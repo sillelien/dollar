@@ -9,6 +9,6 @@ general:
 
 deployment:
   production:
-    branch: naster
+    branch: master
     commands:
         - mvn clean install site scm-publish:publish-scm
