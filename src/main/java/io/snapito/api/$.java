@@ -9,29 +9,62 @@ import org.vertx.java.core.json.JsonObject;
 import java.util.Map;
 
 /**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
+ * The $ class is the class used to hold a JsonObject data structure. It can be used for managing
+ * other data types too by converting them to JsonObject and back.
  *
+ * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class $ {
 
+    /**
+     * Publicly accessible object containing the current state as a JsonObject, if you're working in Vert.x primarily with the JsonObject type you will likely end all chained expressions with '.$'
+     *
+     * For example:
+     * <code>
+     *      eb.send("api.validate", $("key", key).$("params", request.params()).$)
+     * </code>
+     */
     public JsonObject $;
 
-    public $(JsonObject json) {
+    /**
+      * Create a new $ class from the supplied JsonObject. This will just directly wrap the supplied JsonObject.
+      * <b>Important, it does not copy the object, so operations will directly modify the supplied value, use the .copy() method on the JsonObject first if you do not wish this to occur.</b>
+     */
+    $(JsonObject json) {
         if (json == null) {
             throw new NullPointerException("Null Json");
         }
         $ = (json);
     }
 
-    public $(String jsonStr) {
+    /**
+     * Create a new $ object from the supplied JSON string, this uses the JsonObject(String) constructor to parse the Json.
+     * @param jsonStr a string in JSON format, e.g. {foo:'bar'}
+     */
+    $(String jsonStr) {
         $ = (new JsonObject(jsonStr));
     }
 
-    public $() {
+    /**
+     * Create a new and empty $ object.
+     */
+    $() {
         $ = (new JsonObject());
     }
 
-    public $(Object o) {
+    /**
+     * Create a $ object from a variety of different objects. At present the following are supported:<br/>
+     * <ul>
+     *     <li>JsonObject</li>
+     *     <li>MultiMap</li>
+     *     <li>Message</li>
+     * </ul>
+     *
+     * Any other object types will be converted to a string using .toString() and will then be parsed as JSON.
+     *
+     * @param o the object of unknown type to be converted to a JsonObject and then wrapped by the $ class.
+     */
+    $(Object o) {
         if (o instanceof JsonObject) {
             $ = ((JsonObject) o);
         } else if (o instanceof MultiMap) {

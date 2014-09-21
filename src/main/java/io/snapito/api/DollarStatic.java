@@ -6,9 +6,16 @@ import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 
 /**
+ * To use the $ class you need to statically import all of the methods from this class.
+ * This is effectively a factory class for the $ class with additional convenience methods.
+ *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarStatic {
+
+    public static $ $() {
+        return new $();
+    }
 
     public static $ $(String name, MultiMap multiMap) {
         return new $().$(name, multiMap);
