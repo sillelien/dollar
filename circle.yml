@@ -11,4 +11,6 @@ deployment:
   production:
     branch: master
     commands:
-        - mvn clean install site scm-publish:publish-scm
+        - git config --global user.email "neil@cazcade.com"
+        - git config --global user.name "Neil Ellis"
+        - mvn install site scm-publish:publish-scm
