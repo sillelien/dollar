@@ -7,6 +7,12 @@ general:
     ignore:
       - gh-pages
 
+
+
+dependencies:
+  pre:
+    - "(mvn clean install -Dmaven.test.skip || : ) &> /dev/null"
+
 deployment:
   production:
     branch: master
