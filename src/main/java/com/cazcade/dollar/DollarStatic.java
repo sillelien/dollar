@@ -1,4 +1,4 @@
-package io.snapito.api;
+package com.cazcade.dollar;
 
 import org.json.JSONObject;
 import org.vertx.java.core.MultiMap;

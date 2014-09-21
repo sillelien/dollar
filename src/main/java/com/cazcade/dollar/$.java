@@ -1,4 +1,4 @@
-package io.snapito.api;
+package com.cazcade.dollar;
 
 import org.json.JSONObject;
 import org.vertx.java.core.MultiMap;
@@ -88,38 +88,38 @@ public class $ {
         return new JsonArray(values);
     }
 
-    public static io.snapito.api.$ $new(JsonObject json) {
-        return new io.snapito.api.$(json);
+    public static com.cazcade.dollar.$ $new(JsonObject json) {
+        return new com.cazcade.dollar.$(json);
     }
 
-    public static io.snapito.api.$ $new(String json) {
-        return new io.snapito.api.$(json);
+    public static com.cazcade.dollar.$ $new(String json) {
+        return new com.cazcade.dollar.$(json);
     }
 
-    public static io.snapito.api.$ $new(Object o) {
+    public static com.cazcade.dollar.$ $new(Object o) {
 
-        return new io.snapito.api.$(o);
+        return new com.cazcade.dollar.$(o);
     }
 
     public String $(String key) {
         return $.getString(key);
     }
 
-    public io.snapito.api.$ $(String name, MultiMap multiMap) {
+    public com.cazcade.dollar.$ $(String name, MultiMap multiMap) {
         $.putObject(name, mapToJson(multiMap));
         return this;
     }
 
-    public io.snapito.api.$ $(String name, JsonArray value) {
+    public com.cazcade.dollar.$ $(String name, JsonArray value) {
         $.putArray(name, value);
         return this;
     }
 
-    public io.snapito.api.$ $(String key, io.snapito.api.$ value) {
+    public com.cazcade.dollar.$ $(String key, com.cazcade.dollar.$ value) {
         return $(key, value.$json());
     }
 
-    public io.snapito.api.$ $(String key, JsonObject jsonObject) {
+    public com.cazcade.dollar.$ $(String key, JsonObject jsonObject) {
         $.putObject(key, jsonObject);
         return this;
     }
@@ -128,7 +128,7 @@ public class $ {
         return $;
     }
 
-    public io.snapito.api.$ $(String key, String value) {
+    public com.cazcade.dollar.$ $(String key, String value) {
         $.putString(key, value);
         return this;
     }
@@ -137,8 +137,8 @@ public class $ {
         return $.toString();
     }
 
-    public io.snapito.api.$ $$(String json) {
-        return new io.snapito.api.$($json(json));
+    public com.cazcade.dollar.$ $$(String json) {
+        return new com.cazcade.dollar.$($json(json));
     }
 
     public JsonObject $json(String key) {
@@ -161,15 +161,15 @@ public class $ {
         return new JSONObject($.toMap());
     }
 
-    public io.snapito.api.$ copy() {
-        return new io.snapito.api.$($.copy());
+    public com.cazcade.dollar.$ copy() {
+        return new com.cazcade.dollar.$($.copy());
     }
 
     public boolean has(String key) {
         return $json().containsField(key);
     }
 
-    public io.snapito.api.$ rm(String value) {
+    public com.cazcade.dollar.$ rm(String value) {
         $.removeField(value);
         return this;
     }
@@ -179,16 +179,16 @@ public class $ {
         return $.toString();
     }
 
-    public io.snapito.api.$ ¢(String key) {
+    public com.cazcade.dollar.$ ¢(String key) {
         return child(key);
     }
 
-    public io.snapito.api.$ child(String key) {
+    public com.cazcade.dollar.$ child(String key) {
         JsonObject child = $.getObject(key);
         if (child == null) {
             return null;
         }
-        return new io.snapito.api.$(child);
+        return new com.cazcade.dollar.$(child);
     }
 }
 
