@@ -11,4 +11,4 @@ deployment:
   production:
     branch: naster
     commands:
-      - mvn clean install site scm-publish:publish-scm
+        - mvn clean install site scm-publish:publish-scm
