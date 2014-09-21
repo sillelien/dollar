@@ -11,7 +11,7 @@ general:
 
 dependencies:
   pre:
-    - "(mvn clean install -Dmaven.test.skip || : ) &> /dev/null"
+    - "(mvn clean install site -Dmaven.test.skip || : ) &> /dev/null"
 
 deployment:
   production:
@@ -19,4 +19,4 @@ deployment:
     commands:
         - git config --global user.email "neil@cazcade.com"
         - git config --global user.name "Neil Ellis"
-        - mvn install site scm-publish:publish-scm
+        - mvn install site scm-publish:publish-scm deploy
