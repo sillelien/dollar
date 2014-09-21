@@ -1,0 +1,14 @@
+machine:
+  java:
+    version: oraclejdk8
+
+general:
+  branches:
+    ignore:
+      - gh-pages
+
+deployment:
+  production:
+    branch: naster
+    commands:
+      - mvn clean install site scm-publish:publish-scm
