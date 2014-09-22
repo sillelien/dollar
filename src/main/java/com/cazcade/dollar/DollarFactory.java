@@ -21,7 +21,7 @@ import org.vertx.java.core.json.JsonObject;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DollarFactory {
+class DollarFactory {
     public static $ fromField(Object field) {
         if (field == null) {
             return DollarNull.INSTANCE;
