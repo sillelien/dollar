@@ -28,13 +28,13 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
      * eb.send("api.validate", $("key", key).$("params", request.params()).$)
      * </code>
      */
-    public JsonObject $;
+    private JsonObject json;
 
     /**
      * Create a new and empty $ object.
      */
     DollarJson() {
-        $ = (new JsonObject());
+        json = (new JsonObject());
     }
 
     /**
@@ -49,48 +49,25 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
      *
      * @param o the object of unknown type to be converted to a JsonObject and then wrapped by the $ class.
      */
-    DollarJson(Object o) {
-        if(o == null) {
-            throw new NullPointerException();
-        }
-        if (o instanceof JsonObject) {
-            $ = ((JsonObject) o);
-        }
-        if (o instanceof JsonObject) {
-            $ = ((JsonObject) o);
-        } else if (o instanceof MultiMap) {
-            $ = mapToJson((MultiMap) o);
-        } else if (o instanceof Map) {
-            $ = new JsonObject((Map<String, Object>) o);
-        } else if (o instanceof Message) {
-            $ = ((JsonObject) ((Message) o).body());
-        } else {
-            $ = new JsonObject(o.toString());
-        }
+    DollarJson(JsonObject o) {
+        this.json= o;
     }
 
-    private JsonObject mapToJson(MultiMap map) {
-        JsonObject jsonObject = new JsonObject();
-        for (Map.Entry<String, String> entry : map) {
-            jsonObject.putString(entry.getKey(), entry.getValue());
-        }
-        return jsonObject;
-    }
 
     @Override
     public boolean isNull() {
-        return false; //TODO
+        return false;
     }
 
     @Override
     public com.cazcade.dollar.$<JsonObject> $(String key, long value) {
-        $.putNumber(key, value);
+        json.putNumber(key, value);
         return this;
     }
 
     @Override
     public $ $(String key) {
-        return DollarFactory.fromField($.getField(key));
+        return DollarFactory.fromField(json.getField(key));
     }
 
     @Override
@@ -101,35 +78,35 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
     @Override
     public com.cazcade.dollar.$<JsonObject> $(String name, Object o) {
         if (o instanceof MultiMap) {
-            $.putObject(name, mapToJson((MultiMap) o));
+            json.putObject(name, DollarStatic.mapToJson((MultiMap) o));
         } else if (o instanceof JsonArray) {
-            $.putArray(name, (JsonArray) o);
+            json.putArray(name, (JsonArray) o);
         } else if (o instanceof JsonObject) {
-            $.putObject(name, (JsonObject) o);
+            json.putObject(name, (JsonObject) o);
             return this;
         } else if (o instanceof DollarJson) {
-            $.putObject(name, ((DollarJson) o).$json());
+            json.putObject(name, ((DollarJson) o).$json());
         } else if (o instanceof DollarNumber) {
-            $.putNumber(name, ((DollarNumber) o).$());
+            json.putNumber(name, ((DollarNumber) o).$());
         } else if (o instanceof DollarString) {
-            $.putString(name, ((DollarString) o).$());
+            json.putString(name, ((DollarString) o).$());
         } else if (o instanceof FutureDollar) {
             $(name, ((FutureDollar) o).then());
         } else {
-            $.putString(name,String.valueOf(o));
+            json.putString(name, String.valueOf(o));
         }
         return this;
     }
 
     @Override
     public JsonObject $json() {
-        return $;
+        return json;
     }
 
 
     @Override
     public JsonObject $() {
-        return $;
+        return json;
     }
 
     @Override
@@ -144,12 +121,12 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
 
     @Override
     public JsonObject $json(String key) {
-        return $.getObject(key);
+        return json.getObject(key);
     }
 
     @Override
     public Map<String, Object> $map() {
-        return $.toMap();
+        return json.toMap();
     }
 
     @Override
@@ -159,7 +136,7 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
 
     @Override
     public JSONObject $orgjson() {
-        return new JSONObject($.toMap());
+        return new JSONObject(json.toMap());
     }
 
     @Override
@@ -169,7 +146,7 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
 
     @Override
     public java.util.stream.Stream children(String key) {
-        List list = $.getArray(key).toList();
+        List list = json.getArray(key).toList();
         if(list == null) {
             return null;
         }
@@ -178,7 +155,7 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
 
     @Override
     public DollarJson copy() {
-        return new DollarJson($.copy());
+        return new DollarJson(json.copy());
     }
 
     @Override
@@ -194,8 +171,8 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
     @Override
     public Map<String, com.cazcade.dollar.$<JsonObject>> split() {
         HashMap<String, com.cazcade.dollar.$<JsonObject>> map = new HashMap<>();
-        for (String key : $.toMap().keySet()) {
-            Object field = $.getField(key);
+        for (String key : json.toMap().keySet()) {
+            Object field = json.getField(key);
             if (field instanceof JsonObject) {
                 map.put(key, DollarFactory.fromField(field));
             }
@@ -205,19 +182,19 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
 
     @Override
     public java.util.stream.Stream<String> keys() {
-        return $.getFieldNames().stream();
+        return json.getFieldNames().stream();
     }
 
     @Override
     public com.cazcade.dollar.$<JsonObject> rm(String value) {
-        $.removeField(value);
+        json.removeField(value);
         return this;
     }
 
     @Override
     public FutureDollar<JsonObject> send(EventBus e, String destination) {
         FutureDollar<JsonObject> futureDollar = new FutureDollar<>(this);
-        e.send(destination, $, (Message<JsonObject> message) -> {
+        e.send(destination, json, (Message<JsonObject> message) -> {
             futureDollar.handle(message);
         });
         return futureDollar;
@@ -226,8 +203,8 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
     @Override
     public List<String> splitValues() {
         List<String> list = new ArrayList<>();
-        for (String key : $.toMap().keySet()) {
-            String field = $.getField(key).toString();
+        for (String key : json.toMap().keySet()) {
+            String field = json.getField(key).toString();
             list.add(field);
         }
         return list;
@@ -235,12 +212,12 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
 
     @Override
     public String toString() {
-        return $.toString();
+        return json.toString();
     }
 
     @Override
     public JsonObject val() {
-        return $;
+        return json;
     }
 
 
@@ -250,7 +227,7 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
 
 
     public com.cazcade.dollar.$<JsonObject> child(String key) {
-        JsonObject child = $.getObject(key);
+        JsonObject child = json.getObject(key);
         if (child == null) {
             return null;
         }

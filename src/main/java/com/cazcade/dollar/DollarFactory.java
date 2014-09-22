@@ -33,9 +33,9 @@ class DollarFactory {
             return new DollarNumber((Number) field);
         }
         if (field instanceof JsonObject) {
-            return new DollarJson(field);
+            return DollarStatic.$(field);
         }
-        return new DollarJson(field.toString());
+        return DollarStatic.$(field.toString());
     }
 
      static $ fromValue() {
@@ -53,13 +53,13 @@ class DollarFactory {
         if (json == null) {
             return DollarNull.INSTANCE;
         }
-        return new DollarJson(json);
+        return DollarStatic.$(json);
     }
 
      static $ fromValue(Object o) {
         if (o == null) {
             return DollarNull.INSTANCE;
         }
-        return new DollarJson(o);
+        return DollarStatic.$(o);
     }
 }

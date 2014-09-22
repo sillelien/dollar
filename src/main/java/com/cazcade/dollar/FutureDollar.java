@@ -37,7 +37,7 @@ public class FutureDollar<T> {
     }
 
     public void handle(Message<JsonObject> message) {
-        response.complete(new DollarJson(message));
+        response.complete(DollarStatic.$(message));
 
     }
 

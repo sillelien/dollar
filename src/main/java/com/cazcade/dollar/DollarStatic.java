@@ -1,8 +1,11 @@
 package com.cazcade.dollar;
 
 import org.vertx.java.core.MultiMap;
+import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
+
+import java.util.Map;
 
 /**
  * To use the $ class you need to statically import all of the methods from this class.
@@ -25,8 +28,38 @@ public class DollarStatic {
     }
 
     public static $ $(Object o) {
-        return DollarFactory.fromValue(o);
+        if(o == null) {
+            throw new NullPointerException();
+        }
+        JsonObject json;
+        if (o instanceof JsonObject) {
+            json = ((JsonObject) o);
+        }
+        if (o instanceof JsonObject) {
+            json = ((JsonObject) o);
+        } else if (o instanceof MultiMap) {
+            json = mapToJson((MultiMap) o);
+        } else if (o instanceof Map) {
+            json = new JsonObject((Map<String, Object>) o);
+        } else if (o instanceof Message) {
+            json = ((JsonObject) ((Message) o).body());
+            if(json == null) {
+                return DollarNull.INSTANCE;
+            }
+        } else {
+            json = new JsonObject(o.toString());
+        }
+        return new DollarJson(json);
     }
+
+    static JsonObject mapToJson(MultiMap map) {
+        JsonObject jsonObject = new JsonObject();
+        for (Map.Entry<String, String> entry : map) {
+            jsonObject.putString(entry.getKey(), entry.getValue());
+        }
+        return jsonObject;
+    }
+
 
     public static $ $(String name, JsonArray value) {
         return DollarFactory.fromValue().$(name, value);

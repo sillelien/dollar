@@ -65,8 +65,8 @@ public class DollarBasicTest {
 
     @Test
     public void testStringCreation() {
-        assertEquals("bar", new DollarJson("{\"foo\":\"bar\"}").$("foo").val());
-        assertEquals("bar", new DollarJson("{\"foo\":\"bar\"}").$().getString("foo"));
+        assertEquals("bar", $("{\"foo\":\"bar\"}").$("foo").val());
+        assertEquals("bar", $("{\"foo\":\"bar\"}").$json().getString("foo"));
     }
 
     @Test
