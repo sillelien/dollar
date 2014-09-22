@@ -96,23 +96,6 @@ public class $ {
         return jsonObject;
     }
 
-    public static JsonArray $array(Object... values) {
-        return new JsonArray(values);
-    }
-
-    public static com.cazcade.dollar.$ $new(JsonObject json) {
-        return new com.cazcade.dollar.$(json);
-    }
-
-    public static com.cazcade.dollar.$ $new(String json) {
-        return new com.cazcade.dollar.$(json);
-    }
-
-    public static com.cazcade.dollar.$ $new(Object o) {
-
-        return new com.cazcade.dollar.$(o);
-    }
-
     public String $(String key) {
         return $.getField(key).toString();
     }
@@ -136,43 +119,89 @@ public class $ {
         return this;
     }
 
+    /**
+     * Convert this to a Vert.x JsonObject - equivalent to .$
+     *
+     * @return this JSON as a JsonObject
+     */
     public JsonObject $json() {
         return $;
     }
 
+    /**
+     * Builder method for creating a new key/value pair in this object.
+     *
+     * @param key the key
+     * @param value the String value
+     * @return this
+     */
     public com.cazcade.dollar.$ $(String key, String value) {
         $.putString(key, value);
         return this;
     }
 
+    /**
+     * Shorthand for .$.toString()
+     * @return this JSON as a string.
+     */
     public String $() {
         return $.toString();
     }
 
-    public com.cazcade.dollar.$ $$(String json) {
-        return new com.cazcade.dollar.$($json(json));
-    }
-
+    /**
+     * Equivalent returns a Vert.x JsonObject child object value for the supplied key.
+     *
+     * @param key the key
+     * @return a JsonObject
+     */
     public JsonObject $json(String key) {
         return $.getObject(key);
     }
 
+    /**
+     * Returns the value for the supplied key as an Integer.
+     *
+     * @param key the key
+     * @return an Integer value (or null).
+     */
     public Integer $int(String key) {
         return $json().getInteger(key);
     }
 
+    /**
+     * Returns this JSON object as a set of nested maps.
+     *
+     * @return a nested Map
+     */
     public Map<String, Object> $map() {
         return $.toMap();
     }
 
+    /**
+     * Returns the value for the supplied key as a general Number.
+     *
+     * @param key the key
+     * @return a Number
+     */
     public Number $number(String key) {
         return $json().getNumber(key);
     }
 
+    /**
+     * Returns this JSON as a org.json.JSONObject, which can be used
+     * with none Vert.x APIs etc. This conversion is quite efficient.
+     *
+     * @return a JSONObject
+     */
     public JSONObject $orgjson() {
         return new JSONObject($.toMap());
     }
 
+    /**
+     * Returns a deep copy of this object, such that mutations to it
+     * does not effect this.
+     * @return
+     */
     public com.cazcade.dollar.$ copy() {
         return new com.cazcade.dollar.$($.copy());
     }

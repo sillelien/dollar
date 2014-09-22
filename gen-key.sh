@@ -15,5 +15,5 @@ Passphrase: ${GPG_PASSPHRASE}
 %commit
 %echo done
 EOF
-    gpg2 --batch --gen-key key.txt
+    gpg --batch --gen-key key.txt
 fi
