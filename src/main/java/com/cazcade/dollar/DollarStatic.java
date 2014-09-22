@@ -23,13 +23,10 @@ public class DollarStatic {
         return DollarFactory.fromValue().$(name, multiMap);
     }
 
-    public static $ $(String json) {
-        return DollarFactory.fromValue(json);
-    }
 
     public static $ $(Object o) {
         if(o == null) {
-            throw new NullPointerException();
+            return DollarNull.INSTANCE;
         }
         JsonObject json;
         if (o instanceof JsonObject) {
