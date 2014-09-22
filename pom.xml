@@ -115,7 +115,7 @@
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <jvm>${JAVA.EXE}</jvm>
                     <includes>
-                        <include>**/*Specs.java</include>
+                        <include>**/*Test.java</include>
                     </includes>
                 </configuration>
             </plugin>
