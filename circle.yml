@@ -11,8 +11,10 @@ general:
 
 dependencies:
   pre:
+    - sudo apt-get install -y gpg
+    - gpg --import < keys.gpg
     - envsubst < settings.xml > ~/.m2/settings.xml
-    - "(mvn clean install site -Dmaven.test.skip || : ) &> /dev/null"
+    - "(mvn -Dgpg.passphrase=${GPG_KEY} clean install site -Dmaven.test.skip || : ) &> /dev/null"
 
 deployment:
   staging:
@@ -30,4 +32,4 @@ deployment:
     commands:
         - git config --global user.email "neil@cazcade.com"
         - git config --global user.name "Neil Ellis"
-        - mvn install site scm-publish:publish-scm deploy
+        - mvn -Dgpg.passphrase=${GPG_KEY} install site scm-publish:publish-scm deploy

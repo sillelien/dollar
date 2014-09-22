@@ -6,7 +6,36 @@
 
     <groupId>com.cazcade</groupId>
     <artifactId>dollar-vertx</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
+    <name>Dollar Vert.x</name>
+    <description>Json and Map manipulation made easy for Vert.x</description>
+    <contributors>
+        <contributor>
+            <name>Neil Ellis</name>
+            <organization>Cazcade Limited</organization>
+            <organizationUrl>http://cazcade.com</organizationUrl>
+            <roles>
+                <role>founder</role>
+                <role>developer</role>
+            </roles>
+            <timezone>GMT</timezone>
+            <email>neil@cazcade.com</email>
+        </contributor>
+    </contributors>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/cazcade/dollar_vertx</url>
+        <connection>scm:git:git@github.com:cazcade/dollar_vertx.git</connection>
+        <developerConnection>scm:git:git@github.com:cazcade/dollar_vertx.git</developerConnection>
+    </scm>
 
     <properties>
         <jdk.version>1.8</jdk.version>
@@ -156,7 +185,8 @@
                     <content>${project.reporting.outputDirectory}</content>
                     <skipDeletedFiles>true</skipDeletedFiles>
                     <pubScmUrl>scm:git:git@github.com:cazcade/dollar_vertx.git</pubScmUrl>
-                    <scmBranch>gh-pages</scmBranch> <!-- branch with static site -->
+                    <scmBranch>gh-pages</scmBranch>
+                    <!-- branch with static site -->
                 </configuration>
             </plugin>
 
@@ -178,6 +208,20 @@
                         <version>1.7</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
