@@ -22,7 +22,7 @@ import org.vertx.java.core.json.JsonObject;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 class DollarFactory {
-    public static $ fromField(Object field) {
+    static $ fromField(Object field) {
         if (field == null) {
             return DollarNull.INSTANCE;
         }
@@ -38,25 +38,25 @@ class DollarFactory {
         return new DollarJson(field.toString());
     }
 
-    public static $ fromValue() {
+     static $ fromValue() {
         return new DollarJson();
     }
 
-    public static $ fromValue(JsonObject json) {
+     static $ fromValue(JsonObject json) {
         if (json == null) {
             return DollarNull.INSTANCE;
         }
         return new DollarJson(json);
     }
 
-    public static $ fromValue(String json) {
+     static $ fromValue(String json) {
         if (json == null) {
             return DollarNull.INSTANCE;
         }
         return new DollarJson(json);
     }
 
-    public static $ fromValue(Object o) {
+     static $ fromValue(Object o) {
         if (o == null) {
             return DollarNull.INSTANCE;
         }
