@@ -2,10 +2,14 @@ package com.cazcade.dollar;
 
 import org.json.JSONObject;
 import org.vertx.java.core.MultiMap;
+import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,25 +29,6 @@ public class $ {
      * </code>
      */
     public JsonObject $;
-
-    /**
-      * Create a new $ class from the supplied JsonObject. This will just directly wrap the supplied JsonObject.
-      * <b>Important, it does not copy the object, so operations will directly modify the supplied value, use the .copy() method on the JsonObject first if you do not wish this to occur.</b>
-     */
-    $(JsonObject json) {
-        if (json == null) {
-            throw new NullPointerException("Null Json");
-        }
-        $ = (json);
-    }
-
-    /**
-     * Create a new $ object from the supplied JSON string, this uses the JsonObject(String) constructor to parse the Json.
-     * @param jsonStr a string in JSON format, e.g. {foo:'bar'}
-     */
-    $(String jsonStr) {
-        $ = (new JsonObject(jsonStr));
-    }
 
     /**
      * Create a new and empty $ object.
@@ -69,11 +54,38 @@ public class $ {
             $ = ((JsonObject) o);
         } else if (o instanceof MultiMap) {
             $ = mapToJson((MultiMap) o);
+        } else if (o instanceof Map) {
+            $ = new JsonObject((Map<String, Object>) o);
         } else if (o instanceof Message) {
             $ = ((JsonObject) ((Message) o).body());
         } else {
             $ = new JsonObject(o.toString());
         }
+    }
+
+    public $  $(String age, long l) {
+        $.putNumber(age,l);
+        return this;
+    }
+
+    public Map<String,$> split() {
+        HashMap<String, com.cazcade.dollar.$> map = new HashMap<String, $>();
+        for(String key : $.toMap().keySet()) {
+            Object field = $.getField(key);
+            if(field instanceof JsonObject) {
+                map.put(key, new $(field));
+            }
+        }
+        return map;
+    }
+
+    public List<String> splitValues() {
+        List<String> list= new ArrayList<>();
+        for(String key : $.toMap().keySet()) {
+            String field = $.getField(key).toString();
+            list.add(field);
+        }
+        return list;
     }
 
     private JsonObject mapToJson(MultiMap map) {
@@ -102,7 +114,7 @@ public class $ {
     }
 
     public String $(String key) {
-        return $.getString(key);
+        return $.getField(key).toString();
     }
 
     public com.cazcade.dollar.$ $(String name, MultiMap multiMap) {
@@ -174,6 +186,22 @@ public class $ {
         return this;
     }
 
+    public java.util.stream.Stream<Map.Entry<String, com.cazcade.dollar.$>> keyValues() {
+        return split().entrySet().stream();
+    }
+
+    public java.util.stream.Stream<String> keys() {
+        return $.getFieldNames().stream();
+    }
+
+    public java.util.stream.Stream<com.cazcade.dollar.$> children() {
+        return split().values().stream();
+    }
+
+    public java.util.stream.Stream children(String key) {
+        return $.getArray(key).toList().stream();
+    }
+
     @Override
     public String toString() {
         return $.toString();
@@ -189,6 +217,14 @@ public class $ {
             return null;
         }
         return new com.cazcade.dollar.$(child);
+    }
+
+    public FutureDollar send(EventBus e, String destination) {
+        FutureDollar futureDollar = new FutureDollar(this);
+        e.send(destination,$,(Message<JsonObject> message)-> {
+            futureDollar.handle(message);
+        });
+        return futureDollar;
     }
 }
 
