@@ -15,6 +15,16 @@ dependencies:
     - "(mvn clean install site -Dmaven.test.skip || : ) &> /dev/null"
 
 deployment:
+  staging:
+        branch: staging
+        commands:
+          - git reset HEAD --hard
+          - git clean -fd
+          - git checkout master
+          - git pull origin master
+          - git merge staging -m "Auto merge after testing."
+          - git push origin master
+
   production:
     branch: master
     commands:

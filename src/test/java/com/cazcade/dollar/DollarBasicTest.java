@@ -26,7 +26,7 @@ import static com.cazcade.dollar.DollarStatic.$;
 import static com.cazcade.dollar.DollarStatic.$array;
 import static org.junit.Assert.assertEquals;
 
-public class DollarBasicTests {
+public class DollarBasicTest {
     @Test
     public void testStringCreation() {
       assertEquals("bar",new $("{\"foo\":\"bar\"}").$("foo"));
