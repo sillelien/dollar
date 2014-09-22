@@ -27,7 +27,6 @@ import java.util.Map;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- * @todo document.
  */
 public interface $<T> {
 
@@ -55,6 +54,10 @@ public interface $<T> {
     $<T> $(String key, String value);
 
 
+    /**
+     * Returns the wrapped object.
+     * @return the wrapped object
+     */
     T $();
 
 
