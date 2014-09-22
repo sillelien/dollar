@@ -1,6 +1,5 @@
 package com.cazcade.dollar;
 
-import org.json.JSONObject;
 import org.vertx.java.core.MultiMap;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
@@ -14,74 +13,44 @@ import org.vertx.java.core.json.JsonObject;
 public class DollarStatic {
 
     public static $ $() {
-        return new $();
+        return DollarFactory.fromValue();
     }
 
     public static $ $(String name, MultiMap multiMap) {
-        return new $().$(name, multiMap);
+        return DollarFactory.fromValue().$(name, multiMap);
     }
 
     public static $ $(String json) {
-        return new $(json);
+        return DollarFactory.fromValue(json);
     }
 
     public static $ $(Object o) {
-        return new $(o);
+        return DollarFactory.fromValue(o);
     }
 
     public static $ $(String name, JsonArray value) {
-        return new $().$(name, value);
+        return DollarFactory.fromValue().$(name, value);
     }
 
     public static $ $(String key, String value) {
-        return new $().$(key, value);
+        return DollarFactory.fromValue().$(key, value);
     }
 
     public static $ $(JsonObject json) {
-        return new $(json);
+        return DollarFactory.fromValue(json);
     }
 
     public static $ $(String key, $ value) {
-        return new $().$(key, value);
+        return DollarFactory.fromValue().$(key, value);
     }
 
     public static $ $(String key, JsonObject jsonObject) {
-        return new $().$(key, jsonObject);
+        return DollarFactory.fromValue().$child(key, jsonObject);
     }
 
     public static JsonArray $array(Object... values) {
         return new JsonArray(values);
     }
 
-    public static Integer $int(String key) {
-        return new $().$int(key);
-    }
 
-    public static JsonObject $json(String key) {
-        return new $().$json(key);
-    }
-
-    public static JsonObject $json() {
-        return new $().$json();
-    }
-
-    public static JSONObject $orgjson() {
-        return new $().$orgjson();
-    }
-
-    public static $ child(String key) {
-        return new $().child(key);
-    }
-
-    public static $ copy() {
-        return new $().copy();
-    }
-
-    public static boolean has(String key) {
-        return new $().has(key);
-    }
-
-    public static $ rm(String value) {
-        return new $().rm(value);
-    }
 }

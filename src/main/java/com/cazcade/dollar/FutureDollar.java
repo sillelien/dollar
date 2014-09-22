@@ -26,7 +26,7 @@ import java.util.function.Function;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class FutureDollar {
+public class FutureDollar<T> {
 
     private $ requestDollar;
     private CompletableFuture<$> response= new CompletableFuture<>();
@@ -37,7 +37,7 @@ public class FutureDollar {
     }
 
     public void handle(Message<JsonObject> message) {
-        response.complete(new $(message));
+        response.complete(new DollarJson(message));
 
     }
 
@@ -45,7 +45,7 @@ public class FutureDollar {
         return response.get();
     }
 
-    public $ then(Function<$,Void> handler) throws ExecutionException, InterruptedException {
+    public $ then(Function<$<T>,Void> handler) throws ExecutionException, InterruptedException {
         handler.apply(response.get());
         return response.get();
     }
