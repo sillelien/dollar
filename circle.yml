@@ -32,4 +32,4 @@ deployment:
     commands:
         - git config --global user.email "neil@cazcade.com"
         - git config --global user.name "Neil Ellis"
-        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} install site scm-publish:publish-scm deploy
+        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} install scm-publish:publish-scm deploy site
