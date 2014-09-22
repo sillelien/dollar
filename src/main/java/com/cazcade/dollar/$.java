@@ -17,9 +17,7 @@
 package com.cazcade.dollar;
 
 import org.json.JSONObject;
-import org.vertx.java.core.MultiMap;
 import org.vertx.java.core.eventbus.EventBus;
-import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 
 import java.util.List;
@@ -38,23 +36,8 @@ public interface $<T> {
 
     String $$(String key);
 
-    $<T> $(String name, MultiMap multiMap);
 
-    $<T> $(String name, JsonArray value);
-
-    $<T> $(String key, $ value);
-
-    $<T> $child(String key, T value);
-
-    /**
-     * Builder method for creating a new key/value pair in this object.
-     *
-     * @param key   the key
-     * @param value the String value
-     * @return this
-     */
-    $<T> $(String key, String value);
-
+    $<T> $(String key, Object value);
 
     /**
      * Returns the wrapped object.

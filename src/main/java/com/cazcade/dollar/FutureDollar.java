@@ -41,8 +41,15 @@ public class FutureDollar<T> {
 
     }
 
-    public $ then() throws ExecutionException, InterruptedException {
-        return response.get();
+    public $ then() {
+        try {
+            return response.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return DollarNull.INSTANCE;
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public $ then(Function<$<T>,Void> handler) throws ExecutionException, InterruptedException {

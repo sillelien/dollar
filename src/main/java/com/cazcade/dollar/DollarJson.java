@@ -99,25 +99,25 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
     }
 
     @Override
-    public com.cazcade.dollar.$<JsonObject> $(String name, MultiMap multiMap) {
-        $.putObject(name, mapToJson(multiMap));
-        return this;
-    }
-
-    @Override
-    public com.cazcade.dollar.$<JsonObject> $(String name, JsonArray value) {
-        $.putArray(name, value);
-        return this;
-    }
-
-    @Override
-    public com.cazcade.dollar.$<JsonObject> $(String key, com.cazcade.dollar.$ value) {
-        return $child(key, value.$json());
-    }
-
-    @Override
-    public com.cazcade.dollar.$<JsonObject> $child(String key, JsonObject jsonObject) {
-        $.putObject(key, jsonObject);
+    public com.cazcade.dollar.$<JsonObject> $(String name, Object o) {
+        if (o instanceof MultiMap) {
+            $.putObject(name, mapToJson((MultiMap) o));
+        } else if (o instanceof JsonArray) {
+            $.putArray(name, (JsonArray) o);
+        } else if (o instanceof JsonObject) {
+            $.putObject(name, (JsonObject) o);
+            return this;
+        } else if (o instanceof DollarJson) {
+            $.putObject(name, ((DollarJson) o).$json());
+        } else if (o instanceof DollarNumber) {
+            $.putNumber(name, ((DollarNumber) o).$());
+        } else if (o instanceof DollarString) {
+            $.putString(name, ((DollarString) o).$());
+        } else if (o instanceof FutureDollar) {
+            $(name, ((FutureDollar) o).then());
+        } else {
+            $.putString(name,String.valueOf(o));
+        }
         return this;
     }
 
@@ -126,11 +126,6 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
         return $;
     }
 
-    @Override
-    public com.cazcade.dollar.$<JsonObject> $(String key, String value) {
-        $.putString(key, value);
-        return this;
-    }
 
     @Override
     public JsonObject $() {

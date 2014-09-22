@@ -17,9 +17,7 @@
 package com.cazcade.dollar;
 
 import org.json.JSONObject;
-import org.vertx.java.core.MultiMap;
 import org.vertx.java.core.eventbus.EventBus;
-import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 
 import java.util.List;
@@ -38,16 +36,6 @@ public abstract class AbstractDollarSingleValue<T> implements $<T> {
             throw new NullPointerException();
         }
         this.value= value;
-    }
-
-    @Override
-    public $<T> $child(String key, T value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public $<T> $(String key, String value) {
-        throw new UnsupportedOperationException();
     }
 
 
@@ -76,15 +64,8 @@ public abstract class AbstractDollarSingleValue<T> implements $<T> {
         return $(key).$$();
     }
 
-    public $<T> $(String name, MultiMap multiMap) {
-        throw new UnsupportedOperationException();
-    }
 
-    public $<T> $(String name, JsonArray value) {
-        throw new UnsupportedOperationException();
-    }
-
-    public $<T> $(String key, $ value) {
+    public $<T> $(String key, Object value) {
         throw new UnsupportedOperationException();
     }
 
@@ -110,10 +91,6 @@ public abstract class AbstractDollarSingleValue<T> implements $<T> {
 
     }
 
-    public $<T> child(String key) {
-        throw new UnsupportedOperationException();
-
-    }
 
     public Stream<$<T>> children() {
         throw new UnsupportedOperationException();

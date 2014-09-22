@@ -45,7 +45,7 @@ public class DollarStatic {
     }
 
     public static $ $(String key, JsonObject jsonObject) {
-        return DollarFactory.fromValue().$child(key, jsonObject);
+        return DollarFactory.fromValue().$(key, jsonObject);
     }
 
     public static JsonArray $array(Object... values) {

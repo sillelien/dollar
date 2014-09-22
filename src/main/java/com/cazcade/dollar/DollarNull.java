@@ -17,9 +17,7 @@
 package com.cazcade.dollar;
 
 import org.json.JSONObject;
-import org.vertx.java.core.MultiMap;
 import org.vertx.java.core.eventbus.EventBus;
-import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 
 import java.util.Collections;
@@ -59,28 +57,9 @@ public class DollarNull implements $ {
         return null;
     }
 
-    @Override
-    public $ $(String name, MultiMap multiMap) {
-        return DollarFactory.fromValue().$(name,multiMap);
-    }
 
     @Override
-    public $ $(String name, JsonArray value) {
-        return DollarFactory.fromValue().$(name,value);
-    }
-
-    @Override
-    public $ $(String key, $ value) {
-        return DollarFactory.fromValue().$(key,value);
-    }
-
-    @Override
-    public $ $child(String key, Object value) {
-        return this;
-    }
-
-    @Override
-    public $ $(String key, String value) {
+    public $ $(String key, Object value) {
         return DollarFactory.fromValue().$(key,value);
     }
 
