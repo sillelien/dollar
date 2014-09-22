@@ -18,9 +18,8 @@ package com.cazcade.dollar;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- * @todo document.
  */
-public class DollarNumber extends SingleValue<Number>{
+public class DollarNumber extends AbstractDollarSingleValue<Number> {
 
     public DollarNumber(Number value) {
         super(value);

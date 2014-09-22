@@ -20,9 +20,8 @@ import java.math.BigDecimal;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- * @todo document.
  */
-public class DollarString extends SingleValue<String>  {
+public class DollarString extends AbstractDollarSingleValue<String> {
 
 
     public DollarString(String value) {

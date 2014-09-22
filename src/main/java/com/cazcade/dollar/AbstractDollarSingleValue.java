@@ -28,13 +28,12 @@ import java.util.stream.Stream;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- * @todo document.
  */
-public abstract class SingleValue<T> implements $<T> {
+public abstract class AbstractDollarSingleValue<T> implements $<T> {
 
     protected final T value;
 
-    public SingleValue(T value) {
+    public AbstractDollarSingleValue(T value) {
         if(value == null) {
             throw new NullPointerException();
         }

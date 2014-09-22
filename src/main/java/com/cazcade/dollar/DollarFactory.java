@@ -20,7 +20,6 @@ import org.vertx.java.core.json.JsonObject;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- * @todo document.
  */
 public class DollarFactory {
     public static $ fromField(Object field) {
