@@ -7,7 +7,7 @@ Key-Length: 1024
 Subkey-Type: ELG-E
 Subkey-Length: 1024
 Name-Real: Cazcade Limited
-Name-Comment:
+Name-Comment: Build Key For dollar-vertx
 Name-Email: support@cazcade.com
 Expire-Date: 0
 Passphrase: ${GPG_PASSPHRASE}

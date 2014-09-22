@@ -200,12 +200,19 @@ public class $ {
     /**
      * Returns a deep copy of this object, such that mutations to it
      * does not effect this.
-     * @return
+     *
+     * @return a deep copy of this
      */
     public com.cazcade.dollar.$ copy() {
         return new com.cazcade.dollar.$($.copy());
     }
 
+    /**
+     * Returns true if this JSON object has the supplied key.
+     *
+     * @param key the key
+     * @return true if the key exists.
+     */
     public boolean has(String key) {
         return $json().containsField(key);
     }
