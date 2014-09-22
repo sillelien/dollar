@@ -50,7 +50,7 @@ public class DollarStatic {
     }
 
     public static JsonArray $array(Object... values) {
-        return $.$array(values);
+        return new JsonArray(values);
     }
 
     public static Integer $int(String key) {
