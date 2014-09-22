@@ -36,6 +36,8 @@ public interface $<T> {
 
     $ $(String key);
 
+    String $$(String key);
+
     $<T> $(String name, MultiMap multiMap);
 
     $<T> $(String name, JsonArray value);

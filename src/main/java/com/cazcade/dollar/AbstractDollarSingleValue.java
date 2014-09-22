@@ -71,6 +71,11 @@ public abstract class AbstractDollarSingleValue<T> implements $<T> {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public String $$(String key) {
+        return $(key).$$();
+    }
+
     public $<T> $(String name, MultiMap multiMap) {
         throw new UnsupportedOperationException();
     }

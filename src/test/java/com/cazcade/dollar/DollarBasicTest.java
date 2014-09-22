@@ -24,9 +24,7 @@ import java.util.Map;
 
 import static com.cazcade.dollar.DollarStatic.$;
 import static com.cazcade.dollar.DollarStatic.$array;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class DollarBasicTest {
     @Test
@@ -75,8 +73,11 @@ public class DollarBasicTest {
     public void testNull() {
         assertEquals("bar", $((Object)null).$("foo","bar").$("foo").val());
         assertTrue($((Object) null).isNull());
+        assertTrue($((Object) null).$("bar").isNull());
         assertNull($((Object) null).val());
-        assertTrue(!$((Object) null).$("foo", "bar").$("foo").isNull());
+        assertFalse($((Object) null).$("bar").has("foo"));
+        assertFalse($((Object) null).has("foo"));
+        assertFalse($((Object) null).$("foo", "bar").$("foo").isNull());
     }
 
 

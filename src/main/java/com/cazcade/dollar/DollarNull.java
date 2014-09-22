@@ -55,6 +55,11 @@ public class DollarNull implements $ {
     }
 
     @Override
+    public String $$(String key) {
+        return null;
+    }
+
+    @Override
     public $ $(String name, MultiMap multiMap) {
         return DollarFactory.fromValue().$(name,multiMap);
     }

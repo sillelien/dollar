@@ -94,6 +94,11 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
     }
 
     @Override
+    public String $$(String key) {
+        return $(key).$$();
+    }
+
+    @Override
     public com.cazcade.dollar.$<JsonObject> $(String name, MultiMap multiMap) {
         $.putObject(name, mapToJson(multiMap));
         return this;
