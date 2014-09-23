@@ -27,6 +27,9 @@ Example
                 );
         assertEquals(age /11, (int)profile.$("$['age']/11").$int());
         assertEquals("male", profile.$("$.gender").$());
+        assertEquals(10, profile.$("5*2").$());
+        assertEquals($("{\"name\":\"Dave\"}").$("name").$$(),"Dave");
+        assertEquals($().$("({name:'Dave'})").$("name").$$(), "Dave");
 
 
 Or [ ![Download](https://api.bintray.com/packages/cazcade/maven/dollar_vertx/images/download.png) ](https://bintray.com/cazcade/maven/dollar_vertx/_latestVersion)

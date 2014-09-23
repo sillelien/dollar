@@ -3,13 +3,7 @@ dollar_vertx
 
 Making JSON easier for Vert.x
 
-Install using Maven
-
-        <dependency>
-            <groupId>com.cazcade</groupId>
-            <artifactId>dollar-vertx</artifactId>
-            <version>0.0.8</version>
-        </dependency>
+Please start here: http://cazcade.github.io/dollar_vertx/README.html
 
 Or [ ![Download](https://api.bintray.com/packages/cazcade/maven/dollar_vertx/images/download.png) ](https://bintray.com/cazcade/maven/dollar_vertx/_latestVersion)
 

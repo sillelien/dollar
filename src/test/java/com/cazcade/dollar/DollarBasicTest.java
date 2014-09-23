@@ -95,6 +95,8 @@ public class DollarBasicTest {
         assertEquals(age /11, (int)profile.$("$['age']/11").$int());
         assertEquals("male", profile.$("$.gender").$());
         assertEquals(10, profile.$("5*2").$());
+        assertEquals($("{\"name\":\"Dave\"}").$("name").$$(),"Dave");
+        assertEquals($().$("({name:'Dave'})").$("name").$$(), "Dave");
     }
 
 

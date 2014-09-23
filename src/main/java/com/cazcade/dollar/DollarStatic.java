@@ -34,7 +34,7 @@ public class DollarStatic {
         }
         if(o instanceof String) {
             try {
-                return new DollarJson(new JsonObject(o.toString()));
+                return new DollarJson(new JsonObject((String) o));
             } catch (DecodeException de) {
                 return new DollarString((String) o);
             }
