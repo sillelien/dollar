@@ -158,5 +158,10 @@ public class DollarNull implements $ {
         return null;
     }
 
+    @Override
+    public $ decode() {
+        return this;
+    }
+
 
 }

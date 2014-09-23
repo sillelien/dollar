@@ -7,6 +7,7 @@ import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -232,6 +233,11 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
             return null;
         }
         return new DollarJson(child);
+    }
+
+    @Override
+    public $ decode() {
+        return new DollarString(URLDecoder.decode($$()));
     }
 }
 

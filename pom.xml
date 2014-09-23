@@ -6,7 +6,7 @@
 
     <groupId>com.cazcade</groupId>
     <artifactId>dollar-vertx</artifactId>
-    <version>0.0.7</version>
+    <version>0.0.8</version>
     <name>Dollar Vert.x</name>
     <description>Json and Map manipulation made easy for Vert.x</description>
     <contributors>

@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.json.JsonObject;
 
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -43,6 +44,11 @@ public abstract class AbstractDollarSingleValue<T> implements $<T> {
     @Override
     public T val() {
         return value;
+    }
+
+    @Override
+    public DollarString decode() {
+        return new DollarString(URLDecoder.decode($$()));
     }
 
 

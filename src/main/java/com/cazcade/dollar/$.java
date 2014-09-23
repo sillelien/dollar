@@ -131,5 +131,11 @@ public interface $<T> {
 
     T val();
 
+    /**
+     * URL decode.
+     *
+     * @return decoded string value
+     */
+    $ decode();
 
 }
