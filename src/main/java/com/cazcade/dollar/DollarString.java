@@ -30,6 +30,11 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
 
     @Override
+    public Integer $int() {
+        return Integer.parseInt(value);
+    }
+
+    @Override
     public String $() {
         return value;
     }

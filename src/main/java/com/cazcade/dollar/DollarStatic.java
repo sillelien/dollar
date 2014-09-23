@@ -2,6 +2,7 @@ package com.cazcade.dollar;
 
 import org.vertx.java.core.MultiMap;
 import org.vertx.java.core.eventbus.Message;
+import org.vertx.java.core.json.DecodeException;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 
@@ -27,6 +28,16 @@ public class DollarStatic {
     public static $ $(Object o) {
         if(o == null) {
             return DollarNull.INSTANCE;
+        }
+        if(o instanceof Number) {
+            return new DollarNumber((Number) o);
+        }
+        if(o instanceof String) {
+            try {
+                return new DollarJson(new JsonObject(o.toString()));
+            } catch (DecodeException de) {
+                return new DollarString((String) o);
+            }
         }
         JsonObject json;
         if (o instanceof JsonObject) {

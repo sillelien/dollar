@@ -27,6 +27,11 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
 
 
     @Override
+    public Integer $int() {
+        return value.intValue();
+    }
+
+    @Override
     public Number $() {
         return value;
     }

@@ -7,6 +7,10 @@ import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import javax.script.SimpleScriptContext;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +34,7 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
      * </code>
      */
     private JsonObject json;
+    private static ScriptEngine nashorn   = new ScriptEngineManager().getEngineByName("nashorn");;
 
     /**
      * Create a new and empty $ object.
@@ -56,6 +61,11 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
 
 
     @Override
+    public Integer $int() {
+        throw new UnsupportedOperationException("Cannot convert JSON to an integer");
+    }
+
+    @Override
     public boolean isNull() {
         return false;
     }
@@ -68,7 +78,19 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
 
     @Override
     public $ $(String key) {
-        return DollarFactory.fromField(json.getField(key));
+        if(key.matches("\\w+")) {
+            return DollarFactory.fromField(json.getField(key));
+        } else {
+
+            try {
+                SimpleScriptContext context = new SimpleScriptContext();
+                context.setAttribute("$",json.toMap(),context.getScopes().get(0));
+                return DollarFactory.fromValue(nashorn.eval(key, context));
+            } catch (ScriptException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override

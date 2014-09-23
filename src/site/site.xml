@@ -12,14 +12,14 @@
                 <name>Cazcade: Dollar Vert.x</name>
                 <href>http://github.com/cazcade/dollar_vertx</href>
             </brand>
-            <slogan>Super interesting project doing good things.</slogan>
+            <slogan></slogan>
             <titleTemplate>%2$s | %1$s</titleTemplate>
             <toc>top</toc>
-            <topNav>Download|reports</topNav>
+            <topNav>Download|reports|menu1</topNav>
             <bottomNav>
                 <column>Main|Download</column>
                 <column>Documentation</column>
-                <column>reports|modules</column>
+                <column>dollar-vertx|modules</column>
             </bottomNav>
             <bottomDescription>
 
@@ -27,12 +27,12 @@
             <pages>
                 <index project="project-id">
                     <shortTitle>Welcome</shortTitle>
-                    <breadcrumbs>false</breadcrumbs>
+                    <breadcrumbs>true</breadcrumbs>
                     <toc>false</toc>
                     <sections>
-                        <carousel />
-                        <body />
-                        <sidebar />
+                        <carousel/>
+                        <body/>
+                        <sidebar/>
                         <thumbs>2</thumbs>
                         <columns>3</columns>
                     </sections>
@@ -43,4 +43,21 @@
             </pages>
         </reflowSkin>
     </custom>
+    <body>
+        <links>
+            <item name="Intro" href="README.html"/>
+            <!--<item name="Page 2" href="http://google.com/"/>-->
+            <!--<item name="Page 3" href="http://google.com/"/>-->
+        </links>
+
+        <menu name="dollar-vertx">
+            <!--<item name="Introduction" href="index.html"/>-->
+            <!--<item name="Download" href="download.html"/>-->
+            <!--<item name="Release Notes" href="release-notes.html"/>-->
+            <!--<item name="General Information" href="about.html"/>-->
+            <!--<item name="Road Map" href="roadmap.html"/>-->
+        </menu>
+
+        <menu ref="reports"/>
+    </body>
 </project>

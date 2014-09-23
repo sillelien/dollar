@@ -38,6 +38,11 @@ public class DollarNull implements $ {
     }
 
     @Override
+    public Integer $int() {
+        return null;
+    }
+
+    @Override
     public boolean isNull() {
         return true;
     }

@@ -28,6 +28,8 @@ import java.util.Map;
  */
 public interface $<T> {
 
+    Integer $int();
+
     boolean isNull();
 
     $<T> $(String age, long l);

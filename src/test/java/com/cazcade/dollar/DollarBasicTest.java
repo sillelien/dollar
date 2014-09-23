@@ -80,5 +80,22 @@ public class DollarBasicTest {
         assertFalse($((Object) null).$("foo", "bar").$("foo").isNull());
     }
 
+    @Test
+    public void testNashorn() {
+        int age = new Date().getYear() + 1900 - 1970;
+        $ profile = $("name", "Neil")
+                .$("age", age)
+                .$("gender", "male")
+                .$("projects", $array("snapito", "dollar_vertx"))
+                .$("location",
+                        $("city", "brighton")
+                                .$("postcode", "bn1 6jj")
+                                .$("number", 343)
+                );
+        assertEquals(age /11, (int)profile.$("$['age']/11").$int());
+        assertEquals("male", profile.$("$.gender").$());
+        assertEquals(10, profile.$("5*2").$());
+    }
+
 
 }
