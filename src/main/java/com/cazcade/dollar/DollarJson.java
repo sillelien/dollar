@@ -34,7 +34,7 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
      * </code>
      */
     private JsonObject json;
-    private static ScriptEngine nashorn   = new ScriptEngineManager().getEngineByName("nashorn");;
+    private static ScriptEngine nashorn   = new ScriptEngineManager().getEngineByName("nashorn");
 
     /**
      * Create a new and empty $ object.
@@ -61,6 +61,18 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
 
 
     @Override
+    public $ $eval(String js) {
+        try {
+            SimpleScriptContext context = new SimpleScriptContext();
+            context.setAttribute("$",json.toMap(),context.getScopes().get(0));
+            return DollarFactory.fromValue(nashorn.eval(js, context));
+        } catch (ScriptException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public Integer $int() {
         throw new UnsupportedOperationException("Cannot convert JSON to an integer");
     }
@@ -72,8 +84,7 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
 
     @Override
     public com.cazcade.dollar.$<JsonObject> $(String key, long value) {
-        json.putNumber(key, value);
-        return this;
+        return new DollarJson(json.copy().putNumber(key, value));
     }
 
     @Override
@@ -81,15 +92,7 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
         if(key.matches("\\w+")) {
             return DollarFactory.fromField(json.getField(key));
         } else {
-
-            try {
-                SimpleScriptContext context = new SimpleScriptContext();
-                context.setAttribute("$",json.toMap(),context.getScopes().get(0));
-                return DollarFactory.fromValue(nashorn.eval(key, context));
-            } catch (ScriptException e) {
-                e.printStackTrace();
-                throw new RuntimeException(e);
-            }
+            return $eval(key);
         }
     }
 
@@ -100,25 +103,25 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
 
     @Override
     public com.cazcade.dollar.$<JsonObject> $(String name, Object o) {
+        JsonObject copy = this.json.copy();
         if (o instanceof MultiMap) {
-            json.putObject(name, DollarStatic.mapToJson((MultiMap) o));
+            copy.putObject(name, DollarStatic.mapToJson((MultiMap) o));
         } else if (o instanceof JsonArray) {
-            json.putArray(name, (JsonArray) o);
+            copy.putArray(name, (JsonArray) o);
         } else if (o instanceof JsonObject) {
-            json.putObject(name, (JsonObject) o);
-            return this;
+            copy.putObject(name, (JsonObject) o);
         } else if (o instanceof DollarJson) {
-            json.putObject(name, ((DollarJson) o).$json());
+            copy.putObject(name, ((DollarJson) o).$json());
         } else if (o instanceof DollarNumber) {
-            json.putNumber(name, ((DollarNumber) o).$());
+            copy.putNumber(name, ((DollarNumber) o).$());
         } else if (o instanceof DollarString) {
-            json.putString(name, ((DollarString) o).$());
+            copy.putString(name, ((DollarString) o).$());
         } else if (o instanceof FutureDollar) {
-            $(name, ((FutureDollar) o).then());
+            return $(name, ((FutureDollar) o).then());
         } else {
-            json.putString(name, String.valueOf(o));
+            copy.putString(name, String.valueOf(o));
         }
-        return this;
+        return new DollarJson(copy);
     }
 
     @Override

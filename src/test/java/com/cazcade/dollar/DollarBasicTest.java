@@ -24,6 +24,7 @@ import java.util.Map;
 
 import static com.cazcade.dollar.DollarStatic.$;
 import static com.cazcade.dollar.DollarStatic.$array;
+import static com.cazcade.dollar.DollarStatic.$eval;
 import static org.junit.Assert.*;
 
 public class DollarBasicTest {
@@ -95,6 +96,7 @@ public class DollarBasicTest {
         assertEquals(age /11, (int)profile.$("$['age']/11").$int());
         assertEquals("male", profile.$("$.gender").$());
         assertEquals(10, profile.$("5*2").$());
+        assertEquals(10, (int)$eval("10").$int());
         assertEquals($("{\"name\":\"Dave\"}").$("name").$$(),"Dave");
         assertEquals($().$("({name:'Dave'})").$("name").$$(), "Dave");
     }

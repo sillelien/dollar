@@ -28,6 +28,8 @@ import java.util.Map;
  */
 public interface $<T> {
 
+    $ $eval(String js);
+
     Integer $int();
 
     boolean isNull();

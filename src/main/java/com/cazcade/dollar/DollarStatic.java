@@ -24,7 +24,9 @@ public class DollarStatic {
         return DollarFactory.fromValue().$(name, multiMap);
     }
 
-
+    public static $ $eval(String js) {
+        return $().$eval(js);
+    }
     public static $ $(Object o) {
         if(o == null) {
             return DollarNull.INSTANCE;

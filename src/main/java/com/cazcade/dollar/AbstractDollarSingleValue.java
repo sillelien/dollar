@@ -20,6 +20,10 @@ import org.json.JSONObject;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.json.JsonObject;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import javax.script.SimpleScriptContext;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +33,21 @@ import java.util.stream.Stream;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public abstract class AbstractDollarSingleValue<T> implements $<T> {
+    private static ScriptEngine nashorn   = new ScriptEngineManager().getEngineByName("nashorn");
 
     protected final T value;
+
+    @Override
+    public $ $eval(String js) {
+        try {
+            SimpleScriptContext context = new SimpleScriptContext();
+            context.setAttribute("$",value,context.getScopes().get(0));
+            return DollarFactory.fromValue(nashorn.eval(js, context));
+        } catch (ScriptException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
     public AbstractDollarSingleValue(T value) {
         if(value == null) {

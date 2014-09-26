@@ -38,6 +38,11 @@ public class DollarNull implements $ {
     }
 
     @Override
+    public $ $eval(String js) {
+        return INSTANCE;
+    }
+
+    @Override
     public Integer $int() {
         return null;
     }
