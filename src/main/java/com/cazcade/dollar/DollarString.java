@@ -45,7 +45,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
-    public $<String> copy() {
+    public $ copy() {
         return new DollarString(value);
     }
 

@@ -42,7 +42,7 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
     }
 
     @Override
-    public $<Number> copy() {
+    public $ copy() {
         return new DollarNumber(value);
     }
 

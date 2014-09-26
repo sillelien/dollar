@@ -22,32 +22,35 @@ import org.vertx.java.core.json.JsonObject;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface $<T> {
+public interface $ {
 
     $ $eval(String js);
+
+    $ $fun(Function<$, $> lambda);
 
     Integer $int();
 
     boolean isNull();
 
-    $<T> $(String age, long l);
+    $ $(String age, long l);
 
     $ $(String key);
 
     String $$(String key);
 
 
-    $<T> $(String key, Object value);
+    $ $(String key, Object value);
 
     /**
      * Returns the wrapped object.
      * @return the wrapped object
      */
-    T $();
+    <R> R $();
 
 
     String $$();
@@ -98,7 +101,7 @@ public interface $<T> {
      */
     JSONObject $orgjson();
 
-    java.util.stream.Stream<$<T>> children();
+    java.util.stream.Stream<$> children();
 
     java.util.stream.Stream children(String key);
 
@@ -108,7 +111,7 @@ public interface $<T> {
      *
      * @return a deep copy of this
      */
-    $<T> copy();
+    $ copy();
 
     /**
      * Returns true if this JSON object has the supplied key.
@@ -118,22 +121,22 @@ public interface $<T> {
      */
     boolean has(String key);
 
-    java.util.stream.Stream<Map.Entry<String, $<T>>> keyValues();
+    java.util.stream.Stream<Map.Entry<String, $>> keyValues();
 
     java.util.stream.Stream<String> keys();
 
-    $<T> rm(String value);
+    $ rm(String value);
 
-    FutureDollar<T> send(EventBus e, String destination);
+    FutureDollar send(EventBus e, String destination);
 
-    Map<String, $<T>> split();
+    Map<String, $> split();
 
     List<String> splitValues();
 
     @Override
     String toString();
 
-    T val();
+    <R> R val();
 
     /**
      * URL decode.

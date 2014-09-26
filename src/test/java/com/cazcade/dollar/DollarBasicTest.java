@@ -23,8 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.cazcade.dollar.DollarStatic.$;
-import static com.cazcade.dollar.DollarStatic.$array;
-import static com.cazcade.dollar.DollarStatic.$eval;
+import static com.cazcade.dollar.DollarStatic.*;
 import static org.junit.Assert.*;
 
 public class DollarBasicTest {
@@ -43,6 +42,23 @@ public class DollarBasicTest {
     }
 
     @Test
+    public void testLambda() {
+        $ profile = $("name", "Neil")
+                .$("age", 1)
+                .$("gender", "male")
+                .$("projects", $array("snapito", "dollar_vertx"))
+                .$("location",
+                        $("city", "brighton")
+                                .$("postcode", "bn1 6jj")
+                                .$("number", 343)
+                );
+        $ result = profile.$fun(($ value) -> value.$("weight", "none of your business"));
+        String weight = result.$("weight").$$();
+        assertEquals(weight, "none of your business");
+        assertTrue("Profile's state was mutated!!!", profile.$("weight").isNull());
+    }
+
+    @Test
     public void testMapCreation() {
         Map map = new HashMap();
         map.put("foo", "bar");
@@ -58,30 +74,6 @@ public class DollarBasicTest {
     }
 
     @Test
-    public void testSplit() {
-        assertEquals("{}", $("{\"foo\":\"bar\",\"thing\":1}").split().toString());
-        assertEquals("{\"foo\":\"bar\"}", $("{\"a\":{\"foo\":\"bar\"},\"thing\":1}").split().get("a").toString());
-        assertEquals(2, $("{\"foo\":\"bar\",\"thing\":1}").splitValues().stream().count());
-    }
-
-    @Test
-    public void testStringCreation() {
-        assertEquals("bar", $("{\"foo\":\"bar\"}").$("foo").val());
-        assertEquals("bar", $("{\"foo\":\"bar\"}").$json().getString("foo"));
-    }
-
-    @Test
-    public void testNull() {
-        assertEquals("bar", $((Object)null).$("foo","bar").$("foo").val());
-        assertTrue($((Object) null).isNull());
-        assertTrue($((Object) null).$("bar").isNull());
-        assertNull($((Object) null).val());
-        assertFalse($((Object) null).$("bar").has("foo"));
-        assertFalse($((Object) null).has("foo"));
-        assertFalse($((Object) null).$("foo", "bar").$("foo").isNull());
-    }
-
-    @Test
     public void testNashorn() {
         int age = new Date().getYear() + 1900 - 1970;
         $ profile = $("name", "Neil")
@@ -93,12 +85,36 @@ public class DollarBasicTest {
                                 .$("postcode", "bn1 6jj")
                                 .$("number", 343)
                 );
-        assertEquals(age /11, (int)profile.$("$['age']/11").$int());
+        assertEquals(age / 11, (int) profile.$("$['age']/11").$int());
         assertEquals("male", profile.$("$.gender").$());
-        assertEquals(10, profile.$("5*2").$());
-        assertEquals(10, (int)$eval("10").$int());
-        assertEquals($("{\"name\":\"Dave\"}").$("name").$$(),"Dave");
+        assertEquals(10, (int) profile.$("5*2").$int());
+        assertEquals(10, (int) $eval("10").$int());
+        assertEquals($("{\"name\":\"Dave\"}").$("name").$$(), "Dave");
         assertEquals($().$("({name:'Dave'})").$("name").$$(), "Dave");
+    }
+
+    @Test
+    public void testNull() {
+        assertEquals("bar", $((Object) null).$("foo", "bar").$("foo").val());
+        assertTrue($((Object) null).isNull());
+        assertTrue($((Object) null).$("bar").isNull());
+        assertNull($((Object) null).val());
+        assertFalse($((Object) null).$("bar").has("foo"));
+        assertFalse($((Object) null).has("foo"));
+        assertFalse($((Object) null).$("foo", "bar").$("foo").isNull());
+    }
+
+    @Test
+    public void testSplit() {
+        assertEquals("{}", $("{\"foo\":\"bar\",\"thing\":1}").split().toString());
+        assertEquals("{\"foo\":\"bar\"}", $("{\"a\":{\"foo\":\"bar\"},\"thing\":1}").split().get("a").toString());
+        assertEquals(2, $("{\"foo\":\"bar\",\"thing\":1}").splitValues().stream().count());
+    }
+
+    @Test
+    public void testStringCreation() {
+        assertEquals("bar", $("{\"foo\":\"bar\"}").$("foo").val());
+        assertEquals("bar", $("{\"foo\":\"bar\"}").$json().getString("foo"));
     }
 
 

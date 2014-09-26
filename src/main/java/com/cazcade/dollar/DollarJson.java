@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * The $ class is the class used to hold a JsonObject data structure. It can be used for managing
@@ -23,7 +24,7 @@ import java.util.Map;
  *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-class DollarJson implements com.cazcade.dollar.$<JsonObject> {
+class DollarJson implements com.cazcade.dollar.$ {
 
     /**
      * Publicly accessible object containing the current state as a JsonObject, if you're working in Vert.x primarily with the JsonObject type you will likely end all chained expressions with '.$'
@@ -73,6 +74,11 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
     }
 
     @Override
+    public  $ $fun(Function<$, $> lambda) {
+        return lambda.apply(copy());
+    }
+
+    @Override
     public Integer $int() {
         throw new UnsupportedOperationException("Cannot convert JSON to an integer");
     }
@@ -83,7 +89,7 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
     }
 
     @Override
-    public com.cazcade.dollar.$<JsonObject> $(String key, long value) {
+    public com.cazcade.dollar.$ $(String key, long value) {
         return new DollarJson(json.copy().putNumber(key, value));
     }
 
@@ -102,7 +108,7 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
     }
 
     @Override
-    public com.cazcade.dollar.$<JsonObject> $(String name, Object o) {
+    public com.cazcade.dollar.$ $(String name, Object o) {
         JsonObject copy = this.json.copy();
         if (o instanceof MultiMap) {
             copy.putObject(name, DollarStatic.mapToJson((MultiMap) o));
@@ -166,7 +172,7 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
     }
 
     @Override
-    public java.util.stream.Stream<com.cazcade.dollar.$<JsonObject>> children() {
+    public java.util.stream.Stream<com.cazcade.dollar.$> children() {
         return split().values().stream();
     }
 
@@ -190,13 +196,13 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
     }
 
     @Override
-    public java.util.stream.Stream<Map.Entry<String, com.cazcade.dollar.$<JsonObject>>> keyValues() {
+    public java.util.stream.Stream<Map.Entry<String, com.cazcade.dollar.$>> keyValues() {
         return split().entrySet().stream();
     }
 
     @Override
-    public Map<String, com.cazcade.dollar.$<JsonObject>> split() {
-        HashMap<String, com.cazcade.dollar.$<JsonObject>> map = new HashMap<>();
+    public Map<String, com.cazcade.dollar.$> split() {
+        HashMap<String, com.cazcade.dollar.$> map = new HashMap<>();
         for (String key : json.toMap().keySet()) {
             Object field = json.getField(key);
             if (field instanceof JsonObject) {
@@ -212,7 +218,7 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
     }
 
     @Override
-    public com.cazcade.dollar.$<JsonObject> rm(String value) {
+    public com.cazcade.dollar.$ rm(String value) {
         json.removeField(value);
         return this;
     }
@@ -247,12 +253,12 @@ class DollarJson implements com.cazcade.dollar.$<JsonObject> {
     }
 
 
-    public com.cazcade.dollar.$<JsonObject>¢(String key) {
+    public com.cazcade.dollar.$ ¢(String key) {
         return child(key);
     }
 
 
-    public com.cazcade.dollar.$<JsonObject> child(String key) {
+    public com.cazcade.dollar.$ child(String key) {
         JsonObject child = json.getObject(key);
         if (child == null) {
             return null;

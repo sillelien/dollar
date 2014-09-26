@@ -23,6 +23,7 @@ import org.vertx.java.core.json.JsonObject;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -31,7 +32,7 @@ import java.util.stream.Stream;
 public class DollarNull implements $ {
 
 
-    public static final $ INSTANCE = new DollarNull();
+    public static final DollarNull INSTANCE = new DollarNull();
 
     public DollarNull() {
 
@@ -40,6 +41,11 @@ public class DollarNull implements $ {
     @Override
     public $ $eval(String js) {
         return INSTANCE;
+    }
+
+    @Override
+    public  $ $fun(Function<$, $> lambda) {
+        return lambda.apply(INSTANCE);
     }
 
     @Override
@@ -124,7 +130,7 @@ public class DollarNull implements $ {
     }
 
     @Override
-    public $<String> copy() {
+    public DollarNull copy() {
         return this;
     }
 

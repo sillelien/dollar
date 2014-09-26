@@ -52,7 +52,7 @@ public class FutureDollar<T> {
         }
     }
 
-    public $ then(Function<$<T>,Void> handler) throws ExecutionException, InterruptedException {
+    public $ then(Function<$,Void> handler) throws ExecutionException, InterruptedException {
         handler.apply(response.get());
         return response.get();
     }

@@ -27,12 +27,13 @@ import javax.script.SimpleScriptContext;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public abstract class AbstractDollarSingleValue<T> implements $<T> {
+public abstract class AbstractDollarSingleValue<T> implements $ {
     private static ScriptEngine nashorn   = new ScriptEngineManager().getEngineByName("nashorn");
 
     protected final T value;
@@ -47,6 +48,11 @@ public abstract class AbstractDollarSingleValue<T> implements $<T> {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public $ $fun(Function<$, $> lambda) {
+        return lambda.apply(copy());
     }
 
     public AbstractDollarSingleValue(T value) {
@@ -74,7 +80,7 @@ public abstract class AbstractDollarSingleValue<T> implements $<T> {
         return false;
     }
 
-    public $<T> $(String age, long l) {
+    public $ $(String age, long l) {
         throw new UnsupportedOperationException();
     }
 
@@ -88,7 +94,7 @@ public abstract class AbstractDollarSingleValue<T> implements $<T> {
     }
 
 
-    public $<T> $(String key, Object value) {
+    public $ $(String key, Object value) {
         throw new UnsupportedOperationException();
     }
 
@@ -115,7 +121,7 @@ public abstract class AbstractDollarSingleValue<T> implements $<T> {
     }
 
 
-    public Stream<$<T>> children() {
+    public Stream<$> children() {
         throw new UnsupportedOperationException();
 
     }
@@ -134,7 +140,7 @@ public abstract class AbstractDollarSingleValue<T> implements $<T> {
         throw new UnsupportedOperationException();
     }
 
-    public Stream<Map.Entry<String, $<T>>> keyValues() {
+    public Stream<Map.Entry<String, $>> keyValues() {
         throw new UnsupportedOperationException();
 
     }
@@ -144,12 +150,12 @@ public abstract class AbstractDollarSingleValue<T> implements $<T> {
 
     }
 
-    public $<T> rm(String value) {
+    public $ rm(String value) {
         throw new UnsupportedOperationException();
 
     }
 
-    public Map<String, $<T>> split() {
+    public Map<String, $> split() {
         throw new UnsupportedOperationException();
 
     }
@@ -161,7 +167,7 @@ public abstract class AbstractDollarSingleValue<T> implements $<T> {
     }
 
 
-    public $<T> ¢(String key) {
+    public $ ¢(String key) {
         throw new UnsupportedOperationException();
     }
 
