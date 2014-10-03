@@ -5,8 +5,12 @@ import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.DecodeException;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
+import spark.route.HttpMethod;
 
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * To use the $ class you need to statically import all of the methods from this class.
@@ -16,29 +20,31 @@ import java.util.Map;
  */
 public class DollarStatic {
 
-    public static $ $() {
-        return DollarFactory.fromValue();
-    }
+
+    private static ConcurrentHashMap<Object, Map> context = new ConcurrentHashMap<>();
+    private static ThreadLocal<String> threadKey = new ThreadLocal<String>() {
+        @Override
+        protected String initialValue() {
+            return UUID.randomUUID().toString();
+        }
+    };
 
     public static $ $(String name, MultiMap multiMap) {
         return DollarFactory.fromValue().$(name, multiMap);
     }
 
-    public static $ $eval(String js) {
-        return $().$eval(js);
-    }
     public static $ $(Object o) {
-        if(o == null) {
-            return DollarNull.INSTANCE;
+        if (o == null) {
+            return new DollarMonitored(DollarNull.INSTANCE, DollarFactory.monitor);
         }
-        if(o instanceof Number) {
-            return new DollarNumber((Number) o);
+        if (o instanceof Number) {
+            return new DollarMonitored(new DollarNumber((Number) o), DollarFactory.monitor);
         }
-        if(o instanceof String) {
+        if (o instanceof String) {
             try {
-                return new DollarJson(new JsonObject((String) o));
+                return new DollarMonitored(new DollarJson(new JsonObject((String) o)), DollarFactory.monitor);
             } catch (DecodeException de) {
-                return new DollarString((String) o);
+                return new DollarMonitored(new DollarString((String) o), DollarFactory.monitor);
             }
         }
         JsonObject json;
@@ -53,13 +59,13 @@ public class DollarStatic {
             json = new JsonObject((Map<String, Object>) o);
         } else if (o instanceof Message) {
             json = ((JsonObject) ((Message) o).body());
-            if(json == null) {
-                return DollarNull.INSTANCE;
+            if (json == null) {
+                return new DollarMonitored(DollarNull.INSTANCE, DollarFactory.monitor);
             }
         } else {
             json = new JsonObject(o.toString());
         }
-        return new DollarJson(json);
+        return new DollarMonitored(new DollarJson(json), DollarFactory.monitor);
     }
 
     static JsonObject mapToJson(MultiMap map) {
@@ -69,7 +75,6 @@ public class DollarStatic {
         }
         return jsonObject;
     }
-
 
     public static $ $(String name, JsonArray value) {
         return DollarFactory.fromValue().$(name, value);
@@ -93,6 +98,85 @@ public class DollarStatic {
 
     public static JsonArray $array(Object... values) {
         return new JsonArray(values);
+    }
+
+    public static $ $eval(String label, String js) {
+        return $().eval(label, js);
+    }
+
+    public static $ $() {
+        return DollarFactory.fromValue();
+    }
+
+    public static $ $eval(String js) {
+        return $().eval(js);
+    }
+
+    public static DollarHttp GET(String path, DollarHttpHandler handler) {
+        return new DollarHttp(HttpMethod.get.name(), path, handler);
+    }
+
+    /**
+     * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used to link context's together.
+     *
+     * @param call the lambda to run.
+     */
+    public static <R> R call(Callable<R> call) {
+        try {
+            return call.call();
+        } catch (Exception e) {
+            throw new DollarException(e);
+        } finally {
+            threadKey.remove();
+        }
+    }
+
+    /**
+     * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used to link context's together.
+     *
+     * @param call the lambda to run.
+     */
+    public static <R> R call(String contextKey, Callable<R> call) {
+        threadKey.set(contextKey);
+        try {
+            return call.call();
+        } catch (Exception e) {
+            throw new DollarException(e);
+        } finally {
+            threadKey.remove();
+        }
+    }
+
+    public static String contextKey() {
+        return threadKey.get();
+    }
+
+    /**
+     * The beginning of any Dollar Code should start with a DollarStatic.run method.
+     *
+     * @param contextKey this is an identifier used to link context's together, it should be unique to the request being processed.
+     * @param run        the lambda to run.
+     */
+    public static void run(String contextKey, Runnable run) {
+        threadKey.set(contextKey);
+        try {
+            run.run();
+        } finally {
+            threadKey.remove();
+        }
+    }
+
+    /**
+     * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used to link context's together.
+     *
+     * @param run the lambda to run.
+     */
+    public static void run(Runnable run) {
+        try {
+            run.run();
+        } finally {
+            threadKey.remove();
+        }
     }
 
 

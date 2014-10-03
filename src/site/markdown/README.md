@@ -8,7 +8,7 @@ Install using Maven
         <dependency>
             <groupId>com.cazcade</groupId>
             <artifactId>dollar-vertx</artifactId>
-            <version>0.0.11</version>
+            <version>0.0.12</version>
         </dependency>
 
 
@@ -31,6 +31,21 @@ Example
         assertEquals(10, (int)$eval("10").$int());
         assertEquals($("{\"name\":\"Dave\"}").$("name").$$(),"Dave");
         assertEquals($().$("({name:'Dave'})").$("name").$$(), "Dave");
+
+Characteristics
+===============
+
+Synchronous
+Metered
+Nullsafe
+
+The Rules
+=========
+
+1. Do not create your own Threads.
+2. Do not create your own Threads.
+3. Always run from a *static* context (e.g. a public static void main method)
+4. All $ objects are immutable, so use the returned value after 'mutation' actions.
 
 Or [ ![Download](https://api.bintray.com/packages/cazcade/maven/dollar_vertx/images/download.png) ](https://bintray.com/cazcade/maven/dollar_vertx/_latestVersion)
 

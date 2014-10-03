@@ -16,49 +16,53 @@
 
 package com.cazcade.dollar;
 
+import com.cazcade.dollar.monitor.DefaultMonitor;
+import com.cazcade.dollar.monitor.Monitor;
 import org.vertx.java.core.json.JsonObject;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-class DollarFactory {
-    static $ fromField(Object field) {
+public class DollarFactory {
+    static Monitor monitor = new DefaultMonitor();
+
+    public static $ fromField(Object field) {
         if (field == null) {
-            return DollarNull.INSTANCE;
+            return new DollarMonitored(DollarNull.INSTANCE, monitor);
         }
         if (field instanceof String) {
-            return new DollarString((String) field);
+            return new DollarMonitored(new DollarString((String) field), monitor);
         }
         if (field instanceof Number) {
-            return new DollarNumber((Number) field);
+            return new DollarMonitored(new DollarNumber((Number) field), monitor);
         }
         if (field instanceof JsonObject) {
             return DollarStatic.$(field);
         }
-        return DollarStatic.$(field.toString());
+        return new DollarMonitored(DollarStatic.$(field.toString()), monitor);
     }
 
-     static $ fromValue() {
-        return new DollarJson();
+    public static $ fromValue() {
+        return new DollarMonitored(new DollarJson(), monitor);
     }
 
-     static $ fromValue(JsonObject json) {
+    public static $ fromValue(JsonObject json) {
         if (json == null) {
-            return DollarNull.INSTANCE;
+            return new DollarMonitored(DollarNull.INSTANCE, monitor);
         }
-        return new DollarJson(json);
+        return new DollarMonitored(new DollarJson(json), monitor);
     }
 
-     static $ fromValue(String json) {
+    public static $ fromValue(String json) {
         if (json == null) {
-            return DollarNull.INSTANCE;
+            return new DollarMonitored(DollarNull.INSTANCE, monitor);
         }
         return DollarStatic.$(json);
     }
 
-     static $ fromValue(Object o) {
+    public static $ fromValue(Object o) {
         if (o == null) {
-            return DollarNull.INSTANCE;
+            return new DollarMonitored(DollarNull.INSTANCE, monitor);
         }
         return DollarStatic.$(o);
     }

@@ -52,7 +52,7 @@ public class DollarBasicTest {
                                 .$("postcode", "bn1 6jj")
                                 .$("number", 343)
                 );
-        $ result = profile.$fun(($ value) -> value.$("weight", "none of your business"));
+        $ result = profile.eval("getWeight", ($ value) -> value.$("weight", "none of your business"));
         String weight = result.$("weight").$$();
         assertEquals(weight, "none of your business");
         assertTrue("Profile's state was mutated!!!", profile.$("weight").isNull());

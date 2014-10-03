@@ -20,40 +20,43 @@ import org.json.JSONObject;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.json.JsonObject;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface $ {
 
-    $ $eval(String js);
+    static Map<String, String> config = new HashMap<String, String>();
 
-    $ $fun(Function<$, $> lambda);
+    static void config(String key, String value) {
+        config.put(key, value);
+    }
 
-    Integer $int();
-
-    boolean isNull();
+    static String config(String s) {
+        return config.get(s);
+    }
 
     $ $(String age, long l);
 
     $ $(String key);
 
-    String $$(String key);
-
-
     $ $(String key, Object value);
 
     /**
      * Returns the wrapped object.
+     *
      * @return the wrapped object
      */
     <R> R $();
 
+    String $$(String key);
 
     String $$();
+
+    Integer $int();
 
     /**
      * Returns the value for the supplied key as an Integer.
@@ -77,6 +80,8 @@ public interface $ {
      * @return a JsonObject
      */
     JsonObject $json(String key);
+
+    List<String> $list();
 
     /**
      * Returns this JSON object as a set of nested maps.
@@ -114,6 +119,32 @@ public interface $ {
     $ copy();
 
     /**
+     * URL decode.
+     *
+     * @return decoded string value
+     */
+    $ decode();
+
+    $ eval(String label, String js);
+
+    $ eval(String js);
+
+    $ eval(String label, DollarEval eval);
+
+    $ eval(DollarEval eval);
+
+    /**
+     * If the class has a method $ call($ in) then that method is called otherwise
+     * converts this object to a set of string parameters and passes them to the main method of the clazz.
+     *
+     * NB: This is the preferred way to pass values between classes as it preserves the stateless nature.
+     * Try where possible to maintain a stateless context to execution.
+     *
+     * @param clazz the class to pass this to.
+     */
+    $ eval(Class clazz);
+
+    /**
      * Returns true if this JSON object has the supplied key.
      *
      * @param key the key
@@ -121,11 +152,23 @@ public interface $ {
      */
     boolean has(String key);
 
+    boolean isNull();
+
     java.util.stream.Stream<Map.Entry<String, $>> keyValues();
 
     java.util.stream.Stream<String> keys();
 
+    $ load(String location);
+
+    $ pop(String location, int timeoutInMillis);
+
+    void push(String location);
+
     $ rm(String value);
+
+    void save(String location);
+
+    void save(String location, int expiryInMilliseconds);
 
     FutureDollar send(EventBus e, String destination);
 
@@ -138,11 +181,5 @@ public interface $ {
 
     <R> R val();
 
-    /**
-     * URL decode.
-     *
-     * @return decoded string value
-     */
-    $ decode();
 
 }

@@ -17,43 +17,20 @@
 package com.cazcade.dollar;
 
 import org.json.JSONObject;
-import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.json.JsonObject;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import javax.script.SimpleScriptContext;
 import java.net.URLDecoder;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public abstract class AbstractDollarSingleValue<T> implements $ {
-    private static ScriptEngine nashorn   = new ScriptEngineManager().getEngineByName("nashorn");
+public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implements $ {
 
     protected final T value;
-
-    @Override
-    public $ $eval(String js) {
-        try {
-            SimpleScriptContext context = new SimpleScriptContext();
-            context.setAttribute("$",value,context.getScopes().get(0));
-            return DollarFactory.fromValue(nashorn.eval(js, context));
-        } catch (ScriptException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public $ $fun(Function<$, $> lambda) {
-        return lambda.apply(copy());
-    }
 
     public AbstractDollarSingleValue(T value) {
         if(value == null) {
@@ -62,29 +39,11 @@ public abstract class AbstractDollarSingleValue<T> implements $ {
         this.value= value;
     }
 
-
-
-    @Override
-    public T val() {
-        return value;
-    }
-
-    @Override
-    public DollarString decode() {
-        return new DollarString(URLDecoder.decode($$()));
-    }
-
-
-    @Override
-    public boolean isNull() {
-        return false;
-    }
-
     public $ $(String age, long l) {
         throw new UnsupportedOperationException();
     }
 
-    public $ $(String key) {
+    public $ $(String key, Object value) {
         throw new UnsupportedOperationException();
     }
 
@@ -93,11 +52,9 @@ public abstract class AbstractDollarSingleValue<T> implements $ {
         return $(key).$$();
     }
 
-
-    public $ $(String key, Object value) {
+    public $ $(String key) {
         throw new UnsupportedOperationException();
     }
-
 
     public Integer $int(String key) {
         throw new UnsupportedOperationException();
@@ -111,6 +68,21 @@ public abstract class AbstractDollarSingleValue<T> implements $ {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public List<String> $list() {
+        return Collections.singletonList($$());
+    }
+
+    @Override
+    public String $$() {
+        return toString();
+    }
+
+    @Override
+    public String toString() {
+        return value.toString();
+    }
+
     public Map<String, Object> $map() {
         throw new UnsupportedOperationException();
     }
@@ -119,7 +91,6 @@ public abstract class AbstractDollarSingleValue<T> implements $ {
         throw new UnsupportedOperationException();
 
     }
-
 
     public Stream<$> children() {
         throw new UnsupportedOperationException();
@@ -130,14 +101,19 @@ public abstract class AbstractDollarSingleValue<T> implements $ {
         throw new UnsupportedOperationException();
 
     }
-    @Override
-    public String $$() {
-        return toString();
-    }
 
+    @Override
+    public DollarString decode() {
+        return new DollarString(URLDecoder.decode($$()));
+    }
 
     public boolean has(String key) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isNull() {
+        return false;
     }
 
     public Stream<Map.Entry<String, $>> keyValues() {
@@ -160,23 +136,17 @@ public abstract class AbstractDollarSingleValue<T> implements $ {
 
     }
 
-    @Override
-    public FutureDollar<T> send(EventBus e, String destination) {
-        throw new UnsupportedOperationException();
-
-    }
-
-
-    public $ ¢(String key) {
-        throw new UnsupportedOperationException();
-    }
-
     public List<String> splitValues() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public String toString() {
-        return value.toString();
+    public T val() {
+        return value;
     }
+
+    public $ ¢(String key) {
+        throw new UnsupportedOperationException();
+    }
+
 }

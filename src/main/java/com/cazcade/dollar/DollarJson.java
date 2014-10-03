@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * The $ class is the class used to hold a JsonObject data structure. It can be used for managing
@@ -24,8 +23,9 @@ import java.util.function.Function;
  *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-class DollarJson implements com.cazcade.dollar.$ {
+class DollarJson extends AbstractDollar implements com.cazcade.dollar.$ {
 
+    private static ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
     /**
      * Publicly accessible object containing the current state as a JsonObject, if you're working in Vert.x primarily with the JsonObject type you will likely end all chained expressions with '.$'
      * <p/>
@@ -35,7 +35,6 @@ class DollarJson implements com.cazcade.dollar.$ {
      * </code>
      */
     private JsonObject json;
-    private static ScriptEngine nashorn   = new ScriptEngineManager().getEngineByName("nashorn");
 
     /**
      * Create a new and empty $ object.
@@ -60,64 +59,25 @@ class DollarJson implements com.cazcade.dollar.$ {
         this.json= o;
     }
 
-
-    @Override
-    public $ $eval(String js) {
-        try {
-            SimpleScriptContext context = new SimpleScriptContext();
-            context.setAttribute("$",json.toMap(),context.getScopes().get(0));
-            return DollarFactory.fromValue(nashorn.eval(js, context));
-        } catch (ScriptException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public  $ $fun(Function<$, $> lambda) {
-        return lambda.apply(copy());
-    }
-
-    @Override
-    public Integer $int() {
-        throw new UnsupportedOperationException("Cannot convert JSON to an integer");
-    }
-
-    @Override
-    public boolean isNull() {
-        return false;
-    }
-
     @Override
     public com.cazcade.dollar.$ $(String key, long value) {
-        return new DollarJson(json.copy().putNumber(key, value));
-    }
-
-    @Override
-    public $ $(String key) {
-        if(key.matches("\\w+")) {
-            return DollarFactory.fromField(json.getField(key));
-        } else {
-            return $eval(key);
-        }
-    }
-
-    @Override
-    public String $$(String key) {
-        return $(key).$$();
+        return DollarFactory.fromValue(json.copy().putNumber(key, value));
     }
 
     @Override
     public com.cazcade.dollar.$ $(String name, Object o) {
         JsonObject copy = this.json.copy();
-        if (o instanceof MultiMap) {
+        if (o instanceof DollarMonitored) {
+            //unwrap
+            return $(name, ((DollarMonitored) o).getValue());
+        } else if (o instanceof MultiMap) {
             copy.putObject(name, DollarStatic.mapToJson((MultiMap) o));
         } else if (o instanceof JsonArray) {
             copy.putArray(name, (JsonArray) o);
         } else if (o instanceof JsonObject) {
             copy.putObject(name, (JsonObject) o);
         } else if (o instanceof DollarJson) {
-            copy.putObject(name, ((DollarJson) o).$json());
+            copy.putObject(name, ((DollarJson) o).json);
         } else if (o instanceof DollarNumber) {
             copy.putNumber(name, ((DollarNumber) o).$());
         } else if (o instanceof DollarString) {
@@ -127,14 +87,8 @@ class DollarJson implements com.cazcade.dollar.$ {
         } else {
             copy.putString(name, String.valueOf(o));
         }
-        return new DollarJson(copy);
+        return DollarFactory.fromValue(copy);
     }
-
-    @Override
-    public JsonObject $json() {
-        return json;
-    }
-
 
     @Override
     public JsonObject $() {
@@ -142,8 +96,22 @@ class DollarJson implements com.cazcade.dollar.$ {
     }
 
     @Override
-    public String $$() {
-        return toString();
+    public String $$(String key) {
+        return $(key).$$();
+    }
+
+    @Override
+    public $ $(String key) {
+        if (key.matches("\\w+")) {
+            return DollarFactory.fromField(json.getField(key));
+        } else {
+            return eval(key);
+        }
+    }
+
+    @Override
+    public Integer $int() {
+        throw new UnsupportedOperationException("Cannot convert JSON to an integer");
     }
 
     @Override
@@ -152,8 +120,24 @@ class DollarJson implements com.cazcade.dollar.$ {
     }
 
     @Override
+    public JsonObject $json() {
+        return json;
+    }
+
+    @Override
     public JsonObject $json(String key) {
         return json.getObject(key);
+    }
+
+    @Override
+    public List<String> $list() {
+        List<String> values = new ArrayList<>();
+        Map<String, Object> map = $map();
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            values.add(entry.getKey());
+            values.add(entry.getValue().toString());
+        }
+        return values;
     }
 
     @Override
@@ -177,30 +161,6 @@ class DollarJson implements com.cazcade.dollar.$ {
     }
 
     @Override
-    public java.util.stream.Stream children(String key) {
-        List list = json.getArray(key).toList();
-        if(list == null) {
-            return null;
-        }
-        return list.stream();
-    }
-
-    @Override
-    public DollarJson copy() {
-        return new DollarJson(json.copy());
-    }
-
-    @Override
-    public boolean has(String key) {
-        return $json().containsField(key);
-    }
-
-    @Override
-    public java.util.stream.Stream<Map.Entry<String, com.cazcade.dollar.$>> keyValues() {
-        return split().entrySet().stream();
-    }
-
-    @Override
     public Map<String, com.cazcade.dollar.$> split() {
         HashMap<String, com.cazcade.dollar.$> map = new HashMap<>();
         for (String key : json.toMap().keySet()) {
@@ -210,6 +170,67 @@ class DollarJson implements com.cazcade.dollar.$ {
             }
         }
         return map;
+    }
+
+    @Override
+    public java.util.stream.Stream children(String key) {
+        List list = json.getArray(key).toList();
+        if (list == null) {
+            return null;
+        }
+        return list.stream();
+    }
+
+    @Override
+    public $ decode() {
+        return new DollarString(URLDecoder.decode($$()));
+    }
+
+    @Override
+    public String $$() {
+        return toString();
+    }
+
+    @Override
+    public String toString() {
+        return json.toString();
+    }
+
+    @Override
+    public $ eval(String label, String js) {
+        try {
+            SimpleScriptContext context = new SimpleScriptContext();
+            context.setAttribute("$", json.toMap(), context.getScopes().get(0));
+            return DollarFactory.fromValue(nashorn.eval(js, context));
+        } catch (ScriptException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public $ eval(String label, DollarEval lambda) {
+        return lambda.eval(copy());
+    }
+
+    @Override
+    public $ copy() {
+        return DollarFactory.fromValue(json.copy());
+    }
+
+    @Override
+    public boolean has(String key) {
+        return $json().containsField(key);
+    }
+
+    @Override
+    public boolean isNull() {
+        return false;
+    }
+
+    @Override
+    public java.util.stream.Stream<Map.Entry<String, com.cazcade.dollar.$>> keyValues() {
+        return split().entrySet().stream();
     }
 
     @Override
@@ -243,33 +264,22 @@ class DollarJson implements com.cazcade.dollar.$ {
     }
 
     @Override
-    public String toString() {
-        return json.toString();
-    }
-
-    @Override
     public JsonObject val() {
         return json;
     }
 
-
     public com.cazcade.dollar.$ ¢(String key) {
         return child(key);
     }
-
 
     public com.cazcade.dollar.$ child(String key) {
         JsonObject child = json.getObject(key);
         if (child == null) {
             return null;
         }
-        return new DollarJson(child);
+        return DollarFactory.fromValue(child);
     }
 
-    @Override
-    public $ decode() {
-        return new DollarString(URLDecoder.decode($$()));
-    }
 }
 
 

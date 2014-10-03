@@ -23,39 +23,18 @@ import org.vertx.java.core.json.JsonObject;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DollarNull implements $ {
+public class DollarNull extends AbstractDollar implements $ {
 
 
     public static final DollarNull INSTANCE = new DollarNull();
 
     public DollarNull() {
 
-    }
-
-    @Override
-    public $ $eval(String js) {
-        return INSTANCE;
-    }
-
-    @Override
-    public  $ $fun(Function<$, $> lambda) {
-        return lambda.apply(INSTANCE);
-    }
-
-    @Override
-    public Integer $int() {
-        return null;
-    }
-
-    @Override
-    public boolean isNull() {
-        return true;
     }
 
     @Override
@@ -69,14 +48,8 @@ public class DollarNull implements $ {
     }
 
     @Override
-    public String $$(String key) {
-        return null;
-    }
-
-
-    @Override
     public $ $(String key, Object value) {
-        return DollarFactory.fromValue().$(key,value);
+        return DollarFactory.fromValue().$(key, value);
     }
 
     @Override
@@ -85,7 +58,17 @@ public class DollarNull implements $ {
     }
 
     @Override
+    public String $$(String key) {
+        return null;
+    }
+
+    @Override
     public String $$() {
+        return null;
+    }
+
+    @Override
+    public Integer $int() {
         return null;
     }
 
@@ -102,6 +85,11 @@ public class DollarNull implements $ {
     @Override
     public JsonObject $json(String key) {
         return null;
+    }
+
+    @Override
+    public List<String> $list() {
+        return Collections.emptyList();
     }
 
     @Override
@@ -135,13 +123,33 @@ public class DollarNull implements $ {
     }
 
     @Override
+    public $ decode() {
+        return this;
+    }
+
+    @Override
+    public $ eval(String js, String label) {
+        return INSTANCE;
+    }
+
+    @Override
+    public $ eval(String label, DollarEval lambda) {
+        return lambda.eval(INSTANCE);
+    }
+
+    @Override
     public boolean has(String key) {
         return false;
     }
 
     @Override
+    public boolean isNull() {
+        return true;
+    }
+
+    @Override
     public Stream<Map.Entry<String, $>> keyValues() {
-        return Collections.<String,$>emptyMap().entrySet().stream();
+        return Collections.<String, $>emptyMap().entrySet().stream();
     }
 
     @Override
@@ -172,11 +180,6 @@ public class DollarNull implements $ {
     @Override
     public Object val() {
         return null;
-    }
-
-    @Override
-    public $ decode() {
-        return this;
     }
 
 
