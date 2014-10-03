@@ -1,5 +1,6 @@
 package com.cazcade.dollar;
 
+import spark.Route;
 import spark.SparkBase;
 
 /**
@@ -8,8 +9,9 @@ import spark.SparkBase;
 public class DollarHttp extends SparkBase {
 
     public DollarHttp(String method, String path, DollarHttpHandler handler) {
-        addRoute(method, wrap(path, (request, response) -> {
+        Route route = (request, response) -> {
             return DollarStatic.call(() -> handler.handle(new DollarHttpContext(request, response)).$$());
-        }));
+        };
+        addRoute(method, wrap(path, route));
     }
 }
