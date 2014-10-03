@@ -16,14 +16,14 @@ import java.util.function.Consumer;
 public class RedisPubSub implements DollarPubSub {
 
 
-    private final JedisPool jedisPool;
+    private static final JedisPool jedisPool;
+    private static final JedisPoolConfig poolConfig = new JedisPoolConfig();
 
-    {
+    static {
         poolConfig.setMaxTotal(128);
         jedisPool = new JedisPool(poolConfig, System.getProperty("dollar.redis", "localhost"));
     }
 
-    JedisPoolConfig poolConfig = new JedisPoolConfig();
 
     @Override
     public void pub($ value, String... locations) {
