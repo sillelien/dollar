@@ -1,10 +1,10 @@
-dollar_vertx
-============
+dollar
+======
 
-Making JSON easier for Vert.x
+Making Java Dynamic
 
-Please start here: http://cazcade.github.io/dollar_vertx/README.html
+Please start here: http://cazcade.github.io/dollar/README.html
 
-Or [ ![Download](https://api.bintray.com/packages/cazcade/maven/dollar_vertx/images/download.png) ](https://bintray.com/cazcade/maven/dollar_vertx/_latestVersion)
+Or [ ![Download](https://api.bintray.com/packages/cazcade/maven/dollar/images/download.png) ](https://bintray.com/cazcade/maven/dollar/_latestVersion)
 
-[![Circle CI](https://circleci.com/gh/cazcade/dollar_vertx/tree/master.png?style=badge)](https://circleci.com/gh/cazcade/dollar_vertx/tree/master)
+[![Circle CI](https://circleci.com/gh/cazcade/dollar/tree/master.png?style=badge)](https://circleci.com/gh/cazcade/dollar/tree/master)

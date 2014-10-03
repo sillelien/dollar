@@ -6,7 +6,7 @@
 
     <groupId>com.cazcade</groupId>
     <artifactId>dollar</artifactId>
-    <version>0.0.12</version>
+    <version>0.0.13</version>
     <name>Dollar</name>
     <description>Lightweight, dynamic data oriented Java</description>
     <contributors>

@@ -46,10 +46,7 @@ public class DollarHttpTest {
     public void testBasic() throws InterruptedException {
         GET("/", (context) -> $("Hello World"));
         GET("/headers", (context) -> context.headers());
-
-        GET("/profile", (context) -> {
-            return profile;
-        });
+        GET("/profile", (context) -> profile);
         //TODO: Client tests here
         Thread.sleep(1000);
     }

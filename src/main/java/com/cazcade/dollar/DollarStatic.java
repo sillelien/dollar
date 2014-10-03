@@ -112,8 +112,28 @@ public class DollarStatic {
         return $().eval(js);
     }
 
+    public static DollarHttp DELETE(String path, DollarHttpHandler handler) {
+        return new DollarHttp(HttpMethod.delete.name(), path, handler);
+    }
+
     public static DollarHttp GET(String path, DollarHttpHandler handler) {
         return new DollarHttp(HttpMethod.get.name(), path, handler);
+    }
+
+    public static DollarHttp HEAD(String path, DollarHttpHandler handler) {
+        return new DollarHttp(HttpMethod.head.name(), path, handler);
+    }
+
+    public static DollarHttp OPTIONS(String path, DollarHttpHandler handler) {
+        return new DollarHttp(HttpMethod.options.name(), path, handler);
+    }
+
+    public static DollarHttp PATCH(String path, DollarHttpHandler handler) {
+        return new DollarHttp(HttpMethod.patch.name(), path, handler);
+    }
+
+    public static DollarHttp POST(String path, DollarHttpHandler handler) {
+        return new DollarHttp(HttpMethod.post.name(), path, handler);
     }
 
     /**
