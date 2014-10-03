@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.json.JsonObject;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -182,6 +183,11 @@ public class DollarMonitored implements $ {
     @Override
     public $ pop(String location, int timeoutInMillis) {
         return monitor.run("pop", "dollar.persist.temp.pop." + sanitize(location), "Popping value from " + location, () -> getValue().pop(location, timeoutInMillis));
+    }
+
+    @Override
+    public void pub(String... locations) {
+        monitor.run("pub", "dollar.message.pub." + sanitize(Arrays.toString(locations)), "Publishing value to " + Arrays.toString(locations), () -> getValue().pub(locations));
     }
 
     @Override

@@ -78,6 +78,11 @@ public abstract class AbstractDollar implements $ {
     }
 
     @Override
+    public void pub(String... locations) {
+        DollarStatic.pub(this, locations);
+    }
+
+    @Override
     public void push(String location) {
         store.push(location, this);
     }

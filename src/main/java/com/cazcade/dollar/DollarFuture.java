@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
 /**
@@ -15,7 +16,11 @@ import java.util.stream.Stream;
  */
 public class DollarFuture implements $ {
 
-    private CompletableFuture<$> value = new CompletableFuture<>();
+    private Future<$> value = new CompletableFuture<>();
+
+    public DollarFuture(Future<$> value) {
+        this.value = value;
+    }
 
     @Override
     public $ $(String age, long l) {
@@ -31,7 +36,9 @@ public class DollarFuture implements $ {
     }
 
     public void setValue($ newValue) {
-        value.complete(newValue);
+        if (value instanceof CompletableFuture) {
+            ((CompletableFuture) value).complete(newValue);
+        }
     }
 
     @Override
@@ -144,6 +151,10 @@ public class DollarFuture implements $ {
         return getValue().eval(clazz);
     }
 
+    public Future<$> future() {
+        return value;
+    }
+
     @Override
     public boolean has(String key) {
         return getValue().has(key);
@@ -172,6 +183,11 @@ public class DollarFuture implements $ {
     @Override
     public $ pop(String location, int timeoutInMillis) {
         return getValue().pop(location, timeoutInMillis);
+    }
+
+    @Override
+    public void pub(String... locations) {
+        getValue().pub(locations);
     }
 
     @Override

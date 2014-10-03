@@ -162,6 +162,8 @@ public interface $ {
 
     $ pop(String location, int timeoutInMillis);
 
+    void pub(String... locations);
+
     void push(String location);
 
     $ rm(String value);

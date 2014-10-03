@@ -1,5 +1,8 @@
 package com.cazcade.dollar;
 
+import com.cazcade.dollar.pubsub.DollarPubSub;
+import com.cazcade.dollar.pubsub.RedisPubSub;
+import com.cazcade.dollar.pubsub.Sub;
 import org.vertx.java.core.MultiMap;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.DecodeException;
@@ -11,6 +14,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 /**
  * To use the $ class you need to statically import all of the methods from this class.
@@ -22,12 +28,19 @@ public class DollarStatic {
 
 
     private static ConcurrentHashMap<Object, Map> context = new ConcurrentHashMap<>();
+    private static ThreadLocal<DollarPubSub> pubsub = new ThreadLocal<DollarPubSub>() {
+        @Override
+        protected DollarPubSub initialValue() {
+            return new RedisPubSub();
+        }
+    };
     private static ThreadLocal<String> threadKey = new ThreadLocal<String>() {
         @Override
         protected String initialValue() {
             return UUID.randomUUID().toString();
         }
     };
+    private static ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
 
     public static $ $(String name, MultiMap multiMap) {
         return DollarFactory.fromValue().$(name, multiMap);
@@ -151,6 +164,16 @@ public class DollarStatic {
         }
     }
 
+    public static DollarFuture fork(Callable<$> call) {
+        String contextKey = contextKey();
+        return new DollarFuture(threadPoolExecutor.submit(() -> call(contextKey, call)));
+
+    }
+
+    public static String contextKey() {
+        return threadKey.get();
+    }
+
     /**
      * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used to link context's together.
      *
@@ -167,8 +190,8 @@ public class DollarStatic {
         }
     }
 
-    public static String contextKey() {
-        return threadKey.get();
+    public static void pub($ value, String... locations) {
+        pubsub.get().pub(value, locations);
     }
 
     /**
@@ -199,5 +222,8 @@ public class DollarStatic {
         }
     }
 
+    public static Sub sub(Consumer<$> action, String... locations) {
+        return pubsub.get().sub(action, locations);
+    }
 
 }
