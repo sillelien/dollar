@@ -32,11 +32,6 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
     }
 
     @Override
-    public Number $() {
-        return value;
-    }
-
-    @Override
     public Number $number(String key) {
         return value;
     }
@@ -46,6 +41,19 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
         return new DollarNumber(value);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof DollarNumber) {
+            return $().equals(((DollarNumber) obj).$());
+        } else {
+            return value.toString().equals(obj.toString());
+        }
+    }
+
+    @Override
+    public Number $() {
+        return value;
+    }
 
 
 }

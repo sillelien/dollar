@@ -23,6 +23,7 @@ import org.vertx.java.core.json.JsonObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -106,6 +107,8 @@ public interface $ {
      */
     JSONObject $orgjson();
 
+    $ add(Object value);
+
     java.util.stream.Stream<$> children();
 
     java.util.stream.Stream children(String key);
@@ -166,6 +169,8 @@ public interface $ {
 
     void push(String location);
 
+    $ remove(Object value);
+
     $ rm(String value);
 
     void save(String location);
@@ -178,10 +183,10 @@ public interface $ {
 
     List<String> splitValues();
 
+    Stream<$> stream();
+
     @Override
     String toString();
 
     <R> R val();
-
-
 }

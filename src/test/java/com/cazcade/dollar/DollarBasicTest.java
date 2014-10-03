@@ -32,7 +32,7 @@ public class DollarBasicTest {
         $ profile = $("name", "Neil")
                 .$("age", new Date().getYear() + 1900 - 1970)
                 .$("gender", "male")
-                .$("projects", $array("snapito", "dollar_vertx"))
+                .$("projects", jsonArray("snapito", "dollar_vertx"))
                 .$("location",
                         $("city", "brighton")
                                 .$("postcode", "bn1 6jj")
@@ -42,11 +42,30 @@ public class DollarBasicTest {
     }
 
     @Test
+    public void testEquality() {
+        assertNotEquals($(null), $("null"));
+        assertNotEquals($("null"), $(null));
+        assertNotEquals($(1), $(null));
+        assertNotEquals($(null), $(1));
+        assertNotEquals($(), $(null));
+        assertNotEquals($(null), $());
+        assertNotEquals($(""), $());
+        assertNotEquals($(), $(""));
+        assertNotEquals($(), $(0));
+        assertNotEquals($(0), $());
+
+        assertEquals($(), $());
+        assertEquals($("1"), $(1));
+        assertEquals($(1), $("1"));
+        assertEquals($(null), $(null));
+    }
+
+    @Test
     public void testLambda() {
         $ profile = $("name", "Neil")
                 .$("age", 1)
                 .$("gender", "male")
-                .$("projects", $array("snapito", "dollar_vertx"))
+                .$("projects", jsonArray("snapito", "dollar_vertx"))
                 .$("location",
                         $("city", "brighton")
                                 .$("postcode", "bn1 6jj")
@@ -79,7 +98,7 @@ public class DollarBasicTest {
         $ profile = $("name", "Neil")
                 .$("age", age)
                 .$("gender", "male")
-                .$("projects", $array("snapito", "dollar_vertx"))
+                .$("projects", jsonArray("snapito", "dollar_vertx"))
                 .$("location",
                         $("city", "brighton")
                                 .$("postcode", "bn1 6jj")
@@ -116,6 +135,7 @@ public class DollarBasicTest {
         assertEquals("bar", $("{\"foo\":\"bar\"}").$("foo").val());
         assertEquals("bar", $("{\"foo\":\"bar\"}").$json().getString("foo"));
     }
+
 
 
 }

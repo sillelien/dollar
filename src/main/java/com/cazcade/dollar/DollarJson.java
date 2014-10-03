@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * The $ class is the class used to hold a JsonObject data structure. It can be used for managing
@@ -156,6 +157,11 @@ class DollarJson extends AbstractDollar implements com.cazcade.dollar.$ {
     }
 
     @Override
+    public $ add(Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public java.util.stream.Stream<com.cazcade.dollar.$> children() {
         return split().values().stream();
     }
@@ -239,6 +245,11 @@ class DollarJson extends AbstractDollar implements com.cazcade.dollar.$ {
     }
 
     @Override
+    public $ remove(Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public com.cazcade.dollar.$ rm(String value) {
         json.removeField(value);
         return this;
@@ -261,6 +272,11 @@ class DollarJson extends AbstractDollar implements com.cazcade.dollar.$ {
             list.add(field);
         }
         return list;
+    }
+
+    @Override
+    public Stream<$> stream() {
+        return split().values().stream();
     }
 
     @Override

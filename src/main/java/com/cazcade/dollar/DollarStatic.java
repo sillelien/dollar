@@ -109,10 +109,6 @@ public class DollarStatic {
         return DollarFactory.fromValue().$(key, jsonObject);
     }
 
-    public static JsonArray $array(Object... values) {
-        return new JsonArray(values);
-    }
-
     public static $ $eval(String label, String js) {
         return $().eval(label, js);
     }
@@ -123,6 +119,10 @@ public class DollarStatic {
 
     public static $ $eval(String js) {
         return $().eval(js);
+    }
+
+    public static $ $list(Object... values) {
+        return new DollarList(values);
     }
 
     public static DollarHttp DELETE(String path, DollarHttpHandler handler) {
@@ -188,6 +188,10 @@ public class DollarStatic {
         } finally {
             threadKey.remove();
         }
+    }
+
+    public static JsonArray jsonArray(Object... values) {
+        return new JsonArray(values);
     }
 
     public static void pub($ value, String... locations) {

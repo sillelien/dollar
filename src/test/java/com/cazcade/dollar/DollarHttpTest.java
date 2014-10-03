@@ -33,7 +33,7 @@ public class DollarHttpTest {
         profile = $("name", "Neil")
                 .$("age", new Date().getYear() + 1900 - 1970)
                 .$("gender", "male")
-                .$("projects", $array("snapito", "dollar"))
+                .$("projects", jsonArray("snapito", "dollar"))
                 .$("location",
                         $("city", "brighton")
                                 .$("postcode", "bn1 6jj")

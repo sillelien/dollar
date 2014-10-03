@@ -33,10 +33,10 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     protected final T value;
 
     public AbstractDollarSingleValue(T value) {
-        if(value == null) {
+        if (value == null) {
             throw new NullPointerException();
         }
-        this.value= value;
+        this.value = value;
     }
 
     public $ $(String age, long l) {
@@ -92,6 +92,11 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     }
 
+    @Override
+    public $ add(Object newValue) {
+        throw new UnsupportedOperationException();
+    }
+
     public Stream<$> children() {
         throw new UnsupportedOperationException();
 
@@ -107,8 +112,30 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return new DollarString(URLDecoder.decode($$()));
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        } else if (obj instanceof AbstractDollarSingleValue) {
+            return value.equals(((AbstractDollarSingleValue) obj).val());
+        } else {
+            return value.toString().equals(obj.toString());
+        }
+
+    }
+
+    @Override
+    public <R> R val() {
+        return (R) value;
+    }
+
     public boolean has(String key) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int hashCode() {
+        return value.toString().hashCode();
     }
 
     @Override
@@ -126,6 +153,12 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     }
 
+    @Override
+    public $ remove(Object newValue) {
+
+        throw new UnsupportedOperationException();
+    }
+
     public $ rm(String value) {
         throw new UnsupportedOperationException();
 
@@ -141,12 +174,11 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @Override
-    public T val() {
-        return value;
+    public Stream<$> stream() {
+        return Stream.of(this);
     }
 
     public $ ¢(String key) {
         throw new UnsupportedOperationException();
     }
-
 }

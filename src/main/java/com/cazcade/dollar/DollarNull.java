@@ -108,6 +108,11 @@ public class DollarNull extends AbstractDollar implements $ {
     }
 
     @Override
+    public $ add(Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Stream<$> children() {
         return Collections.<$>emptyList().stream();
     }
@@ -128,6 +133,11 @@ public class DollarNull extends AbstractDollar implements $ {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        return obj == null || (obj instanceof $ && (($) obj).$() == null);
+    }
+
+    @Override
     public $ eval(String js, String label) {
         return INSTANCE;
     }
@@ -143,6 +153,11 @@ public class DollarNull extends AbstractDollar implements $ {
     }
 
     @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
     public boolean isNull() {
         return true;
     }
@@ -155,6 +170,11 @@ public class DollarNull extends AbstractDollar implements $ {
     @Override
     public Stream<String> keys() {
         return Collections.<String>emptyList().stream();
+    }
+
+    @Override
+    public $ remove(Object value) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -178,9 +198,17 @@ public class DollarNull extends AbstractDollar implements $ {
     }
 
     @Override
-    public Object val() {
-        return null;
+    public Stream<$> stream() {
+        return Stream.empty();
     }
 
+    @Override
+    public String toString() {
+        return "null";
+    }
 
+    @Override
+    public <R> R val() {
+        return null;
+    }
 }

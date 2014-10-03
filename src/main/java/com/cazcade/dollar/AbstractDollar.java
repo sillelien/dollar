@@ -21,6 +21,15 @@ public abstract class AbstractDollar implements $ {
     private static DollarStore store = new RedisStore();
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof $) {
+            return $() != null && $().equals((($) obj).$());
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public $ eval(DollarEval lambda) {
         return eval("anon", lambda);
     }
@@ -65,6 +74,11 @@ public abstract class AbstractDollar implements $ {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return $().hashCode();
     }
 
     @Override

@@ -28,15 +28,14 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         super(value);
     }
 
+    @Override
+    public String $() {
+        return value;
+    }
 
     @Override
     public Integer $int() {
         return Integer.parseInt(value);
-    }
-
-    @Override
-    public String $() {
-        return value;
     }
 
     @Override
@@ -49,5 +48,8 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return new DollarString(value);
     }
 
-
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && value.equals(obj.toString());
+    }
 }

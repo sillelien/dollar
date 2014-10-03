@@ -107,6 +107,11 @@ public class DollarFuture implements $ {
     }
 
     @Override
+    public $ add(Object value) {
+        return getValue().add(value);
+    }
+
+    @Override
     public Stream<$> children() {
         return getValue().children();
     }
@@ -124,6 +129,11 @@ public class DollarFuture implements $ {
     @Override
     public $ decode() {
         return getValue().decode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return getValue().equals(obj);
     }
 
     @Override
@@ -158,6 +168,11 @@ public class DollarFuture implements $ {
     @Override
     public boolean has(String key) {
         return getValue().has(key);
+    }
+
+    @Override
+    public int hashCode() {
+        return getValue().hashCode();
     }
 
     @Override
@@ -196,6 +211,11 @@ public class DollarFuture implements $ {
     }
 
     @Override
+    public $ remove(Object value) {
+        return getValue().remove(value);
+    }
+
+    @Override
     public $ rm(String value) {
         return getValue().rm(value);
     }
@@ -223,6 +243,11 @@ public class DollarFuture implements $ {
     @Override
     public List<String> splitValues() {
         return getValue().splitValues();
+    }
+
+    @Override
+    public Stream<$> stream() {
+        return getValue().stream();
     }
 
     @Override
