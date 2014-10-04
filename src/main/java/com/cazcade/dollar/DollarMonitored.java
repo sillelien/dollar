@@ -226,13 +226,13 @@ public class DollarMonitored implements $ {
     }
 
     @Override
-    public void save(String location) {
-        monitor.run("save", "dollar.persist.temp.save." + sanitize(location), "Saving value at " + location, () -> getValue().save(location));
+    public $ save(String location) {
+        return monitor.run("save", "dollar.persist.temp.save." + sanitize(location), "Saving value at " + location, () -> getValue().save(location));
     }
 
     @Override
-    public void save(String location, int expiryInMilliseconds) {
-        monitor.run("save", "dollar.persist.temp.save." + sanitize(location), "Saving value at " + location + " with expiry " + expiryInMilliseconds, () -> getValue().save(location, expiryInMilliseconds));
+    public $ save(String location, int expiryInMilliseconds) {
+        return monitor.run("save", "dollar.persist.temp.save." + sanitize(location), "Saving value at " + location + " with expiry " + expiryInMilliseconds, () -> getValue().save(location, expiryInMilliseconds));
     }
 
     @Override

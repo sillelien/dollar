@@ -175,9 +175,9 @@ public interface $ {
 
     $ rm(String value);
 
-    void save(String location);
+    $ save(String location);
 
-    void save(String location, int expiryInMilliseconds);
+    $ save(String location, int expiryInMilliseconds);
 
     FutureDollar send(EventBus e, String destination);
 

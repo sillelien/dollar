@@ -105,13 +105,15 @@ public abstract class AbstractDollar implements $ {
     }
 
     @Override
-    public void save(String location, int expiryInMilliseconds) {
+    public $ save(String location, int expiryInMilliseconds) {
         DollarStatic.$save(location, this, expiryInMilliseconds);
+        return this;
     }
 
     @Override
-    public void save(String location) {
+    public $ save(String location) {
         DollarStatic.$save(this, location);
+        return this;
     }
 
     public FutureDollar send(EventBus e, String destination) {

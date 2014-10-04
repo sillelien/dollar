@@ -226,13 +226,13 @@ public class DollarFuture implements $ {
     }
 
     @Override
-    public void save(String location) {
-        getValue().save(location);
+    public $ save(String location) {
+        return getValue().save(location);
     }
 
     @Override
-    public void save(String location, int expiryInMilliseconds) {
-        getValue().save(location, expiryInMilliseconds);
+    public $ save(String location, int expiryInMilliseconds) {
+        return getValue().save(location, expiryInMilliseconds);
     }
 
     @Override

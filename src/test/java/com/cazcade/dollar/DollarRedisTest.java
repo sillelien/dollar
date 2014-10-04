@@ -24,6 +24,7 @@ import java.util.Date;
 
 import static com.cazcade.dollar.DollarStatic.$;
 import static com.cazcade.dollar.DollarStatic.$jsonArray;
+import static org.junit.Assert.assertTrue;
 
 public class DollarRedisTest {
 
@@ -52,7 +53,7 @@ public class DollarRedisTest {
 
     @Test
     public void testSet() throws InterruptedException {
-        profile.save("test.profile.set");
+        assertTrue(profile.save("test.profile.set").equals(profile));
         $ deser = profile.load("test.profile.set");
         Assert.assertEquals(deser.$$(), profile.$$());
         Thread.sleep(2000);
