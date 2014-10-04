@@ -51,8 +51,9 @@ public class DollarPubSubTest {
             received[0]++;
         }, "test.pub");
         System.out.println("Subbed");
+        Thread.sleep(100);
         profile.pub("test.pub");
-        Thread.sleep(1000);
+        Thread.sleep(100);
         sub.cancel();
         assertEquals(1, received[0]);
     }
