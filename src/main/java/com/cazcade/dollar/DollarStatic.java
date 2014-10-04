@@ -3,11 +3,14 @@ package com.cazcade.dollar;
 import com.cazcade.dollar.pubsub.DollarPubSub;
 import com.cazcade.dollar.pubsub.RedisPubSub;
 import com.cazcade.dollar.pubsub.Sub;
+import com.cazcade.dollar.store.DollarStore;
+import com.cazcade.dollar.store.RedisStore;
 import org.vertx.java.core.MultiMap;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.DecodeException;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
+import spark.Spark;
 import spark.route.HttpMethod;
 
 import java.util.Map;
@@ -34,12 +37,20 @@ public class DollarStatic {
             return new RedisPubSub();
         }
     };
+    private static ThreadLocal<DollarStore> store = new ThreadLocal<DollarStore>() {
+        @Override
+        protected DollarStore initialValue() {
+            return new RedisStore();
+        }
+    };
     private static ThreadLocal<String> threadKey = new ThreadLocal<String>() {
         @Override
         protected String initialValue() {
             return UUID.randomUUID().toString();
         }
     };
+
+
     private static ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
 
     public static $ $(String name, MultiMap multiMap) {
@@ -109,6 +120,45 @@ public class DollarStatic {
         return DollarFactory.fromValue().$(key, jsonObject);
     }
 
+    public static DollarHttp $DELETE(String path, DollarHttpHandler handler) {
+        return new DollarHttp(HttpMethod.delete.name(), path, handler);
+    }
+
+    public static DollarHttp $GET(String path, DollarHttpHandler handler) {
+        return new DollarHttp(HttpMethod.get.name(), path, handler);
+    }
+
+    public static DollarHttp $HEAD(String path, DollarHttpHandler handler) {
+        return new DollarHttp(HttpMethod.head.name(), path, handler);
+    }
+
+    public static DollarHttp $OPTIONS(String path, DollarHttpHandler handler) {
+        return new DollarHttp(HttpMethod.options.name(), path, handler);
+    }
+
+    public static DollarHttp $PATCH(String path, DollarHttpHandler handler) {
+        return new DollarHttp(HttpMethod.patch.name(), path, handler);
+    }
+
+    public static DollarHttp $POST(String path, DollarHttpHandler handler) {
+        return new DollarHttp(HttpMethod.post.name(), path, handler);
+    }
+
+    /**
+     * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used to link context's together.
+     *
+     * @param call the lambda to run.
+     */
+    public static <R> R $call(Callable<R> call) {
+        try {
+            return call.call();
+        } catch (Exception e) {
+            throw new DollarException(e);
+        } finally {
+            threadKey.remove();
+        }
+    }
+
     public static $ $eval(String label, String js) {
         return $().eval(label, js);
     }
@@ -121,52 +171,9 @@ public class DollarStatic {
         return $().eval(js);
     }
 
-    public static $ $list(Object... values) {
-        return new DollarList(values);
-    }
-
-    public static DollarHttp DELETE(String path, DollarHttpHandler handler) {
-        return new DollarHttp(HttpMethod.delete.name(), path, handler);
-    }
-
-    public static DollarHttp GET(String path, DollarHttpHandler handler) {
-        return new DollarHttp(HttpMethod.get.name(), path, handler);
-    }
-
-    public static DollarHttp HEAD(String path, DollarHttpHandler handler) {
-        return new DollarHttp(HttpMethod.head.name(), path, handler);
-    }
-
-    public static DollarHttp OPTIONS(String path, DollarHttpHandler handler) {
-        return new DollarHttp(HttpMethod.options.name(), path, handler);
-    }
-
-    public static DollarHttp PATCH(String path, DollarHttpHandler handler) {
-        return new DollarHttp(HttpMethod.patch.name(), path, handler);
-    }
-
-    public static DollarHttp POST(String path, DollarHttpHandler handler) {
-        return new DollarHttp(HttpMethod.post.name(), path, handler);
-    }
-
-    /**
-     * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used to link context's together.
-     *
-     * @param call the lambda to run.
-     */
-    public static <R> R call(Callable<R> call) {
-        try {
-            return call.call();
-        } catch (Exception e) {
-            throw new DollarException(e);
-        } finally {
-            threadKey.remove();
-        }
-    }
-
-    public static DollarFuture fork(Callable<$> call) {
+    public static DollarFuture $fork(Callable<$> call) {
         String contextKey = contextKey();
-        return new DollarFuture(threadPoolExecutor.submit(() -> call(contextKey, call)));
+        return new DollarFuture(threadPoolExecutor.submit(() -> $call(contextKey, call)));
 
     }
 
@@ -179,7 +186,7 @@ public class DollarStatic {
      *
      * @param call the lambda to run.
      */
-    public static <R> R call(String contextKey, Callable<R> call) {
+    public static <R> R $call(String contextKey, Callable<R> call) {
         threadKey.set(contextKey);
         try {
             return call.call();
@@ -190,12 +197,28 @@ public class DollarStatic {
         }
     }
 
-    public static JsonArray jsonArray(Object... values) {
+    public static JsonArray $jsonArray(Object... values) {
         return new JsonArray(values);
     }
 
-    public static void pub($ value, String... locations) {
+    public static $ $list(Object... values) {
+        return new DollarList(values);
+    }
+
+    public static $ $load(String location) {
+        return store.get().get(location);
+    }
+
+    public static $ $pop(String location, int timeoutInMillis) {
+        return store.get().pop(location, timeoutInMillis);
+    }
+
+    public static void $pub($ value, String... locations) {
         pubsub.get().pub(value, locations);
+    }
+
+    public static void $push(String location, $ value) {
+        store.get().push(location, value);
     }
 
     /**
@@ -204,7 +227,7 @@ public class DollarStatic {
      * @param contextKey this is an identifier used to link context's together, it should be unique to the request being processed.
      * @param run        the lambda to run.
      */
-    public static void run(String contextKey, Runnable run) {
+    public static void $run(String contextKey, Runnable run) {
         threadKey.set(contextKey);
         try {
             run.run();
@@ -218,7 +241,7 @@ public class DollarStatic {
      *
      * @param run the lambda to run.
      */
-    public static void run(Runnable run) {
+    public static void $run(Runnable run) {
         try {
             run.run();
         } finally {
@@ -226,8 +249,20 @@ public class DollarStatic {
         }
     }
 
-    public static Sub sub(Consumer<$> action, String... locations) {
+    public static void $save($ value, String location) {
+        store.get().set(location, value);
+    }
+
+
+    public static void $save(String location, $ value, int expiryInMilliseconds) {
+        store.get().set(location, value, expiryInMilliseconds);
+    }
+
+    public static Sub $sub(Consumer<$> action, String... locations) {
         return pubsub.get().sub(action, locations);
     }
 
+    public static void stopHttpServer() {
+        Spark.stop();
+    }
 }

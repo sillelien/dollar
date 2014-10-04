@@ -245,6 +245,11 @@ class DollarJson extends AbstractDollar implements com.cazcade.dollar.$ {
     }
 
     @Override
+    public String mimeType() {
+        return "application/json";
+    }
+
+    @Override
     public $ remove(Object value) {
         throw new UnsupportedOperationException();
     }
@@ -295,7 +300,6 @@ class DollarJson extends AbstractDollar implements com.cazcade.dollar.$ {
         }
         return DollarFactory.fromValue(child);
     }
-
 }
 
 

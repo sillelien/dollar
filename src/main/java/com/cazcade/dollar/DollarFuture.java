@@ -196,6 +196,11 @@ public class DollarFuture implements $ {
     }
 
     @Override
+    public String mimeType() {
+        return getValue().mimeType();
+    }
+
+    @Override
     public $ pop(String location, int timeoutInMillis) {
         return getValue().pop(location, timeoutInMillis);
     }

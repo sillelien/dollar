@@ -35,7 +35,7 @@ public class DollarPubSubTest {
         profile = $("name", "Neil")
                 .$("age", new Date().getYear() + 1900 - 1970)
                 .$("gender", "male")
-                .$("projects", jsonArray("snapito", "dollar"))
+                .$("projects", $jsonArray("snapito", "dollar"))
                 .$("location",
                         $("city", "brighton")
                                 .$("postcode", "bn1 6jj")
@@ -47,12 +47,12 @@ public class DollarPubSubTest {
     @Test
     public void testBasic() throws InterruptedException {
         final int[] received = {0};
-        Sub sub = sub((message) -> {
+        Sub sub = $sub((message) -> {
             received[0]++;
         }, "test.pub");
         System.out.println("Subbed");
         profile.pub("test.pub");
-        Thread.sleep(500);
+        Thread.sleep(1000);
         sub.cancel();
         assertEquals(1, received[0]);
     }

@@ -10,7 +10,9 @@ public class DollarHttp extends SparkBase {
 
     public DollarHttp(String method, String path, DollarHttpHandler handler) {
         Route route = (request, response) -> {
-            return DollarStatic.call(() -> handler.handle(new DollarHttpContext(request, response)).$$());
+            $ result = DollarStatic.$call(() -> handler.handle(new DollarHttpContext(request, response)));
+            response.type(result.mimeType());
+            return result.$$();
         };
         addRoute(method, wrap(path, route));
     }

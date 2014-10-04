@@ -196,6 +196,11 @@ public class DollarMonitored implements $ {
     }
 
     @Override
+    public String mimeType() {
+        return getValue().mimeType();
+    }
+
+    @Override
     public $ pop(String location, int timeoutInMillis) {
         return monitor.run("pop", "dollar.persist.temp.pop." + sanitize(location), "Popping value from " + location, () -> getValue().pop(location, timeoutInMillis));
     }

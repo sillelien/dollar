@@ -140,6 +140,11 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public String mimeType() {
+        return "application/json";
+    }
+
+    @Override
     public $ remove(Object value) {
         List<$> newList = new ArrayList<>();
         for ($ val : list) {
@@ -181,11 +186,6 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public JsonArray val() {
-        return $();
-    }
-
-    @Override
     public JsonArray $() {
         JsonArray array = new JsonArray();
         list.forEach((i) -> {
@@ -193,4 +193,10 @@ public class DollarList extends AbstractDollar {
         });
         return array;
     }
+
+    @Override
+    public JsonArray val() {
+        return $();
+    }
+
 }

@@ -1,7 +1,5 @@
 package com.cazcade.dollar;
 
-import com.cazcade.dollar.store.DollarStore;
-import com.cazcade.dollar.store.RedisStore;
 import org.vertx.java.core.eventbus.EventBus;
 
 import javax.script.ScriptEngine;
@@ -18,7 +16,6 @@ import java.util.List;
 public abstract class AbstractDollar implements $ {
 
     private static ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
-    private static DollarStore store = new RedisStore();
 
     @Override
     public boolean equals(Object obj) {
@@ -83,32 +80,38 @@ public abstract class AbstractDollar implements $ {
 
     @Override
     public $ load(String location) {
-        return store.get(location);
+        return DollarStatic.$load(location);
+    }
+
+    @Override
+    public String mimeType() {
+        return "text/plain";
     }
 
     @Override
     public $ pop(String location, int timeoutInMillis) {
-        return store.pop(location, timeoutInMillis);
+        return DollarStatic.$pop(location, timeoutInMillis);
+
     }
 
     @Override
     public void pub(String... locations) {
-        DollarStatic.pub(this, locations);
+        DollarStatic.$pub(this, locations);
     }
 
     @Override
     public void push(String location) {
-        store.push(location, this);
+        DollarStatic.$push(location, this);
     }
 
     @Override
     public void save(String location, int expiryInMilliseconds) {
-        store.set(location, this, expiryInMilliseconds);
+        DollarStatic.$save(location, this, expiryInMilliseconds);
     }
 
     @Override
     public void save(String location) {
-        store.set(location, this);
+        DollarStatic.$save(this, location);
     }
 
     public FutureDollar send(EventBus e, String destination) {

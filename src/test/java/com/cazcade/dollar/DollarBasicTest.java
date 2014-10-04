@@ -32,7 +32,7 @@ public class DollarBasicTest {
         $ profile = $("name", "Neil")
                 .$("age", new Date().getYear() + 1900 - 1970)
                 .$("gender", "male")
-                .$("projects", jsonArray("snapito", "dollar_vertx"))
+                .$("projects", $jsonArray("snapito", "dollar_vertx"))
                 .$("location",
                         $("city", "brighton")
                                 .$("postcode", "bn1 6jj")
@@ -65,7 +65,7 @@ public class DollarBasicTest {
         $ profile = $("name", "Neil")
                 .$("age", 1)
                 .$("gender", "male")
-                .$("projects", jsonArray("snapito", "dollar_vertx"))
+                .$("projects", $jsonArray("snapito", "dollar_vertx"))
                 .$("location",
                         $("city", "brighton")
                                 .$("postcode", "bn1 6jj")
@@ -98,7 +98,7 @@ public class DollarBasicTest {
         $ profile = $("name", "Neil")
                 .$("age", age)
                 .$("gender", "male")
-                .$("projects", jsonArray("snapito", "dollar_vertx"))
+                .$("projects", $jsonArray("snapito", "dollar_vertx"))
                 .$("location",
                         $("city", "brighton")
                                 .$("postcode", "bn1 6jj")

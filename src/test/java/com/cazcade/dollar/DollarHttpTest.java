@@ -16,6 +16,8 @@
 
 package com.cazcade.dollar;
 
+import com.jayway.restassured.RestAssured;
+import org.hamcrest.core.Is;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -23,8 +25,13 @@ import java.util.Date;
 
 import static com.cazcade.dollar.DollarStatic.$;
 import static com.cazcade.dollar.DollarStatic.*;
+import static com.jayway.restassured.RestAssured.given;
 
 public class DollarHttpTest {
+
+    static {
+        RestAssured.port = 4567;
+    }
 
     private static $ profile;
 
@@ -33,7 +40,7 @@ public class DollarHttpTest {
         profile = $("name", "Neil")
                 .$("age", new Date().getYear() + 1900 - 1970)
                 .$("gender", "male")
-                .$("projects", jsonArray("snapito", "dollar"))
+                .$("projects", $jsonArray("snapito", "dollar"))
                 .$("location",
                         $("city", "brighton")
                                 .$("postcode", "bn1 6jj")
@@ -44,11 +51,12 @@ public class DollarHttpTest {
 
     @Test
     public void testBasic() throws InterruptedException {
-        GET("/", (context) -> $("Hello World"));
-        GET("/headers", (context) -> context.headers());
-        GET("/profile", (context) -> profile);
-        //TODO: Client tests here
+        $GET("/", (context) -> $("Hello World"));
+        $GET("/headers", (context) -> context.headers());
+        $GET("/profile", (context) -> profile);
         Thread.sleep(1000);
+        given().port(4567).get("/profile").then().assertThat().body("location.number", Is.is(343));
+        stopHttpServer();
     }
 
 

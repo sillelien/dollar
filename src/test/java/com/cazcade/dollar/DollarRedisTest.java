@@ -23,7 +23,7 @@ import org.junit.Test;
 import java.util.Date;
 
 import static com.cazcade.dollar.DollarStatic.$;
-import static com.cazcade.dollar.DollarStatic.jsonArray;
+import static com.cazcade.dollar.DollarStatic.$jsonArray;
 
 public class DollarRedisTest {
 
@@ -34,7 +34,7 @@ public class DollarRedisTest {
         profile = $("name", "Neil")
                 .$("age", new Date().getYear() + 1900 - 1970)
                 .$("gender", "male")
-                .$("projects", jsonArray("snapito", "dollar_vertx"))
+                .$("projects", $jsonArray("snapito", "dollar_vertx"))
                 .$("location",
                         $("city", "brighton")
                                 .$("postcode", "bn1 6jj")

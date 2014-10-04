@@ -163,6 +163,8 @@ public interface $ {
 
     $ load(String location);
 
+    String mimeType();
+
     $ pop(String location, int timeoutInMillis);
 
     void pub(String... locations);
