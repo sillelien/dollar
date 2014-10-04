@@ -5,6 +5,7 @@ import com.cazcade.dollar.DollarFactory;
 import com.cazcade.dollar.DollarFuture;
 import redis.clients.jedis.JedisPubSub;
 
+import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 
 /**
@@ -13,9 +14,20 @@ import java.util.function.Consumer;
 public class RedisPubSubAdapter extends JedisPubSub implements Sub {
     private final Consumer<$> action;
     private DollarFuture future;
+    private Semaphore lock = new Semaphore(1);
 
     public RedisPubSubAdapter(Consumer<$> lambda) {
         this.action = lambda;
+        try {
+            lock.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void await() throws InterruptedException {
+        lock.acquire();
+        lock.release();
     }
 
     @Override
@@ -55,11 +67,12 @@ public class RedisPubSubAdapter extends JedisPubSub implements Sub {
 
     @Override
     public void onSubscribe(String s, int i) {
-        //TODO
+        lock.release();
     }
 
     @Override
     public void onUnsubscribe(String s, int i) {
-        //TODO
+        lock.release();
+
     }
 }

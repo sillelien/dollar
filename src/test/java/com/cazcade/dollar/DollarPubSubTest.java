@@ -50,6 +50,7 @@ public class DollarPubSubTest {
         Sub sub = $sub((message) -> {
             received[0]++;
         }, "test.pub");
+        sub.await();
         System.out.println("Subbed");
         Thread.sleep(100);
         profile.pub("test.pub");
