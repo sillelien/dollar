@@ -1,6 +1,7 @@
 package com.cazcade.dollar;
 
 import com.cazcade.dollar.monitor.Monitor;
+import kotlin.Pair;
 import org.json.JSONObject;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.json.JsonObject;
@@ -136,6 +137,11 @@ public class DollarMonitored implements var {
     }
 
     @Override
+    public void err() {
+        getValue().err();
+    }
+
+    @Override
     public var eval(String js) {
         return eval("anon", js);
     }
@@ -166,6 +172,11 @@ public class DollarMonitored implements var {
     }
 
     @Override
+    public var get(String key) {
+        return getValue().get(key);
+    }
+
+    @Override
     public boolean has(String key) {
         return getValue().has(key);
     }
@@ -173,6 +184,11 @@ public class DollarMonitored implements var {
     @Override
     public int hashCode() {
         return getValue().hashCode();
+    }
+
+    @Override
+    public var invoke(Pair... pairs) {
+        return getValue().invoke(pairs);
     }
 
     @Override
@@ -198,6 +214,16 @@ public class DollarMonitored implements var {
     @Override
     public String mimeType() {
         return getValue().mimeType();
+    }
+
+    @Override
+    public void out() {
+        getValue().out();
+    }
+
+    @Override
+    public var pass(Class<? extends Script> clazz) {
+        return getValue().pass(clazz);
     }
 
     @Override
@@ -239,6 +265,11 @@ public class DollarMonitored implements var {
     @Deprecated
     public FutureDollar send(EventBus e, String destination) {
         return getValue().send(e, destination);
+    }
+
+    @Override
+    public var set(String key, Object value) {
+        return getValue().set(key, value);
     }
 
     @Override

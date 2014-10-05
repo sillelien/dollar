@@ -113,6 +113,10 @@ public interface var {
         System.err.println($$());
     }
 
+    default String $$() {
+        return toString();
+    }
+
     var eval(String label, String js);
 
     var eval(String js);
@@ -162,6 +166,8 @@ public interface var {
      */
     var copy();
 
+    var $(String key, Object value);
+
     boolean isNull();
 
     java.util.stream.Stream<Map.Entry<String, var>> keyValues();
@@ -176,22 +182,7 @@ public interface var {
         System.out.println($$());
     }
 
-    default String $$() {
-        return toString();
-    }
-
-    default var pass(Class<? extends Script> clazz) {
-        DollarStatic.threadContext.set(this);
-        Script script = null;
-        try {
-            script = clazz.newInstance();
-        } catch (InstantiationException e) {
-            throw new DollarException(e.getCause());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return script.result();
-    }
+    var pass(Class<? extends Script> clazz);
 
     var pop(String location, int timeoutInMillis);
 
@@ -212,8 +203,6 @@ public interface var {
     default var set(String key, Object value) {
         return $(key, value);
     }
-
-    var $(String key, Object value);
 
     Map<String, var> split();
 

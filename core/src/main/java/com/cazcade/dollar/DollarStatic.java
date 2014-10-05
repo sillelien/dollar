@@ -1,10 +1,6 @@
 package com.cazcade.dollar;
 
-import com.cazcade.dollar.pubsub.DollarPubSub;
-import com.cazcade.dollar.pubsub.RedisPubSub;
 import com.cazcade.dollar.pubsub.Sub;
-import com.cazcade.dollar.store.DollarStore;
-import com.cazcade.dollar.store.RedisStore;
 import org.jetbrains.annotations.NotNull;
 import org.vertx.java.core.MultiMap;
 import org.vertx.java.core.eventbus.Message;
@@ -16,7 +12,6 @@ import spark.route.HttpMethod;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -32,30 +27,16 @@ import java.util.function.Consumer;
 public class DollarStatic {
 
 
-    static ThreadLocal<var> threadContext = new ThreadLocal<var>();
-    private static ConcurrentHashMap<Object, Map> context = new ConcurrentHashMap<>();
-    private static ThreadLocal<DollarPubSub> pubsub = new ThreadLocal<DollarPubSub>() {
+    static ThreadLocal<DollarThreadContext> threadContext = new ThreadLocal<DollarThreadContext>() {
         @Override
-        protected DollarPubSub initialValue() {
-            return new RedisPubSub();
-        }
-    };
-    private static ThreadLocal<DollarStore> store = new ThreadLocal<DollarStore>() {
-        @Override
-        protected DollarStore initialValue() {
-            return new RedisStore();
-        }
-    };
-    private static ThreadLocal<String> threadKey = new ThreadLocal<String>() {
-        @Override
-        protected String initialValue() {
-            return UUID.randomUUID().toString();
+        protected DollarThreadContext initialValue() {
+            return new DollarThreadContext();
         }
     };
 
+    private static ConcurrentHashMap<Object, Map> context = new ConcurrentHashMap<>();
 
     private static ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
-
 
     public static var $(String name, MultiMap multiMap) {
         return DollarFactory.fromValue().$(name, multiMap);
@@ -176,19 +157,21 @@ public class DollarStatic {
         return new DollarHttp(HttpMethod.post.name(), path, handler);
     }
 
+    public static void $begin(String value) {
+        threadContext.get().pushLabel(value);
+    }
+
     /**
      * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used to link context's together.
      *
      * @param call the lambda to run.
      */
-    public static <R> R $call(Callable<R> call) {
-        try {
-            return call.call();
-        } catch (Exception e) {
-            throw new DollarException(e);
-        } finally {
-            threadKey.remove();
-        }
+    public static var $call(Callable<var> call) {
+        return $call(new DollarThreadContext(), call);
+    }
+
+    public static void $end(String value) {
+        threadContext.get().popLabel(value);
     }
 
     public static var $eval(String label, String js) {
@@ -200,28 +183,24 @@ public class DollarStatic {
     }
 
     public static DollarFuture $fork(Callable<var> call) {
-        String contextKey = contextKey();
-        return new DollarFuture(threadPoolExecutor.submit(() -> $call(contextKey, call)));
+        return new DollarFuture(threadPoolExecutor.submit(() -> $call(threadContext.get(), call)));
 
-    }
-
-    public static String contextKey() {
-        return threadKey.get();
     }
 
     /**
      * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used to link context's together.
      *
-     * @param call the lambda to run.
+     * @param context the current thread context
+     * @param call    the lambda to run.
      */
-    public static <R> R $call(String contextKey, Callable<R> call) {
-        threadKey.set(contextKey);
+    public static var $call(DollarThreadContext context, Callable<var> call) {
+        threadContext.set(context);
         try {
             return call.call();
         } catch (Exception e) {
             throw new DollarException(e);
         } finally {
-            threadKey.remove();
+            threadContext.remove();
         }
     }
 
@@ -234,38 +213,38 @@ public class DollarStatic {
     }
 
     public static var $load(String location) {
-        return store.get().get(location);
+        return threadContext.get().getStore().get(location);
     }
 
     public static var $pop(String location, int timeoutInMillis) {
-        return store.get().pop(location, timeoutInMillis);
+        return threadContext.get().getStore().pop(location, timeoutInMillis);
     }
 
     public static void $pub(var value, String... locations) {
-        pubsub.get().pub(value, locations);
+        threadContext.get().getPubsub().pub(value, locations);
     }
 
     public static void $push(String location, var value) {
-        store.get().push(location, value);
+        threadContext.get().getStore().push(location, value);
     }
 
     /**
      * The beginning of any Dollar Code should start with a DollarStatic.run method.
      *
-     * @param contextKey this is an identifier used to link context's together, it should be unique to the request being processed.
+     * @param context this is an identifier used to link context's together, it should be unique to the request being processed.
      * @param run        the lambda to run.
      */
-    public static void $run(String contextKey, Runnable run) {
-        threadKey.set(contextKey);
+    public static void $run(DollarThreadContext context, Runnable run) {
+        threadContext.set(context);
         try {
             run.run();
         } finally {
-            threadKey.remove();
+            threadContext.remove();
         }
     }
 
     /**
-     * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used to link context's together.
+     * The beginning of any new Dollar Code should start with a DollarStatic.run/call method. This creates an object used to link context's together.
      *
      * @param run the lambda to run.
      */
@@ -273,21 +252,20 @@ public class DollarStatic {
         try {
             run.run();
         } finally {
-            threadKey.remove();
+            threadContext.remove();
         }
     }
 
     public static void $save(var value, String location) {
-        store.get().set(location, value);
+        threadContext.get().getStore().set(location, value);
     }
 
-
     public static void $save(String location, var value, int expiryInMilliseconds) {
-        store.get().set(location, value, expiryInMilliseconds);
+        threadContext.get().getStore().set(location, value, expiryInMilliseconds);
     }
 
     public static Sub $sub(Consumer<var> action, String... locations) {
-        return pubsub.get().sub(action, locations);
+        return  threadContext.get().getPubsub().sub(action, locations);
     }
 
     //Kotlin compatible versions
@@ -306,6 +284,5 @@ public class DollarStatic {
     public static void stopHttpServer() {
         Spark.stop();
     }
-
 
 }

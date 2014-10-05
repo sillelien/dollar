@@ -8,7 +8,7 @@ Install using Maven
         <dependency>
             <groupId>com.cazcade</groupId>
             <artifactId>dollar-vertx</artifactId>
-            <version>0.0.17</version>
+            <version>0.0.18</version>
         </dependency>
 
 

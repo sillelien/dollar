@@ -13,23 +13,20 @@ import java.util.function.Supplier;
  */
 public class DefaultMonitor implements Monitor {
     private static final Logger log = Logger.getLogger("$");
-    private static ThreadLocal<MetricRegistry> metrics = new ThreadLocal<MetricRegistry>() {
-        @Override
-        protected MetricRegistry initialValue() {
-            MetricRegistry metricRegistry = new MetricRegistry();
-            ConsoleReporter reporter = ConsoleReporter.forRegistry(metricRegistry)
-                    .convertRatesTo(TimeUnit.SECONDS)
-                    .convertDurationsTo(TimeUnit.MILLISECONDS)
-                    .build();
-            reporter.start(30, TimeUnit.SECONDS);
-            return metricRegistry;
-        }
-    };
+    private static MetricRegistry metrics = new MetricRegistry();
+
+    public DefaultMonitor() {
+        ConsoleReporter reporter = ConsoleReporter.forRegistry(metrics)
+                .convertRatesTo(TimeUnit.SECONDS)
+                .convertDurationsTo(TimeUnit.MILLISECONDS)
+                .build();
+        reporter.start(30, TimeUnit.SECONDS);
+    }
 
 
     @Override
     public <R> R run(String simpleLabel, String namespacedLabel, String info, Supplier<R> code) {
-        Timer timer = metrics.get().timer(namespacedLabel);
+        Timer timer = metrics.timer(namespacedLabel);
         log.debug("BEFORE : " + simpleLabel + " : " + info);
         Timer.Context time = timer.time();
         R r = code.get();
@@ -40,7 +37,7 @@ public class DefaultMonitor implements Monitor {
 
     @Override
     public void run(String simpleLabel, String namespacedLabel, String info, Runnable code) {
-        Timer timer = metrics.get().timer(namespacedLabel);
+        Timer timer = metrics.timer(namespacedLabel);
         log.debug("BEFORE : " + simpleLabel + " : " + info);
         Timer.Context time = timer.time();
         code.run();

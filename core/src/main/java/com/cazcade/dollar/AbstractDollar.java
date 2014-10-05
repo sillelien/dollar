@@ -88,6 +88,19 @@ public abstract class AbstractDollar implements var {
         return "text/plain";
     }
 
+    @Override
+    public var pass(Class<? extends Script> clazz) {
+        DollarStatic.threadContext.get().setPassValue(this);
+        Script script = null;
+        try {
+            script = clazz.newInstance();
+        } catch (InstantiationException e) {
+            throw new DollarException(e.getCause());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return script.result();
+    }
 
     @Override
     public var pop(String location, int timeoutInMillis) {

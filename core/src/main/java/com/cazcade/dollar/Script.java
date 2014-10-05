@@ -13,12 +13,18 @@ public class Script extends DollarStatic {
     public static Class<? extends Script> $THIS;
     protected static List<String> args;
     private static Script $this;
-    protected var in = DollarStatic.threadContext.get() != null ? DollarStatic.threadContext.get() : $();
+    protected var in = DollarStatic.threadContext.get() != null ? DollarStatic.threadContext.get().getPassValue() : $();
     protected var out;
 
     public static void main(String[] args) throws IllegalAccessException, InstantiationException {
         Script.args = Arrays.asList(args);
-        $this = $THIS.newInstance();
+        $run(() -> {
+            try {
+                $this = $THIS.newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw new Error(e.getCause());
+            }
+        });
     }
 
 

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <dollar.version>0.0.17</dollar.version>
+        <dollar.version>0.0.18</dollar.version>
         <jdk.version>1.8</jdk.version>
         <kotlin.version>0.8.11</kotlin.version>
     </properties>
