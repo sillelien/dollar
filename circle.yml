@@ -16,7 +16,7 @@ dependencies:
     - envsubst < settings.xml > ~/.m2/settings.xml
     - "(mvn -Dgpg.passphrase=${GPG_PASSPHRASE} clean install site -Dmaven.test.skip || : ) &> /dev/null"
   override:
-    - true
+    - echo ""
 
 deployment:
   staging:
