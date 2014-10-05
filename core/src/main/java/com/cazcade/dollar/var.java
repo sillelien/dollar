@@ -128,7 +128,7 @@ public interface var {
     /**
      * If the class has a method $ call($ in) then that method is called otherwise
      * converts this object to a set of string parameters and passes them to the main method of the clazz.
-     * <p/>
+     * <br/>
      * NB: This is the preferred way to pass values between classes as it preserves the stateless nature.
      * Try where possible to maintain a stateless context to execution.
      *
