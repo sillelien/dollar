@@ -12,6 +12,7 @@
 hs_err_pid*
 
 
-dollar_vertx.iml
 .idea
+*.iml
+
 
