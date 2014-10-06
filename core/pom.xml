@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.cazcade</groupId>
         <artifactId>dollar</artifactId>
-        <version>0.0.19</version>
+        <version>0-SNAPSHOT</version>
     </parent>
     <artifactId>dollar-core</artifactId>
 
