@@ -9,13 +9,41 @@ Install using Maven
 
         <dependency>
             <groupId>com.cazcade</groupId>
-            <artifactId>dollar-vertx</artifactId>
+            <artifactId>dollar-core</artifactId>
             <version>0.0.X</version>
         </dependency>
 
 We're not on Maven central yet but we are on Bintray:
 
 [ ![Download](https://api.bintray.com/packages/cazcade/maven/dollar/images/download.png) ](https://bintray.com/cazcade/maven/dollar/_latestVersion)
+
+
+NOTES
+=====
+
+This is not even alpha software and is under rapid development. If you'd like to share ideas or contribute than this is a good time - however, do not write software that depends on this yet.
+
+Dollar currently has a direct dependency on a Redis server running for it's distributed functions. This will all become optional in later releases. Right now just run one on localhost or set
+
+    -Ddollar.redis=<hostname>
+
+FAQ
+===
+
+Why Dollar ?
+------------
+
+Once you've written some Dollar code you'll get the reason pretty quickly.
+
+Is this like jQuery for Java?
+-----------------------------
+
+No, but Dollar uses a lot of ideas that jQuery popularized, so I would certainly acknowledge our debt to jQuery.
+
+Then what is it?
+----------------
+
+If you like the ease of JavaScript, Ruby, Groovy etc. but also enjoy being able to work within the Java language then this is for you. You can write typesafe code and then drop into typeless Dollar code whenever you need to. Dollar is both an alternative paradigm and a complementary resource.
 
 
 Examples
@@ -112,7 +140,9 @@ Dollar is designed for production, it is designed for code you are going to have
 With this in mind the following are Dollar's characteristics:
 
 * Simple - Dollar does do not expose unnecessary complexity to the programmer, we keep it hidden.
-> The secret of success is to be like a duck – smooth and unruffled on top, but paddling furiously underneath.”
+
+    > The secret of success is to be like a duck – smooth and unruffled on top, but paddling furiously underneath.”
+
 * Typeless - if you *need* strongly typed code stop reading now. If you're writing internet centric modest sized software this is unlikely to be the case.
 * Synchronous - asynchronous flows are hard to follow and even harder to debug in production. We do not expose asynchronous behaviour to the programmer.
 * Metered - key execution's are metered using Coda Hale's metrics library, this makes production monitoring and debugging easier.
@@ -125,7 +155,7 @@ The Rules
 1. Do not create your own Threads.
 2. Do not create your own Threads.
 3. Always run from a *static* context (e.g. a public static void main method)
-4. All $ objects are immutable, so use the returned value after 'mutation' actions.
+4. All `var` objects are **immutable**, so use the returned value after 'mutation' actions.
 
 
 
