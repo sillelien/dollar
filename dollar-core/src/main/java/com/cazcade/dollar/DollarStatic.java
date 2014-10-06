@@ -170,23 +170,6 @@ public class DollarStatic {
         return $call(new DollarThreadContext(), call);
     }
 
-    public static void $end(String value) {
-        threadContext.get().popLabel(value);
-    }
-
-    public static var $eval(String label, String js) {
-        return $().eval(label, js);
-    }
-
-    public static var $eval(String js) {
-        return $().eval(js);
-    }
-
-    public static DollarFuture $fork(Callable<var> call) {
-        return new DollarFuture(threadPoolExecutor.submit(() -> $call(threadContext.get(), call)));
-
-    }
-
     /**
      * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used to link context's together.
      *
@@ -202,6 +185,23 @@ public class DollarStatic {
         } finally {
             threadContext.remove();
         }
+    }
+
+    public static void $end(String value) {
+        threadContext.get().popLabel(value);
+    }
+
+    public static var $eval(String label, String js) {
+        return $().eval(label, js);
+    }
+
+    public static var $eval(String js) {
+        return $().eval(js);
+    }
+
+    public static DollarFuture $fork(Callable<var> call) {
+        return new DollarFuture(threadPoolExecutor.submit(() -> $call(threadContext.get(), call)));
+
     }
 
     public static JsonArray $jsonArray(Object... values) {

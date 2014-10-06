@@ -45,8 +45,8 @@
     </scm>
 
     <modules>
-        <module>core</module>
-        <module>examples</module>
+        <module>dollar-core</module>
+        <module>dollar-examples</module>
     </modules>
 
     <dependencies>
@@ -247,15 +247,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-scm-publish-plugin</artifactId>
                 <version>1.0-beta-2</version>
-                <executions>
-                    <execution>
-                        <id>scm-publish</id>
-                        <phase>site-deploy</phase>
-                        <goals>
-                            <goal>publish-scm</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <configuration>
                     <checkoutDirectory>${project.build.directory}/scmpublish</checkoutDirectory>
                     <checkinComment>Publishing Github Website for ${project.version}</checkinComment>
@@ -272,22 +263,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.4</version>
-                <configuration>
-                    <skipDeploy>true</skipDeploy>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>stage-for-scm-publish</id>
-                        <phase>post-site</phase>
-                        <goals>
-                            <goal>stage</goal>
-                        </goals>
-                        <configuration>
-                            <skipDeploy>false</skipDeploy>
-                            <!-- MSITE-652: configuration won't be necessary with m-site-p 3.2 -->
-                        </configuration>
-                    </execution>
-                </executions>
                 <dependencies>
                     <dependency>
                         <groupId>lt.velykis.maven.skins</groupId>
