@@ -18,6 +18,9 @@ dependencies:
   override:
     - echo ""
 
+test:
+  post:
+
 deployment:
   staging:
         branch: staging
@@ -34,4 +37,8 @@ deployment:
     commands:
         - git config --global user.email "neil@cazcade.com"
         - git config --global user.name "Neil Ellis"
+        - mvn versions:set -DnewVersion=0.0.${CIRCLE_BUILD_NUMBER}
+        - mvn versions:resolve-ranges
+        - mvn versions:lock-snapshots
+        - mvn versions:commit
         - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} install scm-publish:publish-scm deploy site
