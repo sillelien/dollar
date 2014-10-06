@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class FirstScript extends Script {
+public final class FirstScript extends Script {
     static {
         $THIS = FirstScript.class;
     }

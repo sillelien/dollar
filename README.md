@@ -10,12 +10,12 @@ Install using Maven
         <dependency>
             <groupId>com.cazcade</groupId>
             <artifactId>dollar-vertx</artifactId>
-            <version>0.0.18</version>
+            <version>0.0.X</version>
         </dependency>
 
+We're not on Maven central yet but we are on Bintray:
+
 [ ![Download](https://api.bintray.com/packages/cazcade/maven/dollar/images/download.png) ](https://bintray.com/cazcade/maven/dollar/_latestVersion)
-
-
 
 
 Examples
@@ -23,6 +23,8 @@ Examples
 
 Basic
 -----
+
+You can just use dollar to write dynamic JSON oriented (JSON is not a requirement, you can work with maps too) using a fluent format like this:
 
         int age = new Date().getYear() + 1900 - 1970;
         var profile = $("name", "Neil")
@@ -35,7 +37,7 @@ Basic
                                 .$("number", 343)
                 );
 
-or
+or using a more builder format like this:
 
         var profile = $(
                 $("name", "Neil"),
@@ -47,7 +49,8 @@ or
                         $("postcode", "bn1 6jj"),
                         $("number", 343)
                 ));
-and
+
+and these hold true:
 
         assertEquals(age /11, (int)profile.$("$['age']/11").$int());
         assertEquals("male", profile.$("$.gender").$());
@@ -55,6 +58,44 @@ and
         assertEquals(10, (int)$eval("10").$int());
         assertEquals($("{\"name\":\"Dave\"}").$("name").$$(),"Dave");
         assertEquals($().$("({name:'Dave'})").$("name").$$(), "Dave");
+
+Script
+------
+
+
+To write Dollar 'scripts' you just need to extend the Script class, add a static initializer for $THIS and then put your code within braces.
+
+    public final class FirstScript extends Script {
+        static {
+            $THIS = FirstScript.class;
+        }
+
+        {
+            var profile = $("name", "Neil")
+                    .$("age", new Date().getYear() + 1900 - 1970)
+                    .$("gender", "male")
+                    .$("projects", $jsonArray("snapito", "dollar_vertx"))
+                    .$("location",
+                            $("city", "brighton")
+                                    .$("postcode", "bn1 6jj")
+                                    .$("number", 343)
+                    );
+            profile.pipe(ExtractName.class).pipe(WelcomeMessage.class).out();
+        }
+    }
+
+You have access to in and out variables for pipelining, as shown below:
+
+    public class ExtractName extends Script {
+        static {
+            $THIS = ExtractName.class;
+        }
+
+        {
+            out = in.$("name");
+        }
+    }
+
 
 Webserver
 ---------
