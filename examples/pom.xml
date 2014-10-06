@@ -10,7 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>dollar-examples</artifactId>
-
+    <name>Dollar Examples</name>
+    <description>Examples of Dollar in Action</description>
     <dependencies>
         <dependency>
             <groupId>com.cazcade</groupId>
