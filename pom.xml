@@ -317,6 +317,8 @@
 
 
     <distributionManagement>
+        <site>
+        <id>http://cazcade.github.io/dollar</id>
         <repository>
             <id>bintray-cazcade-maven-dollar</id>
             <name>cazcade-maven-dollar</name>
