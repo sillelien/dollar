@@ -16,7 +16,6 @@
 
 package com.cazcade.dollar;
 
-import com.cazcade.dollar.monitor.DefaultMonitor;
 import com.cazcade.dollar.monitor.Monitor;
 import org.vertx.java.core.json.JsonObject;
 
@@ -24,7 +23,7 @@ import org.vertx.java.core.json.JsonObject;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarFactory {
-    static Monitor monitor = new DefaultMonitor();
+    static Monitor monitor = DollarStatic.monitor();
 
     public static var fromField(Object field) {
         if (field == null) {

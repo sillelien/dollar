@@ -1,5 +1,7 @@
 package com.cazcade.dollar;
 
+import com.cazcade.dollar.monitor.DefaultMonitor;
+import com.cazcade.dollar.monitor.Monitor;
 import com.cazcade.dollar.pubsub.DollarPubSub;
 import com.cazcade.dollar.pubsub.RedisPubSub;
 import com.cazcade.dollar.store.DollarStore;
@@ -15,8 +17,9 @@ import java.util.UUID;
  */
 public class DollarThreadContext {
 
+    private static final MetricRegistry metrics = new MetricRegistry();
     private List<String> labels = new ArrayList<>();
-    private MetricRegistry metrics = new MetricRegistry();
+    private Monitor monitor = new DefaultMonitor(metrics);
     private var passValue;
     private DollarPubSub pubsub = new RedisPubSub();
     private DollarStore store = new RedisStore();
@@ -32,6 +35,14 @@ public class DollarThreadContext {
 
     public MetricRegistry getMetrics() {
         return metrics;
+    }
+
+    public Monitor getMonitor() {
+        return monitor;
+    }
+
+    public void setMonitor(Monitor monitor) {
+        this.monitor = monitor;
     }
 
     public var getPassValue() {

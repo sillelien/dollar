@@ -58,7 +58,7 @@ You can just use dollar to write dynamic JSON oriented (JSON is not a requiremen
         var profile = $("name", "Neil")
                 .$("age", age)
                 .$("gender", "male")
-                .$("projects", $array("snapito", "dollar_vertx"))
+                .$("projects", $array("snapito", "dollar"))
                 .$("location",
                         $("city", "brighton")
                                 .$("postcode", "bn1 6jj")
@@ -71,7 +71,7 @@ or using a more builder format like this:
                 $("name", "Neil"),
                 $("age", new Date().getYear() + 1900 - 1970),
                 $("gender", "male"),
-                $("projects", $jsonArray("snapito", "dollar_vertx")),
+                $("projects", $jsonArray("snapito", "dollar")),
                 $("location",
                         $("city", "brighton"),
                         $("postcode", "bn1 6jj"),
@@ -102,7 +102,7 @@ To write Dollar 'scripts' you just need to extend the Script class, add a static
             var profile = $("name", "Neil")
                     .$("age", new Date().getYear() + 1900 - 1970)
                     .$("gender", "male")
-                    .$("projects", $jsonArray("snapito", "dollar_vertx"))
+                    .$("projects", $jsonArray("snapito", "dollar"))
                     .$("location",
                             $("city", "brighton")
                                     .$("postcode", "bn1 6jj")

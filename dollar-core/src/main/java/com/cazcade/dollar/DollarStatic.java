@@ -1,5 +1,6 @@
 package com.cazcade.dollar;
 
+import com.cazcade.dollar.monitor.Monitor;
 import com.cazcade.dollar.pubsub.Sub;
 import org.jetbrains.annotations.NotNull;
 import org.vertx.java.core.MultiMap;
@@ -44,16 +45,16 @@ public class DollarStatic {
 
     public static var $(Object o) {
         if (o == null) {
-            return new DollarMonitored(DollarNull.INSTANCE, DollarFactory.monitor);
+            return new DollarMonitored(DollarNull.INSTANCE, monitor());
         }
         if (o instanceof Number) {
-            return new DollarMonitored(new DollarNumber((Number) o), DollarFactory.monitor);
+            return new DollarMonitored(new DollarNumber((Number) o), monitor());
         }
         if (o instanceof String) {
             try {
-                return new DollarMonitored(new DollarJson(new JsonObject((String) o)), DollarFactory.monitor);
+                return new DollarMonitored(new DollarJson(new JsonObject((String) o)), monitor());
             } catch (DecodeException de) {
-                return new DollarMonitored(new DollarString((String) o), DollarFactory.monitor);
+                return new DollarMonitored(new DollarString((String) o), monitor());
             }
         }
         JsonObject json;
@@ -69,12 +70,16 @@ public class DollarStatic {
         } else if (o instanceof Message) {
             json = ((JsonObject) ((Message) o).body());
             if (json == null) {
-                return new DollarMonitored(DollarNull.INSTANCE, DollarFactory.monitor);
+                return new DollarMonitored(DollarNull.INSTANCE, monitor());
             }
         } else {
             json = new JsonObject(o.toString());
         }
-        return new DollarMonitored(new DollarJson(json), DollarFactory.monitor);
+        return new DollarMonitored(new DollarJson(json), monitor());
+    }
+
+    public static Monitor monitor() {
+        return threadContext.get().getMonitor();
     }
 
     static JsonObject mapToJson(MultiMap map) {
@@ -187,6 +192,14 @@ public class DollarStatic {
         }
     }
 
+    public static void $dump() {
+        threadContext.get().getMonitor().dump();
+    }
+
+    public static void $dumpThread() {
+        threadContext.get().getMonitor().dumpThread();
+    }
+
     public static void $end(String value) {
         threadContext.get().popLabel(value);
     }
@@ -232,7 +245,7 @@ public class DollarStatic {
      * The beginning of any Dollar Code should start with a DollarStatic.run method.
      *
      * @param context this is an identifier used to link context's together, it should be unique to the request being processed.
-     * @param run        the lambda to run.
+     * @param run     the lambda to run.
      */
     public static void $run(DollarThreadContext context, Runnable run) {
         threadContext.set(context);
@@ -265,7 +278,7 @@ public class DollarStatic {
     }
 
     public static Sub $sub(Consumer<var> action, String... locations) {
-        return  threadContext.get().getPubsub().sub(action, locations);
+        return threadContext.get().getPubsub().sub(action, locations);
     }
 
     //Kotlin compatible versions
@@ -284,5 +297,4 @@ public class DollarStatic {
     public static void stopHttpServer() {
         Spark.stop();
     }
-
 }

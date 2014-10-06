@@ -13,17 +13,30 @@ import java.util.function.Supplier;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DefaultMonitor implements Monitor {
-    private static MetricRegistry metrics = new MetricRegistry();
-    private Logger log = LoggerFactory.getLogger(this.getClass());
+    private final ConsoleReporter reporter;
 
-    public DefaultMonitor() {
-        ConsoleReporter reporter = ConsoleReporter.forRegistry(metrics)
+    static {
+    }
+    private Logger log = LoggerFactory.getLogger(this.getClass());
+    private MetricRegistry metrics;
+
+    public DefaultMonitor(MetricRegistry metrics) {
+        this.metrics = metrics;
+        reporter = ConsoleReporter.forRegistry(metrics)
                 .convertRatesTo(TimeUnit.SECONDS)
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .build();
-        reporter.start(30, TimeUnit.SECONDS);
     }
 
+    @Override
+    public void dump() {
+        reporter.report();
+    }
+
+    @Override
+    public void dumpThread() {
+        //TODO
+    }
 
     @Override
     public <R> R run(String simpleLabel, String namespacedLabel, String info, Supplier<R> code) {

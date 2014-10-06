@@ -22,8 +22,7 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import static com.cazcade.dollar.DollarStatic.$;
-import static com.cazcade.dollar.DollarStatic.$jsonArray;
+import static com.cazcade.dollar.DollarStatic.*;
 import static org.junit.Assert.assertTrue;
 
 public class DollarRedisTest {
@@ -57,6 +56,7 @@ public class DollarRedisTest {
         var deser = profile.load("test.profile.set");
         Assert.assertEquals(deser.$$(), profile.$$());
         Thread.sleep(2000);
+        $dump();
     }
 
 
