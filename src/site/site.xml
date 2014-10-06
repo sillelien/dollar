@@ -1,4 +1,4 @@
-<project name="dollar-vertx">
+<project name="dollar">
     <skin>
         <groupId>lt.velykis.maven.skins</groupId>
         <artifactId>reflow-maven-skin</artifactId>
@@ -50,7 +50,7 @@
             <!--<item name="Page 3" href="http://google.com/"/>-->
         </links>
 
-        <menu name="dollar-vertx">
+        <menu name="dollar">
             <!--<item name="Introduction" href="index.html"/>-->
             <!--<item name="Download" href="download.html"/>-->
             <!--<item name="Release Notes" href="release-notes.html"/>-->

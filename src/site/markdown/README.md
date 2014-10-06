@@ -64,6 +64,8 @@ Dollar is designed for production, it is designed for code you are going to have
 
 With this in mind the following are Dollar's characteristics:
 
+* Simple - Dollar does do not expose unnecessary complexity to the programmer, we keep it hidden.
+> The secret of success is to be like a duck – smooth and unruffled on top, but paddling furiously underneath.”
 * Typeless - if you *need* strongly typed code stop reading now. If you're writing internet centric modest sized software this is unlikely to be the case.
 * Synchronous - asynchronous flows are hard to follow and even harder to debug in production. We do not expose asynchronous behaviour to the programmer.
 * Metered - key execution's are metered using Coda Hale's metrics library, this makes production monitoring and debugging easier.
