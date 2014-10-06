@@ -41,4 +41,4 @@ deployment:
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
-        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} clean install scm-publish:publish-scm deploy site
+        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} clean install site deploy scm-publish:publish-scm
