@@ -9,8 +9,8 @@
             <theme>bootswatch-flatly</theme>
             <highlightJs>true</highlightJs>
             <brand>
-                <name>Cazcade: Dollar Vert.x</name>
-                <href>http://github.com/cazcade/dollar_vertx</href>
+                <name>Cazcade: Dollar</name>
+                <href>http://github.com/cazcade/dollar</href>
             </brand>
             <slogan></slogan>
             <titleTemplate>%2$s | %1$s</titleTemplate>
@@ -19,7 +19,7 @@
             <bottomNav>
                 <column>Main|Download</column>
                 <column>Documentation</column>
-                <column>dollar-vertx|modules</column>
+                <column>dollar|modules</column>
             </bottomNav>
             <bottomDescription>
 
