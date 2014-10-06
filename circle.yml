@@ -10,6 +10,8 @@ general:
 
 
 dependencies:
+  cache_directories:
+    - ~/.gnupg
   pre:
 #    - sudo apt-get install -y gpg
     - ./gen-key.sh ${GPG_PASSPHRASE}
