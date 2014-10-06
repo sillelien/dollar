@@ -275,9 +275,10 @@
                 <artifactId>maven-scm-publish-plugin</artifactId>
                 <version>1.0-beta-2</version>
                 <configuration>
+                    <excludes>.DS_Store</excludes>
                     <checkoutDirectory>${project.build.directory}/scmpublish</checkoutDirectory>
                     <checkinComment>Publishing Github Website for ${project.version}</checkinComment>
-                    <content>${project.reporting.outputDirectory}</content>
+                    <content>${project.build.directory}/staging</content>
                     <skipDeletedFiles>true</skipDeletedFiles>
                     <pubScmUrl>scm:git:git@github.com:cazcade/dollar.git</pubScmUrl>
                     <scmBranch>gh-pages</scmBranch>
@@ -290,6 +291,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.4</version>
+                <configuration>
+
+                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>lt.velykis.maven.skins</groupId>
