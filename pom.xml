@@ -317,9 +317,10 @@
 
 
     <distributionManagement>
-        <!--<site>-->
-        <!--<id>http://cazcade.github.io/dollar</id>-->
-        <!--</site>-->
+        <site>
+            <id>http://cazcade.github.io/dollar</id>
+            <url>scm:git:git@github.com:cazcade/dollar.git</url>
+        </site>
         <repository>
             <id>bintray-cazcade-maven-dollar</id>
             <name>cazcade-maven-dollar</name>
