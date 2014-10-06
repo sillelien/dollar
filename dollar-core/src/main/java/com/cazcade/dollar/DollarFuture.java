@@ -222,8 +222,8 @@ public class DollarFuture implements var {
     }
 
     @Override
-    public var pass(Class<? extends Script> clazz) {
-        return getValue().pass(clazz);
+    public var pipe(Class<? extends Script> clazz) {
+        return getValue().pipe(clazz);
     }
 
     @Override

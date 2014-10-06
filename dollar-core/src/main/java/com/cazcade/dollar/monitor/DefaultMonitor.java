@@ -3,7 +3,8 @@ package com.cazcade.dollar.monitor;
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -12,8 +13,8 @@ import java.util.function.Supplier;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DefaultMonitor implements Monitor {
-    private static final Logger log = Logger.getLogger("$");
     private static MetricRegistry metrics = new MetricRegistry();
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     public DefaultMonitor() {
         ConsoleReporter reporter = ConsoleReporter.forRegistry(metrics)

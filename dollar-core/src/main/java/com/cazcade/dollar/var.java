@@ -182,7 +182,7 @@ public interface var {
         System.out.println($$());
     }
 
-    var pass(Class<? extends Script> clazz);
+    var pipe(Class<? extends Script> clazz);
 
     var pop(String location, int timeoutInMillis);
 

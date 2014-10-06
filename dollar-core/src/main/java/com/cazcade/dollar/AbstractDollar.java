@@ -89,7 +89,7 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public var pass(Class<? extends Script> clazz) {
+    public var pipe(Class<? extends Script> clazz) {
         DollarStatic.threadContext.get().setPassValue(this);
         Script script = null;
         try {

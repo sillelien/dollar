@@ -222,8 +222,12 @@ public class DollarMonitored implements var {
     }
 
     @Override
-    public var pass(Class<? extends Script> clazz) {
-        return getValue().pass(clazz);
+    public var pipe(Class<? extends Script> clazz) {
+        return monitor.run("pipe", "dollar.run.pipe." + sanitize(clazz), "Piping to " + clazz.getName(), () -> getValue().pipe(clazz));
+    }
+
+    private String sanitize(Class<? extends Script> clazz) {
+        return clazz.getName().toLowerCase();
     }
 
     @Override
