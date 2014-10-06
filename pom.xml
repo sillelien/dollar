@@ -279,7 +279,7 @@
                     <checkoutDirectory>${project.build.directory}/scmpublish</checkoutDirectory>
                     <checkinComment>Publishing Github Website for ${project.version}</checkinComment>
                     <content>${project.build.directory}/staging</content>
-                    <skipDeletedFiles>true</skipDeletedFiles>
+                    <skipDeletedFiles>false</skipDeletedFiles>
                     <pubScmUrl>scm:git:git@github.com:cazcade/dollar.git</pubScmUrl>
                     <scmBranch>gh-pages</scmBranch>
                     <!-- branch with static site -->
