@@ -307,7 +307,24 @@
                 <configuration>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                     <shadedClassifierName>fat</shadedClassifierName>
-                    <!-- Any name that makes sense -->
+                    <filters>
+                        <filter>
+                            <!--
+                                Exclude files that sign a jar
+                                (one or multiple of the dependencies).
+                                One may not repack a signed jar without
+                                this, or you will get a
+                                SecurityException at program start.
+                            -->
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                                <exclude>META-INF/*.INF</exclude>
+                                <!-- This one may not be required -->
+                            </excludes>
+                        </filter>
+                    </filters>
                 </configuration>
                 <executions>
                     <execution>
