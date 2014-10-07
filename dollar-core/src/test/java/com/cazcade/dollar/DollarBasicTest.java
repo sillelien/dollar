@@ -143,7 +143,7 @@ public class DollarBasicTest {
     public void testSplit() {
         assertEquals("{}", $("{\"foo\":\"bar\",\"thing\":1}").split().toString());
         assertEquals("{\"foo\":\"bar\"}", $("{\"a\":{\"foo\":\"bar\"},\"thing\":1}").split().get("a").toString());
-        assertEquals(2, $("{\"foo\":\"bar\",\"thing\":1}").splitValues().stream().count());
+        assertEquals(2, $("{\"foo\":\"bar\",\"thing\":1}").keys().count());
     }
 
     @Test

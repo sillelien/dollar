@@ -53,53 +53,53 @@ public class DollarNull extends AbstractDollar implements var {
     }
 
     @Override
-    public String $() {
+    public <R> R $() {
         return null;
     }
 
     @Override
     public String $$(String key) {
-        return null;
+        return "";
     }
 
     @Override
     public String $$() {
-        return null;
+        return "";
     }
 
     @Override
     public Integer $int() {
-        return null;
+        return 0;
     }
 
     @Override
     public Integer $int(String key) {
-        return null;
+        return 0;
     }
 
     @Override
     public JsonObject $json() {
-        return null;
+        return new JsonObject();
     }
 
     @Override
     public JsonObject $json(String key) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<String> $list() {
+    public List<var> $list() {
         return Collections.emptyList();
     }
 
     @Override
     public Map<String, Object> $map() {
-        return null;
+        return Collections.emptyMap();
     }
 
     @Override
     public Number $number(String key) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -192,7 +192,6 @@ public class DollarNull extends AbstractDollar implements var {
         return Collections.emptyMap();
     }
 
-    @Override
     public List<String> splitValues() {
         return Collections.emptyList();
     }
@@ -203,8 +202,13 @@ public class DollarNull extends AbstractDollar implements var {
     }
 
     @Override
+    public List<String> strings() {
+        return Collections.emptyList();
+    }
+
+    @Override
     public String toString() {
-        return "null";
+        return "";
     }
 
     @Override

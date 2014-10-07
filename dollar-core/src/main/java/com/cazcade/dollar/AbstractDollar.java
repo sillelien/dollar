@@ -9,6 +9,7 @@ import javax.script.SimpleScriptContext;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -20,7 +21,8 @@ public abstract class AbstractDollar implements var {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof var) {
-            return $() != null && $().equals(((var) obj).$());
+            var unwrapped = ((var) obj).unwrap();
+            return $() != null && $().equals(unwrapped.$());
         } else {
             return false;
         }
@@ -37,7 +39,7 @@ public abstract class AbstractDollar implements var {
 
     @Override
     public var eval(Class clazz) {
-        List<String> list = this.$list();
+        List<String> list = this.strings();
         try {
             try {
                 Method callMethod = clazz.getMethod("call", var.class);
@@ -134,5 +136,11 @@ public abstract class AbstractDollar implements var {
         throw new UnsupportedOperationException();
 
     }
+
+    @Override
+    public Stream<var> stream() {
+        return $list().stream();
+    }
+
 
 }

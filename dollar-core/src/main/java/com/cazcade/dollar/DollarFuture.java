@@ -1,6 +1,5 @@
 package com.cazcade.dollar;
 
-import kotlin.Pair;
 import org.json.JSONObject;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.json.JsonObject;
@@ -26,20 +25,6 @@ public class DollarFuture implements var {
     @Override
     public var $(String age, long l) {
         return getValue().$(age, l);
-    }
-
-    var getValue() {
-        try {
-            return value.get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new DollarException(e);
-        }
-    }
-
-    public void setValue(var newValue) {
-        if (value instanceof CompletableFuture) {
-            ((CompletableFuture) value).complete(newValue);
-        }
     }
 
     @Override
@@ -88,7 +73,7 @@ public class DollarFuture implements var {
     }
 
     @Override
-    public List<String> $list() {
+    public List<var> $list() {
         return getValue().$list();
     }
 
@@ -187,11 +172,6 @@ public class DollarFuture implements var {
     }
 
     @Override
-    public var invoke(Pair... pairs) {
-        return invoke(pairs);
-    }
-
-    @Override
     public boolean isNull() {
         return getValue().isNull();
     }
@@ -277,18 +257,37 @@ public class DollarFuture implements var {
     }
 
     @Override
-    public List<String> splitValues() {
-        return getValue().splitValues();
-    }
-
-    @Override
     public Stream<var> stream() {
         return getValue().stream();
     }
 
     @Override
+    public List<String> strings() {
+        return getValue().strings();
+    }
+
+    @Override
     public String toString() {
         return getValue().toString();
+    }
+
+    @Override
+    public var unwrap() {
+        return getValue();
+    }
+
+    var getValue() {
+        try {
+            return value.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new DollarException(e);
+        }
+    }
+
+    public void setValue(var newValue) {
+        if (value instanceof CompletableFuture) {
+            ((CompletableFuture) value).complete(newValue);
+        }
     }
 
     @Override

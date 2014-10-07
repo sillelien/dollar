@@ -17,6 +17,7 @@
 package com.cazcade.dollar;
 
 import com.cazcade.dollar.monitor.Monitor;
+import com.google.common.collect.Range;
 import org.vertx.java.core.json.JsonObject;
 
 /**
@@ -58,6 +59,14 @@ public class DollarFactory {
         }
         return DollarStatic.$(json);
     }
+
+    public static var fromValue(Range range) {
+        if (range == null) {
+            return new DollarMonitored(DollarNull.INSTANCE, monitor);
+        }
+        return DollarStatic.$(range);
+    }
+
 
     public static var fromValue(Object o) {
         if (o == null) {

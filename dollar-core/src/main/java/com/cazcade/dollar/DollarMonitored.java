@@ -1,7 +1,6 @@
 package com.cazcade.dollar;
 
 import com.cazcade.dollar.monitor.Monitor;
-import kotlin.Pair;
 import org.json.JSONObject;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.json.JsonObject;
@@ -87,7 +86,7 @@ public class DollarMonitored implements var {
     }
 
     @Override
-    public List<String> $list() {
+    public List<var> $list() {
         return getValue().$list();
     }
 
@@ -187,11 +186,6 @@ public class DollarMonitored implements var {
     }
 
     @Override
-    public var invoke(Pair... pairs) {
-        return getValue().invoke(pairs);
-    }
-
-    @Override
     public boolean isNull() {
         return getValue().isNull();
     }
@@ -282,18 +276,23 @@ public class DollarMonitored implements var {
     }
 
     @Override
-    public List<String> splitValues() {
-        return getValue().splitValues();
-    }
-
-    @Override
     public Stream<var> stream() {
         return getValue().stream();
     }
 
     @Override
+    public List<String> strings() {
+        return getValue().strings();
+    }
+
+    @Override
     public String toString() {
         return getValue().toString();
+    }
+
+    @Override
+    public var unwrap() {
+        return value;
     }
 
     @Override

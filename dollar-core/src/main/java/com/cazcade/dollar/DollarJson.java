@@ -96,8 +96,8 @@ class DollarJson extends AbstractDollar implements var {
     }
 
     @Override
-    public JsonObject $() {
-        return json;
+    public <R> R $() {
+        return (R) json;
     }
 
     @Override
@@ -135,19 +135,8 @@ class DollarJson extends AbstractDollar implements var {
     }
 
     @Override
-    public List<String> $list() {
-        List<String> values = new ArrayList<>();
-        Map<String, Object> map = $map();
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
-            values.add(entry.getKey());
-            values.add(entry.getValue().toString());
-        }
-        return values;
-    }
-
-    @Override
-    public Map<String, Object> $map() {
-        return json.toMap();
+    public List<var> $list() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -278,18 +267,24 @@ class DollarJson extends AbstractDollar implements var {
     }
 
     @Override
-    public List<String> splitValues() {
-        List<String> list = new ArrayList<>();
-        for (String key : json.toMap().keySet()) {
-            String field = json.getField(key).toString();
-            list.add(field);
-        }
-        return list;
+    public Stream<var> stream() {
+        return split().values().stream();
     }
 
     @Override
-    public Stream<var> stream() {
-        return split().values().stream();
+    public List<String> strings() {
+        List<String> values = new ArrayList<>();
+        Map<String, Object> map = $map();
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            values.add(entry.getKey());
+            values.add(entry.getValue().toString());
+        }
+        return values;
+    }
+
+    @Override
+    public Map<String, Object> $map() {
+        return json.toMap();
     }
 
     @Override

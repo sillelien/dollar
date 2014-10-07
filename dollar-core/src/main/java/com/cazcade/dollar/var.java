@@ -16,7 +16,6 @@
 
 package com.cazcade.dollar;
 
-import kotlin.Pair;
 import org.json.JSONObject;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.json.JsonObject;
@@ -40,7 +39,6 @@ public interface var {
     static String config(String s) {
         return config.get(s);
     }
-
 
     var $(String age, long l);
 
@@ -71,7 +69,7 @@ public interface var {
      */
     JsonObject $json(String key);
 
-    List<String> $list();
+    List<var> $list();
 
     /**
      * Returns this JSON object as a set of nested maps.
@@ -101,6 +99,14 @@ public interface var {
     java.util.stream.Stream<var> children();
 
     java.util.stream.Stream children(String key);
+
+    /**
+     * Returns a deep copy of this object, such that mutations to it
+     * does not effect this.
+     *
+     * @return a deep copy of this
+     */
+    var copy();
 
     /**
      * URL decode.
@@ -150,24 +156,6 @@ public interface var {
      */
     boolean has(String key);
 
-    default var invoke(Pair... pairs) {
-        var copy = copy();
-        for (Pair pair : pairs) {
-            copy = copy.$(pair.getFirst().toString(), pair.getSecond());
-        }
-        return copy;
-    }
-
-    /**
-     * Returns a deep copy of this object, such that mutations to it
-     * does not effect this.
-     *
-     * @return a deep copy of this
-     */
-    var copy();
-
-    var $(String key, Object value);
-
     boolean isNull();
 
     java.util.stream.Stream<Map.Entry<String, var>> keyValues();
@@ -204,14 +192,20 @@ public interface var {
         return $(key, value);
     }
 
-    Map<String, var> split();
+    var $(String key, Object value);
 
-    List<String> splitValues();
+    Map<String, var> split();
 
     Stream<var> stream();
 
+    List<String> strings();
+
     @Override
     String toString();
+
+    default var unwrap() {
+        return this;
+    }
 
     default <R> R val() {
         return $();

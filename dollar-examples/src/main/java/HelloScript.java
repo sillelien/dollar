@@ -8,6 +8,7 @@ import java.util.Date;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class HelloScript extends Script {
+
     static {
         $THIS = HelloScript.class;
     }
@@ -23,12 +24,12 @@ public class HelloScript extends Script {
                                 .$("postcode", "bn1 6jj")
                                 .$("number", 343)
                 );
-
         profile.pipe(SecondScript.class).out();
         profile.out();
         System.out.println(args);
         System.out.println(a);
         System.out.println(in);
     }
+
 
 }

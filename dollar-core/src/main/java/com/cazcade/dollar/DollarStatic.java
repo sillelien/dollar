@@ -2,7 +2,7 @@ package com.cazcade.dollar;
 
 import com.cazcade.dollar.monitor.Monitor;
 import com.cazcade.dollar.pubsub.Sub;
-import org.jetbrains.annotations.NotNull;
+import com.google.common.collect.Range;
 import org.vertx.java.core.MultiMap;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.DecodeException;
@@ -41,53 +41,6 @@ public class DollarStatic {
 
     public static var $(String name, MultiMap multiMap) {
         return DollarFactory.fromValue().$(name, multiMap);
-    }
-
-    public static var $(Object o) {
-        if (o == null) {
-            return new DollarMonitored(DollarNull.INSTANCE, monitor());
-        }
-        if (o instanceof Number) {
-            return new DollarMonitored(new DollarNumber((Number) o), monitor());
-        }
-        if (o instanceof String) {
-            try {
-                return new DollarMonitored(new DollarJson(new JsonObject((String) o)), monitor());
-            } catch (DecodeException de) {
-                return new DollarMonitored(new DollarString((String) o), monitor());
-            }
-        }
-        JsonObject json;
-        if (o instanceof JsonObject) {
-            json = ((JsonObject) o);
-        }
-        if (o instanceof JsonObject) {
-            json = ((JsonObject) o);
-        } else if (o instanceof MultiMap) {
-            json = mapToJson((MultiMap) o);
-        } else if (o instanceof Map) {
-            json = new JsonObject((Map<String, Object>) o);
-        } else if (o instanceof Message) {
-            json = ((JsonObject) ((Message) o).body());
-            if (json == null) {
-                return new DollarMonitored(DollarNull.INSTANCE, monitor());
-            }
-        } else {
-            json = new JsonObject(o.toString());
-        }
-        return new DollarMonitored(new DollarJson(json), monitor());
-    }
-
-    public static Monitor monitor() {
-        return threadContext.get().getMonitor();
-    }
-
-    static JsonObject mapToJson(MultiMap map) {
-        JsonObject jsonObject = new JsonObject();
-        for (Map.Entry<String, String> entry : map) {
-            jsonObject.putString(entry.getKey(), entry.getValue());
-        }
-        return jsonObject;
     }
 
     public static var $(String name, Number value) {
@@ -136,6 +89,60 @@ public class DollarStatic {
 
     public static var $(String key, JsonObject jsonObject) {
         return DollarFactory.fromValue().$(key, jsonObject);
+    }
+
+    public static var $(long start, long finish) {
+        return $(Range.closed(start, finish));
+    }
+
+    public static var $(Object o) {
+        if (o == null) {
+            return new DollarMonitored(DollarNull.INSTANCE, monitor());
+        }
+        if (o instanceof Number) {
+            return new DollarMonitored(new DollarNumber((Number) o), monitor());
+        }
+        if (o instanceof Range) {
+            return new DollarMonitored(new DollarRange((Range) o), monitor());
+        }
+        if (o instanceof String) {
+            try {
+                return new DollarMonitored(new DollarJson(new JsonObject((String) o)), monitor());
+            } catch (DecodeException de) {
+                return new DollarMonitored(new DollarString((String) o), monitor());
+            }
+        }
+        JsonObject json;
+        if (o instanceof JsonObject) {
+            json = ((JsonObject) o);
+        }
+        if (o instanceof JsonObject) {
+            json = ((JsonObject) o);
+        } else if (o instanceof MultiMap) {
+            json = mapToJson((MultiMap) o);
+        } else if (o instanceof Map) {
+            json = new JsonObject((Map<String, Object>) o);
+        } else if (o instanceof Message) {
+            json = ((JsonObject) ((Message) o).body());
+            if (json == null) {
+                return new DollarMonitored(DollarNull.INSTANCE, monitor());
+            }
+        } else {
+            json = new JsonObject(o.toString());
+        }
+        return new DollarMonitored(new DollarJson(json), monitor());
+    }
+
+    public static Monitor monitor() {
+        return threadContext.get().getMonitor();
+    }
+
+    static JsonObject mapToJson(MultiMap map) {
+        JsonObject jsonObject = new JsonObject();
+        for (Map.Entry<String, String> entry : map) {
+            jsonObject.putString(entry.getKey(), entry.getValue());
+        }
+        return jsonObject;
     }
 
     public static DollarHttp $DELETE(String path, DollarHttpHandler handler) {
@@ -282,19 +289,17 @@ public class DollarStatic {
     }
 
     //Kotlin compatible versions
-    public static
-    @NotNull
-    var create() {
+    public static var create() {
         return $();
     }
 
-    public static
-    @NotNull
-    var create(@NotNull String value) {
+    public static var create(String value) {
         return $();
     }
 
     public static void stopHttpServer() {
         Spark.stop();
     }
+
+
 }

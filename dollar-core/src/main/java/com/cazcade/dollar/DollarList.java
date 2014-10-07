@@ -77,6 +77,11 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public List<var> $list() {
+        return new ArrayList<>(list);
+    }
+
+    @Override
     public Map<String, Object> $map() {
         throw new UnsupportedOperationException();
     }
@@ -166,18 +171,13 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public List<String> splitValues() {
-        return $list();
-    }
-
-    @Override
-    public List<String> $list() {
-        return list.stream().map(Object::toString).collect(Collectors.toList());
-    }
-
-    @Override
     public Stream<var> stream() {
         return list.stream();
+    }
+
+    @Override
+    public List<String> strings() {
+        return list.stream().map(Object::toString).collect(Collectors.toList());
     }
 
     @Override
@@ -186,12 +186,12 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public JsonArray $() {
+    public <R> R $() {
         JsonArray array = new JsonArray();
         list.forEach((i) -> {
             array.add(i.$());
         });
-        return array;
+        return (R) array;
     }
 
     @Override
