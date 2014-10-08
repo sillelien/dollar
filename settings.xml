@@ -21,8 +21,8 @@
     <servers>
 
         <server>
-            <id>bintray-cazcade-maven-dollar</id>
-            <username>cazcade</username>
+            <id>bintray-neilellis-maven-dollar</id>
+            <username>neilellis</username>
             <password>${BINTRAY_API_KEY}</password>
         </server>
 

@@ -1,5 +1,6 @@
+package technology.neil.dollar.pipe;
+
 import technology.neil.dollar.Script;
-import technology.neil.dollar.SecondScript;
 import technology.neil.dollar.var;
 
 import java.util.Date;
@@ -7,14 +8,12 @@ import java.util.Date;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class HelloScript extends Script {
-
+public final class FirstScript extends Script {
     static {
-        $THIS = HelloScript.class;
+        $THIS = FirstScript.class;
     }
 
     {
-        var a = $("A");
         var profile = $("name", "Neil")
                 .$("age", new Date().getYear() + 1900 - 1970)
                 .$("gender", "male")
@@ -24,12 +23,6 @@ public class HelloScript extends Script {
                                 .$("postcode", "bn1 6jj")
                                 .$("number", 343)
                 );
-        profile.pipe(SecondScript.class).out();
-        profile.out();
-        System.out.println(args);
-        System.out.println(a);
-        System.out.println(in);
+        profile.pipe(ExtractName.class).pipe(WelcomeMessage.class).out();
     }
-
-
 }

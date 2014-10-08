@@ -8,14 +8,14 @@ Making Java dynamic and easy to use.
 Install using Maven
 
         <dependency>
-            <groupId>com.cazcade</groupId>
+            <groupId>technology.neil</groupId>
             <artifactId>dollar-core</artifactId>
             <version>0.0.X</version>
         </dependency>
 
 We're not on Maven central yet but we are on Bintray:
 
-[ ![Download](https://api.bintray.com/packages/neilellis/maven/dollar/images/download.png) ](https://bintray.com/cazcade/maven/dollar/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/neilellis/maven/dollar/images/download.png) ](https://bintray.com/neilellis/maven/dollar/_latestVersion)
 
 
 NOTES

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>dollar</artifactId>
-        <groupId>com.cazcade</groupId>
+        <groupId>technology.neil</groupId>
         <version>0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -14,7 +14,7 @@
     <description>Examples of Dollar in Action</description>
     <dependencies>
         <dependency>
-            <groupId>com.cazcade</groupId>
+            <groupId>technology.neil</groupId>
             <artifactId>dollar-core</artifactId>
             <version>0-SNAPSHOT</version>
         </dependency>

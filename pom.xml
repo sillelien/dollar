@@ -9,7 +9,7 @@
         <kotlin.version>0.8.11</kotlin.version>
     </properties>
 
-    <groupId>com.cazcade</groupId>
+    <groupId>technology.neil</groupId>
     <artifactId>dollar</artifactId>
     <version>0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -39,9 +39,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/cazcade/dollar/blob/master/</url>
-        <connection>scm:git:git@github.com:cazcade/dollar.git</connection>
-        <developerConnection>scm:git:git@github.com:cazcade/dollar.git</developerConnection>
+        <url>https://github.com/neilellis/dollar/blob/master/</url>
+        <connection>scm:git:git@github.com:neilellis/dollar.git</connection>
+        <developerConnection>scm:git:git@github.com:neilellis/dollar.git</developerConnection>
     </scm>
 
     <modules>
@@ -255,7 +255,7 @@
                     <checkinComment>Publishing Github Website for ${project.version}</checkinComment>
                     <content>${project.build.directory}/staging</content>
                     <skipDeletedFiles>false</skipDeletedFiles>
-                    <pubScmUrl>scm:git:git@github.com:cazcade/dollar.git</pubScmUrl>
+                    <pubScmUrl>scm:git:git@github.com:neilellis/dollar.git</pubScmUrl>
                     <scmBranch>gh-pages</scmBranch>
                     <!-- branch with static site -->
                 </configuration>
@@ -368,13 +368,13 @@
 
     <distributionManagement>
         <site>
-            <id>http://cazcade.github.io/dollar</id>
-            <url>scm:git:git@github.com:cazcade/dollar.git</url>
+            <id>http://neilellis.github.io/dollar</id>
+            <url>scm:git:git@github.com:neilellis/dollar.git</url>
         </site>
         <repository>
-            <id>bintray-cazcade-maven-dollar</id>
-            <name>cazcade-maven-dollar</name>
-            <url>https://api.bintray.com/maven/cazcade/maven/dollar</url>
+            <id>bintray-neilellis-maven-dollar</id>
+            <name>neilellis-maven-dollar</name>
+            <url>https://api.bintray.com/maven/neilellis/maven/dollar</url>
         </repository>
     </distributionManagement>
 
