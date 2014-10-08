@@ -1,7 +1,7 @@
 dollar
 ======
 
-[![Circle CI](https://circleci.com/gh/cazcade/dollar/tree/master.png?style=badge)](https://circleci.com/gh/cazcade/dollar/tree/master)
+[![Circle CI](https://circleci.com/gh/neilellis/dollar.png?style=badge)](https://circleci.com/gh/neilellis/dollar)
 
 Making Java dynamic and easy to use.
 
@@ -15,7 +15,7 @@ Install using Maven
 
 We're not on Maven central yet but we are on Bintray:
 
-[ ![Download](https://api.bintray.com/packages/cazcade/maven/dollar/images/download.png) ](https://bintray.com/cazcade/maven/dollar/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/neilellis/maven/dollar/images/download.png) ](https://bintray.com/cazcade/maven/dollar/_latestVersion)
 
 
 NOTES
