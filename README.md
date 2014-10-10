@@ -8,7 +8,7 @@ Making Java dynamic and easy to use.
 Install using Maven
 
         <dependency>
-            <groupId>technology.neil</groupId>
+            <groupId>me.neilellis</groupId>
             <artifactId>dollar-core</artifactId>
             <version>0.0.X</version>
         </dependency>

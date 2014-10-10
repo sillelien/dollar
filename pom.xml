@@ -9,7 +9,7 @@
         <kotlin.version>0.8.11</kotlin.version>
     </properties>
 
-    <groupId>technology.neil</groupId>
+    <groupId>me.neilellis</groupId>
     <artifactId>dollar</artifactId>
     <version>0-SNAPSHOT</version>
     <packaging>pom</packaging>
