@@ -1,8 +1,8 @@
 package me.neilellis.dollar;
 
+import com.google.common.collect.Range;
 import me.neilellis.dollar.monitor.Monitor;
 import me.neilellis.dollar.pubsub.Sub;
-import com.google.common.collect.Range;
 import org.vertx.java.core.MultiMap;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.DecodeException;
@@ -297,9 +297,16 @@ public class DollarStatic {
         return $();
     }
 
+    public static void log(String message) {
+        System.out.println(threadContext.get().getLabels().toString() + ":" + message);
+    }
+
+    public static void logf(String message, Object... values) {
+        System.out.printf(threadContext.get().getLabels().toString() + ":" + message, values);
+    }
+
     public static void stopHttpServer() {
         Spark.stop();
     }
-
 
 }
