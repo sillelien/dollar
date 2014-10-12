@@ -301,6 +301,10 @@ public class DollarStatic {
         System.out.println(threadContext.get().getLabels().toString() + ":" + message);
     }
 
+    public static void log(Object message) {
+        System.out.println(threadContext.get().getLabels().toString() + ":" + message);
+    }
+
     public static void logf(String message, Object... values) {
         System.out.printf(threadContext.get().getLabels().toString() + ":" + message, values);
     }
