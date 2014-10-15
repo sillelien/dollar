@@ -111,13 +111,15 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public void pub(String... locations) {
+    public var pub(String... locations) {
         DollarStatic.$pub(this, locations);
+        return this;
     }
 
     @Override
-    public void push(String location) {
+    public var push(String location) {
         DollarStatic.$push(location, this);
+        return this;
     }
 
     @Override

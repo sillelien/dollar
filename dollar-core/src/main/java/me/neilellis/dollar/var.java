@@ -174,9 +174,9 @@ public interface var {
 
     var pop(String location, int timeoutInMillis);
 
-    void pub(String... locations);
+    var pub(String... locations);
 
-    void push(String location);
+    var push(String location);
 
     var remove(Object value);
 

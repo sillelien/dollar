@@ -232,13 +232,13 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public void pub(String... locations) {
-        monitor.run("pub", "dollar.message.pub." + sanitize(Arrays.toString(locations)), "Publishing value to " + Arrays.toString(locations), () -> getValue().pub(locations));
+    public var pub(String... locations) {
+        return tracer.trace(this,monitor.run("pub", "dollar.message.pub." + sanitize(Arrays.toString(locations)), "Publishing value to " + Arrays.toString(locations), () -> getValue().pub(locations)), StateTracer.Operations.PUBLISH, locations);
     }
 
     @Override
-    public void push(String location) {
-        monitor.run("push", "dollar.persist.temp.push." + sanitize(location), "Pushing value to " + location, () -> getValue().push(location));
+    public var push(String location) {
+        return tracer.trace(this, monitor.run("push", "dollar.persist.temp.push." + sanitize(location), "Pushing value to " + location, () -> getValue().push(location)), StateTracer.Operations.PUSH,location);
     }
 
     @Override
