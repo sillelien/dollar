@@ -9,8 +9,10 @@ import spark.SparkBase;
 public class DollarHttp extends SparkBase {
 
     public DollarHttp(String method, String path, DollarHttpHandler handler) {
+        DollarThreadContext context = DollarStatic.childContext();
+
         Route route = (request, response) -> {
-            var result = DollarStatic.$call(() -> handler.handle(new DollarHttpContext(request, response)));
+            var result = DollarStatic.$call(context,() -> handler.handle(new DollarHttpContext(request, response)));
             response.type(result.mimeType());
             return result.$$();
         };

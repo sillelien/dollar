@@ -179,7 +179,7 @@ public class DollarStatic {
      * @param call the lambda to run.
      */
     public static var $call(Callable<var> call) {
-        return $call(new DollarThreadContext(), call);
+        return $call(threadContext.get().child(), call);
     }
 
     /**
@@ -189,7 +189,7 @@ public class DollarStatic {
      * @param call    the lambda to run.
      */
     public static var $call(DollarThreadContext context, Callable<var> call) {
-        threadContext.set(context);
+        threadContext.set(context.child());
         try {
             return call.call();
         } catch (Exception e) {
@@ -255,7 +255,7 @@ public class DollarStatic {
      * @param run     the lambda to run.
      */
     public static void $run(DollarThreadContext context, Runnable run) {
-        threadContext.set(context);
+        threadContext.set(context.child());
         try {
             run.run();
         } finally {
@@ -316,4 +316,6 @@ public class DollarStatic {
     public static StateTracer tracer() {
         return new SimpleLogStateTracer();
     }
+    public static DollarThreadContext context() { return threadContext.get();}
+    public static DollarThreadContext childContext() { return threadContext.get().child();}
 }

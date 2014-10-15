@@ -25,6 +25,19 @@ public class DollarThreadContext {
     private DollarStore store = new RedisStore();
     private String threadKey = UUID.randomUUID().toString();
 
+    public DollarThreadContext(List<String> labels, Monitor monitor, var passValue, DollarPubSub pubsub, DollarStore store, String threadKey) {
+        this.labels = labels;
+        this.monitor = monitor;
+        this.passValue = passValue;
+        this.pubsub = pubsub;
+        this.store = store;
+        this.threadKey = threadKey;
+    }
+
+    public DollarThreadContext() {
+
+    }
+
     public List<String> getLabels() {
         return labels;
     }
@@ -88,4 +101,7 @@ public class DollarThreadContext {
         labels.add(label);
     }
 
+    public DollarThreadContext child() {
+        return new DollarThreadContext(new ArrayList<>(labels), monitor, passValue, pubsub, store, threadKey + ":" + UUID.randomUUID());
+    }
 }

@@ -212,13 +212,13 @@ public class DollarFuture implements var {
     }
 
     @Override
-    public void pub(String... locations) {
-        getValue().pub(locations);
+    public var pub(String... locations) {
+        return getValue().pub(locations);
     }
 
     @Override
-    public void push(String location) {
-        getValue().push(location);
+    public var push(String location) {
+       return  getValue().push(location);
     }
 
     @Override
