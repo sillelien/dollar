@@ -68,9 +68,9 @@ class DollarJson extends AbstractDollar implements var {
     @Override
     public var $(String name, Object o) {
         JsonObject copy = this.json.copy();
-        if (o instanceof DollarMonitored) {
+        if (o instanceof DollarWrapper) {
             //unwrap
-            return $(name, ((DollarMonitored) o).getValue());
+            return $(name, ((DollarWrapper) o).getValue());
         } else if (o instanceof MultiMap) {
             copy.putObject(name, DollarStatic.mapToJson((MultiMap) o));
         } else if (o instanceof JsonArray) {

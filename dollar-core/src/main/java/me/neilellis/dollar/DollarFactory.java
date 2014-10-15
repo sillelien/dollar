@@ -16,8 +16,8 @@
 
 package me.neilellis.dollar;
 
-import me.neilellis.dollar.monitor.Monitor;
 import com.google.common.collect.Range;
+import me.neilellis.dollar.monitor.Monitor;
 import org.vertx.java.core.json.JsonObject;
 
 /**
@@ -25,44 +25,45 @@ import org.vertx.java.core.json.JsonObject;
  */
 public class DollarFactory {
     static Monitor monitor = DollarStatic.monitor();
+    static StateTracer tracer= DollarStatic.tracer();
 
     public static var fromField(Object field) {
         if (field == null) {
-            return new DollarMonitored(DollarNull.INSTANCE, monitor);
+            return new DollarWrapper(DollarNull.INSTANCE, monitor, tracer);
         }
         if (field instanceof String) {
-            return new DollarMonitored(new DollarString((String) field), monitor);
+            return new DollarWrapper(new DollarString((String) field), monitor, tracer);
         }
         if (field instanceof Number) {
-            return new DollarMonitored(new DollarNumber((Number) field), monitor);
+            return new DollarWrapper(new DollarNumber((Number) field), monitor, tracer);
         }
         if (field instanceof JsonObject) {
             return DollarStatic.$(field);
         }
-        return new DollarMonitored(DollarStatic.$(field.toString()), monitor);
+        return new DollarWrapper(DollarStatic.$(field.toString()), monitor, tracer);
     }
 
     public static var fromValue() {
-        return new DollarMonitored(new DollarJson(), monitor);
+        return new DollarWrapper(new DollarJson(), monitor, tracer);
     }
 
     public static var fromValue(JsonObject json) {
         if (json == null) {
-            return new DollarMonitored(DollarNull.INSTANCE, monitor);
+            return new DollarWrapper(DollarNull.INSTANCE, monitor, tracer);
         }
-        return new DollarMonitored(new DollarJson(json), monitor);
+        return new DollarWrapper(new DollarJson(json), monitor, tracer);
     }
 
     public static var fromValue(String json) {
         if (json == null) {
-            return new DollarMonitored(DollarNull.INSTANCE, monitor);
+            return new DollarWrapper(DollarNull.INSTANCE, monitor, tracer);
         }
         return DollarStatic.$(json);
     }
 
     public static var fromValue(Range range) {
         if (range == null) {
-            return new DollarMonitored(DollarNull.INSTANCE, monitor);
+            return new DollarWrapper(DollarNull.INSTANCE, monitor, tracer);
         }
         return DollarStatic.$(range);
     }
@@ -70,7 +71,7 @@ public class DollarFactory {
 
     public static var fromValue(Object o) {
         if (o == null) {
-            return new DollarMonitored(DollarNull.INSTANCE, monitor);
+            return new DollarWrapper(DollarNull.INSTANCE, monitor, tracer);
         }
         return DollarStatic.$(o);
     }

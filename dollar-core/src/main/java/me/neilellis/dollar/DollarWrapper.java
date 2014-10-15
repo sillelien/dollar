@@ -13,14 +13,16 @@ import java.util.stream.Stream;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DollarMonitored implements var {
+public class DollarWrapper implements var {
 
     private Monitor monitor;
+    private StateTracer tracer;
     private var value;
 
-    public DollarMonitored(var value, Monitor monitor) {
+    public DollarWrapper(var value, Monitor monitor, StateTracer tracer) {
         this.value = value;
         this.monitor = monitor;
+        this.tracer = tracer;
     }
 
     public static void config(String key, String value) {
@@ -32,8 +34,8 @@ public class DollarMonitored implements var {
     }
 
     @Override
-    public var $(String age, long l) {
-        return getValue().$(age, l);
+    public var $(String key, long l) {
+        return tracer.trace(this, getValue().$(key, l), StateTracer.Operations.SET, key, l);
     }
 
     var getValue() {
@@ -47,7 +49,7 @@ public class DollarMonitored implements var {
 
     @Override
     public var $(String key, Object value) {
-        return getValue().$(key, value);
+        return tracer.trace(this, getValue().$(key, value), StateTracer.Operations.SET, key, value);
     }
 
     @Override
@@ -147,7 +149,7 @@ public class DollarMonitored implements var {
 
     @Override
     public var eval(String label, String js) {
-        return monitor.run("$eval", "dollar.eval.js." + sanitize(label), "Evaluating: " + js, () -> getValue().eval(label, js));
+        return tracer.trace(this, monitor.run("$eval", "dollar.eval.js." + sanitize(label), "Evaluating: " + js, () -> getValue().eval(label, js)), StateTracer.Operations.EVAL,label,js);
     }
 
     private static String sanitize(String location) {
@@ -162,7 +164,7 @@ public class DollarMonitored implements var {
 
     @Override
     public var eval(String label, DollarEval lambda) {
-        return monitor.run("$fun", "dollar.eval.java." + sanitize(label), "Evaluating Lambda", () -> getValue().eval(label, lambda));
+        return tracer.trace(this, monitor.run("$fun", "dollar.eval.java." + sanitize(label), "Evaluating Lambda", () -> getValue().eval(label, lambda)), StateTracer.Operations.EVAL,label,lambda);
     }
 
     @Override
@@ -202,7 +204,7 @@ public class DollarMonitored implements var {
 
     @Override
     public var load(String location) {
-        return monitor.run("save", "dollar.persist.temp.load." + sanitize(location), "Loading value at " + location, () -> getValue().load(location));
+        return tracer.trace(DollarNull.INSTANCE, monitor.run("save", "dollar.persist.temp.load." + sanitize(location), "Loading value at " + location, () -> getValue().load(location)), StateTracer.Operations.LOAD,location);
     }
 
     @Override
@@ -217,7 +219,7 @@ public class DollarMonitored implements var {
 
     @Override
     public var pipe(Class<? extends Script> clazz) {
-        return monitor.run("pipe", "dollar.run.pipe." + sanitize(clazz), "Piping to " + clazz.getName(), () -> getValue().pipe(clazz));
+        return tracer.trace(this, monitor.run("pipe", "dollar.run.pipe." + sanitize(clazz), "Piping to " + clazz.getName(), () -> getValue().pipe(clazz)), StateTracer.Operations.PIPE, clazz.getName());
     }
 
     private String sanitize(Class<? extends Script> clazz) {
@@ -226,7 +228,7 @@ public class DollarMonitored implements var {
 
     @Override
     public var pop(String location, int timeoutInMillis) {
-        return monitor.run("pop", "dollar.persist.temp.pop." + sanitize(location), "Popping value from " + location, () -> getValue().pop(location, timeoutInMillis));
+        return tracer.trace(DollarNull.INSTANCE, monitor.run("pop", "dollar.persist.temp.pop." + sanitize(location), "Popping value from " + location, () -> getValue().pop(location, timeoutInMillis)), StateTracer.Operations.POP,location);
     }
 
     @Override
@@ -241,21 +243,23 @@ public class DollarMonitored implements var {
 
     @Override
     public var remove(Object value) {
-        return getValue().remove(value);
+        return tracer.trace(this, getValue().remove(value), StateTracer.Operations.REMOVE_BY_VALUE, value);
     }
 
     @Override
-    public var rm(String value) {
-        return getValue().rm(value);
+    public var rm(String key) {
+        return tracer.trace(this, getValue().rm(key), StateTracer.Operations.REMOVE_BY_KEY,key);
     }
 
     @Override
     public var save(String location) {
+        tracer.trace(this, this, StateTracer.Operations.SAVE);
         return monitor.run("save", "dollar.persist.temp.save." + sanitize(location), "Saving value at " + location, () -> getValue().save(location));
     }
 
     @Override
     public var save(String location, int expiryInMilliseconds) {
+        tracer.trace(this, this, StateTracer.Operations.SAVE);
         return monitor.run("save", "dollar.persist.temp.save." + sanitize(location), "Saving value at " + location + " with expiry " + expiryInMilliseconds, () -> getValue().save(location, expiryInMilliseconds));
     }
 
@@ -267,12 +271,12 @@ public class DollarMonitored implements var {
 
     @Override
     public var set(String key, Object value) {
-        return getValue().set(key, value);
+        return tracer.trace(this, getValue().set(key, value), StateTracer.Operations.SET,key,value);
     }
 
     @Override
     public Map<String, var> split() {
-        return getValue().split();
+        return tracer.trace(this, getValue().split(), StateTracer.Operations.SPLIT);
     }
 
     @Override

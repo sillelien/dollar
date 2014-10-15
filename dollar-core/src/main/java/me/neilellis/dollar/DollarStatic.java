@@ -97,19 +97,19 @@ public class DollarStatic {
 
     public static var $(Object o) {
         if (o == null) {
-            return new DollarMonitored(DollarNull.INSTANCE, monitor());
+            return new DollarWrapper(DollarNull.INSTANCE, monitor(), tracer());
         }
         if (o instanceof Number) {
-            return new DollarMonitored(new DollarNumber((Number) o), monitor());
+            return new DollarWrapper(new DollarNumber((Number) o), monitor(), tracer());
         }
         if (o instanceof Range) {
-            return new DollarMonitored(new DollarRange((Range) o), monitor());
+            return new DollarWrapper(new DollarRange((Range) o), monitor(), tracer());
         }
         if (o instanceof String) {
             try {
-                return new DollarMonitored(new DollarJson(new JsonObject((String) o)), monitor());
+                return new DollarWrapper(new DollarJson(new JsonObject((String) o)), monitor(), tracer());
             } catch (DecodeException de) {
-                return new DollarMonitored(new DollarString((String) o), monitor());
+                return new DollarWrapper(new DollarString((String) o), monitor(), tracer());
             }
         }
         JsonObject json;
@@ -125,12 +125,12 @@ public class DollarStatic {
         } else if (o instanceof Message) {
             json = ((JsonObject) ((Message) o).body());
             if (json == null) {
-                return new DollarMonitored(DollarNull.INSTANCE, monitor());
+                return new DollarWrapper(DollarNull.INSTANCE, monitor(), tracer());
             }
         } else {
             json = new JsonObject(o.toString());
         }
-        return new DollarMonitored(new DollarJson(json), monitor());
+        return new DollarWrapper(new DollarJson(json), monitor(), tracer());
     }
 
     public static Monitor monitor() {
@@ -313,4 +313,7 @@ public class DollarStatic {
         Spark.stop();
     }
 
+    public static StateTracer tracer() {
+        return new SimpleLogStateTracer();
+    }
 }
