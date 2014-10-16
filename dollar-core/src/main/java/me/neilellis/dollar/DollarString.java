@@ -17,6 +17,7 @@
 package me.neilellis.dollar;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -24,8 +25,8 @@ import java.math.BigDecimal;
 public class DollarString extends AbstractDollarSingleValue<String> {
 
 
-    public DollarString(String value) {
-        super(value);
+    public DollarString(List<Throwable> errors, String value) {
+        super(errors,value);
     }
 
     @Override
@@ -43,10 +44,8 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return new BigDecimal(key);
     }
 
-    @Override
-    public var copy() {
-        return new DollarString(value);
-    }
+
+
 
     @Override
     public boolean equals(Object obj) {

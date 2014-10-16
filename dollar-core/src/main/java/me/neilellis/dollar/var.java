@@ -23,12 +23,14 @@ import org.vertx.java.core.json.JsonObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface var {
+public interface var extends Map<String,var> {
 
     static Map<String, String> config = new HashMap<String, String>();
 
@@ -69,7 +71,7 @@ public interface var {
      */
     JsonObject $json(String key);
 
-    List<var> $list();
+    List<var> list();
 
     /**
      * Returns this JSON object as a set of nested maps.
@@ -142,8 +144,8 @@ public interface var {
      */
     var eval(Class clazz);
 
-    default var get(String key) {
-        return $(key);
+    default var get(Object key) {
+        return $(String.valueOf(key));
     }
 
     var $(String key);
@@ -171,6 +173,8 @@ public interface var {
     }
 
     var pipe(Class<? extends Script> clazz);
+
+    var pipe(Function<var,var> function);
 
     var pop(String location, int timeoutInMillis);
 
@@ -207,6 +211,8 @@ public interface var {
         return this;
     }
 
+    Map<String, var> map();
+
     default <R> R val() {
         return $();
     }
@@ -218,4 +224,21 @@ public interface var {
      */
     <R> R $();
 
+    var error(String errorMessage);
+
+    var error(Throwable error);
+
+    var error();
+
+    boolean hasErrors();
+
+    List<String> errorTexts();
+
+    List<Throwable> errors();
+
+    void clearErrors();
+
+    var onErrors(Consumer<List<Throwable>> handler);
+
+    var copy(List<Throwable> errors);
 }

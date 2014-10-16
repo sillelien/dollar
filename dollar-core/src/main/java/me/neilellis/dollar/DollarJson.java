@@ -1,5 +1,6 @@
 package me.neilellis.dollar;
 
+import com.google.common.collect.Maps;
 import org.json.JSONObject;
 import org.vertx.java.core.MultiMap;
 import org.vertx.java.core.eventbus.EventBus;
@@ -12,10 +13,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleScriptContext;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -39,8 +37,10 @@ class DollarJson extends AbstractDollar implements var {
 
     /**
      * Create a new and empty $ object.
+     * @param errors
      */
-    DollarJson() {
+    DollarJson(List<Throwable> errors) {
+        super(errors);
         json = (new JsonObject());
     }
 
@@ -56,13 +56,14 @@ class DollarJson extends AbstractDollar implements var {
      *
      * @param o the object of unknown type to be converted to a JsonObject and then wrapped by the $ class.
      */
-    DollarJson(JsonObject o) {
+    DollarJson(List<Throwable> errors, JsonObject o) {
+        super(Collections.emptyList());
         this.json= o;
     }
 
     @Override
     public var $(String key, long value) {
-        return DollarFactory.fromValue(json.copy().putNumber(key, value));
+        return DollarFactory.fromValue(errors(),json.copy().putNumber(key, value));
     }
 
     @Override
@@ -92,13 +93,22 @@ class DollarJson extends AbstractDollar implements var {
         } else {
             copy.putString(name, String.valueOf(o));
         }
-        return DollarFactory.fromValue(copy);
+        return DollarFactory.fromValue(errors(),copy);
     }
 
     @Override
     public <R> R $() {
         return (R) json;
     }
+
+
+    @Override
+    public var copy(List<Throwable> errors) {
+        List<Throwable> errorList = errors();
+        errorList.addAll(errors);
+        return DollarFactory.fromValue(errorList, json);
+    }
+
 
     @Override
     public String $$(String key) {
@@ -108,7 +118,7 @@ class DollarJson extends AbstractDollar implements var {
     @Override
     public var $(String key) {
         if (key.matches("\\w+")) {
-            return DollarFactory.fromField(json.getField(key));
+            return DollarFactory.fromField(errors(),json.getField(key));
         } else {
             return eval(key);
         }
@@ -135,7 +145,7 @@ class DollarJson extends AbstractDollar implements var {
     }
 
     @Override
-    public List<var> $list() {
+    public List<var> list() {
         throw new UnsupportedOperationException();
     }
 
@@ -153,7 +163,7 @@ class DollarJson extends AbstractDollar implements var {
     public var add(Object value) {
         JsonObject copy = json.copy();
         if (value instanceof var && ((var) value).$() instanceof JsonObject) {
-            return new DollarJson(copy.mergeIn(((var) value).$()));
+            return  DollarFactory.fromValue(errors(),copy.mergeIn(((var) value).$()));
         }
         throw new IllegalArgumentException("Only the addition of DollarJson objects supported at present.");
     }
@@ -169,7 +179,7 @@ class DollarJson extends AbstractDollar implements var {
         for (String key : json.toMap().keySet()) {
             Object field = json.getField(key);
             if (field instanceof JsonObject) {
-                map.put(key, DollarFactory.fromField(field));
+                map.put(key, DollarFactory.fromField(errors(),field));
             }
         }
         return map;
@@ -186,7 +196,7 @@ class DollarJson extends AbstractDollar implements var {
 
     @Override
     public var decode() {
-        return new DollarString(URLDecoder.decode($$()));
+        return new DollarString(errors(),URLDecoder.decode($$()));
     }
 
     @Override
@@ -200,25 +210,13 @@ class DollarJson extends AbstractDollar implements var {
     }
 
     @Override
-    public var eval(String label, String js) {
-        try {
-            SimpleScriptContext context = new SimpleScriptContext();
-            context.setAttribute("$", json.toMap(), context.getScopes().get(0));
-            return DollarFactory.fromValue(nashorn.eval(js, context));
-        } catch (ScriptException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public var eval(String label, DollarEval lambda) {
         return lambda.eval(copy());
     }
 
     @Override
     public var copy() {
-        return DollarFactory.fromValue(json.copy());
+        return DollarFactory.fromValue(errors(),json.copy());
     }
 
     @Override
@@ -244,6 +242,16 @@ class DollarJson extends AbstractDollar implements var {
     @Override
     public String mimeType() {
         return "application/json";
+    }
+
+    @Override
+    public int size() {
+        return $map().size();
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        return false;
     }
 
     @Override
@@ -288,6 +296,17 @@ class DollarJson extends AbstractDollar implements var {
     }
 
     @Override
+    public Map<String, var> map() {
+        Map<String,var> result= new HashMap<>();
+        Map<String, Object> objectMap = json.toMap();
+        for (Entry<String, Object> entry : objectMap.entrySet()) {
+           result.put(entry.getKey(),DollarFactory.fromValue(errors(),entry.getValue()));
+        }
+        return result;
+    }
+
+
+    @Override
     public JsonObject val() {
         return json;
     }
@@ -302,7 +321,7 @@ class DollarJson extends AbstractDollar implements var {
         if (child == null) {
             return null;
         }
-        return DollarFactory.fromValue(child);
+        return DollarFactory.fromValue(errors(),child);
     }
 }
 

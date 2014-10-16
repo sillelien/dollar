@@ -3,6 +3,7 @@ package me.neilellis.dollar;
 import spark.Request;
 import spark.Response;
 
+import java.util.Collections;
 import java.util.Set;
 
 import static me.neilellis.dollar.DollarStatic.$;
@@ -21,7 +22,7 @@ public class DollarHttpContext {
     }
 
     public var cookies() {
-        return DollarFactory.fromValue(request.cookies());
+        return DollarFactory.fromValue(Collections.emptyList(),request.cookies());
     }
 
     public var headers() {
@@ -34,11 +35,11 @@ public class DollarHttpContext {
     }
 
     public var json() {
-        return DollarFactory.fromValue(request.body());
+        return DollarFactory.fromValue(Collections.emptyList(),request.body());
     }
 
     public var params() {
-        return DollarFactory.fromValue(request.params());
+        return DollarFactory.fromValue(Collections.emptyList(),request.params());
     }
 
     public Request request() {

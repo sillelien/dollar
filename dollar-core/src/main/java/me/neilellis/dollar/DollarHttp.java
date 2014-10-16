@@ -9,13 +9,17 @@ import spark.SparkBase;
 public class DollarHttp extends SparkBase {
 
     public DollarHttp(String method, String path, DollarHttpHandler handler) {
-        DollarThreadContext context = DollarStatic.childContext();
+        DollarThreadContext context = DollarStatic.context();
 
         Route route = (request, response) -> {
-            var result = DollarStatic.$call(context,() -> handler.handle(new DollarHttpContext(request, response)));
+            DollarThreadContext childContext= context.child();
+            childContext.pushLabel(method + ":" + path);
+            var result = DollarStatic.$call(childContext,() -> DollarStatic.tracer().trace(DollarNull.INSTANCE,handler.handle(new DollarHttpContext(request, response)), StateTracer.Operations.HTTP_RESPONSE,method,path));
             response.type(result.mimeType());
             return result.$$();
         };
+
+//        DollarStatic.log("Adding route for "+path);
         addRoute(method, wrap(path, route));
     }
 }

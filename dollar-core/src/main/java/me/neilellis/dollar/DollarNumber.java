@@ -16,13 +16,15 @@
 
 package me.neilellis.dollar;
 
+import java.util.List;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarNumber extends AbstractDollarSingleValue<Number> {
 
-    public DollarNumber(Number value) {
-        super(value);
+    public DollarNumber(List<Throwable> errors, Number value) {
+        super(errors,value);
     }
 
 
@@ -38,7 +40,7 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
 
     @Override
     public var copy() {
-        return new DollarNumber(value);
+        return new DollarNumber(errors(),value);
     }
 
     @Override

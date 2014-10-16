@@ -120,7 +120,8 @@ public class DollarBasicTest {
                                 .$("postcode", "bn1 6jj")
                                 .$("number", 343)
                 );
-        assertEquals(age / 11, (int) profile.$("$['age']/11").$int());
+        assertEquals(age, (int) profile.$("$['age']").$int());
+        assertEquals(age / 11, (int) profile.$("($['age'].$int() / 11)").$int());
         assertEquals("male", profile.$("$.gender").$());
         assertEquals(10, (int) profile.$("5*2").$int());
         assertEquals(10, (int) $eval("10").$int());
@@ -130,13 +131,13 @@ public class DollarBasicTest {
 
     @Test
     public void testNull() {
-        assertEquals("bar", $((Object) null).$("foo", "bar").$("foo").val());
+        assertNull($((Object) null).$("foo", "bar").$("foo").val());
         assertTrue($((Object) null).isNull());
         assertTrue($((Object) null).$("bar").isNull());
         assertNull($((Object) null).val());
         assertFalse($((Object) null).$("bar").has("foo"));
         assertFalse($((Object) null).has("foo"));
-        assertFalse($((Object) null).$("foo", "bar").$("foo").isNull());
+        assertTrue($((Object) null).$("foo", "bar").$("foo").isNull());
     }
 
     @Test

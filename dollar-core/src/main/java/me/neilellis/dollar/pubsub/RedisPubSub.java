@@ -36,15 +36,20 @@ public class RedisPubSub implements DollarPubSub {
 
     @Override
     public Sub sub(Consumer<var> action, String... locations) {
-        RedisPubSubAdapter jedisPubSub = new RedisPubSubAdapter(action);
-        DollarFuture future = DollarStatic.$fork(() -> {
-            try (Jedis jedis = jedisPool.getResource()) {
-                jedis.subscribe(jedisPubSub, locations);
-            }
-            return DollarNull.INSTANCE;
-        });
-        jedisPubSub.setFuture(future);
+        try {
 
-        return jedisPubSub;
+            RedisPubSubAdapter jedisPubSub = new RedisPubSubAdapter(action);
+            DollarFuture future = DollarStatic.$fork(() -> {
+                try (Jedis jedis = jedisPool.getResource()) {
+                    jedis.subscribe(jedisPubSub, locations);
+                }
+                return DollarNull.INSTANCE;
+            });
+            jedisPubSub.setFuture(future);
+
+            return jedisPubSub;
+        } catch (Exception e) {
+            return DollarStatic.handleError(e);
+        }
     }
 }

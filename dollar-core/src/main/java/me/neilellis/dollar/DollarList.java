@@ -17,17 +17,20 @@ public class DollarList extends AbstractDollar {
 
     private List<var> list = new ArrayList<>();
 
-    public DollarList(JsonArray array) {
-        list = list.stream().map((i) -> DollarFactory.fromValue(i)).collect(Collectors.toList());
+     DollarList(List<Throwable> errors, JsonArray array) {
+         super(errors);
+         list = list.stream().map((i) -> DollarFactory.fromValue(errors, i)).collect(Collectors.toList());
     }
 
-    public DollarList(List<var> list) {
-        this.list.addAll(list);
+     DollarList(List<Throwable> errors,List<var> list) {
+         super(errors);
+         this.list.addAll(list);
     }
 
-    public DollarList(Object... values) {
-        for (Object value : values) {
-            list.add(DollarFactory.fromValue(value));
+     DollarList(List<Throwable> errors,Object... values) {
+         super(errors);
+         for (Object value : values) {
+            list.add(DollarFactory.fromValue(errors,value));
         }
     }
 
@@ -77,7 +80,7 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public List<var> $list() {
+    public List<var> list() {
         return new ArrayList<>(list);
     }
 
@@ -99,14 +102,14 @@ public class DollarList extends AbstractDollar {
     @Override
     public var add(Object value) {
         DollarList copy = (DollarList) copy();
-        copy.list.add(DollarFactory.fromValue(value));
+        copy.list.add(DollarFactory.fromValue(errors(),value));
         return copy;
 
     }
 
     @Override
     public var copy() {
-        return new DollarList(list.stream().map(var::copy).collect(Collectors.toList()));
+        return new DollarList(errors(),list.stream().map(var::copy).collect(Collectors.toList()));
     }
 
     @Override
@@ -150,6 +153,16 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public int size() {
+        return list.size();
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        return list.contains(value);
+    }
+
+    @Override
     public var remove(Object value) {
         List<var> newList = new ArrayList<>();
         for (var val : list) {
@@ -157,7 +170,7 @@ public class DollarList extends AbstractDollar {
                 newList.add(val);
             }
         }
-        return new DollarList(newList);
+        return new DollarList(errors(),newList);
     }
 
     @Override
@@ -186,6 +199,11 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public Map<String, var> map() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public <R> R $() {
         JsonArray array = new JsonArray();
         list.forEach((i) -> {
@@ -198,5 +216,14 @@ public class DollarList extends AbstractDollar {
     public JsonArray val() {
         return $();
     }
+
+
+    @Override
+    public var copy(List<Throwable> errors) {
+        List<Throwable> errorList = errors();
+        errorList.addAll(errors);
+        return DollarFactory.fromValue(errorList, list);
+    }
+
 
 }

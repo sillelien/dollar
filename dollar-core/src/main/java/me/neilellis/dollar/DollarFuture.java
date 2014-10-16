@@ -4,11 +4,17 @@ import org.json.JSONObject;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.json.JsonObject;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -73,8 +79,8 @@ public class DollarFuture implements var {
     }
 
     @Override
-    public List<var> $list() {
-        return getValue().$list();
+    public List<var> list() {
+        return getValue().list();
     }
 
     @Override
@@ -152,14 +158,15 @@ public class DollarFuture implements var {
         return getValue().eval(clazz);
     }
 
+    @Override
+    public var get(Object key) {
+        return getValue().get(key);
+    }
+
     public Future<var> future() {
         return value;
     }
 
-    @Override
-    public var get(String key) {
-        return getValue().get(key);
-    }
 
     @Override
     public boolean has(String key) {
@@ -169,6 +176,61 @@ public class DollarFuture implements var {
     @Override
     public int hashCode() {
         return getValue().hashCode();
+    }
+
+    @Override
+    public var getOrDefault(Object key, var defaultValue) {
+        return getValue().getOrDefault(key, defaultValue);
+    }
+
+    @Override
+    public void forEach(BiConsumer<? super String, ? super var> action) {
+        getValue().forEach(action);
+    }
+
+    @Override
+    public void replaceAll(BiFunction<? super String, ? super var, ? extends var> function) {
+        getValue().replaceAll(function);
+    }
+
+    @Override
+    public var putIfAbsent(String key, var value) {
+        return getValue().putIfAbsent(key, value);
+    }
+
+    @Override
+    public boolean remove(Object key, Object value) {
+        return getValue().remove(key, value);
+    }
+
+    @Override
+    public boolean replace(String key, var oldValue, var newValue) {
+        return getValue().replace(key, oldValue, newValue);
+    }
+
+    @Override
+    public var replace(String key, var value) {
+        return getValue().replace(key, value);
+    }
+
+    @Override
+    public var computeIfAbsent(String key, Function<? super String, ? extends var> mappingFunction) {
+        return getValue().computeIfAbsent(key, mappingFunction);
+    }
+
+    @Override
+    public var computeIfPresent(String key, BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
+        return getValue().computeIfPresent(key, remappingFunction);
+    }
+
+    @Override
+    public var compute(String key, BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
+        return getValue().compute(key, remappingFunction);
+    }
+
+    @Override
+    public var merge(String key, var value, BiFunction<? super var, ? super var, ? extends var> remappingFunction) {
+        return getValue().merge(key, value, remappingFunction);
     }
 
     @Override
@@ -204,6 +266,11 @@ public class DollarFuture implements var {
     @Override
     public var pipe(Class<? extends Script> clazz) {
         return getValue().pipe(clazz);
+    }
+
+    @Override
+    public var pipe(Function<var, var> function) {
+        return getValue().pipe(function);
     }
 
     @Override
@@ -276,11 +343,20 @@ public class DollarFuture implements var {
         return getValue();
     }
 
+    @Override
+    public Map<String, var> map() {
+        return getValue().map();
+    }
+
     var getValue() {
         try {
             return value.get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new DollarException(e);
+        } catch (InterruptedException ie) {
+            return DollarStatic.handleInterrupt(ie);
+        } catch (ExecutionException e) {
+            return DollarStatic.handleError(e.getCause());
+        } catch (Exception e) {
+            return DollarStatic.handleError(e);
         }
     }
 
@@ -293,5 +369,100 @@ public class DollarFuture implements var {
     @Override
     public <R> R val() {
         return getValue().val();
+    }
+
+    @Override
+    public var error(String errorMessage) {
+        return getValue().error(errorMessage);
+    }
+
+    @Override
+    public var error(Throwable error) {
+        return getValue().error(error);
+    }
+
+    @Override
+    public var error() {
+        return getValue().error();
+    }
+
+    @Override
+    public boolean hasErrors() {
+        return getValue().hasErrors();
+    }
+
+    @Override
+    public List<String> errorTexts() {
+        return getValue().errorTexts();
+    }
+
+    @Override
+    public List<Throwable> errors() {
+        return getValue().errors();
+    }
+
+    @Override
+    public void clearErrors() {
+        getValue().clearErrors();
+    }
+
+    @Override
+    public var onErrors(Consumer<List<Throwable>> handler) {
+        return getValue().onErrors(handler);
+    }
+
+    @Override
+    public var copy(List<Throwable> errors) {
+        return getValue().copy(errors);
+    }
+
+    @Override
+    public int size() {
+        return getValue().size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return getValue().isEmpty();
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+        return getValue().containsKey(key);
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        return getValue().containsValue(value);
+    }
+
+    @Override
+    public var put(String key, var value) {
+        return getValue().put(key, value);
+    }
+
+    @Override
+    public void putAll(Map<? extends String, ? extends var> m) {
+        getValue().putAll(m);
+    }
+
+    @Override
+    public void clear() {
+        getValue().clear();
+    }
+
+    @Override
+    public Set<String> keySet() {
+        return getValue().keySet();
+    }
+
+    @Override
+    public Collection<var> values() {
+        return getValue().values();
+    }
+
+    @Override
+    public Set<Entry<String, var>> entrySet() {
+        return getValue().entrySet();
     }
 }

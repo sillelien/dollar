@@ -8,7 +8,11 @@ import java.util.Arrays;
 public class SimpleLogStateTracer implements StateTracer {
     @Override
     public <R> R trace(Object before, R after, Operations operationType, Object... values) {
-        DollarStatic.log(String.format("%s%s: %s -> %s",operationType, Arrays.toString(values),before,after));
+        if(before instanceof DollarNull) {
+            DollarStatic.log(String.format("%s%s: %s",operationType, Arrays.toString(values),after));
+        } else {
+            DollarStatic.log(String.format("%s%s: %s -> %s", operationType, Arrays.toString(values), before, after));
+        }
         return after;
     }
 }

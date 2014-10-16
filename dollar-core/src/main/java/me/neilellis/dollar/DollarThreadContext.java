@@ -102,6 +102,10 @@ public class DollarThreadContext {
     }
 
     public DollarThreadContext child() {
-        return new DollarThreadContext(new ArrayList<>(labels), monitor, passValue, pubsub, store, threadKey + ":" + UUID.randomUUID());
+       return child(UUID.randomUUID().toString());
+    }
+
+    public DollarThreadContext child(String s) {
+        return new DollarThreadContext(new ArrayList<>(labels), monitor, passValue, pubsub, store, threadKey + ":" + s);
     }
 }

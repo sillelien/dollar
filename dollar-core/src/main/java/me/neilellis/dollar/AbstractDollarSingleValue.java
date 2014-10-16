@@ -32,7 +32,8 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     protected final T value;
 
-    public AbstractDollarSingleValue(T value) {
+    public AbstractDollarSingleValue(List<Throwable> errors, T value) {
+        super(errors);
         if (value == null) {
             throw new NullPointerException();
         }
@@ -69,11 +70,16 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @Override
-    public List<var> $list() {
+    public List<var> list() {
         return Collections.singletonList(this);
     }
 
     public Map<String, Object> $map() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Map<String, var> map() {
         throw new UnsupportedOperationException();
     }
 
@@ -99,7 +105,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @Override
     public DollarString decode() {
-        return new DollarString(URLDecoder.decode($$()));
+        return new DollarString(errors(),URLDecoder.decode($$()));
     }
 
     @Override
@@ -186,4 +192,27 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     public var ¢(String key) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public int size() {
+        return 1;
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        return this.value.equals(value);
+    }
+
+    @Override
+    public var copy(List<Throwable> errors) {
+        List<Throwable> errorList = errors();
+        errorList.addAll(errors);
+        return DollarFactory.fromValue(errorList, value);
+    }
+
+    @Override
+    public var copy() {
+        return  DollarFactory.fromValue(errors(),value);
+    }
+
 }

@@ -2,9 +2,11 @@ package me.neilellis.dollar.pubsub;
 
 import me.neilellis.dollar.DollarFactory;
 import me.neilellis.dollar.DollarFuture;
+import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.var;
 import redis.clients.jedis.JedisPubSub;
 
+import java.util.Collections;
 import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 
@@ -47,12 +49,20 @@ public class RedisPubSubAdapter extends JedisPubSub implements Sub {
 
     @Override
     public void onMessage(String channel, String message) {
-        action.accept(DollarFactory.fromValue(message));
+        try {
+            action.accept(DollarFactory.fromValue(Collections.<Throwable>emptyList(),message));
+        } catch (Exception e) {
+            DollarStatic.handleError(e);
+        }
     }
 
     @Override
     public void onPMessage(String s, String s1, String message) {
-        action.accept(DollarFactory.fromValue(message));
+        try {
+            action.accept(DollarFactory.fromValue(Collections.emptyList(),message));
+        } catch (Exception e) {
+            DollarStatic.handleError(e);
+        }
     }
 
     @Override

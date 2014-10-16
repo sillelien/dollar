@@ -4,13 +4,13 @@ import com.google.common.collect.Range;
 import me.neilellis.dollar.monitor.Monitor;
 import me.neilellis.dollar.pubsub.Sub;
 import org.vertx.java.core.MultiMap;
-import org.vertx.java.core.eventbus.Message;
-import org.vertx.java.core.json.DecodeException;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 import spark.Spark;
 import spark.route.HttpMethod;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -84,7 +84,7 @@ public class DollarStatic {
     }
 
     public static var $(JsonObject json) {
-        return DollarFactory.fromValue(json);
+        return DollarFactory.fromValue(Collections.<Throwable>emptyList(),json);
     }
 
     public static var $(String key, JsonObject jsonObject) {
@@ -96,41 +96,7 @@ public class DollarStatic {
     }
 
     public static var $(Object o) {
-        if (o == null) {
-            return new DollarWrapper(DollarNull.INSTANCE, monitor(), tracer());
-        }
-        if (o instanceof Number) {
-            return new DollarWrapper(new DollarNumber((Number) o), monitor(), tracer());
-        }
-        if (o instanceof Range) {
-            return new DollarWrapper(new DollarRange((Range) o), monitor(), tracer());
-        }
-        if (o instanceof String) {
-            try {
-                return new DollarWrapper(new DollarJson(new JsonObject((String) o)), monitor(), tracer());
-            } catch (DecodeException de) {
-                return new DollarWrapper(new DollarString((String) o), monitor(), tracer());
-            }
-        }
-        JsonObject json;
-        if (o instanceof JsonObject) {
-            json = ((JsonObject) o);
-        }
-        if (o instanceof JsonObject) {
-            json = ((JsonObject) o);
-        } else if (o instanceof MultiMap) {
-            json = mapToJson((MultiMap) o);
-        } else if (o instanceof Map) {
-            json = new JsonObject((Map<String, Object>) o);
-        } else if (o instanceof Message) {
-            json = ((JsonObject) ((Message) o).body());
-            if (json == null) {
-                return new DollarWrapper(DollarNull.INSTANCE, monitor(), tracer());
-            }
-        } else {
-            json = new JsonObject(o.toString());
-        }
-        return new DollarWrapper(new DollarJson(json), monitor(), tracer());
+        return DollarStatic.tracer().trace(DollarNull.INSTANCE, DollarFactory.create(Collections.emptyList(),o), StateTracer.Operations.CREATE, o == null ? "null" : o.getClass().getName());
     }
 
     public static Monitor monitor() {
@@ -220,7 +186,8 @@ public class DollarStatic {
     }
 
     public static DollarFuture $fork(Callable<var> call) {
-        return new DollarFuture(threadPoolExecutor.submit(() -> $call(threadContext.get(), call)));
+        DollarThreadContext child = threadContext.get().child();
+        return new DollarFuture(threadPoolExecutor.submit(() ->$call(child, call)));
 
     }
 
@@ -229,23 +196,23 @@ public class DollarStatic {
     }
 
     public static var $list(Object... values) {
-        return new DollarList(values);
+        return DollarFactory.fromValue(Collections.emptyList(),values);
     }
 
     public static var $load(String location) {
-        return threadContext.get().getStore().get(location);
+        return $().load(location);
     }
 
     public static var $pop(String location, int timeoutInMillis) {
-        return threadContext.get().getStore().pop(location, timeoutInMillis);
+        return $().pop(location, timeoutInMillis);
     }
 
     public static void $pub(var value, String... locations) {
-        threadContext.get().getPubsub().pub(value, locations);
+        value.pub(locations);
     }
 
     public static void $push(String location, var value) {
-        threadContext.get().getStore().push(location, value);
+        value.push(location);
     }
 
     /**
@@ -277,11 +244,11 @@ public class DollarStatic {
     }
 
     public static void $save(var value, String location) {
-        threadContext.get().getStore().set(location, value);
+        value.save(location);
     }
 
     public static void $save(String location, var value, int expiryInMilliseconds) {
-        threadContext.get().getStore().set(location, value, expiryInMilliseconds);
+        value.save(location, expiryInMilliseconds);
     }
 
     public static Sub $sub(Consumer<var> action, String... locations) {
@@ -316,6 +283,38 @@ public class DollarStatic {
     public static StateTracer tracer() {
         return new SimpleLogStateTracer();
     }
-    public static DollarThreadContext context() { return threadContext.get();}
-    public static DollarThreadContext childContext() { return threadContext.get().child();}
+
+    public static DollarThreadContext context() {
+        return threadContext.get();
+    }
+
+    public static DollarThreadContext childContext() {
+        return threadContext.get().child();
+    }
+
+    public static <R> R handleInterrupt(InterruptedException ie) {
+        if (Thread.interrupted()) {
+            log("Interrupted");
+        }
+        throw new Error("Interrupted");
+    }
+
+    public static <R> R handleError(Throwable throwable) {
+        log(throwable.getMessage());
+        throwable.printStackTrace();
+        if (throwable instanceof DollarException) {
+            throw (DollarException) throwable;
+        } else {
+            throw new DollarException(throwable);
+        }
+
+    }
+
+    public static DollarThreadContext childContext(String s) {
+        return threadContext.get().child(s);
+    }
+
+    public static void label(String label) {
+        context().pushLabel(label);
+    }
 }

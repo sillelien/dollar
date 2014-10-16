@@ -4,6 +4,9 @@ import me.neilellis.dollar.DollarFactory;
 import me.neilellis.dollar.var;
 import redis.clients.jedis.Jedis;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
@@ -13,13 +16,25 @@ public class RedisStore implements DollarStore {
 
     @Override
     public var get(String location) {
-        return DollarFactory.fromValue(jedis.get(location));
+        String value;
+        try {
+            value = jedis.get(location);
+        } catch (Exception e) {
+            return DollarFactory.fromValue(Collections.singletonList(e), null);
+        }
+        return DollarFactory.fromValue(Collections.emptyList(),value);
 
     }
 
     @Override
     public var pop(String location, int timeoutInMillis) {
-        return DollarFactory.fromValue(jedis.brpop(timeoutInMillis / 1000, location).get(1));
+        List<String> value;
+        try {
+            value = jedis.brpop(timeoutInMillis / 1000, location);
+        } catch (Exception e) {
+            return DollarFactory.fromValue(Collections.singletonList(e), null);
+        }
+        return DollarFactory.fromValue(Collections.emptyList(), value.get(1));
     }
 
     @Override

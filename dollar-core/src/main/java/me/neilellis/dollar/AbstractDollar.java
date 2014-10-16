@@ -4,11 +4,15 @@ import org.vertx.java.core.eventbus.EventBus;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import javax.script.SimpleScriptContext;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
+import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -17,6 +21,11 @@ import java.util.stream.Stream;
 public abstract class AbstractDollar implements var {
 
     private static ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
+    private final List<Throwable> errors;
+
+    protected AbstractDollar(List<Throwable> errors) {
+        this.errors = new ArrayList<>(errors);
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -50,7 +59,13 @@ public abstract class AbstractDollar implements var {
             }
             try {
                 Method mainMethod = clazz.getMethod("main", String[].class);
-                return DollarFactory.fromValue(mainMethod.invoke(null, list.toArray(new String[list.size()])));
+                Object value;
+                try {
+                    value = mainMethod.invoke(null, list.toArray(new String[list.size()]));
+                } catch (Exception e) {
+                    return DollarStatic.handleError(e);
+                }
+                return DollarFactory.fromValue(Collections.emptyList(), value);
             } catch (NoSuchMethodException e) {
                 throw new DollarException(e);
             }
@@ -61,18 +76,19 @@ public abstract class AbstractDollar implements var {
 
     @Override
     public var eval(String js) {
-        return eval("anon", js);
+        return eval( "anon",js);
     }
 
-    public var eval(String js, String label) {
+    public var eval(String label, String js) {
+        SimpleScriptContext context = new SimpleScriptContext();
+        context.setAttribute("$", copy(), context.getScopes().get(0));
+        Object value;
         try {
-            SimpleScriptContext context = new SimpleScriptContext();
-            context.setAttribute("$", copy(), context.getScopes().get(0));
-            return DollarFactory.fromValue(nashorn.eval(js, context));
-        } catch (ScriptException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            value = nashorn.eval(js, context);
+        } catch (Exception e) {
+            return DollarStatic.handleError(e);
         }
+        return DollarFactory.fromValue(Collections.emptyList(), value);
     }
 
     @Override
@@ -82,7 +98,7 @@ public abstract class AbstractDollar implements var {
 
     @Override
     public var load(String location) {
-        return DollarStatic.$load(location);
+        return DollarStatic.context().getStore().get(location);
     }
 
     @Override
@@ -105,32 +121,37 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
+    public var pipe(Function<var, var> function) {
+        return function.apply(this);
+    }
+
+    @Override
     public var pop(String location, int timeoutInMillis) {
-        return DollarStatic.$pop(location, timeoutInMillis);
+        return DollarStatic.context().getStore().pop(location, timeoutInMillis);
 
     }
 
     @Override
     public var pub(String... locations) {
-        DollarStatic.$pub(this, locations);
+        DollarStatic.context().getPubsub().pub(this, locations);
         return this;
     }
 
     @Override
     public var push(String location) {
-        DollarStatic.$push(location, this);
+        DollarStatic.context().getStore().push(location, this);
         return this;
     }
 
     @Override
     public var save(String location, int expiryInMilliseconds) {
-        DollarStatic.$save(location, this, expiryInMilliseconds);
+        DollarStatic.context().getStore().set(location, this, expiryInMilliseconds);
         return this;
     }
 
     @Override
     public var save(String location) {
-        DollarStatic.$save(this, location);
+        DollarStatic.context().getStore().set(location, this);
         return this;
     }
 
@@ -141,8 +162,156 @@ public abstract class AbstractDollar implements var {
 
     @Override
     public Stream<var> stream() {
-        return $list().stream();
+        return list().stream();
+    }
+
+    @Override
+    public var error(String errorMessage) {
+        errors.add(new Exception(errorMessage));
+        return this;
+    }
+
+    @Override
+    public var error(Throwable error) {
+        errors.add(error);
+        return this;
+    }
+
+    @Override
+    public var error() {
+        errors.add(new Exception("Unspecified Error"));
+        return this;
+    }
+
+    @Override
+    public boolean hasErrors() {
+        return !errors.isEmpty();
+    }
+
+    @Override
+    public List<String> errorTexts() {
+        return errors.stream().map(Throwable::getMessage).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Throwable> errors() {
+        return new ArrayList<>(errors);
+    }
+
+    @Override
+    public void clearErrors() {
+        errors.clear();
+    }
+
+    @Override
+    public var onErrors(Consumer<List<Throwable>> handler) {
+        if(hasErrors()) {
+            handler.accept(errors());
+            return DollarFactory.fromValue(errors(),null);
+        } else {
+            return this;
+        }
     }
 
 
+    @Override
+    public boolean isEmpty() {
+        return size() > 0;
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+        return has(String.valueOf(key));
+    }
+
+
+
+    @Override
+    public var put(String key, var value) {
+        return $(key,value);
+    }
+
+
+
+
+    @Override
+    public Set<String> keySet() {
+        return keys().collect(Collectors.toSet());
+    }
+
+    @Override
+    public Collection<var> values() {
+        return list();
+    }
+
+    @Override
+    public Set<Entry<String, var>> entrySet() {
+        return keyValues().collect(Collectors.toSet());
+    }
+
+    @Override
+    public var getOrDefault(Object key, var defaultValue) {
+        return has(String.valueOf(key)) ? get(key) : defaultValue;
+    }
+
+    @Override
+    public void forEach(BiConsumer<? super String, ? super var> action) {
+        map().forEach(action);
+    }
+
+    @Override
+    public void replaceAll(BiFunction<? super String, ? super var, ? extends var> function) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public var putIfAbsent(String key, var value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean remove(Object key, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean replace(String key, var oldValue, var newValue) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public var replace(String key, var value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public var computeIfAbsent(String key, Function<? super String, ? extends var> mappingFunction) {
+        return map().computeIfAbsent(key,mappingFunction);
+    }
+
+    @Override
+    public var computeIfPresent(String key, BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
+        return map().computeIfPresent(key,remappingFunction);
+    }
+
+    @Override
+    public var compute(String key, BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
+        return map().compute(key,remappingFunction);
+    }
+
+    @Override
+    public var merge(String key, var value, BiFunction<? super var, ? super var, ? extends var> remappingFunction) {
+        return map().merge(key,value,remappingFunction);
+    }
+
+
+    @Override
+    public void putAll(Map<? extends String, ? extends var> m) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void clear() {
+        throw new UnsupportedOperationException();
+    }
 }

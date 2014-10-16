@@ -18,11 +18,13 @@ public class DollarRange extends AbstractDollar {
 
     private final Range<Long> range;
 
-    public DollarRange(long start, long finish) {
+    public DollarRange(List<Throwable> errors, long start, long finish) {
+        super(errors);
         range = Range.closed(start, finish);
     }
 
-    public DollarRange(Range range) {
+    public DollarRange(List<Throwable> errors, Range range) {
+        super(errors);
         this.range = range;
     }
 
@@ -93,11 +95,11 @@ public class DollarRange extends AbstractDollar {
 
     @Override
     public Stream<var> children() {
-        return $list().stream();
+        return list().stream();
     }
 
     @Override
-    public List<var> $list() {
+    public List<var> list() {
         return ContiguousSet.create(range, DiscreteDomain.longs()).stream().map(DollarStatic::$).collect(Collectors.toList());
     }
 
@@ -108,7 +110,7 @@ public class DollarRange extends AbstractDollar {
 
     @Override
     public var copy() {
-        return DollarFactory.fromValue(range);
+        return DollarFactory.fromValue(errors(),range);
     }
 
     @Override
@@ -127,7 +129,7 @@ public class DollarRange extends AbstractDollar {
                 return range.equals(((DollarRange) unwrapped).range);
             }
             if (unwrapped instanceof DollarList) {
-                return unwrapped.$list().equals($list());
+                return unwrapped.list().equals(list());
             }
         }
         return false;
@@ -181,11 +183,37 @@ public class DollarRange extends AbstractDollar {
 
     @Override
     public Stream<var> stream() {
-        return $list().stream();
+        return list().stream();
     }
 
     @Override
     public List<String> strings() {
         return ContiguousSet.create(range, DiscreteDomain.longs()).stream().map(Object::toString).collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, var> map() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    @Override
+    public var copy(List<Throwable> errors) {
+        List<Throwable> errorList = errors();
+        errorList.addAll(errors);
+        return DollarFactory.fromValue(errorList, range);
+    }
+
+    @Override
+    public int size() {
+        return (int) (range.upperEndpoint()-range.lowerEndpoint());
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        if(value instanceof Number) {
+            return range.contains(((Number) value).longValue());
+        }
+        return range.contains(Long.valueOf(value.toString()));
     }
 }

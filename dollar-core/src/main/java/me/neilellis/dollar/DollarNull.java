@@ -23,6 +23,7 @@ import org.vertx.java.core.json.JsonObject;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -31,10 +32,15 @@ import java.util.stream.Stream;
 public class DollarNull extends AbstractDollar implements var {
 
 
-    public static final DollarNull INSTANCE = new DollarNull();
+    public static final var INSTANCE = DollarFactory.fromValue(Collections.emptyList(),null);
+
+    public DollarNull(List<Throwable> errors) {
+        super(errors);
+    }
 
     public DollarNull() {
 
+        super(Collections.emptyList());
     }
 
     @Override
@@ -49,12 +55,20 @@ public class DollarNull extends AbstractDollar implements var {
 
     @Override
     public var $(String key, Object value) {
-        return DollarFactory.fromValue().$(key, value);
+        return this;
     }
 
     @Override
     public <R> R $() {
         return null;
+    }
+
+
+    @Override
+    public var copy(List<Throwable> errors) {
+        List<Throwable> errorList = errors();
+        errorList.addAll(errors);
+        return DollarFactory.fromValue(errorList, this);
     }
 
     @Override
@@ -88,7 +102,7 @@ public class DollarNull extends AbstractDollar implements var {
     }
 
     @Override
-    public List<var> $list() {
+    public List<var> list() {
         return Collections.emptyList();
     }
 
@@ -109,7 +123,7 @@ public class DollarNull extends AbstractDollar implements var {
 
     @Override
     public var add(Object value) {
-        throw new UnsupportedOperationException();
+        return this;
     }
 
     @Override
@@ -139,12 +153,12 @@ public class DollarNull extends AbstractDollar implements var {
 
     @Override
     public var eval(String js, String label) {
-        return INSTANCE;
+        return this;
     }
 
     @Override
     public var eval(String label, DollarEval lambda) {
-        return lambda.eval(INSTANCE);
+        return this;
     }
 
     @Override
@@ -173,8 +187,18 @@ public class DollarNull extends AbstractDollar implements var {
     }
 
     @Override
+    public int size() {
+        return 0;
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        return false;
+    }
+
+    @Override
     public var remove(Object value) {
-        throw new UnsupportedOperationException();
+        return this;
     }
 
     @Override
@@ -212,7 +236,69 @@ public class DollarNull extends AbstractDollar implements var {
     }
 
     @Override
+    public Map<String, var> map() {
+        return Collections.emptyMap();
+    }
+
+    @Override
     public <R> R val() {
         return null;
     }
+
+    @Override
+    public var eval(DollarEval lambda) {
+        return this;
+    }
+
+    @Override
+    public var eval(Class clazz) {
+        return this;
+    }
+
+    @Override
+    public var eval(String js) {
+        return this;
+    }
+
+    @Override
+    public var load(String location) {
+        return this;
+    }
+
+    @Override
+    public var pipe(Class<? extends Script> clazz) {
+        return this;
+    }
+
+    @Override
+    public var pipe(Function<var, var> function) {
+        return this;
+    }
+
+    @Override
+    public var pop(String location, int timeoutInMillis) {
+        return this;
+    }
+
+    @Override
+    public var pub(String... locations) {
+        return this;
+    }
+
+    @Override
+    public var push(String location) {
+        return this;
+    }
+
+    @Override
+    public var save(String location, int expiryInMilliseconds) {
+        return this;
+    }
+
+    @Override
+    public var save(String location) {
+        return this;
+    }
+
+
 }
