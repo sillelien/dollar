@@ -100,7 +100,7 @@ public class DollarBasicTest {
         Map submap = new HashMap();
         submap.put("thing", 1);
         map.put("sub", submap);
-        assertEquals("bar", $(map).$("foo").val());
+        assertEquals("bar", $(map).$("foo").$val());
         assertEquals("bar", $(map).$map().get("foo"));
         assertEquals(1, $(map).$("sub").$map().get("thing"));
         assertEquals("1", $(map).$("sub").$("thing").$$());
@@ -131,10 +131,10 @@ public class DollarBasicTest {
 
     @Test
     public void testNull() {
-        assertNull($((Object) null).$("foo", "bar").$("foo").val());
+        assertNull($((Object) null).$("foo", "bar").$("foo").$val());
         assertTrue($((Object) null).isNull());
         assertTrue($((Object) null).$("bar").isNull());
-        assertNull($((Object) null).val());
+        assertNull($((Object) null).$val());
         assertFalse($((Object) null).$("bar").has("foo"));
         assertFalse($((Object) null).has("foo"));
         assertTrue($((Object) null).$("foo", "bar").$("foo").isNull());
@@ -144,12 +144,12 @@ public class DollarBasicTest {
     public void testSplit() {
         assertEquals("{}", $("{\"foo\":\"bar\",\"thing\":1}").split().toString());
         assertEquals("{\"foo\":\"bar\"}", $("{\"a\":{\"foo\":\"bar\"},\"thing\":1}").split().get("a").toString());
-        assertEquals(2, $("{\"foo\":\"bar\",\"thing\":1}").keys().count());
+        assertEquals(2, $("{\"foo\":\"bar\",\"thing\":1}").$keys().count());
     }
 
     @Test
     public void testStringCreation() {
-        assertEquals("bar", $("{\"foo\":\"bar\"}").$("foo").val());
+        assertEquals("bar", $("{\"foo\":\"bar\"}").$("foo").$val());
         assertEquals("bar", $("{\"foo\":\"bar\"}").$json().getString("foo"));
     }
 

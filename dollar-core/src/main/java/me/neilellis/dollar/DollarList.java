@@ -102,14 +102,14 @@ public class DollarList extends AbstractDollar {
     @Override
     public var add(Object value) {
         DollarList copy = (DollarList) copy();
-        copy.list.add(DollarFactory.fromValue(errors(),value));
+        copy.list.add(DollarFactory.fromValue($errors(),value));
         return copy;
 
     }
 
     @Override
     public var copy() {
-        return new DollarList(errors(),list.stream().map(var::copy).collect(Collectors.toList()));
+        return new DollarList($errors(),list.stream().map(var::copy).collect(Collectors.toList()));
     }
 
     @Override
@@ -143,12 +143,12 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public Stream<String> keys() {
+    public Stream<String> $keys() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public String mimeType() {
+    public String $mimeType() {
         return "application/json";
     }
 
@@ -170,7 +170,7 @@ public class DollarList extends AbstractDollar {
                 newList.add(val);
             }
         }
-        return new DollarList(errors(),newList);
+        return new DollarList($errors(),newList);
     }
 
     @Override
@@ -189,7 +189,7 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public List<String> strings() {
+    public List<String> $strings() {
         return list.stream().map(Object::toString).collect(Collectors.toList());
     }
 
@@ -213,14 +213,14 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public JsonArray val() {
+    public JsonArray $val() {
         return $();
     }
 
 
     @Override
     public var copy(List<Throwable> errors) {
-        List<Throwable> errorList = errors();
+        List<Throwable> errorList = $errors();
         errorList.addAll(errors);
         return DollarFactory.fromValue(errorList, list);
     }

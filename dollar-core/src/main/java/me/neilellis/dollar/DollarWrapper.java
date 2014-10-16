@@ -260,8 +260,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public Stream<String> keys() {
-        return getValue().keys();
+    public Stream<String> $keys() {
+        return getValue().$keys();
     }
 
     @Override
@@ -270,8 +270,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public String mimeType() {
-        return getValue().mimeType();
+    public String $mimeType() {
+        return getValue().$mimeType();
     }
 
     @Override
@@ -352,8 +352,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public List<String> strings() {
-        return getValue().strings();
+    public List<String> $strings() {
+        return getValue().$strings();
     }
 
     @Override
@@ -362,7 +362,7 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public var unwrap() {
+    public var _unwrap() {
         return value;
     }
 
@@ -372,8 +372,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public <R> R val() {
-        return getValue().val();
+    public <R> R $val() {
+        return getValue().$val();
     }
 
 
@@ -398,13 +398,13 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public List<String> errorTexts() {
-        return getValue().errorTexts();
+    public List<String> $errorTexts() {
+        return getValue().$errorTexts();
     }
 
     @Override
-    public List<Throwable> errors() {
-        return getValue().errors();
+    public List<Throwable> $errors() {
+        return getValue().$errors();
     }
 
     @Override
@@ -413,8 +413,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public var onErrors(Consumer<List<Throwable>> handler) {
-        return getValue().onErrors(handler);
+    public var fail(Consumer<List<Throwable>> handler) {
+        return getValue().fail(handler);
     }
 
     @Override

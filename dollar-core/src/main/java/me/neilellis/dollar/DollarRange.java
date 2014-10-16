@@ -110,7 +110,7 @@ public class DollarRange extends AbstractDollar {
 
     @Override
     public var copy() {
-        return DollarFactory.fromValue(errors(),range);
+        return DollarFactory.fromValue($errors(),range);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class DollarRange extends AbstractDollar {
             return false;
         }
         if (obj instanceof var) {
-            var unwrapped = ((var) obj).unwrap();
+            var unwrapped = ((var) obj)._unwrap();
             if (unwrapped instanceof DollarRange) {
                 return range.equals(((DollarRange) unwrapped).range);
             }
@@ -158,7 +158,7 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public Stream<String> keys() {
+    public Stream<String> $keys() {
         throw new UnsupportedOperationException();
 
     }
@@ -187,7 +187,7 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public List<String> strings() {
+    public List<String> $strings() {
         return ContiguousSet.create(range, DiscreteDomain.longs()).stream().map(Object::toString).collect(Collectors.toList());
     }
 
@@ -199,7 +199,7 @@ public class DollarRange extends AbstractDollar {
 
     @Override
     public var copy(List<Throwable> errors) {
-        List<Throwable> errorList = errors();
+        List<Throwable> errorList = $errors();
         errorList.addAll(errors);
         return DollarFactory.fromValue(errorList, range);
     }

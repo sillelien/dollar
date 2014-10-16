@@ -105,7 +105,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @Override
     public DollarString decode() {
-        return new DollarString(errors(),URLDecoder.decode($$()));
+        return new DollarString($errors(),URLDecoder.decode($$()));
     }
 
     @Override
@@ -113,7 +113,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         if (obj == null) {
             return false;
         } else if (obj instanceof AbstractDollarSingleValue) {
-            return value.equals(((AbstractDollarSingleValue) obj).val());
+            return value.equals(((AbstractDollarSingleValue) obj).$val());
         } else {
             return value.toString().equals(obj.toString());
         }
@@ -121,7 +121,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @Override
-    public <R> R val() {
+    public <R> R $val() {
         return (R) value;
     }
 
@@ -144,7 +144,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     }
 
-    public Stream<String> keys() {
+    public Stream<String> $keys() {
         throw new UnsupportedOperationException();
 
     }
@@ -175,7 +175,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @Override
-    public List<String> strings() {
+    public List<String> $strings() {
         return Collections.singletonList($$());
     }
 
@@ -205,14 +205,14 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @Override
     public var copy(List<Throwable> errors) {
-        List<Throwable> errorList = errors();
+        List<Throwable> errorList = $errors();
         errorList.addAll(errors);
         return DollarFactory.fromValue(errorList, value);
     }
 
     @Override
     public var copy() {
-        return  DollarFactory.fromValue(errors(),value);
+        return  DollarFactory.fromValue($errors(),value);
     }
 
 }

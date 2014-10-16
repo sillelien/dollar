@@ -30,7 +30,7 @@ public abstract class AbstractDollar implements var {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof var) {
-            var unwrapped = ((var) obj).unwrap();
+            var unwrapped = ((var) obj)._unwrap();
             return $() != null && $().equals(unwrapped.$());
         } else {
             return false;
@@ -48,7 +48,7 @@ public abstract class AbstractDollar implements var {
 
     @Override
     public var eval(Class clazz) {
-        List<String> list = this.strings();
+        List<String> list = this.$strings();
         try {
             try {
                 Method callMethod = clazz.getMethod("call", var.class);
@@ -102,7 +102,7 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public String mimeType() {
+    public String $mimeType() {
         return "text/plain";
     }
 
@@ -189,12 +189,12 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public List<String> errorTexts() {
+    public List<String> $errorTexts() {
         return errors.stream().map(Throwable::getMessage).collect(Collectors.toList());
     }
 
     @Override
-    public List<Throwable> errors() {
+    public List<Throwable> $errors() {
         return new ArrayList<>(errors);
     }
 
@@ -204,10 +204,10 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public var onErrors(Consumer<List<Throwable>> handler) {
+    public var fail(Consumer<List<Throwable>> handler) {
         if(hasErrors()) {
-            handler.accept(errors());
-            return DollarFactory.fromValue(errors(),null);
+            handler.accept($errors());
+            return DollarFactory.fromValue($errors(),null);
         } else {
             return this;
         }
@@ -236,7 +236,7 @@ public abstract class AbstractDollar implements var {
 
     @Override
     public Set<String> keySet() {
-        return keys().collect(Collectors.toSet());
+        return $keys().collect(Collectors.toSet());
     }
 
     @Override

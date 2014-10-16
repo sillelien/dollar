@@ -66,7 +66,7 @@ public class DollarNull extends AbstractDollar implements var {
 
     @Override
     public var copy(List<Throwable> errors) {
-        List<Throwable> errorList = errors();
+        List<Throwable> errorList = $errors();
         errorList.addAll(errors);
         return DollarFactory.fromValue(errorList, this);
     }
@@ -182,7 +182,7 @@ public class DollarNull extends AbstractDollar implements var {
     }
 
     @Override
-    public Stream<String> keys() {
+    public Stream<String> $keys() {
         return Collections.<String>emptyList().stream();
     }
 
@@ -226,7 +226,7 @@ public class DollarNull extends AbstractDollar implements var {
     }
 
     @Override
-    public List<String> strings() {
+    public List<String> $strings() {
         return Collections.emptyList();
     }
 
@@ -241,7 +241,7 @@ public class DollarNull extends AbstractDollar implements var {
     }
 
     @Override
-    public <R> R val() {
+    public <R> R $val() {
         return null;
     }
 

@@ -57,9 +57,9 @@ public interface var extends Map<String,var> {
     Integer $int(String key);
 
     /**
-     * Convert this to a Vert.x JsonObject - equivalent to .$
+     * Convert this to a Vert.x JsonObject
      *
-     * @return this JSON as a JsonObject
+     * @return this as a JsonObject
      */
     JsonObject $json();
 
@@ -115,6 +115,7 @@ public interface var extends Map<String,var> {
      *
      * @return decoded string value
      */
+    @Deprecated
     var decode();
 
     default void err() {
@@ -125,12 +126,16 @@ public interface var extends Map<String,var> {
         return toString();
     }
 
+    @Deprecated
     var eval(String label, String js);
 
+    @Deprecated
     var eval(String js);
 
+    @Deprecated
     var eval(String label, DollarEval eval);
 
+    @Deprecated
     var eval(DollarEval eval);
 
     /**
@@ -142,6 +147,7 @@ public interface var extends Map<String,var> {
      * </p>
      * @param clazz the class to pass this to.
      */
+    @Deprecated
     var eval(Class clazz);
 
     default var get(Object key) {
@@ -162,34 +168,19 @@ public interface var extends Map<String,var> {
 
     java.util.stream.Stream<Map.Entry<String, var>> keyValues();
 
-    java.util.stream.Stream<String> keys();
+    java.util.stream.Stream<String> $keys();
 
-    var load(String location);
-
-    String mimeType();
+    String $mimeType();
 
     default void out() {
         System.out.println($$());
     }
 
-    var pipe(Class<? extends Script> clazz);
-
-    var pipe(Function<var,var> function);
-
-    var pop(String location, int timeoutInMillis);
-
-    var pub(String... locations);
-
-    var push(String location);
-
     var remove(Object value);
 
     var rm(String value);
 
-    var save(String location);
-
-    var save(String location, int expiryInMilliseconds);
-
+    @Deprecated
     FutureDollar send(EventBus e, String destination);
 
     default var set(String key, Object value) {
@@ -202,18 +193,18 @@ public interface var extends Map<String,var> {
 
     Stream<var> stream();
 
-    List<String> strings();
+    List<String> $strings();
 
     @Override
     String toString();
 
-    default var unwrap() {
+    default var _unwrap() {
         return this;
     }
 
     Map<String, var> map();
 
-    default <R> R val() {
+    default <R> R $val() {
         return $();
     }
 
@@ -224,6 +215,9 @@ public interface var extends Map<String,var> {
      */
     <R> R $();
 
+
+    //Error Handling
+
     var error(String errorMessage);
 
     var error(Throwable error);
@@ -232,13 +226,32 @@ public interface var extends Map<String,var> {
 
     boolean hasErrors();
 
-    List<String> errorTexts();
+    List<String> $errorTexts();
 
-    List<Throwable> errors();
+    List<Throwable> $errors();
 
     void clearErrors();
 
-    var onErrors(Consumer<List<Throwable>> handler);
+    var fail(Consumer<List<Throwable>> handler);
 
     var copy(List<Throwable> errors);
+
+    //services
+
+    var pipe(Class<? extends Script> clazz);
+
+    var pipe(Function<var,var> function);
+
+    var pop(String location, int timeoutInMillis);
+
+    var pub(String... locations);
+
+    var push(String location);
+
+    var save(String location);
+
+    var save(String location, int expiryInMilliseconds);
+
+    var load(String location);
+
 }

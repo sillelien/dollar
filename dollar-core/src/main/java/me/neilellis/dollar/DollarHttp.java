@@ -15,7 +15,7 @@ public class DollarHttp extends SparkBase {
             DollarThreadContext childContext= context.child();
             childContext.pushLabel(method + ":" + path);
             var result = DollarStatic.$call(childContext,() -> DollarStatic.tracer().trace(DollarNull.INSTANCE,handler.handle(new DollarHttpContext(request, response)), StateTracer.Operations.HTTP_RESPONSE,method,path));
-            response.type(result.mimeType());
+            response.type(result.$mimeType());
             return result.$$();
         };
 
