@@ -113,11 +113,6 @@ public class DollarFail extends AbstractDollar implements var {
         return "";
     }
 
-    @Override
-    public boolean $void() {
-        return true;
-    }
-
     @NotNull
     @Override
     public var $rm(@NotNull String value) {
@@ -128,6 +123,11 @@ public class DollarFail extends AbstractDollar implements var {
     @Override
     public var $(@NotNull String key, Object value) {
         return this;
+    }
+
+    @Override
+    public boolean $void() {
+        return true;
     }
 
     @Override
@@ -202,6 +202,11 @@ public class DollarFail extends AbstractDollar implements var {
     }
 
     @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
     public boolean equals(@Nullable Object obj) {
         return obj == null || (obj instanceof var && ((var) obj).$() == null);
     }
@@ -234,11 +239,6 @@ public class DollarFail extends AbstractDollar implements var {
     @Override
     public var $pipe(@NotNull String js, @NotNull String label) {
         return this;
-    }
-
-    @Override
-    public int hashCode() {
-        return 0;
     }
 
     @NotNull
@@ -289,12 +289,6 @@ public class DollarFail extends AbstractDollar implements var {
         return this;
     }
 
-    @NotNull
-    @Override
-    public FutureDollar send(EventBus e, String destination) {
-        throw new NullPointerException();
-    }
-
     @Override
     public Stream<Entry<String, var>> kvStream() {
         return Collections.<String, var>emptyMap().entrySet().stream();
@@ -304,6 +298,12 @@ public class DollarFail extends AbstractDollar implements var {
     @Override
     public Stream<var> $stream() {
         return Stream.empty();
+    }
+
+    @NotNull
+    @Override
+    public FutureDollar send(EventBus e, String destination) {
+        throw new NullPointerException();
     }
 
     @NotNull

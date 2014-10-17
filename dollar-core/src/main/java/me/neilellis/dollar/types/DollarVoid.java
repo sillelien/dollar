@@ -110,11 +110,6 @@ public class DollarVoid extends AbstractDollar implements var {
         return "";
     }
 
-    @Override
-    public boolean $void() {
-        return true;
-    }
-
     @NotNull
     @Override
     public var $rm(@NotNull String value) {
@@ -125,6 +120,11 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public var $(@NotNull String key, Object value) {
         return this;
+    }
+
+    @Override
+    public boolean $void() {
+        return true;
     }
 
     @Override
@@ -199,6 +199,11 @@ public class DollarVoid extends AbstractDollar implements var {
     }
 
     @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
     public boolean equals(@Nullable Object obj) {
         return (obj instanceof var && ((var) obj).val() == null) || obj == null;
     }
@@ -231,11 +236,6 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public var $pipe(@NotNull String js, @NotNull String label) {
         return this;
-    }
-
-    @Override
-    public int hashCode() {
-        return 0;
     }
 
     @NotNull

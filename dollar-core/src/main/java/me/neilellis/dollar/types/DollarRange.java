@@ -83,11 +83,6 @@ public class DollarRange extends AbstractDollar {
         return range.toString();
     }
 
-    @Override
-    public boolean $void() {
-        return false;
-    }
-
     @NotNull
     @Override
     public var $rm(@NotNull String value) {
@@ -99,6 +94,11 @@ public class DollarRange extends AbstractDollar {
     @Override
     public var $(@NotNull String key, Object value) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean $void() {
+        return false;
     }
 
     @Override

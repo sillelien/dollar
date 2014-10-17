@@ -133,11 +133,6 @@ class DollarJson extends AbstractDollar implements var {
         return $(key).S();
     }
 
-    @Override
-    public boolean $void() {
-        return false;
-    }
-
     @NotNull
     @Override
     public var $rm(@NotNull String value) {
@@ -174,6 +169,11 @@ class DollarJson extends AbstractDollar implements var {
             copy.putString(name, String.valueOf(o));
         }
         return DollarFactory.fromValue(errors(), copy);
+    }
+
+    @Override
+    public boolean $void() {
+        return false;
     }
 
     @Override
@@ -269,16 +269,6 @@ class DollarJson extends AbstractDollar implements var {
         return "application/json";
     }
 
-    @NotNull
-    @Override
-    public FutureDollar<JsonObject> send(@NotNull EventBus e, String destination) {
-        FutureDollar<JsonObject> futureDollar = new FutureDollar<>(this);
-        e.send(destination, json, (Message<JsonObject> message) -> {
-            futureDollar.handle(message);
-        });
-        return futureDollar;
-    }
-
     @Override
     public java.util.stream.Stream<Map.Entry<String, var>> kvStream() {
         return split().entrySet().stream();
@@ -288,6 +278,16 @@ class DollarJson extends AbstractDollar implements var {
     @Override
     public Stream<var> $stream() {
         return split().values().stream();
+    }
+
+    @NotNull
+    @Override
+    public FutureDollar<JsonObject> send(@NotNull EventBus e, String destination) {
+        FutureDollar<JsonObject> futureDollar = new FutureDollar<>(this);
+        e.send(destination, json, (Message<JsonObject> message) -> {
+            futureDollar.handle(message);
+        });
+        return futureDollar;
     }
 
     @NotNull

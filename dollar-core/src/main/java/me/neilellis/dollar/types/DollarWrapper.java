@@ -195,12 +195,6 @@ public class DollarWrapper implements var {
     }
 
     @NotNull
-    private static String sanitize(@NotNull String location) {
-        return location.replaceAll("[^\\w.]+", "_");
-
-    }
-
-    @NotNull
     @Override
     public var $pipe(@NotNull Class<? extends Script> clazz) {
         return tracer.trace(this,
@@ -473,6 +467,12 @@ public class DollarWrapper implements var {
     @NotNull
     private String sanitize(@NotNull Class<? extends Script> clazz) {
         return clazz.getName().toLowerCase();
+    }
+
+    @NotNull
+    private static String sanitize(@NotNull String location) {
+        return location.replaceAll("[^\\w.]+", "_");
+
     }
 
     @Override
