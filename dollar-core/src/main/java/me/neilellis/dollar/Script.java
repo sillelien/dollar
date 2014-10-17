@@ -1,5 +1,7 @@
 package me.neilellis.dollar;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,6 +16,7 @@ public class Script extends DollarStatic {
     protected static List<String> args;
     private static Script $this;
 
+    @NotNull
     protected var in = DollarStatic.threadContext.get() != null ? DollarStatic.threadContext.get().getPassValue() : $();
     protected var out;
 
@@ -22,13 +25,14 @@ public class Script extends DollarStatic {
         $run(() -> {
             try {
                 $this = $THIS.newInstance();
-            } catch (InstantiationException | IllegalAccessException e) {
+            } catch (@NotNull InstantiationException | IllegalAccessException e) {
                 throw new Error(e.getCause());
             }
         });
     }
 
 
+    @NotNull
     public var result() {
         return out != null ? out : in;
     }

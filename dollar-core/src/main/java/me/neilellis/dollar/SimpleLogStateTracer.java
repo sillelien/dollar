@@ -1,5 +1,7 @@
 package me.neilellis.dollar;
 
+import me.neilellis.dollar.types.DollarVoid;
+
 import java.util.Arrays;
 
 /**
@@ -19,9 +21,9 @@ public class SimpleLogStateTracer implements StateTracer {
                 notes += "*B:E* ";
             }
         }
-        if((before instanceof DollarNull || before == null )&& (after instanceof DollarNull|| after == null)) {
+        if((before instanceof DollarVoid || before == null )&& (after instanceof DollarVoid || after == null)) {
             DollarStatic.log(String.format("%s%s: %s",operationType, Arrays.toString(values),notes));
-        } else if(before instanceof DollarNull || before == null) {
+        } else if(before instanceof DollarVoid || before == null) {
             DollarStatic.log(String.format("%s%s: %s%s",operationType, Arrays.toString(values),notes,after));
         } else {
             DollarStatic.log(String.format("%s%s: %s%s -> %s", operationType, Arrays.toString(values), notes,before, after));

@@ -16,6 +16,11 @@
 
 package me.neilellis.dollar;
 
+import me.neilellis.dollar.types.DollarFactory;
+import me.neilellis.dollar.types.DollarFail;
+import me.neilellis.dollar.types.DollarString;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.vertx.java.core.json.JsonObject;
 
@@ -30,103 +35,102 @@ import java.util.stream.Stream;
  */
 public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implements var {
 
+    @NotNull
     protected final T value;
 
-    public AbstractDollarSingleValue(List<Throwable> errors, T value) {
+    public AbstractDollarSingleValue(@NotNull List<Throwable> errors, @NotNull T value) {
         super(errors);
-        if (value == null) {
-            throw new NullPointerException();
-        }
         this.value = value;
     }
 
+    @NotNull
     public var $(String age, long l) {
         throw new UnsupportedOperationException();
     }
 
-    public var $(String key, Object value) {
+    @NotNull
+    public var $(@NotNull String key, Object value) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
-    public String $$(String key) {
+    public String string(@NotNull String key) {
         return $(key).$$();
     }
 
-    public var $(String key) {
-        throw new UnsupportedOperationException();
+    @NotNull
+    public var $(@NotNull String key) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
-    public Integer $int(String key) {
-        throw new UnsupportedOperationException();
+    public Integer integer(@NotNull String key) {
+        return null;
     }
 
-    public JsonObject $json() {
-        throw new UnsupportedOperationException();
+    @Nullable
+    public JsonObject json() {
+        return null;
     }
 
-    public JsonObject $json(String key) {
-        throw new UnsupportedOperationException();
+    @Nullable
+    public JsonObject json(@NotNull String key) {
+        return null;
     }
 
+    @NotNull
     @Override
-    public List<var> list() {
+    public List<var> $list() {
         return Collections.singletonList(this);
     }
 
-    public Map<String, Object> $map() {
-        throw new UnsupportedOperationException();
+    public Map<String, Object> toMap() {
+        return null;
     }
 
+    @NotNull
     @Override
-    public Map<String, var> map() {
-        throw new UnsupportedOperationException();
+    public Map<String, var> $map() {
+        return Collections.singletonMap("value",this);
     }
 
-    public JSONObject $orgjson() {
-        throw new UnsupportedOperationException();
+    @Nullable
+    public JSONObject orgjson() {
+        return null;
 
     }
 
+    @NotNull
     @Override
-    public var add(Object newValue) {
-        throw new UnsupportedOperationException();
+    public var $add(Object newValue) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
-    public Stream<var> children() {
-        throw new UnsupportedOperationException();
-
-    }
-
-    public Stream children(String key) {
-        throw new UnsupportedOperationException();
+    @NotNull
+    public Stream<var> $children() {
+        return Stream.empty();
 
     }
 
+    @NotNull
+    public Stream<var> $children(@NotNull String key) {
+        return Stream.empty();
+    }
+
+    @NotNull
     @Override
     public DollarString decode() {
-        return new DollarString($errors(),URLDecoder.decode($$()));
+        return new DollarString(errors(),URLDecoder.decode($$()));
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        } else if (obj instanceof AbstractDollarSingleValue) {
-            return value.equals(((AbstractDollarSingleValue) obj).$val());
-        } else {
-            return value.toString().equals(obj.toString());
-        }
-
-    }
 
     @Override
-    public <R> R $val() {
+    public <R> R val() {
         return (R) value;
     }
 
-    public boolean has(String key) {
-        throw new UnsupportedOperationException();
+    public boolean $has(@NotNull String key) {
+        return $$().equals(key);
     }
 
     @Override
@@ -135,62 +139,48 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @Override
-    public boolean isNull() {
+    public boolean $null() {
         return false;
     }
 
-    public Stream<Map.Entry<String, var>> keyValues() {
-        throw new UnsupportedOperationException();
+    public Stream<String> keyStream() {
+        return Stream.empty();
 
     }
 
-    public Stream<String> $keys() {
-        throw new UnsupportedOperationException();
-
-    }
-
+    @NotNull
     @Override
     public var remove(Object newValue) {
-
-        throw new UnsupportedOperationException();
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
-    public var rm(String value) {
-        throw new UnsupportedOperationException();
-
-    }
-
-    public Map<String, var> split() {
-        throw new UnsupportedOperationException();
+    @NotNull
+    public var $rm(@NotNull String value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
 
     }
 
-    public List<String> splitValues() {
-        throw new UnsupportedOperationException();
-    }
-
+    @NotNull
     @Override
-    public Stream<var> stream() {
+    public Stream<var> $stream() {
         return Stream.of(this);
     }
 
     @Override
-    public List<String> $strings() {
+    public List<String> strings() {
         return Collections.singletonList($$());
     }
 
+    @NotNull
     @Override
     public String $$() {
         return toString();
     }
 
+    @NotNull
     @Override
     public String toString() {
         return value.toString();
-    }
-
-    public var ¢(String key) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -203,16 +193,10 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return this.value.equals(value);
     }
 
+    @NotNull
     @Override
-    public var copy(List<Throwable> errors) {
-        List<Throwable> errorList = $errors();
-        errorList.addAll(errors);
-        return DollarFactory.fromValue(errorList, value);
-    }
-
-    @Override
-    public var copy() {
-        return  DollarFactory.fromValue($errors(),value);
+    public var $copy() {
+        return  DollarFactory.fromValue(errors(), value);
     }
 
 }

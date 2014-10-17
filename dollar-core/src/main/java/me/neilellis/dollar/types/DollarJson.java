@@ -1,5 +1,8 @@
-package me.neilellis.dollar;
+package me.neilellis.dollar.types;
 
+import me.neilellis.dollar.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.vertx.java.core.MultiMap;
 import org.vertx.java.core.eventbus.EventBus;
@@ -30,13 +33,13 @@ class DollarJson extends AbstractDollar implements var {
      * eb.send("api.validate", $("key", key).$("params", request.params()).$)
      * </code>
      */
-    private JsonObject json;
+    private @NotNull JsonObject json;
 
     /**
      * Create a new and empty $ object.
      * @param errors
      */
-    DollarJson(List<Throwable> errors) {
+    DollarJson(@NotNull List<Throwable> errors) {
         super(errors);
         json = (new JsonObject());
     }
@@ -53,18 +56,20 @@ class DollarJson extends AbstractDollar implements var {
      *
      * @param o the object of unknown type to be converted to a JsonObject and then wrapped by the $ class.
      */
-    DollarJson(List<Throwable> errors, JsonObject o) {
+    DollarJson(@NotNull List<Throwable> errors, @NotNull JsonObject o) {
         super(Collections.emptyList());
         this.json= o;
     }
 
+    @NotNull
     @Override
-    public var $(String key, long value) {
-        return DollarFactory.fromValue($errors(),json.copy().putNumber(key, value));
+    public var $(@NotNull String key, long value) {
+        return DollarFactory.fromValue(errors(), json.copy().putNumber(key, value));
     }
 
+    @NotNull
     @Override
-    public var $(String name, Object o) {
+    public var $(@NotNull String name, Object o) {
         JsonObject copy = this.json.copy();
         if (o instanceof DollarWrapper) {
             //unwrap
@@ -90,100 +95,102 @@ class DollarJson extends AbstractDollar implements var {
         } else {
             copy.putString(name, String.valueOf(o));
         }
-        return DollarFactory.fromValue($errors(),copy);
+        return DollarFactory.fromValue(errors(),copy);
     }
 
+    @NotNull
     @Override
     public <R> R $() {
         return (R) json;
     }
 
 
+    @NotNull
     @Override
-    public var copy(List<Throwable> errors) {
-        List<Throwable> errorList = $errors();
-        errorList.addAll(errors);
-        return DollarFactory.fromValue(errorList, json);
-    }
-
-
-    @Override
-    public String $$(String key) {
+    public String string(@NotNull String key) {
         return $(key).$$();
     }
 
+    @NotNull
     @Override
-    public var $(String key) {
+    public var $(@NotNull String key) {
         if (key.matches("\\w+")) {
-            return DollarFactory.fromField($errors(),json.getField(key));
+            return DollarFactory.fromField(errors(),json.getField(key));
         } else {
-            return eval(key);
+            return $pipe(key);
         }
     }
 
     @Override
-    public Integer $int() {
+    public Integer integer() {
         throw new UnsupportedOperationException("Cannot convert JSON to an integer");
     }
 
     @Override
-    public Integer $int(String key) {
-        return $json().getInteger(key);
+    public Integer integer(@NotNull String key) {
+        return json().getInteger(key);
     }
 
+    @NotNull
     @Override
-    public JsonObject $json() {
+    public JsonObject json() {
         return json;
     }
 
+    @NotNull
     @Override
-    public JsonObject $json(String key) {
+    public JsonObject json(@NotNull String key) {
         return json.getObject(key);
     }
 
+    @NotNull
     @Override
-    public List<var> list() {
+    public List<var> $list() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Number $number(String key) {
-        return $json().getNumber(key);
+    public Number number(@NotNull String key) {
+        return json().getNumber(key);
     }
 
+    @NotNull
     @Override
-    public JSONObject $orgjson() {
+    public JSONObject orgjson() {
         return new JSONObject(json.toMap());
     }
 
+    @NotNull
     @Override
-    public var add(Object value) {
+    public var $add(Object value) {
         JsonObject copy = json.copy();
         if (value instanceof var && ((var) value).$() instanceof JsonObject) {
-            return  DollarFactory.fromValue($errors(),copy.mergeIn(((var) value).$()));
+            return  DollarFactory.fromValue(errors(),copy.mergeIn(((var) value).$()));
         }
         throw new IllegalArgumentException("Only the addition of DollarJson objects supported at present.");
     }
 
+    @NotNull
     @Override
-    public java.util.stream.Stream<var> children() {
+    public java.util.stream.Stream<var> $children() {
         return split().values().stream();
     }
 
-    @Override
+    @NotNull
     public Map<String, var> split() {
         HashMap<String, var> map = new HashMap<>();
         for (String key : json.toMap().keySet()) {
             Object field = json.getField(key);
             if (field instanceof JsonObject) {
-                map.put(key, DollarFactory.fromField($errors(),field));
+                map.put(key, DollarFactory.fromField(errors(),field));
             }
         }
         return map;
     }
 
+    @NotNull
     @Override
-    public java.util.stream.Stream children(String key) {
+    public java.util.stream.Stream $children(@NotNull String key) {
         List list = json.getArray(key).toList();
         if (list == null) {
             return null;
@@ -191,51 +198,57 @@ class DollarJson extends AbstractDollar implements var {
         return list.stream();
     }
 
+    @NotNull
     @Override
     public var decode() {
-        return new DollarString($errors(),URLDecoder.decode($$()));
+        return new DollarString(errors(),URLDecoder.decode($$()));
     }
 
+    @NotNull
     @Override
     public String $$() {
         return toString();
     }
 
+    @NotNull
     @Override
     public String toString() {
         return json.toString();
     }
 
+    @NotNull
     @Override
-    public var eval(String label, DollarEval lambda) {
-        return lambda.eval(copy());
+    public var eval(String label, @NotNull DollarEval lambda) {
+        return lambda.eval($copy());
+    }
+
+    @NotNull
+    @Override
+    public var $copy() {
+        return DollarFactory.fromValue(errors(),json.copy());
     }
 
     @Override
-    public var copy() {
-        return DollarFactory.fromValue($errors(),json.copy());
+    public boolean $has(@NotNull String key) {
+        return json().containsField(key);
     }
 
     @Override
-    public boolean has(String key) {
-        return $json().containsField(key);
-    }
-
-    @Override
-    public boolean isNull() {
+    public boolean $null() {
         return false;
     }
 
     @Override
-    public java.util.stream.Stream<Map.Entry<String, var>> keyValues() {
+    public java.util.stream.Stream<Map.Entry<String, var>> kvStream() {
         return split().entrySet().stream();
     }
 
     @Override
-    public java.util.stream.Stream<String> $keys() {
+    public java.util.stream.Stream<String> keyStream() {
         return json.getFieldNames().stream();
     }
 
+    @NotNull
     @Override
     public String $mimeType() {
         return "application/json";
@@ -243,7 +256,7 @@ class DollarJson extends AbstractDollar implements var {
 
     @Override
     public int size() {
-        return $map().size();
+        return toMap().size();
     }
 
     @Override
@@ -251,19 +264,22 @@ class DollarJson extends AbstractDollar implements var {
         return false;
     }
 
+    @NotNull
     @Override
     public var remove(Object value) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
-    public var rm(String value) {
+    public var $rm(@NotNull String value) {
         json.removeField(value);
         return this;
     }
 
+    @NotNull
     @Override
-    public FutureDollar<JsonObject> send(EventBus e, String destination) {
+    public FutureDollar<JsonObject> send(@NotNull EventBus e, String destination) {
         FutureDollar<JsonObject> futureDollar = new FutureDollar<>(this);
         e.send(destination, json, (Message<JsonObject> message) -> {
             futureDollar.handle(message);
@@ -271,15 +287,16 @@ class DollarJson extends AbstractDollar implements var {
         return futureDollar;
     }
 
+    @NotNull
     @Override
-    public Stream<var> stream() {
+    public Stream<var> $stream() {
         return split().values().stream();
     }
 
     @Override
-    public List<String> $strings() {
+    public List<String> strings() {
         List<String> values = new ArrayList<>();
-        Map<String, Object> map = $map();
+        Map<String, Object> map = toMap();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             values.add(entry.getKey());
             values.add(entry.getValue().toString());
@@ -288,37 +305,40 @@ class DollarJson extends AbstractDollar implements var {
     }
 
     @Override
-    public Map<String, Object> $map() {
+    public Map<String, Object> toMap() {
         return json.toMap();
     }
 
+    @NotNull
     @Override
-    public Map<String, var> map() {
+    public Map<String, var> $map() {
         Map<String,var> result= new HashMap<>();
         Map<String, Object> objectMap = json.toMap();
         for (Entry<String, Object> entry : objectMap.entrySet()) {
-           result.put(entry.getKey(),DollarFactory.fromValue($errors(),entry.getValue()));
+           result.put(entry.getKey(),DollarFactory.fromValue(errors(),entry.getValue()));
         }
         return result;
     }
 
 
     @Override
-    public JsonObject $val() {
+    public JsonObject val() {
         return json;
     }
 
 
+    @Nullable
     public var ¢(String key) {
         return child(key);
     }
 
+    @Nullable
     public var child(String key) {
         JsonObject child = json.getObject(key);
         if (child == null) {
             return null;
         }
-        return DollarFactory.fromValue($errors(),child);
+        return DollarFactory.fromValue(errors(),child);
     }
 }
 

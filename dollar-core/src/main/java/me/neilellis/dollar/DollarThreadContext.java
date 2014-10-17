@@ -7,6 +7,7 @@ import me.neilellis.dollar.pubsub.RedisPubSub;
 import me.neilellis.dollar.store.DollarStore;
 import me.neilellis.dollar.store.RedisStore;
 import com.codahale.metrics.MetricRegistry;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,7 @@ public class DollarThreadContext {
         this.labels = labels;
     }
 
+    @NotNull
     public MetricRegistry getMetrics() {
         return metrics;
     }
@@ -90,7 +92,7 @@ public class DollarThreadContext {
         this.threadKey = threadKey;
     }
 
-    public void popLabel(String label) {
+    public void popLabel(@NotNull String label) {
         String removedLabel = labels.remove(0);
         if (!label.equals(removedLabel)) {
             throw new IllegalStateException("Unbalanced label removal");
@@ -101,10 +103,12 @@ public class DollarThreadContext {
         labels.add(label);
     }
 
+    @NotNull
     public DollarThreadContext child() {
        return child(UUID.randomUUID().toString());
     }
 
+    @NotNull
     public DollarThreadContext child(String s) {
         return new DollarThreadContext(new ArrayList<>(labels), monitor, passValue, pubsub, store, threadKey + ":" + s);
     }

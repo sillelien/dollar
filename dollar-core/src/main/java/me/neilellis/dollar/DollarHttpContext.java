@@ -1,5 +1,7 @@
 package me.neilellis.dollar;
 
+import me.neilellis.dollar.types.DollarFactory;
+import org.jetbrains.annotations.NotNull;
 import spark.Request;
 import spark.Response;
 
@@ -21,10 +23,12 @@ public class DollarHttpContext {
         this.response = response;
     }
 
+    @NotNull
     public var cookies() {
-        return DollarFactory.fromValue(Collections.emptyList(),request.cookies());
+        return DollarFactory.fromValue(Collections.emptyList(), request.cookies());
     }
 
+    @NotNull
     public var headers() {
         var result = $();
         Set<String> headers = request.headers();
@@ -34,14 +38,17 @@ public class DollarHttpContext {
         return result;
     }
 
+    @NotNull
     public var json() {
         return DollarFactory.fromValue(Collections.emptyList(),request.body());
     }
 
+    @NotNull
     public var params() {
         return DollarFactory.fromValue(Collections.emptyList(),request.params());
     }
 
+    @NotNull
     public var queryParams() {
         return DollarFactory.fromValue(Collections.emptyList(),request.queryMap());
     }
@@ -58,7 +65,7 @@ public class DollarHttpContext {
         response.status(statusCode);
     }
 
-    public void body(var body) {
+    public void body(@NotNull var body) {
         response.type(body.$mimeType());
         response.body(body.$$());
     }
@@ -82,7 +89,7 @@ public class DollarHttpContext {
         response.cookie(name, value);
     }
 
-    public void cookie(String path, String name, String value, int maxAge, boolean secured) {
+    public void cookie(String path, @NotNull String name, String value, int maxAge, boolean secured) {
         response.cookie(path, name, value, maxAge, secured);
     }
 
@@ -98,7 +105,7 @@ public class DollarHttpContext {
         response.redirect(location, httpStatusCode);
     }
 
-    public void removeCookie(String name) {
+    public void removeCookie(@NotNull String name) {
         response.removeCookie(name);
     }
 

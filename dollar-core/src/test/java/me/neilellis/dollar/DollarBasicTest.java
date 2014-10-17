@@ -90,7 +90,7 @@ public class DollarBasicTest {
         var result = profile.eval("getWeight", (var value) -> value.$("weight", "none of your business"));
         String weight = result.$("weight").$$();
         assertEquals(weight, "none of your business");
-        assertTrue("Profile's state was mutated!!!", profile.$("weight").isNull());
+        assertTrue("Profile's state was mutated!!!", profile.$("weight").$null());
     }
 
     @Test
@@ -100,12 +100,12 @@ public class DollarBasicTest {
         Map submap = new HashMap();
         submap.put("thing", 1);
         map.put("sub", submap);
-        assertEquals("bar", $(map).$("foo").$val());
-        assertEquals("bar", $(map).$map().get("foo"));
-        assertEquals(1, $(map).$("sub").$map().get("thing"));
+        assertEquals("bar", $(map).$("foo").val());
+        assertEquals("bar", $(map).toMap().get("foo"));
+        assertEquals(1, $(map).$("sub").toMap().get("thing"));
         assertEquals("1", $(map).$("sub").$("thing").$$());
         assertEquals("{\"thing\":1}", $(map).$("sub").$$());
-        assertEquals(1, $(map).$("sub").$int("thing").longValue());
+        assertEquals(1, $(map).$("sub").integer("thing").longValue());
     }
 
     @Test
@@ -120,38 +120,33 @@ public class DollarBasicTest {
                                 .$("postcode", "bn1 6jj")
                                 .$("number", 343)
                 );
-        assertEquals(age, (int) profile.$("$['age']").$int());
-        assertEquals(age / 11, (int) profile.$("($['age'].$int() / 11)").$int());
+        assertEquals(age, (int) profile.$("$['age']").integer());
+        assertEquals(age / 11, (int) profile.$("($['age'].integer() / 11)").integer());
         assertEquals("male", profile.$("$.gender").$());
-        assertEquals(10, (int) profile.$("5*2").$int());
-        assertEquals(10, (int) $eval("10").$int());
+        assertEquals(10, (int) profile.$("5*2").integer());
+        assertEquals(10, (int) $eval("10").integer());
         assertEquals($("{\"name\":\"Dave\"}").$("name").$$(), "Dave");
         assertEquals($().$("({name:'Dave'})").$("name").$$(), "Dave");
     }
 
     @Test
     public void testNull() {
-        assertNull($((Object) null).$("foo", "bar").$("foo").$val());
-        assertTrue($((Object) null).isNull());
-        assertTrue($((Object) null).$("bar").isNull());
-        assertNull($((Object) null).$val());
-        assertFalse($((Object) null).$("bar").has("foo"));
-        assertFalse($((Object) null).has("foo"));
-        assertTrue($((Object) null).$("foo", "bar").$("foo").isNull());
-        assertEquals("twasnull", $((Object) null).ifNull(() -> $("twasnull")).$$());
+        assertNull($((Object) null).$("foo", "bar").$("foo").val());
+        assertTrue($((Object) null).$null());
+        assertTrue($((Object) null).$("bar").$null());
+        assertNull($((Object) null).val());
+        assertFalse($((Object) null).$("bar").$has("foo"));
+        assertFalse($((Object) null).$has("foo"));
+        assertTrue($((Object) null).$("foo", "bar").$("foo").$null());
+        assertEquals("twasnull", $((Object) null).$null(() -> $("twasnull")).$$());
     }
 
-    @Test
-    public void testSplit() {
-        assertEquals("{}", $("{\"foo\":\"bar\",\"thing\":1}").split().toString());
-        assertEquals("{\"foo\":\"bar\"}", $("{\"a\":{\"foo\":\"bar\"},\"thing\":1}").split().get("a").toString());
-        assertEquals(2, $("{\"foo\":\"bar\",\"thing\":1}").$keys().count());
-    }
+
 
     @Test
     public void testStringCreation() {
-        assertEquals("bar", $("{\"foo\":\"bar\"}").$("foo").$val());
-        assertEquals("bar", $("{\"foo\":\"bar\"}").$json().getString("foo"));
+        assertEquals("bar", $("{\"foo\":\"bar\"}").$("foo").val());
+        assertEquals("bar", $("{\"foo\":\"bar\"}").json().getString("foo"));
     }
 
 

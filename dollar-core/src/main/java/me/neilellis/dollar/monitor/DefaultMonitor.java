@@ -3,6 +3,7 @@ package me.neilellis.dollar.monitor;
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +14,7 @@ import java.util.function.Supplier;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DefaultMonitor implements Monitor {
+    @NotNull
     private final ConsoleReporter reporter;
 
     static {
@@ -39,7 +41,7 @@ public class DefaultMonitor implements Monitor {
     }
 
     @Override
-    public <R> R run(String simpleLabel, String namespacedLabel, String info, Supplier<R> code) {
+    public <R> R run(String simpleLabel, String namespacedLabel, String info, @NotNull Supplier<R> code) {
         Timer timer = metrics.timer(namespacedLabel);
         log.debug("BEFORE : " + simpleLabel + " : " + info);
         Timer.Context time = timer.time();
@@ -50,7 +52,7 @@ public class DefaultMonitor implements Monitor {
     }
 
     @Override
-    public void run(String simpleLabel, String namespacedLabel, String info, Runnable code) {
+    public void run(String simpleLabel, String namespacedLabel, String info, @NotNull Runnable code) {
         Timer timer = metrics.timer(namespacedLabel);
         log.debug("BEFORE : " + simpleLabel + " : " + info);
         Timer.Context time = timer.time();

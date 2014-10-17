@@ -1,5 +1,7 @@
 package me.neilellis.dollar;
 
+import me.neilellis.dollar.types.DollarVoid;
+import org.jetbrains.annotations.NotNull;
 import spark.Route;
 import spark.SparkBase;
 
@@ -10,7 +12,7 @@ import static me.neilellis.dollar.DollarStatic.$;
  */
 public class DollarHttp extends SparkBase {
 
-    public DollarHttp(String method, String path, DollarHttpHandler handler) {
+    public DollarHttp(String method, String path, @NotNull DollarHttpHandler handler) {
         DollarThreadContext context = DollarStatic.context();
 
         Route route = (request, response) -> {
@@ -19,10 +21,10 @@ public class DollarHttp extends SparkBase {
 
                 DollarThreadContext childContext = context.child();
                 childContext.pushLabel(method + ":" + path);
-                result = DollarStatic.$call(childContext, () -> DollarStatic.tracer().trace(DollarNull.INSTANCE, handler.handle(new DollarHttpContext(request, response)), StateTracer.Operations.HTTP_RESPONSE, method, path));
+                result = DollarStatic.$call(childContext, () -> DollarStatic.tracer().trace(DollarVoid.INSTANCE, handler.handle(new DollarHttpContext(request, response)), StateTracer.Operations.HTTP_RESPONSE, method, path));
                 if(result.hasErrors()) {
-                    var errors = result.errors();
-                    response.status(errors.$("httpCode").ifNull(() -> $(500)).$int());
+                    var errors = result.$errors();
+                    response.status(errors.$("httpCode").$null(() -> $(500)).integer());
                     return errors.$$();
                 }
                 response.type(result.$mimeType());

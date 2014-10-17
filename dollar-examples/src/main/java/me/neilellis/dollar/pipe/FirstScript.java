@@ -23,6 +23,6 @@ public final class FirstScript extends Script {
                                 .$("postcode", "bn1 6jj")
                                 .$("number", 343)
                 );
-        profile.pipe(ExtractName.class).pipe(WelcomeMessage.class).out();
+        profile.$pipe(ExtractName.class).$pipe(WelcomeMessage.class).$out();
     }
 }

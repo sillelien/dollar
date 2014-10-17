@@ -33,7 +33,7 @@ public class DollarRangeTest {
 
     @Test
     public void testBasics() {
-        assertEquals(range, $list(1).add(2).add(3).add(4));
+        assertEquals(range, $list(1).$add(2).$add(3).$add(4));
         assertEquals(range, $(1, 4));
     }
 

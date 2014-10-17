@@ -1,8 +1,13 @@
-package me.neilellis.dollar;
+package me.neilellis.dollar.types;
 
 import com.google.common.collect.ContiguousSet;
 import com.google.common.collect.DiscreteDomain;
 import com.google.common.collect.Range;
+import me.neilellis.dollar.AbstractDollar;
+import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.vertx.java.core.json.JsonObject;
 
@@ -18,108 +23,122 @@ public class DollarRange extends AbstractDollar {
 
     private final Range<Long> range;
 
-    public DollarRange(List<Throwable> errors, long start, long finish) {
+    public DollarRange(@NotNull List<Throwable> errors, long start, long finish) {
         super(errors);
         range = Range.closed(start, finish);
     }
 
-    public DollarRange(List<Throwable> errors, Range range) {
+    public DollarRange(@NotNull List<Throwable> errors, Range range) {
         super(errors);
         this.range = range;
     }
 
+    @NotNull
     @Override
     public var $(String age, long l) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
-    public var $(String key) {
+    public var $(@NotNull String key) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
-    public var $(String key, Object value) {
+    public var $(@NotNull String key, Object value) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public Range<Long> $() {
         return range;
     }
 
+    @NotNull
     @Override
-    public String $$(String key) {
+    public String string(@NotNull String key) {
         return range.toString();
     }
 
     @Override
-    public Integer $int() {
+    public Integer integer() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Integer $int(String key) {
+    public Integer integer(@NotNull String key) {
+        throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    @Override
+    public JsonObject json() {
+        throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    @Override
+    public JsonObject json(@NotNull String key) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public JsonObject $json() {
+    public Map<String, Object> toMap() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public JsonObject $json(String key) {
+    public Number number(@NotNull String key) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
-    public Map<String, Object> $map() {
+    public JSONObject orgjson() {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
-    public Number $number(String key) {
+    public var $add(Object value) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
-    public JSONObject $orgjson() {
-        throw new UnsupportedOperationException();
+    public Stream<var> $children() {
+        return $list().stream();
     }
 
+    @NotNull
     @Override
-    public var add(Object value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Stream<var> children() {
-        return list().stream();
-    }
-
-    @Override
-    public List<var> list() {
+    public List<var> $list() {
         return ContiguousSet.create(range, DiscreteDomain.longs()).stream().map(DollarStatic::$).collect(Collectors.toList());
     }
 
+    @NotNull
     @Override
-    public Stream children(String key) {
+    public Stream $children(@NotNull String key) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
-    public var copy() {
-        return DollarFactory.fromValue($errors(),range);
+    public var $copy() {
+        return DollarFactory.fromValue(errors(), range);
     }
 
+    @NotNull
     @Override
     public var decode() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (obj == null) {
             return false;
         }
@@ -129,7 +148,7 @@ public class DollarRange extends AbstractDollar {
                 return range.equals(((DollarRange) unwrapped).range);
             }
             if (unwrapped instanceof DollarList) {
-                return unwrapped.list().equals(list());
+                return unwrapped.$list().equals($list());
             }
         }
         return false;
@@ -137,7 +156,7 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public boolean has(String key) {
+    public boolean $has(@NotNull String key) {
         return false;
     }
 
@@ -147,62 +166,54 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public boolean isNull() {
+    public boolean $null() {
         return false;
     }
 
     @Override
-    public Stream<Map.Entry<String, var>> keyValues() {
+    public Stream<Map.Entry<String, var>> kvStream() {
         throw new UnsupportedOperationException();
 
     }
 
     @Override
-    public Stream<String> $keys() {
+    public Stream<String> keyStream() {
         throw new UnsupportedOperationException();
 
     }
 
+    @NotNull
     @Override
     public var remove(Object value) {
         throw new UnsupportedOperationException();
 
     }
 
+    @NotNull
     @Override
-    public var rm(String value) {
+    public var $rm(@NotNull String value) {
         throw new UnsupportedOperationException();
 
     }
 
-    @Override
-    public Map<String, var> split() {
-        throw new UnsupportedOperationException();
 
+    @NotNull
+    @Override
+    public Stream<var> $stream() {
+        return $list().stream();
     }
 
     @Override
-    public Stream<var> stream() {
-        return list().stream();
-    }
-
-    @Override
-    public List<String> $strings() {
+    public List<String> strings() {
         return ContiguousSet.create(range, DiscreteDomain.longs()).stream().map(Object::toString).collect(Collectors.toList());
     }
 
+    @NotNull
     @Override
-    public Map<String, var> map() {
+    public Map<String, var> $map() {
         throw new UnsupportedOperationException();
     }
 
-
-    @Override
-    public var copy(List<Throwable> errors) {
-        List<Throwable> errorList = $errors();
-        errorList.addAll(errors);
-        return DollarFactory.fromValue(errorList, range);
-    }
 
     @Override
     public int size() {

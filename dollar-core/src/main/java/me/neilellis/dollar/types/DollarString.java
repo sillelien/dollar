@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar;
+package me.neilellis.dollar.types;
+
+import me.neilellis.dollar.AbstractDollarSingleValue;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,22 +29,23 @@ import java.util.List;
 public class DollarString extends AbstractDollarSingleValue<String> {
 
 
-    public DollarString(List<Throwable> errors, String value) {
+    public DollarString(@NotNull List<Throwable> errors, @NotNull String value) {
         super(errors,value);
     }
 
+    @NotNull
     @Override
     public String $() {
         return value;
     }
 
     @Override
-    public Integer $int() {
+    public Integer integer() {
         return Integer.parseInt(value);
     }
 
     @Override
-    public Number $number(String key) {
+    public Number number(@NotNull String key) {
         return new BigDecimal(key);
     }
 
@@ -48,7 +53,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         return obj != null && value.equals(obj.toString());
     }
 }

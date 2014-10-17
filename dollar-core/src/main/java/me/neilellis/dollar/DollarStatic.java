@@ -3,6 +3,10 @@ package me.neilellis.dollar;
 import com.google.common.collect.Range;
 import me.neilellis.dollar.monitor.Monitor;
 import me.neilellis.dollar.pubsub.Sub;
+import me.neilellis.dollar.types.DollarFactory;
+import me.neilellis.dollar.types.DollarVoid;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.vertx.java.core.MultiMap;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
@@ -27,66 +31,81 @@ import java.util.function.Consumer;
 public class DollarStatic {
 
 
+    @NotNull
     static ThreadLocal<DollarThreadContext> threadContext = new ThreadLocal<DollarThreadContext>() {
+        @NotNull
         @Override
         protected DollarThreadContext initialValue() {
             return new DollarThreadContext();
         }
     };
 
+    @NotNull
     private static ConcurrentHashMap<Object, Map> context = new ConcurrentHashMap<>();
 
+    @NotNull
     private static ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
 
-    public static var $(String name, MultiMap multiMap) {
+    @NotNull
+    public static var $(@NotNull String name, MultiMap multiMap) {
         return DollarFactory.fromValue().$(name, multiMap);
     }
 
-    public static var $(String name, Number value) {
+    @NotNull
+    public static var $(@NotNull String name, Number value) {
         return DollarFactory.fromValue().$(name, value);
     }
 
-    public static var $(String name, Date value) {
+    @NotNull
+    public static var $(@NotNull String name, Date value) {
         return DollarFactory.fromValue().$(name, value);
     }
 
-    public static var $(String name, JsonArray value) {
+    @NotNull
+    public static var $(@NotNull String name, JsonArray value) {
         return DollarFactory.fromValue().$(name, value);
     }
 
-    public static var $(var... values) {
+    @NotNull
+    public static var $(@NotNull var... values) {
         var v = $();
         for (var value : values) {
-            v = v.add(value);
+            v = v.$add(value);
         }
         return v;
     }
 
+    @NotNull
     public static var $() {
         return DollarFactory.fromValue();
     }
 
-    public static var $(String name, var... values) {
+    @NotNull
+    public static var $(@NotNull String name, @NotNull var... values) {
         var v = $();
         for (var value : values) {
-            v = v.add(value);
+            v = v.$add(value);
         }
         return $(name, v);
     }
 
-    public static var $(String key, var value) {
+    @NotNull
+    public static var $(@NotNull String key, var value) {
         return DollarFactory.fromValue().$(key, value);
     }
 
-    public static var $(String key, String value) {
+    @NotNull
+    public static var $(@NotNull String key, String value) {
         return DollarFactory.fromValue().$(key, value);
     }
 
+    @NotNull
     public static var $(JsonObject json) {
         return DollarFactory.fromValue(Collections.<Throwable>emptyList(),json);
     }
 
-    public static var $(String key, JsonObject jsonObject) {
+    @NotNull
+    public static var $(@NotNull String key, JsonObject jsonObject) {
         return DollarFactory.fromValue().$(key, jsonObject);
     }
 
@@ -94,15 +113,16 @@ public class DollarStatic {
         return $(Range.closed(start, finish));
     }
 
-    public static var $(Object o) {
-        return DollarStatic.tracer().trace(DollarNull.INSTANCE, DollarFactory.create(Collections.emptyList(),o), StateTracer.Operations.CREATE, o == null ? "null" : o.getClass().getName());
+    public static var $(@Nullable Object o) {
+        return DollarStatic.tracer().trace(DollarVoid.INSTANCE, DollarFactory.fromValue(Collections.emptyList(), o), StateTracer.Operations.CREATE, o == null ? "null" : o.getClass().getName());
     }
 
     public static Monitor monitor() {
         return threadContext.get().getMonitor();
     }
 
-    static JsonObject mapToJson(MultiMap map) {
+    @NotNull
+    public static JsonObject mapToJson(@NotNull MultiMap map) {
         JsonObject jsonObject = new JsonObject();
         for (Map.Entry<String, String> entry : map) {
             jsonObject.putString(entry.getKey(), entry.getValue());
@@ -110,7 +130,8 @@ public class DollarStatic {
         return jsonObject;
     }
 
-    static JsonObject paramMapToJson(Map<String,String[]> map) {
+    @NotNull
+    public static JsonObject paramMapToJson(@NotNull Map<String, String[]> map) {
         JsonObject jsonObject = new JsonObject();
         for (Map.Entry<String, String[]> entry : map.entrySet()) {
             if(entry.getValue().length == 1) {
@@ -122,27 +143,33 @@ public class DollarStatic {
         return jsonObject;
     }
 
-    public static DollarHttp $DELETE(String path, DollarHttpHandler handler) {
+    @NotNull
+    public static DollarHttp $DELETE(String path, @NotNull DollarHttpHandler handler) {
         return new DollarHttp(HttpMethod.delete.name(), path, handler);
     }
 
-    public static DollarHttp $GET(String path, DollarHttpHandler handler) {
+    @NotNull
+    public static DollarHttp $GET(String path, @NotNull DollarHttpHandler handler) {
         return new DollarHttp(HttpMethod.get.name(), path, handler);
     }
 
-    public static DollarHttp $HEAD(String path, DollarHttpHandler handler) {
+    @NotNull
+    public static DollarHttp $HEAD(String path, @NotNull DollarHttpHandler handler) {
         return new DollarHttp(HttpMethod.head.name(), path, handler);
     }
 
-    public static DollarHttp $OPTIONS(String path, DollarHttpHandler handler) {
+    @NotNull
+    public static DollarHttp $OPTIONS(String path, @NotNull DollarHttpHandler handler) {
         return new DollarHttp(HttpMethod.options.name(), path, handler);
     }
 
-    public static DollarHttp $PATCH(String path, DollarHttpHandler handler) {
+    @NotNull
+    public static DollarHttp $PATCH(String path, @NotNull DollarHttpHandler handler) {
         return new DollarHttp(HttpMethod.patch.name(), path, handler);
     }
 
-    public static DollarHttp $POST(String path, DollarHttpHandler handler) {
+    @NotNull
+    public static DollarHttp $POST(String path, @NotNull DollarHttpHandler handler) {
         return new DollarHttp(HttpMethod.post.name(), path, handler);
     }
 
@@ -155,7 +182,7 @@ public class DollarStatic {
      *
      * @param call the lambda to run.
      */
-    public static var $call(Callable<var> call) {
+    public static var $call(@NotNull Callable<var> call) {
         return $call(threadContext.get().child(), call);
     }
 
@@ -165,7 +192,7 @@ public class DollarStatic {
      * @param context the current thread context
      * @param call    the lambda to run.
      */
-    public static var $call(DollarThreadContext context, Callable<var> call) {
+    public static var $call(@NotNull DollarThreadContext context, @NotNull Callable<var> call) {
         threadContext.set(context.child());
         try {
             return call.call();
@@ -184,46 +211,53 @@ public class DollarStatic {
         threadContext.get().getMonitor().dumpThread();
     }
 
-    public static void $end(String value) {
+    public static void $end(@NotNull String value) {
         threadContext.get().popLabel(value);
     }
 
-    public static var $eval(String label, String js) {
-        return $().eval(label, js);
+    @NotNull
+    public static var $eval(@NotNull String label, @NotNull String js) {
+        return $().$pipe(label, js);
     }
 
-    public static var $eval(String js) {
-        return $().eval(js);
+    @NotNull
+    public static var $eval(@NotNull String js) {
+        return $().$pipe(js);
     }
 
-    public static DollarFuture $fork(Callable<var> call) {
+    @NotNull
+    public static DollarFuture $fork(@NotNull Callable<var> call) {
         DollarThreadContext child = threadContext.get().child();
         return new DollarFuture(threadPoolExecutor.submit(() ->$call(child, call)));
 
     }
 
-    public static JsonArray $jsonArray(Object... values) {
+    @NotNull
+    public static JsonArray $jsonArray(@NotNull Object... values) {
         return new JsonArray(values);
     }
 
+    @NotNull
     public static var $list(Object... values) {
         return DollarFactory.fromValue(Collections.emptyList(),values);
     }
 
-    public static var $load(String location) {
-        return $().load(location);
+    @NotNull
+    public static var $load(@NotNull String location) {
+        return $().$load(location);
     }
 
-    public static var $pop(String location, int timeoutInMillis) {
-        return $().pop(location, timeoutInMillis);
+    @NotNull
+    public static var $pop(@NotNull String location, int timeoutInMillis) {
+        return $().$pop(location, timeoutInMillis);
     }
 
-    public static void $pub(var value, String... locations) {
-        value.pub(locations);
+    public static void $pub(@NotNull var value, String... locations) {
+        value.$pub(locations);
     }
 
-    public static void $push(String location, var value) {
-        value.push(location);
+    public static void $push(@NotNull String location, @NotNull var value) {
+        value.$push(location);
     }
 
     /**
@@ -232,7 +266,7 @@ public class DollarStatic {
      * @param context this is an identifier used to link context's together, it should be unique to the request being processed.
      * @param run     the lambda to run.
      */
-    public static void $run(DollarThreadContext context, Runnable run) {
+    public static void $run(@NotNull DollarThreadContext context, @NotNull Runnable run) {
         threadContext.set(context.child());
         try {
             run.run();
@@ -246,7 +280,7 @@ public class DollarStatic {
      *
      * @param run the lambda to run.
      */
-    public static void $run(Runnable run) {
+    public static void $run(@NotNull Runnable run) {
         try {
             run.run();
         } finally {
@@ -254,23 +288,26 @@ public class DollarStatic {
         }
     }
 
-    public static void $save(var value, String location) {
-        value.save(location);
+    public static void $save(@NotNull var value, @NotNull String location) {
+        value.$save(location);
     }
 
-    public static void $save(String location, var value, int expiryInMilliseconds) {
-        value.save(location, expiryInMilliseconds);
+    public static void $save(@NotNull String location, @NotNull var value, int expiryInMilliseconds) {
+        value.$save(location, expiryInMilliseconds);
     }
 
+    @NotNull
     public static Sub $sub(Consumer<var> action, String... locations) {
         return threadContext.get().getPubsub().sub(action, locations);
     }
 
     //Kotlin compatible versions
+    @NotNull
     public static var create() {
         return $();
     }
 
+    @NotNull
     public static var create(String value) {
         return $();
     }
@@ -291,6 +328,7 @@ public class DollarStatic {
         Spark.stop();
     }
 
+    @NotNull
     public static StateTracer tracer() {
         return new SimpleLogStateTracer();
     }
@@ -299,10 +337,12 @@ public class DollarStatic {
         return threadContext.get();
     }
 
+    @NotNull
     public static DollarThreadContext childContext() {
         return threadContext.get().child();
     }
 
+    @NotNull
     public static <R> R handleInterrupt(InterruptedException ie) {
         if (Thread.interrupted()) {
             log("Interrupted");
@@ -310,7 +350,8 @@ public class DollarStatic {
         throw new Error("Interrupted");
     }
 
-    public static <R> R handleError(Throwable throwable) {
+    @NotNull
+    public static <R> R handleError(@NotNull Throwable throwable) {
         log(throwable.getMessage());
         throwable.printStackTrace();
         if (throwable instanceof DollarException) {
@@ -321,6 +362,7 @@ public class DollarStatic {
 
     }
 
+    @NotNull
     public static DollarThreadContext childContext(String s) {
         return threadContext.get().child(s);
     }
@@ -329,7 +371,13 @@ public class DollarStatic {
         context().pushLabel(label);
     }
 
+    @NotNull
     public static ErrorLogger errorLogger() {
         return new SimpleErrorLogger();
+    }
+
+    @NotNull
+    public static var $void() {
+        return new DollarVoid();
     }
 }

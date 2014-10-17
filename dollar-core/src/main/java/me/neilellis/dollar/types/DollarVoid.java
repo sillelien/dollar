@@ -14,157 +14,182 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar;
+package me.neilellis.dollar.types;
 
+import me.neilellis.dollar.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
-import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.json.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
+ * To better understand the rationale behind this class, take a look at http://homepages.ecs.vuw.ac.nz/~tk/publications/papers/void.pdf
+ *
+ * Dollar does not have the concept of null. Instead null {@link me.neilellis.dollar.var} objects are instances of this class.
+ *
+ * Void is equivalent to 0,"",null except that unlike these values it has behavior that corresponds to a void object.
+ *
+ * Therefore actions taken against a void object are ignored. Any method that returns a {@link me.neilellis.dollar.var} will return a {@link DollarVoid}.
+ *
+ * <pre>
+ *
+ *  var nulled= $null();
+ *  nulled.$pipe((i)->{System.out.println("You'll never see this."});
+ *
+ * </pre>
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DollarNull extends AbstractDollar implements var {
+public class DollarVoid extends AbstractDollar implements var {
 
 
-    public static final var INSTANCE = DollarFactory.fromValue(Collections.emptyList(),null);
+    public static final var INSTANCE = DollarFactory.fromValue(Collections.emptyList(), null);
 
-    public DollarNull(List<Throwable> errors) {
+    public DollarVoid(@NotNull List<Throwable> errors) {
         super(errors);
     }
 
-    public DollarNull() {
+    public DollarVoid() {
 
         super(Collections.emptyList());
     }
 
+    @NotNull
     @Override
     public var $(String age, long l) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var $(String key) {
+    public var $(@NotNull String key) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var $(String key, Object value) {
+    public var $(@NotNull String key, Object value) {
         return this;
     }
 
+    @NotNull
     @Override
     public <R> R $() {
-        return null;
+        return (R) new JsonObject();
     }
 
-
+    @NotNull
     @Override
-    public var copy(List<Throwable> errors) {
-        List<Throwable> errorList = $errors();
-        errorList.addAll(errors);
-        return DollarFactory.fromValue(errorList, this);
-    }
-
-    @Override
-    public String $$(String key) {
+    public String string(@NotNull String key) {
         return "";
     }
 
+    @NotNull
     @Override
     public String $$() {
         return "";
     }
 
     @Override
-    public Integer $int() {
+    public Integer integer() {
         return 0;
     }
 
     @Override
-    public Integer $int(String key) {
+    public Integer integer(@NotNull String key) {
         return 0;
     }
 
+    @NotNull
     @Override
-    public JsonObject $json() {
+    public JsonObject json() {
         return new JsonObject();
     }
 
+    @NotNull
     @Override
-    public JsonObject $json(String key) {
-        throw new UnsupportedOperationException();
+    public JsonObject json(@NotNull String key) {
+        return new JsonObject();
     }
 
+    @NotNull
     @Override
-    public List<var> list() {
+    public List<var> $list() {
         return Collections.emptyList();
     }
 
     @Override
-    public Map<String, Object> $map() {
+    public Map<String, Object> toMap() {
         return Collections.emptyMap();
     }
 
     @Override
-    public Number $number(String key) {
-        throw new UnsupportedOperationException();
+    public Number number(@NotNull String key) {
+        return 0;
     }
 
+    @NotNull
     @Override
-    public JSONObject $orgjson() {
+    public JSONObject orgjson() {
         return new JSONObject();
     }
 
+    @NotNull
     @Override
-    public var add(Object value) {
+    public var $add(Object value) {
         return this;
     }
 
+    @NotNull
     @Override
-    public Stream<var> children() {
+    public Stream<var> $children() {
         return Collections.<var>emptyList().stream();
     }
 
+    @NotNull
     @Override
-    public Stream children(String key) {
+    public Stream $children(@NotNull String key) {
         return Collections.emptyList().stream();
     }
 
+    @NotNull
     @Override
-    public DollarNull copy() {
-        return this;
+    public DollarVoid $copy() {
+        return new DollarVoid(new ArrayList<>(errors()));
     }
 
+    @NotNull
     @Override
     public var decode() {
         return this;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return obj == null || (obj instanceof var && ((var) obj).$() == null);
+    public boolean equals(@Nullable Object obj) {
+        return (obj instanceof var && ((var) obj).val() == null) || obj == null;
     }
 
+    @NotNull
     @Override
-    public var eval(String js, String label) {
+    public var $pipe(@NotNull String js, @NotNull String label) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var eval(String label, @NotNull DollarEval lambda) {
         return this;
     }
 
     @Override
-    public var eval(String label, DollarEval lambda) {
-        return this;
-    }
-
-    @Override
-    public boolean has(String key) {
+    public boolean $has(@NotNull String key) {
         return false;
     }
 
@@ -174,17 +199,17 @@ public class DollarNull extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean isNull() {
+    public boolean $null() {
         return true;
     }
 
     @Override
-    public Stream<Map.Entry<String, var>> keyValues() {
+    public Stream<Map.Entry<String, var>> kvStream() {
         return Collections.<String, var>emptyMap().entrySet().stream();
     }
 
     @Override
-    public Stream<String> $keys() {
+    public Stream<String> keyStream() {
         return Collections.<String>emptyList().stream();
     }
 
@@ -198,112 +223,122 @@ public class DollarNull extends AbstractDollar implements var {
         return false;
     }
 
+    @NotNull
     @Override
     public var remove(Object value) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var rm(String value) {
+    public var $rm(@NotNull String value) {
         return this;
     }
 
-    @Override
-    public FutureDollar send(EventBus e, String destination) {
-        throw new NullPointerException();
-    }
 
-    @Override
-    public Map<String, var> split() {
-        return Collections.emptyMap();
-    }
 
+    @NotNull
     public List<String> splitValues() {
         return Collections.emptyList();
     }
 
+    @NotNull
     @Override
-    public Stream<var> stream() {
+    public Stream<var> $stream() {
         return Stream.empty();
     }
 
     @Override
-    public List<String> $strings() {
+    public List<String> strings() {
         return Collections.emptyList();
     }
 
+    @NotNull
     @Override
     public String toString() {
-        return "";
+        return "void";
     }
 
+    @NotNull
     @Override
-    public Map<String, var> map() {
+    public Map<String, var> $map() {
         return Collections.emptyMap();
     }
 
     @Override
-    public <R> R $val() {
+    public <R> R val() {
         return null;
     }
 
+    @NotNull
     @Override
-    public var eval(DollarEval lambda) {
+    public var eval(@NotNull DollarEval lambda) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var eval(Class clazz) {
+    public var eval(@NotNull Class clazz) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var eval(String js) {
+    public var $pipe(@NotNull String js) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var load(String location) {
+    public var $load(@NotNull String location) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var pipe(Class<? extends Script> clazz) {
+    public var $pipe(@NotNull Class<? extends Script> clazz) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var pipe(Function<var, var> function) {
+    public var $pipe(@NotNull Function<var, var> function) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var pop(String location, int timeoutInMillis) {
+    public var $pop(@NotNull String location, int timeoutInMillis) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var pub(String... locations) {
+    public var $pub(@NotNull String... locations) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var push(String location) {
+    public var $push(@NotNull String location) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var save(String location, int expiryInMilliseconds) {
+    public var $save(@NotNull String location, int expiryInMilliseconds) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var save(String location) {
+    public var $save(@NotNull String location) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var ifNull(Callable<var> handler) {
+    public var $null(@NotNull Callable<var> handler) {
         try {
             return handler.call();
         } catch (Exception e) {

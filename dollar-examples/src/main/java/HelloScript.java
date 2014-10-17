@@ -24,8 +24,8 @@ public class HelloScript extends Script {
                                 .$("postcode", "bn1 6jj")
                                 .$("number", 343)
                 );
-        profile.pipe(SecondScript.class).out();
-        profile.out();
+        profile.$pipe(SecondScript.class).$out();
+        profile.$out();
         System.out.println(args);
         System.out.println(a);
         System.out.println(in);

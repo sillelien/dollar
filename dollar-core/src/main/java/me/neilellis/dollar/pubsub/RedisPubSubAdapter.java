@@ -1,9 +1,10 @@
 package me.neilellis.dollar.pubsub;
 
-import me.neilellis.dollar.DollarFactory;
+import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.DollarFuture;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.JedisPubSub;
 
 import java.util.Collections;
@@ -16,6 +17,7 @@ import java.util.function.Consumer;
 public class RedisPubSubAdapter extends JedisPubSub implements Sub {
     private final Consumer<var> action;
     private DollarFuture future;
+    @NotNull
     private Semaphore lock = new Semaphore(1);
 
     public RedisPubSubAdapter(Consumer<var> lambda) {

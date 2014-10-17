@@ -45,15 +45,15 @@ public class DollarRedisTest {
 
     @Test
     public void testPushPop() {
-        profile.push("test.profile");
-        var deser = profile.pop("test.profile", 10 * 1000);
+        profile.$push("test.profile");
+        var deser = profile.$pop("test.profile", 10 * 1000);
         Assert.assertEquals(deser.$$(), profile.$$());
     }
 
     @Test
     public void testSet() throws InterruptedException {
-        assertTrue(profile.save("test.profile.set").equals(profile));
-        var deser = profile.load("test.profile.set");
+        assertTrue(profile.$save("test.profile.set").equals(profile));
+        var deser = profile.$load("test.profile.set");
         Assert.assertEquals(deser.$$(), profile.$$());
         Thread.sleep(2000);
         $dump();

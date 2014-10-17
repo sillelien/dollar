@@ -52,7 +52,7 @@ public class DollarPubSubTest {
         sub.await();
         System.out.println("Subbed");
         Thread.sleep(100);
-        profile.pub("test.pub");
+        profile.$pub("test.pub");
         Thread.sleep(100);
         sub.cancel();
         assertEquals(1, received[0]);

@@ -1,7 +1,8 @@
 package me.neilellis.dollar.store;
 
-import me.neilellis.dollar.DollarFactory;
+import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Jedis;
 
 import java.util.Collections;
@@ -12,8 +13,10 @@ import java.util.List;
  */
 public class RedisStore implements DollarStore {
 
+    @NotNull
     private Jedis jedis = new Jedis(System.getProperty("dollar.redis", "localhost"));
 
+    @NotNull
     @Override
     public var get(String location) {
         String value;
@@ -26,6 +29,7 @@ public class RedisStore implements DollarStore {
 
     }
 
+    @NotNull
     @Override
     public var pop(String location, int timeoutInMillis) {
         List<String> value;
@@ -38,17 +42,17 @@ public class RedisStore implements DollarStore {
     }
 
     @Override
-    public void push(String location, var value) {
+    public void push(String location, @NotNull var value) {
         jedis.rpush(location, value.$$());
     }
 
     @Override
-    public void set(String location, var value) {
+    public void set(String location, @NotNull var value) {
         jedis.set(location, value.$$());
     }
 
     @Override
-    public void set(String location, var value, int expiryInMilliseconds) {
+    public void set(String location, @NotNull var value, int expiryInMilliseconds) {
         jedis.set(location, value.$$());
     }
 

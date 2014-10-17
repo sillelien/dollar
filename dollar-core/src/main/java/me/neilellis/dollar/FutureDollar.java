@@ -16,6 +16,8 @@
 
 package me.neilellis.dollar;
 
+import me.neilellis.dollar.types.DollarVoid;
+import org.jetbrains.annotations.NotNull;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
 
@@ -29,6 +31,7 @@ import java.util.function.Function;
 public class FutureDollar<T> {
 
     private var requestDollar;
+    @NotNull
     private CompletableFuture<var> response = new CompletableFuture<>();
 
 
@@ -45,7 +48,7 @@ public class FutureDollar<T> {
         return requestDollar;
     }
 
-    public var then(Function<var, Void> handler) throws ExecutionException, InterruptedException {
+    public var then(@NotNull Function<var, Void> handler) throws ExecutionException, InterruptedException {
         handler.apply(response.get());
         return response.get();
     }
@@ -55,7 +58,7 @@ public class FutureDollar<T> {
             return response.get();
         } catch (InterruptedException e) {
             e.printStackTrace();
-            return DollarNull.INSTANCE;
+            return DollarVoid.INSTANCE;
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }

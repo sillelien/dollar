@@ -16,8 +16,10 @@
 
 package me.neilellis.dollar;
 
+import com.google.common.collect.ImmutableList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
-import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.json.JsonObject;
 
 import java.util.HashMap;
@@ -31,7 +33,7 @@ import java.util.stream.Stream;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface var extends Map<String,var> {
+public interface var extends Map<String, var> {
 
     static Map<String, String> config = new HashMap<String, String>();
 
@@ -43,65 +45,17 @@ public interface var extends Map<String,var> {
         return config.get(s);
     }
 
+    @NotNull
     var $(String age, long l);
 
-    String $$(String key);
+    @NotNull
+    var $add(Object value);
 
-    Integer $int();
+    @NotNull
+    java.util.stream.Stream<var> $children();
 
-    /**
-     * Returns the value for the supplied key as an Integer.
-     *
-     * @param key the key
-     * @return an Integer value (or null).
-     */
-    Integer $int(String key);
-
-    /**
-     * Convert this to a Vert.x JsonObject
-     *
-     * @return this as a JsonObject
-     */
-    JsonObject $json();
-
-    /**
-     * Equivalent returns a Vert.x JsonObject child object value for the supplied key.
-     *
-     * @param key the key
-     * @return a JsonObject
-     */
-    JsonObject $json(String key);
-
-    List<var> list();
-
-    /**
-     * Returns this JSON object as a set of nested maps.
-     *
-     * @return a nested Map
-     */
-    Map<String, Object> $map();
-
-    /**
-     * Returns the value for the supplied key as a general Number.
-     *
-     * @param key the key
-     * @return a Number
-     */
-    Number $number(String key);
-
-    /**
-     * Returns this JSON as a org.json.JSONObject, which can be used
-     * with none Vert.x APIs etc. This conversion is quite efficient.
-     *
-     * @return a JSONObject
-     */
-    JSONObject $orgjson();
-
-    var add(Object value);
-
-    java.util.stream.Stream<var> children();
-
-    java.util.stream.Stream children(String key);
+    @NotNull
+    java.util.stream.Stream<var> $children(@NotNull String key);
 
     /**
      * Returns a deep copy of this object, such that mutations to it
@@ -109,7 +63,142 @@ public interface var extends Map<String,var> {
      *
      * @return a deep copy of this
      */
-    var copy();
+    @NotNull
+    var $copy();
+
+    @NotNull
+    var $error(@NotNull String errorMessage);
+
+    @NotNull
+    var $error(@NotNull Throwable error);
+
+    @NotNull
+    var $error();
+
+    @NotNull
+    var $errors();
+
+    @NotNull
+    var $fail(@NotNull Consumer<List<Throwable>> handler);
+
+    /**
+     * Returns true if this JSON object has the supplied key.
+     *
+     * @param key the key
+     * @return true if the key exists.
+     */
+    boolean $has(@NotNull String key);
+
+    @NotNull
+    default var $invalid(@NotNull String errorMessage) {
+        return $error(errorMessage, ErrorType.VALIDATION);
+    }
+
+    @NotNull
+    var $error(@NotNull String errorMessage, @NotNull ErrorType type);
+
+    @NotNull
+    List<var> $list();
+
+    @NotNull
+    var $load(@NotNull String location);
+
+    @NotNull
+    Map<String, var> $map();
+
+    default boolean $match(@NotNull String key, @Nullable String value) {
+        return value != null && value.equals(string(key));
+    }
+
+    @Nullable
+    String string(@NotNull String key);
+
+    /**
+     * Returns the mime type of this {@link var} object. By default this will be 'application/json'
+     *
+     * @return the mime type associated with this object.
+     */
+    @NotNull
+    default String $mimeType() {
+        return "application/json";
+    }
+
+    boolean $null();
+
+    @NotNull
+    var $null(@NotNull Callable<var> handler);
+
+    /**
+     * Prints the $$() value of this {@link me.neilellis.dollar.var} to stdout.
+     */
+    default void $out() {
+        System.out.println($$());
+    }
+
+    default String $$() {
+        return toString();
+    }
+
+    @NotNull
+    @Override
+    String toString();
+
+    @NotNull
+    var $pipe(@NotNull String label, @NotNull String js);
+
+    @NotNull
+    var $pipe(@NotNull String js);
+
+    @NotNull
+    var $pipe(@NotNull Class<? extends Script> clazz);
+
+    @NotNull
+    var $pipe(@NotNull Function<var, var> function);
+
+    @NotNull
+    var $pop(@NotNull String location, int timeoutInMillis);
+
+    @NotNull
+    var $pub(@NotNull String... locations);
+
+    @NotNull
+    var $push(@NotNull String location);
+
+    /**
+     * Remove by key. (Map like data only).
+     *
+     * @param key the key of the key/value pair to remove
+     * @return the modified var
+     */
+    @NotNull
+    var $rm(@NotNull String key);
+
+    @NotNull
+    var $save(@NotNull String location);
+
+    @NotNull
+    var $save(@NotNull String location, int expiryInMilliseconds);
+
+    @NotNull
+    default var $set(@NotNull String key, @Nullable Object value) {
+        return $(key, value);
+    }
+
+    @NotNull
+    var $(@NotNull String key, @Nullable Object value);
+
+    @NotNull
+    Stream<var> $stream();
+
+    @NotNull
+    default var _unwrap() {
+        return this;
+    }
+
+    void clearErrors();
+
+    @NotNull
+    var copy(@NotNull ImmutableList<Throwable> errors);
 
     /**
      * URL decode.
@@ -119,19 +208,16 @@ public interface var extends Map<String,var> {
     @Deprecated
     var decode();
 
+
     default void err() {
         System.err.println($$());
     }
 
-    default String $$() {
-        return toString();
-    }
+    @NotNull
+    List<String> errorTexts();
 
-    @Deprecated
-    var eval(String label, String js);
-
-    @Deprecated
-    var eval(String js);
+    @NotNull
+    List<Throwable> errors();
 
     @Deprecated
     var eval(String label, DollarEval eval);
@@ -146,133 +232,111 @@ public interface var extends Map<String,var> {
      * NB: This is the preferred way to pass values between classes as it preserves the stateless nature.
      * Try where possible to maintain a stateless context to execution.
      * </p>
+     *
      * @param clazz the class to pass this to.
      */
     @Deprecated
     var eval(Class clazz);
 
-    default var get(Object key) {
+    @NotNull
+    default var get(@NotNull Object key) {
         return $(String.valueOf(key));
     }
 
-    var $(String key);
+    @NotNull
+    var $(@NotNull String key);
+
+    boolean hasErrors();
+
+    @Nullable
+    Integer integer();
 
     /**
-     * Returns true if this JSON object has the supplied key.
+     * Returns the value for the supplied key as an Integer.
      *
      * @param key the key
-     * @return true if the key exists.
+     * @return an Integer value (or null).
      */
-    boolean has(String key);
+    @Nullable
+    Integer integer(@NotNull String key);
 
-    boolean isNull();
+    /**
+     * Convert this to a Vert.x JsonObject
+     *
+     * @return this as a JsonObject
+     */
+    @Nullable
+    JsonObject json();
 
-    java.util.stream.Stream<Map.Entry<String, var>> keyValues();
+    /**
+     * Equivalent returns a Vert.x JsonObject child object value for the supplied key.
+     *
+     * @param key the key
+     * @return a JsonObject
+     */
+    @Nullable
+    JsonObject json(@NotNull String key);
 
-    java.util.stream.Stream<String> $keys();
+    @Nullable
+    Stream<String> keyStream();
 
-    String $mimeType();
+    /**
+     * Returns this {@link me.neilellis.dollar.var} object as a stream of key value pairs, with the values themselves being {@link me.neilellis.dollar.var} objects.
+     *
+     * @return stream of key/value pairs
+     */
 
-    default void out() {
-        System.out.println($$());
-    }
+    @Nullable
+    java.util.stream.Stream<Map.Entry<String, var>> kvStream();
 
-    var remove(Object value);
+    /**
+     * Returns the value for the supplied key as a general Number.
+     *
+     * @param key the key
+     * @return a Number
+     */
+    @Nullable
+    Number number(@NotNull String key);
 
-    var rm(String value);
+    /**
+     * Returns this JSON as a org.json.JSONObject, which can be used
+     * with none Vert.x APIs etc. This conversion is quite efficient.
+     *
+     * @return a JSONObject
+     */
+    @Nullable
+    JSONObject orgjson();
 
-    @Deprecated
-    FutureDollar send(EventBus e, String destination);
+    @Nullable
+    List<String> strings();
 
-    default var set(String key, Object value) {
-        return $(key, value);
-    }
+    /**
+     * Returns this JSON object as a set of nested maps.
+     *
+     * @return a nested Map
+     */
+    @Nullable
+    Map<String, Object> toMap();
 
-    var $(String key, Object value);
-
-    Map<String, var> split();
-
-    Stream<var> stream();
-
-    List<String> $strings();
-
-    @Override
-    String toString();
-
-    default var _unwrap() {
-        return this;
-    }
-
-    Map<String, var> map();
-
-    default <R> R $val() {
+    /**
+     * Returns the underlying data structure. This method is useful for the rare cases you need direct access to the underlying Java type. However it is virtually always better to use $() which returns it in a JSON friendly manner.
+     *
+     * @param <R> the return type expected
+     * @return the underlying Java data structure.
+     */
+    @Nullable
+    default <R> R val() {
         return $();
     }
 
     /**
-     * Returns the wrapped object.
+     * Returns a {@link org.vertx.java.core.json.JsonObject}, JsonArray or primitive type such that it can be added to either a {@link org.vertx.java.core.json.JsonObject} or JsonArray.
      *
-     * @return the wrapped object
+     * @return a Json friendly object.
      */
+    @NotNull
     <R> R $();
 
-    var copy(List<Throwable> errors);
-
-    //Matching
-
-    default boolean $match(String key, String value) {
-        return value != null && value.equals($$(key));
-    }
-
-    
-    //Error Handling
-
-    enum ErrorType {VALIDATION,SYSTEM}
-
-    default var invalid(String errorMessage) {
-      return error(errorMessage,ErrorType.VALIDATION);
-    }
-
-    var error(String errorMessage, ErrorType type);
-
-    var error(String errorMessage);
-
-    var error(Throwable error);
-
-    var error();
-
-    boolean hasErrors();
-
-    List<String> $errorTexts();
-
-    List<Throwable> $errors();
-
-    void clearErrors();
-
-    var errors();
-
-    var fail(Consumer<List<Throwable>> handler);
-
-    var ifNull(Callable<var> handler);
-
-
-
-    //services
-
-    var pipe(Class<? extends Script> clazz);
-
-    var pipe(Function<var,var> function);
-
-    var pop(String location, int timeoutInMillis);
-
-    var pub(String... locations);
-
-    var push(String location);
-
-    var save(String location);
-
-    var save(String location, int expiryInMilliseconds);
-
-    var load(String location);
+    enum ErrorType {VALIDATION, SYSTEM}
 
 }
