@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -46,6 +47,11 @@ public class DollarFuture implements var {
     @Override
     public <R> R $() {
         return getValue().$();
+    }
+
+    @Override
+    public var error(String errorMessage, ErrorType type) {
+        return getValue().error(errorMessage,type);
     }
 
     @Override
@@ -254,6 +260,11 @@ public class DollarFuture implements var {
     }
 
     @Override
+    public var errors() {
+        return getValue().errors();
+    }
+
+    @Override
     public String $mimeType() {
         return getValue().$mimeType();
     }
@@ -409,6 +420,11 @@ public class DollarFuture implements var {
     @Override
     public var fail(Consumer<List<Throwable>> handler) {
         return getValue().fail(handler);
+    }
+
+    @Override
+    public var ifNull(Callable<var> handler) {
+        return getValue().ifNull(handler);
     }
 
     @Override

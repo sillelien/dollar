@@ -9,7 +9,6 @@ import org.vertx.java.core.json.JsonObject;
 import spark.Spark;
 import spark.route.HttpMethod;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
@@ -111,6 +110,18 @@ public class DollarStatic {
         return jsonObject;
     }
 
+    static JsonObject paramMapToJson(Map<String,String[]> map) {
+        JsonObject jsonObject = new JsonObject();
+        for (Map.Entry<String, String[]> entry : map.entrySet()) {
+            if(entry.getValue().length == 1) {
+                jsonObject.putString(entry.getKey(),entry.getValue()[0]);
+            } else {
+                jsonObject.putArray(entry.getKey(), new JsonArray(entry.getValue()));
+            }
+        }
+        return jsonObject;
+    }
+
     public static DollarHttp $DELETE(String path, DollarHttpHandler handler) {
         return new DollarHttp(HttpMethod.delete.name(), path, handler);
     }
@@ -159,7 +170,7 @@ public class DollarStatic {
         try {
             return call.call();
         } catch (Exception e) {
-            throw new DollarException(e);
+            return handleError(e);
         } finally {
             threadContext.remove();
         }
@@ -316,5 +327,9 @@ public class DollarStatic {
 
     public static void label(String label) {
         context().pushLabel(label);
+    }
+
+    public static ErrorLogger errorLogger() {
+        return new SimpleErrorLogger();
     }
 }

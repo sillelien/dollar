@@ -1,6 +1,10 @@
 package me.neilellis.dollar;
 
+import com.google.common.hash.Hashing;
+import me.neilellis.dollar.exceptions.ValidationException;
 import org.vertx.java.core.eventbus.EventBus;
+import org.vertx.java.core.json.JsonArray;
+import org.vertx.java.core.json.JsonObject;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -8,6 +12,7 @@ import javax.script.SimpleScriptContext;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -102,6 +107,26 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
+    public var errors() {
+        JsonObject json= new JsonObject();
+        if(errors.size() > 0) {
+            if(errors.get(0) instanceof DollarException) {
+                json.putNumber("httpCode",((DollarException) errors.get(0)).httpCode());
+            }
+            json.putString("message", errors.get(0).getMessage());
+            JsonArray errorArray = new JsonArray();
+            for (Throwable error : errors) {
+                JsonObject errorJson = new JsonObject();
+                errorJson.putString("message", error.getMessage());
+                errorJson.putString("hash", Hashing.sha1().hashBytes(Arrays.toString(error.getStackTrace()).getBytes()).toString());
+                errorArray.addObject(errorJson);
+            }
+            json.putArray("errors", errorArray);
+        }
+        return DollarFactory.fromValue(json);
+    }
+
+    @Override
     public String $mimeType() {
         return "text/plain";
     }
@@ -122,7 +147,11 @@ public abstract class AbstractDollar implements var {
 
     @Override
     public var pipe(Function<var, var> function) {
-        return function.apply(this);
+        var result = function.apply(this);
+        if(result == null) {
+            return this;
+        }
+        return result;
     }
 
     @Override
@@ -163,6 +192,18 @@ public abstract class AbstractDollar implements var {
     @Override
     public Stream<var> stream() {
         return list().stream();
+    }
+
+    @Override
+    public var error(String errorMessage, ErrorType type) {
+        switch (type) {
+            case SYSTEM:
+                return error(new DollarException(errorMessage));
+            case VALIDATION:
+                 return error(new ValidationException(errorMessage));
+            default:
+                return error(errorMessage);
+        }
     }
 
     @Override
@@ -211,6 +252,11 @@ public abstract class AbstractDollar implements var {
         } else {
             return this;
         }
+    }
+
+    @Override
+    public var ifNull(Callable<var> handler) {
+        return this;
     }
 
 

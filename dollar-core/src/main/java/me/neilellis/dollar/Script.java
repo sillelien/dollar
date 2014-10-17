@@ -13,6 +13,7 @@ public class Script extends DollarStatic {
     public static Class<? extends Script> $THIS;
     protected static List<String> args;
     private static Script $this;
+
     protected var in = DollarStatic.threadContext.get() != null ? DollarStatic.threadContext.get().getPassValue() : $();
     protected var out;
 
@@ -29,6 +30,6 @@ public class Script extends DollarStatic {
 
 
     public var result() {
-        return out;
+        return out != null ? out : in;
     }
 }

@@ -23,6 +23,7 @@ import org.vertx.java.core.json.JsonObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -215,8 +216,24 @@ public interface var extends Map<String,var> {
      */
     <R> R $();
 
+    var copy(List<Throwable> errors);
 
+    //Matching
+
+    default boolean $match(String key, String value) {
+        return value != null && value.equals($$(key));
+    }
+
+    
     //Error Handling
+
+    enum ErrorType {VALIDATION,SYSTEM}
+
+    default var invalid(String errorMessage) {
+      return error(errorMessage,ErrorType.VALIDATION);
+    }
+
+    var error(String errorMessage, ErrorType type);
 
     var error(String errorMessage);
 
@@ -232,9 +249,13 @@ public interface var extends Map<String,var> {
 
     void clearErrors();
 
+    var errors();
+
     var fail(Consumer<List<Throwable>> handler);
 
-    var copy(List<Throwable> errors);
+    var ifNull(Callable<var> handler);
+
+
 
     //services
 

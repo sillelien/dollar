@@ -7,4 +7,12 @@ public class DollarException extends RuntimeException {
     public DollarException(Throwable e) {
         super(e);
     }
+
+    public DollarException(String errorMessage) {
+        super(errorMessage);
+    }
+
+    public int httpCode() {
+        return 500;
+    }
 }

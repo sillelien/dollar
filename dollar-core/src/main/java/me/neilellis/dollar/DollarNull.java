@@ -23,6 +23,8 @@ import org.vertx.java.core.json.JsonObject;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -300,5 +302,12 @@ public class DollarNull extends AbstractDollar implements var {
         return this;
     }
 
-
+    @Override
+    public var ifNull(Callable<var> handler) {
+        try {
+            return handler.call();
+        } catch (Exception e) {
+            return DollarStatic.handleError(e);
+        }
+    }
 }

@@ -6,6 +6,7 @@ import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.json.JsonObject;
 
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -23,13 +24,15 @@ public class DollarWrapper implements var {
 
     private Monitor monitor;
     private StateTracer tracer;
+    private ErrorLogger errorLogger;
     private var value;
 
-    public DollarWrapper(var value, Monitor monitor, StateTracer tracer) {
+    public DollarWrapper(var value, Monitor monitor, StateTracer tracer, ErrorLogger errorLogger) {
 //        tracer.trace(DollarNull.INSTANCE,value, StateTracer.Operations.CREATE);
         this.value = value;
         this.monitor = monitor;
         this.tracer = tracer;
+        this.errorLogger = errorLogger;
     }
 
     public static void config(String key, String value) {
@@ -62,6 +65,12 @@ public class DollarWrapper implements var {
     @Override
     public <R> R $() {
         return getValue().$();
+    }
+
+    @Override
+    public var error(String errorMessage, ErrorType type) {
+        errorLogger.log(errorMessage,type);
+        return getValue().error(errorMessage,type);
     }
 
     @Override
@@ -270,6 +279,11 @@ public class DollarWrapper implements var {
     }
 
     @Override
+    public var errors() {
+        return getValue().errors();
+    }
+
+    @Override
     public String $mimeType() {
         return getValue().$mimeType();
     }
@@ -379,16 +393,19 @@ public class DollarWrapper implements var {
 
     @Override
     public var error(String errorMessage) {
+        errorLogger.log(errorMessage);
         return getValue().error(errorMessage);
     }
 
     @Override
     public var error(Throwable error) {
+        errorLogger.log(error);
         return getValue().error(error);
     }
 
     @Override
     public var error() {
+        errorLogger.log();
         return getValue().error();
     }
 
@@ -415,6 +432,11 @@ public class DollarWrapper implements var {
     @Override
     public var fail(Consumer<List<Throwable>> handler) {
         return getValue().fail(handler);
+    }
+
+    @Override
+    public var ifNull(Callable<var> handler) {
+        return getValue().ifNull(handler);
     }
 
     @Override
