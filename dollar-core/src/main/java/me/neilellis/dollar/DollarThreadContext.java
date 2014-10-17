@@ -1,12 +1,28 @@
+/*
+ * Copyright (c) 2014 Neil Ellis
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package me.neilellis.dollar;
 
+import com.codahale.metrics.MetricRegistry;
 import me.neilellis.dollar.monitor.DefaultMonitor;
 import me.neilellis.dollar.monitor.Monitor;
 import me.neilellis.dollar.pubsub.DollarPubSub;
 import me.neilellis.dollar.pubsub.RedisPubSub;
 import me.neilellis.dollar.store.DollarStore;
 import me.neilellis.dollar.store.RedisStore;
-import com.codahale.metrics.MetricRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -37,6 +53,16 @@ public class DollarThreadContext {
 
     public DollarThreadContext() {
 
+    }
+
+    @NotNull
+    public DollarThreadContext child() {
+        return child(UUID.randomUUID().toString());
+    }
+
+    @NotNull
+    public DollarThreadContext child(String s) {
+        return new DollarThreadContext(new ArrayList<>(labels), monitor, passValue, pubsub, store, threadKey + ":" + s);
     }
 
     public List<String> getLabels() {
@@ -101,15 +127,5 @@ public class DollarThreadContext {
 
     public void pushLabel(String label) {
         labels.add(label);
-    }
-
-    @NotNull
-    public DollarThreadContext child() {
-       return child(UUID.randomUUID().toString());
-    }
-
-    @NotNull
-    public DollarThreadContext child(String s) {
-        return new DollarThreadContext(new ArrayList<>(labels), monitor, passValue, pubsub, store, threadKey + ":" + s);
     }
 }

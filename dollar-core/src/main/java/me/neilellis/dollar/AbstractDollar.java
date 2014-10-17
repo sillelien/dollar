@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2014 Neil Ellis
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package me.neilellis.dollar;
 
 import com.google.common.collect.ImmutableList;
@@ -84,24 +100,19 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var eval(@NotNull DollarEval lambda) {
-        return eval("anon", lambda);
+    public var put(@NotNull String key, var value) {
+        return $(key, value);
     }
 
     @NotNull
     @Override
-    public var put(@NotNull String key, var value) {
-        return $(key, value);
+    public var eval(@NotNull DollarEval lambda) {
+        return eval("anon", lambda);
     }
 
     @Override
     public void putAll(Map<? extends String, ? extends var> m) {
         throw new UnsupportedOperationException();
-    }
-
-    @NotNull
-    public var eval(String label, @NotNull DollarEval lambda) {
-        return lambda.eval($copy());
     }
 
     @Override
@@ -113,6 +124,29 @@ public abstract class AbstractDollar implements var {
     @Override
     public Set<String> keySet() {
         return keyStream().collect(Collectors.toSet());
+    }
+
+    @NotNull
+    public var eval(String label, @NotNull DollarEval lambda) {
+        return lambda.eval($copy());
+    }
+
+    @NotNull
+    @Override
+    public Collection<var> values() {
+        return $list();
+    }
+
+    @NotNull
+    @Override
+    public Set<Entry<String, var>> entrySet() {
+        return kvStream().collect(Collectors.toSet());
+    }
+
+    @NotNull
+    @Override
+    public var getOrDefault(@NotNull Object key, @NotNull var defaultValue) {
+        return $has(String.valueOf(key)) ? get(key) : defaultValue;
     }
 
     @NotNull
@@ -144,16 +178,20 @@ public abstract class AbstractDollar implements var {
         }
     }
 
-    @NotNull
     @Override
-    public Collection<var> values() {
-        return $list();
+    public void forEach(@NotNull BiConsumer<? super String, ? super var> action) {
+        $map().forEach(action);
+    }
+
+    @Override
+    public void replaceAll(BiFunction<? super String, ? super var, ? extends var> function) {
+        throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public Set<Entry<String, var>> entrySet() {
-        return kvStream().collect(Collectors.toSet());
+    public var putIfAbsent(String key, var value) {
+        throw new UnsupportedOperationException();
     }
 
     @NotNull
@@ -162,15 +200,20 @@ public abstract class AbstractDollar implements var {
         return $pipe("anon", js);
     }
 
-    @NotNull
     @Override
-    public var getOrDefault(@NotNull Object key, @NotNull var defaultValue) {
-        return $has(String.valueOf(key)) ? get(key) : defaultValue;
+    public boolean remove(Object key, Object value) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void forEach(@NotNull BiConsumer<? super String, ? super var> action) {
-        $map().forEach(action);
+    public boolean replace(String key, var oldValue, var newValue) {
+        throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    @Override
+    public var replace(String key, var value) {
+        throw new UnsupportedOperationException();
     }
 
     @NotNull
@@ -187,19 +230,25 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public void replaceAll(BiFunction<? super String, ? super var, ? extends var> function) {
-        throw new UnsupportedOperationException();
-    }
-
-    @NotNull
-    @Override
-    public var putIfAbsent(String key, var value) {
-        throw new UnsupportedOperationException();
+    public var computeIfAbsent(String key, @NotNull Function<? super String, ? extends var> mappingFunction) {
+        return $map().computeIfAbsent(key, mappingFunction);
     }
 
     @Override
-    public boolean remove(Object key, Object value) {
-        throw new UnsupportedOperationException();
+    public var computeIfPresent(String key,
+                                @NotNull BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
+        return $map().computeIfPresent(key, remappingFunction);
+    }
+
+    @Override
+    public var compute(String key, @NotNull BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
+        return $map().compute(key, remappingFunction);
+    }
+
+    @Override
+    public var merge(String key, @NotNull var value,
+                     @NotNull BiFunction<? super var, ? super var, ? extends var> remappingFunction) {
+        return $map().merge(key, value, remappingFunction);
     }
 
     @NotNull
@@ -208,15 +257,19 @@ public abstract class AbstractDollar implements var {
         return DollarStatic.context().getStore().get(location);
     }
 
-    @Override
-    public boolean replace(String key, var oldValue, var newValue) {
+    @NotNull
+    public FutureDollar send(EventBus e, String destination) {
         throw new UnsupportedOperationException();
+
     }
 
     @NotNull
-    @Override
-    public var replace(String key, var value) {
-        throw new UnsupportedOperationException();
+    protected JsonArray $array() {
+        JsonArray array = new JsonArray();
+        for (me.neilellis.dollar.var var : $list()) {
+            array.add(var.$());
+        }
+        return array;
     }
 
     @NotNull
@@ -240,16 +293,6 @@ public abstract class AbstractDollar implements var {
         return DollarFactory.fromValue(json);
     }
 
-    @Override
-    public var computeIfAbsent(String key, @NotNull Function<? super String, ? extends var> mappingFunction) {
-        return $map().computeIfAbsent(key, mappingFunction);
-    }
-
-    @Override
-    public var computeIfPresent(String key,
-                                @NotNull BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
-        return $map().computeIfPresent(key, remappingFunction);
-    }
 
     @NotNull
     @Override
@@ -257,16 +300,6 @@ public abstract class AbstractDollar implements var {
         return "text/plain";
     }
 
-    @Override
-    public var compute(String key, @NotNull BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
-        return $map().compute(key, remappingFunction);
-    }
-
-    @Override
-    public var merge(String key, @NotNull var value,
-                     @NotNull BiFunction<? super var, ? super var, ? extends var> remappingFunction) {
-        return $map().merge(key, value, remappingFunction);
-    }
 
     @NotNull
     @Override
@@ -283,20 +316,6 @@ public abstract class AbstractDollar implements var {
         return script.result();
     }
 
-    @NotNull
-    public FutureDollar send(EventBus e, String destination) {
-        throw new UnsupportedOperationException();
-
-    }
-
-    @NotNull
-    protected JsonArray $array() {
-        JsonArray array = new JsonArray();
-        for (me.neilellis.dollar.var var : $list()) {
-            array.add(var.$());
-        }
-        return array;
-    }
 
     @NotNull
     @Override
