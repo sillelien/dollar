@@ -20,8 +20,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.vertx.java.core.json.JsonArray;
 
-import static me.neilellis.dollar.DollarStatic.$list;
 import static junit.framework.TestCase.assertTrue;
+import static me.neilellis.dollar.DollarStatic.$list;
 import static org.junit.Assert.assertEquals;
 
 public class DollarArrayTest {
@@ -34,10 +34,10 @@ public class DollarArrayTest {
 
     @Test
     public void testBasics() {
-        assertEquals(list, $list("Neil").$add("Dimple").$add("Charlie"));
-        assertEquals(list.remove("Neil"), $list("Dimple").$add("Charlie"));
-        assertEquals(list.remove("Dimple"), $list("Neil").$add("Charlie"));
-        assertEquals(list.remove("Charlie"), $list("Neil").$add("Dimple"));
+        assertEquals(list, $list("Neil").$append("Dimple").$append("Charlie"));
+        assertEquals(list.remove("Neil"), $list("Dimple").$append("Charlie"));
+        assertEquals(list.remove("Dimple"), $list("Neil").$append("Charlie"));
+        assertEquals(list.remove("Charlie"), $list("Neil").$append("Dimple"));
         Object value = list.$();
         assertEquals(JsonArray.class, value.getClass());
         assertEquals("[\"Neil\",\"Dimple\",\"Charlie\"]", list.toString());

@@ -70,7 +70,7 @@ public class DollarStatic {
     public static var $(@NotNull var... values) {
         var v = $();
         for (var value : values) {
-            v = v.$add(value);
+            v = v.$append(value);
         }
         return v;
     }
@@ -84,7 +84,7 @@ public class DollarStatic {
     public static var $(@NotNull String name, @NotNull var... values) {
         var v = $();
         for (var value : values) {
-            v = v.$add(value);
+            v = v.$append(value);
         }
         return $(name, v);
     }
@@ -115,6 +115,11 @@ public class DollarStatic {
 
     public static var $(@Nullable Object o) {
         return DollarStatic.tracer().trace(DollarVoid.INSTANCE, DollarFactory.fromValue(Collections.emptyList(), o), StateTracer.Operations.CREATE, o == null ? "null" : o.getClass().getName());
+    }
+
+    @NotNull
+    public static StateTracer tracer() {
+        return new SimpleLogStateTracer();
     }
 
     public static Monitor monitor() {
@@ -201,6 +206,18 @@ public class DollarStatic {
         } finally {
             threadContext.remove();
         }
+    }
+
+    @NotNull
+    public static var handleError(@NotNull Throwable throwable) {
+        log(throwable.getMessage());
+        throwable.printStackTrace();
+        return DollarFactory.failure(throwable);
+
+    }
+
+    public static void log(String message) {
+        System.out.println(threadContext.get().getLabels().toString() + ":" + message);
     }
 
     public static void $dump() {
@@ -312,10 +329,6 @@ public class DollarStatic {
         return $();
     }
 
-    public static void log(String message) {
-        System.out.println(threadContext.get().getLabels().toString() + ":" + message);
-    }
-
     public static void log(Object message) {
         System.out.println(threadContext.get().getLabels().toString() + ":" + message);
     }
@@ -326,15 +339,6 @@ public class DollarStatic {
 
     public static void stopHttpServer() {
         Spark.stop();
-    }
-
-    @NotNull
-    public static StateTracer tracer() {
-        return new SimpleLogStateTracer();
-    }
-
-    public static DollarThreadContext context() {
-        return threadContext.get();
     }
 
     @NotNull
@@ -351,7 +355,7 @@ public class DollarStatic {
     }
 
     @NotNull
-    public static <R> R handleError(@NotNull Throwable throwable) {
+    public static <R> R logAndRethrow(@NotNull Throwable throwable) {
         log(throwable.getMessage());
         throwable.printStackTrace();
         if (throwable instanceof DollarException) {
@@ -359,6 +363,7 @@ public class DollarStatic {
         } else {
             throw new DollarException(throwable);
         }
+
 
     }
 
@@ -369,6 +374,10 @@ public class DollarStatic {
 
     public static void label(String label) {
         context().pushLabel(label);
+    }
+
+    public static DollarThreadContext context() {
+        return threadContext.get();
     }
 
     @NotNull

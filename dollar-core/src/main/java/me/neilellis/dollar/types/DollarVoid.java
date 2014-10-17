@@ -16,7 +16,10 @@
 
 package me.neilellis.dollar.types;
 
-import me.neilellis.dollar.*;
+import me.neilellis.dollar.AbstractDollar;
+import me.neilellis.dollar.DollarEval;
+import me.neilellis.dollar.Script;
+import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
@@ -26,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -63,87 +65,13 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $(String age, long l) {
+    public var $(@NotNull String age, long l) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $(@NotNull String key) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull String key, Object value) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public <R> R $() {
-        return (R) new JsonObject();
-    }
-
-    @NotNull
-    @Override
-    public String string(@NotNull String key) {
-        return "";
-    }
-
-    @NotNull
-    @Override
-    public String $$() {
-        return "";
-    }
-
-    @Override
-    public Integer integer() {
-        return 0;
-    }
-
-    @Override
-    public Integer integer(@NotNull String key) {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public JsonObject json() {
-        return new JsonObject();
-    }
-
-    @NotNull
-    @Override
-    public JsonObject json(@NotNull String key) {
-        return new JsonObject();
-    }
-
-    @NotNull
-    @Override
-    public List<var> $list() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public Map<String, Object> toMap() {
-        return Collections.emptyMap();
-    }
-
-    @Override
-    public Number number(@NotNull String key) {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public JSONObject orgjson() {
-        return new JSONObject();
-    }
-
-    @NotNull
-    @Override
-    public var $add(Object value) {
+    public var $append(Object value) {
         return this;
     }
 
@@ -159,74 +87,32 @@ public class DollarVoid extends AbstractDollar implements var {
         return Collections.emptyList().stream();
     }
 
-    @NotNull
-    @Override
-    public DollarVoid $copy() {
-        return new DollarVoid(new ArrayList<>(errors()));
-    }
-
-    @NotNull
-    @Override
-    public var decode() {
-        return this;
-    }
-
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        return (obj instanceof var && ((var) obj).val() == null) || obj == null;
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull String js, @NotNull String label) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var eval(String label, @NotNull DollarEval lambda) {
-        return this;
-    }
-
     @Override
     public boolean $has(@NotNull String key) {
         return false;
     }
 
+    @NotNull
     @Override
-    public int hashCode() {
-        return 0;
-    }
-
-    @Override
-    public boolean $null() {
-        return true;
-    }
-
-    @Override
-    public Stream<Map.Entry<String, var>> kvStream() {
-        return Collections.<String, var>emptyMap().entrySet().stream();
-    }
-
-    @Override
-    public Stream<String> keyStream() {
-        return Collections.<String>emptyList().stream();
-    }
-
-    @Override
-    public int size() {
-        return 0;
-    }
-
-    @Override
-    public boolean containsValue(Object value) {
-        return false;
+    public List<var> $list() {
+        return Collections.emptyList();
     }
 
     @NotNull
     @Override
-    public var remove(Object value) {
-        return this;
+    public Map<String, var> $map() {
+        return Collections.emptyMap();
+    }
+
+    @NotNull
+    @Override
+    public String string(@NotNull String key) {
+        return "";
+    }
+
+    @Override
+    public boolean $void() {
+        return true;
     }
 
     @NotNull
@@ -235,17 +121,60 @@ public class DollarVoid extends AbstractDollar implements var {
         return this;
     }
 
-
-
     @NotNull
-    public List<String> splitValues() {
-        return Collections.emptyList();
+    @Override
+    public var $(@NotNull String key, Object value) {
+        return this;
+    }
+
+    @Override
+    public Integer I() {
+        return 0;
+    }
+
+    @Override
+    public Integer I(@NotNull String key) {
+        return 0;
     }
 
     @NotNull
     @Override
-    public Stream<var> $stream() {
-        return Stream.empty();
+    public var decode() {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $(@NotNull String key) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public JsonObject json() {
+        return new JsonObject();
+    }
+
+    @NotNull
+    @Override
+    public JsonObject json(@NotNull String key) {
+        return new JsonObject();
+    }
+
+    @Override
+    public Stream<String> keyStream() {
+        return Collections.<String>emptyList().stream();
+    }
+
+    @Override
+    public Number number(@NotNull String key) {
+        return 0;
+    }
+
+    @NotNull
+    @Override
+    public JSONObject orgjson() {
+        return new JSONObject();
     }
 
     @Override
@@ -253,15 +182,8 @@ public class DollarVoid extends AbstractDollar implements var {
         return Collections.emptyList();
     }
 
-    @NotNull
     @Override
-    public String toString() {
-        return "void";
-    }
-
-    @NotNull
-    @Override
-    public Map<String, var> $map() {
+    public Map<String, Object> toMap() {
         return Collections.emptyMap();
     }
 
@@ -272,7 +194,24 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
+    public <R> R $() {
+        return (R) new JsonObject();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return (obj instanceof var && ((var) obj).val() == null) || obj == null;
+    }
+
+    @NotNull
+    @Override
     public var eval(@NotNull DollarEval lambda) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var eval(String label, @NotNull DollarEval lambda) {
         return this;
     }
 
@@ -286,6 +225,17 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public var $pipe(@NotNull String js) {
         return this;
+    }
+
+    @NotNull
+    @Override
+    public var $pipe(@NotNull String js, @NotNull String label) {
+        return this;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
     }
 
     @NotNull
@@ -336,13 +286,48 @@ public class DollarVoid extends AbstractDollar implements var {
         return this;
     }
 
+    @Override
+    public Stream<Map.Entry<String, var>> kvStream() {
+        return Collections.<String, var>emptyMap().entrySet().stream();
+    }
+
     @NotNull
     @Override
-    public var $null(@NotNull Callable<var> handler) {
-        try {
-            return handler.call();
-        } catch (Exception e) {
-            return DollarStatic.handleError(e);
-        }
+    public Stream<var> $stream() {
+        return Stream.empty();
     }
+
+    @NotNull
+    @Override
+    public DollarVoid $copy() {
+        return new DollarVoid(new ArrayList<>(errors()));
+    }
+
+    @Override
+    public int size() {
+        return 0;
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public var remove(Object value) {
+        return this;
+    }
+
+    @NotNull
+    public List<String> splitValues() {
+        return Collections.emptyList();
+    }
+
+    @NotNull
+    @Override
+    public String toString() {
+        return "void";
+    }
+
 }

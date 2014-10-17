@@ -33,14 +33,8 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         super(errors,value);
     }
 
-    @NotNull
     @Override
-    public String $() {
-        return value;
-    }
-
-    @Override
-    public Integer integer() {
+    public Integer I() {
         return Integer.parseInt(value);
     }
 
@@ -49,8 +43,11 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return new BigDecimal(key);
     }
 
-
-
+    @NotNull
+    @Override
+    public String $() {
+        return value;
+    }
 
     @Override
     public boolean equals(@Nullable Object obj) {

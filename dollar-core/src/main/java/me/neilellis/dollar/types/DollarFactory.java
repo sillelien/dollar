@@ -140,4 +140,8 @@ public class DollarFactory {
     public static DollarWrapper wrap(var value, Monitor monitor, StateTracer tracer, ErrorLogger errorLogger) {
         return new DollarWrapper(value, monitor, tracer, errorLogger);
     }
+
+    public static var failure(Throwable throwable) {
+        return wrap(new DollarFail(Collections.singletonList(throwable), DollarFail.FailureType.EXCEPTION));
+    }
 }

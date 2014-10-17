@@ -23,9 +23,42 @@ public class DollarHttpContext {
         this.response = response;
     }
 
+    public void body(@NotNull var body) {
+        response.type(body.$mimeType());
+        response.body(body.S());
+    }
+
+    public void body(String body) {
+        response.body(body);
+    }
+
+    public String body() {
+        return response.body();
+    }
+
+    public void cookie(String name, String value, int maxAge) {
+        response.cookie(name, value, maxAge);
+    }
+
+    public void cookie(String name, String value, int maxAge, boolean secured) {
+        response.cookie(name, value, maxAge, secured);
+    }
+
+    public void cookie(String name, String value) {
+        response.cookie(name, value);
+    }
+
+    public void cookie(String path, @NotNull String name, String value, int maxAge, boolean secured) {
+        response.cookie(path, name, value, maxAge, secured);
+    }
+
     @NotNull
     public var cookies() {
         return DollarFactory.fromValue(Collections.emptyList(), request.cookies());
+    }
+
+    public void header(String header, String value) {
+        response.header(header, value);
     }
 
     @NotNull
@@ -53,50 +86,6 @@ public class DollarHttpContext {
         return DollarFactory.fromValue(Collections.emptyList(),request.queryMap());
     }
 
-    public Request request() {
-        return request;
-    }
-
-    public Response response() {
-        return response;
-    }
-
-    public void status(int statusCode) {
-        response.status(statusCode);
-    }
-
-    public void body(@NotNull var body) {
-        response.type(body.$mimeType());
-        response.body(body.$$());
-    }
-    public void body(String body) {
-        response.body(body);
-    }
-
-    public void cookie(String name, String value, int maxAge) {
-        response.cookie(name, value, maxAge);
-    }
-
-    public void header(String header, String value) {
-        response.header(header, value);
-    }
-
-    public void cookie(String name, String value, int maxAge, boolean secured) {
-        response.cookie(name, value, maxAge, secured);
-    }
-
-    public void cookie(String name, String value) {
-        response.cookie(name, value);
-    }
-
-    public void cookie(String path, @NotNull String name, String value, int maxAge, boolean secured) {
-        response.cookie(path, name, value, maxAge, secured);
-    }
-
-    public String body() {
-        return response.body();
-    }
-
     public void redirect(String location) {
         response.redirect(location);
     }
@@ -107,6 +96,18 @@ public class DollarHttpContext {
 
     public void removeCookie(@NotNull String name) {
         response.removeCookie(name);
+    }
+
+    public Request request() {
+        return request;
+    }
+
+    public Response response() {
+        return response;
+    }
+
+    public void status(int statusCode) {
+        response.status(statusCode);
     }
 
     public void type(String contentType) {

@@ -35,26 +35,46 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $(String age, long l) {
+    public var $(@NotNull String age, long l) {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public var $(@NotNull String key) {
+    public var $append(Object value) {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public var $(@NotNull String key, Object value) {
-        throw new UnsupportedOperationException();
+    public Stream<var> $children() {
+        return $list().stream();
     }
 
     @NotNull
     @Override
-    public Range<Long> $() {
-        return range;
+    public Stream $children(@NotNull String key) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean $has(@NotNull String key) {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public List<var> $list() {
+        return ContiguousSet.create(range, DiscreteDomain.longs())
+                            .stream()
+                            .map(DollarStatic::$)
+                            .collect(Collectors.toList());
+    }
+
+    @NotNull
+    @Override
+    public Map<String, var> $map() {
+        throw new UnsupportedOperationException();
     }
 
     @NotNull
@@ -64,12 +84,42 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public Integer integer() {
+    public boolean $void() {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public var $rm(@NotNull String value) {
+        throw new UnsupportedOperationException();
+
+    }
+
+    @NotNull
+    @Override
+    public var $(@NotNull String key, Object value) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Integer integer(@NotNull String key) {
+    public Integer I() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Integer I(@NotNull String key) {
+        throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    @Override
+    public var decode() {
+        throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    @Override
+    public var $(@NotNull String key) {
         throw new UnsupportedOperationException();
     }
 
@@ -86,8 +136,9 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public Map<String, Object> toMap() {
+    public Stream<String> keyStream() {
         throw new UnsupportedOperationException();
+
     }
 
     @Override
@@ -101,40 +152,28 @@ public class DollarRange extends AbstractDollar {
         throw new UnsupportedOperationException();
     }
 
-    @NotNull
     @Override
-    public var $add(Object value) {
+    public List<String> strings() {
+        return ContiguousSet.create(range, DiscreteDomain.longs())
+                            .stream()
+                            .map(Object::toString)
+                            .collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, Object> toMap() {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public Stream<var> $children() {
-        return $list().stream();
+    public Range<Long> $() {
+        return range;
     }
 
-    @NotNull
     @Override
-    public List<var> $list() {
-        return ContiguousSet.create(range, DiscreteDomain.longs()).stream().map(DollarStatic::$).collect(Collectors.toList());
-    }
-
-    @NotNull
-    @Override
-    public Stream $children(@NotNull String key) {
-        throw new UnsupportedOperationException();
-    }
-
-    @NotNull
-    @Override
-    public var $copy() {
-        return DollarFactory.fromValue(errors(), range);
-    }
-
-    @NotNull
-    @Override
-    public var decode() {
-        throw new UnsupportedOperationException();
+    public int hashCode() {
+        return range.hashCode();
     }
 
     @Override
@@ -156,46 +195,10 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public boolean $has(@NotNull String key) {
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return range.hashCode();
-    }
-
-    @Override
-    public boolean $null() {
-        return false;
-    }
-
-    @Override
     public Stream<Map.Entry<String, var>> kvStream() {
         throw new UnsupportedOperationException();
 
     }
-
-    @Override
-    public Stream<String> keyStream() {
-        throw new UnsupportedOperationException();
-
-    }
-
-    @NotNull
-    @Override
-    public var remove(Object value) {
-        throw new UnsupportedOperationException();
-
-    }
-
-    @NotNull
-    @Override
-    public var $rm(@NotNull String value) {
-        throw new UnsupportedOperationException();
-
-    }
-
 
     @NotNull
     @Override
@@ -203,17 +206,11 @@ public class DollarRange extends AbstractDollar {
         return $list().stream();
     }
 
-    @Override
-    public List<String> strings() {
-        return ContiguousSet.create(range, DiscreteDomain.longs()).stream().map(Object::toString).collect(Collectors.toList());
-    }
-
     @NotNull
     @Override
-    public Map<String, var> $map() {
-        throw new UnsupportedOperationException();
+    public var $copy() {
+        return DollarFactory.fromValue(errors(), range);
     }
-
 
     @Override
     public int size() {
@@ -226,5 +223,12 @@ public class DollarRange extends AbstractDollar {
             return range.contains(((Number) value).longValue());
         }
         return range.contains(Long.valueOf(value.toString()));
+    }
+
+    @NotNull
+    @Override
+    public var remove(Object value) {
+        throw new UnsupportedOperationException();
+
     }
 }

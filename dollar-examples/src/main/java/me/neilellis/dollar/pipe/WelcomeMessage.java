@@ -11,6 +11,6 @@ public class WelcomeMessage extends Script {
     }
 
     {
-        out = $("Welcome, " + in.$$());
+        out = $("Welcome, " + in.S());
     }
 }

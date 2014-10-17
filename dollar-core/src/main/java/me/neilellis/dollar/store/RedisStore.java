@@ -43,17 +43,17 @@ public class RedisStore implements DollarStore {
 
     @Override
     public void push(String location, @NotNull var value) {
-        jedis.rpush(location, value.$$());
+        jedis.rpush(location, value.S());
     }
 
     @Override
     public void set(String location, @NotNull var value) {
-        jedis.set(location, value.$$());
+        jedis.set(location, value.S());
     }
 
     @Override
     public void set(String location, @NotNull var value, int expiryInMilliseconds) {
-        jedis.set(location, value.$$());
+        jedis.set(location, value.S());
     }
 
 

@@ -24,14 +24,14 @@ public class DollarHttp extends SparkBase {
                 result = DollarStatic.$call(childContext, () -> DollarStatic.tracer().trace(DollarVoid.INSTANCE, handler.handle(new DollarHttpContext(request, response)), StateTracer.Operations.HTTP_RESPONSE, method, path));
                 if(result.hasErrors()) {
                     var errors = result.$errors();
-                    response.status(errors.$("httpCode").$null(() -> $(500)).integer());
-                    return errors.$$();
+                    response.status(errors.$("httpCode").$void(() -> $(500)).I());
+                    return errors.S();
                 }
                 response.type(result.$mimeType());
             } catch (Exception e) {
                 return DollarStatic.handleError(e);
             }
-            return result.$$();
+            return result.S();
         };
 
 //        DollarStatic.log("Adding route for "+path);

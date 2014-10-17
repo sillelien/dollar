@@ -1,8 +1,8 @@
 package me.neilellis.dollar.pubsub;
 
 import me.neilellis.dollar.DollarFuture;
-import me.neilellis.dollar.types.DollarVoid;
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.types.DollarVoid;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Jedis;
@@ -31,7 +31,7 @@ public class RedisPubSub implements DollarPubSub {
     public void pub(@NotNull var value, @NotNull String... locations) {
         for (String location : locations) {
             try (Jedis jedis = jedisPool.getResource()) {
-                jedis.publish(location, value.$$());
+                jedis.publish(location, value.S());
             }
         }
     }
@@ -52,7 +52,7 @@ public class RedisPubSub implements DollarPubSub {
 
             return jedisPubSub;
         } catch (Exception e) {
-            return DollarStatic.handleError(e);
+            return DollarStatic.logAndRethrow(e);
         }
     }
 }

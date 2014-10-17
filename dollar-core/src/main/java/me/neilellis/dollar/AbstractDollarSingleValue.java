@@ -44,65 +44,13 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @NotNull
-    public var $(String age, long l) {
-        throw new UnsupportedOperationException();
-    }
-
-    @NotNull
-    public var $(@NotNull String key, Object value) {
+    public var $(@NotNull String age, long l) {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public String string(@NotNull String key) {
-        return $(key).$$();
-    }
-
-    @NotNull
-    public var $(@NotNull String key) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
-    }
-
-    public Integer integer(@NotNull String key) {
-        return null;
-    }
-
-    @Nullable
-    public JsonObject json() {
-        return null;
-    }
-
-    @Nullable
-    public JsonObject json(@NotNull String key) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public List<var> $list() {
-        return Collections.singletonList(this);
-    }
-
-    public Map<String, Object> toMap() {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public Map<String, var> $map() {
-        return Collections.singletonMap("value",this);
-    }
-
-    @Nullable
-    public JSONObject orgjson() {
-        return null;
-
-    }
-
-    @NotNull
-    @Override
-    public var $add(Object newValue) {
+    public var $append(Object newValue) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
@@ -117,41 +65,26 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return Stream.empty();
     }
 
-    @NotNull
-    @Override
-    public DollarString decode() {
-        return new DollarString(errors(),URLDecoder.decode($$()));
-    }
-
-
-    @Override
-    public <R> R val() {
-        return (R) value;
-    }
-
     public boolean $has(@NotNull String key) {
-        return $$().equals(key);
-    }
-
-    @Override
-    public int hashCode() {
-        return value.toString().hashCode();
-    }
-
-    @Override
-    public boolean $null() {
-        return false;
-    }
-
-    public Stream<String> keyStream() {
-        return Stream.empty();
-
+        return S().equals(key);
     }
 
     @NotNull
     @Override
-    public var remove(Object newValue) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    public List<var> $list() {
+        return Collections.singletonList(this);
+    }
+
+    @NotNull
+    @Override
+    public Map<String, var> $map() {
+        return Collections.singletonMap("value", this);
+    }
+
+    @NotNull
+    @Override
+    public String string(@NotNull String key) {
+        return $(key).S();
     }
 
     @NotNull
@@ -161,26 +94,80 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @NotNull
+    public var $(@NotNull String key, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean $void() {
+        return false;
+    }
+
+    public Integer I(@NotNull String key) {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public DollarString decode() {
+        return new DollarString(errors(), URLDecoder.decode(S()));
+    }
+
+    @NotNull
+    public var $(@NotNull String key) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    }
+
+    @Nullable
+    public JsonObject json() {
+        return null;
+    }
+
+    @Nullable
+    public JsonObject json(@NotNull String key) {
+        return null;
+    }
+
+    public Stream<String> keyStream() {
+        return Stream.empty();
+
+    }
+
+    @Nullable
+    public JSONObject orgjson() {
+        return null;
+
+    }
+
+    @Override
+    public List<String> strings() {
+        return Collections.singletonList(S());
+    }
+
+    public Map<String, Object> toMap() {
+        return null;
+    }
+
+    @Override
+    public <R> R val() {
+        return (R) value;
+    }
+
+    @Override
+    public int hashCode() {
+        return value.toString().hashCode();
+    }
+
+    @NotNull
     @Override
     public Stream<var> $stream() {
         return Stream.of(this);
     }
 
-    @Override
-    public List<String> strings() {
-        return Collections.singletonList($$());
-    }
-
     @NotNull
     @Override
-    public String $$() {
-        return toString();
-    }
-
-    @NotNull
-    @Override
-    public String toString() {
-        return value.toString();
+    public var $copy() {
+        return DollarFactory.fromValue(errors(), value);
     }
 
     @Override
@@ -195,8 +182,14 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     @Override
-    public var $copy() {
-        return  DollarFactory.fromValue(errors(), value);
+    public var remove(Object newValue) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public String toString() {
+        return value.toString();
     }
 
 }

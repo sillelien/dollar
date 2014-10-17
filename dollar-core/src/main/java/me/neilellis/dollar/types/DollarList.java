@@ -41,20 +41,46 @@ public class DollarList extends AbstractDollar {
 
     @org.jetbrains.annotations.NotNull
     @Override
-    public var $(String age, long l) {
+    public var $(@NotNull String age, long l) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $(@NotNull String key) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION) ;
+    public var $append(Object value) {
+        DollarList copy = (DollarList) $copy();
+        copy.list.add(DollarFactory.fromValue(errors(), value));
+        return copy;
+
     }
 
     @NotNull
     @Override
-    public var $(@NotNull String key, Object value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+    public Stream<var> $children() {
+        return list.stream();
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $children(@NotNull String key) {
+        return Stream.empty();
+    }
+
+    @Override
+    public boolean $has(@NotNull String key) {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public List<var> $list() {
+        return new ArrayList<>(list);
+    }
+
+    @NotNull
+    @Override
+    public Map<String, var> $map() {
+        return null;
     }
 
     @Nullable
@@ -65,29 +91,51 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public String $$() {
-        return $array().toString();
+    public var $rm(@NotNull String value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $(@NotNull String key, Object value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
     }
 
     @Override
-    public Integer integer() {
-        return $stream().collect(Collectors.summingInt((i)->i.integer()));
+    public boolean $void() {
+        return false;
     }
 
     @Override
-    public Integer integer(@NotNull String key) {
+    public Integer I() {
+        return $stream().collect(Collectors.summingInt((i) -> i.I()));
+    }
+
+    @Override
+    public Integer I(@NotNull String key) {
         throw new ListException();
+    }
+
+    @NotNull
+    @Override
+    public var decode() {
+        throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    @Override
+    public var $(@NotNull String key) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
     }
 
     @org.jetbrains.annotations.NotNull
     @Override
-    public JsonObject json(){
+    public JsonObject json() {
         JsonArray array = $array();
         JsonObject jsonObject = new JsonObject();
-        jsonObject.putArray("value",array);
+        jsonObject.putArray("value", array);
         return jsonObject;
     }
-
 
     @org.jetbrains.annotations.NotNull
     @Override
@@ -95,15 +143,13 @@ public class DollarList extends AbstractDollar {
         throw new ListException();
     }
 
-    @NotNull
     @Override
-    public List<var> $list() {
-        return new ArrayList<>(list);
-    }
-
-    @Override
-    public Map<String, Object> toMap() {
-        throw new ListException();
+    public Stream<String> keyStream() {
+        List<String> strings = strings();
+        if (strings == null) {
+            return Stream.empty();
+        }
+        return strings.stream();
     }
 
     @Override
@@ -113,50 +159,29 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public JSONObject orgjson(){
+    public JSONObject orgjson() {
         return new JSONObject(json().toMap());
     }
 
-    @NotNull
     @Override
-    public var $add(Object value) {
-        DollarList copy = (DollarList) $copy();
-        copy.list.add(DollarFactory.fromValue(errors(),value));
-        return copy;
+    public List<String> strings() {
+        return list.stream().map(Object::toString).collect(Collectors.toList());
+    }
 
+    @Override
+    public Map<String, Object> toMap() {
+        throw new ListException();
+    }
+
+    @Override
+    public <R> R val() {
+        return (R) list;
     }
 
     @NotNull
     @Override
-    public var $copy() {
-        return new DollarList(errors(),list.stream().map(var::$copy).collect(Collectors.toList()));
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $children() {return list.stream();}
-
-
-    @NotNull
-    @Override
-    public Stream<var> $children(@NotNull String key) {
-        return Stream.empty();
-    }
-
-    @NotNull
-    @Override
-    public var decode() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean $has(@NotNull String key) {
-        return false;
-    }
-
-    @Override
-    public boolean $null() {
-        return false;
+    public <R> R $() {
+        return (R) $array();
     }
 
     @Override
@@ -164,15 +189,17 @@ public class DollarList extends AbstractDollar {
         return null;
     }
 
+    @NotNull
     @Override
-    public Stream<String> keyStream() {
-        List<String> strings = strings();
-        if(strings == null) {
-            return Stream.empty();
-        }
-        return strings.stream();
+    public Stream<var> $stream() {
+        return list.stream();
     }
 
+    @NotNull
+    @Override
+    public var $copy() {
+        return new DollarList(errors(), list.stream().map(var::$copy).collect(Collectors.toList()));
+    }
 
     @Override
     public int size() {
@@ -193,48 +220,13 @@ public class DollarList extends AbstractDollar {
                 newList.add(val);
             }
         }
-        return new DollarList(errors(),newList);
-    }
-
-    @NotNull
-    @Override
-    public var $rm(@NotNull String value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
-    }
-
-
-    @NotNull
-    @Override
-    public Stream<var> $stream() {
-        return list.stream();
-    }
-
-    @Override
-    public List<String> strings() {
-        return list.stream().map(Object::toString).collect(Collectors.toList());
+        return new DollarList(errors(), newList);
     }
 
     @NotNull
     @Override
     public String toString() {
-        return $().toString();
-    }
-
-    @NotNull
-    @Override
-    public Map<String, var> $map() {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public <R> R $() {
-        return (R) $array();
-    }
-
-    @Override
-    public <R> R val() {
-        return (R) list;
+        return $array().toString();
     }
 
 

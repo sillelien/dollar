@@ -19,6 +19,7 @@ package me.neilellis.dollar.types;
 import me.neilellis.dollar.AbstractDollarSingleValue;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -31,10 +32,15 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
         super(errors,value);
     }
 
+    @NotNull
+    @Override
+    public var $copy() {
+        return new DollarNumber(errors(), value);
+    }
 
     @Override
     @NotNull
-    public Integer integer() {
+    public Integer I() {
         return value.intValue();
     }
 
@@ -46,8 +52,8 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
 
     @NotNull
     @Override
-    public var $copy() {
-        return new DollarNumber(errors(),value);
+    public Number $() {
+        return value;
     }
 
     @Override
@@ -59,10 +65,16 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
         }
     }
 
-    @NotNull
+    @Nullable
     @Override
-    public Number $() {
-        return value;
+    public Double D() {
+        return value.doubleValue();
+    }
+
+    @Nullable
+    @Override
+    public Long L() {
+        return value.longValue();
     }
 
 
