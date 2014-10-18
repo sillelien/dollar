@@ -44,7 +44,7 @@ import java.util.stream.Stream;
  * <pre>
  *
  *  var nulled= $null();
- *  nulled.$pipe((i)->{System.out.println("You'll never see this."});
+ *  nulled.$pipe((i)-&gt;{System.out.println("You'll never see this."});
  *
  * </pre>
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -100,12 +100,6 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public List<var> list() {
-        return Collections.emptyList();
-    }
-
-    @NotNull
-    @Override
     public Map<String, var> $map() {
         return Collections.emptyMap();
     }
@@ -157,14 +151,20 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public JsonObject json() {
+    public JsonObject json(@NotNull String key) {
         return new JsonObject();
     }
 
     @NotNull
     @Override
-    public JsonObject json(@NotNull String key) {
-        return new JsonObject();
+    public List<var> list() {
+        return Collections.emptyList();
+    }
+
+    @NotNull
+    @Override
+    public <R> R $() {
+        return (R) new JsonObject();
     }
 
     @Override
@@ -183,6 +183,12 @@ public class DollarVoid extends AbstractDollar implements var {
         return new JSONObject();
     }
 
+    @NotNull
+    @Override
+    public JsonObject json() {
+        return new JsonObject();
+    }
+
     @Override
     public List<String> strings() {
         return Collections.emptyList();
@@ -196,12 +202,6 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public <R> R val() {
         return null;
-    }
-
-    @NotNull
-    @Override
-    public <R> R $() {
-        return (R) new JsonObject();
     }
 
     @Override
@@ -305,7 +305,7 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public DollarVoid $copy() {
+    public var $copy() {
         return new DollarVoid(new ArrayList<>(errors()));
     }
 

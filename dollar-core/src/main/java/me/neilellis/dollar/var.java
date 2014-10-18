@@ -113,6 +113,8 @@ public interface var extends Map<String, var> {
 
   @NotNull List<Throwable> errors();
 
+  @NotNull List<var> list();
+
   @NotNull var $load(@NotNull String location);
 
   @NotNull Map<String, var> $map();
@@ -257,14 +259,14 @@ public interface var extends Map<String, var> {
 
   @Deprecated var eval(DollarEval eval);
 
-  /**
-   * If the class has a method $ call($ in) then that method is called otherwise converts this object to a set of string
-   * parameters and passes them to the main method of the clazz. <p> NB: This is the preferred way to pass values
-   * between classes as it preserves the stateless nature. Try where possible to maintain a stateless context to
-   * execution. </p>
-   *
-   * @param clazz the class to pass this to.
-   */
+  //  /**
+//   * If the class has a method $ call($ in) then that method is called otherwise converts this object to a set of string
+//   * parameters and passes them to the main method of the clazz. <p> NB: This is the preferred way to pass values
+//   * between classes as it preserves the stateless nature. Try where possible to maintain a stateless context to
+//   * execution. </p>
+//   *
+//   * @param clazz the class to pass this to.
+//   */
   @Deprecated var eval(Class clazz);
 
   @NotNull
@@ -292,8 +294,6 @@ public interface var extends Map<String, var> {
     }
     return array;
   }
-
-  @NotNull List<var> list();
 
   /**
    * Returns a {@link org.vertx.java.core.json.JsonObject}, JsonArray or primitive type such that it can be added to

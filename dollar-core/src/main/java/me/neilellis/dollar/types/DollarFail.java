@@ -16,7 +16,10 @@
 
 package me.neilellis.dollar.types;
 
-import me.neilellis.dollar.*;
+import me.neilellis.dollar.DollarEval;
+import me.neilellis.dollar.FutureDollar;
+import me.neilellis.dollar.Script;
+import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
@@ -41,12 +44,12 @@ import java.util.stream.Stream;
  * <pre>
  *
  *  var nulled= $null();
- *  nulled.$pipe((i)->{System.out.println("You'll never see this."});
+ *  nulled.$pipe((i)-&gt;{System.out.println("You'll never see this."});
  *
  * </pre>
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DollarFail extends AbstractDollar implements var {
+public class DollarFail extends DollarVoid {
 
     public enum FailureType {
         INVALID_LIST_OPERATION, INVALID_MAP_OPERATION, INVALID_SINGLE_VALUE_OPERATION, EXCEPTION,
@@ -97,12 +100,6 @@ public class DollarFail extends AbstractDollar implements var {
     @Override
     public boolean $has(@NotNull String key) {
         return false;
-    }
-
-    @NotNull
-    @Override
-    public List<var> list() {
-        return Collections.emptyList();
     }
 
     @NotNull
@@ -158,14 +155,20 @@ public class DollarFail extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public JsonObject json() {
-        return new JsonObject();
+    public JsonObject json(@NotNull String key) {
+        throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public JsonObject json(@NotNull String key) {
-        throw new UnsupportedOperationException();
+    public List<var> list() {
+        return Collections.emptyList();
+    }
+
+    @NotNull
+    @Override
+    public <R> R $() {
+        return (R) new JsonObject();
     }
 
     @Override
@@ -184,6 +187,12 @@ public class DollarFail extends AbstractDollar implements var {
         return new JSONObject();
     }
 
+    @NotNull
+    @Override
+    public JsonObject json() {
+        return new JsonObject();
+    }
+
     @Override
     public List<String> strings() {
         return Collections.emptyList();
@@ -197,12 +206,6 @@ public class DollarFail extends AbstractDollar implements var {
     @Override
     public <R> R val() {
         return null;
-    }
-
-    @NotNull
-    @Override
-    public <R> R $() {
-        return (R) new JsonObject();
     }
 
     @Override
@@ -249,12 +252,6 @@ public class DollarFail extends AbstractDollar implements var {
     @Override
     public var $load(@NotNull String location) {
         return this;
-    }
-
-    @NotNull
-    @Override
-    public FutureDollar send(EventBus e, String destination) {
-        throw new NullPointerException();
     }
 
     @NotNull
@@ -316,10 +313,6 @@ public class DollarFail extends AbstractDollar implements var {
         return this;
     }
 
-    @Override public var clearErrors() {
-        return DollarFactory.newVoid();
-    }
-
     @Override
     public int size() {
         return 0;
@@ -340,5 +333,15 @@ public class DollarFail extends AbstractDollar implements var {
     @Override
     public String toString() {
         return "";
+    }
+
+    @NotNull
+    @Override
+    public FutureDollar send(EventBus e, String destination) {
+        throw new NullPointerException();
+    }
+
+    @Override public var clearErrors() {
+        return DollarFactory.newVoid();
     }
 }
