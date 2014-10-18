@@ -83,6 +83,9 @@ public class DollarFactory {
         if (o instanceof var) {
             return ((var) o).copy(ImmutableList.copyOf(errors));
         }
+        if (o instanceof List) {
+            return wrap(new DollarList(errors, (List<var>) o));
+        }
         if (o.getClass().isArray()) {
             return wrap(new DollarList(errors, (Object[]) o));
         }
@@ -115,6 +118,7 @@ public class DollarFactory {
                 return wrap(new DollarVoid(errors));
             }
         } else {
+            System.out.println(o.getClass());
             json = new JsonObject(o.toString());
         }
         return wrap(new DollarJson(errors, json));
@@ -143,5 +147,9 @@ public class DollarFactory {
 
     public static var failure(Throwable throwable) {
         return wrap(new DollarFail(Collections.singletonList(throwable), DollarFail.FailureType.EXCEPTION));
+    }
+
+    public static var newVoid() {
+        return wrap(new DollarVoid());
     }
 }

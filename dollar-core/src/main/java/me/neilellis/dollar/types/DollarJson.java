@@ -85,6 +85,13 @@ class DollarJson extends AbstractDollar implements var {
 
     @NotNull
     @Override
+    public var $(@NotNull String key, double value) {
+        return DollarFactory.fromValue(errors(), json.copy().putNumber(key, value));
+    }
+
+
+    @NotNull
+    @Override
     public var $append(Object value) {
         JsonObject copy = json.copy();
         if (value instanceof var && ((var) value).$() instanceof JsonObject) {
@@ -128,7 +135,7 @@ class DollarJson extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public List<var> $list() {
+    public List<var> list() {
         throw new UnsupportedOperationException();
     }
 
@@ -188,7 +195,7 @@ class DollarJson extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean $void() {
+    public boolean isVoid() {
         return false;
     }
 
@@ -281,18 +288,18 @@ class DollarJson extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public String $mimeType() {
-        return "application/json";
-    }
-
-    @NotNull
-    @Override
     public FutureDollar<JsonObject> send(@NotNull EventBus e, String destination) {
         FutureDollar<JsonObject> futureDollar = new FutureDollar<>(this);
         e.send(destination, json, (Message<JsonObject> message) -> {
             futureDollar.handle(message);
         });
         return futureDollar;
+    }
+
+    @NotNull
+    @Override
+    public String $mimeType() {
+        return "application/json";
     }
 
     @Override

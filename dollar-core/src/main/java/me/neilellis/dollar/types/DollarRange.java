@@ -24,7 +24,6 @@ import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.json.JSONObject;
 import org.vertx.java.core.json.JsonObject;
 
 import java.util.List;
@@ -52,25 +51,31 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $(@NotNull String age, long l) {
-        throw new UnsupportedOperationException();
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+
+    }
+
+    @NotNull @Override public var $(@NotNull String key, double value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+
     }
 
     @NotNull
     @Override
     public var $append(Object value) {
-        throw new UnsupportedOperationException();
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
     @Override
     public Stream<var> $children() {
-        return $list().stream();
+        return list().stream();
     }
 
     @NotNull
     @Override
-    public Stream $children(@NotNull String key) {
-        throw new UnsupportedOperationException();
+    public Stream<var> $children(@NotNull String key) {
+        return Stream.of(DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION));
     }
 
     @Override
@@ -80,7 +85,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public List<var> $list() {
+    public List<var> list() {
         return ContiguousSet.create(range, DiscreteDomain.longs())
                             .stream()
                             .map(DollarStatic::$)
@@ -102,29 +107,29 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $rm(@NotNull String value) {
-        throw new UnsupportedOperationException();
+        return this;
 
     }
 
     @NotNull
     @Override
     public var $(@NotNull String key, Object value) {
-        throw new UnsupportedOperationException();
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 
     @Override
-    public boolean $void() {
+    public boolean isVoid() {
         return false;
     }
 
     @Override
     public Integer I() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override
     public Integer I(@NotNull String key) {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @NotNull
@@ -136,37 +141,36 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $(@NotNull String key) {
-        throw new UnsupportedOperationException();
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
     @Override
     public JsonObject json() {
-        throw new UnsupportedOperationException();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.putArray("value", jsonArray());
+        return jsonObject;
+
     }
+
 
     @NotNull
     @Override
     public JsonObject json(@NotNull String key) {
-        throw new UnsupportedOperationException();
+        return new JsonObject();
     }
 
     @Override
     public Stream<String> keyStream() {
-        throw new UnsupportedOperationException();
+        return null;
 
     }
 
     @Override
     public Number number(@NotNull String key) {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
-    @NotNull
-    @Override
-    public JSONObject orgjson() {
-        throw new UnsupportedOperationException();
-    }
 
     @Override
     public List<String> strings() {
@@ -178,7 +182,7 @@ public class DollarRange extends AbstractDollar {
 
     @Override
     public Map<String, Object> toMap() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @NotNull
@@ -203,29 +207,11 @@ public class DollarRange extends AbstractDollar {
                 return range.equals(((DollarRange) unwrapped).range);
             }
             if (unwrapped instanceof DollarList) {
-                return unwrapped.$list().equals($list());
+                return unwrapped.list().equals(list());
             }
         }
         return false;
 
-    }
-
-    @Override
-    public Stream<Map.Entry<String, var>> kvStream() {
-        throw new UnsupportedOperationException();
-
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $stream() {
-        return $list().stream();
-    }
-
-    @NotNull
-    @Override
-    public var $copy() {
-        return DollarFactory.fromValue(errors(), range);
     }
 
     @Override
@@ -244,7 +230,6 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var remove(Object value) {
-        throw new UnsupportedOperationException();
-
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 }

@@ -104,15 +104,15 @@ public abstract class AbstractDollar implements var {
         return $(key, value);
     }
 
+    @Override
+    public void putAll(Map<? extends String, ? extends var> m) {
+        throw new UnsupportedOperationException();
+    }
+
     @NotNull
     @Override
     public var eval(@NotNull DollarEval lambda) {
         return eval("anon", lambda);
-    }
-
-    @Override
-    public void putAll(Map<? extends String, ? extends var> m) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -127,14 +127,9 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull
-    public var eval(String label, @NotNull DollarEval lambda) {
-        return lambda.eval($copy());
-    }
-
-    @NotNull
     @Override
     public Collection<var> values() {
-        return $list();
+        return list();
     }
 
     @NotNull
@@ -144,38 +139,14 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull
-    @Override
-    public var getOrDefault(@NotNull Object key, @NotNull var defaultValue) {
-        return $has(String.valueOf(key)) ? get(key) : defaultValue;
+    public var eval(String label, @NotNull DollarEval lambda) {
+        return lambda.eval($copy());
     }
 
     @NotNull
     @Override
-    public var eval(@NotNull Class clazz) {
-        List<String> list = this.strings();
-        try {
-            try {
-                Method callMethod = clazz.getMethod("call", var.class);
-                callMethod.invoke(null, this);
-                return this;
-            } catch (NoSuchMethodException e) {
-                //
-            }
-            try {
-                Method mainMethod = clazz.getMethod("main", String[].class);
-                Object value;
-                try {
-                    value = mainMethod.invoke(null, list.toArray(new String[list.size()]));
-                } catch (Exception e) {
-                    return DollarStatic.handleError(e);
-                }
-                return DollarFactory.fromValue(Collections.emptyList(), value);
-            } catch (NoSuchMethodException e) {
-                throw new DollarException(e);
-            }
-        } catch (@NotNull IllegalAccessException | InvocationTargetException e) {
-            throw new DollarException(e);
-        }
+    public var getOrDefault(@NotNull Object key, @NotNull var defaultValue) {
+        return $has(String.valueOf(key)) ? get(key) : defaultValue;
     }
 
     @Override
@@ -196,8 +167,31 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $pipe(@NotNull String js) {
-        return $pipe("anon", js);
+    public var eval(@NotNull Class clazz) {
+        List<String> list = this.strings();
+        try {
+            try {
+                Method callMethod = clazz.getMethod("call", var.class);
+                callMethod.invoke(null, this);
+                return this;
+            } catch (NoSuchMethodException e) {
+                //
+            }
+            try {
+                Method mainMethod = clazz.getMethod("main", String[].class);
+                Object value;
+                try {
+                    value = mainMethod.invoke(null, list.toArray(new String[list.size()]));
+                } catch (Exception e) {
+                    return DollarStatic.handleError(e, this);
+                }
+                return DollarFactory.fromValue(Collections.emptyList(), value);
+            } catch (NoSuchMethodException e) {
+                throw new DollarException(e);
+            }
+        } catch (@NotNull IllegalAccessException | InvocationTargetException e) {
+            throw new DollarException(e);
+        }
     }
 
     @Override
@@ -216,22 +210,15 @@ public abstract class AbstractDollar implements var {
         throw new UnsupportedOperationException();
     }
 
-    @NotNull
-    public var $pipe(@NotNull String label, @NotNull String js) {
-        SimpleScriptContext context = new SimpleScriptContext();
-        context.setAttribute("$", $copy(), context.getScopes().get(0));
-        Object value;
-        try {
-            value = nashorn.eval(js, context);
-        } catch (Exception e) {
-            return DollarStatic.handleError(e);
-        }
-        return DollarFactory.fromValue(Collections.emptyList(), value);
-    }
-
     @Override
     public var computeIfAbsent(String key, @NotNull Function<? super String, ? extends var> mappingFunction) {
         return $map().computeIfAbsent(key, mappingFunction);
+    }
+
+    @NotNull
+    @Override
+    public var $pipe(@NotNull String js) {
+        return $pipe("anon", js);
     }
 
     @Override
@@ -252,25 +239,32 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull
-    @Override
-    public var $load(@NotNull String location) {
-        return DollarStatic.context().getStore().get(location);
-    }
-
-    @NotNull
     public FutureDollar send(EventBus e, String destination) {
         throw new UnsupportedOperationException();
 
     }
 
     @NotNull
-    protected JsonArray $array() {
-        JsonArray array = new JsonArray();
-        for (me.neilellis.dollar.var var : $list()) {
-            array.add(var.$());
+    public var $pipe(@NotNull String label, @NotNull String js) {
+        SimpleScriptContext context = new SimpleScriptContext();
+        context.setAttribute("$", $copy(), context.getScopes().get(0));
+        Object value;
+        try {
+            value = nashorn.eval(js, context);
+        } catch (Exception e) {
+            return DollarStatic.handleError(e, this);
         }
-        return array;
+        return DollarFactory.fromValue(Collections.emptyList(), value);
     }
+
+
+    @NotNull
+    @Override
+    public var $load(@NotNull String location) {
+        return DollarStatic.context().getStore().get(location);
+    }
+
+
 
     @NotNull
     @Override
@@ -309,9 +303,9 @@ public abstract class AbstractDollar implements var {
         try {
             script = clazz.newInstance();
         } catch (InstantiationException e) {
-            throw new DollarException(e.getCause());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            return DollarStatic.handleError(e.getCause(), this);
+        } catch (Exception e) {
+            return DollarStatic.handleError(e, this);
         }
         return script.result();
     }
@@ -320,11 +314,15 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var $pipe(@NotNull Function<var, var> function) {
-        var result = function.apply(this);
-        if(result == null) {
-            return this;
+        try {
+            var result = function.apply(this);
+            if (result == null) {
+                return this;
+            }
+            return result;
+        } catch (Exception e) {
+            return DollarStatic.handleError(e, this);
         }
-        return result;
     }
 
 
@@ -377,7 +375,7 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public Stream<var> $stream() {
-        return $list().stream();
+        return list().stream();
     }
 
 
@@ -457,8 +455,8 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public void clearErrors() {
-        errors.clear();
+    public var clearErrors() {
+        return DollarFactory.fromValue(ImmutableList.<Throwable>builder().build(), val());
     }
 
     @NotNull

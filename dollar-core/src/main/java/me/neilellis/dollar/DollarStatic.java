@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Range;
 import me.neilellis.dollar.monitor.Monitor;
 import me.neilellis.dollar.pubsub.Sub;
@@ -39,8 +40,8 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 /**
- * To use the $ class you need to statically import all of the methods from this class.
- * This is effectively a factory class for the $ class with additional convenience methods.
+ * To use the $ class you need to statically import all of the methods from this class. This is effectively a factory
+ * class for the $ class with additional convenience methods.
  *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
@@ -49,11 +50,11 @@ public class DollarStatic {
 
     @NotNull
     static ThreadLocal<DollarThreadContext> threadContext = new ThreadLocal<DollarThreadContext>() {
-        @NotNull
-        @Override
-        protected DollarThreadContext initialValue() {
-            return new DollarThreadContext();
-        }
+    @NotNull
+    @Override
+    protected DollarThreadContext initialValue() {
+        return new DollarThreadContext();
+    }
     };
 
     @NotNull
@@ -87,7 +88,7 @@ public class DollarStatic {
         var v = $();
         for (var value : values) {
             v = v.$append(value);
-        }
+    }
         return v;
     }
 
@@ -101,7 +102,7 @@ public class DollarStatic {
         var v = $();
         for (var value : values) {
             v = v.$append(value);
-        }
+    }
         return $(name, v);
     }
 
@@ -117,7 +118,7 @@ public class DollarStatic {
 
     @NotNull
     public static var $(JsonObject json) {
-        return DollarFactory.fromValue(Collections.<Throwable>emptyList(),json);
+        return DollarFactory.fromValue(Collections.<Throwable>emptyList(), json);
     }
 
     @NotNull
@@ -130,7 +131,11 @@ public class DollarStatic {
     }
 
     public static var $(@Nullable Object o) {
-        return DollarStatic.tracer().trace(DollarVoid.INSTANCE, DollarFactory.fromValue(Collections.emptyList(), o), StateTracer.Operations.CREATE, o == null ? "null" : o.getClass().getName());
+        return DollarStatic.tracer()
+                           .trace(DollarVoid.INSTANCE,
+                                  DollarFactory.fromValue(Collections.emptyList(), o),
+                                  StateTracer.Operations.CREATE,
+                                  o == null ? "null" : o.getClass().getName());
     }
 
     @NotNull
@@ -147,7 +152,7 @@ public class DollarStatic {
         JsonObject jsonObject = new JsonObject();
         for (Map.Entry<String, String> entry : map) {
             jsonObject.putString(entry.getKey(), entry.getValue());
-        }
+    }
         return jsonObject;
     }
 
@@ -155,12 +160,12 @@ public class DollarStatic {
     public static JsonObject paramMapToJson(@NotNull Map<String, String[]> map) {
         JsonObject jsonObject = new JsonObject();
         for (Map.Entry<String, String[]> entry : map.entrySet()) {
-            if(entry.getValue().length == 1) {
-                jsonObject.putString(entry.getKey(),entry.getValue()[0]);
+            if (entry.getValue().length == 1) {
+                jsonObject.putString(entry.getKey(), entry.getValue()[0]);
             } else {
                 jsonObject.putArray(entry.getKey(), new JsonArray(entry.getValue()));
             }
-        }
+    }
         return jsonObject;
     }
 
@@ -199,7 +204,8 @@ public class DollarStatic {
     }
 
     /**
-     * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used to link context's together.
+     * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used
+     * to link context's together.
      *
      * @param call the lambda to run.
      */
@@ -208,7 +214,8 @@ public class DollarStatic {
     }
 
     /**
-     * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used to link context's together.
+     * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used
+     * to link context's together.
      *
      * @param context the current thread context
      * @param call    the lambda to run.
@@ -218,22 +225,21 @@ public class DollarStatic {
         try {
             return call.call();
         } catch (Exception e) {
-            return handleError(e);
+            return handleError(e, null);
         } finally {
             threadContext.remove();
-        }
+    }
     }
 
     @NotNull
-    public static var handleError(@NotNull Throwable throwable) {
-        log(throwable.getMessage());
-        throwable.printStackTrace();
-        return DollarFactory.failure(throwable);
-
+    public static var handleError(@NotNull Throwable throwable, var failee) {
+//        log(throwable.getMessage());
+//        log(throwable);
+        if (failee == null) {
+            return DollarFactory.failure(throwable);
     }
+        return failee.copy(ImmutableList.of(throwable));
 
-    public static void log(String message) {
-        System.out.println(threadContext.get().getLabels().toString() + ":" + message);
     }
 
     public static void $dump() {
@@ -261,7 +267,7 @@ public class DollarStatic {
     @NotNull
     public static DollarFuture $fork(@NotNull Callable<var> call) {
         DollarThreadContext child = threadContext.get().child();
-        return new DollarFuture(threadPoolExecutor.submit(() ->$call(child, call)));
+        return new DollarFuture(threadPoolExecutor.submit(() -> $call(child, call)));
 
     }
 
@@ -272,7 +278,7 @@ public class DollarStatic {
 
     @NotNull
     public static var $list(Object... values) {
-        return DollarFactory.fromValue(Collections.emptyList(),values);
+        return DollarFactory.fromValue(Collections.emptyList(), values);
     }
 
     @NotNull
@@ -296,7 +302,8 @@ public class DollarStatic {
     /**
      * The beginning of any Dollar Code should start with a DollarStatic.run method.
      *
-     * @param context this is an identifier used to link context's together, it should be unique to the request being processed.
+     * @param context this is an identifier used to link context's together, it should be unique to the request being
+     *                processed.
      * @param run     the lambda to run.
      */
     public static void $run(@NotNull DollarThreadContext context, @NotNull Runnable run) {
@@ -305,11 +312,12 @@ public class DollarStatic {
             run.run();
         } finally {
             threadContext.remove();
-        }
+    }
     }
 
     /**
-     * The beginning of any new Dollar Code should start with a DollarStatic.run/call method. This creates an object used to link context's together.
+     * The beginning of any new Dollar Code should start with a DollarStatic.run/call method. This creates an object used
+     * to link context's together.
      *
      * @param run the lambda to run.
      */
@@ -318,7 +326,7 @@ public class DollarStatic {
             run.run();
         } finally {
             threadContext.remove();
-        }
+    }
     }
 
     public static void $save(@NotNull var value, @NotNull String location) {
@@ -366,8 +374,12 @@ public class DollarStatic {
     public static <R> R handleInterrupt(InterruptedException ie) {
         if (Thread.interrupted()) {
             log("Interrupted");
-        }
+    }
         throw new Error("Interrupted");
+    }
+
+    public static void log(String message) {
+        System.out.println(threadContext.get().getLabels().toString() + ":" + message);
     }
 
     @NotNull
@@ -378,8 +390,7 @@ public class DollarStatic {
             throw (DollarException) throwable;
         } else {
             throw new DollarException(throwable);
-        }
-
+    }
 
     }
 

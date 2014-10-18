@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2014-2014 Cazcade Limited
+ * Copyright (c) 2014 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -90,7 +90,7 @@ public class DollarBasicTest {
         var result = profile.eval("getWeight", (var value) -> value.$("weight", "none of your business"));
       String weight = result.$("weight").S();
         assertEquals(weight, "none of your business");
-      assertTrue("Profile's state was mutated!!!", profile.$("weight").$void());
+      assertTrue("Profile's state was mutated!!!", profile.$("weight").isVoid());
     }
 
     @Test
@@ -132,12 +132,12 @@ public class DollarBasicTest {
     @Test
     public void testNull() {
         assertNull($((Object) null).$("foo", "bar").$("foo").val());
-      assertTrue($((Object) null).$void());
-      assertTrue($((Object) null).$("bar").$void());
+      assertTrue($((Object) null).isVoid());
+      assertTrue($((Object) null).$("bar").isVoid());
         assertNull($((Object) null).val());
         assertFalse($((Object) null).$("bar").$has("foo"));
         assertFalse($((Object) null).$has("foo"));
-      assertTrue($((Object) null).$("foo", "bar").$("foo").$void());
+      assertTrue($((Object) null).$("foo", "bar").$("foo").isVoid());
       assertEquals("twasnull", $((Object) null).$void(() -> $("twasnull")).S());
     }
 

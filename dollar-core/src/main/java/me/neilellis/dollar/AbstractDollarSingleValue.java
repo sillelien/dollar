@@ -45,7 +45,11 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     public var $(@NotNull String age, long l) {
-        throw new UnsupportedOperationException();
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    }
+
+    @NotNull @Override public var $(@NotNull String key, double value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
     @NotNull
@@ -67,12 +71,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     public boolean $has(@NotNull String key) {
         return S().equals(key);
-    }
-
-    @NotNull
-    @Override
-    public List<var> $list() {
-        return Collections.singletonList(this);
     }
 
     @NotNull
@@ -99,7 +97,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @Override
-    public boolean $void() {
+    public boolean isVoid() {
         return false;
     }
 
@@ -119,13 +117,14 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @Nullable
-    public JsonObject json() {
+    public JsonObject json(@NotNull String key) {
         return null;
     }
 
-    @Nullable
-    public JsonObject json(@NotNull String key) {
-        return null;
+    @NotNull
+    @Override
+    public List<var> list() {
+        return Collections.singletonList(this);
     }
 
     public Stream<String> keyStream() {
@@ -137,6 +136,11 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     public JSONObject orgjson() {
         return null;
 
+    }
+
+    @Nullable
+    public JsonObject json() {
+        return null;
     }
 
     @Override
@@ -191,5 +195,4 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     public String toString() {
         return value.toString();
     }
-
 }

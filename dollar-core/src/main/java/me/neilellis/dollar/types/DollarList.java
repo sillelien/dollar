@@ -61,6 +61,10 @@ public class DollarList extends AbstractDollar {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
     }
 
+    @NotNull @Override public var $(@NotNull String key, double value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+    }
+
     @NotNull
     @Override
     public var $append(Object value) {
@@ -89,12 +93,6 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public List<var> $list() {
-        return new ArrayList<>(list);
-    }
-
-    @NotNull
-    @Override
     public Map<String, var> $map() {
         return null;
     }
@@ -118,7 +116,7 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public boolean $void() {
+    public boolean isVoid() {
         return false;
     }
 
@@ -146,17 +144,20 @@ public class DollarList extends AbstractDollar {
 
     @org.jetbrains.annotations.NotNull
     @Override
-    public JsonObject json() {
-        JsonArray array = $array();
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.putArray("value", array);
-        return jsonObject;
-    }
-
-    @org.jetbrains.annotations.NotNull
-    @Override
     public JsonObject json(@NotNull String key) {
         throw new ListException();
+    }
+
+    @NotNull
+    @Override
+    public List<var> list() {
+        return new ArrayList<>(list);
+    }
+
+    @NotNull
+    @Override
+    public <R> R $() {
+        return (R) jsonArray();
     }
 
     @Override
@@ -179,6 +180,15 @@ public class DollarList extends AbstractDollar {
         return new JSONObject(json().toMap());
     }
 
+    @org.jetbrains.annotations.NotNull
+    @Override
+    public JsonObject json() {
+        JsonArray array = jsonArray();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.putArray("value", array);
+        return jsonObject;
+    }
+
     @Override
     public List<String> strings() {
         return list.stream().map(Object::toString).collect(Collectors.toList());
@@ -192,12 +202,6 @@ public class DollarList extends AbstractDollar {
     @Override
     public <R> R val() {
         return (R) list;
-    }
-
-    @NotNull
-    @Override
-    public <R> R $() {
-        return (R) $array();
     }
 
     @Override
@@ -242,7 +246,7 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public String toString() {
-        return $array().toString();
+        return jsonArray().toString();
     }
 
 

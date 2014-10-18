@@ -71,6 +71,12 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
+    public var $(@NotNull String age, double d) {
+        return this;
+    }
+
+    @NotNull
+    @Override
     public var $append(Object value) {
         return this;
     }
@@ -94,7 +100,7 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public List<var> $list() {
+    public List<var> list() {
         return Collections.emptyList();
     }
 
@@ -123,7 +129,7 @@ public class DollarVoid extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean $void() {
+    public boolean isVoid() {
         return true;
     }
 

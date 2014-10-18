@@ -53,6 +53,10 @@ public class DollarFuture implements var {
         return getValue().$(age, l);
     }
 
+    @NotNull @Override public var $(@NotNull String key, double value) {
+        return getValue().$(key, value);
+    }
+
     @NotNull
     @Override
     public var $append(Object value) {
@@ -124,8 +128,8 @@ public class DollarFuture implements var {
 
     @NotNull
     @Override
-    public List<var> $list() {
-        return getValue().$list();
+    public List<Throwable> errors() {
+        return getValue().errors();
     }
 
     @NotNull
@@ -251,8 +255,8 @@ public class DollarFuture implements var {
     }
 
     @Override
-    public boolean $void() {
-        return getValue().$void();
+    public boolean isVoid() {
+        return getValue().isVoid();
     }
 
     @Nullable @Override public Double D() {
@@ -280,8 +284,8 @@ public class DollarFuture implements var {
     }
 
     @Override
-    public void clearErrors() {
-        getValue().clearErrors();
+    public var clearErrors() {
+        return getValue().clearErrors();
     }
 
     @NotNull
@@ -304,12 +308,6 @@ public class DollarFuture implements var {
     @Override
     public List<String> errorTexts() {
         return getValue().errorTexts();
-    }
-
-    @NotNull
-    @Override
-    public List<Throwable> errors() {
-        return getValue().errors();
     }
 
     @Override
@@ -346,14 +344,20 @@ public class DollarFuture implements var {
 
     @NotNull
     @Override
-    public JsonObject json() {
-        return getValue().json();
+    public JsonObject json(@NotNull String key) {
+        return getValue().json(key);
     }
 
     @NotNull
     @Override
-    public JsonObject json(@NotNull String key) {
-        return getValue().json(key);
+    public List<var> list() {
+        return getValue().list();
+    }
+
+    @NotNull
+    @Override
+    public <R> R $() {
+        return getValue().$();
     }
 
     @Override
@@ -377,6 +381,12 @@ public class DollarFuture implements var {
         return getValue().orgjson();
     }
 
+    @NotNull
+    @Override
+    public JsonObject json() {
+        return getValue().json();
+    }
+
     @Override
     public List<String> strings() {
         return getValue().strings();
@@ -392,25 +402,19 @@ public class DollarFuture implements var {
         return getValue().val();
     }
 
-    @NotNull
-    @Override
-    public <R> R $() {
-        return getValue().$();
-    }
-
     var getValue() {
         try {
             var value = this.value.get();
             if (value == null) {
-                return DollarStatic.handleError(new NullPointerException());
+                return DollarStatic.handleError(new NullPointerException(), value);
             }
             return value;
         } catch (InterruptedException ie) {
             return DollarStatic.handleInterrupt(ie);
         } catch (ExecutionException e) {
-            return DollarStatic.handleError(e.getCause());
+            return DollarStatic.handleError(e.getCause(), this);
         } catch (Exception e) {
-            return DollarStatic.handleError(e);
+            return DollarStatic.handleError(e, this);
         }
     }
 

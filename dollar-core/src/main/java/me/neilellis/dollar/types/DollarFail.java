@@ -50,7 +50,7 @@ public class DollarFail extends AbstractDollar implements var {
 
     public enum FailureType {
         INVALID_LIST_OPERATION, INVALID_MAP_OPERATION, INVALID_SINGLE_VALUE_OPERATION, EXCEPTION,
-        VOID_FAILURE
+        INVALID_RANGE_OPERATION, VOID_FAILURE
     }
 
     private FailureType failureType;
@@ -69,6 +69,10 @@ public class DollarFail extends AbstractDollar implements var {
     @NotNull
     @Override
     public var $(@NotNull String age, long l) {
+        return this;
+    }
+
+    @NotNull @Override public var $(@NotNull String key, double value) {
         return this;
     }
 
@@ -97,7 +101,7 @@ public class DollarFail extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public List<var> $list() {
+    public List<var> list() {
         return Collections.emptyList();
     }
 
@@ -126,7 +130,7 @@ public class DollarFail extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean $void() {
+    public boolean isVoid() {
         return true;
     }
 
@@ -249,14 +253,14 @@ public class DollarFail extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $pipe(@NotNull Class<? extends Script> clazz) {
-        return this;
+    public FutureDollar send(EventBus e, String destination) {
+        throw new NullPointerException();
     }
 
     @NotNull
     @Override
-    public FutureDollar send(EventBus e, String destination) {
-        throw new NullPointerException();
+    public var $pipe(@NotNull Class<? extends Script> clazz) {
+        return this;
     }
 
     @NotNull
@@ -312,6 +316,10 @@ public class DollarFail extends AbstractDollar implements var {
         return this;
     }
 
+    @Override public var clearErrors() {
+        return DollarFactory.newVoid();
+    }
+
     @Override
     public int size() {
         return 0;
@@ -333,5 +341,4 @@ public class DollarFail extends AbstractDollar implements var {
     public String toString() {
         return "";
     }
-
 }

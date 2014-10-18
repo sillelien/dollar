@@ -17,9 +17,11 @@
 package me.neilellis.dollar;
 
 import com.google.common.collect.ImmutableList;
+import me.neilellis.dollar.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
+import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 
 import java.util.List;
@@ -35,17 +37,37 @@ import java.util.stream.Stream;
 public interface var extends Map<String, var> {
 
 
-  enum ErrorType {VALIDATION, SYSTEM}
+  public enum ErrorType {VALIDATION, SYSTEM}
+
+  /**
+   * Return a new object with the key and value added to it.
+   *
+   * @param key   the key
+   * @param value the value
+   *
+   * @return a new {@link me.neilellis.dollar.var} object with the key/value pair included.
+   */
+  @NotNull var $(@NotNull String key, long value);
+
+  /**
+   * Return a new object with the key and value added to it.
+   *
+   * @param key   the key
+   * @param value the value
+   *
+   * @return a new {@link me.neilellis.dollar.var} object with the key/value pair included.
+   */
+  @NotNull var $(@NotNull String key, double value);
 
 
-  @NotNull var $(@NotNull String age, long l);
-
-    /**
-     * Returns a new {@link me.neilellis.dollar.var} with this value appended to it.
-     * @param value the value to append, this value may be null
-     * @return a new object with the value supplied appended
-     */
-    @NotNull var $append(@Nullable Object value);
+  /**
+   * Returns a new {@link me.neilellis.dollar.var} with this value appended to it.
+   *
+   * @param value the value to append, this value may be null
+   *
+   * @return a new object with the value supplied appended
+   */
+  @NotNull var $append(@Nullable Object value);
 
   @NotNull Stream<var> $children();
 
@@ -85,7 +107,11 @@ public interface var extends Map<String, var> {
 
   @NotNull var $error(@NotNull String errorMessage, @NotNull ErrorType type);
 
-  @NotNull List<var> $list();
+  default var $list() {
+    return DollarFactory.fromValue(errors(), list());
+  }
+
+  @NotNull List<Throwable> errors();
 
   @NotNull var $load(@NotNull String location);
 
@@ -167,28 +193,28 @@ public interface var extends Map<String, var> {
    * @see me.neilellis.dollar.types.DollarVoid
    */
   @NotNull default var $void(@NotNull Callable<var> handler) {
-    if ($void()) {
+    if (isVoid()) {
       try {
         return handler.call();
       } catch (Exception e) {
-        return DollarStatic.handleError(e);
+        return DollarStatic.handleError(e, this);
       }
     } else {
       return this;
     }
   }
 
-    /**
-     * Is this object a void object? Void objects are similar to null, except they can have methods called on them.
-     *
-     * This is a similar concept to nil in Objective-C.
-     *
-     * @see me.neilellis.dollar.types.DollarVoid
-     * @see me.neilellis.dollar.types.DollarFail
-     *
-     * @return true if this is a void object
-     */
-    boolean $void();
+  /**
+   * Is this object a void object? Void objects are similar to null, except they can have methods called on them.
+   *
+   * This is a similar concept to nil in Objective-C.
+   *
+   * @return true if this is a void object
+   *
+   * @see me.neilellis.dollar.types.DollarVoid
+   * @see me.neilellis.dollar.types.DollarFail
+   */
+  boolean isVoid();
 
   @Nullable Double D();
 
@@ -210,7 +236,7 @@ public interface var extends Map<String, var> {
     return this;
   }
 
-  void clearErrors();
+  var clearErrors();
 
   @NotNull var copy(@NotNull ImmutableList<Throwable> errors);
 
@@ -226,8 +252,6 @@ public interface var extends Map<String, var> {
   }
 
   @NotNull List<String> errorTexts();
-
-  @NotNull List<Throwable> errors();
 
   @Deprecated var eval(String label, DollarEval eval);
 
@@ -253,13 +277,6 @@ public interface var extends Map<String, var> {
   boolean hasErrors();
 
   /**
-   * Convert this to a Vert.x JsonObject
-   *
-   * @return this as a JsonObject
-   */
-  @Nullable JsonObject json();
-
-  /**
    * Equivalent returns a Vert.x JsonObject child object value for the supplied key.
    *
    * @param key the key
@@ -267,6 +284,24 @@ public interface var extends Map<String, var> {
    * @return a JsonObject
    */
   @Nullable JsonObject json(@NotNull String key);
+
+  @NotNull default JsonArray jsonArray() {
+    JsonArray array = new JsonArray();
+    for (me.neilellis.dollar.var var : list()) {
+      array.add(var.$());
+    }
+    return array;
+  }
+
+  @NotNull List<var> list();
+
+  /**
+   * Returns a {@link org.vertx.java.core.json.JsonObject}, JsonArray or primitive type such that it can be added to
+   * either a {@link org.vertx.java.core.json.JsonObject} or JsonArray.
+   *
+   * @return a Json friendly object.
+   */
+  @NotNull <R> R $();
 
   @Nullable Stream<String> keyStream();
 
@@ -295,7 +330,21 @@ public interface var extends Map<String, var> {
    *
    * @return a JSONObject
    */
-  @Nullable JSONObject orgjson();
+  @Nullable default JSONObject orgjson() {
+    JsonObject json = json();
+    if (json != null) {
+      return new JSONObject(json.toMap());
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Convert this to a Vert.x JsonObject
+   *
+   * @return this as a JsonObject
+   */
+  @Nullable JsonObject json();
 
   /**
    * Returns this object as a list of string values or null if this is not applicable.
@@ -323,13 +372,5 @@ public interface var extends Map<String, var> {
   default <R> R val() {
     return $();
   }
-
-  /**
-   * Returns a {@link org.vertx.java.core.json.JsonObject}, JsonArray or primitive type such that it can be added to
-   * either a {@link org.vertx.java.core.json.JsonObject} or JsonArray.
-   *
-   * @return a Json friendly object.
-   */
-  @NotNull <R> R $();
 
 }

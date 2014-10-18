@@ -70,7 +70,7 @@ public class RedisPubSubAdapter extends JedisPubSub implements Sub {
         try {
             action.accept(DollarFactory.fromValue(Collections.<Throwable>emptyList(),message));
         } catch (Exception e) {
-            DollarStatic.handleError(e);
+            DollarStatic.handleError(e, future);
         }
     }
 
@@ -79,7 +79,7 @@ public class RedisPubSubAdapter extends JedisPubSub implements Sub {
         try {
             action.accept(DollarFactory.fromValue(Collections.emptyList(),message));
         } catch (Exception e) {
-            DollarStatic.handleError(e);
+            DollarStatic.handleError(e, future);
         }
     }
 

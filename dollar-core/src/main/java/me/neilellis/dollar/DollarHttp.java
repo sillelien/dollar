@@ -45,7 +45,7 @@ public class DollarHttp extends SparkBase {
                 }
                 response.type(result.$mimeType());
             } catch (Exception e) {
-                return DollarStatic.handleError(e);
+                return DollarStatic.handleError(e, result);
             }
             return result.S();
         };

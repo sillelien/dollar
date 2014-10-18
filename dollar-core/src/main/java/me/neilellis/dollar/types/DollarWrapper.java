@@ -61,8 +61,8 @@ public class DollarWrapper implements var {
         return tracer.trace(this, getValue().$(key, l), StateTracer.Operations.SET, key, l);
     }
 
-    var getValue() {
-        return value;
+    @NotNull @Override public var $(@NotNull String key, double value) {
+        return tracer.trace(this, getValue().$(key, value), StateTracer.Operations.SET, key, value);
     }
 
     @NotNull
@@ -136,14 +136,14 @@ public class DollarWrapper implements var {
     @NotNull
     @Override
     public var $error(@NotNull String errorMessage, @NotNull ErrorType type) {
-        errorLogger.log(errorMessage,type);
+        errorLogger.log(errorMessage, type);
         return getValue().$error(errorMessage, type);
     }
 
     @NotNull
     @Override
-    public List<var> $list() {
-        return getValue().$list();
+    public List<Throwable> errors() {
+        return getValue().errors();
     }
 
     @NotNull
@@ -323,8 +323,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public boolean $void() {
-        return getValue().$void();
+    public boolean isVoid() {
+        return getValue().isVoid();
     }
 
     @Nullable @Override public Double D() {
@@ -352,8 +352,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public void clearErrors() {
-        getValue().clearErrors();
+    public var clearErrors() {
+        return tracer.trace(this, getValue().clearErrors(), StateTracer.Operations.CLEAR_ERRORS);
     }
 
     @NotNull
@@ -376,12 +376,6 @@ public class DollarWrapper implements var {
     @Override
     public List<String> errorTexts() {
         return getValue().errorTexts();
-    }
-
-    @NotNull
-    @Override
-    public List<Throwable> errors() {
-        return getValue().errors();
     }
 
     @Override
@@ -428,14 +422,20 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public JsonObject json() {
-        return getValue().json();
+    public JsonObject json(@NotNull String key) {
+        return getValue().json(key);
     }
 
     @NotNull
     @Override
-    public JsonObject json(@NotNull String key) {
-        return getValue().json(key);
+    public List<var> list() {
+        return getValue().list();
+    }
+
+    @NotNull
+    @Override
+    public <R> R $() {
+        return getValue().$();
     }
 
     @Override
@@ -459,6 +459,12 @@ public class DollarWrapper implements var {
         return getValue().orgjson();
     }
 
+    @NotNull
+    @Override
+    public JsonObject json() {
+        return getValue().json();
+    }
+
     @Override
     public List<String> strings() {
         return getValue().strings();
@@ -475,12 +481,6 @@ public class DollarWrapper implements var {
     }
 
     @NotNull
-    @Override
-    public <R> R $() {
-        return getValue().$();
-    }
-
-    @NotNull
     private String sanitize(@NotNull Class<? extends Script> clazz) {
         return clazz.getName().toLowerCase();
     }
@@ -489,6 +489,10 @@ public class DollarWrapper implements var {
     private static String sanitize(@NotNull String location) {
         return location.replaceAll("[^\\w.]+", "_");
 
+    }
+
+    var getValue() {
+        return value;
     }
 
     @Override

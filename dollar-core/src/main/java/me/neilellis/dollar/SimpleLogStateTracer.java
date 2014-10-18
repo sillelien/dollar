@@ -26,23 +26,34 @@ import java.util.Arrays;
 public class SimpleLogStateTracer implements StateTracer {
     @Override
     public <R> R trace(Object before, R after, Operations operationType, Object... values) {
-        String notes="";
+        String afterNotes = "";
+        String beforeNotes = "";
         if(after instanceof var) {
             if(((var) after).hasErrors()) {
-                notes += "*A:E* ";
+                afterNotes += "*ERROR*";
             }
         }
         if(before instanceof var) {
             if(((var) before).hasErrors()) {
-                notes += "*B:E* ";
+                beforeNotes += "*ERROR*";
             }
         }
         if((before instanceof DollarVoid || before == null )&& (after instanceof DollarVoid || after == null)) {
-            DollarStatic.log(String.format("%s%s: %s",operationType, Arrays.toString(values),notes));
+            DollarStatic.log(String.format("%s%s: %s->%s",
+                                           operationType,
+                                           Arrays.toString(values),
+                                           beforeNotes,
+                                           afterNotes));
         } else if(before instanceof DollarVoid || before == null) {
-            DollarStatic.log(String.format("%s%s: %s%s",operationType, Arrays.toString(values),notes,after));
+            DollarStatic.log(String.format("%s%s: %s%s", operationType, Arrays.toString(values), after, afterNotes));
         } else {
-            DollarStatic.log(String.format("%s%s: %s%s -> %s", operationType, Arrays.toString(values), notes,before, after));
+            DollarStatic.log(String.format("%s%s: %s%s -> %s%s",
+                                           operationType,
+                                           Arrays.toString(values),
+                                           before,
+                                           beforeNotes,
+                                           after,
+                                           afterNotes));
         }
         return after;
     }
