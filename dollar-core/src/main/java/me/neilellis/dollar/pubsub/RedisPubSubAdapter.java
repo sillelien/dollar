@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.pubsub;
 
+import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.DollarFuture;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.types.DollarFactory;
@@ -23,7 +24,6 @@ import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.JedisPubSub;
 
-import java.util.Collections;
 import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 
@@ -68,7 +68,7 @@ public class RedisPubSubAdapter extends JedisPubSub implements Sub {
     @Override
     public void onMessage(String channel, String message) {
         try {
-            action.accept(DollarFactory.fromValue(Collections.<Throwable>emptyList(),message));
+            action.accept(DollarFactory.fromValue(ImmutableList.of(), message));
         } catch (Exception e) {
             DollarStatic.handleError(e, future);
         }
@@ -77,7 +77,7 @@ public class RedisPubSubAdapter extends JedisPubSub implements Sub {
     @Override
     public void onPMessage(String s, String s1, String message) {
         try {
-            action.accept(DollarFactory.fromValue(Collections.emptyList(),message));
+            action.accept(DollarFactory.fromValue(ImmutableList.of(), message));
         } catch (Exception e) {
             DollarStatic.handleError(e, future);
         }

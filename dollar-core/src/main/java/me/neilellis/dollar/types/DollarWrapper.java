@@ -17,6 +17,7 @@
 package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import me.neilellis.dollar.*;
 import me.neilellis.dollar.monitor.Monitor;
 import org.jetbrains.annotations.NotNull;
@@ -142,8 +143,14 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public List<Throwable> errors() {
+    public ImmutableList<Throwable> errors() {
         return getValue().errors();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> list() {
+        return getValue().list();
     }
 
     @NotNull
@@ -160,7 +167,7 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public Map<String, var> $map() {
+    public ImmutableMap<String, var> $map() {
         return getValue().$map();
     }
 
@@ -171,8 +178,8 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public String string(@NotNull String key) {
-        return getValue().string(key);
+    public String S(@NotNull String key) {
+        return getValue().S(key);
     }
 
     @NotNull
@@ -428,12 +435,6 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public List<var> list() {
-        return getValue().list();
-    }
-
-    @NotNull
-    @Override
     public <R> R $() {
         return getValue().$();
     }
@@ -466,12 +467,12 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public List<String> strings() {
+    public ImmutableList<String> strings() {
         return getValue().strings();
     }
 
     @Override
-    public Map<String, Object> toMap() {
+    public ImmutableMap<String, Object> toMap() {
         return getValue().toMap();
     }
 

@@ -16,12 +16,12 @@
 
 package me.neilellis.dollar.store;
 
+import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Jedis;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,9 +39,9 @@ public class RedisStore implements DollarStore {
         try {
             value = jedis.get(location);
         } catch (Exception e) {
-            return DollarFactory.fromValue(Collections.singletonList(e), null);
+            return DollarFactory.fromValue(ImmutableList.of(e), null);
         }
-        return DollarFactory.fromValue(Collections.emptyList(),value);
+        return DollarFactory.fromValue(ImmutableList.of(), value);
 
     }
 
@@ -52,9 +52,9 @@ public class RedisStore implements DollarStore {
         try {
             value = jedis.brpop(timeoutInMillis / 1000, location);
         } catch (Exception e) {
-            return DollarFactory.fromValue(Collections.singletonList(e), null);
+            return DollarFactory.fromValue(ImmutableList.of(e), null);
         }
-        return DollarFactory.fromValue(Collections.emptyList(), value.get(1));
+        return DollarFactory.fromValue(ImmutableList.of(), value.get(1));
     }
 
     @Override

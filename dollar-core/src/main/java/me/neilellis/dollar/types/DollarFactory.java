@@ -39,12 +39,12 @@ import java.util.Map;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarFactory {
-    static Monitor monitor = DollarStatic.monitor();
-    @NotNull
-    static StateTracer tracer = DollarStatic.tracer();
+  static Monitor monitor = DollarStatic.monitor();
+  @NotNull
+  static StateTracer tracer = DollarStatic.tracer();
 
-    @NotNull
-    public static var fromField(@NotNull List<Throwable> errors, Object field) {
+  @NotNull
+  public static var fromField(@NotNull ImmutableList<Throwable> errors, Object field) {
 //            return new DollarWrapper(DollarNull.INSTANCE, monitor, tracer);
 //        }
 //        if (field instanceof String) {
@@ -57,99 +57,103 @@ public class DollarFactory {
 //            return DollarStatic.$(field);
 //        }
 //        return new DollarWrapper(DollarStatic.$(field.toString()), monitor, tracer);
-        return create(errors, field);
+    return create(errors, field);
+  }
+
+
+  @NotNull
+  public static var fromValue(@NotNull ImmutableList<Throwable> errors, Object o) {
+    return create(errors, o);
+  }
+
+  @NotNull
+  public static var fromValue() {
+    return create(ImmutableList.of(), new JsonObject());
+  }
+
+
+  @NotNull
+  static var create(@NotNull ImmutableList<Throwable> errors, @Nullable Object o) {
+    if (o == null) {
+      return wrap(new DollarVoid(errors));
     }
-
-
-    @NotNull
-    public static var fromValue(@NotNull List<Throwable> errors, Object o) {
-        return create(errors, o);
+    if (o instanceof QueryParamsMap) {
+      return create(errors, DollarStatic.paramMapToJson(((QueryParamsMap) o).toMap()));
     }
-
-    @NotNull
-    public static var fromValue() {
-        return create(Collections.emptyList(), new JsonObject());
+    if (o instanceof var) {
+      return ((var) o).$copy();
     }
-
-
-    @NotNull
-    static var create(@NotNull List<Throwable> errors, @Nullable Object o) {
-        if (o == null) {
-            return wrap(new DollarVoid(errors));
-        }
-        if (o instanceof QueryParamsMap) {
-            return create(errors, DollarStatic.paramMapToJson(((QueryParamsMap) o).toMap()));
-        }
-        if (o instanceof var) {
-            return ((var) o).copy(ImmutableList.copyOf(errors));
-        }
-        if (o instanceof List) {
-            return wrap(new DollarList(errors, (List<var>) o));
-        }
-        if (o.getClass().isArray()) {
-            return wrap(new DollarList(errors, (Object[]) o));
-        }
-        if (o instanceof Number) {
-            return wrap(new DollarNumber(errors, (Number) o));
-        }
-        if (o instanceof Range) {
-            return wrap(new DollarRange(errors, (Range) o));
-        }
-        if (o instanceof String) {
-            try {
-                return wrap(new DollarJson(errors, new JsonObject((String) o)));
-            } catch (DecodeException de) {
-                return wrap(new DollarString(errors, (String) o));
-            }
-        }
-        JsonObject json;
-        if (o instanceof JsonObject) {
-            json = ((JsonObject) o);
-        }
-        if (o instanceof JsonObject) {
-            json = ((JsonObject) o);
-        } else if (o instanceof MultiMap) {
-            json = DollarStatic.mapToJson((MultiMap) o);
-        } else if (o instanceof Map) {
-            json = new JsonObject((Map<String, Object>) o);
-        } else if (o instanceof Message) {
-            json = ((JsonObject) ((Message) o).body());
-            if (json == null) {
-                return wrap(new DollarVoid(errors));
-            }
-        } else {
-            System.out.println(o.getClass());
-            json = new JsonObject(o.toString());
-        }
-        return wrap(new DollarJson(errors, json));
+    if (o instanceof List) {
+      return wrap(new DollarList(errors, (List<var>) o));
     }
-
-
-    @NotNull
-    public static var fromValue(Object o) {
-        return fromValue(Collections.emptyList(), o);
+    if (o.getClass().isArray()) {
+      return wrap(new DollarList(errors, (Object[]) o));
     }
-
-    @NotNull
-    public static var failure(DollarFail.FailureType failureType) {
-        return wrap(new DollarFail(failureType));
+    if (o instanceof Number) {
+      return wrap(new DollarNumber(errors, (Number) o));
     }
-
-    @NotNull
-    public static DollarWrapper wrap(var value) {
-        return wrap(value, DollarStatic.monitor(), DollarStatic.tracer(), DollarStatic.errorLogger());
+    if (o instanceof Range) {
+      return wrap(new DollarRange(errors, (Range) o));
     }
-
-    @NotNull
-    public static DollarWrapper wrap(var value, Monitor monitor, StateTracer tracer, ErrorLogger errorLogger) {
-        return new DollarWrapper(value, monitor, tracer, errorLogger);
+    if (o instanceof String) {
+      if (((String) o).matches("^[a-zA-Z0-9]+$")) {
+        return wrap(new DollarString(errors, (String) o));
+      } else {
+        try {
+          return wrap(new DollarJson(errors, new JsonObject((String) o)));
+        } catch (DecodeException de) {
+          return wrap(new DollarString(errors, (String) o));
+        }
+      }
     }
-
-    public static var failure(Throwable throwable) {
-        return wrap(new DollarFail(Collections.singletonList(throwable), DollarFail.FailureType.EXCEPTION));
+    JsonObject json;
+//        if (o instanceof JsonObject) {
+//            json = ((JsonObject) o);
+//        }
+    if (o instanceof JsonObject) {
+      json = ((JsonObject) o);
+    } else if (o instanceof MultiMap) {
+      json = DollarStatic.mapToJson((MultiMap) o);
+    } else if (o instanceof Map) {
+      json = new JsonObject((Map<String, Object>) o);
+    } else if (o instanceof Message) {
+      json = ((JsonObject) ((Message) o).body());
+      if (json == null) {
+        return wrap(new DollarVoid(errors));
+      }
+    } else {
+      System.out.println(o.getClass());
+      json = new JsonObject(o.toString());
     }
+    return wrap(new DollarJson(errors, json));
+  }
 
-    public static var newVoid() {
-        return wrap(new DollarVoid());
-    }
+
+  @NotNull
+  public static var fromValue(Object o) {
+    return fromValue(ImmutableList.of(), o);
+  }
+
+  @NotNull
+  public static var failure(DollarFail.FailureType failureType) {
+    return wrap(new DollarFail(failureType));
+  }
+
+  @NotNull
+  public static DollarWrapper wrap(var value) {
+    return wrap(value, DollarStatic.monitor(), DollarStatic.tracer(), DollarStatic.errorLogger());
+  }
+
+  @NotNull
+  public static DollarWrapper wrap(var value, Monitor monitor, StateTracer tracer, ErrorLogger errorLogger) {
+    return new DollarWrapper(value, monitor, tracer, errorLogger);
+  }
+
+  public static var failure(Throwable throwable) {
+    return wrap(new DollarFail(Collections.singletonList(throwable), DollarFail.FailureType.EXCEPTION));
+  }
+
+  public static var newVoid() {
+    return wrap(new DollarVoid());
+  }
 }

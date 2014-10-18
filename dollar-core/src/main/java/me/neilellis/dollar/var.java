@@ -17,6 +17,7 @@
 package me.neilellis.dollar;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import me.neilellis.dollar.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -111,19 +112,19 @@ public interface var extends Map<String, var> {
     return DollarFactory.fromValue(errors(), list());
   }
 
-  @NotNull List<Throwable> errors();
+  @NotNull ImmutableList<Throwable> errors();
 
-  @NotNull List<var> list();
+  @NotNull ImmutableList<var> list();
 
   @NotNull var $load(@NotNull String location);
 
-  @NotNull Map<String, var> $map();
+  @NotNull ImmutableMap<String, var> $map();
 
   default boolean $match(@NotNull String key, @Nullable String value) {
-    return value != null && value.equals(string(key));
+    return value != null && value.equals(S(key));
   }
 
-  @Nullable String string(@NotNull String key);
+  @Nullable String S(@NotNull String key);
 
   /**
    * Returns the mime type of this {@link var} object. By default this will be 'application/json'
@@ -351,14 +352,14 @@ public interface var extends Map<String, var> {
    *
    * @return a list of strings
    */
-  @Nullable List<String> strings();
+  @Nullable ImmutableList<String> strings();
 
   /**
    * Returns this object as a set of nested maps.
    *
    * @return a nested Map or null if the operation doesn't make sense (i.e. on a single valued object or list)
    */
-  @Nullable Map<String, Object> toMap();
+  @Nullable ImmutableMap<String, Object> toMap();
 
   /**
    * Returns the underlying data structure. This method is useful for the rare cases you need direct access to the

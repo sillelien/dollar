@@ -109,15 +109,15 @@ public abstract class AbstractDollar implements var {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public void clear() {
+        throw new UnsupportedOperationException();
+    }
+
     @NotNull
     @Override
     public var eval(@NotNull DollarEval lambda) {
         return eval("anon", lambda);
-    }
-
-    @Override
-    public void clear() {
-        throw new UnsupportedOperationException();
     }
 
     @NotNull
@@ -139,11 +139,6 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull
-    public var eval(String label, @NotNull DollarEval lambda) {
-        return lambda.eval($copy());
-    }
-
-    @NotNull
     @Override
     public var getOrDefault(@NotNull Object key, @NotNull var defaultValue) {
         return $has(String.valueOf(key)) ? get(key) : defaultValue;
@@ -154,6 +149,11 @@ public abstract class AbstractDollar implements var {
         $map().forEach(action);
     }
 
+    @NotNull
+    public var eval(String label, @NotNull DollarEval lambda) {
+        return lambda.eval($copy());
+    }
+
     @Override
     public void replaceAll(BiFunction<? super String, ? super var, ? extends var> function) {
         throw new UnsupportedOperationException();
@@ -162,6 +162,22 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var putIfAbsent(String key, var value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean remove(Object key, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean replace(String key, var oldValue, var newValue) {
+        throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    @Override
+    public var replace(String key, var value) {
         throw new UnsupportedOperationException();
     }
 
@@ -185,7 +201,7 @@ public abstract class AbstractDollar implements var {
                 } catch (Exception e) {
                     return DollarStatic.handleError(e, this);
                 }
-                return DollarFactory.fromValue(Collections.emptyList(), value);
+                return DollarFactory.fromValue(ImmutableList.of(), value);
             } catch (NoSuchMethodException e) {
                 throw new DollarException(e);
             }
@@ -195,30 +211,8 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public boolean remove(Object key, Object value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean replace(String key, var oldValue, var newValue) {
-        throw new UnsupportedOperationException();
-    }
-
-    @NotNull
-    @Override
-    public var replace(String key, var value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public var computeIfAbsent(String key, @NotNull Function<? super String, ? extends var> mappingFunction) {
         return $map().computeIfAbsent(key, mappingFunction);
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull String js) {
-        return $pipe("anon", js);
     }
 
     @Override
@@ -245,6 +239,13 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull
+    @Override
+    public var $pipe(@NotNull String js) {
+        return $pipe("anon", js);
+    }
+
+
+    @NotNull
     public var $pipe(@NotNull String label, @NotNull String js) {
         SimpleScriptContext context = new SimpleScriptContext();
         context.setAttribute("$", $copy(), context.getScopes().get(0));
@@ -254,7 +255,7 @@ public abstract class AbstractDollar implements var {
         } catch (Exception e) {
             return DollarStatic.handleError(e, this);
         }
-        return DollarFactory.fromValue(Collections.emptyList(), value);
+        return DollarFactory.fromValue(ImmutableList.of(), value);
     }
 
 
@@ -416,7 +417,7 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var $error(@NotNull Throwable error) {
-        return copy(new ImmutableList.Builder().addAll(errors).add(error).build());
+        return copy(new ImmutableList.Builder<Throwable>().add(error).build());
     }
 
     @NotNull
@@ -450,8 +451,8 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public List<Throwable> errors() {
-        return new ArrayList<>(errors);
+    public ImmutableList<Throwable> errors() {
+        return errors;
     }
 
     @Override

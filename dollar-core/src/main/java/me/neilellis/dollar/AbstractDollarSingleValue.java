@@ -16,6 +16,8 @@
 
 package me.neilellis.dollar;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.types.DollarFail;
 import me.neilellis.dollar.types.DollarString;
@@ -25,9 +27,7 @@ import org.json.JSONObject;
 import org.vertx.java.core.json.JsonObject;
 
 import java.net.URLDecoder;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -75,13 +75,19 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     @Override
-    public Map<String, var> $map() {
-        return Collections.singletonMap("value", this);
+    public ImmutableList<var> list() {
+        return ImmutableList.of(this);
     }
 
     @NotNull
     @Override
-    public String string(@NotNull String key) {
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of("value", this);
+    }
+
+    @NotNull
+    @Override
+    public String S(@NotNull String key) {
         return $(key).S();
     }
 
@@ -121,12 +127,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return null;
     }
 
-    @NotNull
-    @Override
-    public List<var> list() {
-        return Collections.singletonList(this);
-    }
-
     public Stream<String> keyStream() {
         return Stream.empty();
 
@@ -144,11 +144,11 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @Override
-    public List<String> strings() {
-        return Collections.singletonList(S());
+    public ImmutableList<String> strings() {
+        return ImmutableList.of(S());
     }
 
-    public Map<String, Object> toMap() {
+    public ImmutableMap<String, Object> toMap() {
         return null;
     }
 

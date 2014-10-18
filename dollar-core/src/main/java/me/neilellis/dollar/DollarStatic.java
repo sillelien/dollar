@@ -30,7 +30,6 @@ import org.vertx.java.core.json.JsonObject;
 import spark.Spark;
 import spark.route.HttpMethod;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -118,7 +117,7 @@ public class DollarStatic {
 
     @NotNull
     public static var $(JsonObject json) {
-        return DollarFactory.fromValue(Collections.<Throwable>emptyList(), json);
+        return DollarFactory.fromValue(ImmutableList.of(), json);
     }
 
     @NotNull
@@ -133,7 +132,7 @@ public class DollarStatic {
     public static var $(@Nullable Object o) {
         return DollarStatic.tracer()
                            .trace(DollarVoid.INSTANCE,
-                                  DollarFactory.fromValue(Collections.emptyList(), o),
+                                  DollarFactory.fromValue(ImmutableList.of(), o),
                                   StateTracer.Operations.CREATE,
                                   o == null ? "null" : o.getClass().getName());
     }
@@ -278,7 +277,7 @@ public class DollarStatic {
 
     @NotNull
     public static var $list(Object... values) {
-        return DollarFactory.fromValue(Collections.emptyList(), values);
+        return DollarFactory.fromValue(ImmutableList.of(), values);
     }
 
     @NotNull

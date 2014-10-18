@@ -16,12 +16,12 @@
 
 package me.neilellis.dollar;
 
+import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
 import spark.Request;
 import spark.Response;
 
-import java.util.Collections;
 import java.util.Set;
 
 import static me.neilellis.dollar.DollarStatic.$;
@@ -70,7 +70,7 @@ public class DollarHttpContext {
 
     @NotNull
     public var cookies() {
-        return DollarFactory.fromValue(Collections.emptyList(), request.cookies());
+        return DollarFactory.fromValue(ImmutableList.of(), request.cookies());
     }
 
     public void header(String header, String value) {
@@ -89,17 +89,17 @@ public class DollarHttpContext {
 
     @NotNull
     public var json() {
-        return DollarFactory.fromValue(Collections.emptyList(),request.body());
+        return DollarFactory.fromValue(ImmutableList.of(), request.body());
     }
 
     @NotNull
     public var params() {
-        return DollarFactory.fromValue(Collections.emptyList(),request.params());
+        return DollarFactory.fromValue(ImmutableList.of(), request.params());
     }
 
     @NotNull
     public var queryParams() {
-        return DollarFactory.fromValue(Collections.emptyList(),request.queryMap());
+        return DollarFactory.fromValue(ImmutableList.of(), request.queryMap());
     }
 
     public void redirect(String location) {

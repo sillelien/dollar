@@ -16,9 +16,7 @@
 
 package me.neilellis.dollar.types;
 
-import com.google.common.collect.ContiguousSet;
-import com.google.common.collect.DiscreteDomain;
-import com.google.common.collect.Range;
+import com.google.common.collect.*;
 import me.neilellis.dollar.AbstractDollar;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.var;
@@ -27,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
 import org.vertx.java.core.json.JsonObject;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -85,13 +82,22 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public Map<String, var> $map() {
+    public ImmutableList<var> list() {
+        return ImmutableList.copyOf(ContiguousSet.create(range, DiscreteDomain.longs())
+                                                 .stream()
+                                                 .map(DollarStatic::$)
+                                                 .collect(Collectors.toList()));
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public String string(@NotNull String key) {
+    public String S(@NotNull String key) {
         return range.toString();
     }
 
@@ -143,15 +149,6 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public List<var> list() {
-        return ContiguousSet.create(range, DiscreteDomain.longs())
-                            .stream()
-                            .map(DollarStatic::$)
-                            .collect(Collectors.toList());
-    }
-
-    @NotNull
-    @Override
     public Range<Long> $() {
         return range;
     }
@@ -177,15 +174,15 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public List<String> strings() {
-        return ContiguousSet.create(range, DiscreteDomain.longs())
+    public ImmutableList<String> strings() {
+        return ImmutableList.copyOf(ContiguousSet.create(range, DiscreteDomain.longs())
                             .stream()
                             .map(Object::toString)
-                            .collect(Collectors.toList());
+                            .collect(Collectors.toList()));
     }
 
     @Override
-    public Map<String, Object> toMap() {
+    public ImmutableMap<String, Object> toMap() {
         return null;
     }
 

@@ -16,6 +16,8 @@
 
 package me.neilellis.dollar.types;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import me.neilellis.dollar.AbstractDollar;
 import me.neilellis.dollar.exceptions.ListException;
 import me.neilellis.dollar.var;
@@ -36,23 +38,28 @@ import java.util.stream.Stream;
  */
 public class DollarList extends AbstractDollar {
 
-    private List<var> list = new ArrayList<>();
+    private final ImmutableList<var> list;
 
-     DollarList(@NotNull List<Throwable> errors, @NotNull JsonArray array) {
+    DollarList(@NotNull ImmutableList<Throwable> errors, @NotNull JsonArray array) {
          super(errors);
-         list = list.stream().map((i) -> DollarFactory.fromValue(errors, i)).collect(Collectors.toList());
+        list = ImmutableList.copyOf((List<var>) array.toList()
+                                                     .stream()
+                                                     .map((i) -> DollarFactory.fromValue(errors, i))
+                                                     .collect(Collectors.toList()));
     }
 
-     DollarList(@NotNull List<Throwable> errors, @NotNull List<var> list) {
+    DollarList(@NotNull ImmutableList<Throwable> errors, @NotNull List<var> list) {
          super(errors);
-         this.list.addAll(list);
+        this.list = ImmutableList.copyOf(list);
     }
 
-     DollarList(@NotNull List<Throwable> errors, @NotNull Object... values) {
+    DollarList(@NotNull ImmutableList<Throwable> errors, @NotNull Object... values) {
          super(errors);
+        List<var> l = new ArrayList<>();
          for (Object value : values) {
-            list.add(DollarFactory.fromValue(errors,value));
+             l.add(DollarFactory.fromValue(errors, value));
         }
+        list = ImmutableList.copyOf(l);
     }
 
     @org.jetbrains.annotations.NotNull
@@ -68,10 +75,11 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public var $append(Object value) {
-        DollarList copy = (DollarList) $copy();
-        copy.list.add(DollarFactory.fromValue(errors(), value));
-        return copy;
-
+        return DollarFactory.fromValue(errors(),
+                                       ImmutableList.builder()
+                                                    .addAll(list)
+                                                    .add(DollarFactory.fromValue(value))
+                                                    .build());
     }
 
     @NotNull
@@ -93,13 +101,19 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public Map<String, var> $map() {
+    public ImmutableList<var> list() {
+        return list;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
         return null;
     }
 
     @Nullable
     @Override
-    public String string(@NotNull String key) {
+    public String S(@NotNull String key) {
         return null;
     }
 
@@ -150,12 +164,6 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public List<var> list() {
-        return new ArrayList<>(list);
-    }
-
-    @NotNull
-    @Override
     public <R> R $() {
         return (R) jsonArray();
     }
@@ -190,13 +198,13 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public List<String> strings() {
-        return list.stream().map(Object::toString).collect(Collectors.toList());
+    public ImmutableList<String> strings() {
+        return ImmutableList.copyOf(list.stream().map(Object::toString).collect(Collectors.toList()));
     }
 
     @Override
-    public Map<String, Object> toMap() {
-        throw new ListException();
+    public ImmutableMap<String, Object> toMap() {
+        return null;
     }
 
     @Override

@@ -17,6 +17,7 @@
 package me.neilellis.dollar;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
@@ -128,8 +129,14 @@ public class DollarFuture implements var {
 
     @NotNull
     @Override
-    public List<Throwable> errors() {
+    public ImmutableList<Throwable> errors() {
         return getValue().errors();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> list() {
+        return getValue().list();
     }
 
     @NotNull
@@ -140,7 +147,7 @@ public class DollarFuture implements var {
 
     @NotNull
     @Override
-    public Map<String, var> $map() {
+    public ImmutableMap<String, var> $map() {
         return getValue().$map();
     }
 
@@ -150,8 +157,8 @@ public class DollarFuture implements var {
 
     @NotNull
     @Override
-    public String string(@NotNull String key) {
-        return getValue().string(key);
+    public String S(@NotNull String key) {
+        return getValue().S(key);
     }
 
     @NotNull
@@ -350,12 +357,6 @@ public class DollarFuture implements var {
 
     @NotNull
     @Override
-    public List<var> list() {
-        return getValue().list();
-    }
-
-    @NotNull
-    @Override
     public <R> R $() {
         return getValue().$();
     }
@@ -388,12 +389,12 @@ public class DollarFuture implements var {
     }
 
     @Override
-    public List<String> strings() {
+    public ImmutableList<String> strings() {
         return getValue().strings();
     }
 
     @Override
-    public Map<String, Object> toMap() {
+    public ImmutableMap<String, Object> toMap() {
         return getValue().toMap();
     }
 

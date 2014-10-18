@@ -16,6 +16,8 @@
 
 package me.neilellis.dollar.types;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import me.neilellis.dollar.AbstractDollar;
 import me.neilellis.dollar.DollarEval;
 import me.neilellis.dollar.Script;
@@ -52,7 +54,7 @@ import java.util.stream.Stream;
 public class DollarVoid extends AbstractDollar implements var {
 
 
-    public static final var INSTANCE = DollarFactory.fromValue(Collections.emptyList(), null);
+    public static final var INSTANCE = DollarFactory.newVoid();
 
     public DollarVoid(@NotNull List<Throwable> errors) {
         super(errors);
@@ -100,13 +102,19 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public Map<String, var> $map() {
-        return Collections.emptyMap();
+    public ImmutableList<var> list() {
+        return ImmutableList.of();
     }
 
     @NotNull
     @Override
-    public String string(@NotNull String key) {
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of();
+    }
+
+    @NotNull
+    @Override
+    public String S(@NotNull String key) {
         return "";
     }
 
@@ -157,12 +165,6 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public List<var> list() {
-        return Collections.emptyList();
-    }
-
-    @NotNull
-    @Override
     public <R> R $() {
         return (R) new JsonObject();
     }
@@ -190,13 +192,13 @@ public class DollarVoid extends AbstractDollar implements var {
     }
 
     @Override
-    public List<String> strings() {
-        return Collections.emptyList();
+    public ImmutableList<String> strings() {
+        return ImmutableList.of();
     }
 
     @Override
-    public Map<String, Object> toMap() {
-        return Collections.emptyMap();
+    public ImmutableMap<String, Object> toMap() {
+        return ImmutableMap.of();
     }
 
     @Override
