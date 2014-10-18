@@ -20,7 +20,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.types.DollarFail;
-import me.neilellis.dollar.types.DollarString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
@@ -113,8 +112,8 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     @Override
-    public DollarString decode() {
-        return new DollarString(errors(), URLDecoder.decode(S()));
+    public var decode() {
+        return DollarFactory.fromValue(errors(), URLDecoder.decode(S()));
     }
 
     @NotNull

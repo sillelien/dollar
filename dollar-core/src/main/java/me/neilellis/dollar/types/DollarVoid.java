@@ -27,7 +27,6 @@ import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.vertx.java.core.json.JsonObject;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -305,11 +304,6 @@ public class DollarVoid extends AbstractDollar implements var {
         return Stream.empty();
     }
 
-    @NotNull
-    @Override
-    public var $copy() {
-        return new DollarVoid(new ArrayList<>(errors()));
-    }
 
     @Override
     public int size() {

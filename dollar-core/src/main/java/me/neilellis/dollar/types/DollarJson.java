@@ -221,7 +221,7 @@ class DollarJson extends AbstractDollar implements var {
     @NotNull
     @Override
     public var decode() {
-        return new DollarString(errors(), URLDecoder.decode(S()));
+        return DollarFactory.fromValue(errors(), URLDecoder.decode(S()));
     }
 
     @NotNull

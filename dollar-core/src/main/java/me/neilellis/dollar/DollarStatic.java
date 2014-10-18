@@ -413,6 +413,6 @@ public class DollarStatic {
 
     @NotNull
     public static var $void() {
-        return new DollarVoid();
+        return DollarFactory.newVoid();
     }
 }

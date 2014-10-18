@@ -226,7 +226,7 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public var $copy() {
-        return new DollarList(errors(), list.stream().map(var::$copy).collect(Collectors.toList()));
+        return DollarFactory.fromValue(errors(), list.stream().map(var::$copy).collect(Collectors.toList()));
     }
 
     @Override
@@ -248,7 +248,7 @@ public class DollarList extends AbstractDollar {
                 newList.add(val);
             }
         }
-        return new DollarList(errors(), newList);
+        return DollarFactory.fromValue(errors(), newList);
     }
 
     @NotNull
