@@ -227,11 +227,7 @@ class DollarJson extends AbstractDollar implements var {
     @NotNull
     @Override
     public var $(@NotNull String key) {
-        if (key.matches("\\w+")) {
             return DollarFactory.fromField(errors(), json().getField(key));
-        } else {
-            return $pipe(key);
-        }
     }
 
     @Nullable

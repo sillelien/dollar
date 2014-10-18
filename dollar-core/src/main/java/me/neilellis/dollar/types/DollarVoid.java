@@ -335,7 +335,7 @@ public class DollarVoid extends AbstractDollar implements var {
     @NotNull
     @Override
     public String toString() {
-        return "void";
+        return "";
     }
 
 }

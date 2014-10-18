@@ -131,6 +131,7 @@ public class DollarWrapper implements var {
     @NotNull
     @Override
     public var $invalid(@NotNull String errorMessage) {
+        errorLogger.log();
         return getValue().$invalid(errorMessage);
     }
 

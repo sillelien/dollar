@@ -60,6 +60,11 @@ public interface var extends Map<String, var> {
    */
   @NotNull var $(@NotNull String key, double value);
 
+  @NotNull
+  default String $S() {
+    String s = S();
+    return s == null ? "" : s;
+  }
 
   /**
    * Returns a new {@link me.neilellis.dollar.var} with this value appended to it.
