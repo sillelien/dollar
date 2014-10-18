@@ -85,15 +85,6 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public List<var> list() {
-        return ContiguousSet.create(range, DiscreteDomain.longs())
-                            .stream()
-                            .map(DollarStatic::$)
-                            .collect(Collectors.toList());
-    }
-
-    @NotNull
-    @Override
     public Map<String, var> $map() {
         throw new UnsupportedOperationException();
     }
@@ -146,18 +137,23 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public JsonObject json() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.putArray("value", jsonArray());
-        return jsonObject;
-
+    public JsonObject json(@NotNull String key) {
+        return new JsonObject();
     }
-
 
     @NotNull
     @Override
-    public JsonObject json(@NotNull String key) {
-        return new JsonObject();
+    public List<var> list() {
+        return ContiguousSet.create(range, DiscreteDomain.longs())
+                            .stream()
+                            .map(DollarStatic::$)
+                            .collect(Collectors.toList());
+    }
+
+    @NotNull
+    @Override
+    public Range<Long> $() {
+        return range;
     }
 
     @Override
@@ -171,6 +167,14 @@ public class DollarRange extends AbstractDollar {
         return null;
     }
 
+    @NotNull
+    @Override
+    public JsonObject json() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.putArray("value", jsonArray());
+        return jsonObject;
+
+    }
 
     @Override
     public List<String> strings() {
@@ -183,12 +187,6 @@ public class DollarRange extends AbstractDollar {
     @Override
     public Map<String, Object> toMap() {
         return null;
-    }
-
-    @NotNull
-    @Override
-    public Range<Long> $() {
-        return range;
     }
 
     @Override
@@ -231,5 +229,9 @@ public class DollarRange extends AbstractDollar {
     @Override
     public var remove(Object value) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+    }
+
+    @Override public String toString() {
+        return String.format("%d..%d", range.lowerEndpoint(), range.upperEndpoint());
     }
 }
