@@ -20,7 +20,11 @@ package me.neilellis.dollar.pubsub;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface Sub {
+    void await(int seconds) throws InterruptedException;
+
     void await() throws InterruptedException;
+
+    void awaitFirst(int seconds) throws InterruptedException;
 
     void cancel();
 }

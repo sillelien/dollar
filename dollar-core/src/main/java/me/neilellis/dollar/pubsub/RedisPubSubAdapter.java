@@ -17,90 +17,107 @@
 package me.neilellis.dollar.pubsub;
 
 import com.google.common.collect.ImmutableList;
-import me.neilellis.dollar.DollarFuture;
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.StateTracer;
 import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.JedisPubSub;
 
 import java.util.concurrent.Semaphore;
-import java.util.function.Consumer;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class RedisPubSubAdapter extends JedisPubSub implements Sub {
-    private final Consumer<var> action;
-    private DollarFuture future;
-    @NotNull
-    private Semaphore lock = new Semaphore(1);
+  private final DollarPubSub.SubAction action;
+  @NotNull
+  private Semaphore lock = new Semaphore(0);
+  private Semaphore firstMessageLock = new Semaphore(0);
 
-    public RedisPubSubAdapter(Consumer<var> lambda) {
-        this.action = lambda;
-        try {
-            lock.acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+  public RedisPubSubAdapter(DollarPubSub.SubAction lambda) {
+    this.action = lambda;
+
+  }
+
+  public void await(int seconds) throws InterruptedException {
+    if (lock.tryAcquire(seconds, TimeUnit.SECONDS)) {
+      lock.release();
+    }
+  }
+
+  @Override public void await() throws InterruptedException {
+    lock.acquire();
+    lock.release();
+  }
+
+  @Override
+  public void awaitFirst(int seconds) throws InterruptedException {
+    if (lock.tryAcquire(seconds, TimeUnit.SECONDS)) {
+      lock.release();
+    }
+    if (firstMessageLock.tryAcquire(seconds, TimeUnit.SECONDS)) {
+      firstMessageLock.release();
+    }
+  }
+
+  @Override
+  public void cancel() {
+    System.out.println("Cancelled");
+    super.unsubscribe();
+  }
+
+
+  @Override
+  public void onMessage(String channel, String message) {
+    try {
+      action.handle(DollarStatic.tracer().trace(null, DollarFactory.fromValue(ImmutableList.of(), message),
+                                                StateTracer.Operations.RECEIVE, channel), this);
+    } catch (Exception e) {
+      DollarStatic.handleError(e, null);
+    } finally {
+      firstMessageLock.release();
+    }
+  }
+
+  @Override
+  public void onPMessage(String s, String s1, String message) {
+    try {
+      action.handle(DollarStatic.tracer().trace(null, DollarFactory.fromValue(ImmutableList.of(), message),
+                                                StateTracer.Operations.RECEIVE, s, s1), this);
+    } catch (Exception e) {
+      DollarStatic.handleError(e, null);
+    } finally {
+      firstMessageLock.release();
+    }
+  }
+
+  @Override
+  public void onSubscribe(String s, int i) {
+    lock.release();
+  }
+
+  @Override
+  public void onUnsubscribe(String s, int i) {
+    try {
+      lock.release();
+    } finally {
+      firstMessageLock.release();
     }
 
-    public void await() throws InterruptedException {
-        lock.acquire();
-        lock.release();
-    }
+  }
 
-    @Override
-    public void cancel() {
-        System.out.println("Cancelled");
-        future.future().cancel(true);
-        super.unsubscribe();
+  @Override
+  public void onPUnsubscribe(String s, int i) {
+    try {
+      lock.release();
+    } finally {
+      firstMessageLock.release();
     }
+  }
 
-    public DollarFuture getFuture() {
-        return future;
-    }
-
-    public void setFuture(DollarFuture future) {
-        this.future = future;
-    }
-
-    @Override
-    public void onMessage(String channel, String message) {
-        try {
-            action.accept(DollarFactory.fromValue(ImmutableList.of(), message));
-        } catch (Exception e) {
-            DollarStatic.handleError(e, future);
-        }
-    }
-
-    @Override
-    public void onPMessage(String s, String s1, String message) {
-        try {
-            action.accept(DollarFactory.fromValue(ImmutableList.of(), message));
-        } catch (Exception e) {
-            DollarStatic.handleError(e, future);
-        }
-    }
-
-    @Override
-    public void onSubscribe(String s, int i) {
-        lock.release();
-    }
-
-    @Override
-    public void onUnsubscribe(String s, int i) {
-        lock.release();
-
-    }
-
-    @Override
-    public void onPUnsubscribe(String s, int i) {
-        //TODO
-    }
-
-    @Override
-    public void onPSubscribe(String s, int i) {
-        //TODO
-    }
+  @Override
+  public void onPSubscribe(String s, int i) {
+    lock.release();
+  }
 }

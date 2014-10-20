@@ -17,11 +17,11 @@
 package me.neilellis.dollar;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import me.neilellis.dollar.collections.ImmutableMap;
+import me.neilellis.dollar.json.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
-import org.vertx.java.core.json.JsonObject;
 
 import java.util.Collection;
 import java.util.List;
@@ -56,6 +56,11 @@ public class DollarFuture implements var {
 
     @NotNull @Override public var $(@NotNull String key, double value) {
         return getValue().$(key, value);
+    }
+
+    @Override
+    public String S() {
+        return getValue().S();
     }
 
     @NotNull
@@ -135,8 +140,8 @@ public class DollarFuture implements var {
 
     @NotNull
     @Override
-    public ImmutableList<var> list() {
-        return getValue().list();
+    public ImmutableList<var> toList() {
+        return getValue().toList();
     }
 
     @NotNull
@@ -172,15 +177,16 @@ public class DollarFuture implements var {
         getValue().$out();
     }
 
-    @Override
-    public String S() {
-        return getValue().S();
-    }
-
     @NotNull
     @Override
     public var $pipe(@NotNull String label, @NotNull String js) {
         return getValue().$pipe(label, js);
+    }
+
+    @NotNull
+    @Override
+    public var $pipe(@NotNull String label, @NotNull Pipeable pipe) {
+        return getValue().$pipe(label, pipe);
     }
 
     @NotNull
@@ -197,14 +203,13 @@ public class DollarFuture implements var {
 
     @NotNull
     @Override
-    public var $pipe(@NotNull Function<var, var> function) {
-        return getValue().$pipe(function);
-    }
-
-    @NotNull
-    @Override
     public var $pop(@NotNull String location, int timeoutInMillis) {
         return getValue().$pop(location, timeoutInMillis);
+    }
+
+    @Override
+    public var $post(String url) {
+        return getValue().$post(url);
     }
 
     @NotNull
@@ -394,7 +399,7 @@ public class DollarFuture implements var {
     }
 
     @Override
-    public ImmutableMap<String, Object> toMap() {
+    public Map<String, Object> toMap() {
         return getValue().toMap();
     }
 

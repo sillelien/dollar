@@ -17,13 +17,13 @@
 package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import me.neilellis.dollar.*;
+import me.neilellis.dollar.collections.ImmutableMap;
+import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.monitor.Monitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
-import org.vertx.java.core.json.JsonObject;
 
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -55,15 +55,23 @@ public class DollarWrapper implements var {
         this.errorLogger = errorLogger;
     }
 
-
     @NotNull
     @Override
     public var $(@NotNull String key, long l) {
+        assert key != null;
         return tracer.trace(this, getValue().$(key, l), StateTracer.Operations.SET, key, l);
     }
 
-    @NotNull @Override public var $(@NotNull String key, double value) {
+    @NotNull
+    @Override
+    public var $(@NotNull String key, double value) {
+        assert key != null;
         return tracer.trace(this, getValue().$(key, value), StateTracer.Operations.SET, key, value);
+    }
+
+    @Override
+    public String S() {
+        return getValue().S();
     }
 
     @NotNull
@@ -81,6 +89,7 @@ public class DollarWrapper implements var {
     @NotNull
     @Override
     public Stream $children(@NotNull String key) {
+        assert key != null;
         return getValue().$children(key);
     }
 
@@ -93,6 +102,7 @@ public class DollarWrapper implements var {
     @NotNull
     @Override
     public var $error(@NotNull String errorMessage) {
+        assert errorMessage != null;
         errorLogger.log(errorMessage);
         return getValue().$error(errorMessage);
     }
@@ -100,6 +110,7 @@ public class DollarWrapper implements var {
     @NotNull
     @Override
     public var $error(@NotNull Throwable error) {
+        assert error != null;
         errorLogger.log(error);
         return getValue().$error(error);
     }
@@ -150,8 +161,8 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public ImmutableList<var> list() {
-        return getValue().list();
+    public ImmutableList<var> toList() {
+        return getValue().toList();
     }
 
     @NotNull
@@ -164,6 +175,12 @@ public class DollarWrapper implements var {
                                         () -> getValue().$load(location)),
                             StateTracer.Operations.LOAD,
                             location);
+    }
+
+    @NotNull
+    private static String sanitize(@NotNull String location) {
+        return location.replaceAll("[^\\w.]+", "_");
+
     }
 
     @NotNull
@@ -194,11 +211,6 @@ public class DollarWrapper implements var {
         getValue().$out();
     }
 
-    @Override
-    public String S() {
-        return getValue().S();
-    }
-
     @NotNull
     @Override
     public var $pipe(@NotNull String label, @NotNull String js) {
@@ -210,6 +222,17 @@ public class DollarWrapper implements var {
                             StateTracer.Operations.EVAL,
                             label,
                             js);
+    }
+
+    @NotNull
+    @Override
+    public var $pipe(@NotNull String label, @NotNull Pipeable pipe) {
+        return tracer.trace(this,
+                            monitor.run("$pipe",
+                                        "dollar.pipe.pipeable." + sanitize(label), "",
+                                        () -> getValue().$pipe(label, pipe)),
+                            StateTracer.Operations.EVAL, label,
+                            pipe.getClass().getName());
     }
 
     @NotNull
@@ -230,16 +253,6 @@ public class DollarWrapper implements var {
                             clazz.getName());
     }
 
-    @NotNull
-    @Override
-    public var $pipe(@NotNull Function<var, var> function) {
-        return tracer.trace(this,
-                            monitor.run("pipe",
-                                        "dollar.run.pipe",
-                                        "Piping to " + function.getClass().getName(),
-                                        () -> getValue().$pipe(function)),
-                            StateTracer.Operations.PIPE);
-    }
 
     @NotNull
     @Override
@@ -251,6 +264,17 @@ public class DollarWrapper implements var {
                                         () -> getValue().$pop(location, timeoutInMillis)),
                             StateTracer.Operations.POP,
                             location);
+    }
+
+    @Override
+    public var $post(String url) {
+        return tracer.trace(this,
+                            monitor.run("$post",
+                                        "dollar.post",
+                                        "Posting to " + url,
+                                        () -> getValue().$post(url)),
+                            StateTracer.Operations.EVAL,
+                            url);
     }
 
     @NotNull
@@ -335,7 +359,9 @@ public class DollarWrapper implements var {
         return getValue().isVoid();
     }
 
-    @Nullable @Override public Double D() {
+    @Nullable
+    @Override
+    public Double D() {
         return getValue().D();
     }
 
@@ -349,7 +375,9 @@ public class DollarWrapper implements var {
         return getValue().I(key);
     }
 
-    @Nullable @Override public Long L() {
+    @Nullable
+    @Override
+    public Long L() {
         return getValue().L();
     }
 
@@ -473,7 +501,7 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public ImmutableMap<String, Object> toMap() {
+    public Map<String, Object> toMap() {
         return getValue().toMap();
     }
 
@@ -483,14 +511,8 @@ public class DollarWrapper implements var {
     }
 
     @NotNull
-    private String sanitize(@NotNull Class<? extends Script> clazz) {
+    private String sanitize(@NotNull Class clazz) {
         return clazz.getName().toLowerCase();
-    }
-
-    @NotNull
-    private static String sanitize(@NotNull String location) {
-        return location.replaceAll("[^\\w.]+", "_");
-
     }
 
     var getValue() {

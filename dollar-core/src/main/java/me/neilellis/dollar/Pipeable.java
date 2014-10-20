@@ -17,12 +17,8 @@
 package me.neilellis.dollar;
 
 /**
- * Created by neil on 10/15/14.
+ * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface StateTracer {
-    enum Operations {
-        EVAL, LOAD, PIPE, POP, REMOVE_BY_VALUE, REMOVE_BY_KEY, SAVE, SPLIT, PUBLISH, PUSH, CREATE, HTTP_RESPONSE,
-        CLEAR_ERRORS, RECEIVE, SET
-    }
-    <R> R trace(Object before, R after, Operations operationType, Object... values);
+public interface Pipeable {
+  var pipe(var in) throws Exception;
 }

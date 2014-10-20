@@ -17,26 +17,30 @@
 package me.neilellis.dollar;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Range;
+import me.neilellis.dollar.js.JSFileScript;
+import me.neilellis.dollar.json.JsonArray;
+import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.monitor.Monitor;
+import me.neilellis.dollar.pubsub.DollarPubSub;
 import me.neilellis.dollar.pubsub.Sub;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.types.DollarVoid;
+import org.eclipse.jetty.util.MultiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vertx.java.core.MultiMap;
-import org.vertx.java.core.json.JsonArray;
-import org.vertx.java.core.json.JsonObject;
 import spark.Spark;
 import spark.route.HttpMethod;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 
 /**
  * To use the $ class you need to statically import all of the methods from this class. This is effectively a factory
@@ -46,9 +50,11 @@ import java.util.function.Consumer;
  */
 public class DollarStatic {
 
+    public static final Configuration config = new Configuration();
+
 
     @NotNull
-    static ThreadLocal<DollarThreadContext> threadContext = new ThreadLocal<DollarThreadContext>() {
+    public static ThreadLocal<DollarThreadContext> threadContext = new ThreadLocal<DollarThreadContext>() {
     @NotNull
     @Override
     protected DollarThreadContext initialValue() {
@@ -61,6 +67,38 @@ public class DollarStatic {
 
     @NotNull
     private static ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
+
+    public static Pipeable $jsFile(String name) {
+        try {
+            return new JSFileScript(new File(name));
+        } catch (IOException e) {
+            return DollarStatic.logAndRethrow(e);
+        }
+    }
+
+    @NotNull
+    public static <R> R logAndRethrow(@NotNull Throwable throwable) {
+        log(throwable.getMessage());
+        throwable.printStackTrace();
+        if (throwable instanceof DollarException) {
+            throw (DollarException) throwable;
+        } else {
+            throw new DollarException(throwable);
+        }
+
+    }
+
+    public static void log(String message) {
+        System.out.println(threadContext.get().getLabels().toString() + ":" + message);
+    }
+
+    public static Pipeable $jsResource(String name) {
+        try {
+            return new JSFileScript(DollarStatic.class.getResourceAsStream(name));
+        } catch (IOException e) {
+            return DollarStatic.logAndRethrow(e);
+        }
+    }
 
     @NotNull
     public static var $(@NotNull String name, MultiMap multiMap) {
@@ -142,14 +180,10 @@ public class DollarStatic {
         return new SimpleLogStateTracer();
     }
 
-    public static Monitor monitor() {
-        return threadContext.get().getMonitor();
-    }
-
     @NotNull
-    public static JsonObject mapToJson(@NotNull MultiMap map) {
+    public static JsonObject mapToJson(@NotNull Multimap<String, String> map) {
         JsonObject jsonObject = new JsonObject();
-        for (Map.Entry<String, String> entry : map) {
+        for (Map.Entry<String, String> entry : map.entries()) {
             jsonObject.putString(entry.getKey(), entry.getValue());
     }
         return jsonObject;
@@ -337,11 +371,34 @@ public class DollarStatic {
     }
 
     @NotNull
-    public static Sub $sub(Consumer<var> action, String... locations) {
-        return threadContext.get().getPubsub().sub(action, locations);
+    public static Sub $sub(DollarPubSub.SubAction action, String... locations) {
+        return monitor().run("$sub",
+                             "dollar.sub",
+                             "Subscription to " + locations,
+                             () -> threadContext.get().getPubsub().sub(action, locations));
     }
 
-    //Kotlin compatible versions
+    public static Monitor monitor() {
+        return threadContext.get().getMonitor();
+    }
+
+    public static var $await(int seconds, String... locations) {
+        try {
+            var[] result = new var[]{$()};
+            Sub sub = threadContext.get().getPubsub().sub((v, s) -> {
+                result[0] = v;
+                s.cancel();
+            }, locations);
+            sub.awaitFirst(seconds);
+            return result[0];
+        } catch (InterruptedException e) {
+            Thread.interrupted();
+            return handleError(e, null);
+        } catch (Exception e) {
+            return handleError(e, null);
+        }
+    }
+
     @NotNull
     public static var create() {
         return $();
@@ -375,22 +432,6 @@ public class DollarStatic {
             log("Interrupted");
     }
         throw new Error("Interrupted");
-    }
-
-    public static void log(String message) {
-        System.out.println(threadContext.get().getLabels().toString() + ":" + message);
-    }
-
-    @NotNull
-    public static <R> R logAndRethrow(@NotNull Throwable throwable) {
-        log(throwable.getMessage());
-        throwable.printStackTrace();
-        if (throwable instanceof DollarException) {
-            throw (DollarException) throwable;
-        } else {
-            throw new DollarException(throwable);
-    }
-
     }
 
     @NotNull

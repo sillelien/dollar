@@ -17,18 +17,19 @@
 package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Range;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.ErrorLogger;
 import me.neilellis.dollar.StateTracer;
+import me.neilellis.dollar.json.DecodeException;
+import me.neilellis.dollar.json.ImmutableJsonObject;
+import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.monitor.Monitor;
 import me.neilellis.dollar.var;
+import org.eclipse.jetty.util.MultiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vertx.java.core.MultiMap;
-import org.vertx.java.core.eventbus.Message;
-import org.vertx.java.core.json.DecodeException;
-import org.vertx.java.core.json.JsonObject;
 import spark.QueryParamsMap;
 
 import java.util.Collections;
@@ -95,6 +96,9 @@ public class DollarFactory {
     if (o instanceof Range) {
       return wrap(new DollarRange(errors, (Range) o));
     }
+    if (o instanceof ImmutableJsonObject) {
+      return wrap(new DollarJson(errors, (ImmutableJsonObject) o));
+    }
     if (o instanceof String) {
       if (((String) o).matches("^[a-zA-Z0-9]+$")) {
         return wrap(new DollarString(errors, (String) o));
@@ -113,14 +117,14 @@ public class DollarFactory {
     if (o instanceof JsonObject) {
       json = ((JsonObject) o);
     } else if (o instanceof MultiMap) {
-      json = DollarStatic.mapToJson((MultiMap) o);
+      json = DollarStatic.mapToJson((Multimap) o);
     } else if (o instanceof Map) {
       json = new JsonObject((Map<String, Object>) o);
-    } else if (o instanceof Message) {
-      json = ((JsonObject) ((Message) o).body());
-      if (json == null) {
-        return wrap(new DollarVoid(errors));
-      }
+//    } else if (o instanceof Message) {
+//      json = ((JsonObject) ((Message) o).body());
+//      if (json == null) {
+//        return wrap(new DollarVoid(errors));
+//      }
     } else {
       System.out.println(o.getClass());
       json = new JsonObject(o.toString());

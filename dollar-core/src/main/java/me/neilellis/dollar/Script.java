@@ -26,25 +26,38 @@ import java.util.List;
  *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class Script extends DollarStatic {
+public class Script extends DollarStatic implements Pipeable {
 
     public static Class<? extends Script> $THIS;
     protected static List<String> args;
-    private static Script $this;
 
     @NotNull
-    protected var in = DollarStatic.threadContext.get() != null ? DollarStatic.threadContext.get().getPassValue() : $();
+    protected var passedIn = DollarStatic.threadContext.get().getPassValue();
+    protected var in = DollarStatic.threadContext.get() != null ? (passedIn != null ? passedIn : $()) : $();
     protected var out;
 
     public static void main(String[] args) throws IllegalAccessException, InstantiationException {
         Script.args = Arrays.asList(args);
         $run(() -> {
             try {
-                $this = $THIS.newInstance();
+                Script $this = $THIS.newInstance();
+                if ($this.in == null) {
+                    throw new NullPointerException();
+                }
+                $this.out = $this.pipe($this.in);
+                if ($this.out == null) {
+                    $this.out = $void();
+                }
             } catch (@NotNull InstantiationException | IllegalAccessException e) {
                 throw new Error(e.getCause());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
+    }
+
+    @Override public var pipe(var in) throws Exception {
+        return in;
     }
 
 
@@ -52,4 +65,5 @@ public class Script extends DollarStatic {
     public var result() {
         return out != null ? out : in;
     }
+
 }

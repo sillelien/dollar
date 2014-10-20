@@ -17,20 +17,18 @@
 package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import me.neilellis.dollar.AbstractDollar;
 import me.neilellis.dollar.DollarEval;
 import me.neilellis.dollar.Script;
+import me.neilellis.dollar.collections.ImmutableMap;
+import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
-import org.vertx.java.core.json.JsonObject;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -67,19 +65,19 @@ public class DollarVoid extends AbstractDollar implements var {
     @NotNull
     @Override
     public var $(@NotNull String age, long l) {
-        return this;
+        return $copy();
     }
 
     @NotNull
     @Override
     public var $(@NotNull String age, double d) {
-        return this;
+        return $copy();
     }
 
     @NotNull
     @Override
     public var $append(Object value) {
-        return this;
+        return $copy();
     }
 
     @NotNull
@@ -101,7 +99,7 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public ImmutableList<var> list() {
+    public ImmutableList<var> toList() {
         return ImmutableList.of();
     }
 
@@ -120,13 +118,13 @@ public class DollarVoid extends AbstractDollar implements var {
     @NotNull
     @Override
     public var $rm(@NotNull String value) {
-        return this;
+        return $copy();
     }
 
     @NotNull
     @Override
     public var $(@NotNull String key, Object value) {
-        return this;
+        return $copy();
     }
 
     @Override
@@ -147,13 +145,13 @@ public class DollarVoid extends AbstractDollar implements var {
     @NotNull
     @Override
     public var decode() {
-        return this;
+        return $copy();
     }
 
     @NotNull
     @Override
     public var $(@NotNull String key) {
-        return this;
+        return $copy();
     }
 
     @NotNull
@@ -196,8 +194,8 @@ public class DollarVoid extends AbstractDollar implements var {
     }
 
     @Override
-    public ImmutableMap<String, Object> toMap() {
-        return ImmutableMap.of();
+    public Map<String, Object> toMap() {
+        return Collections.emptyMap();
     }
 
     @Override
@@ -218,79 +216,73 @@ public class DollarVoid extends AbstractDollar implements var {
     @NotNull
     @Override
     public var eval(@NotNull DollarEval lambda) {
-        return this;
+        return $copy();
     }
 
     @NotNull
     @Override
     public var eval(String label, @NotNull DollarEval lambda) {
-        return this;
+        return $copy();
     }
 
     @NotNull
     @Override
     public var eval(@NotNull Class clazz) {
-        return this;
+        return $copy();
     }
 
     @NotNull
     @Override
     public var $pipe(@NotNull String js) {
-        return this;
+        return $copy();
     }
 
     @NotNull
     @Override
     public var $pipe(@NotNull String js, @NotNull String label) {
-        return this;
+        return $copy();
     }
 
     @NotNull
     @Override
     public var $load(@NotNull String location) {
-        return this;
+        return $copy();
     }
 
     @NotNull
     @Override
     public var $pipe(@NotNull Class<? extends Script> clazz) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull Function<var, var> function) {
-        return this;
+        return $copy();
     }
 
     @NotNull
     @Override
     public var $pop(@NotNull String location, int timeoutInMillis) {
-        return this;
+        return $copy();
     }
 
     @NotNull
     @Override
     public var $pub(@NotNull String... locations) {
-        return this;
+        return $copy();
     }
 
     @NotNull
     @Override
     public var $push(@NotNull String location) {
-        return this;
+        return $copy();
     }
 
     @NotNull
     @Override
     public var $save(@NotNull String location, int expiryInMilliseconds) {
-        return this;
+        return $copy();
     }
 
     @NotNull
     @Override
     public var $save(@NotNull String location) {
-        return this;
+        return $copy();
     }
 
     @Override
@@ -318,7 +310,7 @@ public class DollarVoid extends AbstractDollar implements var {
     @NotNull
     @Override
     public var remove(Object value) {
-        return this;
+        return $copy();
     }
 
     @NotNull

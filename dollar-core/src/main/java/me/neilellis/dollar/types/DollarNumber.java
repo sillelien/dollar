@@ -16,10 +16,10 @@
 
 package me.neilellis.dollar.types;
 
-import me.neilellis.dollar.AbstractDollarSingleValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -37,6 +37,21 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
     @NotNull
     public Integer I() {
         return value.intValue();
+    }
+
+    @Override
+    public boolean isDecimal() {
+        return value instanceof BigDecimal || value instanceof Float || value instanceof Double;
+    }
+
+    @Override
+    public boolean isInteger() {
+        return value instanceof Long || value instanceof Integer;
+    }
+
+    @Override
+    public boolean isNumber() {
+        return true;
     }
 
     @NotNull
@@ -71,6 +86,4 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
     public Long L() {
         return value.longValue();
     }
-
-
 }

@@ -124,8 +124,11 @@ public class DollarBasicTest {
                .$("postcode", "bn1 6jj")
                .$("number", 343)
         );
-    assertEquals(age, (int) profile.$pipe("$['age']").I());
-    assertEquals(age / 11, (int) profile.$pipe("($['age'].I() / 11)").I());
+    var ageRetrieved = profile.$pipe("$['age']");
+    System.out.println(profile.$pipe("$"));
+    System.out.println(ageRetrieved);
+    assertEquals(age, (int) ageRetrieved.I());
+    assertEquals(age / 11, (int) profile.$pipe("($['age'] / 11)").I());
     assertEquals("male", profile.$pipe("$.gender").$());
     assertEquals(10, (int) profile.$pipe("5*2").I());
     assertEquals(10, (int) $eval("10").I());

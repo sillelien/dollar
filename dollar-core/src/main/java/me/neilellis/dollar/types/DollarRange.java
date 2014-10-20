@@ -16,15 +16,20 @@
 
 package me.neilellis.dollar.types;
 
-import com.google.common.collect.*;
-import me.neilellis.dollar.AbstractDollar;
+
+import com.google.common.collect.ContiguousSet;
+import com.google.common.collect.DiscreteDomain;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Range;
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.collections.ImmutableMap;
+import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.vertx.java.core.json.JsonObject;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -66,7 +71,7 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public Stream<var> $children() {
-        return list().stream();
+        return toList().stream();
     }
 
     @NotNull
@@ -82,7 +87,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableList<var> list() {
+    public ImmutableList<var> toList() {
         return ImmutableList.copyOf(ContiguousSet.create(range, DiscreteDomain.longs())
                                                  .stream()
                                                  .map(DollarStatic::$)
@@ -104,7 +109,7 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $rm(@NotNull String value) {
-        return this;
+        return $copy();
 
     }
 
@@ -182,8 +187,13 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public ImmutableMap<String, Object> toMap() {
+    public Map<String, Object> toMap() {
         return null;
+    }
+
+    @Override
+    public boolean isList() {
+        return true;
     }
 
     @Override
@@ -202,7 +212,7 @@ public class DollarRange extends AbstractDollar {
                 return range.equals(((DollarRange) unwrapped).range);
             }
             if (unwrapped instanceof DollarList) {
-                return unwrapped.list().equals(list());
+                return unwrapped.toList().equals(toList());
             }
         }
         return false;
@@ -228,6 +238,7 @@ public class DollarRange extends AbstractDollar {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 
+    @NotNull
     @Override public String toString() {
         return String.format("%d..%d", range.lowerEndpoint(), range.upperEndpoint());
     }

@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar;
+package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.types.DollarFail;
+import me.neilellis.dollar.collections.ImmutableMap;
+import me.neilellis.dollar.json.JsonObject;
+import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
-import org.vertx.java.core.json.JsonObject;
 
 import java.net.URLDecoder;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -74,7 +75,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     @Override
-    public ImmutableList<var> list() {
+    public ImmutableList<var> toList() {
         return ImmutableList.of(this);
     }
 
@@ -147,13 +148,18 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return ImmutableList.of(S());
     }
 
-    public ImmutableMap<String, Object> toMap() {
-        return null;
+    public Map<String, Object> toMap() {
+        return Collections.singletonMap("value", value);
     }
 
     @Override
     public <R> R val() {
         return (R) value;
+    }
+
+    @Override
+    public boolean isSingleValue() {
+        return true;
     }
 
     @Override

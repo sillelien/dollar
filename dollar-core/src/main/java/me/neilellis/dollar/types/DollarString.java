@@ -16,7 +16,6 @@
 
 package me.neilellis.dollar.types;
 
-import me.neilellis.dollar.AbstractDollarSingleValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,14 +38,19 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
-    public Number number(@NotNull String key) {
-        return new BigDecimal(key);
+    public boolean isString() {
+        return true;
     }
 
     @NotNull
     @Override
-    public String $() {
-        return value;
+    public <R> R $() {
+        return (R) value;
+    }
+
+    @Override
+    public Number number(@NotNull String key) {
+        return new BigDecimal(key);
     }
 
     @Override

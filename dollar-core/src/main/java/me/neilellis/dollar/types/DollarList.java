@@ -17,17 +17,17 @@
 package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import me.neilellis.dollar.AbstractDollar;
+import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.exceptions.ListException;
+import me.neilellis.dollar.json.JsonArray;
+import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
-import org.vertx.java.core.json.JsonArray;
-import org.vertx.java.core.json.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -101,7 +101,7 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableList<var> list() {
+    public ImmutableList<var> toList() {
         return list;
     }
 
@@ -156,6 +156,11 @@ public class DollarList extends AbstractDollar {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
     }
 
+    @Override
+    public boolean isList() {
+        return true;
+    }
+
     @org.jetbrains.annotations.NotNull
     @Override
     public JsonObject json(@NotNull String key) {
@@ -203,8 +208,8 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public ImmutableMap<String, Object> toMap() {
-        return null;
+    public Map<String, Object> toMap() {
+        return Collections.singletonMap("value", new ArrayList<>(toList()));
     }
 
     @Override
@@ -256,7 +261,4 @@ public class DollarList extends AbstractDollar {
     public String toString() {
         return jsonArray().toString();
     }
-
-
-
 }
