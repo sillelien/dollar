@@ -34,8 +34,9 @@ public class Plugins {
     return result;
   }
 
+  //TODO: aggregate all available providers
   public static <T extends ExtensionPoint<T>> T newInstance(Class<T> serviceClass) {
-    final ServiceLoader<T> loader = ServiceLoader.<T>load(serviceClass);
+    final ServiceLoader<T> loader = ServiceLoader.load(serviceClass);
     if (!loader.iterator().hasNext()) {
       return NoOpProxy.newInstance(serviceClass);
     }
@@ -43,17 +44,11 @@ public class Plugins {
   }
 
   public static <T extends ExtensionPoint<T>> T sharedInstance(Class<T> serviceClass) {
-    final ServiceLoader<T> loader = ServiceLoader.<T>load(serviceClass);
+    final ServiceLoader<T> loader = ServiceLoader.load(serviceClass);
     if (!loader.iterator().hasNext()) {
       return NoOpProxy.newInstance(serviceClass);
     }
     return loader.iterator().next();
-  }
-
-  public static class ServiceUnavailableError extends Error {
-    public ServiceUnavailableError(String message) {
-      super(message);
-    }
   }
 
 }
