@@ -16,13 +16,10 @@
 
 package me.neilellis.dollar;
 
-import com.codahale.metrics.MetricRegistry;
-import me.neilellis.dollar.monitor.DefaultMonitor;
-import me.neilellis.dollar.monitor.Monitor;
+import me.neilellis.dollar.monitor.DollarMonitor;
+import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.pubsub.DollarPubSub;
-import me.neilellis.dollar.pubsub.RedisPubSub;
 import me.neilellis.dollar.store.DollarStore;
-import me.neilellis.dollar.store.RedisStore;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -34,15 +31,16 @@ import java.util.UUID;
  */
 public class DollarThreadContext {
 
-    private static final MetricRegistry metrics = new MetricRegistry();
+
     private List<String> labels = new ArrayList<>();
-    private Monitor monitor = new DefaultMonitor(metrics);
+    private DollarMonitor monitor = Plugins.newInstance(DollarMonitor.class);
     private var passValue;
-    private DollarPubSub pubsub = new RedisPubSub();
-    private DollarStore store = new RedisStore();
+    private DollarPubSub pubsub = Plugins.newInstance(DollarPubSub.class);
+    private DollarStore store = Plugins.newInstance(DollarStore.class);
     private String threadKey = UUID.randomUUID().toString();
 
-    public DollarThreadContext(List<String> labels, Monitor monitor, var passValue, DollarPubSub pubsub, DollarStore store, String threadKey) {
+    public DollarThreadContext(List<String> labels, DollarMonitor monitor, var passValue, DollarPubSub pubsub,
+                               DollarStore store, String threadKey) {
         this.labels = labels;
         this.monitor = monitor;
         this.passValue = passValue;
@@ -73,16 +71,12 @@ public class DollarThreadContext {
         this.labels = labels;
     }
 
-    @NotNull
-    public MetricRegistry getMetrics() {
-        return metrics;
-    }
 
-    public Monitor getMonitor() {
+    public DollarMonitor getMonitor() {
         return monitor;
     }
 
-    public void setMonitor(Monitor monitor) {
+    public void setMonitor(DollarMonitor monitor) {
         this.monitor = monitor;
     }
 

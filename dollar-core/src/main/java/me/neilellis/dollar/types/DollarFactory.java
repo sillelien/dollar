@@ -25,9 +25,8 @@ import me.neilellis.dollar.StateTracer;
 import me.neilellis.dollar.json.DecodeException;
 import me.neilellis.dollar.json.ImmutableJsonObject;
 import me.neilellis.dollar.json.JsonObject;
-import me.neilellis.dollar.monitor.Monitor;
+import me.neilellis.dollar.monitor.DollarMonitor;
 import me.neilellis.dollar.var;
-import org.eclipse.jetty.util.MultiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import spark.QueryParamsMap;
@@ -40,7 +39,7 @@ import java.util.Map;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarFactory {
-  static Monitor monitor = DollarStatic.monitor();
+  static DollarMonitor monitor = DollarStatic.monitor();
   @NotNull
   static StateTracer tracer = DollarStatic.tracer();
 
@@ -116,7 +115,7 @@ public class DollarFactory {
 //        }
     if (o instanceof JsonObject) {
       json = ((JsonObject) o);
-    } else if (o instanceof MultiMap) {
+    } else if (o instanceof Multimap) {
       json = DollarStatic.mapToJson((Multimap) o);
     } else if (o instanceof Map) {
       json = new JsonObject((Map<String, Object>) o);
@@ -149,7 +148,7 @@ public class DollarFactory {
   }
 
   @NotNull
-  public static DollarWrapper wrap(var value, Monitor monitor, StateTracer tracer, ErrorLogger errorLogger) {
+  public static DollarWrapper wrap(var value, DollarMonitor monitor, StateTracer tracer, ErrorLogger errorLogger) {
     return new DollarWrapper(value, monitor, tracer, errorLogger);
   }
 

@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.store;
+package me.neilellis.dollar.redis;
 
 import com.google.common.collect.ImmutableList;
+import me.neilellis.dollar.store.DollarStore;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
@@ -31,6 +32,10 @@ public class RedisStore implements DollarStore {
 
     @NotNull
     private Jedis jedis = new Jedis(System.getProperty("dollar.redis", "localhost"));
+
+    @Override public DollarStore copy() {
+        return this;
+    }
 
     @NotNull
     @Override

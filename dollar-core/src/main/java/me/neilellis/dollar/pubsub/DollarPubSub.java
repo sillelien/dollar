@@ -16,13 +16,14 @@
 
 package me.neilellis.dollar.pubsub;
 
+import me.neilellis.dollar.plugin.ExtensionPoint;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface DollarPubSub {
+public interface DollarPubSub extends ExtensionPoint<DollarPubSub> {
 
     void pub(var value, String... locations);
 

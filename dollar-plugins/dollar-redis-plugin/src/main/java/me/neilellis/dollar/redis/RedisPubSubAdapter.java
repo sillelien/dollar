@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.pubsub;
+package me.neilellis.dollar.redis;
 
 import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.StateTracer;
+import me.neilellis.dollar.pubsub.DollarPubSub;
+import me.neilellis.dollar.pubsub.Sub;
 import me.neilellis.dollar.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.JedisPubSub;

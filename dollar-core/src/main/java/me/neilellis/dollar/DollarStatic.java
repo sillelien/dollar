@@ -22,23 +22,21 @@ import com.google.common.collect.Range;
 import me.neilellis.dollar.js.JSFileScript;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
-import me.neilellis.dollar.monitor.Monitor;
+import me.neilellis.dollar.monitor.DollarMonitor;
+import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.pubsub.DollarPubSub;
 import me.neilellis.dollar.pubsub.Sub;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.types.DollarVoid;
-import org.eclipse.jetty.util.MultiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import spark.Spark;
-import spark.route.HttpMethod;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -52,7 +50,6 @@ public class DollarStatic {
 
     public static final Configuration config = new Configuration();
 
-
     @NotNull
     public static ThreadLocal<DollarThreadContext> threadContext = new ThreadLocal<DollarThreadContext>() {
     @NotNull
@@ -63,10 +60,9 @@ public class DollarStatic {
     };
 
     @NotNull
-    private static ConcurrentHashMap<Object, Map> context = new ConcurrentHashMap<>();
-
-    @NotNull
     private static ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
+
+    private static DollarHttp dollarHttpProvider = Plugins.sharedInstance(DollarHttp.class);
 
     public static Pipeable $jsFile(String name) {
         try {
@@ -101,7 +97,7 @@ public class DollarStatic {
     }
 
     @NotNull
-    public static var $(@NotNull String name, MultiMap multiMap) {
+    public static var $(@NotNull String name, Multimap multiMap) {
         return DollarFactory.fromValue().$(name, multiMap);
     }
 
@@ -204,32 +200,32 @@ public class DollarStatic {
 
     @NotNull
     public static DollarHttp $DELETE(String path, @NotNull DollarHttpHandler handler) {
-        return new DollarHttp(HttpMethod.delete.name(), path, handler);
+        return dollarHttpProvider.route("delete", path, handler);
     }
 
     @NotNull
     public static DollarHttp $GET(String path, @NotNull DollarHttpHandler handler) {
-        return new DollarHttp(HttpMethod.get.name(), path, handler);
+        return dollarHttpProvider.route("get", path, handler);
     }
 
     @NotNull
     public static DollarHttp $HEAD(String path, @NotNull DollarHttpHandler handler) {
-        return new DollarHttp(HttpMethod.head.name(), path, handler);
+        return dollarHttpProvider.route("head", path, handler);
     }
 
     @NotNull
     public static DollarHttp $OPTIONS(String path, @NotNull DollarHttpHandler handler) {
-        return new DollarHttp(HttpMethod.options.name(), path, handler);
+        return dollarHttpProvider.route("options", path, handler);
     }
 
     @NotNull
     public static DollarHttp $PATCH(String path, @NotNull DollarHttpHandler handler) {
-        return new DollarHttp(HttpMethod.patch.name(), path, handler);
+        return dollarHttpProvider.route("patch", path, handler);
     }
 
     @NotNull
     public static DollarHttp $POST(String path, @NotNull DollarHttpHandler handler) {
-        return new DollarHttp(HttpMethod.post.name(), path, handler);
+        return dollarHttpProvider.route("post", path, handler);
     }
 
     public static void $begin(String value) {
@@ -378,7 +374,7 @@ public class DollarStatic {
                              () -> threadContext.get().getPubsub().sub(action, locations));
     }
 
-    public static Monitor monitor() {
+    public static DollarMonitor monitor() {
         return threadContext.get().getMonitor();
     }
 

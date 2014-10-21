@@ -14,27 +14,11 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.store;
-
-import me.neilellis.dollar.plugin.ExtensionPoint;
-import me.neilellis.dollar.var;
-import org.jetbrains.annotations.NotNull;
+package me.neilellis.dollar.plugin;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface DollarStore extends ExtensionPoint<DollarStore> {
-
-    @NotNull
-    var get(String location);
-
-    @NotNull
-    var pop(String location, int timeoutInMillis);
-
-    void push(String location, var value);
-
-    void set(String location, var value);
-
-    void set(String location, var value, int expiryInMilliseconds);
-
+public interface ExtensionPoint<T extends ExtensionPoint> extends SingletonExtensionPoint {
+  T copy();
 }

@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.*;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.json.JsonObject;
-import me.neilellis.dollar.monitor.Monitor;
+import me.neilellis.dollar.monitor.DollarMonitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
@@ -42,12 +42,12 @@ import java.util.stream.Stream;
  */
 public class DollarWrapper implements var {
 
-    private Monitor monitor;
+    private DollarMonitor monitor;
     private StateTracer tracer;
     private ErrorLogger errorLogger;
     private var value;
 
-    DollarWrapper(var value, Monitor monitor, StateTracer tracer, ErrorLogger errorLogger) {
+    DollarWrapper(var value, DollarMonitor monitor, StateTracer tracer, ErrorLogger errorLogger) {
 //        tracer.trace(DollarNull.INSTANCE,value, StateTracer.Operations.CREATE);
         this.value = value;
         this.monitor = monitor;

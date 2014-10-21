@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.pubsub;
+package me.neilellis.dollar.redis;
 
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.pubsub.DollarPubSub;
+import me.neilellis.dollar.pubsub.Sub;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Jedis;
@@ -36,6 +38,10 @@ public class RedisPubSub implements DollarPubSub {
   static {
     poolConfig.setMaxTotal(128);
     jedisPool = new JedisPool(poolConfig, System.getProperty("dollar.redis", "localhost"));
+  }
+
+  @Override public DollarPubSub copy() {
+    return this;
   }
 
 

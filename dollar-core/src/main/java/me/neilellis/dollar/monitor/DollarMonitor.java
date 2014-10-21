@@ -16,12 +16,14 @@
 
 package me.neilellis.dollar.monitor;
 
+import me.neilellis.dollar.plugin.ExtensionPoint;
+
 import java.util.function.Supplier;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface Monitor {
+public interface DollarMonitor extends ExtensionPoint<DollarMonitor> {
 
     /**
      * Dump metrics and related information to the console.

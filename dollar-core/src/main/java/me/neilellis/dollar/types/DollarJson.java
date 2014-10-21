@@ -25,7 +25,6 @@ import me.neilellis.dollar.json.ImmutableJsonObject;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.var;
-import org.eclipse.jetty.util.MultiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
@@ -187,7 +186,7 @@ class DollarJson extends AbstractDollar implements var {
         if (o instanceof DollarWrapper) {
             //unwrap
             return $(name, ((DollarWrapper) o).getValue());
-        } else if (o instanceof MultiMap) {
+        } else if (o instanceof Multimap) {
             copy.putObject(name, DollarStatic.mapToJson((Multimap) o));
         } else if (o instanceof JsonArray) {
             copy.putArray(name, (JsonArray) o);
@@ -234,6 +233,11 @@ class DollarJson extends AbstractDollar implements var {
     @Override
     public var $(@NotNull String key) {
         return DollarFactory.fromField(errors(), json.getField(key));
+    }
+
+    @Override
+    public boolean isMap() {
+        return true;
     }
 
     @Nullable
@@ -293,11 +297,6 @@ class DollarJson extends AbstractDollar implements var {
     @Override
     public <R> R val() {
         return (R) json();
-    }
-
-    @Override
-    public boolean isMap() {
-        return true;
     }
 
     @NotNull
