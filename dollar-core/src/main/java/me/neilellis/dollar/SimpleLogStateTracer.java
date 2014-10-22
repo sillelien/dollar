@@ -51,7 +51,7 @@ public class SimpleLogStateTracer implements StateTracer {
             if (((var) before).isLambda()) {
                 beforeStr = "<LAMBDA>";
             } else {
-                beforeStr = after.toString();
+                beforeStr = before.toString();
             }
         } else {
             if (before != null) {

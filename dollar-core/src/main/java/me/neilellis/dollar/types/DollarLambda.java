@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.types;
 
+import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.var;
 
 import java.lang.reflect.Method;
@@ -37,21 +38,38 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (Object.class == method.getDeclaringClass()) {
-            String name = method.getName();
-            if ("equals".equals(name)) {
-                return lambda.apply(in).equals(args[0]);
-            } else if ("hashCode".equals(name)) {
-                return lambda.apply(in).hashCode();
-            } else if ("toString".equals(name)) {
-                return lambda.apply(in).toString();
+        try {
+            if (Object.class == method.getDeclaringClass()) {
+                String name = method.getName();
+                if ("equals".equals(name)) {
+                    return lambda.apply(in).equals(args[0]);
+                } else if ("hashCode".equals(name)) {
+                    return lambda.apply(in).hashCode();
+                } else if ("toString".equals(name)) {
+                    return lambda.apply(in).toString();
+                } else {
+                    throw new IllegalStateException(String.valueOf(method));
+                }
+            }
+            if (method.getName().equals("isLambda")) {
+                return true;
+            }
+            if (method.getName().equals("hasErrors")) {
+                return false;
+            }
+            if (method.getName().equals("$copy") || method.getName().equals("copy")) {
+                return proxy;
+            }
+            System.err.println(method);
+
+            return method.invoke(lambda.apply(in), args);
+        } catch (Exception e) {
+            if (method.getReturnType().isAssignableFrom(var.class)) {
+                return DollarStatic.handleError(e, null);
             } else {
-                throw new IllegalStateException(String.valueOf(method));
+                DollarStatic.handleError(e, null);
+                return null;
             }
         }
-        if (method.getName().equals("isLambda")) {
-            return true;
-        }
-        return method.invoke(lambda.apply(in), args);
     }
 }
