@@ -33,13 +33,13 @@ import java.util.stream.Stream;
 
 /**
  * To better understand the rationale behind this class, take a look at http://homepages.ecs.vuw.ac.nz/~tk/publications/papers/void.pdf
- * <p/>
+ *
  * Dollar does not have the concept of null. Instead null {@link me.neilellis.dollar.var} objects are instances of this class.
- * <p/>
+ *
  * Void is equivalent to 0,"",null except that unlike these values it has behavior that corresponds to a void object.
- * <p/>
+ *
  * Therefore actions taken against a void object are ignored. Any method that returns a {@link me.neilellis.dollar.var} will return a {@link DollarVoid}.
- * <p/>
+ *
  * <pre>
  *
  *  var nulled= $null();

@@ -46,15 +46,15 @@ public class DollarPubSubTest {
     @Test
     public void testBasic() throws InterruptedException {
         final int[] received = {0};
-      Sub sub = $sub((message, s) -> {
-        System.out.println("Recieved");
+        Sub sub = $sub((message, s) -> {
+            System.out.println("Received");
             received[0]++;
-        s.cancel();
+            s.cancel();
         }, "test.pub");
         sub.await();
         System.out.println("Subbed");
-        Thread.sleep(100);
         profile.$pub("test.pub");
+        sub.awaitFirst(60);
         Thread.sleep(100);
         assertEquals(1, received[0]);
     }

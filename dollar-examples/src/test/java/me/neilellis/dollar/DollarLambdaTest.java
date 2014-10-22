@@ -41,7 +41,7 @@ public class DollarLambdaTest {
         Thread.sleep(50);
         System.out.println(lambda.L());
         assertTrue(lambda.L() > time);
-
+        assertTrue(lambda.isLambda());
 
     }
 

@@ -26,34 +26,54 @@ import java.util.Arrays;
 public class SimpleLogStateTracer implements StateTracer {
     @Override
     public <R> R trace(Object before, R after, Operations operationType, Object... values) {
+        String beforeStr = "";
+        String afterStr = "";
         String afterNotes = "";
         String beforeNotes = "";
-        if(after instanceof var) {
-            if(((var) after).hasErrors()) {
+        if (after instanceof var) {
+            if (((var) after).hasErrors()) {
                 afterNotes += "*ERROR*";
             }
-        }
-        if(before instanceof var) {
-            if(((var) before).hasErrors()) {
-                beforeNotes += "*ERROR*";
+            if (((var) after).isLambda()) {
+                afterStr = "<LAMBDA>";
+            } else {
+                afterStr = after.toString();
+            }
+        } else {
+            if (after != null) {
+                afterStr = String.format("%s(%s)", after.toString(), after.getClass().getName());
             }
         }
-        if((before instanceof DollarVoid || before == null )&& (after instanceof DollarVoid || after == null)) {
+        if (before instanceof var) {
+            if (((var) before).hasErrors()) {
+                beforeNotes += "*ERROR*";
+            }
+            if (((var) before).isLambda()) {
+                beforeStr = "<LAMBDA>";
+            } else {
+                beforeStr = after.toString();
+            }
+        } else {
+            if (before != null) {
+                beforeStr = String.format("%s(%s)", before.toString(), before.getClass().getName());
+            }
+        }
+        if ((before instanceof DollarVoid || before == null) && (after instanceof DollarVoid || after == null)) {
             DollarStatic.log(String.format("%s%s: %s->%s",
-                                           operationType,
-                                           Arrays.toString(values),
-                                           beforeNotes,
-                                           afterNotes));
-        } else if(before instanceof DollarVoid || before == null) {
-            DollarStatic.log(String.format("%s%s: %s%s", operationType, Arrays.toString(values), after, afterNotes));
+                    operationType,
+                    Arrays.toString(values),
+                    beforeNotes,
+                    afterNotes));
+        } else if (before instanceof DollarVoid || before == null) {
+            DollarStatic.log(String.format("%s%s: %s%s", operationType, Arrays.toString(values), afterStr, afterNotes));
         } else {
             DollarStatic.log(String.format("%s%s: %s%s -> %s%s",
-                                           operationType,
-                                           Arrays.toString(values),
-                                           before,
-                                           beforeNotes,
-                                           after,
-                                           afterNotes));
+                    operationType,
+                    Arrays.toString(values),
+                    beforeStr,
+                    beforeNotes,
+                    afterStr,
+                    afterNotes));
         }
         return after;
     }

@@ -47,7 +47,7 @@ class DollarMap extends AbstractDollar implements var {
     private static ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
     /**
      * Publicly accessible object containing the current state as a JsonObject, if you're working in Vert.x primarily with the JsonObject type you will likely end all chained expressions with '.$'
-     * <p/>
+     *
      * For example:
      * <code>
      * eb.send("api.validate", $("key", key).$("params", request.params()).$)
@@ -74,7 +74,7 @@ class DollarMap extends AbstractDollar implements var {
      * <li>MultiMap</li>
      * <li>Message</li>
      * </ul>
-     * <p/>
+     *
      * Any other object types will be converted to a string using .toString() and will then be parsed as JSON.
      *
      * @param o the object of unknown type to be converted to a JsonObject and then wrapped by the $ class.

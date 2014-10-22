@@ -202,4 +202,9 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     public String S() {
         return value.toString();
     }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
 }

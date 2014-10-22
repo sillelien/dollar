@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 
 /**
  * The DollarWrapper class exists to provide basic AOP style constructs without having actual AOP magic.
- * <p/>
+ *
  * Currently the DollarWrapper class provides monitoring and state tracing functions.
  *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -521,6 +521,46 @@ public class DollarWrapper implements var {
     @Override
     public Integer I(@NotNull String key) {
         return getValue().I(key);
+    }
+
+    @Override
+    public boolean isDecimal() {
+        return getValue().isDecimal();
+    }
+
+    @Override
+    public boolean isInteger() {
+        return getValue().isInteger();
+    }
+
+    @Override
+    public boolean isList() {
+        return getValue().isList();
+    }
+
+    @Override
+    public boolean isMap() {
+        return getValue().isMap();
+    }
+
+    @Override
+    public boolean isNumber() {
+        return getValue().isNumber();
+    }
+
+    @Override
+    public boolean isSingleValue() {
+        return getValue().isSingleValue();
+    }
+
+    @Override
+    public boolean isString() {
+        return getValue().isString();
+    }
+
+    @Override
+    public boolean isLambda() {
+        return getValue().isLambda();
     }
 
     @NotNull

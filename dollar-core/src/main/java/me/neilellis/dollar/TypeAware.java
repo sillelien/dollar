@@ -49,7 +49,7 @@ public interface TypeAware {
 
     /**
      * Is this object a void object? Void objects are similar to null, except they can have methods called on them.
-     * <p/>
+     *
      * This is a similar concept to nil in Objective-C.
      *
      * @return true if this is a void object
@@ -76,33 +76,21 @@ public interface TypeAware {
     @NotNull
     Integer I(@NotNull String key);
 
-    default boolean isDecimal() {
-        return false;
-    }
+    boolean isDecimal();
 
-    default boolean isInteger() {
-        return false;
-    }
+    boolean isInteger();
 
-    default boolean isList() {
-        return false;
-    }
+    boolean isList();
 
-    default boolean isMap() {
-        return false;
-    }
+    boolean isMap();
 
-    default boolean isNumber() {
-        return false;
-    }
+    boolean isNumber();
 
-    default boolean isSingleValue() {
-        return false;
-    }
+    boolean isSingleValue();
 
-    default boolean isString() {
-        return false;
-    }
+    boolean isString();
+
+    boolean isLambda();
 
     @Nullable
     JsonObject json(@NotNull String key);
@@ -127,7 +115,7 @@ public interface TypeAware {
 
     /**
      * Returns this object as a org.json.JSONObject.
-     * <p/>
+     *
      * NB: This conversion is quite efficient.
      *
      * @return a JSONObject

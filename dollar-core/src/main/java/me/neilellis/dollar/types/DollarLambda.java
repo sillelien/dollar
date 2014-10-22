@@ -49,6 +49,9 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 throw new IllegalStateException(String.valueOf(method));
             }
         }
+        if (method.getName().equals("isLambda")) {
+            return true;
+        }
         return method.invoke(lambda.apply(in), args);
     }
 }

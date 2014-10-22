@@ -271,6 +271,7 @@ public class DollarStatic {
     public static var handleError(@NotNull Throwable throwable, var failee) {
 //        log(throwable.getMessage());
 //        log(throwable);
+        throwable.printStackTrace(System.err);
         if (failee == null) {
             return DollarFactory.failure(throwable);
         }

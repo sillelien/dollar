@@ -575,4 +575,44 @@ public abstract class AbstractDollar implements var {
         }
     }
 
+
+    @Override
+    public boolean isDecimal() {
+        return false;
+    }
+
+    @Override
+    public boolean isInteger() {
+        return false;
+    }
+
+    @Override
+    public boolean isList() {
+        return false;
+    }
+
+    @Override
+    public boolean isMap() {
+        return false;
+    }
+
+    @Override
+    public boolean isNumber() {
+        return false;
+    }
+
+    @Override
+    public boolean isSingleValue() {
+        return false;
+    }
+
+    @Override
+    public boolean isString() {
+        return false;
+    }
+
+    @Override
+    public boolean isLambda() {
+        return false;
+    }
 }
