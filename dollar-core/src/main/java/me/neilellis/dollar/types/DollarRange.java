@@ -57,7 +57,9 @@ public class DollarRange extends AbstractDollar {
 
     }
 
-    @NotNull @Override public var $(@NotNull String key, double value) {
+    @NotNull
+    @Override
+    public var $(@NotNull String key, double value) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
 
     }
@@ -81,6 +83,16 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
+    public var $dec(long amount) {
+        return this;
+    }
+
+    @Override
+    public var $inc(long amount) {
+        return this;
+    }
+
+    @Override
     public boolean $has(@NotNull String key) {
         return false;
     }
@@ -89,9 +101,9 @@ public class DollarRange extends AbstractDollar {
     @Override
     public ImmutableList<var> toList() {
         return ImmutableList.copyOf(ContiguousSet.create(range, DiscreteDomain.longs())
-                                                 .stream()
-                                                 .map(DollarStatic::$)
-                                                 .collect(Collectors.toList()));
+                .stream()
+                .map(DollarStatic::$)
+                .collect(Collectors.toList()));
     }
 
     @NotNull
@@ -181,14 +193,20 @@ public class DollarRange extends AbstractDollar {
     @Override
     public ImmutableList<String> strings() {
         return ImmutableList.copyOf(ContiguousSet.create(range, DiscreteDomain.longs())
-                            .stream()
-                            .map(Object::toString)
-                            .collect(Collectors.toList()));
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.toList()));
     }
 
     @Override
     public Map<String, Object> toMap() {
         return null;
+    }
+
+    @NotNull
+    @Override
+    public Number N() {
+        return range.upperEndpoint() - range.lowerEndpoint();
     }
 
     @Override
@@ -221,12 +239,12 @@ public class DollarRange extends AbstractDollar {
 
     @Override
     public int size() {
-        return (int) (range.upperEndpoint()-range.lowerEndpoint());
+        return (int) (range.upperEndpoint() - range.lowerEndpoint());
     }
 
     @Override
     public boolean containsValue(Object value) {
-        if(value instanceof Number) {
+        if (value instanceof Number) {
             return range.contains(((Number) value).longValue());
         }
         return range.contains(Long.valueOf(value.toString()));
@@ -239,7 +257,8 @@ public class DollarRange extends AbstractDollar {
     }
 
     @NotNull
-    @Override public String toString() {
+    @Override
+    public String S() {
         return String.format("%d..%d", range.lowerEndpoint(), range.upperEndpoint());
     }
 }

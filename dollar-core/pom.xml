@@ -50,7 +50,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.4-beta1</version>
+            <version>4.2.6</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
-            <version>4.4-beta1</version>
+            <version>4.2.6</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -72,6 +72,12 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.3.3</version>
         </dependency>
+        <!--<dependency>-->
+        <!--<groupId>cofoja</groupId>-->
+        <!--<artifactId>cofoja</artifactId>-->
+        <!--<version>cofoja.asm-1.2-20140817</version>-->
+        <!--<type>jar</type>-->
+        <!--</dependency>-->
     </dependencies>
     <build>
         <plugins>

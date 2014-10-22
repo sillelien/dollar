@@ -33,27 +33,23 @@ import java.util.stream.Stream;
 
 /**
  * To better understand the rationale behind this class, take a look at http://homepages.ecs.vuw.ac.nz/~tk/publications/papers/void.pdf
- *
+ * <p/>
  * Dollar does not have the concept of null. Instead null {@link me.neilellis.dollar.var} objects are instances of this class.
- *
+ * <p/>
  * Void is equivalent to 0,"",null except that unlike these values it has behavior that corresponds to a void object.
- *
+ * <p/>
  * Therefore actions taken against a void object are ignored. Any method that returns a {@link me.neilellis.dollar.var} will return a {@link DollarFail}.
- *
+ * <p/>
  * <pre>
  *
  *  var nulled= $null();
  *  nulled.$pipe((i)-&gt;{System.out.println("You'll never see this."});
  *
  * </pre>
+ *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarFail extends DollarVoid {
-
-    public enum FailureType {
-        INVALID_LIST_OPERATION, INVALID_MAP_OPERATION, INVALID_SINGLE_VALUE_OPERATION, EXCEPTION,
-        INVALID_RANGE_OPERATION, VOID_FAILURE
-    }
 
     private FailureType failureType;
 
@@ -74,7 +70,9 @@ public class DollarFail extends DollarVoid {
         return $copy();
     }
 
-    @NotNull @Override public var $(@NotNull String key, double value) {
+    @NotNull
+    @Override
+    public var $(@NotNull String key, double value) {
         return $copy();
     }
 
@@ -325,10 +323,16 @@ public class DollarFail extends DollarVoid {
     @NotNull
     @Override
     public var $copy() {
-        return $copy();
+        return this;
     }
 
-    @Override public var clearErrors() {
+    @Override
+    public var clearErrors() {
         return DollarFactory.newVoid();
+    }
+
+    public enum FailureType {
+        INVALID_LIST_OPERATION, INVALID_MAP_OPERATION, INVALID_SINGLE_VALUE_OPERATION, EXCEPTION,
+        INVALID_RANGE_OPERATION, VOID_FAILURE
     }
 }

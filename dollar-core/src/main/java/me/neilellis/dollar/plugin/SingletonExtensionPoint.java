@@ -20,5 +20,9 @@ package me.neilellis.dollar.plugin;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface SingletonExtensionPoint<T> {
+    default void start() throws Exception {
+    }
 
+    default void stop() throws Exception {
+    }
 }

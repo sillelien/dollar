@@ -23,39 +23,48 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class JsonUtilTest {
 
-  @Before
-  public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
 
-  }
+    }
 
-  @After
-  public void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
 
-  }
+    }
 
-  @Test
-  public void testArgsToJson() throws Exception {
-    final JsonObject jsonObject = JsonUtil.argsToJson(Arrays.asList("--remove",
-                                                                    "filename",
-                                                                    "-add",
-                                                                    "file1", "file2",
-                                                                    "-send",
-                                                                    "fileA", "fileB", "fileC",
-                                                                    "--count", "1",
-                                                                    "--rate", "2.343434",
-                                                                    "--quiet", "false",
-                                                                    "--fast"));
-    System.out.println(jsonObject);
-    assertEquals("filename", jsonObject.getString("remove"));
-    assertEquals(true, jsonObject.getBoolean("fast"));
-    assertEquals(false, jsonObject.getBoolean("quiet"));
-    assertEquals(1, (long) jsonObject.getInteger("count"));
-    assertEquals(3, (long) jsonObject.getArray("send").size());
-    assertEquals(2, (long) jsonObject.getArray("add").size());
-    assertEquals(2.343434, jsonObject.getNumber("rate").floatValue(), 0.001);
+    @Test
+    public void testArgsToJson() throws Exception {
+        final JsonObject jsonObject = JsonUtil.argsToJson(Arrays.asList("--remove",
+                "filename",
+                "-add",
+                "file1", "file2",
+                "-send",
+                "fileA", "fileB", "fileC",
+                "--count", "1",
+                "--rate", "2.343434",
+                "--quiet", "false",
+                "--fast"));
+        System.out.println(jsonObject);
+        assertEquals("filename", jsonObject.getString("remove"));
+        assertEquals(true, jsonObject.getBoolean("fast"));
+        assertEquals(false, jsonObject.getBoolean("quiet"));
+        assertEquals(1, (long) jsonObject.getInteger("count"));
+        assertEquals(3, (long) jsonObject.getArray("send").size());
+        assertEquals(2, (long) jsonObject.getArray("add").size());
+        assertEquals(2.343434, jsonObject.getNumber("rate").floatValue(), 0.001);
 
-  }
+    }
+
+    @Test
+    public void testMore() throws Exception {
+        final JsonObject jsonObject = JsonUtil.argsToJson(Arrays.asList("--test", "1", "2", "3"));
+        System.out.println(jsonObject);
+        assertEquals(3, (long) jsonObject.getArray("test").size());
+        assertTrue(jsonObject.getArray("test").get(2) instanceof Long);
+    }
 }

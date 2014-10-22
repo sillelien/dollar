@@ -151,6 +151,7 @@ public class DollarBasicTest {
 
   @Test
   public void testStringCreation() {
+      System.out.println($("{\"foo\":\"bar\"}"));
     assertEquals("bar", $("{\"foo\":\"bar\"}").$("foo").val());
     assertEquals("bar", $("{\"foo\":\"bar\"}").json().getString("foo"));
   }

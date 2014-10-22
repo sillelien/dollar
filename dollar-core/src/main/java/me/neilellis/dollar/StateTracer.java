@@ -17,12 +17,13 @@
 package me.neilellis.dollar;
 
 /**
- * Created by neil on 10/15/14.
+ * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface StateTracer {
+    <R> R trace(Object before, R after, Operations operationType, Object... values);
+
     enum Operations {
         EVAL, LOAD, PIPE, POP, REMOVE_BY_VALUE, REMOVE_BY_KEY, SAVE, SPLIT, PUBLISH, PUSH, CREATE, HTTP_RESPONSE,
-        CLEAR_ERRORS, RECEIVE, SET
+        CLEAR_ERRORS, RECEIVE, SEND, READ, SET, INC, DEC, CHOOSE
     }
-    <R> R trace(Object before, R after, Operations operationType, Object... values);
 }

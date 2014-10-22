@@ -32,6 +32,7 @@
         <module>dollar-redis-plugin</module>
         <module>dollar-spark-plugin</module>
         <module>dollar-metrics-plugin</module>
+        <module>dollar-camel-plugin</module>
     </modules>
 
 

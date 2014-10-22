@@ -33,19 +33,20 @@ import java.util.stream.Stream;
 
 /**
  * To better understand the rationale behind this class, take a look at http://homepages.ecs.vuw.ac.nz/~tk/publications/papers/void.pdf
- *
+ * <p/>
  * Dollar does not have the concept of null. Instead null {@link me.neilellis.dollar.var} objects are instances of this class.
- *
+ * <p/>
  * Void is equivalent to 0,"",null except that unlike these values it has behavior that corresponds to a void object.
- *
+ * <p/>
  * Therefore actions taken against a void object are ignored. Any method that returns a {@link me.neilellis.dollar.var} will return a {@link DollarVoid}.
- *
+ * <p/>
  * <pre>
  *
  *  var nulled= $null();
  *  nulled.$pipe((i)-&gt;{System.out.println("You'll never see this."});
  *
  * </pre>
+ *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarVoid extends AbstractDollar implements var {
@@ -90,6 +91,16 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public Stream $children(@NotNull String key) {
         return Collections.emptyList().stream();
+    }
+
+    @Override
+    public var $dec(long amount) {
+        return this;
+    }
+
+    @Override
+    public var $inc(long amount) {
+        return this;
     }
 
     @Override
@@ -196,6 +207,12 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public Map<String, Object> toMap() {
         return Collections.emptyMap();
+    }
+
+    @NotNull
+    @Override
+    public Number N() {
+        return 0;
     }
 
     @Override
@@ -320,7 +337,7 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public String toString() {
+    public String S() {
         return "";
     }
 

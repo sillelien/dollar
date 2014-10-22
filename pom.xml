@@ -88,6 +88,7 @@
             <artifactId>annotations</artifactId>
             <version>13.0</version>
         </dependency>
+
     </dependencies>
 
     <!-- mvn surefire-report:report -->
@@ -401,6 +402,16 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>bintray.central</id>
+            <name>bintray</name>
+            <url>http://dl.bintray.com/neilellis/maven</url>
+        </repository>
+    </repositories>
 
     <distributionManagement>
         <site>

@@ -28,70 +28,74 @@ import java.util.Map;
 
 public abstract class JsonElement implements Serializable {
 
-  public JsonArray asArray() {
-    return (JsonArray) this;
-  }
-
-  public JsonObject asObject() {
-    return (JsonObject) this;
-  }
-
-  public boolean isArray() {
-    return this instanceof JsonArray;
-  }
-
-  public boolean isObject() {
-    return this instanceof JsonObject;
-  }
-
-  @SuppressWarnings("unchecked")
-  protected Map<String, Object> convertMap(Map<String, Object> map) {
-    Map<String, Object> converted = new LinkedHashMap<>(map.size());
-    for (Map.Entry<String, Object> entry : map.entrySet()) {
-      Object obj = entry.getValue();
-      if (obj instanceof Map) {
-        Map<String, Object> jm = (Map<String, Object>) obj;
-        converted.put(entry.getKey(), convertMap(jm));
-      } else if (obj instanceof List) {
-        List<Object> list = (List<Object>) obj;
-        converted.put(entry.getKey(), convertList(list));
-      } else if (obj instanceof CharSequence) {
-        converted.put(entry.getKey(), obj.toString());
-      } else if (obj instanceof BigDecimal) {
-        converted.put(entry.getKey(), ((BigDecimal) obj).doubleValue());
-      } else if (obj instanceof BigInteger) {
-        converted.put(entry.getKey(), ((BigInteger) obj).longValue());
-      } else if (obj == null || obj instanceof Number || obj instanceof Boolean) {
-        // OK
-        converted.put(entry.getKey(), obj);
-      } else {
-        throw new DollarException("Cannot have objects of class " + obj.getClass() + " in JSON");
-      }
+    public JsonArray asArray() {
+        return (JsonArray) this;
     }
-    return converted;
-  }
 
-  @SuppressWarnings("unchecked")
-  protected List<Object> convertList(List<?> list) {
-    List<Object> arr = new ArrayList<>(list.size());
-    for (Object obj : list) {
-      if (obj instanceof Map) {
-        arr.add(convertMap((Map<String, Object>) obj));
-      } else if (obj instanceof List) {
-        arr.add(convertList((List<?>) obj));
-      } else if (obj instanceof CharSequence) {
-        arr.add(obj.toString());
-      } else if (obj instanceof BigDecimal) {
-        arr.add(((BigDecimal) obj).doubleValue());
-      } else if (obj instanceof BigInteger) {
-        arr.add(((BigInteger) obj).longValue());
-      } else if (obj == null || obj instanceof Number || obj instanceof Boolean) {
-        arr.add(obj);
-      } else {
-        throw new DollarException("Cannot have objects of class " + obj.getClass() + " in JSON");
-      }
+    public JsonObject asObject() {
+        return (JsonObject) this;
     }
-    return arr;
-  }
+
+    public boolean isArray() {
+        return this instanceof JsonArray;
+    }
+
+    public boolean isObject() {
+        return this instanceof JsonObject;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected Map<String, Object> convertMap(Map<String, Object> map) {
+        Map<String, Object> converted = new LinkedHashMap<>(map.size());
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            Object obj = entry.getValue();
+            if (obj instanceof Map) {
+                Map<String, Object> jm = (Map<String, Object>) obj;
+                converted.put(entry.getKey(), convertMap(jm));
+            } else if (obj instanceof List) {
+                List<Object> list = (List<Object>) obj;
+                converted.put(entry.getKey(), convertList(list));
+            } else if (obj instanceof CharSequence) {
+                converted.put(entry.getKey(), obj.toString());
+            } else if (obj instanceof JsonArray) {
+                converted.put(entry.getKey(), ((JsonArray) obj).toList());
+            } else if (obj instanceof JsonObject) {
+                converted.put(entry.getKey(), ((JsonObject) obj).toMap());
+            } else if (obj instanceof BigDecimal) {
+                converted.put(entry.getKey(), ((BigDecimal) obj).doubleValue());
+            } else if (obj instanceof BigInteger) {
+                converted.put(entry.getKey(), ((BigInteger) obj).longValue());
+            } else if (obj == null || obj instanceof Number || obj instanceof Boolean) {
+                // OK
+                converted.put(entry.getKey(), obj);
+            } else {
+                throw new DollarException("Cannot have objects of class " + obj.getClass() + " in JSON");
+            }
+        }
+        return converted;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected List<Object> convertList(List<?> list) {
+        List<Object> arr = new ArrayList<>(list.size());
+        for (Object obj : list) {
+            if (obj instanceof Map) {
+                arr.add(convertMap((Map<String, Object>) obj));
+            } else if (obj instanceof List) {
+                arr.add(convertList((List<?>) obj));
+            } else if (obj instanceof CharSequence) {
+                arr.add(obj.toString());
+            } else if (obj instanceof BigDecimal) {
+                arr.add(((BigDecimal) obj).doubleValue());
+            } else if (obj instanceof BigInteger) {
+                arr.add(((BigInteger) obj).longValue());
+            } else if (obj == null || obj instanceof Number || obj instanceof Boolean) {
+                arr.add(obj);
+            } else {
+                throw new DollarException("Cannot have objects of class " + obj.getClass() + " in JSON");
+            }
+        }
+        return arr;
+    }
 
 }

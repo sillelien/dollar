@@ -48,7 +48,9 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
-    @NotNull @Override public var $(@NotNull String key, double value) {
+    @NotNull
+    @Override
+    public var $(@NotNull String key, double value) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
@@ -197,7 +199,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     @Override
-    public String toString() {
+    public String S() {
         return value.toString();
     }
 }

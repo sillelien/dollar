@@ -15,20 +15,23 @@
  */
 
 package me.neilellis.dollar.types;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.hash.Hashing;
+import com.google.common.io.ByteStreams;
 import me.neilellis.dollar.*;
 import me.neilellis.dollar.exceptions.ValidationException;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.SimpleScriptContext;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -53,6 +56,161 @@ public abstract class AbstractDollar implements var {
 
     protected AbstractDollar(@NotNull List<Throwable> errors) {
         this.errors = new ImmutableList.Builder<Throwable>().addAll(errors).build();
+    }
+
+    @Override
+    public var $choose(var map) {
+        return map.$($S());
+    }
+
+    @Override
+    public var $dec(String key, long amount) {
+        return $(key, $(key).I() - amount);
+    }
+
+    @Override
+    public var $dec() {
+        return this;//TODO
+    }
+
+    @Override
+    public var $inc(String key, long amount) {
+        return $(key, $(key).I() + amount);
+    }
+
+    @Override
+    public var $inc() {
+        return this;//TODO
+    }
+
+    @NotNull
+    @Override
+    public var $load(@NotNull String location) {
+        return DollarStatic.context().getStore().get(location);
+    }
+
+    @NotNull
+    @Override
+    public var $pop(@NotNull String location, int timeoutInMillis) {
+        return DollarStatic.context().getStore().pop(location, timeoutInMillis);
+
+    }
+
+    @NotNull
+    @Override
+    public var $pub(@NotNull String... locations) {
+        DollarStatic.context().getPubsub().pub(this, locations);
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $push(@NotNull String location) {
+        DollarStatic.context().getStore().push(location, this);
+        return this;
+    }
+
+    @Override
+    public var $read(File file) {
+        try {
+            return DollarFactory.fromStringValue(new String(Files.readAllBytes(file.toPath())));
+        } catch (IOException e) {
+            return DollarStatic.handleError(e, this);
+        }
+    }
+
+    @Override
+    public var $read(InputStream in) {
+        try {
+            return DollarFactory.fromStringValue(new String(ByteStreams.toByteArray(in)));
+        } catch (IOException e) {
+            return DollarStatic.handleError(e, this);
+        }
+    }
+
+    @NotNull
+    @Override
+    public var $save(@NotNull String location) {
+        DollarStatic.context().getStore().set(location, this);
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $save(@NotNull String location, int expiryInMilliseconds) {
+        DollarStatic.context().getStore().set(location, this, expiryInMilliseconds);
+        return this;
+    }
+
+    @Override
+    public var $write(File file) {
+        try {
+            Files.write(file.toPath(), this.$S().getBytes());
+            return this;
+        } catch (IOException e) {
+            return DollarStatic.handleError(e, this);
+        }
+    }
+
+    @Override
+    public var $write(OutputStream out) {
+        try {
+            ByteStreams.copy(new ByteArrayInputStream(this.$S().getBytes()), out);
+            return this;
+        } catch (IOException e) {
+            return DollarStatic.handleError(e, this);
+        }
+    }
+
+    @NotNull
+    @Override
+    public var eval(@NotNull DollarEval lambda) {
+        return eval("anon", lambda);
+    }
+
+    @Override
+    public var $send(String uri) {
+        return DollarStatic.integrationProvider().send(uri, this);
+    }
+
+    @Override
+    public void $listen(String uri, Consumer<var> handler) {
+        DollarStatic.integrationProvider().listen(uri, handler);
+    }
+
+    @Override
+    public void $publish(String uri) {
+        DollarStatic.integrationProvider().publish(uri, this);
+    }
+
+    @Override
+    public void $dispatch(String uri) {
+        DollarStatic.integrationProvider().dispatch(uri, this);
+    }
+
+    @NotNull
+    @Override
+    public Double D() {
+        return 0.0;
+    }
+
+    @NotNull
+    @Override
+    public Long L() {
+        return 0L;
+    }
+
+    @NotNull
+    @Override
+    public var _unwrap() {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var copy(@NotNull ImmutableList<Throwable> errors) {
+        return DollarFactory.fromValue(new ImmutableList.Builder<Throwable>().addAll(errors()).addAll(errors).build(),
+                val());
     }
 
     @Override
@@ -93,6 +251,16 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
+    public String toString() {
+        return S();
+    }
+
+    @NotNull
+    public var eval(String label, @NotNull DollarEval lambda) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public boolean isEmpty() {
         return size() > 0;
     }
@@ -126,12 +294,6 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var eval(@NotNull DollarEval lambda) {
-        return eval("anon", lambda);
-    }
-
-    @NotNull
-    @Override
     public Collection<var> values() {
         return toList();
     }
@@ -156,49 +318,6 @@ public abstract class AbstractDollar implements var {
     @Override
     public void replaceAll(BiFunction<? super String, ? super var, ? extends var> function) {
         throw new UnsupportedOperationException();
-    }
-
-    @NotNull
-    @Override
-    public var putIfAbsent(String key, var value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @NotNull
-    public var eval(String label, @NotNull DollarEval lambda) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean remove(Object key, Object value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean replace(String key, var oldValue, var newValue) {
-        throw new UnsupportedOperationException();
-    }
-
-    @NotNull
-    @Override
-    public var replace(String key, var value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public var computeIfAbsent(String key, @NotNull Function<? super String, ? extends var> mappingFunction) {
-        return $map().computeIfAbsent(key, mappingFunction);
-    }
-
-    @Override
-    public var computeIfPresent(String key,
-                                @NotNull BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
-        return $map().computeIfPresent(key, remappingFunction);
-    }
-
-    @Override
-    public var compute(String key, @NotNull BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
-        return $map().compute(key, remappingFunction);
     }
 
     @NotNull
@@ -230,17 +349,54 @@ public abstract class AbstractDollar implements var {
         }
     }
 
+    @NotNull
     @Override
-    public var merge(String key, @NotNull var value,
-                     @NotNull BiFunction<? super var, ? super var, ? extends var> remappingFunction) {
-        return $map().mutable().merge(key, value, remappingFunction);
+    public var putIfAbsent(String key, var value) {
+        throw new UnsupportedOperationException();
     }
 
+    @Override
+    public boolean remove(Object key, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean replace(String key, var oldValue, var newValue) {
+        throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    @Override
+    public var replace(String key, var value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public var computeIfAbsent(String key, @NotNull Function<? super String, ? extends var> mappingFunction) {
+        return $map().computeIfAbsent(key, mappingFunction);
+    }
+
+    @Override
+    public var computeIfPresent(String key,
+                                @NotNull BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
+        return $map().computeIfPresent(key, remappingFunction);
+    }
 
     @NotNull
     @Override
     public var $pipe(@NotNull String js) {
         return $pipe("anon", js);
+    }
+
+    @Override
+    public var compute(String key, @NotNull BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
+        return $map().compute(key, remappingFunction);
+    }
+
+    @Override
+    public var merge(String key, @NotNull var value,
+                     @NotNull BiFunction<? super var, ? super var, ? extends var> remappingFunction) {
+        return $map().mutable().merge(key, value, remappingFunction);
     }
 
 
@@ -257,6 +413,7 @@ public abstract class AbstractDollar implements var {
         return DollarFactory.fromValue(ImmutableList.of(), value);
     }
 
+
     @NotNull
     @Override
     public var $pipe(@NotNull String label, @NotNull Pipeable pipe) {
@@ -265,13 +422,6 @@ public abstract class AbstractDollar implements var {
         } catch (Exception e) {
             return DollarStatic.handleError(e, this);
         }
-    }
-
-
-    @NotNull
-    @Override
-    public var $load(@NotNull String location) {
-        return DollarStatic.context().getStore().get(location);
     }
 
 
@@ -292,9 +442,9 @@ public abstract class AbstractDollar implements var {
                     errorJson.putString("stack", Arrays.toString(error.getStackTrace()));
                 } else {
                     errorJson.putString("hash",
-                                        Hashing.sha1()
-                                               .hashBytes(Arrays.toString(error.getStackTrace()).getBytes())
-                                               .toString());
+                            Hashing.sha1()
+                                    .hashBytes(Arrays.toString(error.getStackTrace()).getBytes())
+                                    .toString());
                 }
                 errorArray.addObject(errorJson);
             }
@@ -327,50 +477,19 @@ public abstract class AbstractDollar implements var {
     }
 
 
-    @NotNull
-    @Override
-    public var $pop(@NotNull String location, int timeoutInMillis) {
-        return DollarStatic.context().getStore().pop(location, timeoutInMillis);
-
-    }
-
-
-    @NotNull
-    @Override
-    public var $pub(@NotNull String... locations) {
-        DollarStatic.context().getPubsub().pub(this, locations);
-        return this;
-    }
-
-
-    @NotNull
-    @Override
-    public var $push(@NotNull String location) {
-        DollarStatic.context().getStore().push(location, this);
-        return this;
-    }
-
-
-    @NotNull
-    @Override
-    public var $save(@NotNull String location, int expiryInMilliseconds) {
-        DollarStatic.context().getStore().set(location, this, expiryInMilliseconds);
-        return this;
-    }
-
-
-    @NotNull
-    @Override
-    public var $save(@NotNull String location) {
-        DollarStatic.context().getStore().set(location, this);
-        return this;
-    }
-
-
     public Stream<Entry<String, var>> kvStream() {
         return $map().entrySet().stream();
 
     }
+
+    @Override
+    public var $(Function<var, var> lambda) {
+        return (var) java.lang.reflect.Proxy.newProxyInstance(
+                DollarStatic.class.getClassLoader(),
+                new Class<?>[]{var.class},
+                new DollarLambda(DollarFactory.wrap(this), lambda));
+    }
+
 
     @Override
     public var $post(String url) {
@@ -382,14 +501,6 @@ public abstract class AbstractDollar implements var {
     @Override
     public Stream<var> $stream() {
         return toList().stream();
-    }
-
-
-    @NotNull
-    @Override
-    public var copy(@NotNull ImmutableList<Throwable> errors) {
-        return DollarFactory.fromValue(new ImmutableList.Builder<Throwable>().addAll(errors()).addAll(errors).build(),
-                                       val());
     }
 
 
@@ -435,17 +546,6 @@ public abstract class AbstractDollar implements var {
         return !errors.isEmpty();
     }
 
-    @Nullable
-    @Override
-    public Double D() {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public Long L() {
-        return null;
-    }
 
     @NotNull
     @Override

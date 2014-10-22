@@ -30,54 +30,44 @@ import java.util.List;
  */
 public class Script extends DollarStatic implements Pipeable {
 
-  public static Class<? extends Script> $THIS;
-  protected static List<String> args;
-  static boolean entrypoint;
+    public static Class<? extends Script> $THIS;
+    protected static List<String> args;
 
-  @NotNull
-  protected var passedIn = DollarStatic.threadContext.get().getPassValue();
-  protected var in = getIn();
-  protected var out;
 
-  public static void main(String[] args) throws IllegalAccessException, InstantiationException {
-    entrypoint = true;
-    Script.args = Arrays.asList(args);
-    $run(() -> {
-      try {
-        Script $this = $THIS.newInstance();
-        if ($this.in == null) {
-          throw new NullPointerException();
-        }
-        $this.out = $this.pipe($this.in);
-        if ($this.out == null) {
-          $this.out = $void();
-        }
-      } catch (@NotNull InstantiationException | IllegalAccessException e) {
-        throw new Error(e.getCause());
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    });
-  }
+    @NotNull
+//  protected var passedIn = DollarStatic.threadContext.get().getPassValue();
+    protected var in = DollarFactory.fromValue(JsonUtil.argsToJson(args));
+    protected var out;
 
-  @Override public var pipe(var in) throws Exception {
-    return in;
-  }
-
-  @NotNull
-  public var result() {
-    return out != null ? out : in;
-  }
-
-  private var getIn() {
-    if (entrypoint) {
-      in = DollarFactory.fromValue(JsonUtil.argsToJson(args));
+    public static void main(String[] args) throws IllegalAccessException, InstantiationException {
+        Script.args = Arrays.asList(args);
+        $run(() -> {
+            try {
+                Script $this = $THIS.newInstance();
+                if ($this.in == null) {
+                    throw new NullPointerException();
+                }
+                $this.out = $this.pipe($this.in);
+                if ($this.out == null) {
+                    $this.out = $void();
+                }
+            } catch (@NotNull InstantiationException | IllegalAccessException e) {
+                throw new Error(e.getCause());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
-    if (passedIn != null) {
-      if (DollarStatic.threadContext.get() != null) { return passedIn; } else { return $(); }
-    } else {
-      return DollarStatic.threadContext.get() != null ? $() : $();
+
+    @Override
+    public var pipe(var in) throws Exception {
+        return in;
     }
-  }
+
+
+    @NotNull
+    public var result() {
+        return out != null ? out : in;
+    }
 
 }

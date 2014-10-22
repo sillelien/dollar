@@ -19,6 +19,7 @@ package me.neilellis.dollar;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Range;
+import me.neilellis.dollar.integration.IntegrationProvider;
 import me.neilellis.dollar.js.JSFileScript;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
@@ -39,6 +40,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
 
 /**
  * To use the $ class you need to statically import all of the methods from this class. This is effectively a factory
@@ -52,17 +54,18 @@ public class DollarStatic {
 
     @NotNull
     public static ThreadLocal<DollarThreadContext> threadContext = new ThreadLocal<DollarThreadContext>() {
-    @NotNull
-    @Override
-    protected DollarThreadContext initialValue() {
-        return new DollarThreadContext();
-    }
+        @NotNull
+        @Override
+        protected DollarThreadContext initialValue() {
+            return new DollarThreadContext();
+        }
     };
 
     @NotNull
     private static ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
 
     private static DollarHttp dollarHttpProvider = Plugins.sharedInstance(DollarHttp.class);
+    private static IntegrationProvider integrationProvider = Plugins.sharedInstance(IntegrationProvider.class);
 
     public static Pipeable $jsFile(String name) {
         try {
@@ -116,12 +119,16 @@ public class DollarStatic {
         return DollarFactory.fromValue().$(name, value);
     }
 
+    public static var $(@NotNull String name, Function<var, var> value) {
+        return DollarFactory.fromValue().$(name, value);
+    }
+
     @NotNull
     public static var $(@NotNull var... values) {
         var v = $();
         for (var value : values) {
             v = v.$append(value);
-    }
+        }
         return v;
     }
 
@@ -135,7 +142,7 @@ public class DollarStatic {
         var v = $();
         for (var value : values) {
             v = v.$append(value);
-    }
+        }
         return $(name, v);
     }
 
@@ -165,10 +172,10 @@ public class DollarStatic {
 
     public static var $(@Nullable Object o) {
         return DollarStatic.tracer()
-                           .trace(DollarVoid.INSTANCE,
-                                  DollarFactory.fromValue(ImmutableList.of(), o),
-                                  StateTracer.Operations.CREATE,
-                                  o == null ? "null" : o.getClass().getName());
+                .trace(DollarVoid.INSTANCE,
+                        DollarFactory.fromValue(ImmutableList.of(), o),
+                        StateTracer.Operations.CREATE,
+                        o == null ? "null" : o.getClass().getName());
     }
 
     @NotNull
@@ -181,7 +188,7 @@ public class DollarStatic {
         JsonObject jsonObject = new JsonObject();
         for (Map.Entry<String, String> entry : map.entries()) {
             jsonObject.putString(entry.getKey(), entry.getValue());
-    }
+        }
         return jsonObject;
     }
 
@@ -194,7 +201,7 @@ public class DollarStatic {
             } else {
                 jsonObject.putArray(entry.getKey(), new JsonArray(entry.getValue()));
             }
-    }
+        }
         return jsonObject;
     }
 
@@ -257,7 +264,7 @@ public class DollarStatic {
             return handleError(e, null);
         } finally {
             threadContext.remove();
-    }
+        }
     }
 
     @NotNull
@@ -266,7 +273,7 @@ public class DollarStatic {
 //        log(throwable);
         if (failee == null) {
             return DollarFactory.failure(throwable);
-    }
+        }
         return failee.copy(ImmutableList.of(throwable));
 
     }
@@ -294,9 +301,13 @@ public class DollarStatic {
     }
 
     @NotNull
-    public static DollarFuture $fork(@NotNull Callable<var> call) {
+    public static var $fork(@NotNull Callable<var> call) {
         DollarThreadContext child = threadContext.get().child();
-        return new DollarFuture(threadPoolExecutor.submit(() -> $call(child, call)));
+        return (var) java.lang.reflect.Proxy.newProxyInstance(
+                DollarStatic.class.getClassLoader(),
+                new Class<?>[]{var.class},
+                new DollarFuture(threadPoolExecutor.submit(() -> $call(child, call))));
+
 
     }
 
@@ -306,6 +317,7 @@ public class DollarStatic {
     }
 
     @NotNull
+
     public static var $list(Object... values) {
         return DollarFactory.fromValue(ImmutableList.of(), values);
     }
@@ -341,7 +353,7 @@ public class DollarStatic {
             run.run();
         } finally {
             threadContext.remove();
-    }
+        }
     }
 
     /**
@@ -355,7 +367,7 @@ public class DollarStatic {
             run.run();
         } finally {
             threadContext.remove();
-    }
+        }
     }
 
     public static void $save(@NotNull var value, @NotNull String location) {
@@ -369,9 +381,9 @@ public class DollarStatic {
     @NotNull
     public static Sub $sub(DollarPubSub.SubAction action, String... locations) {
         return monitor().run("$sub",
-                             "dollar.sub",
-                             "Subscription to " + locations,
-                             () -> threadContext.get().getPubsub().sub(action, locations));
+                "dollar.sub",
+                "Subscription to " + locations,
+                () -> threadContext.get().getPubsub().sub(action, locations));
     }
 
     public static DollarMonitor monitor() {
@@ -426,7 +438,7 @@ public class DollarStatic {
     public static <R> R handleInterrupt(InterruptedException ie) {
         if (Thread.interrupted()) {
             log("Interrupted");
-    }
+        }
         throw new Error("Interrupted");
     }
 
@@ -451,5 +463,13 @@ public class DollarStatic {
     @NotNull
     public static var $void() {
         return DollarFactory.newVoid();
+    }
+
+    public static IntegrationProvider integrationProvider() {
+        return integrationProvider;
+    }
+
+    public static var $(Function<var, var> lambda) {
+        return DollarFactory.fromValue(lambda);
     }
 }

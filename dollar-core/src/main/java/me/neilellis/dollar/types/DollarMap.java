@@ -17,12 +17,9 @@
 package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Multimap;
 import me.neilellis.dollar.DollarEval;
-import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.json.ImmutableJsonObject;
-import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +30,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -45,27 +42,29 @@ import java.util.stream.Stream;
  *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-class DollarJson extends AbstractDollar implements var {
+class DollarMap extends AbstractDollar implements var {
 
     private static ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
     /**
      * Publicly accessible object containing the current state as a JsonObject, if you're working in Vert.x primarily with the JsonObject type you will likely end all chained expressions with '.$'
-     *
+     * <p/>
      * For example:
      * <code>
      * eb.send("api.validate", $("key", key).$("params", request.params()).$)
      * </code>
      */
-    private final @NotNull
-    ImmutableJsonObject json;
+    private final
+    @NotNull
+    LinkedHashMap<String, var> map;
 
     /**
      * Create a new and empty $ object.
+     *
      * @param errors
      */
-    DollarJson(@NotNull ImmutableList<Throwable> errors) {
+    DollarMap(@NotNull ImmutableList<Throwable> errors) {
         super(errors);
-        json = new ImmutableJsonObject(new JsonObject());
+        map = new LinkedHashMap<String, var>();
     }
 
     /**
@@ -75,42 +74,74 @@ class DollarJson extends AbstractDollar implements var {
      * <li>MultiMap</li>
      * <li>Message</li>
      * </ul>
-     *
+     * <p/>
      * Any other object types will be converted to a string using .toString() and will then be parsed as JSON.
      *
      * @param o the object of unknown type to be converted to a JsonObject and then wrapped by the $ class.
      */
-    DollarJson(@NotNull ImmutableList<Throwable> errors, @NotNull JsonObject o) {
+    DollarMap(@NotNull ImmutableList<Throwable> errors, @NotNull JsonObject o) {
         super(errors);
-        this.json = new ImmutableJsonObject(o);
+        map = mapToVarMap(o.toMap());
     }
 
-    public DollarJson(ImmutableList<Throwable> errors, ImmutableJsonObject immutableJsonObject) {
+    public DollarMap(ImmutableList<Throwable> errors, Map<String, Object> o) {
         super(errors);
-        this.json = immutableJsonObject;
+        map = mapToVarMap(o);
+    }
+
+    private DollarMap(ImmutableList<Throwable> errors, LinkedHashMap<String, var> o) {
+        super(errors);
+        this.map = deepClone(o);
+    }
+
+    public DollarMap(ImmutableList<Throwable> errors, ImmutableJsonObject immutableJsonObject) {
+        super(errors);
+        this.map = mapToVarMap(immutableJsonObject.toMap());
+    }
+
+    private LinkedHashMap<String, var> deepClone(LinkedHashMap<String, var> o) {
+        LinkedHashMap<String, var> result = new LinkedHashMap<String, var>();
+        for (Entry<String, var> entry : o.entrySet()) {
+            result.put(entry.getKey(), entry.getValue().$copy());
+        }
+        return result;
+    }
+
+    private LinkedHashMap<String, var> mapToVarMap(Map<String, Object> stringObjectMap) {
+        LinkedHashMap<String, var> result = new LinkedHashMap<String, var>();
+        for (Entry<String, Object> entry : stringObjectMap.entrySet()) {
+            result.put(entry.getKey(), DollarFactory.fromValue(entry.getValue()));
+        }
+        return result;
     }
 
     @NotNull
     @Override
     public var $(@NotNull String key, long value) {
-        return DollarFactory.fromValue(errors(), json().putNumber(key, value));
+        return $(key, (Object) value);
+    }
+
+    private LinkedHashMap<String, var> copyMap() {
+        return deepClone(map);
     }
 
     @NotNull
     @Override
     public var $(@NotNull String key, double value) {
-        return DollarFactory.fromValue(errors(), json().putNumber(key, value));
+        return $(key, (Object) value);
     }
 
 
     @NotNull
     @Override
     public var $append(Object value) {
-        JsonObject copy = json();
-        if (value instanceof var && ((var) value).$() instanceof JsonObject) {
-            return DollarFactory.fromValue(errors(), copy.mergeIn(((var) value).$()));
+        LinkedHashMap<String, var> copy = copyMap();
+        if (value instanceof var) {
+            copy.putAll(((var) value).$map().mutable());
+            return DollarFactory.wrap(new DollarMap(errors(), copy));
         }
         throw new IllegalArgumentException("Only the addition of DollarJson objects supported at present.");
+
     }
 
     @NotNull
@@ -119,17 +150,19 @@ class DollarJson extends AbstractDollar implements var {
         return split().values().stream();
     }
 
+    @Override
+    public var $dec(long amount) {
+        return this;
+    }
+
+    @Override
+    public var $inc(long amount) {
+        return this;
+    }
+
     @NotNull
     public Map<String, var> split() {
-        HashMap<String, var> map = new HashMap<>();
-        ImmutableJsonObject jsonObject = json;
-        for (String key : jsonObject.toMap().keySet()) {
-            Object field = jsonObject.getField(key);
-            if (field instanceof JsonObject) {
-                map.put(key, DollarFactory.fromField(errors(), field));
-            }
-        }
-        return map;
+        return copyMap();
     }
 
     @NotNull
@@ -145,7 +178,7 @@ class DollarJson extends AbstractDollar implements var {
 
     @Override
     public boolean $has(@NotNull String key) {
-        return json.containsField(key);
+        return map.containsKey(key);
     }
 
     @NotNull
@@ -157,12 +190,8 @@ class DollarJson extends AbstractDollar implements var {
     @NotNull
     @Override
     public ImmutableMap<String, var> $map() {
-        Map<String, var> result = new HashMap<>();
-        Map<String, Object> objectMap = json.toMap();
-        for (Entry<String, Object> entry : objectMap.entrySet()) {
-            result.put(entry.getKey(), DollarFactory.fromValue(errors(), entry.getValue()));
-        }
-        return ImmutableMap.<String, var>copyOf(result);
+
+        return ImmutableMap.<String, var>copyOf(map);
     }
 
     @NotNull
@@ -181,31 +210,10 @@ class DollarJson extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $(@NotNull String name, Object o) {
-        JsonObject copy = this.json();
-        if (o instanceof DollarWrapper) {
-            //unwrap
-            return $(name, ((DollarWrapper) o).getValue());
-        } else if (o instanceof Multimap) {
-            copy.putObject(name, DollarStatic.mapToJson((Multimap) o));
-        } else if (o instanceof JsonArray) {
-            copy.putArray(name, (JsonArray) o);
-        } else if (o instanceof JsonObject) {
-            copy.putObject(name, ((JsonObject) o).copy());
-        } else if (o instanceof DollarJson) {
-            copy.putObject(name, ((DollarJson) o).json());
-        } else if (o instanceof String) {
-            copy.putString(name, (String) o);
-        } else if (o instanceof Number) {
-            copy.putNumber(name, (Number) o);
-        } else if (o instanceof DollarNumber) {
-            copy.putNumber(name, ((DollarNumber) o).$());
-        } else if (o instanceof DollarString) {
-            copy.putString(name, ((DollarString) o).$());
-        } else {
-            copy.putString(name, String.valueOf(o));
-        }
-        return DollarFactory.fromValue(errors(), copy);
+    public var $(@NotNull String key, Object value) {
+        LinkedHashMap<String, var> copyMap = copyMap();
+        copyMap.put(key, DollarFactory.fromValue(errors(), value));
+        return DollarFactory.wrap(new DollarMap(errors(), copyMap));
     }
 
     @Override
@@ -220,7 +228,7 @@ class DollarJson extends AbstractDollar implements var {
 
     @Override
     public Integer I(@NotNull String key) {
-        return json.getInteger(key);
+        return map.get(key).I();
     }
 
     @NotNull
@@ -232,7 +240,7 @@ class DollarJson extends AbstractDollar implements var {
     @NotNull
     @Override
     public var $(@NotNull String key) {
-        return DollarFactory.fromField(errors(), json.getField(key));
+        return DollarFactory.fromValue(errors(), map.get(key));
     }
 
     @Override
@@ -253,29 +261,29 @@ class DollarJson extends AbstractDollar implements var {
     @NotNull
     @Override
     public <R> R $() {
-        return (R) json();
+        return (R) varMapToMap();
     }
 
     @Override
     public java.util.stream.Stream<String> keyStream() {
-        return json.getFieldNames().stream();
+        return map.keySet().stream();
     }
 
     @Override
     public Number number(@NotNull String key) {
-        return json.getNumber(key);
+        return map.get(key).N();
     }
 
     @NotNull
     @Override
     public JSONObject orgjson() {
-        return new JSONObject(json.toMap());
+        return new JSONObject(varMapToMap());
     }
 
     @NotNull
     @Override
     public JsonObject json() {
-        return json.mutable();
+        return new JsonObject(varMapToMap());
     }
 
     @Override
@@ -291,12 +299,26 @@ class DollarJson extends AbstractDollar implements var {
 
     @Override
     public Map<String, Object> toMap() {
-        return json.toMap();
+        return varMapToMap();
+    }
+
+    @NotNull
+    @Override
+    public Number N() {
+        return 0;
+    }
+
+    private Map<String, Object> varMapToMap() {
+        Map<String, Object> result = new LinkedHashMap<>();
+        for (Entry<String, var> entry : map.entrySet()) {
+            result.put(entry.getKey(), entry.getValue().$());
+        }
+        return result;
     }
 
     @Override
     public <R> R val() {
-        return (R) json();
+        return (R) map;
     }
 
     @NotNull
@@ -325,7 +347,7 @@ class DollarJson extends AbstractDollar implements var {
     @NotNull
     @Override
     public var $copy() {
-        return DollarFactory.fromValue(errors(), json());
+        return DollarFactory.wrap(new DollarMap(errors(), map));
     }
 
     @Override
@@ -346,9 +368,11 @@ class DollarJson extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public String toString() {
-        return json.toString();
+    public String S() {
+        return json().toString();
     }
+
+
 }
 
 

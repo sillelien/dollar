@@ -34,6 +34,7 @@ public class DollarArrayTest {
 
     @Test
     public void testBasics() {
+        $list(null, null).$append(null);
         assertEquals(list, $list("Neil").$append("Dimple").$append("Charlie"));
         assertEquals(list.remove("Neil"), $list("Dimple").$append("Charlie"));
         assertEquals(list.remove("Dimple"), $list("Neil").$append("Charlie"));

@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.types;
 
+import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,10 +29,45 @@ import java.util.List;
 public class DollarNumber extends AbstractDollarSingleValue<Number> {
 
     public DollarNumber(@NotNull List<Throwable> errors, @NotNull Number value) {
-        super(errors,value);
+        super(errors, value);
     }
 
+    @Override
+    public var $dec(long amount) {
+        return new DollarNumber(errors(), value.longValue() - amount);
+    }
 
+    @Override
+    public var $inc(long amount) {
+        return new DollarNumber(errors(), value.longValue() + amount);
+    }
+
+    @NotNull
+    @Override
+    public Double D() {
+        return value.doubleValue();
+    }
+
+    @Nullable
+    @Override
+    public Long L() {
+        return value.longValue();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof DollarNumber) {
+            return $().equals(((DollarNumber) obj).$());
+        } else {
+            return value.toString().equals(obj.toString());
+        }
+    }
+
+    @NotNull
+    @Override
+    public Number $() {
+        return value;
+    }
 
     @Override
     @NotNull
@@ -54,36 +90,15 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
         return true;
     }
 
-    @NotNull
-    @Override
-    public Number $() {
-        return value;
-    }
-
     @Override
     @NotNull
     public Number number(@NotNull String key) {
         return value;
     }
 
+    @NotNull
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof DollarNumber) {
-            return $().equals(((DollarNumber) obj).$());
-        } else {
-            return value.toString().equals(obj.toString());
-        }
-    }
-
-    @Nullable
-    @Override
-    public Double D() {
-        return value.doubleValue();
-    }
-
-    @Nullable
-    @Override
-    public Long L() {
-        return value.longValue();
+    public Number N() {
+        return value;
     }
 }

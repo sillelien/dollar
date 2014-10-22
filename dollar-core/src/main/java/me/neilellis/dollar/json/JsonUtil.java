@@ -23,42 +23,47 @@ import java.util.List;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class JsonUtil {
-  public static JsonObject argsToJson(List<String> args) {
-    JsonObject json = new JsonObject();
-    String key = "";
-    Object value = "";
-    for (String arg : args) {
-      if (arg.startsWith("-")) {
-        if (!key.isEmpty()) {
-          if (value instanceof String && ((String) value).isEmpty()) {
-            value = true;
-          }
-          json.putValue(key, value);
-        }
-        key = arg.replaceAll("^\\-+", "");
-        value = "";
-      } else {
-        Object argConverted = arg;
-        if (arg.equals("true") || arg.equals("false")) {
-          argConverted = Boolean.valueOf(arg);
-        } else if (arg.matches("^\\d+$")) {
-          argConverted = Long.valueOf(arg);
-        } else if (arg.matches("^[0-9]+(|.\\d*[0-9])+$")) {
-          argConverted = Double.valueOf(arg);
+    public static JsonObject argsToJson(List<String> args) {
+        JsonObject json = new JsonObject();
+        String key = "";
+        Object value = "";
+        for (String arg : args) {
+            if (arg.startsWith("-")) {
+                if (!key.isEmpty()) {
+                    if (value instanceof String && ((String) value).isEmpty()) {
+                        value = true;
+                    }
+                    json.putValue(key, value);
+                }
+                key = arg.replaceAll("^\\-+", "");
+                value = "";
+            } else {
+                Object argConverted = convert(arg);
+                if (value instanceof String && ((String) value).isEmpty()) {
+                    value = argConverted;
+                } else if (value instanceof JsonArray) {
+                    ((JsonArray) value).add(argConverted);
+                } else {
+                    value = new JsonArray(Arrays.asList(value, argConverted));
+                }
+            }
         }
         if (value instanceof String && ((String) value).isEmpty()) {
-          value = argConverted;
-        } else if (value instanceof JsonArray) {
-          ((JsonArray) value).addString(argConverted.toString());
-        } else {
-          value = new JsonArray(Arrays.asList(value, argConverted));
+            value = true;
         }
-      }
+        json.putValue(key, value);
+        return json;
     }
-    if (value instanceof String && ((String) value).isEmpty()) {
-      value = true;
+
+    static Object convert(String arg) {
+        Object argConverted = arg;
+        if (arg.equals("true") || arg.equals("false")) {
+            argConverted = Boolean.valueOf(arg);
+        } else if (arg.matches("^\\d+$")) {
+            argConverted = Long.valueOf(arg);
+        } else if (arg.matches("^[0-9]+(|.\\d*[0-9])+$")) {
+            argConverted = Double.valueOf(arg);
+        }
+        return argConverted;
     }
-    json.put(key, value);
-    return json;
-  }
 }

@@ -20,5 +20,6 @@ package me.neilellis.dollar.plugin;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface ExtensionPoint<T extends ExtensionPoint> extends SingletonExtensionPoint {
-  T copy();
+
+    T copy();
 }

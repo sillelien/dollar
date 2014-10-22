@@ -41,23 +41,32 @@ public class DollarList extends AbstractDollar {
     private final ImmutableList<var> list;
 
     DollarList(@NotNull ImmutableList<Throwable> errors, @NotNull JsonArray array) {
-         super(errors);
-        list = ImmutableList.copyOf((List<var>) array.toList()
-                                                     .stream()
-                                                     .map((i) -> DollarFactory.fromValue(errors, i))
-                                                     .collect(Collectors.toList()));
+        this(errors, array.toList());
     }
 
+
     DollarList(@NotNull ImmutableList<Throwable> errors, @NotNull List<var> list) {
-         super(errors);
-        this.list = ImmutableList.copyOf(list);
+        super(errors);
+        List<var> l = new ArrayList<>();
+        for (Object value : list) {
+            if ((value instanceof var)) {
+                l.add((var) value);
+            } else {
+                l.add(DollarFactory.fromValue(errors, value));
+            }
+        }
+        this.list = ImmutableList.copyOf(l);
     }
 
     DollarList(@NotNull ImmutableList<Throwable> errors, @NotNull Object... values) {
-         super(errors);
+        super(errors);
         List<var> l = new ArrayList<>();
-         for (Object value : values) {
-             l.add(DollarFactory.fromValue(errors, value));
+        for (Object value : values) {
+            if ((value instanceof var)) {
+                l.add((var) value);
+            } else {
+                l.add(DollarFactory.fromValue(errors, value));
+            }
         }
         list = ImmutableList.copyOf(l);
     }
@@ -68,7 +77,9 @@ public class DollarList extends AbstractDollar {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
     }
 
-    @NotNull @Override public var $(@NotNull String key, double value) {
+    @NotNull
+    @Override
+    public var $(@NotNull String key, double value) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
     }
 
@@ -76,10 +87,10 @@ public class DollarList extends AbstractDollar {
     @Override
     public var $append(Object value) {
         return DollarFactory.fromValue(errors(),
-                                       ImmutableList.builder()
-                                                    .addAll(list)
-                                                    .add(DollarFactory.fromValue(value))
-                                                    .build());
+                ImmutableList.builder()
+                        .addAll(list)
+                        .add(DollarFactory.fromValue(value))
+                        .build());
     }
 
     @NotNull
@@ -92,6 +103,16 @@ public class DollarList extends AbstractDollar {
     @Override
     public Stream<var> $children(@NotNull String key) {
         return Stream.empty();
+    }
+
+    @Override
+    public var $dec(long amount) {
+        return this;
+    }
+
+    @Override
+    public var $inc(long amount) {
+        return this;
     }
 
     @Override
@@ -212,6 +233,12 @@ public class DollarList extends AbstractDollar {
         return Collections.singletonMap("value", new ArrayList<>(toList()));
     }
 
+    @NotNull
+    @Override
+    public Number N() {
+        return 0;
+    }
+
     @Override
     public <R> R val() {
         return (R) list;
@@ -258,7 +285,7 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public String toString() {
+    public String S() {
         return jsonArray().toString();
     }
 }
