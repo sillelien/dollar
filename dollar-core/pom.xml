@@ -72,6 +72,7 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.3.3</version>
         </dependency>
+
         <!--<dependency>-->
         <!--<groupId>cofoja</groupId>-->
         <!--<artifactId>cofoja</artifactId>-->
@@ -79,45 +80,6 @@
         <!--<type>jar</type>-->
         <!--</dependency>-->
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <configuration>
-                    <shadedArtifactAttached>true</shadedArtifactAttached>
-                    <shadedClassifierName>fat</shadedClassifierName>
-                    <!--Change to true if/when http://jira.codehaus.org/browse/MSHADE-174 is fixed -->
-                    <minimizeJar>false</minimizeJar>
-                    <filters>
-                        <filter>
-                            <!--
-                                Exclude files that sign a jar
-                                (one or multiple of the dependencies).
-                                One may not repack a signed jar without
-                                this, or you will get a
-                                SecurityException at program start.
-                            -->
-                            <artifact>*:*</artifact>
-                            <excludes>
-                                <exclude>META-INF/*.SF</exclude>
-                                <exclude>META-INF/*.RSA</exclude>
-                                <exclude>META-INF/*.INF</exclude>
-                                <!-- This one may not be required -->
-                            </excludes>
-                        </filter>
-                    </filters>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+
 
 </project>

@@ -19,15 +19,12 @@ package me.neilellis.dollar.types;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Range;
-import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.ErrorLogger;
-import me.neilellis.dollar.StateTracer;
+import me.neilellis.dollar.*;
 import me.neilellis.dollar.json.DecodeException;
 import me.neilellis.dollar.json.ImmutableJsonObject;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.monitor.DollarMonitor;
-import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import spark.QueryParamsMap;
@@ -35,7 +32,6 @@ import spark.QueryParamsMap;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -82,11 +78,11 @@ public class DollarFactory {
         if (o instanceof var) {
             return ((var) o).$copy();
         }
-        if (o instanceof Function) {
+        if (o instanceof Pipeable) {
             return wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                     DollarStatic.class.getClassLoader(),
                     new Class<?>[]{var.class},
-                    new DollarLambda(DollarStatic.$void(), (Function<var, var>) o)));
+                    new DollarLambda(DollarStatic.$void(), (Pipeable) o)));
         }
         if (o instanceof JsonArray) {
             return wrap(new DollarList(errors, (JsonArray) o));

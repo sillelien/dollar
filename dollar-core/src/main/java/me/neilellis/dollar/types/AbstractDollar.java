@@ -251,8 +251,22 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
+    public var $(@NotNull String key, Pipeable value) {
+        return $(key, (Object) value);
+    }
+
+    @Override
     public String toString() {
         return S();
+    }
+
+    @Override
+    public var $default(Object o) {
+        if (isVoid()) {
+            return DollarStatic.$(o);
+        } else {
+            return this;
+        }
     }
 
     @NotNull
@@ -463,9 +477,9 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $pipe(@NotNull Class<? extends Script> clazz) {
+    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
         DollarStatic.threadContext.get().setPassValue(this.$copy());
-        Script script = null;
+        Pipeable script = null;
         try {
             script = clazz.newInstance();
         } catch (InstantiationException e) {
@@ -473,7 +487,11 @@ public abstract class AbstractDollar implements var {
         } catch (Exception e) {
             return DollarStatic.handleError(e, this);
         }
-        return script.result();
+        try {
+            return script.pipe(this);
+        } catch (Exception e) {
+            return DollarStatic.handleError(e, this);
+        }
     }
 
 
@@ -483,7 +501,7 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public var $(Function<var, var> lambda) {
+    public var $(Pipeable lambda) {
         return (var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},

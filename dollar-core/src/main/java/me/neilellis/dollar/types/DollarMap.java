@@ -261,7 +261,7 @@ class DollarMap extends AbstractDollar implements var {
     @NotNull
     @Override
     public <R> R $() {
-        return (R) varMapToMap();
+        return (R) json();
     }
 
     @Override

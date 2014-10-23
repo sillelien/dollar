@@ -17,10 +17,10 @@
 package me.neilellis.dollar.types;
 
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.var;
 
 import java.lang.reflect.Method;
-import java.util.function.Function;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -28,9 +28,9 @@ import java.util.function.Function;
 public class DollarLambda implements java.lang.reflect.InvocationHandler {
 
     private final var in;
-    private Function<var, var> lambda;
+    private Pipeable lambda;
 
-    public DollarLambda(var in, Function<var, var> lambda) {
+    public DollarLambda(var in, Pipeable lambda) {
 
         this.in = in;
         this.lambda = lambda;
@@ -42,11 +42,11 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             if (Object.class == method.getDeclaringClass()) {
                 String name = method.getName();
                 if ("equals".equals(name)) {
-                    return lambda.apply(in).equals(args[0]);
+                    return lambda.pipe(in).equals(args[0]);
                 } else if ("hashCode".equals(name)) {
-                    return lambda.apply(in).hashCode();
+                    return lambda.pipe(in).hashCode();
                 } else if ("toString".equals(name)) {
-                    return lambda.apply(in).toString();
+                    return lambda.pipe(in).toString();
                 } else {
                     throw new IllegalStateException(String.valueOf(method));
                 }
@@ -62,7 +62,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             }
             System.err.println(method);
 
-            return method.invoke(lambda.apply(in), args);
+            return method.invoke(lambda.pipe(in), args);
         } catch (Exception e) {
             if (method.getReturnType().isAssignableFrom(var.class)) {
                 return DollarStatic.handleError(e, null);

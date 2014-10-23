@@ -18,7 +18,7 @@ package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.DollarEval;
-import me.neilellis.dollar.Script;
+import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.var;
@@ -268,7 +268,7 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $pipe(@NotNull Class<? extends Script> clazz) {
+    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
         return $copy();
     }
 

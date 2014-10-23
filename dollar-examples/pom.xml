@@ -31,7 +31,7 @@
     <dependencies>
         <dependency>
             <groupId>me.neilellis</groupId>
-            <artifactId>dollar-core</artifactId>
+            <artifactId>dollar-runtime</artifactId>
             <version>0-SNAPSHOT</version>
         </dependency>
         <dependency>

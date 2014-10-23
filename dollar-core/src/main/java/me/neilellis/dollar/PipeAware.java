@@ -38,7 +38,7 @@ public interface PipeAware {
     var $pipe(@NotNull String js);
 
     @NotNull
-    var $pipe(@NotNull Class<? extends Script> clazz);
+    var $pipe(@NotNull Class<? extends Pipeable> clazz);
 
     @Deprecated
     var eval(String label, DollarEval eval);

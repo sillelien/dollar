@@ -23,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -53,6 +52,8 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
     @NotNull
     var $(@NotNull String key, double value);
 
+    var $(@NotNull String key, Pipeable value);
+
     @NotNull
     @Override
     String toString();
@@ -69,6 +70,8 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
 
     @NotNull
     Stream<var> $children();
+
+    var $default(Object o);
 
     @NotNull
     Stream<var> $children(@NotNull String key);
@@ -211,7 +214,7 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
     }
 
 
-    var $(Function<var, var> lambda);
+    var $(Pipeable lambda);
 
 
 }

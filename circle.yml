@@ -44,5 +44,7 @@ deployment:
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
         - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} clean install deploy
+        - pack/pack.sh
+        - pack/upload.sh
         - mvn site:site site:stage
         - mvn scm-publish:publish-scm

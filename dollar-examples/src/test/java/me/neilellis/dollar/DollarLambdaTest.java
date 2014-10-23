@@ -19,6 +19,7 @@ package me.neilellis.dollar;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static me.neilellis.dollar.DollarStatic.$;
@@ -34,9 +35,7 @@ public class DollarLambdaTest {
 
     @Test
     public void testBasics() throws InterruptedException {
-        var lambda = $((v) -> {
-            return $(System.currentTimeMillis());
-        });
+        var lambda = $((v) -> $(System.currentTimeMillis()));
         long time = System.currentTimeMillis();
         System.out.println(time);
         Thread.sleep(50);
@@ -48,12 +47,9 @@ public class DollarLambdaTest {
 
     @Test
     public void testIdentityEqualsHashCode() throws InterruptedException {
-        var lambda = $((v) -> {
-            return $("Hello World");
-        });
-        System.out.println(lambda);
-
-
+        var lambda = $((v) -> $("Hello World"));
+        assertEquals("Hello World".hashCode(), lambda.hashCode());
+        assertEquals(lambda, "Hello World");
     }
 
 

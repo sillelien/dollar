@@ -67,14 +67,17 @@ public class DollarWrapper implements var {
     @NotNull
     @Override
     public var $(@NotNull String key, long l) {
-        assert key != null;
         return tracer.trace(this, getValue().$(key, l), StateTracer.Operations.SET, key, l);
     }
 
     @NotNull
     @Override
     public var $(@NotNull String key, double value) {
-        assert key != null;
+        return tracer.trace(this, getValue().$(key, value), StateTracer.Operations.SET, key, value);
+    }
+
+    @Override
+    public var $(@NotNull String key, Pipeable value) {
         return tracer.trace(this, getValue().$(key, value), StateTracer.Operations.SET, key, value);
     }
 
@@ -90,10 +93,14 @@ public class DollarWrapper implements var {
         return getValue().$children();
     }
 
+    @Override
+    public var $default(Object o) {
+        return getValue().$default(o);
+    }
+
     @NotNull
     @Override
     public Stream $children(@NotNull String key) {
-        assert key != null;
         return getValue().$children(key);
     }
 
@@ -221,7 +228,7 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public var $(Function<var, var> lambda) {
+    public var $(Pipeable lambda) {
         return getValue().$(lambda);
     }
 
@@ -438,7 +445,7 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $pipe(@NotNull Class<? extends Script> clazz) {
+    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
         return tracer.trace(this,
                 monitor.run("pipe",
                         "dollar.run.pipe." + sanitize(clazz),

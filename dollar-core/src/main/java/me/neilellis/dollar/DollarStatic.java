@@ -40,7 +40,6 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Function;
 
 /**
  * To use the $ class you need to statically import all of the methods from this class. This is effectively a factory
@@ -119,7 +118,7 @@ public class DollarStatic {
         return DollarFactory.fromValue().$(name, value);
     }
 
-    public static var $(@NotNull String name, Function<var, var> value) {
+    public static var $(@NotNull String name, Pipeable value) {
         return DollarFactory.fromValue().$(name, value);
     }
 
@@ -470,7 +469,7 @@ public class DollarStatic {
         return integrationProvider;
     }
 
-    public static var $(Function<var, var> lambda) {
+    public static var $(Pipeable lambda) {
         return DollarFactory.fromValue(lambda);
     }
 }
