@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 
 /**
  * Is the interface needed to register a class reload listener.
- * <p/>
+ *
  * <p>An object implementing this interface can optionally be registered on RelProxy to listen when the method of a proxy object has been called
  * and the class of the original object associated has been reloaded (and a new "original" object based on the new class was created to replace it).
  * </p>

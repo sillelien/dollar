@@ -33,7 +33,7 @@ import com.innowhere.relproxy.RelProxyOnReloadListener;
 public interface JProxyConfig {
     /**
      * Sets whether automatic detection of source code changes is enabled.
-     * <p/>
+     *
      * <p>If set to false other configuration parameters are ignored, there is no automatic source code change detection/reload and original objects are returned
      * instead of proxies, performance penalty is zero. Setting to false is recommended in production whether source code change detection/reload is not required.</p>
      *
@@ -52,10 +52,10 @@ public interface JProxyConfig {
 
     /**
      * Defines the folder root to locate source code Java files.
-     * <p/>
+     *
      * <p>Structure of the source tree must be the same as a JavaSE application, the only difference is shell scripts, shell scripts must be
      * located on the top level of the source tree (default package).</p>
-     * <p/>
+     *
      * <p>This setting is required.</p>
      *
      * @param inputPath the folder root to locate source code Java files.
@@ -65,9 +65,9 @@ public interface JProxyConfig {
 
     /**
      * Sets the folder where to save .class files result of recompiling source code changed.
-     * <p/>
+     *
      * <p>This setting is optional and the folder must be included in Java classpath because the objective is to avoid recompiling.</p>
-     * <p/>
+     *
      * <p>Be careful when executing several Java scripts in the same time and source code has been changed, some file write collisions may happen.</p>
      *
      * @param classFolder the folder where to save .class files. By default is null (not defined, .class files are not saved).
@@ -77,7 +77,7 @@ public interface JProxyConfig {
 
     /**
      * Sets the delay between source code change checking.
-     * <p/>
+     *
      * <p>If this value is set to 0 or negative, no periodic source code change detection is executed and only compilation on the fly happens in load time,
      * this is valid for one shot scripts but it has no sense when using proxies.
      *
@@ -88,7 +88,7 @@ public interface JProxyConfig {
 
     /**
      * Sets the compilation options to be provided to the compiler built-in in JDK like <code>JavaCompiler.getTask()</code> method and the same you would provide to javac.
-     * <p/>
+     *
      * <p>Example of compilation options:</p>
      * <p><code>Iterable&lt;String&gt; compilationOptions = Arrays.asList(new String[]{"-source","1.6","-target","1.6"});</code></p>
      *
@@ -99,9 +99,9 @@ public interface JProxyConfig {
 
     /**
      * Sets the diagnostic listener to capture compilation errors and warnings thrown by the internal compiler.
-     * <p/>
+     *
      * <p>The following is an example similar to the default behavior when this listener is not specified:</p>
-     * <p/>
+     *
      * <pre>
      * JProxyDiagnosticsListener diagnosticsListener = new JProxyDiagnosticsListener()
      * {

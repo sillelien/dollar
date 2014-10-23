@@ -24,7 +24,7 @@ import javax.script.ScriptEngine;
 
 /**
  * Interface implemented by RelProxy to provide <code>javax.script.ScriptEngine</code> objects supporting Java as a scripting language.
- * <p/>
+ *
  * <p>The method {@link JProxyScriptEngineFactory#getScriptEngine()} returns an implementation of this interface.</p>
  *
  * @author Jose Maria Arranz Santamaria

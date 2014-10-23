@@ -28,7 +28,7 @@ package com.innowhere.relproxy;
 public class RelProxyException extends RuntimeException {
     /**
      * Constructs a new exception with the specified message and cause.
-     * <p/>
+     *
      * <p>Parameters are passed to the super constructor.</p>
      *
      * @param message the detail message
@@ -40,7 +40,7 @@ public class RelProxyException extends RuntimeException {
 
     /**
      * Constructs a new exception with the specified message.
-     * <p/>
+     *
      * <p>Parameter is passed to the super constructor.</p>
      *
      * @param message the detail message
@@ -51,7 +51,7 @@ public class RelProxyException extends RuntimeException {
 
     /**
      * Constructs a new exception with the specified cause.
-     * <p/>
+     *
      * <p>Parameter is passed to the super constructor.</p>
      *
      * @param cause the cause

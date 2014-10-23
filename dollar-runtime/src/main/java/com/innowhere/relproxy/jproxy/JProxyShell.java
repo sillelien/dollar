@@ -24,7 +24,7 @@ import com.innowhere.relproxy.impl.jproxy.shell.JProxyShellImpl;
 
 /**
  * Is the main class to execute shell scripting based on Java.
- * <p/>
+ *
  * <p>You are not going to use directly this class, use instead <code>jproxysh</code> command line.</p>
  *
  * @author Jose Maria Arranz Santamaria
