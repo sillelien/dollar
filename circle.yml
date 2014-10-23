@@ -12,6 +12,7 @@ general:
 dependencies:
   cache_directories:
     - ~/.gnupg
+    - ~/.dollar-cache
   pre:
 #    - sudo apt-get install -y gpg
     - ./gen-key.sh ${GPG_PASSPHRASE}

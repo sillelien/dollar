@@ -22,18 +22,16 @@ import java.util.Collection;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class NonNullGuard implements Guard {
+public class SetKeyValueGuard implements Guard {
     @Override
     public String description() {
-        return "Non Null Collection Guard";
+        return "Set K/V Guard";
     }
 
     @Override
     public void preCondition(Object guarded, Method method, Object[] args) {
-        int count = 0;
-        for (Object arg : args) {
-            assertNotNull("parameter argument " + (count++), arg);
-        }
+
+        assertNotNull("first parameter ", args[0]);
     }
 
     @Override

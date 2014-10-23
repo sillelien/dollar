@@ -17,6 +17,10 @@
 package me.neilellis.dollar;
 
 import com.google.common.collect.ImmutableList;
+import me.neilellis.dollar.guard.ChainGuard;
+import me.neilellis.dollar.guard.Guarded;
+import me.neilellis.dollar.guard.NotNullCollectionGuard;
+import me.neilellis.dollar.guard.NotNullParametersGuard;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -27,36 +31,53 @@ import java.util.function.Consumer;
  */
 public interface ErrorAware {
     @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
+
     var $error(@NotNull String errorMessage);
 
     @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
     var $error(@NotNull Throwable error);
 
     @NotNull
+    @Guarded(ChainGuard.class)
     var $error();
 
     @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
     var $errors();
 
     @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
     var $fail(@NotNull Consumer<List<Throwable>> handler);
 
     @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
     default var $invalid(@NotNull String errorMessage) {
         return $error(errorMessage, ErrorType.VALIDATION);
     }
 
     @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
     var $error(@NotNull String errorMessage, @NotNull ErrorType type);
 
     @NotNull
+    @Guarded(NotNullCollectionGuard.class)
     ImmutableList<Throwable> errors();
 
     boolean hasErrors();
 
+    @Guarded(ChainGuard.class)
     var clearErrors();
 
     @NotNull
+    @Guarded(NotNullCollectionGuard.class)
     List<String> errorTexts();
 
 

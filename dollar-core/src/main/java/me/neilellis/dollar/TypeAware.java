@@ -19,7 +19,7 @@ package me.neilellis.dollar;
 import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.guard.AllVarCollectionGuard;
 import me.neilellis.dollar.guard.Guarded;
-import me.neilellis.dollar.guard.NonNullCollectionGuard;
+import me.neilellis.dollar.guard.NotNullCollectionGuard;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +42,7 @@ public interface TypeAware {
     String S();
 
 
-    @Guarded(NonNullCollectionGuard.class)
+    @Guarded(NotNullCollectionGuard.class)
     @Guarded(AllVarCollectionGuard.class)
     @NotNull
     ImmutableList<var> toList();

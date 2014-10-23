@@ -14,31 +14,36 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.pipe;
+package me.neilellis.dollar.guard;
 
-import me.neilellis.dollar.Script;
 import me.neilellis.dollar.var;
 
-import java.util.Date;
+import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public final class FirstScript extends Script {
-    static {
-        $THIS = FirstScript.class;
+public class AllVarMapGuard implements Guard {
+    @Override
+    public String description() {
+        return "Non Null Collection Guard";
     }
 
-    {
-        var profile = $("name", "Neil")
-                .$("age", new Date().getYear() + 1900 - 1970)
-                .$("gender", "male")
-                .$("projects", $jsonArray("snapito", "dollar_vertx"))
-                .$("location",
-                        $("city", "brighton")
-                                .$("postcode", "bn1 6jj")
-                                .$("number", 343)
-                );
-        profile.$pipe(ExtractName.class).$pipe(WelcomeMessage.class).out();
+    @Override
+    public void preCondition(Object guarded, Method method, Object[] args) {
+        for (Object arg : args) {
+            if (arg instanceof Map) {
+                ((Map) arg).forEach((k, v) -> assertTrue(v instanceof var));
+            }
+        }
     }
+
+    @Override
+    public void postCondition(Object guarded, Method method, Object[] args, Object result) {
+        if (result instanceof Map) {
+            ((Map) result).forEach((k, v) -> assertTrue(v instanceof var));
+        }
+    }
+
 }

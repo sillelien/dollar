@@ -2,12 +2,13 @@
 
 
 cd $(dirname $0)
-[ -f /tmp/zulu-mac.zip ] || curl -H "Referer: http://www.azulsystems.com/products/zulu/downloads#mac"  http://cdn.azulsystems.com/zulu/2014-09-8.3-bin/zulu1.8.0_20-8.3.0.4-macosx.zip   > /tmp/zulu-mac.zip
+[ -d ~/.dollar-cache ] || mkdir ~/.dollar-cache
+[ -f ~/.dollar-cache/zulu-mac.zip ] || curl -H "Referer: http://www.azulsystems.com/products/zulu/downloads#mac"  http://cdn.azulsystems.com/zulu/2014-09-8.3-bin/zulu1.8.0_20-8.3.0.4-macosx.zip   > ~/.dollar-cache/zulu-mac.zip
 
 jar=$(ls ../dollar-runtime/target/dollar-runtime*-fat.jar)
 java -jar packr.jar \
      -platform mac \
-     -jdk /tmp/zulu-mac.zip \
+     -jdk ~/.dollar-cache/zulu-mac.zip \
      -executable dollar \
      -appjar ${jar} \
      -mainclass "me/neilellis/dollar/runtime/Main" \

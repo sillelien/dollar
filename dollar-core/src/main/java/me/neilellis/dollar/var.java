@@ -17,6 +17,7 @@
 package me.neilellis.dollar;
 
 import me.neilellis.dollar.collections.ImmutableMap;
+import me.neilellis.dollar.guard.*;
 import me.neilellis.dollar.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,6 +41,8 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
      * @return a new {@link me.neilellis.dollar.var} object with the key/value pair included.
      */
     @NotNull
+    @Guarded(SetKeyValueGuard.class)
+    @Guarded(ReturnVarOnlyGuard.class)
     var $(@NotNull String key, long value);
 
     /**
@@ -50,8 +53,12 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
      * @return a new {@link me.neilellis.dollar.var} object with the key/value pair included.
      */
     @NotNull
+    @Guarded(SetKeyValueGuard.class)
+    @Guarded(ReturnVarOnlyGuard.class)
     var $(@NotNull String key, double value);
 
+    @Guarded(SetKeyValueGuard.class)
+    @Guarded(ReturnVarOnlyGuard.class)
     var $(@NotNull String key, Pipeable value);
 
     @NotNull
@@ -66,14 +73,20 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
      */
 
     @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(ReturnVarOnlyGuard.class)
     var $append(@Nullable Object value);
 
     @NotNull
+    @Guarded(ChainGuard.class)
     Stream<var> $children();
 
+    @Guarded(ChainGuard.class)
+    @Guarded(ReturnVarOnlyGuard.class)
     var $default(Object o);
 
     @NotNull
+    @Guarded(ChainGuard.class)
     Stream<var> $children(@NotNull String key);
 
     /**
@@ -83,6 +96,8 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
      * @return a deep copy of this object
      */
     @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(ReturnVarOnlyGuard.class)
     var $copy();
 
     /**
@@ -91,13 +106,18 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
      * @param key the key
      * @return true if the key exists.
      */
+    @Guarded(NotNullParametersGuard.class)
     boolean $has(@NotNull String key);
 
+
+    @Guarded(ChainGuard.class)
+    @Guarded(ReturnVarOnlyGuard.class)
     default var $list() {
         return DollarFactory.fromValue(errors(), toList());
     }
 
     @NotNull
+    @Guarded(AllVarMapGuard.class)
     ImmutableMap<String, var> $map();
 
     default boolean $match(@NotNull String key, @Nullable String value) {
@@ -105,6 +125,7 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
     }
 
     @Nullable
+    @Guarded(NotNullParametersGuard.class)
     String S(@NotNull String key);
 
     /**
@@ -117,6 +138,7 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
         return "application/json";
     }
 
+    @Guarded(ReturnVarOnlyGuard.class)
     var $post(String url);
 
     /**
@@ -178,6 +200,7 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
     <R> R $();
 
     @Nullable
+    @Guarded(ChainGuard.class)
     Stream<String> keyStream();
 
     /**
@@ -188,6 +211,7 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
      */
 
     @Nullable
+    @Guarded(ChainGuard.class)
     java.util.stream.Stream<Map.Entry<String, var>> kvStream();
 
     /**
@@ -202,18 +226,24 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
         return $();
     }
 
-    default void err() {
+    @Guarded(ChainGuard.class)
+    default var err() {
         System.err.println(S());
+        return this;
     }
 
     /**
      * Prints the S() value of this {@link var} to stdout.
      */
-    default void $out() {
+    @Guarded(ChainGuard.class)
+    default var out() {
         System.out.println(S());
+        return this;
     }
 
 
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
     var $(Pipeable lambda);
 
 

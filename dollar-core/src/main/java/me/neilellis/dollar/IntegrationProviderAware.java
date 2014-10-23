@@ -16,6 +16,10 @@
 
 package me.neilellis.dollar;
 
+import me.neilellis.dollar.guard.ChainGuard;
+import me.neilellis.dollar.guard.Guarded;
+import me.neilellis.dollar.guard.NotNullParametersGuard;
+
 import java.util.function.Consumer;
 
 /**
@@ -27,6 +31,8 @@ public interface IntegrationProviderAware {
      *
      * @param uri
      */
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
     var $send(String uri);
 
     /**
@@ -34,6 +40,7 @@ public interface IntegrationProviderAware {
      *
      * @param uri
      */
+    @Guarded(NotNullParametersGuard.class)
     void $listen(String uri, Consumer<var> handler);
 
     /**
@@ -41,6 +48,7 @@ public interface IntegrationProviderAware {
      *
      * @param uri
      */
+    @Guarded(NotNullParametersGuard.class)
     void $publish(String uri);
 
     /**
@@ -48,5 +56,6 @@ public interface IntegrationProviderAware {
      *
      * @param uri
      */
+    @Guarded(NotNullParametersGuard.class)
     void $dispatch(String uri);
 }

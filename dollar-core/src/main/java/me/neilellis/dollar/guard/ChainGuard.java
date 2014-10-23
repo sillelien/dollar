@@ -17,12 +17,11 @@
 package me.neilellis.dollar.guard;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class NonNullCollectionGuard implements Guard {
+public class ChainGuard implements Guard {
     @Override
     public String description() {
         return "Non Null Collection Guard";
@@ -35,9 +34,8 @@ public class NonNullCollectionGuard implements Guard {
 
     @Override
     public void postCondition(Object guarded, Method method, Object[] args, Object result) {
-        if (result instanceof Collection) {
-            ((Collection) result).forEach(this::assertNotNull);
-        }
+
+        assertNotNull("return value", result);
     }
 
 }

@@ -73,12 +73,7 @@
             <version>2.3.3</version>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>cofoja</groupId>-->
-        <!--<artifactId>cofoja</artifactId>-->
-        <!--<version>cofoja.asm-1.2-20140817</version>-->
-        <!--<type>jar</type>-->
-        <!--</dependency>-->
+
     </dependencies>
 
 

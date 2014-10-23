@@ -218,13 +218,14 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public void err() {
-        getValue().err();
+    public var err() {
+        return getValue().err();
+
     }
 
     @Override
-    public void $out() {
-        getValue().$out();
+    public var out() {
+        return getValue().out();
     }
 
     @Override

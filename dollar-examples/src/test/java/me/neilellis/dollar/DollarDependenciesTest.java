@@ -22,14 +22,11 @@ import org.junit.Test;
 import org.sonatype.aether.resolution.DependencyResolutionException;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
 
-import static me.neilellis.dollar.DollarStatic.$list;
-
 public class DollarDependenciesTest {
-    private static var list;
 
     @BeforeClass
     public static void setUp() {
-        list = $list("Neil", "Dimple", "Charlie");
+
     }
 
     @Test
