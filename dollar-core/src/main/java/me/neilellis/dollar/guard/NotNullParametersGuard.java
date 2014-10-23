@@ -30,8 +30,10 @@ public class NotNullParametersGuard implements Guard {
     @Override
     public void preCondition(Object guarded, Method method, Object[] args) {
         int count = 0;
-        for (Object arg : args) {
-            assertNotNull("parameter argument " + (count++), arg);
+        if (args != null) {
+            for (Object arg : args) {
+                assertNotNull("parameter argument " + (count++), arg);
+            }
         }
     }
 

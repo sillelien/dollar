@@ -30,9 +30,11 @@ public class NotNullCollectionGuard implements Guard {
 
     @Override
     public void preCondition(Object guarded, Method method, Object[] args) {
-        for (Object arg : args) {
-            if (arg instanceof Collection) {
-                ((Collection) arg).forEach((i) -> assertNotNull(i));
+        if (args != null) {
+            for (Object arg : args) {
+                if (arg instanceof Collection) {
+                    ((Collection) arg).forEach((i) -> assertNotNull(i));
+                }
             }
         }
     }

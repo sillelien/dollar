@@ -32,9 +32,11 @@ public class AllVarMapGuard implements Guard {
 
     @Override
     public void preCondition(Object guarded, Method method, Object[] args) {
-        for (Object arg : args) {
-            if (arg instanceof Map) {
-                ((Map) arg).forEach((k, v) -> assertTrue(v instanceof var));
+        if (args != null) {
+            for (Object arg : args) {
+                if (arg instanceof Map) {
+                    ((Map) arg).forEach((k, v) -> assertTrue(v instanceof var));
+                }
             }
         }
     }
