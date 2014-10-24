@@ -431,7 +431,7 @@
             </snapshots>
             <id>bintray.central</id>
             <name>bintray</name>
-            <url>http://dl.bintray.com/neilellis/maven</url>
+            <url>http://dl.bintray.com/neilellis/dollar/dollar</url>
         </repository>
     </repositories>
 
@@ -443,7 +443,7 @@
         <repository>
             <id>bintray-neilellis-maven-dollar</id>
             <name>neilellis-maven-dollar</name>
-            <url>https://api.bintray.com/maven/neilellis/maven/dollar</url>
+            <url>https://api.bintray.com/maven/neilellis/dollar/dollar</url>
         </repository>
     </distributionManagement>
 
