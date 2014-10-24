@@ -43,7 +43,7 @@
             <version>0-SNAPSHOT</version>
         </dependency>
         <dependency>
-        <groupId>com.jcabi</groupId>
+            <groupId>com.jcabi</groupId>
             <artifactId>jcabi-aether</artifactId>
             <version>0.10.1</version>
         </dependency>
@@ -57,7 +57,6 @@
             <artifactId>tools</artifactId>
             <version>1.8</version>
             <scope>compile</scope>
-            <systemPath>${project.basedir}/../lib/tools.jar</systemPath>
         </dependency>
     </dependencies>
     <build>

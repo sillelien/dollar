@@ -431,7 +431,7 @@
             </snapshots>
             <id>bintray.central</id>
             <name>bintray</name>
-            <url>http://dl.bintray.com/neilellis/dollar/dollar</url>
+            <url>http://dl.bintray.com/neilellis/dollar</url>
         </repository>
     </repositories>
 
