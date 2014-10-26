@@ -1,0 +1,6 @@
+#!/bin/sh -x
+cd $(dirname $0)/..
+DOLLAR_HOME=$(pwd)
+cd -
+export JAVA_HOME=${DOLLAR_HOME}/jdk/
+${DOLLAR_HOME}/jdk/jre/bin/java -classpath "${DOLLAR_HOME}/lib/*:${DOLLAR_HOME}/ext:${DOLLAR_HOME}/plugins:${HOME}/.dollar/lib" me.neilellis.dollar.script.ParserMain $@

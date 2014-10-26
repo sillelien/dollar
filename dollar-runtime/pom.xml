@@ -43,7 +43,12 @@
             <version>0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.jcabi</groupId>
+            <groupId>me.neilellis</groupId>
+            <artifactId>dollar-script</artifactId>
+            <version>0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        <groupId>com.jcabi</groupId>
             <artifactId>jcabi-aether</artifactId>
             <version>0.10.1</version>
         </dependency>
