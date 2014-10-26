@@ -38,6 +38,7 @@ public class DollarThreadContext {
     private DollarPubSub pubsub = Plugins.newInstance(DollarPubSub.class);
     private DollarStore store = Plugins.newInstance(DollarStore.class);
     private String threadKey = UUID.randomUUID().toString();
+    private ClassLoader classLoader = DollarThreadContext.class.getClassLoader();
 
     public DollarThreadContext(List<String> labels, DollarMonitor monitor, var passValue, DollarPubSub pubsub,
                                DollarStore store, String threadKey) {
@@ -121,5 +122,13 @@ public class DollarThreadContext {
 
     public void pushLabel(String label) {
         labels.add(label);
+    }
+
+    public ClassLoader getClassLoader() {
+        return classLoader;
+    }
+
+    public void setClassLoader(ClassLoader classLoader) {
+        this.classLoader = classLoader;
     }
 }

@@ -1,5 +1,5 @@
-! {"test" : 1, "test2" : 2} | 'me.neilellis.dollar.script.TestPipe'
-//! "test" : 1, "test2" : 2 | 'me.neilellis.dollar.script.TestPipe' ;
+//! {"test" : 1, "test2" : 2} | 'mvn:me.neilellis.dollar.script.TestPipe:me.neilellis:dollar-script:0-SNAPSHOT'
+! "test" : 1, "test2" : 2 | 'me.neilellis.dollar.script.TestPipe'
 //! 1, 2, 3 ;
 //! {1, 2, 3} ;
 //! [1, 2, 3] ;

@@ -16,6 +16,8 @@
 
 package me.neilellis.dollar.plugin;
 
+import me.neilellis.dollar.pipe.PipeResolver;
+
 import java.util.*;
 
 /**
@@ -23,32 +25,46 @@ import java.util.*;
  */
 public class Plugins {
 
-  public static <T extends ExtensionPoint<T>> List<T> allProviders(Class<T> serviceClass) {
-    final ServiceLoader<T> loader = ServiceLoader.<T>load(serviceClass);
-    final Iterator<T> iterator = loader.iterator();
-    if (!iterator.hasNext()) {
-      return Collections.singletonList(NoOpProxy.newInstance(serviceClass));
+    public static <T extends ExtensionPoint<T>> List<T> allProviders(Class<T> serviceClass) {
+        final ServiceLoader<T> loader = ServiceLoader.<T>load(serviceClass);
+        final Iterator<T> iterator = loader.iterator();
+        if (!iterator.hasNext()) {
+            return Collections.singletonList(NoOpProxy.newInstance(serviceClass));
+        }
+        List<T> result = new ArrayList<>();
+        while (iterator.hasNext()) {
+            result.add(iterator.next());
+        }
+        return result;
     }
-    List<T> result = new ArrayList<>();
-    while (iterator.hasNext()) { result.add(iterator.next()); }
-    return result;
-  }
 
-  //TODO: aggregate all available providers
-  public static <T extends ExtensionPoint<T>> T newInstance(Class<T> serviceClass) {
-    final ServiceLoader<T> loader = ServiceLoader.load(serviceClass);
-    if (!loader.iterator().hasNext()) {
-      return NoOpProxy.newInstance(serviceClass);
+    //TODO: aggregate all available providers
+    public static <T extends ExtensionPoint<T>> T newInstance(Class<T> serviceClass) {
+        final ServiceLoader<T> loader = ServiceLoader.load(serviceClass);
+        if (!loader.iterator().hasNext()) {
+            return NoOpProxy.newInstance(serviceClass);
+        }
+        return loader.iterator().next().copy();
     }
-    return loader.iterator().next().copy();
-  }
 
-  public static <T extends ExtensionPoint<T>> T sharedInstance(Class<T> serviceClass) {
-    final ServiceLoader<T> loader = ServiceLoader.load(serviceClass);
-    if (!loader.iterator().hasNext()) {
-      return NoOpProxy.newInstance(serviceClass);
+    public static PipeResolver resolvePiper(String scheme) {
+        final ServiceLoader<PipeResolver> loader = ServiceLoader.load(PipeResolver.class);
+        Iterator<PipeResolver> iterator = loader.iterator();
+        while (iterator.hasNext()) {
+            PipeResolver piper = iterator.next();
+            if (piper.getScheme().equals(scheme)) {
+                return piper.copy();
+            }
+        }
+        return NoOpProxy.newInstance(PipeResolver.class);
     }
-    return loader.iterator().next();
-  }
+
+    public static <T extends ExtensionPoint<T>> T sharedInstance(Class<T> serviceClass) {
+        final ServiceLoader<T> loader = ServiceLoader.load(serviceClass);
+        if (!loader.iterator().hasNext()) {
+            return NoOpProxy.newInstance(serviceClass);
+        }
+        return loader.iterator().next();
+    }
 
 }

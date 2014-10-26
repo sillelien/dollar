@@ -35,11 +35,18 @@ public class DollarParser {
     static final Parser<var> DECIMAL_LITERAL = Terminals.DecimalLiteral.PARSER.map(s -> DollarStatic.$(Double.parseDouble(s)));
     static final Parser<var> INTEGER_LITERAL = Terminals.IntegerLiteral.PARSER.map(s -> DollarStatic.$(Long.parseLong(s)));
     static final Parser<var> URL = url().map(url -> DollarStatic.$(url));
+    private static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", "<=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",");
     private static final Parser<Void> IGNORED =
             Parsers.or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT, Scanners.WHITESPACES, Scanners.lineComment("#")).skipMany();
-    private static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", "<=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",");
+    private final ClassLoader classLoader;
 
     public DollarParser() {
+        classLoader = DollarParser.class.getClassLoader();
+    }
+
+    public DollarParser(ClassLoader classLoader) {
+
+        this.classLoader = classLoader;
     }
 
     static <T> Parser<T> op(String name, T value) {
@@ -112,16 +119,19 @@ public class DollarParser {
     }
 
     public var parse(File file) throws IOException {
+        DollarStatic.context().setClassLoader(classLoader);
         Parser<var> parser = buildParser();
         return parser.from(TOKENIZER, IGNORED).parse(new FileReader(file));
     }
 
     public var parse(InputStream in) throws IOException {
+        DollarStatic.context().setClassLoader(classLoader);
         Parser<var> parser = buildParser();
         return parser.from(TOKENIZER, IGNORED).parse(new InputStreamReader(in));
     }
 
     public var parse(String s) throws IOException {
+        DollarStatic.context().setClassLoader(classLoader);
         Parser<var> parser = buildParser();
         return parser.from(TOKENIZER, IGNORED).parse(s);
     }

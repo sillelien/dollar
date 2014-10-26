@@ -32,7 +32,7 @@ public class AllVarCollectionGuard implements Guard {
 
     @Override
     public void preCondition(Object guarded, Method method, Object[] args) {
-        if (args == null) {
+        if (args != null) {
             for (Object arg : args) {
                 if (arg instanceof Collection) {
                     ((Collection) arg).forEach((i) -> assertTrue(i instanceof var));

@@ -408,8 +408,14 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $pipe(@NotNull String js) {
+    public var $eval(@NotNull String js) {
         return $pipe("anon", js);
+    }
+
+    @NotNull
+    @Override
+    public var $pipe(@NotNull String classModule) {
+        return getValue().$pipe(classModule);
     }
 
     @Override

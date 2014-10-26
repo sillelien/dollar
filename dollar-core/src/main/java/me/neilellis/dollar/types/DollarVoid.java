@@ -250,7 +250,7 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $pipe(@NotNull String js) {
+    public var $eval(@NotNull String js) {
         return $copy();
     }
 

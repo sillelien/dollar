@@ -35,7 +35,10 @@ public interface PipeAware {
     var $pipe(@NotNull String label, @NotNull Pipeable pipe);
 
     @NotNull
-    var $pipe(@NotNull String js);
+    var $eval(@NotNull String js);
+
+    @NotNull
+    var $pipe(@NotNull String classModule);
 
     @NotNull
     var $pipe(@NotNull Class<? extends Pipeable> clazz);

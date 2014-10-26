@@ -31,8 +31,7 @@ public class DollarDependenciesTest {
 
     @Test
     public void testBasics() throws InterruptedException, DependencyResolutionException, ClassNotFoundException {
-        DependencyRetriever.retrieve(new DefaultArtifact("org.twitter4j:twitter4j-core:4.0.2"));
-        Thread.currentThread().getContextClassLoader().loadClass("twitter4j.Twitter");
+        DependencyRetriever.retrieve(new DefaultArtifact("org.twitter4j:twitter4j-core:4.0.2")).loadClass("twitter4j.Twitter");
     }
 
 

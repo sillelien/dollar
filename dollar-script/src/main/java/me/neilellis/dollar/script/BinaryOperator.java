@@ -91,8 +91,8 @@ enum BinaryOperator implements Binary<var> {
     PIPE {
         public var map(var lhs, var rhs) {
             try {
-                return lhs.$pipe((Class<? extends me.neilellis.dollar.Pipeable>) Class.forName(rhs.$S()));
-            } catch (ClassNotFoundException e) {
+                return lhs.$pipe(rhs.$S());
+            } catch (Exception e) {
                 return DollarStatic.handleError(e, lhs);
             }
         }

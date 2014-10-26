@@ -26,8 +26,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>dollar-examples</artifactId>
+    <packaging>pom</packaging>
     <name>Dollar Examples</name>
     <description>Examples of Dollar in Action</description>
+    <modules>
+        <module>dollar-github-pipe-plugin</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>me.neilellis</groupId>
@@ -47,6 +51,16 @@
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-spark-plugin</artifactId>
+            <version>0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>me.neilellis</groupId>
+            <artifactId>dollar-maven-resolver-plugin</artifactId>
+            <version>0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>me.neilellis</groupId>
+            <artifactId>dollar-github-resolver-plugin</artifactId>
             <version>0-SNAPSHOT</version>
         </dependency>
         <dependency>

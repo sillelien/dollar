@@ -33,6 +33,8 @@
         <module>dollar-spark-plugin</module>
         <module>dollar-metrics-plugin</module>
         <module>dollar-camel-plugin</module>
+        <module>dollar-maven-pipe-plugin</module>
+        <module>dollar-github-resolver-plugin</module>
     </modules>
 
 

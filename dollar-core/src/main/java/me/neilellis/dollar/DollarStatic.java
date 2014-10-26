@@ -297,7 +297,7 @@ public class DollarStatic {
 
     @NotNull
     public static var $eval(@NotNull String js) {
-        return $().$pipe(js);
+        return $().$eval(js);
     }
 
     @NotNull

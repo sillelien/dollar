@@ -23,6 +23,7 @@ import me.neilellis.dollar.*;
 import me.neilellis.dollar.exceptions.ValidationException;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
+import me.neilellis.dollar.plugin.Plugins;
 import org.jetbrains.annotations.NotNull;
 
 import javax.script.ScriptEngine;
@@ -398,7 +399,7 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $pipe(@NotNull String js) {
+    public var $eval(@NotNull String js) {
         return $pipe("anon", js);
     }
 
@@ -632,5 +633,17 @@ public abstract class AbstractDollar implements var {
     @Override
     public boolean isLambda() {
         return false;
+    }
+
+    @NotNull
+    @Override
+    public var $pipe(@NotNull String classModule) {
+        String[] parts = classModule.split(":", 2);
+        try {
+            return $pipe(Plugins.resolvePiper(parts[0]).resolve(this, parts[1]));
+        } catch (Exception e) {
+            return DollarStatic.handleError(e, this);
+        }
+
     }
 }
