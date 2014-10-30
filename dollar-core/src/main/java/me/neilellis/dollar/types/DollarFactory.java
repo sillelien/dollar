@@ -103,6 +103,10 @@ public class DollarFactory {
         if (o.getClass().isArray()) {
             return wrap(new DollarList(errors, (Object[]) o));
         }
+        if (o instanceof Boolean) {
+            return wrap(new DollarBoolean(errors, (Boolean) o));
+        }
+
         if (o instanceof Number) {
             return wrap(new DollarNumber(errors, (Number) o));
         }
@@ -180,5 +184,9 @@ public class DollarFactory {
 
     public static var fromStringValue(String body) {
         return create(ImmutableList.<Throwable>of(), body);
+    }
+
+    public static var fromLambda(Pipeable pipeable) {
+        return fromValue(pipeable);
     }
 }

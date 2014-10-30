@@ -77,7 +77,7 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $append(Object value) {
+    public var $plus(Object value) {
         return $copy();
     }
 
@@ -130,6 +130,12 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public var $rm(@NotNull String value) {
         return $copy();
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull Object value) {
+        return this;
     }
 
     @NotNull
@@ -341,4 +347,28 @@ public class DollarVoid extends AbstractDollar implements var {
         return "";
     }
 
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return false;
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
+    }
 }

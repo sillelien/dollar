@@ -99,7 +99,9 @@ public interface TypeAware {
     default JsonArray jsonArray() {
         JsonArray array = new JsonArray();
         for (me.neilellis.dollar.var var : toList()) {
-            array.add(var.$());
+            if (!var.isVoid()) {
+                array.add(var.$());
+            }
         }
         return array;
     }

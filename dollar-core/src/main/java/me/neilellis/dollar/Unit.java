@@ -31,16 +31,18 @@ import java.util.List;
  *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class Script extends DollarStatic implements Pipeable {
+public abstract class Unit extends DollarStatic implements Pipeable {
 
-    public static Class<? extends Script> $THIS;
+    protected static final ThreadLocal<Class<? extends Unit>> $THIS = new ThreadLocal<>();
     protected static List<String> args;
-
-
     @NotNull
 //  protected var passedIn = DollarStatic.threadContext.get().getPassValue();
     protected var in = DollarFactory.fromValue(JsonUtil.argsToJson(args));
     protected var out;
+
+    public static void mainClass(Class<? extends Unit> main) {
+        $THIS.set(main);
+    }
 
     public static void requires(String artifact) {
         try {
@@ -51,10 +53,19 @@ public class Script extends DollarStatic implements Pipeable {
     }
 
     public static void main(String[] args) throws IllegalAccessException, InstantiationException {
-        Script.args = Arrays.asList(args);
+        if ($THIS.get() == null) {
+            System.err.println("Please add a line in this class which says 'public static void main(String[] args) {run(<classname>.class,args);}'");
+            System.exit(-1);
+        }
+
+    }
+
+    protected static void run(Class<? extends Unit> main, String[] args) {
+        $THIS.set(main);
+        Unit.args = Arrays.asList(args);
         $run(() -> {
             try {
-                Script $this = $THIS.newInstance();
+                Unit $this = $THIS.get().newInstance();
                 if ($this.in == null) {
                     throw new NullPointerException();
                 }
@@ -64,6 +75,8 @@ public class Script extends DollarStatic implements Pipeable {
                 }
             } catch (@NotNull InstantiationException | IllegalAccessException e) {
                 throw new Error(e.getCause());
+            } catch (AssertionError e) {
+                System.err.println(e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -75,10 +88,10 @@ public class Script extends DollarStatic implements Pipeable {
         return in;
     }
 
-
     @NotNull
     public var result() {
         return out != null ? out : in;
     }
+
 
 }

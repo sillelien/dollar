@@ -26,6 +26,12 @@ public interface VarInternal {
     @NotNull
     var _unwrap();
 
+    String _src();
+
+    void _src(String src);
+
+
     @NotNull
     var copy(@NotNull ImmutableList<Throwable> errors);
+
 }

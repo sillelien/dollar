@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.types;
 
+import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.Guards;
 import me.neilellis.dollar.var;
@@ -39,30 +40,36 @@ public class DollarGuard implements java.lang.reflect.InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (Object.class == method.getDeclaringClass()) {
-            String name = method.getName();
-            if ("equals".equals(name)) {
-                return in.equals(args[0]);
-            } else if ("hashCode".equals(name)) {
-                return in.hashCode();
-            } else if ("toString".equals(name)) {
-                return in.toString();
-            } else {
-                throw new IllegalStateException(String.valueOf(method));
+        try {
+            if (Object.class == method.getDeclaringClass()) {
+                String name = method.getName();
+                if ("equals".equals(name)) {
+                    return in.equals(args[0]);
+                } else if ("hashCode".equals(name)) {
+                    return in.hashCode();
+                } else if ("toString".equals(name)) {
+                    return in.toString();
+                } else {
+                    throw new IllegalStateException(String.valueOf(method));
+                }
             }
-        }
-        Guards guardsAnnotations = method.getAnnotation(Guards.class);
+            Guards guardsAnnotations = method.getAnnotation(Guards.class);
 
-        if (guardsAnnotations != null) {
-            Guarded[] guards = guardsAnnotations.value();
-            return invokeWithGuards(method, args, guards);
-        } else {
-            Guarded[] guardedAnnotations = method.getAnnotationsByType(Guarded.class);
-            if (guardedAnnotations.length > 0) {
-                return invokeWithGuards(method, args, guardedAnnotations);
+            if (guardsAnnotations != null) {
+                Guarded[] guards = guardsAnnotations.value();
+                return invokeWithGuards(method, args, guards);
             } else {
-                return method.invoke(in, args);
+                Guarded[] guardedAnnotations = method.getAnnotationsByType(Guarded.class);
+                if (guardedAnnotations.length > 0) {
+                    return invokeWithGuards(method, args, guardedAnnotations);
+                } else {
+                    return method.invoke(in, args);
+                }
             }
+        } catch (InvocationTargetException e) {
+            return DollarStatic.logAndRethrow(e.getCause());
+        } catch (Exception e) {
+            return DollarStatic.logAndRethrow(e);
         }
     }
 

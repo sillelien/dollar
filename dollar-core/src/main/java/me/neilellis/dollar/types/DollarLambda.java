@@ -39,6 +39,9 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         try {
+            if (proxy == null) {
+                return null;
+            }
             if (Object.class == method.getDeclaringClass()) {
                 String name = method.getName();
                 if ("equals".equals(name)) {
@@ -60,9 +63,13 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             if (method.getName().equals("$copy") || method.getName().equals("copy")) {
                 return proxy;
             }
-            System.err.println(method);
+//            System.err.println(method);
 
-            return method.invoke(lambda.pipe(in), args);
+            var out = lambda.pipe(in);
+            if (out == null) {
+                return null;
+            }
+            return method.invoke(out, args);
         } catch (Exception e) {
             if (method.getReturnType().isAssignableFrom(var.class)) {
                 return DollarStatic.handleError(e, null);

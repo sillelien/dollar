@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAware, TypeAware, PipeAware,
-        OldAndDeprecated, VarInternal, BasicIOAware, NumericAware, ControlFlowAware {
+        OldAndDeprecated, VarInternal, BasicIOAware, NumericAware, BooleanAware, ControlFlowAware, AssertionAware {
 
 
     /**
@@ -75,7 +75,7 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(ReturnVarOnlyGuard.class)
-    var $append(@Nullable Object value);
+    var $plus(@Nullable Object value);
 
     @NotNull
     @Guarded(ChainGuard.class)
@@ -149,6 +149,10 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
      */
     @NotNull
     var $rm(@NotNull String key);
+
+
+    @NotNull
+    var $minus(@NotNull Object value);
 
     @NotNull
     default var $set(@NotNull String key, @Nullable Object value) {
@@ -228,7 +232,7 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
 
     @Guarded(ChainGuard.class)
     default var err() {
-        System.err.println(S());
+        System.err.println(toString());
         return this;
     }
 
@@ -237,7 +241,7 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
      */
     @Guarded(ChainGuard.class)
     default var out() {
-        System.out.println(S());
+        System.out.println(toString());
         return this;
     }
 

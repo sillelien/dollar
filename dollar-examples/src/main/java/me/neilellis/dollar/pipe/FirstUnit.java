@@ -16,7 +16,7 @@
 
 package me.neilellis.dollar.pipe;
 
-import me.neilellis.dollar.Script;
+import me.neilellis.dollar.Unit;
 import me.neilellis.dollar.var;
 
 import java.util.Date;
@@ -24,9 +24,9 @@ import java.util.Date;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public final class FirstScript extends Script {
+public final class FirstUnit extends Unit {
     static {
-        $THIS = FirstScript.class;
+        mainClass(FirstUnit.class);
     }
 
     {

@@ -28,7 +28,6 @@ import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.pubsub.DollarPubSub;
 import me.neilellis.dollar.pubsub.Sub;
 import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.types.DollarVoid;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import spark.Spark;
@@ -126,7 +125,7 @@ public class DollarStatic {
     public static var $(@NotNull var... values) {
         var v = $();
         for (var value : values) {
-            v = v.$append(value);
+            v = v.$plus(value);
         }
         return v;
     }
@@ -140,7 +139,7 @@ public class DollarStatic {
     public static var $(@NotNull String name, @NotNull var... values) {
         var v = $();
         for (var value : values) {
-            v = v.$append(value);
+            v = v.$plus(value);
         }
         return $(name, v);
     }
@@ -170,11 +169,7 @@ public class DollarStatic {
     }
 
     public static var $(@Nullable Object o) {
-        return DollarStatic.tracer()
-                .trace(DollarVoid.INSTANCE,
-                        DollarFactory.fromValue(ImmutableList.of(), o),
-                        StateTracer.Operations.CREATE,
-                        o == null ? "null" : o.getClass().getName());
+        return DollarFactory.fromValue(ImmutableList.of(), o);
     }
 
     @NotNull

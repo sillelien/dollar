@@ -54,6 +54,7 @@ public abstract class AbstractDollar implements var {
     private final
     @NotNull
     ImmutableList<Throwable> errors;
+    private String src;
 
     protected AbstractDollar(@NotNull List<Throwable> errors) {
         this.errors = new ImmutableList.Builder<Throwable>().addAll(errors).build();
@@ -645,5 +646,46 @@ public abstract class AbstractDollar implements var {
             return DollarStatic.handleError(e, this);
         }
 
+    }
+
+    @Override
+    public var assertNotVoid(String message) throws AssertionError {
+        return assertFalse(TypeAware::isVoid, message);
+    }
+
+    @Override
+    public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
+        try {
+            if (assertion.apply(this)) {
+                throw new AssertionError(message);
+            } else {
+                return this;
+            }
+        } catch (Exception e) {
+            return DollarStatic.logAndRethrow(e);
+        }
+    }
+
+    @Override
+    public var assertTrue(Function<var, Boolean> assertion, String message) throws AssertionError {
+        try {
+            if (!assertion.apply(this)) {
+                throw new AssertionError(message);
+            } else {
+                return this;
+            }
+        } catch (Exception e) {
+            return DollarStatic.logAndRethrow(e);
+        }
+    }
+
+    @Override
+    public String _src() {
+        return this.src;
+    }
+
+    @Override
+    public void _src(String src) {
+        this.src = src;
     }
 }

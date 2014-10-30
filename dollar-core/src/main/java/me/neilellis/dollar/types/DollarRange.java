@@ -66,7 +66,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $append(Object value) {
+    public var $plus(Object value) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 
@@ -123,6 +123,12 @@ public class DollarRange extends AbstractDollar {
     public var $rm(@NotNull String value) {
         return $copy();
 
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull Object value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
@@ -260,5 +266,30 @@ public class DollarRange extends AbstractDollar {
     @Override
     public String S() {
         return String.format("%d..%d", range.lowerEndpoint(), range.upperEndpoint());
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return !range.isEmpty();
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
     }
 }

@@ -29,9 +29,7 @@
     <packaging>pom</packaging>
     <name>Dollar Examples</name>
     <description>Examples of Dollar in Action</description>
-    <modules>
-        <module>dollar-github-pipe-plugin</module>
-    </modules>
+
     <dependencies>
         <dependency>
             <groupId>me.neilellis</groupId>

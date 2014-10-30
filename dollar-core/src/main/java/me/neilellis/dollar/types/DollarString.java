@@ -74,4 +74,35 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     public boolean equals(@Nullable Object obj) {
         return obj != null && value.equals(obj.toString());
     }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("yes");
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public var $plus(Object newValue) {
+        return DollarFactory.fromValue(errors(), value + newValue.toString());
+    }
 }

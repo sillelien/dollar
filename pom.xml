@@ -66,6 +66,7 @@
         <module>dollar-runtime</module>
         <module>dollar-examples</module>
         <module>dollar-script</module>
+        <module>dollar-docs</module>
     </modules>
     <dependencyManagement>
         <dependencies>

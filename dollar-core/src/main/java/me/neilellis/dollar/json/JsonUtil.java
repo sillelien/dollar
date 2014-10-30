@@ -25,33 +25,35 @@ import java.util.List;
 public class JsonUtil {
     public static JsonObject argsToJson(List<String> args) {
         JsonObject json = new JsonObject();
-        String key = "";
-        Object value = "";
-        for (String arg : args) {
-            if (arg.startsWith("-")) {
-                if (!key.isEmpty()) {
-                    if (value instanceof String && ((String) value).isEmpty()) {
-                        value = true;
+        if (!args.isEmpty()) {
+            String key = "";
+            Object value = "";
+            for (String arg : args) {
+                if (arg.startsWith("-")) {
+                    if (!key.isEmpty()) {
+                        if (value instanceof String && ((String) value).isEmpty()) {
+                            value = true;
+                        }
+                        json.putValue(key, value);
                     }
-                    json.putValue(key, value);
-                }
-                key = arg.replaceAll("^\\-+", "");
-                value = "";
-            } else {
-                Object argConverted = convert(arg);
-                if (value instanceof String && ((String) value).isEmpty()) {
-                    value = argConverted;
-                } else if (value instanceof JsonArray) {
-                    ((JsonArray) value).add(argConverted);
+                    key = arg.replaceAll("^\\-+", "");
+                    value = "";
                 } else {
-                    value = new JsonArray(Arrays.asList(value, argConverted));
+                    Object argConverted = convert(arg);
+                    if (value instanceof String && ((String) value).isEmpty()) {
+                        value = argConverted;
+                    } else if (value instanceof JsonArray) {
+                        ((JsonArray) value).add(argConverted);
+                    } else {
+                        value = new JsonArray(Arrays.asList(value, argConverted));
+                    }
                 }
             }
+            if (value instanceof String && ((String) value).isEmpty()) {
+                value = true;
+            }
+            json.putValue(key, value);
         }
-        if (value instanceof String && ((String) value).isEmpty()) {
-            value = true;
-        }
-        json.putValue(key, value);
         return json;
     }
 

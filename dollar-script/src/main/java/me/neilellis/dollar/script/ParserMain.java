@@ -25,6 +25,9 @@ import java.io.IOException;
 public class ParserMain {
 
     public static void main(String[] args) throws IOException {
-        new DollarParser().parse(new File(args[0]));
+        File file = new File(args[0]);
+
+        new DollarParser().parse(file);
     }
+
 }

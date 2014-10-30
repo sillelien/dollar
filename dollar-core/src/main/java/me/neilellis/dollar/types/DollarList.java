@@ -50,7 +50,11 @@ public class DollarList extends AbstractDollar {
         List<var> l = new ArrayList<>();
         for (Object value : list) {
             if ((value instanceof var)) {
-                l.add((var) value);
+                if (((var) value).isLambda() || !((var) value).isVoid()) {
+                    l.add((var) value);
+                }
+            } else if (value == null) {
+                //Skip
             } else {
                 l.add(DollarFactory.fromValue(errors, value));
             }
@@ -85,7 +89,7 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $append(Object value) {
+    public var $plus(Object value) {
         return DollarFactory.fromValue(errors(),
                 ImmutableList.builder()
                         .addAll(list)
@@ -142,6 +146,14 @@ public class DollarList extends AbstractDollar {
     @Override
     public var $rm(@NotNull String value) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull Object value) {
+        ArrayList<var> newVal = new ArrayList<>(list);
+        newVal.remove(value);
+        return DollarFactory.fromValue(errors(), newVal);
     }
 
     @NotNull
@@ -287,5 +299,30 @@ public class DollarList extends AbstractDollar {
     @Override
     public String S() {
         return jsonArray().toString();
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return !list.isEmpty();
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
     }
 }

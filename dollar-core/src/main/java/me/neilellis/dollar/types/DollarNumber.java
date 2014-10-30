@@ -101,4 +101,61 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
     public Number N() {
         return value;
     }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return value.intValue() != 0;
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
+    }
+
+    @NotNull
+    @Override
+    public var $plus(Object newValue) {
+        if (newValue instanceof var) {
+            if (((var) newValue).isInteger()) {
+                return DollarFactory.fromValue(errors(), value.longValue() + ((var) newValue).L());
+            }
+            if (((var) newValue).isDecimal()) {
+                return DollarFactory.fromValue(errors(), value.doubleValue() + ((var) newValue).D());
+            }
+        }
+        return super.$plus(newValue);
+
+    }
+
+    @NotNull
+    @Override
+    public var $minus(Object newValue) {
+        if (newValue instanceof var) {
+            if (((var) newValue).isInteger()) {
+                return DollarFactory.fromValue(errors(), value.longValue() - ((var) newValue).L());
+            }
+            if (((var) newValue).isDecimal()) {
+                return DollarFactory.fromValue(errors(), value.doubleValue() - ((var) newValue).D());
+            }
+        }
+        return super.$plus(newValue);
+
+    }
+
+
 }

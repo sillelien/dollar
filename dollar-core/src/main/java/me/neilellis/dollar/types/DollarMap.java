@@ -134,7 +134,7 @@ class DollarMap extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $append(Object value) {
+    public var $plus(Object value) {
         LinkedHashMap<String, var> copy = copyMap();
         if (value instanceof var) {
             copy.putAll(((var) value).$map().mutable());
@@ -206,6 +206,12 @@ class DollarMap extends AbstractDollar implements var {
         JsonObject jsonObject = json();
         jsonObject.removeField(value);
         return DollarFactory.fromValue(errors(), jsonObject);
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull Object value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
     }
 
     @NotNull
@@ -373,6 +379,30 @@ class DollarMap extends AbstractDollar implements var {
     }
 
 
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return !map.isEmpty();
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
+    }
 }
 
 

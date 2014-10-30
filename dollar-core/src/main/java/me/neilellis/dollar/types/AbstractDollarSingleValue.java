@@ -17,6 +17,7 @@
 package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
+import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.var;
@@ -56,7 +57,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     @Override
-    public var $append(Object newValue) {
+    public var $plus(Object newValue) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
@@ -97,6 +98,16 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     public var $rm(@NotNull String value) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
 
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull Object value) {
+        if (value.equals(this)) {
+            return DollarStatic.$void();
+        } else {
+            return this;
+        }
     }
 
     @NotNull

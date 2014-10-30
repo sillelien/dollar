@@ -19,7 +19,7 @@ package me.neilellis.dollar.runtime;
 import com.innowhere.relproxy.jproxy.JProxy;
 import com.innowhere.relproxy.jproxy.JProxyConfig;
 import com.innowhere.relproxy.jproxy.JProxyDiagnosticsListener;
-import me.neilellis.dollar.Script;
+import me.neilellis.dollar.Unit;
 import me.neilellis.dollar.var;
 
 import javax.tools.Diagnostic;
@@ -33,9 +33,9 @@ import static java.util.Arrays.asList;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class Main extends Script {
+public class Main extends Unit {
     static {
-        $THIS = Main.class;
+        mainClass(Main.class);
     }
 
     @Override

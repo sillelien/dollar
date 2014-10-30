@@ -83,8 +83,8 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $append(Object value) {
-        return getValue().$append(value);
+    public var $plus(Object value) {
+        return getValue().$plus(value);
     }
 
     @NotNull
@@ -162,6 +162,12 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
+    public var $minus(@NotNull Object value) {
+        return getValue().$minus(value);
+    }
+
+    @NotNull
+    @Override
     public var $set(@NotNull String key, Object value) {
         return tracer.trace(this, getValue().$set(key, value), StateTracer.Operations.SET, key, value);
     }
@@ -196,7 +202,7 @@ public class DollarWrapper implements var {
         return getValue().$(key);
     }
 
-    @NotNull
+
     @Override
     public <R> R $() {
         return getValue().$();
@@ -622,6 +628,17 @@ public class DollarWrapper implements var {
         return value;
     }
 
+    @Override
+    public String _src() {
+        return getValue()._src();
+    }
+
+    @Override
+    public void _src(String src) {
+        getValue()._src(src);
+    }
+
+
     @NotNull
     @Override
     public var copy(@NotNull ImmutableList<Throwable> errors) {
@@ -795,4 +812,43 @@ public class DollarWrapper implements var {
         return clazz.getName().toLowerCase();
     }
 
+    @Override
+    public boolean isBoolean() {
+        return getValue().isBoolean();
+    }
+
+    @Override
+    public boolean isTrue() {
+        return getValue().isTrue();
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return getValue().isTruthy();
+    }
+
+    @Override
+    public boolean isFalse() {
+        return getValue().isFalse();
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return getValue().isNeitherTrueNorFalse();
+    }
+
+    @Override
+    public var assertNotVoid(String message) throws AssertionError {
+        return getValue().assertNotVoid(message);
+    }
+
+    @Override
+    public var assertTrue(Function<var, Boolean> assertion, String message) throws AssertionError {
+        return getValue().assertTrue(assertion, message);
+    }
+
+    @Override
+    public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
+        return getValue().assertFalse(assertion, message);
+    }
 }

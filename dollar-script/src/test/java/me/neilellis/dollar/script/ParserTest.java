@@ -16,9 +16,12 @@
 
 package me.neilellis.dollar.script;
 
+import com.google.common.io.CharStreams;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.InputStreamReader;
 
 public class ParserTest {
 
@@ -35,5 +38,10 @@ public class ParserTest {
     @Test
     public void test() throws Exception {
         new DollarParser().parse(getClass().getResourceAsStream("/test1.dlr"));
+    }
+
+    @Test
+    public void testMarkdown() throws Exception {
+        new DollarParser().parseMarkdown(CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/test1.md"))));
     }
 }

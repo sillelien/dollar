@@ -1,2 +1,5 @@
+#!/bin/sh
 cd $(dirname $0)
-mvn clean install && ./pack/pack.sh
+mvn clean install
+./build-docs.sh
+./pack/pack.sh
