@@ -201,10 +201,12 @@ public class CodeExtractionVisitor implements Visitor {
 
     @Override
     public void visit(VerbatimNode node) {
-        try {
-            new DollarParser().parse(node.getText());
-        } catch (Throwable e) {
-            throw new AssertionError("Failed to executed code in markdown", e);
+        if ("dollar".equals(node.getType())) {
+            try {
+                new DollarParser().parse(node.getText());
+            } catch (Throwable e) {
+                throw new AssertionError("Failed to executed code in markdown", e);
+            }
         }
     }
 

@@ -29,7 +29,7 @@ import java.nio.file.Files;
 public class ParseDocs {
 
     public static void main(String[] args) throws IOException {
-        parseDoc("tutorial", new File(args[0]));
+        parseDoc("scripting", new File(args[0]));
     }
 
     private static void parseDoc(String page, File outDir) throws IOException {
@@ -45,5 +45,6 @@ public class ParseDocs {
         PegDownProcessor pegDownProcessor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
         String result = pegDownProcessor.markdownToHtml(toParse);
         Files.write(new File(outDir, page + ".html").toPath(), result.getBytes());
+        Files.write(new File(outDir, page + ".md").toPath(), toParse.getBytes());
     }
 }
