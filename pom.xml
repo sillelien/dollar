@@ -445,7 +445,7 @@
         <repository>
             <id>bintray-neilellis-maven-dollar</id>
             <name>neilellis-maven-dollar</name>
-            <url>https://api.bintray.com/maven/neilellis/dollar/dollar</url>
+            <url>https://api.bintray.com/maven/neilellis/maven/dollar</url>
         </repository>
     </distributionManagement>
 
