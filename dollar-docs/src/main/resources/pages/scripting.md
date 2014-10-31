@@ -78,6 +78,12 @@ a=4
  
 ```
 
+~~~
+2
+3
+4
+~~~
+
 That remarkable piece of code will simply output each change made to the variable a, but wait a minute what about ...
 
 ```dollar
@@ -91,7 +97,14 @@ a=4
 b=2 
 ```
 
-Yep, you can write reactive expressions based on collections or arbitrary expressions !! When any component changes the right hand side is re-evaluated (the actual value that changed is passed in as $1
+~~~
+a=2, b=1 new value was 2
+a=3, b=1 new value was 3
+a=4, b=1 new value was 4
+a=4, b=2 new value was 2
+~~~
+
+Yep, you can write reactive expressions based on collections or arbitrary expressions !! When any component changes the right hand side is re-evaluated (the actual value that changed is passed in as $1).
 
 
 Assignment
