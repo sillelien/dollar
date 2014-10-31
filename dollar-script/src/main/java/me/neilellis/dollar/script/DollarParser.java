@@ -280,7 +280,7 @@ public class DollarParser {
                 .infixl(op("?", new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$choose(rhs), scope), scope), 50)
                 .infixl(op("?:", new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$default(rhs), scope), scope), 50)
 //                .infixl(op(",", new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$append(rhs), scope)), 10)
-                .infixl(op(".", new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$(rhs.$S()), scope), scope), 50)
+                .infixl(op(".", new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$(rhs.$S()), scope), scope), 200)
                 .postfix(op("--", new ScopedVarUnaryOperator(var::$dec, scope), scope), 100)
                 .postfix(op("++", new ScopedVarUnaryOperator(var::$inc, scope), scope), 100)
                         //The newline operator

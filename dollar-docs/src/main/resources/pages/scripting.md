@@ -120,7 +120,7 @@ block2 := {1;2;}
 ```
 When a line block is evaluated the result is the value of the last entry. For advanced users note that all lines will be evaluated, the value is just ignored. A line block behaves a lot like a function in an imperative language.
  
-Next we have the array block, the array block preserves all the values and has the same format as a line block but is delimited by `[` and `]`.
+Next we have the array block, the array block preserves all the values each part is seperated by either a `,` or a newline but is delimited by `[` and `]`.
 
 ```dollar
 
@@ -152,5 +152,32 @@ appending2 := { 1, 2}
 
 => $appending2 == 3
 
+```
+
+Appending blocks can be combined with the pair `:` operator to create maps/JSON like this:
+
+
+```dollar
+
+appending := {
+    first:"Hello ",
+    second:"World"
+}
+
+>> $appending
+
+=> $appending.second == "World"
+
+```
+
+The stdout operator `>>` is used to send a value to stdout in it's serialized (JSON) format, so the result of the above would be to output `{"first":"Hello ","second":"World"}` a JSON object created using JSON like syntax. This works because of how appending works with pairs, i.e. they are joined together to form a map.
+
+```dollar
+ 
+pair1 = first : "Hello ";
+pair2 = second : "World";
+  
+=> $pair1 + $pair2 == {"first":"Hello ","second":"World"}
+ 
 ```
 
