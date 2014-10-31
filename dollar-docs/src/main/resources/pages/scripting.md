@@ -174,8 +174,8 @@ The stdout operator `>>` is used to send a value to stdout in it's serialized (J
 
 ```dollar
  
-pair1 = first : "Hello ";
-pair2 = second : "World";
+pair1 := first : "Hello ";
+pair2 := second : "World";
   
 => $pair1 + $pair2 == {"first":"Hello ","second":"World"}
  
