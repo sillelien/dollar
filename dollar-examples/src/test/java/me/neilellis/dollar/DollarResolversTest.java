@@ -35,7 +35,7 @@ public class DollarResolversTest {
 
     @Test
     public void testGithub() {
-        assertEquals("Hello World", DollarStatic.$().$pipe("github:neilellis/dollar-example-module").$S());
+        assertEquals("Hello World", DollarStatic.$().$pipe("github:neilellis/dollar-example-module").toList().get(0).toString());
     }
 
     @Test
