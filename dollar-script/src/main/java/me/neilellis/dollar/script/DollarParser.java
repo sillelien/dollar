@@ -18,7 +18,6 @@ package me.neilellis.dollar.script;
 
 import com.google.common.io.ByteStreams;
 import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.*;
 import org.codehaus.jparsec.functors.Map;
@@ -39,6 +38,7 @@ import java.util.stream.Collectors;
 
 import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$void;
+import static me.neilellis.dollar.types.DollarFactory.fromLambda;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -60,6 +60,7 @@ public class DollarParser {
             Parsers.or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT, Scanners.among(" \t\r").many1(), Scanners.lineComment("#")).skipMany();
     static final Parser<?> TERMINATOR_SYMBOL = Parsers.or(term("\n"), term(";")).many1();
     static final Parser<?> COMMA_TERMINATOR = Parsers.sequence(term(","), term("\n").optional());
+    static final Parser<?> COMMA_OR_NEWLINE_TERMINATOR = Parsers.or(term(","), term("\n")).many1();
     static final Parser<?> SEMICOLON_TERMINATOR = Parsers.or(term(";"), term("\n"));
     private final ClassLoader classLoader;
     private CopyOnWriteArrayList<ScriptScope> scopes = new CopyOnWriteArrayList<ScriptScope>();
@@ -118,7 +119,7 @@ public class DollarParser {
     }
 
     private static Parser<var> list(ScriptScope scope, Parser<var> expression) {
-        Parser<List<var>> sequence = term("[").next(expression.sepBy(COMMA_TERMINATOR)).followedBy(term("]"));
+        Parser<List<var>> sequence = termFollowedByNewlines("[").next(expression.sepBy(COMMA_OR_NEWLINE_TERMINATOR)).followedBy(termPreceededByNewlines("]"));
         return sequence.map(DollarStatic::$);
     }
 
@@ -152,12 +153,12 @@ public class DollarParser {
             int index = token.index();
             int length = token.length();
             String source = scope.getSource().substring(index, index + length);
-            return DollarFactory.fromLambda(v -> scope.getDollarParser().parseExpression(scope, source));
+            return fromLambda(v -> scope.getDollarParser().parseExpression(scope, source));
         });
     }
 
     private static Parser<var> map(ScriptScope scope, Parser<var> expression) {
-        Parser<List<var>> sequence = termFollowedByNewlines("{").next(expression.sepBy(COMMA_TERMINATOR)).followedBy(termPreceededByNewlines("}"));
+        Parser<List<var>> sequence = termFollowedByNewlines("{").next(expression.sepBy1(COMMA_TERMINATOR)).followedBy(termPreceededByNewlines("}"));
         return sequence.map(o -> {
             var current = null;
             for (var v : o) {
@@ -179,7 +180,23 @@ public class DollarParser {
     private static Parser<var> block(ScriptScope scope, Parser<var> parentParser) {
         Parser.Reference<var> ref = Parser.newReference();
 
-        Parser<var> or = (Parsers.or(parentParser, ref.lazy().between(termFollowedByNewlines("{"), termPreceededByNewlines("}"))).followedBy(SEMICOLON_TERMINATOR)).many1().map(DollarStatic::$);
+        Parser<List<var>> listParser = (Parsers.or(parentParser, ref.lazy().between(termFollowedByNewlines("{"), termPreceededByNewlines("}"))).followedBy(SEMICOLON_TERMINATOR)).many1();
+
+        //Now we do the complex part, the following will only return the last value in the
+        //block when the block is evaluated, but it will trigger execution of the rest.
+        //This gives it functionality like a conventional function in imperative languages
+        Parser<var> or = listParser.map(l -> fromLambda(delayed -> {
+                    if (l.size() > 0) {
+                        for (int i = 0; i < l.size() - 1; i++) {
+                            l.get(i).$();
+                        }
+
+                        return l.get(l.size() - 1);
+                    } else {
+                        return $void();
+                    }
+                })
+        );
         ref.set(or);
         return or;
     }

@@ -103,17 +103,18 @@ lamval5=13
 // <> forces immediate evaluation, the value lock symbol
 // otherwise values are assumed to be lambdas and are lazily evaluated
 
-function := {
-    >> "Function start"  //This is displayed during evaluation, return is void
-    <> $lamval  //locked into the current value at definition (i.e. 5)
-       $lamval  //lazy evaluated, will take the value when the whole block is evaluated
+function := [
+    >> "Function start",  //This is displayed during evaluation, return is void
+    <> $lamval,  //locked into the current value at definition (i.e. 5)
+       $lamval,  //lazy evaluated, will take the value when the whole block is evaluated
        $1      //A value to be passed in via  a pipe $1 is a special variable
-}
+]
 
 
 lamval = "fred"
 
-=> ([1,2,3] | $function) ==  [5,"fred",[1,2,3]]
+!! ([1,2,3] | $function)
+=> ([1,2,3] | $function) ==  [ 5, "fred", [1, 2, 3] ]
 
 removeWorld := ($1 - "World")
 

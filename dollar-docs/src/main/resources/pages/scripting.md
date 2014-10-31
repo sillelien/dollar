@@ -99,6 +99,58 @@ variableA = 2
 
 So `:=` allows the default behaviour of Dollar, which is to make everything declarative, and `=` is used to nail down a particular value. Later we'll come across the value anchor operator or diamond `<>` which instructs DollarScript to fix a value at the time of declaration. More on that later.
 
+Blocks
+------
 
+DollarScript supports several block types, the first is the 'line block' a line block lies between `{` and `}` and is separated by either newlines or `;` characters.
 
+```dollar
+
+block := {
+    "Hello "
+    "World"
+}
+
+=> $block == "World"
+
+block2 := {1;2;}
+
+=> $block2 == 2
+
+```
+When a line block is evaluated the result is the value of the last entry. For advanced users note that all lines will be evaluated, the value is just ignored. A line block behaves a lot like a function in an imperative language.
+ 
+Next we have the array block, the array block preserves all the values and has the same format as a line block but is delimited by `[` and `]`.
+
+```dollar
+
+array := [
+    "Hello "
+    "World"
+]
+
+=> $array == ["Hello ","World"]
+
+array2 := [1,2]
+
+=> $array2 == [1,2]
+
+```
+
+Finally we have the appending block, when an appending (or map) block is evaluated the result is the concatenation (using $plus() in the Dollar API) of the parts from top to bottom. The appending block starts and finishes with the `{` `}` braces, however each part is seperated by a `,` not a `;` or *newline*
+
+```dollar
+
+appending := {
+    "Hello ",
+    "World"
+}
+
+=> $appending == "Hello World"
+
+appending2 := { 1, 2}
+
+=> $appending2 == 3
+
+```
 
