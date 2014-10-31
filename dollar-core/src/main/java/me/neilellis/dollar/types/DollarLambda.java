@@ -21,6 +21,8 @@ import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.var;
 
 import java.lang.reflect.Method;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -29,6 +31,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
 
     private final var in;
     private Pipeable lambda;
+    private ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
 
     public DollarLambda(var in, Pipeable lambda) {
 
@@ -56,6 +59,21 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             }
             if (method.getName().equals("isLambda")) {
                 return true;
+            }
+            if (method.getName().equals("$listen")) {
+                String listenerId = UUID.randomUUID().toString();
+                if (args.length == 2) {
+                    listenerId = String.valueOf(args[1]);
+                }
+                listeners.put(listenerId, (Pipeable) args[0]);
+            }
+            if (method.getName().equals("$notify")) {
+                for (Pipeable pipeable : listeners.values()) {
+                    pipeable.pipe((var) args[0]);
+                }
+            }
+            if (method.getName().equals("$remove")) {
+                listeners.remove(args[0]);
             }
             if (method.getName().equals("hasErrors")) {
                 return false;

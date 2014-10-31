@@ -17,6 +17,7 @@
 package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
+import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.exceptions.ListException;
 import me.neilellis.dollar.json.JsonArray;
@@ -26,10 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -324,5 +322,27 @@ public class DollarList extends AbstractDollar {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return true;
+    }
+
+    @Override
+    public void $notify(var value) {
+        for (var v : list) {
+            v.$notify(value);
+        }
+    }
+
+    @Override
+    public String $listen(Pipeable pipe, String key) {
+        for (var v : list) {
+            v.$listen(pipe, key);
+        }
+        return key;
+    }
+
+    @Override
+    public String $listen(Pipeable pipe) {
+        String key = UUID.randomUUID().toString();
+        $listen(pipe, key);
+        return key;
     }
 }

@@ -16,6 +16,8 @@
 
 package me.neilellis.dollar.script;
 
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Parser;
 
@@ -34,6 +36,7 @@ public class ScriptScope {
     private boolean lambdaUnderConstruction;
     private Parser<var> parser;
     private DollarParser dollarParser;
+    private Multimap<String, var> listeners = LinkedListMultimap.create();
 
     public ScriptScope(DollarParser dollarParser, ScriptScope parent, String source) {
         this.parent = parent;
@@ -81,6 +84,11 @@ public class ScriptScope {
     public var set(String key, var value) {
 //        System.out.println("Setting up "+key +" in "+id);
         variables.put(key, value);
+        if (listeners.containsKey(key)) {
+            for (var listener : listeners.get(key)) {
+                listener.$notify(value);
+            }
+        }
         return value;
     }
 
@@ -117,4 +125,7 @@ public class ScriptScope {
     }
 
 
+    public void listen(String key, var map) {
+        listeners.put(key, map);
+    }
 }

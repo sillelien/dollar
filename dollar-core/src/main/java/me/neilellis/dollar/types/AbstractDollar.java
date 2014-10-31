@@ -688,4 +688,22 @@ public abstract class AbstractDollar implements var {
     public void _src(String src) {
         this.src = src;
     }
+
+    @Override
+    public String $listen(Pipeable pipe) {
+//        do nothing, not a reactive type
+        System.err.println("Cannot listen on a non reactive type " + getClass().getName());
+        return "<unknown>";
+    }
+
+    @Override
+    public void $notify(var value) {
+//        do nothing, not a reactive type
+    }
+
+    @Override
+    public String $listen(Pipeable pipe, String key) {
+        System.err.println("Cannot listen on a non reactive type " + getClass().getName());
+        return "<unknown>";
+    }
 }

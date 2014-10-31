@@ -851,4 +851,19 @@ public class DollarWrapper implements var {
     public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
         return getValue().assertFalse(assertion, message);
     }
+
+    @Override
+    public String $listen(Pipeable pipe) {
+        return getValue().$listen(pipe);
+    }
+
+    @Override
+    public void $notify(var value) {
+        getValue().$notify(value);
+    }
+
+    @Override
+    public String $listen(Pipeable pipe, String key) {
+        return getValue().$listen(pipe, key);
+    }
 }

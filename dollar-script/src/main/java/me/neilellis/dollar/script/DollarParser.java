@@ -18,6 +18,7 @@ package me.neilellis.dollar.script;
 
 import com.google.common.io.ByteStreams;
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.*;
 import org.codehaus.jparsec.functors.Map;
@@ -46,7 +47,7 @@ import static me.neilellis.dollar.types.DollarFactory.fromLambda;
 public class DollarParser {
 
 
-    static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", "<=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "`", "``", "??", "!!", "*>", "==", "!=", "+", "-", "\n", "$(", "${", ":=", "&", "&=", "<>", "+>", "<+", "*>", "<*", "*|", "|*", "*|*", "|>", "<|", "&>");
+    static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", "<=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "`", "``", "??", "!!", "*>", "==", "!=", "+", "-", "\n", "$(", "${", ":=", "&", "&=", "<>", "+>", "<+", "*>", "<*", "*|", "|*", "*|*", "|>", "<|", "&>", "?->");
     static final Parser<?> TOKENIZER =
             Parsers.or(url(), Terminals.StringLiteral.DOUBLE_QUOTE_TOKENIZER, Terminals.StringLiteral.SINGLE_QUOTE_TOKENIZER, Terminals.DecimalLiteral.TOKENIZER, Terminals.IntegerLiteral.TOKENIZER, Terminals.Identifier.TOKENIZER, OPERATORS.tokenizer());
     static final Parser<var> IDENTIFIER = Terminals.Identifier.PARSER.map(s -> $(s));
@@ -228,6 +229,17 @@ public class DollarParser {
             }
         });
 //        ScopedVarBinaryOperator value = new ScopedVarBinaryOperator((lhs, rhs) -> rhs, scope);
+        Map<var, var> reactive = new Map<var, var>() {
+            @Override
+            public var map(var v) {
+                String key = v.$S();
+                var listener = DollarFactory.fromLambda(i ->
+                                scope.get(key)
+                );
+                scope.listen(key, listener);
+                return listener;
+            }
+        };
         Parser<var> parser = new OperatorTable<var>()
                 .infixl(op("!=", new ScopedVarBinaryOperator((lhs, rhs) -> $(!lhs.equals(rhs)), scope), scope), 100)
                 .infixl(op("==", new ScopedVarBinaryOperator((lhs, rhs) -> $(lhs.equals(rhs)), scope), scope), 100)
@@ -277,7 +289,11 @@ public class DollarParser {
                     lhs.$publish(rhs.$S());
                     return lhs;
                 }, scope), scope), 50)
-                .infixl(op("?", new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$choose(rhs), scope), scope), 50)
+                .infixl(op("?", new ScopedVarBinaryOperator(true, (lhs, rhs) -> $(lhs.$listen(i -> {
+                    scope.set("1", i);
+                    return $((Object) rhs.$());
+                })), scope), scope), 50)
+                .infixl(op("?->", new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$choose(rhs), scope), scope), 50)
                 .infixl(op("?:", new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$default(rhs), scope), scope), 50)
 //                .infixl(op(",", new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$append(rhs), scope)), 10)
                 .infixl(op(".", new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$(rhs.$S()), scope), scope), 200)
@@ -288,7 +304,7 @@ public class DollarParser {
 //                .prefix((term("\n").many1().retn(new ScopedVarUnaryOperator(v-> v, scope))), 1)
 //                .postfix((term("\n").many1().retn(new ScopedVarUnaryOperator(v-> v, scope))), 1)
                 .prefix(op("<>", new ScopedVarUnaryOperator(true, v -> $((Object) v.$()), scope), scope), 1000)
-                .prefix(op("$", new ScopedVarUnaryOperator(v -> scope.get(v.$S()), scope), scope), 1000)
+                .prefix(op("$", new ScopedVarUnaryOperator(reactive, scope), scope), 1000)
                 .infixr(op("=", new ScopedVarBinaryOperator(false, (lhs, rhs) -> {
                     var evalled = $((Object) rhs.$());
                     scope.set(lhs.$S(), evalled);
