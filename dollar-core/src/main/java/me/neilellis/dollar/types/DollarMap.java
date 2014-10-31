@@ -18,6 +18,7 @@ package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.DollarEval;
+import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.json.ImmutableJsonObject;
 import me.neilellis.dollar.json.JsonObject;
@@ -29,10 +30,7 @@ import org.json.JSONObject;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 
@@ -402,6 +400,28 @@ class DollarMap extends AbstractDollar implements var {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return true;
+    }
+
+    @Override
+    public void $notify(var value) {
+        for (var v : map.values()) {
+            v.$notify(value);
+        }
+    }
+
+    @Override
+    public String $listen(Pipeable pipe, String key) {
+        for (var v : map.values()) {
+            v.$listen(pipe, key);
+        }
+        return key;
+    }
+
+    @Override
+    public String $listen(Pipeable pipe) {
+        String key = UUID.randomUUID().toString();
+        $listen(pipe, key);
+        return key;
     }
 }
 
