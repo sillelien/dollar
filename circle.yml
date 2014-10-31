@@ -49,4 +49,4 @@ deployment:
         - pack/pack.sh
         - pack/upload.sh 0.0.${CIRCLE_BUILD_NUM}
 #        - mvn site:site site:stage
-        - mvn scm-publish:publish-scm
+#        - mvn scm-publish:publish-scm
