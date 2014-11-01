@@ -42,8 +42,8 @@ public class ListenOperator implements Binary<var>, Operator {
         try {
             final var lambda = DollarFactory.fromLambda(v -> {
                 try {
-                    return $(lhs.$listen(i -> DollarParser.withinNewScope(scope, newScope -> {
-                        DollarParser.currentScope().set("1", i);
+                    return $(lhs.$listen(i -> scope.getDollarParser().withinNewScope(scope, newScope -> {
+                        scope.getDollarParser().currentScope().set("1", i);
                         //todo: change to receive
                         return $((Object) rhs.$());
                     })));

@@ -19,8 +19,6 @@ package me.neilellis.dollar.script;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 
-import static me.neilellis.dollar.script.DollarParser.currentScope;
-
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
@@ -36,7 +34,7 @@ public class VariableOperator extends ScopedVarUnaryOperator {
     public var map(var from) {
         try {
             String key = from.$S();
-            var lambda = DollarFactory.fromLambda(v -> currentScope().has(key) ? currentScope().get(key) : scope.get(key));
+            var lambda = DollarFactory.fromLambda(v -> scope.getDollarParser().currentScope().has(key) ? scope.getDollarParser().currentScope().get(key) : scope.get(key));
             scope.listen(key, lambda);
             return lambda;
         } catch (AssertionError e) {

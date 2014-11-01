@@ -7,6 +7,8 @@
 lamval=1
 lambda2 := $lamval
 
+$lamval effects { ?? $lamval; }
+
 lambda := ( ( $lamval )  + $lamval )
 notlambda = ( ( $lamval )  + $lamval )
 
@@ -17,7 +19,7 @@ lamval2= 23
 //The simplest possible lambda (serves no purpose!)
 => 1 == 1
 
-=> 1 == <> 1
+=> 1 == fix 1
 
 => <> 1 == 1
 

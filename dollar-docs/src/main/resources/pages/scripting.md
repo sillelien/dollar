@@ -90,7 +90,7 @@ That remarkable piece of code will simply output each change made to the variabl
 
 b=1
 a=1
-$a + $b + 1 ? { >> "a=" + $a + ", b=" + $b}
+$a + $b + 1 effects { >> "a=" + $a + ", b=" + $b}
 a=2
 a=3
 a=4
@@ -225,7 +225,7 @@ pair2 := second : "World";
 ```dollar
  
 a=1
-$a ? { >> $a }
+$a effects { >> $a }
 a=2
 a=3
 a=4
