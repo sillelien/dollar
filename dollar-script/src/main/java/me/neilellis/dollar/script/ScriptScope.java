@@ -18,6 +18,7 @@ package me.neilellis.dollar.script;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
+import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Parser;
 
@@ -66,7 +67,7 @@ public class ScriptScope {
     }
 
     public var get(String variable) {
-//        System.out.println("Looking up "+variable +" in "+this);
+        if (DollarStatic.config.isDebugScope()) System.out.println("Looking up " + variable + " in " + this);
         var val = variables.get(variable);
         if (val == null) {
             if (parent == null) {
@@ -80,21 +81,27 @@ public class ScriptScope {
 
 
     public boolean has(String variable) {
-//        System.out.println("Checking for "+variable +" in "+this);
+        if (DollarStatic.config.isDebugScope()) {
+            System.out.println("Checking for " + variable + " in " + this);
+        }
         var val = variables.get(variable);
         return val != null || parent != null && parent.has(variable);
 
     }
 
     public var set(String key, var value) {
-//        System.out.println("Setting up "+key +" in "+this);
+        if (DollarStatic.config.isDebugScope()) System.out.println("Setting " + key + " in " + this);
         variables.put(key, value);
+        notifyScope(key, value);
+        return value;
+    }
+
+    public void notifyScope(String key, var value) {
         if (listeners.containsKey(key)) {
             for (var listener : listeners.get(key)) {
                 listener.$notify(value);
             }
         }
-        return value;
     }
 
     public Parser<var> getParser() {
@@ -123,12 +130,19 @@ public class ScriptScope {
 
 
     public void listen(String key, var listener) {
-        ScriptScope scope = getScopeForKey(key);
-        if (scope == null) {
-//            System.out.println("Key "+key+" was not in any scope.");
+        if (key.matches("[0-9]+")) {
+            if (DollarStatic.config.isDebugScope())
+                System.out.println("Cannot listen to positional parameter $" + key + " in " + this);
             return;
         }
-        scope.listeners.put(key, listener);
+        ScriptScope scopeForKey = getScopeForKey(key);
+        if (scopeForKey == null) {
+            if (DollarStatic.config.isDebugScope()) System.out.println("Key " + key + " not found in " + this);
+            listeners.put(key, listener);
+            return;
+        }
+        if (DollarStatic.config.isDebugScope()) System.out.println("Listening for " + key + " in " + scopeForKey);
+        scopeForKey.listeners.put(key, listener);
     }
 
     private ScriptScope getScopeForKey(String key) {
@@ -138,6 +152,7 @@ public class ScriptScope {
         if (parent != null) {
             return parent.getScopeForKey(key);
         } else {
+            if (DollarStatic.config.isDebugScope()) System.out.println("Scope not found for " + key);
             return null;
         }
     }
@@ -148,7 +163,7 @@ public class ScriptScope {
     }
 
     public void clear() {
-        System.out.println("Clearing scope " + this);
+        if (DollarStatic.config.isDebugScope()) System.out.println("Clearing scope " + this);
         variables.clear();
         listeners.clear();
     }

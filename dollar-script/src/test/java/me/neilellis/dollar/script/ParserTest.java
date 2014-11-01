@@ -37,17 +37,17 @@ public class ParserTest {
 
     @Test
     public void testBasics1() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test1.dlr"));
+        new DollarParser().parse(getClass().getResourceAsStream("/test1.ds"));
     }
 
     @Test
     public void testBasics2() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test2.dlr"));
+        new DollarParser().parse(getClass().getResourceAsStream("/test2.ds"));
     }
 
     @Test
     public void testBasics3() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test3.dlr"));
+        new DollarParser().parse(getClass().getResourceAsStream("/test3.ds"));
     }
 
 

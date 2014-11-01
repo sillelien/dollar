@@ -90,7 +90,7 @@ That remarkable piece of code will simply output each change made to the variabl
 
 b=1
 a=1
-$a + $b + 1 effects { >> "a=" + $a + ", b=" + $b}
+$a + $b + 1 causes { >> "a=" + $a + ", b=" + $b}
 a=2
 a=3
 a=4
@@ -222,12 +222,41 @@ pair2 := second : "World";
  
 ```
 
+Reactive Control Flow
+---------------------
+
+DollarScript as previously mentioned is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
+
+Let's start with the simplest reactive control flow operator, the '->' or 'causes' operator. 
+
 ```dollar
  
+$a -> { >> $a } //alternatively for clarity '$a causes {>> $a} '
+
 a=1
-$a effects { >> $a }
 a=2
 a=3
 a=4
+a=2
  
 ```
+
+When the code is executed we'll see the values 1,2,3,4,2 printed out, this is because whenever a changes the block { >> $a } is evaluated, resulting in the variable $a being printed to stdout. Imagine how useful that is for debugging changes to a variable!
+
+Next we have the 'when' operator, there is no shorthand for this operator to help keep you code readable:
+
+
+```dollar
+
+a=1
+ 
+when $a == 2 { >> $a } //alternatively for clarity '$a causes {>> $a} '
+
+a=2
+a=3
+a=4
+a=2
+ 
+```
+
+This time we'll just see the number 2 twice, this is because the `when` operator triggers the evaluation of the supplied block ONLY when the supplied expression (`$a == 2`) becomes true. 

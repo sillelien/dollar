@@ -18,6 +18,7 @@ package me.neilellis.dollar.script;
 
 import com.google.common.io.ByteStreams;
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.*;
 import org.codehaus.jparsec.functors.Map;
@@ -47,13 +48,24 @@ import static me.neilellis.dollar.types.DollarFactory.fromLambda;
 public class DollarParser {
 
 
+    //Lexer
+
     static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", "<=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "`", "``", "??", "!!", "*>", "==", "!=", "+", "-", "\n", "$(", "${", ":=", "&", "&=", "<>", "+>", "<+", "*>", "<*", "*|", "|*", "*|*", "|>", "<|", "&>", "?->", "<=>");
 
-    static final Terminals KEYWORDS = Terminals.operators("fix", "effects", "when", "if", "then", "for", "each", "fail", "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default", "debug", "error");
+    static final Terminals KEYWORDS = Terminals.operators("fix", "causes", "when", "if", "then", "for", "each", "fail", "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default", "debug", "error");
 
     static final Parser<?> TOKENIZER =
             Parsers.or(url(), OPERATORS.tokenizer(), Terminals.StringLiteral.DOUBLE_QUOTE_TOKENIZER, Terminals.StringLiteral.SINGLE_QUOTE_TOKENIZER, Terminals.DecimalLiteral.TOKENIZER, Terminals.IntegerLiteral.TOKENIZER, Parsers.longest(KEYWORDS.tokenizer(), Terminals.Identifier.TOKENIZER));
 
+    static final Parser<?> TERMINATOR_SYMBOL = Parsers.or(term("\n"), term(";")).many1();
+    static final Parser<?> COMMA_TERMINATOR = Parsers.sequence(term(","), term("\n").many());
+    static final Parser<?> COMMA_OR_NEWLINE_TERMINATOR = Parsers.or(term(","), term("\n")).many1();
+    static final Parser<?> SEMICOLON_TERMINATOR = Parsers.or(term(";"), term("\n").many1());
+
+    static final Parser<Void> IGNORED =
+            Parsers.or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT, Scanners.among(" \t\r").many1(), Scanners.lineComment("#")).skipMany();
+
+    //Grammar
     static final Parser<var> IDENTIFIER = Terminals.Identifier.PARSER.map(s -> $(s));
     static final Parser<var> STRING_LITERAL = Terminals.StringLiteral.PARSER.map(s -> $(s));
     static final Parser<var> DECIMAL_LITERAL = Terminals.DecimalLiteral.PARSER.map(s ->
@@ -62,14 +74,9 @@ public class DollarParser {
     static final Parser<var> INTEGER_LITERAL = Terminals.IntegerLiteral.PARSER.map(s -> $(Long.parseLong(s)));
     static final Parser<var> URL = Terminals.StringLiteral.PARSER.map(url -> $(url));
 
-    static final Parser<Void> IGNORED =
-            Parsers.or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT, Scanners.among(" \t\r").many1(), Scanners.lineComment("#")).skipMany();
 
-    static final Parser<?> TERMINATOR_SYMBOL = Parsers.or(term("\n"), term(";")).many1();
-    static final Parser<?> COMMA_TERMINATOR = Parsers.sequence(term(","), term("\n").optional());
-    static final Parser<?> COMMA_OR_NEWLINE_TERMINATOR = Parsers.or(term(","), term("\n")).many1();
-    static final Parser<?> SEMICOLON_TERMINATOR = Parsers.or(term(";"), term("\n"));
     private final ClassLoader classLoader;
+
     private CopyOnWriteArrayList<ScriptScope> scopes = new CopyOnWriteArrayList<>();
     private Parser<?> topLevelParser;
 
@@ -89,12 +96,20 @@ public class DollarParser {
         return OPERATORS.token(name);
     }
 
+    static Parser<?> keyword(String name) {
+        return KEYWORDS.token(name);
+    }
+
     static Parser<?> termAndNewlines(String... names) {
         return term("\n").many().followedBy(OPERATORS.token(names).followedBy(term("\n").many()));
     }
 
     static Parser<?> termFollowedByNewlines(String... names) {
         return OPERATORS.token(names).followedBy(term("\n").many());
+    }
+
+    static Parser<?> keywordFollowedByNewlines(String... names) {
+        return KEYWORDS.token(names).followedBy(term("\n").many());
     }
 
     static Parser<?> termPreceededByNewlines(String... names) {
@@ -151,12 +166,54 @@ public class DollarParser {
 
     }
 
-    private  Parser<var> list(Parser<var> expression, ScriptScope scope) {
+    private Parser<var> ifStatement(Parser<var> expression, ScriptScope scope) {
+        Parser<Object[]> sequence = keywordFollowedByNewlines("if").next(Parsers.array(expression, expression));
+        return sequence.map(objects -> {
+            var lhs = ((var) objects[0]);
+            var rhs = (var) objects[1];
+            var lambda = DollarFactory.fromLambda(i -> lhs.isTrue() ? $((Object) rhs.$()) : $void());
+            return lambda;
+        });
+    }
+
+    private Parser<var> whenStatement(Parser<var> expression, ScriptScope scope) {
+        Parser<Object[]> sequence = keywordFollowedByNewlines("when").next(Parsers.array(expression, expression));
+        return sequence.map(objects -> {
+            var lhs = (var) objects[0];
+            var rhs = (var) objects[1];
+            var lambda = DollarFactory.fromLambda(i -> lhs.isTrue() ? $((Object) rhs.$()) : $void());
+            lhs.$listen(i -> {
+                if (i.isTrue()) {
+                    return $((Object) rhs.$());
+                }
+                return $void();
+            });
+            lhs.$listen(lambda::$notify);
+            return lambda;
+        });
+    }
+
+
+    private Parser<var> eachStatement(Parser<var> expression, ScriptScope scope) {
+        Parser<Object[]> sequence = keywordFollowedByNewlines("each").next(Parsers.array(expression, expression));
+        return sequence.map(objects -> {
+            var lhs = (var) objects[0];
+            var lambda = DollarFactory.fromLambda(i -> lhs.$each(j -> {
+                scope.set("1", j);
+                return $((Object) ((var) objects[1]).$());
+            }));
+            lhs.$listen(lambda::$notify);
+            return lambda;
+        });
+    }
+
+
+    private Parser<var> list(Parser<var> expression, ScriptScope scope) {
         Parser<List<var>> sequence = termFollowedByNewlines("[").next(expression.sepBy(COMMA_OR_NEWLINE_TERMINATOR)).followedBy(termPreceededByNewlines("]"));
         return sequence.map(i -> withinNewScope(scope, newScope -> DollarStatic.$(i)));
     }
 
-    private  Parser<var> map(Parser<var> expression, ScriptScope scope) {
+    private Parser<var> map(Parser<var> expression, ScriptScope scope) {
         Parser<List<var>> sequence = termFollowedByNewlines("{").next(expression.sepBy1(COMMA_TERMINATOR)).followedBy(termPreceededByNewlines("}"));
         return sequence.map(o -> withinNewScope(scope, newScope -> {
             var current = null;
@@ -171,7 +228,7 @@ public class DollarParser {
         }));
     }
 
-    private  Parser<var> block(Parser<var> parentParser, ScriptScope scope) {
+    private Parser<var> block(Parser<var> parentParser, ScriptScope scope) {
         Parser.Reference<var> ref = Parser.newReference();
 
         Parser<List<var>> listParser = (Parsers.or(parentParser, ref.lazy().between(termFollowedByNewlines("{"), termPreceededByNewlines("}"))).followedBy(SEMICOLON_TERMINATOR)).many1();
@@ -212,7 +269,7 @@ public class DollarParser {
     private Parser<var> expression(ScriptScope scope) {
 
         Parser.Reference<var> ref = Parser.newReference();
-        Parser<var> main = ref.lazy().between(term("("), term(")")).or(Parsers.or(list(ref.lazy(), scope), map(ref.lazy(), scope).map(DollarStatic::$), URL, DECIMAL_LITERAL, INTEGER_LITERAL, STRING_LITERAL, IDENTIFIER)).or(block(ref.lazy(), scope).between(termFollowedByNewlines("{"), termPreceededByNewlines("}")));
+        Parser<var> main = ref.lazy().between(term("("), term(")")).or(Parsers.or(list(ref.lazy(), scope), map(ref.lazy(), scope).map(DollarStatic::$), ifStatement(ref.lazy(), scope), eachStatement(ref.lazy(), scope), whenStatement(ref.lazy(), scope), URL, DECIMAL_LITERAL, INTEGER_LITERAL, STRING_LITERAL, IDENTIFIER)).or(block(ref.lazy(), scope).between(termFollowedByNewlines("{"), termPreceededByNewlines("}")));
 
         Parser<var> unit = Parsers.array(main, parameters(ref.lazy()).optional()).map(objects -> withinNewScope(scope, newScope -> {
             if (objects.length == 1 || objects[1] == null) {
@@ -225,7 +282,7 @@ public class DollarParser {
                 }
                 var result = newScope.get(objects[0].toString());
 //                var result = $((Object) ((var) objects[0]).$());
-                System.out.println("Result " + result.$S());
+//                System.out.println("Result " + result.$S());
                 return $((Object) result.$());
             }
         }));
@@ -249,7 +306,7 @@ public class DollarParser {
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> $(lhs.$S(), rhs)), ":"), 30)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> scope.set(lhs.$S(), $().$read(new File(rhs.$S())))), "<"), 50)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$write(new File(rhs.$S()))), ">"), 50)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.isTrue() ? rhs : lhs), "->"), 50)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.isTrue() ? rhs : lhs), "?"), 50)
                 .prefix(op(new ScopedVarUnaryOperator(false, i -> {
                     i.out();
                     return $void();
@@ -288,7 +345,7 @@ public class DollarParser {
 //                    lhs.$publish(rhs.$S());
 //                    return lhs;
 //                }, scope), scope), 50)
-                .infixl(op(new ListenOperator(scope), "?", "effects"), 50)
+                .infixl(op(new ListenOperator(scope), "->", "causes"), 50)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$choose(rhs)), "?->", "choose"), 50)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$default(rhs)), "?:", "default"), 50)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$(rhs.$S())), "."), 200)
@@ -297,10 +354,7 @@ public class DollarParser {
                 .prefix(op(new ScopedVarUnaryOperator(true, v -> $((Object) v.$())), "<>", "fix"), 1000)
                 .prefix(op(new VariableOperator(scope), "$"), 1000)
                 .infixr(op(new AssignmentOperator(scope), "="), 2)
-                .infixl(op(new ScopedVarBinaryOperator(false, (lhs, rhs) -> {
-                    scope.set(lhs.$S(), rhs);
-                    return lhs;
-                }), ":="), 2)
+                .infixl(op(new DeclarationOperator(scope), ":="), 2)
                 .build(unit);
         ref.set(parser);
 

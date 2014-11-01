@@ -16,45 +16,39 @@
 
 package me.neilellis.dollar.script;
 
+import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
 
 import java.util.function.Supplier;
 
-import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$void;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class ListenOperator implements Binary<var>, Operator {
+public class DeclarationOperator implements Binary<var>, Operator {
+
     private Supplier<String> source;
     private ScriptScope scope;
 
 
-    public ListenOperator(ScriptScope scope) {
+    public DeclarationOperator(ScriptScope scope) {
         this.scope = scope;
     }
-
 
     @Override
     public var map(var lhs, var rhs) {
         try {
-
-            return $(lhs.$listen(i -> scope.getDollarParser().withinNewScope(scope, newScope -> {
-                        scope.getDollarParser().currentScope().set("1", i);
-                        //todo: change to receive
-                $((Object) rhs.$());
+            String key = lhs.$S();
+            var lambda = DollarFactory.fromLambda(i -> {
+                scope.set(key, rhs);
                 return $void();
-                    })));
-//                } catch (AssertionError e) {
-//                    throw new AssertionError(e + " at '" + source.get() + "'", e);
-//                }
-//
-
-//            return lambda;
+            });
+            rhs.$listen(i -> scope.set(key, i));
+            return lambda;
         } catch (AssertionError e) {
-            throw new AssertionError(e + " at '" + source.get() + "'");
+            throw new AssertionError(e + " at '" + source.get() + "'", e);
         } catch (Exception e) {
             throw new Error(e + " at '" + source.get() + "'");
         }

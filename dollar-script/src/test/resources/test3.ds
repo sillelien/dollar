@@ -3,11 +3,11 @@
 // however := is the lambda assignment and does not, thus creating a
 // lambda style expression
 
+$lamval causes { ?? $lamval; }
 
 lamval=1
 lambda2 := $lamval
 
-$lamval effects { ?? $lamval; }
 
 lambda := ( ( $lamval )  + $lamval )
 notlambda = ( ( $lamval )  + $lamval )
@@ -77,6 +77,29 @@ removeWorld := ($1 - "World")
 testParams := ($2 + " " + $1)
 >>testParams ("Hello", "World")
 testParams ("Hello", "World") <=> "World Hello"
+
+a=2
+
+when $a == 2 {
+    >> ">> " + $a
+}
+
+a=1
+a=3
+a=2
+a=1
+
+if $a == 1 {
+    >> "Hello World"
+}
+
+a=1
+a=2
+
+each [1,2,3] {
+    >> $1 ;
+}
+
 
 //TODO
 #marinaVideos <+ https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo

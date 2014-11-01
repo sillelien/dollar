@@ -681,8 +681,9 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public void $notify(var value) {
+    public var $notify(var value) {
 //        do nothing, not a reactive type
+        return this;
     }
 
     @Override
@@ -695,5 +696,14 @@ public abstract class AbstractDollar implements var {
     public var $receive(var value) {
         System.err.println("Cannot receive values " + getClass().getName());
         return this;
+    }
+
+    @Override
+    public var $each(Pipeable pipe) throws Exception {
+        List<var> result = new LinkedList<>();
+        for (var var : toList()) {
+            pipe.pipe(var);
+        }
+        return DollarFactory.fromValue(result);
     }
 }

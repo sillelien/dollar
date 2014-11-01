@@ -325,10 +325,11 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public void $notify(var value) {
+    public var $notify(var value) {
         for (var v : list) {
             v.$notify(value);
         }
+        return this;
     }
 
     @Override

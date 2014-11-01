@@ -403,10 +403,11 @@ class DollarMap extends AbstractDollar implements var {
     }
 
     @Override
-    public void $notify(var value) {
+    public var $notify(var value) {
         for (var v : map.values()) {
             v.$notify(value);
         }
+        return this;
     }
 
     @Override

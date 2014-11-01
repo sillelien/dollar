@@ -41,7 +41,8 @@ public class AssignmentOperator implements Binary<var>, Operator {
     public var map(var lhs, var rhs) {
         try {
             scope.set(lhs.$S(), $((Object) rhs.$()));
-            return lhs;
+
+            return rhs;
         } catch (AssertionError e) {
             throw new AssertionError(e + " at '" + source.get() + "'", e);
         } catch (Exception e) {

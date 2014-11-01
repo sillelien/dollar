@@ -109,6 +109,11 @@ public class DollarWrapper implements var {
         return tracer.trace(this, getValue().$choose(map), StateTracer.Operations.CHOOSE);
     }
 
+    @Override
+    public var $each(Pipeable pipe) throws Exception {
+        return getValue().$each(pipe);
+    }
+
     @NotNull
     @Override
     public var $copy() {
@@ -827,8 +832,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public void $notify(var value) {
-        getValue().$notify(value);
+    public var $notify(var value) {
+        return getValue().$notify(value);
     }
 
     @Override

@@ -30,7 +30,7 @@ public interface ReactiveAware {
     String $listen(Pipeable pipe);
 
     @Guarded(NotNullParametersGuard.class)
-    void $notify(var value);
+    var $notify(var value);
 
     @Guarded(NotNullParametersGuard.class)
     String $listen(Pipeable pipe, String key);

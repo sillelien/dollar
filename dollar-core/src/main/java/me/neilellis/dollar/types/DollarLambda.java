@@ -75,7 +75,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             } else if (method.getName().equals("$notify")) {
                 if (notifyStack.get().contains(this)) {
                     //throw new IllegalStateException("Recursive notify loop detected");
-                    return null;
+                    return proxy;
                 }
                 notifyStack.get().add(this);
                 for (Pipeable pipeable : listeners.values()) {
