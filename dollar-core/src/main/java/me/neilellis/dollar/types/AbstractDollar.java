@@ -170,25 +170,6 @@ public abstract class AbstractDollar implements var {
         return eval("anon", lambda);
     }
 
-    @Override
-    public var $send(String uri) {
-        return DollarStatic.integrationProvider().send(uri, this);
-    }
-
-    @Override
-    public void $listen(String uri, Consumer<var> handler) {
-        DollarStatic.integrationProvider().listen(uri, handler);
-    }
-
-    @Override
-    public void $publish(String uri) {
-        DollarStatic.integrationProvider().publish(uri, this);
-    }
-
-    @Override
-    public void $dispatch(String uri) {
-        DollarStatic.integrationProvider().dispatch(uri, this);
-    }
 
     @NotNull
     @Override
@@ -640,6 +621,9 @@ public abstract class AbstractDollar implements var {
     @Override
     public var $pipe(@NotNull String classModule) {
         String[] parts = classModule.split(":", 2);
+        if (parts.length < 2) {
+            throw new IllegalArgumentException("Pipe " + classModule + " needs to have a scheme");
+        }
         try {
             return $pipe(Plugins.resolvePiper(parts[0]).resolve(this, parts[1]));
         } catch (Exception e) {
@@ -692,7 +676,7 @@ public abstract class AbstractDollar implements var {
     @Override
     public String $listen(Pipeable pipe) {
 //        do nothing, not a reactive type
-        System.err.println("Cannot listen on a non reactive type " + getClass().getName());
+//        System.err.println("Cannot listen on a non reactive type " + getClass().getName());
         return "<unknown>";
     }
 
@@ -703,7 +687,13 @@ public abstract class AbstractDollar implements var {
 
     @Override
     public String $listen(Pipeable pipe, String key) {
-        System.err.println("Cannot listen on a non reactive type " + getClass().getName());
+//        System.err.println("Cannot listen on a non reactive type " + getClass().getName());
         return "<unknown>";
+    }
+
+    @Override
+    public var $receive(var value) {
+        System.err.println("Cannot receive values " + getClass().getName());
+        return this;
     }
 }

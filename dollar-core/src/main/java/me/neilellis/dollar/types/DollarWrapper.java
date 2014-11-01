@@ -473,37 +473,6 @@ public class DollarWrapper implements var {
         return getValue().$write(out);
     }
 
-    @Override
-    public var $send(String uri) {
-        return tracer.trace(DollarVoid.INSTANCE,
-                monitor.run("send",
-                        "dollar.integration.send." + sanitize(uri),
-                        "Sending to " + uri,
-                        () -> getValue().$send(uri)),
-                StateTracer.Operations.SEND,
-                uri);
-    }
-
-    @Override
-    public void $listen(String uri, Consumer<var> handler) {
-        getValue().$listen(uri, handler);
-    }
-
-    @Override
-    public void $publish(String uri) {
-        monitor.run("dispatch",
-                "dollar.integration.dispatch." + sanitize(uri),
-                "Writing to " + uri,
-                () -> getValue().$publish(uri));
-    }
-
-    @Override
-    public void $dispatch(String uri) {
-        monitor.run("dispatch",
-                "dollar.integration.dispatch." + sanitize(uri),
-                "Writing to " + uri,
-                () -> getValue().$dispatch(uri));
-    }
 
     @Override
     public String S() {
@@ -865,5 +834,10 @@ public class DollarWrapper implements var {
     @Override
     public String $listen(Pipeable pipe, String key) {
         return getValue().$listen(pipe, key);
+    }
+
+    @Override
+    public var $receive(var value) {
+        return getValue().$receive(value);
     }
 }

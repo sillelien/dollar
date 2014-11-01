@@ -73,6 +73,9 @@ public abstract class Unit extends DollarStatic implements Pipeable {
                 if ($this.out == null) {
                     $this.out = $void();
                 }
+                if (!$this.out.isVoid()) {
+                    System.out.println($this.out);
+                }
             } catch (@NotNull InstantiationException | IllegalAccessException e) {
                 throw new Error(e.getCause());
             } catch (AssertionError e) {

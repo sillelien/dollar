@@ -22,47 +22,56 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import me.neilellis.dollar.json.DecodeException;
 import me.neilellis.dollar.json.EncodeException;
+import me.neilellis.dollar.json.JsonObject;
+
+import java.util.Map;
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 public class Json {
 
-  private final static ObjectMapper mapper = new ObjectMapper();
-  private final static ObjectMapper prettyMapper = new ObjectMapper();
+    private final static ObjectMapper mapper = new ObjectMapper();
+    private final static ObjectMapper prettyMapper = new ObjectMapper();
 
-  static {
-    // Non-standard JSON but we allow C style comments in our JSON
-    mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
-  }
-
-  public static String encode(Object obj) throws EncodeException {
-    try {
-      return mapper.writeValueAsString(obj);
-    } catch (Exception e) {
-      throw new EncodeException("Failed to encode as JSON: " + e.getMessage());
+    static {
+        // Non-standard JSON but we allow C style comments in our JSON
+        mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
     }
-  }
 
-  public static String encodePrettily(Object obj) throws EncodeException {
-    try {
-      return prettyMapper.writeValueAsString(obj);
-    } catch (Exception e) {
-      throw new EncodeException("Failed to encode as JSON: " + e.getMessage());
+    public static String encode(Object obj) throws EncodeException {
+        try {
+            return mapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new EncodeException("Failed to encode as JSON: " + e.getMessage());
+        }
     }
-  }
 
-  @SuppressWarnings("unchecked")
-  public static <T> T decodeValue(String str, Class<?> clazz) throws DecodeException {
-    try {
-      return (T) mapper.readValue(str, clazz);
-    } catch (Exception e) {
-      throw new DecodeException("Failed to decode:" + e.getMessage());
+    public static String encodePrettily(Object obj) throws EncodeException {
+        try {
+            return prettyMapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new EncodeException("Failed to encode as JSON: " + e.getMessage());
+        }
     }
-  }
 
-  static {
-    prettyMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-  }
+    @SuppressWarnings("unchecked")
+    public static <T> T decodeValue(String str, Class<?> clazz) throws DecodeException {
+        try {
+            return (T) mapper.readValue(str, clazz);
+        } catch (Exception e) {
+            throw new DecodeException("Failed to decode:" + e.getMessage());
+        }
+    }
+
+    public static JsonObject fromJavaObject(Object o) {
+
+        return new JsonObject(mapper.convertValue(o, Map.class));
+
+    }
+
+    static {
+        prettyMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+    }
 
 }

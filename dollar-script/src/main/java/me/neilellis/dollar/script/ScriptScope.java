@@ -21,15 +21,16 @@ import com.google.common.collect.Multimap;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Parser;
 
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class ScriptScope {
 
-    private final String id = UUID.randomUUID().toString();
+    private static AtomicInteger counter = new AtomicInteger();
+    private final String id;
     private final String source;
     private ScriptScope parent;
     private ConcurrentHashMap<String, var> variables = new ConcurrentHashMap<>();
@@ -38,21 +39,25 @@ public class ScriptScope {
     private DollarParser dollarParser;
     private Multimap<String, var> listeners = LinkedListMultimap.create();
 
-    public ScriptScope(DollarParser dollarParser, ScriptScope parent, String source) {
-        this.parent = parent;
-        this.source = source;
+    public ScriptScope(String name) {
+        this.parent = null;
+        this.source = "<unknown>";
+        this.dollarParser = null;
+        id = String.valueOf(name + ":" + counter.incrementAndGet());
     }
 
     public ScriptScope(ScriptScope parent, String source) {
         this.parent = parent;
         this.source = source;
         this.dollarParser = parent.getDollarParser();
+        id = String.valueOf("S:" + counter.incrementAndGet());
     }
 
 
     public ScriptScope(DollarParser dollarParser, String source) {
         this.source = source;
         this.dollarParser = dollarParser;
+        id = String.valueOf("S:" + counter.incrementAndGet());
     }
 
 
@@ -61,11 +66,11 @@ public class ScriptScope {
     }
 
     public var get(String variable) {
-//        System.out.println("Looking up "+variable +" in "+id);
+//        System.out.println("Looking up "+variable +" in "+this);
         var val = variables.get(variable);
         if (val == null) {
             if (parent == null) {
-                return dollarParser.notFound(variable, this);
+                return dollarParser.notFound(variable);
             } else {
                 return parent.get(variable);
             }
@@ -75,14 +80,14 @@ public class ScriptScope {
 
 
     public boolean has(String variable) {
-//        System.out.println("Looking up "+variable +" in "+id);
+//        System.out.println("Checking for "+variable +" in "+this);
         var val = variables.get(variable);
         return val != null || parent != null && parent.has(variable);
 
     }
 
     public var set(String key, var value) {
-//        System.out.println("Setting up "+key +" in "+id);
+//        System.out.println("Setting up "+key +" in "+this);
         variables.put(key, value);
         if (listeners.containsKey(key)) {
             for (var listener : listeners.get(key)) {
@@ -90,14 +95,6 @@ public class ScriptScope {
             }
         }
         return value;
-    }
-
-    public boolean isLambdaUnderConstruction() {
-        return lambdaUnderConstruction;
-    }
-
-    public void setLambdaUnderConstruction(boolean lambdaUnderConstruction) {
-        this.lambdaUnderConstruction = lambdaUnderConstruction;
     }
 
     public Parser<var> getParser() {
@@ -125,7 +122,34 @@ public class ScriptScope {
     }
 
 
-    public void listen(String key, var map) {
-        listeners.put(key, map);
+    public void listen(String key, var listener) {
+        ScriptScope scope = getScopeForKey(key);
+        if (scope == null) {
+//            System.out.println("Key "+key+" was not in any scope.");
+            return;
+        }
+        scope.listeners.put(key, listener);
+    }
+
+    private ScriptScope getScopeForKey(String key) {
+        if (variables.containsKey(key)) {
+            return this;
+        }
+        if (parent != null) {
+            return parent.getScopeForKey(key);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return id + "->" + parent;
+    }
+
+    public void clear() {
+        System.out.println("Clearing scope " + this);
+        variables.clear();
+        listeners.clear();
     }
 }

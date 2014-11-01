@@ -334,7 +334,9 @@ public class DollarList extends AbstractDollar {
     @Override
     public String $listen(Pipeable pipe, String key) {
         for (var v : list) {
-            v.$listen(pipe, key);
+            //Join the children to this, so if the children change
+            //listeners to this get the latest value of this.
+            v.$listen(i -> this, key);
         }
         return key;
     }

@@ -16,15 +16,29 @@
 
 package me.neilellis.dollar;
 
+import me.neilellis.dollar.guard.ChainGuard;
+import me.neilellis.dollar.guard.Guarded;
+import me.neilellis.dollar.guard.NotNullParametersGuard;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface ReactiveAware {
 
 
+    @Guarded(NotNullParametersGuard.class)
     String $listen(Pipeable pipe);
 
+    @Guarded(NotNullParametersGuard.class)
     void $notify(var value);
 
+    @Guarded(NotNullParametersGuard.class)
     String $listen(Pipeable pipe, String key);
+
+    /**
+     * Send synchronously using an integration provider.
+     */
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
+    var $receive(var value);
 }

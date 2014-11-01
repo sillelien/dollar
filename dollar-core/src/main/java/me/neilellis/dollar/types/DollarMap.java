@@ -412,10 +412,13 @@ class DollarMap extends AbstractDollar implements var {
     @Override
     public String $listen(Pipeable pipe, String key) {
         for (var v : map.values()) {
-            v.$listen(pipe, key);
+            //Join the children to this, so if the children change
+            //listeners to this get the latest value of this.
+            v.$listen(i -> this, key);
         }
         return key;
     }
+
 
     @Override
     public String $listen(Pipeable pipe) {

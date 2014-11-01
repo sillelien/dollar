@@ -21,6 +21,8 @@ import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.var;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,6 +31,12 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DollarLambda implements java.lang.reflect.InvocationHandler {
 
+    private static final ThreadLocal<List<DollarLambda>> notifyStack = new ThreadLocal<List<DollarLambda>>() {
+        @Override
+        protected List<DollarLambda> initialValue() {
+            return new ArrayList<DollarLambda>();
+        }
+    };
     private final var in;
     private Pipeable lambda;
     private ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
@@ -44,8 +52,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
         try {
             if (proxy == null) {
                 return null;
-            }
-            if (Object.class == method.getDeclaringClass()) {
+            } else if (Object.class == method.getDeclaringClass()) {
                 String name = method.getName();
                 if ("equals".equals(name)) {
                     return lambda.pipe(in).equals(args[0]);
@@ -56,38 +63,42 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 } else {
                     throw new IllegalStateException(String.valueOf(method));
                 }
-            }
-            if (method.getName().equals("isLambda")) {
+            } else if (method.getName().equals("isLambda")) {
                 return true;
-            }
-            if (method.getName().equals("$listen")) {
+            } else if (method.getName().equals("$listen")) {
                 String listenerId = UUID.randomUUID().toString();
                 if (args.length == 2) {
                     listenerId = String.valueOf(args[1]);
                 }
                 listeners.put(listenerId, (Pipeable) args[0]);
-            }
-            if (method.getName().equals("$notify")) {
+                return listenerId;
+            } else if (method.getName().equals("$notify")) {
+                if (notifyStack.get().contains(this)) {
+                    //throw new IllegalStateException("Recursive notify loop detected");
+                    return null;
+                }
+                notifyStack.get().add(this);
                 for (Pipeable pipeable : listeners.values()) {
                     pipeable.pipe((var) args[0]);
                 }
-            }
-            if (method.getName().equals("$remove")) {
+                notifyStack.get().remove(this);
+                return null;
+            } else if (method.getName().equals("$remove")) {
                 listeners.remove(args[0]);
-            }
-            if (method.getName().equals("hasErrors")) {
+                return null;
+            } else if (method.getName().equals("hasErrors")) {
                 return false;
-            }
-            if (method.getName().equals("$copy") || method.getName().equals("copy")) {
+            } else if (method.getName().equals("$copy") || method.getName().equals("copy")) {
                 return proxy;
-            }
+            } else {
 //            System.err.println(method);
 
-            var out = lambda.pipe(in);
-            if (out == null) {
-                return null;
+                var out = lambda.pipe(in);
+                if (out == null) {
+                    return null;
+                }
+                return method.invoke(out, args);
             }
-            return method.invoke(out, args);
         } catch (Exception e) {
             if (method.getReturnType().isAssignableFrom(var.class)) {
                 return DollarStatic.handleError(e, null);

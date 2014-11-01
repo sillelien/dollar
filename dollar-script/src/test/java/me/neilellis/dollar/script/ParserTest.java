@@ -36,12 +36,23 @@ public class ParserTest {
     }
 
     @Test
-    public void test() throws Exception {
+    public void testBasics1() throws Exception {
         new DollarParser().parse(getClass().getResourceAsStream("/test1.dlr"));
     }
 
     @Test
-    public void testMarkdown() throws Exception {
+    public void testBasics2() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test2.dlr"));
+    }
+
+    @Test
+    public void testBasics3() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test3.dlr"));
+    }
+
+
+    @Test
+    public void testMarkdown1() throws Exception {
         new DollarParser().parseMarkdown(CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/test1.md"))));
     }
 }

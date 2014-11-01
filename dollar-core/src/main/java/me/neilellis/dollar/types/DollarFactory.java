@@ -19,11 +19,13 @@ package me.neilellis.dollar.types;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Range;
+import com.google.gson.Gson;
 import me.neilellis.dollar.*;
 import me.neilellis.dollar.json.DecodeException;
 import me.neilellis.dollar.json.ImmutableJsonObject;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
+import me.neilellis.dollar.json.impl.Json;
 import me.neilellis.dollar.monitor.DollarMonitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -131,24 +133,21 @@ public class DollarFactory {
 //        if (o instanceof JsonObject) {
 //            json = ((JsonObject) o);
 //        }
-        if (o instanceof JsonObject) {
-            json = ((JsonObject) o);
-        } else if (o instanceof Multimap) {
+        if (o instanceof Multimap) {
             json = DollarStatic.mapToJson((Multimap) o);
-        } else if (o instanceof Map) {
-            json = new JsonObject((Map<String, Object>) o);
-//    } else if (o instanceof Message) {
-//      json = ((JsonObject) ((Message) o).body());
-//      if (json == null) {
-//        return wrap(new DollarVoid(errors));
-//      }
         } else {
-            System.out.println(o.getClass());
-            json = new JsonObject(o.toString());
+            json = Json.fromJavaObject(o);
         }
         return wrap(new DollarMap(errors, json));
     }
 
+
+    @NotNull
+    public static var fromGsonObject(Object o) {
+        Gson gson = new Gson();
+        String json = gson.toJson(o);
+        return create(ImmutableList.<Throwable>of(), json);
+    }
 
     @NotNull
     public static var fromValue(Object o) {

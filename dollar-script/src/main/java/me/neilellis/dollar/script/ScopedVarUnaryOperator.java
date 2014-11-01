@@ -28,21 +28,20 @@ import java.util.function.Supplier;
  */
 public class ScopedVarUnaryOperator implements Unary<var>, Operator {
     private final boolean immediate;
-    private Map<var, var> function;
-    private ScriptScope scope;
-    private Supplier<String> source;
+    protected Map<var, var> function;
+    protected Supplier<String> source;
+    protected ScriptScope scope;
 
 
-    public ScopedVarUnaryOperator(Map<var, var> function, ScriptScope scope) {
-        this.function = function;
+    public ScopedVarUnaryOperator(ScriptScope scope, Map<var, var> function) {
         this.scope = scope;
+        this.function = function;
         this.immediate = false;
     }
 
-    public ScopedVarUnaryOperator(boolean immediate, Map<var, var> function, ScriptScope scope) {
+    public ScopedVarUnaryOperator(boolean immediate, Map<var, var> function) {
         this.immediate = immediate;
         this.function = function;
-        this.scope = scope;
     }
 
     @Override
@@ -54,15 +53,22 @@ public class ScopedVarUnaryOperator implements Unary<var>, Operator {
             }
 
             //Lazy evaluation
-            return DollarFactory.fromLambda(v -> {
+            final var lambda = DollarFactory.fromLambda(v -> {
                 try {
                     return function.map(from);
                 } catch (AssertionError e) {
                     throw new AssertionError(e + " at '" + source.get() + "'", e);
                 }
             });
+            from.$listen(i -> {
+                lambda.$notify(i);
+                return i;
+            });
+            return lambda;
         } catch (AssertionError e) {
             throw new AssertionError(e + " at '" + source.get() + "'", e);
+        } catch (Exception e) {
+            throw new Error(e + " at '" + source.get() + "'");
         }
 
     }

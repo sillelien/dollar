@@ -90,7 +90,7 @@ That remarkable piece of code will simply output each change made to the variabl
 
 b=1
 a=1
-[$a, $b] ? { >> "a=" + $a + ", b=" + $b +" new value was "+$1}
+$a + $b + 1 ? { >> "a=" + $a + ", b=" + $b}
 a=2
 a=3
 a=4
