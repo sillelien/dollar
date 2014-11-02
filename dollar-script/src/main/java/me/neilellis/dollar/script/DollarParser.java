@@ -33,8 +33,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -77,7 +77,15 @@ public class DollarParser {
 
     private final ClassLoader classLoader;
 
-    private CopyOnWriteArrayList<ScriptScope> scopes = new CopyOnWriteArrayList<>();
+    private ThreadLocal<List<ScriptScope>> scopes = new ThreadLocal<List<ScriptScope>>() {
+        @Override
+        protected List<ScriptScope> initialValue() {
+            ArrayList<ScriptScope> list = new ArrayList<>();
+            list.add(new ScriptScope("ThreadTopLevel"));
+            return list;
+        }
+    };
+
     private Parser<?> topLevelParser;
 
     public DollarParser() {
@@ -364,7 +372,7 @@ public class DollarParser {
     }
 
     public void addScope(ScriptScope scope) {
-        scopes.add(scope);
+        scopes.get().add(scope);
     }
 
     public <T> T withinNewScope(ScriptScope currentScope, Function<ScriptScope, T> r) {
@@ -383,11 +391,11 @@ public class DollarParser {
     }
 
     public ScriptScope endScope() {
-        return scopes.remove(scopes.size() - 1);
+        return scopes.get().remove(scopes.get().size() - 1);
     }
 
     public ScriptScope currentScope() {
-        return scopes.get(scopes.size() - 1);
+        return scopes.get().get(scopes.get().size() - 1);
     }
 
     public var parse(File file) throws IOException {

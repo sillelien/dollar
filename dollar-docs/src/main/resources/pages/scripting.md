@@ -66,12 +66,12 @@ In the above example we are declaring (using the declarative operator `:=`) that
 The assertion operator `=>` will throw an assertion error if the value following is either non boolean or not true.
 
 
-Now let's throw in the ? or listen operator :
+Now let's throw in the -> or causes operator :
 
 ```dollar
  
 a=1
-$a ? { >> $a }
+$a -> { >> $a }
 a=2
 a=3
 a=4
@@ -90,7 +90,7 @@ That remarkable piece of code will simply output each change made to the variabl
 
 b=1
 a=1
-$a + $b + 1 causes { >> "a=" + $a + ", b=" + $b}
+$a + $b + 1 -> { >> "a=" + $a + ", b=" + $b}
 a=2
 a=3
 a=4
@@ -98,10 +98,10 @@ b=2
 ```
 
 ~~~
-a=2, b=1 new value was 2
-a=3, b=1 new value was 3
-a=4, b=1 new value was 4
-a=4, b=2 new value was 2
+a=2, b=1 
+a=3, b=1 
+a=4, b=1 
+a=4, b=2 
 ~~~
 
 Yep, you can write reactive expressions based on collections or arbitrary expressions !! When any component changes the right hand side is re-evaluated (the actual value that changed is passed in as $1).
