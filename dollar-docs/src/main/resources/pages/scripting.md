@@ -241,16 +241,16 @@ a=2
  
 ```
 
-When the code is executed we'll see the values 1,2,3,4,2 printed out, this is because whenever a changes the block { >> $a } is evaluated, resulting in the variable $a being printed to stdout. Imagine how useful that is for debugging changes to a variable!
+When the code is executed we'll see the values 1,2,3,4,2 printed out, this is because whenever `$a` changes the block { >> $a } is evaluated, resulting in the variable $a being printed to stdout. Imagine how useful that is for debugging changes to a variable!
 
-Next we have the 'when' operator, there is no shorthand for this operator to help keep you code readable:
+Next we have the 'when' operator, there is no shorthand for this operator, to help keep you code readable:
 
 
 ```dollar
 
 a=1
  
-when $a == 2 { >> $a } //alternatively for clarity '$a causes {>> $a} '
+when $a == 2 { >> $a } 
 
 a=2
 a=3
