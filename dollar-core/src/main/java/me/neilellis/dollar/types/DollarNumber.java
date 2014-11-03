@@ -42,6 +42,33 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
         return new DollarNumber(errors(), value.longValue() + amount);
     }
 
+    @Override
+    public var $multiply(var v) {
+        if (isInteger()) {
+            return DollarFactory.fromValue(value.longValue() * v.L());
+        } else {
+            return DollarFactory.fromValue(value.doubleValue() * v.D());
+        }
+    }
+
+    @Override
+    public var $divide(var v) {
+        if (isInteger()) {
+            return DollarFactory.fromValue(value.longValue() / v.L());
+        } else {
+            return DollarFactory.fromValue(value.doubleValue() / v.D());
+        }
+    }
+
+    @Override
+    public var $modulus(var v) {
+        if (isInteger()) {
+            return DollarFactory.fromValue(value.longValue() % v.L());
+        } else {
+            return DollarFactory.fromValue(value.doubleValue() % v.D());
+        }
+    }
+
     @NotNull
     @Override
     public Double D() {
@@ -131,10 +158,9 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
     @Override
     public var $plus(Object newValue) {
         if (newValue instanceof var) {
-            if (((var) newValue).isInteger()) {
+            if (isInteger()) {
                 return DollarFactory.fromValue(errors(), value.longValue() + ((var) newValue).L());
-            }
-            if (((var) newValue).isDecimal()) {
+            } else {
                 return DollarFactory.fromValue(errors(), value.doubleValue() + ((var) newValue).D());
             }
         }

@@ -46,5 +46,11 @@ public interface NumericAware {
         return $inc(1);
     }
 
+    var $multiply(var v);
+
+    var $divide(var v);
+
+    var $modulus(var v);
+
 
 }

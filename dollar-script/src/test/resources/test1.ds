@@ -37,8 +37,8 @@ d= a.doesntExist ?: 2;
 
 >> [$a, $b, $c] ;
 
-$c > "/tmp/test2.out" ;
-d < "/etc/ssh_config" ;
+$c $> "/tmp/test2.out" ;
+d <$ "/etc/ssh_config" ;
 
 //>> $d ;
 

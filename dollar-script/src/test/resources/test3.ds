@@ -3,7 +3,7 @@
 // however := is the lambda assignment and does not, thus creating a
 // lambda style expression
 
-$lamval causes { ?? $lamval; }
+$lamval causes { >> $lamval; }
 
 lamval=1
 lambda2 := $lamval
@@ -36,12 +36,22 @@ lamval2= 23
 //Now we test levels of indirection
 delayName := ("lamval" + $lamval)
 
-
 lamval=5
 lamval5=13
 
 //Did you follow that crazyness :-) Don't do this at home!
 
+>> "lamval"
+
+>> "lamval" + 1
+
+>> lamval + 1
+
+>> $lamval
+
+>> ("lamval" + $lamval)
+
+>> ('lamval' + $lamval)
 
 
 //Lambda variable resolution >>! - notice the two levels of indirection here - yeah edge case :-)
@@ -72,11 +82,13 @@ removeWorld := ($1 - "World")
 (["Goodbye", "World"] | $removeWorld) <=> ["Goodbye"]
 
 
-//($2 + " " + $1)("Hello", "World") <=> "World Hello"
+($2 + " " + $1)("Hello", "World") <=> "World Hello"
 
 testParams := ($2 + " " + $1)
->>testParams ("Hello", "World")
-testParams ("Hello", "World") <=> "World Hello"
+($testParams) ("Hello", "World") <=> "World Hello"
+
+//short-form of parameterized variable (function call style)
+testParams("Hello", "World") <=> "World Hello"
 
 a=2
 

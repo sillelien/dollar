@@ -40,6 +40,11 @@ public class CamelIntegrationProvider implements IntegrationProvider {
 
     public CamelIntegrationProvider() {
         context = new DefaultCamelContext();
+        try {
+            context.start();
+        } catch (Exception e) {
+            throw new Error(e);
+        }
         producerTemplate = context.createProducerTemplate();
         consumerTemplate = context.createConsumerTemplate();
     }

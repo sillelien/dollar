@@ -41,6 +41,21 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
+    @Override
+    public var $multiply(var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
+    }
+
+    @Override
+    public var $divide(var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
+    }
+
+    @Override
+    public var $modulus(var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
+    }
+
     @NotNull
     @Override
     public Double D() {

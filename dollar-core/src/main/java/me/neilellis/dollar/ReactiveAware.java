@@ -36,9 +36,18 @@ public interface ReactiveAware {
     String $listen(Pipeable pipe, String key);
 
     /**
-     * Send synchronously using an integration provider.
+     * Receive synchronously.
      */
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
     var $receive(var value);
+
+    /**
+     * Take synchronously (blocking)
+     */
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
+    var $take();
+
+
 }

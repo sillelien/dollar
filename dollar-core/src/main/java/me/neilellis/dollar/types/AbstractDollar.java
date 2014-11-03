@@ -693,8 +693,13 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public var $receive(var value) {
-        System.err.println("Cannot receive values " + getClass().getName());
+    public var $receive(var given) {
+        //We don't know how to receive so we take from the giver
+        return given.$take();
+    }
+
+    @Override
+    public var $take() {
         return this;
     }
 
@@ -702,7 +707,7 @@ public abstract class AbstractDollar implements var {
     public var $each(Pipeable pipe) throws Exception {
         List<var> result = new LinkedList<>();
         for (var var : toList()) {
-            pipe.pipe(var);
+            result.add(pipe.pipe(var));
         }
         return DollarFactory.fromValue(result);
     }

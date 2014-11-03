@@ -152,6 +152,8 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
 
 
     @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
     var $minus(@NotNull Object value);
 
     @NotNull
@@ -160,6 +162,7 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
     }
 
     @NotNull
+    @Guarded(ChainGuard.class)
     var $(@NotNull String key, @Nullable Object value);
 
     @NotNull
@@ -173,6 +176,8 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
      * @see me.neilellis.dollar.types.DollarVoid
      */
     @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
     default var $void(@NotNull Callable<var> handler) {
         if (isVoid()) {
             try {
@@ -187,6 +192,9 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
 
 
     @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
+
     default var get(@NotNull Object key) {
         return $(String.valueOf(key));
     }
@@ -203,8 +211,7 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
     @NotNull
     <R> R $();
 
-    @Nullable
-    @Guarded(ChainGuard.class)
+    @Guarded(NotNullGuard.class)
     Stream<String> keyStream();
 
     /**
@@ -215,7 +222,7 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
      */
 
     @Nullable
-    @Guarded(ChainGuard.class)
+    @Guarded(NotNullGuard.class)
     java.util.stream.Stream<Map.Entry<String, var>> kvStream();
 
     /**

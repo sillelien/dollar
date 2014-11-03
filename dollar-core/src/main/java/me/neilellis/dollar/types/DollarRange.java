@@ -93,6 +93,21 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
+    public var $multiply(var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
+    }
+
+    @Override
+    public var $divide(var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
+    }
+
+    @Override
+    public var $modulus(var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
+    }
+
+    @Override
     public boolean $has(@NotNull String key) {
         return false;
     }

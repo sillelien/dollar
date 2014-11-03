@@ -58,5 +58,11 @@
             <artifactId>pegdown</artifactId>
             <version>1.4.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-quartz</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 </project>

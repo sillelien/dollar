@@ -104,6 +104,31 @@ public class DollarVoid extends AbstractDollar implements var {
     }
 
     @Override
+    public var $multiply(var v) {
+        return this;
+    }
+
+    @Override
+    public var $divide(var v) {
+        return this;
+    }
+
+    /**
+     * If you stare into the void, the void will stare back at you.
+     *
+     * @param you - you.
+     */
+    public void stare(var you) {
+        this.stare(you);
+    }
+
+
+    @Override
+    public var $modulus(var v) {
+        return this;
+    }
+
+    @Override
     public boolean $has(@NotNull String key) {
         return false;
     }

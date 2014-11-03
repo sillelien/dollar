@@ -56,6 +56,9 @@ public class DollarWrapper implements var {
         this.monitor = monitor;
         this.tracer = tracer;
         this.errorLogger = errorLogger;
+        if (value == null) {
+            throw new NullPointerException();
+        }
     }
 
     @NotNull
@@ -245,6 +248,9 @@ public class DollarWrapper implements var {
     }
 
     var getValue() {
+        if (value == null) {
+            throw new IllegalStateException("Value has become null!!");
+        }
         return value;
     }
 
@@ -266,6 +272,21 @@ public class DollarWrapper implements var {
     @Override
     public var $inc(long amount) {
         return tracer.trace(this, getValue().$inc(amount), StateTracer.Operations.INC, amount);
+    }
+
+    @Override
+    public var $multiply(var v) {
+        return getValue().$multiply(v);
+    }
+
+    @Override
+    public var $divide(var v) {
+        return getValue().$divide(v);
+    }
+
+    @Override
+    public var $modulus(var v) {
+        return getValue().$modulus(v);
     }
 
     @NotNull
@@ -844,5 +865,10 @@ public class DollarWrapper implements var {
     @Override
     public var $receive(var value) {
         return getValue().$receive(value);
+    }
+
+    @Override
+    public var $take() {
+        return getValue().$take();
     }
 }

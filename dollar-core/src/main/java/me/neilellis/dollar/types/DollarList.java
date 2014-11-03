@@ -118,6 +118,21 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public var $multiply(var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+    }
+
+    @Override
+    public var $divide(var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+    }
+
+    @Override
+    public var $modulus(var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+    }
+
+    @Override
     public boolean $has(@NotNull String key) {
         return false;
     }

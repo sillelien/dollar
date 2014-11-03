@@ -44,6 +44,26 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
+    public var $multiply(var v) {
+        String newValue = "";
+        Long max = v.L();
+        for (int i = 0; i < max; i++) {
+            newValue = newValue + value;
+        }
+        return DollarFactory.fromValue(errors(), newValue);
+    }
+
+    @Override
+    public var $divide(var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_STRING_OPERATION);
+    }
+
+    @Override
+    public var $modulus(var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_STRING_OPERATION);
+    }
+
+    @Override
     public Integer I() {
         return Integer.parseInt(value);
     }

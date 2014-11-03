@@ -188,4 +188,8 @@ public class DollarFactory {
     public static var fromLambda(Pipeable pipeable) {
         return fromValue(pipeable);
     }
+
+    public static var fromURI(String uri) {
+        return wrap(new DollarURI(ImmutableList.of(), uri));
+    }
 }

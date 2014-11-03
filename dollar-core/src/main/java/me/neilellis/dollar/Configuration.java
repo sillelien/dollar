@@ -21,7 +21,7 @@ package me.neilellis.dollar;
  */
 public class Configuration {
   private boolean production;
-    private boolean debugScope = true;
+    private boolean debugScope = false;
 
     public boolean production() {
     return production;

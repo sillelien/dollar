@@ -50,6 +50,11 @@ public class ParserTest {
         new DollarParser().parse(getClass().getResourceAsStream("/test3.ds"));
     }
 
+    @Test
+    public void testURIs() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_uris.ds"));
+    }
+
 
     @Test
     public void testMarkdown1() throws Exception {

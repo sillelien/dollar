@@ -23,6 +23,7 @@
     <properties>
         <jdk.version>1.8</jdk.version>
         <kotlin.version>0.8.11</kotlin.version>
+        <camel.version>2.14.0</camel.version>
     </properties>
 
     <groupId>me.neilellis</groupId>
@@ -90,6 +91,26 @@
                 <groupId>org.jetbrains</groupId>
                 <artifactId>annotations</artifactId>
                 <version>13.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-quartz</artifactId>
+                <version>${camel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-core</artifactId>
+                <version>2.14.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-http</artifactId>
+                <version>2.14.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-test</artifactId>
+                <version>2.14.0</version>
             </dependency>
 
         </dependencies>

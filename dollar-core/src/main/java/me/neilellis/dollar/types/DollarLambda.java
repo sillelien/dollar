@@ -103,8 +103,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             if (method.getReturnType().isAssignableFrom(var.class)) {
                 return DollarStatic.handleError(e, null);
             } else {
-                DollarStatic.handleError(e, null);
-                return null;
+                throw e;
             }
         }
     }

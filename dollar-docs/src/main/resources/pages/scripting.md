@@ -107,8 +107,7 @@ a=4, b=2
 Yep, you can write reactive expressions based on collections or arbitrary expressions !! When any component changes the right hand side is re-evaluated (the actual value that changed is passed in as $1).
 
 
-Assignment
-----------
+###Assignment
 
 Obviously the declarative/reactive behavior is fantastic for templating and creating lambda style expressions, however a lot of the time we want to simply assign a value.
 
@@ -140,8 +139,7 @@ variableA = 2
 
 So `:=` allows the default behaviour of Dollar, which is to make everything declarative, and `=` is used to nail down a particular value. Later we'll come across the value anchor operator or diamond `<>` which instructs DollarScript to fix a value at the time of declaration. More on that later.
 
-Blocks
-------
+###Blocks
 
 DollarScript supports several block types, the first is the 'line block' a line block lies between `{` and `}` and is separated by either newlines or `;` characters.
 
@@ -222,8 +220,7 @@ pair2 := second : "World";
  
 ```
 
-Reactive Control Flow
----------------------
+###Reactive Control Flow
 
 DollarScript as previously mentioned is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
 
@@ -260,3 +257,70 @@ a=2
 ```
 
 This time we'll just see the number 2 twice, this is because the `when` operator triggers the evaluation of the supplied block ONLY when the supplied expression (`$a == 2`) becomes true. 
+
+
+###Reactive Operators
+ 
+####Split, Filter and Aggregate
+
+<!--
+split - % <filter expression>
+
+Converts a list into a stream of values matching the filter
+
+```
+b := $a % (true)
+b := $a % ($1 > 3)
+```
+
+filter - ^ <filter expression>
+
+```
+b := $a ^ ($1 > 100)
+```
+
+b will not generate events if a's value is <= 100, also b will be void if queried during that state.
+
+aggregate - & <emit condition>
+
+Aggregate until emit condition is true and then emit the result
+
+$1 == aggregate
+$2 == previous value
+$3 == current value
+$4 == next value
+
+```
+    b :=  $a & ($2 == ';')
+```
+-->
+
+Imperative Control Flow
+-----------------------
+
+Parameters &amp; Functions
+----------------------
+
+Resources &amp; URIs
+----------------
+
+Iterative Operators
+-------------------
+
+Numerical Operators
+-------------------
+
+Pipe Operators
+--------------
+
+Modules & Module Locators
+-------------------------
+
+Remaining Operators
+-------------------
+
+Concurrency & Threads
+---------------------
+
+
+

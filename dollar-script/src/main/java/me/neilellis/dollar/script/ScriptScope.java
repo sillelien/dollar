@@ -66,33 +66,40 @@ public class ScriptScope {
         this.parent = scriptScope;
     }
 
-    public var get(String variable) {
-        if (DollarStatic.config.isDebugScope()) System.out.println("Looking up " + variable + " in " + this);
-        var val = variables.get(variable);
-        if (val == null) {
-            if (parent == null) {
-                return dollarParser.notFound(variable);
-            } else {
-                return parent.get(variable);
-            }
+    public var get(String key) {
+        if (DollarStatic.config.isDebugScope()) System.out.println("Looking up " + key + " in " + this);
+        ScriptScope scope = getScopeForKey(key);
+        if (scope == null) {
+            scope = this;
+        } else {
+            if (DollarStatic.config.isDebugScope()) System.out.println("Found " + key + " in " + scope);
         }
-        return val;
+        return scope.variables.get(key);
     }
 
 
-    public boolean has(String variable) {
-        if (DollarStatic.config.isDebugScope()) {
-            System.out.println("Checking for " + variable + " in " + this);
+    public boolean has(String key) {
+        ScriptScope scope = getScopeForKey(key);
+        if (scope == null) {
+            scope = this;
         }
-        var val = variables.get(variable);
-        return val != null || parent != null && parent.has(variable);
+        if (DollarStatic.config.isDebugScope()) {
+            System.out.println("Checking for " + key + " in " + scope);
+        }
+
+        var val = scope.variables.get(key);
+        return val != null;
 
     }
 
     public var set(String key, var value) {
-        if (DollarStatic.config.isDebugScope()) System.out.println("Setting " + key + " in " + this);
-        variables.put(key, value);
-        notifyScope(key, value);
+        ScriptScope scope = getScopeForKey(key);
+        if (scope == null) {
+            scope = this;
+        }
+        if (DollarStatic.config.isDebugScope()) System.out.println("Setting " + key + " in " + scope);
+        scope.variables.put(key, value);
+        scope.notifyScope(key, value);
         return value;
     }
 

@@ -39,7 +39,7 @@ public class VariableOperator extends ScopedVarUnaryOperator {
             return lambda;
         } catch (AssertionError e) {
             throw new AssertionError(e + " at '" + source.get() + "'", e);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new Error(e + " at '" + source.get() + "'");
         }
 

@@ -18,41 +18,34 @@ package me.neilellis.dollar.script;
 
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
-import org.codehaus.jparsec.functors.Binary;
-
-import java.util.function.Supplier;
-
-import static me.neilellis.dollar.DollarStatic.$;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class AssignmentOperator implements Binary<var>, Operator {
-
-    private Supplier<String> source;
-    private ScriptScope scope;
+public class SleepOperator extends ScopedVarUnaryOperator {
 
 
-    public AssignmentOperator(ScriptScope scope) {
-
-        this.scope = scope;
+    public SleepOperator(ScriptScope scope) {
+        super(scope, null);
     }
 
-    @Override
-    public var map(var lhs, var rhs) {
-        try {
-            var lambda = DollarFactory.fromLambda(i -> scope.set(lhs.$S(), $((Object) rhs.$())));
 
+    @Override
+    public var map(var from) {
+        try {
+            long sleep = (long) (from.D() * 1000);
+            var lambda = DollarFactory.fromLambda(v -> {
+                Thread.sleep(sleep);
+                return v;
+            });
             return lambda;
         } catch (AssertionError e) {
             throw new AssertionError(e + " at '" + source.get() + "'", e);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new Error(e + " at '" + source.get() + "'");
         }
+
     }
 
-    @Override
-    public void setSource(Supplier<String> source) {
-        this.source = source;
-    }
+
 }

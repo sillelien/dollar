@@ -158,6 +158,21 @@ class DollarMap extends AbstractDollar implements var {
         return this;
     }
 
+    @Override
+    public var $multiply(var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
+    }
+
+    @Override
+    public var $divide(var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
+    }
+
+    @Override
+    public var $modulus(var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
+    }
+
     @NotNull
     public Map<String, var> split() {
         return copyMap();
