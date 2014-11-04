@@ -18,7 +18,6 @@ package me.neilellis.dollar.script;
 
 import com.google.common.io.ByteStreams;
 import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.ReactiveAware;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.*;
@@ -52,9 +51,15 @@ public class DollarParser {
 
     //Lexer
 
+    public static final int MEMBER_PRIORITY = 500;
+    public static final int ASSIGNMENT_PRIORITY = 2;
+    public static final int INC_DEC_PRIORITY = 100;
+    public static final int LINE_PREFIX_PRIORITY = 0;
+    public static final int EQUIVALENCE_PRIORITY = 20;
+    public static final int PLUS_MINUS_PRIORITY = 200;
+    public static final int OUTPUT_PRIORITY = 50;
     static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", "<=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "`", "``", "??", "!!", "*>", "==", "!=", "+", "-", "\n", "$(", "${", ":=", "&", "&=", "<>", "+>", "<+", "*>", "<*", "*|", "|*", "*|*", "|>", "<|", "&>", "?->", "<=>", "<$", "$>", "-_-");
-
-    static final Terminals KEYWORDS = Terminals.operators("out", "err", "debug", "fix", "causes", "when", "if", "then", "for", "each", "fail", "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default", "debug", "error", "filter", "sleep", "seconds", "second", "minute", "minutes", "hour", "hours", "milli", "millis", "every", "until", "unless");
+    static final Terminals KEYWORDS = Terminals.operators("out", "err", "debug", "fix", "causes", "when", "if", "then", "for", "each", "fail", "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default", "debug", "error", "filter", "sleep", "secs", "sec", "min", "mins", "hr", "hrs", "milli", "millis", "every", "until", "unless");
     static final Parser<?> TOKENIZER =
             Parsers.or(url(), OPERATORS.tokenizer(), decimal(), Terminals.StringLiteral.DOUBLE_QUOTE_TOKENIZER, Terminals.StringLiteral.SINGLE_QUOTE_TOKENIZER, Terminals.IntegerLiteral.TOKENIZER, Parsers.longest(KEYWORDS.tokenizer(), Terminals.Identifier.TOKENIZER));
     static final Parser<?> TERMINATOR_SYMBOL = Parsers.or(term("\n"), term(";")).many1();
@@ -207,6 +212,10 @@ public class DollarParser {
 
     }
 
+//    private Parser<var> arrayElementExpression(Parser<var> expression1, Parser<var> expression2, ScriptScope scope) {
+//        return expression1.infixl(term("[").next(expression2).followedBy(term("]")));
+//    }
+
     private Parser<var> ifStatement(Parser<var> expression, ScriptScope scope) {
         Parser<Object[]> sequence = keywordFollowedByNewlines("if").next(Parsers.array(expression, expression));
         return sequence.map(objects -> {
@@ -224,12 +233,12 @@ public class DollarParser {
             var rhs = (var) objects[1];
             var lambda = DollarFactory.fromLambda(i -> lhs.isTrue() ? $((Object) rhs.$()) : $void());
             lhs.$listen(i -> {
+                lambda.$notify(i);
                 if (i.isTrue()) {
                     return $((Object) rhs.$());
                 }
                 return $void();
             });
-            lhs.$listen(lambda::$notify);
             return lambda;
         });
     }
@@ -250,9 +259,9 @@ public class DollarParser {
 
 
     private Parser<var> everyStatement(Parser<var> expression, ScriptScope scope) {
-        Parser<Object[]> sequence = keywordFollowedByNewlines("every").next(Parsers.array(expression, keyword("seconds", "second", "minute", "minutes", "hour", "hours", "milli", "millis"), keyword("until").next(expression).optional(), keyword("unless").next(expression).optional(), expression));
+        Parser<Object[]> sequence = keywordFollowedByNewlines("every").next(Parsers.array(expression, keyword("secs", "sec", "min", "mins", "hr", "hrs", "milli", "millis"), keyword("until").next(expression).optional(), keyword("unless").next(expression).optional(), expression));
         return sequence.map(objects -> {
-            final int[] count = new int[1];
+            final int[] count = new int[]{-1};
             Scheduler.schedule(i -> {
                 count[0]++; // William Gibson
 //                System.out.println("COUNT "+count[0]);
@@ -335,7 +344,7 @@ public class DollarParser {
     private Parser<var> expression(ScriptScope scope) {
 
         Parser.Reference<var> ref = Parser.newReference();
-        Parser<var> main = ref.lazy().between(term("("), term(")")).or(Parsers.or(list(ref.lazy(), scope), map(ref.lazy(), scope).map(DollarStatic::$), ifStatement(ref.lazy(), scope), eachStatement(ref.lazy(), scope), whenStatement(ref.lazy(), scope), everyStatement(ref.lazy(), scope), URL, DECIMAL_LITERAL, INTEGER_LITERAL, STRING_LITERAL, IDENTIFIER)).or(block(ref.lazy(), scope).between(termFollowedByNewlines("{"), termPreceededByNewlines("}")));
+        Parser<var> main = ref.lazy().between(term("("), term(")")).or(Parsers.or(ifStatement(ref.lazy(), scope), list(ref.lazy(), scope), map(ref.lazy(), scope), eachStatement(ref.lazy(), scope), whenStatement(ref.lazy(), scope), everyStatement(ref.lazy(), scope), URL, DECIMAL_LITERAL, INTEGER_LITERAL, STRING_LITERAL, IDENTIFIER)).or(block(ref.lazy(), scope).between(termFollowedByNewlines("{"), termPreceededByNewlines("}")));
 
         Parser<var> unit = Parsers.array(IDENTIFIER.or(main), parameters(ref.lazy()).optional()).map(objects -> {
             if (objects.length == 1 || objects[1] == null) {
@@ -365,9 +374,9 @@ public class DollarParser {
         });
 //        ScopedVarBinaryOperator value = new ScopedVarBinaryOperator((lhs, rhs) -> rhs, scope);
         Parser<var> parser = new OperatorTable<var>()
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> $(!lhs.equals(rhs))), "!="), 100)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> $(!lhs.equals(rhs))), "!="), EQUIVALENCE_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> $(lhs.equals(rhs))
-                ), "=="), 100)
+                ), "=="), EQUIVALENCE_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> withinNewScope(scope, newScope -> {
                     newScope.set("1", lhs);
                     if (!rhs.isString()) {
@@ -378,43 +387,43 @@ public class DollarParser {
                     }
                 })
                 ), "|"), 80)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$plus(rhs)), "+"), 200)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$minus(rhs)), "-"), 200)
+                .infixr(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$plus(rhs)), "+"), PLUS_MINUS_PRIORITY)
+                .infixr(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$minus(rhs)), "-"), PLUS_MINUS_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> $(lhs.$S(), rhs)), ":"), 30)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> scope.set(lhs.$S(), $().$read(new File(rhs.$S())))), "<$"), 50)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$write(new File(rhs.$S()))), "$>"), 50)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$write(new File(rhs.$S()))), "$>"), OUTPUT_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.isTrue() ? rhs : lhs), "?"), 50)
                 .prefix(op(new ScopedVarUnaryOperator(false, i -> {
                     i.out();
                     return $void();
-                }), ">>", "out"), 5)
+                }), ">>", "out"), LINE_PREFIX_PRIORITY)
                 .prefix(op(new ScopedVarUnaryOperator(false, i -> {
                     i.out();
                     return $void();/*reserved for debug instead of stdout messages*/
-                }), "!!", "debug"), 5)
+                }), "!!", "debug"), LINE_PREFIX_PRIORITY)
                 .prefix(op(new ScopedVarUnaryOperator(false, i -> {
                     i.err();
                     return $void();
-                }), "??", "err"), 5)
+                }), "??", "err"), LINE_PREFIX_PRIORITY)
                 .prefix(op(new ScopedVarUnaryOperator(false, v -> {
                     if (v.isTrue()) {
                         return v;
                     } else {
                         throw new AssertionError();
                     }
-                }), "=>", "assert"), 5)
+                }), "=>", "assert"), LINE_PREFIX_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> {
                     if (lhs.equals(rhs)) {
                         return lhs;
                     } else {
                         throw new AssertionError(lhs.$S() + " != " + rhs.$S());
                     }
-                }), "<=>"), 5)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$save(rhs.$S())), "|>"), 50)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$load(rhs.$S())), "<|"), 50)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$receive(lhs)), "+>"), 50)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$notify(lhs)), "&>"), 50)
-                .prefix(op(new ScopedVarUnaryOperator(scope, ReactiveAware::$take), "<+"), 50)
+                }), "<=>"), EQUIVALENCE_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$save(rhs.$S())), "|>"), OUTPUT_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$load(rhs.$S())), "<|"), OUTPUT_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$receive(lhs)), "+>"), OUTPUT_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$notify(lhs)), "&>"), OUTPUT_PRIORITY)
+                .prefix(op(new TakeOperator(scope), "<+"), 100)
 //                .infixl(op("*>", new ScopedVarBinaryOperator((lhs, rhs) -> {
 //                    lhs.$publish(rhs.$S());
 //                    return lhs;
@@ -422,20 +431,31 @@ public class DollarParser {
                 .infixl(op(new ListenOperator(scope), "->", "causes"), 50)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$choose(rhs)), "?->", "choose"), 50)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$default(rhs)), "?:", "default"), 50)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$(rhs.$S())), "."), 200)
-                .postfix(op(new ScopedVarUnaryOperator(scope, var::$dec), "--"), 100)
-                .postfix(op(new ScopedVarUnaryOperator(scope, var::$inc), "++"), 100)
+                .postfix(term(".").next(ref.lazy().between(term("("), term(")")).or(IDENTIFIER)).map(rhs -> lhs -> {
+                    return linkBinaryInToOut(lhs, rhs, DollarFactory.fromLambda(i -> lhs.$(rhs.$S())));
+                }), MEMBER_PRIORITY)
+                .postfix(op(new ScopedVarUnaryOperator(scope, var::$dec), "--"), INC_DEC_PRIORITY)
+                .postfix(op(new ScopedVarUnaryOperator(scope, var::$inc), "++"), INC_DEC_PRIORITY)
+                .postfix(term("[").next(ref.lazy()).followedBy(term("]")).map(rhs -> lhs -> {
+                    return linkBinaryInToOut(lhs, rhs, DollarFactory.fromLambda(i -> lhs.toList().get(rhs.I())));
+                }), MEMBER_PRIORITY)
                 .prefix(op(new ScopedVarUnaryOperator(true, v -> $((Object) v.$())), "<>", "fix"), 1000)
                 .prefix(op(new VariableOperator(scope), "$"), 1000)
-                .prefix(op(new SleepOperator(scope), "-_-", "sleep"), 2)
-                .infixr(op(new AssignmentOperator(scope), "="), 2)
-                .infixl(op(new DeclarationOperator(scope), ":="), 2)
+                .prefix(op(new SleepOperator(scope), "-_-", "sleep"), ASSIGNMENT_PRIORITY)
+                .infixr(op(new AssignmentOperator(scope), "="), ASSIGNMENT_PRIORITY)
+                .infixl(op(new DeclarationOperator(scope), ":="), ASSIGNMENT_PRIORITY)
                 .build(unit);
         ref.set(parser);
 
         scope.setParser(parser);
 
         return parser;
+    }
+
+    private var linkBinaryInToOut(var lhs, var rhs, var lambda) {
+        lhs.$listen(i -> lambda.$notify(lambda));
+        rhs.$listen(i -> lambda.$notify(lambda));
+        return lambda;
     }
 
     public void addScope(ScriptScope scope) {

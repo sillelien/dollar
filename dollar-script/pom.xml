@@ -63,6 +63,9 @@
             <artifactId>camel-quartz</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-weather</artifactId>
+        </dependency>
     </dependencies>
 </project>

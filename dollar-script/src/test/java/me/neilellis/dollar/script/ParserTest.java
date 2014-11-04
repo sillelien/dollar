@@ -41,8 +41,8 @@ public class ParserTest {
     }
 
     @Test
-    public void testBasics2() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test2.ds"));
+    public void testArrays() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_arrays.ds"));
     }
 
     @Test
