@@ -302,7 +302,24 @@ Parameters &amp; Functions
 ----------------------
 
 Resources &amp; URIs
-----------------
+--------------------
+
+URIs are first class citizen's in DollarScript. They refer to a an arbitrary resource, usually remote, that can be accessed using the specified protocol and location. Static URIs can be referred to directly without quotation marks, dynamic URIs can be built using the `uri` operator
+
+```dollar
+
+
+search="Unikitty"
+dynamicURI= uri "http://google.com?q="+$search
+
+marinaVideos = <+ https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
+>> each $marinaVideos.results { $1.trackViewUrl }
+
+```
+
+In this example we've requested a single value (using `<+`) from a uri and assigned the value to `$marinaVideos` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `trackViewUrl`. The each operator returns a list of the results and that is what is passed to standard out.
+
+
 
 Iterative Operators
 -------------------
@@ -310,6 +327,33 @@ Iterative Operators
 Numerical Operators
 -------------------
 
+Arrays
+------
+
+DollarScript's arrays are pretty similar to JavaScript. They are defined using the `[1,2,3]` style syntax and accessed using the `x[y]` subscript syntax.
+
+```dollar
+=> [1,2,3] + 4 == [1,2,3,4];
+=> [1,2,3,4] - 4 == [1,2,3];
+=> [] + 1 == [1] ;
+=> [1] + [1] == [1,[1]];
+=> [1] + 1 == [1,1];
+
+[1,2,3][1] <=> 2
+```
+
+*Note we're introducing the assert equals or `<=>` operator here, this is a combination of `=>` and `==` that will cause an error if the two values are not equal.*
+ 
+DollarScript maps are also associative arrays (like JavaScript) allowing you to request members from them using the array subscript syntax
+ 
+```dollar
+{"key1":1,"key2":2} ["key"+1] <=> 1
+{"key1":1,"key2":2} [1] <=> {"key2":2}
+{"key1":1,"key2":2} [1]["key2"] <=> 2
+```
+
+As you can see from the example you can request a key/value pair (or Tuple if you like) by it's position using a numeric subscript. Or you can treat it as an associative array and request an entry by specifying the key name. Any expression can be used as a subscript, numerical values will be used as indexes, otherwise the string value will be used as a key.
+ 
 Pipe Operators
 --------------
 
