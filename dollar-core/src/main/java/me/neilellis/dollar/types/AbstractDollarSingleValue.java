@@ -218,4 +218,13 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     public boolean isEmpty() {
         return false;
     }
+
+    @Override
+    public var $(Number n) {
+        if (n.longValue() != 0) {
+            return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+        } else {
+            return this;
+        }
+    }
 }

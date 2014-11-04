@@ -198,6 +198,11 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
+    public var $(Number n) {
+        return DollarFactory.fromValue(range.lowerEndpoint() + n.longValue());
+    }
+
+    @Override
     public Number number(@NotNull String key) {
         return null;
     }

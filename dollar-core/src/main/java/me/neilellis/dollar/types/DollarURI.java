@@ -131,6 +131,11 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
+    public var $(Number n) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @Override
     public boolean isBoolean() {
         return false;
     }

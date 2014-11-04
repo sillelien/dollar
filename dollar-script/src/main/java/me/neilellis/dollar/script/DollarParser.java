@@ -437,7 +437,7 @@ public class DollarParser {
                 .postfix(op(new ScopedVarUnaryOperator(scope, var::$dec), "--"), INC_DEC_PRIORITY)
                 .postfix(op(new ScopedVarUnaryOperator(scope, var::$inc), "++"), INC_DEC_PRIORITY)
                 .postfix(term("[").next(ref.lazy()).followedBy(term("]")).map(rhs -> lhs -> {
-                    return linkBinaryInToOut(lhs, rhs, DollarFactory.fromLambda(i -> lhs.toList().get(rhs.I())));
+                    return linkBinaryInToOut(lhs, rhs, DollarFactory.fromLambda(i -> lhs.$(rhs)));
                 }), MEMBER_PRIORITY)
                 .prefix(op(new ScopedVarUnaryOperator(true, v -> $((Object) v.$())), "<>", "fix"), 1000)
                 .prefix(op(new VariableOperator(scope), "$"), 1000)

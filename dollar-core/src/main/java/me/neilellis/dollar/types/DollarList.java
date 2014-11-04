@@ -270,6 +270,11 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public var $(Number n) {
+        return list.get(n.intValue());
+    }
+
+    @Override
     public Stream<Map.Entry<String, var>> kvStream() {
         return null;
     }

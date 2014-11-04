@@ -711,4 +711,13 @@ public abstract class AbstractDollar implements var {
         }
         return DollarFactory.fromValue(result);
     }
+
+    @Override
+    public var $(var key) {
+        if (key.isNumber()) {
+            return $(key.N());
+        } else {
+            return $(key.$S());
+        }
+    }
 }

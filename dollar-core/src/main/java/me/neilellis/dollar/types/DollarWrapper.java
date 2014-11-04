@@ -247,6 +247,16 @@ public class DollarWrapper implements var {
         return getValue().$(lambda);
     }
 
+    @Override
+    public var $(Number n) {
+        return getValue().$(n);
+    }
+
+    @Override
+    public var $(var rhs) {
+        return getValue().$(rhs);
+    }
+
     var getValue() {
         if (value == null) {
             throw new IllegalStateException("Value has become null!!");

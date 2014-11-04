@@ -258,4 +258,7 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
     var $(Pipeable lambda);
 
 
+    var $(Number n);
+
+    var $(var rhs);
 }

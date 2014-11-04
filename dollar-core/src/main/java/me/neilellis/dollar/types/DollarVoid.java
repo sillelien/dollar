@@ -252,6 +252,11 @@ public class DollarVoid extends AbstractDollar implements var {
     }
 
     @Override
+    public var $(Number n) {
+        return this;
+    }
+
+    @Override
     public int hashCode() {
         return 0;
     }

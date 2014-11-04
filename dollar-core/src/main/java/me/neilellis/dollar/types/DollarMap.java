@@ -18,6 +18,7 @@ package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.DollarEval;
+import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.json.ImmutableJsonObject;
@@ -338,6 +339,12 @@ class DollarMap extends AbstractDollar implements var {
     @Override
     public <R> R val() {
         return (R) map;
+    }
+
+    @Override
+    public var $(Number n) {
+        String key = map.keySet().toArray()[n.intValue()].toString();
+        return DollarStatic.$(key, map.get(key));
     }
 
     @NotNull
