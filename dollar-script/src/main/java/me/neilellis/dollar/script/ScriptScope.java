@@ -25,6 +25,8 @@ import org.codehaus.jparsec.Parser;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static me.neilellis.dollar.DollarStatic.$void;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
@@ -74,7 +76,9 @@ public class ScriptScope {
         } else {
             if (DollarStatic.config.isDebugScope()) System.out.println("Found " + key + " in " + scope);
         }
-        return scope.variables.get(key);
+        var result = scope.variables.get(key);
+
+        return result != null ? result : $void();
     }
 
 

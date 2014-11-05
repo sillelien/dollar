@@ -187,6 +187,11 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
+    public var $negate() {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @Override
     public var $multiply(var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }

@@ -43,6 +43,15 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
     }
 
     @Override
+    public var $negate() {
+        if (isInteger()) {
+            return DollarFactory.fromValue(-value.longValue());
+        } else {
+            return DollarFactory.fromValue(-value.doubleValue());
+        }
+    }
+
+    @Override
     public var $multiply(var v) {
         if (isInteger()) {
             return DollarFactory.fromValue(value.longValue() * v.L());

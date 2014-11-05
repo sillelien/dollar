@@ -42,6 +42,11 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     }
 
     @Override
+    public var $negate() {
+        return DollarFactory.fromValue(errors(), !value);
+    }
+
+    @Override
     public var $multiply(var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
@@ -79,8 +84,8 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
 
     @NotNull
     @Override
-    public Number $() {
-        return value ? 1 : 0;
+    public Boolean $() {
+        return value;
     }
 
     @Override

@@ -44,6 +44,11 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
+    public var $negate() {
+        return DollarFactory.fromValue(errors(), new StringBuilder(value).reverse().toString());
+    }
+
+    @Override
     public var $multiply(var v) {
         String newValue = "";
         Long max = v.L();

@@ -285,6 +285,11 @@ public class DollarWrapper implements var {
     }
 
     @Override
+    public var $negate() {
+        return getValue().$negate();
+    }
+
+    @Override
     public var $multiply(var v) {
         return getValue().$multiply(v);
     }
@@ -880,5 +885,15 @@ public class DollarWrapper implements var {
     @Override
     public var $take() {
         return getValue().$take();
+    }
+
+    @Override
+    public void setMetaAttribute(String key, String value) {
+        getValue().setMetaAttribute(key, value);
+    }
+
+    @Override
+    public String getMetaAttribute(String key) {
+        return getValue().getMetaAttribute(key);
     }
 }

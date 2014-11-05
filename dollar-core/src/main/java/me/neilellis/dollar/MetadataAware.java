@@ -17,42 +17,18 @@
 package me.neilellis.dollar;
 
 /**
+ * Metadata is really only for use by the DollarScript language,
+ * I wouldn't use this for everyday programming.
+ *
+ * Once an object is given a value it cannot be changed.
+ * Also, very importantly if a method returns an object based on this object the new object
+ * may or may not contain the metadata.
+ *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface NumericAware {
+public interface MetadataAware {
 
-    default var $dec(String key) {
-        return $dec(key, 1);
-    }
+    void setMetaAttribute(String key, String value);
 
-    var $dec(String key, long amount);
-
-    var $dec(long amount);
-
-    default var $dec() {
-        return $dec(1);
-    }
-
-
-    default var $inc(String key) {
-        return $inc(key, 1);
-    }
-
-    var $inc(String key, long amount);
-
-    var $inc(long amount);
-
-    var $negate();
-
-    default var $inc() {
-        return $inc(1);
-    }
-
-    var $multiply(var v);
-
-    var $divide(var v);
-
-    var $modulus(var v);
-
-
+    String getMetaAttribute(String key);
 }

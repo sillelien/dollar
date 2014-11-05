@@ -172,6 +172,10 @@ public class DollarStatic {
         return DollarFactory.fromValue(ImmutableList.of(), o);
     }
 
+    public static var fix(@Nullable var v) {
+        return DollarFactory.fromValue(ImmutableList.of(), v != null ? v.$() : $void());
+    }
+
     @NotNull
     public static StateTracer tracer() {
         return new SimpleLogStateTracer();

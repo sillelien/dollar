@@ -160,6 +160,11 @@ class DollarMap extends AbstractDollar implements var {
     }
 
     @Override
+    public var $negate() {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
+    }
+
+    @Override
     public var $multiply(var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
     }

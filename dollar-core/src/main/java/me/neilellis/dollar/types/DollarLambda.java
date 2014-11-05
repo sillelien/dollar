@@ -40,6 +40,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
     private final var in;
     private Pipeable lambda;
     private ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, String> meta = new ConcurrentHashMap<>();
 
     public DollarLambda(var in, Pipeable lambda) {
 
@@ -65,6 +66,11 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 }
             } else if (method.getName().equals("isLambda")) {
                 return true;
+            } else if (method.getName().equals("getMetaAttribute")) {
+                return meta.get(args[0]);
+            } else if (method.getName().equals("setMetaAttribute")) {
+                meta.put(String.valueOf(args[0]), String.valueOf(args[1]));
+                return null;
             } else if (method.getName().equals("$listen")) {
                 String listenerId = UUID.randomUUID().toString();
                 if (args.length == 2) {

@@ -93,6 +93,11 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
+    public var $negate() {
+        return DollarFactory.fromValue(errors(), Range.closed(range.upperEndpoint(), range.lowerEndpoint()));
+    }
+
+    @Override
     public var $multiply(var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
     }

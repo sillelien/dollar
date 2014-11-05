@@ -118,6 +118,13 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public var $negate() {
+        ArrayList<var> result = new ArrayList<>(list);
+        Collections.reverse(result);
+        return DollarFactory.fromValue(errors(), result);
+    }
+
+    @Override
     public var $multiply(var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
     }

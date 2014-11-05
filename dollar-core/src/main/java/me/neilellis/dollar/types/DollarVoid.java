@@ -104,6 +104,11 @@ public class DollarVoid extends AbstractDollar implements var {
     }
 
     @Override
+    public var $negate() {
+        return this;
+    }
+
+    @Override
     public var $multiply(var v) {
         return this;
     }

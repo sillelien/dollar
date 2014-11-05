@@ -53,14 +53,20 @@ public class DollarParser {
 
     public static final int MEMBER_PRIORITY = 500;
     public static final int ASSIGNMENT_PRIORITY = 2;
-    public static final int INC_DEC_PRIORITY = 100;
+    public static final int UNARY_PRIORITY = 400;
+    public static final int INC_DEC_PRIORITY = 400;
     public static final int LINE_PREFIX_PRIORITY = 0;
-    public static final int EQUIVALENCE_PRIORITY = 20;
+    public static final int EQUIVALENCE_PRIORITY = 100;
     public static final int PLUS_MINUS_PRIORITY = 200;
     public static final int OUTPUT_PRIORITY = 50;
     public static final int CAST_PRIORITY = 80;
-    static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", "<=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "`", "``", "??", "!!", "*>", "==", "!=", "+", "-", "\n", "$(", "${", ":=", "&", "&=", "<>", "+>", "<+", "*>", "<*", "*|", "|*", "*|*", "|>", "<|", "&>", "?->", "<=>", "<$", "$>", "-_-", "::");
-    static final Terminals KEYWORDS = Terminals.operators("out", "err", "debug", "fix", "causes", "when", "if", "then", "for", "each", "fail", "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default", "debug", "error", "filter", "sleep", "secs", "sec", "min", "mins", "hr", "hrs", "milli", "millis", "every", "until", "unless", "uri");
+    public static final int CONTROL_FLOW_PRIORITY = 50;
+    public static final int MULTIPLY_DIVIDE_PRIORITY = 300;
+    public static final String NAMED_PARAMETER_META_ATTR = "__named_parameter";
+    public static final int LOGICAL_AND_PRIORITY = 70;
+    public static final int LOGICAL_OR_PRIORITY = 60;
+    static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", "<=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "`", "``", "??", "!!", "*>", "==", "!=", "+", "-", "\n", "$(", "${", ":=", "&", "&=", "<>", "+>", "<+", "*>", "<*", "*|", "|*", "*|*", "|>", "<|", "&>", "?->", "<=>", "<$", "$>", "-_-", "::", "/", "%", "*", "&&", "||");
+    static final Terminals KEYWORDS = Terminals.operators("out", "err", "debug", "fix", "causes", "when", "if", "then", "for", "each", "fail", "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default", "debug", "error", "filter", "sleep", "secs", "sec", "min", "mins", "hr", "hrs", "milli", "millis", "every", "until", "unless", "uri", "and", "or");
     static final Parser<?> TOKENIZER =
             Parsers.or(url(), OPERATORS.tokenizer(), decimal(), Terminals.StringLiteral.DOUBLE_QUOTE_TOKENIZER, Terminals.StringLiteral.SINGLE_QUOTE_TOKENIZER, Terminals.IntegerLiteral.TOKENIZER, Parsers.longest(KEYWORDS.tokenizer(), Terminals.Identifier.TOKENIZER));
     static final Parser<?> TERMINATOR_SYMBOL = Parsers.or(term("\n"), term(";")).many1();
@@ -70,7 +76,7 @@ public class DollarParser {
     static final Parser<Void> IGNORED =
             Parsers.or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT, Scanners.among(" \t\r").many1(), Scanners.lineComment("#")).skipMany();
     //Grammar
-    static final Parser<var> IDENTIFIER = Terminals.Identifier.PARSER.map(DollarStatic::$);
+    static final Parser<var> IDENTIFIER = identifier();
     static final Parser<var> STRING_LITERAL = Terminals.StringLiteral.PARSER.map(DollarStatic::$);
     static final Parser<var> DECIMAL_LITERAL = Terminals.DecimalLiteral.PARSER.map(s ->
                     s.contains(".") ? $(Double.parseDouble(s)) : $(Long.parseLong(s))
@@ -111,6 +117,25 @@ public class DollarParser {
 
     public DollarParser(ClassLoader classLoader) {
         this.classLoader = classLoader;
+    }
+
+    private static Parser<var> identifier() {
+        return Terminals.Identifier.PARSER.map(i -> {
+            switch (i) {
+                case "true":
+                    return $(true);
+                case "false":
+                    return $(false);
+                case "yes":
+                    return $(true);
+                case "no":
+                    return $(false);
+                case "void":
+                    return $void();
+                default:
+                    return $(i);
+            }
+        });
     }
 
     private static Parser<?> decimal() {
@@ -155,7 +180,17 @@ public class DollarParser {
     }
 
     private static Parser<var> parameters(Parser<var> expression) {
-        Parser<List<var>> sequence = term("(").next(expression.sepBy(COMMA_TERMINATOR)).followedBy(term(")"));
+        Parser<List<var>> sequence = term("(").next(Parsers.array(IDENTIFIER.followedBy(term(":")).optional(), expression).map(new Map<Object[], var>() {
+            @Override
+            public var map(Object[] objects) {
+                if (objects[0] != null) {
+                    var result = (var) objects[1];
+                    result.setMetaAttribute(NAMED_PARAMETER_META_ATTR, objects[0].toString());
+                    return result;
+                }
+                return (var) objects[1];
+            }
+        }).sepBy(COMMA_TERMINATOR)).followedBy(term(")"));
         return sequence.map(DollarStatic::$);
     }
 
@@ -354,9 +389,13 @@ public class DollarParser {
 
                 var lambda = DollarFactory.fromLambda(i -> withinNewScope(scope, newScope -> {
                     List<me.neilellis.dollar.var> params = ((var) objects[1]).toList();
+                    newScope.set("*", $(params));
                     int count = 0;
                     for (var param : params) {
                         newScope.set(String.valueOf(++count), param);
+                        if (param.getMetaAttribute(NAMED_PARAMETER_META_ATTR) != null) {
+                            newScope.set(param.getMetaAttribute(NAMED_PARAMETER_META_ATTR), param);
+                        }
                     }
                     var result;
                     if (((var) objects[0]).isLambda()) {
@@ -378,6 +417,10 @@ public class DollarParser {
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> $(!lhs.equals(rhs))), "!="), EQUIVALENCE_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> $(lhs.equals(rhs))
                 ), "=="), EQUIVALENCE_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> $(lhs.isTrue() && rhs.isTrue())
+                ), "&&"), LOGICAL_AND_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> $(lhs.isTrue() || rhs.isTrue())
+                ), "||"), LOGICAL_OR_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> withinNewScope(scope, newScope -> {
                     newScope.set("1", lhs);
                     if (!rhs.isString()) {
@@ -388,12 +431,15 @@ public class DollarParser {
                     }
                 })
                 ), "|"), 80)
-                .infixr(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$plus(rhs)), "+"), PLUS_MINUS_PRIORITY)
-                .infixr(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$minus(rhs)), "-"), PLUS_MINUS_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$multiply(rhs)), "*"), MULTIPLY_DIVIDE_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$divide(rhs)), "/"), MULTIPLY_DIVIDE_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$modulus(rhs)), "%"), MULTIPLY_DIVIDE_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$plus(rhs)), "+"), PLUS_MINUS_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$minus(rhs)), "-"), PLUS_MINUS_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> $(lhs.$S(), rhs)), ":"), 30)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> scope.set(lhs.$S(), $().$read(new File(rhs.$S())))), "<$"), 50)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> scope.set(lhs.$S(), $().$read(new File(rhs.$S())))), "<$"), OUTPUT_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$write(new File(rhs.$S()))), "$>"), OUTPUT_PRIORITY)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.isTrue() ? rhs : lhs), "?"), 50)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.isTrue() ? rhs : lhs), "?"), CONTROL_FLOW_PRIORITY)
                 .prefix(op(new ScopedVarUnaryOperator(false, i -> {
                     i.out();
                     return $void();
@@ -429,14 +475,16 @@ public class DollarParser {
 //                    lhs.$publish(rhs.$S());
 //                    return lhs;
 //                }, scope), scope), 50)
-                .infixl(op(new ListenOperator(scope), "->", "causes"), 50)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$choose(rhs)), "?->", "choose"), 50)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$default(rhs)), "?:", "default"), 50)
+                .infixl(op(new ListenOperator(scope), "->", "causes"), CONTROL_FLOW_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$choose(rhs)), "?->", "choose"), CONTROL_FLOW_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$default(rhs)), "?:", "default"), CONTROL_FLOW_PRIORITY)
                 .postfix(term(".").next(ref.lazy().between(term("("), term(")")).or(IDENTIFIER)).map(rhs -> lhs -> {
                     return linkBinaryInToOut(lhs, rhs, DollarFactory.fromLambda(i -> lhs.$(rhs.$S())));
                 }), MEMBER_PRIORITY)
+                .prefix(op(new ScopedVarUnaryOperator(scope, v -> $(!v.isTrue())), "!", "not"), UNARY_PRIORITY)
                 .postfix(op(new ScopedVarUnaryOperator(scope, var::$dec), "--"), INC_DEC_PRIORITY)
                 .postfix(op(new ScopedVarUnaryOperator(scope, var::$inc), "++"), INC_DEC_PRIORITY)
+                .prefix(op(new ScopedVarUnaryOperator(scope, var::$negate), "-"), UNARY_PRIORITY)
                 .postfix(term("[").next(ref.lazy()).followedBy(term("]")).map(rhs -> lhs -> {
                     return linkBinaryInToOut(lhs, rhs, DollarFactory.fromLambda(i -> lhs.$(rhs)));
                 }), MEMBER_PRIORITY)

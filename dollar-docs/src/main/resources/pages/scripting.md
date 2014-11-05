@@ -259,47 +259,50 @@ a=2
 This time we'll just see the number 2 twice, this is because the `when` operator triggers the evaluation of the supplied block ONLY when the supplied expression (`$a == 2`) becomes true. 
 
 
-###Reactive Operators
- 
-####Split, Filter and Aggregate
-
-<!--
-split - % <filter expression>
-
-Converts a list into a stream of values matching the filter
-
-```
-b := $a % (true)
-b := $a % ($1 > 3)
-```
-
-filter - ^ <filter expression>
-
-```
-b := $a ^ ($1 > 100)
-```
-
-b will not generate events if a's value is <= 100, also b will be void if queried during that state.
-
-aggregate - & <emit condition>
-
-Aggregate until emit condition is true and then emit the result
-
-$1 == aggregate
-$2 == previous value
-$3 == current value
-$4 == next value
-
-```
-    b :=  $a & ($2 == ';')
-```
--->
 
 Imperative Control Flow
 -----------------------
 
 Parameters &amp; Functions
 ----------------------
+
+In most programming languages you have the concept of functions and parameters, i.e. you can parametrized blocks of code. In DollarScript you can parameterize *anything*. For example let's just take a simple expression that adds two strings together, in reverse order, and pass in two parameters.
+
+```dollar
+($2 + " " + $1)("Hello", "World") <=> "World Hello"
+
+```
+
+The naming of positional parameters is the same as in shell scripts.
+
+Now if we take this further we can use the declaration operator `:=` to say that a variable is equal to the expression we wish to parameterise, like so:
+
+```dollar
+
+testParams := ($2 + " " + $1)
+($testParams) ("Hello", "World") <=> "World Hello"
+
+```
+
+Yep we built a function just by naming an expression. You can name anything and parameterise it - including maps, lists, blocks and plain old expressions. 
+
+Obviously this syntax would be a bit clunky so DollarScript let's you use some nice syntatic sugar by letting you drop the $ operator and refer to the variable directly in this context.
+
+
+```dollar
+testParams := ($2 + " " + $1)
+testParams("Hello", "World") <=> "World Hello"
+```
+
+What about named parameters, that would be nice.
+
+```dollar
+testParams := ($last + " " + $first)
+testParams(first:"Hello", last:"World") <=> "World Hello"
+```
+
+Yep you can use *pairs* as parameters, then refer to the values by the keys passed in.
+
 
 Resources &amp; URIs
 --------------------
@@ -310,6 +313,7 @@ URIs are first class citizen's in DollarScript. They refer to a an arbitrary res
 
 
 search="Unikitty"
+
 dynamicURI= uri "http://google.com?q="+$search
 
 marinaVideos = <+ https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo

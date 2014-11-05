@@ -20,7 +20,7 @@ dynamicURI= uri "http://google.com?q="+$search
 
 w = <+ weather://w ; >> "The weather in " + ($w).name + " is '" + $w.weather[0].description+"'"
 
-sleep 10
+sleep 1
 
 $a <=> 4
 $b <=> 5

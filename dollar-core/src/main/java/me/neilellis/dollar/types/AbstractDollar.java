@@ -34,6 +34,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -55,6 +56,7 @@ public abstract class AbstractDollar implements var {
     @NotNull
     ImmutableList<Throwable> errors;
     private String src;
+    private ConcurrentHashMap<String, String> meta = new ConcurrentHashMap<>();
 
     protected AbstractDollar(@NotNull List<Throwable> errors) {
         this.errors = new ImmutableList.Builder<Throwable>().addAll(errors).build();
@@ -719,5 +721,18 @@ public abstract class AbstractDollar implements var {
         } else {
             return $(key.$S());
         }
+    }
+
+    @Override
+    public void setMetaAttribute(String key, String value) {
+        if (meta.containsKey(key)) {
+            throw new DollarException("Cannot change a metadata attribute once set.");
+        }
+        meta.put(key, value);
+    }
+
+    @Override
+    public String getMetaAttribute(String key) {
+        return meta.get(key);
     }
 }
