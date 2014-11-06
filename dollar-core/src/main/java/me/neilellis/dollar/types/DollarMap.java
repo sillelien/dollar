@@ -179,6 +179,11 @@ class DollarMap extends AbstractDollar implements var {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
     }
 
+    @Override
+    public var $abs() {
+        return this;
+    }
+
     @NotNull
     public Map<String, var> split() {
         return copyMap();
@@ -453,6 +458,11 @@ class DollarMap extends AbstractDollar implements var {
         String key = UUID.randomUUID().toString();
         $listen(pipe, key);
         return key;
+    }
+
+    @Override
+    public int compareTo(var o) {
+        return Comparator.<var>naturalOrder().<var>compare(this, o);
     }
 }
 

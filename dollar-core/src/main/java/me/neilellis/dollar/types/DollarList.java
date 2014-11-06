@@ -140,6 +140,11 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public var $abs() {
+        return this;
+    }
+
+    @Override
     public boolean $has(@NotNull String key) {
         return false;
     }
@@ -374,5 +379,17 @@ public class DollarList extends AbstractDollar {
         String key = UUID.randomUUID().toString();
         $listen(pipe, key);
         return key;
+    }
+
+    @Override
+    public int compareTo(var o) {
+        //TODO: improve comparisons
+        if (list.stream().allMatch(v -> v.compareTo(o) == -1)) {
+            return -1;
+        }
+        if (list.stream().allMatch(v -> v.compareTo(o) == 1)) {
+            return 1;
+        }
+        return 0;
     }
 }

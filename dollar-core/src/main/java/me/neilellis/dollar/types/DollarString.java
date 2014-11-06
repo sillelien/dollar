@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -66,6 +67,11 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @Override
     public var $modulus(var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_STRING_OPERATION);
+    }
+
+    @Override
+    public var $abs() {
+        return this;
     }
 
     @Override
@@ -130,4 +136,10 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     public var $plus(Object newValue) {
         return DollarFactory.fromValue(errors(), value + newValue.toString());
     }
+
+    @Override
+    public int compareTo(var o) {
+        return Comparator.<String>naturalOrder().compare(value, o.$S());
+    }
+
 }

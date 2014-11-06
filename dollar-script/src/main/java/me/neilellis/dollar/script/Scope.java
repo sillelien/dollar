@@ -14,46 +14,21 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar;
+package me.neilellis.dollar.script;
+
+import me.neilellis.dollar.var;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface NumericAware {
+public interface Scope {
+    var get(String key);
 
-    default var $dec(String key) {
-        return $dec(key, 1);
-    }
+    boolean has(String key);
 
-    var $dec(String key, long amount);
+    var set(String key, var value);
 
-    var $dec(long amount);
+    void notifyScope(String key, var value);
 
-    default var $dec() {
-        return $dec(1);
-    }
-
-
-    default var $inc(String key) {
-        return $inc(key, 1);
-    }
-
-    var $inc(String key, long amount);
-
-    var $inc(long amount);
-
-    var $negate();
-
-    default var $inc() {
-        return $inc(1);
-    }
-
-    var $multiply(var v);
-
-    var $divide(var v);
-
-    var $modulus(var v);
-
-
-    var $abs();
+    void listen(String key, var listener);
 }

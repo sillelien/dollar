@@ -304,6 +304,11 @@ public class DollarWrapper implements var {
         return getValue().$modulus(v);
     }
 
+    @Override
+    public var $abs() {
+        return getValue().$abs();
+    }
+
     @NotNull
     @Override
     public var $error(@NotNull String errorMessage) {
@@ -895,5 +900,10 @@ public class DollarWrapper implements var {
     @Override
     public String getMetaAttribute(String key) {
         return getValue().getMetaAttribute(key);
+    }
+
+    @Override
+    public int compareTo(var o) {
+        return getValue().compareTo(o);
     }
 }

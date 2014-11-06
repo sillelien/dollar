@@ -67,6 +67,21 @@ public class ParserTest {
 
 
     @Test
+    public void testBuiltins() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_builtins.ds"));
+    }
+
+    @Test
+    public void testParameters() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_parameters.ds"));
+    }
+
+    @Test
+    public void testJava() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_java.ds"));
+    }
+
+    @Test
     public void testMarkdown1() throws Exception {
         new DollarParser().parseMarkdown(CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/test1.md"))));
     }

@@ -61,6 +61,11 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
+    @Override
+    public var $abs() {
+        return this;
+    }
+
     @NotNull
     @Override
     public Double D() {
@@ -144,5 +149,10 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return false;
+    }
+
+    @Override
+    public int compareTo(var o) {
+        return I() - o.I();
     }
 }

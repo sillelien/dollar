@@ -30,7 +30,7 @@ import static me.neilellis.dollar.DollarStatic.$void;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class ScriptScope {
+public class ScriptScope implements Scope {
 
     private static AtomicInteger counter = new AtomicInteger();
     private final String id;
@@ -68,6 +68,7 @@ public class ScriptScope {
         this.parent = scriptScope;
     }
 
+    @Override
     public var get(String key) {
         if (DollarStatic.config.isDebugScope()) System.out.println("Looking up " + key + " in " + this);
         ScriptScope scope = getScopeForKey(key);
@@ -82,6 +83,7 @@ public class ScriptScope {
     }
 
 
+    @Override
     public boolean has(String key) {
         ScriptScope scope = getScopeForKey(key);
         if (scope == null) {
@@ -96,6 +98,7 @@ public class ScriptScope {
 
     }
 
+    @Override
     public var set(String key, var value) {
         ScriptScope scope = getScopeForKey(key);
         if (scope == null) {
@@ -107,6 +110,7 @@ public class ScriptScope {
         return value;
     }
 
+    @Override
     public void notifyScope(String key, var value) {
         if (listeners.containsKey(key)) {
             for (var listener : listeners.get(key)) {
@@ -140,6 +144,7 @@ public class ScriptScope {
     }
 
 
+    @Override
     public void listen(String key, var listener) {
         if (key.matches("[0-9]+")) {
             if (DollarStatic.config.isDebugScope())

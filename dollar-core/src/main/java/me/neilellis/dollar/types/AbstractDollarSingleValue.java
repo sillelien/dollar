@@ -227,4 +227,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
             return this;
         }
     }
+
+
 }

@@ -134,6 +134,11 @@ public class DollarVoid extends AbstractDollar implements var {
     }
 
     @Override
+    public var $abs() {
+        return this;
+    }
+
+    @Override
     public boolean $has(@NotNull String key) {
         return false;
     }
@@ -405,5 +410,14 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return true;
+    }
+
+    @Override
+    public int compareTo(var o) {
+        if (o.isVoid()) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 }

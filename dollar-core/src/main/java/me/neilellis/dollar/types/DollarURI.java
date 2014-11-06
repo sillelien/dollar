@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -207,6 +208,11 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
+    public var $abs() {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @Override
     public var decode() {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
@@ -313,4 +319,8 @@ public class DollarURI extends AbstractDollar {
     }
 
 
+    @Override
+    public int compareTo(var o) {
+        return Comparator.<String>naturalOrder().compare(uri, o.toString());
+    }
 }

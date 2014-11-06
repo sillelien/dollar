@@ -66,6 +66,25 @@ public class ClassDescriptorSourceScript extends ClassDescriptorSourceUnit {
         boolean completeClass = isCompleteClass(scriptCode);
 
         StringBuilder finalCode = new StringBuilder();
+        finalCode.append("import me.neilellis.dollar.*;\n");
+//        finalCode.append("import me.neilellis.dollar.script.lang.*;\n");
+        finalCode.append("import static me.neilellis.dollar.DollarStatic.*;\n");
+        finalCode.append("import java.util.*;\n");
+        finalCode.append("import java.text.*;\n");
+        finalCode.append("import java.util.concurrent.*;\n");
+        finalCode.append("import java.util.regex.*;\n");
+        finalCode.append("import java.util.jar.*;\n");
+        finalCode.append("import java.util.zip.*;\n");
+        finalCode.append("import java.io.*;\n");
+        finalCode.append("import java.math.*;\n");
+        finalCode.append("import java.nio.*;\n");
+        finalCode.append("import java.nio.channels.*;\n");
+        finalCode.append("import java.nio.charset.*;\n");
+        finalCode.append("import java.net.*;\n");
+        finalCode.append("import java.security.*;\n");
+        finalCode.append("import java.sql.*;\n");
+        finalCode.append("import java.awt.*;\n");
+        finalCode.append("import javax.script.*;\n");
         if (completeClass) {
             if (hasHashBang[0])
                 finalCode.append("\n");   // Como hemos quitado la línea #! añadimos una nueva para que los números de línea en caso de error coincidan con el original
@@ -86,7 +105,7 @@ public class ClassDescriptorSourceScript extends ClassDescriptorSourceUnit {
                 if (scriptCode.equals("")) scriptCode = "return null;";
             }
 
-            finalCode.append("public class " + className + " { public static " + mainReturnType + " main(" + mainParamsDec + ") {\n"); // Lo ponemos todo en una línea para que en caso de error la línea de error coincida con el script original pues hemos quitado la primera línea #!
+            finalCode.append("public class " + className + " extends me.neilellis.dollar.Unit { public static " + mainReturnType + " main(" + mainParamsDec + ") {\n"); // Lo ponemos todo en una línea para que en caso de error la línea de error coincida con el script original pues hemos quitado la primera línea #!
             finalCode.append(scriptCode);
             finalCode.append("  }\n");
             finalCode.append("}\n");

@@ -33,6 +33,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.lang.Math.abs;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
@@ -110,6 +112,11 @@ public class DollarRange extends AbstractDollar {
     @Override
     public var $modulus(var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
+    }
+
+    @Override
+    public var $abs() {
+        return DollarFactory.fromValue(errors(), Range.closed(abs(range.upperEndpoint()), abs(range.lowerEndpoint())));
     }
 
     @Override
@@ -317,4 +324,10 @@ public class DollarRange extends AbstractDollar {
     public boolean isNeitherTrueNorFalse() {
         return true;
     }
+
+    @Override
+    public int compareTo(var o) {
+        return (int) Math.signum(range.lowerEndpoint() - o.L());
+    }
+
 }

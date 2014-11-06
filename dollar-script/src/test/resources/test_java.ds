@@ -1,0 +1,9 @@
+variableA="Hello World"
+
+javaTest = `
+
+out=scope.get("variableA");
+
+`
+
+$javaTest <=> "Hello World"

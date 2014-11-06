@@ -35,7 +35,7 @@ Here is an example of what DollarScript looks like
 
 testParams := ($2 + " " + $1)
 
-=> $testParams ("Hello", "World") == "World Hello"
+=> testParams ("Hello", "World") == "World Hello"
 
 ```
 
@@ -301,7 +301,7 @@ testParams := ($last + " " + $first)
 testParams(first:"Hello", last:"World") <=> "World Hello"
 ```
 
-Yep you can use *pairs* as parameters, then refer to the values by the keys passed in.
+Yep you can use named parameters, then refer to the values by the names passed in.
 
 
 Resources &amp; URIs
@@ -324,12 +324,38 @@ marinaVideos = <+ https://itunes.apple.com/search?term=Marina+And+The+Diamonds&e
 In this example we've requested a single value (using `<+`) from a uri and assigned the value to `$marinaVideos` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `trackViewUrl`. The each operator returns a list of the results and that is what is passed to standard out.
 
 
+Using Java
+----------
+
+Hopefully you'll find DollarScript a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of Java. To do so, just surround the Java in backticks.
+
+```dollar
+
+variableA="Hello World"
+
+java = `out=scope.get("variableA");`
+
+$java <=> "Hello World"
+
+```
+
+A whole bunch of imports are done for you automatically (java.util.*, java.math.*) but you will have to fully qualify any thirdparty libs. The variable `in` will be available to you and will be of type me.neilellis.dollar.var - for more info check out the Dollar API documentation. The return type will also be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (me.neilellis.dollar.script.Scope) object on which you can get and set DollarScript variables.
+
+Reactive behaviour is supported on the Scope object with the listen and notify methods on variables. You'll need to then built your reactivity around those variables or on the `out` object directly (that's a pretty advanced topic).
+
 
 Iterative Operators
 -------------------
 
 Numerical Operators
 -------------------
+
+DollarScript support the basic numerical operators +,-,/,*,%
+
+Logical Operators
+-----------------
+
+DollarScript support the basic logical operators &&,||,!
 
 Arrays
 ------

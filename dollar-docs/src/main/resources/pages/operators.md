@@ -1,22 +1,23 @@
 Operators
 
 1000
-<>      + fix
-$       + variable
+<>      + fix value
+$       + variable reference
 
 500
 []      + subscript
-()      + parameterise
+()      + parameterize
 .       + member access
 
 400 unary priority
 ++      + inc
 --      + dec
-+/-     - unary plus/minus
-~       + NOT USED
-^       + NOT USED
-&       + NOT USED
-`       + NOT USED
+-       + unary minus
++       - unary plus (no point!)
+~       - NOT USED  - reserved - possibly regex
+^       - NOT USED  - reserved
+&       - NOT USED  - reserved - possibly to indicate parallelism preferred ?
+`       - NOT USED  - rexerved - possibly Java strings
 !       + logical negation
 @       - attribute prefix
 
@@ -49,13 +50,13 @@ uri     + cast String to URI
 
 
 50 - output
-<$      + file out
-$>      + file in
+<$      + file in - change to (U)
+$>      + file out
 |>      + save
-<|      + load
+<|      + load - change to (U)
 +>      + receive
 &>      + notify
-<+      + take  (B)
+<+      + take  (U)
 
 50 - control flow
 ?       + if
@@ -80,5 +81,6 @@ sleep   + sleep keyword
 ?? - stderr
 => - assert
 
-Keywords
+TODO
 
+?+ ANY, ?* ALL

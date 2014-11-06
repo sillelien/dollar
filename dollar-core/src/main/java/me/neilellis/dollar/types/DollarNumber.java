@@ -23,6 +23,8 @@ import org.jetbrains.annotations.Nullable;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static java.lang.Math.abs;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
@@ -75,6 +77,15 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
             return DollarFactory.fromValue(value.longValue() % v.L());
         } else {
             return DollarFactory.fromValue(value.doubleValue() % v.D());
+        }
+    }
+
+    @Override
+    public var $abs() {
+        if (isInteger()) {
+            return DollarFactory.fromValue(abs(value.longValue()));
+        } else {
+            return DollarFactory.fromValue(abs(value.doubleValue()));
         }
     }
 
@@ -193,4 +204,8 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
     }
 
 
+    @Override
+    public int compareTo(var o) {
+        return $minus(o).I();
+    }
 }

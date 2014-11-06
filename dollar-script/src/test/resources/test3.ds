@@ -113,18 +113,6 @@ each [1,2,3] {
 }
 
 
-//TODO
-#marinaVideos <+ https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
-
-#Filter operator (applies jquery style or jxpath style filter) - use this to get video names
-
-#Iteration pipe 1|* which does the same as each == toList().forEach(Pipeable pipe) - create that also
-
-// 1|* - splitter - the pipe is applied to each part of the list
-// *|* - fork join ? - list is split, each part passed to the pipe and returned as a list again
-// *|1 - join      - list is split all parts passed to pipe and joined using the pipe
-// 1|1 - normal pipe
-
 
 
 
