@@ -16,40 +16,45 @@
 
 package me.neilellis.dollar;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface BasicIOAware {
+    /*
     @NotNull
+    @Deprecated
     var $load(@NotNull String location);
 
+    @Deprecated
     @NotNull
     var $pop(@NotNull String location, int timeoutInMillis);
 
+    @Deprecated
     @NotNull
     var $pub(@NotNull String... locations);
 
+    @Deprecated
     @NotNull
     var $push(@NotNull String location);
 
+    @Deprecated
     var $read(File file);
 
+    @Deprecated
     var $read(InputStream in);
 
     @NotNull
+    @Deprecated
     var $save(@NotNull String location);
 
     @NotNull
+    @Deprecated
     var $save(@NotNull String location, int expiryInMilliseconds);
 
+    @Deprecated
     var $write(File file);
 
+    @Deprecated
     var $write(OutputStream out);
-
+   */
 }

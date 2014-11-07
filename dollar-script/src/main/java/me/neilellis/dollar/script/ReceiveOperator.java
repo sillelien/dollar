@@ -14,27 +14,33 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.integration;
+package me.neilellis.dollar.script;
 
-import me.neilellis.dollar.plugin.ExtensionPoint;
+import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
-
-import java.util.function.Consumer;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface IntegrationProvider extends ExtensionPoint<IntegrationProvider> {
+public class ReceiveOperator extends ScopedVarUnaryOperator {
 
-    var dispatch(String uri, var value);
 
-    var listen(String uri, Consumer<var> consumer);
+    public ReceiveOperator(ScriptScope scope) {
+        super(scope, null);
+    }
 
-    var poll(String uri);
 
-    var publish(String uri, var value);
+    @Override
+    public var map(var from) {
+        try {
+            return DollarFactory.fromLambda(v -> from.$receive());
+        } catch (AssertionError e) {
+            throw new AssertionError(e + " at '" + source.get() + "'", e);
+        } catch (Throwable e) {
+            throw new Error(e + " at '" + source.get() + "'");
+        }
 
-    var send(String uri, var value);
+    }
 
 
 }

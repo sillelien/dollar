@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
+@Deprecated
 public class RedisPubSubAdapter extends JedisPubSub implements Sub {
     private final DollarPubSub.SubAction action;
     @NotNull

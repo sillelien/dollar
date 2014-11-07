@@ -14,33 +14,45 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script;
+package me.neilellis.dollar.redis;
 
-import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.uri.URIHandler;
+import me.neilellis.dollar.uri.URIHandlerFactory;
+import redis.clients.jedis.JedisPoolConfig;
+
+import java.net.URISyntaxException;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class TakeOperator extends ScopedVarUnaryOperator {
+public class RedisURIHandlerFactory implements URIHandlerFactory {
 
 
-    public TakeOperator(ScriptScope scope) {
-        super(scope, null);
+    private static final JedisPoolConfig poolConfig = new JedisPoolConfig();
+
+    static {
+        poolConfig.setMaxTotal(128);
+
     }
 
 
     @Override
-    public var map(var from) {
-        try {
-            return DollarFactory.fromLambda(v -> from.$take());
-        } catch (AssertionError e) {
-            throw new AssertionError(e + " at '" + source.get() + "'", e);
-        } catch (Throwable e) {
-            throw new Error(e + " at '" + source.get() + "'");
-        }
-
+    public String getScheme() {
+        return "redis";
     }
 
+    @Override
+    public URIHandler forURI(String uri) {
+        try {
+            return new RedisURIHandler(uri, poolConfig);
+        } catch (URISyntaxException e) {
+            return null;
+        }
+    }
 
+    @Override
+    public URIHandlerFactory copy() {
+        return this;
+    }
 }
+

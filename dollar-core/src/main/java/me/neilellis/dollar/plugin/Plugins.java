@@ -17,6 +17,7 @@
 package me.neilellis.dollar.plugin;
 
 import me.neilellis.dollar.pipe.PipeResolver;
+import me.neilellis.dollar.uri.URIHandlerFactory;
 
 import java.util.*;
 
@@ -47,7 +48,7 @@ public class Plugins {
         return loader.iterator().next().copy();
     }
 
-    public static PipeResolver resolvePiper(String scheme) {
+    public static PipeResolver resolveModule(String scheme) {
         final ServiceLoader<PipeResolver> loader = ServiceLoader.load(PipeResolver.class);
         Iterator<PipeResolver> iterator = loader.iterator();
         while (iterator.hasNext()) {
@@ -57,6 +58,18 @@ public class Plugins {
             }
         }
         return NoOpProxy.newInstance(PipeResolver.class);
+    }
+
+    public static URIHandlerFactory resolveURIProvider(String scheme) {
+        final ServiceLoader<URIHandlerFactory> loader = ServiceLoader.load(URIHandlerFactory.class);
+        Iterator<URIHandlerFactory> iterator = loader.iterator();
+        while (iterator.hasNext()) {
+            URIHandlerFactory handler = iterator.next();
+            if (handler.getScheme().equals(scheme)) {
+                return handler;
+            }
+        }
+        return NoOpProxy.newInstance(URIHandlerFactory.class);
     }
 
     public static <T extends ExtensionPoint<T>> T sharedInstance(Class<T> serviceClass) {

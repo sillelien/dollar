@@ -98,6 +98,8 @@ public class DollarThreadContext {
     }
 
     public DollarStore getStore() {
+
+        System.err.println("STORE IS DEPRECATED, PLEASE USE URIs INSTEAD");
         return store;
     }
 

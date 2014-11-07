@@ -18,7 +18,6 @@ package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.hash.Hashing;
-import com.google.common.io.ByteStreams;
 import me.neilellis.dollar.*;
 import me.neilellis.dollar.exceptions.ValidationException;
 import me.neilellis.dollar.json.JsonArray;
@@ -29,10 +28,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.SimpleScriptContext;
-import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
@@ -87,84 +84,6 @@ public abstract class AbstractDollar implements var {
         return this;//TODO
     }
 
-    @NotNull
-    @Override
-    public var $load(@NotNull String location) {
-        return DollarStatic.context().getStore().get(location);
-    }
-
-    @NotNull
-    @Override
-    public var $pop(@NotNull String location, int timeoutInMillis) {
-        return DollarStatic.context().getStore().pop(location, timeoutInMillis);
-
-    }
-
-    @NotNull
-    @Override
-    public var $pub(@NotNull String... locations) {
-        DollarStatic.context().getPubsub().pub(this, locations);
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $push(@NotNull String location) {
-        DollarStatic.context().getStore().push(location, this);
-        return this;
-    }
-
-    @Override
-    public var $read(File file) {
-        try {
-            return DollarFactory.fromStringValue(new String(Files.readAllBytes(file.toPath())));
-        } catch (IOException e) {
-            return DollarStatic.handleError(e, this);
-        }
-    }
-
-    @Override
-    public var $read(InputStream in) {
-        try {
-            return DollarFactory.fromStringValue(new String(ByteStreams.toByteArray(in)));
-        } catch (IOException e) {
-            return DollarStatic.handleError(e, this);
-        }
-    }
-
-    @NotNull
-    @Override
-    public var $save(@NotNull String location) {
-        DollarStatic.context().getStore().set(location, this);
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $save(@NotNull String location, int expiryInMilliseconds) {
-        DollarStatic.context().getStore().set(location, this, expiryInMilliseconds);
-        return this;
-    }
-
-    @Override
-    public var $write(File file) {
-        try {
-            Files.write(file.toPath(), this.$S().getBytes());
-            return this;
-        } catch (IOException e) {
-            return DollarStatic.handleError(e, this);
-        }
-    }
-
-    @Override
-    public var $write(OutputStream out) {
-        try {
-            ByteStreams.copy(new ByteArrayInputStream(this.$S().getBytes()), out);
-            return this;
-        } catch (IOException e) {
-            return DollarStatic.handleError(e, this);
-        }
-    }
 
     @NotNull
     @Override
@@ -627,7 +546,7 @@ public abstract class AbstractDollar implements var {
             throw new IllegalArgumentException("Pipe " + classModule + " needs to have a scheme");
         }
         try {
-            return $pipe(Plugins.resolvePiper(parts[0]).resolve(this, parts[1]));
+            return $pipe(Plugins.resolveModule(parts[0]).resolve(this, parts[1]));
         } catch (Exception e) {
             return DollarStatic.handleError(e, this);
         }
@@ -695,15 +614,10 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public var $receive(var given) {
-        //We don't know how to receive so we take from the giver
-        return given.$take();
-    }
-
-    @Override
-    public var $take() {
+    public var $send(var given) {
         return this;
     }
+
 
     @Override
     public var $each(Pipeable pipe) throws Exception {
@@ -734,5 +648,60 @@ public abstract class AbstractDollar implements var {
     @Override
     public String getMetaAttribute(String key) {
         return meta.get(key);
+    }
+
+    @Override
+    public var $receive() {
+        return DollarStatic.$void();
+    }
+
+    @Override
+    public var $poll() {
+        return DollarStatic.$void();
+    }
+
+    @Override
+    public var $peek() {
+        return DollarStatic.$void();
+    }
+
+    @Override
+    public var $pop() {
+        return DollarStatic.$void();
+    }
+
+    @Override
+    public var $subscribe(Pipeable subscription) {
+        return this;
+    }
+
+    @Override
+    public var $dispatch(var lhs) {
+        return this;
+    }
+
+    @Override
+    public var $give(var lhs) {
+        return this;
+    }
+
+    @Override
+    public var $push(var lhs) {
+        return this;
+    }
+
+    @Override
+    public var $publish(var lhs) {
+        return this;
+    }
+
+    @Override
+    public var $drain() {
+        return DollarStatic.$void();
+    }
+
+    @Override
+    public var $all() {
+        return DollarStatic.$void();
     }
 }

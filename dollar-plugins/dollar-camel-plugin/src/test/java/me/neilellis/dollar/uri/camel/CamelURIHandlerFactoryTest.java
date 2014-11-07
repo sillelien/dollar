@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.integration.camel;
+package me.neilellis.dollar.uri.camel;
 
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.var;
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
@@ -28,7 +29,7 @@ import java.util.concurrent.CountDownLatch;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class CamelIntegrationProviderTest {
+public class CamelURIHandlerFactoryTest {
 
 
     @Test
@@ -39,20 +40,22 @@ public class CamelIntegrationProviderTest {
     @Test
     public void testListen() throws Exception {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
-        final CamelIntegrationProvider camelIntegrationProvider = new CamelIntegrationProvider();
-        camelIntegrationProvider.listen("vm://testListen", (v) -> {
+        String vmListenURI = "vm://testListen";
+        CamelURIHandlerFactory camelURIHandlerFactory = new CamelURIHandlerFactory();
+        final URIHandler camelIntegrationProvider = camelURIHandlerFactory.forURI(vmListenURI);
+        camelIntegrationProvider.subscribe((value) -> {
             try {
-                System.out.println("***: " + v);
-                assertEquals("Listen Test", v.$S());
+                System.out.println("***: " + value);
+                assertEquals("Listen Test", value.toString());
                 countDownLatch.countDown();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-        camelIntegrationProvider.start();
-        camelIntegrationProvider.dispatch("vm://testListen", DollarStatic.$("Listen Test"));
+        camelURIHandlerFactory.start();
+        camelIntegrationProvider.dispatch(DollarStatic.$("Listen Test"));
         countDownLatch.await();
-        camelIntegrationProvider.stop();
+        camelURIHandlerFactory.stop();
     }
 
     @Test
@@ -62,7 +65,8 @@ public class CamelIntegrationProviderTest {
 
     @Test
     public void testPoll() throws Exception {
-        final var page = new CamelIntegrationProvider().poll("http://google.com");
+        CamelURIHandlerFactory camelURIHandlerFactory = new CamelURIHandlerFactory();
+        final var page = camelURIHandlerFactory.forURI("http://google.com").poll();
         assertTrue(page.$S().contains("html"));
     }
 
@@ -80,12 +84,13 @@ public class CamelIntegrationProviderTest {
         context.addRoutes(routeBuilder);
         context.start();
         Thread.sleep(1000);
-        final CamelIntegrationProvider camelIntegrationProvider = new CamelIntegrationProvider();
-        final var result = camelIntegrationProvider.send("direct-vm:test", DollarStatic.$("test"));
+        CamelURIHandlerFactory camelURIHandlerFactory = new CamelURIHandlerFactory();
+
+        final var result = camelURIHandlerFactory.forURI("direct-vm:test").send(DollarStatic.$("test"));
         assertEquals("RESULT", result.$S());
         System.out.println(result);
         context.stop();
-        camelIntegrationProvider.stop();
+        camelURIHandlerFactory.stop();
 
     }
 

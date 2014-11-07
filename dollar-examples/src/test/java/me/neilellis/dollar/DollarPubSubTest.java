@@ -16,14 +16,12 @@
 
 package me.neilellis.dollar;
 
-import me.neilellis.dollar.pubsub.Sub;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 import java.util.Date;
 
-import static me.neilellis.dollar.DollarStatic.*;
-import static org.junit.Assert.assertEquals;
+import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.DollarStatic.$jsonArray;
 
 public class DollarPubSubTest {
 
@@ -43,21 +41,21 @@ public class DollarPubSubTest {
     }
 
 
-    @Test
-    public void testBasic() throws InterruptedException {
-        final int[] received = {0};
-        Sub sub = $sub((message, s) -> {
-            System.out.println("Received");
-            received[0]++;
-            s.cancel();
-        }, "test.pub");
-        sub.await();
-        System.out.println("Subbed");
-        profile.$pub("test.pub");
-        sub.awaitFirst(60);
-        Thread.sleep(100);
-        assertEquals(1, received[0]);
-    }
+//    @Test
+//    public void testBasic() throws InterruptedException {
+//        final int[] received = {0};
+//        Sub sub = $sub((message, s) -> {
+//            System.out.println("Received");
+//            received[0]++;
+//            s.cancel();
+//        }, "test.pub");
+//        sub.await();
+//        System.out.println("Subbed");
+//        profile.$pub("test.pub");
+//        sub.awaitFirst(60);
+//        Thread.sleep(100);
+//        assertEquals(1, received[0]);
+//    }
 
 
 }

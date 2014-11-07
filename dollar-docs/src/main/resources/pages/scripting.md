@@ -314,9 +314,9 @@ URIs are first class citizen's in DollarScript. They refer to a an arbitrary res
 
 search="Unikitty"
 
-dynamicURI= uri "http://google.com?q="+$search
+dynamicURI= uri "camel:http://google.com?q="+$search
 
-marinaVideos = <+ https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
+marinaVideos = <+ camel:https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
 >> each $marinaVideos.results { $1.trackViewUrl }
 
 ```

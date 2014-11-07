@@ -19,7 +19,6 @@ package me.neilellis.dollar;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Range;
-import me.neilellis.dollar.integration.IntegrationProvider;
 import me.neilellis.dollar.js.JSFileScript;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
@@ -28,6 +27,7 @@ import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.pubsub.DollarPubSub;
 import me.neilellis.dollar.pubsub.Sub;
 import me.neilellis.dollar.types.DollarFactory;
+import me.neilellis.dollar.uri.URIHandlerFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import spark.Spark;
@@ -63,7 +63,7 @@ public class DollarStatic {
     private static ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
 
     private static DollarHttp dollarHttpProvider = Plugins.sharedInstance(DollarHttp.class);
-    private static IntegrationProvider integrationProvider = Plugins.sharedInstance(IntegrationProvider.class);
+    private static URIHandlerFactory URIHandler = Plugins.sharedInstance(URIHandlerFactory.class);
 
     public static Pipeable $jsFile(String name) {
         try {
@@ -321,24 +321,6 @@ public class DollarStatic {
         return DollarFactory.fromValue(ImmutableList.of(), values);
     }
 
-    @NotNull
-    public static var $load(@NotNull String location) {
-        return $().$load(location);
-    }
-
-    @NotNull
-    public static var $pop(@NotNull String location, int timeoutInMillis) {
-        return $().$pop(location, timeoutInMillis);
-    }
-
-    public static void $pub(@NotNull var value, String... locations) {
-        value.$pub(locations);
-    }
-
-    public static void $push(@NotNull String location, @NotNull var value) {
-        value.$push(location);
-    }
-
     /**
      * The beginning of any Dollar Code should start with a DollarStatic.run method.
      *
@@ -369,13 +351,6 @@ public class DollarStatic {
         }
     }
 
-    public static void $save(@NotNull var value, @NotNull String location) {
-        value.$save(location);
-    }
-
-    public static void $save(@NotNull String location, @NotNull var value, int expiryInMilliseconds) {
-        value.$save(location, expiryInMilliseconds);
-    }
 
     @NotNull
     public static Sub $sub(DollarPubSub.SubAction action, String... locations) {
@@ -464,8 +439,8 @@ public class DollarStatic {
         return DollarFactory.newVoid();
     }
 
-    public static IntegrationProvider integrationProvider() {
-        return integrationProvider;
+    public static URIHandlerFactory integrationProvider() {
+        return URIHandler;
     }
 
     public static var $(Pipeable lambda) {

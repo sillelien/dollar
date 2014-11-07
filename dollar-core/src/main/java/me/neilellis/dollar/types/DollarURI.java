@@ -20,8 +20,9 @@ import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.collections.ImmutableMap;
-import me.neilellis.dollar.integration.IntegrationProvider;
 import me.neilellis.dollar.json.JsonObject;
+import me.neilellis.dollar.plugin.Plugins;
+import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,46 +39,48 @@ import java.util.stream.Stream;
 public class DollarURI extends AbstractDollar {
 
     private String uri;
-    private IntegrationProvider integrationProvider = DollarStatic.integrationProvider();
+    private URIHandler handler;
 
     public DollarURI(@NotNull List<Throwable> errors, String uri) {
         super(errors);
-        this.uri = uri;
+        this.uri = uri.substring(uri.indexOf(":") + 1);
+        String scheme = uri.substring(0, uri.indexOf(":"));
+        handler = Plugins.resolveURIProvider(scheme).forURI(this.uri);
     }
 
     @NotNull
     @Override
     public var $(@NotNull String key, long value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+        return handler.set(DollarStatic.$(key), DollarStatic.$(value));
     }
 
     @NotNull
     @Override
     public var $(@NotNull String key, double value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+        return handler.set(DollarStatic.$(key), DollarStatic.$(value));
     }
 
     @NotNull
     @Override
     public var $plus(@Nullable Object value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+        return handler.push(DollarStatic.$(value));
     }
 
     @NotNull
     @Override
     public Stream<var> $children() {
-        return Stream.empty();
+        return handler.all().toList().stream();
     }
 
     @NotNull
     @Override
     public Stream<var> $children(@NotNull String key) {
-        return Stream.empty();
+        return handler.get(DollarStatic.$(key)).toList().stream();
     }
 
     @Override
     public boolean $has(@NotNull String key) {
-        return false;
+        return !handler.get(DollarStatic.$(key)).isVoid();
     }
 
     @NotNull
@@ -86,38 +89,32 @@ public class DollarURI extends AbstractDollar {
         return ImmutableMap.of();
     }
 
-    @Nullable
-    @Override
-    public String S(@NotNull String key) {
-        return null;
-    }
 
     @NotNull
     @Override
     public var $rm(@NotNull String key) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+        return handler.remove(DollarStatic.$(key));
 
     }
 
     @NotNull
     @Override
     public var $minus(@NotNull Object value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+        return handler.removeValue(DollarStatic.$(value));
 
     }
 
     @NotNull
     @Override
     public var $(@NotNull String key, @Nullable Object value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+        return handler.set(DollarStatic.$(key), DollarStatic.$(value));
 
     }
 
     @NotNull
     @Override
     public var $(@NotNull String key) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-
+        return handler.get(DollarStatic.$(key));
     }
 
     @NotNull
@@ -163,7 +160,7 @@ public class DollarURI extends AbstractDollar {
 
     @Override
     public int size() {
-        return 0;
+        return handler.size();
     }
 
     @Override
@@ -225,7 +222,7 @@ public class DollarURI extends AbstractDollar {
     @NotNull
     @Override
     public ImmutableList<var> toList() {
-        return ImmutableList.of();
+        return ImmutableList.copyOf(handler.all().toList());
     }
 
     @Override
@@ -282,20 +279,20 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public String $listen(Pipeable pipe) {
-        integrationProvider.listen(uri, i -> {
+    public var $subscribe(Pipeable pipe) {
+        handler.subscribe(i -> {
             try {
                 pipe.pipe(i);
             } catch (Exception e) {
                 DollarStatic.logAndRethrow(e);
             }
         });
-        return "no cancellation mechanism yet";
+        return this;
     }
 
     @Override
     public var $notify(var v) {
-        return integrationProvider.dispatch(uri, v);
+        return handler.dispatch(v);
     }
 
     @Override
@@ -304,8 +301,8 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public var $receive(var v) {
-        return integrationProvider.send(uri, v);
+    public var $send(var v) {
+        return handler.send(v);
     }
 
     @Override
@@ -314,13 +311,58 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public var $take() {
-        return integrationProvider.poll(uri);
+    public int compareTo(var o) {
+        return Comparator.<String>naturalOrder().compare(uri, o.toString());
+    }
+
+    @Override
+    public var $receive() {
+        return handler.receive();
+    }
+
+    @Override
+    public var $poll() {
+        return handler.poll();
+    }
+
+    @Override
+    public var $peek() {
+        return handler.peek();
+    }
+
+    @Override
+    public var $pop() {
+        return handler.pop();
+    }
+
+    @Override
+    public var $all() {
+        return handler.all();
     }
 
 
     @Override
-    public int compareTo(var o) {
-        return Comparator.<String>naturalOrder().compare(uri, o.toString());
+    public var $dispatch(var value) {
+        return handler.dispatch(value);
+    }
+
+    @Override
+    public var $give(var value) {
+        return handler.give(value);
+    }
+
+    @Override
+    public var $push(var lhs) {
+        return handler.push(lhs);
+    }
+
+    @Override
+    public var $publish(var lhs) {
+        return handler.publish(lhs);
+    }
+
+    @Override
+    public var $drain() {
+        return handler.drain();
     }
 }

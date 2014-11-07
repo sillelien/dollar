@@ -28,46 +28,48 @@ import redis.clients.jedis.JedisPoolConfig;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
+@Deprecated
 public class RedisPubSub implements DollarPubSub {
 
 
-  @NotNull
-  private static final JedisPool jedisPool;
-  private static final JedisPoolConfig poolConfig = new JedisPoolConfig();
+    @NotNull
+    private static final JedisPool jedisPool;
+    private static final JedisPoolConfig poolConfig = new JedisPoolConfig();
 
-  static {
-    poolConfig.setMaxTotal(128);
-    jedisPool = new JedisPool(poolConfig, System.getProperty("dollar.redis", "localhost"));
-  }
-
-  @Override public DollarPubSub copy() {
-    return this;
-  }
-
-
-  @Override
-  public void pub(@NotNull var value, @NotNull String... locations) {
-    for (String location : locations) {
-      try (Jedis jedis = jedisPool.getResource()) {
-        jedis.publish(location, value.S());
-      }
+    static {
+        poolConfig.setMaxTotal(128);
+        jedisPool = new JedisPool(poolConfig, System.getProperty("dollar.redis", "localhost"));
     }
-  }
 
-  @NotNull
-  @Override
-  public Sub sub(SubAction action, String... locations) {
-    try {
-      RedisPubSubAdapter jedisPubSub = new RedisPubSubAdapter(action);
-      DollarStatic.$fork(() -> {
-        try (Jedis jedis = jedisPool.getResource()) {
-          jedis.subscribe(jedisPubSub, locations);
-          return null;
+    @Override
+    public DollarPubSub copy() {
+        return this;
+    }
+
+
+    @Override
+    public void pub(@NotNull var value, @NotNull String... locations) {
+        for (String location : locations) {
+            try (Jedis jedis = jedisPool.getResource()) {
+                jedis.publish(location, value.S());
+            }
         }
-      });
-      return jedisPubSub;
-    } catch (Exception e) {
-      return DollarStatic.logAndRethrow(e);
     }
-  }
+
+    @NotNull
+    @Override
+    public Sub sub(SubAction action, String... locations) {
+        try {
+            RedisPubSubAdapter jedisPubSub = new RedisPubSubAdapter(action);
+            DollarStatic.$fork(() -> {
+                try (Jedis jedis = jedisPool.getResource()) {
+                    jedis.subscribe(jedisPubSub, locations);
+                    return null;
+                }
+            });
+            return jedisPubSub;
+        } catch (Exception e) {
+            return DollarStatic.logAndRethrow(e);
+        }
+    }
 }

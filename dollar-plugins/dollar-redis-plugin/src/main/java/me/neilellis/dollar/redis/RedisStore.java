@@ -28,12 +28,14 @@ import java.util.List;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
+@Deprecated
 public class RedisStore implements DollarStore {
 
     @NotNull
     private Jedis jedis = new Jedis(System.getProperty("dollar.redis", "localhost"));
 
-    @Override public DollarStore copy() {
+    @Override
+    public DollarStore copy() {
         return this;
     }
 

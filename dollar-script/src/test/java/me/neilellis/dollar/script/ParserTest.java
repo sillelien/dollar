@@ -82,6 +82,11 @@ public class ParserTest {
     }
 
     @Test
+    public void testRedis() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_redis.ds"));
+    }
+
+    @Test
     public void testMarkdown1() throws Exception {
         new DollarParser().parseMarkdown(CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/test1.md"))));
     }

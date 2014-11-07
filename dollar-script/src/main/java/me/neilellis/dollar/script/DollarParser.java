@@ -18,6 +18,7 @@ package me.neilellis.dollar.script;
 
 import com.google.common.io.ByteStreams;
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.ReactiveAware;
 import me.neilellis.dollar.script.java.JavaScriptingSupport;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
@@ -65,8 +66,8 @@ public class DollarParser {
     public static final String NAMED_PARAMETER_META_ATTR = "__named_parameter";
     public static final int LOGICAL_AND_PRIORITY = 70;
     public static final int LOGICAL_OR_PRIORITY = 60;
-    static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", "<=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "??", "!!", "*>", "==", "!=", "+", "-", "\n", "$(", "${", ":=", "&", "&=", "<>", "+>", "<+", "*>", "<*", "*|", "|*", "*|*", "|>", "<|", "&>", "?->", "<=>", "<$", "$>", "-_-", "::", "/", "%", "*", "&&", "||");
-    static final Terminals KEYWORDS = Terminals.operators("out", "err", "debug", "fix", "causes", "when", "if", "then", "for", "each", "fail", "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default", "debug", "error", "filter", "sleep", "secs", "sec", "minute", "minutes", "hr", "hrs", "milli", "millis", "every", "until", "unless", "uri", "and", "or");
+    static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", "<=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "??", "!!", "*>", "==", "!=", "+", "-", "\n", "$(", "${", ":=", "&", "&=", "<>", "+>", "<+", "*>", "<*", "*|", "|*", "*|*", "|>", "<|", "&>", "<&", "?>", "<?", "?->", "<=>", "<$", "$>", "-_-", "::", "/", "%", "*", "&&", "||", "<--", "<++");
+    static final Terminals KEYWORDS = Terminals.operators("out", "err", "debug", "fix", "causes", "when", "if", "then", "for", "each", "fail", "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default", "debug", "error", "filter", "sleep", "secs", "sec", "minute", "minutes", "hr", "hrs", "milli", "millis", "every", "until", "unless", "uri", "and", "or", "dispatch", "send", "give", "receive", "peek", "poll", "push", "pop", "publish", "subscribe", "emit", "drain", "receive all");
     static final Parser<?> TOKENIZER =
             Parsers.or(Lexical.url(), OPERATORS.tokenizer(), Lexical.decimal(), Lexical.java(), Terminals.StringLiteral.DOUBLE_QUOTE_TOKENIZER, Terminals.StringLiteral.SINGLE_QUOTE_TOKENIZER, Terminals.IntegerLiteral.TOKENIZER, Parsers.longest(KEYWORDS.tokenizer(), Terminals.Identifier.TOKENIZER));
 
@@ -409,8 +410,6 @@ public class DollarParser {
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$plus(rhs)), "+"), PLUS_MINUS_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$minus(rhs)), "-"), PLUS_MINUS_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> $(lhs.$S(), rhs)), ":"), 30)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> scope.set(lhs.$S(), $().$read(new File(rhs.$S())))), "<$"), OUTPUT_PRIORITY)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$write(new File(rhs.$S()))), "$>"), OUTPUT_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.isTrue() ? rhs : lhs), "?"), CONTROL_FLOW_PRIORITY)
                 .prefix(op(new ScopedVarUnaryOperator(false, i -> {
                     i.out();
@@ -438,16 +437,34 @@ public class DollarParser {
                         throw new AssertionError(lhs.$S() + " != " + rhs.$S());
                     }
                 }), "<=>"), EQUIVALENCE_PRIORITY)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$save(rhs.$S())), "|>"), OUTPUT_PRIORITY)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$load(rhs.$S())), "<|"), OUTPUT_PRIORITY)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$receive(lhs)), "+>"), OUTPUT_PRIORITY)
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$notify(lhs)), "&>"), OUTPUT_PRIORITY)
-                .prefix(op(new TakeOperator(scope), "<+"), 100)
+
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$dispatch(lhs)), "?>", "dispatch"), OUTPUT_PRIORITY)
+                .prefix(op(new ScopedVarUnaryOperator(scope, ReactiveAware::$peek), "<?", "peek"), OUTPUT_PRIORITY)
+
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$give(lhs)), "&>", "give"), OUTPUT_PRIORITY)
+                .prefix(op(new ScopedVarUnaryOperator(scope, ReactiveAware::$poll), "<&", "poll"), OUTPUT_PRIORITY)
+                .prefix(op(new ScopedVarUnaryOperator(scope, ReactiveAware::$drain), "<--", "drain"), OUTPUT_PRIORITY)
+                .prefix(op(new ScopedVarUnaryOperator(scope, ReactiveAware::$all), "<++", "receive all"), OUTPUT_PRIORITY)
+
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$push(lhs)), "->", "push"), OUTPUT_PRIORITY)
+                .prefix(op(new ScopedVarUnaryOperator(scope, ReactiveAware::$pop), "<-", "pop"), OUTPUT_PRIORITY)
+
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$publish(lhs)), "*>", "publish"), OUTPUT_PRIORITY)
+                .infixl(op(new SubscribeOperator(scope), "<*", "subscribe"), OUTPUT_PRIORITY)
+
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$send(lhs)), "+>", "send"), OUTPUT_PRIORITY)
+                .prefix(op(new ReceiveOperator(scope), "<+", "receive"), OUTPUT_PRIORITY)
+
+                .infixl(op(new ListenOperator(scope), "<$", "causes"), CONTROL_FLOW_PRIORITY)
+
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$notify(lhs)), "$>", "emit"), OUTPUT_PRIORITY)
+
+
 //                .infixl(op("*>", new ScopedVarBinaryOperator((lhs, rhs) -> {
 //                    lhs.$publish(rhs.$S());
 //                    return lhs;
 //                }, scope), scope), 50)
-                .infixl(op(new ListenOperator(scope), "->", "causes"), CONTROL_FLOW_PRIORITY)
+
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$choose(rhs)), "?->", "choose"), CONTROL_FLOW_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$default(rhs)), "?:", "default"), CONTROL_FLOW_PRIORITY)
                 .postfix(Lexical.term(".").next(ref.lazy().between(Lexical.term("("), Lexical.term(")")).or(IDENTIFIER)).map(rhs -> lhs -> {

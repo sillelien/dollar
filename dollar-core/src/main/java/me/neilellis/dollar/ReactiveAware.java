@@ -36,18 +36,48 @@ public interface ReactiveAware {
     String $listen(Pipeable pipe, String key);
 
     /**
-     * Receive synchronously.
+     * Send (to this) synchronously.
      */
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    var $receive(var value);
+    var $send(var value);
 
     /**
-     * Take synchronously (blocking)
+     * Receive (from this) synchronously.
      */
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    var $take();
+    var $receive();
 
+
+    @Guarded(ChainGuard.class)
+    var $drain();
+
+    @Guarded(ChainGuard.class)
+    var $poll();
+
+    @Guarded(ChainGuard.class)
+    var $peek();
+
+    @Guarded(ChainGuard.class)
+    var $pop();
+
+    @Guarded(ChainGuard.class)
+    var $all();
+
+    @Guarded(ChainGuard.class)
+    var $subscribe(Pipeable subscription);
+
+    @Guarded(ChainGuard.class)
+    var $dispatch(var lhs);
+
+    @Guarded(ChainGuard.class)
+    var $give(var lhs);
+
+    @Guarded(ChainGuard.class)
+    var $push(var lhs);
+
+    @Guarded(ChainGuard.class)
+    var $publish(var lhs);
 
 }

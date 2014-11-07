@@ -308,43 +308,7 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $load(@NotNull String location) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
     public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var $pop(@NotNull String location, int timeoutInMillis) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var $pub(@NotNull String... locations) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var $push(@NotNull String location) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var $save(@NotNull String location, int expiryInMilliseconds) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var $save(@NotNull String location) {
         return $copy();
     }
 

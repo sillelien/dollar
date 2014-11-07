@@ -16,14 +16,12 @@
 
 package me.neilellis.dollar;
 
-import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 import java.util.Date;
 
-import static me.neilellis.dollar.DollarStatic.*;
-import static org.junit.Assert.assertTrue;
+import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.DollarStatic.$jsonArray;
 
 public class DollarRedisTest {
 
@@ -40,23 +38,6 @@ public class DollarRedisTest {
                                 .$("postcode", "bn1 6jj")
                                 .$("number", 343)
                 );
-    }
-
-
-    @Test
-    public void testPushPop() {
-        profile.$push("test.profile");
-        var deser = profile.$pop("test.profile", 10 * 1000);
-      Assert.assertEquals(deser.S(), profile.S());
-    }
-
-    @Test
-    public void testSet() throws InterruptedException {
-        assertTrue(profile.$save("test.profile.set").equals(profile));
-        var deser = profile.$load("test.profile.set");
-      Assert.assertEquals(deser.S(), profile.S());
-        Thread.sleep(2000);
-        $dump();
     }
 
 

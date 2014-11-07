@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar;
+package me.neilellis.dollar.uri;
+
+import me.neilellis.dollar.plugin.ExtensionPoint;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface ControlFlowAware {
+public interface URIHandlerFactory extends ExtensionPoint<URIHandlerFactory> {
 
-    /**
-     * Select a value from map based upon the current value and return that.
-     */
-    var $choose(var map);
 
-    var $each(Pipeable pipe) throws Exception;
+    String getScheme();
+
+    URIHandler forURI(String uri);
 }

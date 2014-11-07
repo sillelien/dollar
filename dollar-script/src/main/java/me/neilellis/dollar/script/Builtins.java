@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.var;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -80,6 +81,7 @@ public class Builtins {
         });
 
         addJavaStyle("strlen", 1, 1, (args, scope) -> args.get(0).toString().length());
+        addJavaStyle("date", 0, 0, (args, scope) -> new Date().toString());
         addJavaStyle("matches", 2, 2, (args, scope) -> args.get(0).toString().matches(args.get(1).$S()));
     }
 }

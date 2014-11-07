@@ -126,7 +126,9 @@ public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAw
 
     @Nullable
     @Guarded(NotNullParametersGuard.class)
-    String S(@NotNull String key);
+    default String S(@NotNull String key) {
+        return $(key).S();
+    }
 
     /**
      * Returns the mime type of this {@link var} object. By default this will be 'application/json'

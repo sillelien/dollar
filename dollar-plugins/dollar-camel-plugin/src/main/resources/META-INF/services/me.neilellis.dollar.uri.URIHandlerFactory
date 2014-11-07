@@ -30,5 +30,4 @@
 # limitations under the License.
 #
 
-
-me.neilellis.dollar.integration.camel.CamelIntegrationProvider
+me.neilellis.dollar.uri.camel.CamelURIHandlerFactory
