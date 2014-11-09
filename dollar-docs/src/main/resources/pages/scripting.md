@@ -317,7 +317,7 @@ search="Unikitty"
 dynamicURI= uri "camel:http://google.com?q="+$search
 
 marinaVideos = <+ camel:https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
->> each $marinaVideos.results { $1.trackViewUrl }
+>> $marinaVideos.results each { $1.trackViewUrl }
 
 ```
 

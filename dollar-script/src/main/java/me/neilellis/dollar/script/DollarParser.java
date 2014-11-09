@@ -41,8 +41,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.DollarStatic.$void;
+import static me.neilellis.dollar.DollarStatic.*;
 import static me.neilellis.dollar.script.Lexical.term;
 import static me.neilellis.dollar.types.DollarFactory.fromLambda;
 import static org.codehaus.jparsec.Parsers.array;
@@ -70,7 +69,7 @@ public class DollarParser {
     public static final String NAMED_PARAMETER_META_ATTR = "__named_parameter";
     public static final int LOGICAL_AND_PRIORITY = 70;
     public static final int LOGICAL_OR_PRIORITY = 60;
-    static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", "<=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "??", "!!", "*>", "==", "!=", "+", "-", "\n", "$(", "${", ":=", "&", "&=", "<>", "+>", "<+", "*>", "<*", "*|", "|*", "*|*", "|>", "<|", "&>", "<&", "?>", "<?", "?->", "<=>", "<$", "$>", "-_-", "::", "/", "%", "*", "&&", "||", "<--", "<++", "\u2357");
+    static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", "<=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "??", "!!", "*>", "==", "!=", "+", "-", "\n", "$(", "${", ":=", "&", "&=", "<>", "+>", "<+", "*>", "<*", "*|", "|*", "*|*", "|>", "<|", "&>", "<&", "?>", "<?", "?->", "<=>", "<$", "$>", "-_-", "::", "/", "%", "*", "&&", "||", "<--", "<++", "\u2357", "**");
     static final Terminals KEYWORDS = Terminals.operators("out", "err", "debug", "fix", "causes", "when", "if", "then", "for", "each", "fail", "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default", "debug", "error", "filter", "sleep", "secs", "sec", "minute", "minutes", "hr", "hrs", "milli", "millis", "every", "until", "unless", "uri", "and", "or", "dispatch", "send", "give", "receive", "peek", "poll", "push", "pop", "publish", "subscribe", "emit", "drain", "receive all", "import");
     static final Parser<?> TOKENIZER =
             Parsers.or(Lexical.url(), OPERATORS.tokenizer(), Lexical.decimal(), Lexical.java(), Terminals.StringLiteral.DOUBLE_QUOTE_TOKENIZER, Terminals.StringLiteral.SINGLE_QUOTE_TOKENIZER, Terminals.IntegerLiteral.TOKENIZER, Parsers.longest(KEYWORDS.tokenizer(), Terminals.Identifier.TOKENIZER));
@@ -247,20 +246,6 @@ public class DollarParser {
     }
 
 
-    private Parser<var> eachStatement(Parser<var> expression, ScriptScope scope) {
-        Parser<Object[]> sequence = Lexical.keywordFollowedByNewlines("each").next(array(expression, expression));
-        return sequence.map(objects -> {
-            var lhs = (var) objects[0];
-            var lambda = DollarFactory.fromLambda(i -> lhs.$each(j -> {
-                scope.set("1", j);
-                return $((Object) ((var) objects[1]).$());
-            }));
-            lhs.$listen(lambda::$notify);
-            return lambda;
-        });
-    }
-
-
     private Parser<var> everyStatement(Parser<var> expression, ScriptScope scope) {
         Parser<Object[]> sequence = Lexical.keywordFollowedByNewlines("every").next(array(expression, Lexical.keyword("secs", "sec", "minute", "minutes", "hr", "hrs", "milli", "millis"), Lexical.keyword("until").next(expression).optional(), Lexical.keyword("unless").next(expression).optional(), expression));
         return sequence.map(objects -> {
@@ -270,7 +255,7 @@ public class DollarParser {
 //                System.out.println("COUNT "+count[0]);
                 return withinNewScope(scope, newScope -> {
 //                    System.err.println(newScope);
-                    newScope.set("1", $(count[0]));
+                    newScope.setImmediate("1", $(count[0]));
                     if (objects[2] instanceof var && ((var) objects[2]).isTrue()) {
                         Scheduler.cancel(i.$S());
                         return i;
@@ -348,7 +333,7 @@ public class DollarParser {
     private Parser<var> expression(ScriptScope scope) {
 
         Parser.Reference<var> ref = Parser.newReference();
-        Parser<var> main = ref.lazy().between(term("("), term(")")).or(Parsers.or(ifStatement(ref.lazy(), scope), list(ref.lazy(), scope), map(ref.lazy(), scope), eachStatement(ref.lazy(), scope), whenStatement(ref.lazy(), scope), everyStatement(ref.lazy(), scope), java(scope), URL, DECIMAL_LITERAL, INTEGER_LITERAL, STRING_LITERAL, IDENTIFIER)).or(block(ref.lazy(), scope).between(Lexical.termFollowedByNewlines("{"), Lexical.termPreceededByNewlines("}")));
+        Parser<var> main = ref.lazy().between(term("("), term(")")).or(Parsers.or(ifStatement(ref.lazy(), scope), list(ref.lazy(), scope), map(ref.lazy(), scope), whenStatement(ref.lazy(), scope), everyStatement(ref.lazy(), scope), java(scope), URL, DECIMAL_LITERAL, INTEGER_LITERAL, STRING_LITERAL, IDENTIFIER)).or(block(ref.lazy(), scope).between(Lexical.termFollowedByNewlines("{"), Lexical.termPreceededByNewlines("}")));
 
         Parser<var> unit = main.withSource().map(varWithSource -> {
             var value = varWithSource.getValue();
@@ -367,17 +352,18 @@ public class DollarParser {
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> $(lhs.isTrue() || rhs.isTrue()),
                         scope), "||"), LOGICAL_OR_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> withinNewScope(scope, newScope -> {
-                    newScope.setImmediate("1", lhs);
+                    var lhsFix = fix(lhs);
+                    newScope.setImmediate("1", lhsFix);
                     Object rhsVal = rhs.$();
                     if ((rhsVal instanceof String)) {
                         String rhsStr = rhsVal.toString();
                         if (Builtins.exists(rhsStr)) {
-                            return Builtins.execute(rhsStr, Collections.singletonList(lhs), newScope);
+                            return Builtins.execute(rhsStr, Collections.singletonList(lhsFix), newScope);
                         } else {
                             throw new VariableNotFoundException(rhsStr);
                         }
                     } else {
-                        return $((Object) rhsVal);
+                        return $(rhsVal);
                     }
                 }),
                         scope), "|"), PIPE_PRIORITY)
@@ -430,6 +416,10 @@ public class DollarParser {
                 .infixl(op(new SubscribeOperator(scope), "<*", "subscribe"), OUTPUT_PRIORITY)
 
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$send(lhs), scope), "+>", "send"), OUTPUT_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$each(i -> withinNewScope(scope, newScope -> {
+                    newScope.setImmediate("1", i);
+                    return fix(rhs);
+                })), scope), "**", "each"), MULTIPLY_DIVIDE_PRIORITY)
                 .prefix(op(new ReceiveOperator(scope), "<+", "receive"), OUTPUT_PRIORITY)
 
                 .infixl(op(new ListenOperator(scope), "<$", "causes"), CONTROL_FLOW_PRIORITY)
@@ -519,10 +509,10 @@ public class DollarParser {
 
             var lambda = DollarFactory.fromLambda(i -> withinNewScope(scope, newScope -> {
                 //Add the special $* value for all the parameters
-                newScope.set("*", $(rhs));
+                newScope.setImmediate("*", $(rhs));
                 int count = 0;
                 for (var param : rhs) {
-                    newScope.set(String.valueOf(++count), param);
+                    newScope.setImmediate(String.valueOf(++count), param);
                     //If the parameter is a named parameter then use the name (set as metadata
                     //on the value).
                     if (param.getMetaAttribute(NAMED_PARAMETER_META_ATTR) != null) {

@@ -26,5 +26,5 @@ public interface ControlFlowAware {
      */
     var $choose(var map);
 
-    var $each(Pipeable pipe) throws Exception;
+    var $each(Pipeable pipe);
 }

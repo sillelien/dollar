@@ -36,8 +36,8 @@ public class VariableOperator extends ScopedVarUnaryOperator {
     @Override
     public var map(var from) {
         try {
-            String key = from.$S();
             var lambda = DollarFactory.fromLambda(v -> {
+                String key = from.$S();
                 try {
                     List<ScriptScope> scopes = scope.getDollarParser().scopes();
                     for (ScriptScope scriptScope : scopes) {
@@ -54,7 +54,8 @@ public class VariableOperator extends ScopedVarUnaryOperator {
                 }
                 return scope.get(key);
             });
-            scope.listen(key, lambda);
+            scope.listen(from.$S(), lambda);
+            lambda.setMetaAttribute("variable", from.$S());
             return lambda;
         } catch (AssertionError e) {
             return scope.getDollarParser().getErrorHandler().handle(source.get(), e);

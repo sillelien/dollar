@@ -100,6 +100,9 @@ public class ScriptScope implements Scope {
 
     @Override
     public var set(String key, var value) {
+        if (key.matches("[0-9]+")) {
+            throw new AssertionError("Cannot set numerical keys, use setImmediate");
+        }
         ScriptScope scope = getScopeForKey(key);
         if (scope == null) {
             scope = this;
@@ -112,7 +115,10 @@ public class ScriptScope implements Scope {
 
     public var setImmediate(String key, var value) {
         if (DollarStatic.config.isDebugScope()) System.out.println("Setting " + key + " in " + this);
-        this.variables.put(key, value);
+        if (key.matches("[0-9]+") && variables.containsKey(key)) {
+            throw new AssertionError("Cannot change the value of positional variables.");
+        }
+        variables.put(key, value);
         this.notifyScope(key, value);
         return value;
     }

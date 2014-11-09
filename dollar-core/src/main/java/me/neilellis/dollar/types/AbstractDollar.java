@@ -600,10 +600,16 @@ public abstract class AbstractDollar implements var {
 
 
     @Override
-    public var $each(Pipeable pipe) throws Exception {
+    public var $each(Pipeable pipe) {
         List<var> result = new LinkedList<>();
-        for (var var : toList()) {
-            result.add(pipe.pipe(var));
+        for (var v : toList()) {
+            var res = null;
+            try {
+                res = pipe.pipe(v);
+            } catch (Exception e) {
+                throw new DollarException(e);
+            }
+            result.add(res);
         }
         return DollarFactory.fromValue(result);
     }

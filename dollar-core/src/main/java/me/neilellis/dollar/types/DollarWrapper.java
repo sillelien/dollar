@@ -98,7 +98,7 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public var $each(Pipeable pipe) throws Exception {
+    public var $each(Pipeable pipe) {
         return getValue().$each(pipe);
     }
 

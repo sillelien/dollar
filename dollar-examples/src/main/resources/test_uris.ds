@@ -3,7 +3,7 @@ marinaVideos = <+ camel:https://itunes.apple.com/search?term=Marina+And+The+Diam
 >> $marinaVideos
 firstUrl= $marinaVideos.results[0];
 
-videoUrls= each $marinaVideos.results { $1.trackViewUrl }
+videoUrls= $marinaVideos.results each { $1.trackViewUrl }
 => count($videoUrls) != 0
 
 

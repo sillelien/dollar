@@ -77,6 +77,11 @@ public class ParserTest {
     }
 
     @Test
+    public void testIteration() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_iteration.ds"));
+    }
+
+    @Test
     public void testJava() throws Exception {
         new DollarParser().parse(getClass().getResourceAsStream("/test_java.ds"));
     }

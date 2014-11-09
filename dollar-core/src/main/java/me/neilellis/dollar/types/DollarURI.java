@@ -300,7 +300,7 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public var $each(Pipeable pipe) throws Exception {
+    public var $each(Pipeable pipe) {
         return super.$each(pipe);
     }
 
