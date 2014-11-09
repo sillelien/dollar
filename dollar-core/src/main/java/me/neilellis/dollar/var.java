@@ -33,33 +33,7 @@ public interface var extends Map<String, var>, ErrorAware, TypeAware, PipeAware,
         OldAndDeprecated, VarInternal, NumericAware, BooleanAware, ControlFlowAware, AssertionAware, URIAware, MetadataAware, Comparable<var> {
 
 
-    /**
-     * Return a new object with the key and value added to it.
-     *
-     * @param key   the key
-     * @param value the value
-     * @return a new {@link me.neilellis.dollar.var} object with the key/value pair included.
-     */
-    @NotNull
-    @Guarded(SetKeyValueGuard.class)
-    @Guarded(ReturnVarOnlyGuard.class)
-    var $(@NotNull String key, long value);
 
-    /**
-     * Return a new object with the key and value added to it.
-     *
-     * @param key   the key
-     * @param value the value
-     * @return a new {@link me.neilellis.dollar.var} object with the key/value pair included.
-     */
-    @NotNull
-    @Guarded(SetKeyValueGuard.class)
-    @Guarded(ReturnVarOnlyGuard.class)
-    var $(@NotNull String key, double value);
-
-    @Guarded(SetKeyValueGuard.class)
-    @Guarded(ReturnVarOnlyGuard.class)
-    var $(@NotNull String key, Pipeable value);
 
     @NotNull
     @Override
@@ -160,12 +134,19 @@ public interface var extends Map<String, var>, ErrorAware, TypeAware, PipeAware,
 
     @NotNull
     default var $set(@NotNull String key, @Nullable Object value) {
-        return $(key, value);
+        return $(DollarStatic.$(key), value);
     }
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var $(@NotNull String key, @Nullable Object value);
+    var $(@NotNull var key, @Nullable Object value);
+
+
+    @NotNull
+    @Guarded(ChainGuard.class)
+    default var $(@NotNull String key, @Nullable Object value) {
+        return $(DollarStatic.$(key), value);
+    }
 
     @NotNull
     Stream<var> $stream();
@@ -260,7 +241,9 @@ public interface var extends Map<String, var>, ErrorAware, TypeAware, PipeAware,
     var $(Pipeable lambda);
 
 
-    var $(Number n);
+    default var $(Number n) {
+        return $(DollarStatic.$(n));
+    }
 
     var $(var rhs);
 

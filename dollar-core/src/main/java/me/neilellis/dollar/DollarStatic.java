@@ -34,7 +34,6 @@ import spark.Spark;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -98,28 +97,10 @@ public class DollarStatic {
     }
 
     @NotNull
-    public static var $(@NotNull String name, Multimap multiMap) {
-        return DollarFactory.fromValue().$(name, multiMap);
+    public static var $(@NotNull String name, Object o) {
+        return DollarFactory.fromValue().$($(name), o);
     }
 
-    @NotNull
-    public static var $(@NotNull String name, Number value) {
-        return DollarFactory.fromValue().$(name, value);
-    }
-
-    @NotNull
-    public static var $(@NotNull String name, Date value) {
-        return DollarFactory.fromValue().$(name, value);
-    }
-
-    @NotNull
-    public static var $(@NotNull String name, JsonArray value) {
-        return DollarFactory.fromValue().$(name, value);
-    }
-
-    public static var $(@NotNull String name, Pipeable value) {
-        return DollarFactory.fromValue().$(name, value);
-    }
 
     @NotNull
     public static var $(@NotNull var... values) {
@@ -144,25 +125,12 @@ public class DollarStatic {
         return $(name, v);
     }
 
-    @NotNull
-    public static var $(@NotNull String key, var value) {
-        return DollarFactory.fromValue().$(key, value);
-    }
-
-    @NotNull
-    public static var $(@NotNull String key, String value) {
-        return DollarFactory.fromValue().$(key, value);
-    }
 
     @NotNull
     public static var $(JsonObject json) {
         return DollarFactory.fromValue(ImmutableList.of(), json);
     }
 
-    @NotNull
-    public static var $(@NotNull String key, JsonObject jsonObject) {
-        return DollarFactory.fromValue().$(key, jsonObject);
-    }
 
     public static var $(long start, long finish) {
         return $(Range.closed(start, finish));

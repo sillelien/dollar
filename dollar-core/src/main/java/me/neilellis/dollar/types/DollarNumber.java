@@ -35,13 +35,13 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
     }
 
     @Override
-    public var $dec(long amount) {
-        return new DollarNumber(errors(), value.longValue() - amount);
+    public var $dec(var amount) {
+        return new DollarNumber(errors(), value.longValue() - amount.L());
     }
 
     @Override
-    public var $inc(long amount) {
-        return new DollarNumber(errors(), value.longValue() + amount);
+    public var $inc(var amount) {
+        return new DollarNumber(errors(), value.longValue() + amount.L());
     }
 
     @Override

@@ -52,19 +52,7 @@ public class DollarRange extends AbstractDollar {
         this.range = range;
     }
 
-    @NotNull
-    @Override
-    public var $(@NotNull String age, long l) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
 
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull String key, double value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
-
-    }
 
     @NotNull
     @Override
@@ -85,12 +73,12 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public var $dec(long amount) {
+    public var $dec(var amount) {
         return this;
     }
 
     @Override
-    public var $inc(long amount) {
+    public var $inc(var amount) {
         return this;
     }
 
@@ -160,7 +148,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $(@NotNull String key, Object value) {
+    public var $(@NotNull var key, Object value) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 

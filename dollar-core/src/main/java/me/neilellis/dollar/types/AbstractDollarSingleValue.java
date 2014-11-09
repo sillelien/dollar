@@ -44,16 +44,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         this.value = value;
     }
 
-    @NotNull
-    public var $(@NotNull String age, long l) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull String key, double value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
-    }
 
     @NotNull
     @Override
@@ -111,7 +101,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @NotNull
-    public var $(@NotNull String key, Object value) {
+    public var $(@NotNull var key, Object value) {
         throw new UnsupportedOperationException();
     }
 

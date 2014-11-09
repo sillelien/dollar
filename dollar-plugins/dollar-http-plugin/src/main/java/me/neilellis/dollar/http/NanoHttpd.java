@@ -45,7 +45,7 @@ public abstract class NanoHttpd {
     private final String hostname;
     private final int myPort;
     private ServerSocket myServerSocket;
-    private Set<Socket> openConnections = new HashSet<Socket>();
+    private Set<Socket> openConnections = new HashSet<>();
     private Thread myThread;
     /**
      * Pluggable strategy for asynchronously executing requests.
@@ -73,7 +73,7 @@ public abstract class NanoHttpd {
         setAsyncRunner(new DefaultAsyncRunner());
     }
 
-    private static final void safeClose(Closeable closeable) {
+    private static void safeClose(Closeable closeable) {
         if (closeable != null) {
             try {
                 closeable.close();
@@ -82,7 +82,7 @@ public abstract class NanoHttpd {
         }
     }
 
-    private static final void safeClose(Socket closeable) {
+    private static void safeClose(Socket closeable) {
         if (closeable != null) {
             try {
                 closeable.close();
@@ -91,7 +91,7 @@ public abstract class NanoHttpd {
         }
     }
 
-    private static final void safeClose(ServerSocket closeable) {
+    private static void safeClose(ServerSocket closeable) {
         if (closeable != null) {
             try {
                 closeable.close();
@@ -111,15 +111,12 @@ public abstract class NanoHttpd {
 
         myThread = new Thread(() -> {
             do {
-                try {
-                    final Socket finalAccept = myServerSocket.accept();
+                try (Socket finalAccept = myServerSocket.accept()) {
                     registerConnection(finalAccept);
                     finalAccept.setSoTimeout(SOCKET_READ_TIMEOUT);
-                    final InputStream inputStream = finalAccept.getInputStream();
                     asyncRunner.exec(() -> {
-                        OutputStream outputStream = null;
-                        try {
-                            outputStream = finalAccept.getOutputStream();
+                        try (OutputStream outputStream = finalAccept.getOutputStream(); InputStream inputStream = finalAccept.getInputStream()) {
+
                             TempFileManager tempFileManager = tempFileManagerFactory.create();
                             HTTPSession session = new HTTPSession(tempFileManager, inputStream, outputStream, finalAccept.getInetAddress());
                             while (!finalAccept.isClosed()) {
@@ -131,10 +128,6 @@ public abstract class NanoHttpd {
                             if (!(e instanceof SocketException && "NanoHttpd Shutdown".equals(e.getMessage()))) {
                                 e.printStackTrace();
                             }
-                        } finally {
-                            safeClose(outputStream);
-                            safeClose(inputStream);
-                            safeClose(finalAccept);
                             unRegisterConnection(finalAccept);
                         }
                     });
@@ -185,9 +178,7 @@ public abstract class NanoHttpd {
      * Forcibly closes all connections that are open.
      */
     public synchronized void closeAllConnections() {
-        for (Socket socket : openConnections) {
-            safeClose(socket);
-        }
+        openConnections.forEach(NanoHttpd::safeClose);
     }
 
     public final int getListeningPort() {
@@ -230,7 +221,7 @@ public abstract class NanoHttpd {
      * @return HTTP response, see class Response for details
      */
     public Response serve(IHTTPSession session) {
-        Map<String, String> files = new HashMap<String, String>();
+        Map<String, String> files = new HashMap<>();
         Method method = session.getMethod();
         if (Method.PUT.equals(method) || Method.POST.equals(method)) {
             try {
@@ -283,7 +274,7 @@ public abstract class NanoHttpd {
      * @return a map of <code>String</code> (parameter name) to <code>List&lt;String&gt;</code> (a list of the values supplied).
      */
     protected Map<String, List<String>> decodeParameters(String queryString) {
-        Map<String, List<String>> parms = new HashMap<String, List<String>>();
+        Map<String, List<String>> parms = new HashMap<>();
         if (queryString != null) {
             StringTokenizer st = new StringTokenizer(queryString, "&");
             while (st.hasMoreTokens()) {
@@ -291,7 +282,7 @@ public abstract class NanoHttpd {
                 int sep = e.indexOf('=');
                 String propertyName = (sep >= 0) ? decodePercent(e.substring(0, sep)).trim() : decodePercent(e).trim();
                 if (!parms.containsKey(propertyName)) {
-                    parms.put(propertyName, new ArrayList<String>());
+                    parms.put(propertyName, new ArrayList<>());
                 }
                 String propertyValue = (sep >= 0) ? decodePercent(e.substring(sep + 1)) : null;
                 if (propertyValue != null) {
@@ -529,7 +520,7 @@ public abstract class NanoHttpd {
         /**
          * Headers for the HTTP response. Use addHeader() to add lines.
          */
-        private Map<String, String> header = new HashMap<String, String>();
+        private Map<String, String> header = new HashMap<>();
         /**
          * The request method that spawned this response.
          */
@@ -1166,7 +1157,7 @@ public abstract class NanoHttpd {
         private int[] getBoundaryPositions(ByteBuffer b, byte[] boundary) {
             int matchcount = 0;
             int matchbyte = -1;
-            List<Integer> matchbytes = new ArrayList<Integer>();
+            List<Integer> matchbytes = new ArrayList<>();
             for (int i = 0; i < b.limit(); i++) {
                 if (b.get(i) == boundary[matchcount]) {
                     if (matchcount == 0)
@@ -1303,8 +1294,8 @@ public abstract class NanoHttpd {
      * @author LordFokas
      */
     public class CookieHandler implements Iterable<String> {
-        private HashMap<String, String> cookies = new HashMap<String, String>();
-        private ArrayList<Cookie> queue = new ArrayList<Cookie>();
+        private HashMap<String, String> cookies = new HashMap<>();
+        private ArrayList<Cookie> queue = new ArrayList<>();
 
         public CookieHandler(Map<String, String> httpHeaders) {
             String raw = httpHeaders.get("cookie");

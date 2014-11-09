@@ -65,18 +65,6 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $(@NotNull String age, long l) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull String age, double d) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
     public var $plus(Object value) {
         return $copy();
     }
@@ -94,12 +82,12 @@ public class DollarVoid extends AbstractDollar implements var {
     }
 
     @Override
-    public var $dec(long amount) {
+    public var $dec(var amount) {
         return this;
     }
 
     @Override
-    public var $inc(long amount) {
+    public var $inc(var amount) {
         return this;
     }
 
@@ -175,7 +163,7 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $(@NotNull String key, Object value) {
+    public var $(@NotNull var key, Object value) {
         return $copy();
     }
 

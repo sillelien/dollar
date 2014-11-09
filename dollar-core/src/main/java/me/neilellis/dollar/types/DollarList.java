@@ -73,18 +73,6 @@ public class DollarList extends AbstractDollar {
         list = ImmutableList.copyOf(l);
     }
 
-    @org.jetbrains.annotations.NotNull
-    @Override
-    public var $(@NotNull String age, long l) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull String key, double value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
-    }
-
     @NotNull
     @Override
     public var $plus(Object value) {
@@ -108,12 +96,12 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public var $dec(long amount) {
+    public var $dec(var amount) {
         return this;
     }
 
     @Override
-    public var $inc(long amount) {
+    public var $inc(var amount) {
         return this;
     }
 
@@ -183,8 +171,14 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $(@NotNull String key, Object value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+    public var $(@NotNull var key, Object value) {
+        ArrayList<var> newVal = new ArrayList<>(list);
+        if (key.isInteger()) {
+            newVal.set(key.I(), DollarFactory.fromValue(value));
+        } else {
+            return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+        }
+        return DollarFactory.fromValue(errors(), newVal);
     }
 
     @Override

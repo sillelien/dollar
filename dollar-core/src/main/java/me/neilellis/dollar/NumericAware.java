@@ -16,35 +16,55 @@
 
 package me.neilellis.dollar;
 
+import static me.neilellis.dollar.DollarStatic.$;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface NumericAware {
 
-    default var $dec(String key) {
-        return $dec(key, 1);
+
+    var $dec(var key, var amount);
+
+    default var $dec(String key, var amount) {
+        return $dec($(key), amount);
     }
 
-    var $dec(String key, long amount);
+    default var $dec(String key, Number amount) {
+        return $dec($(key), $(amount));
+    }
 
-    var $dec(long amount);
+    var $dec(var amount);
+
+    default var $dec(Number amount) {
+        return $dec($(amount));
+    }
 
     default var $dec() {
-        return $dec(1);
+        return $dec($(1));
     }
 
-    default var $inc(String key) {
-        return $inc(key, 1);
+
+    var $inc(var key, var amount);
+
+    default var $inc(String key, var amount) {
+        return $inc($(key), amount);
     }
 
-    var $inc(String key, long amount);
+    default var $inc(String key, Number amount) {
+        return $inc($(key), $(amount));
+    }
 
-    var $inc(long amount);
+    var $inc(var amount);
+
+    default var $inc(Number amount) {
+        return $inc($(amount));
+    }
 
     var $negate();
 
     default var $inc() {
-        return $inc(1);
+        return $inc($(1));
     }
 
     var $multiply(var v);

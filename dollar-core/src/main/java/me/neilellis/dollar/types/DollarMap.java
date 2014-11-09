@@ -114,20 +114,9 @@ class DollarMap extends AbstractDollar implements var {
         return result;
     }
 
-    @NotNull
-    @Override
-    public var $(@NotNull String key, long value) {
-        return $(key, (Object) value);
-    }
 
     private LinkedHashMap<String, var> copyMap() {
         return deepClone(map);
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull String key, double value) {
-        return $(key, (Object) value);
     }
 
 
@@ -150,12 +139,12 @@ class DollarMap extends AbstractDollar implements var {
     }
 
     @Override
-    public var $dec(long amount) {
+    public var $dec(var amount) {
         return this;
     }
 
     @Override
-    public var $inc(long amount) {
+    public var $inc(var amount) {
         return this;
     }
 
@@ -240,9 +229,9 @@ class DollarMap extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $(@NotNull String key, Object value) {
+    public var $(@NotNull var key, Object value) {
         LinkedHashMap<String, var> copyMap = copyMap();
-        copyMap.put(key, DollarFactory.fromValue(errors(), value));
+        copyMap.put(key.$S(), DollarFactory.fromValue(errors(), value));
         return DollarFactory.wrap(new DollarMap(errors(), copyMap));
     }
 

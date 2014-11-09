@@ -32,12 +32,12 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     }
 
     @Override
-    public var $dec(long amount) {
+    public var $dec(var amount) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
     @Override
-    public var $inc(long amount) {
+    public var $inc(var amount) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 

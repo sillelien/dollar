@@ -179,12 +179,12 @@ public class HttpURIHandler implements URIHandler {
         public NanoHttpd.Response invoke(NanoHttpd.IHTTPSession session) {
             try {
                 var in = $()
-                        .$("headers", session.getHeaders())
-                        .$("params", session.getParms())
-                        .$("uri", session.getUri())
-                        .$("query", session.getQueryParameterString())
-                        .$("method", session.getMethod().name())
-                        .$("body", "");
+                        .$($("headers"), session.getHeaders())
+                        .$($("params"), session.getParms())
+                        .$($("uri"), session.getUri())
+                        .$($("query"), session.getQueryParameterString())
+                        .$($("method"), session.getMethod().name())
+                        .$($("body"), "");
 //                session.getInputStream().close();
                 var out = consumer.pipe(in);
                 var body = out.$("body");

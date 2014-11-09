@@ -49,17 +49,6 @@ public class DollarURI extends AbstractDollar {
         handler = Plugins.resolveURIProvider(scheme).forURI(scheme, this.uri);
     }
 
-    @NotNull
-    @Override
-    public var $(@NotNull String key, long value) {
-        return handler.set(DollarStatic.$(key), DollarStatic.$(value));
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull String key, double value) {
-        return handler.set(DollarStatic.$(key), DollarStatic.$(value));
-    }
 
     @NotNull
     @Override
@@ -107,7 +96,7 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $(@NotNull String key, @Nullable Object value) {
+    public var $(@NotNull var key, @Nullable Object value) {
         return handler.set(DollarStatic.$(key), DollarStatic.$(value));
 
     }
@@ -176,12 +165,12 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public var $dec(long amount) {
+    public var $dec(var amount) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
     @Override
-    public var $inc(long amount) {
+    public var $inc(var amount) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 

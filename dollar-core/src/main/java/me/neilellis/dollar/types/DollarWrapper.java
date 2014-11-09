@@ -68,22 +68,6 @@ public class DollarWrapper implements var {
 
     }
 
-    @NotNull
-    @Override
-    public var $(@NotNull String key, long l) {
-        return tracer.trace(this, getValue().$(key, l), StateTracer.Operations.SET, key, l);
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull String key, double value) {
-        return tracer.trace(this, getValue().$(key, value), StateTracer.Operations.SET, key, value);
-    }
-
-    @Override
-    public var $(@NotNull String key, Pipeable value) {
-        return tracer.trace(this, getValue().$(key, value), StateTracer.Operations.SET, key, value);
-    }
 
     @NotNull
     @Override
@@ -183,7 +167,7 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $(@NotNull String key, Object value) {
+    public var $(@NotNull var key, Object value) {
         return tracer.trace(this, getValue().$(key, value), StateTracer.Operations.SET, key, value);
     }
 
@@ -266,22 +250,22 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public var $dec(String key, long amount) {
+    public var $dec(var key, var amount) {
         return tracer.trace(this, getValue().$dec(key, amount), StateTracer.Operations.DEC, key, amount);
     }
 
     @Override
-    public var $dec(long amount) {
+    public var $dec(var amount) {
         return tracer.trace(this, getValue().$dec(amount), StateTracer.Operations.DEC, amount);
     }
 
     @Override
-    public var $inc(String key, long amount) {
+    public var $inc(var key, var amount) {
         return tracer.trace(this, getValue().$inc(key, amount), StateTracer.Operations.INC, key, amount);
     }
 
     @Override
-    public var $inc(long amount) {
+    public var $inc(var amount) {
         return tracer.trace(this, getValue().$inc(amount), StateTracer.Operations.INC, amount);
     }
 

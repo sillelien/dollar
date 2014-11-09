@@ -66,23 +66,14 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public var $dec(String key, long amount) {
-        return $(key, $(key).I() - amount);
+    public var $dec(var key, var amount) {
+        return $(key, $(key).L() - amount.L());
     }
 
-    @Override
-    public var $dec() {
-        return this;//TODO
-    }
 
     @Override
-    public var $inc(String key, long amount) {
-        return $(key, $(key).I() + amount);
-    }
-
-    @Override
-    public var $inc() {
-        return this;//TODO
+    public var $inc(var key, var amount) {
+        return $(key, $(key).L() + amount.L());
     }
 
 
@@ -155,10 +146,6 @@ public abstract class AbstractDollar implements var {
         }
     }
 
-    @Override
-    public var $(@NotNull String key, Pipeable value) {
-        return $(key, (Object) value);
-    }
 
     @Override
     public String toString() {
@@ -192,7 +179,7 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var put(@NotNull String key, var value) {
-        return $(key, value);
+        return $($(key), value);
     }
 
     @Override

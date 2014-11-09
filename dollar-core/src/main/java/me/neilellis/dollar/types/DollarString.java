@@ -35,12 +35,12 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
-    public var $dec(long amount) {
+    public var $dec(var amount) {
         return this;
     }
 
     @Override
-    public var $inc(long amount) {
+    public var $inc(var amount) {
         return this;
     }
 
