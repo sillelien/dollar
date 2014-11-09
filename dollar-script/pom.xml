@@ -49,14 +49,13 @@
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
-            <artifactId>dollar-metrics-plugin</artifactId>
+            <artifactId>dollar-http-plugin</artifactId>
             <version>0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
-            <artifactId>dollar-class-resolver-plugin</artifactId>
+            <artifactId>dollar-metrics-plugin</artifactId>
             <version>0-SNAPSHOT</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.pegdown</groupId>

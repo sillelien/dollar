@@ -16,6 +16,8 @@
 
 package me.neilellis.dollar.redis;
 
+import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.var;
 import redis.clients.jedis.Jedis;
@@ -26,7 +28,6 @@ import redis.clients.jedis.JedisPubSub;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static me.neilellis.dollar.DollarStatic.$;
 
@@ -45,7 +46,7 @@ public class RedisURIHandler implements URIHandler {
         String host = uri1.getHost();
         int port = uri1.getPort();
         String userInfo = uri1.getUserInfo();
-        path = uri1.getPath();
+        path = uri1.getPath().substring(1);
         query = uri1.getQuery();
         if (userInfo != null) {
             String[] usernamePassword = userInfo.split(":");
@@ -64,17 +65,25 @@ public class RedisURIHandler implements URIHandler {
     }
 
     @Override
-    public void subscribe(Consumer<var> consumer) {
+    public void subscribe(Pipeable consumer) {
         try (Jedis jedis = jedisPool.getResource()) {
             jedis.subscribe(new JedisPubSub() {
                 @Override
                 public void onMessage(String channel, String message) {
-                    consumer.accept($(message));
+                    try {
+                        consumer.pipe($(message));
+                    } catch (Exception e) {
+                        DollarStatic.logAndRethrow(e);
+                    }
                 }
 
                 @Override
                 public void onPMessage(String pattern, String channel, String message) {
-                    consumer.accept($(message));
+                    try {
+                        consumer.pipe($(message));
+                    } catch (Exception e) {
+                        DollarStatic.logAndRethrow(e);
+                    }
                 }
 
                 @Override
@@ -170,10 +179,6 @@ public class RedisURIHandler implements URIHandler {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public var subscribe() {
-        throw new UnsupportedOperationException();
-    }
 
     @Override
     public var give(var value) {

@@ -67,7 +67,7 @@ public class DollarGuard implements java.lang.reflect.InvocationHandler {
                 }
             }
         } catch (InvocationTargetException e) {
-            return DollarStatic.logAndRethrow(e.getCause());
+            throw e.getCause();
         } catch (Exception e) {
             return DollarStatic.logAndRethrow(e);
         }

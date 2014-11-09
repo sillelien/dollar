@@ -16,9 +16,10 @@
 
 package me.neilellis.dollar.uri;
 
+import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.var;
 
-import java.util.function.Consumer;
+import java.io.IOException;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -38,7 +39,7 @@ public interface URIHandler {
      *
      * @param consumer
      */
-    void subscribe(Consumer<var> consumer);
+    void subscribe(Pipeable consumer) throws IOException;
 
     /**
      * Take the latest available value or return a void value.
@@ -131,7 +132,6 @@ public interface URIHandler {
 
     int size();
 
-    var subscribe();
 
     var give(var value);
 

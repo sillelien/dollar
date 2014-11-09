@@ -27,6 +27,7 @@ import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -41,11 +42,11 @@ public class DollarURI extends AbstractDollar {
     private String uri;
     private URIHandler handler;
 
-    public DollarURI(@NotNull List<Throwable> errors, String uri) {
+    public DollarURI(@NotNull List<Throwable> errors, String uri) throws Exception {
         super(errors);
         this.uri = uri.substring(uri.indexOf(":") + 1);
         String scheme = uri.substring(0, uri.indexOf(":"));
-        handler = Plugins.resolveURIProvider(scheme).forURI(this.uri);
+        handler = Plugins.resolveURIProvider(scheme).forURI(scheme, this.uri);
     }
 
     @NotNull
@@ -280,13 +281,17 @@ public class DollarURI extends AbstractDollar {
 
     @Override
     public var $subscribe(Pipeable pipe) {
-        handler.subscribe(i -> {
-            try {
-                pipe.pipe(i);
-            } catch (Exception e) {
-                DollarStatic.logAndRethrow(e);
-            }
-        });
+        try {
+            handler.subscribe(i -> {
+                try {
+                    return pipe.pipe(i);
+                } catch (Exception e) {
+                    return DollarStatic.logAndRethrow(e);
+                }
+            });
+        } catch (IOException e) {
+            return DollarStatic.logAndRethrow(e);
+        }
         return this;
     }
 

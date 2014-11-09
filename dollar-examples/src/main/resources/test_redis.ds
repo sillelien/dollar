@@ -1,0 +1,23 @@
+#!/usr/bin/env dollar
+
+
+redis := redis://localhost:6379/test
+("Hello World " + date()) send $redis
+
+>> receive all $redis
+
+
+a := {
+    2
+    >> date()
+    5
+}
+
+>> $a
+sleep 0.5
+>> $a
+
+chat := import "github:neilellis:dollar-example-module:chat.ds"
+$chat.server( channel : "test" )
+
+sleep 1

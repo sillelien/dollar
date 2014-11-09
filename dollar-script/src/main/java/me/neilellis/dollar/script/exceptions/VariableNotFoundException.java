@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script;
-
-import java.io.File;
+package me.neilellis.dollar.script.exceptions;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class ParserMain {
+public class VariableNotFoundException extends DollarScriptException {
+    private String variable;
 
-    public static void main(String[] args) throws Throwable {
-        File file = new File(args[0]);
-        DollarParser parser = new DollarParser();
-        try {
-            parser.parse(file);
-        } catch (Throwable t) {
-            parser.getErrorHandler().handleTopLevel(t);
-        }
+    public VariableNotFoundException(Throwable e) {
+        super(e);
     }
 
+    public VariableNotFoundException(String variable) {
+        super("Variable not found '$" + variable + "'");
+        this.variable = variable;
+    }
 }

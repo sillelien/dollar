@@ -16,21 +16,29 @@
 
 package me.neilellis.dollar.script;
 
-import java.io.File;
+import me.neilellis.dollar.Pipeable;
+import me.neilellis.dollar.plugin.ExtensionPoint;
+import me.neilellis.dollar.plugin.NoOpProxy;
+
+import java.util.ServiceLoader;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class ParserMain {
+public interface PipeableResolver extends ExtensionPoint<PipeableResolver> {
 
-    public static void main(String[] args) throws Throwable {
-        File file = new File(args[0]);
-        DollarParser parser = new DollarParser();
-        try {
-            parser.parse(file);
-        } catch (Throwable t) {
-            parser.getErrorHandler().handleTopLevel(t);
+    public static PipeableResolver resolveModule(String scheme) {
+        final ServiceLoader<PipeableResolver> loader = ServiceLoader.load(PipeableResolver.class);
+        for (PipeableResolver piper : loader) {
+            if (piper.getScheme().equals(scheme)) {
+                return piper.copy();
+            }
         }
+        return NoOpProxy.newInstance(PipeableResolver.class);
     }
 
+
+    String getScheme();
+
+    Pipeable resolve(String uriWithoutScheme, ScriptScope scope) throws Exception;
 }

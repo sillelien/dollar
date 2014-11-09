@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -452,7 +453,6 @@ public class DollarWrapper implements var {
     }
 
 
-
     @Override
     public String S() {
         return getValue().S();
@@ -568,6 +568,11 @@ public class DollarWrapper implements var {
     @Override
     public Number N() {
         return getValue().N();
+    }
+
+    @Override
+    public InputStream toStream() {
+        return getValue().toStream();
     }
 
     @NotNull

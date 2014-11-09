@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.pipe;
-
-import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.plugin.ExtensionPoint;
-import me.neilellis.dollar.var;
+package me.neilellis.dollar.script;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface PipeResolver extends ExtensionPoint<PipeResolver> {
+public class DollarParserException extends Error {
+    public DollarParserException(Throwable e) {
+        super(e);
+    }
 
-    String getScheme();
+    public DollarParserException(String errorMessage) {
+        super(errorMessage);
+    }
 
-    Pipeable resolve(var v, String uriWithoutScheme) throws Exception;
+    public DollarParserException(String message, Throwable cause) {
+        super(message, cause, true, true);
+    }
 }

@@ -26,6 +26,7 @@ import org.junit.Test;
 
 import java.util.concurrent.CountDownLatch;
 
+import static me.neilellis.dollar.DollarStatic.$void;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -42,14 +43,16 @@ public class CamelURIHandlerFactoryTest {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         String vmListenURI = "vm://testListen";
         CamelURIHandlerFactory camelURIHandlerFactory = new CamelURIHandlerFactory();
-        final URIHandler camelIntegrationProvider = camelURIHandlerFactory.forURI(vmListenURI);
+        final URIHandler camelIntegrationProvider = camelURIHandlerFactory.forURI("camel", vmListenURI);
         camelIntegrationProvider.subscribe((value) -> {
             try {
                 System.out.println("***: " + value);
                 assertEquals("Listen Test", value.toString());
                 countDownLatch.countDown();
+                return $void();
             } catch (Exception e) {
                 e.printStackTrace();
+                return $void();
             }
         });
         camelURIHandlerFactory.start();
@@ -66,7 +69,7 @@ public class CamelURIHandlerFactoryTest {
     @Test
     public void testPoll() throws Exception {
         CamelURIHandlerFactory camelURIHandlerFactory = new CamelURIHandlerFactory();
-        final var page = camelURIHandlerFactory.forURI("http://google.com").poll();
+        final var page = camelURIHandlerFactory.forURI("camel", "http://google.com").poll();
         assertTrue(page.$S().contains("html"));
     }
 
@@ -86,7 +89,7 @@ public class CamelURIHandlerFactoryTest {
         Thread.sleep(1000);
         CamelURIHandlerFactory camelURIHandlerFactory = new CamelURIHandlerFactory();
 
-        final var result = camelURIHandlerFactory.forURI("direct-vm:test").send(DollarStatic.$("test"));
+        final var result = camelURIHandlerFactory.forURI("camel", "direct-vm:test").send(DollarStatic.$("test"));
         assertEquals("RESULT", result.$S());
         System.out.println(result);
         context.stop();

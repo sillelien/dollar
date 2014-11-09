@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.script;
 
+import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
@@ -30,16 +31,19 @@ public class ScopedVarBinaryOperator implements Binary<var>, Operator {
     private final boolean immediate;
     private Map2<var, var, var> function;
     private Supplier<String> source;
+    private ScriptScope scope;
 
 
-    public ScopedVarBinaryOperator(Map2<var, var, var> function) {
+    public ScopedVarBinaryOperator(Map2<var, var, var> function, ScriptScope scope) {
         this.function = function;
+        this.scope = scope;
         this.immediate = false;
     }
 
-    public ScopedVarBinaryOperator(boolean immediate, Map2<var, var, var> function) {
+    public ScopedVarBinaryOperator(boolean immediate, Map2<var, var, var> function, ScriptScope scope) {
         this.immediate = immediate;
         this.function = function;
+        this.scope = scope;
     }
 
     @Override
@@ -53,9 +57,11 @@ public class ScopedVarBinaryOperator implements Binary<var>, Operator {
                 try {
                     return function.map(lhs, rhs);
                 } catch (AssertionError e) {
-                    throw new AssertionError(e + " at '" + source.get() + "'", e);
+                    return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+                } catch (DollarScriptException e) {
+                    return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
                 } catch (Exception e) {
-                    throw new Error(e + " at '" + source.get() + "'");
+                    return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
                 }
             });
 
@@ -71,9 +77,11 @@ public class ScopedVarBinaryOperator implements Binary<var>, Operator {
 
             return lambda;
         } catch (AssertionError e) {
-            throw new AssertionError(e + " at '" + source.get() + "'");
+            return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+        } catch (DollarScriptException e) {
+            return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
         } catch (Exception e) {
-            throw new Error(e + " at '" + source.get() + "'");
+            return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
         }
     }
 

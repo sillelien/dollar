@@ -16,10 +16,12 @@
 
 package me.neilellis.dollar.types;
 
-import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.Pipeable;
+import me.neilellis.dollar.exceptions.LambdaRecursionException;
 import me.neilellis.dollar.var;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +33,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DollarLambda implements java.lang.reflect.InvocationHandler {
 
+    public static final int MAX_STACK_DEPTH = 100;
     private static final ThreadLocal<List<DollarLambda>> notifyStack = new ThreadLocal<List<DollarLambda>>() {
         @Override
         protected List<DollarLambda> initialValue() {
-            return new ArrayList<DollarLambda>();
+            return new ArrayList<>();
+        }
+    };
+    private static final ThreadLocal<List<DollarLambda>> stack = new ThreadLocal<List<DollarLambda>>() {
+        @Override
+        protected List<DollarLambda> initialValue() {
+            return new ArrayList<>();
         }
     };
     private final var in;
@@ -50,6 +59,14 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        if (stack.get().size() > MAX_STACK_DEPTH) {
+//            System.err.println("Stack consists of the following Lambda types: ");
+//            for (DollarLambda stackEntry : stack.get()) {
+//                System.err.println(stackEntry.lambda.getClass());
+//            }
+            throw new LambdaRecursionException(stack.get().size());
+
+        }
         try {
             if (proxy == null) {
                 return null;
@@ -103,14 +120,17 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 if (out == null) {
                     return null;
                 }
-                return method.invoke(out, args);
+                try {
+                    stack.get().add(this);
+                    return method.invoke(out, args);
+                } finally {
+                    stack.get().remove(stack.get().size() - 1);
+                }
             }
+        } catch (InvocationTargetException e) {
+            throw e.getCause();
         } catch (Exception e) {
-            if (method.getReturnType().isAssignableFrom(var.class)) {
-                return DollarStatic.handleError(e, null);
-            } else {
-                throw e;
-            }
+            throw new DollarException(e);
         }
     }
 }

@@ -14,29 +14,19 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.plugins.pipe;
+package me.neilellis.dollar.script.exceptions;
 
-import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.pipe.PipeResolver;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.DollarException;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class ClassPipeResolver implements PipeResolver {
-    @Override
-    public String getScheme() {
-        return "class";
+public class DollarScriptException extends DollarException {
+    public DollarScriptException(Throwable e) {
+        super(e);
     }
 
-    @Override
-    public Pipeable resolve(var v, String uriWithoutScheme) throws Exception {
-        return (Pipeable) DollarStatic.context().getClassLoader().loadClass(uriWithoutScheme).newInstance();
-    }
-
-    @Override
-    public PipeResolver copy() {
-        return this;
+    public DollarScriptException(String errorMessage) {
+        super(errorMessage);
     }
 }

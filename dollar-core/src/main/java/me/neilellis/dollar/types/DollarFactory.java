@@ -19,6 +19,7 @@ package me.neilellis.dollar.types;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Range;
+import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import me.neilellis.dollar.*;
 import me.neilellis.dollar.json.DecodeException;
@@ -31,6 +32,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import spark.QueryParamsMap;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -118,6 +122,13 @@ public class DollarFactory {
         if (o instanceof ImmutableJsonObject) {
             return wrap(new DollarMap(errors, (ImmutableJsonObject) o));
         }
+        if (o instanceof InputStream) {
+            try {
+                return create(errors, CharStreams.toString(new InputStreamReader((InputStream) o)));
+            } catch (IOException e) {
+                return failure(e);
+            }
+        }
         if (o instanceof String) {
             if (((String) o).matches("^[a-zA-Z0-9]+$")) {
                 return wrap(new DollarString(errors, (String) o));
@@ -190,6 +201,10 @@ public class DollarFactory {
     }
 
     public static var fromURI(String uri) {
-        return wrap(new DollarURI(ImmutableList.of(), uri));
+        try {
+            return wrap(new DollarURI(ImmutableList.of(), uri));
+        } catch (Exception e) {
+            return DollarStatic.handleError(e, null);
+        }
     }
 }

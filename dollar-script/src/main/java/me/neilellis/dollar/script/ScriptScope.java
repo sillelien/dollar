@@ -110,6 +110,13 @@ public class ScriptScope implements Scope {
         return value;
     }
 
+    public var setImmediate(String key, var value) {
+        if (DollarStatic.config.isDebugScope()) System.out.println("Setting " + key + " in " + this);
+        this.variables.put(key, value);
+        this.notifyScope(key, value);
+        return value;
+    }
+
     @Override
     public void notifyScope(String key, var value) {
         if (listeners.containsKey(key)) {

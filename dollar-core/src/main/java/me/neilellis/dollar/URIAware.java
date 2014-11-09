@@ -23,7 +23,7 @@ import me.neilellis.dollar.guard.NotNullParametersGuard;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface ReactiveAware {
+public interface URIAware {
 
 
     @Guarded(NotNullParametersGuard.class)

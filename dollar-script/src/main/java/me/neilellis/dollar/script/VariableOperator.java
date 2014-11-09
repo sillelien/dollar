@@ -16,8 +16,11 @@
 
 package me.neilellis.dollar.script;
 
+import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+
+import java.util.List;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -34,13 +37,31 @@ public class VariableOperator extends ScopedVarUnaryOperator {
     public var map(var from) {
         try {
             String key = from.$S();
-            var lambda = DollarFactory.fromLambda(v -> scope.getDollarParser().currentScope().has(key) ? scope.getDollarParser().currentScope().get(key) : scope.get(key));
+            var lambda = DollarFactory.fromLambda(v -> {
+                try {
+                    List<ScriptScope> scopes = scope.getDollarParser().scopes();
+                    for (ScriptScope scriptScope : scopes) {
+                        if (scriptScope.has(key)) {
+                            return scriptScope.get(key);
+                        }
+                    }
+                } catch (AssertionError e) {
+                    return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+                } catch (DollarScriptException e) {
+                    return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+                } catch (Exception e) {
+                    return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+                }
+                return scope.get(key);
+            });
             scope.listen(key, lambda);
             return lambda;
         } catch (AssertionError e) {
-            throw new AssertionError(e + " at '" + source.get() + "'", e);
-        } catch (Throwable e) {
-            throw new Error(e + " at '" + source.get() + "'");
+            return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+        } catch (DollarScriptException e) {
+            return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+        } catch (Exception e) {
+            return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
         }
 
     }

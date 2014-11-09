@@ -38,6 +38,7 @@ public interface PipeAware {
     var $eval(@NotNull String js);
 
     @NotNull
+    @Deprecated
     var $pipe(@NotNull String classModule);
 
     @NotNull

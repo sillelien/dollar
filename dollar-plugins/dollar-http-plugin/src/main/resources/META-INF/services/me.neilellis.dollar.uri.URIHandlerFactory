@@ -30,4 +30,4 @@
 # limitations under the License.
 #
 
-me.neilellis.dollar.plugins.pipe.GithubPipeResolver
+me.neilellis.dollar.http.HttpURIHandlerFactory

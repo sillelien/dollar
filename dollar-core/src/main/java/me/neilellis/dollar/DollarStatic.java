@@ -62,7 +62,7 @@ public class DollarStatic {
     @NotNull
     private static ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
 
-    private static DollarHttp dollarHttpProvider = Plugins.sharedInstance(DollarHttp.class);
+
     private static URIHandlerFactory URIHandler = Plugins.sharedInstance(URIHandlerFactory.class);
 
     public static Pipeable $jsFile(String name) {
@@ -203,35 +203,6 @@ public class DollarStatic {
         return jsonObject;
     }
 
-    @NotNull
-    public static DollarHttp $DELETE(String path, @NotNull DollarHttpHandler handler) {
-        return dollarHttpProvider.route("delete", path, handler);
-    }
-
-    @NotNull
-    public static DollarHttp $GET(String path, @NotNull DollarHttpHandler handler) {
-        return dollarHttpProvider.route("get", path, handler);
-    }
-
-    @NotNull
-    public static DollarHttp $HEAD(String path, @NotNull DollarHttpHandler handler) {
-        return dollarHttpProvider.route("head", path, handler);
-    }
-
-    @NotNull
-    public static DollarHttp $OPTIONS(String path, @NotNull DollarHttpHandler handler) {
-        return dollarHttpProvider.route("options", path, handler);
-    }
-
-    @NotNull
-    public static DollarHttp $PATCH(String path, @NotNull DollarHttpHandler handler) {
-        return dollarHttpProvider.route("patch", path, handler);
-    }
-
-    @NotNull
-    public static DollarHttp $POST(String path, @NotNull DollarHttpHandler handler) {
-        return dollarHttpProvider.route("post", path, handler);
-    }
 
     public static void $begin(String value) {
         threadContext.get().pushLabel(value);

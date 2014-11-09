@@ -33,7 +33,6 @@ public interface NumericAware {
         return $dec(1);
     }
 
-
     default var $inc(String key) {
         return $inc(key, 1);
     }
@@ -53,7 +52,6 @@ public interface NumericAware {
     var $divide(var v);
 
     var $modulus(var v);
-
 
     var $abs();
 }

@@ -16,7 +16,7 @@
 
 package me.neilellis.dollar.plugin;
 
-import me.neilellis.dollar.pipe.PipeResolver;
+import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.uri.URIHandlerFactory;
 
 import java.util.*;
@@ -48,28 +48,14 @@ public class Plugins {
         return loader.iterator().next().copy();
     }
 
-    public static PipeResolver resolveModule(String scheme) {
-        final ServiceLoader<PipeResolver> loader = ServiceLoader.load(PipeResolver.class);
-        Iterator<PipeResolver> iterator = loader.iterator();
-        while (iterator.hasNext()) {
-            PipeResolver piper = iterator.next();
-            if (piper.getScheme().equals(scheme)) {
-                return piper.copy();
-            }
-        }
-        return NoOpProxy.newInstance(PipeResolver.class);
-    }
-
     public static URIHandlerFactory resolveURIProvider(String scheme) {
         final ServiceLoader<URIHandlerFactory> loader = ServiceLoader.load(URIHandlerFactory.class);
-        Iterator<URIHandlerFactory> iterator = loader.iterator();
-        while (iterator.hasNext()) {
-            URIHandlerFactory handler = iterator.next();
-            if (handler.getScheme().equals(scheme)) {
+        for (URIHandlerFactory handler : loader) {
+            if (handler.handlesScheme(scheme)) {
                 return handler;
             }
         }
-        return NoOpProxy.newInstance(URIHandlerFactory.class);
+        throw new DollarException("Could not find any provider for URI scheme " + scheme);
     }
 
     public static <T extends ExtensionPoint<T>> T sharedInstance(Class<T> serviceClass) {

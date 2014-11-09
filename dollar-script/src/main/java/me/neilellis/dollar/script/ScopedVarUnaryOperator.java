@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.script;
 
+import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
@@ -66,10 +67,13 @@ public class ScopedVarUnaryOperator implements Unary<var>, Operator {
             });
             return lambda;
         } catch (AssertionError e) {
-            throw new AssertionError(e + " at '" + source.get() + "'", e);
+            return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+        } catch (DollarScriptException e) {
+            return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
         } catch (Exception e) {
-            throw new Error(e + " at '" + source.get() + "'");
+            return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
         }
+
 
     }
 

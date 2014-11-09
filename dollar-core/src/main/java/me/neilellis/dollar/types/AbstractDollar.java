@@ -22,12 +22,13 @@ import me.neilellis.dollar.*;
 import me.neilellis.dollar.exceptions.ValidationException;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
-import me.neilellis.dollar.plugin.Plugins;
 import org.jetbrains.annotations.NotNull;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.SimpleScriptContext;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -541,16 +542,7 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var $pipe(@NotNull String classModule) {
-        String[] parts = classModule.split(":", 2);
-        if (parts.length < 2) {
-            throw new IllegalArgumentException("Pipe " + classModule + " needs to have a scheme");
-        }
-        try {
-            return $pipe(Plugins.resolveModule(parts[0]).resolve(this, parts[1]));
-        } catch (Exception e) {
-            return DollarStatic.handleError(e, this);
-        }
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -615,6 +607,7 @@ public abstract class AbstractDollar implements var {
 
     @Override
     public var $send(var given) {
+        System.err.println("Cannot send to " + getClass().getName());
         return this;
     }
 
@@ -703,5 +696,10 @@ public abstract class AbstractDollar implements var {
     @Override
     public var $all() {
         return DollarStatic.$void();
+    }
+
+    @Override
+    public InputStream toStream() {
+        return new ByteArrayInputStream($S().getBytes());
     }
 }

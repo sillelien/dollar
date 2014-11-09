@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script;
+package me.neilellis.dollar.exceptions;
 
-import java.io.File;
+import me.neilellis.dollar.DollarException;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class ParserMain {
-
-    public static void main(String[] args) throws Throwable {
-        File file = new File(args[0]);
-        DollarParser parser = new DollarParser();
-        try {
-            parser.parse(file);
-        } catch (Throwable t) {
-            parser.getErrorHandler().handleTopLevel(t);
-        }
+public class LambdaRecursionException extends DollarException {
+    public LambdaRecursionException(Throwable e) {
+        super(e);
     }
 
+    public LambdaRecursionException(String errorMessage) {
+        super(errorMessage);
+    }
+
+    public LambdaRecursionException(int stackDepth) {
+        super("Lambda recursion detected, stack size " + stackDepth);
+    }
 }

@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.redis;
+package me.neilellis.dollar.http;
 
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
 import redis.clients.jedis.JedisPoolConfig;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
+
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class RedisURIHandlerFactory implements URIHandlerFactory {
+public class HttpURIHandlerFactory implements URIHandlerFactory {
 
 
     private static final JedisPoolConfig poolConfig = new JedisPoolConfig();
@@ -38,13 +40,13 @@ public class RedisURIHandlerFactory implements URIHandlerFactory {
 
     @Override
     public boolean handlesScheme(String scheme) {
-        return scheme.equals("redis");
+        return scheme.equals("http") || scheme.equals("https");
     }
 
     @Override
-    public URIHandler forURI(String scheme, String uri) {
+    public URIHandler forURI(String scheme, String uri) throws IOException {
         try {
-            return new RedisURIHandler(uri, poolConfig);
+            return new HttpURIHandler(scheme, uri);
         } catch (URISyntaxException e) {
             return null;
         }

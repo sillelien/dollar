@@ -17,6 +17,7 @@
 package me.neilellis.dollar.uri.camel;
 
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
@@ -24,8 +25,6 @@ import me.neilellis.dollar.var;
 import org.apache.camel.*;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
-
-import java.util.function.Consumer;
 
 import static me.neilellis.dollar.DollarStatic.$void;
 
@@ -43,12 +42,12 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
 
 
     @Override
-    public String getScheme() {
-        return "camel";
+    public boolean handlesScheme(String scheme) {
+        return scheme.equals("camel");
     }
 
     @Override
-    public URIHandler forURI(String uri) {
+    public URIHandler forURI(String scheme, String uri) {
         return new CamelURIHandler(uri, context);
     }
 
@@ -94,7 +93,7 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
         }
 
         @Override
-        public void subscribe(Consumer<var> consumer) {
+        public void subscribe(Pipeable consumer) {
             try {
                 context.addRoutes(
                         new RouteBuilder(context) {
@@ -102,7 +101,7 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
                             public void configure() throws Exception {
                                 from(uri).process((ex) -> {
                                     try {
-                                        consumer.accept(DollarFactory.fromStringValue(ex.getIn().getBody(String.class)));
+                                        consumer.pipe(DollarFactory.fromStringValue(ex.getIn().getBody(String.class)));
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -192,10 +191,6 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
             throw new UnsupportedOperationException("The Apache Camel uri handler does not support this yet.");
         }
 
-        @Override
-        public var subscribe() {
-            throw new UnsupportedOperationException("The Apache Camel uri handler does not support this yet.");
-        }
 
         @Override
         public var give(var value) {

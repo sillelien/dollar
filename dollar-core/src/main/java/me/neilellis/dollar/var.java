@@ -29,8 +29,8 @@ import java.util.stream.Stream;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface var extends Map<String, var>, IntegrationProviderAware, ErrorAware, TypeAware, PipeAware,
-        OldAndDeprecated, VarInternal, BasicIOAware, NumericAware, BooleanAware, ControlFlowAware, AssertionAware, ReactiveAware, MetadataAware, Comparable<var> {
+public interface var extends Map<String, var>, ErrorAware, TypeAware, PipeAware,
+        OldAndDeprecated, VarInternal, NumericAware, BooleanAware, ControlFlowAware, AssertionAware, URIAware, MetadataAware, Comparable<var> {
 
 
     /**

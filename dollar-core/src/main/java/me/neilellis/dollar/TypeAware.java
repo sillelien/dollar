@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -158,4 +159,6 @@ public interface TypeAware {
 
     @NotNull
     Number N();
+
+    InputStream toStream();
 }
