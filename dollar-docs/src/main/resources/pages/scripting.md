@@ -415,10 +415,9 @@ The truthy operator converts any value to a boolean by applying the rule that: v
 
 ```
 
-Arrays
-------
+###Lists
 
-DollarScript's arrays are pretty similar to JavaScript. They are defined using the `[1,2,3]` style syntax and accessed using the `x[y]` subscript syntax.
+DollarScript's lists are pretty similar to JavaScript arrays. They are defined using the `[1,2,3]` style syntax and accessed using the `x[y]` subscript syntax.
 
 ```dollar
 => [1,2,3] + 4 == [1,2,3,4];
@@ -441,7 +440,17 @@ DollarScript maps are also associative arrays (like JavaScript) allowing you to 
 ```
 
 As you can see from the example you can request a key/value pair (or Tuple if you like) by it's position using a numeric subscript. Or you can treat it as an associative array and request an entry by specifying the key name. Any expression can be used as a subscript, numerical values will be used as indexes, otherwise the string value will be used as a key.
- 
+
+
+###Types
+
+Although DollarScript is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, NUMBER, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
+
+```dollar
+=> "Hello World" is STRING
+=> ["Hello World"] is LIST
+```
+
 Pipe Operators
 --------------
 

@@ -1,4 +1,4 @@
->> {"test" : 1, "test2" : 2} | import 'github:neilellis:dollar-example-module'
+>> {"test" : 1, "test2" : 2}
 
 
 

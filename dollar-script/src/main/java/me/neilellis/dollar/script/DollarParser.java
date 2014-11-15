@@ -401,7 +401,6 @@ public class DollarParser {
 
 
 //        ScopedVarBinaryOperator value = new ScopedVarBinaryOperator((lhs, rhs) -> rhs, scope);
-        Parser<var> expression = ref.lazy();
 
         Parser<var> parser = new OperatorTable<var>()
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> $(!lhs.equals(rhs)), scope), "!="), EQUIVALENCE_PRIORITY)
@@ -463,14 +462,18 @@ public class DollarParser {
                         return lhs;
                     }
                 }, scope), "???", "else"), IF_PRIORITY)
-                .prefix(Lexical.keywordFollowedByNewlines("if").next(expression).map(lhs -> new Map<var, var>() {
+                .prefix(Lexical.keywordFollowedByNewlines("if").next(ref.lazy()).map(lhs -> new Map<var, var>() {
                     @Override
                     public var map(var rhs) {
-                        if (lhs.isBoolean() && lhs.isTrue()) {
-                            return rhs;
-                        } else {
-                            return $(false);
-                        }
+                        final var lambda = DollarFactory.fromLambda(i -> {
+                            if (lhs.isBoolean() && lhs.isTrue()) {
+                                return rhs;
+                            } else {
+                                return $(false);
+                            }
+                        });
+                        rhs.$listen(i -> lambda.$notify(lambda));
+                        return lambda;
                     }
                 }), IF_PRIORITY)
 
