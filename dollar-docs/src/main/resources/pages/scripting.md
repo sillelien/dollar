@@ -1,10 +1,8 @@
 #!/usr/bin/env dollar
 
-Introduction
-============
+##Introduction
 
-Executable Documentation
-------------------------
+###Executable Documentation
 
 Everything in this documentation is executed as part of the build process, so all the examples are guaranteed to run with the latest master branch of Dollar. 
 
@@ -18,8 +16,7 @@ So it can be executed directly from a Unix command line.
 
 The source for this page (minus that header) is [here](scripting.md)
 
-Getting Started
----------------
+###Getting Started
 
 NOTE: At present only Mac OS X is officially supported, however since Dollar is entirely based in Java it's trivial to port to other systems.
 
@@ -39,13 +36,12 @@ testParams := ($2 + " " + $1)
 
 ```
 
-Understanding the Basics
-========================
+##Understanding the Basics
+
 
 DollarScript has it's own peculiarities, mostly these exists to help with it's major function - data/API centric Internet applications. So it's important to understand the basic concepts before getting started.
 
-Reactive Programming
---------------------
+###Reactive Programming
 
 DollarScript expressions are by default *lazy*, this is really important to understand otherwise you may get some surprises. This lazy evaluation makes DollarScript a [reactive programming language](http://en.wikipedia.org/wiki/Reactive_programming) by default.
 
@@ -157,11 +153,11 @@ block := {
     "World"
 }
 
-=> $block == "World"
+=> block == "World"
 
 block2 := {1;2;}
 
-=> $block2 == 2
+=> block2 == 2
 
 ```
 When a line block is evaluated the result is the value of the last entry. For advanced users note that all lines will be evaluated, the value is just ignored. A line block behaves a lot like a function in an imperative language.
@@ -192,7 +188,7 @@ appending := {
     "World"
 }
 
-=> $appending == "Hello World"
+=> appending == "Hello World"
 
 appending2 := { 1, 2}
 
@@ -210,9 +206,9 @@ appending := {
    "second":"World"
 }
 
->> $appending
+>> appending
 
-=> $appending.second == "World"
+=> appending.second == "World"
 
 ```
 
@@ -227,7 +223,56 @@ pair2 := "second" : "World";
  
 ```
 
-###Reactive Control Flow
+
+###Lists
+
+DollarScript's lists are pretty similar to JavaScript arrays. They are defined using the `[1,2,3]` style syntax and accessed using the `x[y]` subscript syntax.
+
+```dollar
+=> [1,2,3] + 4 == [1,2,3,4];
+=> [1,2,3,4] - 4 == [1,2,3];
+=> [] + 1 == [1] ;
+=> [1] + [1] == [1,[1]];
+=> [1] + 1 == [1,1];
+
+[1,2,3][1] <=> 2
+```
+
+*Note we're introducing the assert equals or `<=>` operator here, this is a combination of `=>` and `==` that will cause an error if the two values are not equal.*
+
+DollarScript maps are also associative arrays (like JavaScript) allowing you to request members from them using the array subscript syntax
+
+```dollar
+{"key1":1,"key2":2} ["key"+1] <=> 1
+{"key1":1,"key2":2} [1] <=> {"key2":2}
+{"key1":1,"key2":2} [1]["key2"] <=> 2
+```
+
+As you can see from the example you can request a key/value pair (or Tuple if you like) by it's position using a numeric subscript. Or you can treat it as an associative array and request an entry by specifying the key name. Any expression can be used as a subscript, numerical values will be used as indexes, otherwise the string value will be used as a key.
+
+
+###Ranges
+
+DollarScript (at present) supports numerical and character ranges
+
+```dollar
+
+"a".."c" <=> ["a","b","c"]
+1..3 <=> [1,2,3]
+
+`
+
+###Types
+
+Although DollarScript is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, NUMBER, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
+
+```dollar
+=> "Hello World" is STRING
+=> ["Hello World"] is LIST
+```
+
+
+##Reactive Control Flow
 
 DollarScript as previously mentioned is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
 
@@ -246,7 +291,7 @@ a=2
  
 ```
 
-When the code is executed we'll see the values 1,2,3,4,2 printed out, this is because whenever `$a` changes the block { >> $a } is evaluated, resulting in the variable $a being printed to stdout. Imagine how useful that is for debugging changes to a variable!
+When the code is executed we'll see the values 1,2,3,4,2 printed out, this is because whenever `a` changes the block `{ >> a }` is evaluated, resulting in the variable `a` being printed to stdout. Imagine how useful that is for debugging changes to a variable!
 
 Next we have the 'when' operator, there is no shorthand for this operator, to help keep you code readable:
 
@@ -268,9 +313,9 @@ This time we'll just see the number 2 twice, this is because the `when` operator
 
 
 
-###Imperative Control Flow
+##Imperative Control Flow
 
-####If
+###If
 
 DollarScript supports the usual imperative control flow but, unlike some languages, everything is an operator. This is the general rule of DollarScript, everything has a value. DollarScript does not have the concept of statements and expressions, just expressions. This means that you can use control flow in an expression.
 
@@ -290,13 +335,13 @@ The combined effect of these two operators is to provide the usual if/else/else 
 ```dollar
 
 a=5
-#Parenthesis added for clarity, not required.
+//Parenthesis added for clarity, not required.
 b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 => b == "more than two"
 
 ```
 
-####For
+###For
 
 ```dollar
 
@@ -306,8 +351,7 @@ for i in 1..10 {
 
 ```
 
-Parameters &amp; Functions
-----------------------
+##Parameters &amp; Functions
 
 In most programming languages you have the concept of functions and parameters, i.e. you can parametrized blocks of code. In DollarScript you can parameterize *anything*. For example let's just take a simple expression that adds two strings together, in reverse order, and pass in two parameters.
 
@@ -340,8 +384,7 @@ testParams(first:"Hello", last:"World") <=> "World Hello"
 Yep you can use named parameters, then refer to the values by the names passed in.
 
 
-Resources &amp; URIs
---------------------
+##Resources &amp; URIs
 
 URIs are first class citizen's in DollarScript. They refer to a an arbitrary resource, usually remote, that can be accessed using the specified protocol and location. Static URIs can be referred to directly without quotation marks, dynamic URIs can be built using the `uri` operator
 
@@ -350,29 +393,18 @@ URIs are first class citizen's in DollarScript. They refer to a an arbitrary res
 
 search="Unikitty"
 
-dynamicURI= uri "camel:http://google.com?q="+$search
+dynamicURI= uri "camel:http://google.com?q="+search
 
 marinaVideos = <+ camel:https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
 >> marinaVideos.results map { $1.trackViewUrl }
 
 ```
 
-In this example we've requested a single value (using `<+`) from a uri and assigned the value to `$marinaVideos` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `trackViewUrl`. The each operator returns a list of the results and that is what is passed to standard out.
+In this example we've requested a single value (using `<+`) from a uri and assigned the value to `marinaVideos` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `trackViewUrl`. The each operator returns a list of the results and that is what is passed to standard out.
 
+``
 
-###Ranges
-
-DollarScript (at present) supports numerical and character ranges
-
-```dollar
-
-"a".."c" <=> ["a","b","c"]
-1..3 <=> [1,2,3]
-
-```
-
-Using Java
-----------
+##Using Java
 
 Hopefully you'll find DollarScript a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of Java. To do so, just surround the Java in backticks.
 
@@ -391,16 +423,15 @@ A whole bunch of imports are done for you automatically (java.util.*, java.math.
 Reactive behaviour is supported on the Scope object with the listen and notify methods on variables. You'll need to then built your reactivity around those variables or on the `out` object directly (that's a pretty advanced topic).
 
 
-Iterative Operators
--------------------
+##Operators
 
-Numerical Operators
--------------------
+###Iterative Operators
+
+###Numerical Operators
 
 DollarScript support the basic numerical operators +,-,/,*,%
 
-Logical Operators
------------------
+###Logical Operators
 
 DollarScript support the basic logical operators &&,||,! as well as the truthy operator `~`
 
@@ -420,53 +451,12 @@ The truthy operator converts any value to a boolean by applying the rule that: v
 
 ```
 
-###Lists
 
-DollarScript's lists are pretty similar to JavaScript arrays. They are defined using the `[1,2,3]` style syntax and accessed using the `x[y]` subscript syntax.
-
-```dollar
-=> [1,2,3] + 4 == [1,2,3,4];
-=> [1,2,3,4] - 4 == [1,2,3];
-=> [] + 1 == [1] ;
-=> [1] + [1] == [1,[1]];
-=> [1] + 1 == [1,1];
-
-[1,2,3][1] <=> 2
-```
-
-*Note we're introducing the assert equals or `<=>` operator here, this is a combination of `=>` and `==` that will cause an error if the two values are not equal.*
- 
-DollarScript maps are also associative arrays (like JavaScript) allowing you to request members from them using the array subscript syntax
- 
-```dollar
-{"key1":1,"key2":2} ["key"+1] <=> 1
-{"key1":1,"key2":2} [1] <=> {"key2":2}
-{"key1":1,"key2":2} [1]["key2"] <=> 2
-```
-
-As you can see from the example you can request a key/value pair (or Tuple if you like) by it's position using a numeric subscript. Or you can treat it as an associative array and request an entry by specifying the key name. Any expression can be used as a subscript, numerical values will be used as indexes, otherwise the string value will be used as a key.
-
-
-###Types
-
-Although DollarScript is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, NUMBER, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
-
-```dollar
-=> "Hello World" is STRING
-=> ["Hello World"] is LIST
-```
-
-Pipe Operators
---------------
-
-Modules & Module Locators
--------------------------
-
-Remaining Operators
--------------------
-
-Concurrency & Threads
----------------------
+### Pipe Operators
+### Remaining Operators
+## Modules & Module Locators
+## Advanced Yopics
+### Concurrency & Threads
 
 
 
