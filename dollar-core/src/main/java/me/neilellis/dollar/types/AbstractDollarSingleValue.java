@@ -81,7 +81,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     @NotNull
     @Override
     public String S(@NotNull String key) {
-        return $(key).S();
+        return $get(key).S();
     }
 
     @NotNull
@@ -121,7 +121,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @NotNull
-    public var $(@NotNull String key) {
+    public var $get(@NotNull String key) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 

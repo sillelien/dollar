@@ -27,6 +27,6 @@ public class ExtractName extends Unit {
     }
 
     {
-        out = in.$("name");
+        out = in.$get("name");
     }
 }

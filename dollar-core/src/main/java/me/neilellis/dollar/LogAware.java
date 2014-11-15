@@ -19,27 +19,27 @@ package me.neilellis.dollar;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class Configuration {
-    private boolean production;
-    private boolean debugScope = true;
+public interface LogAware {
 
-    public boolean production() {
-        return production;
-    }
+    var debugf(String message, Object... values);
 
-    public boolean isDebugScope() {
-        return debugScope;
-    }
+    var debug(Object message);
 
-    public void setDebugScope(boolean debugScope) {
-        this.debugScope = debugScope;
-    }
+    var debug();
 
-    public boolean wrapForMonitoring() {
-        return production;
-    }
+    var infof(String message, Object... values);
 
-    public boolean wrapForGuards() {
-        return production;
-    }
+    var info(Object message);
+
+    var info();
+
+    var errorf(String message, Object... values);
+
+    var error(Throwable exception);
+
+    var error(Object message);
+
+    var error();
+
+
 }

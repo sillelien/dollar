@@ -24,9 +24,13 @@ import me.neilellis.dollar.var;
 public interface Scope {
     var get(String key);
 
+    var getParameter(String key);
+
+    boolean hasParameter(String key);
+
     boolean has(String key);
 
-    var set(String key, var value);
+    var set(String key, var value, boolean readonly);
 
     void notifyScope(String key, var value);
 

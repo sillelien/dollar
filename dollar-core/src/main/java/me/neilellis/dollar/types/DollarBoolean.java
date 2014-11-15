@@ -66,6 +66,16 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         return this;
     }
 
+    @Override
+    public boolean is(Type... types) {
+        for (Type type : types) {
+            if (type == Type.BOOLEAN) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @NotNull
     @Override
     public Double D() {

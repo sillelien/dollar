@@ -20,6 +20,8 @@ import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,11 +40,19 @@ public class VariableOperator extends ScopedVarUnaryOperator {
         try {
             var lambda = DollarFactory.fromLambda(v -> {
                 String key = from.$S();
+                boolean numeric = from.isNumber();
                 try {
-                    List<ScriptScope> scopes = scope.getDollarParser().scopes();
+                    List<ScriptScope> scopes = new ArrayList<ScriptScope>(scope.getDollarParser().scopes());
+                    Collections.reverse(scopes);
                     for (ScriptScope scriptScope : scopes) {
-                        if (scriptScope.has(key)) {
-                            return scriptScope.get(key);
+                        if (numeric) {
+                            if (scriptScope.hasParameter(key)) {
+                                return scriptScope.getParameter(key);
+                            }
+                        } else {
+                            if (scriptScope.has(key)) {
+                                return scriptScope.get(key);
+                            }
                         }
                     }
                 } catch (AssertionError e) {
@@ -51,6 +61,9 @@ public class VariableOperator extends ScopedVarUnaryOperator {
                     return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
                 } catch (Exception e) {
                     return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+                }
+                if (numeric) {
+                    return scope.getParameter(key);
                 }
                 return scope.get(key);
             });

@@ -16,30 +16,14 @@
 
 package me.neilellis.dollar;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
-public class Configuration {
-    private boolean production;
-    private boolean debugScope = true;
+import me.neilellis.dollar.script.DollarParser;
 
-    public boolean production() {
-        return production;
-    }
+import java.io.IOException;
 
-    public boolean isDebugScope() {
-        return debugScope;
-    }
+public class ExampleApp {
 
-    public void setDebugScope(boolean debugScope) {
-        this.debugScope = debugScope;
-    }
 
-    public boolean wrapForMonitoring() {
-        return production;
-    }
-
-    public boolean wrapForGuards() {
-        return production;
+    public static void main(String[] args) throws IOException {
+        new DollarParser().parse(ExampleApp.class.getResourceAsStream("/example.ds"));
     }
 }

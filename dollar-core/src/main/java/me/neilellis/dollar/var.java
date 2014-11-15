@@ -22,15 +22,20 @@ import me.neilellis.dollar.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface var extends Map<String, var>, ErrorAware, TypeAware, PipeAware,
-        OldAndDeprecated, VarInternal, NumericAware, BooleanAware, ControlFlowAware, AssertionAware, URIAware, MetadataAware, Comparable<var> {
+public interface var extends ErrorAware, TypeAware, PipeAware,
+        OldAndDeprecated, VarInternal, NumericAware, BooleanAware, ControlFlowAware, AssertionAware, URIAware, MetadataAware, Comparable<var>, LogAware {
 
 
 
@@ -101,7 +106,7 @@ public interface var extends Map<String, var>, ErrorAware, TypeAware, PipeAware,
     @Nullable
     @Guarded(NotNullParametersGuard.class)
     default String S(@NotNull String key) {
-        return $(key).S();
+        return $get(key).S();
     }
 
     /**
@@ -179,11 +184,15 @@ public interface var extends Map<String, var>, ErrorAware, TypeAware, PipeAware,
     @Guarded(ChainGuard.class)
 
     default var get(@NotNull Object key) {
-        return $(String.valueOf(key));
+        return $get(String.valueOf(key));
+    }
+
+    default var $(@NotNull String key) {
+        return $get(key);
     }
 
     @NotNull
-    var $(@NotNull String key);
+    var $get(@NotNull String key);
 
     /**
      * Returns a {@link me.neilellis.dollar.json.JsonObject}, JsonArray or primitive type such that it can be added to
@@ -246,5 +255,55 @@ public interface var extends Map<String, var>, ErrorAware, TypeAware, PipeAware,
     }
 
     var $(var rhs);
+
+    default var $contains(var value) {
+        return DollarStatic.$(containsValue(value));
+    }
+
+    boolean containsValue(Object value);
+
+    int size();
+
+    Set<Map.Entry<String, var>> entrySet();
+
+    Collection<var> values();
+
+    Set<String> keySet();
+
+    void clear();
+
+    boolean isEmpty();
+
+    void putAll(Map<? extends String, ? extends var> m);
+
+    <R> R remove(Object value);
+
+    boolean containsKey(Object key);
+
+    var put(String key, var value);
+
+    var getOrDefault(Object key, var defaultValue);
+
+    void forEach(BiConsumer<? super String, ? super var> action);
+
+    void replaceAll(BiFunction<? super String, ? super var, ? extends var> function);
+
+    boolean replace(String key, var oldValue, var newValue);
+
+    var computeIfAbsent(String key, Function<? super String, ? extends var> mappingFunction);
+
+    var replace(String key, var value);
+
+    boolean remove(Object key, Object value);
+
+    var computeIfPresent(String key, BiFunction<? super String, ? super var, ? extends var> remappingFunction);
+
+    var compute(String key, BiFunction<? super String, ? super var, ? extends var> remappingFunction);
+
+
+    var putIfAbsent(String key, var value);
+
+    var merge(String key, var value, BiFunction<? super var, ? super var, ? extends var> remappingFunction);
+
 
 }

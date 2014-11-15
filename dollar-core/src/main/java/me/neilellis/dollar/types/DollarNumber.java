@@ -89,6 +89,13 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
         }
     }
 
+    public boolean $equals(var other) {
+        if (isInteger()) {
+            return value.longValue() == other.L();
+        } else {
+            return value.doubleValue() == other.D();
+        }
+    }
     @NotNull
     @Override
     public Double D() {
@@ -103,8 +110,13 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof DollarNumber) {
-            return $().equals(((DollarNumber) obj).$());
+        if (obj instanceof var) {
+            var unwrapped = ((var) obj)._unwrap();
+            if (unwrapped instanceof DollarNumber) {
+                return $equals(unwrapped);
+            } else {
+                return value.toString().equals(obj.toString());
+            }
         } else {
             return value.toString().equals(obj.toString());
         }
@@ -207,5 +219,15 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
     @Override
     public int compareTo(var o) {
         return $minus(o).I();
+    }
+
+    @Override
+    public boolean is(Type... types) {
+        for (Type type : types) {
+            if (type == Type.NUMBER) {
+                return true;
+            }
+        }
+        return false;
     }
 }

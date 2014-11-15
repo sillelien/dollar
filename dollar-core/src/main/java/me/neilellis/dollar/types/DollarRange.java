@@ -17,8 +17,6 @@
 package me.neilellis.dollar.types;
 
 
-import com.google.common.collect.ContiguousSet;
-import com.google.common.collect.DiscreteDomain;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Range;
 import me.neilellis.dollar.DollarStatic;
@@ -28,23 +26,21 @@ import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.lang.Math.abs;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarRange extends AbstractDollar {
 
-    private final Range<Long> range;
+    private final Range<var> range;
 
-    public DollarRange(@NotNull List<Throwable> errors, long start, long finish) {
+    public DollarRange(@NotNull List<Throwable> errors, Object start, Object finish) {
         super(errors);
-        range = Range.closed(start, finish);
+        range = Range.closed(DollarStatic.$(start), DollarStatic.$(finish));
     }
 
     public DollarRange(@NotNull List<Throwable> errors, Range range) {
@@ -104,7 +100,7 @@ public class DollarRange extends AbstractDollar {
 
     @Override
     public var $abs() {
-        return DollarFactory.fromValue(errors(), Range.closed(abs(range.upperEndpoint()), abs(range.lowerEndpoint())));
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
     }
 
     @Override
@@ -115,10 +111,13 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public ImmutableList<var> toList() {
-        return ImmutableList.copyOf(ContiguousSet.create(range, DiscreteDomain.longs())
-                .stream()
-                .map(DollarStatic::$)
-                .collect(Collectors.toList()));
+        List<var> values = new ArrayList<>();
+        var start = range.lowerEndpoint();
+        var finish = range.upperEndpoint();
+        for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
+            values.add(i);
+        }
+        return ImmutableList.copyOf(values);
     }
 
     @NotNull
@@ -175,7 +174,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $(@NotNull String key) {
+    public var $get(@NotNull String key) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 
@@ -187,7 +186,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public Range<Long> $() {
+    public Range<var> $() {
         return range;
     }
 
@@ -199,7 +198,7 @@ public class DollarRange extends AbstractDollar {
 
     @Override
     public var $(Number n) {
-        return DollarFactory.fromValue(range.lowerEndpoint() + n.longValue());
+        return toList().get(n.intValue());
     }
 
     @Override
@@ -218,10 +217,7 @@ public class DollarRange extends AbstractDollar {
 
     @Override
     public ImmutableList<String> strings() {
-        return ImmutableList.copyOf(ContiguousSet.create(range, DiscreteDomain.longs())
-                .stream()
-                .map(Object::toString)
-                .collect(Collectors.toList()));
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -232,7 +228,7 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public Number N() {
-        return range.upperEndpoint() - range.lowerEndpoint();
+        return range.upperEndpoint().L() - range.lowerEndpoint().L();
     }
 
     @Override
@@ -265,15 +261,12 @@ public class DollarRange extends AbstractDollar {
 
     @Override
     public int size() {
-        return (int) (range.upperEndpoint() - range.lowerEndpoint());
+        return toList().size();
     }
 
     @Override
     public boolean containsValue(Object value) {
-        if (value instanceof Number) {
-            return range.contains(((Number) value).longValue());
-        }
-        return range.contains(Long.valueOf(value.toString()));
+        return range.lowerEndpoint().compareTo(DollarStatic.$(value)) <= 0 && range.upperEndpoint().compareTo(DollarStatic.$(value)) >= 0;
     }
 
     @NotNull
@@ -285,7 +278,7 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public String S() {
-        return String.format("%d..%d", range.lowerEndpoint(), range.upperEndpoint());
+        return String.format("%s..%s", range.lowerEndpoint(), range.upperEndpoint());
     }
 
     @Override
@@ -315,7 +308,25 @@ public class DollarRange extends AbstractDollar {
 
     @Override
     public int compareTo(var o) {
-        return (int) Math.signum(range.lowerEndpoint() - o.L());
+        if (containsValue(o)) {
+            return 0;
+        }
+        if (range.lowerEndpoint().compareTo(o) < 0) {
+            return -1;
+        }
+        if (range.upperEndpoint().compareTo(o) > 0) {
+            return 1;
+        }
+        throw new IllegalStateException();
     }
 
+    @Override
+    public boolean is(Type... types) {
+        for (Type type : types) {
+            if (type == Type.RANGE) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

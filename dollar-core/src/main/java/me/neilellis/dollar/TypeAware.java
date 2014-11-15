@@ -33,6 +33,7 @@ import java.util.Map;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface TypeAware {
+
     @NotNull
     default String $S() {
         String s = S();
@@ -41,7 +42,6 @@ public interface TypeAware {
     }
 
     String S();
-
 
     @Guarded(NotNullCollectionGuard.class)
     @Guarded(AllVarCollectionGuard.class)
@@ -58,6 +58,9 @@ public interface TypeAware {
      * @see me.neilellis.dollar.types.DollarFail
      */
     boolean isVoid();
+
+    //Any of these
+    boolean is(Type... types);
 
     @NotNull
     Double D();
@@ -161,4 +164,10 @@ public interface TypeAware {
     Number N();
 
     InputStream toStream();
+
+    boolean isUri();
+
+    enum Type {
+        STRING, NUMBER, LIST, MAP, URI, VOID, RANGE, BOOLEAN, ERROR
+    }
 }

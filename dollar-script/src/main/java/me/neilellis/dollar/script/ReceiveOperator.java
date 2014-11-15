@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.script;
 
+import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 
@@ -33,13 +34,20 @@ public class ReceiveOperator extends ScopedVarUnaryOperator {
     @Override
     public var map(var from) {
         try {
-            return DollarFactory.fromLambda(v -> from.$receive());
+            return DollarFactory.fromLambda(v -> {
+                try {
+                    return DollarFactory.fromURI(from).$receive();
+                } catch (Exception e) {
+                    return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+                }
+            });
         } catch (AssertionError e) {
-            throw new AssertionError(e + " at '" + source.get() + "'", e);
-        } catch (Throwable e) {
-            throw new Error(e + " at '" + source.get() + "'");
+            return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+        } catch (DollarScriptException e) {
+            return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+        } catch (Exception e) {
+            return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
         }
-
     }
 
 

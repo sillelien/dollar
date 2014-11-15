@@ -60,9 +60,9 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (stack.get().size() > MAX_STACK_DEPTH) {
-            System.err.println("Stack consists of the following Lambda types: ");
+            in.error("Stack consists of the following Lambda types: ");
             for (DollarLambda stackEntry : stack.get()) {
-                System.err.println(stackEntry.lambda.getClass() + ":" + stackEntry.meta);
+                in.error(stackEntry.lambda.getClass() + ":" + stackEntry.meta);
             }
             throw new LambdaRecursionException(stack.get().size());
 

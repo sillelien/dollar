@@ -191,8 +191,8 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $(@NotNull String key) {
-        return getValue().$(key);
+    public var $get(@NotNull String key) {
+        return getValue().$get(key);
     }
 
 
@@ -453,6 +453,11 @@ public class DollarWrapper implements var {
         return getValue().isVoid();
     }
 
+    @Override
+    public boolean is(Type... types) {
+        return getValue().is(types);
+    }
+
     @Nullable
     @Override
     public Double D() {
@@ -557,6 +562,11 @@ public class DollarWrapper implements var {
     @Override
     public InputStream toStream() {
         return getValue().toStream();
+    }
+
+    @Override
+    public boolean isUri() {
+        return getValue().isUri();
     }
 
     @NotNull
@@ -674,7 +684,7 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public Set<Entry<String, var>> entrySet() {
+    public Set<Map.Entry<String, var>> entrySet() {
         return getValue().entrySet();
     }
 
@@ -869,5 +879,55 @@ public class DollarWrapper implements var {
     @Override
     public int compareTo(var o) {
         return getValue().compareTo(o);
+    }
+
+    @Override
+    public var debugf(String message, Object... values) {
+        return getValue().debugf(message, values);
+    }
+
+    @Override
+    public var debug(Object message) {
+        return getValue().debug(message);
+    }
+
+    @Override
+    public var debug() {
+        return getValue().debug();
+    }
+
+    @Override
+    public var infof(String message, Object... values) {
+        return getValue().infof(message, values);
+    }
+
+    @Override
+    public var info(Object message) {
+        return getValue().info(message);
+    }
+
+    @Override
+    public var info() {
+        return getValue().info();
+    }
+
+    @Override
+    public var errorf(String message, Object... values) {
+        return getValue().errorf(message, values);
+    }
+
+    @Override
+    public var error(Throwable exception) {
+        return getValue().error(exception);
+    }
+
+    @Override
+    public var error(Object message) {
+        return getValue().error(message);
+    }
+
+    @Override
+    public var error() {
+        return getValue().error();
     }
 }

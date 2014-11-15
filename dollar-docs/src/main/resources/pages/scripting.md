@@ -134,10 +134,17 @@ variableA = 2
 => $variableB == 1 
 => $variableC == 2 
 => $variableD == 3
- 
+
 ```
 
-So `:=` allows the default behaviour of Dollar, which is to make everything declarative, and `=` is used to nail down a particular value. Later we'll come across the value anchor operator or diamond `<>` which instructs DollarScript to fix a value at the time of declaration. More on that later.
+It's important to note that all values in DollarScript are immutable - that means if you wish to change the value of a variable you *must* __reassign__ a new value to the variable. For example `$v++` would return the value of `$v+1` it does not increment v. If however you want to assign a constant value, one that is both immutable and cannot be reassigned, just use the `const` modifier at the variable assignment (this does not make sense for declarations, so is only available on assignments).
+
+```dollar
+const MEDIUM = 23
+# MEDIUM= 4 would now produce an error
+```
+
+So `:=` supports the reactive behaviour of Dollar, i.e. it is a declaration not a value assignment, and `=` is used to nail down a particular value. Later we'll come across the value anchor operator or diamond `<>` which instructs DollarScript to fix a value at the time of declaration. More on that later.
 
 ###Blocks
 
@@ -199,8 +206,8 @@ Appending blocks can be combined with the pair `:` operator to create maps/JSON 
 ```dollar
 
 appending := {
-    first:"Hello ",
-    second:"World"
+    "first":"Hello ",
+   "second":"World"
 }
 
 >> $appending
@@ -213,8 +220,8 @@ The stdout operator `>>` is used to send a value to stdout in it's serialized (J
 
 ```dollar
  
-pair1 := first : "Hello ";
-pair2 := second : "World";
+pair1 := "first" : "Hello ";
+pair2 := "second" : "World";
   
 => $pair1 + $pair2 == {"first":"Hello ","second":"World"}
  
@@ -260,8 +267,43 @@ This time we'll just see the number 2 twice, this is because the `when` operator
 
 
 
-Imperative Control Flow
------------------------
+###Imperative Control Flow
+
+####If
+
+DollarScript supports the usual imperative control flow but, unlike some languages, everything is an operator. This is the general rule of DollarScript, everything has a value. DollarScript does not have the concept of statements and expressions, just expressions. This means that you can use control flow in an expression.
+
+```dollar
+
+a=1
+b= if $a==1 2 else 3
+$b <=> 2
+
+```
+So let's start with the `if` operator. The `if` operator is seperate from the `else` operator, it simply evaluates the condition supplied as the first argument. If that value is boolean and true it evaluates the second argument and returns it's value; otherwise it returns boolean false.
+
+The `else` operator is a binary operator which evaluates the left-hand-side (usually the result of an `if` statement), if that has a value of false then the right-hand-side is evaluated and it's result returned, otherwise it returns the left-hand-side.
+
+The combined effect of these two operators is to provide the usual if/else/else if/ control flow
+
+```dollar
+
+a=5
+#Parenthesis added for clarity, not required.
+b= if ($a == 1) "one" else if ($a == 2) "two" else "more than two"
+=> $b == "more than two"
+
+```
+
+####For
+
+```dollar
+
+for i in 1..10 {
+    >> $i
+}
+
+```
 
 Parameters &amp; Functions
 ----------------------
@@ -355,7 +397,23 @@ DollarScript support the basic numerical operators +,-,/,*,%
 Logical Operators
 -----------------
 
-DollarScript support the basic logical operators &&,||,!
+DollarScript support the basic logical operators &&,||,! as well as the truthy operator `~`
+
+The truthy operator converts any value to a boolean by applying the rule that: void is false, 0 is false, "" is false, empty list is false, empty map is false - all else is true.
+
+```dollar
+
+=> ~ [1,2,3]
+=> ! ~ []
+=> ~ "anything"
+=> ! ~ ""
+=> ~ 1
+=> ! ~ 0
+=> ! ~ {void}
+=>  ~ {"a" : 1}
+=> ! ~ void
+
+```
 
 Arrays
 ------

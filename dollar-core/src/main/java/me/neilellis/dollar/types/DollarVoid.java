@@ -190,7 +190,7 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $(@NotNull String key) {
+    public var $get(@NotNull String key) {
         return $copy();
     }
 
@@ -371,5 +371,16 @@ public class DollarVoid extends AbstractDollar implements var {
         } else {
             return 1;
         }
+    }
+
+
+    @Override
+    public boolean is(Type... types) {
+        for (Type type : types) {
+            if (type == Type.VOID) {
+                return true;
+            }
+        }
+        return false;
     }
 }

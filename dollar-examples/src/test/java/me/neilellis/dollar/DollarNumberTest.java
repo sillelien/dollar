@@ -38,9 +38,9 @@ public class DollarNumberTest {
         map = map.$inc("foobar", 1);
         map = map.$inc("bar", 10);
         map = map.$dec("foo", 5);
-        assertEquals(20, (long) map.$("bar").I());
-        assertEquals(-4, (long) map.$("foo").I());
-        assertEquals(1, (long) map.$("foobar").I());
+        assertEquals(20, (long) map.$get("bar").I());
+        assertEquals(-4, (long) map.$get("foo").I());
+        assertEquals(1, (long) map.$get("foobar").I());
 
     }
 

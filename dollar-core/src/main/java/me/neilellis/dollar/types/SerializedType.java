@@ -14,32 +14,11 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar;
+package me.neilellis.dollar.types;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class Configuration {
-    private boolean production;
-    private boolean debugScope = true;
-
-    public boolean production() {
-        return production;
-    }
-
-    public boolean isDebugScope() {
-        return debugScope;
-    }
-
-    public void setDebugScope(boolean debugScope) {
-        this.debugScope = debugScope;
-    }
-
-    public boolean wrapForMonitoring() {
-        return production;
-    }
-
-    public boolean wrapForGuards() {
-        return production;
-    }
+public enum SerializedType {
+    JSON, XML, HTML
 }

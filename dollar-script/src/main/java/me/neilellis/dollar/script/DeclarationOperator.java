@@ -42,10 +42,10 @@ public class DeclarationOperator implements Binary<var>, Operator {
         try {
             String key = lhs.$S();
             var lambda = DollarFactory.fromLambda(i -> {
-                scope.set(key, rhs);
+                scope.set(key, rhs, false);
                 return $void();
             });
-            rhs.$listen(i -> scope.set(key, i));
+            rhs.$listen(i -> scope.set(key, i, false));
             return lambda;
         } catch (AssertionError e) {
             throw new AssertionError(e + " at '" + source.get() + "'", e);

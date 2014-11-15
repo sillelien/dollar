@@ -100,7 +100,7 @@ class DollarMap extends AbstractDollar implements var {
 
     private LinkedHashMap<String, var> deepClone(LinkedHashMap<String, var> o) {
         LinkedHashMap<String, var> result = new LinkedHashMap<String, var>();
-        for (Entry<String, var> entry : o.entrySet()) {
+        for (Map.Entry<String, var> entry : o.entrySet()) {
             result.put(entry.getKey(), entry.getValue().$copy());
         }
         return result;
@@ -108,7 +108,7 @@ class DollarMap extends AbstractDollar implements var {
 
     private LinkedHashMap<String, var> mapToVarMap(Map<String, Object> stringObjectMap) {
         LinkedHashMap<String, var> result = new LinkedHashMap<String, var>();
-        for (Entry<String, Object> entry : stringObjectMap.entrySet()) {
+        for (Map.Entry<String, Object> entry : stringObjectMap.entrySet()) {
             result.put(entry.getKey(), DollarFactory.fromValue(entry.getValue()));
         }
         return result;
@@ -210,7 +210,7 @@ class DollarMap extends AbstractDollar implements var {
     @NotNull
     @Override
     public String S(@NotNull String key) {
-        return $(key).S();
+        return $get(key).S();
     }
 
     @NotNull
@@ -258,7 +258,7 @@ class DollarMap extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $(@NotNull String key) {
+    public var $get(@NotNull String key) {
         return DollarFactory.fromValue(errors(), map.get(key));
     }
 
@@ -329,7 +329,7 @@ class DollarMap extends AbstractDollar implements var {
 
     private Map<String, Object> varMapToMap() {
         Map<String, Object> result = new LinkedHashMap<>();
-        for (Entry<String, var> entry : map.entrySet()) {
+        for (Map.Entry<String, var> entry : map.entrySet()) {
             result.put(entry.getKey(), entry.getValue().$());
         }
         return result;
@@ -380,7 +380,6 @@ class DollarMap extends AbstractDollar implements var {
         return toMap().size();
     }
 
-    @Override
     public boolean containsValue(Object value) {
         return false;
     }
@@ -452,6 +451,16 @@ class DollarMap extends AbstractDollar implements var {
     @Override
     public int compareTo(var o) {
         return Comparator.<var>naturalOrder().<var>compare(this, o);
+    }
+
+    @Override
+    public boolean is(Type... types) {
+        for (Type type : types) {
+            if (type == Type.MAP) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

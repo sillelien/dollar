@@ -26,6 +26,8 @@ import me.neilellis.dollar.var;
 import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.stream.Collectors;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class GithubPipeableResolver implements PipeableResolver {
+    private static final Logger logger = LoggerFactory.getLogger(GithubPipeableResolver.class);
     @Override
     public String getScheme() {
         return "github";
@@ -41,7 +44,7 @@ public class GithubPipeableResolver implements PipeableResolver {
 
     @Override
     public Pipeable resolve(String uriWithoutScheme, ScriptScope scope) throws Exception {
-        System.out.println(uriWithoutScheme);
+        logger.debug(uriWithoutScheme);
         String[] githubParts = uriWithoutScheme.split(":");
         GitHub github = GitHub.connect();
         GHRepository repository = github.getUser(githubParts[0]).getRepository(githubParts[1]);
@@ -54,9 +57,9 @@ public class GithubPipeableResolver implements PipeableResolver {
         } else {
             GHContent moduleContent = repository.getFileContent("module.json");
             var module = DollarStatic.$(moduleContent.getContent());
-            GHContent fileContent = repository.getFileContent(module.$("main").$S());
+            GHContent fileContent = repository.getFileContent(module.$get("main").$S());
             content = fileContent.getContent();
-            classLoader = DependencyRetriever.retrieve(module.$("dependencies").toList().stream().map((i) -> i.$S()).collect(Collectors.toList()));
+            classLoader = DependencyRetriever.retrieve(module.$get("dependencies").toList().stream().map((i) -> i.$S()).collect(Collectors.toList()));
         }
         return (in) -> scope.getDollarParser().withinNewScope(scope, newScope -> {
             try {

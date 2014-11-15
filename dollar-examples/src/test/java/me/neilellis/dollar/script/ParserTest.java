@@ -92,6 +92,11 @@ public class ParserTest {
     }
 
     @Test
+    public void testRanges() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_ranges.ds"));
+    }
+
+    @Test
     public void testMarkdown1() throws Exception {
         new DollarParser().parseMarkdown(CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/test1.md"))));
     }

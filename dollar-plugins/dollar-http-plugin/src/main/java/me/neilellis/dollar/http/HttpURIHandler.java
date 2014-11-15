@@ -16,7 +16,12 @@
 
 package me.neilellis.dollar.http;
 
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
+import me.neilellis.dollar.types.DollarFactory;
+import me.neilellis.dollar.types.SerializedType;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.var;
 
@@ -36,18 +41,16 @@ public class HttpURIHandler implements URIHandler {
     public static final int BLOCKING_TIMEOUT = 10;
     private static final ConcurrentHashMap<String, RouteableNanoHttpd> servers = new ConcurrentHashMap<>();
     private final URI uri;
-    private final RouteableNanoHttpd httpd;
+    private RouteableNanoHttpd httpd;
     private String method = "GET";
 
     public HttpURIHandler(String scheme, String uri) throws URISyntaxException, IOException {
-        if (uri.startsWith("://")) {
-            this.uri = new URI(scheme + uri);
+        if (uri.startsWith("//")) {
+            this.uri = new URI(scheme + ":" + uri);
         } else {
             this.uri = new URI(uri);
             this.method = this.uri.getScheme();
         }
-        httpd = getHttpServerFor(this.uri.getHost(), this.uri.getPort());
-        System.out.println(httpd);
     }
 
     private static RouteableNanoHttpd getHttpServerFor(String hostname, int port) throws IOException {
@@ -58,7 +61,6 @@ public class HttpURIHandler implements URIHandler {
             RouteableNanoHttpd nanoHttpd = new RouteableNanoHttpd(hostname, port);
             servers.putIfAbsent(key, nanoHttpd);
             nanoHttpd.start();
-            System.out.println(nanoHttpd);
             return nanoHttpd;
         }
     }
@@ -70,6 +72,7 @@ public class HttpURIHandler implements URIHandler {
 
     @Override
     public void subscribe(Pipeable consumer) throws IOException {
+        httpd = getHttpServerFor(this.uri.getHost(), this.uri.getPort());
         httpd.handle(this.uri.getPath(), new RequestHandler(consumer));
     }
 
@@ -80,7 +83,15 @@ public class HttpURIHandler implements URIHandler {
 
     @Override
     public var receive() {
-        throw new UnsupportedOperationException();
+
+        try {
+            return DollarFactory.fromStream(SerializedType.JSON, Unirest.get(uri.toString())
+                    .asJson().getRawBody());
+        } catch (UnirestException e) {
+            return DollarStatic.handleError(e, null);
+        } catch (IOException e) {
+            return DollarStatic.handleError(e, null);
+        }
     }
 
     @Override
@@ -187,19 +198,19 @@ public class HttpURIHandler implements URIHandler {
                         .$($("body"), "");
 //                session.getInputStream().close();
                 var out = consumer.pipe(in);
-                var body = out.$("body");
+                var body = out.$get("body");
                 NanoHttpd.Response response = new NanoHttpd.Response(new NanoHttpd.Response.IStatus() {
                     @Override
                     public int getRequestStatus() {
-                        return out.$("status").$default(200).I();
+                        return out.$get("status").$default(200).I();
                     }
 
                     @Override
                     public String getDescription() {
-                        return out.$("reason").$default("").S();
+                        return out.$get("reason").$default("").S();
                     }
                 }, body.$mimeType(), body.S());
-                out.$("headers").$map().forEach((s, v) -> response.addHeader(s, v.$S()));
+                out.$get("headers").$map().forEach((s, v) -> response.addHeader(s, v.$S()));
                 response.setData(body.toStream());
                 return response;
             } catch (Exception e) {

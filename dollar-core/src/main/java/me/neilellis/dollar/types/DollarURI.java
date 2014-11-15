@@ -103,7 +103,7 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $(@NotNull String key) {
+    public var $get(@NotNull String key) {
         return handler.get(DollarStatic.$(key));
     }
 
@@ -135,7 +135,7 @@ public class DollarURI extends AbstractDollar {
 
     @Override
     public boolean isTruthy() {
-        return false;
+        return handler != null;
     }
 
     @Override
@@ -153,7 +153,6 @@ public class DollarURI extends AbstractDollar {
         return handler.size();
     }
 
-    @Override
     public boolean containsValue(Object value) {
         return false;
     }
@@ -358,5 +357,20 @@ public class DollarURI extends AbstractDollar {
     @Override
     public var $drain() {
         return handler.drain();
+    }
+
+    @Override
+    public boolean isUri() {
+        return true;
+    }
+
+    @Override
+    public boolean is(Type... types) {
+        for (Type type : types) {
+            if (type == Type.URI) {
+                return true;
+            }
+        }
+        return false;
     }
 }

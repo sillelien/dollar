@@ -31,17 +31,19 @@ public class AssignmentOperator implements Binary<var>, Operator {
 
     private Supplier<String> source;
     private ScriptScope scope;
+    private boolean readonly;
 
 
-    public AssignmentOperator(ScriptScope scope) {
+    public AssignmentOperator(ScriptScope scope, boolean readonly) {
 
         this.scope = scope;
+        this.readonly = readonly;
     }
 
     @Override
     public var map(var lhs, var rhs) {
         try {
-            var lambda = DollarFactory.fromLambda(i -> scope.set(lhs.$S(), $((Object) rhs.$())));
+            var lambda = DollarFactory.fromLambda(i -> scope.set(lhs.$S(), $((Object) rhs.$()), readonly));
 
             return lambda;
         } catch (AssertionError e) {

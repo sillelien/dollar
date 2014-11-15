@@ -18,7 +18,6 @@ package me.neilellis.dollar.http;
 
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
-import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -30,12 +29,6 @@ import java.net.URISyntaxException;
 public class HttpURIHandlerFactory implements URIHandlerFactory {
 
 
-    private static final JedisPoolConfig poolConfig = new JedisPoolConfig();
-
-    static {
-        poolConfig.setMaxTotal(128);
-
-    }
 
 
     @Override

@@ -23,6 +23,8 @@ import me.neilellis.dollar.exceptions.ValidationException;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -50,6 +52,7 @@ public abstract class AbstractDollar implements var {
     private static
     @NotNull
     ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final
     @NotNull
     ImmutableList<Throwable> errors;
@@ -62,7 +65,7 @@ public abstract class AbstractDollar implements var {
 
     @Override
     public var $choose(var map) {
-        return map.$($S());
+        return map.$get($S());
     }
 
     @Override
@@ -171,57 +174,47 @@ public abstract class AbstractDollar implements var {
         return size() > 0;
     }
 
-    @Override
     public boolean containsKey(Object key) {
         return $has(String.valueOf(key));
     }
 
     @NotNull
-    @Override
     public var put(@NotNull String key, var value) {
-        return $($(key), value);
+        return $($get(key), value);
     }
 
-    @Override
     public void putAll(Map<? extends String, ? extends var> m) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public void clear() {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
-    @Override
     public Set<String> keySet() {
         return keyStream().collect(Collectors.toSet());
     }
 
     @NotNull
-    @Override
     public Collection<var> values() {
         return toList();
     }
 
     @NotNull
-    @Override
-    public Set<Entry<String, var>> entrySet() {
+    public Set<Map.Entry<String, var>> entrySet() {
         return kvStream().collect(Collectors.toSet());
     }
 
     @NotNull
-    @Override
     public var getOrDefault(@NotNull Object key, @NotNull var defaultValue) {
         return $has(String.valueOf(key)) ? get(key) : defaultValue;
     }
 
-    @Override
     public void forEach(@NotNull BiConsumer<? super String, ? super var> action) {
         $map().forEach(action);
     }
 
-    @Override
     public void replaceAll(BiFunction<? super String, ? super var, ? extends var> function) {
         throw new UnsupportedOperationException();
     }
@@ -256,33 +249,27 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull
-    @Override
     public var putIfAbsent(String key, var value) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public boolean remove(Object key, Object value) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public boolean replace(String key, var oldValue, var newValue) {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
-    @Override
     public var replace(String key, var value) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public var computeIfAbsent(String key, @NotNull Function<? super String, ? extends var> mappingFunction) {
         return $map().computeIfAbsent(key, mappingFunction);
     }
 
-    @Override
     public var computeIfPresent(String key,
                                 @NotNull BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
         return $map().computeIfPresent(key, remappingFunction);
@@ -294,12 +281,10 @@ public abstract class AbstractDollar implements var {
         return $pipe("anon", js);
     }
 
-    @Override
     public var compute(String key, @NotNull BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
         return $map().compute(key, remappingFunction);
     }
 
-    @Override
     public var merge(String key, @NotNull var value,
                      @NotNull BiFunction<? super var, ? super var, ? extends var> remappingFunction) {
         return $map().mutable().merge(key, value, remappingFunction);
@@ -387,7 +372,7 @@ public abstract class AbstractDollar implements var {
     }
 
 
-    public Stream<Entry<String, var>> kvStream() {
+    public Stream<Map.Entry<String, var>> kvStream() {
         return $map().entrySet().stream();
 
     }
@@ -594,7 +579,7 @@ public abstract class AbstractDollar implements var {
 
     @Override
     public var $send(var given) {
-        System.err.println("Cannot send to " + getClass().getName());
+        debug("Cannot send to " + getClass().getName());
         return this;
     }
 
@@ -610,8 +595,11 @@ public abstract class AbstractDollar implements var {
                 throw new DollarException(e);
             }
             result.add(res);
+
         }
-        return DollarFactory.fromValue(result);
+        debug(result);
+        final var resultvar = DollarFactory.fromValue(result);
+        return resultvar;
     }
 
     @Override
@@ -619,7 +607,7 @@ public abstract class AbstractDollar implements var {
         if (key.isNumber()) {
             return $(key.N());
         } else {
-            return $(key.$S());
+            return $get(key.$S());
         }
     }
 
@@ -694,5 +682,71 @@ public abstract class AbstractDollar implements var {
     @Override
     public InputStream toStream() {
         return new ByteArrayInputStream($S().getBytes());
+    }
+
+    @Override
+    public boolean isUri() {
+        return false;
+    }
+
+    @Override
+    public var debugf(String message, Object... values) {
+        logger.debug(message, values);
+        return this;
+    }
+
+    @Override
+    public var debug(Object message) {
+        logger.debug(message.toString());
+        return this;
+    }
+
+    @Override
+    public var debug() {
+        logger.debug(this.toString());
+        return this;
+    }
+
+    @Override
+    public var infof(String message, Object... values) {
+        logger.info(message, values);
+        return this;
+    }
+
+    @Override
+    public var info(Object message) {
+        logger.info(message.toString());
+        return this;
+    }
+
+    @Override
+    public var info() {
+        logger.info(this.toString());
+        return this;
+    }
+
+    @Override
+    public var errorf(String message, Object... values) {
+        logger.error(message, values);
+        return this;
+    }
+
+    @Override
+    public var error(Throwable exception) {
+        logger.error(exception.getMessage(), exception);
+        return this;
+    }
+
+    @Override
+    public var error(Object message) {
+        logger.error(message.toString());
+        return this;
+
+    }
+
+    @Override
+    public var error() {
+        logger.error(this.toString());
+        return this;
     }
 }

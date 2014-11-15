@@ -132,7 +132,7 @@ public class DollarStatic {
     }
 
 
-    public static var $(long start, long finish) {
+    public static var $(var start, var finish) {
         return $(Range.closed(start, finish));
     }
 
@@ -207,7 +207,7 @@ public class DollarStatic {
     @NotNull
     public static var handleError(@NotNull Throwable throwable, var failee) {
 //        log(throwable.getMessage());
-//        log(throwable);
+////        log(throwable);
         throwable.printStackTrace(System.err);
         if (failee == null) {
             return DollarFactory.failure(throwable);
@@ -329,6 +329,7 @@ public class DollarStatic {
     public static var create(String value) {
         return $();
     }
+
 
     public static void log(Object message) {
         System.out.println(threadContext.get().getLabels().toString() + ":" + message);

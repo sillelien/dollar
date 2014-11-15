@@ -17,6 +17,7 @@
 package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
+import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.exceptions.ListException;
@@ -43,7 +44,7 @@ public class DollarList extends AbstractDollar {
     }
 
 
-    DollarList(@NotNull ImmutableList<Throwable> errors, @NotNull List<var> list) {
+    DollarList(@NotNull ImmutableList<Throwable> errors, @NotNull List<Object> list) {
         super(errors);
         List<var> l = new ArrayList<>();
         for (Object value : list) {
@@ -60,22 +61,29 @@ public class DollarList extends AbstractDollar {
         this.list = ImmutableList.copyOf(l);
     }
 
-    DollarList(@NotNull ImmutableList<Throwable> errors, @NotNull Object... values) {
+    DollarList(@NotNull ImmutableList<Throwable> errors, @NotNull Object[] values) {
         super(errors);
         List<var> l = new ArrayList<>();
         for (Object value : values) {
             if ((value instanceof var)) {
-                l.add((var) value);
+                if (((var) value).isLambda() || !((var) value).isVoid()) {
+                    l.add((var) value);
+                }
+            } else if (value == null) {
+                //Skip
             } else {
                 l.add(DollarFactory.fromValue(errors, value));
             }
         }
-        list = ImmutableList.copyOf(l);
+        this.list = ImmutableList.copyOf(l);
     }
 
     @NotNull
     @Override
     public var $plus(Object value) {
+        if (value == this) {
+            throw new IllegalArgumentException("Tried to add to self");
+        }
         return DollarFactory.fromValue(errors(),
                 ImmutableList.builder()
                         .addAll(list)
@@ -204,8 +212,13 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $(@NotNull String key) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+    public var $get(@NotNull String key) {
+        for (var var : list) {
+            if (var.$S().equals(key)) {
+                return var;
+            }
+        }
+        return DollarStatic.$void();
     }
 
     @Override
@@ -385,5 +398,29 @@ public class DollarList extends AbstractDollar {
             return 1;
         }
         return 0;
+    }
+
+    @Override
+    public boolean is(Type... types) {
+        for (Type type : types) {
+            if (type == Type.LIST) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof List) {
+            return list.equals(obj);
+        }
+        if (obj instanceof var) {
+            return list.equals(((var) obj).toList());
+        }
+        return false;
     }
 }

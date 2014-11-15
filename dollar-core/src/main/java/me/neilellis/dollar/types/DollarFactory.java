@@ -16,6 +16,8 @@
 
 package me.neilellis.dollar.types;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Range;
@@ -28,8 +30,12 @@ import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.json.impl.Json;
 import me.neilellis.dollar.monitor.DollarMonitor;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.ObjectNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import spark.QueryParamsMap;
 
 import java.io.IOException;
@@ -96,6 +102,12 @@ public class DollarFactory {
         if (o instanceof JsonObject) {
             return wrap(new DollarMap(errors, new ImmutableJsonObject((JsonObject) o)));
         }
+        if (o instanceof JSONObject || o instanceof ObjectNode || o instanceof com.fasterxml.jackson.databind.node.ObjectNode) {
+            return wrap(new DollarMap(errors, new JsonObject(o.toString())));
+        }
+        if (o instanceof JSONArray || o instanceof ArrayNode || o instanceof com.fasterxml.jackson.databind.node.ArrayNode) {
+            return wrap(new DollarList(errors, new JsonArray(o.toString())));
+        }
         if (o instanceof Map) {
             return wrap(new DollarMap(errors, (Map<String, Object>) o));
         }
@@ -104,7 +116,7 @@ public class DollarFactory {
         }
 
         if (o instanceof List) {
-            return wrap(new DollarList(errors, (List<var>) o));
+            return wrap(new DollarList(errors, (List<Object>) o));
         }
         if (o.getClass().isArray()) {
             return wrap(new DollarList(errors, (Object[]) o));
@@ -141,9 +153,6 @@ public class DollarFactory {
             }
         }
         JsonObject json;
-//        if (o instanceof JsonObject) {
-//            json = ((JsonObject) o);
-//        }
         if (o instanceof Multimap) {
             json = DollarStatic.mapToJson((Multimap) o);
         } else {
@@ -177,10 +186,21 @@ public class DollarFactory {
 
     @NotNull
     public static var wrap(var value, DollarMonitor monitor, StateTracer tracer, ErrorLogger errorLogger) {
-        return (var) java.lang.reflect.Proxy.newProxyInstance(
-                DollarStatic.class.getClassLoader(),
-                new Class<?>[]{var.class},
-                new DollarGuard(new DollarWrapper(value, monitor, tracer, errorLogger)));
+        final var val;
+        if (DollarStatic.config.wrapForMonitoring()) {
+            val = new DollarWrapper(value, monitor, tracer, errorLogger);
+        } else {
+            val = value;
+        }
+        if (DollarStatic.config.wrapForGuards()) {
+            return (var) java.lang.reflect.Proxy.newProxyInstance(
+                    DollarStatic.class.getClassLoader(),
+                    new Class<?>[]{var.class},
+                    new DollarGuard(val));
+        } else {
+            return val;
+    }
+
 
     }
 
@@ -205,6 +225,30 @@ public class DollarFactory {
             return wrap(new DollarURI(ImmutableList.of(), uri));
         } catch (Exception e) {
             return DollarStatic.handleError(e, null);
+        }
+    }
+
+    public static var fromURI(var from) {
+        if (from.isUri()) {
+            return from;
+        } else {
+            return fromURI(from.$S());
+        }
+    }
+
+    public static var fromStream(SerializedType type, InputStream rawBody) throws IOException {
+        if (type == SerializedType.JSON) {
+            ObjectMapper mapper = new ObjectMapper();
+            final JsonNode jsonNode = mapper.readTree(rawBody);
+            if (jsonNode.isArray()) {
+                return create(ImmutableList.<Throwable>of(), jsonNode);
+            } else if (jsonNode.isObject()) {
+                return create(ImmutableList.<Throwable>of(), jsonNode);
+            } else {
+                throw new DollarException("Could not deserialize JSON, not array or object");
+            }
+        } else {
+            throw new DollarException("Could not deserialize " + type);
         }
     }
 }

@@ -22,19 +22,25 @@ import org.junit.Test;
 import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$list;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class DollarRangeTest {
     private static var range;
 
     @BeforeClass
     public static void setUp() {
-        range = $(1, 4);
+        range = $($(1), $(4));
     }
 
     @Test
     public void testBasics() {
-        assertEquals(range, $list(1).$plus(2).$plus(3).$plus(4));
-        assertEquals(range, $(1, 4));
+        System.err.println(range.toList());
+        final var actual = $list(1).$plus(2).$plus(3).$plus(4);
+        assertTrue(range.equals(actual));
+        assertTrue(actual.equals(range));
+        System.err.println(actual._unwrap().getClass());
+        assertEquals(range, actual);
+        assertEquals(range, $($(1), $(4)));
     }
 
 

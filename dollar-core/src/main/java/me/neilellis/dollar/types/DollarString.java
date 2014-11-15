@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.types;
 
+import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +42,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @Override
     public var $inc(var amount) {
-        return this;
+        return DollarStatic.$(String.valueOf((char) (value.charAt(value.length() - 1) + 1)));
     }
 
     @Override
@@ -118,7 +119,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @Override
     public boolean isTruthy() {
-        return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("yes");
+        return !value.isEmpty();
     }
 
     @Override
@@ -142,4 +143,13 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return Comparator.<String>naturalOrder().compare(value, o.$S());
     }
 
+    @Override
+    public boolean is(Type... types) {
+        for (Type type : types) {
+            if (type == Type.STRING) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

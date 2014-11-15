@@ -45,7 +45,7 @@ lamval5=13
 
 >> "lamval" + 1
 
->> lamval + 1
+>> $lamval + 1
 
 >> $lamval
 
@@ -71,15 +71,15 @@ function := [
 
 lamval = "fred"
 
-!! ([1,2,3] | $function)
-([1,2,3] | $function) <=>  [ 5, "fred", [1, 2, 3] ]
+!! ([1,2,3] | function)
+([1,2,3] | function) <=>  [ 5, "fred", [1, 2, 3] ]
 
 removeWorld := ($1 - "World")
 
->> ["Hello", "World"] | $removeWorld
+>> ["Hello", "World"] | removeWorld
 
-(["Hello", "World"] | $removeWorld) <=> ["Hello"]
-(["Goodbye", "World"] | $removeWorld) <=> ["Goodbye"]
+(["Hello", "World"] | removeWorld) <=> ["Hello"]
+(["Goodbye", "World"] | removeWorld) <=> ["Goodbye"]
 
 
 ($2 + " " + $1)("Hello", "World") <=> "World Hello"
