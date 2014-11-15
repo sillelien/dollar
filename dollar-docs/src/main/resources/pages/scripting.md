@@ -71,7 +71,7 @@ Now let's throw in the -> or causes operator :
 ```dollar
  
 a=1
-$a -> { >> $a }
+a -> { >> $1 }
 a=2
 a=3
 a=4
@@ -234,7 +234,8 @@ DollarScript as previously mentioned is a reactive programming language, that me
 Let's start with the simplest reactive control flow operator, the '->' or 'causes' operator. 
 
 ```dollar
- 
+
+a=0
 $a -> { >> $a } //alternatively for clarity '$a causes {>> $a} '
 
 a=1
@@ -365,6 +366,17 @@ marinaVideos = <+ camel:https://itunes.apple.com/search?term=Marina+And+The+Diam
 
 In this example we've requested a single value (using `<+`) from a uri and assigned the value to `$marinaVideos` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `trackViewUrl`. The each operator returns a list of the results and that is what is passed to standard out.
 
+
+###Ranges
+
+DollarScript (at present) supports numerical and character ranges
+
+```dollar
+
+"a".."c" <=> ["a","b","c"]
+1..3 <=> [1,2,3]
+
+```
 
 Using Java
 ----------

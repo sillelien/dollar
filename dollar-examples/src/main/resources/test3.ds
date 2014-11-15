@@ -55,7 +55,7 @@ lamval5=13
 
 
 //Lambda variable resolution >>! - notice the two levels of indirection here - yeah edge case :-)
-=> $$delayName == 13
+=> $($delayName) == 13
 
 
 // <> forces immediate evaluation, the value lock symbol

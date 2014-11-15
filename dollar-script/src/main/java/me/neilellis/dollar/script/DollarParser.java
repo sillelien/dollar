@@ -77,7 +77,7 @@ public class DollarParser {
     public static final String NAMED_PARAMETER_META_ATTR = "__named_parameter";
     public static final int LOGICAL_AND_PRIORITY = 70;
     public static final int LOGICAL_OR_PRIORITY = 60;
-    static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", "<=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "??", "!!", "*>", "==", "!=", "+", "-", "\n", "$(", "${", ":=", "&", "&=", "<>", "+>", "<+", "*>", "<*", "*|", "|*", "*|*", "|>", "<|", "&>", "<&", "?>", "<?", "?->", "<=>", "<$", "$>", "-_-", "::", "/", "%", "*", "&&", "||", "<--", "<++", "\u2357", "~", "?$?", "???", "..", "?..?");
+    static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", "<=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "??", "!!", "*>", "==", "!=", "+", "-", "\n", "${", ":=", "&", "&=", "<>", "+>", "<+", "*>", "<*", "*|", "|*", "*|*", "|>", "<|", "&>", "<&", "?>", "<?", "?->", "<=>", "<$", "$>", "-_-", "::", "/", "%", "*", "&&", "||", "<--", "<++", "\u2357", "~", "?$?", "???", "..", "?..?");
     static final Terminals KEYWORDS = Terminals.operators("out", "err", "debug", "fix", "causes", "when", "if", "then", "for", "map", "fail", "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default", "debug", "error", "filter", "sleep", "secs", "sec", "minute", "minutes", "hr", "hrs", "milli", "millis", "every", "until", "unless", "uri", "and", "or", "dispatch", "send", "give", "receive", "peek", "poll", "push", "pop", "publish", "subscribe", "emit", "drain", "receive all", "import", "reduce", "truthy", "is", "else", "const", "in", "true", "false", "yes", "no", "void");
     static final Parser<?> TOKENIZER =
             Parsers.or(Lexical.url(), OPERATORS.tokenizer(), Lexical.decimal(), Lexical.java(), Terminals.StringLiteral.DOUBLE_QUOTE_TOKENIZER, Terminals.StringLiteral.SINGLE_QUOTE_TOKENIZER, Terminals.IntegerLiteral.TOKENIZER, Parsers.longest(KEYWORDS.tokenizer(), Terminals.Identifier.TOKENIZER));
@@ -130,7 +130,7 @@ public class DollarParser {
 
     static final Parser<var> dollarIdentifier(ScriptScope scope) {
         return term("$").next(Terminals.Identifier.PARSER).map(i -> {
-            return getVariable(scope, i, false);
+            return DollarFactory.fromLambda(j -> getVariable(scope, i, false));
         });
     }
 
@@ -202,6 +202,9 @@ public class DollarParser {
             }
             if (numeric) {
                 return scope.getParameter(key);
+            }
+            if (!scope.has(key)) {
+                throw new VariableNotFoundException(key);
             }
             return scope.get(key);
         });
@@ -395,7 +398,12 @@ public class DollarParser {
     private Parser<var> expression(ScriptScope scope) {
 
         Parser.Reference<var> ref = Parser.newReference();
-        Parser<var> main = ref.lazy().between(term("("), term(")")).or(Parsers.or(list(ref.lazy(), scope), map(ref.lazy(), scope), whenStatement(ref.lazy(), scope), everyStatement(ref.lazy(), scope), java(scope), URL, DECIMAL_LITERAL, INTEGER_LITERAL, STRING_LITERAL, dollarIdentifier(scope), IDENTIFIER_KEYWORD, functionCall(ref, scope))).or(block(ref.lazy(), scope).between(Lexical.termFollowedByNewlines("{"), Lexical.termPreceededByNewlines("}")));
+        Parser<var> main = ref.lazy().between(term("("), term(")")).or(Parsers.or(list(ref.lazy(), scope), map(ref.lazy(), scope), whenStatement(ref.lazy(), scope), everyStatement(ref.lazy(), scope), java(scope), URL, DECIMAL_LITERAL, INTEGER_LITERAL, STRING_LITERAL, dollarIdentifier(scope), IDENTIFIER_KEYWORD, functionCall(ref, scope), IDENTIFIER.map(new Map<var, var>() {
+            @Override
+            public var map(var var) {
+                return DollarFactory.fromLambda(i -> getVariable(scope, var.toString(), false));
+            }
+        }))).or(block(ref.lazy(), scope).between(Lexical.termFollowedByNewlines("{"), Lexical.termPreceededByNewlines("}")));
 
         Parser<var> unit = main;
 
@@ -554,14 +562,14 @@ public class DollarParser {
     }
 
     private Parser<Map<? super var, ? extends var>> declarationOperator(final ScriptScope scope, Parser.Reference<var> ref) {
-        return Parsers.array(keyword("const").optional(), ref.lazy().between(term("("), term(")")).or(IDENTIFIER), term(":=")).map(new Map<Object[], Map<? super var, ? extends var>>() {
+        return Parsers.array(ref.lazy().between(term("("), term(")")).or(IDENTIFIER), term(":=")).map(new Map<Object[], Map<? super var, ? extends var>>() {
             public Map<? super var, ? extends var> map(Object[] objects) {
 
                 return new Map<var, var>() {
                     public var map(var rhs) {
-                        final var lambda = DollarFactory.fromLambda(i -> scope.set(objects[1].toString(), rhs, (objects[0] != null)));
-                        rhs.$listen(i -> lambda.$notify(lambda));
-                        return lambda;
+                        scope.set(objects[0].toString(), rhs, false);
+                        rhs.$listen(i -> scope.set(objects[0].toString(), rhs, false));
+                        return $void();
                     }
                 };
             }
@@ -633,12 +641,12 @@ public class DollarParser {
 
 
     private Parser<Map<? super var, ? extends var>> variableUsageOperator(Parser.Reference<var> ref, ScriptScope scope) {
-        return Parsers.or(term("$").notFollowedBy(IDENTIFIER.or(INTEGER_LITERAL))
+        return Parsers.or(term("$").followedBy(term("(").peek())
                 .map(lhs -> rhs -> {
-                    return getVariable(scope, rhs.toString(), false);
-                }), term("$").notFollowedBy(IDENTIFIER)
+                    return DollarFactory.fromLambda(i -> getVariable(scope, rhs.toString(), false));
+                }), term("$").followedBy(INTEGER_LITERAL.peek())
                 .map(lhs -> rhs -> {
-                    return getVariable(scope, rhs.toString(), true);
+                    return DollarFactory.fromLambda(i -> getVariable(scope, rhs.toString(), true));
                 }));
     }
 
@@ -817,8 +825,10 @@ public class DollarParser {
             return $(parse.stream().map(i -> i.$()).collect(Collectors.toList()));
         } catch (ParserException e) {
             //todo: proper error handling
-            final int index = e.getErrorDetails().getIndex();
-            System.err.println(source.substring(index, index < source.length() - 20 ? index + 20 : source.length() - 1));
+            if (e.getErrorDetails() != null) {
+                final int index = e.getErrorDetails().getIndex();
+                System.err.println(source.substring(index, index < source.length() - 20 ? index + 20 : source.length() - 1));
+            }
             e.printStackTrace(System.err);
             throw e;
         } finally {
