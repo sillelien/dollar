@@ -267,11 +267,13 @@ public class DollarRange extends AbstractDollar {
 
     }
 
+    @NotNull
     @Override
     public var $size() {
         return DollarStatic.$(toList().size());
     }
 
+    @NotNull
     @Override
     public var $containsValue(Object value) {
         return DollarStatic.$(range.lowerEndpoint().compareTo(DollarStatic.$(value)) <= 0 && range.upperEndpoint().compareTo(DollarStatic.$(value)) >= 0);

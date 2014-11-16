@@ -22,6 +22,8 @@ package me.neilellis.dollar;
 public class Configuration {
     private boolean production;
     private boolean debugScope = true;
+    private boolean safe = true;
+    private boolean monitor = true;
 
     public boolean production() {
         return production;
@@ -36,10 +38,10 @@ public class Configuration {
     }
 
     public boolean wrapForMonitoring() {
-        return production;
+        return production || monitor;
     }
 
     public boolean wrapForGuards() {
-        return production;
+        return production || safe;
     }
 }

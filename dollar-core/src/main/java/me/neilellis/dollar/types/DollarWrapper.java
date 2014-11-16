@@ -79,6 +79,7 @@ public class DollarWrapper implements var {
         return getValue().$children();
     }
 
+    @NotNull
     @Override
     public var $default(Object o) {
         return getValue().$default(o);
@@ -106,6 +107,7 @@ public class DollarWrapper implements var {
         return getValue().$copy();
     }
 
+    @NotNull
     @Override
     public var $has(@NotNull String key) {
         return DollarStatic.$(getValue().$has(key));
@@ -117,6 +119,7 @@ public class DollarWrapper implements var {
         return getValue().$map();
     }
 
+    @NotNull
     @Override
     public var $match(@NotNull String key, String value) {
         return DollarStatic.$(getValue().$match(key, value));
@@ -134,6 +137,7 @@ public class DollarWrapper implements var {
         return DollarStatic.$(getValue().$mimeType());
     }
 
+    @NotNull
     @Override
     public var $post(String url) {
         return tracer.trace(this,
@@ -194,12 +198,13 @@ public class DollarWrapper implements var {
     }
 
 
-    @NotNull
+    @Nullable
     @Override
     public <R> R $() {
         return getValue().$();
     }
 
+    @NotNull
     @Override
     public Stream<String> keyStream() {
         return getValue().keyStream();
@@ -307,7 +312,6 @@ public class DollarWrapper implements var {
     @NotNull
     @Override
     public var $error(@NotNull String errorMessage) {
-        assert errorMessage != null;
         errorLogger.log(errorMessage);
         return getValue().$error(errorMessage);
     }
@@ -315,7 +319,6 @@ public class DollarWrapper implements var {
     @NotNull
     @Override
     public var $error(@NotNull Throwable error) {
-        assert error != null;
         errorLogger.log(error);
         return getValue().$error(error);
     }
@@ -530,7 +533,7 @@ public class DollarWrapper implements var {
         return getValue().isLambda();
     }
 
-    @NotNull
+    @Nullable
     @Override
     public JsonObject json(@NotNull String key) {
         return getValue().json(key);
@@ -541,13 +544,13 @@ public class DollarWrapper implements var {
         return getValue().number(key);
     }
 
-    @NotNull
+    @Nullable
     @Override
     public JSONObject orgjson() {
         return getValue().orgjson();
     }
 
-    @NotNull
+    @Nullable
     @Override
     public JsonObject json() {
         return getValue().json();
@@ -582,7 +585,7 @@ public class DollarWrapper implements var {
     @NotNull
     @Override
     public var _unwrap() {
-        return value;
+        return value._unwrap();
     }
 
     @Override
@@ -623,26 +626,31 @@ public class DollarWrapper implements var {
         return getValue().toString();
     }
 
+    @NotNull
     @Override
     public var $size() {
         return DollarStatic.$(getValue().$size());
     }
 
+    @NotNull
     @Override
     public var $isEmpty() {
         return DollarStatic.$(getValue().$isEmpty());
     }
 
+    @NotNull
     @Override
     public boolean containsKey(Object key) {
         return getValue().containsKey(key);
     }
 
+    @NotNull
     @Override
-    public var $containsValue(Object value) {
+    public var $containsValue(@NotNull Object value) {
         return DollarStatic.$(getValue().$containsValue(value));
     }
 
+    @NotNull
     @Override
     public var remove(Object value) {
         return tracer.trace(this, getValue().remove(value), StateTracer.Operations.REMOVE_BY_VALUE, value);

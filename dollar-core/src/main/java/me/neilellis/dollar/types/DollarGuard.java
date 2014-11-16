@@ -41,8 +41,13 @@ public class DollarGuard implements java.lang.reflect.InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         try {
+            String name = method.getName();
+
+            if ("_unwrap".equals(name)) {
+                return in._unwrap();
+            }
+
             if (Object.class == method.getDeclaringClass()) {
-                String name = method.getName();
                 if ("equals".equals(name)) {
                     return in.equals(args[0]);
                 } else if ("hashCode".equals(name)) {

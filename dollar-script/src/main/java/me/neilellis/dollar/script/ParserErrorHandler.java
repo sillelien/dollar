@@ -42,7 +42,7 @@ public class ParserErrorHandler {
 
 
     public var handle(String source, AssertionError e) {
-        AssertionError throwable = new AssertionError(e.getMessage() + " at " + source);
+        AssertionError throwable = new AssertionError(e.getMessage() + " at " + source, e);
         if (!faultTolerant) {
             throw throwable;
         } else {
@@ -52,7 +52,7 @@ public class ParserErrorHandler {
     }
 
     public var handle(String source, DollarScriptException e) {
-        DollarParserException throwable = new DollarParserException(e.getMessage() + " at " + source);
+        DollarParserException throwable = new DollarParserException(e.getMessage() + " at " + source, e);
         if ((e instanceof VariableNotFoundException && missingVariables) || failfast) {
             throw throwable;
         } else {

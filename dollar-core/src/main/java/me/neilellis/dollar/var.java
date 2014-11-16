@@ -58,10 +58,12 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(ReturnVarOnlyGuard.class)
+    @Guarded(NotNullParametersGuard.class)
     var $default(Object o);
 
     @NotNull
     @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
     Stream<var> $children(@NotNull String key);
 
 
