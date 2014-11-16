@@ -62,8 +62,8 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return Stream.empty();
     }
 
-    public boolean $has(@NotNull String key) {
-        return S().equals(key);
+    public var $has(@NotNull String key) {
+        return DollarStatic.$(S().equals(key));
     }
 
     @NotNull
@@ -156,11 +156,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @Override
-    public <R> R val() {
-        return (R) value;
-    }
-
-    @Override
     public boolean isSingleValue() {
         return true;
     }
@@ -183,13 +178,13 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @Override
-    public int size() {
-        return 1;
+    public var $size() {
+        return DollarStatic.$(1);
     }
 
     @Override
-    public boolean containsValue(Object value) {
-        return this.value.equals(value);
+    public var $containsValue(Object value) {
+        return DollarStatic.$(this.value.equals(value));
     }
 
     @NotNull
@@ -205,12 +200,13 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @Override
-    public boolean isEmpty() {
-        return false;
+    public var $isEmpty() {
+        return DollarStatic.$(false);
     }
 
+    @NotNull
     @Override
-    public var $(Number n) {
+    public var $(@NotNull Number n) {
         if (n.longValue() != 0) {
             return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
         } else {

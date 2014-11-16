@@ -31,8 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -109,8 +107,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public boolean $has(@NotNull String key) {
-        return getValue().$has(key);
+    public var $has(@NotNull String key) {
+        return DollarStatic.$(getValue().$has(key));
     }
 
     @NotNull
@@ -120,8 +118,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public boolean $match(@NotNull String key, String value) {
-        return getValue().$match(key, value);
+    public var $match(@NotNull String key, String value) {
+        return DollarStatic.$(getValue().$match(key, value));
     }
 
     @NotNull
@@ -132,8 +130,8 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public String $mimeType() {
-        return getValue().$mimeType();
+    public var $mimeType() {
+        return DollarStatic.$(getValue().$mimeType());
     }
 
     @Override
@@ -185,8 +183,8 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var get(@NotNull Object key) {
-        return getValue().get(key);
+    public var $get(@NotNull Object key) {
+        return getValue().$get(key);
     }
 
     @NotNull
@@ -196,6 +194,7 @@ public class DollarWrapper implements var {
     }
 
 
+    @NotNull
     @Override
     public <R> R $() {
         return getValue().$();
@@ -206,39 +205,41 @@ public class DollarWrapper implements var {
         return getValue().keyStream();
     }
 
+    @NotNull
     @Override
     public Stream<Map.Entry<String, var>> kvStream() {
         return getValue().kvStream();
     }
 
-    @Override
-    public <R> R val() {
-        return getValue().val();
-    }
 
+    @NotNull
     @Override
     public var err() {
         return getValue().err();
 
     }
 
+    @NotNull
     @Override
     public var out() {
         return getValue().out();
     }
 
+    @NotNull
     @Override
-    public var $(Pipeable lambda) {
+    public var $(@NotNull Pipeable lambda) {
         return getValue().$(lambda);
     }
 
+    @NotNull
     @Override
-    public var $(Number n) {
+    public var $(@NotNull Number n) {
         return getValue().$(n);
     }
 
+    @NotNull
     @Override
-    public var $(var rhs) {
+    public var $(@NotNull var rhs) {
         return getValue().$(rhs);
     }
 
@@ -249,46 +250,55 @@ public class DollarWrapper implements var {
         return value;
     }
 
+    @NotNull
     @Override
-    public var $dec(var key, var amount) {
+    public var $dec(@NotNull var key, @NotNull var amount) {
         return tracer.trace(this, getValue().$dec(key, amount), StateTracer.Operations.DEC, key, amount);
     }
 
+    @NotNull
     @Override
-    public var $dec(var amount) {
+    public var $dec(@NotNull var amount) {
         return tracer.trace(this, getValue().$dec(amount), StateTracer.Operations.DEC, amount);
     }
 
+    @NotNull
     @Override
-    public var $inc(var key, var amount) {
+    public var $inc(@NotNull var key, @NotNull var amount) {
         return tracer.trace(this, getValue().$inc(key, amount), StateTracer.Operations.INC, key, amount);
     }
 
+    @NotNull
     @Override
-    public var $inc(var amount) {
+    public var $inc(@NotNull var amount) {
         return tracer.trace(this, getValue().$inc(amount), StateTracer.Operations.INC, amount);
     }
 
+    @NotNull
     @Override
     public var $negate() {
         return getValue().$negate();
     }
 
+    @NotNull
     @Override
-    public var $multiply(var v) {
+    public var $multiply(@NotNull var v) {
         return getValue().$multiply(v);
     }
 
+    @NotNull
     @Override
-    public var $divide(var v) {
+    public var $divide(@NotNull var v) {
         return getValue().$divide(v);
     }
 
+    @NotNull
     @Override
-    public var $modulus(var v) {
+    public var $modulus(@NotNull var v) {
         return getValue().$modulus(v);
     }
 
+    @NotNull
     @Override
     public var $abs() {
         return getValue().$abs();
@@ -614,13 +624,13 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public int size() {
-        return getValue().size();
+    public var $size() {
+        return DollarStatic.$(getValue().$size());
     }
 
     @Override
-    public boolean isEmpty() {
-        return getValue().isEmpty();
+    public var $isEmpty() {
+        return DollarStatic.$(getValue().$isEmpty());
     }
 
     @Override
@@ -629,13 +639,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public boolean containsValue(Object value) {
-        return getValue().containsValue(value);
-    }
-
-    @Override
-    public var put(String key, var value) {
-        return getValue().put(key, value);
+    public var $containsValue(Object value) {
+        return DollarStatic.$(getValue().$containsValue(value));
     }
 
     @Override
@@ -656,19 +661,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public void putAll(@NotNull Map<? extends String, ? extends var> m) {
-        getValue().putAll(m);
-    }
-
-    @Override
     public void clear() {
         getValue().clear();
-    }
-
-    @NotNull
-    @Override
-    public Set<String> keySet() {
-        return getValue().keySet();
     }
 
     @NotNull
@@ -688,20 +682,6 @@ public class DollarWrapper implements var {
         return getValue().entrySet();
     }
 
-    @Override
-    public var getOrDefault(Object key, var defaultValue) {
-        return getValue().getOrDefault(key, defaultValue);
-    }
-
-    @Override
-    public void forEach(@NotNull BiConsumer<? super String, ? super var> action) {
-        getValue().forEach(action);
-    }
-
-    @Override
-    public void replaceAll(@NotNull BiFunction<? super String, ? super var, ? extends var> function) {
-        getValue().replaceAll(function);
-    }
 
     @Override
     public var eval(@NotNull Class clazz) {
@@ -711,47 +691,6 @@ public class DollarWrapper implements var {
                 () -> getValue().eval(clazz));
     }
 
-    @Override
-    public var putIfAbsent(String key, var value) {
-        return getValue().putIfAbsent(key, value);
-    }
-
-    @Override
-    public boolean remove(Object key, Object value) {
-        return getValue().remove(key, value);
-    }
-
-    @Override
-    public boolean replace(String key, var oldValue, var newValue) {
-        return getValue().replace(key, oldValue, newValue);
-    }
-
-    @Override
-    public var replace(String key, var value) {
-        return getValue().replace(key, value);
-    }
-
-    @Override
-    public var computeIfAbsent(String key, @NotNull Function<? super String, ? extends var> mappingFunction) {
-        return getValue().computeIfAbsent(key, mappingFunction);
-    }
-
-    @Override
-    public var computeIfPresent(String key,
-                                @NotNull BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
-        return getValue().computeIfPresent(key, remappingFunction);
-    }
-
-    @Override
-    public var compute(String key, @NotNull BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
-        return getValue().compute(key, remappingFunction);
-    }
-
-    @Override
-    public var merge(String key, @NotNull var value,
-                     @NotNull BiFunction<? super var, ? super var, ? extends var> remappingFunction) {
-        return getValue().merge(key, value, remappingFunction);
-    }
 
 
     @NotNull

@@ -16,6 +16,11 @@
 
 package me.neilellis.dollar;
 
+import me.neilellis.dollar.guard.ChainGuard;
+import me.neilellis.dollar.guard.Guarded;
+import me.neilellis.dollar.guard.NotNullGuard;
+import org.jetbrains.annotations.NotNull;
+
 import static me.neilellis.dollar.DollarStatic.$;
 
 /**
@@ -24,54 +29,104 @@ import static me.neilellis.dollar.DollarStatic.$;
 public interface NumericAware {
 
 
-    var $dec(var key, var amount);
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    var $dec(@NotNull var key, @NotNull var amount);
 
-    default var $dec(String key, var amount) {
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    default var $dec(@NotNull String key, @NotNull var amount) {
         return $dec($(key), amount);
     }
 
-    default var $dec(String key, Number amount) {
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    default var $dec(@NotNull String key, @NotNull Number amount) {
         return $dec($(key), $(amount));
     }
 
-    var $dec(var amount);
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    var $dec(@NotNull var amount);
 
-    default var $dec(Number amount) {
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    default var $dec(@NotNull Number amount) {
         return $dec($(amount));
     }
 
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    @NotNull
     default var $dec() {
         return $dec($(1));
     }
 
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    var $inc(@NotNull var key, @NotNull var amount);
 
-    var $inc(var key, var amount);
-
-    default var $inc(String key, var amount) {
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    @NotNull
+    default var $inc(@NotNull String key, @NotNull var amount) {
         return $inc($(key), amount);
     }
 
-    default var $inc(String key, Number amount) {
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    default var $inc(@NotNull String key, @NotNull Number amount) {
         return $inc($(key), $(amount));
     }
 
-    var $inc(var amount);
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    var $inc(@NotNull var amount);
 
-    default var $inc(Number amount) {
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    default var $inc(@NotNull Number amount) {
         return $inc($(amount));
     }
 
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
     var $negate();
 
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
     default var $inc() {
         return $inc($(1));
     }
 
-    var $multiply(var v);
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    var $multiply(@NotNull var v);
 
-    var $divide(var v);
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    var $divide(@NotNull var v);
 
-    var $modulus(var v);
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    var $modulus(@NotNull var v);
 
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
     var $abs();
 }

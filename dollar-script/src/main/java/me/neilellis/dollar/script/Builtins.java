@@ -53,7 +53,7 @@ public class Builtins {
 
     static {
         addDollarStyle("abs", 1, 1, (args, scope) -> args.get(0).$abs());
-        addJavaStyle("count", 1, 1, (args, scope) -> args.get(0).size());
+        addJavaStyle("count", 1, 1, (args, scope) -> args.get(0).$size());
 
         addJavaStyle("format", 1, Integer.MAX_VALUE, (args, scope) -> {
             String message = args.get(0).$S();

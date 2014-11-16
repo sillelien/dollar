@@ -40,7 +40,7 @@ public class DollarHttpContext {
     }
 
     public void body(@NotNull var body) {
-        response.type(body.$mimeType());
+        response.type(body.$mimeType().$S());
         response.body(body.S());
     }
 

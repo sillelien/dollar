@@ -16,6 +16,9 @@
 
 package me.neilellis.dollar;
 
+import me.neilellis.dollar.guard.ChainGuard;
+import me.neilellis.dollar.guard.Guarded;
+import me.neilellis.dollar.guard.NotNullGuard;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -23,31 +26,47 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface PipeAware {
     @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
     var $pipe(@NotNull String label, @NotNull String js);
 
     default
     @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
     var $pipe(@NotNull Pipeable pipe) {
         return $pipe("anon", pipe);
     }
 
     @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
     var $pipe(@NotNull String label, @NotNull Pipeable pipe);
 
     @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
     var $eval(@NotNull String js);
 
     @NotNull
     @Deprecated
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
     var $pipe(@NotNull String classModule);
 
     @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
     var $pipe(@NotNull Class<? extends Pipeable> clazz);
 
     @Deprecated
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
     var eval(String label, DollarEval eval);
 
     @Deprecated
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
     var eval(DollarEval eval);
 
     //  /**
@@ -59,5 +78,7 @@ public interface PipeAware {
 //   * @param clazz the class to pass this to.
 //   */
     @Deprecated
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
     var eval(Class clazz);
 }

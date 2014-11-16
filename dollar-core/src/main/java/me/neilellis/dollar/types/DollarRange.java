@@ -68,44 +68,51 @@ public class DollarRange extends AbstractDollar {
         return Stream.of(DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION));
     }
 
+    @NotNull
     @Override
-    public var $dec(var amount) {
+    public var $dec(@NotNull var amount) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var $inc(var amount) {
+    public var $inc(@NotNull var amount) {
         return this;
     }
 
+    @NotNull
     @Override
     public var $negate() {
         return DollarFactory.fromValue(errors(), Range.closed(range.upperEndpoint(), range.lowerEndpoint()));
     }
 
+    @NotNull
     @Override
-    public var $multiply(var v) {
+    public var $multiply(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
     }
 
+    @NotNull
     @Override
-    public var $divide(var v) {
+    public var $divide(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
     }
 
+    @NotNull
     @Override
-    public var $modulus(var v) {
+    public var $modulus(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
     }
 
+    @NotNull
     @Override
     public var $abs() {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
     }
 
     @Override
-    public boolean $has(@NotNull String key) {
-        return false;
+    public var $has(@NotNull String key) {
+        return DollarStatic.$(false);
     }
 
     @NotNull
@@ -196,8 +203,9 @@ public class DollarRange extends AbstractDollar {
 
     }
 
+    @NotNull
     @Override
-    public var $(Number n) {
+    public var $(@NotNull Number n) {
         return toList().get(n.intValue());
     }
 
@@ -260,13 +268,13 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public int size() {
-        return toList().size();
+    public var $size() {
+        return DollarStatic.$(toList().size());
     }
 
     @Override
-    public boolean containsValue(Object value) {
-        return range.lowerEndpoint().compareTo(DollarStatic.$(value)) <= 0 && range.upperEndpoint().compareTo(DollarStatic.$(value)) >= 0;
+    public var $containsValue(Object value) {
+        return DollarStatic.$(range.lowerEndpoint().compareTo(DollarStatic.$(value)) <= 0 && range.upperEndpoint().compareTo(DollarStatic.$(value)) >= 0);
     }
 
     @NotNull
@@ -308,7 +316,7 @@ public class DollarRange extends AbstractDollar {
 
     @Override
     public int compareTo(var o) {
-        if (containsValue(o)) {
+        if ($containsValue(o).isTrue()) {
             return 0;
         }
         if (range.lowerEndpoint().compareTo(o) < 0) {

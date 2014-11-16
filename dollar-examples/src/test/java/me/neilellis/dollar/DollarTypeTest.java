@@ -63,7 +63,7 @@ public class DollarTypeTest {
         assertFalse($(1).isLambda());
         assertFalse($(1).isString());
         assertFalse($(1).isVoid());
-        assertFalse($(1).isEmpty());
+        assertFalse($(1).$isEmpty().isTrue());
 
         //numeric functions
         assertEquals(2, (long) $(1).$inc().L());
@@ -103,7 +103,7 @@ public class DollarTypeTest {
         assertFalse($(1.0).isLambda());
         assertFalse($(1.0).isString());
         assertFalse($(1.0).isVoid());
-        assertFalse($(1.0).isEmpty());
+        assertFalse($(1.0).$isEmpty().isTrue());
 
         //numeric functions
         assertEquals(2.0, $(1.0).$inc().D(), 0.00001);

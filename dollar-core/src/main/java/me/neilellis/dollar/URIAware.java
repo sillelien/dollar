@@ -30,6 +30,7 @@ public interface URIAware {
     String $listen(Pipeable pipe);
 
     @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
     var $notify(var value);
 
     @Guarded(NotNullParametersGuard.class)
@@ -66,18 +67,23 @@ public interface URIAware {
     var $all();
 
     @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
     var $subscribe(Pipeable subscription);
 
     @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
     var $dispatch(var lhs);
 
     @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
     var $give(var lhs);
 
     @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
     var $push(var lhs);
 
     @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
     var $publish(var lhs);
 
 }

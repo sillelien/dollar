@@ -104,7 +104,7 @@ public class DollarBasicTest {
         Map submap = new HashMap();
         submap.put("thing", 1);
         map.put("sub", submap);
-        assertEquals("bar", $(map).$get("foo").val());
+        assertEquals("bar", $(map).$get("foo").$());
         assertEquals("bar", $(map).toMap().get("foo"));
         assertEquals(1, $(map).$get("sub").toMap().get("thing"));
         assertEquals("1", $(map).$get("sub").$get("thing").S());
@@ -138,12 +138,12 @@ public class DollarBasicTest {
 
     @Test
     public void testNull() {
-        assertNull($((Object) null).$("foo", "bar").$get("foo").val());
+        assertNull($((Object) null).$("foo", "bar").$get("foo").$());
         assertTrue($((Object) null).isVoid());
         assertTrue($((Object) null).$get("bar").isVoid());
-        assertNull($((Object) null).val());
-        assertFalse($((Object) null).$get("bar").$has("foo"));
-        assertFalse($((Object) null).$has("foo"));
+        assertNull($((Object) null).$());
+        assertFalse($((Object) null).$get("bar").$has("foo").isTrue());
+        assertFalse($((Object) null).$has("foo").isTrue());
         assertTrue($((Object) null).$("foo", "bar").$get("foo").isVoid());
         assertEquals("twasnull", $((Object) null).$void(() -> $("twasnull")).S());
     }
@@ -152,7 +152,7 @@ public class DollarBasicTest {
     @Test
     public void testStringCreation() {
         System.out.println($("{\"foo\":\"bar\"}"));
-        assertEquals("bar", $("{\"foo\":\"bar\"}").$get("foo").val());
+        assertEquals("bar", $("{\"foo\":\"bar\"}").$get("foo").$());
         assertEquals("bar", $("{\"foo\":\"bar\"}").json().getString("foo"));
     }
 

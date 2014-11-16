@@ -26,9 +26,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -36,8 +33,6 @@ import java.util.stream.Stream;
  */
 public interface var extends ErrorAware, TypeAware, PipeAware,
         OldAndDeprecated, VarInternal, NumericAware, BooleanAware, ControlFlowAware, AssertionAware, URIAware, MetadataAware, Comparable<var>, LogAware {
-
-
 
 
     @NotNull
@@ -60,6 +55,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @Guarded(ChainGuard.class)
     Stream<var> $children();
 
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(ReturnVarOnlyGuard.class)
     var $default(Object o);
@@ -68,16 +64,6 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @Guarded(ChainGuard.class)
     Stream<var> $children(@NotNull String key);
 
-    /**
-     * Returns a deep copy of this object. You should never need to use this operation as all {@link
-     * me.neilellis.dollar.var} objects are immutable. Therefore they can freely be shared between threads.
-     *
-     * @return a deep copy of this object
-     */
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(ReturnVarOnlyGuard.class)
-    var $copy();
 
     /**
      * Returns true if this JSON object has the supplied key.
@@ -85,10 +71,12 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
      * @param key the key
      * @return true if the key exists.
      */
+    @NotNull
     @Guarded(NotNullParametersGuard.class)
-    boolean $has(@NotNull String key);
+    var $has(@NotNull String key);
 
 
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(ReturnVarOnlyGuard.class)
     default var $list() {
@@ -99,8 +87,10 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @Guarded(AllVarMapGuard.class)
     ImmutableMap<String, var> $map();
 
-    default boolean $match(@NotNull String key, @Nullable String value) {
-        return value != null && value.equals(S(key));
+    @NotNull
+    @Guarded(ChainGuard.class)
+    default var $match(@NotNull String key, @Nullable String value) {
+        return DollarStatic.$(value != null && value.equals(S(key)));
     }
 
     @Nullable
@@ -115,10 +105,13 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
      * @return the mime type associated with this object.
      */
     @NotNull
-    default String $mimeType() {
-        return "application/json";
+    @Guarded(ChainGuard.class)
+    default var $mimeType() {
+        return DollarStatic.$("application/json");
     }
 
+    @NotNull
+    @Deprecated
     @Guarded(ReturnVarOnlyGuard.class)
     var $post(String url);
 
@@ -182,11 +175,13 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-
-    default var get(@NotNull Object key) {
+    default var $get(@NotNull Object key) {
         return $get(String.valueOf(key));
     }
 
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
     default var $(@NotNull String key) {
         return $get(key);
     }
@@ -200,9 +195,11 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
      *
      * @return a Json friendly object.
      */
-    @NotNull
+    @Nullable
     <R> R $();
 
+    @NotNull
+    @Deprecated
     @Guarded(NotNullGuard.class)
     Stream<String> keyStream();
 
@@ -213,22 +210,13 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
      * @return stream of key/value pairs
      */
 
-    @Nullable
+    @NotNull
     @Guarded(NotNullGuard.class)
+    @Guarded(NotNullCollectionGuard.class)
+    @Deprecated
     java.util.stream.Stream<Map.Entry<String, var>> kvStream();
 
-    /**
-     * Returns the underlying data structure. This method is useful for the rare cases you need direct access to the
-     * underlying Java type. However it is virtually always better to use $() which returns it in a JSON friendly manner.
-     *
-     * @param <R> the return type expected
-     * @return the underlying Java data structure.
-     */
-    @Nullable
-    default <R> R val() {
-        return $();
-    }
-
+    @NotNull
     @Guarded(ChainGuard.class)
     default var err() {
         System.err.println(toString());
@@ -238,6 +226,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     /**
      * Prints the S() value of this {@link var} to stdout.
      */
+    @NotNull
     @Guarded(ChainGuard.class)
     default var out() {
         System.out.println(toString());
@@ -245,65 +234,61 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     }
 
 
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    var $(Pipeable lambda);
+    var $(@NotNull Pipeable lambda);
 
 
-    default var $(Number n) {
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    default var $(@NotNull Number n) {
         return $(DollarStatic.$(n));
     }
 
-    var $(var rhs);
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
+    var $(@NotNull var rhs);
 
-    default var $contains(var value) {
-        return DollarStatic.$(containsValue(value));
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
+    default var $contains(@NotNull var value) {
+        return DollarStatic.$($containsValue(value));
     }
 
-    boolean containsValue(Object value);
+    @Guarded(ChainGuard.class)
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    var $containsValue(@NotNull Object value);
 
-    int size();
+    @NotNull
+    @Guarded(ChainGuard.class)
+    var $size();
 
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullCollectionGuard.class)
     Set<Map.Entry<String, var>> entrySet();
 
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullCollectionGuard.class)
     Collection<var> values();
-
-    Set<String> keySet();
 
     void clear();
 
-    boolean isEmpty();
+    @NotNull
+    @Guarded(ChainGuard.class)
+    var $isEmpty();
 
-    void putAll(Map<? extends String, ? extends var> m);
-
+    @NotNull
+    @Guarded(ChainGuard.class)
     <R> R remove(Object value);
 
+    @NotNull
+    @Guarded(ChainGuard.class)
     boolean containsKey(Object key);
-
-    var put(String key, var value);
-
-    var getOrDefault(Object key, var defaultValue);
-
-    void forEach(BiConsumer<? super String, ? super var> action);
-
-    void replaceAll(BiFunction<? super String, ? super var, ? extends var> function);
-
-    boolean replace(String key, var oldValue, var newValue);
-
-    var computeIfAbsent(String key, Function<? super String, ? extends var> mappingFunction);
-
-    var replace(String key, var value);
-
-    boolean remove(Object key, Object value);
-
-    var computeIfPresent(String key, BiFunction<? super String, ? super var, ? extends var> remappingFunction);
-
-    var compute(String key, BiFunction<? super String, ? super var, ? extends var> remappingFunction);
-
-
-    var putIfAbsent(String key, var value);
-
-    var merge(String key, var value, BiFunction<? super var, ? super var, ? extends var> remappingFunction);
-
 
 }

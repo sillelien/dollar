@@ -209,7 +209,7 @@ public class HttpURIHandler implements URIHandler {
                     public String getDescription() {
                         return out.$get("reason").$default("").S();
                     }
-                }, body.$mimeType(), body.S());
+                }, body.$mimeType().$S(), body.S());
                 out.$get("headers").$map().forEach((s, v) -> response.addHeader(s, v.$S()));
                 response.setData(body.toStream());
                 return response;

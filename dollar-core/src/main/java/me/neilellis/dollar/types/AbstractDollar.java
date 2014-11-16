@@ -68,14 +68,16 @@ public abstract class AbstractDollar implements var {
         return map.$get($S());
     }
 
+    @NotNull
     @Override
-    public var $dec(var key, var amount) {
+    public var $dec(@NotNull var key, @NotNull var amount) {
         return $(key, $(key).L() - amount.L());
     }
 
 
+    @NotNull
     @Override
-    public var $inc(var key, var amount) {
+    public var $inc(@NotNull var key, @NotNull var amount) {
         return $(key, $(key).L() + amount.L());
     }
 
@@ -109,7 +111,7 @@ public abstract class AbstractDollar implements var {
     @Override
     public var copy(@NotNull ImmutableList<Throwable> errors) {
         return DollarFactory.fromValue(new ImmutableList.Builder<Throwable>().addAll(errors()).addAll(errors).build(),
-                val());
+                $());
     }
 
     @Override
@@ -122,7 +124,7 @@ public abstract class AbstractDollar implements var {
         if (obj == null) {
             return false;
         }
-        Object val = val();
+        Object val = $();
         if (val == null) {
             throw new NullPointerException();
         }
@@ -139,7 +141,7 @@ public abstract class AbstractDollar implements var {
             if (unwrappedDollar == null) {
                 return false;
             }
-            Object unwrappedVal = unwrapped.val();
+            Object unwrappedVal = unwrapped.$();
             if (unwrappedVal == null) {
                 return false;
             }
@@ -150,6 +152,7 @@ public abstract class AbstractDollar implements var {
     }
 
 
+    @NotNull
     @Override
     public String toString() {
         return S();
@@ -170,12 +173,12 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public boolean isEmpty() {
-        return size() > 0;
+    public var $isEmpty() {
+        return DollarFactory.fromValue($size().I() > 0);
     }
 
     public boolean containsKey(Object key) {
-        return $has(String.valueOf(key));
+        return $has(String.valueOf(key)).isTrue();
     }
 
     @NotNull
@@ -208,7 +211,7 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     public var getOrDefault(@NotNull Object key, @NotNull var defaultValue) {
-        return $has(String.valueOf(key)) ? get(key) : defaultValue;
+        return $has(String.valueOf(key)).isTrue() ? $get(key) : defaultValue;
     }
 
     public void forEach(@NotNull BiConsumer<? super String, ? super var> action) {
@@ -347,8 +350,8 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public String $mimeType() {
-        return "text/plain";
+    public var $mimeType() {
+        return DollarStatic.$("text/plain");
     }
 
 
@@ -372,13 +375,15 @@ public abstract class AbstractDollar implements var {
     }
 
 
+    @NotNull
     public Stream<Map.Entry<String, var>> kvStream() {
         return $map().entrySet().stream();
 
     }
 
+    @NotNull
     @Override
-    public var $(Pipeable lambda) {
+    public var $(@NotNull Pipeable lambda) {
         return (var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
@@ -402,7 +407,7 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var $copy() {
-        return DollarFactory.fromValue(new ImmutableList.Builder<Throwable>().addAll(errors()).build(), val());
+        return DollarFactory.fromValue(new ImmutableList.Builder<Throwable>().addAll(errors()).build(), $());
     }
 
     @NotNull
@@ -456,7 +461,7 @@ public abstract class AbstractDollar implements var {
 
     @Override
     public var clearErrors() {
-        return DollarFactory.fromValue(ImmutableList.<Throwable>builder().build(), val());
+        return DollarFactory.fromValue(ImmutableList.<Throwable>builder().build(), $());
     }
 
     @NotNull
@@ -602,8 +607,9 @@ public abstract class AbstractDollar implements var {
         return resultvar;
     }
 
+    @NotNull
     @Override
-    public var $(var key) {
+    public var $(@NotNull var key) {
         if (key.isNumber()) {
             return $(key.N());
         } else {

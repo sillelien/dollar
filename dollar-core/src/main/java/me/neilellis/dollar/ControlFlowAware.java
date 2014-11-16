@@ -16,6 +16,10 @@
 
 package me.neilellis.dollar;
 
+import me.neilellis.dollar.guard.ChainGuard;
+import me.neilellis.dollar.guard.Guarded;
+import me.neilellis.dollar.guard.NotNullGuard;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
@@ -24,7 +28,11 @@ public interface ControlFlowAware {
     /**
      * Select a value from map based upon the current value and return that.
      */
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
     var $choose(var map);
 
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
     var $each(Pipeable pipe);
 }

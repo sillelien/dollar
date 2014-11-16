@@ -58,7 +58,7 @@ public class SparkHttp implements DollarHttp {
                     response.status(errors.$get("httpCode").$void(() -> DollarStatic.$(500)).I());
                     return errors.S();
                 }
-                response.type(result.$mimeType());
+                response.type(result.$mimeType().$S());
             } catch (Exception e) {
                 return DollarStatic.handleError(e, result);
             }

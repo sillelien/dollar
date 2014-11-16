@@ -260,7 +260,7 @@ DollarScript (at present) supports numerical and character ranges
 "a".."c" <=> ["a","b","c"]
 1..3 <=> [1,2,3]
 
-`
+```
 
 ###Types
 

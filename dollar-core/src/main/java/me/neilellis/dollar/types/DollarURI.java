@@ -69,8 +69,8 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public boolean $has(@NotNull String key) {
-        return !handler.get(DollarStatic.$(key)).isVoid();
+    public var $has(@NotNull String key) {
+        return DollarStatic.$(!handler.get(DollarStatic.$(key)).isVoid());
     }
 
     @NotNull
@@ -118,8 +118,9 @@ public class DollarURI extends AbstractDollar {
         return Stream.empty();
     }
 
+    @NotNull
     @Override
-    public var $(Number n) {
+    public var $(@NotNull Number n) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
@@ -149,12 +150,12 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public int size() {
-        return handler.size();
+    public var $size() {
+        return DollarStatic.$(handler.size());
     }
 
-    public boolean containsValue(Object value) {
-        return false;
+    public var $containsValue(Object value) {
+        return DollarStatic.$(false);
     }
 
     @Override
@@ -163,36 +164,43 @@ public class DollarURI extends AbstractDollar {
 
     }
 
+    @NotNull
     @Override
-    public var $dec(var amount) {
+    public var $dec(@NotNull var amount) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
+    @NotNull
     @Override
-    public var $inc(var amount) {
+    public var $inc(@NotNull var amount) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
+    @NotNull
     @Override
     public var $negate() {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
+    @NotNull
     @Override
-    public var $multiply(var v) {
+    public var $multiply(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
+    @NotNull
     @Override
-    public var $divide(var v) {
+    public var $divide(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
+    @NotNull
     @Override
-    public var $modulus(var v) {
+    public var $modulus(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
+    @NotNull
     @Override
     public var $abs() {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);

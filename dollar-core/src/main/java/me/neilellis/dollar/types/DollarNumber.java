@@ -34,16 +34,19 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
         super(errors, value);
     }
 
+    @NotNull
     @Override
-    public var $dec(var amount) {
+    public var $dec(@NotNull var amount) {
         return new DollarNumber(errors(), value.longValue() - amount.L());
     }
 
+    @NotNull
     @Override
-    public var $inc(var amount) {
+    public var $inc(@NotNull var amount) {
         return new DollarNumber(errors(), value.longValue() + amount.L());
     }
 
+    @NotNull
     @Override
     public var $negate() {
         if (isInteger()) {
@@ -53,8 +56,9 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
         }
     }
 
+    @NotNull
     @Override
-    public var $multiply(var v) {
+    public var $multiply(@NotNull var v) {
         if (isInteger()) {
             return DollarFactory.fromValue(value.longValue() * v.L());
         } else {
@@ -62,8 +66,9 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
         }
     }
 
+    @NotNull
     @Override
-    public var $divide(var v) {
+    public var $divide(@NotNull var v) {
         if (isInteger()) {
             return DollarFactory.fromValue(value.longValue() / v.L());
         } else {
@@ -71,8 +76,9 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
         }
     }
 
+    @NotNull
     @Override
-    public var $modulus(var v) {
+    public var $modulus(@NotNull var v) {
         if (isInteger()) {
             return DollarFactory.fromValue(value.longValue() % v.L());
         } else {
@@ -80,6 +86,7 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
         }
     }
 
+    @NotNull
     @Override
     public var $abs() {
         if (isInteger()) {

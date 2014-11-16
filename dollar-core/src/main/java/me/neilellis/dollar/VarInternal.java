@@ -17,6 +17,9 @@
 package me.neilellis.dollar;
 
 import com.google.common.collect.ImmutableList;
+import me.neilellis.dollar.guard.ChainGuard;
+import me.neilellis.dollar.guard.Guarded;
+import me.neilellis.dollar.guard.ReturnVarOnlyGuard;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -33,5 +36,16 @@ public interface VarInternal {
 
     @NotNull
     var copy(@NotNull ImmutableList<Throwable> errors);
+
+    /**
+     * Returns a deep copy of this object. You should never need to use this operation as all {@link
+     * me.neilellis.dollar.var} objects are immutable. Therefore they can freely be shared between threads.
+     *
+     * @return a deep copy of this object
+     */
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(ReturnVarOnlyGuard.class)
+    var $copy();
 
 }

@@ -35,23 +35,27 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         super(errors, value);
     }
 
+    @NotNull
     @Override
-    public var $dec(var amount) {
+    public var $dec(@NotNull var amount) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var $inc(var amount) {
+    public var $inc(@NotNull var amount) {
         return DollarStatic.$(String.valueOf((char) (value.charAt(value.length() - 1) + 1)));
     }
 
+    @NotNull
     @Override
     public var $negate() {
         return DollarFactory.fromValue(errors(), new StringBuilder(value).reverse().toString());
     }
 
+    @NotNull
     @Override
-    public var $multiply(var v) {
+    public var $multiply(@NotNull var v) {
         String newValue = "";
         Long max = v.L();
         for (int i = 0; i < max; i++) {
@@ -60,16 +64,19 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return DollarFactory.fromValue(errors(), newValue);
     }
 
+    @NotNull
     @Override
-    public var $divide(var v) {
+    public var $divide(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_STRING_OPERATION);
     }
 
+    @NotNull
     @Override
-    public var $modulus(var v) {
+    public var $modulus(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_STRING_OPERATION);
     }
 
+    @NotNull
     @Override
     public var $abs() {
         return this;

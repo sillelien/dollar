@@ -138,36 +138,43 @@ class DollarMap extends AbstractDollar implements var {
         return split().values().stream();
     }
 
+    @NotNull
     @Override
-    public var $dec(var amount) {
+    public var $dec(@NotNull var amount) {
         return this;
     }
 
+    @NotNull
     @Override
-    public var $inc(var amount) {
+    public var $inc(@NotNull var amount) {
         return this;
     }
 
+    @NotNull
     @Override
     public var $negate() {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
     }
 
+    @NotNull
     @Override
-    public var $multiply(var v) {
+    public var $multiply(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
     }
 
+    @NotNull
     @Override
-    public var $divide(var v) {
+    public var $divide(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
     }
 
+    @NotNull
     @Override
-    public var $modulus(var v) {
+    public var $modulus(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
     }
 
+    @NotNull
     @Override
     public var $abs() {
         return this;
@@ -190,8 +197,8 @@ class DollarMap extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean $has(@NotNull String key) {
-        return map.containsKey(key);
+    public var $has(@NotNull String key) {
+        return DollarStatic.$(map.containsKey(key));
     }
 
     @NotNull
@@ -335,13 +342,10 @@ class DollarMap extends AbstractDollar implements var {
         return result;
     }
 
-    @Override
-    public <R> R val() {
-        return (R) map;
-    }
 
+    @NotNull
     @Override
-    public var $(Number n) {
+    public var $(@NotNull Number n) {
         String key = map.keySet().toArray()[n.intValue()].toString();
         return DollarStatic.$(key, map.get(key));
     }
@@ -354,10 +358,11 @@ class DollarMap extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public String $mimeType() {
-        return "application/json";
+    public var $mimeType() {
+        return DollarStatic.$("application/json");
     }
 
+    @NotNull
     @Override
     public java.util.stream.Stream<Map.Entry<String, var>> kvStream() {
         return split().entrySet().stream();
@@ -376,12 +381,12 @@ class DollarMap extends AbstractDollar implements var {
     }
 
     @Override
-    public int size() {
-        return toMap().size();
+    public var $size() {
+        return DollarStatic.$(toMap().size());
     }
 
-    public boolean containsValue(Object value) {
-        return false;
+    public var $containsValue(Object value) {
+        return DollarStatic.$(false);
     }
 
     @NotNull

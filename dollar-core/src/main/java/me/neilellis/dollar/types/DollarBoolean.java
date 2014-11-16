@@ -31,36 +31,43 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         super(errors, value);
     }
 
+    @NotNull
     @Override
-    public var $dec(var amount) {
+    public var $dec(@NotNull var amount) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
+    @NotNull
     @Override
-    public var $inc(var amount) {
+    public var $inc(@NotNull var amount) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
+    @NotNull
     @Override
     public var $negate() {
         return DollarFactory.fromValue(errors(), !value);
     }
 
+    @NotNull
     @Override
-    public var $multiply(var v) {
+    public var $multiply(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
+    @NotNull
     @Override
-    public var $divide(var v) {
+    public var $divide(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
+    @NotNull
     @Override
-    public var $modulus(var v) {
+    public var $modulus(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
+    @NotNull
     @Override
     public var $abs() {
         return this;
