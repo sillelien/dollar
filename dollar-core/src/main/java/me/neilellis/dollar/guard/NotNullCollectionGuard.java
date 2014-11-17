@@ -33,7 +33,7 @@ public class NotNullCollectionGuard implements Guard {
         if (args != null) {
             for (Object arg : args) {
                 if (arg instanceof Collection) {
-                    ((Collection) arg).forEach((i) -> assertNotNull(i));
+                    ((Collection) arg).forEach((i) -> assertNotNull(i, method));
                 }
             }
         }
@@ -42,9 +42,9 @@ public class NotNullCollectionGuard implements Guard {
     @Override
     public void postCondition(Object guarded, Method method, Object[] args, Object result) {
         if (result instanceof Collection) {
-            ((Collection) result).forEach(this::assertNotNull);
+            ((Collection) result).forEach(i -> assertNotNull(i, method));
         }
-        assertNotNull(result);
+        assertNotNull(result, method);
     }
 
 }

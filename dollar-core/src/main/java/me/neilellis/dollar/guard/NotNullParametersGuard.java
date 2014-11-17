@@ -32,7 +32,7 @@ public class NotNullParametersGuard implements Guard {
         int count = 0;
         if (args != null) {
             for (Object arg : args) {
-                assertNotNull("parameter argument " + (count++), arg);
+                assertNotNull("parameter argument " + (count++), arg, method);
             }
         }
     }

@@ -30,7 +30,7 @@ public interface Scope {
 
     boolean has(String key);
 
-    var set(String key, var value, boolean readonly);
+    var set(String key, var value, boolean readonly, var constraint);
 
     void notifyScope(String key, var value);
 

@@ -35,7 +35,7 @@ public class AllVarCollectionGuard implements Guard {
         if (args != null) {
             for (Object arg : args) {
                 if (arg instanceof Collection) {
-                    ((Collection) arg).forEach((i) -> assertTrue(i instanceof var));
+                    ((Collection) arg).forEach((i) -> assertTrue(i instanceof var, method));
                 }
             }
         }
@@ -44,7 +44,7 @@ public class AllVarCollectionGuard implements Guard {
     @Override
     public void postCondition(Object guarded, Method method, Object[] args, Object result) {
         if (result instanceof Collection) {
-            ((Collection) result).forEach((i) -> assertTrue(i instanceof var));
+            ((Collection) result).forEach((i) -> assertTrue(i instanceof var, method));
         }
     }
 

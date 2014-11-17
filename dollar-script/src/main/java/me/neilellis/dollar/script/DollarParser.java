@@ -120,6 +120,7 @@ public class DollarParser {
     };
     private Parser<?> topLevelParser;
     private ParserErrorHandler errorHandler = new ParserErrorHandler();
+
     public DollarParser() {
         classLoader = DollarParser.class.getClassLoader();
     }
@@ -214,6 +215,7 @@ public class DollarParser {
 
 
     }
+
     private static Parser<var> parameters(Parser<var> expression) {
         Parser<List<var>> sequence = term("(").next(array(IDENTIFIER.followedBy(term(":")).optional(), expression).map(new Map<Object[], var>() {
             @Override
@@ -548,12 +550,12 @@ public class DollarParser {
     }
 
     private Parser<Map<? super var, ? extends var>> assignmentOperator(final ScriptScope scope, Parser.Reference<var> ref) {
-        return Parsers.array(keyword("const").optional(), ref.lazy().between(term("("), term(")")).or(IDENTIFIER), term("=")).map(new Map<Object[], Map<? super var, ? extends var>>() {
+        return Parsers.array(keyword("const").optional(), ref.lazy().between(term("<"), term(">")).optional(), ref.lazy().between(term("("), term(")")).or(IDENTIFIER), term("=")).map(new Map<Object[], Map<? super var, ? extends var>>() {
             public Map<? super var, ? extends var> map(Object[] objects) {
 
                 return new Map<var, var>() {
                     public var map(var rhs) {
-                        final var lambda = DollarFactory.fromLambda(i -> scope.set(objects[1].toString(), fix(rhs), (objects[0] != null)));
+                        final var lambda = DollarFactory.fromLambda(i -> scope.set(objects[2].toString(), fix(rhs), (objects[0] != null), (var) objects[1]));
                         return lambda;
                     }
                 };
@@ -562,13 +564,14 @@ public class DollarParser {
     }
 
     private Parser<Map<? super var, ? extends var>> declarationOperator(final ScriptScope scope, Parser.Reference<var> ref) {
-        return Parsers.array(ref.lazy().between(term("("), term(")")).or(IDENTIFIER), term(":=")).map(new Map<Object[], Map<? super var, ? extends var>>() {
+        return Parsers.array(ref.lazy().between(term("<"), term(">")).optional(), ref.lazy().between(term("("), term(")")).or(IDENTIFIER), term(":=")).map(new Map<Object[], Map<? super var, ? extends var>>() {
             public Map<? super var, ? extends var> map(Object[] objects) {
 
                 return new Map<var, var>() {
                     public var map(var rhs) {
-                        scope.set(objects[0].toString(), rhs, false);
-                        rhs.$listen(i -> scope.set(objects[0].toString(), rhs, false));
+
+                        scope.set(objects[1].toString(), rhs, false, (var) objects[0]);
+                        rhs.$listen(i -> scope.set(objects[1].toString(), rhs, false, (var) objects[0]));
                         return $void();
                     }
                 };
@@ -584,7 +587,7 @@ public class DollarParser {
                     final var lambda = DollarFactory.fromLambda(l -> {
                         return withinNewScope(scope, newScope -> {
                             return ((var) objects[3]).$each(i -> {
-                                newScope.set(objects[1].toString(), fix(i), false);
+                                newScope.set(objects[1].toString(), fix(i), false, null);
                                 return fix(rhs);
                             });
                         });
@@ -594,7 +597,6 @@ public class DollarParser {
             }
         });
     }
-
 
 
     private Parser<Map<? super var, ? extends var>> subscriptOperator(Parser.Reference<var> ref) {
@@ -652,16 +654,15 @@ public class DollarParser {
 
     private Parser<Map<? super var, ? extends var>> isOperator(Parser.Reference<var> ref, ScriptScope scope) {
         return keyword("is").next(IDENTIFIER.sepBy(term(",")))
-                .map(rhs -> lhs -> {
+                .map(rhs -> lhs -> DollarFactory.fromLambda(i -> {
                     for (var value : rhs) {
                         if (lhs.is(TypeAware.Type.valueOf(value.$S().toUpperCase()))) {
                             return $(true);
                         }
                     }
                     return $(false);
-                });
+                }));
     }
-
 
 
     private Parser<ScopedVarUnaryOperator> importOperator(ScriptScope scope) {
@@ -712,7 +713,7 @@ public class DollarParser {
                     //If the parameter is a named parameter then use the name (set as metadata
                     //on the value).
                     if (param.getMetaAttribute(NAMED_PARAMETER_META_ATTR) != null) {
-                        newScope.set(param.getMetaAttribute(NAMED_PARAMETER_META_ATTR), param, true);
+                        newScope.set(param.getMetaAttribute(NAMED_PARAMETER_META_ATTR), param, true, null);
                     }
                 }
                 var result;

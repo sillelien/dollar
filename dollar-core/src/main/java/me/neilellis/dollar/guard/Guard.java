@@ -29,19 +29,19 @@ public interface Guard {
 
     void postCondition(Object guarded, Method method, Object[] args, Object result);
 
-    default void assertNotNull(Object o) {
-        assertNotNull("-", o);
+    default void assertNotNull(Object o, Method method) {
+        assertNotNull("-", o, method);
     }
 
-    default void assertNotNull(String message, Object o) {
+    default void assertNotNull(String message, Object o, Method method) {
         if (o == null) {
-            throw new AssertionError(description() + " " + message + " Not Null FAILED");
+            throw new AssertionError(description() + " " + message + " Not Null FAILED for " + method);
         }
     }
 
-    default void assertTrue(boolean condition) {
+    default void assertTrue(boolean condition, Method method) {
         if (!condition) {
-            throw new AssertionError(description() + " FAILED");
+            throw new AssertionError(description() + " FAILED for " + method);
         }
     }
 

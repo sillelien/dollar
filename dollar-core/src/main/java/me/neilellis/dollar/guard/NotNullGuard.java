@@ -33,7 +33,7 @@ public class NotNullGuard implements Guard {
         int count = 0;
         if (args != null) {
             for (Object arg : args) {
-                assertNotNull("parameter argument " + (count++), arg);
+                assertNotNull("parameter argument " + (count++), arg, method);
             }
         }
     }
@@ -41,7 +41,7 @@ public class NotNullGuard implements Guard {
     @Override
     public void postCondition(Object guarded, Method method, Object[] args, Object result) {
         if (result instanceof Collection) {
-            assertNotNull("return value", result);
+            assertNotNull("return value", result, method);
         }
     }
 

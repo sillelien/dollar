@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 public class ChainGuard implements Guard {
     @Override
     public String description() {
-        return "Non Null Collection Guard";
+        return "Chain Guard";
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ChainGuard implements Guard {
     @Override
     public void postCondition(Object guarded, Method method, Object[] args, Object result) {
 
-        assertNotNull("return value", result);
+        assertNotNull("return value", result, method);
     }
 
 }

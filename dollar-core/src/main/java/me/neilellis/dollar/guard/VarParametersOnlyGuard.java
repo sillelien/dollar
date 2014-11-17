@@ -33,7 +33,7 @@ public class VarParametersOnlyGuard implements Guard {
     public void preCondition(Object guarded, Method method, Object[] args) {
         if (args != null) {
             for (Object arg : args) {
-                assertTrue(arg instanceof var);
+                assertTrue(arg instanceof var, method);
             }
         }
     }

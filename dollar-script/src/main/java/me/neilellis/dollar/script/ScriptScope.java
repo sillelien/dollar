@@ -29,6 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static me.neilellis.dollar.DollarStatic.$void;
+import static me.neilellis.dollar.DollarStatic.fix;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -134,7 +135,7 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public var set(String key, var value, boolean readonly) {
+    public var set(String key, var value, boolean readonly, var constraint) {
         if (key.matches("[0-9]+")) {
             throw new AssertionError("Cannot set numerical keys, use setParameter");
         }
@@ -146,11 +147,37 @@ public class ScriptScope implements Scope {
         if (scope.variables.containsKey(key) && scope.variables.get(key).readonly) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
-        scope.variables.put(key, new Variable(value, readonly));
+        if (scope.variables.containsKey(key) && scope.variables.get(key).constraint != null) {
+            if (constraint != null) {
+                throw new DollarScriptException("Cannot change the constraint on a variable, attempted to redeclare for " + key);
+            }
+            if (checkConstraint(value, scope.variables.get(key), scope.variables.get(key).constraint)) {
+                throw new DollarScriptException("Constraint failed for variable " + key + "");
+            }
+        }
+        if (checkConstraint(value, scope.variables.get(key), constraint)) {
+            throw new DollarScriptException("Constraint failed for variable " + key + "");
+        }
+        if (scope.variables.containsKey(key)) {
+            scope.variables.get(key).value = value;
+        } else {
+            scope.variables.put(key, new Variable(value, readonly, constraint));
+        }
         if (readonly) {
             scope.notifyScope(key, value);
         }
         return value;
+    }
+
+    private boolean checkConstraint(var value, Variable oldValue, var constraint) {
+        setParameter("it", value);
+        if (oldValue != null) {
+            setParameter("previous", oldValue.value);
+        }
+        final boolean fail = fix(constraint).isFalse();
+        setParameter("it", $void());
+        setParameter("previous", $void());
+        return fail;
     }
 
     public var setParameter(String key, var value) {
@@ -159,13 +186,16 @@ public class ScriptScope implements Scope {
             throw new AssertionError("Cannot change the value of positional variables.");
         }
         this.parameterScope = true;
-        variables.put(key, new Variable(value));
+        variables.put(key, new Variable(value, null));
         this.notifyScope(key, value);
         return value;
     }
 
     @Override
     public void notifyScope(String key, var value) {
+        if (value == null) {
+            throw new NullPointerException();
+        }
         if (listeners.containsKey(key)) {
             for (var listener : listeners.get(key)) {
                 listener.$notify(value);
@@ -251,18 +281,21 @@ public class ScriptScope implements Scope {
     }
 
     private class Variable {
-        private final var value;
         private final boolean readonly;
+        private final var constraint;
+        private var value;
 
-        public Variable(var value) {
+        public Variable(var value, var constraint) {
 
             this.value = value;
+            this.constraint = constraint;
             readonly = false;
         }
 
-        public Variable(var value, boolean readonly) {
+        public Variable(var value, boolean readonly, var constraint) {
             this.value = value;
             this.readonly = readonly;
+            this.constraint = constraint;
         }
 
         @Override

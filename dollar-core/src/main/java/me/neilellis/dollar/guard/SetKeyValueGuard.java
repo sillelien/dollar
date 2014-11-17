@@ -31,13 +31,13 @@ public class SetKeyValueGuard implements Guard {
     @Override
     public void preCondition(Object guarded, Method method, Object[] args) {
 
-        assertNotNull("first parameter ", args[0]);
+        assertNotNull("first parameter ", args[0], method);
     }
 
     @Override
     public void postCondition(Object guarded, Method method, Object[] args, Object result) {
         if (result instanceof Collection) {
-            assertNotNull("return value", result);
+            assertNotNull("return value", result, method);
         }
     }
 

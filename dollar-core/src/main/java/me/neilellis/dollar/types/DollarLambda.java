@@ -107,10 +107,10 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                     pipeable.pipe((var) args[0]);
                 }
                 notifyStack.get().remove(this);
-                return null;
+                return proxy;
             } else if (method.getName().equals("$remove")) {
                 listeners.remove(args[0]);
-                return null;
+                return args[0];
             } else if (method.getName().equals("hasErrors")) {
                 return false;
             } else if (method.getName().equals("$copy") || method.getName().equals("copy")) {

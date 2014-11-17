@@ -35,7 +35,7 @@ public class ReturnVarOnlyGuard implements Guard {
 
     @Override
     public void postCondition(Object guarded, Method method, Object[] args, Object result) {
-        assertTrue(result instanceof var);
+        assertTrue(result instanceof var, method);
     }
 
 }

@@ -35,7 +35,7 @@ public class AllVarMapGuard implements Guard {
         if (args != null) {
             for (Object arg : args) {
                 if (arg instanceof Map) {
-                    ((Map) arg).forEach((k, v) -> assertTrue(v instanceof var));
+                    ((Map) arg).forEach((k, v) -> assertTrue(v instanceof var, method));
                 }
             }
         }
@@ -44,7 +44,7 @@ public class AllVarMapGuard implements Guard {
     @Override
     public void postCondition(Object guarded, Method method, Object[] args, Object result) {
         if (result instanceof Map) {
-            ((Map) result).forEach((k, v) -> assertTrue(v instanceof var));
+            ((Map) result).forEach((k, v) -> assertTrue(v instanceof var, method));
         }
     }
 
