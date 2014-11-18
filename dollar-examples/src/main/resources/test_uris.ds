@@ -1,6 +1,6 @@
 marinaVideos = << camel:https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
 
-@@ $marinaVideos
+@@ marinaVideos
 firstUrl= $marinaVideos.results[0]
 
 videoUrls= $marinaVideos.results map { $1.trackViewUrl }

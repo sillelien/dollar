@@ -1,15 +1,15 @@
 geo= (receive "http://freegeoip.net/json/")
-.: $geo is MAP
+.: geo is MAP
 
-lat= $geo.latitude
-lon= $geo.longitude
+lat= geo.latitude
+lon= geo.longitude
 
 .: $lat is NUMBER
 .: $lon is NUMBER
 
 
 crimes= (receive "http://data.police.uk/api/crimes-at-location?date=2014-08&lat=" + $lat + "&lng=" + $lon )
-.: $crimes is LIST
+.: crimes is LIST
 
 categories= $crimes map { $1.category }
 

@@ -320,6 +320,12 @@ myColor="apple"
 
 ```
 
+Of course since the use of `(it is XXXX)` is very common DollarScript provides a specific runtime type constraint that can be added in conjunction with other constraints. Simply prefix the assignment or decleration with `<XXXX>` where XXXX is the runtime type.
+
+
+```dollar
+<string> s="String value"
+```
 
 ##Reactive Control Flow
 

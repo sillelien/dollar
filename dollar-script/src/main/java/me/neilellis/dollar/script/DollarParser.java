@@ -18,14 +18,11 @@ package me.neilellis.dollar.script;
 
 import com.google.common.collect.Range;
 import com.google.common.io.ByteStreams;
-import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.TypeAware;
-import me.neilellis.dollar.URIAware;
+import me.neilellis.dollar.*;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
 import me.neilellis.dollar.script.java.JavaScriptingSupport;
 import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.var;
 import org.codehaus.jparsec.*;
 import org.codehaus.jparsec.error.ParserException;
 import org.codehaus.jparsec.functors.Map;
@@ -561,12 +558,21 @@ public class DollarParser {
     }
 
     private Parser<Map<? super var, ? extends var>> assignmentOperator(final ScriptScope scope, Parser.Reference<var> ref) {
-        return Parsers.array(keyword("const").optional(), ref.lazy().between(term("("), term(")")).optional(), term("$").next(ref.lazy().between(term("("), term(")"))).or(IDENTIFIER), term("=")).map(new Map<Object[], Map<? super var, ? extends var>>() {
+        return Parsers.array(keyword("const").optional(), IDENTIFIER.between(term("<"), term(">")).optional(), ref.lazy().between(term("("), term(")")).optional(), term("$").next(ref.lazy().between(term("("), term(")"))).or(IDENTIFIER), term("=")).map(new Map<Object[], Map<? super var, ? extends var>>() {
             public Map<? super var, ? extends var> map(Object[] objects) {
 
                 return new Map<var, var>() {
                     public var map(var rhs) {
-                        final var lambda = DollarFactory.fromLambda(i -> scope.set(objects[2].toString(), fix(rhs), (objects[0] != null), (var) objects[1]));
+                        var constraint;
+                        if (objects[1] != null) {
+                            constraint = DollarFactory.fromLambda(i -> {
+                                return $(scope.getParameter("it").is(TypeAware.Type.valueOf(objects[1].toString().toUpperCase())) && (objects[2] == null || ((var) objects[2]).isTrue()));
+                            });
+                        } else {
+                            constraint = (var) objects[2];
+
+                        }
+                        final var lambda = DollarFactory.fromLambda(i -> scope.set(objects[3].toString(), fix(rhs), (objects[0] != null), constraint));
                         return lambda;
                     }
                 };
@@ -575,14 +581,25 @@ public class DollarParser {
     }
 
     private Parser<Map<? super var, ? extends var>> declarationOperator(final ScriptScope scope, Parser.Reference<var> ref) {
-        return Parsers.array(ref.lazy().between(term("("), term(")")).optional(), term("$").next(ref.lazy().between(term("("), term(")"))).or(IDENTIFIER), term(":=")).map(new Map<Object[], Map<? super var, ? extends var>>() {
+        return Parsers.array(IDENTIFIER.between(term("<"), term(">")).optional(), ref.lazy().between(term("("), term(")")).optional(), term("$").next(ref.lazy().between(term("("), term(")"))).or(IDENTIFIER), term(":=")).map(new Map<Object[], Map<? super var, ? extends var>>() {
             public Map<? super var, ? extends var> map(Object[] objects) {
 
                 return new Map<var, var>() {
                     public var map(var rhs) {
+                        var constraint;
+                        if (objects[0] != null) {
+                            constraint = DollarFactory.fromLambda(i -> $(scope.getParameter("it").is(TypeAware.Type.valueOf(objects[0].toString().toUpperCase())) && (objects[1] == null || ((var) objects[1]).isTrue())));
+                        } else {
+                            constraint = (var) objects[1];
 
-                        scope.set(objects[1].toString(), rhs, false, (var) objects[0]);
-                        rhs.$listen(i -> scope.set(objects[1].toString(), rhs, false, (var) objects[0]));
+                        }
+                        Pipeable action = i -> scope.set(objects[2].toString(), rhs, false, constraint);
+                        try {
+                            action.pipe($void());
+                        } catch (Exception e) {
+                            throw new DollarScriptException(e);
+                        }
+                        rhs.$listen(action);
                         return $void();
                     }
                 };
