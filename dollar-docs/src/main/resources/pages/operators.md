@@ -1,7 +1,7 @@
 Operators
 
 1000
-<>      + fix value
+@      + fix value
 $       + variable reference
 
 500

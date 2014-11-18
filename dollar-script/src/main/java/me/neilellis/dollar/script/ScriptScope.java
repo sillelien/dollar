@@ -25,11 +25,12 @@ import org.codehaus.jparsec.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static me.neilellis.dollar.DollarStatic.$void;
-import static me.neilellis.dollar.DollarStatic.fix;
+import static me.neilellis.dollar.DollarStatic.*;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -47,6 +48,7 @@ public class ScriptScope implements Scope {
     private DollarParser dollarParser;
     private Multimap<String, var> listeners = LinkedListMultimap.create();
     private boolean parameterScope;
+    private List<var> errorHandlers = new CopyOnWriteArrayList<>();
 
     public ScriptScope(String name) {
         this.parent = null;
@@ -149,10 +151,10 @@ public class ScriptScope implements Scope {
         }
         if (scope.variables.containsKey(key) && scope.variables.get(key).constraint != null) {
             if (constraint != null) {
-                throw new DollarScriptException("Cannot change the constraint on a variable, attempted to redeclare for " + key);
+                handleError(new DollarScriptException("Cannot change the constraint on a variable, attempted to redeclare for " + key));
             }
             if (checkConstraint(value, scope.variables.get(key), scope.variables.get(key).constraint)) {
-                throw new DollarScriptException("Constraint failed for variable " + key + "");
+                handleError(new DollarScriptException("Constraint failed for variable " + key + ""));
             }
         }
         if (checkConstraint(value, scope.variables.get(key), constraint)) {
@@ -245,6 +247,12 @@ public class ScriptScope implements Scope {
         scopeForKey.listeners.put(key, listener);
     }
 
+    @Override
+    public var addErrorHandler(var handler) {
+        errorHandlers.add(handler);
+        return $void();
+    }
+
     private ScriptScope getScopeForKey(String key) {
         if (variables.containsKey(key)) {
             return this;
@@ -267,6 +275,29 @@ public class ScriptScope implements Scope {
             if (DollarStatic.config.isDebugScope()) log.info("Parameter scope not found.");
             return null;
         }
+    }
+
+    public var handleError(Throwable t) {
+        if (errorHandlers.isEmpty()) {
+            if (parent != null) {
+                return parent.handleError(t);
+            } else {
+                throw new DollarScriptException(t);
+            }
+        } else {
+            setParameter("type", $(t.getClass().getName()));
+            setParameter("msg", $(t.getMessage()));
+            try {
+                for (var handler : errorHandlers) {
+                    fix(handler);
+                }
+            } finally {
+                setParameter("type", $void());
+                setParameter("msg", $void());
+            }
+            return $void();
+        }
+
     }
 
     @Override

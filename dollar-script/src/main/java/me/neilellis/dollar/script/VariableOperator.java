@@ -56,11 +56,11 @@ public class VariableOperator extends ScopedVarUnaryOperator {
                         }
                     }
                 } catch (AssertionError e) {
-                    return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+                    return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
                 } catch (DollarScriptException e) {
-                    return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+                    return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
                 } catch (Exception e) {
-                    return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+                    return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
                 }
                 if (numeric) {
                     return scope.getParameter(key);
@@ -71,11 +71,11 @@ public class VariableOperator extends ScopedVarUnaryOperator {
             lambda.setMetaAttribute("variable", from.$S());
             return lambda;
         } catch (AssertionError e) {
-            return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
         } catch (DollarScriptException e) {
-            return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
         } catch (Exception e) {
-            return scope.getDollarParser().getErrorHandler().handle(source.get(), e);
+            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
         }
 
     }

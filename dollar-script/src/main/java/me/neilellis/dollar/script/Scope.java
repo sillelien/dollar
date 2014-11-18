@@ -35,4 +35,6 @@ public interface Scope {
     void notifyScope(String key, var value);
 
     void listen(String key, var listener);
+
+    var addErrorHandler(var handler);
 }

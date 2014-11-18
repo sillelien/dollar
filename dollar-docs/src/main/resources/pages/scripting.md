@@ -80,7 +80,7 @@ a=4
 4
 ~~~
 
-That remarkable piece of code will simply output each change made to the variable a, but wait a minute what about ...
+That simple piece of code will simply output each change made to the variable a, but wait a minute what about ...
 
 ```dollar
 
@@ -140,7 +140,7 @@ const MEDIUM = 23
 # MEDIUM= 4 would now produce an error
 ```
 
-So `:=` supports the reactive behaviour of Dollar, i.e. it is a declaration not a value assignment, and `=` is used to nail down a particular value. Later we'll come across the value anchor operator or diamond `<>` which instructs DollarScript to fix a value at the time of declaration. More on that later.
+So `:=` supports the reactive behaviour of Dollar, i.e. it is a declaration not a value assignment, and `=` is used to nail down a particular value. Later we'll come across the value anchor operator or diamond `@` which instructs DollarScript to fix a value at the time of declaration. More on that later.
 
 ###Blocks
 
@@ -262,13 +262,54 @@ DollarScript (at present) supports numerical and character ranges
 
 ```
 
-###Types
+###Error Handling
+
+Error handling couldn't be simpler. Define an error expression using the error keyword, the expression supplied will be evaluated on an error occurring within any sub scope of the scope in which it is defined. The special variables `msg` and `type` will be assigned values.
+
+```dollar
+errorHappened= false
+error { >> msg; errorHappened= true; }
+a=1/0
+=> errorHappened
+```
+
+###Types and Constraints
 
 Although DollarScript is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, NUMBER, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
 
 ```dollar
 => "Hello World" is STRING
 => ["Hello World"] is LIST
+```
+
+Although there are no compile type constraints in DollarScript a runtime type system can be built using constraints. Constraints are declared at the time of variable assignment or declaration. A constraint once declared on a variable cannot be changed. The constraint is placed before the variable name at the time of declaration in parenthesis.
+
+```dollar
+(it < 100) a = 50
+(it > previous || previous is VOID) b = 5
+b=6
+b=7
+( it is STRING) s="String value"
+```
+
+The special variables `it`, the current value and `previous`, the previous value, will be available for the constraint.
+
+To build a simple type system simply declare (using `:=`) your type as a boolean expression.
+
+```dollar
+
+//define a pseudo-type
+colorEnum := ( it in ["red","green","blue"] )
+
+
+//Use it as a constraint
+(colorEnum) myColor= "green"
+
+error { >> msg }
+
+//This fails
+myColor="apple"
+
 ```
 
 
@@ -426,6 +467,8 @@ Reactive behaviour is supported on the Scope object with the listen and notify m
 ##Operators
 
 ###Iterative Operators
+
+###Comparison Operators
 
 ###Numerical Operators
 

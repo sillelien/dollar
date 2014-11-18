@@ -41,20 +41,20 @@ public class ParserErrorHandler {
     }
 
 
-    public var handle(String source, AssertionError e) {
+    public var handle(ScriptScope scope, String source, AssertionError e) {
         AssertionError throwable = new AssertionError(e.getMessage() + " at " + source, e);
         if (!faultTolerant) {
-            throw throwable;
+            return scope.handleError(e);
         } else {
             log(e);
             return DollarFactory.failure(throwable);
         }
     }
 
-    public var handle(String source, DollarScriptException e) {
+    public var handle(ScriptScope scope, String source, DollarScriptException e) {
         DollarParserException throwable = new DollarParserException(e.getMessage() + " at " + source, e);
         if ((e instanceof VariableNotFoundException && missingVariables) || failfast) {
-            throw throwable;
+            return scope.handleError(e);
         } else {
             log(e);
             return DollarFactory.failure(throwable);
@@ -69,7 +69,7 @@ public class ParserErrorHandler {
         }
     }
 
-    public var handle(String source, Exception e) {
+    public var handle(ScriptScope scope, String source, Exception e) {
         if (e instanceof LambdaRecursionException) {
             throw new DollarParserException("Excessive recursion detected, this is usually due to a recursive definition of lazily defined expressions. The simplest way to solve this is to use the 'fix' operator or the '=' operator to reduce the amount of lazy evaluation. The error occured at " + source);
         }
@@ -77,7 +77,7 @@ public class ParserErrorHandler {
         DollarParserException throwable = new DollarParserException((unravel(e)).getMessage() + " at " + source, unravel(e));
 
         if (failfast) {
-            throw throwable;
+            return scope.handleError(e);
         } else if (faultTolerant) {
             log(e);
             return $void();
