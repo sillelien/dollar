@@ -496,23 +496,19 @@ Yep you can use named parameters, then refer to the values by the names passed i
 
 ##Resources &amp; URIs
 
-URIs are first class citizen's in DollarScript. They refer to a an arbitrary resource, usually remote, that can be accessed using the specified protocol and location. Static URIs can be referred to directly without quotation marks, dynamic URIs can be built using the `uri` operator
+URIs are first class citizen's in DollarScript. They refer to a an arbitrary resource, usually remote, that can be accessed using the specified protocol and location. Static URIs can be referred to directly without quotation marks, dynamic URIs can be built by casting to a uri using the `as` operator.
 
 ```dollar
-
-
 search="Unikitty"
 
 dynamicURI= ("camel:http://google.com?q="+search) as uri
 
 marinaVideos = << camel:https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
 @@ marinaVideos.results each { $1.trackViewUrl }
-
 ```
 
 In this example we've requested a single value (using `<+`) from a uri and assigned the value to `marinaVideos` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `trackViewUrl`. The each operator returns a list of the results and that is what is passed to standard out.
 
-``
 
 ##Using Java
 
