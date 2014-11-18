@@ -204,7 +204,11 @@ class DollarMap extends AbstractDollar implements var {
     @NotNull
     @Override
     public ImmutableList<var> toList() {
-        throw new UnsupportedOperationException();
+        final ArrayList<var> entries = new ArrayList<>();
+        for (Map.Entry<String, var> entry : map.entrySet()) {
+            entries.add(DollarStatic.$(entry.getKey(), entry.getValue()));
+        }
+        return ImmutableList.copyOf(entries);
     }
 
     @NotNull
@@ -332,6 +336,24 @@ class DollarMap extends AbstractDollar implements var {
     @Override
     public Number N() {
         return 0;
+    }
+
+    @Override
+    public var $as(Type type) {
+        switch (type) {
+            case MAP:
+                return this;
+            case LIST:
+                return DollarStatic.$(toList());
+            case BOOLEAN:
+                return DollarStatic.$(!map.isEmpty());
+            case STRING:
+                return DollarFactory.fromStringValue(S());
+            case VOID:
+                return DollarStatic.$void();
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
 
     private Map<String, Object> varMapToMap() {

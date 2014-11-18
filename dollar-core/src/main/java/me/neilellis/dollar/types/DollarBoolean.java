@@ -16,10 +16,12 @@
 
 package me.neilellis.dollar.types;
 
+import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -141,6 +143,26 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     @Override
     public Number N() {
         return value ? 1 : 0;
+    }
+
+    @Override
+    public var $as(Type type) {
+        switch (type) {
+            case BOOLEAN:
+                return this;
+            case STRING:
+                return DollarStatic.$(S());
+            case LIST:
+                return DollarStatic.$(Arrays.asList(this));
+            case MAP:
+                return DollarStatic.$("value", this);
+            case NUMBER:
+                return DollarStatic.$(value ? 1 : 0);
+            case VOID:
+                return DollarStatic.$void();
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
 
     @Override

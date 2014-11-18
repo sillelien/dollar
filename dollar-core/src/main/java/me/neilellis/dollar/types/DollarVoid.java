@@ -17,6 +17,7 @@
 package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Range;
 import me.neilellis.dollar.DollarEval;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
@@ -27,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -252,6 +254,27 @@ public class DollarVoid extends AbstractDollar implements var {
         return 0;
     }
 
+    @Override
+    public var $as(Type type) {
+        switch (type) {
+            case BOOLEAN:
+                return DollarStatic.$(false);
+            case STRING:
+                return DollarStatic.$("");
+            case LIST:
+                return DollarStatic.$(Arrays.asList());
+            case MAP:
+                return DollarStatic.$("value", this);
+            case NUMBER:
+                return DollarStatic.$(0);
+            case VOID:
+                return this;
+            case RANGE:
+                return DollarFactory.fromValue(Range.closed(0, 0));
+            default:
+                throw new UnsupportedOperationException();
+        }
+    }
 
     @NotNull
     @Override

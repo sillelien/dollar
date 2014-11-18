@@ -339,4 +339,21 @@ public class DollarRange extends AbstractDollar {
         }
         return false;
     }
+
+    @Override
+    public var $as(Type type) {
+        switch (type) {
+            case LIST:
+                return DollarStatic.$(toList());
+            case MAP:
+                return DollarStatic.$(toMap());
+            case STRING:
+                return DollarFactory.fromStringValue(S());
+            case VOID:
+                return DollarStatic.$void();
+            default:
+                throw new UnsupportedOperationException();
+        }
+    }
+
 }

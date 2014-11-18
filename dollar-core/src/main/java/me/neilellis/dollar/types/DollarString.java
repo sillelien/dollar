@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -110,6 +111,27 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
+    public var $as(Type type) {
+        switch (type) {
+            case BOOLEAN:
+                return DollarStatic.$(value.equals("true") || value.equals("yes"));
+            case STRING:
+                return this;
+            case LIST:
+                return DollarStatic.$(Arrays.asList(this));
+            case MAP:
+                return DollarStatic.$("value", this);
+            case NUMBER:
+                return DollarStatic.$(value.contains(".") ? Double.parseDouble(value) : Long.parseLong(value));
+            case VOID:
+                return DollarStatic.$void();
+            case URI:
+                return DollarFactory.fromURI(value);
+            default:
+                throw new UnsupportedOperationException();
+        }
+    }
+    @Override
     public boolean equals(@Nullable Object obj) {
         return obj != null && value.equals(obj.toString());
     }
@@ -158,5 +180,10 @@ public class DollarString extends AbstractDollarSingleValue<String> {
             }
         }
         return false;
+    }
+
+    @Override
+    public var $size() {
+        return DollarStatic.$(value.length());
     }
 }

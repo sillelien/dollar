@@ -290,6 +290,24 @@ public class DollarList extends AbstractDollar {
         return 0;
     }
 
+    @Override
+    public var $as(Type type) {
+        switch (type) {
+            case LIST:
+                return this;
+            case MAP:
+                return DollarStatic.$(toMap());
+            case STRING:
+                return DollarFactory.fromStringValue(S());
+            case VOID:
+                return DollarStatic.$void();
+            case BOOLEAN:
+                return DollarStatic.$(!list.isEmpty());
+            default:
+                throw new UnsupportedOperationException();
+        }
+    }
+
     @NotNull
     @Override
     public var $(@NotNull Number n) {

@@ -354,4 +354,20 @@ public class DollarURI extends AbstractDollar {
         }
         return false;
     }
+
+    @Override
+    public var $as(Type type) {
+        switch (type) {
+            case STRING:
+                return DollarStatic.$(S());
+            case LIST:
+                return $all();
+            case MAP:
+                return DollarStatic.$("value", this);
+            case VOID:
+                return DollarStatic.$void();
+            default:
+                throw new UnsupportedOperationException();
+        }
+    }
 }

@@ -1,0 +1,39 @@
+1 as string <=> "1"
+1 as boolean <=> true
+1 as list <=> [1]
+1 as map <=> {"value":1}
+1 as VOID <=> void
+1 as number <=> 1
+
+"1" as number <=> 1
+"http://google.com" as uri
+"1" as VOID <=> void
+"true" as boolean <=> true
+"1" as boolean <=> false
+"1" as list <=> ["1"]
+"1" as map <=> {"value":"1"}
+"1" as string <=> "1"
+
+true as string <=> "true"
+true as number <=> 1
+true as list <=> [true]
+true as map <=> {"value":true}
+true as boolean <=> true
+true as VOID <=> void
+
+
+[1,2,3] as string <=> "[1,2,3]"
+[1,2,3] as list <=> [1,2,3]
+[1,2,3] as boolean <=> true
+[1,2,3] as map <=> {"value":[1,2,3]}
+
+{"a":1,"b":2} as string <=> '{"a":1,"b":2}'
+{"a":1,"b":2} as list <=> ["a":1,"b":2]
+{"a":1,"b":2} as boolean <=> true
+{"a":1,"b":2} as VOID <=> void
+
+
+
+
+
+

@@ -16,11 +16,13 @@
 
 package me.neilellis.dollar.types;
 
+import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Math.abs;
@@ -236,5 +238,25 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
             }
         }
         return false;
+    }
+
+    @Override
+    public var $as(Type type) {
+        switch (type) {
+            case BOOLEAN:
+                return DollarStatic.$(value.intValue() != 0);
+            case STRING:
+                return DollarStatic.$(S());
+            case LIST:
+                return DollarStatic.$(Arrays.asList(this));
+            case MAP:
+                return DollarStatic.$("value", this);
+            case NUMBER:
+                return this;
+            case VOID:
+                return DollarStatic.$void();
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
 }

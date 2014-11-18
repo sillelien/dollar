@@ -167,6 +167,8 @@ public interface TypeAware {
 
     boolean isUri();
 
+    var $as(Type type);
+
     enum Type {
         STRING, NUMBER, LIST, MAP, URI, VOID, RANGE, BOOLEAN, ERROR
     }

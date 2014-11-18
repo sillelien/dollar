@@ -143,7 +143,7 @@ const MEDIUM = 23
 So `:=` supports the reactive behaviour of Dollar, i.e. it is a declaration not a value assignment, and `=` is used to nail down a particular value. Later we'll come across the value anchor operator or diamond `@` which instructs DollarScript to fix a value at the time of declaration. More on that later.
 
 ###Blocks
-
+####Line Block
 DollarScript supports several block types, the first is the 'line block' a line block lies between `{` and `}` and is separated by either newlines or `;` characters.
 
 ```dollar
@@ -163,22 +163,26 @@ block2 := {1;2;}
 
 When a line block is evaluated the result is the value of the last entry. For advanced users note that all lines will be evaluated, the value is just ignored. A line block behaves a lot like a function in an imperative language.
 
-Next we have the array block, the array block preserves all the values each part is seperated by either a `,` or a newline but is delimited by `[` and `]`.
+####List Block
+
+Next we have the list block, the list block preserves all the values each part is seperated by either a `,` or a newline but is delimited by `[` and `]`.
 
 ```dollar
 
-array := [
+list := [
     "Hello "
     "World"
 ]
 
-.: array == ["Hello ","World"]
+.: list == ["Hello ","World"]
 
-array2 := [1,2]
+list2 := [1,2]
 
-.: array2 == [1,2]
+.: list2 == [1,2]
 
 ```
+
+####Appending / Map Block
 
 Finally we have the appending block, when an appending (or map) block is evaluated the result is the concatenation (using $plus() in the Dollar API) of the parts from top to bottom. The appending block starts and finishes with the `{` `}` braces, however each part is seperated by a `,` not a `;` or *newline*
 
@@ -248,7 +252,7 @@ You can count the size of the list using the size operator `#`.
 #[1,2,3,4] <=> 4
 ```
 
-DollarScript maps are also associative arrays (like JavaScript) allowing you to request members from them using the array subscript syntax
+DollarScript maps are also associative arrays (like JavaScript) allowing you to request members from them using the list subscript syntax
 
 ```dollar
 {"key1":1,"key2":2} ["key"+1] <=> 1
@@ -281,14 +285,16 @@ a=1/0
 .: errorHappened
 ```
 
-###Types and Constraints
-
+##Type System
+###Types
 Although DollarScript is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, NUMBER, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
 
 ```dollar
 .: "Hello World" is STRING
 .: ["Hello World"] is LIST
 ```
+
+###Constraints
 
 Although there are no compile type constraints in DollarScript a runtime type system can be built using constraints. Constraints are declared at the time of variable assignment or declaration. A constraint once declared on a variable cannot be changed. The constraint is placed before the variable name at the time of declaration in parenthesis.
 
@@ -324,8 +330,56 @@ Of course since the use of `(it is XXXX)` is very common DollarScript provides a
 
 
 ```dollar
-<string> s="String value"
+<string> (#it > 5) s="String value"
 ```
+
+### Type Coercion
+DollarScript also supports type coercion, this is done using the `as` operator followed by the type to coerce to.
+
+
+```dollar
+<string> s= 1 as string
+s <=> "1"
+```
+
+A few more examples follow.
+
+```dollar
+1 as string <=> "1"
+1 as boolean <=> true
+1 as list <=> [1]
+1 as map <=> {"value":1}
+1 as VOID <=> void
+1 as number <=> 1
+
+"1" as number <=> 1
+"http://google.com" as uri
+"1" as VOID <=> void
+"true" as boolean <=> true
+"1" as boolean <=> false
+"1" as list <=> ["1"]
+"1" as map <=> {"value":"1"}
+"1" as string <=> "1"
+
+true as string <=> "true"
+true as number <=> 1
+true as list <=> [true]
+true as map <=> {"value":true}
+true as boolean <=> true
+true as VOID <=> void
+
+
+[1,2,3] as string <=> "[1,2,3]"
+[1,2,3] as list <=> [1,2,3]
+[1,2,3] as boolean <=> true
+[1,2,3] as map <=> {"value":[1,2,3]}
+
+{"a":1,"b":2} as string <=> '{"a":1,"b":2}'
+{"a":1,"b":2} as list <=> ["a":1,"b":2]
+{"a":1,"b":2} as boolean <=> true
+{"a":1,"b":2} as VOID <=> void
+```
+
 
 ##Reactive Control Flow
 
@@ -449,10 +503,10 @@ URIs are first class citizen's in DollarScript. They refer to a an arbitrary res
 
 search="Unikitty"
 
-dynamicURI= uri "camel:http://google.com?q="+search
+dynamicURI= ("camel:http://google.com?q="+search) as uri
 
 marinaVideos = << camel:https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
-@@ marinaVideos.results map { $1.trackViewUrl }
+@@ marinaVideos.results each { $1.trackViewUrl }
 
 ```
 
@@ -487,7 +541,7 @@ Reactive behaviour is supported on the Scope object with the listen and notify m
 
 ###Numerical Operators
 
-DollarScript support the basic numerical operators +,-,/,*,%
+DollarScript support the basic numerical operators +,-,/,*,% as well as #
 
 ###Logical Operators
 

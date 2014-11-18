@@ -3,7 +3,7 @@ marinaVideos = << camel:https://itunes.apple.com/search?term=Marina+And+The+Diam
 @@ marinaVideos
 firstUrl= $marinaVideos.results[0]
 
-videoUrls= $marinaVideos.results map { $1.trackViewUrl }
+videoUrls= $marinaVideos.results each { $1.trackViewUrl }
 .: count($videoUrls) != 0
 
 
@@ -16,7 +16,7 @@ every 100 millis until ($1 == 5) unless ($1 == 3) { a= ($a + 1); @@ "Hello " + $
 every 100 millis until ($1 == 5) { b= b + 1; @@ "Goodbye " + $1; }
 
 search="Unikitty"
-dynamicURI= uri "camel:http://google.com?q="+$search
+dynamicURI=  ("camel:http://google.com?q=" + search) as uri
 
 w = << camel:weather://w ; @@ "The weather in " + w.name + " is '" + w.weather[0].description+"'"
 

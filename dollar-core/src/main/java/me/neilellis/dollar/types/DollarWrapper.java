@@ -582,6 +582,11 @@ public class DollarWrapper implements var {
         return getValue().isUri();
     }
 
+    @Override
+    public var $as(Type type) {
+        return getValue().$as(type);
+    }
+
     @NotNull
     @Override
     public var _unwrap() {
