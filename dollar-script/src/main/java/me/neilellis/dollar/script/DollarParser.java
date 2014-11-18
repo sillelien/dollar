@@ -77,8 +77,8 @@ public class DollarParser {
     public static final String NAMED_PARAMETER_META_ATTR = "__named_parameter";
     public static final int LOGICAL_AND_PRIORITY = 70;
     public static final int LOGICAL_OR_PRIORITY = 60;
-    static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", "<=", ">=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "??", "!!", "*>", "==", "!=", "+", "-", "\n", "${", ":=", "&", "&=", "@", "+>", "<+", "*>", "<*", "*|", "|*", "*|*", "|>", "<|", "&>", "<&", "?>", "<?", "?->", "<=>", "<$", "$>", "-_-", "::", "/", "%", "*", "&&", "||", "<--", "<++", "\u2357", "~", "?$?", "???", "..", "?..?", "€");
-    static final Terminals KEYWORDS = Terminals.operators("out", "err", "debug", "fix", "causes", "when", "if", "then", "for", "map", "fail", "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default", "debug", "error", "filter", "sleep", "secs", "sec", "minute", "minutes", "hr", "hrs", "milli", "millis", "every", "until", "unless", "uri", "and", "or", "dispatch", "send", "give", "receive", "peek", "poll", "push", "pop", "publish", "subscribe", "emit", "drain", "receive all", "import", "reduce", "truthy", "is", "else", "const", "in", "true", "false", "yes", "no", "void", "error");
+    static final Terminals OPERATORS = Terminals.operators("|", ">>", "<<", "->", "=>", ".:", "<=", ">=", "<-", "(", ")", "--", "++", ".", ":", "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "??", "!!", "*>", "==", "!=", "+", "-", "\n", "${", ":=", "&", "&=", "@", "+>", "<+", "*>", "<*", "*|", "|*", "*|*", "|>", "<|", "&>", "<&", "?>", "<?", "?->", "<=>", "<$", "$>", "-_-", "::", "/", "%", "*", "&&", "||", "<--", "<++", "\u2357", "~", "?$?", "???", "..", "?..?", "€", "@@", "<@", "@>", "#");
+    static final Terminals KEYWORDS = Terminals.operators("out", "err", "debug", "fix", "causes", "when", "if", "then", "for", "map", "fail", "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default", "debug", "error", "filter", "sleep", "secs", "sec", "minute", "minutes", "hr", "hrs", "milli", "millis", "every", "until", "unless", "uri", "and", "or", "dispatch", "send", "give", "receive", "peek", "poll", "push", "pop", "publish", "subscribe", "emit", "drain", "all", "import", "reduce", "truthy", "is", "else", "const", "in", "true", "false", "yes", "no", "void", "error", "to", "from", "async", "stateless", "size");
     static final Parser<?> TOKENIZER =
             Parsers.or(Lexical.url(), OPERATORS.tokenizer(), Lexical.decimal(), Lexical.java(), Terminals.StringLiteral.DOUBLE_QUOTE_TOKENIZER, Terminals.StringLiteral.SINGLE_QUOTE_TOKENIZER, Terminals.IntegerLiteral.TOKENIZER, Parsers.longest(KEYWORDS.tokenizer(), Terminals.Identifier.TOKENIZER));
 
@@ -438,9 +438,9 @@ public class DollarParser {
                 .prefix(op(new ScopedVarUnaryOperator(false, i -> {
                     i.out();
                     return $void();
-                }), ">>", "out"), LINE_PREFIX_PRIORITY)
+                }), "@@", "print"), LINE_PREFIX_PRIORITY)
                 .prefix(op(new ScopedVarUnaryOperator(false, i -> {
-                    i.out();
+                    i.debug();
                     return $void();/*reserved for debug instead of stdout messages*/
                 }), "!!", "debug"), LINE_PREFIX_PRIORITY)
                 .prefix(op(new ScopedVarUnaryOperator(false, i -> {
@@ -453,7 +453,7 @@ public class DollarParser {
                     } else {
                         throw new AssertionError();
                     }
-                }), "=>", "assert"), LINE_PREFIX_PRIORITY)
+                }), ".:", "assert"), LINE_PREFIX_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> {
                     if (lhs.equals(rhs)) {
                         return lhs;
@@ -463,12 +463,14 @@ public class DollarParser {
                 }, scope), "<=>"), LINE_PREFIX_PRIORITY)
 
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$dispatch(lhs), scope), "?>", "dispatch"), OUTPUT_PRIORITY)
-                .prefix(op(new ScopedVarUnaryOperator(scope, URIAware::$peek), "<?", "peek"), OUTPUT_PRIORITY)
+                .prefix(sendOperator(ref, scope), OUTPUT_PRIORITY)
+                .prefix(receiveOperator(ref, scope), OUTPUT_PRIORITY)
                 .prefix(op(new ScopedVarUnaryOperator(scope, i -> $(i.isTruthy())), "~", "truthy"), UNARY_PRIORITY)
+                .prefix(op(new ScopedVarUnaryOperator(scope, i -> i.$size()), "#", "size"), UNARY_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$give(lhs), scope), "&>", "give"), OUTPUT_PRIORITY)
-                .prefix(op(new ScopedVarUnaryOperator(scope, URIAware::$poll), "<&", "poll"), OUTPUT_PRIORITY)
+                .prefix(op(new ScopedVarUnaryOperator(scope, URIAware::$poll), "<&"), OUTPUT_PRIORITY)
                 .prefix(op(new ScopedVarUnaryOperator(scope, URIAware::$drain), "<--", "drain"), OUTPUT_PRIORITY)
-                .prefix(op(new ScopedVarUnaryOperator(scope, URIAware::$all), "<++", "receive all"), OUTPUT_PRIORITY)
+                .prefix(op(new ScopedVarUnaryOperator(scope, URIAware::$all), "<@", "all"), OUTPUT_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> {
                     if (lhs.isBoolean() && lhs.isFalse()) {
                         return rhs;
@@ -480,14 +482,14 @@ public class DollarParser {
 
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$contains(lhs), scope), "?..?", "in"), IN_PRIORITY)
 
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$push(lhs), scope), "->", "push"), OUTPUT_PRIORITY)
-                .prefix(op(new ScopedVarUnaryOperator(scope, URIAware::$pop), "<-", "pop"), OUTPUT_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$push(lhs), scope), "+>"), OUTPUT_PRIORITY)
+                .prefix(op(new ScopedVarUnaryOperator(scope, URIAware::$pop), "<+"), OUTPUT_PRIORITY)
                 .prefix(op(new ScopedVarUnaryOperator(scope, rhs -> scope.addErrorHandler(rhs)), "€", "error"), LINE_PREFIX_PRIORITY)
 
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$publish(lhs), scope), "*>", "publish"), OUTPUT_PRIORITY)
                 .infixl(op(new SubscribeOperator(scope), "<*", "subscribe"), OUTPUT_PRIORITY)
 
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$send(lhs), scope), "+>", "send"), OUTPUT_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$send(lhs), scope), ">>"), OUTPUT_PRIORITY)
                 .postfix(isOperator(ref, scope), EQUIVALENCE_PRIORITY)
                 .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$each(i -> withinNewScope(scope, newScope -> {
                     newScope.setParameter("1", i);
@@ -502,11 +504,11 @@ public class DollarParser {
                         });
                     }).get();
                 }, scope), "*|", "reduce"), MULTIPLY_DIVIDE_PRIORITY)
-                .prefix(op(new ReceiveOperator(scope), "<+", "receive"), OUTPUT_PRIORITY)
+                .prefix(op(new ReceiveOperator(scope), "<<"), OUTPUT_PRIORITY)
 
-                .infixl(op(new ListenOperator(scope), "<$", "causes"), CONTROL_FLOW_PRIORITY)
+                .infixl(op(new ListenOperator(scope), "=>", "causes"), CONTROL_FLOW_PRIORITY)
 
-                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> rhs.$notify(lhs), scope), "$>", "emit"), OUTPUT_PRIORITY)
+                .infixl(op(new ScopedVarBinaryOperator((lhs, rhs) -> lhs.$notify(rhs), scope), "<-", "emit"), OUTPUT_PRIORITY)
 
 
 //                .infixl(op("*>", new ScopedVarBinaryOperator((lhs, rhs) -> {
@@ -660,6 +662,36 @@ public class DollarParser {
                     return DollarFactory.fromLambda(i -> getVariable(scope, rhs.toString(), true));
                 }));
     }
+
+
+    private Parser<Map<? super var, ? extends var>> receiveOperator(Parser.Reference<var> ref, ScriptScope scope) {
+        return Parsers.array(keyword("receive"), keyword("async").optional(), keyword("stateless").optional()).followedBy(keyword("from").optional()).map(new Map<Object[], Map<? super var, ? extends var>>() {
+            @Override
+            public Map<? super var, ? extends var> map(Object[] objects) {
+                return new Map<var, var>() {
+                    @Override
+                    public var map(var rhs) {
+                        return DollarFactory.fromLambda(i -> rhs.$receive(objects[1] == null, objects[2] == null));
+                    }
+                };
+            }
+        });
+    }
+
+    private Parser<Map<? super var, ? extends var>> sendOperator(Parser.Reference<var> ref, ScriptScope scope) {
+        return Parsers.array(keyword("send"), ref.lazy(), keyword("async").optional(), keyword("stateless").optional()).followedBy(keyword("to").optional()).map(new Map<Object[], Map<? super var, ? extends var>>() {
+            @Override
+            public Map<? super var, ? extends var> map(Object[] objects) {
+                return new Map<var, var>() {
+                    @Override
+                    public var map(var rhs) {
+                        return DollarFactory.fromLambda(i -> rhs.$send((var) objects[1], objects[2] == null, objects[3] == null));
+                    }
+                };
+            }
+        });
+    }
+
 
     private Parser<Map<? super var, ? extends var>> isOperator(Parser.Reference<var> ref, ScriptScope scope) {
         return keyword("is").next(IDENTIFIER.sepBy(term(",")))

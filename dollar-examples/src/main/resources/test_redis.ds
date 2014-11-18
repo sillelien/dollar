@@ -2,22 +2,22 @@
 
 
 redis := uri "redis://localhost:6379/test"
-("Hello World " + date()) send $redis
+send ("Hello World " + date()) to redis
 
->> receive all $redis
+@@ all $redis
 
 
 a := {
     2
-    >> date()
+    @@ date()
     5
 }
 
->> $a
+@@ a
 sleep 0.5
->> $a
+@@ a
 
-#chat := import "github:neilellis:dollar-example-module:chat.ds"
-#$chat.server( "channel" : "test" )
+//chat := import "github:neilellis:dollar-example-module:chat.ds"
+//$chat.server( "channel" : "test" )
 
 sleep 1

@@ -76,10 +76,10 @@ sleep   + sleep keyword
 
 
 0 - Line Prefix
->>  - stdout
+@@  - stdout
 !! - debug
 ?? - stderr
-=> - assert
+.: - assert
 
 TODO
 

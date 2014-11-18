@@ -631,51 +631,6 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public var $receive() {
-        return DollarStatic.$void();
-    }
-
-    @Override
-    public var $poll() {
-        return DollarStatic.$void();
-    }
-
-    @Override
-    public var $peek() {
-        return DollarStatic.$void();
-    }
-
-    @Override
-    public var $pop() {
-        return DollarStatic.$void();
-    }
-
-    @Override
-    public var $subscribe(Pipeable subscription) {
-        return this;
-    }
-
-    @Override
-    public var $dispatch(var lhs) {
-        return this;
-    }
-
-    @Override
-    public var $give(var lhs) {
-        return this;
-    }
-
-    @Override
-    public var $push(var lhs) {
-        return this;
-    }
-
-    @Override
-    public var $publish(var lhs) {
-        return this;
-    }
-
-    @Override
     public var $drain() {
         return DollarStatic.$void();
     }
@@ -753,6 +708,26 @@ public abstract class AbstractDollar implements var {
     @Override
     public var error() {
         logger.error(this.toString());
+        return this;
+    }
+
+    @Override
+    public var $send(var value, boolean blocking, boolean mutating) {
+        return this;
+    }
+
+    @Override
+    public var $receive(boolean blocking, boolean mutating) {
+        return this;
+    }
+
+    @Override
+    public var $subscribe(Pipeable subscription) {
+        return this;
+    }
+
+    @Override
+    public var $publish(var lhs) {
         return this;
     }
 }

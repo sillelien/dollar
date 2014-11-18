@@ -762,6 +762,11 @@ public class DollarWrapper implements var {
     }
 
     @Override
+    public var $send(var value, boolean blocking, boolean mutating) {
+        return getValue().$send(value, blocking, mutating);
+    }
+
+    @Override
     public var $send(var value) {
         return getValue().$send(value);
     }
@@ -805,6 +810,11 @@ public class DollarWrapper implements var {
     public var $push(var lhs) {
         return getValue().$push(lhs);
 
+    }
+
+    @Override
+    public var $receive(boolean blocking, boolean mutating) {
+        return getValue().$receive(blocking, mutating);
     }
 
     @Override

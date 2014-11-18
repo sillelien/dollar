@@ -53,7 +53,7 @@ public class DollarURI extends AbstractDollar {
     @NotNull
     @Override
     public var $plus(@Nullable Object value) {
-        return handler.push(DollarStatic.$(value));
+        return handler.send(DollarStatic.$(value), true, true);
     }
 
     @NotNull
@@ -293,17 +293,12 @@ public class DollarURI extends AbstractDollar {
 
     @Override
     public var $notify(var v) {
-        return handler.dispatch(v);
+        return handler.send(v, false, false);
     }
 
     @Override
     public String $listen(Pipeable pipe, String key) {
         return $listen(pipe);
-    }
-
-    @Override
-    public var $send(var v) {
-        return handler.send(v);
     }
 
     @Override
@@ -317,24 +312,16 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public var $receive() {
-        return handler.receive();
+    public var $receive(boolean blocking, boolean mutating) {
+        return handler.receive(blocking, mutating);
     }
 
-    @Override
-    public var $poll() {
-        return handler.poll();
-    }
 
     @Override
-    public var $peek() {
-        return handler.peek();
+    public var $send(var value, boolean blocking, boolean mutating) {
+        return handler.send(value, blocking, mutating);
     }
 
-    @Override
-    public var $pop() {
-        return handler.pop();
-    }
 
     @Override
     public var $all() {
@@ -342,20 +329,6 @@ public class DollarURI extends AbstractDollar {
     }
 
 
-    @Override
-    public var $dispatch(var value) {
-        return handler.dispatch(value);
-    }
-
-    @Override
-    public var $give(var value) {
-        return handler.give(value);
-    }
-
-    @Override
-    public var $push(var lhs) {
-        return handler.push(lhs);
-    }
 
     @Override
     public var $publish(var lhs) {

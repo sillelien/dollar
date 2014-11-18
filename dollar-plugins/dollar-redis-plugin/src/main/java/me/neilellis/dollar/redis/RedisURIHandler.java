@@ -56,8 +56,7 @@ public class RedisURIHandler implements URIHandler {
         }
     }
 
-    @Override
-    public var dispatch(var value) {
+    public var send(var value) {
         try (Jedis jedis = jedisPool.getResource()) {
             jedis.lpush(path, value.$S());
         }
@@ -109,31 +108,19 @@ public class RedisURIHandler implements URIHandler {
         }
     }
 
-    @Override
     public var poll() {
         try (Jedis jedis = jedisPool.getResource()) {
             return $(jedis.rpop(path));
         }
     }
 
-    @Override
     public var receive() {
         try (Jedis jedis = jedisPool.getResource()) {
             return $(jedis.brpop(BLOCKING_TIMEOUT, path).get(1));
         }
     }
 
-    @Override
-    public var send(var value) {
-        return dispatch(value);
-    }
 
-    @Override
-    public var push(var value) {
-        return dispatch(value);
-    }
-
-    @Override
     public var peek() {
         try (Jedis jedis = jedisPool.getResource()) {
             return $(jedis.lindex(path, -1));
@@ -180,10 +167,7 @@ public class RedisURIHandler implements URIHandler {
     }
 
 
-    @Override
-    public var give(var value) {
-        throw new UnsupportedOperationException();
-    }
+
 
     @Override
     public var drain() {
@@ -192,5 +176,23 @@ public class RedisURIHandler implements URIHandler {
             jedis.ltrim(path, 1, 0);
             return $(result);
         }
+    }
+
+    @Override
+    public var receive(boolean blocking, boolean mutating) {
+        if (blocking && !mutating) {
+            return receive();
+        } else if (!blocking && mutating) {
+            return poll();
+        } else if (!blocking && !mutating) {
+            return peek();
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    @Override
+    public var send(var value, boolean blocking, boolean mutating) {
+        return send(value);
     }
 }

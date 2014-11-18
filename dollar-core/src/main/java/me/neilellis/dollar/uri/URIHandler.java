@@ -27,33 +27,12 @@ import java.io.IOException;
 public interface URIHandler {
 
     /**
-     * Send but do not wait for the return value.
-     *
-     * @param value
-     * @return
-     */
-    var dispatch(var value);
-
-    /**
      * Subscribe, listen semantics.
      *
      * @param consumer
      */
     void subscribe(Pipeable consumer) throws IOException;
 
-    /**
-     * Take the latest available value or return a void value.
-     *
-     * @return
-     */
-    var poll();
-
-    /**
-     * Take the latest available value, block until one is available
-     *
-     * @return
-     */
-    var receive();
 
 
     /**
@@ -65,44 +44,8 @@ public interface URIHandler {
      * @return
      */
     default var publish(var value) {
-        return dispatch(value);
+        return send(value, false, false);
     }
-
-    /**
-     * Synchronous send/receive, the returned value is the response to the value sent.
-     *
-     * Think HTTP.
-     *
-     * @param value
-     * @return
-     */
-    var send(var value);
-
-    /**
-     * Queue like behaviour, incudling appending to a file or stream.
-     *
-     * @param value
-     * @return
-     */
-    var push(var value);
-
-    /**
-     * Queue like behaviour, reading the last entry and removing it.
-     *
-     * Usually blocking behaviour.
-     *
-     * @return
-     */
-    default var pop() {
-        return receive();
-    }
-
-    /**
-     * Queue like behaviour, reading the last entry but not removing it.
-     *
-     * @return
-     */
-    var peek();
 
 
     /**
@@ -132,8 +75,9 @@ public interface URIHandler {
 
     int size();
 
-
-    var give(var value);
-
     var drain();
+
+    var receive(boolean blocking, boolean mutating);
+
+    var send(var value, boolean blocking, boolean mutating);
 }

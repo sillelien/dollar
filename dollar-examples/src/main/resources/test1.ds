@@ -5,41 +5,37 @@ c={
 "test2" : [1,2,3,{"foo":"bar"}]} | $testPipe
 
 f={1;2;3;4;}
->> $f
+@@ $f
 
 multiline={
 "Hello "
 "World"
 }
 
->> $multiline
->> $c
->> $c.test2
+@@ $multiline
+@@ $c
+@@ $c.test2
 
 a="Hello";
 b="World";
 
->> $a;
+@@ $a;
 
 a="Goodbye";
 d= a.doesntExist ?: 2;
 
 //Assert d == 2
 
-=> $d == 2
+.: $d == 2
 
->> $d == 2 -> "It's True !!!";
+@@ $d == 2 ? "It's True @@!";
 
->> $d;
+@@ $d;
 
->> $a;
->> $c ;
+@@ $a;
+@@ $c ;
 
->> [$a, $b, $c] ;
+@@ [$a, $b, $c] ;
 
-$c $> "/tmp/test2.out" ;
-d <$ "/etc/ssh_config" ;
 
-//>> $d ;
-
-//>> {"test" : 1, "test2" : 2} | 'mvn:me.neilellis.dollar.script.TestPipe:me.neilellis:dollar-script:0-SNAPSHOT'
+//@@ {"test" : 1, "test2" : 2} | 'mvn:me.neilellis.dollar.script.TestPipe:me.neilellis:dollar-script:0-SNAPSHOT'

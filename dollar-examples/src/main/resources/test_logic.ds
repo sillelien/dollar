@@ -4,9 +4,9 @@ const b = false
 $a <=> true
 $b <=> false
 
-=> $a && !$b
-=> $a || $b
-=> $b || $a
+.: $a && !$b
+.: $a || $b
+.: $b || $a
 
 !true <=> false
 !false <=> true
@@ -29,38 +29,38 @@ false || !false <=> true
 !false && !false <=> true
 
 
-=> false && false || true
-=> true || false && false
-=> true || false || false
-=> true && true && true
+.: false && false || true
+.: true || false && false
+.: true || false || false
+.: true && true && true
 
-=> true != false
-=> false != true
-=> true == true
-=> false == false
+.: true != false
+.: false != true
+.: true == true
+.: false == false
 
-=> ~ [1,2,3]
-=> ! ~ []
-=> ~ "anything"
-=> ! ~ ""
-=> ~ 1
-=> ! ~ 0
-=> ! ~ {void}
-=>  ~ { "a" : 1}
-=> ! ~ void
+.: ~ [1,2,3]
+.: ! ~ []
+.: ~ "anything"
+.: ! ~ ""
+.: ~ 1
+.: ! ~ 0
+.: ! ~ {void}
+.:  ~ { "a" : 1}
+.: ! ~ void
 
 e=0
 if ($e == 1) (e=2) else (e=3)
 $e <=> 3
 
-1 == 0 else ( >> "Not 0" )
+1 == 0 else ( @@ "Not 0" )
 
 if false {
-    >> "oops!"
-    => false
+    @@ "oops!"
+    .: false
 } else {
-    >> "False!"
-    => true
+    @@ "False!"
+    .: true
 }
 
 

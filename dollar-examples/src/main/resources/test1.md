@@ -7,9 +7,9 @@ Testing the embedding of code in markdown
 
 testParams := ($2 + " " + $1)
 
-=> $testParams ("Hello", "World") == "World Hello"
+.: $testParams ("Hello", "World") == "World Hello"
 
 
-!! $testParams ("Hello", "World")
+@@ $testParams ("Hello", "World")
 
 ```

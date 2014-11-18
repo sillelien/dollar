@@ -65,10 +65,7 @@ public class HttpURIHandler implements URIHandler {
         }
     }
 
-    @Override
-    public var dispatch(var value) {
-        throw new UnsupportedOperationException();
-    }
+
 
     @Override
     public void subscribe(Pipeable consumer) throws IOException {
@@ -77,13 +74,12 @@ public class HttpURIHandler implements URIHandler {
     }
 
     @Override
-    public var poll() {
+    public var send(var value, boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public var receive() {
-
+    public var receive(boolean blocking, boolean mutating) {
         try {
             return DollarFactory.fromStream(SerializedType.JSON, Unirest.get(uri.toString())
                     .asJson().getRawBody());
@@ -94,22 +90,7 @@ public class HttpURIHandler implements URIHandler {
         }
     }
 
-    @Override
-    public var send(var value) {
-        return dispatch(value);
-    }
 
-    @Override
-    public var push(var value) {
-        return dispatch(value);
-    }
-
-    @Override
-    public var peek() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public var set(var key, var value) {
         throw new UnsupportedOperationException();
     }
@@ -139,10 +120,6 @@ public class HttpURIHandler implements URIHandler {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public var give(var value) {
-        throw new UnsupportedOperationException();
-    }
 
     @Override
     public var drain() {

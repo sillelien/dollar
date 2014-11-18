@@ -25,7 +25,6 @@ import me.neilellis.dollar.guard.NotNullParametersGuard;
  */
 public interface URIAware {
 
-
     @Guarded(NotNullParametersGuard.class)
     String $listen(Pipeable pipe);
 
@@ -36,32 +35,78 @@ public interface URIAware {
     @Guarded(NotNullParametersGuard.class)
     String $listen(Pipeable pipe, String key);
 
+
+    /**
+     * Generic Send.
+     */
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
+    var $send(var value, boolean blocking, boolean mutating);
+
     /**
      * Send (to this) synchronously.
      */
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    var $send(var value);
+    default var $send(var value) {
+        return $send(value, true, false);
+    }
+
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
+    default var $dispatch(var lhs) {
+        return $send(lhs, false, false);
+    }
+
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
+    default var $give(var lhs) {
+        return $send(lhs, false, true);
+    }
+
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
+    default var $push(var lhs) {
+        return $send(lhs, true, true);
+    }
+
+
+    /**
+     * Generic receive
+     */
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
+    var $receive(boolean blocking, boolean mutating);
 
     /**
      * Receive (from this) synchronously.
      */
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    var $receive();
+    default var $receive() {
+        return $receive(true, false);
+    }
+
+
+    @Guarded(ChainGuard.class)
+    default var $poll() {
+        return $receive(false, true);
+    }
+
+    @Guarded(ChainGuard.class)
+    default var $peek() {
+        return $receive(false, false);
+    }
+
+    @Guarded(ChainGuard.class)
+    default var $pop() {
+        return $receive(true, true);
+    }
 
 
     @Guarded(ChainGuard.class)
     var $drain();
 
-    @Guarded(ChainGuard.class)
-    var $poll();
-
-    @Guarded(ChainGuard.class)
-    var $peek();
-
-    @Guarded(ChainGuard.class)
-    var $pop();
 
     @Guarded(ChainGuard.class)
     var $all();
@@ -69,18 +114,6 @@ public interface URIAware {
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
     var $subscribe(Pipeable subscription);
-
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    var $dispatch(var lhs);
-
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    var $give(var lhs);
-
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    var $push(var lhs);
 
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)

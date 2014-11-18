@@ -16,14 +16,14 @@ $b(5) <=> 6
 c= $b(5)
 
 for i in 1..3 {
-    >> i
+    @@ i
 }
 
 
 //Okay so we add one to a and get "b" we then look for the variable by that name, it's paramterized so we supply the parameter value of 3 - the function adds one and we get 4 !
 $("a"++)(3) <=> 4
 
-for v in "a".."c" {>> ("" + v + "=" + $(v))(1)}
+for v in "a".."c" {@@ ("" + v + "=" + $(v))(1)}
 
 
 //Variable constraints
@@ -37,12 +37,12 @@ e=3
 errorOccured= false
 
 {
-    error { >> "Caught "+type ; errorOccured= true;}
+    error { @@ "Caught "+type ; errorOccured= true;}
     e=3
 }
 
 
-=> errorOccured;
+.: errorOccured;
 
 //Dynamically named variable
 $("a"+"b")=2

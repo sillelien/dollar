@@ -4,7 +4,7 @@
 
 ###Executable Documentation
 
-Everything in this documentation is executed as part of the build process, so all the examples are guaranteed to run with the latest master branch of Dollar. 
+Everything in this documentation is executed as part of the build process, so all the examples are guaranteed to run with the latest master branch of Dollar.
 
 Yep Dollar can actually run Markdown files, in fact the source file that this page was built from starts with:
 
@@ -20,19 +20,19 @@ The source for this page (minus that header) is [here](scripting.md)
 
 NOTE: At present only Mac OS X is officially supported, however since Dollar is entirely based in Java it's trivial to port to other systems.
 
-First download the Dollar scripting runtime from [ ![Download](https://api.bintray.com/packages/neilellis/dollar/dollar-runtime-osx/images/download.svg) ](https://bintray.com/neilellis/dollar/dollar-runtime-osx/_latestVersion) 
- 
+First download the Dollar scripting runtime from [ ![Download](https://api.bintray.com/packages/neilellis/dollar/dollar-runtime-osx/images/download.svg) ](https://bintray.com/neilellis/dollar/dollar-runtime-osx/_latestVersion)
+
 Make sure `dollar/bin` is on your PATH.
 
-Run `dollar <filename>` to execute a Dollar script. 
- 
+Run `dollar <filename>` to execute a Dollar script.
+
 Here is an example of what DollarScript looks like
 
-```dollar  
+```dollar
 
 testParams := ($2 + " " + $1)
 
-=> testParams ("Hello", "World") == "World Hello"
+.: testParams ("Hello", "World") == "World Hello"
 
 ```
 
@@ -54,24 +54,24 @@ variableA := 1
 variableB := variableA
 variableA := 2
 
-=> variableB == 2
+.: variableB == 2
 ```
 
 In the above example we are declaring (using the declarative operator `:=`) that variableA is current the value 1, we then declare that variableB is the *same as* variableA. So when we change variableA to 2 we also change variableB to 2.
 
-The assertion operator `=>` will throw an assertion error if the value following is either non boolean or not true.
+The assertion operator `.:` will throw an assertion error if the value following is either non boolean or not true.
 
 
-Now let's throw in the -> or causes operator :
+Now let's throw in the => or causes operator :
 
 ```dollar
- 
+
 a=1
-a -> { >> $1 }
+a => { @@ $1 }
 a=2
 a=3
 a=4
- 
+
 ```
 
 ~~~
@@ -86,21 +86,21 @@ That simple piece of code will simply output each change made to the variable a,
 
 b=1
 a=1
-a + b + 1 -> { >> "a=" + a + ", b=" + b}
+a + b + 1 => { @@ "a=" + a + ", b=" + b}
 a=2
 a=3
 a=4
-b=2 
+b=2
 ```
 
 ~~~
-a=2, b=1 
-a=3, b=1 
-a=4, b=1 
-a=4, b=2 
+a=2, b=1
+a=3, b=1
+a=4, b=1
+a=4, b=2
 ~~~
 
-Yep, you can write reactive expressions based on collections or arbitrary expressions !! When any component changes the right hand side is re-evaluated (the actual value that changed is passed in as $1).
+Yep, you can write reactive expressions based on collections or arbitrary expressions @@ When any component changes the right hand side is re-evaluated (the actual value that changed is passed in as $1).
 
 
 ###Assignment
@@ -113,7 +113,7 @@ variableA = 1
 variableB = variableA
 variableA = 2
 
-=> variableB == 1
+.: variableB == 1
 ```
 
 So as you can see when we use the `=` assignment operator we assign the *value* of the right hand side to the variable. Watch what happens when we use expressions.
@@ -127,9 +127,9 @@ variableC = (variableA +1 )
 variableD := (variableA + 1)
 variableA = 2
 
-=> variableB == 1
-=> variableC == 2
-=> variableD == 3
+.: variableB == 1
+.: variableC == 2
+.: variableD == 3
 
 ```
 
@@ -137,7 +137,7 @@ It's important to note that all values in DollarScript are immutable - that mean
 
 ```dollar
 const MEDIUM = 23
-# MEDIUM= 4 would now produce an error
+// MEDIUM= 4 would now produce an error
 ```
 
 So `:=` supports the reactive behaviour of Dollar, i.e. it is a declaration not a value assignment, and `=` is used to nail down a particular value. Later we'll come across the value anchor operator or diamond `@` which instructs DollarScript to fix a value at the time of declaration. More on that later.
@@ -153,15 +153,16 @@ block := {
     "World"
 }
 
-=> block == "World"
+.: block == "World"
 
 block2 := {1;2;}
 
-=> block2 == 2
+.: block2 == 2
 
 ```
+
 When a line block is evaluated the result is the value of the last entry. For advanced users note that all lines will be evaluated, the value is just ignored. A line block behaves a lot like a function in an imperative language.
- 
+
 Next we have the array block, the array block preserves all the values each part is seperated by either a `,` or a newline but is delimited by `[` and `]`.
 
 ```dollar
@@ -171,11 +172,11 @@ array := [
     "World"
 ]
 
-=> array == ["Hello ","World"]
+.: array == ["Hello ","World"]
 
 array2 := [1,2]
 
-=> array2 == [1,2]
+.: array2 == [1,2]
 
 ```
 
@@ -188,11 +189,11 @@ appending := {
     "World"
 }
 
-=> appending == "Hello World"
+.: appending == "Hello World"
 
 appending2 := { 1, 2}
 
-=> appending2 == 3
+.: appending2 == 3
 
 ```
 
@@ -206,21 +207,21 @@ appending := {
    "second":"World"
 }
 
->> appending
+@@ appending
 
-=> appending.second == "World"
+.: appending.second == "World"
 
 ```
 
-The stdout operator `>>` is used to send a value to stdout in it's serialized (JSON) format, so the result of the above would be to output `{"first":"Hello ","second":"World"}` a JSON object created using JSON like syntax. This works because of how appending works with pairs, i.e. they are joined together to form a map.
+The stdout operator `@@` is used to send a value to stdout in it's serialized (JSON) format, so the result of the above would be to output `{"first":"Hello ","second":"World"}` a JSON object created using JSON like syntax. This works because of how appending works with pairs, i.e. they are joined together to form a map.
 
 ```dollar
- 
+
 pair1 := "first" : "Hello ";
 pair2 := "second" : "World";
-  
-=> pair1 + pair2 == {"first":"Hello ","second":"World"}
- 
+
+.: pair1 + pair2 == {"first":"Hello ","second":"World"}
+
 ```
 
 
@@ -229,16 +230,23 @@ pair2 := "second" : "World";
 DollarScript's lists are pretty similar to JavaScript arrays. They are defined using the `[1,2,3]` style syntax and accessed using the `x[y]` subscript syntax.
 
 ```dollar
-=> [1,2,3] + 4 == [1,2,3,4];
-=> [1,2,3,4] - 4 == [1,2,3];
-=> [] + 1 == [1] ;
-=> [1] + [1] == [1,[1]];
-=> [1] + 1 == [1,1];
+.: [1,2,3] + 4 == [1,2,3,4];
+.: [1,2,3,4] - 4 == [1,2,3];
+.: [] + 1 == [1] ;
+.: [1] + [1] == [1,[1]];
+.: [1] + 1 == [1,1];
 
 [1,2,3][1] <=> 2
+
 ```
 
-*Note we're introducing the assert equals or `<=>` operator here, this is a combination of `=>` and `==` that will cause an error if the two values are not equal.*
+*Note we're using the assert equals or `<=>` operator here, this is a combination of `.:` and `==` that will cause an error if the two values are not equal.*
+
+You can count the size of the list using the size operator `#`.
+
+```dollar
+#[1,2,3,4] <=> 4
+```
 
 DollarScript maps are also associative arrays (like JavaScript) allowing you to request members from them using the array subscript syntax
 
@@ -268,9 +276,9 @@ Error handling couldn't be simpler. Define an error expression using the error k
 
 ```dollar
 errorHappened= false
-error { >> msg; errorHappened= true; }
+error { @@ msg; errorHappened= true; }
 a=1/0
-=> errorHappened
+.: errorHappened
 ```
 
 ###Types and Constraints
@@ -278,8 +286,8 @@ a=1/0
 Although DollarScript is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, NUMBER, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
 
 ```dollar
-=> "Hello World" is STRING
-=> ["Hello World"] is LIST
+.: "Hello World" is STRING
+.: ["Hello World"] is LIST
 ```
 
 Although there are no compile type constraints in DollarScript a runtime type system can be built using constraints. Constraints are declared at the time of variable assignment or declaration. A constraint once declared on a variable cannot be changed. The constraint is placed before the variable name at the time of declaration in parenthesis.
@@ -292,7 +300,7 @@ b=7
 ( it is STRING) s="String value"
 ```
 
-The special variables `it`, the current value and `previous`, the previous value, will be available for the constraint.
+The special variables `it` - the current value and `previous` - the previous value, will be available for the constraint.
 
 To build a simple type system simply declare (using `:=`) your type as a boolean expression.
 
@@ -305,7 +313,7 @@ colorEnum := ( it in ["red","green","blue"] )
 //Use it as a constraint
 (colorEnum) myColor= "green"
 
-error { >> msg }
+error { @@ msg }
 
 //This fails
 myColor="apple"
@@ -317,22 +325,22 @@ myColor="apple"
 
 DollarScript as previously mentioned is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
 
-Let's start with the simplest reactive control flow operator, the '->' or 'causes' operator. 
+Let's start with the simplest reactive control flow operator, the '=>' or 'causes' operator.
 
 ```dollar
 
 a=0
-a -> { >> a } //alternatively for clarity 'a causes {>> a} '
+a => { @@ a } //alternatively for clarity 'a causes {@@ a} '
 
 a=1
 a=2
 a=3
 a=4
 a=2
- 
+
 ```
 
-When the code is executed we'll see the values 1,2,3,4,2 printed out, this is because whenever `a` changes the block `{ >> a }` is evaluated, resulting in the variable `a` being printed to stdout. Imagine how useful that is for debugging changes to a variable!
+When the code is executed we'll see the values 1,2,3,4,2 printed out, this is because whenever `a` changes the block `{ @@ a }` is evaluated, resulting in the variable `a` being printed to stdout. Imagine how useful that is for debugging changes to a variable!
 
 Next we have the 'when' operator, there is no shorthand for this operator, to help keep you code readable:
 
@@ -340,14 +348,14 @@ Next we have the 'when' operator, there is no shorthand for this operator, to he
 ```dollar
 
 a=1
- 
-when a == 2 { >> a }
+
+when a == 2 { @@ a }
 
 a=2
 a=3
 a=4
 a=2
- 
+
 ```
 
 This time we'll just see the number 2 twice, this is because the `when` operator triggers the evaluation of the supplied block ONLY when the supplied expression (`a == 2`) becomes true.
@@ -367,6 +375,7 @@ b= if a==1 2 else 3
 b <=> 2
 
 ```
+
 So let's start with the `if` operator. The `if` operator is seperate from the `else` operator, it simply evaluates the condition supplied as the first argument. If that value is boolean and true it evaluates the second argument and returns it's value; otherwise it returns boolean false.
 
 The `else` operator is a binary operator which evaluates the left-hand-side (usually the result of an `if` statement), if that has a value of false then the right-hand-side is evaluated and it's result returned, otherwise it returns the left-hand-side.
@@ -378,7 +387,7 @@ The combined effect of these two operators is to provide the usual if/else/else 
 a=5
 //Parenthesis added for clarity, not required.
 b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
-=> b == "more than two"
+.: b == "more than two"
 
 ```
 
@@ -387,7 +396,7 @@ b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 ```dollar
 
 for i in 1..10 {
-    >> i
+    @@ i
 }
 
 ```
@@ -412,7 +421,7 @@ testParams ("Hello", "World") <=> "World Hello"
 
 ```
 
-Yep we built a function just by naming an expression. You can name anything and parameterise it - including maps, lists, blocks and plain old expressions. 
+Yep we built a function just by naming an expression. You can name anything and parameterise it - including maps, lists, blocks and plain old expressions.
 
 
 What about named parameters, that would be nice.
@@ -436,8 +445,8 @@ search="Unikitty"
 
 dynamicURI= uri "camel:http://google.com?q="+search
 
-marinaVideos = <+ camel:https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
->> marinaVideos.results map { $1.trackViewUrl }
+marinaVideos = << camel:https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
+@@ marinaVideos.results map { $1.trackViewUrl }
 
 ```
 
@@ -482,23 +491,29 @@ The truthy operator converts any value to a boolean by applying the rule that: v
 
 ```dollar
 
-=> ~ [1,2,3]
-=> ! ~ []
-=> ~ "anything"
-=> ! ~ ""
-=> ~ 1
-=> ! ~ 0
-=> ! ~ {void}
-=>  ~ {"a" : 1}
-=> ! ~ void
+.: ~ [1,2,3]
+.: ! ~ []
+.: ~ "anything"
+.: ! ~ ""
+.: ~ 1
+.: ! ~ 0
+.: ! ~ {void}
+.:  ~ {"a" : 1}
+.: ! ~ void
 
 ```
 
 
 ### Pipe Operators
 ### Remaining Operators
-## Modules & Module Locators
-## Advanced Yopics
+## Imports &amp; Modules
+###Import
+###Module Locators
+###UModules
+
+##Builtin Functions
+
+## Advanced Topics
 ### Concurrency & Threads
 
 
