@@ -41,7 +41,8 @@ public class DollarLexer {
                                 "milli", "millis", "every", "until", "unless", "and", "or", "dispatch", "send", "give",
                                 "receive", "peek", "poll", "push", "pop", "publish", "subscribe", "emit", "drain",
                                 "all", "import", "reduce", "truthy", "is", "else", "const", "in", "true", "false",
-                                "yes", "no", "void", "error", "to", "from", "async", "stateless", "size", "as");
+                                "yes", "no", "void", "error", "to", "from", "async", "stateless", "size", "as",
+                                "while");
     static final Terminals
             OPERATORS =
             Terminals.operators("|", ">>", "<<", "->", "=>", ".:", "<=", ">=", "<-", "(", ")", "--", "++", ".", ":",
@@ -51,10 +52,10 @@ public class DollarLexer {
                                 "::", "/", "%", "*", "&&", "||", "<--", "<++", "\u2357", "~", "?$?", "-:", "..", "?..?",
                                 "€", "@@", "<@", "@>", "#", "!?#*!", "?*");
 
-    static final Parser<?> TERMINATOR_SYMBOL = Parsers.or(term("\n"), term(";")).many1();
-    static final Parser<?> COMMA_TERMINATOR = Parsers.sequence(term(","), term("\n").many());
-    static final Parser<?> COMMA_OR_NEWLINE_TERMINATOR = Parsers.or(term(","), term("\n")).many1();
-    static final Parser<?> SEMICOLON_TERMINATOR = Parsers.or(term(";"), term("\n").many1());
+    static final Parser<?> TERMINATOR_SYMBOL = Parsers.or(OP("\n"), OP(";")).many1();
+    static final Parser<?> COMMA_TERMINATOR = Parsers.sequence(OP(","), OP("\n").many());
+    static final Parser<?> COMMA_OR_NEWLINE_TERMINATOR = Parsers.or(OP(","), OP("\n")).many1();
+    static final Parser<?> SEMICOLON_TERMINATOR = Parsers.or(OP(";"), OP("\n").many1());
     static final Parser<Void> IGNORED =
             Parsers.or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT, Scanners.among(" \t\r").many1(),
                        Scanners.lineComment("#!")).skipMany();
@@ -112,7 +113,7 @@ public class DollarLexer {
                                          .next(Patterns.isChar(':').next(Patterns.among("=\"").not())
                                                        .next(Patterns.among("-._~:/?#[]@!$&'()*+,;=%")
                                                                      .or(Patterns.isChar(
-                                                                             CharPredicates.IS_ALPHA_NUMERIC_)
+                                                                                 CharPredicates.IS_ALPHA_NUMERIC_)
                                                                      )
                                                                      .many1()
                                                        )), "uri").source()
@@ -167,28 +168,28 @@ public class DollarLexer {
                        });
     }
 
-    static Parser<?> term(String name, String keyword) {
+    static Parser<?> OP(String name, String keyword) {
         return OPERATORS.token(name).or(KEYWORDS.token(keyword));
     }
 
-    static Parser<?> termAndNewlines(String... names) {
-        return term("\n").many().followedBy(OPERATORS.token(names).followedBy(term("\n").many()));
+    static Parser<?> OP_NLS(String... names) {
+        return OP("\n").many().followedBy(OPERATORS.token(names).followedBy(OP("\n").many()));
     }
 
-    static Parser<?> term(String name) {
+    static Parser<?> OP(String name) {
         return OPERATORS.token(name);
     }
 
-    static Parser<?> termThenNl(String... names) {
-        return OPERATORS.token(names).followedBy(term("\n").many());
+    static Parser<?> OP_NL(String... names) {
+        return OPERATORS.token(names).followedBy(OP("\n").many());
     }
 
-    static Parser<?> keywordThenNL(String... names) {
-        return KEYWORDS.token(names).followedBy(term("\n").many());
+    static Parser<?> KEYWORD_NL(String... names) {
+        return KEYWORDS.token(names).followedBy(OP("\n").many());
     }
 
-    static Parser<?> nlThenTerm(String... names) {
-        return term("\n").many().followedBy(OPERATORS.token(names));
+    static Parser<?> NL_TERM(String... names) {
+        return OP("\n").many().followedBy(OPERATORS.token(names));
     }
 
     private static Parser<String> identifierTokenizer() {
@@ -216,7 +217,7 @@ public class DollarLexer {
     }
 
     private static Parser<var> identifierKeyword() {
-        return or(keyword("true"), keyword("false"), keyword("yes"), keyword("no"), keyword("void"))
+        return or(KEYWORD("true"), KEYWORD("false"), KEYWORD("yes"), KEYWORD("no"), KEYWORD("void"))
                 .map(new Map<Object, var>() {
                     @Override
                     public var map(Object i) {
@@ -238,7 +239,7 @@ public class DollarLexer {
                 });
     }
 
-    static Parser<?> keyword(String... names) {
+    static Parser<?> KEYWORD(String... names) {
         return KEYWORDS.token(names);
     }
 }

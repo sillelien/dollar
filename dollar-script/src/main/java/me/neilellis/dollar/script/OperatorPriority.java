@@ -19,23 +19,23 @@ package me.neilellis.dollar.script;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class OperatorPriority {
-    public static final int MEMBER_PRIORITY = 500;
-    public static final int ASSIGNMENT_PRIORITY = 10;
-    public static final int UNARY_PRIORITY = 400;
-    public static final int INC_DEC_PRIORITY = 400;
-    public static final int IN_PRIORITY = 400;
-    public static final int LINE_PREFIX_PRIORITY = 0;
-    public static final int PIPE_PRIORITY = 150;
-    public static final int EQUIVALENCE_PRIORITY = 100;
-    public static final int COMPARISON_PRIORITY = 150;
-    public static final int PLUS_MINUS_PRIORITY = 200;
-    public static final int OUTPUT_PRIORITY = 50;
-    public static final int IF_PRIORITY = 20;
-    public static final int CAST_PRIORITY = 80;
-    public static final int CONTROL_FLOW_PRIORITY = 50;
-    public static final int MULTIPLY_DIVIDE_PRIORITY = 300;
-    public static final int RANGE_PRIORITY = 600;
-    public static final int LOGICAL_AND_PRIORITY = 70;
-    public static final int LOGICAL_OR_PRIORITY = 60;
+public interface OperatorPriority {
+    int MEMBER_PRIORITY = 500;
+    int ASSIGNMENT_PRIORITY = 10;
+    int UNARY_PRIORITY = 400;
+    int INC_DEC_PRIORITY = 400;
+    int IN_PRIORITY = 400;
+    int LINE_PREFIX_PRIORITY = 0;
+    int PIPE_PRIORITY = 150;
+    int EQUIVALENCE_PRIORITY = 100;
+    int COMPARISON_PRIORITY = 150;
+    int PLUS_MINUS_PRIORITY = 200;
+    int OUTPUT_PRIORITY = 50;
+    int IF_PRIORITY = 20;
+    int CAST_PRIORITY = 80;
+    int CONTROL_FLOW_PRIORITY = 50;
+    int MULTIPLY_DIVIDE_PRIORITY = 300;
+    int RANGE_PRIORITY = 600;
+    int LOGICAL_AND_PRIORITY = 70;
+    int LOGICAL_OR_PRIORITY = 60;
 }

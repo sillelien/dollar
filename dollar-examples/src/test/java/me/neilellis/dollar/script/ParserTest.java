@@ -36,13 +36,13 @@ public class ParserTest {
     }
 
     @Test
-    public void testBasics1() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test1.ds"));
+    public void testArrays() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_arrays.ds"));
     }
 
     @Test
-    public void testArrays() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_arrays.ds"));
+    public void testBasics1() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test1.ds"));
     }
 
     @Test
@@ -51,29 +51,18 @@ public class ParserTest {
     }
 
     @Test
-    public void testURIs() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_uris.ds"));
-    }
-
-    @Test
-    public void testLogic() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_logic.ds"));
-    }
-
-    @Test
-    public void testNumeric() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_numeric.ds"));
-    }
-
-
-    @Test
     public void testBuiltins() throws Exception {
         new DollarParser().parse(getClass().getResourceAsStream("/test_builtins.ds"));
     }
 
     @Test
-    public void testParameters() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_parameters.ds"));
+    public void testCasting() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_casting.ds"));
+    }
+
+    @Test
+    public void testControlFlow() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_control_flow.ds"));
     }
 
     @Test
@@ -87,8 +76,24 @@ public class ParserTest {
     }
 
     @Test
-    public void testRedis() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_redis.ds"));
+    public void testLogic() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_logic.ds"));
+    }
+
+    @Test
+    public void testMarkdown1() throws Exception {
+        new DollarParser().parseMarkdown(
+                CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/test1.md"))));
+    }
+
+    @Test
+    public void testNumeric() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_numeric.ds"));
+    }
+
+    @Test
+    public void testParameters() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_parameters.ds"));
     }
 
     @Test
@@ -97,17 +102,17 @@ public class ParserTest {
     }
 
     @Test
+    public void testRedis() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_redis.ds"));
+    }
+
+    @Test
+    public void testURIs() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_uris.ds"));
+    }
+
+    @Test
     public void testVariables() throws Exception {
         new DollarParser().parse(getClass().getResourceAsStream("/test_variables.ds"));
-    }
-
-    @Test
-    public void testCasting() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_casting.ds"));
-    }
-
-    @Test
-    public void testMarkdown1() throws Exception {
-        new DollarParser().parseMarkdown(CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/test1.md"))));
     }
 }
