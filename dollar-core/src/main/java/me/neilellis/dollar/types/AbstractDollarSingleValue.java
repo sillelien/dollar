@@ -44,11 +44,14 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         this.value = value;
     }
 
-
     @NotNull
     @Override
-    public var $plus(Object newValue) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    public var $(@NotNull Number n) {
+        if (n.longValue() != 0) {
+            return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+        } else {
+            return this;
+        }
     }
 
     @NotNull
@@ -62,14 +65,13 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return Stream.empty();
     }
 
-    public var $has(@NotNull String key) {
-        return DollarStatic.$(S().equals(key));
+    @Override
+    public var $containsValue(var value) {
+        return DollarStatic.$(this.value.equals(value));
     }
 
-    @NotNull
-    @Override
-    public ImmutableList<var> toList() {
-        return ImmutableList.of(this);
+    public var $has(@NotNull String key) {
+        return DollarStatic.$(S().equals(key));
     }
 
     @NotNull
@@ -85,9 +87,8 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @NotNull
-    public var $rm(@NotNull String value) {
+    public var $get(@NotNull String key) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
-
     }
 
     @NotNull
@@ -101,28 +102,46 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @NotNull
+    @Override
+    public var $plus(Object newValue) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    }
+
+    @NotNull
+    public var $rm(@NotNull String value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+
+    }
+
+    @NotNull
     public var $(@NotNull var key, Object value) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean isVoid() {
-        return false;
+    public var $size() {
+        return DollarStatic.$(1);
     }
 
-    public Integer I(@NotNull String key) {
-        return null;
+    public Stream<String> keyStream() {
+        return Stream.empty();
+
     }
 
     @NotNull
     @Override
-    public var decode() {
-        return DollarFactory.fromValue(errors(), URLDecoder.decode(S()));
+    public var remove(Object newValue) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
     @NotNull
-    public var $get(@NotNull String key) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    @Override
+    public String S() {
+        return value.toString();
+    }
+
+    public Integer I(@NotNull String key) {
+        return null;
     }
 
     @Nullable
@@ -130,9 +149,15 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return null;
     }
 
-    public Stream<String> keyStream() {
-        return Stream.empty();
+    @NotNull
+    @Override
+    public ImmutableList<var> toList() {
+        return ImmutableList.of(this);
+    }
 
+    @Override
+    public boolean isVoid() {
+        return false;
     }
 
     @Nullable
@@ -155,14 +180,20 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return Collections.singletonMap("value", value);
     }
 
+    @NotNull
     @Override
-    public boolean isSingleValue() {
-        return true;
+    public var decode() {
+        return DollarFactory.fromValue(errors(), URLDecoder.decode(S()));
     }
 
     @Override
     public int hashCode() {
         return value.toString().hashCode();
+    }
+
+    @Override
+    public var $isEmpty() {
+        return DollarStatic.$(false);
     }
 
     @NotNull
@@ -178,40 +209,8 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @Override
-    public var $size() {
-        return DollarStatic.$(1);
-    }
-
-    @Override
-    public var $containsValue(Object value) {
-        return DollarStatic.$(this.value.equals(value));
-    }
-
-    @NotNull
-    @Override
-    public var remove(Object newValue) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public String S() {
-        return value.toString();
-    }
-
-    @Override
-    public var $isEmpty() {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull Number n) {
-        if (n.longValue() != 0) {
-            return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
-        } else {
-            return this;
-        }
+    public boolean isSingleValue() {
+        return true;
     }
 
 

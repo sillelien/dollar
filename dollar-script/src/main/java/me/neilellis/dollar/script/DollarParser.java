@@ -21,6 +21,7 @@ import com.google.common.io.ByteStreams;
 import me.neilellis.dollar.*;
 import me.neilellis.dollar.script.java.JavaScriptingSupport;
 import me.neilellis.dollar.script.operators.*;
+import me.neilellis.dollar.types.DollarFactory;
 import org.codehaus.jparsec.*;
 import org.codehaus.jparsec.error.ParserException;
 import org.codehaus.jparsec.functors.Map;
@@ -258,6 +259,15 @@ public class DollarParser {
         return sequence.map(new WhenOperator());
     }
 
+
+    private Parser<var> collectStatement(Parser<var> expression, ScriptScope scope) {
+        Parser<Object[]> sequence = KEYWORD_NL("collect")
+                .next(array(expression, KEYWORD("until").next(expression).optional(),
+                            KEYWORD("unless").next(expression).optional(), expression));
+        return sequence.map(new CollectOperator(this, scope));
+    }
+
+
     private Parser<var> everyStatement(Parser<var> expression, ScriptScope scope) {
         Parser<Object[]> sequence = KEYWORD_NL("every")
                 .next(array(expression,
@@ -317,12 +327,17 @@ public class DollarParser {
         Parser<var> main = ref.lazy()
                               .between(OP("("), OP(")"))
                               .or(or(list(ref.lazy(), scope), map(ref.lazy(), scope),
+                                     collectStatement(ref.lazy(), scope),
                                      whenStatement(ref.lazy(), scope), everyStatement(ref.lazy(), scope),
                                      java(scope), URL, DECIMAL_LITERAL, INTEGER_LITERAL, STRING_LITERAL,
                                      dollarIdentifier(scope), IDENTIFIER_KEYWORD, functionCall(ref, scope),
                                      identifier().map(new Map<var, var>() {
                                          @Override public var map(var var) {
-                                             return fromLambda(i -> getVariable(scope, var.S(), false));
+                                             final me.neilellis.dollar.var
+                                                     lambda =
+                                                     fromLambda(i -> getVariable(scope, var.S(), false));
+                                             scope.listen(var.S(), lambda);
+                                             return lambda;
                                          }
                                      })))
                               .or(block(ref.lazy(), scope).between(OP_NL("{"), NL_TERM("}")));
@@ -407,7 +422,15 @@ public class DollarParser {
                     }).get();
                 }, scope), "*|", "reduce"), MULTIPLY_DIVIDE_PRIORITY)
                 .prefix(op(new SimpleReceiveOperator(scope), "<<"), OUTPUT_PRIORITY)
-                .infixl(op(new ListenOperator(scope), "=>", "causes"), CONTROL_FLOW_PRIORITY)
+                .infixl(op(new ListenOperator(scope), "->", "causes"), CONTROL_FLOW_PRIORITY)
+                .infixl(op(new BinaryOp((lhs, rhs) -> {
+                    var lambda = DollarFactory.fromLambda(i -> lhs.isTrue() ? fix(rhs) : $void());
+                    lhs.$listen(i -> {
+                        lambda.$notify(i);
+                        return fix(lambda);
+                    });
+                    return lambda;
+                }, scope), "=>"), CONTROL_FLOW_PRIORITY)
                 .infixl(op(new BinaryOp(ControlFlowAware::$choose, scope), "?*", "choose"), CONTROL_FLOW_PRIORITY)
                 .infixl(op(new BinaryOp(var::$default, scope), "?:", "default"), CONTROL_FLOW_PRIORITY)
                 .postfix(memberOperator(ref, scope), MEMBER_PRIORITY)
@@ -432,10 +455,11 @@ public class DollarParser {
         return parser;
     }
 
+
     private Parser<Map<? super var, ? extends var>> memberOperator(Parser.Reference<var> ref, ScriptScope scope) {
         return OP(".").followedBy(OP(".").not())
                       .next(ref.lazy().between(OP("("), OP(")")).or(IDENTIFIER))
-                        .map(rhs -> lhs -> wrapReactiveBinary(scope, "", lhs, rhs, () -> lhs.$get(rhs.$S())));
+                      .map(rhs -> lhs -> wrapReactiveBinary(scope, "", lhs, rhs, () -> lhs.$get(rhs.$S())));
     }
 
     private Parser<Map<var, var>> ifOperator(Parser.Reference<var> ref, ScriptScope scope) {
@@ -456,9 +480,8 @@ public class DollarParser {
                                                                         Parser.Reference<var> ref) {
 
         return array(IDENTIFIER.between(OP("<"), OP(">")).optional(),
-                     ref.lazy().between(OP("("), OP(")")).optional(),
                      OP("$").next(ref.lazy().between(OP("("), OP(")")))
-                              .or(IDENTIFIER),
+                            .or(IDENTIFIER),
                      OP(":=")).map(new DeclarationOperator(scope));
     }
 
@@ -472,7 +495,7 @@ public class DollarParser {
 
     private Parser<Map<? super var, ? extends var>> subscriptOperator(Parser.Reference<var> ref, ScriptScope scope) {
         return OP("[").next(array(ref.lazy().followedBy(OP("]")), OP("=").next(ref.lazy()).optional()))
-                        .map(new SubscriptOperator(scope));
+                      .map(new SubscriptOperator(scope));
     }
 
     private Parser<Map<? super var, ? extends var>> castOperator(Parser.Reference<var> ref, ScriptScope scope) {
@@ -481,13 +504,13 @@ public class DollarParser {
 
     private Parser<Map<? super var, ? extends var>> pipeOperator(Parser.Reference<var> ref, ScriptScope scope) {
         return OP("|").next(IDENTIFIER.or(ref.lazy().between(OP("("), OP(")"))))
-                        .map(new PipeOperator(this, scope));
+                      .map(new PipeOperator(this, scope));
     }
 
     private Parser<Map<? super var, ? extends var>> variableUsageOperator(Parser.Reference<var> ref,
                                                                           ScriptScope scope) {
         return or(OP("$").followedBy(OP("(").peek())
-                           .map(new VariableUsageOperator(scope)),
+                         .map(new VariableUsageOperator(scope)),
                   OP("$").followedBy(INTEGER_LITERAL.peek()).map(
                           lhs -> rhs -> fromLambda(i -> getVariable(scope, rhs.toString(), true))));
     }

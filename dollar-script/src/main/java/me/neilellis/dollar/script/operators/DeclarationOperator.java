@@ -45,13 +45,12 @@ public class DeclarationOperator implements Map<Object[], Map<? super var, ? ext
                             DollarFactory.fromLambda(i -> {
                                 final Type type = Type.valueOf(objects[0].toString().toUpperCase());
                                 var it = scope.getParameter("it");
-                                boolean constraintValue = objects[1] == null || ((var) objects[1]).isTrue();
-                                return $(it.is(type) && constraintValue);
+                                return $(it.is(type));
                             });
                 } else {
-                    constraint = (var) objects[1];
+                    constraint = null;
                 }
-                Pipeable action = i -> scope.set(objects[2].toString(), rhs, false, constraint);
+                Pipeable action = i -> scope.set(objects[1].toString(), rhs, false, constraint);
                 try {
                     action.pipe($void());
                 } catch (Exception e) {

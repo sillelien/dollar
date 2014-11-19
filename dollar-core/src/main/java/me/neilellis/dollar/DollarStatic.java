@@ -97,12 +97,6 @@ public class DollarStatic {
     }
 
     @NotNull
-    public static var $(@NotNull String name, Object o) {
-        return DollarFactory.fromValue().$($(name), o);
-    }
-
-
-    @NotNull
     public static var $(@NotNull var... values) {
         var v = $();
         for (var value : values) {
@@ -125,23 +119,31 @@ public class DollarStatic {
         return $(name, v);
     }
 
-
     @NotNull
-    public static var $(JsonObject json) {
-        return DollarFactory.fromValue(ImmutableList.of(), json);
-    }
-
-
-    public static var $(var start, var finish) {
-        return $(Range.closed(start, finish));
+    public static var $(@NotNull String name, Object o) {
+        return DollarFactory.fromValue().$($(name), o);
     }
 
     public static var $(@Nullable Object o) {
         return DollarFactory.fromValue(ImmutableList.of(), o);
     }
 
+    @NotNull
+    public static var $(JsonObject json) {
+        return DollarFactory.fromValue(ImmutableList.of(), json);
+    }
+
+    public static var $(var start, var finish) {
+        return $(Range.closed(start, finish));
+    }
+
     public static var fix(@Nullable var v) {
-        return DollarFactory.fromValue(ImmutableList.of(), v != null ? v.$() : $void());
+        return DollarFactory.fromValue(ImmutableList.of(), v != null ? v._unwrap().$() : $void());
+    }
+
+    @NotNull
+    public static var $void() {
+        return DollarFactory.newVoid();
     }
 
     @NotNull
@@ -170,7 +172,6 @@ public class DollarStatic {
         }
         return jsonObject;
     }
-
 
     public static void $begin(String value) {
         threadContext.get().pushLabel(value);
@@ -290,13 +291,12 @@ public class DollarStatic {
         }
     }
 
-
     @NotNull
     public static Sub $sub(DollarPubSub.SubAction action, String... locations) {
         return monitor().run("$sub",
-                "dollar.sub",
-                "Subscription to " + locations,
-                () -> threadContext.get().getPubsub().sub(action, locations));
+                             "dollar.sub",
+                             "Subscription to " + locations,
+                             () -> threadContext.get().getPubsub().sub(action, locations));
     }
 
     public static DollarMonitor monitor() {
@@ -329,7 +329,6 @@ public class DollarStatic {
     public static var create(String value) {
         return $();
     }
-
 
     public static void log(Object message) {
         System.out.println(threadContext.get().getLabels().toString() + ":" + message);
@@ -372,11 +371,6 @@ public class DollarStatic {
     @NotNull
     public static ErrorLogger errorLogger() {
         return new SimpleErrorLogger();
-    }
-
-    @NotNull
-    public static var $void() {
-        return DollarFactory.newVoid();
     }
 
     public static URIHandlerFactory integrationProvider() {

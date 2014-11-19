@@ -381,48 +381,9 @@ true as VOID <=> void
 ```
 
 
-##Reactive Control Flow
-
-DollarScript as previously mentioned is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
-
-Let's start with the simplest reactive control flow operator, the '=>' or 'causes' operator.
-
-```dollar
-
-a=0
-a => { @@ a } //alternatively for clarity 'a causes {@@ a} '
-
-a=1
-a=2
-a=3
-a=4
-a=2
-
-```
-
-When the code is executed we'll see the values 1,2,3,4,2 printed out, this is because whenever `a` changes the block `{ @@ a }` is evaluated, resulting in the variable `a` being printed to stdout. Imagine how useful that is for debugging changes to a variable!
-
-Next we have the 'when' operator, there is no shorthand for this operator, to help keep you code readable:
-
-
-```dollar
-
-a=1
-
-when a == 2 { @@ a }
-
-a=2
-a=3
-a=4
-a=2
-
-```
-
-This time we'll just see the number 2 twice, this is because the `when` operator triggers the evaluation of the supplied block ONLY when the supplied expression (`a == 2`) becomes true.
-
-
-
 ##Imperative Control Flow
+
+With imperative control flow, the control flow operations are only triggered when the block they are contained within is evaluated. I.e. they behave like control flow in imperative languages. So start with these if you're just learning DollarScript.
 
 ###If
 
@@ -458,6 +419,112 @@ b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 for i in 1..10 {
     @@ i
 }
+
+```
+
+###While
+
+```dollar
+a= 1
+while a < 10 {
+ a= a+1
+}
+a <=> 10
+
+```
+
+
+
+##Reactive Control Flow
+
+###Causes
+
+DollarScript as previously mentioned is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
+
+Let's start with the simplest reactive control flow operator, the '->' or 'causes' operator.
+
+```dollar
+a=1
+b=1
+a -> (b= a)
+
+//Note the use of the fix operator & otherwise we are saying a is always equal to 1
+
+&a <=> 1
+&b <=> 1
+
+a=2
+
+&a <=> 2
+&b <=> 2
+```
+
+Okay so reactive programming can melt your head a little. So let's go through the example step by step.
+
+Firstly we assign fixed values to `a` and `b`, we then say that when `a` changes the action we should take is to assign it's value to `b`. Okay now we check to see if the current value of `a` is equal to 1, we use the fix operator `&` here to say that we are only interested in the current value. Because `<=>` is a reactive operator if we didn't use the fix operator then `a <=> 1` would mean a is always 1. When we add the fix operator it fixes the value of a to the value at this point in the code.
+
+We then do the same with b to see if it is 1.
+
+Next we assign a new value of 2 to `a`. This will immediately (within the same thread) trigger the reactive `->` operator which is triggered by changes to `a`. The trigger assigns the value of `a` to `b`, so `b` is now the same as `a`. The assertions at the end confirm this.
+
+###When
+
+Next we have the 'when' operator which can be specified as a statement, usually for longer pieces of code. Or as the `=>` operator, for concise code.
+
+
+```dollar
+
+c=1
+d=1
+
+//When c is greater than 3 assign it's value to d
+c > 3 => (d= c)
+
+&c <=> 1
+&d <=> 1
+c=2
+&c <=> 2
+&d <=> 1
+c=5
+&c <=> 5
+&d <=> 5
+
+```
+
+This is similar to the previous example except that we have to set a value greater than 3 for the action to be taken.
+
+###Collect
+
+
+The `collect` operator listens for changes in the supplied expression adding all the values to a list until the `until` clause is triggered. It then evaluates the second expression with the values `it` for the current value, `count` for the number of messages collected since last emission and `collected` for the collected values. The whole operator itself emits `void` unless the collection emission is triggered in which case it emits the collection itself. Values can be skipped with an `unless` clause. Skipped messages increase the count value, so use `#collected` if you want the number of collected values.
+
+```dollar
+e=void
+
+//Length should always be five unless void
+(#it == 5 || it is VOID) collectedValues=void
+
+//count starts at 0 so this means five to collect
+collect e until count == 4 {
+    print count
+    print collected
+    collectedValues= collected
+}
+
+e=1
+e=2
+e=3
+e=4
+e=5
+&collectedValues <=> [1,2,3,4,5]
+e=6
+e=7
+e=8
+e=9
+e=10
+&collectedValues <=> [6,7,8,9,10]
+e=11
+e=12
 
 ```
 

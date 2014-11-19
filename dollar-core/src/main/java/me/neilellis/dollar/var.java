@@ -36,20 +36,39 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
 
 
     @NotNull
-    @Override
-    String toString();
-
-    /**
-     * Returns a new {@link me.neilellis.dollar.var} with this value appended to it.
-     *
-     * @param value the value to append, this value may be null
-     * @return a new object with the value supplied appended
-     */
+    @Guarded(ChainGuard.class)
+    default var $(@NotNull String key, @Nullable Object value) {
+        return $(DollarStatic.$(key), value);
+    }
 
     @NotNull
     @Guarded(ChainGuard.class)
-    @Guarded(ReturnVarOnlyGuard.class)
-    var $plus(@Nullable Object value);
+    @Guarded(NotNullParametersGuard.class)
+    default var $(@NotNull String key) {
+        return $get(key);
+    }
+
+    /**
+     * Returns a {@link me.neilellis.dollar.json.JsonObject}, JsonArray or primitive type such that it can be added to
+     * either a {@link me.neilellis.dollar.json.JsonObject} or JsonArray.
+     *
+     * @return a Json friendly object.
+     */
+    @Nullable <R> R $();
+
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class) var $(@NotNull Pipeable lambda);
+
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    default var $(@NotNull Number n) {
+        return $(DollarStatic.$(n));
+    }
+
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class) var $(@NotNull var rhs);
 
     @NotNull
     @Guarded(ChainGuard.class)
@@ -57,15 +76,30 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
 
     @NotNull
     @Guarded(ChainGuard.class)
-    @Guarded(ReturnVarOnlyGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    var $default(Object o);
+    @Guarded(NotNullParametersGuard.class) Stream<var> $children(@NotNull String key);
 
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    Stream<var> $children(@NotNull String key);
+    default var $contains(@NotNull var value) {
+        return $containsValue(value);
+    }
 
+    @Guarded(ChainGuard.class)
+    @NotNull
+    @Guarded(NotNullParametersGuard.class) var $containsValue(@NotNull var value);
+
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(ReturnVarOnlyGuard.class)
+    @Guarded(NotNullParametersGuard.class) var $default(Object o);
+
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
+    default var $get(@NotNull Object key) {
+        return $get(String.valueOf(key));
+    }
 
     /**
      * Returns true if this JSON object has the supplied key.
@@ -77,6 +111,8 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @Guarded(NotNullParametersGuard.class)
     var $has(@NotNull String key);
 
+    @NotNull
+    @Guarded(ChainGuard.class) var $isEmpty();
 
     @NotNull
     @Guarded(ChainGuard.class)
@@ -101,6 +137,8 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
         return $get(key).S();
     }
 
+    @NotNull var $get(@NotNull String key);
+
     /**
      * Returns the mime type of this {@link var} object. By default this will be 'application/json'
      *
@@ -111,6 +149,22 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     default var $mimeType() {
         return DollarStatic.$("application/json");
     }
+
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class) var $minus(@NotNull Object value);
+
+    /**
+     * Returns a new {@link me.neilellis.dollar.var} with this value appended to it.
+     *
+     * @param value the value to append, this value may be null
+     *
+     * @return a new object with the value supplied appended
+     */
+
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(ReturnVarOnlyGuard.class) var $plus(@Nullable Object value);
 
     @NotNull
     @Deprecated
@@ -126,12 +180,6 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @NotNull
     var $rm(@NotNull String key);
 
-
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    var $minus(@NotNull Object value);
-
     @NotNull
     default var $set(@NotNull String key, @Nullable Object value) {
         return $(DollarStatic.$(key), value);
@@ -141,12 +189,8 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @Guarded(ChainGuard.class)
     var $(@NotNull var key, @Nullable Object value);
 
-
     @NotNull
-    @Guarded(ChainGuard.class)
-    default var $(@NotNull String key, @Nullable Object value) {
-        return $(DollarStatic.$(key), value);
-    }
+    @Guarded(ChainGuard.class) var $size();
 
     @NotNull
     Stream<var> $stream();
@@ -173,32 +217,24 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
         }
     }
 
+    void clear();
 
     @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    default var $get(@NotNull Object key) {
-        return $get(String.valueOf(key));
-    }
+    @Guarded(ChainGuard.class) boolean containsKey(Object key);
 
     @NotNull
     @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    default var $(@NotNull String key) {
-        return $get(key);
+    @Guarded(NotNullCollectionGuard.class) Set<Map.Entry<String, var>> entrySet();
+
+    @NotNull
+    @Guarded(ChainGuard.class)
+    default var err() {
+        System.err.println(toString());
+        return this;
     }
 
     @NotNull
-    var $get(@NotNull String key);
-
-    /**
-     * Returns a {@link me.neilellis.dollar.json.JsonObject}, JsonArray or primitive type such that it can be added to
-     * either a {@link me.neilellis.dollar.json.JsonObject} or JsonArray.
-     *
-     * @return a Json friendly object.
-     */
-    @Nullable
-    <R> R $();
+    @Override String toString();
 
     @NotNull
     @Deprecated
@@ -218,13 +254,6 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @Deprecated
     java.util.stream.Stream<Map.Entry<String, var>> kvStream();
 
-    @NotNull
-    @Guarded(ChainGuard.class)
-    default var err() {
-        System.err.println(toString());
-        return this;
-    }
-
     /**
      * Prints the S() value of this {@link var} to stdout.
      */
@@ -235,62 +264,12 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
         return this;
     }
 
-
     @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    var $(@NotNull Pipeable lambda);
-
-
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    default var $(@NotNull Number n) {
-        return $(DollarStatic.$(n));
-    }
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    var $(@NotNull var rhs);
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    default var $contains(@NotNull var value) {
-        return DollarStatic.$($containsValue(value));
-    }
-
-    @Guarded(ChainGuard.class)
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    var $containsValue(@NotNull Object value);
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    var $size();
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullCollectionGuard.class)
-    Set<Map.Entry<String, var>> entrySet();
+    @Guarded(ChainGuard.class) <R> R remove(Object value);
 
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullCollectionGuard.class)
     Collection<var> values();
-
-    void clear();
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    var $isEmpty();
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    <R> R remove(Object value);
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    boolean containsKey(Object key);
 
 }

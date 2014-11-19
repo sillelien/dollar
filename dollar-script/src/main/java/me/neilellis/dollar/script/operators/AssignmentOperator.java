@@ -19,6 +19,7 @@ package me.neilellis.dollar.script.operators;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
@@ -40,21 +41,38 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
             public var map(var rhs) {
                 var constraint;
                 if (objects[1] != null) {
+                    final Type type = Type.valueOf(objects[1].toString().toUpperCase());
                     constraint = DollarFactory.fromLambda(i -> {
-                        return $(scope.getParameter("it")
-                                      .is(Type.valueOf(objects[1].toString().toUpperCase())) &&
+                        return $(scope.getDollarParser().currentScope().getParameter("it")
+                                      .is(type) &&
                                  (objects[2] == null || ((var) objects[2]).isTrue()));
                     });
                 } else {
                     constraint = (var) objects[2];
 
                 }
-                return DollarScriptSupport.wrapBinary(scope,
-                                                      "",
-                                                      () -> scope.set(objects[3].toString(),
-                                                                      fix(rhs),
-                                                                      (objects[0] != null),
-                                                                      constraint));
+                final String varName = objects[3].toString();
+                return DollarScriptSupport.wrapBinary(scope, "", () -> {
+                    var useConstraint;
+                    if (constraint != null) {
+                        useConstraint = constraint;
+                    } else {
+                        useConstraint = scope.getConstraint(varName);
+                    }
+                    return scope.getDollarParser().inScope(scope, newScope -> {
+                        final var rhsFixed = fix(rhs);
+                        if (useConstraint != null) {
+                            newScope.setParameter("it", rhsFixed);
+                            newScope.setParameter("previous", scope.get(varName));
+                            if (useConstraint.isFalse()) {
+                                newScope.handleError(new DollarScriptException(
+                                        "Constraint failed for variable " + varName + ""));
+                            }
+                        }
+                        return scope.set(varName, rhsFixed, (objects[0] != null),
+                                         constraint);
+                    });
+                });
             }
         };
     }

@@ -1,0 +1,59 @@
+a=1
+b=1
+a -> (print a)
+a -> (b= a)
+
+//Note the use of the fix operator otherwise we are saying a is always equal to 1
+
+&a <=> 1
+&b <=> 1
+
+a=2
+
+&a <=> 2
+&b <=> 2
+
+
+
+c=1
+d=1
+c > 3 => (d= c)
+&c <=> 1
+&d <=> 1
+c=2
+&c <=> 2
+&d <=> 1
+c=5
+&c <=> 5
+&d <=> 5
+
+
+e=void
+
+//Length should always be five unless void
+(#it == 5 || it is VOID) collectedValues=void
+
+//count starts at 0 so this means five to collect
+collect e until count == 4 {
+    print count
+    print collected
+    collectedValues= collected
+}
+
+e=1
+e=2
+e=3
+e=4
+e=5
+&collectedValues <=> [1,2,3,4,5]
+e=6
+e=7
+e=8
+e=9
+e=10
+&collectedValues <=> [6,7,8,9,10]
+e=11
+e=12
+
+
+

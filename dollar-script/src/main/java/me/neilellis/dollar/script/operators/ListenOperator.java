@@ -24,6 +24,7 @@ import org.codehaus.jparsec.functors.Binary;
 import java.util.function.Supplier;
 
 import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.DollarStatic.fix;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -45,14 +46,8 @@ public class ListenOperator implements Binary<var>, Operator {
             return $(lhs.$listen(i -> scope.getDollarParser().inScope(scope, newScope -> {
                 newScope.setParameter("1", i);
                 //todo: change to receive
-                return $((Object) rhs.$());
+                return fix(rhs);
             })));
-//                } catch (AssertionError e) {
-//                    throw new AssertionError(e + " at '" + source.get() + "'", e);
-//                }
-//
-
-//            return lambda;
         } catch (AssertionError e) {
             throw new AssertionError(e + " at '" + source.get() + "'");
         } catch (Exception e) {

@@ -102,6 +102,11 @@ public class ParserTest {
     }
 
     @Test
+    public void testReactive() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_reactive.ds"));
+    }
+
+    @Test
     public void testRedis() throws Exception {
         new DollarParser().parse(getClass().getResourceAsStream("/test_redis.ds"));
     }

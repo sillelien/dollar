@@ -122,6 +122,12 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
+    public String S(@NotNull String key) {
+        return range.toString();
+    }
+
+    @NotNull
+    @Override
     public ImmutableList<var> toList() {
         List<var> values = new ArrayList<>();
         var start = range.lowerEndpoint();
@@ -130,12 +136,6 @@ public class DollarRange extends AbstractDollar {
             values.add(i);
         }
         return ImmutableList.copyOf(values);
-    }
-
-    @NotNull
-    @Override
-    public String S(@NotNull String key) {
-        return range.toString();
     }
 
     @NotNull
@@ -170,19 +170,9 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public boolean isVoid() {
-        return false;
-    }
-
-    @Override
     public Stream<String> keyStream() {
         return null;
 
-    }
-
-    @Override
-    public Integer I() {
-        return null;
     }
 
     @NotNull
@@ -192,13 +182,13 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public Integer I(@NotNull String key) {
-        return null;
+    public boolean isVoid() {
+        return false;
     }
 
     @NotNull
     @Override
-    public var $containsValue(Object value) {
+    public var $containsValue(var value) {
         return DollarStatic.$(range.lowerEndpoint().compareTo(DollarStatic.$(value)) <= 0 &&
                               range.upperEndpoint().compareTo(DollarStatic.$(value)) >= 0);
     }
@@ -209,16 +199,15 @@ public class DollarRange extends AbstractDollar {
         return DollarStatic.$(toList().size());
     }
 
-    @NotNull
     @Override
-    public var remove(Object value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+    public Integer I() {
+        return null;
     }
 
     @NotNull
     @Override
-    public JsonObject json(@NotNull String key) {
-        return new JsonObject();
+    public var remove(Object value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 
     @Override
@@ -233,6 +222,11 @@ public class DollarRange extends AbstractDollar {
             return 1;
         }
         throw new IllegalStateException();
+    }
+
+    @Override
+    public Integer I(@NotNull String key) {
+        return null;
     }
 
     @NotNull
@@ -265,22 +259,14 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public Number number(@NotNull String key) {
-        return null;
-    }
-
-    @Override
     public boolean isList() {
         return true;
     }
 
     @NotNull
     @Override
-    public JsonObject json() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.putArray("value", jsonArray());
-        return jsonObject;
-
+    public JsonObject json(@NotNull String key) {
+        return new JsonObject();
     }
 
     @Override
@@ -289,29 +275,13 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public ImmutableList<String> strings() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean isTrue() {
         return false;
     }
 
     @Override
-    public Map<String, Object> toMap() {
-        return null;
-    }
-
-    @Override
     public boolean isTruthy() {
         return !range.isEmpty();
-    }
-
-    @NotNull
-    @Override
-    public Number N() {
-        return range.upperEndpoint().L() - range.lowerEndpoint().L();
     }
 
     @Override
@@ -322,6 +292,41 @@ public class DollarRange extends AbstractDollar {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return true;
+    }
+
+    @Override
+    public Number number(@NotNull String key) {
+        return null;
+    }
+
+
+    @NotNull
+    @Override
+    public JsonObject json() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.putArray("value", jsonArray());
+        return jsonObject;
+
+    }
+
+
+
+    @Override
+    public ImmutableList<String> strings() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    @Override
+    public Map<String, Object> toMap() {
+        return null;
+    }
+
+
+    @NotNull
+    @Override
+    public Number N() {
+        return range.upperEndpoint().L() - range.lowerEndpoint().L();
     }
 
 

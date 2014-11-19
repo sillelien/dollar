@@ -182,7 +182,7 @@ public class DollarVoid extends AbstractDollar implements var {
     }
 
     @Override
-    public var $containsValue(Object value) {
+    public var $containsValue(var value) {
         return DollarStatic.$(false);
     }
 
@@ -203,25 +203,26 @@ public class DollarVoid extends AbstractDollar implements var {
         return "";
     }
 
-    @NotNull
     @Override
-    public ImmutableList<var> toList() {
-        return ImmutableList.of();
-    }
-
-    @Override
-    public boolean isVoid() {
-        return true;
-    }
-
-    @Override
-    public boolean is(Type... types) {
-        for (Type type : types) {
-            if (type == Type.VOID) {
-                return true;
-            }
+    public var $as(Type type) {
+        switch (type) {
+            case BOOLEAN:
+                return DollarStatic.$(false);
+            case STRING:
+                return DollarStatic.$("");
+            case LIST:
+                return DollarStatic.$(Arrays.asList());
+            case MAP:
+                return DollarStatic.$("value", this);
+            case NUMBER:
+                return DollarStatic.$(0);
+            case VOID:
+                return this;
+            case RANGE:
+                return DollarFactory.fromValue(Range.closed(0, 0));
+            default:
+                throw new UnsupportedOperationException();
         }
-        return false;
     }
 
     @Override
@@ -236,8 +237,35 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
+    public Number N() {
+        return 0;
+    }
+
+    @Override
+    public boolean is(Type... types) {
+        for (Type type : types) {
+            if (type == Type.VOID) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @NotNull
+    @Override
     public JsonObject json(@NotNull String key) {
         return new JsonObject();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> toList() {
+        return ImmutableList.of();
+    }
+
+    @Override
+    public boolean isVoid() {
+        return true;
     }
 
     @Override
@@ -265,34 +293,6 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public Map<String, Object> toMap() {
         return Collections.emptyMap();
-    }
-
-    @NotNull
-    @Override
-    public Number N() {
-        return 0;
-    }
-
-    @Override
-    public var $as(Type type) {
-        switch (type) {
-            case BOOLEAN:
-                return DollarStatic.$(false);
-            case STRING:
-                return DollarStatic.$("");
-            case LIST:
-                return DollarStatic.$(Arrays.asList());
-            case MAP:
-                return DollarStatic.$("value", this);
-            case NUMBER:
-                return DollarStatic.$(0);
-            case VOID:
-                return this;
-            case RANGE:
-                return DollarFactory.fromValue(Range.closed(0, 0));
-            default:
-                throw new UnsupportedOperationException();
-        }
     }
 
     @Override

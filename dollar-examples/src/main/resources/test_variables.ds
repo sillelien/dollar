@@ -1,6 +1,6 @@
 a=1
-$a <=> 1
-a <=> 1
+&$a <=> 1
+&a <=> 1
 a <=> $a
 a= a + 2
 a <=> 3
@@ -45,7 +45,7 @@ errorOccured= false
 }
 
 
-.: errorOccured;
+.: errorOccured
 
 //Dynamically named variable
 $("a"+"b")=2

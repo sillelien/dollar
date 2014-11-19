@@ -33,6 +33,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static me.neilellis.dollar.DollarStatic.fix;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
@@ -81,6 +83,134 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
+    public <R> R $() {
+        return (R) jsonArray();
+    }
+
+    @NotNull
+    @Override
+    public var $(@NotNull Number n) {
+        return list.get(n.intValue());
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $children() {
+        return list.stream();
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $children(@NotNull String key) {
+        return Stream.empty();
+    }
+
+    @Override
+    public var $containsValue(var value) {
+        return DollarStatic.$(list.contains(fix(value)));
+    }
+
+    @Override
+    public var $has(@NotNull String key) {
+        return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public String S(@NotNull String key) {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public var $get(@NotNull String key) {
+        for (var var : list) {
+            if (var.$S().equals(key)) {
+                return var;
+            }
+        }
+        return DollarStatic.$void();
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull Object value) {
+        ArrayList<var> newVal = new ArrayList<>(list);
+        newVal.remove(value);
+        return DollarFactory.fromValue(errors(), newVal);
+    }
+
+    @NotNull
+    @Override
+    public var $plus(Object value) {
+        if (value == this) {
+            throw new IllegalArgumentException("Tried to add to self");
+        }
+        return DollarFactory.fromValue(errors(),
+                                       ImmutableList.builder()
+                                                    .addAll(list)
+                                                    .add(DollarFactory.fromValue(value))
+                                                    .build());
+    }
+
+    @NotNull
+    @Override
+    public var $rm(@NotNull String value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $(@NotNull var key, Object value) {
+        ArrayList<var> newVal = new ArrayList<>(list);
+        if (key.isInteger()) {
+            newVal.set(key.I(), DollarFactory.fromValue(value));
+        } else {
+            return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+        }
+        return DollarFactory.fromValue(errors(), newVal);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> toList() {
+        return list;
+    }
+
+    @Override
+    public var $size() {
+        return DollarStatic.$(list.size());
+    }
+
+    @Override
+    public Stream<String> keyStream() {
+        List<String> strings = strings();
+        if (strings == null) {
+            return Stream.empty();
+        }
+        return strings.stream();
+    }
+
+    @NotNull
+    @Override
+    public var remove(Object value) {
+        List<var> newList = new ArrayList<>();
+        for (var val : list) {
+            if (!val.equals(value)) {
+                newList.add(val);
+            }
+        }
+        return DollarFactory.fromValue(errors(), newList);
+    }
+
+    @NotNull
+    @Override
     public var $dec(@NotNull var amount) {
         return this;
     }
@@ -105,6 +235,11 @@ public class DollarList extends AbstractDollar {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
     }
 
+    @Override
+    public boolean isVoid() {
+        return false;
+    }
+
     @NotNull
     @Override
     public var $divide(@NotNull var v) {
@@ -117,117 +252,6 @@ public class DollarList extends AbstractDollar {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
     }
 
-    @NotNull
-    @Override
-    public var $abs() {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $plus(Object value) {
-        if (value == this) {
-            throw new IllegalArgumentException("Tried to add to self");
-        }
-        return DollarFactory.fromValue(errors(),
-                                       ImmutableList.builder()
-                                                    .addAll(list)
-                                                    .add(DollarFactory.fromValue(value))
-                                                    .build());
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $children() {
-        return list.stream();
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $children(@NotNull String key) {
-        return Stream.empty();
-    }
-
-    @Override
-    public var $has(@NotNull String key) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> toList() {
-        return list;
-    }
-
-    @Nullable
-    @Override
-    public String S(@NotNull String key) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public var $rm(@NotNull String value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $minus(@NotNull Object value) {
-        ArrayList<var> newVal = new ArrayList<>(list);
-        newVal.remove(value);
-        return DollarFactory.fromValue(errors(), newVal);
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull var key, Object value) {
-        ArrayList<var> newVal = new ArrayList<>(list);
-        if (key.isInteger()) {
-            newVal.set(key.I(), DollarFactory.fromValue(value));
-        } else {
-            return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
-        }
-        return DollarFactory.fromValue(errors(), newVal);
-    }
-
-    @NotNull
-    @Override
-    public var $get(@NotNull String key) {
-        for (var var : list) {
-            if (var.$S().equals(key)) {
-                return var;
-            }
-        }
-        return DollarStatic.$void();
-    }
-
-    @NotNull
-    @Override
-    public <R> R $() {
-        return (R) jsonArray();
-    }
-
-    @Override
-    public boolean isVoid() {
-        return false;
-    }
-
-    @Override
-    public Stream<String> keyStream() {
-        List<String> strings = strings();
-        if (strings == null) {
-            return Stream.empty();
-        }
-        return strings.stream();
-    }
-
     @Override
     public Integer I() {
         return $stream().collect(Collectors.summingInt((i) -> i.I()));
@@ -235,35 +259,8 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $(@NotNull Number n) {
-        return list.get(n.intValue());
-    }
-
-    @Override
-    public Integer I(@NotNull String key) {
-        throw new ListException();
-    }
-
-    @Override
-    public var $containsValue(Object value) {
-        return DollarStatic.$(list.contains(value));
-    }
-
-    @Override
-    public var $size() {
-        return DollarStatic.$(list.size());
-    }
-
-    @NotNull
-    @Override
-    public var remove(Object value) {
-        List<var> newList = new ArrayList<>();
-        for (var val : list) {
-            if (!val.equals(value)) {
-                newList.add(val);
-            }
-        }
-        return DollarFactory.fromValue(errors(), newList);
+    public var $abs() {
+        return this;
     }
 
     @Override
@@ -278,9 +275,8 @@ public class DollarList extends AbstractDollar {
         return 0;
     }
 
-    @org.jetbrains.annotations.NotNull
     @Override
-    public JsonObject json(@NotNull String key) {
+    public Integer I(@NotNull String key) {
         throw new ListException();
     }
 
@@ -310,11 +306,6 @@ public class DollarList extends AbstractDollar {
         return null;
     }
 
-    @Override
-    public Number number(@NotNull String key) {
-        throw new ListException();
-    }
-
     @NotNull
     @Override
     public Stream<var> $stream() {
@@ -323,14 +314,75 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public JSONObject orgjson() {
-        return new JSONObject(json().toMap());
+    public var $copy() {
+        return DollarFactory.fromValue(errors(), list.stream().map(var::$copy).collect(Collectors.toList()));
+    }
+
+    @org.jetbrains.annotations.NotNull
+    @Override
+    public JsonObject json(@NotNull String key) {
+        throw new ListException();
+    }
+
+    @Override
+    public boolean isList() {
+        return true;
+    }
+
+    @Override
+    public String $listen(Pipeable pipe) {
+        String key = UUID.randomUUID().toString();
+        $listen(pipe, key);
+        return key;
+    }
+
+    @Override
+    public var $notify(var value) {
+        for (var v : list) {
+            v.$notify(value);
+        }
+        return this;
+    }
+
+    @Override
+    public String $listen(Pipeable pipe, String key) {
+        for (var v : list) {
+            //Join the children to this, so if the children change
+            //listeners to this get the latest value of this.
+            v.$listen(i -> this, key);
+        }
+        return key;
+    }
+
+    @Override
+    public Number number(@NotNull String key) {
+        throw new ListException();
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
     }
 
     @NotNull
     @Override
-    public var $copy() {
-        return DollarFactory.fromValue(errors(), list.stream().map(var::$copy).collect(Collectors.toList()));
+    public JSONObject orgjson() {
+        return new JSONObject(json().toMap());
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return !list.isEmpty();
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
     }
 
     @org.jetbrains.annotations.NotNull
@@ -343,7 +395,7 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public boolean isList() {
+    public boolean isNeitherTrueNorFalse() {
         return true;
     }
 
@@ -352,25 +404,13 @@ public class DollarList extends AbstractDollar {
         return ImmutableList.<String>copyOf(list.stream().map(Object::toString).collect(Collectors.toList()));
     }
 
-    @Override
-    public String $listen(Pipeable pipe) {
-        String key = UUID.randomUUID().toString();
-        $listen(pipe, key);
-        return key;
-    }
+
 
     @Override
     public Map<String, Object> toMap() {
         return Collections.singletonMap("value", new ArrayList<>(toList()));
     }
 
-    @Override
-    public var $notify(var value) {
-        for (var v : list) {
-            v.$notify(value);
-        }
-        return this;
-    }
 
     @NotNull
     @Override
@@ -378,15 +418,6 @@ public class DollarList extends AbstractDollar {
         return 0;
     }
 
-    @Override
-    public String $listen(Pipeable pipe, String key) {
-        for (var v : list) {
-            //Join the children to this, so if the children change
-            //listeners to this get the latest value of this.
-            v.$listen(i -> this, key);
-        }
-        return key;
-    }
 
     @Override
     public var $as(Type type) {
@@ -404,31 +435,6 @@ public class DollarList extends AbstractDollar {
             default:
                 throw new UnsupportedOperationException();
         }
-    }
-
-    @Override
-    public boolean isBoolean() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean isTruthy() {
-        return !list.isEmpty();
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
     }
 
 
