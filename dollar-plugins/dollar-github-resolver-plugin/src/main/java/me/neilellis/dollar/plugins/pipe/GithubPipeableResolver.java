@@ -37,6 +37,12 @@ import java.util.stream.Collectors;
  */
 public class GithubPipeableResolver implements PipeableResolver {
     private static final Logger logger = LoggerFactory.getLogger(GithubPipeableResolver.class);
+
+    @Override
+    public PipeableResolver copy() {
+        return this;
+    }
+
     @Override
     public String getScheme() {
         return "github";
@@ -61,17 +67,12 @@ public class GithubPipeableResolver implements PipeableResolver {
             content = fileContent.getContent();
             classLoader = DependencyRetriever.retrieve(module.$get("dependencies").toList().stream().map((i) -> i.$S()).collect(Collectors.toList()));
         }
-        return (in) -> scope.getDollarParser().withinNewScope(scope, newScope -> {
+        return (in) -> scope.getDollarParser().inScope(scope, newScope -> {
             try {
                 return new DollarParser(classLoader).parse(newScope, content);
             } catch (IOException e) {
                 return DollarStatic.logAndRethrow(e);
             }
         });
-    }
-
-    @Override
-    public PipeableResolver copy() {
-        return this;
     }
 }

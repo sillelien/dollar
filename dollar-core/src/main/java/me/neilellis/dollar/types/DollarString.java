@@ -17,6 +17,7 @@
 package me.neilellis.dollar.types;
 
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.Type;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,6 +35,60 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     public DollarString(@NotNull List<Throwable> errors, @NotNull String value) {
         super(errors, value);
+    }
+
+    @NotNull
+    @Override
+    public <R> R $() {
+        return (R) value;
+    }
+
+    @Override
+    public var $as(Type type) {
+        switch (type) {
+            case BOOLEAN:
+                return DollarStatic.$(value.equals("true") || value.equals("yes"));
+            case STRING:
+                return this;
+            case LIST:
+                return DollarStatic.$(Arrays.asList(this));
+            case MAP:
+                return DollarStatic.$("value", this);
+            case NUMBER:
+                return DollarStatic.$(value.contains(".") ? Double.parseDouble(value) : Long.parseLong(value));
+            case VOID:
+                return DollarStatic.$void();
+            case URI:
+                return DollarFactory.fromURI(value);
+            default:
+                throw new UnsupportedOperationException();
+        }
+    }
+
+    @Override
+    public Integer I() {
+        return Integer.parseInt(value);
+    }
+
+    @NotNull
+    @Override
+    public Number N() {
+        return D();
+    }
+
+    @Override
+    public boolean is(Type... types) {
+        for (Type type : types) {
+            if (type == Type.STRING) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Number number(@NotNull String key) {
+        return new BigDecimal(key);
     }
 
     @NotNull
@@ -83,57 +138,30 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return this;
     }
 
+    @NotNull
     @Override
-    public Integer I() {
-        return Integer.parseInt(value);
+    public var $plus(Object newValue) {
+        return DollarFactory.fromValue(errors(), value + newValue.toString());
+    }
+
+    @Override
+    public var $size() {
+        return DollarStatic.$(value.length());
+    }
+
+    @Override
+    public int compareTo(var o) {
+        return Comparator.<String>naturalOrder().compare(value, o.$S());
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj != null && value.equals(obj.toString());
     }
 
     @Override
     public boolean isString() {
         return true;
-    }
-
-    @NotNull
-    @Override
-    public <R> R $() {
-        return (R) value;
-    }
-
-    @Override
-    public Number number(@NotNull String key) {
-        return new BigDecimal(key);
-    }
-
-    @NotNull
-    @Override
-    public Number N() {
-        return D();
-    }
-
-    @Override
-    public var $as(Type type) {
-        switch (type) {
-            case BOOLEAN:
-                return DollarStatic.$(value.equals("true") || value.equals("yes"));
-            case STRING:
-                return this;
-            case LIST:
-                return DollarStatic.$(Arrays.asList(this));
-            case MAP:
-                return DollarStatic.$("value", this);
-            case NUMBER:
-                return DollarStatic.$(value.contains(".") ? Double.parseDouble(value) : Long.parseLong(value));
-            case VOID:
-                return DollarStatic.$void();
-            case URI:
-                return DollarFactory.fromURI(value);
-            default:
-                throw new UnsupportedOperationException();
-        }
-    }
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        return obj != null && value.equals(obj.toString());
     }
 
     @Override
@@ -159,31 +187,5 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return false;
-    }
-
-    @NotNull
-    @Override
-    public var $plus(Object newValue) {
-        return DollarFactory.fromValue(errors(), value + newValue.toString());
-    }
-
-    @Override
-    public int compareTo(var o) {
-        return Comparator.<String>naturalOrder().compare(value, o.$S());
-    }
-
-    @Override
-    public boolean is(Type... types) {
-        for (Type type : types) {
-            if (type == Type.STRING) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public var $size() {
-        return DollarStatic.$(value.length());
     }
 }

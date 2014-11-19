@@ -14,48 +14,49 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script;
+package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.UnaryOp;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
-import org.codehaus.jparsec.functors.Binary;
-import org.codehaus.jparsec.functors.Map2;
 
-import java.util.function.Supplier;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class ScopedVarBinaryOperator implements Binary<var>, Operator {
-    private final boolean immediate;
-    private Map2<var, var, var> function;
-    private Supplier<String> source;
-    private ScriptScope scope;
+public class VariableOperator extends UnaryOp {
 
 
-    public ScopedVarBinaryOperator(Map2<var, var, var> function, ScriptScope scope) {
-        this.function = function;
-        this.scope = scope;
-        this.immediate = false;
+    public VariableOperator(ScriptScope scope) {
+        super(scope, null);
     }
 
-    public ScopedVarBinaryOperator(boolean immediate, Map2<var, var, var> function, ScriptScope scope) {
-        this.immediate = immediate;
-        this.function = function;
-        this.scope = scope;
-    }
 
     @Override
-    public var map(var lhs, var rhs) {
+    public var map(var from) {
         try {
-            if (immediate) {
-                return function.map(lhs, rhs);
-            }
-            //Lazy evaluation
-            final me.neilellis.dollar.var lambda = DollarFactory.fromLambda(v -> {
+            var lambda = DollarFactory.fromLambda(v -> {
+                String key = from.$S();
+                boolean numeric = from.isNumber();
                 try {
-                    return function.map(lhs, rhs);
+                    List<ScriptScope> scopes = new ArrayList<ScriptScope>(scope.getDollarParser().scopes());
+                    Collections.reverse(scopes);
+                    for (ScriptScope scriptScope : scopes) {
+                        if (numeric) {
+                            if (scriptScope.hasParameter(key)) {
+                                return scriptScope.getParameter(key);
+                            }
+                        } else {
+                            if (scriptScope.has(key)) {
+                                return scriptScope.get(key);
+                            }
+                        }
+                    }
                 } catch (AssertionError e) {
                     return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
                 } catch (DollarScriptException e) {
@@ -63,18 +64,13 @@ public class ScopedVarBinaryOperator implements Binary<var>, Operator {
                 } catch (Exception e) {
                     return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
                 }
+                if (numeric) {
+                    return scope.getParameter(key);
+                }
+                return scope.get(key);
             });
-
-            //Wire up the reactive parts
-            lhs.$listen(i -> {
-                lambda.$notify(function.map(i, rhs));
-                return i;
-            });
-            rhs.$listen(i -> {
-                lambda.$notify(function.map(lhs, i));
-                return i;
-            });
-
+            scope.listen(from.$S(), lambda);
+            lambda.setMetaAttribute("variable", from.$S());
             return lambda;
         } catch (AssertionError e) {
             return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
@@ -83,10 +79,8 @@ public class ScopedVarBinaryOperator implements Binary<var>, Operator {
         } catch (Exception e) {
             return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
         }
+
     }
 
-    @Override
-    public void setSource(Supplier<String> source) {
-        this.source = source;
-    }
+
 }

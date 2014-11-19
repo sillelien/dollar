@@ -19,28 +19,53 @@ package me.neilellis.dollar.script;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.functors.Map;
+import org.codehaus.jparsec.functors.Unary;
+
+import java.util.function.Supplier;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class ReceiveOperator extends ScopedVarUnaryOperator {
+public class UnaryOp implements Unary<var>, Operator {
+    private final boolean immediate;
+    protected Map<var, var> function;
+    protected Supplier<String> source;
+    protected ScriptScope scope;
 
 
-    public ReceiveOperator(ScriptScope scope) {
-        super(scope, null);
+    public UnaryOp(ScriptScope scope, Map<var, var> function) {
+        this.scope = scope;
+        this.function = function;
+        this.immediate = false;
     }
 
+    public UnaryOp(boolean immediate, Map<var, var> function) {
+        this.immediate = immediate;
+        this.function = function;
+    }
 
     @Override
     public var map(var from) {
+
         try {
-            return DollarFactory.fromLambda(v -> {
+            if (immediate) {
+                return function.map(from);
+            }
+
+            //Lazy evaluation
+            final var lambda = DollarFactory.fromLambda(v -> {
                 try {
-                    return DollarFactory.fromURI(from).$receive();
-                } catch (Exception e) {
-                    return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
+                    return function.map(from);
+                } catch (AssertionError e) {
+                    throw new AssertionError(e + " at '" + source.get() + "'", e);
                 }
             });
+            from.$listen(i -> {
+                lambda.$notify(i);
+                return i;
+            });
+            return lambda;
         } catch (AssertionError e) {
             return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
         } catch (DollarScriptException e) {
@@ -48,7 +73,13 @@ public class ReceiveOperator extends ScopedVarUnaryOperator {
         } catch (Exception e) {
             return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
         }
+
+
     }
 
 
+    @Override
+    public void setSource(Supplier<String> source) {
+        this.source = source;
+    }
 }

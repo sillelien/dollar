@@ -14,58 +14,35 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script;
+package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.UnaryOp;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
-import org.codehaus.jparsec.functors.Map;
-import org.codehaus.jparsec.functors.Unary;
-
-import java.util.function.Supplier;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class ScopedVarUnaryOperator implements Unary<var>, Operator {
-    private final boolean immediate;
-    protected Map<var, var> function;
-    protected Supplier<String> source;
-    protected ScriptScope scope;
+public class SimpleReceiveOperator extends UnaryOp {
 
 
-    public ScopedVarUnaryOperator(ScriptScope scope, Map<var, var> function) {
-        this.scope = scope;
-        this.function = function;
-        this.immediate = false;
+    public SimpleReceiveOperator(ScriptScope scope) {
+        super(scope, null);
     }
 
-    public ScopedVarUnaryOperator(boolean immediate, Map<var, var> function) {
-        this.immediate = immediate;
-        this.function = function;
-    }
 
     @Override
     public var map(var from) {
-
         try {
-            if (immediate) {
-                return function.map(from);
-            }
-
-            //Lazy evaluation
-            final var lambda = DollarFactory.fromLambda(v -> {
+            return DollarFactory.fromLambda(v -> {
                 try {
-                    return function.map(from);
-                } catch (AssertionError e) {
-                    throw new AssertionError(e + " at '" + source.get() + "'", e);
+                    return DollarFactory.fromURI(from).$receive();
+                } catch (Exception e) {
+                    return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
                 }
             });
-            from.$listen(i -> {
-                lambda.$notify(i);
-                return i;
-            });
-            return lambda;
         } catch (AssertionError e) {
             return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
         } catch (DollarScriptException e) {
@@ -73,13 +50,7 @@ public class ScopedVarUnaryOperator implements Unary<var>, Operator {
         } catch (Exception e) {
             return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
         }
-
-
     }
 
 
-    @Override
-    public void setSource(Supplier<String> source) {
-        this.source = source;
-    }
 }

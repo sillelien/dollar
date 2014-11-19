@@ -19,42 +19,43 @@ package me.neilellis.dollar.script;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.functors.Binary;
+import org.codehaus.jparsec.functors.Map2;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class VariableOperator extends ScopedVarUnaryOperator {
+public class BinaryOp implements Binary<var>, Operator {
+    private final boolean immediate;
+    private Map2<var, var, var> function;
+    private Supplier<String> source;
+    private ScriptScope scope;
 
 
-    public VariableOperator(ScriptScope scope) {
-        super(scope, null);
+    public BinaryOp(Map2<var, var, var> function, ScriptScope scope) {
+        this.function = function;
+        this.scope = scope;
+        this.immediate = false;
     }
 
+    public BinaryOp(boolean immediate, Map2<var, var, var> function, ScriptScope scope) {
+        this.immediate = immediate;
+        this.function = function;
+        this.scope = scope;
+    }
 
     @Override
-    public var map(var from) {
+    public var map(var lhs, var rhs) {
         try {
-            var lambda = DollarFactory.fromLambda(v -> {
-                String key = from.$S();
-                boolean numeric = from.isNumber();
+            if (immediate) {
+                return function.map(lhs, rhs);
+            }
+            //Lazy evaluation
+            final me.neilellis.dollar.var lambda = DollarFactory.fromLambda(v -> {
                 try {
-                    List<ScriptScope> scopes = new ArrayList<ScriptScope>(scope.getDollarParser().scopes());
-                    Collections.reverse(scopes);
-                    for (ScriptScope scriptScope : scopes) {
-                        if (numeric) {
-                            if (scriptScope.hasParameter(key)) {
-                                return scriptScope.getParameter(key);
-                            }
-                        } else {
-                            if (scriptScope.has(key)) {
-                                return scriptScope.get(key);
-                            }
-                        }
-                    }
+                    return function.map(lhs, rhs);
                 } catch (AssertionError e) {
                     return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
                 } catch (DollarScriptException e) {
@@ -62,13 +63,18 @@ public class VariableOperator extends ScopedVarUnaryOperator {
                 } catch (Exception e) {
                     return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
                 }
-                if (numeric) {
-                    return scope.getParameter(key);
-                }
-                return scope.get(key);
             });
-            scope.listen(from.$S(), lambda);
-            lambda.setMetaAttribute("variable", from.$S());
+
+            //Wire up the reactive parts
+            lhs.$listen(i -> {
+                lambda.$notify(function.map(i, rhs));
+                return i;
+            });
+            rhs.$listen(i -> {
+                lambda.$notify(function.map(lhs, i));
+                return i;
+            });
+
             return lambda;
         } catch (AssertionError e) {
             return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
@@ -77,8 +83,10 @@ public class VariableOperator extends ScopedVarUnaryOperator {
         } catch (Exception e) {
             return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
         }
-
     }
 
-
+    @Override
+    public void setSource(Supplier<String> source) {
+        this.source = source;
+    }
 }

@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script;
+package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.script.Operator;
+import me.neilellis.dollar.script.ScriptScope;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
 
@@ -26,12 +28,12 @@ import static me.neilellis.dollar.DollarStatic.$;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class SubscribeOperator implements Binary<var>, Operator {
+public class ListenOperator implements Binary<var>, Operator {
     private Supplier<String> source;
     private ScriptScope scope;
 
 
-    public SubscribeOperator(ScriptScope scope) {
+    public ListenOperator(ScriptScope scope) {
         this.scope = scope;
     }
 
@@ -40,8 +42,8 @@ public class SubscribeOperator implements Binary<var>, Operator {
     public var map(var lhs, var rhs) {
         try {
 
-            return $(lhs.$subscribe(i -> scope.getDollarParser().withinNewScope(scope, newScope -> {
-                scope.getDollarParser().currentScope().setParameter("1", i);
+            return $(lhs.$listen(i -> scope.getDollarParser().inScope(scope, newScope -> {
+                newScope.setParameter("1", i);
                 //todo: change to receive
                 return $((Object) rhs.$());
             })));

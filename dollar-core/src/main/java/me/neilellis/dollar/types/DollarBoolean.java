@@ -17,6 +17,7 @@
 package me.neilellis.dollar.types;
 
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.Type;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,6 +32,54 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
 
     public DollarBoolean(@NotNull List<Throwable> errors, @NotNull Boolean value) {
         super(errors, value);
+    }
+
+    @Override
+    public var $as(Type type) {
+        switch (type) {
+            case BOOLEAN:
+                return this;
+            case STRING:
+                return DollarStatic.$(S());
+            case LIST:
+                return DollarStatic.$(Arrays.asList(this));
+            case MAP:
+                return DollarStatic.$("value", this);
+            case NUMBER:
+                return DollarStatic.$(value ? 1 : 0);
+            case VOID:
+                return DollarStatic.$void();
+            default:
+                throw new UnsupportedOperationException();
+        }
+    }
+
+    @Override
+    @NotNull
+    public Integer I() {
+        return value ? 1 : 0;
+    }
+
+    @NotNull
+    @Override
+    public Number N() {
+        return value ? 1 : 0;
+    }
+
+    @Override
+    public boolean is(Type... types) {
+        for (Type type : types) {
+            if (type == Type.BOOLEAN) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    @NotNull
+    public Number number(@NotNull String key) {
+        return 0;
     }
 
     @NotNull
@@ -75,16 +124,6 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         return this;
     }
 
-    @Override
-    public boolean is(Type... types) {
-        for (Type type : types) {
-            if (type == Type.BOOLEAN) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @NotNull
     @Override
     public Double D() {
@@ -113,12 +152,6 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     }
 
     @Override
-    @NotNull
-    public Integer I() {
-        return value ? 1 : 0;
-    }
-
-    @Override
     public boolean isDecimal() {
         return false;
     }
@@ -134,35 +167,8 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     }
 
     @Override
-    @NotNull
-    public Number number(@NotNull String key) {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public Number N() {
-        return value ? 1 : 0;
-    }
-
-    @Override
-    public var $as(Type type) {
-        switch (type) {
-            case BOOLEAN:
-                return this;
-            case STRING:
-                return DollarStatic.$(S());
-            case LIST:
-                return DollarStatic.$(Arrays.asList(this));
-            case MAP:
-                return DollarStatic.$("value", this);
-            case NUMBER:
-                return DollarStatic.$(value ? 1 : 0);
-            case VOID:
-                return DollarStatic.$void();
-            default:
-                throw new UnsupportedOperationException();
-        }
+    public int compareTo(var o) {
+        return I() - o.I();
     }
 
     @Override
@@ -188,10 +194,5 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return false;
-    }
-
-    @Override
-    public int compareTo(var o) {
-        return I() - o.I();
     }
 }

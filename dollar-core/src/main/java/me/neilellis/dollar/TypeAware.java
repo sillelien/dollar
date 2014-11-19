@@ -43,33 +43,13 @@ public interface TypeAware {
 
     String S();
 
-    @Guarded(NotNullCollectionGuard.class)
-    @Guarded(AllVarCollectionGuard.class)
-    @NotNull
-    ImmutableList<var> toList();
-
-    /**
-     * Is this object a void object? Void objects are similar to null, except they can have methods called on them.
-     *
-     * This is a similar concept to nil in Objective-C.
-     *
-     * @return true if this is a void object
-     * @see me.neilellis.dollar.types.DollarVoid
-     * @see me.neilellis.dollar.types.DollarFail
-     */
-    boolean isVoid();
-
-    //Any of these
-    boolean is(Type... types);
+    var $as(Type type);
 
     @NotNull
     Double D();
 
     @NotNull
     Integer I();
-
-    @NotNull
-    Long L();
 
     /**
      * Returns the value for the supplied key as an Integer.
@@ -80,9 +60,18 @@ public interface TypeAware {
     @NotNull
     Integer I(@NotNull String key);
 
+    @NotNull Long L();
+
+    @NotNull Number N();
+
+    //Any of these
+    boolean is(Type... types);
+
     boolean isDecimal();
 
     boolean isInteger();
+
+    boolean isLambda();
 
     boolean isList();
 
@@ -94,7 +83,7 @@ public interface TypeAware {
 
     boolean isString();
 
-    boolean isLambda();
+    boolean isUri();
 
     @Nullable
     JsonObject json(@NotNull String key);
@@ -109,6 +98,21 @@ public interface TypeAware {
         }
         return array;
     }
+
+    @Guarded(NotNullCollectionGuard.class)
+    @Guarded(AllVarCollectionGuard.class)
+    @NotNull ImmutableList<var> toList();
+
+    /**
+     * Is this object a void object? Void objects are similar to null, except they can have methods called on them.
+     *
+     * This is a similar concept to nil in Objective-C.
+     *
+     * @return true if this is a void object
+     * @see me.neilellis.dollar.types.DollarVoid
+     * @see me.neilellis.dollar.types.DollarFail
+     */
+    boolean isVoid();
 
     /**
      * Returns the value for the supplied key as a general {@link Number}.
@@ -160,16 +164,6 @@ public interface TypeAware {
     @Nullable
     Map<String, Object> toMap();
 
-    @NotNull
-    Number N();
-
     InputStream toStream();
 
-    boolean isUri();
-
-    var $as(Type type);
-
-    enum Type {
-        STRING, NUMBER, LIST, MAP, URI, VOID, RANGE, BOOLEAN, ERROR
-    }
 }

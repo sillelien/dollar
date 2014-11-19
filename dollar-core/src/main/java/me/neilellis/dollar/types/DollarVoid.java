@@ -18,12 +18,9 @@ package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Range;
-import me.neilellis.dollar.DollarEval;
-import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.Pipeable;
+import me.neilellis.dollar.*;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.json.JsonObject;
-import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
@@ -68,24 +65,6 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $plus(Object value) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $children() {
-        return Collections.<var>emptyList().stream();
-    }
-
-    @NotNull
-    @Override
-    public Stream $children(@NotNull String key) {
-        return Collections.emptyList().stream();
-    }
-
-    @NotNull
-    @Override
     public var $dec(@NotNull var amount) {
         return this;
     }
@@ -114,16 +93,6 @@ public class DollarVoid extends AbstractDollar implements var {
         return this;
     }
 
-    /**
-     * If you stare into the void, the void will stare back at you.
-     *
-     * @param you - you.
-     */
-    public void stare(var you) {
-        this.stare(you);
-    }
-
-
     @NotNull
     @Override
     public var $modulus(@NotNull var v) {
@@ -136,15 +105,27 @@ public class DollarVoid extends AbstractDollar implements var {
         return this;
     }
 
+    @NotNull
     @Override
-    public var $has(@NotNull String key) {
-        return DollarStatic.$(false);
+    public var $plus(Object value) {
+        return $copy();
     }
 
     @NotNull
     @Override
-    public ImmutableList<var> toList() {
-        return ImmutableList.of();
+    public Stream<var> $children() {
+        return Collections.<var>emptyList().stream();
+    }
+
+    @NotNull
+    @Override
+    public Stream $children(@NotNull String key) {
+        return Collections.emptyList().stream();
+    }
+
+    @Override
+    public var $has(@NotNull String key) {
+        return DollarStatic.$(false);
     }
 
     @NotNull
@@ -177,9 +158,70 @@ public class DollarVoid extends AbstractDollar implements var {
         return $copy();
     }
 
+    @NotNull
+    @Override
+    public var $get(@NotNull String key) {
+        return $copy();
+    }
+
+    @Nullable
+    @Override
+    public <R> R $() {
+        return null;
+    }
+
+    @Override
+    public Stream<String> keyStream() {
+        return Collections.<String>emptyList().stream();
+    }
+
+    @NotNull
+    @Override
+    public var $(@NotNull Number n) {
+        return this;
+    }
+
+    @Override
+    public var $containsValue(Object value) {
+        return DollarStatic.$(false);
+    }
+
+    @Override
+    public var $size() {
+        return DollarStatic.$(0);
+    }
+
+    @NotNull
+    @Override
+    public var remove(Object value) {
+        return $copy();
+    }
+
+    @NotNull
+    @Override
+    public String S() {
+        return "";
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> toList() {
+        return ImmutableList.of();
+    }
+
     @Override
     public boolean isVoid() {
         return true;
+    }
+
+    @Override
+    public boolean is(Type... types) {
+        for (Type type : types) {
+            if (type == Type.VOID) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -194,31 +236,8 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var decode() {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var $get(@NotNull String key) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
     public JsonObject json(@NotNull String key) {
         return new JsonObject();
-    }
-
-    @Nullable
-    @Override
-    public <R> R $() {
-        return null;
-    }
-
-    @Override
-    public Stream<String> keyStream() {
-        return Collections.<String>emptyList().stream();
     }
 
     @Override
@@ -276,10 +295,25 @@ public class DollarVoid extends AbstractDollar implements var {
         }
     }
 
+    @Override
+    public int compareTo(var o) {
+        if (o.isVoid()) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
     @NotNull
     @Override
-    public var $(@NotNull Number n) {
-        return this;
+    public var decode() {
+        return $copy();
+    }
+
+    @NotNull
+    @Override
+    public var eval(@NotNull DollarEval lambda) {
+        return $copy();
     }
 
     @Override
@@ -290,12 +324,6 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public boolean equals(@Nullable Object obj) {
         return (obj instanceof var && ((var) obj).$() == null) || obj == null;
-    }
-
-    @NotNull
-    @Override
-    public var eval(@NotNull DollarEval lambda) {
-        return $copy();
     }
 
     @NotNull
@@ -340,34 +368,6 @@ public class DollarVoid extends AbstractDollar implements var {
         return Stream.empty();
     }
 
-
-    @Override
-    public var $size() {
-        return DollarStatic.$(0);
-    }
-
-    @Override
-    public var $containsValue(Object value) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public var remove(Object value) {
-        return $copy();
-    }
-
-    @NotNull
-    public List<String> splitValues() {
-        return Collections.emptyList();
-    }
-
-    @NotNull
-    @Override
-    public String S() {
-        return "";
-    }
-
     @Override
     public boolean isBoolean() {
         return false;
@@ -393,23 +393,17 @@ public class DollarVoid extends AbstractDollar implements var {
         return true;
     }
 
-    @Override
-    public int compareTo(var o) {
-        if (o.isVoid()) {
-            return 0;
-        } else {
-            return 1;
-        }
+    @NotNull
+    public List<String> splitValues() {
+        return Collections.emptyList();
     }
 
-
-    @Override
-    public boolean is(Type... types) {
-        for (Type type : types) {
-            if (type == Type.VOID) {
-                return true;
-            }
-        }
-        return false;
+    /**
+     * If you stare into the void, the void will stare back at you.
+     *
+     * @param you - you.
+     */
+    public void stare(var you) {
+        this.stare(you);
     }
 }

@@ -1,7 +1,7 @@
 Operators
 
 1000
-@      + fix value
+&      + fix value
 $       + variable reference
 
 500
@@ -19,7 +19,7 @@ $       + variable reference
 &       - NOT USED  - reserved - possibly to indicate parallelism preferred ?
 `       - NOT USED  - rexerved - possibly Java strings
 !       + logical negation
-@       - attribute prefix
+&       - attribute prefix
 
 
 300 - /,*,%

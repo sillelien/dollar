@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script;
+package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.UnaryOp;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class SleepOperator extends ScopedVarUnaryOperator {
+public class SleepOperator extends UnaryOp {
 
 
     public SleepOperator(ScriptScope scope) {

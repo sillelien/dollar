@@ -19,6 +19,7 @@ package me.neilellis.dollar.types;
 import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
+import me.neilellis.dollar.Type;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.exceptions.ListException;
 import me.neilellis.dollar.json.JsonArray;
@@ -80,31 +81,6 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $plus(Object value) {
-        if (value == this) {
-            throw new IllegalArgumentException("Tried to add to self");
-        }
-        return DollarFactory.fromValue(errors(),
-                ImmutableList.builder()
-                        .addAll(list)
-                        .add(DollarFactory.fromValue(value))
-                        .build());
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $children() {
-        return list.stream();
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $children(@NotNull String key) {
-        return Stream.empty();
-    }
-
-    @NotNull
-    @Override
     public var $dec(@NotNull var amount) {
         return this;
     }
@@ -147,6 +123,31 @@ public class DollarList extends AbstractDollar {
         return this;
     }
 
+    @NotNull
+    @Override
+    public var $plus(Object value) {
+        if (value == this) {
+            throw new IllegalArgumentException("Tried to add to self");
+        }
+        return DollarFactory.fromValue(errors(),
+                                       ImmutableList.builder()
+                                                    .addAll(list)
+                                                    .add(DollarFactory.fromValue(value))
+                                                    .build());
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $children() {
+        return list.stream();
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $children(@NotNull String key) {
+        return Stream.empty();
+    }
+
     @Override
     public var $has(@NotNull String key) {
         return DollarStatic.$(false);
@@ -154,14 +155,14 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableList<var> toList() {
-        return list;
+    public ImmutableMap<String, var> $map() {
+        return null;
     }
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        return null;
+    public ImmutableList<var> toList() {
+        return list;
     }
 
     @Nullable
@@ -196,27 +197,6 @@ public class DollarList extends AbstractDollar {
         return DollarFactory.fromValue(errors(), newVal);
     }
 
-    @Override
-    public boolean isVoid() {
-        return false;
-    }
-
-    @Override
-    public Integer I() {
-        return $stream().collect(Collectors.summingInt((i) -> i.I()));
-    }
-
-    @Override
-    public Integer I(@NotNull String key) {
-        throw new ListException();
-    }
-
-    @NotNull
-    @Override
-    public var decode() {
-        throw new UnsupportedOperationException();
-    }
-
     @NotNull
     @Override
     public var $get(@NotNull String key) {
@@ -228,21 +208,15 @@ public class DollarList extends AbstractDollar {
         return DollarStatic.$void();
     }
 
-    @Override
-    public boolean isList() {
-        return true;
-    }
-
-    @org.jetbrains.annotations.NotNull
-    @Override
-    public JsonObject json(@NotNull String key) {
-        throw new ListException();
-    }
-
     @NotNull
     @Override
     public <R> R $() {
         return (R) jsonArray();
+    }
+
+    @Override
+    public boolean isVoid() {
+        return false;
     }
 
     @Override
@@ -255,14 +229,108 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public Integer I() {
+        return $stream().collect(Collectors.summingInt((i) -> i.I()));
+    }
+
+    @NotNull
+    @Override
+    public var $(@NotNull Number n) {
+        return list.get(n.intValue());
+    }
+
+    @Override
+    public Integer I(@NotNull String key) {
+        throw new ListException();
+    }
+
+    @Override
+    public var $containsValue(Object value) {
+        return DollarStatic.$(list.contains(value));
+    }
+
+    @Override
+    public var $size() {
+        return DollarStatic.$(list.size());
+    }
+
+    @NotNull
+    @Override
+    public var remove(Object value) {
+        List<var> newList = new ArrayList<>();
+        for (var val : list) {
+            if (!val.equals(value)) {
+                newList.add(val);
+            }
+        }
+        return DollarFactory.fromValue(errors(), newList);
+    }
+
+    @Override
+    public int compareTo(var o) {
+        //TODO: improve comparisons
+        if (list.stream().allMatch(v -> v.compareTo(o) == -1)) {
+            return -1;
+        }
+        if (list.stream().allMatch(v -> v.compareTo(o) == 1)) {
+            return 1;
+        }
+        return 0;
+    }
+
+    @org.jetbrains.annotations.NotNull
+    @Override
+    public JsonObject json(@NotNull String key) {
+        throw new ListException();
+    }
+
+    @NotNull
+    @Override
+    public var decode() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof List) {
+            return list.equals(obj);
+        }
+        if (obj instanceof var) {
+            return list.equals(((var) obj).toList());
+        }
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public Stream<Map.Entry<String, var>> kvStream() {
+        return null;
+    }
+
+    @Override
     public Number number(@NotNull String key) {
         throw new ListException();
     }
 
     @NotNull
     @Override
+    public Stream<var> $stream() {
+        return list.stream();
+    }
+
+    @NotNull
+    @Override
     public JSONObject orgjson() {
         return new JSONObject(json().toMap());
+    }
+
+    @NotNull
+    @Override
+    public var $copy() {
+        return DollarFactory.fromValue(errors(), list.stream().map(var::$copy).collect(Collectors.toList()));
     }
 
     @org.jetbrains.annotations.NotNull
@@ -275,8 +343,20 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public boolean isList() {
+        return true;
+    }
+
+    @Override
     public ImmutableList<String> strings() {
         return ImmutableList.<String>copyOf(list.stream().map(Object::toString).collect(Collectors.toList()));
+    }
+
+    @Override
+    public String $listen(Pipeable pipe) {
+        String key = UUID.randomUUID().toString();
+        $listen(pipe, key);
+        return key;
     }
 
     @Override
@@ -284,10 +364,28 @@ public class DollarList extends AbstractDollar {
         return Collections.singletonMap("value", new ArrayList<>(toList()));
     }
 
+    @Override
+    public var $notify(var value) {
+        for (var v : list) {
+            v.$notify(value);
+        }
+        return this;
+    }
+
     @NotNull
     @Override
     public Number N() {
         return 0;
+    }
+
+    @Override
+    public String $listen(Pipeable pipe, String key) {
+        for (var v : list) {
+            //Join the children to this, so if the children change
+            //listeners to this get the latest value of this.
+            v.$listen(i -> this, key);
+        }
+        return key;
     }
 
     @Override
@@ -306,58 +404,6 @@ public class DollarList extends AbstractDollar {
             default:
                 throw new UnsupportedOperationException();
         }
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull Number n) {
-        return list.get(n.intValue());
-    }
-
-    @NotNull
-    @Override
-    public Stream<Map.Entry<String, var>> kvStream() {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $stream() {
-        return list.stream();
-    }
-
-    @NotNull
-    @Override
-    public var $copy() {
-        return DollarFactory.fromValue(errors(), list.stream().map(var::$copy).collect(Collectors.toList()));
-    }
-
-    @Override
-    public var $size() {
-        return DollarStatic.$(list.size());
-    }
-
-    @Override
-    public var $containsValue(Object value) {
-        return DollarStatic.$(list.contains(value));
-    }
-
-    @NotNull
-    @Override
-    public var remove(Object value) {
-        List<var> newList = new ArrayList<>();
-        for (var val : list) {
-            if (!val.equals(value)) {
-                newList.add(val);
-            }
-        }
-        return DollarFactory.fromValue(errors(), newList);
-    }
-
-    @NotNull
-    @Override
-    public String S() {
-        return jsonArray().toString();
     }
 
     @Override
@@ -385,42 +431,13 @@ public class DollarList extends AbstractDollar {
         return true;
     }
 
+
+    @NotNull
     @Override
-    public var $notify(var value) {
-        for (var v : list) {
-            v.$notify(value);
-        }
-        return this;
+    public String S() {
+        return jsonArray().toString();
     }
 
-    @Override
-    public String $listen(Pipeable pipe, String key) {
-        for (var v : list) {
-            //Join the children to this, so if the children change
-            //listeners to this get the latest value of this.
-            v.$listen(i -> this, key);
-        }
-        return key;
-    }
-
-    @Override
-    public String $listen(Pipeable pipe) {
-        String key = UUID.randomUUID().toString();
-        $listen(pipe, key);
-        return key;
-    }
-
-    @Override
-    public int compareTo(var o) {
-        //TODO: improve comparisons
-        if (list.stream().allMatch(v -> v.compareTo(o) == -1)) {
-            return -1;
-        }
-        if (list.stream().allMatch(v -> v.compareTo(o) == 1)) {
-            return 1;
-        }
-        return 0;
-    }
 
     @Override
     public boolean is(Type... types) {
@@ -432,17 +449,5 @@ public class DollarList extends AbstractDollar {
         return false;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (obj instanceof List) {
-            return list.equals(obj);
-        }
-        if (obj instanceof var) {
-            return list.equals(((var) obj).toList());
-        }
-        return false;
-    }
+
 }

@@ -19,6 +19,7 @@ package me.neilellis.dollar.types;
 import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
+import me.neilellis.dollar.Type;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.plugin.Plugins;
@@ -49,6 +50,108 @@ public class DollarURI extends AbstractDollar {
         handler = Plugins.resolveURIProvider(scheme).forURI(scheme, this.uri);
     }
 
+    @NotNull
+    @Override
+    public var $dec(@NotNull var amount) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $inc(@NotNull var amount) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $negate() {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $multiply(@NotNull var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $divide(@NotNull var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $modulus(@NotNull var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $abs() {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @Override
+    public var $notify(var v) {
+        return handler.send(v, false, false);
+    }
+
+    @Override
+    public String $listen(Pipeable pipe, String key) {
+        return $listen(pipe);
+    }
+
+    @Override
+    public var $each(Pipeable pipe) {
+        return super.$each(pipe);
+    }
+
+    @Override
+    public var $drain() {
+        return handler.drain();
+    }
+
+    @Override
+    public var $all() {
+        return handler.all();
+    }
+
+    @Override
+    public boolean isUri() {
+        return true;
+    }
+
+    @Override
+    public var $send(var value, boolean blocking, boolean mutating) {
+        return handler.send(value, blocking, mutating);
+    }
+
+    @Override
+    public var $receive(boolean blocking, boolean mutating) {
+        return handler.receive(blocking, mutating);
+    }
+
+    @Override
+    public var $subscribe(Pipeable pipe) {
+        try {
+            handler.subscribe(i -> {
+                try {
+                    return pipe.pipe(i);
+                } catch (Exception e) {
+                    return DollarStatic.logAndRethrow(e);
+                }
+            });
+        } catch (IOException e) {
+            return DollarStatic.logAndRethrow(e);
+        }
+        return this;
+    }
+
+    @Override
+    public var $publish(var lhs) {
+        return handler.publish(lhs);
+    }
 
     @NotNull
     @Override
@@ -78,7 +181,6 @@ public class DollarURI extends AbstractDollar {
     public ImmutableMap<String, var> $map() {
         return ImmutableMap.of();
     }
-
 
     @NotNull
     @Override
@@ -125,28 +227,18 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public boolean isBoolean() {
-        return false;
+    public String S() {
+        return uri;
     }
 
-    @Override
-    public boolean isTrue() {
-        return false;
+    public var $containsValue(Object value) {
+        return DollarStatic.$(false);
     }
 
+    @NotNull
     @Override
-    public boolean isTruthy() {
-        return handler != null;
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
+    public ImmutableList<var> toList() {
+        return ImmutableList.copyOf(handler.all().toList());
     }
 
     @Override
@@ -154,8 +246,9 @@ public class DollarURI extends AbstractDollar {
         return DollarStatic.$(handler.size());
     }
 
-    public var $containsValue(Object value) {
-        return DollarStatic.$(false);
+    @Override
+    public boolean isVoid() {
+        return false;
     }
 
     @Override
@@ -166,71 +259,13 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $dec(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $negate() {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $multiply(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $divide(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $modulus(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $abs() {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @Override
-    public var decode() {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @Override
-    public String S() {
-        return uri;
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> toList() {
-        return ImmutableList.copyOf(handler.all().toList());
-    }
-
-    @Override
-    public boolean isVoid() {
-        return false;
-    }
-
-    @NotNull
-    @Override
     public Integer I() {
         return 0;
+    }
+
+    @Override
+    public int compareTo(var o) {
+        return Comparator.<String>naturalOrder().compare(uri, o.toString());
     }
 
     @NotNull
@@ -239,10 +274,20 @@ public class DollarURI extends AbstractDollar {
         return 0;
     }
 
+    @Override
+    public var decode() {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
     @Nullable
     @Override
     public JsonObject json(@NotNull String key) {
         return new JsonObject();
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
     }
 
     @Nullable
@@ -251,10 +296,20 @@ public class DollarURI extends AbstractDollar {
         return 0;
     }
 
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
     @Nullable
     @Override
     public JsonObject json() {
         return new JsonObject();
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return handler != null;
     }
 
     @Nullable
@@ -263,10 +318,20 @@ public class DollarURI extends AbstractDollar {
         return ImmutableList.of();
     }
 
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
     @Nullable
     @Override
     public Map<String, Object> toMap() {
         return Collections.emptyMap();
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
     }
 
     @NotNull
@@ -275,75 +340,6 @@ public class DollarURI extends AbstractDollar {
         return 0;
     }
 
-    @Override
-    public var $subscribe(Pipeable pipe) {
-        try {
-            handler.subscribe(i -> {
-                try {
-                    return pipe.pipe(i);
-                } catch (Exception e) {
-                    return DollarStatic.logAndRethrow(e);
-                }
-            });
-        } catch (IOException e) {
-            return DollarStatic.logAndRethrow(e);
-        }
-        return this;
-    }
-
-    @Override
-    public var $notify(var v) {
-        return handler.send(v, false, false);
-    }
-
-    @Override
-    public String $listen(Pipeable pipe, String key) {
-        return $listen(pipe);
-    }
-
-    @Override
-    public var $each(Pipeable pipe) {
-        return super.$each(pipe);
-    }
-
-    @Override
-    public int compareTo(var o) {
-        return Comparator.<String>naturalOrder().compare(uri, o.toString());
-    }
-
-    @Override
-    public var $receive(boolean blocking, boolean mutating) {
-        return handler.receive(blocking, mutating);
-    }
-
-
-    @Override
-    public var $send(var value, boolean blocking, boolean mutating) {
-        return handler.send(value, blocking, mutating);
-    }
-
-
-    @Override
-    public var $all() {
-        return handler.all();
-    }
-
-
-
-    @Override
-    public var $publish(var lhs) {
-        return handler.publish(lhs);
-    }
-
-    @Override
-    public var $drain() {
-        return handler.drain();
-    }
-
-    @Override
-    public boolean isUri() {
-        return true;
-    }
 
     @Override
     public boolean is(Type... types) {

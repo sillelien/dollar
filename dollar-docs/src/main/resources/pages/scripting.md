@@ -140,7 +140,7 @@ const MEDIUM = 23
 // MEDIUM= 4 would now produce an error
 ```
 
-So `:=` supports the reactive behaviour of Dollar, i.e. it is a declaration not a value assignment, and `=` is used to nail down a particular value. Later we'll come across the value anchor operator or diamond `@` which instructs DollarScript to fix a value at the time of declaration. More on that later.
+So `:=` supports the reactive behaviour of Dollar, i.e. it is a declaration not a value assignment, and `=` is used to nail down a particular value. Later we'll come across the value anchor operator or diamond `&` which instructs DollarScript to fix a value at the time of declaration. More on that later.
 
 ###Blocks
 ####Line Block
