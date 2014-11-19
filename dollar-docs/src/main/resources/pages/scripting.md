@@ -444,19 +444,14 @@ DollarScript as previously mentioned is a reactive programming language, that me
 Let's start with the simplest reactive control flow operator, the '->' or 'causes' operator.
 
 ```dollar
-a=1
-b=1
+a=1; b=1
+
 a -> (b= a)
 
-//Note the use of the fix operator & otherwise we are saying a is always equal to 1
+&a <=> 1 ; &b <=> 1
 
-&a <=> 1
-&b <=> 1
+a=2 ; &a <=> 2 ; &b <=> 2
 
-a=2
-
-&a <=> 2
-&b <=> 2
 ```
 
 Okay so reactive programming can melt your head a little. So let's go through the example step by step.
@@ -480,14 +475,9 @@ d=1
 //When c is greater than 3 assign it's value to d
 c > 3 => (d= c)
 
-&c <=> 1
-&d <=> 1
-c=2
-&c <=> 2
-&d <=> 1
-c=5
-&c <=> 5
-&d <=> 5
+&c <=> 1; &d <=> 1
+c=2; &c <=> 2; &d <=> 1
+c=5 ; &c <=> 5 ; &d <=> 5
 
 ```
 
