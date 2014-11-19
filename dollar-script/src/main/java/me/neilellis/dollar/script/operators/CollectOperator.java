@@ -47,14 +47,14 @@ public class CollectOperator implements Map<Object[], var> {
                 var value = fix((var) objects[0]);
                 count[0]++;
                 return dollarParser.inScope(scope, newScope -> {
+                    newScope.setParameter("count", $(count[0]));
+                    newScope.setParameter("it", value);
                     if (objects[2] instanceof var && ((var) objects[2]).isTrue()) {
                         //skip
                     } else {
                         collected.add(value);
                     }
                     var returnValue = $void();
-                    newScope.setParameter("count", $(count[0]));
-                    newScope.setParameter("it", value);
                     newScope.setParameter("collected", $(collected));
                     final boolean endValue = objects[1] instanceof var && ((var) objects[1]).isTrue();
                     if (endValue) {

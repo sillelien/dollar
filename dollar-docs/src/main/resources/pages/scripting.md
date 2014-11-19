@@ -496,35 +496,28 @@ This is similar to the previous example except that we have to set a value great
 ###Collect
 
 
-The `collect` operator listens for changes in the supplied expression adding all the values to a list until the `until` clause is triggered. It then evaluates the second expression with the values `it` for the current value, `count` for the number of messages collected since last emission and `collected` for the collected values. The whole operator itself emits `void` unless the collection emission is triggered in which case it emits the collection itself. Values can be skipped with an `unless` clause. Skipped messages increase the count value, so use `#collected` if you want the number of collected values.
+The `collect` operator listens for changes in the supplied expression adding all the values to a list until the `until` clause is triggered. It then evaluates the second expression with the values `it` for the current value, `count` for the number of messages **received** since last emission and `collected` for the collected values. The whole operator itself emits `void` unless the collection operation is triggered in which case it emits the collection itself. Values can be skipped with an `unless` clause. Skipped messages increase the count value, so use `#collected` if you want the number of collected values.
 
 ```dollar
+
 e=void
 
-//Length should always be five unless void
-(#it == 5 || it is VOID) collectedValues=void
+//Length is greater than or equal to 4 unless void
+(#it >= 4 || it is VOID) collectedValues=void
 
-//count starts at 0 so this means five to collect
-collect e until count == 4 {
+//count starts at 0 so this means five to collect (except if it contains the value 10)
+collect e until count == 4 unless it == 10{
     print count
     print collected
     collectedValues= collected
 }
 
-e=1
-e=2
-e=3
-e=4
-e=5
+e=1; e=2; e=3; e=4; e=5; e=6
 &collectedValues <=> [1,2,3,4,5]
-e=6
-e=7
-e=8
-e=9
-e=10
-&collectedValues <=> [6,7,8,9,10]
-e=11
-e=12
+e=7; e=8; e=9; e=10
+&collectedValues <=> [6,7,8,9]
+e=11; e=12; e=13; e=14; e=15; e=16
+&collectedValues <=> [11,12,13,14,15]
 
 ```
 
