@@ -62,12 +62,12 @@ In the above example we are declaring (using the declarative operator `:=`) that
 The assertion operator `.:` will throw an assertion error if the value following is either non boolean or not true.
 
 
-Now let's throw in the => or causes operator :
+Now let's throw in the -> or causes operator :
 
 ```dollar
 
 a=1
-a => { @@ $1 }
+a -> { @@ $1 }
 a=2
 a=3
 a=4
@@ -86,7 +86,7 @@ That simple piece of code will simply output each change made to the variable a,
 
 b=1
 a=1
-a + b + 1 => { @@ "a=" + a + ", b=" + b}
+a + b + 1 -> { @@ "a=" + a + ", b=" + b}
 a=2
 a=3
 a=4
@@ -482,6 +482,12 @@ c=5 ; &c <=> 5 ; &d <=> 5
 ```
 
 This is similar to the previous example except that we have to set a value greater than 3 for the action to be taken.
+
+```dollar
+//Note alternative syntax is when <condition> <expression>
+c=1
+when c > 3 { @@ c}
+```
 
 ###Collect
 
