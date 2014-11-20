@@ -59,6 +59,8 @@ public class DollarParser {
 
 
     private final ClassLoader classLoader;
+    private File file;
+    private File sourceDir;
     private ThreadLocal<List<ScriptScope>> scopes = new ThreadLocal<List<ScriptScope>>() {
         @Override
         protected List<ScriptScope> initialValue() {
@@ -74,8 +76,10 @@ public class DollarParser {
         classLoader = DollarParser.class.getClassLoader();
     }
 
-    public DollarParser(ClassLoader classLoader) {
+    public DollarParser(ClassLoader classLoader, File dir, File mainFile) {
         this.classLoader = classLoader;
+        this.sourceDir = dir;
+        this.file = mainFile;
     }
 
     static Parser<var> dollarIdentifier(ScriptScope scope) {
@@ -440,7 +444,7 @@ public class DollarParser {
                 .prefix(op(new UnaryOp(scope, var::$negate), "-"), UNARY_PRIORITY)
                 .prefix(forOperator(scope, ref), UNARY_PRIORITY)
                 .prefix(whileOperator(scope, ref), UNARY_PRIORITY)
-                .prefix(importOperator(scope), UNARY_PRIORITY)
+                .prefix(moduleOperator(scope), UNARY_PRIORITY)
                 .postfix(subscriptOperator(ref, scope), MEMBER_PRIORITY)
                 .postfix(parameterOperator(ref, scope), MEMBER_PRIORITY)
                 .prefix(op(new UnaryOp(true, v -> $((Object) v.$())), "&", "fix"), 1000)
@@ -531,23 +535,22 @@ public class DollarParser {
         return KEYWORD("is").next(IDENTIFIER.sepBy(OP(","))).map(new IsOperator(scope));
     }
 
-    private Parser<UnaryOp> importOperator(ScriptScope scope) {
+    private Parser<UnaryOp> moduleOperator(ScriptScope scope) {
         return op(new UnaryOp(scope, i -> {
             String importName = i.$S();
             String[] parts = importName.split(":", 2);
             if (parts.length < 2) {
-                throw new IllegalArgumentException("Import " + importName + " needs to have a scheme");
+                throw new IllegalArgumentException("Module " + importName + " needs to have a scheme");
             }
             try {
-                return fromLambda(in -> PipeableResolver.resolveModule(parts[0])
-                                                        .resolve(parts[1],
-                                                                 scope.getDollarParser().currentScope())
-                                                        .pipe(in));
+                return fromLambda(in -> ModuleResolver.resolveModule(parts[0])
+                                                      .resolve(parts[1], scope.getDollarParser().currentScope())
+                                                      .pipe(in));
             } catch (Exception e) {
                 return DollarStatic.logAndRethrow(e);
             }
 
-        }), "\u2357", "import");
+        }), "\u2357", "module");
     }
 
     private Parser<var> functionCall(Parser.Reference<var> ref, ScriptScope scope) {

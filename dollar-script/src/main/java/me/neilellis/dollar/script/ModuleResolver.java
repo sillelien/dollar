@@ -25,16 +25,16 @@ import java.util.ServiceLoader;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface PipeableResolver extends ExtensionPoint<PipeableResolver> {
+public interface ModuleResolver extends ExtensionPoint<ModuleResolver> {
 
-    public static PipeableResolver resolveModule(String scheme) {
-        final ServiceLoader<PipeableResolver> loader = ServiceLoader.load(PipeableResolver.class);
-        for (PipeableResolver piper : loader) {
+    public static ModuleResolver resolveModule(String scheme) {
+        final ServiceLoader<ModuleResolver> loader = ServiceLoader.load(ModuleResolver.class);
+        for (ModuleResolver piper : loader) {
             if (piper.getScheme().equals(scheme)) {
                 return piper.copy();
             }
         }
-        return NoOpProxy.newInstance(PipeableResolver.class);
+        return NoOpProxy.newInstance(ModuleResolver.class);
     }
 
 

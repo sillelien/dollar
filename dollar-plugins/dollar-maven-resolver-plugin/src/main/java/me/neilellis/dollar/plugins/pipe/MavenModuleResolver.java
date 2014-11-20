@@ -19,14 +19,19 @@ package me.neilellis.dollar.plugins.pipe;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.deps.DependencyRetriever;
-import me.neilellis.dollar.script.PipeableResolver;
+import me.neilellis.dollar.script.ModuleResolver;
 import me.neilellis.dollar.script.ScriptScope;
 import org.sonatype.aether.resolution.DependencyResolutionException;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class MavenPipeableResolver implements PipeableResolver {
+public class MavenModuleResolver implements ModuleResolver {
+    @Override
+    public ModuleResolver copy() {
+        return this;
+    }
+
     @Override
     public String getScheme() {
         return "mvn";
@@ -40,10 +45,5 @@ public class MavenPipeableResolver implements PipeableResolver {
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | DependencyResolutionException e) {
             return DollarStatic.logAndRethrow(e);
         }
-    }
-
-    @Override
-    public PipeableResolver copy() {
-        return this;
     }
 }

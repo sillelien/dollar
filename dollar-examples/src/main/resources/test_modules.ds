@@ -1,0 +1,2 @@
+chat := module "github:neilellis:dollar-example-module::chat.ds"
+chat.server( channel : "test" )
