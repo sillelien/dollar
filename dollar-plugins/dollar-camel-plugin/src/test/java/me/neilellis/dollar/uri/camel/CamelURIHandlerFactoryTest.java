@@ -24,6 +24,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.junit.Test;
 
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
 import static me.neilellis.dollar.DollarStatic.$void;
@@ -54,7 +55,7 @@ public class CamelURIHandlerFactoryTest {
                 e.printStackTrace();
                 return $void();
             }
-        });
+        }, UUID.randomUUID().toString());
         camelURIHandlerFactory.start();
         camelIntegrationProvider.send(DollarStatic.$("Listen Test"), false, false);
         countDownLatch.await();
@@ -62,15 +63,15 @@ public class CamelURIHandlerFactoryTest {
     }
 
     @Test
-    public void testPublish() throws Exception {
-
-    }
-
-    @Test
     public void testPoll() throws Exception {
         CamelURIHandlerFactory camelURIHandlerFactory = new CamelURIHandlerFactory();
         final var page = camelURIHandlerFactory.forURI("camel", "http://google.com").receive(true, false);
         assertTrue(page.$S().contains("html"));
+    }
+
+    @Test
+    public void testPublish() throws Exception {
+
     }
 
     @Test

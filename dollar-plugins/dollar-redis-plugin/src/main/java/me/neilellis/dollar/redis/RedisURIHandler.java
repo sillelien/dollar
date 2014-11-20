@@ -56,15 +56,8 @@ public class RedisURIHandler implements URIHandler {
         }
     }
 
-    public var send(var value) {
-        try (Jedis jedis = jedisPool.getResource()) {
-            jedis.lpush(path, value.$S());
-        }
-        return value;
-    }
-
     @Override
-    public void subscribe(Pipeable consumer) {
+    public void subscribe(Pipeable consumer, String id) {
         try (Jedis jedis = jedisPool.getResource()) {
             jedis.subscribe(new JedisPubSub() {
                 @Override
@@ -108,25 +101,6 @@ public class RedisURIHandler implements URIHandler {
         }
     }
 
-    public var poll() {
-        try (Jedis jedis = jedisPool.getResource()) {
-            return $(jedis.rpop(path));
-        }
-    }
-
-    public var receive() {
-        try (Jedis jedis = jedisPool.getResource()) {
-            return $(jedis.brpop(BLOCKING_TIMEOUT, path).get(1));
-        }
-    }
-
-
-    public var peek() {
-        try (Jedis jedis = jedisPool.getResource()) {
-            return $(jedis.lindex(path, -1));
-        }
-    }
-
     @Override
     public var set(var key, var value) {
         try (Jedis jedis = jedisPool.getResource()) {
@@ -166,9 +140,6 @@ public class RedisURIHandler implements URIHandler {
         throw new UnsupportedOperationException();
     }
 
-
-
-
     @Override
     public var drain() {
         try (Jedis jedis = jedisPool.getResource()) {
@@ -191,8 +162,37 @@ public class RedisURIHandler implements URIHandler {
         }
     }
 
+    public var receive() {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return $(jedis.brpop(BLOCKING_TIMEOUT, path).get(1));
+        }
+    }
+
+    public var poll() {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return $(jedis.rpop(path));
+        }
+    }
+
+    public var peek() {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return $(jedis.lindex(path, -1));
+        }
+    }
+
     @Override
     public var send(var value, boolean blocking, boolean mutating) {
         return send(value);
+    }
+
+    public var send(var value) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            jedis.lpush(path, value.$S());
+        }
+        return value;
+    }
+
+    @Override public void unsubscribe(String subId) {
+        //TODO
     }
 }

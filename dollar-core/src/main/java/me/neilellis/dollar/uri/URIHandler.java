@@ -26,14 +26,19 @@ import java.io.IOException;
  */
 public interface URIHandler {
 
+    var all();
+
+    var drain();
+
     /**
-     * Subscribe, listen semantics.
+     * Think Map.
      *
-     * @param consumer
+     * Map behaviour.
+     *
+     * @param key
+     * @return
      */
-    void subscribe(Pipeable consumer) throws IOException;
-
-
+    var get(var key);
 
     /**
      * Send to a point with multiple listeners.
@@ -47,37 +52,28 @@ public interface URIHandler {
         return send(value, false, false);
     }
 
+    var send(var value, boolean blocking, boolean mutating);
 
-    /**
-     * Think Map.
-     *
-     * @param key
-     * @param value
-     * @return
-     */
-    var set(var key, var value);
-
-    /**
-     * Think Map.
-     *
-     * Map behaviour.
-     *
-     * @param key
-     * @return
-     */
-    var get(var key);
-
-    var all();
+    var receive(boolean blocking, boolean mutating);
 
     var remove(var v);
 
     var removeValue(var v);
 
+    /**
+     * Think Map.
+     */
+    var set(var key, var value);
+
     int size();
 
-    var drain();
+    /**
+     * Subscribe, listen semantics.
+     *
+     * @param consumer
+     * @param id
+     */
+    void subscribe(Pipeable consumer, String id) throws IOException;
 
-    var receive(boolean blocking, boolean mutating);
-
-    var send(var value, boolean blocking, boolean mutating);
+    void unsubscribe(String subId);
 }

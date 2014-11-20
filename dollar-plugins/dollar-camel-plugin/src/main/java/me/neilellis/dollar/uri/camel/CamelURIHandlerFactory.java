@@ -82,9 +82,16 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
             consumerTemplate = this.context.createConsumerTemplate();
         }
 
+        public CamelContext getContext() {
+            return context;
+        }
+
+        public void setContext(CamelContext context) {
+            this.context = context;
+        }
 
         @Override
-        public void subscribe(Pipeable consumer) {
+        public void subscribe(Pipeable consumer, String id) {
             try {
                 context.addRoutes(
                         new RouteBuilder(context) {
@@ -104,20 +111,6 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
             }
         }
 
-
-        @Override
-        public var receive(boolean blocking, boolean mutating) {
-            try {
-                if (blocking) {
-                    return DollarFactory.fromStringValue(consumerTemplate.receiveBody(uri, String.class));
-                } else {
-                    return DollarFactory.fromStringValue(consumerTemplate.receiveBody(uri, 0, String.class));
-                }
-            } catch (Exception e) {
-                return DollarStatic.handleError(e, $void());
-            }
-        }
-
         @Override
         public var publish(var value) {
             try {
@@ -127,23 +120,6 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
             }
             return value;
         }
-
-        @Override
-        public var send(var value, boolean blocking, boolean mutating) {
-            try {
-                if (blocking) {
-                    return DollarFactory.fromStringValue(producerTemplate.sendBody(uri, ExchangePattern.InOut, value.$S())
-                            .toString());
-                } else {
-                    producerTemplate.asyncSendBody(uri, value.$S());
-                    return value;
-                }
-            } catch (CamelExecutionException e) {
-                return DollarStatic.handleError(e, value);
-            }
-        }
-
-
 
         @Override
         public var set(var key, var value) {
@@ -175,19 +151,42 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
             throw new UnsupportedOperationException("The Apache Camel uri handler does not support this yet.");
         }
 
-
         @Override
         public var drain() {
             throw new UnsupportedOperationException("The Apache Camel uri handler does not support this yet.");
         }
 
-
-        public CamelContext getContext() {
-            return context;
+        @Override
+        public var receive(boolean blocking, boolean mutating) {
+            try {
+                if (blocking) {
+                    return DollarFactory.fromStringValue(consumerTemplate.receiveBody(uri, String.class));
+                } else {
+                    return DollarFactory.fromStringValue(consumerTemplate.receiveBody(uri, 0, String.class));
+                }
+            } catch (Exception e) {
+                return DollarStatic.handleError(e, $void());
+            }
         }
 
-        public void setContext(CamelContext context) {
-            this.context = context;
+        @Override
+        public var send(var value, boolean blocking, boolean mutating) {
+            try {
+                if (blocking) {
+                    return DollarFactory.fromStringValue(
+                            producerTemplate.sendBody(uri, ExchangePattern.InOut, value.$S())
+                                            .toString());
+                } else {
+                    producerTemplate.asyncSendBody(uri, value.$S());
+                    return value;
+                }
+            } catch (CamelExecutionException e) {
+                return DollarStatic.handleError(e, value);
+            }
+        }
+
+        @Override public void unsubscribe(String subId) {
+            //TODO
         }
 
 

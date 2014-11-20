@@ -29,10 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -221,12 +218,8 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public String S() {
-        return uri;
-    }
-
-    @Override
     public var $subscribe(Pipeable pipe) {
+        final String subId = UUID.randomUUID().toString();
         try {
             handler.subscribe(i -> {
                 try {
@@ -234,22 +227,24 @@ public class DollarURI extends AbstractDollar {
                 } catch (Exception e) {
                     return DollarStatic.logAndRethrow(e);
                 }
-            });
+            }, subId);
         } catch (IOException e) {
             return DollarStatic.logAndRethrow(e);
         }
-        return this;
+        return DollarStatic.$("id", subId).$("unsub", DollarFactory.fromLambda(i -> {
+            handler.unsubscribe(subId);
+            return DollarStatic.$(subId);
+        }));
+    }
+
+    @Override
+    public String S() {
+        return uri;
     }
 
     @Override
     public var $publish(var lhs) {
         return handler.publish(lhs);
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> toList() {
-        return ImmutableList.copyOf(handler.all().toList());
     }
 
     @Override
@@ -262,9 +257,10 @@ public class DollarURI extends AbstractDollar {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
+    @NotNull
     @Override
-    public boolean isVoid() {
-        return false;
+    public ImmutableList<var> toList() {
+        return ImmutableList.copyOf(handler.all().toList());
     }
 
     @Override
@@ -277,15 +273,14 @@ public class DollarURI extends AbstractDollar {
         return false;
     }
 
-    @NotNull
-    @Override
-    public Integer I() {
-        return 0;
-    }
-
     @Override
     public boolean isTruthy() {
         return handler != null;
+    }
+
+    @Override
+    public boolean isVoid() {
+        return false;
     }
 
     @Override
@@ -293,16 +288,24 @@ public class DollarURI extends AbstractDollar {
         return false;
     }
 
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
+    }
+
+    @NotNull
+    @Override
+    public Integer I() {
+        return 0;
+    }
+
+
     @NotNull
     @Override
     public Integer I(@NotNull String key) {
         return 0;
     }
 
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
 
     @Nullable
     @Override

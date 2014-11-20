@@ -53,24 +53,19 @@ public class HttpURIHandler implements URIHandler {
         }
     }
 
-    private static RouteableNanoHttpd getHttpServerFor(String hostname, int port) throws IOException {
-        String key = hostname + ":" + port;
-        if (servers.contains(key)) {
-            return servers.get(key);
-        } else {
-            RouteableNanoHttpd nanoHttpd = new RouteableNanoHttpd(hostname, port);
-            servers.putIfAbsent(key, nanoHttpd);
-            nanoHttpd.start();
-            return nanoHttpd;
-        }
+    @Override
+    public var all() {
+        throw new UnsupportedOperationException();
     }
 
-
+    @Override
+    public var drain() {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
-    public void subscribe(Pipeable consumer) throws IOException {
-        httpd = getHttpServerFor(this.uri.getHost(), this.uri.getPort());
-        httpd.handle(this.uri.getPath(), new RequestHandler(consumer));
+    public var get(var key) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -90,21 +85,6 @@ public class HttpURIHandler implements URIHandler {
         }
     }
 
-
-    public var set(var key, var value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public var get(var key) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public var all() {
-        throw new UnsupportedOperationException();
-    }
-
     @Override
     public var remove(var key) {
         throw new UnsupportedOperationException();
@@ -115,15 +95,35 @@ public class HttpURIHandler implements URIHandler {
         throw new UnsupportedOperationException();
     }
 
+    public var set(var key, var value) {
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public int size() {
         throw new UnsupportedOperationException();
     }
 
-
     @Override
-    public var drain() {
-        throw new UnsupportedOperationException();
+    public void subscribe(Pipeable consumer, String id) throws IOException {
+        httpd = getHttpServerFor(this.uri.getHost(), this.uri.getPort());
+        httpd.handle(this.uri.getPath(), new RequestHandler(consumer));
+    }
+
+    private static RouteableNanoHttpd getHttpServerFor(String hostname, int port) throws IOException {
+        String key = hostname + ":" + port;
+        if (servers.contains(key)) {
+            return servers.get(key);
+        } else {
+            RouteableNanoHttpd nanoHttpd = new RouteableNanoHttpd(hostname, port);
+            servers.putIfAbsent(key, nanoHttpd);
+            nanoHttpd.start();
+            return nanoHttpd;
+        }
+    }
+
+    @Override public void unsubscribe(String subId) {
+        //TODO
     }
 
     public static class RouteableNanoHttpd extends NanoHttpd {

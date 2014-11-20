@@ -18,6 +18,8 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.Operator;
 import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.exceptions.DollarScriptException;
+import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
 
@@ -42,22 +44,20 @@ public class SubscribeOperator implements Binary<var>, Operator {
     public var map(var lhs, var rhs) {
         try {
 
-            return $(lhs.$subscribe(i -> scope.getDollarParser().inScope(scope, newScope -> {
+            return DollarFactory.fromLambda(
+                    j -> lhs.$subscribe(i -> scope.getDollarParser().inScope(scope, newScope -> {
                 scope.getDollarParser().currentScope().setParameter("1", i);
                 scope.getDollarParser().currentScope().setParameter("it", i);
                 //todo: change to receive
                 return $((Object) rhs.$());
             })));
-//                } catch (AssertionError e) {
-//                    throw new AssertionError(e + " at '" + source.get() + "'", e);
-//                }
-//
 
-//            return lambda;
         } catch (AssertionError e) {
-            throw new AssertionError(e + " at '" + source.get() + "'");
+            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
+        } catch (DollarScriptException e) {
+            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
         } catch (Exception e) {
-            throw new Error(e + " at '" + source.get() + "'");
+            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
         }
     }
 
