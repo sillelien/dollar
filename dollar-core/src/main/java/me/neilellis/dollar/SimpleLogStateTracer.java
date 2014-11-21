@@ -16,9 +16,9 @@
 
 package me.neilellis.dollar;
 
+import me.neilellis.dollar.types.DollarList;
+import me.neilellis.dollar.types.DollarMap;
 import me.neilellis.dollar.types.DollarVoid;
-
-import java.util.Arrays;
 
 /**
  * Created by neil on 10/15/14.
@@ -34,11 +34,7 @@ public class SimpleLogStateTracer implements StateTracer {
             if (((var) after).hasErrors()) {
                 afterNotes += "*ERROR*";
             }
-            if (((var) after).isLambda()) {
-                afterStr = "<LAMBDA>";
-            } else {
-                afterStr = after.toString();
-            }
+            afterStr = format(after);
         } else {
             if (after != null) {
                 afterStr = String.format("%s(%s)", after.toString(), after.getClass().getName());
@@ -48,11 +44,7 @@ public class SimpleLogStateTracer implements StateTracer {
             if (((var) before).hasErrors()) {
                 beforeNotes += "*ERROR*";
             }
-            if (((var) before).isLambda()) {
-                beforeStr = "<LAMBDA>";
-            } else {
-                beforeStr = before.toString();
-            }
+            beforeStr = format(before);
         } else {
             if (before != null) {
                 beforeStr = String.format("%s(%s)", before.toString(), before.getClass().getName());
@@ -61,20 +53,49 @@ public class SimpleLogStateTracer implements StateTracer {
         if ((before instanceof DollarVoid || before == null) && (after instanceof DollarVoid || after == null)) {
             DollarStatic.log(String.format("%s%s: %s->%s",
                     operationType,
-                    Arrays.toString(values),
+                    toDescription(values),
                     beforeNotes,
                     afterNotes));
         } else if (before instanceof DollarVoid || before == null) {
-            DollarStatic.log(String.format("%s%s: %s%s", operationType, Arrays.toString(values), afterStr, afterNotes));
+            DollarStatic.log(String.format("%s%s: %s%s", operationType, toDescription(values), afterStr, afterNotes));
         } else {
             DollarStatic.log(String.format("%s%s: %s%s -> %s%s",
                     operationType,
-                    Arrays.toString(values),
+                    toDescription(values),
                     beforeStr,
                     beforeNotes,
                     afterStr,
                     afterNotes));
         }
         return after;
+    }
+
+    private String format(Object value) {
+        Object unwrapped;
+        String formatted;
+        if (value instanceof var) {
+            unwrapped = ((var) value)._unwrap();
+        } else {
+            unwrapped = value;
+        }
+        if (value instanceof var &&
+            (((var) unwrapped).isLambda() || unwrapped instanceof DollarList || unwrapped instanceof DollarMap)) {
+            formatted = "<" + unwrapped.getClass().getSimpleName() + ">";
+        } else {
+            formatted = String.valueOf(value);
+        }
+        return formatted;
+    }
+
+    private String toDescription(Object[] values) {
+        String result = "[";
+        for (Object value : values) {
+            Object unwrapped;
+            String formatted;
+            formatted = format(value);
+            result += formatted + ", ";
+        }
+        result += "]";
+        return result;
     }
 }

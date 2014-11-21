@@ -37,7 +37,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static me.neilellis.dollar.DollarStatic.*;
 import static me.neilellis.dollar.script.DollarLexer.*;
@@ -155,7 +154,7 @@ public class DollarParser {
             scope.setDollarParser(this);
             Parser<?> parser = buildParser(new ScriptScope(scope, source));
             List<var> parse = (List<var>) parser.from(TOKENIZER, DollarLexer.IGNORED).parse(source);
-            return $(parse.stream().map(i -> i.$()).collect(Collectors.toList()));
+            return parse.get(parse.size() - 1);
         } catch (ParserException e) {
             //todo: proper error handling
             if (e.getErrorDetails() != null) {
@@ -383,7 +382,7 @@ public class DollarParser {
                         ".:", "assert"), LINE_PREFIX_PRIORITY)
                 .infixl(op(new BinaryOp((lhs, rhs) -> {
                     if (lhs.equals(rhs)) {
-                        return lhs;
+                        return $(true);
                     } else {
                         throw new AssertionError(lhs.$S() + " != " + rhs.$S());
                     }

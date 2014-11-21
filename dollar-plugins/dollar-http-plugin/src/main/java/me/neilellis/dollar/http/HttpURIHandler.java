@@ -43,6 +43,7 @@ public class HttpURIHandler implements URIHandler {
     private final URI uri;
     private RouteableNanoHttpd httpd;
     private String method = "GET";
+    private ConcurrentHashMap<String, String> subscriptions = new ConcurrentHashMap<>();
 
     public HttpURIHandler(String scheme, String uri) throws URISyntaxException, IOException {
         if (uri.startsWith("//")) {
@@ -108,11 +109,12 @@ public class HttpURIHandler implements URIHandler {
     public void subscribe(Pipeable consumer, String id) throws IOException {
         httpd = getHttpServerFor(this.uri.getHost(), this.uri.getPort());
         httpd.handle(this.uri.getPath(), new RequestHandler(consumer));
+        subscriptions.put(id, this.uri.getPath());
     }
 
     private static RouteableNanoHttpd getHttpServerFor(String hostname, int port) throws IOException {
         String key = hostname + ":" + port;
-        if (servers.contains(key)) {
+        if (servers.containsKey(key)) {
             return servers.get(key);
         } else {
             RouteableNanoHttpd nanoHttpd = new RouteableNanoHttpd(hostname, port);
@@ -123,7 +125,7 @@ public class HttpURIHandler implements URIHandler {
     }
 
     @Override public void unsubscribe(String subId) {
-        //TODO
+        httpd.remove(subscriptions.get(subId));
     }
 
     public static class RouteableNanoHttpd extends NanoHttpd {
@@ -138,6 +140,9 @@ public class HttpURIHandler implements URIHandler {
             handlers.put(key, handler);
         }
 
+        public void remove(String key) {
+            handlers.remove(key);
+        }
 
         @Override
         public Response serve(IHTTPSession session) {

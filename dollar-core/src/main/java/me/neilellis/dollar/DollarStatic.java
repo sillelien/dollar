@@ -138,7 +138,7 @@ public class DollarStatic {
     }
 
     public static var fix(@Nullable var v) {
-        return DollarFactory.fromValue(ImmutableList.of(), v != null ? v._unwrap().$() : $void());
+        return v != null ? DollarFactory.fromValue(ImmutableList.of(), v._unwrap().$()) : $void();
     }
 
     @NotNull

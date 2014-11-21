@@ -26,6 +26,7 @@ import org.codehaus.jparsec.functors.Map;
 import java.util.List;
 
 import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.DollarStatic.fix;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -42,9 +43,7 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
     @Override public Map<? super var, ? extends var> map(List<var> rhs) {
         return lhs -> {
 
-            var
-                    lambda =
-                    DollarFactory.fromLambda(i -> dollarParser.inScope(scope, newScope -> {
+            var lambda = DollarFactory.fromLambda(i -> dollarParser.inScope(scope, newScope -> {
                         //Add the special $* value for all the parameters
                         newScope.setParameter("*", $(rhs));
                         int count = 0;
@@ -59,7 +58,9 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
                         }
                         var result;
                         if (lhs.isLambda()) {
-                            result = $((Object) lhs.$());
+                            System.out.println("RESULT: " + lhs._unwrap().getClass());
+                            result = fix(lhs);
+                            System.out.println("RESULT: " + result._unwrap().getClass());
                         } else {
                             String lhsString = lhs.toString();
                             //The lhs is a string, so let's see if it's a builtin function
@@ -67,7 +68,7 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
                             if (Builtins.exists(lhsString)) {
                                 result = Builtins.execute(lhsString, rhs, newScope);
                             } else {
-                                result = $((Object) newScope.get(lhsString).$());
+                                result = fix(newScope.get(lhsString));
                             }
                         }
 

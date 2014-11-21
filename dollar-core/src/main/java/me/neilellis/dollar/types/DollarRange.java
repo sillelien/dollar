@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static me.neilellis.dollar.DollarStatic.fix;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
@@ -47,6 +49,115 @@ public class DollarRange extends AbstractDollar {
     public DollarRange(@NotNull List<Throwable> errors, Range range) {
         super(errors);
         this.range = range;
+    }
+
+    @NotNull
+    @Override
+    public Range<var> $() {
+        return range;
+    }
+
+    @NotNull
+    @Override
+    public var $(@NotNull Number n) {
+        return toList().get(n.intValue());
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $children() {
+        return toList().stream();
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $children(@NotNull String key) {
+        return Stream.of(DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION));
+    }
+
+    @NotNull
+    @Override
+    public var $containsValue(var value) {
+        return DollarStatic.$(range.lowerEndpoint().compareTo(DollarStatic.$(value)) <= 0 &&
+                              range.upperEndpoint().compareTo(DollarStatic.$(value)) >= 0);
+    }
+
+    @Override
+    public var $has(@NotNull String key) {
+        return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    @Override
+    public String S(@NotNull String key) {
+        return range.toString();
+    }
+
+    @NotNull
+    @Override
+    public var $get(@NotNull String key) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull Object value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $plus(Object value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $rm(@NotNull String value) {
+        return $copy();
+
+    }
+
+    @NotNull
+    @Override
+    public var $(@NotNull var key, Object value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $size() {
+        return DollarStatic.$(toList().size());
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> toList() {
+        List<var> values = new ArrayList<>();
+        var start = range.lowerEndpoint();
+        var finish = range.upperEndpoint();
+        for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
+            values.add(i);
+        }
+        return ImmutableList.copyOf(values);
+    }
+
+    @Override
+    public Stream<String> keyStream() {
+        return null;
+
+    }
+
+    @NotNull
+    @Override
+    public var remove(Object value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
@@ -85,102 +196,6 @@ public class DollarRange extends AbstractDollar {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
     }
 
-    @NotNull
-    @Override
-    public var $abs() {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
-    }
-
-    @NotNull
-    @Override
-    public var $plus(Object value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $children() {
-        return toList().stream();
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $children(@NotNull String key) {
-        return Stream.of(DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION));
-    }
-
-    @Override
-    public var $has(@NotNull String key) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-        throw new UnsupportedOperationException();
-    }
-
-    @NotNull
-    @Override
-    public String S(@NotNull String key) {
-        return range.toString();
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> toList() {
-        List<var> values = new ArrayList<>();
-        var start = range.lowerEndpoint();
-        var finish = range.upperEndpoint();
-        for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
-            values.add(i);
-        }
-        return ImmutableList.copyOf(values);
-    }
-
-    @NotNull
-    @Override
-    public var $rm(@NotNull String value) {
-        return $copy();
-
-    }
-
-    @NotNull
-    @Override
-    public var $minus(@NotNull Object value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull var key, Object value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $get(@NotNull String key) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public Range<var> $() {
-        return range;
-    }
-
-    @Override
-    public Stream<String> keyStream() {
-        return null;
-
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull Number n) {
-        return toList().get(n.intValue());
-    }
-
     @Override
     public boolean isVoid() {
         return false;
@@ -188,26 +203,8 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $containsValue(var value) {
-        return DollarStatic.$(range.lowerEndpoint().compareTo(DollarStatic.$(value)) <= 0 &&
-                              range.upperEndpoint().compareTo(DollarStatic.$(value)) >= 0);
-    }
-
-    @NotNull
-    @Override
-    public var $size() {
-        return DollarStatic.$(toList().size());
-    }
-
-    @Override
-    public Integer I() {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public var remove(Object value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+    public var $abs() {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
     }
 
     @Override
@@ -224,15 +221,15 @@ public class DollarRange extends AbstractDollar {
         throw new IllegalStateException();
     }
 
-    @Override
-    public Integer I(@NotNull String key) {
-        return null;
-    }
-
     @NotNull
     @Override
     public var decode() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Integer I() {
+        return null;
     }
 
     @Override
@@ -246,7 +243,7 @@ public class DollarRange extends AbstractDollar {
             return false;
         }
         if (obj instanceof var) {
-            var unwrapped = ((var) obj)._unwrap();
+            var unwrapped = fix(((var) obj))._unwrap();
             if (unwrapped instanceof DollarRange) {
                 return range.equals(((DollarRange) unwrapped).range);
             }
@@ -263,10 +260,9 @@ public class DollarRange extends AbstractDollar {
         return true;
     }
 
-    @NotNull
     @Override
-    public JsonObject json(@NotNull String key) {
-        return new JsonObject();
+    public Integer I(@NotNull String key) {
+        return null;
     }
 
     @Override
@@ -293,6 +289,13 @@ public class DollarRange extends AbstractDollar {
     public boolean isNeitherTrueNorFalse() {
         return true;
     }
+
+    @NotNull
+    @Override
+    public JsonObject json(@NotNull String key) {
+        return new JsonObject();
+    }
+
 
     @Override
     public Number number(@NotNull String key) {

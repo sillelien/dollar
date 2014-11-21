@@ -1,6 +1,19 @@
+/*chat:= {
+    "server": {
+        redis := ("redis://localhost:6379/" + channel) as URI
+
+          (("http:get://127.0.0.1:8111/" + channel) as URI) subscribe {
+            $1.params +> redis
+            { body :  all redis }
+        }
+
+        "Hello World"
+    }
+}
+*/
+
 chat := module "github:neilellis:dollar-example-module::chat.ds"
-sub= chat.server( channel : "test" )
-@@ sub
+sub= (chat.server)( channel : "test" )
 sub.unsub()
 
 

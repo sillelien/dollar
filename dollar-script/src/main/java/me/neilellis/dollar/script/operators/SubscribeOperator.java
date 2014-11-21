@@ -25,7 +25,7 @@ import org.codehaus.jparsec.functors.Binary;
 
 import java.util.function.Supplier;
 
-import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.DollarStatic.fix;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -46,11 +46,12 @@ public class SubscribeOperator implements Binary<var>, Operator {
 
             return DollarFactory.fromLambda(
                     j -> lhs.$subscribe(i -> scope.getDollarParser().inScope(scope, newScope -> {
-                scope.getDollarParser().currentScope().setParameter("1", i);
-                scope.getDollarParser().currentScope().setParameter("it", i);
-                //todo: change to receive
-                return $((Object) rhs.$());
-            })));
+                        final var it = fix(i);
+                        scope.getDollarParser().currentScope().setParameter("1", it);
+                        scope.getDollarParser().currentScope().setParameter("it", it);
+                        //todo: change to receive
+                        return fix(rhs);
+                    })));
 
         } catch (AssertionError e) {
             return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
