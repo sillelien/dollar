@@ -18,6 +18,8 @@ dependencies:
     - ./gen-key.sh ${GPG_PASSPHRASE}
     - envsubst < settings.xml > ~/.m2/settings.xml
     - "(mvn -Dgpg.passphrase=${GPG_PASSPHRASE} clean package -Dmaven.test.skip || : ) &> /dev/null"
+    - echo "login=neilellis" > ~/.github
+    - echo "password=${GITHUB_PASSWORD}" >> ~/.github
   override:
     - echo ""
 
