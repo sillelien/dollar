@@ -273,11 +273,11 @@ public class DollarParser {
         final Parser<Object[]> param = array(IDENTIFIER.followedBy(OP("=")), ref.lazy());
 
         final Parser<List<var>> parameters =
-                KEYWORD("with").next(param).map(objects -> {
+                KEYWORD("with").optional().next((param).map(objects -> {
                     var result = (var) objects[1];
                     result.setMetaAttribute(NAMED_PARAMETER_META_ATTR, objects[0].toString());
                     return result;
-                }).sepBy(COMMA_TERMINATOR);
+                }).sepBy(OP(",")).between(OP("("), OP(")")));
 
         Parser<Object[]> sequence = array(KEYWORD("module"), STRING_LITERAL.or(URL), parameters.optional());
 

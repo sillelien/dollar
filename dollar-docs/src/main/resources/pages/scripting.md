@@ -625,7 +625,7 @@ The truthy operator converts any value to a boolean by applying the rule that: v
 Modules can be imported using the `module` keyword and a string representing in URI format the location of the module. At present the standard format is the Github locator so we're going to look at that first.
 
 ```dollar
-chat:= module "github:neilellis:dollar-example-module::chat.ds" with channel="test"
+chat:= module "github:neilellis:dollar-example-module::chat.ds" (channel="test")
 sub= chat.server()
 chat.state <=> ["RUNNING","RUNNING"]
 sub.unsub()

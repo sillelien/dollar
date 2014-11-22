@@ -12,7 +12,7 @@
 }
 */
 
-chat:= module "github:neilellis:dollar-example-module::chat.ds" with channel="test"
+chat:= module "github:neilellis:dollar-example-module::chat.ds" (channel="test",hello="world")
 sub= chat.server()
 chat.state <=> ["RUNNING","RUNNING"]
 sub.unsub()
