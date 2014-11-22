@@ -44,7 +44,7 @@ deployment:
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
-        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} clean install deploy
+        - mvn -X -Dgpg.passphrase=${GPG_PASSPHRASE} clean install deploy
         - ./build-docs.sh
         - pack/pack.sh
         - pack/upload.sh 0.0.${CIRCLE_BUILD_NUM}
