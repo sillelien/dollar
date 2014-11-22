@@ -19,6 +19,7 @@ package me.neilellis.dollar.plugins.pipe;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.TypeAware;
+import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.deps.DependencyRetriever;
 import me.neilellis.dollar.script.DollarParser;
 import me.neilellis.dollar.script.ModuleResolver;
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -105,9 +107,15 @@ public class GithubModuleResolver implements ModuleResolver {
                                                        .map(TypeAware::$S)
                                                        .collect(Collectors.toList()));
         }
-        return (in) -> scope.getDollarParser().inScope(scope, newScope -> {
+        return (params) -> scope.getDollarParser().inScope(scope, newScope -> {
             try {
-                return new DollarParser(classLoader, dir, mainFile).parse(newScope, content);
+
+                final ScriptScope moduleScope = new ScriptScope(uriWithoutScheme);
+                final ImmutableMap<String, var> paramMap = params.$map();
+                for (Map.Entry<String, var> entry : paramMap.entrySet()) {
+                    moduleScope.set(entry.getKey(), entry.getValue(), true, null);
+                }
+                return new DollarParser(classLoader, dir, mainFile).parse(moduleScope, content);
             } catch (IOException e) {
                 return DollarStatic.logAndRethrow(e);
             }

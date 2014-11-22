@@ -8,4 +8,9 @@ revrse([2,1]) <=> [1,2]
 fix ([2,1] | revrse) | revrse <=> [2,1]
 
 
+testParams := ($2 + " " + $1)
+testParams ("Hello", "World") <=> "World Hello"
+
+testParams2 := (last + " " + first)
+testParams2(first="Hello", last="World") <=> "World Hello"
 

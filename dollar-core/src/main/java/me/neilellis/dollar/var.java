@@ -32,7 +32,8 @@ import java.util.stream.Stream;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface var extends ErrorAware, TypeAware, PipeAware,
-        OldAndDeprecated, VarInternal, NumericAware, BooleanAware, ControlFlowAware, AssertionAware, URIAware, MetadataAware, Comparable<var>, LogAware {
+                             OldAndDeprecated, VarInternal, NumericAware, BooleanAware, ControlFlowAware,
+                             AssertionAware, URIAware, MetadataAware, Comparable<var>, LogAware, StateAware<var> {
 
 
     @NotNull
@@ -42,11 +43,16 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     }
 
     @NotNull
+    @Guarded(ChainGuard.class) var $(@NotNull var key, @Nullable Object value);
+
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
     default var $(@NotNull String key) {
         return $get(key);
     }
+
+    @NotNull var $get(@NotNull String key);
 
     /**
      * Returns a {@link me.neilellis.dollar.json.JsonObject}, JsonArray or primitive type such that it can be added to
@@ -137,8 +143,6 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
         return $get(key).S();
     }
 
-    @NotNull var $get(@NotNull String key);
-
     /**
      * Returns the mime type of this {@link var} object. By default this will be 'application/json'
      *
@@ -184,10 +188,6 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     default var $set(@NotNull String key, @Nullable Object value) {
         return $(DollarStatic.$(key), value);
     }
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    var $(@NotNull var key, @Nullable Object value);
 
     @NotNull
     @Guarded(ChainGuard.class) var $size();

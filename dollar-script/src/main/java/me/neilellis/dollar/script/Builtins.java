@@ -17,12 +17,14 @@
 package me.neilellis.dollar.script;
 
 import com.google.common.collect.ImmutableList;
+import me.neilellis.dollar.StateAware;
 import me.neilellis.dollar.var;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static me.neilellis.dollar.DollarStatic.$;
@@ -50,6 +52,11 @@ public class Builtins {
     public static void addDollarStyle(String name, int minargs, int maxargs, Builtin.DollarStyle lambda) {
         map.put(name, new Builtin.BuiltinImpl(lambda, minargs, maxargs));
     }
+
+    public static void addDollarSingleNoScope(String name, Function<var, var> lambda) {
+        map.put(name, new Builtin.BuiltinImpl((args, scope) -> lambda.apply((var) args.get(0)), 1, 1));
+    }
+
 
     static {
         addDollarStyle("abs", 1, 1, (args, scope) -> args.get(0).$abs());
@@ -79,6 +86,13 @@ public class Builtins {
             ImmutableList<var> list = args.get(0).toList();
             return $(list.get(list.size() - 1));
         });
+        addDollarSingleNoScope("start", StateAware::$start);
+        addDollarSingleNoScope("stop", StateAware::$stop);
+        addDollarSingleNoScope("create", StateAware::$create);
+        addDollarSingleNoScope("destroy", StateAware::$destroy);
+        addDollarSingleNoScope("pause", StateAware::$pause);
+        addDollarSingleNoScope("unpause", StateAware::$unpause);
+        addDollarSingleNoScope("state", StateAware::$state);
 
         addJavaStyle("strlen", 1, 1, (args, scope) -> args.get(0).toString().length());
         addJavaStyle("date", 0, 0, (args, scope) -> new Date().toString());

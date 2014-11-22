@@ -36,6 +36,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import static me.neilellis.dollar.DollarStatic.*;
@@ -70,6 +71,7 @@ public class DollarParser {
     };
     private Parser<?> topLevelParser;
     private ParserErrorHandler errorHandler = new ParserErrorHandler();
+    private ConcurrentHashMap<String, var> exports = new ConcurrentHashMap<>();
 
     public DollarParser() {
         classLoader = DollarParser.class.getClassLoader();
@@ -95,6 +97,10 @@ public class DollarParser {
 
     public ScriptScope endScope() {
         return scopes.get().remove(scopes.get().size() - 1);
+    }
+
+    public void export(String name, var export) {
+        exports.put(name, export);
     }
 
 //    private Parser<var> arrayElementExpression(Parser<var> expression1, Parser<var> expression2, ScriptScope scope) {
@@ -154,7 +160,7 @@ public class DollarParser {
             scope.setDollarParser(this);
             Parser<?> parser = buildParser(new ScriptScope(scope, source));
             List<var> parse = (List<var>) parser.from(TOKENIZER, DollarLexer.IGNORED).parse(source);
-            return parse.get(parse.size() - 1);
+            return $(exports);
         } catch (ParserException e) {
             //todo: proper error handling
             if (e.getErrorDetails() != null) {
@@ -263,6 +269,23 @@ public class DollarParser {
     }
 
 
+    private Parser<var> moduleStatement(ScriptScope scope, Parser.Reference<var> ref) {
+        final Parser<Object[]> param = array(IDENTIFIER.followedBy(OP("=")), ref.lazy());
+
+        final Parser<List<var>> parameters =
+                KEYWORD("with").next(param).map(objects -> {
+                    var result = (var) objects[1];
+                    result.setMetaAttribute(NAMED_PARAMETER_META_ATTR, objects[0].toString());
+                    return result;
+                }).sepBy(COMMA_TERMINATOR);
+
+        Parser<Object[]> sequence = array(KEYWORD("module"), STRING_LITERAL.or(URL), parameters.optional());
+
+        return sequence.map(new ModuleOperator(scope));
+
+    }
+
+
     private Parser<var> collectStatement(Parser<var> expression, ScriptScope scope) {
         Parser<Object[]> sequence = KEYWORD_NL("collect")
                 .next(array(expression, KEYWORD("until").next(expression).optional(),
@@ -318,7 +341,7 @@ public class DollarParser {
             Parser<var> block = block(ref.lazy(), newScope).between(OP_NL("{"), NL_TERM("}"));
             Parser<var> expression = expression(newScope);
             Parser<List<var>> parser = (TERMINATOR_SYMBOL.optional()).next(or(expression, block).followedBy(
-                    TERMINATOR_SYMBOL).map(DollarStatic::fix).many1());
+                    TERMINATOR_SYMBOL).map((v) -> {return DollarStatic.fix(v);}).many1());
             ref.set(parser.map(DollarStatic::$));
             return parser;
         });
@@ -330,11 +353,12 @@ public class DollarParser {
         Parser<var> main = ref.lazy()
                               .between(OP("("), OP(")"))
                               .or(or(list(ref.lazy(), scope), map(ref.lazy(), scope),
+                                     moduleStatement(scope, ref),
                                      collectStatement(ref.lazy(), scope),
                                      whenStatement(ref.lazy(), scope), everyStatement(ref.lazy(), scope),
                                      java(scope), URL, DECIMAL_LITERAL, INTEGER_LITERAL, STRING_LITERAL,
                                      dollarIdentifier(scope), IDENTIFIER_KEYWORD, functionCall(ref, scope),
-                                     identifier().map(new Map<var, var>() {
+                                     identifier().followedBy(OP("(").not().peek()).map(new Map<var, var>() {
                                          @Override public var map(var var) {
                                              final me.neilellis.dollar.var
                                                      lambda =
@@ -441,9 +465,15 @@ public class DollarParser {
                 .postfix(op(new UnaryOp(scope, var::$dec), "--"), INC_DEC_PRIORITY)
                 .postfix(op(new UnaryOp(scope, var::$inc), "++"), INC_DEC_PRIORITY)
                 .prefix(op(new UnaryOp(scope, var::$negate), "-"), UNARY_PRIORITY)
+                .prefix(op(new UnaryOp(scope, var::$stop), "(!)"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp(scope, var::$start), "(>)"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp(scope, var::$pause), "(=)"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp(scope, var::$unpause), "(~)"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp(scope, var::$destroy), "(-)"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp(scope, var::$create), "(+)"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp(scope, var::$state), "(?)"), SIGNAL_PRIORITY)
                 .prefix(forOperator(scope, ref), UNARY_PRIORITY)
                 .prefix(whileOperator(scope, ref), UNARY_PRIORITY)
-                .prefix(moduleOperator(scope), UNARY_PRIORITY)
                 .postfix(subscriptOperator(ref, scope), MEMBER_PRIORITY)
                 .postfix(parameterOperator(ref, scope), MEMBER_PRIORITY)
                 .prefix(op(new UnaryOp(true, v -> $((Object) v.$())), "&", "fix"), 1000)
@@ -471,7 +501,7 @@ public class DollarParser {
 
     private Parser<Map<? super var, ? extends var>> assignmentOperator(final ScriptScope scope,
                                                                        Parser.Reference<var> ref) {
-        return array(KEYWORD("const").optional(),
+        return array(KEYWORD("export").optional(), KEYWORD("const").optional(),
                      IDENTIFIER.between(OP("<"), OP(">")).optional(),
                      ref.lazy().between(OP("("), OP(")")).optional(),
                      OP("$").next(ref.lazy().between(OP("("), OP(")")))
@@ -482,7 +512,7 @@ public class DollarParser {
     private Parser<Map<? super var, ? extends var>> declarationOperator(final ScriptScope scope,
                                                                         Parser.Reference<var> ref) {
 
-        return array(IDENTIFIER.between(OP("<"), OP(">")).optional(),
+        return array(KEYWORD("export").optional(), IDENTIFIER.between(OP("<"), OP(">")).optional(),
                      OP("$").next(ref.lazy().between(OP("("), OP(")")))
                             .or(IDENTIFIER),
                      OP(":=")).map(new DeclarationOperator(scope));
@@ -534,41 +564,25 @@ public class DollarParser {
         return KEYWORD("is").next(IDENTIFIER.sepBy(OP(","))).map(new IsOperator(scope));
     }
 
-    private Parser<UnaryOp> moduleOperator(ScriptScope scope) {
-        return op(new UnaryOp(scope, i -> {
-            String importName = i.$S();
-            String[] parts = importName.split(":", 2);
-            if (parts.length < 2) {
-                throw new IllegalArgumentException("Module " + importName + " needs to have a scheme");
-            }
-            try {
-                return fromLambda(in -> ModuleResolver.resolveModule(parts[0])
-                                                      .resolve(parts[1], scope.getDollarParser().currentScope())
-                                                      .pipe(in));
-            } catch (Exception e) {
-                return DollarStatic.logAndRethrow(e);
-            }
-
-        }), "\u2357", "module");
-    }
-
     private Parser<var> functionCall(Parser.Reference<var> ref, ScriptScope scope) {
         return array(IDENTIFIER, parameterOperator(ref, scope)).map(new FunctionCallOperator());
     }
 
     private Parser<Map<? super var, ? extends var>> parameterOperator(Parser.Reference<var> ref, ScriptScope scope) {
-        return OP("(").next(array(IDENTIFIER.followedBy(OP(":")).optional(), ref.lazy()).map(objects -> {
-            //Is it a named parameter
-            if (objects[0] != null) {
-                //yes so let's add the name as metadata to the value
-                var result = (var) objects[1];
-                result.setMetaAttribute(NAMED_PARAMETER_META_ATTR, objects[0].toString());
-                return result;
-            } else {
-                //no, just use the value
-                return (var) objects[1];
-            }
-        }).sepBy(COMMA_TERMINATOR)).followedBy(OP(")")).map(
+        return OP("(").next(
+                or(array(IDENTIFIER.followedBy(OP("=")), ref.lazy()), array(OP("=").optional(), ref.lazy())).map(
+                        objects -> {
+                            //Is it a named parameter
+                            if (objects[0] != null) {
+                                //yes so let's add the name as metadata to the value
+                                var result = (var) objects[1];
+                                result.setMetaAttribute(NAMED_PARAMETER_META_ATTR, objects[0].toString());
+                                return result;
+                            } else {
+                                //no, just use the value
+                                return (var) objects[1];
+                            }
+                        }).sepBy(COMMA_TERMINATOR)).followedBy(OP(")")).map(
                 new ParameterOperator(this, scope));
     }
 

@@ -28,6 +28,8 @@ public interface URIHandler {
 
     var all();
 
+    void destroy();
+
     var drain();
 
     /**
@@ -39,6 +41,10 @@ public interface URIHandler {
      * @return
      */
     var get(var key);
+
+    void init();
+
+    void pause();
 
     /**
      * Send to a point with multiple listeners.
@@ -67,6 +73,10 @@ public interface URIHandler {
 
     int size();
 
+    void start();
+
+    void stop();
+
     /**
      * Subscribe, listen semantics.
      *
@@ -74,6 +84,8 @@ public interface URIHandler {
      * @param id
      */
     void subscribe(Pipeable consumer, String id) throws IOException;
+
+    void unpause();
 
     void unsubscribe(String subId);
 }

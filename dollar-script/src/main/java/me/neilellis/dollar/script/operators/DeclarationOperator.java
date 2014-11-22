@@ -38,25 +38,29 @@ public class DeclarationOperator implements Map<Object[], Map<? super var, ? ext
     public Map<? super var, ? extends var> map(Object[] objects) {
 
         return new Map<var, var>() {
-            public var map(var rhs) {
+            public var map(var value) {
                 var constraint;
-                if (objects[0] != null) {
+                if (objects[1] != null) {
                     constraint =
                             DollarFactory.fromLambda(i -> {
-                                final Type type = Type.valueOf(objects[0].toString().toUpperCase());
+                                final Type type = Type.valueOf(objects[1].toString().toUpperCase());
                                 var it = scope.getParameter("it");
                                 return $(it.is(type));
                             });
                 } else {
                     constraint = null;
                 }
-                Pipeable action = i -> scope.set(objects[1].toString(), rhs, false, constraint);
+                final String variableName = objects[2].toString();
+                Pipeable action = i -> scope.set(variableName, value, false, constraint);
                 try {
                     action.pipe($void());
                 } catch (Exception e) {
                     throw new DollarScriptException(e);
                 }
-                rhs.$listen(action);
+                value.$listen(action);
+                if (objects[0] != null) {
+                    scope.getDollarParser().export(variableName, value);
+                }
                 return $void();
             }
         };

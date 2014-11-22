@@ -59,6 +59,10 @@ public class HttpURIHandler implements URIHandler {
         throw new UnsupportedOperationException();
     }
 
+    @Override public void destroy() {
+        //TODO
+    }
+
     @Override
     public var drain() {
         throw new UnsupportedOperationException();
@@ -67,6 +71,14 @@ public class HttpURIHandler implements URIHandler {
     @Override
     public var get(var key) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override public void init() {
+        //TODO
+    }
+
+    @Override public void pause() {
+        //TODO
     }
 
     @Override
@@ -105,11 +117,27 @@ public class HttpURIHandler implements URIHandler {
         throw new UnsupportedOperationException();
     }
 
+    @Override public void start() {
+        //TODO
+    }
+
+    @Override public void stop() {
+        //TODO
+    }
+
     @Override
     public void subscribe(Pipeable consumer, String id) throws IOException {
         httpd = getHttpServerFor(this.uri.getHost(), this.uri.getPort());
         httpd.handle(this.uri.getPath(), new RequestHandler(consumer));
         subscriptions.put(id, this.uri.getPath());
+    }
+
+    @Override public void unpause() {
+        //TODO
+    }
+
+    @Override public void unsubscribe(String subId) {
+        httpd.remove(subscriptions.get(subId));
     }
 
     private static RouteableNanoHttpd getHttpServerFor(String hostname, int port) throws IOException {
@@ -122,10 +150,6 @@ public class HttpURIHandler implements URIHandler {
             nanoHttpd.start();
             return nanoHttpd;
         }
-    }
-
-    @Override public void unsubscribe(String subId) {
-        httpd.remove(subscriptions.get(subId));
     }
 
     public static class RouteableNanoHttpd extends NanoHttpd {

@@ -40,18 +40,18 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
         return new Map<var, var>() {
             public var map(var rhs) {
                 var constraint;
-                if (objects[1] != null) {
-                    final Type type = Type.valueOf(objects[1].toString().toUpperCase());
+                if (objects[2] != null) {
+                    final Type type = Type.valueOf(objects[2].toString().toUpperCase());
                     constraint = DollarFactory.fromLambda(i -> {
                         return $(scope.getDollarParser().currentScope().getParameter("it")
                                       .is(type) &&
-                                 (objects[2] == null || ((var) objects[2]).isTrue()));
+                                 (objects[3] == null || ((var) objects[3]).isTrue()));
                     });
                 } else {
-                    constraint = (var) objects[2];
+                    constraint = (var) objects[3];
 
                 }
-                final String varName = objects[3].toString();
+                final String varName = objects[4].toString();
                 return DollarScriptSupport.wrapBinary(scope, "", () -> {
                     var useConstraint;
                     if (constraint != null) {
@@ -69,7 +69,10 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
                                         "Constraint failed for variable " + varName + ""));
                             }
                         }
-                        return scope.set(varName, rhsFixed, (objects[0] != null),
+                        if (objects[0] != null) {
+                            scope.getDollarParser().export(varName, rhsFixed);
+                        }
+                        return scope.set(varName, rhsFixed, (objects[1] != null),
                                          constraint);
                     });
                 });

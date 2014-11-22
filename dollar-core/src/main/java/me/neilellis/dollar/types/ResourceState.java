@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script.operators;
-
-import me.neilellis.dollar.var;
-import org.codehaus.jparsec.functors.Map;
-
-import static me.neilellis.dollar.DollarStatic.fix;
+package me.neilellis.dollar.types;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class FunctionCallOperator implements Map<Object[], var> {
-    @Override
-    public var map(Object[] objects) {
-        return ((Map<? super var, ? extends var>) objects[1]).map(fix((var) objects[0]));
-    }
+public enum ResourceState {
+    RUNNING, PAUSED, DESTROYED, INITIAL, STOPPED
 }

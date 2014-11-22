@@ -544,7 +544,7 @@ What about named parameters, that would be nice.
 
 ```dollar
 testParams := (last + " " + first)
-testParams(first:"Hello", last:"World") <=> "World Hello"
+testParams(first="Hello", last="World") <=> "World Hello"
 ```
 
 Yep you can use named parameters, then refer to the values by the names passed in.
@@ -625,9 +625,13 @@ The truthy operator converts any value to a boolean by applying the rule that: v
 Modules can be imported using the `module` keyword and a string representing in URI format the location of the module. At present the standard format is the Github locator so we're going to look at that first.
 
 ```dollar
-chat := module "github:neilellis:dollar-example-module::chat.ds"
-sub= chat.server( channel : "test" )
+chat:= module "github:neilellis:dollar-example-module::chat.ds" with channel="test"
+sub= chat.server()
+chat.state <=> ["RUNNING","RUNNING"]
 sub.unsub()
+chat.stop()
+chat.state <=> ["STOPPED","STOPPED"]
+
 ```
 
 Let's start by breaking down the module URI. Okay our first part says it's the GitHub scheme and so the GitHub module locator will be used. Next we say the repository belongs to neilellis and the repository is called dollar-example-module. The next part is the optional branch indicator - here we are using the master, so we just leave that empty. Finally we can optionally supply the name of a single script we want to import. If we don't provide that then the main script from the modules 'module.json' file will be used.

@@ -16,15 +16,14 @@
 
 package me.neilellis.dollar.types;
 
+import com.github.oxo42.stateless4j.StateMachine;
+import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.google.common.collect.ImmutableList;
-import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.Type;
+import me.neilellis.dollar.*;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.uri.URIHandler;
-import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,14 +36,43 @@ import java.util.stream.Stream;
  */
 public class DollarURI extends AbstractDollar {
 
+    private final StateMachine<ResourceState, Signal> stateMachine;
     private String uri;
     private URIHandler handler;
+
 
     public DollarURI(@NotNull List<Throwable> errors, String uri) throws Exception {
         super(errors);
         this.uri = uri.substring(uri.indexOf(":") + 1);
         String scheme = uri.substring(0, uri.indexOf(":"));
         handler = Plugins.resolveURIProvider(scheme).forURI(scheme, this.uri);
+        StateMachineConfig<ResourceState, Signal> stateMachineConfig = getDefaultStateMachineConfig();
+        stateMachineConfig.configure(ResourceState.RUNNING).onEntry(i -> {handler.start();});
+        stateMachineConfig.configure(ResourceState.RUNNING).onExit(i -> {handler.stop();});
+        stateMachineConfig.configure(ResourceState.INITIAL).onExit(i -> {handler.init();});
+        stateMachineConfig.configure(ResourceState.DESTROYED).onEntry(i -> {handler.destroy();});
+        stateMachineConfig.configure(ResourceState.PAUSED).onEntry(i -> {handler.pause();});
+        stateMachineConfig.configure(ResourceState.PAUSED).onExit(i -> {handler.unpause();});
+        stateMachine = new StateMachine<ResourceState, Signal>(ResourceState.INITIAL, stateMachineConfig);
+        stateMachine.fire(Signal.START);
+
+    }
+
+    @NotNull
+    @Override
+    public var $(@NotNull var key, @Nullable Object value) {
+        assertRunning();
+
+        return handler.set(DollarStatic.$(key), DollarStatic.$(value));
+
+    }
+
+    @NotNull
+    @Override
+    public var $get(@NotNull String key) {
+        assertRunning();
+
+        return handler.get(DollarStatic.$(key));
     }
 
     @NotNull
@@ -62,12 +90,15 @@ public class DollarURI extends AbstractDollar {
     @NotNull
     @Override
     public Stream<var> $children() {
+        assertRunning();
         return handler.all().toList().stream();
     }
 
     @NotNull
     @Override
     public Stream<var> $children(@NotNull String key) {
+        assertRunning();
+
         return handler.get(DollarStatic.$(key)).toList().stream();
     }
 
@@ -77,6 +108,7 @@ public class DollarURI extends AbstractDollar {
 
     @Override
     public var $has(@NotNull String key) {
+        assertRunning();
         return DollarStatic.$(!handler.get(DollarStatic.$(key)).isVoid());
     }
 
@@ -88,13 +120,8 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $get(@NotNull String key) {
-        return handler.get(DollarStatic.$(key));
-    }
-
-    @NotNull
-    @Override
     public var $minus(@NotNull Object value) {
+        assertRunning();
         return handler.removeValue(DollarStatic.$(value));
 
     }
@@ -102,25 +129,22 @@ public class DollarURI extends AbstractDollar {
     @NotNull
     @Override
     public var $plus(@Nullable Object value) {
+        assertRunning();
         return handler.send(DollarStatic.$(value), true, true);
     }
 
     @NotNull
     @Override
     public var $rm(@NotNull String key) {
+        assertRunning();
+
         return handler.remove(DollarStatic.$(key));
-
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull var key, @Nullable Object value) {
-        return handler.set(DollarStatic.$(key), DollarStatic.$(value));
 
     }
 
     @Override
     public var $size() {
+        assertRunning();
         return DollarStatic.$(handler.size());
     }
 
@@ -133,6 +157,12 @@ public class DollarURI extends AbstractDollar {
     public var remove(Object key) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
 
+    }
+
+    private void assertRunning() {
+        if (!stateMachine.isInState(ResourceState.RUNNING)) {
+            throw new DollarException("Resource is in state " + stateMachine.getState() + " should be RUNNING");
+        }
     }
 
     @NotNull
@@ -179,6 +209,7 @@ public class DollarURI extends AbstractDollar {
 
     @Override
     public var $notify(var v) {
+        assertRunning();
         return handler.send(v, false, false);
     }
 
@@ -194,11 +225,13 @@ public class DollarURI extends AbstractDollar {
 
     @Override
     public var $drain() {
+        assertRunning();
         return handler.drain();
     }
 
     @Override
     public var $all() {
+        assertRunning();
         return handler.all();
     }
 
@@ -209,16 +242,19 @@ public class DollarURI extends AbstractDollar {
 
     @Override
     public var $send(var value, boolean blocking, boolean mutating) {
+        assertRunning();
         return handler.send(value, blocking, mutating);
     }
 
     @Override
     public var $receive(boolean blocking, boolean mutating) {
+        assertRunning();
         return handler.receive(blocking, mutating);
     }
 
     @Override
     public var $subscribe(Pipeable pipe) {
+        assertRunning();
         final String subId = UUID.randomUUID().toString();
         try {
             handler.subscribe(i -> {
@@ -238,13 +274,18 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
+    public var $publish(var lhs) {
+        assertRunning();
+        return handler.publish(lhs);
+    }
+
+    @Override
     public String S() {
         return uri;
     }
 
-    @Override
-    public var $publish(var lhs) {
-        return handler.publish(lhs);
+    @Override public StateMachine<ResourceState, Signal> getStateMachine() {
+        return stateMachine;
     }
 
     @Override
@@ -257,12 +298,6 @@ public class DollarURI extends AbstractDollar {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
-    @NotNull
-    @Override
-    public ImmutableList<var> toList() {
-        return ImmutableList.copyOf(handler.all().toList());
-    }
-
     @Override
     public boolean isBoolean() {
         return false;
@@ -273,14 +308,16 @@ public class DollarURI extends AbstractDollar {
         return false;
     }
 
+    @NotNull
     @Override
-    public boolean isTruthy() {
-        return handler != null;
+    public ImmutableList<var> toList() {
+        assertRunning();
+        return ImmutableList.copyOf(handler.all().toList());
     }
 
     @Override
-    public boolean isVoid() {
-        return false;
+    public boolean isTruthy() {
+        return handler != null;
     }
 
     @Override
@@ -292,6 +329,12 @@ public class DollarURI extends AbstractDollar {
     public boolean isNeitherTrueNorFalse() {
         return true;
     }
+
+    @Override
+    public boolean isVoid() {
+        return false;
+    }
+
 
     @NotNull
     @Override

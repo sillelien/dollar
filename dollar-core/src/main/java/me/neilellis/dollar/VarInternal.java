@@ -26,17 +26,6 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface VarInternal {
-    @NotNull
-    var _unwrap();
-
-    String _src();
-
-    void _src(String src);
-
-
-    @NotNull
-    var copy(@NotNull ImmutableList<Throwable> errors);
-
     /**
      * Returns a deep copy of this object. You should never need to use this operation as all {@link
      * me.neilellis.dollar.var} objects are immutable. Therefore they can freely be shared between threads.
@@ -47,5 +36,25 @@ public interface VarInternal {
     @Guarded(ChainGuard.class)
     @Guarded(ReturnVarOnlyGuard.class)
     var $copy();
+
+    @NotNull
+    /**
+     * Like _unwrap() except it causes lambda evaluation and propagates through lists and maps. The result is a
+     * static value with no nested lambdas.
+     */
+    var _fix();
+
+    void _src(String src);
+
+    String _src();
+
+    /**
+     * Unwraps any wrapper classes around the actual type class.
+     *
+     * @return an unwrapped class.
+     */
+    @NotNull var _unwrap();
+
+    @NotNull var copy(@NotNull ImmutableList<Throwable> errors);
 
 }

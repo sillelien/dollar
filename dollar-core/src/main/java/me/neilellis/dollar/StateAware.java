@@ -14,30 +14,33 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script;
+package me.neilellis.dollar;
+
+import com.github.oxo42.stateless4j.StateMachine;
+import me.neilellis.dollar.types.ResourceState;
+import me.neilellis.dollar.types.Signal;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface OperatorPriority {
-    int MEMBER_PRIORITY = 500;
-    int ASSIGNMENT_PRIORITY = 10;
-    int UNARY_PRIORITY = 400;
-    int INC_DEC_PRIORITY = 400;
-    int IN_PRIORITY = 400;
-    int LINE_PREFIX_PRIORITY = 0;
-    int PIPE_PRIORITY = 150;
-    int EQUIVALENCE_PRIORITY = 100;
-    int COMPARISON_PRIORITY = 150;
-    int PLUS_MINUS_PRIORITY = 200;
-    int OUTPUT_PRIORITY = 50;
-    int IF_PRIORITY = 20;
-    int CAST_PRIORITY = 80;
-    int CONTROL_FLOW_PRIORITY = 50;
-    int MULTIPLY_DIVIDE_PRIORITY = 300;
-    int RANGE_PRIORITY = 600;
-    int LOGICAL_AND_PRIORITY = 70;
-    int LOGICAL_OR_PRIORITY = 60;
-    int SIGNAL_PRIORITY = 20;
+public interface StateAware<R extends StateAware<R>> {
+
+    R $create();
+
+    R $destroy();
+
+    R $pause();
+
+    void $signal(Signal signal);
+
+    R $start();
+
+    R $state();
+
+    R $stop();
+
+    R $unpause();
+
+    StateMachine<ResourceState, Signal> getStateMachine();
 
 }

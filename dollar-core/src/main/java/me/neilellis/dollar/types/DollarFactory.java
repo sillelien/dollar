@@ -88,7 +88,7 @@ public class DollarFactory {
             return wrap(new DollarVoid(errors));
         }
         if (o instanceof var) {
-            return ((var) o).$copy();
+            return (var) o;
         }
         if (o instanceof Pipeable) {
             return wrap((var) java.lang.reflect.Proxy.newProxyInstance(
@@ -220,19 +220,19 @@ public class DollarFactory {
         return fromValue(pipeable);
     }
 
-    public static var fromURI(String uri) {
-        try {
-            return wrap(new DollarURI(ImmutableList.of(), uri));
-        } catch (Exception e) {
-            return DollarStatic.handleError(e, null);
-        }
-    }
-
     public static var fromURI(var from) {
         if (from.isUri()) {
             return from;
         } else {
             return fromURI(from.$S());
+        }
+    }
+
+    public static var fromURI(String uri) {
+        try {
+            return wrap(new DollarURI(ImmutableList.of(), uri));
+        } catch (Exception e) {
+            return DollarStatic.handleError(e, null);
         }
     }
 

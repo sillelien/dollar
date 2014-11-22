@@ -57,6 +57,92 @@ public class RedisURIHandler implements URIHandler {
     }
 
     @Override
+    public var all() {
+        try (Jedis jedis = jedisPool.getResource()) {
+            List<String> result = jedis.lrange(path, 0, -1);
+            return $(result);
+        }
+    }
+
+    @Override public void destroy() {
+        //TODO
+    }
+
+    @Override
+    public var drain() {
+        try (Jedis jedis = jedisPool.getResource()) {
+            List<String> result = jedis.lrange(path, 0, -1);
+            jedis.ltrim(path, 1, 0);
+            return $(result);
+        }
+    }
+
+    @Override
+    public var get(var key) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return $(jedis.hget(path, key.$S()));
+        }
+    }
+
+    @Override public void init() {
+        //TODO
+    }
+
+    @Override public void pause() {
+        //TODO
+    }
+
+    @Override
+    public var send(var value, boolean blocking, boolean mutating) {
+        return send(value);
+    }
+
+    @Override
+    public var receive(boolean blocking, boolean mutating) {
+        if (blocking && !mutating) {
+            return receive();
+        } else if (!blocking && mutating) {
+            return poll();
+        } else if (!blocking && !mutating) {
+            return peek();
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    @Override
+    public var remove(var key) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return $(jedis.hdel(path, key.$S()));
+        }
+    }
+
+    @Override
+    public var removeValue(var v) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public var set(var key, var value) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return $(jedis.hset(path, key.$S(), value.$S()));
+        }
+    }
+
+    @Override
+    public int size() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override public void start() {
+        //TODO
+    }
+
+    @Override public void stop() {
+        //TODO
+    }
+
+    @Override
     public void subscribe(Pipeable consumer, String id) {
         try (Jedis jedis = jedisPool.getResource()) {
             jedis.subscribe(new JedisPubSub() {
@@ -101,65 +187,12 @@ public class RedisURIHandler implements URIHandler {
         }
     }
 
-    @Override
-    public var set(var key, var value) {
-        try (Jedis jedis = jedisPool.getResource()) {
-            return $(jedis.hset(path, key.$S(), value.$S()));
-        }
+    @Override public void unpause() {
+        //TODO
     }
 
-    @Override
-    public var get(var key) {
-        try (Jedis jedis = jedisPool.getResource()) {
-            return $(jedis.hget(path, key.$S()));
-        }
-    }
-
-    @Override
-    public var all() {
-        try (Jedis jedis = jedisPool.getResource()) {
-            List<String> result = jedis.lrange(path, 0, -1);
-            return $(result);
-        }
-    }
-
-    @Override
-    public var remove(var key) {
-        try (Jedis jedis = jedisPool.getResource()) {
-            return $(jedis.hdel(path, key.$S()));
-        }
-    }
-
-    @Override
-    public var removeValue(var v) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public int size() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public var drain() {
-        try (Jedis jedis = jedisPool.getResource()) {
-            List<String> result = jedis.lrange(path, 0, -1);
-            jedis.ltrim(path, 1, 0);
-            return $(result);
-        }
-    }
-
-    @Override
-    public var receive(boolean blocking, boolean mutating) {
-        if (blocking && !mutating) {
-            return receive();
-        } else if (!blocking && mutating) {
-            return poll();
-        } else if (!blocking && !mutating) {
-            return peek();
-        } else {
-            throw new UnsupportedOperationException();
-        }
+    @Override public void unsubscribe(String subId) {
+        //TODO
     }
 
     public var receive() {
@@ -180,19 +213,10 @@ public class RedisURIHandler implements URIHandler {
         }
     }
 
-    @Override
-    public var send(var value, boolean blocking, boolean mutating) {
-        return send(value);
-    }
-
     public var send(var value) {
         try (Jedis jedis = jedisPool.getResource()) {
             jedis.lpush(path, value.$S());
         }
         return value;
-    }
-
-    @Override public void unsubscribe(String subId) {
-        //TODO
     }
 }

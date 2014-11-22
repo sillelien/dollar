@@ -135,6 +135,10 @@ public class DollarMap extends AbstractDollar implements var {
         return copyMap();
     }
 
+    private LinkedHashMap<String, var> copyMap() {
+        return deepClone(map);
+    }
+
     @NotNull
     @Override
     public Stream<var> $children(@NotNull String key) {
@@ -190,10 +194,6 @@ public class DollarMap extends AbstractDollar implements var {
         }
         throw new IllegalArgumentException("Only the addition of DollarJson objects supported at present.");
 
-    }
-
-    private LinkedHashMap<String, var> copyMap() {
-        return deepClone(map);
     }
 
     @NotNull
@@ -276,6 +276,74 @@ public class DollarMap extends AbstractDollar implements var {
     @Override
     public var $abs() {
         return this;
+    }
+
+    @NotNull @Override public var _fix() {
+        HashMap<String, var> result = new HashMap<>();
+        for (Map.Entry<String, var> entry : map.entrySet()) {
+            result.put(entry.getKey(), entry.getValue()._fix());
+        }
+        return DollarStatic.$(result);
+    }
+
+    @NotNull
+    @Override
+    public var eval(String label, @NotNull DollarEval lambda) {
+        return lambda.eval($copy());
+    }
+
+    @NotNull
+    @Override
+    public var $mimeType() {
+        return DollarStatic.$("application/json");
+    }
+
+    @NotNull
+    @Override
+    public java.util.stream.Stream<Map.Entry<String, var>> kvStream() {
+        return split().entrySet().stream();
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $stream() {
+        return split().values().stream();
+    }
+
+    @NotNull
+    @Override
+    public var $copy() {
+        return DollarFactory.wrap(new DollarMap(errors(), map));
+    }
+
+    @Override
+    public boolean isMap() {
+        return true;
+    }
+
+    @Override
+    public String $listen(Pipeable pipe) {
+        String key = UUID.randomUUID().toString();
+        $listen(pipe, key);
+        return key;
+    }
+
+    @Override
+    public var $notify(var value) {
+        for (var v : map.values()) {
+            v.$notify(value);
+        }
+        return this;
+    }
+
+    @Override
+    public String $listen(Pipeable pipe, String key) {
+        for (var v : map.values()) {
+            //Join the children to this, so if the children change
+            //listeners to this get the latest value of this.
+            v.$listen(i -> this, key);
+        }
+        return key;
     }
 
     @Override
@@ -395,66 +463,6 @@ public class DollarMap extends AbstractDollar implements var {
     @Override
     public Map<String, Object> toMap() {
         return varMapToMap();
-    }
-
-    @NotNull
-    @Override
-    public var eval(String label, @NotNull DollarEval lambda) {
-        return lambda.eval($copy());
-    }
-
-    @NotNull
-    @Override
-    public var $mimeType() {
-        return DollarStatic.$("application/json");
-    }
-
-    @NotNull
-    @Override
-    public java.util.stream.Stream<Map.Entry<String, var>> kvStream() {
-        return split().entrySet().stream();
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $stream() {
-        return split().values().stream();
-    }
-
-    @NotNull
-    @Override
-    public var $copy() {
-        return DollarFactory.wrap(new DollarMap(errors(), map));
-    }
-
-    @Override
-    public boolean isMap() {
-        return true;
-    }
-
-    @Override
-    public String $listen(Pipeable pipe) {
-        String key = UUID.randomUUID().toString();
-        $listen(pipe, key);
-        return key;
-    }
-
-    @Override
-    public var $notify(var value) {
-        for (var v : map.values()) {
-            v.$notify(value);
-        }
-        return this;
-    }
-
-    @Override
-    public String $listen(Pipeable pipe, String key) {
-        for (var v : map.values()) {
-            //Join the children to this, so if the children change
-            //listeners to this get the latest value of this.
-            v.$listen(i -> this, key);
-        }
-        return key;
     }
 
     @Override

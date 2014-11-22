@@ -116,7 +116,6 @@ public class ParserTest {
         new DollarParser().parse(getClass().getResourceAsStream("/test_redis.ds"));
     }
 
-    @Test
     public void testURIs() throws Exception {
         new DollarParser().parse(getClass().getResourceAsStream("/test_uris.ds"));
     }

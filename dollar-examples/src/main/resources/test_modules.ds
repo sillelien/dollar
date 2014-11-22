@@ -12,12 +12,18 @@
 }
 */
 
-chat := module "github:neilellis:dollar-example-module::chat.ds"
-sub= (chat.server)( channel : "test" )
+chat:= module "github:neilellis:dollar-example-module::chat.ds" with channel="test"
+sub= chat.server()
+chat.state <=> ["RUNNING","RUNNING"]
 sub.unsub()
+@@ chat.state
+chat.stop()
+chat.state <=> ["STOPPED","STOPPED"]
 
 
-hello := module "github:neilellis:dollar-example-module:0.1.0:branch.ds"
-@@ hello
+id= (module "github:neilellis:dollar-example-module:0.1.0:branch.ds").value
+
+@@ id
+id <=> "Branch 0.1.0"
 
 

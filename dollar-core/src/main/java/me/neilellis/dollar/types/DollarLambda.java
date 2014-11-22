@@ -86,6 +86,8 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             } else if (method.getName().equals("_unwrap")) {
                 return proxy;
 //                return lambda.pipe(in)._unwrap();
+            } else if (method.getName().equals("_fix")) {
+                return lambda.pipe(in)._fix();
             } else if (method.getName().equals("getMetaAttribute")) {
                 return meta.get(args[0]);
             } else if (method.getName().equals("setMetaAttribute")) {
