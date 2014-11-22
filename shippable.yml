@@ -1,5 +1,5 @@
-  # language setting
 language: java
-  # jdk tag
 jdk:
- - oraclejdk8
+   - oraclejdk8
+services:
+  - redis
