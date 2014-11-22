@@ -653,6 +653,7 @@ hello := module "github:neilellis:dollar-example-module:0.1.0:branch.ds"
 ```
 
 ###Module Locators
+###Writing Modules
 
 ##Builtin Functions
 
