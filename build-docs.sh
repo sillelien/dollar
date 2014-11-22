@@ -11,7 +11,7 @@ cd ../..
 mvn install exec:java -e -pl me.neilellis:dollar-docs -Dexec.mainClass="me.neilellis.dollar.docs.ParseDocs" -Dexec.args="./dist/docs"
 cd dist/docs
 git add *
-git commit -a -m "Updated docs from build"
-git push
+git commit -a -m "Updated docs from build"  || :
+git push || :
 cd -
 
