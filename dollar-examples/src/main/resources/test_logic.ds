@@ -1,12 +1,12 @@
 const a = true
 const b = false
 
-$a <=> true
-$b <=> false
+a <=> true
+b <=> false
 
-.: $a && !$b
-.: $a || $b
-.: $b || $a
+.: a && !b
+.: a || b
+.: b || a
 
 !true <=> false
 !false <=> true
@@ -53,7 +53,7 @@ e=0
 
 if (e == 1) {e=2} else {e=3}
 
-$e <=> 3
+e <=> 3
 
 1 == 0 else ( @@ "Not 0" )
 

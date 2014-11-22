@@ -651,6 +651,35 @@ hello := module "github:neilellis:dollar-example-module:0.1.0:branch.ds"
 ###Module Locators
 ###Writing Modules
 
+Modules consist of a file called module.json with the name of the main script for the module and an optional array of Maven style java dependencies. And then one or more DollarScript files.
+
+```
+{
+"main":"chat.ds",
+"dependencies":["org.twitter4j:twitter4j-core:4.0.2"]
+}
+```
+
+The DollarScript files should use the export modifier on assignments that it wishes to make available to client applications and it can refer to variables that don't exist, in which case values for those variables will need to be passed as parameters to the module declaration in the client application.
+
+
+```dollar
+redis= ("redis://localhost:6379/" + ${channel | "test"}) as URI
+www= (("http:get://127.0.0.1:8111/" + ${channel | "test"}) as URI)
+
+export server := {
+           www subscribe {
+            $1.params +> redis
+            { body :  all redis }
+        }
+    };
+
+export stop := {stop(www);stop(redis); @@ [state(www),state(redis)];}
+
+export state:= [state(www),state(redis)]
+```
+
+
 ##Builtin Functions
 
 ## Advanced Topics

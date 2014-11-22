@@ -22,7 +22,7 @@ count(1..5) <=> 5
 //Iterate over a range
 y=0
 for x in 1..5 {
-    y= $y++
+    y= y++
 }
-$y <=> 5
+y <=> 5
 

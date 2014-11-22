@@ -6,4 +6,4 @@ out=scope.get("variableA");
 
 `
 
-$javaTest <=> "Hello World"
+javaTest <=> "Hello World"

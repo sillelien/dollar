@@ -4,7 +4,7 @@
 redis := "redis://localhost:6379/test" as uri
 send ("Hello World " + date()) to redis
 
-@@ all $redis
+@@ all redis
 
 
 a := {
@@ -18,6 +18,6 @@ sleep 0.5
 @@ a
 
 //chat := import "github:neilellis:dollar-example-module:chat.ds"
-//$chat.server( "channel" : "test" )
+//chat.server( "channel" : "test" )
 
 sleep 1

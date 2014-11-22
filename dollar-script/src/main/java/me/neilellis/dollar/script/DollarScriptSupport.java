@@ -68,7 +68,7 @@ public class DollarScriptSupport {
         return toLambda(scope, source, callable);
     }
 
-    public static var getVariable(ScriptScope scope, String key, boolean numeric) {
+    public static var getVariable(ScriptScope scope, String key, boolean numeric, var defaultValue) {
 
         var lambda = DollarFactory.fromLambda(v -> {
             try {
@@ -96,7 +96,11 @@ public class DollarScriptSupport {
                 return scope.getParameter(key);
             }
             if (!scope.has(key)) {
-                throw new VariableNotFoundException(key);
+                if (defaultValue != null) {
+                    return defaultValue;
+                } else {
+                    throw new VariableNotFoundException(key);
+                }
             }
             return scope.get(key);
         });

@@ -3,14 +3,14 @@
 // however := is the lambda assignment and does not, thus creating a
 // lambda style expression
 
-$lamval causes { @@ $lamval; }
+lamval causes { @@ lamval; }
 
 lamval=1
-lambda2 := $lamval
+lambda2 := lamval
 
 
-lambda := ( ( $lamval )  + $lamval )
-notlambda = ( ( $lamval )  + $lamval )
+lambda := ( ( lamval )  + lamval )
+notlambda = ( ( lamval )  + lamval )
 
 lamval= 7
 
@@ -25,16 +25,16 @@ lamval2= 23
 
 
 //Since the lambda shares the scope of when it was declared this should be 14 not 2
-.: $lambda == 14
-.: $notlambda == 2
+.: lambda == 14
+.: notlambda == 2
 
-//And this is the single $lamval syntax from earlier
-.: $lambda2 == 7
+//And this is the single lamval syntax from earlier
+.: lambda2 == 7
 
 
 
 //Now we test levels of indirection
-delayName := ("lamval" + $lamval)
+delayName := ("lamval" + lamval)
 
 lamval=5
 lamval5=13
@@ -45,17 +45,17 @@ lamval5=13
 
 @@ "lamval" + 1
 
-@@ $lamval + 1
+@@ lamval + 1
 
-@@ $lamval
+@@ lamval
 
-@@ ("lamval" + $lamval)
+@@ ("lamval" + lamval)
 
-@@ ('lamval' + $lamval)
+@@ ('lamval' + lamval)
 
 
 //Lambda variable resolution @@! - notice the two levels of indirection here - yeah edge case :-)
-.: $($delayName) == 13
+.: $(${delayName}) == 13
 
 
 // & forces immediate evaluation, the value lock symbol
@@ -63,9 +63,9 @@ lamval5=13
 
 function := [
     @@ "Function start",  //This is displayed during evaluation, return is void
-    & $lamval,  //locked into the current value at definition (i.e. 5)
-       $lamval,  //lazy evaluated, will take the value when the whole block is evaluated
-       $1      //A value to be passed in via  a pipe $1 is a special variable
+    & lamval,  //locked into the current value at definition (i.e. 5)
+       lamval,  //lazy evaluated, will take the value when the whole block is evaluated
+       $1      //A value to be passed in via  a pipe 1 is a special variable
 ]
 
 
@@ -85,15 +85,15 @@ removeWorld := ($1 - "World")
 ($2 + " " + $1)("Hello", "World") <=> "World Hello"
 
 testParams := ($2 + " " + $1)
-($testParams) ("Hello", "World") <=> "World Hello"
+(testParams) ("Hello", "World") <=> "World Hello"
 
 //short-form of parameterized variable (function call style)
 testParams("Hello", "World") <=> "World Hello"
 
 a=2
 
-when $a == 2 {
-    @@ "@@ " + $a
+when a == 2 {
+    @@ "@@ " + a
 }
 
 a=1
@@ -101,7 +101,7 @@ a=3
 a=2
 a=1
 
-if $a == 1 {
+if a == 1 {
     @@ "Hello World"
 }
 

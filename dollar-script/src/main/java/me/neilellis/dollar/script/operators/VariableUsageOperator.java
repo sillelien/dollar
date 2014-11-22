@@ -22,6 +22,8 @@ import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
+import static me.neilellis.dollar.DollarStatic.$void;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
@@ -33,7 +35,7 @@ public class VariableUsageOperator implements Map<Object, Map<? super var, ? ext
     @Override public Map<? super var, ? extends var> map(Object lhs) {
         return rhs -> {
             return DollarFactory.fromLambda(
-                    i -> DollarScriptSupport.getVariable(scope, rhs.toString(), false));
+                    i -> DollarScriptSupport.getVariable(scope, rhs.toString(), false, $void()));
         };
     }
 }
