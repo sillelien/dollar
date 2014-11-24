@@ -2,15 +2,15 @@
 @@ date() + 1
 @@ date() - 1
 
-.:date() + 1 is DATE
-.:date() - 1 is DATE
-.:date() + 1.0 is DATE
-.:date() - 1.0 is DATE
+.: date() + 1 is DATE
+.: date() - 1 is DATE
+.: date() + 1.0 is DATE
+.: date() - 1.0 is DATE
 
-.:date() + "1.0" is DATE
-.:date() / "1.0" is DECIMAL
+.: date() + "1.0" is DATE
+.: date() / "1.0" is DECIMAL
 
-.:date() * 10 is DECIMAL
-.:date() / 10 is DECIMAL
+.: date() * 10 is DECIMAL
+.: date() / 10 is DECIMAL
 
 
