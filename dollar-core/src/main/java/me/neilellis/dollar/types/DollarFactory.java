@@ -45,6 +45,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -269,5 +270,12 @@ public class DollarFactory {
         } else {
             throw new DollarException("Could not deserialize " + type);
         }
+    }
+
+    public static var fromFuture(Future<var> future) {
+        return wrap((var) java.lang.reflect.Proxy.newProxyInstance(
+                DollarStatic.class.getClassLoader(),
+                new Class<?>[]{var.class},
+                new DollarLambda(i -> future.get(), false)));
     }
 }

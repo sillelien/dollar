@@ -683,14 +683,46 @@ export state:= [state(www),state(redis)]
 ##Builtin Functions
 
 ## Concurrency & Threads
-### Concurrent Scope
-The concurrent scope operator `(p)` or `parallel` creates a new scope in which all actions that can be parallel will be, it's partner the serial operator `(s)` or `serial`
-
 
 Notes:
 
 All types are immutable, including collections.
-Cannot reassign a variable from a different thread, so readonly from other threads.ç
+You cannot reassign a variable from a different thread, so they are readonly from other threads.
+
+
+### Parallel &amp; Serial Operators
+The parallel prefix operator `(p)` or `parallel` causes the right hand side expression to be evaluated in parallel, it's partner the serial operator `(s)` or `serial` forces serial evaluation even if the current expression is being evaluated in parallel.
+
+```dollar
+
+testList := [ time(), {sleep(1);time();}, time() ];
+a= testList;
+b= parallel testList;
+//Test different execution orders
+.: a[2] >= a[1]
+.: b[2] < b[1]
+```
+
+As you can see the order of evaluation of lists and maps **but not line blocks** is affected by the use of parallel evaluation.
+
+### Fork
+
+The fork operator will cause an expression to be evaluated in the background and any reference to the forked expression will block until a value is ready.
+
+```dollar
+sleepTime := {@@ "Background Sleeping";sleep 4; @@ "Background Finished Sleeping";time()}
+//Any future reference to c will block until c has completed evaluation
+c= fork sleepTime
+sleep 1
+@@ "Main thread sleeping ..."
+sleep 2
+@@ "Main thread finished sleeping ..."
+d= time()
+.: c > d
+```
+
+In the example the value of c is greater than d because the value of c is evaluated in the background. Note that as soon as you make use of the value of c you block until the value is ready. This is exactly the same as Java's Futures.
+
 
 
 

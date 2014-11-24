@@ -14,3 +14,25 @@ b= parallel testArray;
 //Test different execution orders
 .: b[2] < b[1]
 .: a[2] >= a[1]
+
+sleepTime := {@@ "Background Sleeping";sleep 4; @@ "Background Finished Sleeping";time()}
+
+//Any future reference to c will block until c has completed evaluation
+c= fork sleepTime
+
+sleep 1
+
+@@ "Main thread sleeping ..."
+
+sleep 2
+
+@@ "Main thread finished sleeping ..."
+
+d= time()
+
+@@ c
+@@ d
+
+.: c > d
+
+

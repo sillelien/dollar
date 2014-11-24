@@ -477,8 +477,10 @@ public class DollarParser {
                 .prefix(op(new UnaryOp(scope, var::$destroy), "(-)"), SIGNAL_PRIORITY)
                 .prefix(op(new UnaryOp(scope, var::$create), "(+)"), SIGNAL_PRIORITY)
                 .prefix(op(new UnaryOp(scope, var::$state), "(?)"), SIGNAL_PRIORITY)
-                .prefix(op(new UnaryOp(scope, v -> fix(v, true)), "(p)", "parallel"), SIGNAL_PRIORITY)
-                .prefix(op(new UnaryOp(scope, v -> fix(v, false)), "(s)", "serial"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp(scope, v -> fix(v, true)), "[p]", "parallel"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp(scope, v -> fix(v, false)), "[s]", "serial"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp(scope, v -> DollarFactory.fromFuture(
+                        Execution.executeInBackground(i -> fix(v, false)))), "[f]", "fork"), SIGNAL_PRIORITY)
                 .prefix(forOperator(scope, ref), UNARY_PRIORITY)
                 .prefix(whileOperator(scope, ref), UNARY_PRIORITY)
                 .postfix(subscriptOperator(ref, scope), MEMBER_PRIORITY)

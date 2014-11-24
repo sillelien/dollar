@@ -50,11 +50,22 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
         }
     };
     private final var in;
+    private final boolean fixable;
     private Pipeable lambda;
     private ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, String> meta = new ConcurrentHashMap<>();
 
     public DollarLambda(Pipeable lambda) {
+        this(lambda, true);
+    }
+
+    /**
+     * @param lambda  the lambda to lazily evaluate.
+     * @param fixable can we fix the value of the lambda with the use of _fix(boolean) - if you're waiting for a future
+     *                to complete then false is a good value.
+     */
+    public DollarLambda(Pipeable lambda, boolean fixable) {
+        this.fixable = fixable;
 
         this.in = DollarStatic.$(false);
         this.lambda = lambda;
@@ -90,7 +101,11 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 return proxy;
 //                return lambda.pipe(in)._unwrap();
             } else if (method.getName().equals("_fix")) {
-                return lambda.pipe(DollarFactory.fromValue(args[0]))._fix((Boolean) args[0]);
+                if (fixable) {
+                    return lambda.pipe(DollarFactory.fromValue(args[0]))._fix((Boolean) args[0]);
+                } else {
+                    return proxy;
+                }
             } else if (method.getName().equals("getMetaAttribute")) {
                 return meta.get(args[0]);
             } else if (method.getName().equals("setMetaAttribute")) {

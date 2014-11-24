@@ -144,16 +144,16 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        return null;
-    }
-
-    @NotNull
-    @Override
     public var $minus(@NotNull var value) {
         ArrayList<var> newVal = new ArrayList<>(list);
         newVal.remove(value);
         return DollarFactory.fromValue(newVal, errors());
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return null;
     }
 
     @NotNull
@@ -203,12 +203,6 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableList<var> toList() {
-        return list;
-    }
-
-    @NotNull
-    @Override
     public var $abs() {
         return this;
     }
@@ -217,6 +211,12 @@ public class DollarList extends AbstractDollar {
     @Override
     public var $dec(@NotNull var amount) {
         return this;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> toList() {
+        return list;
     }
 
     @NotNull
@@ -253,10 +253,11 @@ public class DollarList extends AbstractDollar {
 
     @NotNull @Override public var _fix(boolean parallel) {
         try {
-            return forkJoinPool.submit(() ->
-                                               DollarFactory.fromValue($stream(parallel).map(v -> v._fix(parallel))
-                                                                                        .collect(Collectors.toList()),
-                                                                       errors())).get();
+            return Execution.forkJoinPool.submit(() ->
+                                                         DollarFactory.fromValue(
+                                                                 $stream(parallel).map(v -> v._fix(parallel))
+                                                                                  .collect(Collectors.toList()),
+                                                                 errors())).get();
         } catch (InterruptedException | ExecutionException e) {
             throw new DollarException(e);
         }
@@ -273,11 +274,6 @@ public class DollarList extends AbstractDollar {
             stream = list.stream();
         }
         return stream;
-    }
-
-    @Override
-    public boolean isVoid() {
-        return false;
     }
 
     @NotNull
@@ -304,16 +300,16 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public boolean isVoid() {
+        return false;
+    }
+
+    @Override
     public var $notify() {
         for (var v : list) {
             v.$notify();
         }
         return this;
-    }
-
-    @Override
-    public Integer I() {
-        return $stream(false).collect(Collectors.summingInt((i) -> i.I()));
     }
 
     @Override
@@ -354,8 +350,8 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public Integer I(@NotNull String key) {
-        throw new ListException();
+    public Integer I() {
+        return $stream(false).collect(Collectors.summingInt((i) -> i.I()));
     }
 
     @NotNull
@@ -385,10 +381,14 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public Integer I(@NotNull String key) {
+        throw new ListException();
+    }
+
+    @Override
     public boolean isNeitherTrueNorFalse() {
         return true;
     }
-
 
 
     @org.jetbrains.annotations.NotNull
