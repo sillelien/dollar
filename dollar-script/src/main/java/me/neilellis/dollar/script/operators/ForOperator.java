@@ -41,8 +41,8 @@ public class ForOperator implements Map<Object[], Map<? super var, ? extends var
             return DollarFactory.fromLambda(l -> {
                 return dollarParser.inScope(scope, newScope -> {
                     return ((var) objects[3]).$each(i -> {
-                        newScope.set(objects[1].toString(), fix(i), false, null);
-                        return fix(rhs);
+                        newScope.set(objects[1].toString(), fix(i, false), false, null);
+                        return fix(rhs, false);
                     });
                 });
             });

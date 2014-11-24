@@ -43,7 +43,6 @@ public class ScriptScope implements Scope {
     private final String source;
     private ScriptScope parent;
     private ConcurrentHashMap<String, Variable> variables = new ConcurrentHashMap<>();
-    private boolean lambdaUnderConstruction;
     private Parser<var> parser;
     private DollarParser dollarParser;
     private Multimap<String, var> listeners = LinkedListMultimap.create();
@@ -67,6 +66,7 @@ public class ScriptScope implements Scope {
     public DollarParser getDollarParser() {
         return dollarParser;
     }
+
 
     public void setDollarParser(DollarParser dollarParser) {
         this.dollarParser = dollarParser;
@@ -161,19 +161,18 @@ public class ScriptScope implements Scope {
         if (scope.variables.containsKey(key) && scope.variables.get(key).readonly) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
-        if (scope.variables.containsKey(key) && scope.variables.get(key).constraint != null) {
-            if (constraint != null) {
-                handleError(new DollarScriptException(
-                        "Cannot change the constraint on a variable, attempted to redeclare for " + key));
-            }
-//            if (scope.checkConstraint(value, scope.variables.get(key), scope.variables.get(key).constraint)) {
-//                handleError(new DollarScriptException("Constraint failed for variable " + key + ""));
-//            }
-        }
-//        if (constraint != null && scope.checkConstraint(value, scope.variables.get(key), constraint)) {
-//            handleError(new DollarScriptException("Constraint failed for variable " + key + ""));
-//        }
         if (scope.variables.containsKey(key)) {
+            if (scope.variables.get(key).thread != Thread.currentThread().getId()) {
+                handleError(new DollarScriptException("Concurrency Error: Cannot change the variable " +
+                                                      key +
+                                                      " in a different thread from that which is created in."));
+            }
+            if (scope.variables.get(key).constraint != null) {
+                if (constraint != null) {
+                    handleError(new DollarScriptException(
+                            "Cannot change the constraint on a variable, attempted to redeclare for " + key));
+                }
+            }
             scope.variables.get(key).value = value;
         } else {
             scope.variables.put(key, new Variable(value, readonly, constraint));
@@ -189,7 +188,7 @@ public class ScriptScope implements Scope {
         }
         if (listeners.containsKey(key)) {
             for (var listener : listeners.get(key)) {
-                listener.$notify(value);
+                listener.$notify();
             }
         }
     }
@@ -234,6 +233,7 @@ public class ScriptScope implements Scope {
         return parser;
     }
 
+
     public void setParser(Parser<var> parser) {
         this.parser = parser;
     }
@@ -254,7 +254,7 @@ public class ScriptScope implements Scope {
             setParameter("msg", $(t.getMessage()));
             try {
                 for (var handler : errorHandlers) {
-                    fix(handler);
+                    fix(handler, false);
                 }
             } finally {
                 setParameter("type", $void());
@@ -272,6 +272,7 @@ public class ScriptScope implements Scope {
     private class Variable {
         private final boolean readonly;
         private final var constraint;
+        private final long thread;
         private var value;
 
         public Variable(var value, var constraint) {
@@ -279,12 +280,14 @@ public class ScriptScope implements Scope {
             this.value = value;
             this.constraint = constraint;
             readonly = false;
+            thread = Thread.currentThread().getId();
         }
 
         public Variable(var value, boolean readonly, var constraint) {
             this.value = value;
             this.readonly = readonly;
             this.constraint = constraint;
+            thread = Thread.currentThread().getId();
         }
 
         @Override
@@ -340,11 +343,6 @@ public class ScriptScope implements Scope {
         }
     }
 
-    @Override
-    public String toString() {
-        return id + "->" + parent;
-    }
-
     private ScriptScope getScopeForParameters() {
         if (parameterScope) {
             return this;
@@ -356,6 +354,12 @@ public class ScriptScope implements Scope {
             return null;
         }
     }
+
+    @Override
+    public String toString() {
+        return id + "->" + parent;
+    }
+
 
 
 }

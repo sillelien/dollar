@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -72,8 +73,12 @@ public class DollarFactory {
 
 
     @NotNull
-    public static var fromValue(@NotNull ImmutableList<Throwable> errors, Object o) {
-        return create(errors, o);
+    public static var fromValue(Object o, @NotNull ImmutableList<Throwable>... errors) {
+        ImmutableList.Builder<Throwable> builder = ImmutableList.builder();
+        for (ImmutableList<Throwable> error : errors) {
+            builder = builder.addAll(error);
+        }
+        return create(builder.build(), o);
     }
 
     @NotNull
@@ -94,7 +99,7 @@ public class DollarFactory {
             return wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                     DollarStatic.class.getClassLoader(),
                     new Class<?>[]{var.class},
-                    new DollarLambda(DollarStatic.$void(), (Pipeable) o)));
+                    new DollarLambda((Pipeable) o)));
         }
         if (o instanceof JsonArray) {
             return wrap(new DollarList(errors, (JsonArray) o));
@@ -124,9 +129,23 @@ public class DollarFactory {
         if (o instanceof Boolean) {
             return wrap(new DollarBoolean(errors, (Boolean) o));
         }
-
-        if (o instanceof Number) {
-            return wrap(new DollarNumber(errors, (Number) o));
+        if (o instanceof Date) {
+            return wrap(new DollarDate(errors, ((Date) o).getTime()));
+        }
+        if (o instanceof Double) {
+            return wrap(new DollarDecimal(errors, (Double) o));
+        }
+        if (o instanceof Float) {
+            return wrap(new DollarDecimal(errors, ((Float) o).doubleValue()));
+        }
+        if (o instanceof Long) {
+            return wrap(new DollarInteger(errors, (Long) o));
+        }
+        if (o instanceof Integer) {
+            return wrap(new DollarInteger(errors, ((Integer) o).longValue()));
+        }
+        if (o instanceof Short) {
+            return wrap(new DollarInteger(errors, ((Short) o).longValue()));
         }
         if (o instanceof Range) {
             return wrap(new DollarRange(errors, (Range) o));
@@ -171,7 +190,7 @@ public class DollarFactory {
 
     @NotNull
     public static var fromValue(Object o) {
-        return fromValue(ImmutableList.of(), o);
+        return fromValue(o, ImmutableList.of());
     }
 
     @NotNull

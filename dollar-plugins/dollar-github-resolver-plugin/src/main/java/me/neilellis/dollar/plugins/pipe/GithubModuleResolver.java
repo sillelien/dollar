@@ -115,7 +115,7 @@ public class GithubModuleResolver implements ModuleResolver {
                 for (Map.Entry<String, var> entry : paramMap.entrySet()) {
                     moduleScope.set(entry.getKey(), entry.getValue(), true, null);
                 }
-                return new DollarParser(classLoader, dir, mainFile).parse(moduleScope, content);
+                return new DollarParser(classLoader, dir, mainFile).parse(moduleScope, content, false);
             } catch (IOException e) {
                 return DollarStatic.logAndRethrow(e);
             }

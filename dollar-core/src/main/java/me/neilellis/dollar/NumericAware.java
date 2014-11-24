@@ -31,12 +31,12 @@ public interface NumericAware {
 
     @NotNull
     @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    var $dec(@NotNull var key, @NotNull var amount);
+    @Guarded(ChainGuard.class) var $abs();
 
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
+    @Deprecated
     default var $dec(@NotNull String key, @NotNull var amount) {
         return $dec($(key), amount);
     }
@@ -44,6 +44,12 @@ public interface NumericAware {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
+    @Deprecated var $dec(@NotNull var key, @NotNull var amount);
+
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    @Deprecated
     default var $dec(@NotNull String key, @NotNull Number amount) {
         return $dec($(key), $(amount));
     }
@@ -51,14 +57,15 @@ public interface NumericAware {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    var $dec(@NotNull var amount);
+    @Deprecated
+    default var $dec(@NotNull Number amount) {
+        return $dec($(amount));
+    }
 
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    default var $dec(@NotNull Number amount) {
-        return $dec($(amount));
-    }
+    @Deprecated var $dec(@NotNull var amount);
 
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
@@ -69,12 +76,12 @@ public interface NumericAware {
 
     @NotNull
     @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    var $inc(@NotNull var key, @NotNull var amount);
+    @Guarded(ChainGuard.class) var $divide(@NotNull var v);
 
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
     @NotNull
+    @Deprecated
     default var $inc(@NotNull String key, @NotNull var amount) {
         return $inc($(key), amount);
     }
@@ -82,6 +89,12 @@ public interface NumericAware {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
+    @Deprecated var $inc(@NotNull var key, @NotNull var amount);
+
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    @Deprecated
     default var $inc(@NotNull String key, @NotNull Number amount) {
         return $inc($(key), $(amount));
     }
@@ -89,19 +102,14 @@ public interface NumericAware {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    var $inc(@NotNull var amount);
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
+    @Deprecated
     default var $inc(@NotNull Number amount) {
         return $inc($(amount));
     }
 
     @NotNull
     @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    var $negate();
+    @Guarded(ChainGuard.class) var $inc(@NotNull var amount);
 
     @NotNull
     @Guarded(NotNullGuard.class)
@@ -112,21 +120,13 @@ public interface NumericAware {
 
     @NotNull
     @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    var $multiply(@NotNull var v);
+    @Guarded(ChainGuard.class) var $modulus(@NotNull var v);
 
     @NotNull
     @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    var $divide(@NotNull var v);
+    @Guarded(ChainGuard.class) var $multiply(@NotNull var v);
 
     @NotNull
     @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    var $modulus(@NotNull var v);
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    var $abs();
+    @Guarded(ChainGuard.class) var $negate();
 }

@@ -106,7 +106,7 @@ public class DollarBasicTest {
         map.put("sub", submap);
         assertEquals("bar", $(map).$get("foo").$());
         assertEquals("bar", $(map).toMap().get("foo"));
-        assertEquals(1, $(map).$get("sub").toMap().get("thing"));
+        assertEquals(1L, $(map).$get("sub").toMap().get("thing"));
         assertEquals("1", $(map).$get("sub").$get("thing").S());
         assertEquals("{\"thing\":1}", $(map).$get("sub").S());
         assertEquals(1, $(map).$get("sub").I("thing").longValue());

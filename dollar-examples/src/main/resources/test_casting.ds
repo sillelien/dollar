@@ -3,9 +3,9 @@
 1 as list <=> [1]
 1 as map <=> {"value":1}
 1 as VOID <=> void
-1 as number <=> 1
+1 as integer <=> 1
 
-"1" as number <=> 1
+"1" as integer <=> 1
 "http://google.com" as uri
 "1" as VOID <=> void
 "true" as boolean <=> true
@@ -15,7 +15,8 @@
 "1" as string <=> "1"
 
 true as string <=> "true"
-true as number <=> 1
+true as integer <=> 1
+true as decimal <=> 1.0
 true as list <=> [true]
 true as map <=> {"value":true}
 true as boolean <=> true

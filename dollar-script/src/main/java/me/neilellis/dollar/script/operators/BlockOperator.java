@@ -24,6 +24,7 @@ import org.codehaus.jparsec.functors.Map;
 import java.util.List;
 
 import static me.neilellis.dollar.DollarStatic.$void;
+import static me.neilellis.dollar.DollarStatic.fix;
 import static me.neilellis.dollar.types.DollarFactory.fromLambda;
 
 /**
@@ -39,10 +40,10 @@ public class BlockOperator implements Map<List<var>, var> {
     }
 
     @Override public var map(List<var> l) {
-        return fromLambda(delayed -> dollarParser.inScope(scope, newScope -> {
+        return fromLambda(parallel -> dollarParser.inScope(scope, newScope -> {
                               if (l.size() > 0) {
                                   for (int i = 0; i < l.size() - 1; i++) {
-                                      l.get(i).$S();
+                                      fix(l.get(i), parallel.isTrue());
                                   }
 
                                   return l.get(l.size() - 1);

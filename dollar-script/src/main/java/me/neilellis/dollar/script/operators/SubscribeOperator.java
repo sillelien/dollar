@@ -46,11 +46,11 @@ public class SubscribeOperator implements Binary<var>, Operator {
 
             return DollarFactory.fromLambda(
                     j -> lhs.$subscribe(i -> scope.getDollarParser().inScope(scope, newScope -> {
-                        final var it = fix(i);
+                        final var it = fix(i, false);
                         scope.getDollarParser().currentScope().setParameter("1", it);
                         scope.getDollarParser().currentScope().setParameter("it", it);
                         //todo: change to receive
-                        return fix(rhs);
+                        return fix(rhs, false);
                     })));
 
         } catch (AssertionError e) {

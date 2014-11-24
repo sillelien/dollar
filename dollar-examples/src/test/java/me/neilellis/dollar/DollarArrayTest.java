@@ -21,6 +21,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
+import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$list;
 import static org.junit.Assert.assertEquals;
 
@@ -35,15 +36,15 @@ public class DollarArrayTest {
     @Test
     public void testBasics() {
         $list(null, null).$plus(null);
-        assertEquals(list, $list("Neil").$plus("Dimple").$plus("Charlie"));
-        assertEquals(list.remove("Neil"), $list("Dimple").$plus("Charlie"));
-        assertEquals(list.remove("Dimple"), $list("Neil").$plus("Charlie"));
-        assertEquals(list.remove("Charlie"), $list("Neil").$plus("Dimple"));
+        assertEquals(list, $list("Neil").$plus($("Dimple")).$plus($("Charlie")));
+        assertEquals(list.remove("Neil"), $list("Dimple").$plus($("Charlie")));
+        assertEquals(list.remove("Dimple"), $list("Neil").$plus($("Charlie")));
+        assertEquals(list.remove("Charlie"), $list("Neil").$plus($("Dimple")));
         Object value = list.$();
         assertEquals(JsonArray.class, value.getClass());
         assertEquals("[\"Neil\",\"Dimple\",\"Charlie\"]", list.toString());
         assertEquals("[\"Neil\",\"Dimple\",\"Charlie\"]", value.toString());
-        assertTrue(list.$stream().anyMatch((i) -> i.equals("Neil")));
+        assertTrue(list.$stream(false).anyMatch((i) -> i.equals("Neil")));
     }
 
 

@@ -95,7 +95,8 @@ public class Builtins {
         addDollarSingleNoScope("state", StateAware::$state);
 
         addJavaStyle("strlen", 1, 1, (args, scope) -> args.get(0).toString().length());
-        addJavaStyle("date", 0, 0, (args, scope) -> new Date().toString());
+        addJavaStyle("date", 0, 0, (args, scope) -> $(new Date()));
+        addJavaStyle("time", 0, 0, (args, scope) -> System.currentTimeMillis());
         addJavaStyle("matches", 2, 2, (args, scope) -> args.get(0).toString().matches(args.get(1).$S()));
     }
 }

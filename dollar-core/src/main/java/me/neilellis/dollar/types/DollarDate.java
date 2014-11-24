@@ -23,74 +23,88 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+
+import static java.lang.Math.abs;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
+public class DollarDate extends AbstractDollarSingleValue<Long> {
 
-    public DollarBoolean(@NotNull List<Throwable> errors, @NotNull Boolean value) {
+    public DollarDate(@NotNull List<Throwable> errors, @NotNull Long value) {
         super(errors, value);
     }
 
     @NotNull
     @Override
+    public Date $() {
+        return new Date(value);
+    }
+
+    @NotNull
+    @Override
     public var $abs() {
-        return this;
+        return DollarFactory.fromValue(new Date(abs(value)),errors());
     }
 
     @NotNull
     @Override
     public var $dec(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
+        return DollarFactory.fromValue( value.longValue() - asLong(amount.D()),errors(),amount.errors());
+    }
+
+    private long asLong(double d) {
+        return (long) (d * (24.0 * 60.0 * 60.0 * 1000.0));
     }
 
     @NotNull
     @Override
     public var $divide(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
+        return DollarFactory.fromValue(asDecimal() / v.D(), errors(), v.errors());
     }
 
     @NotNull
     @Override
     public var $inc(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
+        return DollarFactory.fromValue(value.longValue() + asLong(amount.D()),errors(),amount.errors());
     }
 
     @NotNull
     @Override
     public var $modulus(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
+        return DollarFactory.fromValue(asDecimal() % v.D(),errors(),v.errors());
     }
 
     @NotNull
     @Override
     public var $multiply(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
+        return DollarFactory.fromValue(asDecimal() * v.D(),errors(),v.errors());
     }
 
     @NotNull
     @Override
     public var $negate() {
-        return DollarFactory.fromValue(!value, errors());
+        return DollarFactory.fromValue(-asDecimal(),errors());
     }
 
     @Override
     public var $as(Type type) {
         switch (type) {
             case BOOLEAN:
-                return this;
+                return DollarStatic.$(value != 0);
             case STRING:
-                return DollarStatic.$(S());
+                return DollarStatic.$(new Date(value).toString());
             case LIST:
                 return DollarStatic.$(Arrays.asList(this));
             case MAP:
                 return DollarStatic.$("value", this);
             case DECIMAL:
-                return DollarStatic.$(value ? 1.0 : 0.0);
+                return DollarStatic.$(asDecimal());
             case INTEGER:
-                return DollarStatic.$(value ? 1 : 0);
+                return DollarStatic.$(asDecimal());
             case VOID:
                 return DollarStatic.$void();
             default:
@@ -98,22 +112,26 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         }
     }
 
+    private Double asDecimal() {
+        return value.doubleValue() / (24 * 60 * 60 * 1000);
+    }
+
     @Override
     @NotNull
     public Integer I() {
-        return value ? 1 : 0;
+        return value.intValue();
     }
 
     @NotNull
     @Override
     public Number N() {
-        return value ? 1 : 0;
+        return value;
     }
 
     @Override
     public boolean is(Type... types) {
         for (Type type : types) {
-            if (type == Type.BOOLEAN) {
+            if (type == Type.DATE) {
                 return true;
             }
         }
@@ -123,19 +141,19 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     @Override
     @NotNull
     public Number number(@NotNull String key) {
-        return 0;
+        return value;
     }
 
     @NotNull
     @Override
     public Double D() {
-        return value ? 1.0 : 0.0;
+        return asDecimal();
     }
 
     @Nullable
     @Override
     public Long L() {
-        return value ? 1L : 0L;
+        return asDecimal().longValue();
     }
 
     @Override
@@ -150,51 +168,75 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
 
     @Override
     public boolean isNumber() {
-        return false;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof DollarBoolean) {
-            return $().equals(((DollarBoolean) obj).$());
-        } else {
-            return value.toString().equals(obj.toString());
-        }
-    }
-
-    @NotNull
-    @Override
-    public Boolean $() {
-        return value;
-    }
-
-    @Override
-    public int compareTo(var o) {
-        return I() - o.I();
-    }
-
-    @Override
-    public boolean isBoolean() {
         return true;
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof var) {
+            var unwrapped = ((var) obj)._unwrap();
+            if (unwrapped instanceof DollarDate) {
+                return $equals(unwrapped);
+            } else {
+                return toString().equals(obj.toString());
+            }
+        } else {
+            return toString().equals(obj.toString());
+        }
+    }
+
+    public boolean $equals(var other) {
+            return Objects.equals(toString(), other.toString());
+    }
+
+    @Override
+    public int compareTo(var o) {
+        return $minus(o).I();
+    }
+
+    @NotNull
+    @Override
+    public var $minus(var newValue) {
+        return DollarFactory.fromValue(new Date(value - asLong(newValue.D())), errors(),
+                                       newValue.errors());
+
+    }
+
+    @NotNull
+    @Override
+    public var $plus(var newValue) {
+                return DollarFactory.fromValue(new Date(value + asLong(newValue.D())), errors(), newValue.errors());
+
+    }
+
+    @NotNull @Override public String S() {
+        return new Date(value).toString();
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
     public boolean isTrue() {
-        return value;
+        return false;
     }
 
     @Override
     public boolean isTruthy() {
-        return value;
+        return value.intValue() != 0;
     }
 
     @Override
     public boolean isFalse() {
-        return !value;
+        return false;
     }
 
     @Override
     public boolean isNeitherTrueNorFalse() {
-        return false;
+        return true;
     }
+
+
 }

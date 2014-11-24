@@ -62,7 +62,7 @@ public class UnaryOp implements Unary<var>, Operator {
                 }
             });
             from.$listen(i -> {
-                lambda.$notify(i);
+                lambda.$notify();
                 return i;
             });
             return lambda;

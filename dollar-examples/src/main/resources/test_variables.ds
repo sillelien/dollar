@@ -40,7 +40,7 @@ e=3
 errorOccured= false
 
 {
-    error { @@ "Caught "+type ; errorOccured= true;}
+    error { @@ "Caught "+type ; errorOccured= true}
     e=3
 }
 

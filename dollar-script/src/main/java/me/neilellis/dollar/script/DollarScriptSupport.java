@@ -34,7 +34,7 @@ public class DollarScriptSupport {
 
     public static var wrapReactiveUnary(ScriptScope scope, String source, var lhs, Callable<var> callable) {
         final var lambda = toLambda(scope, source, callable);
-        lhs.$listen(i -> lambda.$notify(lambda));
+        lhs.$listen(i -> lambda.$notify());
         return lambda;
     }
 
@@ -55,8 +55,8 @@ public class DollarScriptSupport {
     public static var wrapReactiveBinary(ScriptScope scope, String source, var lhs, var rhs, Callable<var> callable) {
         final var lambda = toLambda(scope, source, callable);
 
-        rhs.$listen(i -> lambda.$notify(lambda));
-        lhs.$listen(i -> lambda.$notify(lambda));
+        rhs.$listen(i -> lambda.$notify());
+        lhs.$listen(i -> lambda.$notify());
         return lambda;
     }
 

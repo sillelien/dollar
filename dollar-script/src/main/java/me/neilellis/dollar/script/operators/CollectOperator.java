@@ -44,7 +44,7 @@ public class CollectOperator implements Map<Object[], var> {
             private ArrayList<var> collected = new ArrayList<var>();
 
             @Override public var pipe(var in) throws Exception {
-                var value = fix((var) objects[0]);
+                var value = fix((var) objects[0], false);
                 count[0]++;
                 return dollarParser.inScope(scope, newScope -> {
                     newScope.setParameter("count", $(count[0]));
@@ -60,7 +60,7 @@ public class CollectOperator implements Map<Object[], var> {
                     if (endValue) {
                         collected.clear();
                         count[0] = -1;
-                        returnValue = fix((var) objects[3]);
+                        returnValue = fix((var) objects[3], false);
                     }
                     return returnValue;
                 });

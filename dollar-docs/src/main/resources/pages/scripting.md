@@ -62,12 +62,12 @@ In the above example we are declaring (using the declarative operator `:=`) that
 The assertion operator `.:` will throw an assertion error if the value following is either non boolean or not true.
 
 
-Now let's throw in the -> or causes operator :
+Now let's throw in the ->? or causes operator :
 
 ```dollar
 
 a=1
-a -> { @@ $1 }
+a ->? { @@ $1 }
 a=2
 a=3
 a=4
@@ -86,7 +86,7 @@ That simple piece of code will simply output each change made to the variable a,
 
 b=1
 a=1
-a + b + 1 -> { @@ "a=" + a + ", b=" + b}
+a + b + 1 ->? { @@ "a=" + a + ", b=" + b}
 a=2
 a=3
 a=4
@@ -155,7 +155,7 @@ block := {
 
 .: block == "World"
 
-block2 := {1;2;}
+block2 := {1;2}
 
 .: block2 == 2
 
@@ -182,42 +182,42 @@ list2 := [1,2]
 
 ```
 
-####Appending / Map Block
+####Map Block
 
-Finally we have the appending block, when an appending (or map) block is evaluated the result is the concatenation (using $plus() in the Dollar API) of the parts from top to bottom. The appending block starts and finishes with the `{` `}` braces, however each part is seperated by a `,` not a `;` or *newline*
+Finally we have the map block, when an map block is evaluated the result is the aggregation  of the parts from top to bottom into a map. The map block starts and finishes with the `{` `}` braces, however each part is seperated by a `,` not a `;` or *newline*
 
 ```dollar
 
-appending := {
-    "Hello ",
+mapBlock := {
+    "Hello",
     "World"
 }
 
-.: appending == "Hello World"
+mapBlock <=> {"Hello":"Hello", "World":"World"}
 
-appending2 := { 1, 2}
+mapBlock2 := { 1, 2}
 
-.: appending2 == 3
+mapBlock2 <=> {"1":1,"2":2}
 
 ```
 
-Appending blocks can be combined with the pair `:` operator to create maps/JSON like this:
+Map blocks can be combined with the pair `:` operator to create maps/JSON like this:
 
 
 ```dollar
 
-appending := {
+mapBlock := {
     "first":"Hello ",
    "second":"World"
 }
 
-@@ appending
+@@ mapBlock
 
-.: appending.second == "World"
+.: mapBlock.second == "World"
 
 ```
 
-The stdout operator `@@` is used to send a value to stdout in it's serialized (JSON) format, so the result of the above would be to output `{"first":"Hello ","second":"World"}` a JSON object created using JSON like syntax. This works because of how appending works with pairs, i.e. they are joined together to form a map.
+The stdout operator `@@` is used to send a value to stdout in it's serialized (JSON) format, so the result of the above would be to output `{"first":"Hello ","second":"World"}` a JSON object created using JSON like syntax. Maps can also be created by joining pairs.
 
 ```dollar
 
@@ -280,7 +280,7 @@ Error handling couldn't be simpler. Define an error expression using the error k
 
 ```dollar
 errorHappened= false
-error { @@ msg; errorHappened= true; }
+error { @@ msg; errorHappened= true }
 a=1/0
 .: errorHappened
 ```
@@ -350,9 +350,9 @@ A few more examples follow.
 1 as list <=> [1]
 1 as map <=> {"value":1}
 1 as VOID <=> void
-1 as number <=> 1
+1 as integer <=> 1
 
-"1" as number <=> 1
+"1" as integer <=> 1
 "http://google.com" as uri
 "1" as VOID <=> void
 "true" as boolean <=> true
@@ -362,7 +362,7 @@ A few more examples follow.
 "1" as string <=> "1"
 
 true as string <=> "true"
-true as number <=> 1
+true as integer <=> 1
 true as list <=> [true]
 true as map <=> {"value":true}
 true as boolean <=> true
@@ -441,12 +441,12 @@ a <=> 10
 
 DollarScript as previously mentioned is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
 
-Let's start with the simplest reactive control flow operator, the '->' or 'causes' operator.
+Let's start with the simplest reactive control flow operator, the '->?' or 'causes' operator.
 
 ```dollar
 a=1; b=1
 
-a -> (b= a)
+a ->? (b= a)
 
 &a <=> 1 ; &b <=> 1
 
@@ -464,7 +464,7 @@ Next we assign a new value of 2 to `a`. This will immediately (within the same t
 
 ###When
 
-Next we have the 'when' operator which can be specified as a statement, usually for longer pieces of code. Or as the `=>` operator, for concise code.
+Next we have the 'when' operator which can be specified as a statement, usually for longer pieces of code. Or as the `?` operator, for concise code.
 
 
 ```dollar
@@ -473,7 +473,7 @@ c=1
 d=1
 
 //When c is greater than 3 assign it's value to d
-c > 3 => (d= c)
+c > 3 ? (d= c)
 
 &c <=> 1; &d <=> 1
 c=2; &c <=> 2; &d <=> 1
@@ -674,7 +674,7 @@ export server := {
         }
     };
 
-export stop := {stop(www);stop(redis); @@ [state(www),state(redis)];}
+export stop := {stop(www);stop(redis); @@ [state(www),state(redis)]}
 
 export state:= [state(www),state(redis)]
 ```
@@ -682,8 +682,18 @@ export state:= [state(www),state(redis)]
 
 ##Builtin Functions
 
-## Advanced Topics
-### Concurrency & Threads
+## Concurrency & Threads
+### Concurrent Scope
+The concurrent scope operator `(p)` or `parallel` creates a new scope in which all actions that can be parallel will be, it's partner the serial operator `(s)` or `serial`
 
+
+Notes:
+
+All types are immutable, including collections.
+Cannot reassign a variable from a different thread, so readonly from other threads.ç
+
+
+
+## Advanced Topics
 
 

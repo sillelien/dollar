@@ -39,6 +39,33 @@
 .: -1 <= 0
 .: -1 >= -2
 
+.: (1 - 1.0) is DECIMAL
+.: (1.0 - 1.0) is DECIMAL
+.: (1.0 - 1) is DECIMAL
+.: (1 - 1) is INTEGER
+
+.: (1 + 1.0) is DECIMAL
+.: (1.0 + 1.0) is DECIMAL
+.: (1.0 + 1) is DECIMAL
+.: (1 + 1) is INTEGER
+
+.: 1/1 is INTEGER
+.: 1/1.0 is DECIMAL
+.: 2.0/1 is DECIMAL
+.: 2.0/1.0 is DECIMAL
+
+.: 1*1 is INTEGER
+.: 1*1.0 is DECIMAL
+.: 2.0*1 is DECIMAL
+.: 2.0*1.0 is DECIMAL
+
+
+.: 1%1 is INTEGER
+.: 1%1.0 is DECIMAL
+.: 2.0%1 is DECIMAL
+.: 2.0%1.0 is DECIMAL
+.: abs(1) is INTEGER
+.: abs(1.0) is DECIMAL
 
 
 

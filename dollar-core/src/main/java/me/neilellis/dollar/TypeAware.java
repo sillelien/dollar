@@ -17,7 +17,9 @@
 package me.neilellis.dollar;
 
 import com.google.common.collect.ImmutableList;
+import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.guard.AllVarCollectionGuard;
+import me.neilellis.dollar.guard.AllVarMapGuard;
 import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.NotNullCollectionGuard;
 import me.neilellis.dollar.json.JsonArray;
@@ -64,6 +66,24 @@ public interface TypeAware {
 
     @NotNull Number N();
 
+    default String getPairKey() {
+        return toMap().keySet().iterator().next();
+    }
+
+    /**
+     * Returns this object as a set of nested maps.
+     *
+     * @return a nested Map or null if the operation doesn't make sense (i.e. on a single valued object or list)
+     */
+    @Nullable Map<String, Object> toMap();
+
+    default var getPairValue() {
+        return $map().values().iterator().next();
+    }
+
+    @NotNull
+    @Guarded(AllVarMapGuard.class) ImmutableMap<String, var> $map();
+
     //Any of these
     boolean is(Type... types);
 
@@ -78,6 +98,8 @@ public interface TypeAware {
     boolean isMap();
 
     boolean isNumber();
+
+    boolean isPair();
 
     boolean isSingleValue();
 
@@ -155,14 +177,6 @@ public interface TypeAware {
      */
     @Nullable
     ImmutableList<String> strings();
-
-    /**
-     * Returns this object as a set of nested maps.
-     *
-     * @return a nested Map or null if the operation doesn't make sense (i.e. on a single valued object or list)
-     */
-    @Nullable
-    Map<String, Object> toMap();
 
     InputStream toStream();
 

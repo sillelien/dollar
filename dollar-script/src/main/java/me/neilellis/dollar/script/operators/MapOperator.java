@@ -18,10 +18,15 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarParser;
 import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static me.neilellis.dollar.DollarStatic.$;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -36,16 +41,20 @@ public class MapOperator implements Map<List<var>, var> {
     }
 
     @Override public var map(List<var> o) {
-        return dollarParser.inScope(scope, newScope -> {
-            var current = null;
-            for (var v : o) {
-                if (current != null) {
-                    current = current.$plus(v);
-                } else {
-                    current = v;
-                }
+        return DollarFactory.fromLambda(parallel -> dollarParser.inScope(scope, newScope -> {
+            Stream<var> stream;
+            if (parallel.isTrue()) {
+                stream = o.stream().parallel();
+            } else {
+                stream = o.stream();
             }
-            return current;
-        });
+            //Not really a map if only one entry unless it's a pair, in fact it's really a block.
+            if (o.size() == 1) {
+                return o.get(0);
+            }
+            return $(stream.map(v -> v._fix(parallel.isTrue()))
+                           .collect(Collectors.toConcurrentMap(v -> v.isPair() ? v.getPairKey() : v.$S(),
+                                                               v -> v.isPair() ? v.getPairValue() : v)));
+        }));
     }
 }

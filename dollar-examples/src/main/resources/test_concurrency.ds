@@ -1,0 +1,16 @@
+
+testArray := [ time(), {sleep(2);time();}, time() ];
+
+
+a= testArray;
+
+
+b= parallel testArray;
+
+@@ a
+@@ b
+
+
+//Test different execution orders
+.: b[2] < b[1]
+.: a[2] >= a[1]

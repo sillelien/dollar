@@ -42,7 +42,7 @@ public interface VarInternal {
      * Like _unwrap() except it causes lambda evaluation and propagates through lists and maps. The result is a
      * static value with no nested lambdas.
      */
-    var _fix();
+    var _fix(boolean parallel);
 
     void _src(String src);
 

@@ -46,9 +46,9 @@ public class RedisStore implements DollarStore {
         try {
             value = jedis.get(location);
         } catch (Exception e) {
-            return DollarFactory.fromValue(ImmutableList.of(e), null);
+            return DollarFactory.fromValue(null, ImmutableList.of(e));
         }
-        return DollarFactory.fromValue(ImmutableList.of(), value);
+        return DollarFactory.fromValue(value, ImmutableList.of());
 
     }
 
@@ -59,9 +59,9 @@ public class RedisStore implements DollarStore {
         try {
             value = jedis.brpop(timeoutInMillis / 1000, location);
         } catch (Exception e) {
-            return DollarFactory.fromValue(ImmutableList.of(e), null);
+            return DollarFactory.fromValue(null, ImmutableList.of(e));
         }
-        return DollarFactory.fromValue(ImmutableList.of(), value.get(1));
+        return DollarFactory.fromValue(value.get(1), ImmutableList.of());
     }
 
     @Override

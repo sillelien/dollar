@@ -22,7 +22,6 @@ import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,15 +30,15 @@ import static java.lang.Math.abs;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DollarNumber extends AbstractDollarSingleValue<Number> {
+public class DollarDecimal extends AbstractDollarSingleValue<Double> {
 
-    public DollarNumber(@NotNull List<Throwable> errors, @NotNull Number value) {
+    public DollarDecimal(@NotNull List<Throwable> errors, @NotNull Double value) {
         super(errors, value);
     }
 
     @NotNull
     @Override
-    public Number $() {
+    public Double $() {
         return value;
     }
 
@@ -54,8 +53,10 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
                 return DollarStatic.$(Arrays.asList(this));
             case MAP:
                 return DollarStatic.$("value", this);
-            case NUMBER:
+            case DECIMAL:
                 return this;
+            case INTEGER:
+                return DollarStatic.$(value.longValue());
             case VOID:
                 return DollarStatic.$void();
             default:
@@ -78,7 +79,7 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
     @Override
     public boolean is(Type... types) {
         for (Type type : types) {
-            if (type == Type.NUMBER) {
+            if (type == Type.DECIMAL) {
                 return true;
             }
         }
@@ -94,98 +95,49 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
     @NotNull
     @Override
     public var $dec(@NotNull var amount) {
-        return new DollarNumber(errors(), value.longValue() - amount.L());
+        return DollarFactory.fromValue(value - amount.D(), errors(), amount.errors());
     }
 
     @NotNull
     @Override
     public var $inc(@NotNull var amount) {
-        return new DollarNumber(errors(), value.longValue() + amount.L());
+        return DollarFactory.fromValue(value + amount.D(), errors(), amount.errors());
     }
 
     @NotNull
     @Override
     public var $negate() {
-        if (isInteger()) {
-            return DollarFactory.fromValue(-value.longValue());
-        } else {
-            return DollarFactory.fromValue(-value.doubleValue());
-        }
+        return DollarFactory.fromValue(-value, errors());
     }
 
     @NotNull
     @Override
     public var $multiply(@NotNull var v) {
-        if (isInteger()) {
-            return DollarFactory.fromValue(value.longValue() * v.L());
-        } else {
-            return DollarFactory.fromValue(value.doubleValue() * v.D());
-        }
+        return DollarFactory.fromValue(value * v.D(), errors(), v.errors());
     }
 
     @NotNull
     @Override
     public var $divide(@NotNull var v) {
-        if (isInteger()) {
-            return DollarFactory.fromValue(value.longValue() / v.L());
-        } else {
-            return DollarFactory.fromValue(value.doubleValue() / v.D());
-        }
+        return DollarFactory.fromValue(value / v.D(), errors(), v.errors());
     }
 
     @NotNull
     @Override
     public var $modulus(@NotNull var v) {
-        if (isInteger()) {
-            return DollarFactory.fromValue(value.longValue() % v.L());
-        } else {
-            return DollarFactory.fromValue(value.doubleValue() % v.D());
-        }
+        return DollarFactory.fromValue(value % v.D(), errors(), v.errors());
     }
 
     @NotNull
     @Override
     public var $abs() {
-        if (isInteger()) {
-            return DollarFactory.fromValue(abs(value.longValue()));
-        } else {
-            return DollarFactory.fromValue(abs(value.doubleValue()));
-        }
-    }
-
-    @NotNull
-    @Override
-    public var $plus(Object newValue) {
-        if (newValue instanceof var) {
-            if (isInteger()) {
-                return DollarFactory.fromValue(errors(), value.longValue() + ((var) newValue).L());
-            } else {
-                return DollarFactory.fromValue(errors(), value.doubleValue() + ((var) newValue).D());
-            }
-        }
-        return super.$plus(newValue);
-
-    }
-
-    @NotNull
-    @Override
-    public var $minus(Object newValue) {
-        if (newValue instanceof var) {
-            if (((var) newValue).isInteger()) {
-                return DollarFactory.fromValue(errors(), value.longValue() - ((var) newValue).L());
-            }
-            if (((var) newValue).isDecimal()) {
-                return DollarFactory.fromValue(errors(), value.doubleValue() - ((var) newValue).D());
-            }
-        }
-        return super.$plus(newValue);
-
+        return DollarFactory.fromValue(abs(value), errors());
     }
 
     @NotNull
     @Override
     public Double D() {
-        return value.doubleValue();
+        return value;
     }
 
     @Nullable
@@ -195,10 +147,25 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
     }
 
     @Override
+    public boolean isDecimal() {
+        return true;
+    }
+
+    @Override
+    public boolean isInteger() {
+        return false;
+    }
+
+    @Override
+    public boolean isNumber() {
+        return true;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof var) {
             var unwrapped = ((var) obj)._unwrap();
-            if (unwrapped instanceof DollarNumber) {
+            if (unwrapped instanceof DollarDecimal) {
                 return $equals(unwrapped);
             } else {
                 return value.toString().equals(obj.toString());
@@ -217,23 +184,21 @@ public class DollarNumber extends AbstractDollarSingleValue<Number> {
     }
 
     @Override
-    public boolean isDecimal() {
-        return value instanceof BigDecimal || value instanceof Float || value instanceof Double;
-    }
-
-    @Override
-    public boolean isInteger() {
-        return value instanceof Long || value instanceof Integer;
-    }
-
-    @Override
-    public boolean isNumber() {
-        return true;
-    }
-
-    @Override
     public int compareTo(var o) {
         return $minus(o).I();
+    }
+
+    @NotNull
+    @Override
+    public var $minus(var newValue) {
+        return DollarFactory.fromValue(value - ((var) newValue).D(), errors(), ((var) newValue).errors());
+
+    }
+
+    @NotNull
+    @Override
+    public var $plus(var newValue) {
+        return DollarFactory.fromValue(value + ((var) newValue).D(), errors(), ((var) newValue).errors());
     }
 
     @Override

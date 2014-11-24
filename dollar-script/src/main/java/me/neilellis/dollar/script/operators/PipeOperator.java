@@ -42,7 +42,7 @@ public class PipeOperator implements Map<var, Map<? super var, ? extends var>> {
 
     @Override public Map<? super var, ? extends var> map(var rhs) {
         return lhs -> dollarParser.inScope(scope, newScope -> {
-            var lhsFix = fix(lhs);
+            var lhsFix = fix(lhs, false);
             newScope.setParameter("1", lhsFix);
             Object rhsVal = rhs.$();
             if ((rhsVal instanceof String)) {
@@ -51,7 +51,7 @@ public class PipeOperator implements Map<var, Map<? super var, ? extends var>> {
                     return Builtins.execute(rhsStr, Collections.singletonList(lhsFix),
                                             newScope);
                 } else if (scope.has(rhsStr)) {
-                    return fix(scope.get(rhsVal.toString()));
+                    return fix(scope.get(rhsVal.toString()), false);
                 } else {
                     throw new VariableNotFoundException(rhsStr);
                 }

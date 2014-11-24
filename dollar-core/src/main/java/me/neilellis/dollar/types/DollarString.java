@@ -54,8 +54,10 @@ public class DollarString extends AbstractDollarSingleValue<String> {
                 return DollarStatic.$(Arrays.asList(this));
             case MAP:
                 return DollarStatic.$("value", this);
-            case NUMBER:
-                return DollarStatic.$(value.contains(".") ? Double.parseDouble(value) : Long.parseLong(value));
+            case DECIMAL:
+                return DollarStatic.$(Double.parseDouble(value));
+            case INTEGER:
+                return DollarStatic.$(Long.parseLong(value));
             case VOID:
                 return DollarStatic.$void();
             case URI:
@@ -106,7 +108,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @NotNull
     @Override
     public var $negate() {
-        return DollarFactory.fromValue(errors(), new StringBuilder(value).reverse().toString());
+        return DollarFactory.fromValue(new StringBuilder(value).reverse().toString(), errors());
     }
 
     @NotNull
@@ -117,7 +119,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         for (int i = 0; i < max; i++) {
             newValue = newValue + value;
         }
-        return DollarFactory.fromValue(errors(), newValue);
+        return DollarFactory.fromValue(newValue, errors());
     }
 
     @NotNull
@@ -140,8 +142,8 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
-    public var $plus(Object newValue) {
-        return DollarFactory.fromValue(errors(), value + newValue.toString());
+    public var $plus(var newValue) {
+        return DollarFactory.fromValue(value + newValue.toString(), errors());
     }
 
     @Override
@@ -152,16 +154,6 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @Override
     public int compareTo(var o) {
         return Comparator.<String>naturalOrder().compare(value, o.$S());
-    }
-
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        return obj != null && value.equals(obj.toString());
-    }
-
-    @Override
-    public boolean isString() {
-        return true;
     }
 
     @Override
@@ -187,5 +179,15 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return false;
+    }
+
+    @Override
+    public boolean isString() {
+        return true;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj != null && value.equals(obj.toString());
     }
 }

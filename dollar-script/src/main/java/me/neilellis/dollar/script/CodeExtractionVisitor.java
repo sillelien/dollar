@@ -128,12 +128,6 @@ public class CodeExtractionVisitor implements Visitor {
 
     }
 
-    protected void visitChildren(SuperNode node) {
-        for (Node child : node.getChildren()) {
-            child.accept(this);
-        }
-    }
-
     @Override
     public void visit(RootNode node) {
         for (ReferenceNode refNode : node.getReferences()) {
@@ -203,7 +197,7 @@ public class CodeExtractionVisitor implements Visitor {
     public void visit(VerbatimNode node) {
         if ("dollar".equals(node.getType())) {
             try {
-                new DollarParser().parse(node.getText());
+                new DollarParser().parse(node.getText(), false);
             } catch (Throwable e) {
                 throw new AssertionError("Failed to executed code in markdown", e);
             }
@@ -228,5 +222,11 @@ public class CodeExtractionVisitor implements Visitor {
     @Override
     public void visit(Node node) {
 
+    }
+
+    protected void visitChildren(SuperNode node) {
+        for (Node child : node.getChildren()) {
+            child.accept(this);
+        }
     }
 }

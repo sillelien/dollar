@@ -16,7 +16,6 @@
 
 package me.neilellis.dollar;
 
-import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.guard.*;
 import me.neilellis.dollar.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
@@ -124,12 +123,9 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @Guarded(ChainGuard.class)
     @Guarded(ReturnVarOnlyGuard.class)
     default var $list() {
-        return DollarFactory.fromValue(errors(), toList());
+        return DollarFactory.fromValue(toList(), errors());
     }
 
-    @NotNull
-    @Guarded(AllVarMapGuard.class)
-    ImmutableMap<String, var> $map();
 
     @NotNull
     @Guarded(ChainGuard.class)
@@ -156,7 +152,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
 
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class) var $minus(@NotNull Object value);
+    @Guarded(ChainGuard.class) var $minus(@NotNull var value);
 
     /**
      * Returns a new {@link me.neilellis.dollar.var} with this value appended to it.
@@ -168,7 +164,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
 
     @NotNull
     @Guarded(ChainGuard.class)
-    @Guarded(ReturnVarOnlyGuard.class) var $plus(@Nullable Object value);
+    @Guarded(ReturnVarOnlyGuard.class) var $plus(@Nullable var value);
 
     @NotNull
     @Deprecated
@@ -192,8 +188,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @NotNull
     @Guarded(ChainGuard.class) var $size();
 
-    @NotNull
-    Stream<var> $stream();
+    @NotNull Stream<var> $stream(boolean parallel);
 
     /**
      * Execute the handler if {@link #$void} is true.

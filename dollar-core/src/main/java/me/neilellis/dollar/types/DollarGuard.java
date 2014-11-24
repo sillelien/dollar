@@ -47,7 +47,7 @@ public class DollarGuard implements java.lang.reflect.InvocationHandler {
                 return in._unwrap();
             }
             if ("_fix".equals(name)) {
-                return in._fix();
+                return in._fix((Boolean) args[0]);
             }
 
 

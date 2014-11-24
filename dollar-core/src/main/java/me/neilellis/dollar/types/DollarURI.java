@@ -114,13 +114,7 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of();
-    }
-
-    @NotNull
-    @Override
-    public var $minus(@NotNull Object value) {
+    public var $minus(@NotNull var value) {
         assertRunning();
         return handler.removeValue(DollarStatic.$(value));
 
@@ -128,7 +122,13 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $plus(@Nullable Object value) {
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of();
+    }
+
+    @NotNull
+    @Override
+    public var $plus(@Nullable var value) {
         assertRunning();
         return handler.send(DollarStatic.$(value), true, true);
     }
@@ -208,36 +208,19 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public var $notify(var v) {
-        assertRunning();
-        return handler.send(v, false, false);
-    }
-
-    @Override
-    public String $listen(Pipeable pipe, String key) {
-        return $listen(pipe);
-    }
-
-    @Override
     public var $each(Pipeable pipe) {
         return super.$each(pipe);
     }
 
     @Override
-    public var $drain() {
+    public var $notify() {
         assertRunning();
-        return handler.drain();
+        return handler.send(this, false, false);
     }
 
     @Override
-    public var $all() {
-        assertRunning();
-        return handler.all();
-    }
-
-    @Override
-    public boolean isUri() {
-        return true;
+    public String $listen(Pipeable pipe, String key) {
+        return $listen(pipe);
     }
 
     @Override
@@ -250,6 +233,18 @@ public class DollarURI extends AbstractDollar {
     public var $receive(boolean blocking, boolean mutating) {
         assertRunning();
         return handler.receive(blocking, mutating);
+    }
+
+    @Override
+    public var $drain() {
+        assertRunning();
+        return handler.drain();
+    }
+
+    @Override
+    public var $all() {
+        assertRunning();
+        return handler.all();
     }
 
     @Override
@@ -280,8 +275,8 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public String S() {
-        return uri;
+    public boolean isUri() {
+        return true;
     }
 
     @Override public StateMachine<ResourceState, Signal> getStateMachine() {
@@ -291,6 +286,11 @@ public class DollarURI extends AbstractDollar {
     @Override
     public int compareTo(var o) {
         return Comparator.<String>naturalOrder().compare(uri, o.toString());
+    }
+
+    @Override
+    public String S() {
+        return uri;
     }
 
     @Override
@@ -308,13 +308,6 @@ public class DollarURI extends AbstractDollar {
         return false;
     }
 
-    @NotNull
-    @Override
-    public ImmutableList<var> toList() {
-        assertRunning();
-        return ImmutableList.copyOf(handler.all().toList());
-    }
-
     @Override
     public boolean isTruthy() {
         return handler != null;
@@ -329,6 +322,14 @@ public class DollarURI extends AbstractDollar {
     public boolean isNeitherTrueNorFalse() {
         return true;
     }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> toList() {
+        assertRunning();
+        return ImmutableList.copyOf(handler.all().toList());
+    }
+
 
     @Override
     public boolean isVoid() {

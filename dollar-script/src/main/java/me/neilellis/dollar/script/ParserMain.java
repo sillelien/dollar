@@ -27,7 +27,7 @@ public class ParserMain {
         File file = new File(args[0]);
         DollarParser parser = new DollarParser();
         try {
-            parser.parse(file);
+            parser.parse(file, false);
         } catch (Throwable t) {
             parser.getErrorHandler().handleTopLevel(t);
         }

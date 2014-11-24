@@ -70,7 +70,7 @@ public class DollarHttpContext {
 
     @NotNull
     public var cookies() {
-        return DollarFactory.fromValue(ImmutableList.of(), request.cookies());
+        return DollarFactory.fromValue(request.cookies(), ImmutableList.of());
     }
 
     public void header(String header, String value) {
@@ -89,17 +89,17 @@ public class DollarHttpContext {
 
     @NotNull
     public var json() {
-        return DollarFactory.fromValue(ImmutableList.of(), request.body());
+        return DollarFactory.fromValue(request.body(), ImmutableList.of());
     }
 
     @NotNull
     public var params() {
-        return DollarFactory.fromValue(ImmutableList.of(), request.params());
+        return DollarFactory.fromValue(request.params(), ImmutableList.of());
     }
 
     @NotNull
     public var queryParams() {
-        return DollarFactory.fromValue(ImmutableList.of(), request.queryMap());
+        return DollarFactory.fromValue(request.queryMap(), ImmutableList.of());
     }
 
     public void redirect(String location) {

@@ -25,32 +25,7 @@ import me.neilellis.dollar.guard.NotNullParametersGuard;
  */
 public interface URIAware {
 
-    @Guarded(NotNullParametersGuard.class)
-    String $listen(Pipeable pipe);
-
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    var $notify(var value);
-
-    @Guarded(NotNullParametersGuard.class)
-    String $listen(Pipeable pipe, String key);
-
-
-    /**
-     * Generic Send.
-     */
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    var $send(var value, boolean blocking, boolean mutating);
-
-    /**
-     * Send (to this) synchronously.
-     */
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    default var $send(var value) {
-        return $send(value, true, false);
-    }
+    @Guarded(ChainGuard.class) var $all();
 
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
@@ -58,25 +33,44 @@ public interface URIAware {
         return $send(lhs, false, false);
     }
 
+    @Guarded(ChainGuard.class) var $drain();
+
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
     default var $give(var lhs) {
         return $send(lhs, false, true);
     }
 
+    @Guarded(NotNullParametersGuard.class) String $listen(Pipeable pipe);
+
+    @Guarded(NotNullParametersGuard.class) String $listen(Pipeable pipe, String key);
+
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class) var $notify();
+
+    @Guarded(ChainGuard.class)
+    default var $peek() {
+        return $receive(false, false);
+    }
+
+    @Guarded(ChainGuard.class)
+    default var $poll() {
+        return $receive(false, true);
+    }
+
+    @Guarded(ChainGuard.class)
+    default var $pop() {
+        return $receive(true, true);
+    }
+
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class) var $publish(var lhs);
+
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
     default var $push(var lhs) {
         return $send(lhs, true, true);
     }
-
-
-    /**
-     * Generic receive
-     */
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    var $receive(boolean blocking, boolean mutating);
 
     /**
      * Receive (from this) synchronously.
@@ -87,36 +81,28 @@ public interface URIAware {
         return $receive(true, false);
     }
 
-
-    @Guarded(ChainGuard.class)
-    default var $poll() {
-        return $receive(false, true);
-    }
-
-    @Guarded(ChainGuard.class)
-    default var $peek() {
-        return $receive(false, false);
-    }
-
-    @Guarded(ChainGuard.class)
-    default var $pop() {
-        return $receive(true, true);
-    }
-
-
-    @Guarded(ChainGuard.class)
-    var $drain();
-
-
-    @Guarded(ChainGuard.class)
-    var $all();
-
-    @Guarded(ChainGuard.class)
+    /**
+     * Generic receive
+     */
     @Guarded(NotNullParametersGuard.class)
-    var $subscribe(Pipeable subscription);
+    @Guarded(ChainGuard.class) var $receive(boolean blocking, boolean mutating);
+
+    /**
+     * Send (to this) synchronously.
+     */
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
+    default var $send(var value) {
+        return $send(value, true, false);
+    }
+
+    /**
+     * Generic Send.
+     */
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class) var $send(var value, boolean blocking, boolean mutating);
 
     @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    var $publish(var lhs);
+    @Guarded(NotNullParametersGuard.class) var $subscribe(Pipeable subscription);
 
 }

@@ -17,6 +17,7 @@
 package me.neilellis.dollar.types;
 
 import me.neilellis.dollar.DollarException;
+import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.exceptions.LambdaRecursionException;
 import me.neilellis.dollar.var;
@@ -27,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static me.neilellis.dollar.DollarStatic.$void;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -51,9 +54,9 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
     private ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, String> meta = new ConcurrentHashMap<>();
 
-    public DollarLambda(var in, Pipeable lambda) {
+    public DollarLambda(Pipeable lambda) {
 
-        this.in = in;
+        this.in = DollarStatic.$(false);
         this.lambda = lambda;
     }
 
@@ -87,7 +90,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 return proxy;
 //                return lambda.pipe(in)._unwrap();
             } else if (method.getName().equals("_fix")) {
-                return lambda.pipe(in)._fix();
+                return lambda.pipe(DollarFactory.fromValue(args[0]))._fix((Boolean) args[0]);
             } else if (method.getName().equals("getMetaAttribute")) {
                 return meta.get(args[0]);
             } else if (method.getName().equals("setMetaAttribute")) {
@@ -107,7 +110,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 }
                 notifyStack.get().add(this);
                 for (Pipeable pipeable : listeners.values()) {
-                    pipeable.pipe((var) args[0]);
+                    pipeable.pipe($void());
                 }
                 notifyStack.get().remove(this);
                 return proxy;

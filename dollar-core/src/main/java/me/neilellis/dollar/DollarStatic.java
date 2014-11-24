@@ -34,6 +34,8 @@ import spark.Spark;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -125,25 +127,44 @@ public class DollarStatic {
     }
 
     public static var $(@Nullable Object o) {
-        return DollarFactory.fromValue(ImmutableList.of(), o);
+        return $(o, false);
+    }
+
+    public static var $(@Nullable Object o, boolean parallel) {
+        if (o instanceof var) {
+            return fix((var) o, parallel);
+        }
+        return DollarFactory.fromValue(o, ImmutableList.of());
+    }
+
+    public static var fix(@Nullable var v, boolean parallel) {
+        return v != null ? DollarFactory.wrap(v._fix(parallel)) : $void();
+    }
+
+    @NotNull
+    public static var $void() {
+        return DollarFactory.newVoid();
     }
 
     @NotNull
     public static var $(JsonObject json) {
-        return DollarFactory.fromValue(ImmutableList.of(), json);
+        return DollarFactory.fromValue(json, ImmutableList.of());
     }
 
     public static var $(var start, var finish) {
         return $(Range.closed(start, finish));
     }
 
-    public static var fix(@Nullable var v) {
-        return v != null ? DollarFactory.wrap(v._fix()) : $void();
-    }
-
-    @NotNull
-    public static var $void() {
-        return DollarFactory.newVoid();
+    public static List<var> fixList(@Nullable List list) {
+        ArrayList<var> result = new ArrayList<>();
+        for (Object value : list) {
+            if (value instanceof var) {
+                result.add(((var) value)._fix(false));
+            } else {
+                result.add($(value));
+            }
+        }
+        return result;
     }
 
     @NotNull
@@ -258,7 +279,7 @@ public class DollarStatic {
     @NotNull
 
     public static var $list(Object... values) {
-        return DollarFactory.fromValue(ImmutableList.of(), values);
+        return DollarFactory.fromValue(values, ImmutableList.of());
     }
 
     /**

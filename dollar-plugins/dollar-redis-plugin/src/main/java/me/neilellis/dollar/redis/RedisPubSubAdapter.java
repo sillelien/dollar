@@ -74,7 +74,7 @@ public class RedisPubSubAdapter extends JedisPubSub implements Sub {
     @Override
     public void onMessage(String channel, String message) {
         try {
-            action.handle(DollarStatic.tracer().trace(null, DollarFactory.fromValue(ImmutableList.of(), message),
+            action.handle(DollarStatic.tracer().trace(null, DollarFactory.fromValue(message, ImmutableList.of()),
                     StateTracer.Operations.RECEIVE, channel), this);
         } catch (Exception e) {
             DollarStatic.handleError(e, null);
@@ -86,7 +86,7 @@ public class RedisPubSubAdapter extends JedisPubSub implements Sub {
     @Override
     public void onPMessage(String s, String s1, String message) {
         try {
-            action.handle(DollarStatic.tracer().trace(null, DollarFactory.fromValue(ImmutableList.of(), message),
+            action.handle(DollarStatic.tracer().trace(null, DollarFactory.fromValue(message, ImmutableList.of()),
                     StateTracer.Operations.RECEIVE, s, s1), this);
         } catch (Exception e) {
             DollarStatic.handleError(e, null);

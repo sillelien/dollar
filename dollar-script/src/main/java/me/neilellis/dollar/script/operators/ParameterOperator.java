@@ -59,7 +59,7 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
                         var result;
                         if (lhs.isLambda()) {
                             System.out.println("RESULT: " + lhs._unwrap().getClass());
-                            result = fix(lhs);
+                            result = fix(lhs, false);
                             System.out.println("RESULT: " + result._unwrap().getClass());
                         } else {
                             String lhsString = lhs.toString();
@@ -68,16 +68,16 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
                             if (Builtins.exists(lhsString)) {
                                 result = Builtins.execute(lhsString, rhs, newScope);
                             } else {
-                                result = fix(newScope.get(lhsString));
+                                result = fix(newScope.get(lhsString), false);
                             }
                         }
 
                         return result;
                     }));
             //reactive links
-            lhs.$listen(i -> lambda.$notify($((Object) lambda.$())));
+            lhs.$listen(i -> lambda.$notify());
             for (var param : rhs) {
-                param.$listen(i -> lambda.$notify($((Object) lambda.$())));
+                param.$listen(i -> lambda.$notify());
             }
             return lambda;
         };

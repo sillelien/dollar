@@ -67,11 +67,11 @@ public class BinaryOp implements Binary<var>, Operator {
 
             //Wire up the reactive parts
             lhs.$listen(i -> {
-                lambda.$notify(function.map(i, rhs));
+                lambda.$notify();
                 return i;
             });
             rhs.$listen(i -> {
-                lambda.$notify(function.map(lhs, i));
+                lambda.$notify();
                 return i;
             });
 

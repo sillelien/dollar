@@ -130,36 +130,36 @@ public class DollarParser {
         }
     }
 
-    public var parse(File file) throws IOException {
+    public var parse(File file, boolean parallel) throws IOException {
         if (file.getName().endsWith(".md") || file.getName().endsWith(".markdown")) {
             return parseMarkdown(file);
         } else {
             String source = new String(Files.readAllBytes(file.toPath()));
-            return parse(new ScriptScope(this, source), source);
+            return parse(new ScriptScope(this, source), source, parallel);
         }
 
     }
 
-    public var parse(ScriptScope scope, File file) throws IOException {
+    public var parse(ScriptScope scope, File file, boolean parallel) throws IOException {
         String source = new String(Files.readAllBytes(file.toPath()));
-        return parse(new ScriptScope(scope, source), source);
+        return parse(new ScriptScope(scope, source), source, parallel);
     }
 
-    public var parse(ScriptScope scope, InputStream in) throws IOException {
+    public var parse(ScriptScope scope, InputStream in, boolean parallel) throws IOException {
         String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(scope, source), source);
+        return parse(new ScriptScope(scope, source), source, parallel);
     }
 
-    public var parse(InputStream in) throws IOException {
+    public var parse(InputStream in, boolean parallel) throws IOException {
         String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(this, source), source);
+        return parse(new ScriptScope(this, source), source, parallel);
     }
 
-    public var parse(String s) throws IOException {
-        return parse(new ScriptScope(this, s), s);
+    public var parse(String s, boolean parallel) throws IOException {
+        return parse(new ScriptScope(this, s), s, parallel);
     }
 
-    public var parse(ScriptScope scope, String source) throws IOException {
+    public var parse(ScriptScope scope, String source, boolean parallel) throws IOException {
         addScope(new ScriptScope(scope, source));
         try {
             DollarStatic.context().setClassLoader(classLoader);
@@ -313,7 +313,8 @@ public class DollarParser {
     private Parser<var> list(Parser<var> expression, ScriptScope scope) {
         return OP_NL("[")
                 .next(expression.sepBy(COMMA_OR_NEWLINE_TERMINATOR))
-                .followedBy(NL_TERM("]")).map(i -> inScope(scope, newScope -> DollarStatic.$(i)));
+                .followedBy(NL_TERM("]")).map(
+                        new ListOperator(this, scope));
     }
 
     private Parser<var> map(Parser<var> expression, ScriptScope scope) {
@@ -333,9 +334,8 @@ public class DollarParser {
         Parser<var>
                 or =
                 (
-                        or(parentParser, ref.lazy().between(OP_NL("{"), NL_TERM("}"))).followedBy(
-                                SEMICOLON_TERMINATOR)
-                ).many1().map(
+                        or(parentParser, ref.lazy().between(OP_NL("{"), NL_TERM("}")))
+                ).sepBy1(SEMICOLON_TERMINATOR).followedBy(SEMICOLON_TERMINATOR.optional()).map(
                         new BlockOperator(this, scope));
         ref.set(or);
         return or;
@@ -347,7 +347,7 @@ public class DollarParser {
             Parser<var> block = block(ref.lazy(), newScope).between(OP_NL("{"), NL_TERM("}"));
             Parser<var> expression = expression(newScope);
             Parser<List<var>> parser = (TERMINATOR_SYMBOL.optional()).next(or(expression, block).followedBy(
-                    TERMINATOR_SYMBOL).map((v) -> {return DollarStatic.fix(v);}).many1());
+                    TERMINATOR_SYMBOL).map((v) -> {return DollarStatic.fix(v, false);}).many1());
             ref.set(parser.map(DollarStatic::$));
             return parser;
         });
@@ -440,7 +440,7 @@ public class DollarParser {
                 .infixl(op(new BinaryOp((lhs, rhs) -> {
                             return lhs.$each(i -> inScope(scope, newScope -> {
                                 newScope.setParameter("1", i);
-                                return fix(rhs);
+                                return fix(rhs, false);
                             }));
                         }, scope), "*|*", "each"),
                         MULTIPLY_DIVIDE_PRIORITY)
@@ -449,22 +449,22 @@ public class DollarParser {
                         return inScope(scope, newScope -> {
                             newScope.setParameter("1", x);
                             newScope.setParameter("2", y);
-                            return fix(rhs);
+                            return fix(rhs, false);
                         });
                     }).get();
                 }, scope), "*|", "reduce"), MULTIPLY_DIVIDE_PRIORITY)
                 .prefix(op(new SimpleReceiveOperator(scope), "<<"), OUTPUT_PRIORITY)
-                .infixl(op(new ListenOperator(scope), "->", "causes"), CONTROL_FLOW_PRIORITY)
+                .infixl(op(new ListenOperator(scope), "->?", "causes"), CONTROL_FLOW_PRIORITY)
                 .infixl(op(new BinaryOp((lhs, rhs) -> {
-                    var lambda = DollarFactory.fromLambda(i -> lhs.isTrue() ? fix(rhs) : $void());
+                    var lambda = DollarFactory.fromLambda(i -> lhs.isTrue() ? fix(rhs, false) : $void());
                     lhs.$listen(i -> {
-                        lambda.$notify(i);
-                        return fix(lambda);
+                        lambda.$notify();
+                        return fix(lambda, false);
                     });
                     return lambda;
-                }, scope), "=>"), CONTROL_FLOW_PRIORITY)
+                }, scope), "?"), CONTROL_FLOW_PRIORITY)
                 .infixl(op(new BinaryOp(ControlFlowAware::$choose, scope), "?*", "choose"), CONTROL_FLOW_PRIORITY)
-                .infixl(op(new BinaryOp(var::$default, scope), "?", "default"), CONTROL_FLOW_PRIORITY)
+                .infixl(op(new BinaryOp(var::$default, scope), "|", "default"), CONTROL_FLOW_PRIORITY)
                 .postfix(memberOperator(ref, scope), MEMBER_PRIORITY)
                 .prefix(op(new UnaryOp(scope, v -> $(!v.isTrue())), "!", "not"), UNARY_PRIORITY)
                 .postfix(op(new UnaryOp(scope, var::$dec), "--"), INC_DEC_PRIORITY)
@@ -477,6 +477,8 @@ public class DollarParser {
                 .prefix(op(new UnaryOp(scope, var::$destroy), "(-)"), SIGNAL_PRIORITY)
                 .prefix(op(new UnaryOp(scope, var::$create), "(+)"), SIGNAL_PRIORITY)
                 .prefix(op(new UnaryOp(scope, var::$state), "(?)"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp(scope, v -> fix(v, true)), "(p)", "parallel"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp(scope, v -> fix(v, false)), "(s)", "serial"), SIGNAL_PRIORITY)
                 .prefix(forOperator(scope, ref), UNARY_PRIORITY)
                 .prefix(whileOperator(scope, ref), UNARY_PRIORITY)
                 .postfix(subscriptOperator(ref, scope), MEMBER_PRIORITY)
@@ -541,8 +543,8 @@ public class DollarParser {
     }
 
     private Parser<Map<? super var, ? extends var>> pipeOperator(Parser.Reference<var> ref, ScriptScope scope) {
-        return OP("|").next(IDENTIFIER.or(ref.lazy().between(OP("("), OP(")"))))
-                      .map(new PipeOperator(this, scope));
+        return OP("->").next(IDENTIFIER.or(ref.lazy().between(OP("("), OP(")"))))
+                       .map(new PipeOperator(this, scope));
     }
 
     private Parser<Map<? super var, ? extends var>> variableUsageOperator(Parser.Reference<var> ref,

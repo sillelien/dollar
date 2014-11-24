@@ -37,6 +37,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -51,66 +52,25 @@ import static com.jayway.restassured.RestAssured.given;
  */
 public abstract class AbstractDollar implements var {
 
+    protected static ForkJoinPool forkJoinPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors() * 8);
+
     private static
     @NotNull
     ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
-
-    protected static StateMachineConfig<ResourceState, Signal> getDefaultStateMachineConfig() {
-        final StateMachineConfig<ResourceState, Signal> stateMachineConfig = new StateMachineConfig<>();
-        stateMachineConfig.configure(ResourceState.STOPPED)
-                          .permitReentry(Signal.STOP)
-                          .permit(Signal.START, ResourceState.RUNNING);
-        stateMachineConfig.configure(ResourceState.RUNNING)
-                          .permit(Signal.STOP, ResourceState.STOPPED)
-                          .permitReentry(Signal.START);
-        stateMachineConfig.configure(ResourceState.PAUSED)
-                          .permit(Signal.STOP, ResourceState.STOPPED)
-                          .permit(Signal.UNPAUSE, ResourceState.RUNNING)
-                          .permitReentry(Signal.PAUSE);
-        stateMachineConfig.configure(ResourceState.DESTROYED).permitReentry(Signal.DESTROY);
-        stateMachineConfig.configure(ResourceState.INITIAL)
-                          .permit(Signal.CREATE, ResourceState.STOPPED)
-                          .permit(Signal.START, ResourceState.RUNNING)
-                          .permit(Signal.PAUSE, ResourceState.PAUSED)
-                          .permit(Signal.STOP, ResourceState.STOPPED)
-                          .permit(Signal.DESTROY, ResourceState.DESTROYED);
-        return stateMachineConfig;
-    }
-
     private final Logger logger = LoggerFactory.getLogger(getClass());
-
-    @NotNull @Override public var _fix() {
-        return this;
-    }
     private final
     @NotNull
     ImmutableList<Throwable> errors;
-
-    @Override public void $signal(Signal signal) {
-        getStateMachine().fire(signal);
-    }
-
     private String src;
 
-    @Override public var $start() {
-        getStateMachine().fire(Signal.START);
+    @NotNull @Override public var _fix(boolean parallel) {
         return this;
     }
 
     private ConcurrentHashMap<String, String> meta = new ConcurrentHashMap<>();
 
-    @Override public var $stop() {
-        getStateMachine().fire(Signal.STOP);
-        return this;
-    }
-
     protected AbstractDollar(@NotNull List<Throwable> errors) {
         this.errors = new ImmutableList.Builder<Throwable>().addAll(errors).build();
-    }
-
-    @Override public var $create() {
-        getStateMachine().fire(Signal.CREATE);
-        return this;
     }
 
     @NotNull
@@ -119,12 +79,7 @@ public abstract class AbstractDollar implements var {
         return (var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
-                new DollarLambda(DollarFactory.wrap(this), lambda));
-    }
-
-    @Override public var $destroy() {
-        getStateMachine().fire(Signal.DESTROY);
-        return this;
+                new DollarLambda(lambda));
     }
 
     @NotNull
@@ -137,11 +92,6 @@ public abstract class AbstractDollar implements var {
         }
     }
 
-    @Override public var $pause() {
-        getStateMachine().fire(Signal.PAUSE);
-        return this;
-    }
-
     @Override
     public var $default(Object o) {
         if (isVoid()) {
@@ -151,19 +101,9 @@ public abstract class AbstractDollar implements var {
         }
     }
 
-    @Override public var $unpause() {
-        getStateMachine().fire(Signal.UNPAUSE);
-        return this;
-    }
-
     @Override
     public var $isEmpty() {
         return DollarFactory.fromValue($size().I() > 0);
-    }
-
-    @Override public var $state() {
-        System.out.println("State for " + this.getClass() + " is " + getStateMachine().getState());
-        return DollarStatic.$(getStateMachine().getState().toString());
     }
 
     @NotNull
@@ -174,12 +114,12 @@ public abstract class AbstractDollar implements var {
 
     @Override
     public var $post(String url) {
-        return DollarFactory.fromValue(errors(), given().parameters(toMap()).post(url).thenReturn().body().print());
+        return DollarFactory.fromValue(given().parameters(toMap()).post(url).thenReturn().body().print(), errors());
     }
 
     @NotNull
     @Override
-    public Stream<var> $stream() {
+    public Stream<var> $stream(boolean parallel) {
         return toList().stream();
     }
 
@@ -208,6 +148,61 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
+    public var $all() {
+        return DollarStatic.$void();
+    }
+
+    @Override
+    public var $drain() {
+        return DollarStatic.$void();
+    }
+
+    @Override
+    public String $listen(Pipeable pipe) {
+//        do nothing, not a reactive type
+//        System.err.println("Cannot listen on a non reactive type " + getClass().getName());
+        return "<unknown>";
+    }
+
+    @Override
+    public String $listen(Pipeable pipe, String key) {
+//        System.err.println("Cannot listen on a non reactive type " + getClass().getName());
+        return "<unknown>";
+    }
+
+    @Override
+    public var $notify() {
+//        do nothing, not a reactive type
+        return this;
+    }
+
+    @Override
+    public var $publish(var lhs) {
+        return this;
+    }
+
+    @Override
+    public var $receive(boolean blocking, boolean mutating) {
+        return this;
+    }
+
+    @Override
+    public var $send(var given) {
+        debug("Cannot send to " + getClass().getName());
+        return this;
+    }
+
+    @Override
+    public var $send(var value, boolean blocking, boolean mutating) {
+        return this;
+    }
+
+    @Override
+    public var $subscribe(Pipeable subscription) {
+        return this;
+    }
+
+    @Override
     public var $choose(var map) {
         return map.$get($S());
     }
@@ -230,10 +225,89 @@ public abstract class AbstractDollar implements var {
         return resultvar;
     }
 
+    @Override public var $create() {
+        getStateMachine().fire(Signal.CREATE);
+        return this;
+    }
+
     @NotNull
     @Override
     public var eval(@NotNull DollarEval lambda) {
         return eval("anon", lambda);
+    }
+
+    @Override public var $destroy() {
+        getStateMachine().fire(Signal.DESTROY);
+        return this;
+    }
+
+    @Override public var $pause() {
+        getStateMachine().fire(Signal.PAUSE);
+        return this;
+    }
+
+    @Override public void $signal(Signal signal) {
+        getStateMachine().fire(signal);
+    }
+
+    protected static StateMachineConfig<ResourceState, Signal> getDefaultStateMachineConfig() {
+        final StateMachineConfig<ResourceState, Signal> stateMachineConfig = new StateMachineConfig<>();
+        stateMachineConfig.configure(ResourceState.STOPPED)
+                          .permitReentry(Signal.STOP)
+                          .permit(Signal.START, ResourceState.RUNNING);
+        stateMachineConfig.configure(ResourceState.RUNNING)
+                          .permit(Signal.STOP, ResourceState.STOPPED)
+                          .permitReentry(Signal.START);
+        stateMachineConfig.configure(ResourceState.PAUSED)
+                          .permit(Signal.STOP, ResourceState.STOPPED)
+                          .permit(Signal.UNPAUSE, ResourceState.RUNNING)
+                          .permitReentry(Signal.PAUSE);
+        stateMachineConfig.configure(ResourceState.DESTROYED).permitReentry(Signal.DESTROY);
+        stateMachineConfig.configure(ResourceState.INITIAL)
+                          .permit(Signal.CREATE, ResourceState.STOPPED)
+                          .permit(Signal.START, ResourceState.RUNNING)
+                          .permit(Signal.PAUSE, ResourceState.PAUSED)
+                          .permit(Signal.STOP, ResourceState.STOPPED)
+                          .permit(Signal.DESTROY, ResourceState.DESTROYED);
+        return stateMachineConfig;
+    }
+
+    @NotNull
+    @Override
+    public var _unwrap() {
+        return this;
+    }
+
+    @Override public var $start() {
+        getStateMachine().fire(Signal.START);
+        return this;
+    }
+
+    @Override public var $state() {
+        System.out.println("State for " + this.getClass() + " is " + getStateMachine().getState());
+        return DollarStatic.$(getStateMachine().getState().toString());
+    }
+
+    @NotNull
+    @Override
+    public var copy(@NotNull ImmutableList<Throwable> errors) {
+        return DollarFactory.fromValue($(),
+                                       new ImmutableList.Builder<Throwable>().addAll(errors()).addAll(errors).build()
+        );
+    }
+
+    @Override public var $stop() {
+        getStateMachine().fire(Signal.STOP);
+        return this;
+    }
+
+    @Override public var $unpause() {
+        getStateMachine().fire(Signal.UNPAUSE);
+        return this;
+    }
+
+    @Override public StateMachine<ResourceState, Signal> getStateMachine() {
+        return new StateMachine<ResourceState, Signal>(ResourceState.INITIAL, getDefaultStateMachineConfig());
     }
 
     @NotNull
@@ -248,83 +322,15 @@ public abstract class AbstractDollar implements var {
         return $(key, $(key).L() + amount.L());
     }
 
-    @Override
-    public String $listen(Pipeable pipe) {
-//        do nothing, not a reactive type
-//        System.err.println("Cannot listen on a non reactive type " + getClass().getName());
-        return "<unknown>";
-    }
-
     @NotNull
     @Override
-    public var _unwrap() {
-        return this;
-    }
-
-    @Override
-    public var $notify(var value) {
-//        do nothing, not a reactive type
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var copy(@NotNull ImmutableList<Throwable> errors) {
-        return DollarFactory.fromValue(new ImmutableList.Builder<Throwable>().addAll(errors()).addAll(errors).build(),
-                                       $());
-    }
-
-    @Override
-    public String $listen(Pipeable pipe, String key) {
-//        System.err.println("Cannot listen on a non reactive type " + getClass().getName());
-        return "<unknown>";
-    }
-
-    @Override
-    public var $send(var value, boolean blocking, boolean mutating) {
-        return this;
-    }
-
-    @Override
-    public var $send(var given) {
-        debug("Cannot send to " + getClass().getName());
-        return this;
-    }
-
-    @Override
-    public var $receive(boolean blocking, boolean mutating) {
-        return this;
-    }
-
-    @Override
-    public var $drain() {
-        return DollarStatic.$void();
+    public Double D() {
+        return 0.0;
     }
 
     @NotNull
     public var eval(String label, @NotNull DollarEval lambda) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public var $all() {
-        return DollarStatic.$void();
-    }
-
-    @Override
-    public var $subscribe(Pipeable subscription) {
-        return this;
-    }
-
-    @Override
-    public var $publish(var lhs) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public Double D() {
-        return 0.0;
     }
 
     @NotNull
@@ -363,9 +369,33 @@ public abstract class AbstractDollar implements var {
         return false;
     }
 
+    @Override public boolean isPair() {
+        return false;
+    }
+
     @Override
     public boolean isSingleValue() {
         return false;
+    }
+
+    @Override
+    public boolean isString() {
+        return false;
+    }
+
+    @Override
+    public boolean isUri() {
+        return false;
+    }
+
+    @Override
+    public InputStream toStream() {
+        return new ByteArrayInputStream($S().getBytes());
+    }
+
+    @Override
+    public var assertNotVoid(String message) throws AssertionError {
+        return assertFalse(TypeAware::isVoid, message);
     }
 
     @NotNull
@@ -388,33 +418,13 @@ public abstract class AbstractDollar implements var {
                 } catch (Exception e) {
                     return DollarStatic.handleError(e, this);
                 }
-                return DollarFactory.fromValue(ImmutableList.of(), value);
+                return DollarFactory.fromValue(value, ImmutableList.of());
             } catch (NoSuchMethodException e) {
                 throw new DollarException(e);
             }
         } catch (@NotNull IllegalAccessException | InvocationTargetException e) {
             throw new DollarException(e);
         }
-    }
-
-    @Override
-    public boolean isString() {
-        return false;
-    }
-
-    @Override
-    public boolean isUri() {
-        return false;
-    }
-
-    @Override
-    public InputStream toStream() {
-        return new ByteArrayInputStream($S().getBytes());
-    }
-
-    @Override
-    public var assertNotVoid(String message) throws AssertionError {
-        return assertFalse(TypeAware::isVoid, message);
     }
 
     @Override
@@ -447,12 +457,6 @@ public abstract class AbstractDollar implements var {
         return $map().compute(key, remappingFunction);
     }
 
-    @NotNull
-    @Override
-    public var $eval(@NotNull String js) {
-        return $pipe("anon", js);
-    }
-
     public var computeIfAbsent(String key, @NotNull Function<? super String, ? extends var> mappingFunction) {
         return $map().computeIfAbsent(key, mappingFunction);
     }
@@ -468,6 +472,48 @@ public abstract class AbstractDollar implements var {
         return this;
     }
 
+    @Override
+    public var debug(Object message) {
+        logger.debug(message.toString());
+        return this;
+    }
+
+    @Override
+    public var debug() {
+        logger.debug(this.toString());
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $eval(@NotNull String js) {
+        return $pipe("anon", js);
+    }
+
+    @Override
+    public var infof(String message, Object... values) {
+        logger.info(message, values);
+        return this;
+    }
+
+    @Override
+    public var info(Object message) {
+        logger.info(message.toString());
+        return this;
+    }
+
+    @Override
+    public var info() {
+        logger.info(this.toString());
+        return this;
+    }
+
+    @Override
+    public var errorf(String message, Object... values) {
+        logger.error(message, values);
+        return this;
+    }
+
     @NotNull
     public var $pipe(@NotNull String label, @NotNull String js) {
         SimpleScriptContext context = new SimpleScriptContext();
@@ -478,13 +524,20 @@ public abstract class AbstractDollar implements var {
         } catch (Exception e) {
             return DollarStatic.handleError(e, this);
         }
-        return DollarFactory.fromValue(ImmutableList.of(), value);
+        return DollarFactory.fromValue(value, ImmutableList.of());
     }
 
     @Override
-    public var debug(Object message) {
-        logger.debug(message.toString());
+    public var error(Throwable exception) {
+        logger.error(exception.getMessage(), exception);
         return this;
+    }
+
+    @Override
+    public var error(Object message) {
+        logger.error(message.toString());
+        return this;
+
     }
 
     @NotNull
@@ -498,9 +551,13 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public var debug() {
-        logger.debug(this.toString());
+    public var error() {
+        logger.error(this.toString());
         return this;
+    }
+
+    public void forEach(@NotNull BiConsumer<? super String, ? super var> action) {
+        $map().forEach(action);
     }
 
     @NotNull
@@ -531,111 +588,14 @@ public abstract class AbstractDollar implements var {
         return DollarFactory.fromValue(json);
     }
 
-    @Override
-    public var infof(String message, Object... values) {
-        logger.info(message, values);
-        return this;
-    }
-
-    @Override
-    public var info(Object message) {
-        logger.info(message.toString());
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
-        DollarStatic.threadContext.get().setPassValue(this.$copy());
-        Pipeable script = null;
-        try {
-            script = clazz.newInstance();
-        } catch (InstantiationException e) {
-            return DollarStatic.handleError(e.getCause(), this);
-        } catch (Exception e) {
-            return DollarStatic.handleError(e, this);
-        }
-        try {
-            return script.pipe(this);
-        } catch (Exception e) {
-            return DollarStatic.handleError(e, this);
-        }
-    }
-
-    @Override
-    public var info() {
-        logger.info(this.toString());
-        return this;
-    }
-
-    @Override
-    public var errorf(String message, Object... values) {
-        logger.error(message, values);
-        return this;
-    }
-
-    @Override
-    public var error(Throwable exception) {
-        logger.error(exception.getMessage(), exception);
-        return this;
-    }
-
-    @Override
-    public var error(Object message) {
-        logger.error(message.toString());
-        return this;
-
-    }
-
-    @Override
-    public var error() {
-        logger.error(this.toString());
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $copy() {
-        return DollarFactory.fromValue(new ImmutableList.Builder<Throwable>().addAll(errors()).build(), $());
-    }
-
-    public void forEach(@NotNull BiConsumer<? super String, ? super var> action) {
-        $map().forEach(action);
-    }
-
-    @NotNull
-    @Override
-    public var $error(@NotNull String errorMessage, @NotNull ErrorType type) {
-        switch (type) {
-            case SYSTEM:
-                return $error(new DollarException(errorMessage));
-            case VALIDATION:
-                return $error(new ValidationException(errorMessage));
-            default:
-                return $error(errorMessage);
-        }
-    }
-
     @NotNull
     public var getOrDefault(@NotNull Object key, @NotNull var defaultValue) {
         return $has(String.valueOf(key)).isTrue() ? $get(key) : defaultValue;
     }
 
-    @NotNull
-    @Override
-    public var $error(@NotNull String errorMessage) {
-        return $error(new Exception(errorMessage));
-    }
-
     @Override
     public int hashCode() {
         return $().hashCode();
-    }
-
-    @NotNull
-    @Override
-    public var $error(@NotNull Throwable error) {
-        return copy(new ImmutableList.Builder<Throwable>().add(error).build());
     }
 
     @Override
@@ -672,8 +632,21 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $error() {
-        return $error("Unspecified Error");
+    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
+        DollarStatic.threadContext.get().setPassValue(this.$copy());
+        Pipeable script = null;
+        try {
+            script = clazz.newInstance();
+        } catch (InstantiationException e) {
+            return DollarStatic.handleError(e.getCause(), this);
+        } catch (Exception e) {
+            return DollarStatic.handleError(e, this);
+        }
+        try {
+            return script.pipe(this);
+        } catch (Exception e) {
+            return DollarStatic.handleError(e, this);
+        }
     }
 
     @NotNull
@@ -682,20 +655,9 @@ public abstract class AbstractDollar implements var {
         return S();
     }
 
-    @Override
-    public boolean hasErrors() {
-        return !errors.isEmpty();
-    }
-
     @NotNull
     public Set<String> keySet() {
         return keyStream().collect(Collectors.toSet());
-    }
-
-    @NotNull
-    @Override
-    public List<String> errorTexts() {
-        return errors.stream().map(Throwable::getMessage).collect(Collectors.toList());
     }
 
     public var merge(String key, @NotNull var value,
@@ -704,19 +666,8 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull
-    @Override
-    public ImmutableList<Throwable> errors() {
-        return errors;
-    }
-
-    @NotNull
     public var put(@NotNull String key, var value) {
         return $($get(key), value);
-    }
-
-    @Override
-    public var clearErrors() {
-        return DollarFactory.fromValue(ImmutableList.<Throwable>builder().build(), $());
     }
 
     public void putAll(Map<? extends String, ? extends var> m) {
@@ -724,19 +675,14 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull
-    @Override
-    public var $fail(@NotNull Consumer<List<Throwable>> handler) {
-        if (hasErrors()) {
-            handler.accept(errors());
-            return DollarFactory.fromValue(errors(), null);
-        } else {
-            return this;
-        }
+    public var putIfAbsent(String key, var value) {
+        throw new UnsupportedOperationException();
     }
 
     @NotNull
-    public var putIfAbsent(String key, var value) {
-        throw new UnsupportedOperationException();
+    @Override
+    public var $copy() {
+        return DollarFactory.fromValue($(), new ImmutableList.Builder<Throwable>().addAll(errors()).build());
     }
 
     public boolean remove(Object key, Object value) {
@@ -748,12 +694,31 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull
+    @Override
+    public var $error(@NotNull String errorMessage, @NotNull ErrorType type) {
+        switch (type) {
+            case SYSTEM:
+                return $error(new DollarException(errorMessage));
+            case VALIDATION:
+                return $error(new ValidationException(errorMessage));
+            default:
+                return $error(errorMessage);
+        }
+    }
+
+    @NotNull
     public var replace(String key, var value) {
         throw new UnsupportedOperationException();
     }
 
     public void replaceAll(BiFunction<? super String, ? super var, ? extends var> function) {
         throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    @Override
+    public var $error(@NotNull String errorMessage) {
+        return $error(new Exception(errorMessage));
     }
 
     @Override
@@ -769,6 +734,60 @@ public abstract class AbstractDollar implements var {
         return meta.get(key);
     }
 
+    @NotNull
+    @Override
+    public var $error(@NotNull Throwable error) {
+        return copy(new ImmutableList.Builder<Throwable>().add(error).build());
+    }
+
+
+
+    @NotNull
+    @Override
+    public var $error() {
+        return $error("Unspecified Error");
+    }
+
+
+
+    @Override
+    public boolean hasErrors() {
+        return !errors.isEmpty();
+    }
+
+
+
+    @NotNull
+    @Override
+    public List<String> errorTexts() {
+        return errors.stream().map(Throwable::getMessage).collect(Collectors.toList());
+    }
+
+
+
+    @NotNull
+    @Override
+    public ImmutableList<Throwable> errors() {
+        return errors;
+    }
+
+
+    @Override
+    public var clearErrors() {
+        return DollarFactory.fromValue($(), ImmutableList.<Throwable>builder().build());
+    }
+
+
+    @NotNull
+    @Override
+    public var $fail(@NotNull Consumer<List<Throwable>> handler) {
+        if (hasErrors()) {
+            handler.accept(errors());
+            return DollarFactory.fromValue(null, errors());
+        } else {
+            return this;
+        }
+    }
 
 
     @NotNull
@@ -788,8 +807,4 @@ public abstract class AbstractDollar implements var {
         this.src = src;
     }
 
-
-    @Override public StateMachine<ResourceState, Signal> getStateMachine() {
-        return new StateMachine<ResourceState, Signal>(ResourceState.INITIAL, getDefaultStateMachineConfig());
-    }
 }

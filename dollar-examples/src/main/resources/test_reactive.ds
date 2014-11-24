@@ -1,7 +1,7 @@
 a=1
 b=1
-a -> (print a)
-a -> (b= a)
+a causes (print a)
+a causes (b= a)
 
 //Note the use of the fix operator otherwise we are saying a is always equal to 1
 
@@ -17,7 +17,7 @@ a=2
 
 c=1
 d=1
-c > 3 => (d= c)
+c > 3 ? (d= c)
 &c <=> 1
 &d <=> 1
 c=2

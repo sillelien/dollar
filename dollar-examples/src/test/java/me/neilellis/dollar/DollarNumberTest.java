@@ -45,27 +45,6 @@ public class DollarNumberTest {
     }
 
     @Test
-    public void testMultiply() {
-        var lhs = $(4.1);
-        var rhs = $(5.3);
-        assertEquals(21, (long) lhs.$multiply(rhs).I());
-        assertEquals(21, (long) rhs.$multiply(lhs).I());
-        assertEquals(4.1 * 5.3, rhs.$multiply(lhs).D(), 0.01);
-        assertEquals(4.1 * 5.3, lhs.$multiply(rhs).D(), 0.01);
-
-        var intRhs = $(2);
-        var intLhs = $(3);
-
-        assertEquals(15, (long) intLhs.$multiply(rhs).I());
-        assertEquals(15, (long) rhs.$multiply(intLhs).I());
-        assertEquals(6, (long) intLhs.$multiply(intRhs).I());
-
-        assertEquals(15.9, rhs.$multiply(intLhs).D(), 0.01);
-        assertEquals(15.0, intLhs.$multiply(rhs).D(), 0.01);
-        assertEquals(6, intLhs.$multiply(intRhs).D(), 0.01);
-    }
-
-    @Test
     public void testDivide() {
 
         var lhs = $(40.1);
@@ -79,12 +58,12 @@ public class DollarNumberTest {
         var intLhs = $(30);
         var intRhs = $(2);
 
-        assertEquals(6, (long) intLhs.$divide(rhs).I());
+        assertEquals(5, (long) intLhs.$divide(rhs).I());
         assertEquals(0, (long) rhs.$divide(intLhs).I());
         assertEquals(15, (long) intLhs.$divide(intRhs).I());
 
         assertEquals(0.177, rhs.$divide(intLhs).D(), 0.01);
-        assertEquals(6.0, intLhs.$divide(rhs).D(), 0.01);
+        assertEquals(5.660377358490567, intLhs.$divide(rhs).D(), 0.01);
         assertEquals(15.0, intLhs.$divide(intRhs).D(), 0.01);
 
     }
@@ -102,15 +81,36 @@ public class DollarNumberTest {
         var intLhs = $(30);
         var intRhs = $(2);
 
-        assertEquals(0, (long) intLhs.$modulus(rhs).I());
-        assertEquals(5, (long) rhs.$modulus(intLhs).I());
+        assertEquals(3, (long) intLhs.$modulus(rhs).L());
+        assertEquals(5, (long) rhs.$modulus(intLhs).L());
         assertEquals(0, (long) intLhs.$modulus(intRhs).I());
 
         assertEquals(5.3, rhs.$modulus(intLhs).D(), 0.01);
-        assertEquals(0.0, intLhs.$modulus(rhs).D(), 0.01);
+        assertEquals(3.5, intLhs.$modulus(rhs).D(), 0.01);
         assertEquals(0.0, intLhs.$modulus(intRhs).D(), 0.01);
 
 
+    }
+
+    @Test
+    public void testMultiply() {
+        var lhs = $(4.1);
+        var rhs = $(5.3);
+        assertEquals(21, (long) lhs.$multiply(rhs).I());
+        assertEquals(21, (long) rhs.$multiply(lhs).I());
+        assertEquals(4.1 * 5.3, rhs.$multiply(lhs).D(), 0.01);
+        assertEquals(4.1 * 5.3, lhs.$multiply(rhs).D(), 0.01);
+
+        var intRhs = $(2);
+        var intLhs = $(3);
+
+        assertEquals(15, (long) intLhs.$multiply(rhs).I());
+        assertEquals(15, (long) rhs.$multiply(intLhs).I());
+        assertEquals(6, (long) intLhs.$multiply(intRhs).I());
+
+        assertEquals(15.9, rhs.$multiply(intLhs).D(), 0.01);
+        assertEquals(15.9, intLhs.$multiply(rhs).D(), 0.01);
+        assertEquals(6, intLhs.$multiply(intRhs).D(), 0.01);
     }
 
 }

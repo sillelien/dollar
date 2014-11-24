@@ -46,7 +46,7 @@ public class ListenOperator implements Binary<var>, Operator {
             return $(lhs.$listen(i -> scope.getDollarParser().inScope(scope, newScope -> {
                 newScope.setParameter("1", i);
                 //todo: change to receive
-                return fix(rhs);
+                return fix(rhs, false);
             })));
         } catch (AssertionError e) {
             throw new AssertionError(e + " at '" + source.get() + "'");

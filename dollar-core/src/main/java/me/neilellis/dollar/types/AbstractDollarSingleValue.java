@@ -45,6 +45,16 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @NotNull
+    public var $(@NotNull var key, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    public var $get(@NotNull String key) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    }
+
+    @NotNull
     @Override
     public var $(@NotNull Number n) {
         if (n.longValue() != 0) {
@@ -76,24 +86,13 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of("value", this);
-    }
-
-    @NotNull
-    @Override
     public String S(@NotNull String key) {
         return $get(key).S();
     }
 
     @NotNull
-    public var $get(@NotNull String key) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
-    }
-
-    @NotNull
     @Override
-    public var $minus(@NotNull Object value) {
+    public var $minus(@NotNull var value) {
         if (value.equals(this)) {
             return DollarStatic.$void();
         } else {
@@ -103,7 +102,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     @Override
-    public var $plus(Object newValue) {
+    public var $plus(var newValue) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
@@ -111,11 +110,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     public var $rm(@NotNull String value) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
 
-    }
-
-    @NotNull
-    public var $(@NotNull var key, Object value) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -132,6 +126,39 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     @Override
     public var remove(Object newValue) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    }
+
+    @Override
+    public var $isEmpty() {
+        return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $stream(boolean parallel) {
+        return Stream.of(this);
+    }
+
+    @Override
+    public boolean isSingleValue() {
+        return true;
+    }
+
+    @NotNull
+    @Override
+    public var $copy() {
+        return DollarFactory.fromValue(value, errors());
+    }
+
+    @Override
+    public int hashCode() {
+        return value.toString().hashCode();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of("value", this);
     }
 
     @NotNull
@@ -183,34 +210,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     @NotNull
     @Override
     public var decode() {
-        return DollarFactory.fromValue(errors(), URLDecoder.decode(S()));
-    }
-
-    @Override
-    public int hashCode() {
-        return value.toString().hashCode();
-    }
-
-    @Override
-    public var $isEmpty() {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $stream() {
-        return Stream.of(this);
-    }
-
-    @NotNull
-    @Override
-    public var $copy() {
-        return DollarFactory.fromValue(errors(), value);
-    }
-
-    @Override
-    public boolean isSingleValue() {
-        return true;
+        return DollarFactory.fromValue(URLDecoder.decode(S()), errors());
     }
 
 

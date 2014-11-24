@@ -32,7 +32,7 @@ public class WhenOperator implements Map<Object[], var> {
         var rhs = (var) objects[1];
         var lambda = DollarFactory.fromLambda(i -> lhs.isTrue() ? $((Object) rhs.$()) : $void());
         lhs.$listen(i -> {
-            lambda.$notify(i);
+            lambda.$notify();
             if (i.isTrue()) {
                 return $((Object) rhs.$());
             }
