@@ -286,13 +286,27 @@ a=1/0
 ```
 
 ##Type System
-###Types
+###Intro
 Although DollarScript is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, NUMBER, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
 
 ```dollar
 .: "Hello World" is STRING
 .: ["Hello World"] is LIST
 ```
+
+###Date
+
+Dollar supports a decimal date system where each day is 1.0. This means it's possible to add and remove days from a date using simple arithmetic.
+
+```dollar
+@@ date()
+@@ date() + 1
+@@ date() - 1
+
+.: date() + "1.0" is DATE
+.: date() / "1.0" is DECIMAL
+```
+
 
 ###Constraints
 
@@ -616,9 +630,9 @@ The truthy operator converts any value to a boolean by applying the rule that: v
 ```
 
 
-### Pipe Operators
-### Remaining Operators
-## Imports &amp; Modules
+###Pipe Operators
+###Remaining Operators
+##Imports &amp; Modules
 ###Import
 ###Modules
 
@@ -682,7 +696,7 @@ export state:= [state(www),state(redis)]
 
 ##Builtin Functions
 
-## Concurrency & Threads
+##Concurrency & Threads
 
 Notes:
 
@@ -690,7 +704,7 @@ All types are immutable, including collections.
 You cannot reassign a variable from a different thread, so they are readonly from other threads.
 
 
-### Parallel &amp; Serial Operators
+###Parallel &amp; Serial Operators
 The parallel prefix operator `(p)` or `parallel` causes the right hand side expression to be evaluated in parallel, it's partner the serial operator `(s)` or `serial` forces serial evaluation even if the current expression is being evaluated in parallel.
 
 ```dollar
@@ -705,7 +719,7 @@ b= parallel testList;
 
 As you can see the order of evaluation of lists and maps **but not line blocks** is affected by the use of parallel evaluation.
 
-### Fork
+###Fork
 
 The fork operator will cause an expression to be evaluated in the background and any reference to the forked expression will block until a value is ready.
 
@@ -726,6 +740,6 @@ In the example the value of c is greater than d because the value of c is evalua
 
 
 
-## Advanced Topics
+##Advanced Topics
 
 
