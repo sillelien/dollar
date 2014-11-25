@@ -38,19 +38,23 @@ public class Execution {
     }
 
     static {
-        getRuntime().addShutdownHook(new Thread(Execution::shutdown));
+        getRuntime().addShutdownHook(new Thread(Execution::forceShutdown));
 
     }
 
-    public static void shutdown() {
+    public static void forceShutdown() {
         backgroundExecutor.shutdownNow();
         forkJoinPool.shutdownNow();
     }
 
     public static void restart() {
+        shutdown();
+        init();
+    }
+
+    private static void shutdown() {
         backgroundExecutor.shutdown();
         forkJoinPool.shutdown();
-        init();
     }
 
     public static void init() {
