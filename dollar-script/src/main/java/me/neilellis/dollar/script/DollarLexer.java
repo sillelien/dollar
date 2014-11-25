@@ -43,7 +43,7 @@ public class DollarLexer {
                                 "all", "import", "reduce", "truthy", "is", "else", "const", "in", "true", "false",
                                 "yes", "no", "void", "error", "to", "from", "async", "stateless", "size", "as",
                                 "while", "collect", "module", "include", "export", "with", "parallel", "serial",
-                                "fork");
+                                "fork", "null");
     static final Terminals
             OPERATORS =
             Terminals.operators("|", ">>", "<<", "->", "=>", ".:", "<=", ">=", "<-", "(", ")", "--", "++", ".", ":",
@@ -212,6 +212,7 @@ public class DollarLexer {
                 case "no":
                     return $(false);
                 case "void":
+                case "null":
                     return $void();
                 default:
                     return $(i);
@@ -220,7 +221,7 @@ public class DollarLexer {
     }
 
     private static Parser<var> identifierKeyword() {
-        return or(KEYWORD("true"), KEYWORD("false"), KEYWORD("yes"), KEYWORD("no"), KEYWORD("void"))
+        return or(KEYWORD("true"), KEYWORD("false"), KEYWORD("yes"), KEYWORD("no"), KEYWORD("null"), KEYWORD("void"))
                 .map(new Map<Object, var>() {
                     @Override
                     public var map(Object i) {
@@ -233,6 +234,7 @@ public class DollarLexer {
                                 return $(true);
                             case "no":
                                 return $(false);
+                            case "null":
                             case "void":
                                 return $void();
                             default:

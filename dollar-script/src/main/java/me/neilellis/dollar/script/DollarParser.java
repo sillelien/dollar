@@ -342,7 +342,10 @@ public class DollarParser {
                 .prefix(op(new UnaryOp(scope, URIAware::$drain), "<--", "drain"), OUTPUT_PRIORITY)
                 .prefix(op(new UnaryOp(scope, URIAware::$all), "<@", "all"), OUTPUT_PRIORITY)
                 .infixl(op(new BinaryOp(
-                        (lhs, rhs) -> { if (lhs.isBoolean() && lhs.isFalse()) { return rhs; } else { return lhs; } },
+                        (lhs, rhs) -> {
+                            final var fixLhs = fix(lhs, false);
+                            if (fixLhs.isBoolean() && fixLhs.isFalse()) { return rhs; } else { return fixLhs; }
+                        },
                         scope), "-:", "else"), IF_PRIORITY)
                 .prefix(ifOperator(ref, scope), IF_PRIORITY)
                 .infixl(op(new BinaryOp((lhs, rhs) -> rhs.$contains(lhs), scope), "€", "in"), IN_PRIORITY)

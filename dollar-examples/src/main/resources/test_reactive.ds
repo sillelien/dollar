@@ -13,6 +13,7 @@ a=2
 &a <=> 2
 &b <=> 2
 
+///////////////////////////////////////////////////////////////////////////////
 
 
 c=1
@@ -27,6 +28,7 @@ c=5
 &c <=> 5
 &d <=> 5
 
+///////////////////////////////////////////////////////////////////////////////
 
 e=void
 
@@ -59,5 +61,44 @@ e=14
 e=15
 e=16
 &collectedValues <=> [11,12,13,14,15]
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+//Test against reactivity for if()
+
+f=0
+g=0
+f=1
+f=2
+f=3
+if(~f) {
+    g=g+1
+}
+f=4
+f=5
+
+g <=> 1
+
+
+///////////////////////////////////////////////////////////////////////////////
+//Tests for incorrect executions in an if statement, based on the else operator.
+
+crimes= [{"location_subtype":"","outcome_status":null,"persistent_id":"138345d85e0e564defe7756f90cf1d127ff655649412b7a41579e6764e51b828","month":"2014-08","context":"","location":{"street":{"name":"On or near Sports/recreation Area","id":1172196},"latitude":"50.856123","longitude":"-0.115792"},"id":35196312,"category":"anti-social-behaviour","location_type":"Force"},{"location_subtype":"","outcome_status":null,"persistent_id":"54cc87fc116bd787dfa41988409e0ad481cc7b2348bffd8fa14451cab82caf63","month":"2014-08","context":"","location":{"street":{"name":"On or near Sports/recreation Area","id":1172196},"latitude":"50.856123","longitude":"-0.115792"},"id":35196311,"category":"anti-social-behaviour","location_type":"Force"},{"location_subtype":"","outcome_status":{"date":"2014-08","category":"Investigation complete; no suspect identified"},"persistent_id":"99d894734b2b1bd9356e42899bbe7a2af62b1e905e248544ee39a57bb9fb8a5f","month":"2014-08","context":"","location":{"street":{"name":"On or near Sports/recreation Area","id":1172196},"latitude":"50.856123","longitude":"-0.115792"},"id":35186173,"category":"criminal-damage-arson","location_type":"Force"}]
+
+categories= crimes each { $1.category; }
+crimeCount=0
+
+//~ is the truthy operator void is false, 0 is false, "" is false, empty list is false, empty map is false.
+if (~ categories["anti-social-behaviour"]) {
+   crimeCount=crimeCount+1
+} else {
+    @@ "No anti-social behaviour in your area!"
+}
+
+crimeCount <=> 1
+
+///////////////////////////////////////////////////////////////////////////////
+
 
 

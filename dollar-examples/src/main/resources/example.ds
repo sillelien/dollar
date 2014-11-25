@@ -1,26 +1,31 @@
-geo= (receive "http://freegeoip.net/json/")
+geo= receive http://freegeoip.net/json/
+@@geo
 .: geo is MAP
 
 lat= geo.latitude
 lon= geo.longitude
 
-.: $lat is NUMBER
-.: $lon is NUMBER
+.: lat is DECIMAL
+.: lon is DECIMAL
 
 
-crimes= (receive "http://data.police.uk/api/crimes-at-location?date=2014-08&lat=" + $lat + "&lng=" + $lon )
+crimes= receive (("http://data.police.uk/api/crimes-at-location?date=2014-08&lat=" + lat + "&lng=" + lon) as URI)
+@@crimes
 .: crimes is LIST
 
-categories= $crimes map { $1.category }
+categories= crimes each { $1.category; }
 
-.: $categories is LIST
+@@categories
+
+.: categories is LIST
 
 //~ is the truthy operator void is false, 0 is false, "" is false, empty list is false, empty map is false.
-if ~ $categories["antis-social-behaviour"] {
+if (~ categories["anti-social-behaviour"]) {
     @@ "Anti-Social behaviour in your area!"
 } else {
     @@ "No anti-social behaviour in your area!"
 }
 
+"End!"
 
 

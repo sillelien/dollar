@@ -21,7 +21,8 @@ import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
 import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactiveBinary;
+import static me.neilellis.dollar.DollarStatic.fix;
+import static me.neilellis.dollar.script.DollarScriptSupport.wrapBinary;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -32,18 +33,13 @@ public class IfOperator implements Map<var, Map<var, var>> {
     public IfOperator(ScriptScope scope) {this.scope = scope;}
 
     @Override public Map<var, var> map(var lhs) {
-        return new Map<var, var>() {
-            @Override
-            public var map(var rhs) {
-                return wrapReactiveBinary(scope, lhs, rhs, () -> {
-                    if (lhs.isBoolean() && lhs.isTrue()) {
-                        return rhs;
-                    } else {
-                        return $(false);
-                    }
-                });
-
+        return rhs -> wrapBinary(scope, () -> {
+            final var lhsFix = fix(lhs, false);
+            if (lhsFix.isBoolean() && lhsFix.isTrue()) {
+                return rhs;
+            } else {
+                return $(false);
             }
-        };
+        });
     }
 }
