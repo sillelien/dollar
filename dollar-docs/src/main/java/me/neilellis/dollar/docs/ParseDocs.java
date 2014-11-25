@@ -46,5 +46,6 @@ public class ParseDocs {
         String result = pegDownProcessor.markdownToHtml(toParse);
         Files.write(new File(outDir, page + ".html").toPath(), result.getBytes());
         Files.write(new File(outDir, page + ".md").toPath(), toParse.getBytes());
+        System.exit(-1);
     }
 }
