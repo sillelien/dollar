@@ -16,16 +16,45 @@
 
 package me.neilellis.dollar;
 
+import me.neilellis.dollar.script.SourceAware;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarException extends RuntimeException {
+
+    private List<SourceAware> sourceList = new ArrayList<>();
+
     public DollarException(Throwable e) {
         super(e);
     }
 
     public DollarException(String errorMessage) {
         super(errorMessage);
+    }
+
+    public DollarException(Throwable t, String s) {
+        super(s, t);
+    }
+
+    public void addSource(SourceAware source) {
+        sourceList.add(source);
+    }
+
+    @Override public String getMessage() {
+        if (sourceList.size() == 0) {
+            return super.getMessage() + " (no source available)";
+
+        } else {
+            StringBuilder builder = new StringBuilder(super.getMessage() + "\n");
+            for (SourceAware sourceEntry : sourceList) {
+                builder.append(sourceEntry.getSourceMessage()).append("\n");
+            }
+            return builder.toString();
+        }
     }
 
     public int httpCode() {

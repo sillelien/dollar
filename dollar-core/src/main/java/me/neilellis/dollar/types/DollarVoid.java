@@ -151,25 +151,13 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
+    public var $abs() {
+        return this;
+    }
+
+    @NotNull
+    @Override
     public var $dec(@NotNull var amount) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $negate() {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $multiply(@NotNull var v) {
         return this;
     }
 
@@ -181,20 +169,89 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
+    public var $inc(@NotNull var amount) {
+        return this;
+    }
+
+    @NotNull
+    @Override
     public var $modulus(@NotNull var v) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $abs() {
+    public var $multiply(@NotNull var v) {
         return this;
     }
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of();
+    public var $negate() {
+        return this;
+    }
+
+    @Override
+    public Integer I(@NotNull String key) {
+        return 0;
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $stream(boolean parallel) {
+        return Stream.empty();
+    }
+
+    @NotNull
+    @Override
+    public Stream<Map.Entry<String, var>> kvStream() {
+        return Collections.<String, var>emptyMap().entrySet().stream();
+    }
+
+    @NotNull
+    @Override
+    public var eval(@NotNull DollarEval lambda) {
+        return $copy();
+    }
+
+    @NotNull
+    @Override
+    public var eval(String label, @NotNull DollarEval lambda) {
+        return $copy();
+    }
+
+    @NotNull
+    @Override
+    public var eval(@NotNull Class clazz) {
+        return $copy();
+    }
+
+    @NotNull
+    @Override
+    public var $eval(@NotNull String js) {
+        return $copy();
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return (obj instanceof var && ((var) obj).$() == null) || obj == null;
+    }
+
+    @NotNull
+    @Override
+    public var $pipe(@NotNull String js, @NotNull String label) {
+        return $copy();
+    }
+
+    @NotNull
+    @Override
+    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
+        return $copy();
     }
 
     @NotNull
@@ -221,7 +278,7 @@ public class DollarVoid extends AbstractDollar implements var {
             case RANGE:
                 return DollarFactory.fromValue(Range.closed(0, 0));
             default:
-                throw new UnsupportedOperationException();
+                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
         }
     }
 
@@ -230,15 +287,21 @@ public class DollarVoid extends AbstractDollar implements var {
         return 0;
     }
 
-    @Override
-    public Integer I(@NotNull String key) {
-        return 0;
-    }
-
     @NotNull
     @Override
     public Number N() {
         return 0;
+    }
+
+    @Override
+    public Map<String, Object> toMap() {
+        return Collections.emptyMap();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of();
     }
 
     @Override
@@ -291,69 +354,6 @@ public class DollarVoid extends AbstractDollar implements var {
     }
 
     @Override
-    public Map<String, Object> toMap() {
-        return Collections.emptyMap();
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $stream(boolean parallel) {
-        return Stream.empty();
-    }
-
-    @NotNull
-    @Override
-    public Stream<Map.Entry<String, var>> kvStream() {
-        return Collections.<String, var>emptyMap().entrySet().stream();
-    }
-
-    @NotNull
-    @Override
-    public var eval(@NotNull DollarEval lambda) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var eval(String label, @NotNull DollarEval lambda) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var eval(@NotNull Class clazz) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var $eval(@NotNull String js) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull String js, @NotNull String label) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
-        return $copy();
-    }
-
-    @Override
-    public int hashCode() {
-        return 0;
-    }
-
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        return (obj instanceof var && ((var) obj).$() == null) || obj == null;
-    }
-
-    @Override
     public int compareTo(var o) {
         if (o.isVoid()) {
             return 0;
@@ -362,11 +362,6 @@ public class DollarVoid extends AbstractDollar implements var {
         }
     }
 
-    @NotNull
-    @Override
-    public var decode() {
-        return $copy();
-    }
 
     @Override
     public boolean isBoolean() {

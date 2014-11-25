@@ -16,15 +16,15 @@
 
 package me.neilellis.dollar.script;
 
+import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.exceptions.LambdaRecursionException;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
 import me.neilellis.dollar.types.DollarFactory;
+import me.neilellis.dollar.types.DollarFail;
 import me.neilellis.dollar.var;
 
 import java.lang.reflect.InvocationTargetException;
-
-import static me.neilellis.dollar.DollarStatic.$void;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -41,24 +41,42 @@ public class ParserErrorHandler {
     }
 
 
-    public var handle(ScriptScope scope, String source, AssertionError e) {
-        AssertionError throwable = new AssertionError(e.getMessage() + " at " + source, e);
+    public var handle(ScriptScope scope, SourceAware source, AssertionError e) {
+        AssertionError throwable = new AssertionError(e.getMessage() + " at " + source.getSourceMessage(), e);
         if (!faultTolerant) {
             return scope.handleError(e);
         } else {
-            log(e);
             return DollarFactory.failure(throwable);
         }
     }
 
-    public var handle(ScriptScope scope, String source, DollarScriptException e) {
-        DollarParserException throwable = new DollarParserException(e.getMessage() + " at " + source, e);
+    public var handle(ScriptScope scope, SourceAware source, DollarException e) {
+        DollarParserException
+                throwable =
+                new DollarParserException(e.getMessage() + " at " + source.getSourceMessage(), e);
         if ((e instanceof VariableNotFoundException && missingVariables) || failfast) {
             return scope.handleError(e);
         } else {
-            log(e);
             return DollarFactory.failure(throwable);
         }
+    }
+
+    public var handle(ScriptScope scope, SourceAware source, Exception e) {
+        if (e instanceof LambdaRecursionException) {
+            throw new DollarParserException(
+                    "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
+                    "expressions. The simplest way to solve this is to use the 'fix' operator or the '=' operator to " +
+                    "reduce the amount of lazy evaluation. The error occured at " +
+                    source);
+        }
+
+        if (e instanceof DollarException) {
+            ((DollarException) e).addSource(source);
+            throw (DollarException) e;
+        } else {
+            return DollarFactory.failureWithSource(DollarFail.FailureType.EXCEPTION, unravel(e), source);
+        }
+
     }
 
     private Throwable unravel(Throwable e) {
@@ -69,37 +87,19 @@ public class ParserErrorHandler {
         }
     }
 
-    public var handle(ScriptScope scope, String source, Exception e) {
-        if (e instanceof LambdaRecursionException) {
-            throw new DollarParserException("Excessive recursion detected, this is usually due to a recursive definition of lazily defined expressions. The simplest way to solve this is to use the 'fix' operator or the '=' operator to reduce the amount of lazy evaluation. The error occured at " + source);
-        }
-
-        DollarParserException throwable = new DollarParserException((unravel(e)).getMessage() + " at " + source, unravel(e));
-
-        if (failfast) {
-            return scope.handleError(e);
-        } else if (faultTolerant) {
-            log(e);
-            return $void();
-        } else {
-            log(e);
-            return DollarFactory.failure(throwable);
-        }
-    }
-
-    private void log(Throwable e) {
-        e.printStackTrace();
-    }
-
     public void handleTopLevel(Throwable t) throws Throwable {
         if (t instanceof AssertionError) {
             System.err.println(t.getMessage());
         }
-        if (t instanceof DollarParserException) {
+        if (t instanceof DollarException) {
             System.err.println(t.getMessage());
         }
         if (t instanceof DollarScriptException) {
             System.err.println(t.getMessage());
-        } else throw t;
+        } else { throw t; }
+    }
+
+    private void log(Throwable e) {
+        e.printStackTrace();
     }
 }

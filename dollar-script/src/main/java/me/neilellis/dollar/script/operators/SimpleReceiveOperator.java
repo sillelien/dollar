@@ -16,9 +16,9 @@
 
 package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.ScriptScope;
 import me.neilellis.dollar.script.UnaryOp;
-import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 
@@ -35,22 +35,7 @@ public class SimpleReceiveOperator extends UnaryOp {
 
     @Override
     public var map(var from) {
-        try {
-            return DollarFactory.fromLambda(v -> {
-                try {
-                    return DollarFactory.fromURI(from).$receive();
-                } catch (Exception e) {
-                    return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-                }
-            });
-        } catch (AssertionError e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-        } catch (DollarScriptException e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-        } catch (Exception e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-        }
+        return DollarScriptSupport.wrapReactiveUnary(scope, from, () -> DollarFactory.fromURI(from).$receive());
     }
-
 
 }

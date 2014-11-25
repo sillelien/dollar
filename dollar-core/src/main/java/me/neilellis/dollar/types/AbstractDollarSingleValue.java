@@ -25,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
-import java.net.URLDecoder;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +45,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     public var $(@NotNull var key, Object value) {
-        throw new UnsupportedOperationException();
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
     @NotNull
@@ -128,47 +127,20 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
-    @Override
-    public var $isEmpty() {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $stream(boolean parallel) {
-        return Stream.of(this);
-    }
-
-    @Override
-    public boolean isSingleValue() {
-        return true;
-    }
-
-    @NotNull
-    @Override
-    public var $copy() {
-        return DollarFactory.fromValue(value, errors());
-    }
-
-    @Override
-    public int hashCode() {
-        return value.toString().hashCode();
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of("value", this);
-    }
-
     @NotNull
     @Override
     public String S() {
         return value.toString();
     }
 
-    public Integer I(@NotNull String key) {
-        return null;
+    public Map<String, Object> toMap() {
+        return Collections.singletonMap("value", value);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of("value", this);
     }
 
     @Nullable
@@ -203,14 +175,31 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return ImmutableList.of(S());
     }
 
-    public Map<String, Object> toMap() {
-        return Collections.singletonMap("value", value);
+    @Override
+    public var $isEmpty() {
+        return DollarStatic.$(false);
     }
 
     @NotNull
     @Override
-    public var decode() {
-        return DollarFactory.fromValue(URLDecoder.decode(S()), errors());
+    public Stream<var> $stream(boolean parallel) {
+        return Stream.of(this);
+    }
+
+    @Override
+    public boolean isSingleValue() {
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return value.toString().hashCode();
+    }
+
+    @NotNull
+    @Override
+    public var $copy() {
+        return DollarFactory.fromValue(value, errors());
     }
 
 

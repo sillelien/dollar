@@ -16,10 +16,9 @@
 
 package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.ScriptScope;
 import me.neilellis.dollar.script.UnaryOp;
-import me.neilellis.dollar.script.exceptions.DollarScriptException;
-import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 
 import java.util.ArrayList;
@@ -39,48 +38,34 @@ public class VariableOperator extends UnaryOp {
 
     @Override
     public var map(var from) {
-        try {
-            var lambda = DollarFactory.fromLambda(v -> {
-                String key = from.$S();
-                boolean numeric = from.isNumber();
-                try {
-                    List<ScriptScope> scopes = new ArrayList<ScriptScope>(scope.getDollarParser().scopes());
-                    Collections.reverse(scopes);
-                    for (ScriptScope scriptScope : scopes) {
-                        if (numeric) {
-                            if (scriptScope.hasParameter(key)) {
-                                return scriptScope.getParameter(key);
-                            }
-                        } else {
-                            if (scriptScope.has(key)) {
-                                return scriptScope.get(key);
-                            }
-                        }
-                    }
-                } catch (AssertionError e) {
-                    return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-                } catch (DollarScriptException e) {
-                    return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-                } catch (Exception e) {
-                    return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-                }
+
+        var lambda = DollarScriptSupport.wrapReactiveUnary(scope, from, () -> {
+            String key = from.$S();
+            boolean numeric = from.isNumber();
+
+            List<ScriptScope> scopes = new ArrayList<ScriptScope>(scope.getDollarParser().scopes());
+            Collections.reverse(scopes);
+            for (ScriptScope scriptScope : scopes) {
                 if (numeric) {
-                    return scope.getParameter(key);
+                    if (scriptScope.hasParameter(key)) {
+                        return scriptScope.getParameter(key);
+                    }
+                } else {
+                    if (scriptScope.has(key)) {
+                        return scriptScope.get(key);
+                    }
                 }
-                return scope.get(key);
-            });
-            scope.listen(from.$S(), lambda);
-            lambda.setMetaAttribute("variable", from.$S());
-            return lambda;
-        } catch (AssertionError e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-        } catch (DollarScriptException e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-        } catch (Exception e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-        }
+            }
+
+            if (numeric) {
+                return scope.getParameter(key);
+            }
+            return scope.get(key);
+        });
+        scope.listen(from.$S(), lambda);
+        lambda.setMetaAttribute("variable", from.$S());
+        return lambda;
 
     }
-
 
 }

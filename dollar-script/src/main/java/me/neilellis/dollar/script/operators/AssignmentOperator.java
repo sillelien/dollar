@@ -52,7 +52,7 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
 
                 }
                 final String varName = objects[4].toString();
-                return DollarScriptSupport.wrapBinary(scope, "", () -> {
+                return DollarScriptSupport.wrapBinary(scope, () -> {
                     var useConstraint;
                     if (constraint != null) {
                         useConstraint = constraint;

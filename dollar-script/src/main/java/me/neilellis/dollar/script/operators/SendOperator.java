@@ -35,7 +35,6 @@ public class SendOperator implements Map<Object[], Map<? super var, ? extends va
             @Override
             public var map(var rhs) {
                 return DollarScriptSupport.wrapReactiveBinary(scope,
-                                                              "",
                                                               (var) objects[1],
                                                               rhs,
                                                               () -> rhs.$send((var) objects[1],

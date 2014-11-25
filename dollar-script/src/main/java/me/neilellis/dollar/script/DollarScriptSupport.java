@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.script;
 
+import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
 import me.neilellis.dollar.types.DollarFactory;
@@ -32,40 +33,33 @@ import java.util.concurrent.Callable;
 public class DollarScriptSupport {
 
 
-    public static var wrapReactiveUnary(ScriptScope scope, String source, var lhs, Callable<var> callable) {
-        final var lambda = toLambda(scope, source, callable);
+    public static var wrapReactiveUnary(ScriptScope scope, var lhs, Callable<var> callable) {
+        final var lambda = toLambda(scope, callable);
         lhs.$listen(i -> lambda.$notify());
         return lambda;
     }
 
-    private static var toLambda(ScriptScope scope, String source, Callable<var> callable) {
-        return DollarFactory.fromLambda(i -> {
-            try {
-                return callable.call();
-            } catch (AssertionError e) {
-                return scope.getDollarParser().getErrorHandler().handle(scope, source, e);
-            } catch (DollarScriptException e) {
-                return scope.getDollarParser().getErrorHandler().handle(scope, source, e);
-            } catch (Exception e) {
-                return scope.getDollarParser().getErrorHandler().handle(scope, source, e);
-            }
-        });
+    private static var toLambda(ScriptScope scope, Callable<var> callable) {
+        return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
+                DollarStatic.class.getClassLoader(),
+                new Class<?>[]{var.class},
+                new DollarSource(i -> callable.call(), scope)));
     }
 
-    public static var wrapReactiveBinary(ScriptScope scope, String source, var lhs, var rhs, Callable<var> callable) {
-        final var lambda = toLambda(scope, source, callable);
+    public static var wrapReactiveBinary(ScriptScope scope, var lhs, var rhs, Callable<var> callable) {
+        final var lambda = toLambda(scope, callable);
 
         rhs.$listen(i -> lambda.$notify());
         lhs.$listen(i -> lambda.$notify());
         return lambda;
     }
 
-    public static var wrapUnary(ScriptScope scope, String source, Callable<var> callable) {
-        return toLambda(scope, source, callable);
+    public static var wrapUnary(ScriptScope scope, Callable<var> callable) {
+        return toLambda(scope, callable);
     }
 
-    public static var wrapBinary(ScriptScope scope, String source, Callable<var> callable) {
-        return toLambda(scope, source, callable);
+    public static var wrapBinary(ScriptScope scope, Callable<var> callable) {
+        return toLambda(scope, callable);
     }
 
     public static var getVariable(ScriptScope scope, String key, boolean numeric, var defaultValue) {
@@ -86,11 +80,11 @@ public class DollarScriptSupport {
                     }
                 }
             } catch (AssertionError e) {
-                return scope.getDollarParser().getErrorHandler().handle(scope, key, e);
+                return scope.getDollarParser().getErrorHandler().handle(scope, null, e);
             } catch (DollarScriptException e) {
-                return scope.getDollarParser().getErrorHandler().handle(scope, key, e);
+                return scope.getDollarParser().getErrorHandler().handle(scope, null, e);
             } catch (Exception e) {
-                return scope.getDollarParser().getErrorHandler().handle(scope, key, e);
+                return scope.getDollarParser().getErrorHandler().handle(scope, null, e);
             }
             if (numeric) {
                 return scope.getParameter(key);

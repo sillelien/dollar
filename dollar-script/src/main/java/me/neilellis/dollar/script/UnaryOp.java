@@ -16,8 +16,6 @@
 
 package me.neilellis.dollar.script;
 
-import me.neilellis.dollar.script.exceptions.DollarScriptException;
-import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 import org.codehaus.jparsec.functors.Unary;
@@ -48,32 +46,17 @@ public class UnaryOp implements Unary<var>, Operator {
     @Override
     public var map(var from) {
 
-        try {
-            if (immediate) {
-                return function.map(from);
-            }
-
-            //Lazy evaluation
-            final var lambda = DollarFactory.fromLambda(v -> {
-                try {
-                    return function.map(from);
-                } catch (AssertionError e) {
-                    throw new AssertionError(e + " at '" + source.get() + "'", e);
-                }
-            });
-            from.$listen(i -> {
-                lambda.$notify();
-                return i;
-            });
-            return lambda;
-        } catch (AssertionError e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-        } catch (DollarScriptException e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-        } catch (Exception e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
+        if (immediate) {
+            return function.map(from);
         }
 
+        //Lazy evaluation
+        final var lambda = DollarScriptSupport.wrapReactiveUnary(scope, from, () -> function.map(from));
+        from.$listen(i -> {
+            lambda.$notify();
+            return i;
+        });
+        return lambda;
 
     }
 

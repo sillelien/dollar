@@ -42,6 +42,48 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         return value;
     }
 
+    @NotNull
+    @Override
+    public var $abs() {
+        return DollarFactory.fromValue(abs(value), errors());
+    }
+
+    @NotNull
+    @Override
+    public var $dec(@NotNull var amount) {
+        return DollarFactory.fromValue(value - amount.D(), errors(), amount.errors());
+    }
+
+    @NotNull
+    @Override
+    public var $divide(@NotNull var v) {
+        return DollarFactory.fromValue(value / v.D(), errors(), v.errors());
+    }
+
+    @NotNull
+    @Override
+    public var $inc(@NotNull var amount) {
+        return DollarFactory.fromValue(value + amount.D(), errors(), amount.errors());
+    }
+
+    @NotNull
+    @Override
+    public var $modulus(@NotNull var v) {
+        return DollarFactory.fromValue(value % v.D(), errors(), v.errors());
+    }
+
+    @NotNull
+    @Override
+    public var $multiply(@NotNull var v) {
+        return DollarFactory.fromValue(value * v.D(), errors(), v.errors());
+    }
+
+    @NotNull
+    @Override
+    public var $negate() {
+        return DollarFactory.fromValue(-value, errors());
+    }
+
     @Override
     public var $as(Type type) {
         switch (type) {
@@ -60,7 +102,8 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
             case VOID:
                 return DollarStatic.$void();
             default:
-                throw new UnsupportedOperationException();
+                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
+
         }
     }
 
@@ -90,48 +133,6 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     @NotNull
     public Number number(@NotNull String key) {
         return value;
-    }
-
-    @NotNull
-    @Override
-    public var $dec(@NotNull var amount) {
-        return DollarFactory.fromValue(value - amount.D(), errors(), amount.errors());
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return DollarFactory.fromValue(value + amount.D(), errors(), amount.errors());
-    }
-
-    @NotNull
-    @Override
-    public var $negate() {
-        return DollarFactory.fromValue(-value, errors());
-    }
-
-    @NotNull
-    @Override
-    public var $multiply(@NotNull var v) {
-        return DollarFactory.fromValue(value * v.D(), errors(), v.errors());
-    }
-
-    @NotNull
-    @Override
-    public var $divide(@NotNull var v) {
-        return DollarFactory.fromValue(value / v.D(), errors(), v.errors());
-    }
-
-    @NotNull
-    @Override
-    public var $modulus(@NotNull var v) {
-        return DollarFactory.fromValue(value % v.D(), errors(), v.errors());
-    }
-
-    @NotNull
-    @Override
-    public var $abs() {
-        return DollarFactory.fromValue(abs(value), errors());
     }
 
     @NotNull

@@ -16,7 +16,6 @@
 
 package me.neilellis.dollar.types;
 
-import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.exceptions.LambdaRecursionException;
@@ -51,9 +50,9 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
     };
     private final var in;
     private final boolean fixable;
+    protected ConcurrentHashMap<String, String> meta = new ConcurrentHashMap<>();
     private Pipeable lambda;
     private ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<String, String> meta = new ConcurrentHashMap<>();
 
     public DollarLambda(Pipeable lambda) {
         this(lambda, true);
@@ -152,8 +151,6 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             }
         } catch (InvocationTargetException e) {
             throw e.getCause();
-        } catch (Exception e) {
-            throw new DollarException(e);
         }
     }
 }

@@ -94,7 +94,8 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
             case VOID:
                 return DollarStatic.$void();
             default:
-                throw new UnsupportedOperationException();
+                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
+
         }
     }
 

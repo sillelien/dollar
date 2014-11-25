@@ -18,10 +18,12 @@ package me.neilellis.dollar.script;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
+import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Parser;
+import org.codehaus.jparsec.error.ParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -244,10 +246,16 @@ public class ScriptScope implements Scope {
 
     public var handleError(Throwable t) {
         if (errorHandlers.isEmpty()) {
-            if (parent != null) {
-                return parent.handleError(t);
-            } else {
+            if (parent == null) {
+                if (t instanceof ParserException) {
+                    throw (ParserException) t;
+                }
+                if (t instanceof DollarException) {
+                    throw (DollarException) t;
+                }
                 throw new DollarScriptException(t);
+            } else {
+                return parent.handleError(t);
             }
         } else {
             setParameter("type", $(t.getClass().getName()));
@@ -359,7 +367,5 @@ public class ScriptScope implements Scope {
     public String toString() {
         return id + "->" + parent;
     }
-
-
 
 }

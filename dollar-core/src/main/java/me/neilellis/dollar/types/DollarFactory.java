@@ -24,12 +24,14 @@ import com.google.common.collect.Range;
 import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import me.neilellis.dollar.*;
+import me.neilellis.dollar.exceptions.DollarFailureException;
 import me.neilellis.dollar.json.DecodeException;
 import me.neilellis.dollar.json.ImmutableJsonObject;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.json.impl.Json;
 import me.neilellis.dollar.monitor.DollarMonitor;
+import me.neilellis.dollar.script.SourceAware;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +43,7 @@ import spark.QueryParamsMap;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -196,7 +198,11 @@ public class DollarFactory {
 
     @NotNull
     public static var failure(DollarFail.FailureType failureType) {
-        return wrap(new DollarFail(failureType));
+        if (DollarStatic.config.failFast()) {
+            throw new DollarFailureException(failureType);
+        } else {
+            return wrap(new DollarFail(failureType));
+        }
     }
 
     @NotNull
@@ -219,13 +225,22 @@ public class DollarFactory {
                     new DollarGuard(val));
         } else {
             return val;
+        }
+
+
     }
 
-
+    @NotNull
+    public static var failure(DollarFail.FailureType failureType, Throwable t) {
+        if (DollarStatic.config.failFast()) {
+            throw new DollarFailureException(t, failureType);
+        } else {
+            return wrap(new DollarFail(Arrays.asList(t), failureType));
+        }
     }
 
     public static var failure(Throwable throwable) {
-        return wrap(new DollarFail(Collections.singletonList(throwable), DollarFail.FailureType.EXCEPTION));
+        return failure(DollarFail.FailureType.EXCEPTION, throwable);
     }
 
     public static var newVoid() {
@@ -277,5 +292,15 @@ public class DollarFactory {
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
                 new DollarLambda(i -> future.get(), false)));
+    }
+
+    public static var failureWithSource(DollarFail.FailureType failureType, Throwable throwable, SourceAware source) {
+        if (DollarStatic.config.failFast()) {
+            final DollarFailureException dollarFailureException = new DollarFailureException(throwable, failureType);
+            dollarFailureException.addSource(source);
+            throw dollarFailureException;
+        } else {
+            return wrap(new DollarFail(Arrays.asList(throwable), failureType));
+        }
     }
 }

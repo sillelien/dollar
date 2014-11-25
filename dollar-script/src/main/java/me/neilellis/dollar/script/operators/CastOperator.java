@@ -32,7 +32,6 @@ public class CastOperator implements Map<var, Map<? super var, ? extends var>> {
 
     @Override public Map<? super var, ? extends var> map(var rhs) {
         return lhs -> DollarScriptSupport.wrapReactiveUnary(scope,
-                                                            "",
                                                             lhs,
                                                             () -> lhs.$as(Type
                                                                                   .valueOf(

@@ -35,7 +35,7 @@ public class IsOperator implements Map<List<var>, Map<? super var, ? extends var
     public IsOperator(ScriptScope scope) {this.scope = scope;}
 
     @Override public Map<? super var, ? extends var> map(List<var> rhs) {
-        return lhs -> DollarScriptSupport.wrapReactiveUnary(scope, "", lhs, () -> {
+        return lhs -> DollarScriptSupport.wrapReactiveUnary(scope, lhs, () -> {
             for (var value : rhs) {
                 if (lhs.is(Type.valueOf(value.$S().toUpperCase()))) {
                     return $(true);

@@ -23,10 +23,10 @@ public class Configuration {
     private boolean production;
     private boolean debugScope = true;
     private boolean safe = true;
-    private boolean monitor = true;
+    private boolean monitor = false;
 
-    public boolean production() {
-        return production;
+    public boolean failFast() {
+        return true;
     }
 
     public boolean isDebugScope() {
@@ -37,11 +37,15 @@ public class Configuration {
         this.debugScope = debugScope;
     }
 
-    public boolean wrapForMonitoring() {
-        return production || monitor;
+    public boolean production() {
+        return production;
     }
 
     public boolean wrapForGuards() {
         return production || safe;
+    }
+
+    public boolean wrapForMonitoring() {
+        return production || monitor;
     }
 }

@@ -19,7 +19,6 @@ package me.neilellis.dollar.types;
 import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.*;
 import me.neilellis.dollar.collections.ImmutableMap;
-import me.neilellis.dollar.exceptions.ListException;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import org.jetbrains.annotations.NotNull;
@@ -152,21 +151,18 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        return null;
-    }
-
-    @NotNull
-    @Override
     public var $plus(var value) {
-        if (value == this) {
-            throw new IllegalArgumentException("Tried to add to self");
-        }
         return DollarFactory.fromValue(ImmutableList.builder()
                                                     .addAll(list)
                                                     .add(DollarFactory.fromValue(value))
                                                     .build(), errors()
         );
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return null;
     }
 
     @NotNull
@@ -215,12 +211,6 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableList<var> toList() {
-        return list;
-    }
-
-    @NotNull
-    @Override
     public var $divide(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
     }
@@ -229,6 +219,12 @@ public class DollarList extends AbstractDollar {
     @Override
     public var $inc(@NotNull var amount) {
         return this;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> toList() {
+        return list;
     }
 
     @NotNull
@@ -258,8 +254,13 @@ public class DollarList extends AbstractDollar {
                                                                  $stream(parallel).map(v -> v._fix(parallel))
                                                                                   .collect(Collectors.toList()),
                                                                  errors())).get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new DollarException(e);
+        } catch (InterruptedException e) {
+            Thread.interrupted();
+            return DollarFactory.failure(DollarFail.FailureType.INTERRUPTED, e);
+
+        } catch (ExecutionException e) {
+            return DollarFactory.failure(DollarFail.FailureType.EXECUTION_FAILURE, e);
+
         }
 
     }
@@ -300,11 +301,6 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public boolean isVoid() {
-        return false;
-    }
-
-    @Override
     public var $notify() {
         for (var v : list) {
             v.$notify();
@@ -313,8 +309,19 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public Integer I(@NotNull String key) {
+        DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+        return null;
+    }
+
+    @Override
     public boolean isList() {
         return true;
+    }
+
+    @Override
+    public boolean isVoid() {
+        return false;
     }
 
     @Override
@@ -350,17 +357,6 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public Integer I() {
-        return $stream(false).collect(Collectors.summingInt((i) -> i.I()));
-    }
-
-    @NotNull
-    @Override
-    public var decode() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean isBoolean() {
         return false;
     }
@@ -376,13 +372,13 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public boolean isFalse() {
-        return false;
+    public Integer I() {
+        return $stream(false).collect(Collectors.summingInt((i) -> i.I()));
     }
 
     @Override
-    public Integer I(@NotNull String key) {
-        throw new ListException();
+    public boolean isFalse() {
+        return false;
     }
 
     @Override
@@ -394,13 +390,15 @@ public class DollarList extends AbstractDollar {
     @org.jetbrains.annotations.NotNull
     @Override
     public JsonObject json(@NotNull String key) {
-        throw new ListException();
+        DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+        return null;
     }
 
 
     @Override
     public Number number(@NotNull String key) {
-        throw new ListException();
+        DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+        return null;
     }
 
 
@@ -454,7 +452,8 @@ public class DollarList extends AbstractDollar {
             case BOOLEAN:
                 return DollarStatic.$(!list.isEmpty());
             default:
-                throw new UnsupportedOperationException();
+                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
+
         }
     }
 

@@ -144,26 +144,14 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
+    public var $abs() {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+    }
+
+    @NotNull
+    @Override
     public var $dec(@NotNull var amount) {
         return this;
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $negate() {
-        return DollarFactory.fromValue(Range.closed(range.upperEndpoint(), range.lowerEndpoint()), errors());
-    }
-
-    @NotNull
-    @Override
-    public var $multiply(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
     }
 
     @NotNull
@@ -174,26 +162,54 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
+    public var $inc(@NotNull var amount) {
+        return this;
+    }
+
+    @NotNull
+    @Override
     public var $modulus(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
     }
 
     @NotNull
     @Override
-    public var $abs() {
+    public var $multiply(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
     }
 
     @NotNull
     @Override
+    public var $negate() {
+        return DollarFactory.fromValue(Range.closed(range.upperEndpoint(), range.lowerEndpoint()), errors());
+    }
+
+    @Override
+    public Integer I(@NotNull String key) {
+        return null;
+    }
+
+    @NotNull
+    @Override
     public ImmutableMap<String, var> $map() {
-        throw new UnsupportedOperationException();
+        DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+        return ImmutableMap.of();
+    }
+
+    @Override
+    public boolean isList() {
+        return true;
     }
 
     @NotNull
     @Override
     public String S() {
         return String.format("%s..%s", range.lowerEndpoint(), range.upperEndpoint());
+    }
+
+    @Override
+    public int hashCode() {
+        return range.hashCode();
     }
 
     @Override
@@ -208,8 +224,26 @@ public class DollarRange extends AbstractDollar {
             case VOID:
                 return DollarStatic.$void();
             default:
-                throw new UnsupportedOperationException();
+                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
         }
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof var) {
+            var unwrapped = fix(((var) obj), false)._unwrap();
+            if (unwrapped instanceof DollarRange) {
+                return range.equals(((DollarRange) unwrapped).range);
+            }
+            if (unwrapped instanceof DollarList) {
+                return unwrapped.toList().equals(toList());
+            }
+        }
+        return false;
+
     }
 
     @Override
@@ -218,14 +252,33 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public Integer I(@NotNull String key) {
-        return null;
+    public int compareTo(var o) {
+        if ($containsValue(o).isTrue()) {
+            return 0;
+        }
+        if (range.lowerEndpoint().compareTo(o) < 0) {
+            return -1;
+        }
+        if (range.upperEndpoint().compareTo(o) > 0) {
+            return 1;
+        }
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
     }
 
     @NotNull
     @Override
     public Number N() {
         return range.upperEndpoint().L() - range.lowerEndpoint().L();
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
     }
 
     @Override
@@ -238,10 +291,20 @@ public class DollarRange extends AbstractDollar {
         return false;
     }
 
+    @Override
+    public boolean isTruthy() {
+        return !range.isEmpty();
+    }
+
     @NotNull
     @Override
     public JsonObject json(@NotNull String key) {
         return new JsonObject();
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
     }
 
     @NotNull
@@ -254,6 +317,11 @@ public class DollarRange extends AbstractDollar {
             values.add(i);
         }
         return ImmutableList.copyOf(values);
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
     }
 
     @Override
@@ -277,85 +345,13 @@ public class DollarRange extends AbstractDollar {
 
     @Override
     public ImmutableList<String> strings() {
-        throw new UnsupportedOperationException();
+        DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+        return null;
     }
 
     @Override
     public Map<String, Object> toMap() {
         return null;
-    }
-
-    @Override
-    public int compareTo(var o) {
-        if ($containsValue(o).isTrue()) {
-            return 0;
-        }
-        if (range.lowerEndpoint().compareTo(o) < 0) {
-            return -1;
-        }
-        if (range.upperEndpoint().compareTo(o) > 0) {
-            return 1;
-        }
-        throw new IllegalStateException();
-    }
-
-    @NotNull
-    @Override
-    public var decode() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isBoolean() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean isTruthy() {
-        return !range.isEmpty();
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
-    public boolean isList() {
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return range.hashCode();
-    }
-
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (obj instanceof var) {
-            var unwrapped = fix(((var) obj), false)._unwrap();
-            if (unwrapped instanceof DollarRange) {
-                return range.equals(((DollarRange) unwrapped).range);
-            }
-            if (unwrapped instanceof DollarList) {
-                return unwrapped.toList().equals(toList());
-            }
-        }
-        return false;
-
     }
 
 }

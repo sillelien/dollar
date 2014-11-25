@@ -90,6 +90,10 @@ public class DollarDate extends AbstractDollarSingleValue<Long> {
         return DollarFactory.fromValue(-asDecimal(),errors());
     }
 
+    private Double asDecimal() {
+        return value.doubleValue() / (24 * 60 * 60 * 1000);
+    }
+
     @Override
     public var $as(Type type) {
         switch (type) {
@@ -108,12 +112,9 @@ public class DollarDate extends AbstractDollarSingleValue<Long> {
             case VOID:
                 return DollarStatic.$void();
             default:
-                throw new UnsupportedOperationException();
-        }
-    }
+                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
 
-    private Double asDecimal() {
-        return value.doubleValue() / (24 * 60 * 60 * 1000);
+        }
     }
 
     @Override

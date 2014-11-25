@@ -42,6 +42,63 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         return value;
     }
 
+    @NotNull
+    @Override
+    public var $abs() {
+        return DollarFactory.fromValue(abs(value.longValue()), errors());
+    }
+
+    @NotNull
+    @Override
+    public var $dec(@NotNull var amount) {
+        return DollarFactory.fromValue(value - amount.L(), errors(), amount.errors());
+    }
+
+    @NotNull
+    @Override
+    public var $divide(@NotNull var newValue) {
+        if (newValue.isDecimal()) {
+            return DollarFactory.fromValue(value.doubleValue() / newValue.D(), errors(),
+                                           newValue.errors());
+        } else {
+            return DollarFactory.fromValue(value / newValue.L(), errors(), newValue.errors());
+        }
+    }
+
+    @NotNull
+    @Override
+    public var $inc(@NotNull var amount) {
+        return DollarFactory.fromValue(value + amount.L(), errors(), amount.errors());
+    }
+
+    @NotNull
+    @Override
+    public var $modulus(@NotNull var newValue) {
+        if (newValue.isDecimal()) {
+            return DollarFactory.fromValue(value.doubleValue() % newValue.D(), errors(),
+                                           newValue.errors());
+        } else {
+            return DollarFactory.fromValue(value % newValue.L(), errors(), newValue.errors());
+        }
+    }
+
+    @NotNull
+    @Override
+    public var $multiply(@NotNull var newValue) {
+        if (newValue.isDecimal()) {
+            return DollarFactory.fromValue(value.doubleValue() * newValue.D(), errors(),
+                                           newValue.errors());
+        } else {
+            return DollarFactory.fromValue(value * newValue.L(), errors(), newValue.errors());
+        }
+    }
+
+    @NotNull
+    @Override
+    public var $negate() {
+        return DollarFactory.fromValue(-value, errors());
+    }
+
     @Override
     public var $as(Type type) {
         switch (type) {
@@ -60,7 +117,8 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
             case VOID:
                 return DollarStatic.$void();
             default:
-                throw new UnsupportedOperationException();
+                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
+
         }
     }
 
@@ -90,63 +148,6 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     @NotNull
     public Number number(@NotNull String key) {
         return value;
-    }
-
-    @NotNull
-    @Override
-    public var $dec(@NotNull var amount) {
-        return DollarFactory.fromValue(value - amount.L(), errors(), amount.errors());
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return DollarFactory.fromValue(value + amount.L(), errors(), amount.errors());
-    }
-
-    @NotNull
-    @Override
-    public var $negate() {
-        return DollarFactory.fromValue(-value, errors());
-    }
-
-    @NotNull
-    @Override
-    public var $multiply(@NotNull var newValue) {
-        if (newValue.isDecimal()) {
-            return DollarFactory.fromValue(value.doubleValue() * newValue.D(), errors(),
-                                           newValue.errors());
-        } else {
-            return DollarFactory.fromValue(value * newValue.L(), errors(), newValue.errors());
-        }
-    }
-
-    @NotNull
-    @Override
-    public var $divide(@NotNull var newValue) {
-        if (newValue.isDecimal()) {
-            return DollarFactory.fromValue(value.doubleValue() / newValue.D(), errors(),
-                                           newValue.errors());
-        } else {
-            return DollarFactory.fromValue(value / newValue.L(), errors(), newValue.errors());
-        }
-    }
-
-    @NotNull
-    @Override
-    public var $modulus(@NotNull var newValue) {
-        if (newValue.isDecimal()) {
-            return DollarFactory.fromValue(value.doubleValue() % newValue.D(), errors(),
-                                           newValue.errors());
-        } else {
-            return DollarFactory.fromValue(value % newValue.L(), errors(), newValue.errors());
-        }
-    }
-
-    @NotNull
-    @Override
-    public var $abs() {
-        return DollarFactory.fromValue(abs(value.longValue()), errors());
     }
 
     @NotNull

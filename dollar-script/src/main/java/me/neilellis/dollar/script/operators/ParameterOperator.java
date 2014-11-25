@@ -58,9 +58,7 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
                         }
                         var result;
                         if (lhs.isLambda()) {
-                            System.out.println("RESULT: " + lhs._unwrap().getClass());
                             result = fix(lhs, false);
-                            System.out.println("RESULT: " + result._unwrap().getClass());
                         } else {
                             String lhsString = lhs.toString();
                             //The lhs is a string, so let's see if it's a builtin function

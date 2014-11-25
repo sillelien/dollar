@@ -35,7 +35,7 @@ public class IfOperator implements Map<var, Map<var, var>> {
         return new Map<var, var>() {
             @Override
             public var map(var rhs) {
-                return wrapReactiveBinary(scope, "", lhs, rhs, () -> {
+                return wrapReactiveBinary(scope, lhs, rhs, () -> {
                     if (lhs.isBoolean() && lhs.isTrue()) {
                         return rhs;
                     } else {

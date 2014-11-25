@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar;
+package me.neilellis.dollar.exceptions;
+
+import me.neilellis.dollar.DollarException;
+import me.neilellis.dollar.types.DollarFail;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface OldAndDeprecated {
+public class DollarFailureException extends DollarException {
+    public DollarFailureException(DollarFail.FailureType failureType) {
+        super(failureType.toString());
+    }
 
+    public DollarFailureException(Throwable t, DollarFail.FailureType failureType) {
+        super(t, failureType.toString() + ": " + t.getMessage());
+    }
 
 }

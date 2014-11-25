@@ -83,51 +83,16 @@ public class DollarParser {
         this.file = mainFile;
     }
 
-    static Parser<var> dollarIdentifier(ScriptScope scope, Parser.Reference ref) {
-        return OP("$").next(
-                array(Terminals.Identifier.PARSER, OP("|").next(ref.lazy()).optional()).between(OP("{"), OP("}"))).map(
-                new Map<Object[], var>() {
-                    @Override public var map(Object[] objects) {
-                        return fromLambda(j -> getVariable(scope, objects[0].toString(), false, (var) objects[1]));
-                    }
-                });
-    }
-
-    public void addScope(ScriptScope scope) {
-        scopes.get().add(scope);
-    }
-
     public ScriptScope currentScope() {
         return scopes.get().get(scopes.get().size() - 1);
-    }
-
-    public ScriptScope endScope() {
-        return scopes.get().remove(scopes.get().size() - 1);
     }
 
     public void export(String name, var export) {
         exports.put(name, export);
     }
 
-//    private Parser<var> arrayElementExpression(Parser<var> expression1, Parser<var> expression2, ScriptScope scope) {
-//        return expression1.infixl(term("[").next(expression2).followedBy(term("]")));
-//    }
-
     public ParserErrorHandler getErrorHandler() {
         return errorHandler;
-    }
-
-    public <T> T inScope(ScriptScope currentScope, Function<ScriptScope, T> r) {
-        ScriptScope newScope = new ScriptScope(currentScope, currentScope.getSource());
-        addScope(newScope);
-        try {
-            return r.apply(newScope);
-        } finally {
-            ScriptScope poppedScope = endScope();
-            if (poppedScope != newScope) {
-                throw new IllegalStateException("Popped wrong scope");
-            }
-        }
     }
 
     public var parse(File file, boolean parallel) throws IOException {
@@ -140,24 +105,18 @@ public class DollarParser {
 
     }
 
-    public var parse(ScriptScope scope, File file, boolean parallel) throws IOException {
-        String source = new String(Files.readAllBytes(file.toPath()));
-        return parse(new ScriptScope(scope, source), source, parallel);
+    public var parseMarkdown(File file) throws IOException {
+        PegDownProcessor pegDownProcessor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
+        RootNode root =
+                pegDownProcessor.parseMarkdown(com.google.common.io.Files.toString(file, Charset.forName("utf-8"))
+                                                                         .toCharArray());
+        root.accept(new CodeExtractionVisitor());
+        return $();
     }
 
-    public var parse(ScriptScope scope, InputStream in, boolean parallel) throws IOException {
-        String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(scope, source), source, parallel);
-    }
-
-    public var parse(InputStream in, boolean parallel) throws IOException {
-        String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(this, source), source, parallel);
-    }
-
-    public var parse(String s, boolean parallel) throws IOException {
-        return parse(new ScriptScope(this, s), s, parallel);
-    }
+//    private Parser<var> arrayElementExpression(Parser<var> expression1, Parser<var> expression2, ScriptScope scope) {
+//        return expression1.infixl(term("[").next(expression2).followedBy(term("]")));
+//    }
 
     public var parse(ScriptScope scope, String source, boolean parallel) throws IOException {
         addScope(new ScriptScope(scope, source));
@@ -183,146 +142,42 @@ public class DollarParser {
         }
     }
 
-    public var parseMarkdown(File file) throws IOException {
-        PegDownProcessor pegDownProcessor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
-        RootNode root =
-                pegDownProcessor.parseMarkdown(com.google.common.io.Files.toString(file, Charset.forName("utf-8"))
-                                                                         .toCharArray());
-        root.accept(new CodeExtractionVisitor());
-        return $();
+    public void addScope(ScriptScope scope) {
+        scopes.get().add(scope);
     }
 
-    public var parseMarkdown(String source) throws IOException {
-        PegDownProcessor processor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
-        RootNode rootNode = processor.parseMarkdown(source.toCharArray());
-        rootNode.accept(new CodeExtractionVisitor());
-        return $();
+    private Parser<?> buildParser(ScriptScope scope) {
+        topLevelParser = script(scope);
+        return topLevelParser;
     }
 
-    public List<ScriptScope> scopes() {
-        return scopes.get();
+    public ScriptScope endScope() {
+        return scopes.get().remove(scopes.get().size() - 1);
     }
 
-    final Parser<var> java(ScriptScope scope) {
-        return token(new TokenMap<String>() {
-            @Override
-            public String map(Token token) {
-                final Object val = token.value();
-                if (val instanceof Tokens.Fragment) {
-                    Tokens.Fragment c = (Tokens.Fragment) val;
-                    if (!c.tag().equals("java")) {
-                        return null;
-                    }
-                    return c.text();
-                } else { return null; }
-            }
-
-            @Override
-            public String toString() {
-                return "java";
-            }
-        }).map(new Map<String, var>() {
-            @Override
-            public var map(String s) {
-                return JavaScriptingSupport.compile($void(), s, scope);
-            }
+    private Parser<List<var>> script(ScriptScope scope) {
+        return inScope(scope, newScope -> {
+            Parser.Reference<var> ref = Parser.newReference();
+            Parser<var> block = block(ref.lazy(), newScope).between(OP_NL("{"), NL_TERM("}"));
+            Parser<var> expression = expression(newScope);
+            Parser<List<var>> parser = (TERMINATOR_SYMBOL.optional()).next(or(expression, block).followedBy(
+                    TERMINATOR_SYMBOL).map((v) -> {return DollarStatic.fix(v, false);}).many1());
+            ref.set(parser.map(DollarStatic::$));
+            return parser;
         });
     }
 
-    <T> Parser<T> op(T value, String name) {
-        return op(value, name, null);
-    }
-
-    <T> Parser<T> op(T value, String name, String keyword) {
-        Parser<?> parser;
-        if (keyword == null) {
-            parser = OP(name);
-        } else {
-            parser = OP(name, keyword);
-
+    public <T> T inScope(ScriptScope currentScope, Function<ScriptScope, T> r) {
+        ScriptScope newScope = new ScriptScope(currentScope, currentScope.getSource());
+        addScope(newScope);
+        try {
+            return r.apply(newScope);
+        } finally {
+            ScriptScope poppedScope = endScope();
+            if (poppedScope != newScope) {
+                throw new IllegalStateException("Popped wrong scope");
+            }
         }
-        return parser.token().map(new Map<Token, T>() {
-            @Override
-            public T map(Token token) {
-                if (value instanceof Operator) {
-                    ((Operator) value).setSource(() -> {
-                        int index = token.index();
-                        int length = token.length();
-                        String theSource = currentScope().getSource();
-                        int end = theSource.indexOf('\n', index + length);
-                        int start = index > 10 ? index - 10 : 0;
-                        String
-                                highlightedSource =
-                                "... " +
-                                theSource.substring(start, index) +
-                                " \u261E " +
-                                theSource.substring(index, index + length) +
-                                " \u261C " +
-                                theSource.substring(index + length, end) +
-                                " ...";
-                        return highlightedSource.replaceAll("\n", "\\\\n");
-                    });
-                }
-                return value;
-            }
-        });
-
-    }
-
-    private Parser<var> whenStatement(Parser<var> expression, ScriptScope scope) {
-        Parser<Object[]> sequence = KEYWORD_NL("when").next(array(expression, expression));
-        return sequence.map(new WhenOperator());
-    }
-
-
-    private Parser<var> moduleStatement(ScriptScope scope, Parser.Reference<var> ref) {
-        final Parser<Object[]> param = array(IDENTIFIER.followedBy(OP("=")), ref.lazy());
-
-        final Parser<List<var>> parameters =
-                KEYWORD("with").optional().next((param).map(objects -> {
-                    var result = (var) objects[1];
-                    result.setMetaAttribute(NAMED_PARAMETER_META_ATTR, objects[0].toString());
-                    return result;
-                }).sepBy(OP(",")).between(OP("("), OP(")")));
-
-        Parser<Object[]> sequence = array(KEYWORD("module"), STRING_LITERAL.or(URL), parameters.optional());
-
-        return sequence.map(new ModuleOperator(scope));
-
-    }
-
-
-    private Parser<var> collectStatement(Parser<var> expression, ScriptScope scope) {
-        Parser<Object[]> sequence = KEYWORD_NL("collect")
-                .next(array(expression, KEYWORD("until").next(expression).optional(),
-                            KEYWORD("unless").next(expression).optional(), expression));
-        return sequence.map(new CollectOperator(this, scope));
-    }
-
-
-    private Parser<var> everyStatement(Parser<var> expression, ScriptScope scope) {
-        Parser<Object[]> sequence = KEYWORD_NL("every")
-                .next(array(expression,
-                            KEYWORD("secs", "sec", "minute", "minutes", "hr", "hrs", "milli", "millis"),
-                            KEYWORD("until").next(expression).optional(),
-                            KEYWORD("unless").next(expression).optional(),
-                            expression));
-        return sequence.map(new EveryOperator(this, scope));
-    }
-
-    private Parser<var> list(Parser<var> expression, ScriptScope scope) {
-        return OP_NL("[")
-                .next(expression.sepBy(COMMA_OR_NEWLINE_TERMINATOR))
-                .followedBy(NL_TERM("]")).map(
-                        new ListOperator(this, scope));
-    }
-
-    private Parser<var> map(Parser<var> expression, ScriptScope scope) {
-        Parser<List<var>>
-                sequence =
-                OP_NL("{").next(expression.sepBy1(COMMA_TERMINATOR))
-                          .followedBy(NL_TERM("}"));
-        return sequence.map(new MapOperator(this, scope));
     }
 
     private Parser<var> block(Parser<var> parentParser, ScriptScope scope) {
@@ -339,18 +194,6 @@ public class DollarParser {
                         new BlockOperator(this, scope));
         ref.set(or);
         return or;
-    }
-
-    private Parser<List<var>> script(ScriptScope scope) {
-        return inScope(scope, newScope -> {
-            Parser.Reference<var> ref = Parser.newReference();
-            Parser<var> block = block(ref.lazy(), newScope).between(OP_NL("{"), NL_TERM("}"));
-            Parser<var> expression = expression(newScope);
-            Parser<List<var>> parser = (TERMINATOR_SYMBOL.optional()).next(or(expression, block).followedBy(
-                    TERMINATOR_SYMBOL).map((v) -> {return DollarStatic.fix(v, false);}).many1());
-            ref.set(parser.map(DollarStatic::$));
-            return parser;
-        });
     }
 
     private Parser<var> expression(ScriptScope scope) {
@@ -494,18 +337,198 @@ public class DollarParser {
                 .build(main);
         ref.set(parser);
         scope.setParser(parser);
-        return parser;
+        return parser.token().map(new Map<Token, var>() {
+            @Override public var map(Token token) {
+                final var value = (var) token.value();
+                value.setMetaAttribute("__parse_start", String.valueOf(token.index()));
+                value.setMetaAttribute("__parse_length", String.valueOf(token.length()));
+                return value;
+            }
+        });
+
     }
 
+    private Parser<var> list(Parser<var> expression, ScriptScope scope) {
+        return OP_NL("[")
+                .next(expression.sepBy(COMMA_OR_NEWLINE_TERMINATOR))
+                .followedBy(NL_TERM("]")).map(
+                        new ListOperator(this, scope));
+    }
 
-    private Parser<Map<? super var, ? extends var>> memberOperator(Parser.Reference<var> ref, ScriptScope scope) {
-        return OP(".").followedBy(OP(".").not())
-                      .next(ref.lazy().between(OP("("), OP(")")).or(IDENTIFIER))
-                      .map(rhs -> lhs -> wrapReactiveBinary(scope, "", lhs, rhs, () -> lhs.$get(rhs.$S())));
+    private Parser<var> map(Parser<var> expression, ScriptScope scope) {
+        Parser<List<var>>
+                sequence =
+                OP_NL("{").next(expression.sepBy1(COMMA_TERMINATOR))
+                          .followedBy(NL_TERM("}"));
+        return sequence.map(new MapOperator(this, scope));
+    }
+
+    private Parser<var> moduleStatement(ScriptScope scope, Parser.Reference<var> ref) {
+        final Parser<Object[]> param = array(IDENTIFIER.followedBy(OP("=")), ref.lazy());
+
+        final Parser<List<var>> parameters =
+                KEYWORD("with").optional().next((param).map(objects -> {
+                    var result = (var) objects[1];
+                    result.setMetaAttribute(NAMED_PARAMETER_META_ATTR, objects[0].toString());
+                    return result;
+                }).sepBy(OP(",")).between(OP("("), OP(")")));
+
+        Parser<Object[]> sequence = array(KEYWORD("module"), STRING_LITERAL.or(URL), parameters.optional());
+
+        return sequence.map(new ModuleOperator(scope));
+
+    }
+
+    private Parser<var> collectStatement(Parser<var> expression, ScriptScope scope) {
+        Parser<Object[]> sequence = KEYWORD_NL("collect")
+                .next(array(expression, KEYWORD("until").next(expression).optional(),
+                            KEYWORD("unless").next(expression).optional(), expression));
+        return sequence.map(new CollectOperator(this, scope));
+    }
+
+    private Parser<var> whenStatement(Parser<var> expression, ScriptScope scope) {
+        Parser<Object[]> sequence = KEYWORD_NL("when").next(array(expression, expression));
+        return sequence.map(new WhenOperator());
+    }
+
+    private Parser<var> everyStatement(Parser<var> expression, ScriptScope scope) {
+        Parser<Object[]> sequence = KEYWORD_NL("every")
+                .next(array(expression,
+                            KEYWORD("secs", "sec", "minute", "minutes", "hr", "hrs", "milli", "millis"),
+                            KEYWORD("until").next(expression).optional(),
+                            KEYWORD("unless").next(expression).optional(),
+                            expression));
+        return sequence.map(new EveryOperator(this, scope));
+    }
+
+    final Parser<var> java(ScriptScope scope) {
+        return token(new TokenMap<String>() {
+            @Override
+            public String map(Token token) {
+                final Object val = token.value();
+                if (val instanceof Tokens.Fragment) {
+                    Tokens.Fragment c = (Tokens.Fragment) val;
+                    if (!c.tag().equals("java")) {
+                        return null;
+                    }
+                    return c.text();
+                } else { return null; }
+            }
+
+            @Override
+            public String toString() {
+                return "java";
+            }
+        }).map(new Map<String, var>() {
+            @Override
+            public var map(String s) {
+                return JavaScriptingSupport.compile($void(), s, scope);
+            }
+        });
+    }
+
+    static Parser<var> dollarIdentifier(ScriptScope scope, Parser.Reference ref) {
+        return OP("$").next(
+                array(Terminals.Identifier.PARSER, OP("|").next(ref.lazy()).optional()).between(OP("{"), OP("}"))).map(
+                new Map<Object[], var>() {
+                    @Override public var map(Object[] objects) {
+                        return fromLambda(j -> getVariable(scope, objects[0].toString(), false, (var) objects[1]));
+                    }
+                });
+    }
+
+    private Parser<var> functionCall(Parser.Reference<var> ref, ScriptScope scope) {
+        return array(IDENTIFIER, parameterOperator(ref, scope)).map(new FunctionCallOperator());
+    }
+
+    <T> Parser<T> op(T value, String name) {
+        return op(value, name, null);
+    }
+
+    <T> Parser<T> op(T value, String name, String keyword) {
+        Parser<?> parser;
+        if (keyword == null) {
+            parser = OP(name);
+        } else {
+            parser = OP(name, keyword);
+
+        }
+        return parser.token().map(new SourceMapper<>(value));
+
+    }
+
+    private Parser<Map<? super var, ? extends var>> pipeOperator(Parser.Reference<var> ref, ScriptScope scope) {
+        return (OP("->").optional()).next(IDENTIFIER.or(ref.lazy().between(OP("("), OP(")"))))
+                                    .map(new PipeOperator(this, scope));
+    }
+
+    private Parser<Map<? super var, ? extends var>> sendOperator(Parser.Reference<var> ref, ScriptScope scope) {
+        return array(KEYWORD("send"), ref.lazy(), KEYWORD("async").optional(), KEYWORD("stateless").optional())
+                .followedBy(KEYWORD("to").optional())
+                .map(new SendOperator(scope));
+    }
+
+    private Parser<Map<? super var, ? extends var>> receiveOperator(Parser.Reference<var> ref, ScriptScope scope) {
+        return array(KEYWORD("receive"), KEYWORD("async").optional(), KEYWORD("stateless").optional())
+                .followedBy(KEYWORD("from").optional())
+                .map(new ReceiveOperator());
     }
 
     private Parser<Map<var, var>> ifOperator(Parser.Reference<var> ref, ScriptScope scope) {
         return KEYWORD_NL("if").next(ref.lazy()).map(new IfOperator(scope));
+    }
+
+    private Parser<Map<? super var, ? extends var>> isOperator(Parser.Reference<var> ref, ScriptScope scope) {
+        return KEYWORD("is").next(IDENTIFIER.sepBy(OP(","))).map(new IsOperator(scope));
+    }
+
+    private Parser<Map<? super var, ? extends var>> memberOperator(Parser.Reference<var> ref, ScriptScope scope) {
+        return OP(".").followedBy(OP(".").not())
+                      .next(ref.lazy().between(OP("("), OP(")")).or(IDENTIFIER))
+                      .map(rhs -> lhs -> wrapReactiveBinary(scope, lhs, rhs, () -> lhs.$get(rhs.$S())));
+    }
+
+    private Parser<Map<? super var, ? extends var>> forOperator(final ScriptScope scope, Parser.Reference<var> ref) {
+        return array(KEYWORD("for"), IDENTIFIER, KEYWORD("in"), ref.lazy()).map(new ForOperator(this, scope));
+    }
+
+    private Parser<Map<? super var, ? extends var>> whileOperator(final ScriptScope scope, Parser.Reference<var> ref) {
+        return KEYWORD("while").next(ref.lazy()).map(new WhileOperator(this, scope));
+    }
+
+    private Parser<Map<? super var, ? extends var>> subscriptOperator(Parser.Reference<var> ref, ScriptScope scope) {
+        return OP("[").next(array(ref.lazy().followedBy(OP("]")), OP("=").next(ref.lazy()).optional()))
+                      .map(new SubscriptOperator(scope));
+    }
+
+    private Parser<Map<? super var, ? extends var>> parameterOperator(Parser.Reference<var> ref, ScriptScope scope) {
+        return OP("(").next(
+                or(array(IDENTIFIER.followedBy(OP("=")), ref.lazy()), array(OP("=").optional(), ref.lazy())).map(
+                        objects -> {
+                            //Is it a named parameter
+                            if (objects[0] != null) {
+                                //yes so let's add the name as metadata to the value
+                                var result = (var) objects[1];
+                                result.setMetaAttribute(NAMED_PARAMETER_META_ATTR, objects[0].toString());
+                                return result;
+                            } else {
+                                //no, just use the value
+                                return (var) objects[1];
+                            }
+                        }).sepBy(COMMA_TERMINATOR)).followedBy(OP(")")).map(
+                new ParameterOperator(this, scope));
+    }
+
+    private Parser<Map<? super var, ? extends var>> variableUsageOperator(Parser.Reference<var> ref,
+                                                                          ScriptScope scope) {
+        return or(OP("$").followedBy(OP("(").peek())
+                         .map(new VariableUsageOperator(scope)),
+                  OP("$").followedBy(INTEGER_LITERAL.peek()).map(
+                          lhs -> rhs -> fromLambda(i -> getVariable(scope, rhs.toString(), true, null))));
+    }
+
+    private Parser<Map<? super var, ? extends var>> castOperator(Parser.Reference<var> ref, ScriptScope scope) {
+        return KEYWORD("as").next(IDENTIFIER).map(new CastOperator(scope));
     }
 
     private Parser<Map<? super var, ? extends var>> assignmentOperator(final ScriptScope scope,
@@ -527,76 +550,63 @@ public class DollarParser {
                      OP(":=")).map(new DeclarationOperator(scope));
     }
 
-    private Parser<Map<? super var, ? extends var>> forOperator(final ScriptScope scope, Parser.Reference<var> ref) {
-        return array(KEYWORD("for"), IDENTIFIER, KEYWORD("in"), ref.lazy()).map(new ForOperator(this, scope));
+    public var parse(ScriptScope scope, File file, boolean parallel) throws IOException {
+        String source = new String(Files.readAllBytes(file.toPath()));
+        return parse(new ScriptScope(scope, source), source, parallel);
     }
 
-    private Parser<Map<? super var, ? extends var>> whileOperator(final ScriptScope scope, Parser.Reference<var> ref) {
-        return KEYWORD("while").next(ref.lazy()).map(new WhileOperator(this, scope));
+    public var parse(ScriptScope scope, InputStream in, boolean parallel) throws IOException {
+        String source = new String(ByteStreams.toByteArray(in));
+        return parse(new ScriptScope(scope, source), source, parallel);
     }
 
-    private Parser<Map<? super var, ? extends var>> subscriptOperator(Parser.Reference<var> ref, ScriptScope scope) {
-        return OP("[").next(array(ref.lazy().followedBy(OP("]")), OP("=").next(ref.lazy()).optional()))
-                      .map(new SubscriptOperator(scope));
+    public var parse(InputStream in, boolean parallel) throws IOException {
+        String source = new String(ByteStreams.toByteArray(in));
+        return parse(new ScriptScope(this, source), source, parallel);
     }
 
-    private Parser<Map<? super var, ? extends var>> castOperator(Parser.Reference<var> ref, ScriptScope scope) {
-        return KEYWORD("as").next(IDENTIFIER).map(new CastOperator(scope));
+    public var parse(String s, boolean parallel) throws IOException {
+        return parse(new ScriptScope(this, s), s, parallel);
     }
 
-    private Parser<Map<? super var, ? extends var>> pipeOperator(Parser.Reference<var> ref, ScriptScope scope) {
-        return OP("->").next(IDENTIFIER.or(ref.lazy().between(OP("("), OP(")"))))
-                       .map(new PipeOperator(this, scope));
+    public var parseMarkdown(String source) throws IOException {
+        PegDownProcessor processor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
+        RootNode rootNode = processor.parseMarkdown(source.toCharArray());
+        rootNode.accept(new CodeExtractionVisitor());
+        return $();
     }
 
-    private Parser<Map<? super var, ? extends var>> variableUsageOperator(Parser.Reference<var> ref,
-                                                                          ScriptScope scope) {
-        return or(OP("$").followedBy(OP("(").peek())
-                         .map(new VariableUsageOperator(scope)),
-                  OP("$").followedBy(INTEGER_LITERAL.peek()).map(
-                          lhs -> rhs -> fromLambda(i -> getVariable(scope, rhs.toString(), true, null))));
+    public List<ScriptScope> scopes() {
+        return scopes.get();
     }
 
-    private Parser<Map<? super var, ? extends var>> receiveOperator(Parser.Reference<var> ref, ScriptScope scope) {
-        return array(KEYWORD("receive"), KEYWORD("async").optional(), KEYWORD("stateless").optional())
-                .followedBy(KEYWORD("from").optional())
-                .map(new ReceiveOperator());
-    }
+    private class SourceMapper<T> implements Map<Token, T> {
+        private final T value;
 
-    private Parser<Map<? super var, ? extends var>> sendOperator(Parser.Reference<var> ref, ScriptScope scope) {
-        return array(KEYWORD("send"), ref.lazy(), KEYWORD("async").optional(), KEYWORD("stateless").optional())
-                .followedBy(KEYWORD("to").optional())
-                .map(new SendOperator(scope));
-    }
+        public SourceMapper(T value) {this.value = value;}
 
-    private Parser<Map<? super var, ? extends var>> isOperator(Parser.Reference<var> ref, ScriptScope scope) {
-        return KEYWORD("is").next(IDENTIFIER.sepBy(OP(","))).map(new IsOperator(scope));
-    }
-
-    private Parser<var> functionCall(Parser.Reference<var> ref, ScriptScope scope) {
-        return array(IDENTIFIER, parameterOperator(ref, scope)).map(new FunctionCallOperator());
-    }
-
-    private Parser<Map<? super var, ? extends var>> parameterOperator(Parser.Reference<var> ref, ScriptScope scope) {
-        return OP("(").next(
-                or(array(IDENTIFIER.followedBy(OP("=")), ref.lazy()), array(OP("=").optional(), ref.lazy())).map(
-                        objects -> {
-                            //Is it a named parameter
-                            if (objects[0] != null) {
-                                //yes so let's add the name as metadata to the value
-                                var result = (var) objects[1];
-                                result.setMetaAttribute(NAMED_PARAMETER_META_ATTR, objects[0].toString());
-                                return result;
-                            } else {
-                                //no, just use the value
-                                return (var) objects[1];
-                            }
-                        }).sepBy(COMMA_TERMINATOR)).followedBy(OP(")")).map(
-                new ParameterOperator(this, scope));
-    }
-
-    private Parser<?> buildParser(ScriptScope scope) {
-        topLevelParser = script(scope);
-        return topLevelParser;
+        @Override
+        public T map(Token token) {
+            if (value instanceof Operator) {
+                ((Operator) value).setSource(() -> {
+                    int index = token.index();
+                    int length = token.length();
+                    String theSource = currentScope().getSource();
+                    int end = theSource.indexOf('\n', index + length);
+                    int start = index > 10 ? index - 10 : 0;
+                    String
+                            highlightedSource =
+                            "... " +
+                            theSource.substring(start, index) +
+                            " \u261E " +
+                            theSource.substring(index, index + length) +
+                            " \u261C " +
+                            theSource.substring(index + length, end) +
+                            " ...";
+                    return highlightedSource.replaceAll("\n", "\\\\n");
+                });
+            }
+            return value;
+        }
     }
 }

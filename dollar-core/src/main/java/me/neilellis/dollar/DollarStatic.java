@@ -76,18 +76,12 @@ public class DollarStatic {
 
     @NotNull
     public static <R> R logAndRethrow(@NotNull Throwable throwable) {
-        log(throwable.getMessage());
-        throwable.printStackTrace();
         if (throwable instanceof DollarException) {
             throw (DollarException) throwable;
         } else {
             throw new DollarException(throwable);
         }
 
-    }
-
-    public static void log(String message) {
-        System.out.println(threadContext.get().getLabels().toString() + ":" + message);
     }
 
     public static Pipeable $jsResource(String name) {
@@ -230,7 +224,7 @@ public class DollarStatic {
     public static var handleError(@NotNull Throwable throwable, var failee) {
 //        log(throwable.getMessage());
 ////        log(throwable);
-        throwable.printStackTrace(System.err);
+//        throwable.printStackTrace(System.err);
         if (failee == null) {
             return DollarFactory.failure(throwable);
         }
@@ -374,6 +368,10 @@ public class DollarStatic {
             log("Interrupted");
         }
         throw new Error("Interrupted");
+    }
+
+    public static void log(String message) {
+        System.out.println(threadContext.get().getLabels().toString() + ":" + message);
     }
 
     @NotNull

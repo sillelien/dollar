@@ -20,11 +20,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$list;
-import static org.junit.Assert.fail;
 
 public class DollarLambdaTest {
     private static var list;
@@ -54,21 +52,6 @@ public class DollarLambdaTest {
     }
 
 
-    @Test
-    public void testErrors() throws InterruptedException {
-        var lambda = $((v) -> {
-            throw new RuntimeException("OMG!");
-        });
-        //At this point the lambda is not evaluated (hasErrors does not trigger evaluation)
-        assertFalse(lambda.hasErrors());
-        //Now perform any operation to trigger the exception and we have errors
-        try {
-            lambda.$dec();
-            fail();
-        } catch (DollarException e) {
 
-        }
-
-    }
 
 }

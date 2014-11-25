@@ -41,8 +41,8 @@ public class MapOperator implements Map<List<var>, var> {
     }
 
     @Override public var map(List<var> o) {
-        return DollarFactory.fromLambda(parallel -> dollarParser.inScope(scope, newScope -> {
-            Stream<var> stream;
+        final var lambda = DollarFactory.fromLambda(parallel -> dollarParser.inScope(scope, newScope -> {
+            Stream<me.neilellis.dollar.var> stream;
             if (parallel.isTrue()) {
                 stream = o.stream().parallel();
             } else {
@@ -56,5 +56,9 @@ public class MapOperator implements Map<List<var>, var> {
                            .collect(Collectors.toConcurrentMap(v -> v.isPair() ? v.getPairKey() : v.$S(),
                                                                v -> v.isPair() ? v.getPairValue() : v)));
         }));
+        for (var value : o) {
+            value.$listen(i->lambda.$notify());
+        }
+        return lambda;
     }
 }

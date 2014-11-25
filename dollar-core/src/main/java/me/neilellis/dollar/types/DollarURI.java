@@ -122,15 +122,15 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of();
+    public var $plus(@Nullable var value) {
+        assertRunning();
+        return handler.send(DollarStatic.$(value), true, true);
     }
 
     @NotNull
     @Override
-    public var $plus(@Nullable var value) {
-        assertRunning();
-        return handler.send(DollarStatic.$(value), true, true);
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of();
     }
 
     @NotNull
@@ -167,25 +167,13 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
+    public var $abs() {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
     public var $dec(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $negate() {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $multiply(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
@@ -197,42 +185,38 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
+    public var $inc(@NotNull var amount) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
     public var $modulus(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $abs() {
+    public var $multiply(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
+    @NotNull
     @Override
-    public var $each(Pipeable pipe) {
-        return super.$each(pipe);
+    public var $negate() {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public Integer I(@NotNull String key) {
+        return 0;
     }
 
     @Override
-    public var $notify() {
+    public var $all() {
         assertRunning();
-        return handler.send(this, false, false);
-    }
-
-    @Override
-    public String $listen(Pipeable pipe, String key) {
-        return $listen(pipe);
-    }
-
-    @Override
-    public var $send(var value, boolean blocking, boolean mutating) {
-        assertRunning();
-        return handler.send(value, blocking, mutating);
-    }
-
-    @Override
-    public var $receive(boolean blocking, boolean mutating) {
-        assertRunning();
-        return handler.receive(blocking, mutating);
+        return handler.all();
     }
 
     @Override
@@ -242,9 +226,32 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public var $all() {
+    public String $listen(Pipeable pipe, String key) {
+        return $listen(pipe);
+    }
+
+    @Override
+    public var $notify() {
         assertRunning();
-        return handler.all();
+        return handler.send(this, false, false);
+    }
+
+    @Override
+    public var $publish(var lhs) {
+        assertRunning();
+        return handler.publish(lhs);
+    }
+
+    @Override
+    public var $receive(boolean blocking, boolean mutating) {
+        assertRunning();
+        return handler.receive(blocking, mutating);
+    }
+
+    @Override
+    public var $send(var value, boolean blocking, boolean mutating) {
+        assertRunning();
+        return handler.send(value, blocking, mutating);
     }
 
     @Override
@@ -269,18 +276,17 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public var $publish(var lhs) {
-        assertRunning();
-        return handler.publish(lhs);
+    public var $each(Pipeable pipe) {
+        return super.$each(pipe);
+    }
+
+    @Override public StateMachine<ResourceState, Signal> getStateMachine() {
+        return stateMachine;
     }
 
     @Override
     public boolean isUri() {
         return true;
-    }
-
-    @Override public StateMachine<ResourceState, Signal> getStateMachine() {
-        return stateMachine;
     }
 
     @Override
@@ -289,18 +295,13 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public String S() {
-        return uri;
-    }
-
-    @Override
-    public var decode() {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @Override
     public boolean isBoolean() {
         return false;
+    }
+
+    @Override
+    public String S() {
+        return uri;
     }
 
     @Override
@@ -323,6 +324,7 @@ public class DollarURI extends AbstractDollar {
         return true;
     }
 
+
     @NotNull
     @Override
     public ImmutableList<var> toList() {
@@ -344,11 +346,7 @@ public class DollarURI extends AbstractDollar {
     }
 
 
-    @NotNull
-    @Override
-    public Integer I(@NotNull String key) {
-        return 0;
-    }
+
 
 
     @Nullable
@@ -415,7 +413,7 @@ public class DollarURI extends AbstractDollar {
             case VOID:
                 return DollarStatic.$void();
             default:
-                throw new UnsupportedOperationException();
+                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
         }
     }
 }

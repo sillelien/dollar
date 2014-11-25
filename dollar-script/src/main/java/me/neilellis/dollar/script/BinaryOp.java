@@ -16,13 +16,13 @@
 
 package me.neilellis.dollar.script;
 
-import me.neilellis.dollar.script.exceptions.DollarScriptException;
-import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
 import org.codehaus.jparsec.functors.Map2;
 
 import java.util.function.Supplier;
+
+import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactiveBinary;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -48,41 +48,11 @@ public class BinaryOp implements Binary<var>, Operator {
 
     @Override
     public var map(var lhs, var rhs) {
-        try {
-            if (immediate) {
-                return function.map(lhs, rhs);
-            }
-            //Lazy evaluation
-            final me.neilellis.dollar.var lambda = DollarFactory.fromLambda(v -> {
-                try {
-                    return function.map(lhs, rhs);
-                } catch (AssertionError e) {
-                    return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-                } catch (DollarScriptException e) {
-                    return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-                } catch (Exception e) {
-                    return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-                }
-            });
-
-            //Wire up the reactive parts
-            lhs.$listen(i -> {
-                lambda.$notify();
-                return i;
-            });
-            rhs.$listen(i -> {
-                lambda.$notify();
-                return i;
-            });
-
-            return lambda;
-        } catch (AssertionError e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-        } catch (DollarScriptException e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
-        } catch (Exception e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, source.get(), e);
+        if (immediate) {
+            return function.map(lhs, rhs);
         }
+        //Lazy evaluation
+        return wrapReactiveBinary(scope, lhs, rhs, () -> function.map(lhs, rhs));
     }
 
     @Override

@@ -36,7 +36,6 @@ public class SubscriptOperator implements Map<Object[], Map<? super var, ? exten
                 return DollarFactory.fromLambda(i -> lhs.$((var) rhs[0], rhs[1]));
             } else {
                 return DollarScriptSupport.wrapReactiveBinary(scope,
-                                                              "",
                                                               lhs,
                                                               (var) rhs[0],
                                                               () -> lhs.$(((var) rhs[0])));
