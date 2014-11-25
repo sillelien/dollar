@@ -27,11 +27,21 @@ import static me.neilellis.dollar.DollarStatic.$void;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class Execution {
+
+
     public static ForkJoinPool forkJoinPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors() * 8);
 
     private static ExecutorService
             backgroundExecutorService =
             Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            backgroundExecutorService.shutdown();
+            forkJoinPool.shutdown();
+        }));
+
+    }
 
     public static Future<var> executeInBackground(Pipeable pipe) {
         return backgroundExecutorService.submit(() -> pipe.pipe($void()));
