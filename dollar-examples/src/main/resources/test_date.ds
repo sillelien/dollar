@@ -32,8 +32,6 @@ fortnight := ($1 * 14)
 
 @@ void|"Hello"
 
-min ([1,2,3,4])
-
 
 dates := [ date(),{sleep 4; time()},date() ]
 
