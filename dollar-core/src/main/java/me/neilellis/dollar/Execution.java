@@ -17,10 +17,11 @@
 package me.neilellis.dollar;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 
+import static java.lang.Runtime.getRuntime;
+import static java.util.concurrent.Executors.newFixedThreadPool;
 import static me.neilellis.dollar.DollarStatic.$void;
 
 /**
@@ -28,22 +29,36 @@ import static me.neilellis.dollar.DollarStatic.$void;
  */
 public class Execution {
 
+    public static ForkJoinPool forkJoinPool;
 
-    public static ForkJoinPool forkJoinPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors() * 8);
-
-    private static ExecutorService
-            backgroundExecutorService =
-            Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    private static ExecutorService backgroundExecutor;
 
     static {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            backgroundExecutorService.shutdown();
-            forkJoinPool.shutdown();
-        }));
+        init();
+    }
+
+    static {
+        getRuntime().addShutdownHook(new Thread(Execution::shutdown));
 
     }
 
+    public static void shutdown() {
+        backgroundExecutor.shutdownNow();
+        forkJoinPool.shutdownNow();
+    }
+
+    public static void restart() {
+        backgroundExecutor.shutdown();
+        forkJoinPool.shutdown();
+        init();
+    }
+
+    public static void init() {
+        forkJoinPool = new ForkJoinPool(getRuntime().availableProcessors() * 8);
+        backgroundExecutor = newFixedThreadPool(getRuntime().availableProcessors());
+    }
+
     public static Future<var> executeInBackground(Pipeable pipe) {
-        return backgroundExecutorService.submit(() -> pipe.pipe($void()));
+        return backgroundExecutor.submit(() -> pipe.pipe($void()));
     }
 }
