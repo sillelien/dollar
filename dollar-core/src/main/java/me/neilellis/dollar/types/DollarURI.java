@@ -69,14 +69,6 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $get(@NotNull String key) {
-        assertRunning();
-
-        return handler.get(DollarStatic.$(key));
-    }
-
-    @NotNull
-    @Override
     public <R> R $() {
         return (R) uri;
     }
@@ -106,6 +98,14 @@ public class DollarURI extends AbstractDollar {
         return DollarStatic.$(false);
     }
 
+    @NotNull
+    @Override
+    public var $(@NotNull String key) {
+        assertRunning();
+
+        return handler.get(DollarStatic.$(key));
+    }
+
     @Override
     public var $has(@NotNull String key) {
         assertRunning();
@@ -129,17 +129,17 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of();
-    }
-
-    @NotNull
-    @Override
     public var $rm(@NotNull String key) {
         assertRunning();
 
         return handler.remove(DollarStatic.$(key));
 
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of();
     }
 
     @Override
@@ -207,10 +207,25 @@ public class DollarURI extends AbstractDollar {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
+    @Override
+    public int compareTo(var o) {
+        return Comparator.<String>naturalOrder().compare(uri, o.toString());
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
     @NotNull
     @Override
     public Integer I(@NotNull String key) {
         return 0;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
     }
 
     @Override
@@ -220,14 +235,29 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
+    public boolean isTruthy() {
+        return handler != null;
+    }
+
+    @Override
     public var $drain() {
         assertRunning();
         return handler.drain();
     }
 
     @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
     public String $listen(Pipeable pipe, String key) {
         return $listen(pipe);
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
     }
 
     @Override
@@ -289,39 +319,10 @@ public class DollarURI extends AbstractDollar {
         return true;
     }
 
-    @Override
-    public int compareTo(var o) {
-        return Comparator.<String>naturalOrder().compare(uri, o.toString());
-    }
-
-    @Override
-    public boolean isBoolean() {
-        return false;
-    }
 
     @Override
     public String S() {
         return uri;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean isTruthy() {
-        return handler != null;
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
     }
 
 

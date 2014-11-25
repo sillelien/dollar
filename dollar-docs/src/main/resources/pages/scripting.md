@@ -307,6 +307,35 @@ Dollar supports a decimal date system where each day is 1.0. This means it's pos
 .: date() / "1.0" is DECIMAL
 ```
 
+Components of the date can be accessed using the subscript operators:
+
+```dollar
+@@ date().DAY_OF_WEEK
+
+@@ date()['DAY_OF_YEAR']=1
+```
+
+Valid values are those from `java.time.temporal.ChronoField`
+
+```
+NANO_OF_SECOND, NANO_OF_DAY, MICRO_OF_SECOND, MICRO_OF_DAY, MILLI_OF_SECOND, MILLI_OF_DAY, SECOND_OF_MINUTE, SECOND_OF_DAY, MINUTE_OF_HOUR, MINUTE_OF_DAY, HOUR_OF_AMPM, CLOCK_HOUR_OF_AMPM, HOUR_OF_DAY, CLOCK_HOUR_OF_DAY, AMPM_OF_DAY, DAY_OF_WEEK, ALIGNED_DAY_OF_WEEK_IN_MONTH, ALIGNED_DAY_OF_WEEK_IN_YEAR, DAY_OF_MONTH, DAY_OF_YEAR, EPOCH_DAY, ALIGNED_WEEK_OF_MONTH, ALIGNED_WEEK_OF_YEAR, MONTH_OF_YEAR, PROLEPTIC_MONTH, YEAR_OF_ERA, YEAR, ERA, INSTANT_SECONDS, OFFSET_SECONDS
+```
+
+As you can see we can do date arithmetic, but thanks to another DollarScript feature anything that can be specified as xxx(i) can also be written i xxx (where i is an integer or decimal and xxx is an identifier). So we can add days hours and seconds to the date.
+
+```dollar
+@@ date() + 1 day
+@@ date() + 1 hour
+@@ date() + 1 sec
+```
+
+Those values are built in, but we can easily define them ourselves.
+
+```dollar
+fortnight := ($1 * 14)
+
+@@ date() + 1 fortnight
+```
 
 ###Constraints
 
@@ -705,13 +734,13 @@ You cannot reassign a variable from a different thread, so they are readonly fro
 
 
 ###Parallel &amp; Serial Operators
-The parallel prefix operator `(p)` or `parallel` causes the right hand side expression to be evaluated in parallel, it's partner the serial operator `(s)` or `serial` forces serial evaluation even if the current expression is being evaluated in parallel.
+The parallel operator `|:|` or `parallel` causes the right hand side expression to be evaluated in parallel, it's partner the serial operator `|..|` or `serial` forces serial evaluation even if the current expression is being evaluated in parallel.
 
 ```dollar
 
 testList := [ time(), {sleep(1);time();}, time() ];
-a= testList;
-b= parallel testList;
+a= |..| testList;
+b= |:| testList;
 //Test different execution orders
 .: a[2] >= a[1]
 .: b[2] < b[1]
@@ -721,7 +750,7 @@ As you can see the order of evaluation of lists and maps **but not line blocks**
 
 ###Fork
 
-The fork operator will cause an expression to be evaluated in the background and any reference to the forked expression will block until a value is ready.
+The fork operator `-<` or `fork` will cause an expression to be evaluated in the background and any reference to the forked expression will block until a value is ready.
 
 ```dollar
 sleepTime := {@@ "Background Sleeping";sleep 4; @@ "Background Finished Sleeping";time()}

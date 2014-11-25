@@ -120,7 +120,7 @@ public class DollarMap extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $get(@NotNull String key) {
+    public var $(@NotNull String key) {
         return DollarFactory.fromValue(map.get(key), errors());
     }
 
@@ -172,7 +172,7 @@ public class DollarMap extends AbstractDollar implements var {
     @NotNull
     @Override
     public String S(@NotNull String key) {
-        return $get(key).S();
+        return $(key).S();
     }
 
     @NotNull
@@ -277,14 +277,27 @@ public class DollarMap extends AbstractDollar implements var {
 
     @NotNull
     @Override
+    public var $mimeType() {
+        return DollarStatic.$("application/json");
+    }
+
+    @NotNull
+    @Override
     public ImmutableMap<String, var> $map() {
 
         return ImmutableMap.<String, var>copyOf(map);
     }
 
+    @NotNull
     @Override
-    public Integer I(@NotNull String key) {
-        return map.get(key).I();
+    public Stream<var> $stream(boolean parallel) {
+        return split().values().stream();
+    }
+
+    @NotNull
+    @Override
+    public java.util.stream.Stream<Map.Entry<String, var>> kvStream() {
+        return split().entrySet().stream();
     }
 
     @NotNull
@@ -293,10 +306,21 @@ public class DollarMap extends AbstractDollar implements var {
         return json().toString();
     }
 
-    @NotNull
     @Override
-    public var $mimeType() {
-        return DollarStatic.$("application/json");
+    public String $listen(Pipeable pipe) {
+        String key = UUID.randomUUID().toString();
+        $listen(pipe, key);
+        return key;
+    }
+
+    @Override
+    public String $listen(Pipeable pipe, String key) {
+        for (var v : map.values()) {
+            //Join the children to this, so if the children change
+            //listeners to this get the latest value of this.
+            v.$listen(i -> this, key);
+        }
+        return key;
     }
 
     @Override
@@ -317,10 +341,17 @@ public class DollarMap extends AbstractDollar implements var {
         }
     }
 
-    @NotNull
     @Override
-    public Stream<var> $stream(boolean parallel) {
-        return split().values().stream();
+    public var $notify() {
+        for (var v : map.values()) {
+            v.$notify();
+        }
+        return this;
+    }
+
+    @Override
+    public Integer I(@NotNull String key) {
+        return map.get(key).I();
     }
 
     @Override
@@ -329,17 +360,19 @@ public class DollarMap extends AbstractDollar implements var {
         return null;
     }
 
-    @NotNull
     @Override
-    public java.util.stream.Stream<Map.Entry<String, var>> kvStream() {
-        return split().entrySet().stream();
+    public boolean isMap() {
+        return true;
     }
 
+    @Override public boolean isPair() {
+        return map.size() == 1;
+    }
+
+    @NotNull
     @Override
-    public String $listen(Pipeable pipe) {
-        String key = UUID.randomUUID().toString();
-        $listen(pipe, key);
-        return key;
+    public var eval(String label, @NotNull DollarEval lambda) {
+        return lambda.eval($copy());
     }
 
     @NotNull
@@ -348,14 +381,15 @@ public class DollarMap extends AbstractDollar implements var {
         return 0;
     }
 
+    @NotNull
     @Override
-    public String $listen(Pipeable pipe, String key) {
-        for (var v : map.values()) {
-            //Join the children to this, so if the children change
-            //listeners to this get the latest value of this.
-            v.$listen(i -> this, key);
-        }
-        return key;
+    public var $copy() {
+        return DollarFactory.wrap(new DollarMap(errors(), map));
+    }
+
+    @Override
+    public int compareTo(var o) {
+        return Comparator.<var>naturalOrder().<var>compare(this, o);
     }
 
     @Override
@@ -369,11 +403,13 @@ public class DollarMap extends AbstractDollar implements var {
     }
 
     @Override
-    public var $notify() {
-        for (var v : map.values()) {
-            v.$notify();
-        }
-        return this;
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
     }
 
     @Nullable
@@ -386,10 +422,14 @@ public class DollarMap extends AbstractDollar implements var {
         return object;
     }
 
-    @NotNull
     @Override
-    public var eval(String label, @NotNull DollarEval lambda) {
-        return lambda.eval($copy());
+    public boolean isTruthy() {
+        return !map.isEmpty();
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
     }
 
     @NotNull
@@ -403,7 +443,7 @@ public class DollarMap extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean isMap() {
+    public boolean isNeitherTrueNorFalse() {
         return true;
     }
 
@@ -412,20 +452,13 @@ public class DollarMap extends AbstractDollar implements var {
         return false;
     }
 
-    @Override public boolean isPair() {
-        return map.size() == 1;
-    }
+
 
     @Override
     public Number number(@NotNull String key) {
         return map.get(key).N();
     }
 
-    @NotNull
-    @Override
-    public var $copy() {
-        return DollarFactory.wrap(new DollarMap(errors(), map));
-    }
 
     @NotNull
     @Override
@@ -433,10 +466,6 @@ public class DollarMap extends AbstractDollar implements var {
         return new JSONObject(varMapToMap());
     }
 
-    @Override
-    public int compareTo(var o) {
-        return Comparator.<var>naturalOrder().<var>compare(this, o);
-    }
 
     @NotNull
     @Override
@@ -444,10 +473,6 @@ public class DollarMap extends AbstractDollar implements var {
         return new JsonObject(varMapToMap());
     }
 
-    @Override
-    public boolean isBoolean() {
-        return false;
-    }
 
     @Override
     public ImmutableList<String> strings() {
@@ -460,29 +485,10 @@ public class DollarMap extends AbstractDollar implements var {
         return ImmutableList.copyOf(values);
     }
 
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
 
     @Override
     public Map<String, Object> toMap() {
         return varMapToMap();
-    }
-
-    @Override
-    public boolean isTruthy() {
-        return !map.isEmpty();
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
     }
 
 }

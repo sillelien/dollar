@@ -98,10 +98,10 @@ public class GithubModuleResolver implements ModuleResolver {
         } else {
             final File moduleFile = new File(dir, "module.json");
             var module = DollarStatic.$(new String(Files.readAllBytes(moduleFile.toPath())));
-            mainFile = new File(dir, module.$get("main").$S());
+            mainFile = new File(dir, module.$("main").$S());
             content = new String(Files.readAllBytes(mainFile.toPath()));
             classLoader =
-                    DependencyRetriever.retrieve(module.$get("dependencies")
+                    DependencyRetriever.retrieve(module.$("dependencies")
                                                        .toList()
                                                        .stream()
                                                        .map(TypeAware::$S)

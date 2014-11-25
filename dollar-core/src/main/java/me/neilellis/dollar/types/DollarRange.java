@@ -59,7 +59,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $get(@NotNull String key) {
+    public var $(@NotNull String key) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 
@@ -189,6 +189,11 @@ public class DollarRange extends AbstractDollar {
         return null;
     }
 
+    @Override
+    public boolean isList() {
+        return true;
+    }
+
     @NotNull
     @Override
     public ImmutableMap<String, var> $map() {
@@ -197,35 +202,8 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public boolean isList() {
-        return true;
-    }
-
-    @NotNull
-    @Override
-    public String S() {
-        return String.format("%s..%s", range.lowerEndpoint(), range.upperEndpoint());
-    }
-
-    @Override
     public int hashCode() {
         return range.hashCode();
-    }
-
-    @Override
-    public var $as(Type type) {
-        switch (type) {
-            case LIST:
-                return DollarStatic.$(toList());
-            case MAP:
-                return DollarStatic.$(toMap());
-            case STRING:
-                return DollarFactory.fromStringValue(S());
-            case VOID:
-                return DollarStatic.$void();
-            default:
-                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
-        }
     }
 
     @Override
@@ -246,9 +224,10 @@ public class DollarRange extends AbstractDollar {
 
     }
 
+    @NotNull
     @Override
-    public Integer I() {
-        return null;
+    public String S() {
+        return String.format("%s..%s", range.lowerEndpoint(), range.upperEndpoint());
     }
 
     @Override
@@ -270,16 +249,53 @@ public class DollarRange extends AbstractDollar {
         return false;
     }
 
-    @NotNull
     @Override
-    public Number N() {
-        return range.upperEndpoint().L() - range.lowerEndpoint().L();
+    public var $as(Type type) {
+        switch (type) {
+            case LIST:
+                return DollarStatic.$(toList());
+            case MAP:
+                return DollarStatic.$(toMap());
+            case STRING:
+                return DollarFactory.fromStringValue(S());
+            case VOID:
+                return DollarStatic.$void();
+            default:
+                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
+        }
     }
 
     @Override
     public boolean isTrue() {
         return false;
     }
+
+    @Override
+    public boolean isTruthy() {
+        return !range.isEmpty();
+    }
+
+    @Override
+    public Integer I() {
+        return null;
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
+    }
+
+    @NotNull
+    @Override
+    public Number N() {
+        return range.upperEndpoint().L() - range.lowerEndpoint().L();
+    }
+
 
     @Override
     public boolean is(Type... types) {
@@ -291,10 +307,6 @@ public class DollarRange extends AbstractDollar {
         return false;
     }
 
-    @Override
-    public boolean isTruthy() {
-        return !range.isEmpty();
-    }
 
     @NotNull
     @Override
@@ -302,10 +314,6 @@ public class DollarRange extends AbstractDollar {
         return new JsonObject();
     }
 
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
 
     @NotNull
     @Override
@@ -319,10 +327,6 @@ public class DollarRange extends AbstractDollar {
         return ImmutableList.copyOf(values);
     }
 
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
 
     @Override
     public boolean isVoid() {

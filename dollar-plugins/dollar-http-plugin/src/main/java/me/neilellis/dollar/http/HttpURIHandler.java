@@ -204,19 +204,19 @@ public class HttpURIHandler implements URIHandler {
                         .$($("body"), "");
 //                session.getInputStream().close();
                 var out = consumer.pipe(in);
-                var body = out.$get("body");
+                var body = out.$("body");
                 NanoHttpd.Response response = new NanoHttpd.Response(new NanoHttpd.Response.IStatus() {
                     @Override
                     public int getRequestStatus() {
-                        return out.$get("status").$default(200).I();
+                        return out.$("status").$default(200).I();
                     }
 
                     @Override
                     public String getDescription() {
-                        return out.$get("reason").$default("").S();
+                        return out.$("reason").$default("").S();
                     }
                 }, body.$mimeType().$S(), body.S());
-                out.$get("headers").$map().forEach((s, v) -> response.addHeader(s, v.$S()));
+                out.$("headers").$map().forEach((s, v) -> response.addHeader(s, v.$S()));
                 response.setData(body.toStream());
                 return response;
             } catch (Exception e) {

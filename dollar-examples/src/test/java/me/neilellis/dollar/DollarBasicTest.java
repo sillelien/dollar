@@ -92,9 +92,9 @@ public class DollarBasicTest {
                                 .$("number", 343)
                 );
         var result = profile.eval("getWeight", (var value) -> value.$("weight", "none of your business"));
-        String weight = result.$get("weight").S();
+        String weight = result.$("weight").S();
         assertEquals(weight, "none of your business");
-        assertTrue("Profile's state was mutated!!!", profile.$get("weight").isVoid());
+        assertTrue("Profile's state was mutated!!!", profile.$("weight").isVoid());
     }
 
     @Test
@@ -104,12 +104,12 @@ public class DollarBasicTest {
         Map submap = new HashMap();
         submap.put("thing", 1);
         map.put("sub", submap);
-        assertEquals("bar", $(map).$get("foo").$());
+        assertEquals("bar", $(map).$("foo").$());
         assertEquals("bar", $(map).toMap().get("foo"));
-        assertEquals(1L, $(map).$get("sub").toMap().get("thing"));
-        assertEquals("1", $(map).$get("sub").$get("thing").S());
-        assertEquals("{\"thing\":1}", $(map).$get("sub").S());
-        assertEquals(1, $(map).$get("sub").I("thing").longValue());
+        assertEquals(1L, $(map).$("sub").toMap().get("thing"));
+        assertEquals("1", $(map).$("sub").$("thing").S());
+        assertEquals("{\"thing\":1}", $(map).$("sub").S());
+        assertEquals(1, $(map).$("sub").I("thing").longValue());
     }
 
     @Test
@@ -132,19 +132,19 @@ public class DollarBasicTest {
         assertEquals("male", profile.$eval("$.gender").$());
         assertEquals(10, (int) profile.$eval("5*2").I());
         assertEquals(10, (int) $eval("10").I());
-        assertEquals($("{\"name\":\"Dave\"}").$get("name").S(), "Dave");
-        assertEquals($().$eval("({name:'Dave'})").$get("name").S(), "Dave");
+        assertEquals($("{\"name\":\"Dave\"}").$("name").S(), "Dave");
+        assertEquals($().$eval("({name:'Dave'})").$("name").S(), "Dave");
     }
 
     @Test
     public void testNull() {
-        assertNull($((Object) null).$("foo", "bar").$get("foo").$());
+        assertNull($((Object) null).$("foo", "bar").$("foo").$());
         assertTrue($((Object) null).isVoid());
-        assertTrue($((Object) null).$get("bar").isVoid());
+        assertTrue($((Object) null).$("bar").isVoid());
         assertNull($((Object) null).$());
-        assertFalse($((Object) null).$get("bar").$has("foo").isTrue());
+        assertFalse($((Object) null).$("bar").$has("foo").isTrue());
         assertFalse($((Object) null).$has("foo").isTrue());
-        assertTrue($((Object) null).$("foo", "bar").$get("foo").isVoid());
+        assertTrue($((Object) null).$("foo", "bar").$("foo").isVoid());
         assertEquals("twasnull", $((Object) null).$void(() -> $("twasnull")).S());
     }
 
@@ -152,7 +152,7 @@ public class DollarBasicTest {
     @Test
     public void testStringCreation() {
         System.out.println($("{\"foo\":\"bar\"}"));
-        assertEquals("bar", $("{\"foo\":\"bar\"}").$get("foo").$());
+        assertEquals("bar", $("{\"foo\":\"bar\"}").$("foo").$());
         assertEquals("bar", $("{\"foo\":\"bar\"}").json().getString("foo"));
     }
 

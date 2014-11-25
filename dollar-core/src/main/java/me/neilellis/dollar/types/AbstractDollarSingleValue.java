@@ -49,11 +49,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @NotNull
-    public var $get(@NotNull String key) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
-    }
-
-    @NotNull
     @Override
     public var $(@NotNull Number n) {
         if (n.longValue() != 0) {
@@ -79,6 +74,11 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return DollarStatic.$(this.value.equals(value));
     }
 
+    @NotNull
+    public var $(@NotNull String key) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    }
+
     public var $has(@NotNull String key) {
         return DollarStatic.$(S().equals(key));
     }
@@ -86,7 +86,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     @NotNull
     @Override
     public String S(@NotNull String key) {
-        return $get(key).S();
+        return $(key).S();
     }
 
     @NotNull

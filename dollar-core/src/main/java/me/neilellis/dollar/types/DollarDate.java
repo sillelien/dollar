@@ -22,42 +22,77 @@ import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoField;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
-import static java.lang.Math.abs;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DollarDate extends AbstractDollarSingleValue<Long> {
+public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
+
+    public static final double ONE_DAY_MILLIS = 24.0 * 60.0 * 60.0 * 1000.0;
+    public static final double ONE_DAY_SECONDS = 24.0 * 60.0 * 60.0;
 
     public DollarDate(@NotNull List<Throwable> errors, @NotNull Long value) {
+        super(errors, LocalDateTime.ofInstant(Instant.ofEpochMilli(value), ZoneId.systemDefault()));
+    }
+
+    public DollarDate(List<Throwable> errors, LocalDateTime value) {
         super(errors, value);
     }
 
     @NotNull
     @Override
-    public Date $() {
-        return new Date(value);
+    public String $() {
+        return value.toString();
+    }
+
+    @NotNull @Override public var $(@NotNull var key, Object v) {
+        return DollarFactory.fromValue(
+                value.with(ChronoField.valueOf(key.S().toUpperCase()), DollarFactory.fromValue(v).L()), errors(),
+                key.errors());
+    }
+
+    @NotNull @Override public var $(@NotNull String key) {
+        return DollarFactory.fromValue(value.get(ChronoField.valueOf(key.toUpperCase())), errors());
+    }
+
+    @NotNull
+    @Override
+    public var $minus(var newValue) {
+        return DollarFactory.fromValue(value.minusSeconds((long) (ONE_DAY_SECONDS * newValue.D())), errors(),
+                                       newValue.errors());
+
+    }
+
+    @NotNull
+    @Override
+    public var $plus(var newValue) {
+        return DollarFactory.fromValue(value.plusSeconds((long) (ONE_DAY_SECONDS * newValue.D())), errors(),
+                                       newValue.errors());
+
+    }
+
+    @NotNull @Override public String S() {
+        return value.toString();
     }
 
     @NotNull
     @Override
     public var $abs() {
-        return DollarFactory.fromValue(new Date(abs(value)),errors());
+        return this;
     }
 
     @NotNull
     @Override
     public var $dec(@NotNull var amount) {
-        return DollarFactory.fromValue( value.longValue() - asLong(amount.D()),errors(),amount.errors());
-    }
-
-    private long asLong(double d) {
-        return (long) (d * (24.0 * 60.0 * 60.0 * 1000.0));
+        return DollarFactory.fromValue(value.plusSeconds((long) (ONE_DAY_SECONDS * amount.D())), errors(),
+                                       amount.errors());
     }
 
     @NotNull
@@ -69,38 +104,39 @@ public class DollarDate extends AbstractDollarSingleValue<Long> {
     @NotNull
     @Override
     public var $inc(@NotNull var amount) {
-        return DollarFactory.fromValue(value.longValue() + asLong(amount.D()),errors(),amount.errors());
+        return DollarFactory.fromValue(value.minusSeconds((long) (ONE_DAY_SECONDS * amount.D())), errors(),
+                                       amount.errors());
     }
 
     @NotNull
     @Override
     public var $modulus(@NotNull var v) {
-        return DollarFactory.fromValue(asDecimal() % v.D(),errors(),v.errors());
+        return DollarFactory.fromValue(asDecimal() % v.D(), errors(), v.errors());
     }
 
     @NotNull
     @Override
     public var $multiply(@NotNull var v) {
-        return DollarFactory.fromValue(asDecimal() * v.D(),errors(),v.errors());
+        return DollarFactory.fromValue(asDecimal() * v.D(), errors(), v.errors());
     }
 
     @NotNull
     @Override
     public var $negate() {
-        return DollarFactory.fromValue(-asDecimal(),errors());
+        return DollarFactory.fromValue(-asDecimal(), errors());
     }
 
     private Double asDecimal() {
-        return value.doubleValue() / (24 * 60 * 60 * 1000);
+        return ((double) value.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()) / (24 * 60 * 60 * 1000);
     }
 
     @Override
     public var $as(Type type) {
         switch (type) {
             case BOOLEAN:
-                return DollarStatic.$(value != 0);
+                return DollarStatic.$(true);
             case STRING:
-                return DollarStatic.$(new Date(value).toString());
+                return DollarStatic.$(value.toString());
             case LIST:
                 return DollarStatic.$(Arrays.asList(this));
             case MAP:
@@ -108,7 +144,7 @@ public class DollarDate extends AbstractDollarSingleValue<Long> {
             case DECIMAL:
                 return DollarStatic.$(asDecimal());
             case INTEGER:
-                return DollarStatic.$(asDecimal());
+                return DollarStatic.$(asDecimal().longValue());
             case VOID:
                 return DollarStatic.$void();
             default:
@@ -120,13 +156,13 @@ public class DollarDate extends AbstractDollarSingleValue<Long> {
     @Override
     @NotNull
     public Integer I() {
-        return value.intValue();
+        return asDecimal().intValue();
     }
 
     @NotNull
     @Override
     public Number N() {
-        return value;
+        return asDecimal();
     }
 
     @Override
@@ -142,7 +178,7 @@ public class DollarDate extends AbstractDollarSingleValue<Long> {
     @Override
     @NotNull
     public Number number(@NotNull String key) {
-        return value;
+        return asDecimal();
     }
 
     @NotNull
@@ -187,31 +223,12 @@ public class DollarDate extends AbstractDollarSingleValue<Long> {
     }
 
     public boolean $equals(var other) {
-            return Objects.equals(toString(), other.toString());
+        return Objects.equals(toString(), other.toString());
     }
 
     @Override
     public int compareTo(var o) {
         return $minus(o).I();
-    }
-
-    @NotNull
-    @Override
-    public var $minus(var newValue) {
-        return DollarFactory.fromValue(new Date(value - asLong(newValue.D())), errors(),
-                                       newValue.errors());
-
-    }
-
-    @NotNull
-    @Override
-    public var $plus(var newValue) {
-                return DollarFactory.fromValue(new Date(value + asLong(newValue.D())), errors(), newValue.errors());
-
-    }
-
-    @NotNull @Override public String S() {
-        return new Date(value).toString();
     }
 
     @Override
@@ -226,7 +243,7 @@ public class DollarDate extends AbstractDollarSingleValue<Long> {
 
     @Override
     public boolean isTruthy() {
-        return value.intValue() != 0;
+        return true;
     }
 
     @Override
@@ -238,6 +255,12 @@ public class DollarDate extends AbstractDollarSingleValue<Long> {
     public boolean isNeitherTrueNorFalse() {
         return true;
     }
+
+    private long asLong(double d) {
+        return (long) (d * ONE_DAY_MILLIS);
+    }
+
+
 
 
 }

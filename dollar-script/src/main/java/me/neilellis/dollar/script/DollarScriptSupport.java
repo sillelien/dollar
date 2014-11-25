@@ -34,12 +34,18 @@ public class DollarScriptSupport {
 
 
     public static var wrapReactiveUnary(ScriptScope scope, var lhs, Callable<var> callable) {
+        if (scope == null) {
+            throw new NullPointerException();
+        }
         final var lambda = toLambda(scope, callable);
         lhs.$listen(i -> lambda.$notify());
         return lambda;
     }
 
     private static var toLambda(ScriptScope scope, Callable<var> callable) {
+        if (scope == null) {
+            throw new NullPointerException();
+        }
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},

@@ -33,14 +33,21 @@ public class UnaryOp implements Unary<var>, Operator {
 
 
     public UnaryOp(ScriptScope scope, Map<var, var> function) {
+        if (scope == null) {
+            throw new NullPointerException();
+        }
         this.scope = scope;
         this.function = function;
         this.immediate = false;
     }
 
-    public UnaryOp(boolean immediate, Map<var, var> function) {
+    public UnaryOp(ScriptScope scope, boolean immediate, Map<var, var> function) {
+        if (scope == null) {
+            throw new NullPointerException();
+        }
         this.immediate = immediate;
         this.function = function;
+        this.scope = scope;
     }
 
     @Override

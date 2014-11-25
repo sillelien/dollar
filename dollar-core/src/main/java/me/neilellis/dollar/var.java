@@ -44,15 +44,6 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @NotNull
     @Guarded(ChainGuard.class) var $(@NotNull var key, @Nullable Object value);
 
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    default var $(@NotNull String key) {
-        return $get(key);
-    }
-
-    @NotNull var $get(@NotNull String key);
-
     /**
      * Returns a {@link me.neilellis.dollar.json.JsonObject}, JsonArray or primitive type such that it can be added to
      * either a {@link me.neilellis.dollar.json.JsonObject} or JsonArray.
@@ -100,10 +91,19 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @Guarded(NotNullParametersGuard.class) var $default(Object o);
 
     @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
+    default var $get(@NotNull String key) {
+        return $(key);
+    }
+
+    @NotNull var $(@NotNull String key);
+
+    @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
     default var $get(@NotNull Object key) {
-        return $get(String.valueOf(key));
+        return $(String.valueOf(key));
     }
 
     /**
@@ -136,7 +136,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @Nullable
     @Guarded(NotNullParametersGuard.class)
     default String S(@NotNull String key) {
-        return $get(key).S();
+        return $(key).S();
     }
 
     /**

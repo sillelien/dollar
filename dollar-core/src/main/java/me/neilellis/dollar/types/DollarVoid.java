@@ -71,7 +71,7 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $get(@NotNull String key) {
+    public var $(@NotNull String key) {
         return $copy();
     }
 
@@ -191,11 +191,6 @@ public class DollarVoid extends AbstractDollar implements var {
         return this;
     }
 
-    @Override
-    public Integer I(@NotNull String key) {
-        return 0;
-    }
-
     @NotNull
     @Override
     public Stream<var> $stream(boolean parallel) {
@@ -214,6 +209,11 @@ public class DollarVoid extends AbstractDollar implements var {
         return $copy();
     }
 
+    @Override
+    public Integer I(@NotNull String key) {
+        return 0;
+    }
+
     @NotNull
     @Override
     public var eval(String label, @NotNull DollarEval lambda) {
@@ -226,12 +226,6 @@ public class DollarVoid extends AbstractDollar implements var {
         return $copy();
     }
 
-    @NotNull
-    @Override
-    public var $eval(@NotNull String js) {
-        return $copy();
-    }
-
     @Override
     public int hashCode() {
         return 0;
@@ -240,6 +234,12 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public boolean equals(@Nullable Object obj) {
         return (obj instanceof var && ((var) obj).$() == null) || obj == null;
+    }
+
+    @NotNull
+    @Override
+    public var $eval(@NotNull String js) {
+        return $copy();
     }
 
     @NotNull

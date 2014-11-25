@@ -13,5 +13,38 @@
 .: date() * 10 is DECIMAL
 .: date() / 10 is DECIMAL
 
+@@ date().DAY_OF_WEEK
+
+@@ date()['DAY_OF_YEAR']=1
+
+fortnight := ($1 * 14)
+
+@@ date() + 1 day
+@@ date() + 1 hour
+@@ date() + 1 sec
+@@ date() + 1 fortnight
+
+
+[1,2,3,4] -> sort -> min
+[1,2,3,4] sort min
+
+1 hour
+
+@@ void|"Hello"
+
+min ([1,2,3,4])
+
+
+dates := [ date(),{sleep 4; time()},date() ]
+
+@@ |..| dates
+@@ |:| dates
+
+s= -< dates
+@@ "Hello World"
+@@ s
+
+
+
 
 

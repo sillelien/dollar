@@ -32,7 +32,7 @@ public class Scheduler {
     private static ScheduledExecutorService scheduler = new ScheduledThreadPoolExecutor(3);
     private static ConcurrentHashMap<String, ScheduledFuture> scheduledTasks = new ConcurrentHashMap<>();
 
-    public static String schedule(Pipeable task, long duration, String timeUnit) {
+    public static String schedule(Pipeable task, long duration) {
 
         String id = UUID.randomUUID().toString();
         scheduledTasks.put(id, scheduler.scheduleAtFixedRate(() -> {
@@ -41,7 +41,7 @@ public class Scheduler {
             } catch (Exception e) {
                 DollarStatic.logAndRethrow(e);
             }
-        }, duration, duration, convertToTimeUnit(timeUnit)));
+        }, duration, duration, TimeUnit.MILLISECONDS));
         return id;
     }
 

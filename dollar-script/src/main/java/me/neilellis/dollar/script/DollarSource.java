@@ -30,11 +30,17 @@ public class DollarSource extends DollarLambda implements SourceAware {
 
     public DollarSource(Pipeable lambda, ScriptScope scope) {
         super(lambda);
+        if (scope == null) {
+            throw new NullPointerException();
+        }
         this.scope = scope;
     }
 
     public DollarSource(Pipeable lambda, ScriptScope scope, boolean fixable) {
         super(lambda, fixable);
+        if (scope == null) {
+            throw new NullPointerException();
+        }
         this.scope = scope;
     }
 

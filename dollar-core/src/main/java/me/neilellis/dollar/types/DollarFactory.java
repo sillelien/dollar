@@ -43,6 +43,7 @@ import spark.QueryParamsMap;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -134,6 +135,9 @@ public class DollarFactory {
         }
         if (o instanceof Date) {
             return wrap(new DollarDate(errors, ((Date) o).getTime()));
+        }
+        if (o instanceof LocalDateTime) {
+            return wrap(new DollarDate(errors, (LocalDateTime) o));
         }
         if (o instanceof Double) {
             return wrap(new DollarDecimal(errors, (Double) o));

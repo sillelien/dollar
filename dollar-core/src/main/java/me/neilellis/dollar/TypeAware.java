@@ -143,6 +143,7 @@ public interface TypeAware {
      * @return a Number or null if this operation is not applicable
      */
     @Nullable
+    @Deprecated
     Number number(@NotNull String key);
 
     /**

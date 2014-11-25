@@ -37,8 +37,8 @@ public class DollarLexer {
             KEYWORDS =
             Terminals.operators("out", "err", "debug", "fix", "causes", "when", "if", "then", "for", "each", "fail",
                                 "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default",
-                                "debug", "error", "filter", "sleep", "secs", "sec", "minute", "minutes", "hr", "hrs",
-                                "milli", "millis", "every", "until", "unless", "and", "or", "dispatch", "send", "give",
+                                "debug", "error", "filter", "sleep", "every", "until", "unless", "and", "or",
+                                "dispatch", "send", "give",
                                 "receive", "peek", "poll", "push", "pop", "publish", "subscribe", "emit", "drain",
                                 "all", "import", "reduce", "truthy", "is", "else", "const", "in", "true", "false",
                                 "yes", "no", "void", "error", "to", "from", "async", "stateless", "size", "as",
@@ -52,7 +52,7 @@ public class DollarLexer {
                                 "<*", "*|", "|*", "*|*", "|>", "<|", "&>", "<&", "?>", "<?", "?->", "<=>", "<$", "-_-",
                                 "::", "/", "%", "*", "&&", "||", "<--", "<++", "\u2357", "~", "?$?", "-:", "..", "?..?",
                                 "€", "@@", "<@", "@>", "#", "!?#*!", "?*", "(!)", "(>)", "(=)", "(~)", "(-)", "(+)",
-                                "(?)", "->?", "[p]", "[s]", "[f]");
+                                "(?)", "->?", "|:|", "|..|", "-<");
 
     static final Parser<?> TERMINATOR_SYMBOL = Parsers.or(OP("\n"), OP(";")).many1();
     static final Parser<?> COMMA_TERMINATOR = Parsers.sequence(OP(","), OP("\n").many());

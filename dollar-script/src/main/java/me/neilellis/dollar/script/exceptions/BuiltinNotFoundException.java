@@ -19,15 +19,15 @@ package me.neilellis.dollar.script.exceptions;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class VariableNotFoundException extends DollarScriptException {
+public class BuiltinNotFoundException extends DollarScriptException {
     private String variable;
 
-    public VariableNotFoundException(Throwable e) {
+    public BuiltinNotFoundException(Throwable e) {
         super(e);
     }
 
-    public VariableNotFoundException(String variable) {
-        super("Variable not found '" + variable + "'");
+    public BuiltinNotFoundException(String variable) {
+        super("Builtin not found '" + variable + "'");
         this.variable = variable;
     }
 }

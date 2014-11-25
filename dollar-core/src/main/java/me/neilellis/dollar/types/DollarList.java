@@ -92,17 +92,6 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $get(@NotNull String key) {
-        for (var var : list) {
-            if (var.$S().equals(key)) {
-                return var;
-            }
-        }
-        return DollarStatic.$void();
-    }
-
-    @NotNull
-    @Override
     public <R> R $() {
         return (R) jsonArray();
     }
@@ -128,6 +117,17 @@ public class DollarList extends AbstractDollar {
     @Override
     public var $containsValue(var value) {
         return DollarStatic.$(list.contains(fix(value, false)));
+    }
+
+    @NotNull
+    @Override
+    public var $(@NotNull String key) {
+        for (var var : list) {
+            if (var.$S().equals(key)) {
+                return var;
+            }
+        }
+        return DollarStatic.$void();
     }
 
     @Override
@@ -161,14 +161,14 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        return null;
+    public var $rm(@NotNull String value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $rm(@NotNull String value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+    public ImmutableMap<String, var> $map() {
+        return null;
     }
 
     @Override
@@ -223,12 +223,6 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableList<var> toList() {
-        return list;
-    }
-
-    @NotNull
-    @Override
     public var $modulus(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
     }
@@ -237,6 +231,12 @@ public class DollarList extends AbstractDollar {
     @Override
     public var $multiply(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> toList() {
+        return list;
     }
 
     @NotNull
@@ -320,11 +320,6 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public boolean isVoid() {
-        return false;
-    }
-
-    @Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
@@ -357,6 +352,11 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public boolean isVoid() {
+        return false;
+    }
+
+    @Override
     public boolean isBoolean() {
         return false;
     }
@@ -372,11 +372,6 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public Integer I() {
-        return $stream(false).collect(Collectors.summingInt((i) -> i.I()));
-    }
-
-    @Override
     public boolean isFalse() {
         return false;
     }
@@ -385,6 +380,16 @@ public class DollarList extends AbstractDollar {
     public boolean isNeitherTrueNorFalse() {
         return true;
     }
+
+
+    @Override
+    public Integer I() {
+        return $stream(false).collect(Collectors.summingInt((i) -> i.I()));
+    }
+
+
+
+
 
 
     @org.jetbrains.annotations.NotNull
