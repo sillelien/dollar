@@ -43,7 +43,7 @@ public class ListenOperator implements Binary<var>, Operator {
     public var map(var lhs, var rhs) {
         try {
 
-            return $(lhs.$listen(i -> scope.getDollarParser().inScope(scope, newScope -> {
+            return $(lhs.$listen(i -> scope.getDollarParser().inScope("listen", scope, newScope -> {
                 newScope.setParameter("1", i);
                 //todo: change to receive
                 return fix(rhs, false);

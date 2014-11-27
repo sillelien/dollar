@@ -37,6 +37,7 @@
         <module>dollar-maven-resolver-plugin</module>
         <module>dollar-github-resolver-plugin</module>
         <module>dollar-class-resolver-plugin</module>
+        <module>dollar-std-resources-plugin</module>
     </modules>
 
 

@@ -107,15 +107,15 @@ public class GithubModuleResolver implements ModuleResolver {
                                                        .map(TypeAware::$S)
                                                        .collect(Collectors.toList()));
         }
-        return (params) -> scope.getDollarParser().inScope(scope, newScope -> {
+        return (params) -> scope.getDollarParser().inScope("github-module", scope, newScope -> {
             try {
 
-                final ScriptScope moduleScope = new ScriptScope(uriWithoutScheme);
+
                 final ImmutableMap<String, var> paramMap = params.$map();
                 for (Map.Entry<String, var> entry : paramMap.entrySet()) {
-                    moduleScope.set(entry.getKey(), entry.getValue(), true, null);
+                    newScope.set(entry.getKey(), entry.getValue(), true, null, false);
                 }
-                return new DollarParser(classLoader, dir, mainFile).parse(moduleScope, content, false);
+                return new DollarParser(classLoader, dir, mainFile).parse(newScope, content, false);
             } catch (IOException e) {
                 return DollarStatic.logAndRethrow(e);
             }

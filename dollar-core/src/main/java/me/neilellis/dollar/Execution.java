@@ -16,9 +16,7 @@
 
 package me.neilellis.dollar;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 import static java.lang.Runtime.getRuntime;
 import static java.util.concurrent.Executors.newFixedThreadPool;
@@ -32,6 +30,7 @@ public class Execution {
     public static ForkJoinPool forkJoinPool;
 
     private static ExecutorService backgroundExecutor;
+    private static ScheduledExecutorService scheduledExecutor;
 
     static {
         init();
@@ -45,6 +44,7 @@ public class Execution {
     public static void forceShutdown() {
         backgroundExecutor.shutdownNow();
         forkJoinPool.shutdownNow();
+        scheduledExecutor.shutdownNow();
     }
 
     public static void restart() {
@@ -55,14 +55,20 @@ public class Execution {
     private static void shutdown() {
         backgroundExecutor.shutdown();
         forkJoinPool.shutdown();
+        scheduledExecutor.shutdown();
     }
 
     public static void init() {
         forkJoinPool = new ForkJoinPool(getRuntime().availableProcessors() * 8);
         backgroundExecutor = newFixedThreadPool(getRuntime().availableProcessors());
+        scheduledExecutor = Executors.newScheduledThreadPool(getRuntime().availableProcessors());
     }
 
     public static Future<var> executeInBackground(Pipeable pipe) {
         return backgroundExecutor.submit(() -> pipe.pipe($void()));
+    }
+
+    public static void schedule(long millis, Runnable runnable) {
+        scheduledExecutor.scheduleAtFixedRate(runnable, millis, millis, TimeUnit.MILLISECONDS);
     }
 }

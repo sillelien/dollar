@@ -38,7 +38,7 @@ public class WhileOperator implements Map<var, Map<? super var, ? extends var>> 
     }
 
     public Map<? super var, ? extends var> map(var lhs) {
-        return rhs -> DollarFactory.fromLambda(l -> parser.inScope(scope, newScope -> {
+        return rhs -> DollarFactory.fromLambda(l -> parser.inScope("while", scope, newScope -> {
             while (fix(lhs, false).isTrue()) {
                 fix(rhs, false);
             }

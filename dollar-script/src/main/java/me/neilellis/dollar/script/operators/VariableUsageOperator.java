@@ -18,7 +18,6 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.ScriptScope;
-import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
@@ -33,9 +32,8 @@ public class VariableUsageOperator implements Map<Object, Map<? super var, ? ext
     public VariableUsageOperator(ScriptScope scope) {this.scope = scope;}
 
     @Override public Map<? super var, ? extends var> map(Object lhs) {
-        return rhs -> {
-            return DollarFactory.fromLambda(
-                    i -> DollarScriptSupport.getVariable(scope, rhs.toString(), false, $void()));
-        };
+        return rhs -> DollarScriptSupport.wrapUnary(scope, () ->
+                DollarScriptSupport.getVariable(scope, rhs.toString(), false,
+                                                $void()));
     }
 }

@@ -24,19 +24,13 @@
         <version>0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>dollar-redis-plugin</artifactId>
+
+    <artifactId>dollar-std-resources-plugins</artifactId>
     <dependencies>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-core</artifactId>
             <version>0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>2.6.0</version>
-            <type>jar</type>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

@@ -136,16 +136,16 @@ public class DollarURI extends AbstractDollar {
 
     }
 
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of();
-    }
-
     @Override
     public var $size() {
         assertRunning();
         return DollarStatic.$(handler.size());
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of();
     }
 
     @Override
@@ -208,6 +208,32 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
+    public var $subscribe(Pipeable pipe) {
+        return $subscribe(pipe, null);
+    }
+
+    @Override
+    public var $subscribe(Pipeable pipe, String id) {
+        assertRunning();
+        final String subId = id == null ? UUID.randomUUID().toString() : id;
+        try {
+            handler.subscribe(i -> {
+                try {
+                    return pipe.pipe(i);
+                } catch (Exception e) {
+                    return DollarStatic.logAndRethrow(e);
+                }
+            }, subId);
+        } catch (IOException e) {
+            return DollarStatic.logAndRethrow(e);
+        }
+        return DollarStatic.$("id", subId).$("unsub", DollarFactory.fromLambda(i -> {
+            handler.unsubscribe(subId);
+            return DollarStatic.$(subId);
+        }));
+    }
+
+    @Override
     public int compareTo(var o) {
         return Comparator.<String>naturalOrder().compare(uri, o.toString());
     }
@@ -229,20 +255,14 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public var $all() {
-        assertRunning();
-        return handler.all();
-    }
-
-    @Override
     public boolean isTruthy() {
         return handler != null;
     }
 
     @Override
-    public var $drain() {
+    public var $all() {
         assertRunning();
-        return handler.drain();
+        return handler.all();
     }
 
     @Override
@@ -251,14 +271,16 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public String $listen(Pipeable pipe, String key) {
-        return $listen(pipe);
-    }
-
-    @Override
     public boolean isNeitherTrueNorFalse() {
         return true;
     }
+
+    @Override
+    public var $drain() {
+        assertRunning();
+        return handler.drain();
+    }
+
 
     @Override
     public var $notify() {
@@ -284,26 +306,6 @@ public class DollarURI extends AbstractDollar {
         return handler.send(value, blocking, mutating);
     }
 
-    @Override
-    public var $subscribe(Pipeable pipe) {
-        assertRunning();
-        final String subId = UUID.randomUUID().toString();
-        try {
-            handler.subscribe(i -> {
-                try {
-                    return pipe.pipe(i);
-                } catch (Exception e) {
-                    return DollarStatic.logAndRethrow(e);
-                }
-            }, subId);
-        } catch (IOException e) {
-            return DollarStatic.logAndRethrow(e);
-        }
-        return DollarStatic.$("id", subId).$("unsub", DollarFactory.fromLambda(i -> {
-            handler.unsubscribe(subId);
-            return DollarStatic.$(subId);
-        }));
-    }
 
     @Override
     public var $each(Pipeable pipe) {

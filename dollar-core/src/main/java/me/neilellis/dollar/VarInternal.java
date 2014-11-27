@@ -39,10 +39,11 @@ public interface VarInternal {
 
     @NotNull
     /**
-     * Like _unwrap() except it causes lambda evaluation and propagates through lists and maps. The result is a
-     * static value with no nested lambdas.
+     * Like _unwrap() except it causes lambda evaluation but does not propagate through lists and maps.
      */
     var _fix(boolean parallel);
+
+    var _fixDeep(boolean parallel);
 
     void _src(String src);
 

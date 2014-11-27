@@ -58,36 +58,36 @@ public class ScriptScope implements Scope {
         id = String.valueOf(name + ":" + counter.incrementAndGet());
     }
 
-    public ScriptScope(ScriptScope parent, String source) {
+    public ScriptScope(ScriptScope parent, String source, String name) {
         this.parent = parent;
         this.source = source;
         this.dollarParser = parent.getDollarParser();
-        id = String.valueOf("S:" + counter.incrementAndGet());
+        id = String.valueOf(name + ":" + counter.incrementAndGet());
     }
 
     public DollarParser getDollarParser() {
         return dollarParser;
     }
 
-
     public void setDollarParser(DollarParser dollarParser) {
         this.dollarParser = dollarParser;
     }
 
+
     public ScriptScope(DollarParser dollarParser, String source) {
         this.source = source;
         this.dollarParser = dollarParser;
-        id = String.valueOf("S:" + counter.incrementAndGet());
+        id = String.valueOf("(top):" + counter.incrementAndGet());
     }
 
-    public ScriptScope addChild(String source) {
-        return new ScriptScope(this, source);
+    public ScriptScope addChild(String source, String name) {
+        return new ScriptScope(this, source, name);
     }
 
-    public void clear() {
-        if (DollarStatic.config.isDebugScope()) { log.info("Clearing scope " + this); }
-        variables.clear();
-        listeners.clear();
+    @Override
+    public var addErrorHandler(var handler) {
+        errorHandlers.add(handler);
+        return $void();
     }
 
     @Override
@@ -122,20 +122,6 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public boolean hasParameter(String key) {
-        if (DollarStatic.config.isDebugScope()) { log.info("Looking up parameter " + key + " in " + this); }
-        ScriptScope scope = getScopeForParameters();
-        if (scope == null) {
-            scope = this;
-        } else {
-            if (DollarStatic.config.isDebugScope()) { log.info("Found " + key + " in " + scope); }
-        }
-        Variable result = scope.variables.get(key);
-
-        return result != null;
-    }
-
-    @Override
     public boolean has(String key) {
         ScriptScope scope = getScopeForKey(key);
         if (scope == null) {
@@ -151,48 +137,17 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public var set(String key, var value, boolean readonly, var constraint) {
-        if (key.matches("[0-9]+")) {
-            throw new AssertionError("Cannot set numerical keys, use setParameter");
-        }
-        ScriptScope scope = getScopeForKey(key);
+    public boolean hasParameter(String key) {
+        if (DollarStatic.config.isDebugScope()) { log.info("Looking up parameter " + key + " in " + this); }
+        ScriptScope scope = getScopeForParameters();
         if (scope == null) {
             scope = this;
-        }
-        if (DollarStatic.config.isDebugScope()) { log.info("Setting " + key + " in " + scope); }
-        if (scope.variables.containsKey(key) && scope.variables.get(key).readonly) {
-            throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
-        }
-        if (scope.variables.containsKey(key)) {
-            if (scope.variables.get(key).thread != Thread.currentThread().getId()) {
-                handleError(new DollarScriptException("Concurrency Error: Cannot change the variable " +
-                                                      key +
-                                                      " in a different thread from that which is created in."));
-            }
-            if (scope.variables.get(key).constraint != null) {
-                if (constraint != null) {
-                    handleError(new DollarScriptException(
-                            "Cannot change the constraint on a variable, attempted to redeclare for " + key));
-                }
-            }
-            scope.variables.get(key).value = value;
         } else {
-            scope.variables.put(key, new Variable(value, readonly, constraint));
+            if (DollarStatic.config.isDebugScope()) { log.info("Found " + key + " in " + scope); }
         }
-        scope.notifyScope(key, value);
-        return value;
-    }
+        Variable result = scope.variables.get(key);
 
-    @Override
-    public void notifyScope(String key, var value) {
-        if (value == null) {
-            throw new NullPointerException();
-        }
-        if (listeners.containsKey(key)) {
-            for (var listener : listeners.get(key)) {
-                listener.$notify();
-            }
-        }
+        return result != null;
     }
 
     @Override
@@ -214,9 +169,55 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public var addErrorHandler(var handler) {
-        errorHandlers.add(handler);
-        return $void();
+    public void notifyScope(String key, var value) {
+        if (value == null) {
+            throw new NullPointerException();
+        }
+        if (listeners.containsKey(key)) {
+            for (var listener : listeners.get(key)) {
+                listener.$notify();
+            }
+        }
+    }
+
+    @Override
+    public var set(String key, var value, boolean readonly, var constraint, boolean isVolatile) {
+        if (key.matches("[0-9]+")) {
+            throw new AssertionError("Cannot set numerical keys, use setParameter");
+        }
+        ScriptScope scope = getScopeForKey(key);
+        if (scope == null) {
+            scope = this;
+        }
+        if (DollarStatic.config.isDebugScope()) { log.info("Setting " + key + " in " + scope); }
+        if (scope.variables.containsKey(key) && scope.variables.get(key).readonly) {
+            throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
+        }
+        if (scope.variables.containsKey(key)) {
+            final Variable variable = scope.variables.get(key);
+            if (!variable.isVolatile && variable.thread != Thread.currentThread().getId()) {
+                handleError(new DollarScriptException("Concurrency Error: Cannot change the variable " +
+                                                      key +
+                                                      " in a different thread from that which is created in."));
+            }
+            if (variable.constraint != null) {
+                if (constraint != null) {
+                    handleError(new DollarScriptException(
+                            "Cannot change the constraint on a variable, attempted to redeclare for " + key));
+                }
+            }
+            variable.value = value;
+        } else {
+            scope.variables.put(key, new Variable(value, readonly, constraint, isVolatile));
+        }
+        scope.notifyScope(key, value);
+        return value;
+    }
+
+    public void clear() {
+        if (DollarStatic.config.isDebugScope()) { log.info("Clearing scope " + this); }
+        variables.clear();
+        listeners.clear();
     }
 
     public var getConstraint(String key) {
@@ -234,7 +235,6 @@ public class ScriptScope implements Scope {
     public Parser<var> getParser() {
         return parser;
     }
-
 
     public void setParser(Parser<var> parser) {
         this.parser = parser;
@@ -273,6 +273,18 @@ public class ScriptScope implements Scope {
 
     }
 
+    public var notify(String variableName) {
+        final ScriptScope scopeForKey = getScopeForKey(variableName);
+        if (scopeForKey == null) {
+            return $void();
+        }
+        int count = 0;
+        for (var listener : scopeForKey.listeners.get(variableName)) {
+            listener.$notify();
+        }
+        return scopeForKey.get(variableName);
+    }
+
     public void setParent(ScriptScope scriptScope) {
         this.parent = scriptScope;
     }
@@ -281,6 +293,7 @@ public class ScriptScope implements Scope {
         private final boolean readonly;
         private final var constraint;
         private final long thread;
+        public boolean isVolatile;
         private var value;
 
         public Variable(var value, var constraint) {
@@ -291,10 +304,11 @@ public class ScriptScope implements Scope {
             thread = Thread.currentThread().getId();
         }
 
-        public Variable(var value, boolean readonly, var constraint) {
+        public Variable(var value, boolean readonly, var constraint, boolean isVolatile) {
             this.value = value;
             this.readonly = readonly;
             this.constraint = constraint;
+            this.isVolatile = isVolatile;
             thread = Thread.currentThread().getId();
         }
 

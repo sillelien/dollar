@@ -22,19 +22,19 @@ import me.neilellis.dollar.var;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface Scope {
+    var addErrorHandler(var handler);
+
     var get(String key);
 
     var getParameter(String key);
 
-    boolean hasParameter(String key);
-
     boolean has(String key);
 
-    var set(String key, var value, boolean readonly, var constraint);
-
-    void notifyScope(String key, var value);
+    boolean hasParameter(String key);
 
     void listen(String key, var listener);
 
-    var addErrorHandler(var handler);
+    void notifyScope(String key, var value);
+
+    var set(String key, var value, boolean readonly, var constraint, boolean isVolatile);
 }

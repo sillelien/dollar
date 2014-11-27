@@ -1,3 +1,98 @@
+
+// = (assignment) normally forces immediate evaluation of the RHS
+// however := is the lambda assignment and does not, thus creating a
+// lambda style expression
+@@ "*****"
+
+lamval causes { @@ "->"+lamval; }
+
+lamval=1
+lambda2 := lamval
+
+
+lambda := ( ( lamval )  + lamval )
+notlambda = ( ( lamval )  + lamval )
+
+lamval= 7
+
+lamval2= 23
+
+//The simplest possible lambda (serves no purpose!)
+.: 1 == 1
+
+.: 1 == fix 1
+
+.: & 1 == 1
+
+@@ "*****"
+//Since the lambda shares the scope of when it was declared this should be 14 not 2
+.: &lambda == 14
+.: &notlambda == 2
+
+//And this is the single lamval syntax from earlier
+&lambda2 <=> 7
+
+
+
+//Now we test levels of indirection
+delayName := ("lamval" + lamval)
+@@ "*****"
+lamval=5
+lamval5=13
+
+//Did you follow that crazyness :-) Don't do this at home!
+
+@@ "*****"
+@@ "lamval"
+
+@@ "lamval" + 1
+
+@@ lamval + 1
+
+@@ lamval
+
+@@ $("lamval" + lamval)
+
+@@ $('lamval' + lamval)
+
+
+//Lambda variable resolution @@! - notice the two levels of indirection here - yeah edge case :-)
+&$(${delayName}) <=> 13
+
+
+// & forces immediate evaluation, the value lock symbol
+// otherwise values are assumed to be lambdas and are lazily evaluated
+
+function := [
+    @@ "Function start",  //This is displayed during evaluation, return is void
+    & lamval,  //locked into the current value at definition (i.e. 5)
+       lamval,  //lazy evaluated, will take the value when the whole block is evaluated
+       $1      //A value to be passed in via a pipe 1 is a special variable
+]
+
+
+lamval = "fred"
+
+@@ ([1,2,3] -> function)
+([1,2,3] -> function) <=>  [ 5, "fred", [1, 2, 3] ]
+
+removeWorld := ($1 - "World")
+
+@@ ["Hello", "World"] -> removeWorld
+
+(["Hello", "World"] -> removeWorld) <=> ["Hello"]
+(["Goodbye", "World"] -> removeWorld) <=> ["Goodbye"]
+
+
+($2 + " " + $1)("Hello", "World") <=> "World Hello"
+
+testParams := ($2 + " " + $1)
+(testParams) ("Hello", "World") <=> "World Hello"
+
+//short-form of parameterized variable (function call style)
+testParams("Hello", "World") <=> "World Hello"
+
+///////////////////////////////////////////////////////////////////////////////
 a=1
 b=1
 a causes (print a)
@@ -99,6 +194,29 @@ if (~ categories["anti-social-behaviour"]) {
 crimeCount <=> 1
 
 ///////////////////////////////////////////////////////////////////////////////
+
+// Listen assignment
+
+
+h=1
+i ?= h + 2
+h=4
+i <=> 6
+
+///////////////////////////////////////////////////////////////////////////////
+
+// Subscription assignment
+
+
+j *= random:dummy
+colors= ["red","green","blue"]
+k := colors[j * #colors]
+volatile updatedK=false
+k ->? (updatedK=true)
+sleep 2
+&updatedK <=> true
+
+
 
 
 

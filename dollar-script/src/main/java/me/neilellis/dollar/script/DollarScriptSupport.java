@@ -99,7 +99,7 @@ public class DollarScriptSupport {
                 if (defaultValue != null) {
                     return defaultValue;
                 } else {
-                    throw new VariableNotFoundException(key);
+                    throw new VariableNotFoundException(key,scope);
                 }
             }
             return scope.get(key);

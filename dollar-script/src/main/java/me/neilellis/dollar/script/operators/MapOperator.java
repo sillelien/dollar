@@ -41,7 +41,7 @@ public class MapOperator implements Map<List<var>, var> {
     }
 
     @Override public var map(List<var> o) {
-        final var lambda = DollarFactory.fromLambda(parallel -> dollarParser.inScope(scope, newScope -> {
+        final var lambda = DollarFactory.fromLambda(parallel -> dollarParser.inScope("map", scope, newScope -> {
             Stream<me.neilellis.dollar.var> stream;
             if (parallel.isTrue()) {
                 stream = o.stream().parallel();

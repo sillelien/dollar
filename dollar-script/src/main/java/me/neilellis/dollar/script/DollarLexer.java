@@ -43,7 +43,7 @@ public class DollarLexer {
                                 "all", "import", "reduce", "truthy", "is", "else", "const", "in", "true", "false",
                                 "yes", "no", "void", "error", "to", "from", "async", "stateless", "size", "as",
                                 "while", "collect", "module", "include", "export", "with", "parallel", "serial",
-                                "fork", "null");
+                                "fork", "null", "volatile");
     static final Terminals
             OPERATORS =
             Terminals.operators("|", ">>", "<<", "->", "=>", ".:", "<=", ">=", "<-", "(", ")", "--", "++", ".", ":",
@@ -52,7 +52,7 @@ public class DollarLexer {
                                 "<*", "*|", "|*", "*|*", "|>", "<|", "&>", "<&", "?>", "<?", "?->", "<=>", "<$", "-_-",
                                 "::", "/", "%", "*", "&&", "||", "<--", "<++", "\u2357", "~", "?$?", "-:", "..", "?..?",
                                 "€", "@@", "<@", "@>", "#", "!?#*!", "?*", "(!)", "(>)", "(=)", "(~)", "(-)", "(+)",
-                                "(?)", "->?", "|:|", "|..|", "-<");
+                                "(?)", "->?", "|:|", "|..|", "-<", "?=", "*=");
 
     static final Parser<?> TERMINATOR_SYMBOL = Parsers.or(OP("\n"), OP(";")).many1();
     static final Parser<?> COMMA_TERMINATOR = Parsers.sequence(OP(","), OP("\n").many());

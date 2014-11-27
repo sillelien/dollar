@@ -43,7 +43,8 @@ public class SubscribeOperator implements Binary<var>, Operator {
     public var map(var lhs, var rhs) {
 
         return wrapReactiveBinary(scope, lhs, rhs,
-                                  () -> lhs.$subscribe(i -> scope.getDollarParser().inScope(scope, newScope -> {
+                                  () -> lhs.$subscribe(
+                                          i -> scope.getDollarParser().inScope("subscribe", scope, newScope -> {
                                       final var it = fix(i, false);
                                       scope.getDollarParser().currentScope().setParameter("1", it);
                                       scope.getDollarParser().currentScope().setParameter("it", it);

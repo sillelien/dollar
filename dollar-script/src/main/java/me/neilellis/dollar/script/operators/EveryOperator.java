@@ -42,7 +42,7 @@ public class EveryOperator implements Map<Object[], var> {
         Scheduler.schedule(i -> {
             count[0]++; // William Gibson
 //                System.out.println("COUNT "+count[0]);
-            return dollarParser.inScope(scope, newScope -> {
+            return dollarParser.inScope("every", scope, newScope -> {
 //                    System.err.println(newScope);
                 newScope.setParameter("1", $(count[0]));
                 if (objects[2] instanceof var && ((var) objects[2]).isTrue()) {

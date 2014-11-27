@@ -39,10 +39,10 @@ public class ForOperator implements Map<Object[], Map<? super var, ? extends var
     public Map<? super var, ? extends var> map(Object[] objects) {
         return rhs -> {
             return DollarScriptSupport.wrapReactiveUnary(scope, rhs, () -> {
-                return dollarParser.inScope(scope, newScope -> {
+                return dollarParser.inScope("for", scope, newScope -> {
                     return ((var) objects[3]).$each(i -> {
-                        newScope.set(objects[1].toString(), fix(i, false), false, null);
-                        return fix(rhs, false);
+                        newScope.set(objects[1].toString(), fix(i, false), false, null, false);
+                        return rhs._fixDeep(false);
                     });
                 });
             });

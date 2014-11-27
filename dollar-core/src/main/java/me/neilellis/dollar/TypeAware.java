@@ -107,6 +107,7 @@ public interface TypeAware {
 
     boolean isUri();
 
+
     @Nullable
     JsonObject json(@NotNull String key);
 

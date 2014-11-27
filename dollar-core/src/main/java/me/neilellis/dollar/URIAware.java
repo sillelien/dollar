@@ -33,7 +33,17 @@ public interface URIAware {
         return $send(lhs, false, false);
     }
 
+    /**
+     * Generic Send.
+     */
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class) var $send(var value, boolean blocking, boolean mutating);
+
     @Guarded(ChainGuard.class) var $drain();
+
+//    @Guarded(NotNullParametersGuard.class) String $listen(Pipeable pipe);
+//
+//    @Guarded(NotNullParametersGuard.class) String $listen(Pipeable pipe, String key);
 
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
@@ -41,9 +51,12 @@ public interface URIAware {
         return $send(lhs, false, true);
     }
 
-    @Guarded(NotNullParametersGuard.class) String $listen(Pipeable pipe);
-
-    @Guarded(NotNullParametersGuard.class) String $listen(Pipeable pipe, String key);
+    /**
+     * THis is for reactive programming using lamdas, you probably want $subscribe(...).
+     *
+     * @param pipeable action
+     */
+    default var $listen(Pipeable pipeable) {return DollarStatic.$void();}
 
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class) var $notify();
@@ -52,6 +65,12 @@ public interface URIAware {
     default var $peek() {
         return $receive(false, false);
     }
+
+    /**
+     * Generic receive
+     */
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class) var $receive(boolean blocking, boolean mutating);
 
     @Guarded(ChainGuard.class)
     default var $poll() {
@@ -82,12 +101,6 @@ public interface URIAware {
     }
 
     /**
-     * Generic receive
-     */
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class) var $receive(boolean blocking, boolean mutating);
-
-    /**
      * Send (to this) synchronously.
      */
     @Guarded(NotNullParametersGuard.class)
@@ -96,13 +109,18 @@ public interface URIAware {
         return $send(value, true, false);
     }
 
-    /**
-     * Generic Send.
-     */
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class) var $send(var value, boolean blocking, boolean mutating);
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class) default var $subscribe(Pipeable subscription) {
+        return $listen(subscription,
+                       null);
+    }
+
+    default var $listen(Pipeable pipeable, String id) {return DollarStatic.$void();}
 
     @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class) var $subscribe(Pipeable subscription);
+    @Guarded(NotNullParametersGuard.class) default var $subscribe(Pipeable subscription, String key) {
+        return $listen(subscription, key);
+    }
+
 
 }

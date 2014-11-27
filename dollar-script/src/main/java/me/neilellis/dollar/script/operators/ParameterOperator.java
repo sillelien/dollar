@@ -43,7 +43,7 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
     @Override public Map<? super var, ? extends var> map(List<var> rhs) {
         return lhs -> {
 
-            var lambda = DollarFactory.fromLambda(i -> dollarParser.inScope(scope, newScope -> {
+            var lambda = DollarFactory.fromLambda(i -> dollarParser.inScope("parameter", scope, newScope -> {
                         //Add the special $* value for all the parameters
                         newScope.setParameter("*", $(rhs));
                         int count = 0;
@@ -53,7 +53,7 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
                             //on the value).
                             if (param.getMetaAttribute(DollarParser.NAMED_PARAMETER_META_ATTR) != null) {
                                 newScope.set(param.getMetaAttribute(DollarParser.NAMED_PARAMETER_META_ATTR), param,
-                                             true, null);
+                                             true, null, false);
                             }
                         }
                         var result;

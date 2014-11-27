@@ -2,7 +2,7 @@
 testArray := [ time(), {sleep(2);time();}, time() ];
 
 
-a= testArray;
+a= serial testArray;
 
 
 b= parallel testArray;

@@ -120,12 +120,6 @@ public class DollarMap extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $(@NotNull String key) {
-        return DollarFactory.fromValue(map.get(key), errors());
-    }
-
-    @NotNull
-    @Override
     public <R> R $() {
         return (R) json();
     }
@@ -162,6 +156,12 @@ public class DollarMap extends AbstractDollar implements var {
 
     public var $containsValue(var value) {
         return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public var $(@NotNull String key) {
+        return DollarFactory.fromValue(map.get(key), errors());
     }
 
     @Override
@@ -215,7 +215,7 @@ public class DollarMap extends AbstractDollar implements var {
 
     private Map<String, Object> varMapToMap() {
         Map<String, Object> result = new LinkedHashMap<>();
-        for (Map.Entry<String, var> entry : map.entrySet()) {
+        for (Map.Entry<String, var> entry : $map().entrySet()) {
             result.put(entry.getKey(), entry.getValue().$());
         }
         return result;
@@ -267,12 +267,40 @@ public class DollarMap extends AbstractDollar implements var {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
     }
 
-    @NotNull @Override public var _fix(boolean parallel) {
-        HashMap<String, var> result = new HashMap<>();
+    @Override
+    public var $listen(Pipeable pipe) {
+        String key = UUID.randomUUID().toString();
+        $listen(pipe, key);
+        return DollarStatic.$(key);
+    }
+
+    @Override
+    public var $listen(Pipeable pipe, String key) {
+        for (var v : map.values()) {
+            //Join the children to this, so if the children change
+            //listeners to this get the latest value of this.
+            v.$listen(i -> this, key);
+        }
+        return DollarStatic.$(key);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+
+        LinkedHashMap<String, var> result = new LinkedHashMap<>();
         for (Map.Entry<String, var> entry : map.entrySet()) {
             result.put(entry.getKey(), entry.getValue()._fix(false));
         }
-        return DollarStatic.$(result);
+        return ImmutableMap.<String, var>copyOf(result);
+    }
+
+    @Override public var _fixDeep(boolean parallel) {
+        Map<String, var> result = new LinkedHashMap<>();
+        for (Map.Entry<String, var> entry : map.entrySet()) {
+            result.put(entry.getKey(), entry.getValue()._fixDeep(parallel));
+        }
+        return DollarFactory.fromValue(result, errors());
     }
 
     @NotNull
@@ -283,21 +311,8 @@ public class DollarMap extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-
-        return ImmutableMap.<String, var>copyOf(map);
-    }
-
-    @NotNull
-    @Override
     public Stream<var> $stream(boolean parallel) {
         return split().values().stream();
-    }
-
-    @NotNull
-    @Override
-    public java.util.stream.Stream<Map.Entry<String, var>> kvStream() {
-        return split().entrySet().stream();
     }
 
     @NotNull
@@ -306,21 +321,23 @@ public class DollarMap extends AbstractDollar implements var {
         return json().toString();
     }
 
+    @NotNull
     @Override
-    public String $listen(Pipeable pipe) {
-        String key = UUID.randomUUID().toString();
-        $listen(pipe, key);
-        return key;
+    public java.util.stream.Stream<Map.Entry<String, var>> kvStream() {
+        return split().entrySet().stream();
     }
 
     @Override
-    public String $listen(Pipeable pipe, String key) {
+    public var $notify() {
         for (var v : map.values()) {
-            //Join the children to this, so if the children change
-            //listeners to this get the latest value of this.
-            v.$listen(i -> this, key);
+            v.$notify();
         }
-        return key;
+        return this;
+    }
+
+    @Override
+    public Integer I(@NotNull String key) {
+        return map.get(key).I();
     }
 
     @Override
@@ -342,25 +359,6 @@ public class DollarMap extends AbstractDollar implements var {
     }
 
     @Override
-    public var $notify() {
-        for (var v : map.values()) {
-            v.$notify();
-        }
-        return this;
-    }
-
-    @Override
-    public Integer I(@NotNull String key) {
-        return map.get(key).I();
-    }
-
-    @Override
-    public Integer I() {
-        DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
-        return null;
-    }
-
-    @Override
     public boolean isMap() {
         return true;
     }
@@ -375,10 +373,10 @@ public class DollarMap extends AbstractDollar implements var {
         return lambda.eval($copy());
     }
 
-    @NotNull
     @Override
-    public Number N() {
-        return 0;
+    public Integer I() {
+        DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
+        return null;
     }
 
     @NotNull
@@ -393,16 +391,6 @@ public class DollarMap extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean is(Type... types) {
-        for (Type type : types) {
-            if (type == Type.MAP) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
     public boolean isBoolean() {
         return false;
     }
@@ -412,14 +400,10 @@ public class DollarMap extends AbstractDollar implements var {
         return false;
     }
 
-    @Nullable
+    @NotNull
     @Override
-    public JsonObject json(@NotNull String key) {
-        JsonObject object = json().getObject(key);
-        if (object == null) {
-            return null;
-        }
-        return object;
+    public Number N() {
+        return 0;
     }
 
     @Override
@@ -432,6 +416,33 @@ public class DollarMap extends AbstractDollar implements var {
         return false;
     }
 
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
+    }
+
+    @Override
+    public boolean is(Type... types) {
+        for (Type type : types) {
+            if (type == Type.MAP) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    @Nullable
+    @Override
+    public JsonObject json(@NotNull String key) {
+        JsonObject object = json().getObject(key);
+        if (object == null) {
+            return null;
+        }
+        return object;
+    }
+
+
     @NotNull
     @Override
     public ImmutableList<var> toList() {
@@ -442,10 +453,7 @@ public class DollarMap extends AbstractDollar implements var {
         return ImmutableList.copyOf(entries);
     }
 
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
+
 
     @Override
     public boolean isVoid() {

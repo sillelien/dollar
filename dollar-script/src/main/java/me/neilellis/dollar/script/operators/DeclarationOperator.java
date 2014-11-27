@@ -51,13 +51,13 @@ public class DeclarationOperator implements Map<Object[], Map<? super var, ? ext
                     constraint = null;
                 }
                 final String variableName = objects[2].toString();
-                Pipeable action = i -> scope.set(variableName, value, false, constraint);
+                Pipeable action = i -> scope.set(variableName, value, false, constraint, false);
                 try {
                     action.pipe($void());
                 } catch (Exception e) {
                     throw new DollarScriptException(e);
                 }
-                value.$listen(action);
+                value.$listen(i -> scope.notify(variableName));
                 if (objects[0] != null) {
                     scope.getDollarParser().export(variableName, value);
                 }

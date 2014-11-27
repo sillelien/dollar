@@ -24,59 +24,94 @@ import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
-import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.DollarStatic.fix;
+import static me.neilellis.dollar.DollarStatic.*;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class AssignmentOperator implements Map<Object[], Map<? super var, ? extends var>> {
     private final ScriptScope scope;
+    private boolean push;
 
-    public AssignmentOperator(ScriptScope scope) {this.scope = scope;}
+    public AssignmentOperator(ScriptScope scope, boolean push) {
+        this.scope = scope;
+        this.push = push;
+    }
 
     public Map<? super var, ? extends var> map(Object[] objects) {
+        var constraint;
+        if (objects[2] != null) {
+            final Type type = Type.valueOf(objects[2].toString().toUpperCase());
+            constraint = DollarFactory.fromLambda(i -> {
+                return $(scope.getDollarParser().currentScope().getParameter("it")
+                              .is(type) &&
+                         (objects[3] == null || ((var) objects[3]).isTrue()));
+            });
+        } else {
+            constraint = (var) objects[3];
+
+        }
+        boolean constant;
+        boolean isVolatile;
+        final Object mutability = objects[1];
+        constant = mutability != null && mutability.toString().equals("const");
+        isVolatile = mutability != null && mutability.toString().equals("volatile");
 
         return new Map<var, var>() {
             public var map(var rhs) {
-                var constraint;
-                if (objects[2] != null) {
-                    final Type type = Type.valueOf(objects[2].toString().toUpperCase());
-                    constraint = DollarFactory.fromLambda(i -> {
-                        return $(scope.getDollarParser().currentScope().getParameter("it")
-                                      .is(type) &&
-                                 (objects[3] == null || ((var) objects[3]).isTrue()));
-                    });
-                } else {
-                    constraint = (var) objects[3];
+                final String operator = objects[5].toString();
 
-                }
-                final String varName = objects[4].toString();
-                return DollarScriptSupport.wrapBinary(scope, () -> {
+                if (operator.equals("?=") || operator.equals("*=")) {
                     var useConstraint;
                     if (constraint != null) {
                         useConstraint = constraint;
                     } else {
-                        useConstraint = scope.getConstraint(varName);
+                        useConstraint = scope.getConstraint(objects[4].toString());
                     }
-                    return scope.getDollarParser().inScope(scope, newScope -> {
-                        final var rhsFixed = fix(rhs, false);
-                        if (useConstraint != null) {
-                            newScope.setParameter("it", rhsFixed);
-                            newScope.setParameter("previous", scope.get(varName));
-                            if (useConstraint.isFalse()) {
-                                newScope.handleError(new DollarScriptException(
-                                        "Constraint failed for variable " + varName + ""));
-                            }
-                        }
-                        if (objects[0] != null) {
-                            scope.getDollarParser().export(varName, rhsFixed);
-                        }
-                        return scope.set(varName, rhsFixed, (objects[1] != null),
-                                         constraint);
-                    });
-                });
+                    if (operator.equals("?=")) {
+                        scope.set(objects[4].toString(), $void(), constant, null, isVolatile);
+                        return $(rhs.$listen(
+                                i -> scope.set(objects[4].toString(), fix(i, false), false,
+                                               useConstraint, isVolatile)));
+
+                    } else if (operator.equals("*=")) {
+                        scope.set(objects[4].toString(), $void(), constant, null, true);
+                        return $(rhs.$subscribe(
+                                i -> scope.set(objects[4].toString(), fix(i, false), false,
+                                               useConstraint, true)));
+                    }
+                }
+                return assign(rhs, objects, constraint, constant, isVolatile);
             }
         };
+    }
+
+    private var assign(var rhs, Object[] objects, var constraint, boolean constant, boolean isVolatile) {
+
+        final String varName = objects[4].toString();
+        return DollarScriptSupport.wrapBinary(scope, () -> {
+            var useConstraint;
+            if (constraint != null) {
+                useConstraint = constraint;
+            } else {
+                useConstraint = scope.getConstraint(varName);
+            }
+            return scope.getDollarParser().inScope("assignment-constraint", scope, newScope -> {
+                final var rhsFixed = fix(rhs, false);
+                if (useConstraint != null) {
+                    newScope.setParameter("it", rhsFixed);
+                    newScope.setParameter("previous", scope.get(varName));
+                    if (useConstraint.isFalse()) {
+                        newScope.handleError(new DollarScriptException(
+                                "Constraint failed for variable " + varName + ""));
+                    }
+                }
+                if (objects[0] != null) {
+                    scope.getDollarParser().export(varName, rhsFixed);
+                }
+                return scope.set(varName, rhsFixed, constant,
+                                 constraint, isVolatile);
+            });
+        });
     }
 }

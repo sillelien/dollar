@@ -59,10 +59,6 @@ public class UnaryOp implements Unary<var>, Operator {
 
         //Lazy evaluation
         final var lambda = DollarScriptSupport.wrapReactiveUnary(scope, from, () -> function.map(from));
-        from.$listen(i -> {
-            lambda.$notify();
-            return i;
-        });
         return lambda;
 
     }

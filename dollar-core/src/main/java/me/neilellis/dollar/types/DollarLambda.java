@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static me.neilellis.dollar.DollarStatic.$void;
-
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
@@ -105,6 +103,12 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 } else {
                     return proxy;
                 }
+            } else if (method.getName().equals("_fixDeep")) {
+                if (fixable) {
+                    return lambda.pipe(DollarFactory.fromValue(args[0]))._fixDeep((Boolean) args[0]);
+                } else {
+                    return proxy;
+                }
             } else if (method.getName().equals("getMetaAttribute")) {
                 return meta.get(args[0]);
             } else if (method.getName().equals("setMetaAttribute")) {
@@ -116,15 +120,16 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                     listenerId = String.valueOf(args[1]);
                 }
                 listeners.put(listenerId, (Pipeable) args[0]);
-                return listenerId;
+                return DollarStatic.$(listenerId);
             } else if (method.getName().equals("$notify")) {
                 if (notifyStack.get().contains(this)) {
                     //throw new IllegalStateException("Recursive notify loop detected");
                     return proxy;
                 }
                 notifyStack.get().add(this);
-                for (Pipeable pipeable : listeners.values()) {
-                    pipeable.pipe($void());
+                final var value = lambda.pipe(in);
+                for (Pipeable listener : listeners.values()) {
+                    listener.pipe(value);
                 }
                 notifyStack.get().remove(this);
                 return proxy;
