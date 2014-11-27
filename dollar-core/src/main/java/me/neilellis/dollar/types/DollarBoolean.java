@@ -20,7 +20,6 @@ import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -42,19 +41,7 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
 
     @NotNull
     @Override
-    public var $dec(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
-    }
-
-    @NotNull
-    @Override
     public var $divide(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
@@ -112,13 +99,25 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     }
 
     @Override
-    public boolean is(Type... types) {
+    public boolean is(@NotNull Type... types) {
         for (Type type : types) {
             if (type == Type.BOOLEAN) {
                 return true;
             }
         }
         return false;
+    }
+
+    @NotNull
+    @Override
+    public var $dec(@NotNull var amount) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $inc(@NotNull var amount) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
     @Override
@@ -133,8 +132,7 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         return value ? 1.0 : 0.0;
     }
 
-    @Nullable
-    @Override
+    @NotNull @Override
     public Long L() {
         return value ? 1L : 0L;
     }

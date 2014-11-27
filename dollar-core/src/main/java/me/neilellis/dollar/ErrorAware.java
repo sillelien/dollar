@@ -30,30 +30,26 @@ import java.util.function.Consumer;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface ErrorAware {
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-
-    var $error(@NotNull String errorMessage);
+    public enum ErrorType {VALIDATION, SYSTEM}
 
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    var $error(@NotNull Throwable error);
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    var $error();
+    @Guarded(ChainGuard.class) var $error(@NotNull String errorMessage);
 
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    var $errors();
+    @Guarded(ChainGuard.class) var $error(@NotNull Throwable error);
+
+    @NotNull
+    @Guarded(ChainGuard.class) var $error();
 
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    var $fail(@NotNull Consumer<List<Throwable>> handler);
+    @Guarded(ChainGuard.class) var $errors();
+
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class) var $fail(@NotNull Consumer<List<Throwable>> handler);
 
     @NotNull
     @Guarded(NotNullParametersGuard.class)
@@ -64,22 +60,17 @@ public interface ErrorAware {
 
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    var $error(@NotNull String errorMessage, @NotNull ErrorType type);
+    @Guarded(ChainGuard.class) var $error(@NotNull String errorMessage, @NotNull ErrorType type);
 
     @NotNull
-    @Guarded(NotNullCollectionGuard.class)
-    ImmutableList<Throwable> errors();
-
-    boolean hasErrors();
-
     @Guarded(ChainGuard.class)
     var clearErrors();
 
     @NotNull
-    @Guarded(NotNullCollectionGuard.class)
-    List<String> errorTexts();
+    @Guarded(NotNullCollectionGuard.class) List<String> errorTexts();
 
+    @NotNull
+    @Guarded(NotNullCollectionGuard.class) ImmutableList<Throwable> errors();
 
-    public enum ErrorType {VALIDATION, SYSTEM}
+    boolean hasErrors();
 }

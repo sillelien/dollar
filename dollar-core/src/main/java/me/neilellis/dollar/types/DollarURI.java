@@ -114,21 +114,6 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var value) {
-        assertRunning();
-        return handler.removeValue(DollarStatic.$(value));
-
-    }
-
-    @NotNull
-    @Override
-    public var $plus(@Nullable var value) {
-        assertRunning();
-        return handler.send(DollarStatic.$(value), true, true);
-    }
-
-    @NotNull
-    @Override
     public var $rm(@NotNull String key) {
         assertRunning();
 
@@ -140,17 +125,6 @@ public class DollarURI extends AbstractDollar {
     public var $size() {
         assertRunning();
         return DollarStatic.$(handler.size());
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of();
-    }
-
-    @Override
-    public Stream<String> keyStream() {
-        return Stream.empty();
     }
 
     @Override
@@ -167,25 +141,34 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
+    public var $minus(@NotNull var value) {
+        assertRunning();
+        return handler.removeValue(DollarStatic.$(value));
+
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of();
+    }
+
+    @NotNull
+    @Override
+    public var $plus(@Nullable var value) {
+        assertRunning();
+        return handler.send(DollarStatic.$(value), true, true);
+    }
+
+    @NotNull
+    @Override
     public var $abs() {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $dec(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
     public var $divide(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
@@ -243,12 +226,6 @@ public class DollarURI extends AbstractDollar {
         return false;
     }
 
-    @NotNull
-    @Override
-    public Integer I(@NotNull String key) {
-        return 0;
-    }
-
     @Override
     public boolean isTrue() {
         return false;
@@ -260,12 +237,6 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public var $all() {
-        assertRunning();
-        return handler.all();
-    }
-
-    @Override
     public boolean isFalse() {
         return false;
     }
@@ -274,6 +245,42 @@ public class DollarURI extends AbstractDollar {
     public boolean isNeitherTrueNorFalse() {
         return true;
     }
+
+    @Override
+    public Stream<String> keyStream() {
+        return Stream.empty();
+    }
+
+    @NotNull
+    @Override
+    public Integer I(@NotNull String key) {
+        return 0;
+    }
+
+    @Nullable
+    @Override
+    public Number number(@NotNull String key) {
+        return 0;
+    }
+
+    @NotNull
+    @Override
+    public var $dec(@NotNull var amount) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $inc(@NotNull var amount) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @Override
+    public var $all() {
+        assertRunning();
+        return handler.all();
+    }
+
 
     @Override
     public var $drain() {
@@ -312,7 +319,7 @@ public class DollarURI extends AbstractDollar {
         return super.$each(pipe);
     }
 
-    @Override public StateMachine<ResourceState, Signal> getStateMachine() {
+    @NotNull @Override public StateMachine<ResourceState, Signal> getStateMachine() {
         return stateMachine;
     }
 
@@ -359,11 +366,7 @@ public class DollarURI extends AbstractDollar {
     }
 
 
-    @Nullable
-    @Override
-    public Number number(@NotNull String key) {
-        return 0;
-    }
+
 
 
     @Nullable
@@ -395,7 +398,7 @@ public class DollarURI extends AbstractDollar {
 
 
     @Override
-    public boolean is(Type... types) {
+    public boolean is(@NotNull Type... types) {
         for (Type type : types) {
             if (type == Type.URI) {
                 return true;

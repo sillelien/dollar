@@ -49,10 +49,8 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return this;
     }
 
-    @NotNull
-    @Override
-    public var $dec(@NotNull var amount) {
-        return this;
+    @NotNull @Override public var $dec() {
+        return DollarStatic.$(String.valueOf((char) (value.charAt(value.length() - 1) - 1)));
     }
 
     @NotNull
@@ -61,9 +59,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_STRING_OPERATION);
     }
 
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
+    @NotNull @Override public var $inc() {
         return DollarStatic.$(String.valueOf((char) (value.charAt(value.length() - 1) + 1)));
     }
 
@@ -114,7 +110,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         }
     }
 
-    @Override
+    @NotNull @Override
     public Integer I() {
         return Integer.parseInt(value);
     }
@@ -126,18 +122,13 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
-    public boolean is(Type... types) {
+    public boolean is(@NotNull Type... types) {
         for (Type type : types) {
             if (type == Type.STRING) {
                 return true;
             }
         }
         return false;
-    }
-
-    @Override
-    public Number number(@NotNull String key) {
-        return new BigDecimal(key);
     }
 
     @NotNull
@@ -189,5 +180,22 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @Override
     public boolean equals(@Nullable Object obj) {
         return obj != null && value.equals(obj.toString());
+    }
+
+    @Override
+    public Number number(@NotNull String key) {
+        return new BigDecimal(key);
+    }
+
+    @NotNull
+    @Override
+    public var $dec(@NotNull var amount) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $inc(@NotNull var amount) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_STRING_OPERATION);
     }
 }

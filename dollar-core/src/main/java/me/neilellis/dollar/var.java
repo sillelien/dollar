@@ -67,8 +67,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @Guarded(NotNullParametersGuard.class) var $(@NotNull var rhs);
 
     @NotNull
-    @Guarded(ChainGuard.class)
-    Stream<var> $children();
+    @Guarded(ChainGuard.class) Stream<var> $children();
 
     @NotNull
     @Guarded(ChainGuard.class)
@@ -110,18 +109,17 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
      * Returns true if this JSON object has the supplied key.
      *
      * @param key the key
+     *
      * @return true if the key exists.
      */
     @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    var $has(@NotNull String key);
+    @Guarded(NotNullParametersGuard.class) var $has(@NotNull String key);
 
     @NotNull
     @Guarded(ChainGuard.class) var $isEmpty();
 
     @NotNull
     @Guarded(ChainGuard.class)
-    @Guarded(ReturnVarOnlyGuard.class)
     default var $list() {
         return DollarFactory.fromValue(toList(), errors());
     }
@@ -150,35 +148,14 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
         return DollarStatic.$("application/json");
     }
 
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class) var $minus(@NotNull var value);
-
-    /**
-     * Returns a new {@link me.neilellis.dollar.var} with this value appended to it.
-     *
-     * @param value the value to append, this value may be null
-     *
-     * @return a new object with the value supplied appended
-     */
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(ReturnVarOnlyGuard.class) var $plus(@Nullable var value);
-
-    @NotNull
-    @Deprecated
-    @Guarded(ReturnVarOnlyGuard.class)
-    var $post(String url);
-
     /**
      * Remove by key. (Map like data only).
      *
      * @param key the key of the key/value pair to remove
+     *
      * @return the modified var
      */
-    @NotNull
-    var $rm(@NotNull String key);
+    @NotNull var $rm(@NotNull String key);
 
     @NotNull
     default var $set(@NotNull String key, @Nullable Object value) {
@@ -194,7 +171,9 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
      * Execute the handler if {@link #$void} is true.
      *
      * @param handler the handler to execute
+     *
      * @return the result of executing the handler if this is void, otherwise this
+     *
      * @see me.neilellis.dollar.types.DollarVoid
      */
     @NotNull
@@ -215,7 +194,8 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     void clear();
 
     @NotNull
-    @Guarded(ChainGuard.class) boolean containsKey(Object key);
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class) boolean containsKey(Object key);
 
     @NotNull
     @Guarded(ChainGuard.class)
@@ -229,25 +209,8 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     }
 
     @NotNull
+    @Guarded(NotNullGuard.class)
     @Override String toString();
-
-    @NotNull
-    @Deprecated
-    @Guarded(NotNullGuard.class)
-    Stream<String> keyStream();
-
-    /**
-     * Returns this {@link me.neilellis.dollar.var} object as a stream of key value pairs, with the values themselves
-     * being {@link me.neilellis.dollar.var} objects.
-     *
-     * @return stream of key/value pairs
-     */
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(NotNullCollectionGuard.class)
-    @Deprecated
-    java.util.stream.Stream<Map.Entry<String, var>> kvStream();
 
     /**
      * Prints the S() value of this {@link var} to stdout.
@@ -264,7 +227,6 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
 
     @NotNull
     @Guarded(ChainGuard.class)
-    @Guarded(NotNullCollectionGuard.class)
-    Collection<var> values();
+    @Guarded(NotNullCollectionGuard.class) Collection<var> values();
 
 }

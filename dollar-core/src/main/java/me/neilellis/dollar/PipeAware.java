@@ -27,8 +27,7 @@ import org.jetbrains.annotations.NotNull;
 public interface PipeAware {
     @NotNull
     @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    var $pipe(@NotNull String label, @NotNull String js);
+    @Guarded(ChainGuard.class) var $eval(@NotNull String js);
 
     default
     @NotNull
@@ -45,40 +44,12 @@ public interface PipeAware {
 
     @NotNull
     @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    var $eval(@NotNull String js);
-
-    @NotNull
-    @Deprecated
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    var $pipe(@NotNull String classModule);
+    @Guarded(ChainGuard.class) var $pipe(@NotNull String label, @NotNull String js);
 
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
     var $pipe(@NotNull Class<? extends Pipeable> clazz);
 
-    @Deprecated
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    var eval(String label, DollarEval eval);
 
-    @Deprecated
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    var eval(DollarEval eval);
-
-    //  /**
-//   * If the class has a method $ call($ in) then that method is called otherwise converts this object to a set of string
-//   * parameters and passes them to the main method of the clazz. <p> NB: This is the preferred way to pass values
-//   * between classes as it preserves the stateless nature. Try where possible to maintain a stateless context to
-//   * execution. </p>
-//   *
-//   * @param clazz the class to pass this to.
-//   */
-    @Deprecated
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    var eval(Class clazz);
 }

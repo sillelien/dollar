@@ -69,12 +69,6 @@ public class DollarVoid extends AbstractDollar implements var {
         return $copy();
     }
 
-    @NotNull
-    @Override
-    public var $(@NotNull String key) {
-        return $copy();
-    }
-
     @Nullable
     @Override
     public <R> R $() {
@@ -104,6 +98,12 @@ public class DollarVoid extends AbstractDollar implements var {
         return DollarStatic.$(false);
     }
 
+    @NotNull
+    @Override
+    public var $(@NotNull String key) {
+        return $copy();
+    }
+
     @Override
     public var $has(@NotNull String key) {
         return DollarStatic.$(false);
@@ -113,6 +113,23 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public String S(@NotNull String key) {
         return "";
+    }
+
+    @NotNull
+    @Override
+    public var $rm(@NotNull String value) {
+        return $copy();
+    }
+
+    @Override
+    public var $size() {
+        return DollarStatic.$(0);
+    }
+
+    @NotNull
+    @Override
+    public var remove(Object value) {
+        return $copy();
     }
 
     @NotNull
@@ -129,47 +146,13 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $rm(@NotNull String value) {
-        return $copy();
-    }
-
-    @Override
-    public var $size() {
-        return DollarStatic.$(0);
-    }
-
-    @Override
-    public Stream<String> keyStream() {
-        return Collections.<String>emptyList().stream();
-    }
-
-    @NotNull
-    @Override
-    public var remove(Object value) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
     public var $abs() {
         return this;
     }
 
     @NotNull
     @Override
-    public var $dec(@NotNull var amount) {
-        return this;
-    }
-
-    @NotNull
-    @Override
     public var $divide(@NotNull var v) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
         return this;
     }
 
@@ -209,7 +192,7 @@ public class DollarVoid extends AbstractDollar implements var {
         return $copy();
     }
 
-    @Override
+    @NotNull @Override
     public Integer I(@NotNull String key) {
         return 0;
     }
@@ -217,12 +200,6 @@ public class DollarVoid extends AbstractDollar implements var {
     @NotNull
     @Override
     public var eval(String label, @NotNull DollarEval lambda) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var eval(@NotNull Class clazz) {
         return $copy();
     }
 
@@ -234,6 +211,12 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public boolean equals(@Nullable Object obj) {
         return (obj instanceof var && ((var) obj).$() == null) || obj == null;
+    }
+
+    @NotNull
+    @Override
+    public var eval(@NotNull Class clazz) {
+        return $copy();
     }
 
     @NotNull
@@ -282,7 +265,7 @@ public class DollarVoid extends AbstractDollar implements var {
         }
     }
 
-    @Override
+    @NotNull @Override
     public Integer I() {
         return 0;
     }
@@ -305,7 +288,7 @@ public class DollarVoid extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean is(Type... types) {
+    public boolean is(@NotNull Type... types) {
         for (Type type : types) {
             if (type == Type.VOID) {
                 return true;
@@ -329,11 +312,6 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public boolean isVoid() {
         return true;
-    }
-
-    @Override
-    public Number number(@NotNull String key) {
-        return 0;
     }
 
     @NotNull
@@ -362,7 +340,6 @@ public class DollarVoid extends AbstractDollar implements var {
         }
     }
 
-
     @Override
     public boolean isBoolean() {
         return false;
@@ -386,6 +363,28 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return true;
+    }
+
+    @Override
+    public Stream<String> keyStream() {
+        return Collections.<String>emptyList().stream();
+    }
+
+    @Override
+    public Number number(@NotNull String key) {
+        return 0;
+    }
+
+    @NotNull
+    @Override
+    public var $dec(@NotNull var amount) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $inc(@NotNull var amount) {
+        return this;
     }
 
     @NotNull

@@ -20,7 +20,6 @@ import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -50,20 +49,8 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
 
     @NotNull
     @Override
-    public var $dec(@NotNull var amount) {
-        return DollarFactory.fromValue(value - amount.D(), errors(), amount.errors());
-    }
-
-    @NotNull
-    @Override
     public var $divide(@NotNull var v) {
         return DollarFactory.fromValue(value / v.D(), errors(), v.errors());
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return DollarFactory.fromValue(value + amount.D(), errors(), amount.errors());
     }
 
     @NotNull
@@ -120,7 +107,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     }
 
     @Override
-    public boolean is(Type... types) {
+    public boolean is(@NotNull Type... types) {
         for (Type type : types) {
             if (type == Type.DECIMAL) {
                 return true;
@@ -129,20 +116,13 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         return false;
     }
 
-    @Override
-    @NotNull
-    public Number number(@NotNull String key) {
-        return value;
-    }
-
     @NotNull
     @Override
     public Double D() {
         return value;
     }
 
-    @Nullable
-    @Override
+    @NotNull @Override
     public Long L() {
         return value.longValue();
     }
@@ -225,5 +205,23 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return true;
+    }
+
+    @Override
+    @NotNull
+    public Number number(@NotNull String key) {
+        return value;
+    }
+
+    @NotNull
+    @Override
+    public var $dec(@NotNull var amount) {
+        return DollarFactory.fromValue(value - amount.D(), errors(), amount.errors());
+    }
+
+    @NotNull
+    @Override
+    public var $inc(@NotNull var amount) {
+        return DollarFactory.fromValue(value + amount.D(), errors(), amount.errors());
     }
 }

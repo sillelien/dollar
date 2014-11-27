@@ -20,7 +20,6 @@ import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -90,22 +89,8 @@ public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
 
     @NotNull
     @Override
-    public var $dec(@NotNull var amount) {
-        return DollarFactory.fromValue(value.plusSeconds((long) (ONE_DAY_SECONDS * amount.D())), errors(),
-                                       amount.errors());
-    }
-
-    @NotNull
-    @Override
     public var $divide(@NotNull var v) {
         return DollarFactory.fromValue(asDecimal() / v.D(), errors(), v.errors());
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return DollarFactory.fromValue(value.minusSeconds((long) (ONE_DAY_SECONDS * amount.D())), errors(),
-                                       amount.errors());
     }
 
     @NotNull
@@ -166,13 +151,27 @@ public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
     }
 
     @Override
-    public boolean is(Type... types) {
+    public boolean is(@NotNull Type... types) {
         for (Type type : types) {
             if (type == Type.DATE) {
                 return true;
             }
         }
         return false;
+    }
+
+    @NotNull
+    @Override
+    public var $dec(@NotNull var amount) {
+        return DollarFactory.fromValue(value.plusSeconds((long) (ONE_DAY_SECONDS * amount.D())), errors(),
+                                       amount.errors());
+    }
+
+    @NotNull
+    @Override
+    public var $inc(@NotNull var amount) {
+        return DollarFactory.fromValue(value.minusSeconds((long) (ONE_DAY_SECONDS * amount.D())), errors(),
+                                       amount.errors());
     }
 
     @Override
@@ -187,8 +186,7 @@ public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
         return asDecimal();
     }
 
-    @Nullable
-    @Override
+    @NotNull @Override
     public Long L() {
         return asDecimal().longValue();
     }

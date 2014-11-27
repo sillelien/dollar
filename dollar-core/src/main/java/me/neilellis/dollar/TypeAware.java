@@ -18,10 +18,7 @@ package me.neilellis.dollar;
 
 import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
-import me.neilellis.dollar.guard.AllVarCollectionGuard;
-import me.neilellis.dollar.guard.AllVarMapGuard;
-import me.neilellis.dollar.guard.Guarded;
-import me.neilellis.dollar.guard.NotNullCollectionGuard;
+import me.neilellis.dollar.guard.*;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +34,7 @@ import java.util.Map;
 public interface TypeAware {
 
     @NotNull
+    @Guarded(NotNullGuard.class)
     default String $S() {
         String s = S();
         return s == null ? "" : s;
@@ -48,9 +46,11 @@ public interface TypeAware {
     var $as(Type type);
 
     @NotNull
+    @Guarded(NotNullGuard.class)
     Double D();
 
     @NotNull
+    @Guarded(NotNullGuard.class)
     Integer I();
 
     /**
@@ -60,12 +60,16 @@ public interface TypeAware {
      * @return an Integer value (or null).
      */
     @NotNull
+    @Guarded(NotNullGuard.class)
     Integer I(@NotNull String key);
 
+    @Guarded(NotNullGuard.class)
     @NotNull Long L();
 
+    @Guarded(NotNullGuard.class)
     @NotNull Number N();
 
+    @Guarded(NotNullGuard.class)
     default String getPairKey() {
         return toMap().keySet().iterator().next();
     }
@@ -75,17 +79,20 @@ public interface TypeAware {
      *
      * @return a nested Map or null if the operation doesn't make sense (i.e. on a single valued object or list)
      */
+    @Guarded(NotNullGuard.class)
     @Nullable Map<String, Object> toMap();
 
+    @Guarded(NotNullGuard.class)
     default var getPairValue() {
         return $map().values().iterator().next();
     }
 
     @NotNull
+    @Guarded(NotNullGuard.class)
     @Guarded(AllVarMapGuard.class) ImmutableMap<String, var> $map();
 
     //Any of these
-    boolean is(Type... types);
+    @Guarded(NotNullGuard.class) boolean is(@NotNull Type... types);
 
     boolean isDecimal();
 
@@ -112,6 +119,7 @@ public interface TypeAware {
     JsonObject json(@NotNull String key);
 
     @NotNull
+    @Guarded(NotNullGuard.class)
     default JsonArray jsonArray() {
         JsonArray array = new JsonArray();
         for (me.neilellis.dollar.var var : toList()) {
@@ -136,16 +144,6 @@ public interface TypeAware {
      * @see me.neilellis.dollar.types.DollarFail
      */
     boolean isVoid();
-
-    /**
-     * Returns the value for the supplied key as a general {@link Number}.
-     *
-     * @param key the key to look up
-     * @return a Number or null if this operation is not applicable
-     */
-    @Nullable
-    @Deprecated
-    Number number(@NotNull String key);
 
     /**
      * Returns this object as a org.json.JSONObject.
@@ -180,6 +178,8 @@ public interface TypeAware {
     @Nullable
     ImmutableList<String> strings();
 
+    @Guarded(NotNullGuard.class)
+    @NotNull
     InputStream toStream();
 
 }

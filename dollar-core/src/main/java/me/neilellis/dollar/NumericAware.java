@@ -19,7 +19,9 @@ package me.neilellis.dollar;
 import me.neilellis.dollar.guard.ChainGuard;
 import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.NotNullGuard;
+import me.neilellis.dollar.guard.NotNullParametersGuard;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static me.neilellis.dollar.DollarStatic.$;
 
@@ -33,90 +35,38 @@ public interface NumericAware {
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class) var $abs();
 
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    @Deprecated
-    default var $dec(@NotNull String key, @NotNull var amount) {
-        return $dec($(key), amount);
-    }
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    @Deprecated var $dec(@NotNull var key, @NotNull var amount);
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    @Deprecated
-    default var $dec(@NotNull String key, @NotNull Number amount) {
-        return $dec($(key), $(amount));
-    }
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    @Deprecated
-    default var $dec(@NotNull Number amount) {
-        return $dec($(amount));
-    }
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    @Deprecated var $dec(@NotNull var amount);
-
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
     @NotNull
     default var $dec() {
-        return $dec($(1));
+        return $minus($(1));
     }
+
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class) var $minus(@NotNull var value);
 
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class) var $divide(@NotNull var v);
 
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    @NotNull
-    @Deprecated
-    default var $inc(@NotNull String key, @NotNull var amount) {
-        return $inc($(key), amount);
-    }
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    @Deprecated var $inc(@NotNull var key, @NotNull var amount);
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    @Deprecated
-    default var $inc(@NotNull String key, @NotNull Number amount) {
-        return $inc($(key), $(amount));
-    }
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    @Deprecated
-    default var $inc(@NotNull Number amount) {
-        return $inc($(amount));
-    }
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class) var $inc(@NotNull var amount);
-
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
     default var $inc() {
-        return $inc($(1));
+        return $plus($(1));
     }
+
+    /**
+     * Returns a new {@link me.neilellis.dollar.var} with this value appended to it.
+     *
+     * @param value the value to append, this value may be null
+     *
+     * @return a new object with the value supplied appended
+     */
+
+    @NotNull
+    @Guarded(ChainGuard.class) var $plus(@Nullable var value);
 
     @NotNull
     @Guarded(NotNullGuard.class)

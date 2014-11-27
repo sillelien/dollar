@@ -59,12 +59,6 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $(@NotNull String key) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
-    }
-
-    @NotNull
-    @Override
     public Range<var> $() {
         return range;
     }
@@ -94,6 +88,12 @@ public class DollarRange extends AbstractDollar {
                               range.upperEndpoint().compareTo(DollarStatic.$(value)) >= 0);
     }
 
+    @NotNull
+    @Override
+    public var $(@NotNull String key) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+    }
+
     @Override
     public var $has(@NotNull String key) {
         return DollarStatic.$(false);
@@ -103,6 +103,25 @@ public class DollarRange extends AbstractDollar {
     @Override
     public String S(@NotNull String key) {
         return range.toString();
+    }
+
+    @NotNull
+    @Override
+    public var $rm(@NotNull String value) {
+        return $copy();
+
+    }
+
+    @NotNull
+    @Override
+    public var $size() {
+        return DollarStatic.$(toList().size());
+    }
+
+    @NotNull
+    @Override
+    public var remove(Object value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
@@ -119,51 +138,14 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $rm(@NotNull String value) {
-        return $copy();
-
-    }
-
-    @NotNull
-    @Override
-    public var $size() {
-        return DollarStatic.$(toList().size());
-    }
-
-    @Override
-    public Stream<String> keyStream() {
-        return null;
-
-    }
-
-    @NotNull
-    @Override
-    public var remove(Object value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
-    }
-
-    @NotNull
-    @Override
     public var $abs() {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $dec(@NotNull var amount) {
-        return this;
-    }
-
-    @NotNull
-    @Override
     public var $divide(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return this;
     }
 
     @NotNull
@@ -184,7 +166,7 @@ public class DollarRange extends AbstractDollar {
         return DollarFactory.fromValue(Range.closed(range.upperEndpoint(), range.lowerEndpoint()), errors());
     }
 
-    @Override
+    @NotNull @Override
     public Integer I(@NotNull String key) {
         return null;
     }
@@ -192,13 +174,6 @@ public class DollarRange extends AbstractDollar {
     @Override
     public boolean isList() {
         return true;
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-        DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
-        return ImmutableMap.of();
     }
 
     @Override
@@ -224,12 +199,6 @@ public class DollarRange extends AbstractDollar {
 
     }
 
-    @NotNull
-    @Override
-    public String S() {
-        return String.format("%s..%s", range.lowerEndpoint(), range.upperEndpoint());
-    }
-
     @Override
     public int compareTo(var o) {
         if ($containsValue(o).isTrue()) {
@@ -249,6 +218,50 @@ public class DollarRange extends AbstractDollar {
         return false;
     }
 
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+        return ImmutableMap.of();
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return !range.isEmpty();
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public String S() {
+        return String.format("%s..%s", range.lowerEndpoint(), range.upperEndpoint());
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
+    }
+
+    @Override
+    public Stream<String> keyStream() {
+        return null;
+
+    }
+
+    @Override
+    public Number number(@NotNull String key) {
+        return null;
+    }
+
     @Override
     public var $as(Type type) {
         switch (type) {
@@ -265,30 +278,23 @@ public class DollarRange extends AbstractDollar {
         }
     }
 
+    @NotNull
     @Override
-    public boolean isTrue() {
-        return false;
+    public var $dec(@NotNull var amount) {
+        return this;
     }
 
+    @NotNull
     @Override
-    public boolean isTruthy() {
-        return !range.isEmpty();
+    public var $inc(@NotNull var amount) {
+        return this;
     }
 
-    @Override
+    @NotNull @Override
     public Integer I() {
         return null;
     }
 
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
 
     @NotNull
     @Override
@@ -298,7 +304,7 @@ public class DollarRange extends AbstractDollar {
 
 
     @Override
-    public boolean is(Type... types) {
+    public boolean is(@NotNull Type... types) {
         for (Type type : types) {
             if (type == Type.RANGE) {
                 return true;
@@ -333,10 +339,6 @@ public class DollarRange extends AbstractDollar {
         return false;
     }
 
-    @Override
-    public Number number(@NotNull String key) {
-        return null;
-    }
 
     @NotNull
     @Override

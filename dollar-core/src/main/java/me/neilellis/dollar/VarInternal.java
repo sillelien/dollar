@@ -19,7 +19,8 @@ package me.neilellis.dollar;
 import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.guard.ChainGuard;
 import me.neilellis.dollar.guard.Guarded;
-import me.neilellis.dollar.guard.ReturnVarOnlyGuard;
+import me.neilellis.dollar.guard.NotNullCollectionGuard;
+import me.neilellis.dollar.guard.NotNullGuard;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -34,19 +35,22 @@ public interface VarInternal {
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    @Guarded(ReturnVarOnlyGuard.class)
     var $copy();
 
     @NotNull
     /**
      * Like _unwrap() except it causes lambda evaluation but does not propagate through lists and maps.
      */
+    @Guarded(ChainGuard.class)
     var _fix(boolean parallel);
 
+    @Guarded(ChainGuard.class)
     var _fixDeep(boolean parallel);
 
+    @Guarded(NotNullGuard.class)
     void _src(String src);
 
+    @Guarded(NotNullGuard.class)
     String _src();
 
     /**
@@ -54,8 +58,12 @@ public interface VarInternal {
      *
      * @return an unwrapped class.
      */
+    @Guarded(ChainGuard.class)
     @NotNull var _unwrap();
 
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullGuard.class)
+    @Guarded(NotNullCollectionGuard.class)
     @NotNull var copy(@NotNull ImmutableList<Throwable> errors);
 
 }
