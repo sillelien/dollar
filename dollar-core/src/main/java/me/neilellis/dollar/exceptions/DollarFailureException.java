@@ -27,6 +27,10 @@ public class DollarFailureException extends DollarException {
         super(failureType.toString());
     }
 
+    public DollarFailureException(DollarFail.FailureType failureType, String message) {
+        super(failureType.toString() + ":" + message);
+    }
+
     public DollarFailureException(Throwable t, DollarFail.FailureType failureType) {
         super(t, failureType.toString() + ": " + t.getMessage());
     }

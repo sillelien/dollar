@@ -134,19 +134,13 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var value) {
+    public var $abs() {
         return this;
     }
 
     @NotNull
     @Override
-    public var $plus(var value) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var $abs() {
+    public var $minus(@NotNull var value) {
         return this;
     }
 
@@ -154,6 +148,12 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public var $divide(@NotNull var v) {
         return this;
+    }
+
+    @NotNull
+    @Override
+    public var $plus(var value) {
+        return $copy();
     }
 
     @NotNull
@@ -176,6 +176,28 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
+    public var $dec(@NotNull var amount) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $inc(@NotNull var amount) {
+        return this;
+    }
+
+    @Override
+    public Stream<String> keyStream() {
+        return Collections.<String>emptyList().stream();
+    }
+
+    @Override
+    public Number number(@NotNull String key) {
+        return 0;
+    }
+
+    @NotNull
+    @Override
     public Stream<var> $stream(boolean parallel) {
         return Stream.empty();
     }
@@ -188,29 +210,14 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var eval(@NotNull DollarEval lambda) {
-        return $copy();
-    }
-
-    @NotNull @Override
-    public Integer I(@NotNull String key) {
-        return 0;
-    }
-
-    @NotNull
-    @Override
     public var eval(String label, @NotNull DollarEval lambda) {
         return $copy();
     }
 
+    @NotNull
     @Override
-    public int hashCode() {
-        return 0;
-    }
-
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        return (obj instanceof var && ((var) obj).$() == null) || obj == null;
+    public var eval(@NotNull DollarEval lambda) {
+        return $copy();
     }
 
     @NotNull
@@ -237,6 +244,21 @@ public class DollarVoid extends AbstractDollar implements var {
         return $copy();
     }
 
+    @NotNull @Override
+    public Integer I(@NotNull String key) {
+        return 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return (obj instanceof var && ((var) obj).$() == null) || obj == null;
+    }
+
     @NotNull
     @Override
     public String S() {
@@ -255,13 +277,15 @@ public class DollarVoid extends AbstractDollar implements var {
             case MAP:
                 return DollarStatic.$("value", this);
             case DECIMAL:
+                return DollarStatic.$(0.0d);
+            case INTEGER:
                 return DollarStatic.$(0);
             case VOID:
                 return this;
             case RANGE:
                 return DollarFactory.fromValue(Range.closed(0, 0));
             default:
-                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
+                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST, type.toString());
         }
     }
 
@@ -274,6 +298,10 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public Number N() {
         return 0;
+    }
+
+    @Override public boolean isCollection() {
+        return false;
     }
 
     @Override
@@ -363,28 +391,6 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return true;
-    }
-
-    @Override
-    public Stream<String> keyStream() {
-        return Collections.<String>emptyList().stream();
-    }
-
-    @Override
-    public Number number(@NotNull String key) {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public var $dec(@NotNull var amount) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return this;
     }
 
     @NotNull

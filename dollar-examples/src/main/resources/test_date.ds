@@ -1,48 +1,32 @@
-@@ date()
-@@ date() + 1
-@@ date() - 1
+@@ DATE()
+@@ DATE() + 1
+@@ DATE() - 1
 
-.: date() + 1 is DATE
-.: date() - 1 is DATE
-.: date() + 1.0 is DATE
-.: date() - 1.0 is DATE
+.: DATE() + 1 is Date
+.: DATE() - 1 is Date
+.: DATE() + 1.0 is Date
+.: DATE() - 1.0 is Date
 
-.: date() + "1.0" is DATE
-.: date() / "1.0" is DECIMAL
+.: DATE() + "1.0" is Date
+.: DATE() / "1.0" is Decimal
 
-.: date() * 10 is DECIMAL
-.: date() / 10 is DECIMAL
+.: DATE() * 10 is Decimal
+.: DATE() / 10 is Decimal
 
-@@ date().DAY_OF_WEEK
+@@ DATE().DAY_OF_WEEK
 
-@@ date()['DAY_OF_YEAR']=1
+@@ DATE()['DAY_OF_YEAR']=1
 
-fortnight := ($1 * 14)
+Fortnight := ($1 * 14)
 
-@@ date() + 1 day
-@@ date() + 1 hour
-@@ date() + 1 sec
-@@ date() + 1 fortnight
-
-
-[1,2,3,4] -> sort -> min
-[1,2,3,4] sort min
-
-1 hour
-
-@@ void|"Hello"
+@@ DATE() + 1 Day
+@@ DATE() + 1 Hour
+@@ DATE() + 1 Sec
+@@ DATE() + 1 Fortnight
 
 
-dates := [ date(),{sleep 4; time()},date() ]
-
-@@ |..| dates
-@@ |:| dates
-
-s= -< dates
-@@ "Hello World"
-@@ s
-
-
+[1,2,3,4] -> SORT -> MIN
+[1,2,3,4] SORT MIN
 
 
 

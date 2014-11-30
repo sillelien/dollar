@@ -22,6 +22,7 @@ import me.neilellis.dollar.var;
 import org.codehaus.jparsec.*;
 import org.codehaus.jparsec.functors.Map;
 import org.codehaus.jparsec.pattern.CharPredicates;
+import org.codehaus.jparsec.pattern.Pattern;
 import org.codehaus.jparsec.pattern.Patterns;
 
 import static me.neilellis.dollar.DollarStatic.$;
@@ -57,7 +58,7 @@ public class DollarLexer {
     static final Parser<?> TERMINATOR_SYMBOL = Parsers.or(OP("\n"), OP(";")).many1();
     static final Parser<?> COMMA_TERMINATOR = Parsers.sequence(OP(","), OP("\n").many());
     static final Parser<?> COMMA_OR_NEWLINE_TERMINATOR = Parsers.or(OP(","), OP("\n")).many1();
-    static final Parser<?> SEMICOLON_TERMINATOR = Parsers.or(OP(";"), OP("\n").many1());
+    static final Parser<?> SEMICOLON_TERMINATOR = Parsers.or(OP(";").followedBy(OP("\n").many()), OP("\n").many1());
     static final Parser<Void> IGNORED =
             Parsers.or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT, Scanners.among(" \t\r").many1(),
                        Scanners.lineComment("#!")).skipMany();
@@ -80,7 +81,7 @@ public class DollarLexer {
                Terminals.StringLiteral.DOUBLE_QUOTE_TOKENIZER,
                Terminals.StringLiteral.SINGLE_QUOTE_TOKENIZER,
                Terminals.IntegerLiteral.TOKENIZER,
-               Parsers.longest(KEYWORDS.tokenizer(), Terminals.Identifier.TOKENIZER));
+               Parsers.longest(DollarLexer.builtin(), KEYWORDS.tokenizer(), Terminals.Identifier.TOKENIZER));
     //Grammar
     static final Parser<var> IDENTIFIER = identifier();
     static final Parser<var> IDENTIFIER_KEYWORD = identifierKeyword();
@@ -90,24 +91,12 @@ public class DollarLexer {
             Terminals.DecimalLiteral.PARSER.map(s -> s.contains(".") ? $(Double.parseDouble(s)) : $(Long.parseLong(s))
             );
     static final Parser<var> INTEGER_LITERAL = Terminals.IntegerLiteral.PARSER.map(s -> $(Long.parseLong(s)));
-    static final Parser<var> URL = token(new TokenMap<String>() {
-        @Override
-        public String map(Token token) {
-            final Object val = token.value();
-            if (val instanceof Tokens.Fragment) {
-                Tokens.Fragment c = (Tokens.Fragment) val;
-                if (!c.tag().equals("uri")) {
-                    return null;
-                }
-                return c.text();
-            } else { return null; }
-        }
-
-        @Override
-        public String toString() {
-            return "URI";
-        }
-    }).map(DollarFactory::fromURI);
+    static final Parser<var> BUILTIN = token(new TokenTagMap("builtin")).map(s -> {
+        var v = $(s);
+        v.setMetaAttribute("__builtin", s);
+        return v;
+    });
+    static final Parser<var> URL = token(new TokenTagMap("uri")).map(DollarFactory::fromURI);
 
     static Parser<?> url() {
         return (
@@ -200,6 +189,34 @@ public class DollarLexer {
 
     }
 
+    static Parser<?> builtin() {
+        return Scanners.pattern(new Pattern() {
+            @Override public int match(CharSequence src, int begin, int end) {
+                int i = begin;
+                for (; i < end && Character.isAlphabetic(src.charAt(i)); i++) {
+                    //
+                }
+                final String name = src.subSequence(begin, i).toString();
+                if (Builtins.exists(name)) {
+                    return i - begin;
+                } else {
+                    return Pattern.MISMATCH;
+                }
+            }
+        }, "builtin").source()
+                       .map(new Map<String, Tokens.Fragment>() {
+                           public Tokens.Fragment map(String text) {
+                               return Tokens.fragment(text, "builtin");
+                           }
+
+                           @Override
+                           public String toString() {
+                               return "builtin";
+                           }
+                       });
+    }
+
+
     static Parser<var> identifier() {
         return Terminals.Identifier.PARSER.map(i -> {
             switch (i) {
@@ -246,5 +263,28 @@ public class DollarLexer {
 
     static Parser<?> KEYWORD(String... names) {
         return KEYWORDS.token(names);
+    }
+
+    private static class TokenTagMap implements TokenMap<String> {
+        private String tag;
+
+        private TokenTagMap(String tag) {this.tag = tag;}
+
+        @Override
+        public String map(Token token) {
+            final Object val = token.value();
+            if (val instanceof Tokens.Fragment) {
+                Tokens.Fragment c = (Tokens.Fragment) val;
+                if (!c.tag().equals(tag)) {
+                    return null;
+                }
+                return c.text();
+            } else { return null; }
+        }
+
+        @Override
+        public String toString() {
+            return tag;
+        }
     }
 }

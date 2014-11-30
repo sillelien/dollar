@@ -60,7 +60,7 @@ public class CollectOperator implements Map<Object[], var> {
                     if (endValue) {
                         collected.clear();
                         count[0] = -1;
-                        returnValue = fix((var) objects[3], false);
+                        returnValue = ((var) objects[3])._fixDeep();
                     }
                     return returnValue;
                 });

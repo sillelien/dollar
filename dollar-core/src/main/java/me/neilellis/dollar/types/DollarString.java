@@ -56,7 +56,9 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @NotNull
     @Override
     public var $divide(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_STRING_OPERATION);
+        final String[] split = value.split(v.S());
+        return DollarFactory.fromValue(Arrays.asList(split), errors());
+
     }
 
     @NotNull @Override public var $inc() {
@@ -133,6 +135,23 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
+    public var $dec(@NotNull var amount) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $inc(@NotNull var amount) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_STRING_OPERATION);
+    }
+
+    @Override
+    public Number number(@NotNull String key) {
+        return new BigDecimal(key);
+    }
+
+    @NotNull
+    @Override
     public var $plus(var newValue) {
         return DollarFactory.fromValue(value + newValue.toString(), errors());
     }
@@ -180,22 +199,5 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @Override
     public boolean equals(@Nullable Object obj) {
         return obj != null && value.equals(obj.toString());
-    }
-
-    @Override
-    public Number number(@NotNull String key) {
-        return new BigDecimal(key);
-    }
-
-    @NotNull
-    @Override
-    public var $dec(@NotNull var amount) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_STRING_OPERATION);
     }
 }

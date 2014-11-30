@@ -90,22 +90,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @NotNull
-    @Override
-    public var $minus(@NotNull var value) {
-        if (value.equals(this)) {
-            return DollarStatic.$void();
-        } else {
-            return this;
-        }
-    }
-
-    @NotNull
-    @Override
-    public var $plus(var newValue) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
-    }
-
-    @NotNull
     public var $rm(@NotNull String value) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
 
@@ -114,11 +98,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     @Override
     public var $size() {
         return DollarStatic.$(1);
-    }
-
-    public Stream<String> keyStream() {
-        return Stream.empty();
-
     }
 
     @NotNull
@@ -131,6 +110,10 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     @Override
     public String S() {
         return value.toString();
+    }
+
+    @Override public boolean isCollection() {
+        return false;
     }
 
     public Map<String, Object> toMap() {
@@ -186,6 +169,12 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return Stream.of(this);
     }
 
+    @NotNull
+    @Override
+    public var $copy() {
+        return DollarFactory.fromValue(value, errors());
+    }
+
     @Override
     public boolean isSingleValue() {
         return true;
@@ -198,8 +187,23 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     @Override
-    public var $copy() {
-        return DollarFactory.fromValue(value, errors());
+    public var $minus(@NotNull var value) {
+        if (value.equals(this)) {
+            return DollarStatic.$void();
+        } else {
+            return this;
+        }
+    }
+
+    @NotNull
+    @Override
+    public var $plus(var newValue) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    }
+
+    public Stream<String> keyStream() {
+        return Stream.empty();
+
     }
 
 

@@ -128,6 +128,12 @@ public class ParserTest {
         new DollarParser().parse(getClass().getResourceAsStream("/test_redis.ds"), parallel);
     }
 
+    @Test
+    public void testStrings() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_strings.ds"), parallel);
+    }
+
+    @Test
     public void testURIs() throws Exception {
         new DollarParser().parse(getClass().getResourceAsStream("/test_uris.ds"), parallel);
     }

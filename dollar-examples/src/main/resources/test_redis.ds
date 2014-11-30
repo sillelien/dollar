@@ -2,14 +2,14 @@
 
 
 redis := "redis://localhost:6379/test" as uri
-send ("Hello World " + date()) to redis
+send ("Hello World " + DATE()) to redis
 
 @@ all redis
 
 
 a := {
     2
-    @@ date()
+    @@ DATE()
     5
 }
 

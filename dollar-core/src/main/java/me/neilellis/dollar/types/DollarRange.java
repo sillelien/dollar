@@ -126,19 +126,13 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $plus(var value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
-    }
-
-    @NotNull
-    @Override
     public var $abs() {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull var value) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 
@@ -146,6 +140,12 @@ public class DollarRange extends AbstractDollar {
     @Override
     public var $divide(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION); //TODO
+    }
+
+    @NotNull
+    @Override
+    public var $plus(var value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
@@ -166,6 +166,29 @@ public class DollarRange extends AbstractDollar {
         return DollarFactory.fromValue(Range.closed(range.upperEndpoint(), range.lowerEndpoint()), errors());
     }
 
+    @NotNull
+    @Override
+    public var $dec(@NotNull var amount) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $inc(@NotNull var amount) {
+        return this;
+    }
+
+    @Override
+    public Stream<String> keyStream() {
+        return null;
+
+    }
+
+    @Override
+    public Number number(@NotNull String key) {
+        return null;
+    }
+
     @NotNull @Override
     public Integer I(@NotNull String key) {
         return null;
@@ -179,6 +202,13 @@ public class DollarRange extends AbstractDollar {
     @Override
     public int hashCode() {
         return range.hashCode();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
+        return ImmutableMap.of();
     }
 
     @Override
@@ -218,16 +248,15 @@ public class DollarRange extends AbstractDollar {
         return false;
     }
 
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-        DollarFactory.failure(DollarFail.FailureType.INVALID_RANGE_OPERATION);
-        return ImmutableMap.of();
-    }
-
     @Override
     public boolean isTrue() {
         return false;
+    }
+
+    @NotNull
+    @Override
+    public String S() {
+        return String.format("%s..%s", range.lowerEndpoint(), range.upperEndpoint());
     }
 
     @Override
@@ -240,26 +269,9 @@ public class DollarRange extends AbstractDollar {
         return false;
     }
 
-    @NotNull
-    @Override
-    public String S() {
-        return String.format("%s..%s", range.lowerEndpoint(), range.upperEndpoint());
-    }
-
     @Override
     public boolean isNeitherTrueNorFalse() {
         return true;
-    }
-
-    @Override
-    public Stream<String> keyStream() {
-        return null;
-
-    }
-
-    @Override
-    public Number number(@NotNull String key) {
-        return null;
     }
 
     @Override
@@ -278,17 +290,6 @@ public class DollarRange extends AbstractDollar {
         }
     }
 
-    @NotNull
-    @Override
-    public var $dec(@NotNull var amount) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return this;
-    }
 
     @NotNull @Override
     public Integer I() {
@@ -339,6 +340,9 @@ public class DollarRange extends AbstractDollar {
         return false;
     }
 
+    @Override public boolean isCollection() {
+        return true;
+    }
 
     @NotNull
     @Override

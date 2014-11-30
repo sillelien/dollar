@@ -123,71 +123,6 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull
-    public Stream<Map.Entry<String, var>> kvStream() {
-        return $map().entrySet().stream();
-
-    }
-
-    @NotNull
-    public var eval(String label, @NotNull DollarEval lambda) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_OPERATION);
-
-    }
-
-    @NotNull
-    @Override
-    public var eval(@NotNull DollarEval lambda) {
-        return eval("anon", lambda);
-    }
-
-    @NotNull
-    @Override
-    public var eval(@NotNull Class clazz) {
-        List<String> list = this.strings();
-        try {
-            try {
-                Method callMethod = clazz.getMethod("call", var.class);
-                callMethod.invoke(null, this);
-                return this;
-            } catch (NoSuchMethodException e) {
-                //
-            }
-            try {
-                Method mainMethod = clazz.getMethod("main", String[].class);
-                Object value;
-                try {
-                    value = mainMethod.invoke(null, list.toArray(new String[list.size()]));
-                } catch (Exception e) {
-                    return DollarStatic.handleError(e, this);
-                }
-                return DollarFactory.fromValue(value, ImmutableList.of());
-            } catch (NoSuchMethodException e) {
-                return DollarFactory.failure(DollarFail.FailureType.EVALUATION_FAILURE, e);
-            }
-        } catch (@NotNull IllegalAccessException | InvocationTargetException e) {
-            return DollarFactory.failure(DollarFail.FailureType.EVALUATION_FAILURE, e);
-        }
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull String classModule) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $dec(@NotNull var key, @NotNull var amount) {
-        return $(key, $(key).L() - amount.L());
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var key, @NotNull var amount) {
-        return $(key, $(key).L() + amount.L());
-    }
-
-    @NotNull
     public Collection<var> values() {
         return toList();
     }
@@ -247,7 +182,6 @@ public abstract class AbstractDollar implements var {
             result.add(res);
 
         }
-        debug(result);
         final var resultvar = DollarFactory.fromValue(result);
         return resultvar;
     }
@@ -318,6 +252,71 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
+    public var $dec(@NotNull var key, @NotNull var amount) {
+        return $(key, $(key).L() - amount.L());
+    }
+
+    @NotNull
+    @Override
+    public var $inc(@NotNull var key, @NotNull var amount) {
+        return $(key, $(key).L() + amount.L());
+    }
+
+    @NotNull
+    @Override
+    public var $pipe(@NotNull String classModule) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_OPERATION);
+    }
+
+    @NotNull
+    public var eval(String label, @NotNull DollarEval lambda) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_OPERATION);
+
+    }
+
+    @NotNull
+    @Override
+    public var eval(@NotNull DollarEval lambda) {
+        return eval("anon", lambda);
+    }
+
+    @NotNull
+    @Override
+    public var eval(@NotNull Class clazz) {
+        List<String> list = this.strings();
+        try {
+            try {
+                Method callMethod = clazz.getMethod("call", var.class);
+                callMethod.invoke(null, this);
+                return this;
+            } catch (NoSuchMethodException e) {
+                //
+            }
+            try {
+                Method mainMethod = clazz.getMethod("main", String[].class);
+                Object value;
+                try {
+                    value = mainMethod.invoke(null, list.toArray(new String[list.size()]));
+                } catch (Exception e) {
+                    return DollarStatic.handleError(e, this);
+                }
+                return DollarFactory.fromValue(value, ImmutableList.of());
+            } catch (NoSuchMethodException e) {
+                return DollarFactory.failure(DollarFail.FailureType.EVALUATION_FAILURE, e);
+            }
+        } catch (@NotNull IllegalAccessException | InvocationTargetException e) {
+            return DollarFactory.failure(DollarFail.FailureType.EVALUATION_FAILURE, e);
+        }
+    }
+
+    @NotNull
+    public Stream<Map.Entry<String, var>> kvStream() {
+        return $map().entrySet().stream();
+
+    }
+
+    @NotNull
+    @Override
     public var $eval(@NotNull String js) {
         return $pipe("anon", js);
     }
@@ -370,12 +369,17 @@ public abstract class AbstractDollar implements var {
         return DollarFactory.fromValue($(), new ImmutableList.Builder<Throwable>().addAll(errors()).build());
     }
 
-    @NotNull @Override public var _fix(boolean parallel) {
+    @NotNull final @Override public var _fix(boolean parallel) {
+        return _fix(0, parallel);
+    }
+
+
+    @Override public var _fix(int depth, boolean parallel) {
         return this;
     }
 
-    @Override public var _fixDeep(boolean parallel) {
-        return this;
+    @Override public final var _fixDeep(boolean parallel) {
+        return _fix(Integer.MAX_VALUE, parallel);
     }
 
     @Override
@@ -667,6 +671,12 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull
+    public var replace(String key, var value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_OPERATION);
+
+    }
+
+    @NotNull
     @Override
     public var $errors() {
         JsonObject json = new JsonObject();
@@ -694,12 +704,6 @@ public abstract class AbstractDollar implements var {
         return DollarFactory.fromValue(json);
     }
 
-    @NotNull
-    public var replace(String key, var value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_OPERATION);
-
-    }
-
     public void replaceAll(BiFunction<? super String, ? super var, ? extends var> function) {
         DollarFactory.failure(DollarFail.FailureType.INVALID_OPERATION);
 
@@ -715,6 +719,11 @@ public abstract class AbstractDollar implements var {
         meta.put(key, value);
     }
 
+    @Override
+    public String getMetaAttribute(String key) {
+        return meta.get(key);
+    }
+
     @NotNull
     @Override
     public var $error(@NotNull String errorMessage, @NotNull ErrorType type) {
@@ -728,10 +737,6 @@ public abstract class AbstractDollar implements var {
         }
     }
 
-    @Override
-    public String getMetaAttribute(String key) {
-        return meta.get(key);
-    }
 
     @NotNull
     @Override

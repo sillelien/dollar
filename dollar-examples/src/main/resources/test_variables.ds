@@ -37,13 +37,15 @@ string := (it is STRING)
 
 
 (previous != it || previous is VOID) e = 1
+@@e
 e=2
 e=3
 
 errorOccured= false
 
-{
+&{
     error { @@ "Caught "+type ; errorOccured= true}
+    @@ "*******"
     e=3
 }
 

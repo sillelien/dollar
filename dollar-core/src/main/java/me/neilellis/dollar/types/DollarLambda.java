@@ -99,13 +99,22 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
 //                return lambda.pipe(in)._unwrap();
             } else if (method.getName().equals("_fix")) {
                 if (fixable) {
-                    return lambda.pipe(DollarFactory.fromValue(args[0]))._fix((Boolean) args[0]);
+                    if (args.length == 1) {
+                        return lambda.pipe(DollarFactory.fromValue(args[0]))._fix((Boolean) args[0]);
+                    } else {
+                        return lambda.pipe(DollarFactory.fromValue(args[1]))._fix((int) args[0], (Boolean) args[1]);
+
+                    }
                 } else {
                     return proxy;
                 }
             } else if (method.getName().equals("_fixDeep")) {
                 if (fixable) {
-                    return lambda.pipe(DollarFactory.fromValue(args[0]))._fixDeep((Boolean) args[0]);
+                    if (args == null || args.length == 0) {
+                        return lambda.pipe(DollarFactory.fromValue(false))._fixDeep();
+                    } else {
+                        return lambda.pipe(DollarFactory.fromValue(args[0]))._fixDeep((Boolean) args[0]);
+                    }
                 } else {
                     return proxy;
                 }

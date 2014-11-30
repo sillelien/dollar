@@ -208,13 +208,16 @@ i <=> 6
 // Subscription assignment
 
 
-j *= random:dummy
+sub := j *= random:dummy
+
 colors= ["red","green","blue"]
 k := colors[j * #colors]
+@@k
 volatile updatedK=false
-k ->? (updatedK=true)
-sleep 2
+k ->? {updatedK=true}
+sleep 5
 &updatedK <=> true
+sub.unsub();
 
 
 

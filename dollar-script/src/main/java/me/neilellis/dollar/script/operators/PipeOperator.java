@@ -26,7 +26,6 @@ import org.codehaus.jparsec.functors.Map;
 import java.util.Collections;
 
 import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.DollarStatic.fix;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -42,18 +41,18 @@ public class PipeOperator implements Map<var, Map<? super var, ? extends var>> {
 
     @Override public Map<? super var, ? extends var> map(var rhs) {
         return lhs -> dollarParser.inScope("pipe", scope, newScope -> {
-            var lhsFix = fix(lhs, false);
+            var lhsFix = lhs._fix(false);
             newScope.setParameter("1", lhsFix);
             Object rhsVal = rhs.$();
             if ((rhsVal instanceof String)) {
                 String rhsStr = rhsVal.toString();
-                if (Builtins.exists(rhsStr)) {
+                if (rhs.getMetaAttribute("__builtin") != null) {
                     return Builtins.execute(rhsStr, Collections.singletonList(lhsFix),
                                             newScope);
-                } else if (scope.has(rhsStr)) {
-                    return fix(scope.get(rhsVal.toString()), false);
+                } else if (newScope.has(rhsStr)) {
+                    return newScope.get(rhsVal.toString())._fix(1, false);
                 } else {
-                    throw new VariableNotFoundException(rhsStr, scope);
+                    throw new VariableNotFoundException(rhsStr, newScope);
                 }
             } else {
                 return $(rhsVal);

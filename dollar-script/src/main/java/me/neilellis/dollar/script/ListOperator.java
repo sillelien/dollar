@@ -21,10 +21,6 @@ import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static me.neilellis.dollar.DollarStatic.$;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -41,13 +37,8 @@ class ListOperator implements Map<List<var>, var> {
     @Override public var map(List<var> o) {
 
         final var lambda = DollarFactory.fromLambda(parallel -> dollarParser.inScope("list", scope, newScope -> {
-            Stream<me.neilellis.dollar.var> stream;
-            if (parallel.isTrue()) {
-                stream = o.stream().parallel();
-            } else {
-                stream = o.stream();
-            }
-            return $(stream.map(v -> v._fix(parallel.isTrue())).collect(Collectors.toList()));
+            Scope scope2 = newScope;
+            return DollarFactory.fromValue(o);
         }));
         for (var v : o) {
             v.$listen(i -> lambda.$notify());

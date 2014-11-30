@@ -42,6 +42,9 @@ public class MapOperator implements Map<List<var>, var> {
 
     @Override public var map(List<var> o) {
         final var lambda = DollarFactory.fromLambda(parallel -> dollarParser.inScope("map", scope, newScope -> {
+            if (o.size() == 1) {
+                return DollarFactory.blockCollection(o);
+            }
             Stream<me.neilellis.dollar.var> stream;
             if (parallel.isTrue()) {
                 stream = o.stream().parallel();
@@ -49,9 +52,6 @@ public class MapOperator implements Map<List<var>, var> {
                 stream = o.stream();
             }
             //Not really a map if only one entry unless it's a pair, in fact it's really a block.
-            if (o.size() == 1) {
-                return o.get(0);
-            }
             return $(stream.map(v -> v._fix(parallel.isTrue()))
                            .collect(Collectors.toConcurrentMap(v -> v.isPair() ? v.getPairKey() : v.$S(),
                                                                v -> v.isPair() ? v.getPairValue() : v)));

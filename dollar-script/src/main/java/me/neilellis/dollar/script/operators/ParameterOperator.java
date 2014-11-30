@@ -18,6 +18,7 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.Builtins;
 import me.neilellis.dollar.script.DollarParser;
+import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.ScriptScope;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
@@ -26,7 +27,6 @@ import org.codehaus.jparsec.functors.Map;
 import java.util.List;
 
 import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.DollarStatic.fix;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -58,7 +58,7 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
                         }
                         var result;
                         if (lhs.isLambda()) {
-                            result = fix(lhs, false);
+                            result = lhs._fix(1, false);
                         } else {
                             String lhsString = lhs.toString();
                             //The lhs is a string, so let's see if it's a builtin function
@@ -66,7 +66,10 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
                             if (Builtins.exists(lhsString)) {
                                 result = Builtins.execute(lhsString, rhs, newScope);
                             } else {
-                                result = fix(newScope.get(lhsString), false);
+                                final var
+                                        valueUnfixed =
+                                        DollarScriptSupport.getVariable(newScope, lhsString, false, null);
+                                result = valueUnfixed._fix(1, false);
                             }
                         }
 

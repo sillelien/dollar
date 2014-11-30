@@ -17,6 +17,7 @@
 package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.Type;
+import me.neilellis.dollar.script.DollarParserException;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.ScriptScope;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
@@ -56,6 +57,12 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
         final Object mutability = objects[1];
         constant = mutability != null && mutability.toString().equals("const");
         isVolatile = mutability != null && mutability.toString().equals("volatile");
+        if (((var) objects[4]).getMetaAttribute("__builtin") != null) {
+            throw new DollarParserException("The variable '" +
+                                            objects[4] +
+                                            "' cannot be assigned as this name is the name of a builtin function.");
+        }
+        final String varName = objects[4].toString();
 
         return new Map<var, var>() {
             public var map(var rhs) {
@@ -66,18 +73,18 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
                     if (constraint != null) {
                         useConstraint = constraint;
                     } else {
-                        useConstraint = scope.getConstraint(objects[4].toString());
+                        useConstraint = scope.getConstraint(varName);
                     }
                     if (operator.equals("?=")) {
-                        scope.set(objects[4].toString(), $void(), constant, null, isVolatile);
+                        scope.set(varName, $void(), constant, null, isVolatile);
                         return $(rhs.$listen(
-                                i -> scope.set(objects[4].toString(), fix(i, false), false,
+                                i -> scope.set(varName, fix(i, false), false,
                                                useConstraint, isVolatile)));
 
                     } else if (operator.equals("*=")) {
-                        scope.set(objects[4].toString(), $void(), constant, null, true);
+                        scope.set(varName, $void(), constant, null, true);
                         return $(rhs.$subscribe(
-                                i -> scope.set(objects[4].toString(), fix(i, false), false,
+                                i -> scope.set(varName, fix(i, false), false,
                                                useConstraint, true)));
                     }
                 }

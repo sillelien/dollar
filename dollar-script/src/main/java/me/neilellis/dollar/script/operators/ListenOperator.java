@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Operator;
 import me.neilellis.dollar.script.ScriptScope;
 import me.neilellis.dollar.var;
@@ -24,7 +25,6 @@ import org.codehaus.jparsec.functors.Binary;
 import java.util.function.Supplier;
 
 import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.DollarStatic.fix;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -42,12 +42,13 @@ public class ListenOperator implements Binary<var>, Operator {
     @Override
     public var map(var lhs, var rhs) {
         try {
-
-            return $(lhs.$listen(i -> scope.getDollarParser().inScope("listen", scope, newScope -> {
-                newScope.setParameter("1", i);
-                //todo: change to receive
-                return fix(rhs, false);
-            })));
+            return DollarScriptSupport.wrapUnary(scope, () -> {
+                return $(lhs.$listen(i -> scope.getDollarParser().inScope("listen", scope, newScope -> {
+                    newScope.setParameter("1", i);
+                    //todo: change to receive
+                    return rhs._fixDeep(false);
+                })));
+            });
         } catch (AssertionError e) {
             throw new AssertionError(e + " at '" + source.get() + "'");
         } catch (Exception e) {

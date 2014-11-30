@@ -70,51 +70,53 @@ public class Builtins {
 
 
     static {
-        addDollarStyle(1, 1, (args, scope) -> args.get(0).$abs(), "abs");
-        addJavaStyle(1, 1, (args, scope) -> args.get(0).$size(), "count");
+        addDollarStyle(1, 1, (args, scope) -> args.get(0).$abs(), "ABS");
+        addJavaStyle(1, 1, (args, scope) -> args.get(0).$size(), "COUNT");
 
         addJavaStyle(1, Integer.MAX_VALUE, (args, scope) -> {
             String message = args.get(0).$S();
             ArrayList<var> values = new ArrayList<>(args);
             values.remove(0);
             return $(String.format(message, values.stream().map(i -> i.$()).toArray()));
-        }, "format");
+        }, "FORMAT");
         addJavaStyle(1, 1, (args, scope) -> {
             return args.get(0).toList().stream().min((o1, o2) -> (int) Math.signum(o1.D() - o2.D())).get();
-        }, "min");
+        }, "MIN");
         addJavaStyle(1, 1, (args, scope) -> {
             return args.get(0).toList().stream().max((o1, o2) -> (int) Math.signum(o1.D() - o2.D())).get();
-        }, "max");
+        }, "MAX");
         addJavaStyle(1, 1, (args, scope) -> {
             return $(args.get(0).toList().stream().sorted().collect(Collectors.toList()));
-        }, "sort");
+        }, "SORT");
 
         addJavaStyle(1, 1, (args, scope) -> {
             return $(args.get(0).toList().get(0));
-        }, "first");
+        }, "FIRST");
 
         addJavaStyle(1, 1, (args, scope) -> {
             ImmutableList<var> list = args.get(0).toList();
             return $(list.get(list.size() - 1));
-        }, "last");
-        addDollarSingleNoScope(StateAware::$start, "start");
-        addDollarSingleNoScope(StateAware::$stop, "stop");
-        addDollarSingleNoScope(StateAware::$create, "create");
-        addDollarSingleNoScope(StateAware::$destroy, "destroy");
-        addDollarSingleNoScope(StateAware::$pause, "pause");
-        addDollarSingleNoScope(StateAware::$unpause, "unpause");
-        addDollarSingleNoScope(StateAware::$state, "state");
+        }, "LAST");
+        addDollarSingleNoScope(StateAware::$start, "START");
+        addDollarSingleNoScope(StateAware::$stop, "STOP");
+        addDollarSingleNoScope(StateAware::$create, "CREATE");
+        addDollarSingleNoScope(StateAware::$destroy, "DESTROY");
+        addDollarSingleNoScope(StateAware::$pause, "PAUSE");
+        addDollarSingleNoScope(StateAware::$unpause, "UNPAUSE");
+        addDollarSingleNoScope(StateAware::$state, "STATE");
 
-        addJavaStyle(1, 1, (args, scope) -> args.get(0).D() / (24.0 * 60.0 * 60.0 * 1000.0), "millis", "milli", "ms",
-                     "milliseconds", "millisecond");
-        addJavaStyle(1, 1, (args, scope) -> args.get(0).D() / (24.0 * 60.0 * 60.0), "secs", "s", "sec", "seconds",
-                     "second");
-        addJavaStyle(1, 1, (args, scope) -> args.get(0).D() / (24.0 * 60.0), "m", "minutes", "minute");
-        addJavaStyle(1, 1, (args, scope) -> args.get(0).D() / 24.0, "hrs", "hours", "h", "hour");
-        addJavaStyle(1, 1, (args, scope) -> args.get(0).D(), "days", "day", "d");
-        addJavaStyle(1, 1, (args, scope) -> args.get(0).toString().length(), "strlen");
-        addJavaStyle(0, 0, (args, scope) -> $(new Date()), "date");
-        addJavaStyle(0, 0, (args, scope) -> System.currentTimeMillis(), "time");
-        addJavaStyle(2, 2, (args, scope) -> args.get(0).toString().matches(args.get(1).$S()), "matches");
+        addJavaStyle(1, 1, (args, scope) -> args.get(0).D() / (24.0 * 60.0 * 60.0 * 1000.0), "Millis", "Milli", "MS",
+                     "Milliseconds", "Millisecond");
+        addJavaStyle(1, 1, (args, scope) -> args.get(0).D() / (24.0 * 60.0 * 60.0), "Secs", "S", "Sec", "Seconds",
+                     "Second");
+        addJavaStyle(1, 1, (args, scope) -> args.get(0).D() / (24.0 * 60.0), "M", "Minutes", "Minute");
+        addJavaStyle(1, 1, (args, scope) -> {
+            return args.get(0).D() / 24.0;
+        }, "Hrs", "Hours", "H", "Hour");
+        addJavaStyle(1, 1, (args, scope) -> args.get(0).D(), "Days", "Day", "D");
+        addJavaStyle(1, 1, (args, scope) -> args.get(0).toString().length(), "LEN");
+        addJavaStyle(0, 0, (args, scope) -> $(new Date()), "DATE");
+        addJavaStyle(0, 0, (args, scope) -> System.currentTimeMillis(), "TIME");
+        addJavaStyle(2, 2, (args, scope) -> args.get(0).toString().matches(args.get(1).$S()), "MATCHES");
     }
 }

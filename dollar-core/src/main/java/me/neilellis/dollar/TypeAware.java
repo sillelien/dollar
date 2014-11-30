@@ -94,6 +94,8 @@ public interface TypeAware {
     //Any of these
     @Guarded(NotNullGuard.class) boolean is(@NotNull Type... types);
 
+    boolean isCollection();
+
     boolean isDecimal();
 
     boolean isInteger();
@@ -122,9 +124,12 @@ public interface TypeAware {
     @Guarded(NotNullGuard.class)
     default JsonArray jsonArray() {
         JsonArray array = new JsonArray();
-        for (me.neilellis.dollar.var var : toList()) {
-            if (!var.isVoid()) {
-                array.add(var.$());
+        for (me.neilellis.dollar.var item : toList()) {
+            if (item == this) {
+                throw new IllegalArgumentException();
+            }
+            if (!item.isVoid()) {
+                array.add(item.$());
             }
         }
         return array;

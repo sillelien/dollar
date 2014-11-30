@@ -206,6 +206,72 @@ public class DollarMap extends AbstractDollar implements var {
         return deepClone(map);
     }
 
+    @NotNull
+    @Override
+    public var $abs() {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull var value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $divide(@NotNull var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $plus(var value) {
+        LinkedHashMap<String, var> copy = copyMap();
+        copy.putAll(((var) value).$map().mutable());
+        return DollarFactory.wrap(new DollarMap(errors(), copy));
+    }
+
+    @NotNull
+    @Override
+    public var $modulus(@NotNull var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $multiply(@NotNull var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $negate() {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $dec(@NotNull var amount) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $inc(@NotNull var amount) {
+        return this;
+    }
+
+    @Override
+    public java.util.stream.Stream<String> keyStream() {
+        return map.keySet().stream();
+    }
+
+    @Override
+    public Number number(@NotNull String key) {
+        return map.get(key).N();
+    }
+
     @Override
     public var $listen(Pipeable pipe) {
         String key = UUID.randomUUID().toString();
@@ -227,6 +293,15 @@ public class DollarMap extends AbstractDollar implements var {
     @Override
     public var $mimeType() {
         return DollarStatic.$("application/json");
+    }    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+
+        LinkedHashMap<String, var> result = new LinkedHashMap<>();
+        for (Map.Entry<String, var> entry : map.entrySet()) {
+            result.put(entry.getKey(), entry.getValue()._fix(false));
+        }
+        return ImmutableMap.<String, var>copyOf(result);
     }
 
     @NotNull
@@ -259,14 +334,22 @@ public class DollarMap extends AbstractDollar implements var {
     @Override
     public var $copy() {
         return DollarFactory.wrap(new DollarMap(errors(), map));
+    }    @NotNull
+    @Override
+    public String S() {
+        return json().toString();
     }
 
-    @Override public var _fixDeep(boolean parallel) {
-        Map<String, var> result = new LinkedHashMap<>();
-        for (Map.Entry<String, var> entry : map.entrySet()) {
-            result.put(entry.getKey(), entry.getValue()._fixDeep(parallel));
+    @Override public var _fix(int depth, boolean parallel) {
+        if(depth == 0) {
+            return this;
+        } else {
+            Map<String, var> result = new LinkedHashMap<>();
+            for (Map.Entry<String, var> entry : map.entrySet()) {
+                result.put(entry.getKey(), entry.getValue()._fix(depth - 1, parallel));
+            }
+            return DollarFactory.fromValue(result, errors());
         }
-        return DollarFactory.fromValue(result, errors());
     }
 
     @NotNull @Override
@@ -283,78 +366,10 @@ public class DollarMap extends AbstractDollar implements var {
         return map.size() == 1;
     }
 
-    @NotNull
-    @Override
-    public var $minus(@NotNull var value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-
-        LinkedHashMap<String, var> result = new LinkedHashMap<>();
-        for (Map.Entry<String, var> entry : map.entrySet()) {
-            result.put(entry.getKey(), entry.getValue()._fix(false));
-        }
-        return ImmutableMap.<String, var>copyOf(result);
-    }
-
-    @NotNull
-    @Override
-    public var $plus(var value) {
-        LinkedHashMap<String, var> copy = copyMap();
-        copy.putAll(((var) value).$map().mutable());
-        return DollarFactory.wrap(new DollarMap(errors(), copy));
-    }
-
-    @NotNull
-    @Override
-    public var $abs() {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $divide(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $modulus(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public String S() {
-        return json().toString();
-    }
-
-    @NotNull
-    @Override
-    public var $multiply(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $negate() {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
-    }
-
     @Override
     public int compareTo(var o) {
         return Comparator.<var>naturalOrder().<var>compare(this, o);
-    }
-
-    @Override
-    public boolean isBoolean() {
-        return false;
-    }
-
-    @Override
+    }    @Override
     public var $as(Type type) {
         switch (type) {
             case MAP:
@@ -370,6 +385,11 @@ public class DollarMap extends AbstractDollar implements var {
             default:
                 return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
         }
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
     }
 
     @Override
@@ -390,40 +410,28 @@ public class DollarMap extends AbstractDollar implements var {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return true;
-    }
-
-    @NotNull @Override
+    }    @NotNull @Override
     public Integer I() {
         DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
         return null;
     }
 
-    @Override
-    public java.util.stream.Stream<String> keyStream() {
-        return map.keySet().stream();
-    }
 
-    @Override
-    public Number number(@NotNull String key) {
-        return map.get(key).N();
-    }
 
-    @NotNull
-    @Override
-    public var $dec(@NotNull var amount) {
-        return this;
-    }
 
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return this;
-    }
+
+
+
+
 
     @NotNull
     @Override
     public Number N() {
         return 0;
+    }
+
+    @Override public boolean isCollection() {
+        return true;
     }
 
 

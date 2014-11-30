@@ -44,6 +44,11 @@ public interface VarInternal {
     @Guarded(ChainGuard.class)
     var _fix(boolean parallel);
 
+    @Guarded(ChainGuard.class) var _fix(int depth, boolean parallel);
+
+    @Guarded(ChainGuard.class)
+    default var _fixDeep() { return _fixDeep(false);}
+
     @Guarded(ChainGuard.class)
     var _fixDeep(boolean parallel);
 

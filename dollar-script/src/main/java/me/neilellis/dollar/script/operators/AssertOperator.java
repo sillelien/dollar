@@ -16,38 +16,31 @@
 
 package me.neilellis.dollar.script.operators;
 
-import me.neilellis.dollar.script.DollarParser;
+import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.ScriptScope;
-import me.neilellis.dollar.types.DollarFactory;
+import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.WithSource;
 import org.codehaus.jparsec.functors.Map;
 
-import java.util.List;
-
 import static me.neilellis.dollar.DollarStatic.$void;
-import static me.neilellis.dollar.types.DollarFactory.fromLambda;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class BlockOperator implements Map<List<var>, var> {
+public class AssertOperator implements Map<WithSource<Object[]>, var> {
     private final ScriptScope scope;
-    private DollarParser dollarParser;
 
-    public BlockOperator(DollarParser dollarParser, ScriptScope scope) {
-        this.dollarParser = dollarParser;
-        this.scope = scope;
-    }
+    public AssertOperator(ScriptScope scope) {this.scope = scope;}
 
-    @Override public var map(List<var> l) {
-        return fromLambda(parallel -> dollarParser.inScope("block", scope, newScope -> {
-                              if (l.size() > 0) {
-                                  return DollarFactory.blockCollection(l);
-//                        return $(l);
-                              } else {
-                                  return $void();
-                              }
-                          })
-        );
+    @Override public var map(WithSource<Object[]> withSource) {
+        return DollarScriptSupport.wrapReactiveUnary(scope, (var) withSource.getValue()[1], () -> {
+            if (((var) withSource.getValue()[1]).isTrue()) { return $void(); } else {
+                throw new DollarScriptException("Assertion failed: " +
+                                                (withSource.getValue()[0] != null ? withSource.getValue()[0] : "") +
+                                                " : " +
+                                                withSource.getSource());
+            }
+        });
     }
 }

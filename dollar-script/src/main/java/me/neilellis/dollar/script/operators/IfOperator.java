@@ -21,7 +21,6 @@ import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
 import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.DollarStatic.fix;
 import static me.neilellis.dollar.script.DollarScriptSupport.wrapBinary;
 
 /**
@@ -34,9 +33,9 @@ public class IfOperator implements Map<var, Map<var, var>> {
 
     @Override public Map<var, var> map(var lhs) {
         return rhs -> wrapBinary(scope, () -> {
-            final var lhsFix = fix(lhs, false);
+            final var lhsFix = lhs._fixDeep();
             if (lhsFix.isBoolean() && lhsFix.isTrue()) {
-                return rhs;
+                return rhs._fix(1, false);
             } else {
                 return $(false);
             }

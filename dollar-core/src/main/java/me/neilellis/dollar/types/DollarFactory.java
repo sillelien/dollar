@@ -243,6 +243,14 @@ public class DollarFactory {
         }
     }
 
+    public static var failure(DollarFail.FailureType failureType, String message) {
+        if (DollarStatic.config.failFast()) {
+            throw new DollarFailureException(failureType, message);
+        } else {
+            return wrap(new DollarFail(Arrays.asList(new DollarException(message)), failureType));
+        }
+    }
+
     public static var failure(Throwable throwable) {
         return failure(DollarFail.FailureType.EXCEPTION, throwable);
     }
@@ -306,5 +314,9 @@ public class DollarFactory {
         } else {
             return wrap(new DollarFail(Arrays.asList(throwable), failureType));
         }
+    }
+
+    public static var blockCollection(List<var> var) {
+        return wrap(new DollarBlockCollection(var));
     }
 }

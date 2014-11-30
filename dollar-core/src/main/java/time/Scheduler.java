@@ -16,8 +16,8 @@
 
 package time;
 
-import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
+import me.neilellis.dollar.types.DollarFactory;
 
 import java.util.UUID;
 import java.util.concurrent.*;
@@ -39,26 +39,11 @@ public class Scheduler {
             try {
                 task.pipe($(id));
             } catch (Exception e) {
-                DollarStatic.logAndRethrow(e);
+                e.printStackTrace();
+                DollarFactory.failure(e);
             }
         }, duration, duration, TimeUnit.MILLISECONDS));
         return id;
-    }
-
-    private static TimeUnit convertToTimeUnit(String timeUnit) {
-        if (timeUnit.startsWith("sec")) {
-            return TimeUnit.SECONDS;
-        }
-        if (timeUnit.startsWith("min")) {
-            return TimeUnit.MINUTES;
-        }
-        if (timeUnit.startsWith("h")) {
-            return TimeUnit.HOURS;
-        }
-        if (timeUnit.startsWith("milli")) {
-            return TimeUnit.MILLISECONDS;
-        }
-        return TimeUnit.MILLISECONDS;
     }
 
     public static void cancel(String id) {

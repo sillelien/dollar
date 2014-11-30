@@ -21,6 +21,7 @@ import com.google.common.collect.Multimap;
 import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
+import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.error.ParserException;
@@ -92,19 +93,7 @@ public class ScriptScope implements Scope {
 
     @Override
     public var get(String key) {
-        if (key.matches("[0-9]+")) {
-            throw new AssertionError("Cannot get numerical keys, use getParameter");
-        }
-        if (DollarStatic.config.isDebugScope()) { log.info("Looking up " + key + " in " + this); }
-        ScriptScope scope = getScopeForKey(key);
-        if (scope == null) {
-            scope = this;
-        } else {
-            if (DollarStatic.config.isDebugScope()) { log.info("Found " + key + " in " + scope); }
-        }
-        Variable result = scope.variables.get(key);
-
-        return result != null ? result.value : $void();
+        return get(key, false);
     }
 
     @Override
@@ -218,6 +207,30 @@ public class ScriptScope implements Scope {
         if (DollarStatic.config.isDebugScope()) { log.info("Clearing scope " + this); }
         variables.clear();
         listeners.clear();
+    }
+
+    public var get(String key, boolean mustFind) {
+        if (key.matches("[0-9]+")) {
+            throw new AssertionError("Cannot get numerical keys, use getParameter");
+        }
+        if (DollarStatic.config.isDebugScope()) { log.info("Looking up " + key + " in " + this); }
+        ScriptScope scope = getScopeForKey(key);
+        if (scope == null) {
+            scope = this;
+        } else {
+            if (DollarStatic.config.isDebugScope()) { log.info("Found " + key + " in " + scope); }
+        }
+        Variable result = scope.variables.get(key);
+
+        if (mustFind) {
+            if (result == null) {
+                throw new VariableNotFoundException(key, this);
+            } else {
+                return result.value;
+            }
+        } else {
+            return result != null ? result.value : $void();
+        }
     }
 
     public var getConstraint(String key) {

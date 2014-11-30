@@ -23,7 +23,6 @@ import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
 import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.DollarStatic.fix;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -39,8 +38,8 @@ public class WhileOperator implements Map<var, Map<? super var, ? extends var>> 
 
     public Map<? super var, ? extends var> map(var lhs) {
         return rhs -> DollarFactory.fromLambda(l -> parser.inScope("while", scope, newScope -> {
-            while (fix(lhs, false).isTrue()) {
-                fix(rhs, false);
+            while (lhs.isTrue()) {
+                rhs._fixDeep();
             }
             return $(false);
         }));

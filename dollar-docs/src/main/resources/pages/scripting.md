@@ -153,11 +153,11 @@ block := {
     "World"
 }
 
-.: block == "World"
+block <=> "World"
 
 block2 := {1;2}
 
-.: block2 == 2
+block2 <=> 2
 
 ```
 
@@ -174,11 +174,11 @@ list := [
     "World"
 ]
 
-.: list == ["Hello ","World"]
+list <=> ["Hello ","World"]
 
 list2 := [1,2]
 
-.: list2 == [1,2]
+list2 <=> [1,2]
 
 ```
 
@@ -213,7 +213,7 @@ mapBlock := {
 
 @@ mapBlock
 
-.: mapBlock.second == "World"
+mapBlock.second <=> "World"
 
 ```
 
@@ -237,7 +237,7 @@ DollarScript's lists are pretty similar to JavaScript arrays. They are defined u
 .: [1,2,3] + 4 == [1,2,3,4];
 .: [1,2,3,4] - 4 == [1,2,3];
 .: [] + 1 == [1] ;
-.: [1] + [1] == [1,[1]];
+.: [1] + [1] == [1,1];
 .: [1] + 1 == [1,1];
 
 [1,2,3][1] <=> 2
@@ -290,8 +290,8 @@ a=1/0
 Although DollarScript is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, NUMBER, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
 
 ```dollar
-.: "Hello World" is STRING
-.: ["Hello World"] is LIST
+.: "Hello World" is String
+.: ["Hello World"] is List
 ```
 
 ###Date
@@ -299,20 +299,20 @@ Although DollarScript is typeless at compile time, it does support basic runtime
 Dollar supports a decimal date system where each day is 1.0. This means it's possible to add and remove days from a date using simple arithmetic.
 
 ```dollar
-@@ date()
-@@ date() + 1
-@@ date() - 1
+@@ DATE()
+@@ DATE() + 1
+@@ DATE() - 1
 
-.: date() + "1.0" is DATE
-.: date() / "1.0" is DECIMAL
+.: DATE() + "1.0" is Date
+.: DATE() / "1.0" is Decimal
 ```
 
 Components of the date can be accessed using the subscript operators:
 
 ```dollar
-@@ date().DAY_OF_WEEK
+@@ DATE().DAY_OF_WEEK
 
-@@ date()['DAY_OF_YEAR']=1
+@@ DATE()['DAY_OF_YEAR']=1
 ```
 
 Valid values are those from `java.time.temporal.ChronoField`
@@ -324,9 +324,9 @@ NANO_OF_SECOND, NANO_OF_DAY, MICRO_OF_SECOND, MICRO_OF_DAY, MILLI_OF_SECOND, MIL
 As you can see we can do date arithmetic, but thanks to another DollarScript feature anything that can be specified as xxx(i) can also be written i xxx (where i is an integer or decimal and xxx is an identifier). So we can add days hours and seconds to the date.
 
 ```dollar
-@@ date() + 1 day
-@@ date() + 1 hour
-@@ date() + 1 sec
+@@ DATE() + 1 Day
+@@ DATE() + 1 Hour
+@@ DATE() + 1 Sec
 ```
 
 Those values are built in, but we can easily define them ourselves.
@@ -334,7 +334,7 @@ Those values are built in, but we can easily define them ourselves.
 ```dollar
 fortnight := ($1 * 14)
 
-@@ date() + 1 fortnight
+@@ DATE() + 1 fortnight
 ```
 
 ###Constraints
@@ -343,10 +343,10 @@ Although there are no compile type constraints in DollarScript a runtime type sy
 
 ```dollar
 (it < 100) a = 50
-(it > previous || previous is VOID) b = 5
+(it > previous || previous is Void) b = 5
 b=6
 b=7
-( it is STRING) s="String value"
+( it is String) s="String value"
 ```
 
 The special variables `it` - the current value and `previous` - the previous value, will be available for the constraint.
@@ -738,7 +738,7 @@ The parallel operator `|:|` or `parallel` causes the right hand side expression 
 
 ```dollar
 
-testList := [ time(), {sleep(1);time();}, time() ];
+testList := [ TIME(), {sleep(1);TIME();}, TIME() ];
 a= |..| testList;
 b= |:| testList;
 //Test different execution orders
@@ -753,14 +753,14 @@ As you can see the order of evaluation of lists and maps **but not line blocks**
 The fork operator `-<` or `fork` will cause an expression to be evaluated in the background and any reference to the forked expression will block until a value is ready.
 
 ```dollar
-sleepTime := {@@ "Background Sleeping";sleep 4; @@ "Background Finished Sleeping";time()}
+sleepTime := {@@ "Background Sleeping";sleep 4; @@ "Background Finished Sleeping";TIME()}
 //Any future reference to c will block until c has completed evaluation
 c= fork sleepTime
 sleep 1
 @@ "Main thread sleeping ..."
 sleep 2
 @@ "Main thread finished sleeping ..."
-d= time()
+d= TIME()
 .: c > d
 ```
 

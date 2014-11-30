@@ -141,13 +141,17 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
+    public var $abs() {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
     public var $minus(@NotNull var value) {
         assertRunning();
         return handler.removeValue(DollarStatic.$(value));
 
-    }
-
-    @NotNull
+    }    @NotNull
     @Override
     public ImmutableMap<String, var> $map() {
         return ImmutableMap.of();
@@ -155,21 +159,15 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
+    public var $divide(@NotNull var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
     public var $plus(@Nullable var value) {
         assertRunning();
         return handler.send(DollarStatic.$(value), true, true);
-    }
-
-    @NotNull
-    @Override
-    public var $abs() {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $divide(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
     @NotNull
@@ -190,6 +188,29 @@ public class DollarURI extends AbstractDollar {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
     }
 
+    @NotNull
+    @Override
+    public var $dec(@NotNull var amount) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $inc(@NotNull var amount) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @Override
+    public Stream<String> keyStream() {
+        return Stream.empty();
+    }
+
+    @Nullable
+    @Override
+    public Number number(@NotNull String key) {
+        return 0;
+    }
+
     @Override
     public var $subscribe(Pipeable pipe) {
         return $subscribe(pipe, null);
@@ -204,16 +225,19 @@ public class DollarURI extends AbstractDollar {
                 try {
                     return pipe.pipe(i);
                 } catch (Exception e) {
+                    e.printStackTrace();
                     return DollarStatic.logAndRethrow(e);
                 }
             }, subId);
         } catch (IOException e) {
+            e.printStackTrace();
             return DollarStatic.logAndRethrow(e);
         }
-        return DollarStatic.$("id", subId).$("unsub", DollarFactory.fromLambda(i -> {
-            handler.unsubscribe(subId);
-            return DollarStatic.$(subId);
-        }));
+        return DollarFactory.blockCollection(
+                Arrays.asList(DollarStatic.$("id", subId).$("unsub", DollarFactory.fromLambda(i -> {
+                    handler.unsubscribe(subId);
+                    return DollarStatic.$(subId);
+                }))));
     }
 
     @Override
@@ -239,6 +263,10 @@ public class DollarURI extends AbstractDollar {
     @Override
     public boolean isFalse() {
         return false;
+    }    @NotNull
+    @Override
+    public Integer I(@NotNull String key) {
+        return 0;
     }
 
     @Override
@@ -246,34 +274,9 @@ public class DollarURI extends AbstractDollar {
         return true;
     }
 
-    @Override
-    public Stream<String> keyStream() {
-        return Stream.empty();
-    }
 
-    @NotNull
-    @Override
-    public Integer I(@NotNull String key) {
-        return 0;
-    }
 
-    @Nullable
-    @Override
-    public Number number(@NotNull String key) {
-        return 0;
-    }
 
-    @NotNull
-    @Override
-    public var $dec(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
 
     @Override
     public var $all() {
@@ -394,6 +397,10 @@ public class DollarURI extends AbstractDollar {
     @Override
     public Number N() {
         return 0;
+    }
+
+    @Override public boolean isCollection() {
+        return false;
     }
 
 

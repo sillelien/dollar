@@ -180,14 +180,14 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        return null;
+    public var $divide(@NotNull var v) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $divide(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+    public ImmutableMap<String, var> $map() {
+        return null;
     }
 
     @NotNull
@@ -195,9 +195,10 @@ public class DollarList extends AbstractDollar {
     public var $plus(var value) {
         return DollarFactory.fromValue(ImmutableList.builder()
                                                     .addAll(list)
-                                                    .add(DollarFactory.fromValue(value))
+                                                    .addAll(value == null ? Arrays.asList() : value.toList())
                                                     .build(), errors()
         );
+
     }
 
     @NotNull
@@ -264,6 +265,23 @@ public class DollarList extends AbstractDollar {
         return DollarStatic.$(key);
     }
 
+    @Override
+    public int compareTo(var o) {
+        //TODO: improve comparisons
+        if (list.stream().allMatch(v -> v.compareTo(o) == -1)) {
+            return -1;
+        }
+        if (list.stream().allMatch(v -> v.compareTo(o) == 1)) {
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
     @NotNull
     @Override
     public ImmutableList<var> toList() {
@@ -282,43 +300,54 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public int compareTo(var o) {
-        //TODO: improve comparisons
-        if (list.stream().allMatch(v -> v.compareTo(o) == -1)) {
-            return -1;
-        }
-        if (list.stream().allMatch(v -> v.compareTo(o) == 1)) {
-            return 1;
-        }
-        return 0;
-    }
-
-    @Override
-    public boolean isBoolean() {
-        return false;
-    }
-
-    @Override public var _fixDeep(boolean parallel) {
-        ImmutableList<var> result;
-        try {
-            result =
-                    ImmutableList.copyOf(Execution.forkJoinPool.submit(
-                            () -> $stream(parallel).map(v -> v._fixDeep(parallel)).collect(
-                                    Collectors.toList())).get());
-        } catch (InterruptedException e) {
-            Thread.interrupted();
-            result = ImmutableList.of(DollarFactory.failure(DollarFail.FailureType.INTERRUPTED, e));
-
-        } catch (ExecutionException e) {
-            result = ImmutableList.of(DollarFactory.failure(DollarFail.FailureType.EXECUTION_FAILURE, e));
-
-        }
-        return DollarFactory.fromValue(result, errors());
-    }
-
-    @Override
     public boolean isTrue() {
         return false;
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return !list.isEmpty();
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override public var _fix(int depth, boolean parallel) {
+        if (depth == 0) {
+            return this;
+        } else {
+            ImmutableList<var> result;
+            if (parallel) {
+                try {
+                    result =
+                            ImmutableList.copyOf(Execution.forkJoinPool.submit(
+                                    () -> $stream(parallel).map(v -> v._fix(depth - 1, parallel)).collect(
+                                            Collectors.toList())).get());
+
+                } catch (InterruptedException e) {
+                    Thread.interrupted();
+                    result = ImmutableList.of(DollarFactory.failure(DollarFail.FailureType.INTERRUPTED, e));
+
+                } catch (ExecutionException e) {
+                    result =
+                            ImmutableList.of(
+                                    DollarFactory.failure(DollarFail.FailureType.EXECUTION_FAILURE, e.getCause()));
+
+                }
+                return DollarFactory.fromValue(result, errors());
+            } else {
+                return DollarFactory.fromValue(
+                        $stream(parallel).map(v -> v._fix(depth - 1, parallel)).collect(Collectors.toList()), errors());
+            }
+        }
+
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
     }
 
     @NotNull
@@ -333,10 +362,6 @@ public class DollarList extends AbstractDollar {
         return stream;
     }
 
-    @Override
-    public boolean isTruthy() {
-        return !list.isEmpty();
-    }
 
     @NotNull
     @Override
@@ -344,10 +369,6 @@ public class DollarList extends AbstractDollar {
         return null;
     }
 
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
 
     @Override
     public var $notify() {
@@ -357,10 +378,6 @@ public class DollarList extends AbstractDollar {
         return this;
     }
 
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
 
     @NotNull @Override
     public Integer I(@NotNull String key) {
@@ -406,19 +423,12 @@ public class DollarList extends AbstractDollar {
     }
 
 
-
-
-
-
     @org.jetbrains.annotations.NotNull
     @Override
     public JsonObject json(@NotNull String key) {
         DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
         return null;
     }
-
-
-
 
 
     @NotNull
@@ -454,6 +464,10 @@ public class DollarList extends AbstractDollar {
     @Override
     public Number N() {
         return 0;
+    }
+
+    @Override public boolean isCollection() {
+        return true;
     }
 
 

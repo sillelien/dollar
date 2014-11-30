@@ -119,12 +119,17 @@ public class DollarParser {
 
     public <T> T inScope(String scopeName, ScriptScope currentScope, Function<ScriptScope, T> r) {
         ScriptScope newScope = new ScriptScope(currentScope, currentScope.getSource(), scopeName);
+        addScope(currentScope);
         addScope(newScope);
         try {
             return r.apply(newScope);
         } finally {
             ScriptScope poppedScope = endScope();
             if (poppedScope != newScope) {
+                throw new IllegalStateException("Popped wrong scope");
+            }
+            final ScriptScope poppedScope2 = endScope();
+            if (poppedScope2 != currentScope) {
                 throw new IllegalStateException("Popped wrong scope");
             }
         }
@@ -244,7 +249,7 @@ public class DollarParser {
             Parser<var> block = block(ref.lazy(), newScope).between(OP_NL("{"), NL_TERM("}"));
             Parser<var> expression = expression(newScope);
             Parser<List<var>> parser = (TERMINATOR_SYMBOL.optional()).next(or(expression, block).followedBy(
-                    TERMINATOR_SYMBOL).map((v) -> {return DollarStatic.fix(v, false);}).many1());
+                    TERMINATOR_SYMBOL).map(v -> v._fix(false)).many1());
             ref.set(parser.map(DollarStatic::$));
             return parser;
         });
@@ -259,7 +264,7 @@ public class DollarParser {
         Parser<var>
                 or =
                 (
-                        or(parentParser, ref.lazy().between(OP_NL("{"), NL_TERM("}")))
+                        or(parentParser, parentParser.between(OP_NL("{"), NL_TERM("}")))
                 ).sepBy1(SEMICOLON_TERMINATOR).followedBy(SEMICOLON_TERMINATOR.optional()).map(
                         new BlockOperator(this, scope));
         ref.set(or);
@@ -271,13 +276,18 @@ public class DollarParser {
         Parser.Reference<var> ref = Parser.newReference();
         Parser<var> main = ref.lazy()
                               .between(OP("("), OP(")"))
-                              .or(or(list(ref.lazy(), scope), map(ref.lazy(), scope),
-                                     moduleStatement(scope, ref),
+                              .or(or(unitValue(ref.lazy(), scope), list(ref.lazy(), scope), map(ref.lazy(), scope),
+                                     moduleStatement(scope, ref), assertOperator(ref, scope),
                                      collectStatement(ref.lazy(), scope),
                                      whenStatement(ref.lazy(), scope), everyStatement(ref.lazy(), scope),
-                                     java(scope), URL, unitValue(ref, scope), DECIMAL_LITERAL, INTEGER_LITERAL,
+                                     java(scope), URL, DECIMAL_LITERAL, INTEGER_LITERAL,
                                      STRING_LITERAL,
                                      dollarIdentifier(scope, ref), IDENTIFIER_KEYWORD, functionCall(ref, scope),
+                                     BUILTIN.map(new Map<var, var>() {
+                                         public var map(var var) {
+                                             return Builtins.execute(var.S(), Arrays.asList(), scope);
+                                         }
+                                     }),
                                      identifier().followedBy(OP("(").not().peek()).map(new Map<var, var>() {
                                          public var map(var var) {
                                              return getVariable(scope, var.S(), false, null);
@@ -298,7 +308,17 @@ public class DollarParser {
                 .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.compareTo(rhs) > 0), scope), ">"), EQUIVALENCE_PRIORITY)
                 .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.compareTo(rhs) <= 0), scope), "<="), EQUIVALENCE_PRIORITY)
                 .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.compareTo(rhs) >= 0), scope), ">="), EQUIVALENCE_PRIORITY)
-                .infixl(op(new BinaryOp(NumericAware::$multiply, scope), "*"), MULTIPLY_DIVIDE_PRIORITY)
+                .infixl(op(new BinaryOp((lhs, rhs) -> {
+                    final var lhsFix = lhs._fix(false);
+                    if (lhsFix.isCollection()) {
+                        var newValue = lhsFix._fixDeep(false);
+                        Long max = rhs.L();
+                        for (int i = 1; i < max; i++) {
+                            newValue = newValue.$plus(lhs._fixDeep());
+                        }
+                        return newValue;
+                    } else {return lhsFix.$multiply(rhs);}
+                }, scope), "*"), MULTIPLY_DIVIDE_PRIORITY)
                 .infixl(op(new BinaryOp(NumericAware::$divide, scope), "/"), MULTIPLY_DIVIDE_PRIORITY)
                 .infixl(op(new BinaryOp(NumericAware::$modulus, scope), "%"), MULTIPLY_DIVIDE_PRIORITY)
                 .infixl(op(new BinaryOp(var::$plus, scope), "+"), PLUS_MINUS_PRIORITY)
@@ -316,15 +336,13 @@ public class DollarParser {
                     i.err();
                     return $void();
                 }), "??", "err"), LINE_PREFIX_PRIORITY)
-                .prefix(op(
-                        new UnaryOp(scope, false,
-                                    v -> { if (v.isTrue()) { return v; } else { throw new AssertionError(); } }),
-                        ".:", "assert"), LINE_PREFIX_PRIORITY)
                 .infixl(op(new BinaryOp((lhs, rhs) -> {
-                    if (lhs.equals(rhs)) {
+                    final var lhsFix = lhs._fixDeep(true);
+                    final var rhsFix = rhs._fixDeep(true);
+                    if (lhsFix.equals(rhsFix)) {
                         return $(true);
                     } else {
-                        throw new AssertionError(lhs.$S() + " != " + rhs.$S());
+                        throw new AssertionError(lhsFix.$S() + " != " + rhsFix.$S());
                     }
                 }, scope), "<=>"), LINE_PREFIX_PRIORITY)
                 .infixl(op(new BinaryOp((lhs, rhs) -> rhs.$dispatch(lhs), scope), "?>"), OUTPUT_PRIORITY)
@@ -338,8 +356,10 @@ public class DollarParser {
                 .prefix(op(new UnaryOp(scope, URIAware::$all), "<@", "all"), OUTPUT_PRIORITY)
                 .infixl(op(new BinaryOp(
                         (lhs, rhs) -> {
-                            final var fixLhs = fix(lhs, false);
-                            if (fixLhs.isBoolean() && fixLhs.isFalse()) { return rhs; } else { return fixLhs; }
+                            final var fixLhs = lhs._fixDeep();
+                            if (fixLhs.isBoolean() && fixLhs.isFalse()) { return rhs._fix(1, false); } else {
+                                return fixLhs;
+                            }
                         },
                         scope), "-:", "else"), IF_PRIORITY)
                 .prefix(ifOperator(ref, scope), IF_PRIORITY)
@@ -354,7 +374,7 @@ public class DollarParser {
                 .infixl(op(new BinaryOp((lhs, rhs) -> {
                             return lhs.$each(i -> inScope("each", scope, newScope -> {
                                 newScope.setParameter("1", i);
-                                return fix(rhs, false);
+                                return rhs._fixDeep(false);
                             }));
                         }, scope), "*|*", "each"),
                         MULTIPLY_DIVIDE_PRIORITY)
@@ -363,7 +383,7 @@ public class DollarParser {
                         return inScope("reduce", scope, newScope -> {
                             newScope.setParameter("1", x);
                             newScope.setParameter("2", y);
-                            return fix(rhs, false);
+                            return rhs._fixDeep(false);
                         });
                     }).get();
                 }, scope), "*|", "reduce"), MULTIPLY_DIVIDE_PRIORITY)
@@ -391,8 +411,13 @@ public class DollarParser {
                 .prefix(op(new UnaryOp(scope, var::$destroy), "(-)"), SIGNAL_PRIORITY)
                 .prefix(op(new UnaryOp(scope, var::$create), "(+)"), SIGNAL_PRIORITY)
                 .prefix(op(new UnaryOp(scope, var::$state), "(?)"), SIGNAL_PRIORITY)
-                .prefix(op(new UnaryOp(scope, v -> v._fixDeep(true)), "|:|", "parallel"), SIGNAL_PRIORITY)
-                .prefix(op(new UnaryOp(scope, v -> v._fixDeep(false)), "|..|", "serial"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp(scope, true,
+                                       v -> {
+                                           return v._fixDeep(true);
+                                       }), "|:|", "parallel"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp(scope, true, v -> {
+                    return v._fixDeep(false);
+                }), "|..|", "serial"), SIGNAL_PRIORITY)
                 .prefix(op(new UnaryOp(scope, v -> DollarFactory.fromFuture(
                         Execution.executeInBackground(i -> fix(v, false)))), "-<", "fork"), SIGNAL_PRIORITY)
                 .prefix(forOperator(scope, ref), UNARY_PRIORITY)
@@ -464,7 +489,7 @@ public class DollarParser {
 
     private Parser<var> everyStatement(Parser<var> expression, ScriptScope scope) {
         Parser<Object[]> sequence = KEYWORD_NL("every")
-                .next(array(expression,
+                .next(array(unitValue(expression, scope),
                             KEYWORD("until").next(expression).optional(),
                             KEYWORD("unless").next(expression).optional(),
                             expression));
@@ -498,18 +523,18 @@ public class DollarParser {
     }
 
     private Parser<var> functionCall(Parser.Reference<var> ref, ScriptScope scope) {
-        return array(IDENTIFIER, parameterOperator(ref, scope)).map(new FunctionCallOperator());
+        return array(IDENTIFIER.or(BUILTIN), parameterOperator(ref, scope)).map(new FunctionCallOperator());
     }
 
-    private Parser<var> unitValue(Parser.Reference<var> ref, ScriptScope scope) {
-        return array(DECIMAL_LITERAL.or(INTEGER_LITERAL), IDENTIFIER).map(new Map<Object[], var>() {
+    private Parser<var> unitValue(Parser<var> ref, ScriptScope scope) {
+        return array(DECIMAL_LITERAL.or(INTEGER_LITERAL), BUILTIN).map(new Map<Object[], var>() {
             @Override public var map(Object[] objects) {
                 return DollarScriptSupport.wrapUnary(scope, () -> inScope("unit", scope, newScope -> {
-                    final var defaultValue = $void();
-                    final var variable = getVariable(newScope, objects[1].toString(), false, defaultValue);
-                    if (variable == defaultValue) {
+                    if (Builtins.exists(objects[1].toString())) {
                         return Builtins.execute(objects[1].toString(), Arrays.asList((var) objects[0]), newScope);
                     } else {
+                        final var defaultValue = $void();
+                        final var variable = getVariable(newScope, objects[1].toString(), false, defaultValue);
                         newScope.setParameter("1", (var) objects[0]);
                         return fix(variable, false);
                     }
@@ -535,7 +560,7 @@ public class DollarParser {
     }
 
     private Parser<Map<? super var, ? extends var>> pipeOperator(Parser.Reference<var> ref, ScriptScope scope) {
-        return (OP("->").optional()).next(IDENTIFIER.or(ref.lazy().between(OP("("), OP(")"))))
+        return (OP("->").optional()).next(BUILTIN.or(IDENTIFIER).or(ref.lazy().between(OP("("), OP(")"))))
                                     .map(new PipeOperator(this, scope));
     }
 
@@ -553,6 +578,13 @@ public class DollarParser {
 
     private Parser<Map<var, var>> ifOperator(Parser.Reference<var> ref, ScriptScope scope) {
         return KEYWORD_NL("if").next(ref.lazy()).map(new IfOperator(scope));
+    }
+
+    private Parser<var> assertOperator(Parser.Reference<var> ref, ScriptScope scope) {
+        return OP(".:").next(
+                or(array(STRING_LITERAL.followedBy(OP(":")), ref.lazy()), array(OP(":").optional(), ref.lazy()))
+                        .withSource()
+                        .map(new AssertOperator(scope)));
     }
 
     private Parser<Map<? super var, ? extends var>> isOperator(Parser.Reference<var> ref, ScriptScope scope) {
@@ -610,12 +642,12 @@ public class DollarParser {
 
     private Parser<Map<? super var, ? extends var>> assignmentOperator(final ScriptScope scope,
                                                                        Parser.Reference<var> ref) {
-        return array(KEYWORD("export").optional(), Parsers.or(KEYWORD("const"), KEYWORD("volatile")).optional(),
+        return array(KEYWORD("export").optional(), or(KEYWORD("const"), KEYWORD("volatile")).optional(),
                      IDENTIFIER.between(OP("<"), OP(">")).optional(),
                      ref.lazy().between(OP("("), OP(")")).optional(),
                      OP("$").next(ref.lazy().between(OP("("), OP(")")))
-                            .or(IDENTIFIER),
-                     Parsers.or(OP("="), OP("?="), OP("*="))).map(new AssignmentOperator(scope, false));
+                            .or(IDENTIFIER).or(BUILTIN),
+                     or(OP("="), OP("?="), OP("*="))).map(new AssignmentOperator(scope, false));
     }
 
 
