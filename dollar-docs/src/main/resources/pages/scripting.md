@@ -43,7 +43,7 @@ DollarScript has it's own peculiarities, mostly these exists to help with it's m
 
 ###Reactive Programming
 
-DollarScript expressions are by default *lazy*, this is really important to understand otherwise you may get some surprises. This lazy evaluation makes DollarScript a [reactive programming language](http://en.wikipedia.org/wiki/Reactive_programming) by default.
+DollarScript expressions are by default *lazy*, this is really important to understand otherwise you may get some surprises. This lazy evaluation is combined with a simple event system to make DollarScript a [reactive programming language](http://en.wikipedia.org/wiki/Reactive_programming) by default.
 
 
 Let's see some of that behaviour in action:
@@ -62,12 +62,12 @@ In the above example we are declaring (using the declarative operator `:=`) that
 The assertion operator `.:` will throw an assertion error if the value following is either non boolean or not true.
 
 
-Now let's throw in the ->? or causes operator :
+Now let's throw in the causes operator :
 
 ```dollar
 
 a=1
-a ->? { @@ $1 }
+a causes { @@ $1 }
 a=2
 a=3
 a=4
@@ -86,7 +86,7 @@ That simple piece of code will simply output each change made to the variable a,
 
 b=1
 a=1
-a + b + 1 ->? { @@ "a=" + a + ", b=" + b}
+a + b + 1 causes { @@ "a=" + a + ", b=" + b}
 a=2
 a=3
 a=4
@@ -100,7 +100,7 @@ a=4, b=1
 a=4, b=2
 ~~~
 
-Yep, you can write reactive expressions based on collections or arbitrary expressions @@ When any component changes the right hand side is re-evaluated (the actual value that changed is passed in as $1).
+Yep, you can write reactive expressions based on collections or arbitrary expressions. When any component changes the right hand side is re-evaluated (the actual value that changed is passed in as $1).
 
 
 ###Assignment
@@ -132,6 +132,7 @@ variableA = 2
 .: variableD == 3
 
 ```
+The assignment operator '=' has a 'fix' depth of 1.
 
 It's important to note that all values in DollarScript are immutable - that means if you wish to change the value of a variable you *must* __reassign__ a new value to the variable. For example `v++` would return the value of `v+1` it does not increment v. If however you want to assign a constant value, one that is both immutable and cannot be reassigned, just use the `const` modifier at the variable assignment (this does not make sense for declarations, so is only available on assignments).
 

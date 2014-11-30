@@ -78,6 +78,11 @@ public class ParserTest {
     }
 
     @Test
+    public void testFix() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_fix.ds"), parallel);
+    }
+
+    @Test
     public void testIteration() throws Exception {
         new DollarParser().parse(getClass().getResourceAsStream("/test_iteration.ds"), parallel);
     }

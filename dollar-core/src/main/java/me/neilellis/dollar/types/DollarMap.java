@@ -293,15 +293,6 @@ public class DollarMap extends AbstractDollar implements var {
     @Override
     public var $mimeType() {
         return DollarStatic.$("application/json");
-    }    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-
-        LinkedHashMap<String, var> result = new LinkedHashMap<>();
-        for (Map.Entry<String, var> entry : map.entrySet()) {
-            result.put(entry.getKey(), entry.getValue()._fix(false));
-        }
-        return ImmutableMap.<String, var>copyOf(result);
     }
 
     @NotNull
@@ -312,14 +303,13 @@ public class DollarMap extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public java.util.stream.Stream<Map.Entry<String, var>> kvStream() {
-        return split().entrySet().stream();
-    }
+    public ImmutableMap<String, var> $map() {
 
-    @NotNull
-    @Override
-    public var eval(String label, @NotNull DollarEval lambda) {
-        return lambda.eval($copy());
+        LinkedHashMap<String, var> result = new LinkedHashMap<>();
+        for (Map.Entry<String, var> entry : map.entrySet()) {
+            result.put(entry.getKey(), entry.getValue()._fix(false));
+        }
+        return ImmutableMap.<String, var>copyOf(result);
     }
 
     @Override
@@ -332,16 +322,24 @@ public class DollarMap extends AbstractDollar implements var {
 
     @NotNull
     @Override
+    public var eval(String label, @NotNull DollarEval lambda) {
+        return lambda.eval($copy());
+    }
+
+    @NotNull
+    @Override
+    public java.util.stream.Stream<Map.Entry<String, var>> kvStream() {
+        return split().entrySet().stream();
+    }
+
+    @NotNull
+    @Override
     public var $copy() {
         return DollarFactory.wrap(new DollarMap(errors(), map));
-    }    @NotNull
-    @Override
-    public String S() {
-        return json().toString();
     }
 
     @Override public var _fix(int depth, boolean parallel) {
-        if(depth == 0) {
+        if (depth <= 1) {
             return this;
         } else {
             Map<String, var> result = new LinkedHashMap<>();
@@ -357,6 +355,12 @@ public class DollarMap extends AbstractDollar implements var {
         return map.get(key).I();
     }
 
+    @NotNull
+    @Override
+    public String S() {
+        return json().toString();
+    }
+
     @Override
     public boolean isMap() {
         return true;
@@ -369,7 +373,23 @@ public class DollarMap extends AbstractDollar implements var {
     @Override
     public int compareTo(var o) {
         return Comparator.<var>naturalOrder().<var>compare(this, o);
-    }    @Override
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+    @Override
+    public boolean isTruthy() {
+        return !map.isEmpty();
+    }
+
+    @Override
     public var $as(Type type) {
         switch (type) {
             case MAP:
@@ -388,21 +408,6 @@ public class DollarMap extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean isBoolean() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean isTruthy() {
-        return !map.isEmpty();
-    }
-
-    @Override
     public boolean isFalse() {
         return false;
     }
@@ -410,7 +415,10 @@ public class DollarMap extends AbstractDollar implements var {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return true;
-    }    @NotNull @Override
+    }
+
+
+    @NotNull @Override
     public Integer I() {
         DollarFactory.failure(DollarFail.FailureType.INVALID_MAP_OPERATION);
         return null;

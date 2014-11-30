@@ -189,8 +189,6 @@ public class DollarBlockCollection implements var {
 
     @Override @Guarded(NotNullGuard.class) public String getPairKey() {return getValue().getPairKey();}
 
-    @Override public boolean isCollection() {return true;}
-
     @Override @Guarded(NotNullGuard.class) @Nullable public Map<String, Object> toMap() {return getValue().toMap();}
 
     @Override @Guarded(NotNullGuard.class) public var getPairValue() {return getValue().getPairValue();}
@@ -199,6 +197,8 @@ public class DollarBlockCollection implements var {
     public ImmutableMap<String, var> $map() {return getValue().$map();}
 
     @Override @Guarded(NotNullGuard.class) public boolean is(@NotNull Type... types) {return getValue().is(types);}
+
+    @Override public boolean isCollection() {return true;}
 
     @Override public boolean isDecimal() {return getValue().isDecimal();}
 
@@ -350,10 +350,10 @@ public class DollarBlockCollection implements var {
 
     @Override @NotNull @Guarded(ChainGuard.class) public var $copy() {return getValue().$copy();}
 
-    @Override @NotNull @Guarded(ChainGuard.class) public var _fix(boolean parallel) {return _fix(0, parallel);}
+    @Override @NotNull @Guarded(ChainGuard.class) public var _fix(boolean parallel) {return _fix(1, parallel);}
 
     @Override public var _fix(int depth, boolean parallel) {
-        if (depth == 0) {
+        if (depth <= 1) {
             return this;
         } else {
             return getValue()._fix(depth - 1, parallel);

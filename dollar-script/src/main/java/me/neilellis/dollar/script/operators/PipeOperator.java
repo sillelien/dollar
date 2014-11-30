@@ -50,7 +50,7 @@ public class PipeOperator implements Map<var, Map<? super var, ? extends var>> {
                     return Builtins.execute(rhsStr, Collections.singletonList(lhsFix),
                                             newScope);
                 } else if (newScope.has(rhsStr)) {
-                    return newScope.get(rhsVal.toString())._fix(1, false);
+                    return newScope.get(rhsVal.toString())._fix(2, false);
                 } else {
                     throw new VariableNotFoundException(rhsStr, newScope);
                 }

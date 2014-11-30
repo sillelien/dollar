@@ -186,12 +186,6 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        return null;
-    }
-
-    @NotNull
-    @Override
     public var $plus(var value) {
         return DollarFactory.fromValue(ImmutableList.builder()
                                                     .addAll(list)
@@ -199,6 +193,12 @@ public class DollarList extends AbstractDollar {
                                                     .build(), errors()
         );
 
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return null;
     }
 
     @NotNull
@@ -282,6 +282,16 @@ public class DollarList extends AbstractDollar {
         return false;
     }
 
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return !list.isEmpty();
+    }
+
     @NotNull
     @Override
     public ImmutableList<var> toList() {
@@ -300,22 +310,19 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean isTruthy() {
-        return !list.isEmpty();
-    }
-
-    @Override
     public boolean isFalse() {
         return false;
     }
 
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
+    }
+
+
+
     @Override public var _fix(int depth, boolean parallel) {
-        if (depth == 0) {
+        if (depth <= 1) {
             return this;
         } else {
             ImmutableList<var> result;
@@ -345,10 +352,6 @@ public class DollarList extends AbstractDollar {
 
     }
 
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
 
     @NotNull
     @Override

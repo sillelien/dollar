@@ -280,9 +280,10 @@ public class DollarParser {
                                      moduleStatement(scope, ref), assertOperator(ref, scope),
                                      collectStatement(ref.lazy(), scope),
                                      whenStatement(ref.lazy(), scope), everyStatement(ref.lazy(), scope),
+                                     functionCall(ref, scope),
                                      java(scope), URL, DECIMAL_LITERAL, INTEGER_LITERAL,
                                      STRING_LITERAL,
-                                     dollarIdentifier(scope, ref), IDENTIFIER_KEYWORD, functionCall(ref, scope),
+                                     dollarIdentifier(scope, ref), IDENTIFIER_KEYWORD,
                                      BUILTIN.map(new Map<var, var>() {
                                          public var map(var var) {
                                              return Builtins.execute(var.S(), Arrays.asList(), scope);
@@ -357,7 +358,7 @@ public class DollarParser {
                 .infixl(op(new BinaryOp(
                         (lhs, rhs) -> {
                             final var fixLhs = lhs._fixDeep();
-                            if (fixLhs.isBoolean() && fixLhs.isFalse()) { return rhs._fix(1, false); } else {
+                            if (fixLhs.isBoolean() && fixLhs.isFalse()) { return rhs._fix(2, false); } else {
                                 return fixLhs;
                             }
                         },
@@ -523,7 +524,8 @@ public class DollarParser {
     }
 
     private Parser<var> functionCall(Parser.Reference<var> ref, ScriptScope scope) {
-        return array(IDENTIFIER.or(BUILTIN), parameterOperator(ref, scope)).map(new FunctionCallOperator());
+        return array(IDENTIFIER.or(BUILTIN).followedBy(OP("(").peek()), parameterOperator(ref, scope)).map(
+                new FunctionCallOperator());
     }
 
     private Parser<var> unitValue(Parser<var> ref, ScriptScope scope) {
@@ -560,7 +562,8 @@ public class DollarParser {
     }
 
     private Parser<Map<? super var, ? extends var>> pipeOperator(Parser.Reference<var> ref, ScriptScope scope) {
-        return (OP("->").optional()).next(BUILTIN.or(IDENTIFIER).or(ref.lazy().between(OP("("), OP(")"))))
+        return (OP("->").optional()).next(
+                Parsers.longest(BUILTIN, IDENTIFIER, functionCall(ref, scope), ref.lazy().between(OP("("), OP(")"))))
                                     .map(new PipeOperator(this, scope));
     }
 

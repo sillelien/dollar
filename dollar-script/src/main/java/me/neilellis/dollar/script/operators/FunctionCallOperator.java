@@ -25,6 +25,6 @@ import org.codehaus.jparsec.functors.Map;
 public class FunctionCallOperator implements Map<Object[], var> {
     @Override
     public var map(Object[] objects) {
-        return ((Map<? super var, ? extends var>) objects[1]).map(((var) objects[0])._fix(1, false));
+        return ((Map<? super var, ? extends var>) objects[1]).map(((var) objects[0])._fix(2, false));
     }
 }

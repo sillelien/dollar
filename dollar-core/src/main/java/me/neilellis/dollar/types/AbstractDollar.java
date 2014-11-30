@@ -370,7 +370,7 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull final @Override public var _fix(boolean parallel) {
-        return _fix(0, parallel);
+        return _fix(1, parallel);
     }
 
 
@@ -676,6 +676,11 @@ public abstract class AbstractDollar implements var {
 
     }
 
+    public void replaceAll(BiFunction<? super String, ? super var, ? extends var> function) {
+        DollarFactory.failure(DollarFail.FailureType.INVALID_OPERATION);
+
+    }
+
     @NotNull
     @Override
     public var $errors() {
@@ -704,11 +709,6 @@ public abstract class AbstractDollar implements var {
         return DollarFactory.fromValue(json);
     }
 
-    public void replaceAll(BiFunction<? super String, ? super var, ? extends var> function) {
-        DollarFactory.failure(DollarFail.FailureType.INVALID_OPERATION);
-
-    }
-
     @Override
     public void setMetaAttribute(String key, String value) {
         if (meta.containsKey(key)) {
@@ -723,6 +723,7 @@ public abstract class AbstractDollar implements var {
     public String getMetaAttribute(String key) {
         return meta.get(key);
     }
+
 
     @NotNull
     @Override

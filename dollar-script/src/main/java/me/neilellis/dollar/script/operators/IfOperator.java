@@ -35,7 +35,7 @@ public class IfOperator implements Map<var, Map<var, var>> {
         return rhs -> wrapBinary(scope, () -> {
             final var lhsFix = lhs._fixDeep();
             if (lhsFix.isBoolean() && lhsFix.isTrue()) {
-                return rhs._fix(1, false);
+                return rhs._fix(2, false);
             } else {
                 return $(false);
             }

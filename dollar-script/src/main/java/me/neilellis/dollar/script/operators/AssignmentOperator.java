@@ -104,7 +104,7 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
                 useConstraint = scope.getConstraint(varName);
             }
             return scope.getDollarParser().inScope("assignment-constraint", scope, newScope -> {
-                final var rhsFixed = fix(rhs, false);
+                final var rhsFixed = rhs._fix(1, false);
                 if (useConstraint != null) {
                     newScope.setParameter("it", rhsFixed);
                     newScope.setParameter("previous", scope.get(varName));

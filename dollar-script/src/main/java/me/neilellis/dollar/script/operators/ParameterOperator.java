@@ -58,7 +58,7 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
                         }
                         var result;
                         if (lhs.isLambda()) {
-                            result = lhs._fix(1, false);
+                            result = lhs._fix(2, false);
                         } else {
                             String lhsString = lhs.toString();
                             //The lhs is a string, so let's see if it's a builtin function
@@ -69,7 +69,7 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
                                 final var
                                         valueUnfixed =
                                         DollarScriptSupport.getVariable(newScope, lhsString, false, null);
-                                result = valueUnfixed._fix(1, false);
+                                result = valueUnfixed._fix(2, false);
                             }
                         }
 
