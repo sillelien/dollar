@@ -1,19 +1,3 @@
-/*
- * Copyright (c) 2014 Neil Ellis
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 /*!
  * Media helper for fancyBox
  * version: 1.0.6 (Fri, 14 Jun 2013)
@@ -78,155 +62,138 @@
  *          http://maps.google.com/?ll=48.857995,2.294297&spn=0.007666,0.021136&t=m&z=16
  *          http://maps.google.com/?ll=48.859463,2.292626&spn=0.000965,0.002642&t=m&z=19&layer=c&cbll=48.859524,2.292532&panoid=YJ0lq28OOy3VT2IqIuVY0g&cbp=12,151.58,,0,-15.56
  */
-;
-(
-		function ($) {
-			"use strict";
+;(function ($) {
+	"use strict";
 
-			//Shortcut for fancyBox object
-			var F = $.fancybox,
-					format = function (url, rez, params) {
-						params = params || '';
+	//Shortcut for fancyBox object
+	var F = $.fancybox,
+		format = function( url, rez, params ) {
+			params = params || '';
 
-						if ($.type(params) === "object") {
-							params = $.param(params, true);
-						}
+			if ( $.type( params ) === "object" ) {
+				params = $.param(params, true);
+			}
 
-						$.each(rez, function (key, value) {
-							url = url.replace('$' + key, value || '');
-						});
+			$.each(rez, function(key, value) {
+				url = url.replace( '$' + key, value || '' );
+			});
 
-						if (params.length) {
-							url += (
-										   url.indexOf('?') > 0 ? '&' : '?'
-								   ) + params;
-						}
+			if (params.length) {
+				url += ( url.indexOf('?') > 0 ? '&' : '?' ) + params;
+			}
 
-						return url;
-					};
+			return url;
+		};
 
-			//Add helper object
-			F.helpers.media = {
-				defaults: {
-					youtube: {
-						matcher: /(youtube\.com|youtu\.be|youtube-nocookie\.com)\/(watch\?v=|v\/|u\/|embed\/?)?(videoseries\?list=(.*)|[\w-]{11}|\?listType=(.*)&list=(.*)).*/i,
-						params: {
-							autoplay: 1,
-							autohide: 1,
-							fs: 1,
-							rel: 0,
-							hd: 1,
-							wmode: 'opaque',
-							enablejsapi: 1
-						},
-						type: 'iframe',
-						url: '//www.youtube.com/embed/$3'
-					},
-					vimeo: {
-						matcher: /(?:vimeo(?:pro)?.com)\/(?:[^\d]+)?(\d+)(?:.*)/,
-						params: {
-							autoplay: 1,
-							hd: 1,
-							show_title: 1,
-							show_byline: 1,
-							show_portrait: 0,
-							fullscreen: 1
-						},
-						type: 'iframe',
-						url: '//player.vimeo.com/video/$1'
-					},
-					metacafe: {
-						matcher: /metacafe.com\/(?:watch|fplayer)\/([\w\-]{1,10})/,
-						params: {
-							autoPlay: 'yes'
-						},
-						type: 'swf',
-						url: function (rez, params, obj) {
-							obj.swf.flashVars = 'playerVars=' + $.param(params, true);
-
-							return '//www.metacafe.com/fplayer/' + rez[1] + '/.swf';
-						}
-					},
-					dailymotion: {
-						matcher: /dailymotion.com\/video\/(.*)\/?(.*)/,
-						params: {
-							additionalInfos: 0,
-							autoStart: 1
-						},
-						type: 'swf',
-						url: '//www.dailymotion.com/swf/video/$1'
-					},
-					twitvid: {
-						matcher: /twitvid\.com\/([a-zA-Z0-9_\-\?\=]+)/i,
-						params: {
-							autoplay: 0
-						},
-						type: 'iframe',
-						url: '//www.twitvid.com/embed.php?guid=$1'
-					},
-					twitpic: {
-						matcher: /twitpic\.com\/(?!(?:place|photos|events)\/)([a-zA-Z0-9\?\=\-]+)/i,
-						type: 'image',
-						url: '//twitpic.com/show/full/$1/'
-					},
-					instagram: {
-						matcher: /(instagr\.am|instagram\.com)\/p\/([a-zA-Z0-9_\-]+)\/?/i,
-						type: 'image',
-						url: '//$1/p/$2/media/?size=l'
-					},
-					google_maps: {
-						matcher: /maps\.google\.([a-z]{2,3}(\.[a-z]{2})?)\/(\?ll=|maps\?)(.*)/i,
-						type: 'iframe',
-						url: function (rez) {
-							return '//maps.google.' + rez[1] + '/' + rez[3] + '' + rez[4] + '&output=' + (
-											rez[4].indexOf('layer=c') > 0 ? 'svembed' : 'embed'
-									);
-						}
-					}
+	//Add helper object
+	F.helpers.media = {
+		defaults : {
+			youtube : {
+				matcher : /(youtube\.com|youtu\.be|youtube-nocookie\.com)\/(watch\?v=|v\/|u\/|embed\/?)?(videoseries\?list=(.*)|[\w-]{11}|\?listType=(.*)&list=(.*)).*/i,
+				params  : {
+					autoplay    : 1,
+					autohide    : 1,
+					fs          : 1,
+					rel         : 0,
+					hd          : 1,
+					wmode       : 'opaque',
+					enablejsapi : 1
 				},
+				type : 'iframe',
+				url  : '//www.youtube.com/embed/$3'
+			},
+			vimeo : {
+				matcher : /(?:vimeo(?:pro)?.com)\/(?:[^\d]+)?(\d+)(?:.*)/,
+				params  : {
+					autoplay      : 1,
+					hd            : 1,
+					show_title    : 1,
+					show_byline   : 1,
+					show_portrait : 0,
+					fullscreen    : 1
+				},
+				type : 'iframe',
+				url  : '//player.vimeo.com/video/$1'
+			},
+			metacafe : {
+				matcher : /metacafe.com\/(?:watch|fplayer)\/([\w\-]{1,10})/,
+				params  : {
+					autoPlay : 'yes'
+				},
+				type : 'swf',
+				url  : function( rez, params, obj ) {
+					obj.swf.flashVars = 'playerVars=' + $.param( params, true );
 
-				beforeLoad: function (opts, obj) {
-					var url = obj.href || '',
-							type = false,
-							what,
-							item,
-							rez,
-							params;
+					return '//www.metacafe.com/fplayer/' + rez[1] + '/.swf';
+				}
+			},
+			dailymotion : {
+				matcher : /dailymotion.com\/video\/(.*)\/?(.*)/,
+				params  : {
+					additionalInfos : 0,
+					autoStart : 1
+				},
+				type : 'swf',
+				url  : '//www.dailymotion.com/swf/video/$1'
+			},
+			twitvid : {
+				matcher : /twitvid\.com\/([a-zA-Z0-9_\-\?\=]+)/i,
+				params  : {
+					autoplay : 0
+				},
+				type : 'iframe',
+				url  : '//www.twitvid.com/embed.php?guid=$1'
+			},
+			twitpic : {
+				matcher : /twitpic\.com\/(?!(?:place|photos|events)\/)([a-zA-Z0-9\?\=\-]+)/i,
+				type : 'image',
+				url  : '//twitpic.com/show/full/$1/'
+			},
+			instagram : {
+				matcher : /(instagr\.am|instagram\.com)\/p\/([a-zA-Z0-9_\-]+)\/?/i,
+				type : 'image',
+				url  : '//$1/p/$2/media/?size=l'
+			},
+			google_maps : {
+				matcher : /maps\.google\.([a-z]{2,3}(\.[a-z]{2})?)\/(\?ll=|maps\?)(.*)/i,
+				type : 'iframe',
+				url  : function( rez ) {
+					return '//maps.google.' + rez[1] + '/' + rez[3] + '' + rez[4] + '&output=' + (rez[4].indexOf('layer=c') > 0 ? 'svembed' : 'embed');
+				}
+			}
+		},
 
-					for (what in opts) {
-						if (opts.hasOwnProperty(what)) {
-							item = opts[what];
-							rez = url.match(item.matcher);
+		beforeLoad : function(opts, obj) {
+			var url   = obj.href || '',
+				type  = false,
+				what,
+				item,
+				rez,
+				params;
 
-							if (rez) {
-								type = item.type;
-								params = $.extend(true,
-												  {},
-												  item.params,
-												  obj[what] || (
-														  $.isPlainObject(opts[what]) ? opts[what].params : null
-												  ));
+			for (what in opts) {
+				if (opts.hasOwnProperty(what)) {
+					item = opts[ what ];
+					rez  = url.match( item.matcher );
 
-								url = $.type(item.url) === "function" ? item.url.call(this,
-																					  rez,
-																					  params,
-																					  obj) : format(item.url,
-																									rez,
-																									params);
+					if (rez) {
+						type   = item.type;
+						params = $.extend(true, {}, item.params, obj[ what ] || ($.isPlainObject(opts[ what ]) ? opts[ what ].params : null));
 
-								break;
-							}
-						}
-					}
+						url = $.type( item.url ) === "function" ? item.url.call( this, rez, params, obj ) : format( item.url, rez, params );
 
-					if (type) {
-						obj.href = url;
-						obj.type = type;
-
-						obj.autoHeight = false;
+						break;
 					}
 				}
-			};
+			}
 
-		}(jQuery)
-);
+			if (type) {
+				obj.href = url;
+				obj.type = type;
+
+				obj.autoHeight = false;
+			}
+		}
+	};
+
+}(jQuery));

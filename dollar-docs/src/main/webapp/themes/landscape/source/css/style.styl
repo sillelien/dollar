@@ -18,9 +18,9 @@ input, button
   font-weight: normal
   src: url(font-icon-path + ".eot?v=#" + font-icon-version)
   src: url(font-icon-path + ".eot?#iefix&v=#" + font-icon-version) format("embedded-opentype"),
-  url(font-icon-path + ".woff?v=#" + font-icon-version) format("woff"),
-  url(font-icon-path + ".ttf?v=#" + font-icon-version) format("truetype"),
-  url(font-icon-path + ".svg#fontawesomeregular?v=#" + font-icon-version) format("svg")
+       url(font-icon-path + ".woff?v=#" + font-icon-version) format("woff"),
+       url(font-icon-path + ".ttf?v=#" + font-icon-version) format("truetype"),
+       url(font-icon-path + ".svg#fontawesomeregular?v=#" + font-icon-version) format("svg")
 
 html, body, #container
   height: 100%
@@ -69,7 +69,7 @@ body
 if sidebar and sidebar isnt bottom
   #main
     @media mq-normal
-    column(main-column)
+      column(main-column)
 
 if sidebar is left
   #main

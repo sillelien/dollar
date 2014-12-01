@@ -35,7 +35,7 @@
   color: color-default
   line-height: line-height-title
   transition: color 0.2s
-  a &:hover
+  a&:hover
     color: color-link
 
 .article-entry
@@ -110,7 +110,7 @@
   // http://webdesignerwall.com/tutorials/css-elastic-videos
   .video-container
     position: relative
-    padding-top: (9 / 16 * 100) % // 16:9 ratio
+    padding-top: (9 / 16 * 100)% // 16:9 ratio
     height: 0
     overflow: hidden
     iframe, object, embed
@@ -177,13 +177,13 @@
   clearfix()
   position: relative
   @media mq-normal
-  margin: block-margin 0
-  &:before
-    absolute-center(8px)
-    content: ""
-    border-radius: 50%
-    background: color-border
-    box-shadow: 0 1px 2px #fff
+    margin: block-margin 0
+    &:before
+      absolute-center(8px)
+      content: ""
+      border-radius: 50%
+      background: color-border
+      box-shadow: 0 1px 2px #fff
 
 .article-nav-link-wrap
   text-decoration: none
@@ -196,20 +196,20 @@
   &:hover
     color: color-default
   @media mq-normal
-  width: 50%
-  margin-top: 0
+    width: 50%
+    margin-top: 0
 
 #article-nav-newer
   @media mq-normal
-  float: left
-  text-align: right
-  padding-right: 20px
+    float: left
+    text-align: right
+    padding-right: 20px
 
 #article-nav-older
   @media mq-normal
-  float: right
-  text-align: left
-  padding-left: 20px
+    float: right
+    text-align: left
+    padding-left: 20px
 
 .article-nav-caption
   text-transform: uppercase
@@ -273,7 +273,7 @@ $article-share-link
 .article-share-twitter
   @extend $article-share-link
   &:before
-  content: "\f099"
+    content: "\f099"
   &:hover
     background: color-twitter
     text-shadow: 0 1px darken(color-twitter, 20%)
@@ -281,7 +281,7 @@ $article-share-link
 .article-share-facebook
   @extend $article-share-link
   &:before
-  content: "\f09a"
+    content: "\f09a"
   &:hover
     background: color-facebook
     text-shadow: 0 1px darken(color-facebook, 20%)
@@ -289,7 +289,7 @@ $article-share-link
 .article-share-pinterest
   @extend $article-share-link
   &:before
-  content: "\f0d2"
+    content: "\f0d2"
   &:hover
     background: color-pinterest
     text-shadow: 0 1px darken(color-pinterest, 20%)
@@ -297,7 +297,7 @@ $article-share-link
 .article-share-google
   @extend $article-share-link
   &:before
-  content: "\f0d5"
+    content: "\f0d5"
   &:hover
     background: color-google
     text-shadow: 0 1px darken(color-google, 20%)
