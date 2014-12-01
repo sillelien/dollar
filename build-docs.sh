@@ -7,7 +7,7 @@ cd dist
 git clone git@github.com:neilellis/dollar.git docs
 cd docs
 git checkout gh-pages
-cd $DIR/dollar-docs/src/main/webapp/*
+cd $DIR/dollar-docs/src/main/webapp/
 jekyll build
 cp -rf * $DIR/dist/docs
 cd $DIR
