@@ -391,7 +391,7 @@
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
-                    <forkCount>3</forkCount>
+                    <forkCount>8</forkCount>
                     <reuseForks>true</reuseForks>
                     <argLine>-Xmx1024m</argLine>
                     <parallel>methods</parallel>
