@@ -147,62 +147,60 @@
                                              f.isPlainObject(d) || (
                                                      d = {}
                                              ), !1 !== b.close(!0)
-                                     )) {
-                                 return f.isArray(a) || (
-                                         a = u(a) ? f(a).get() : [a]
-                                 ), f.each(a, function (e, c) {
-                                     var l = {}, g, h, k, n, m;
-                                     "object" === f.type(c) && (
-                                             c.nodeType && (
-                                                     c = f(c)
-                                             ), u(c) ? (
-                                                     l = {
-                                                         href: c.data("fancybox-href") || c.attr("href"),
-                                                         title: f("<div/>").text(c.data("fancybox-title") || c.attr("title")).html(),
-                                                         isDom: !0,
-                                                         element: c
-                                                     },
-                                                     f.metadata && f.extend(!0, l, c.metadata())
-                                             ) : l = c
-                                     );
-                                     g = d.href || l.href || (
-                                             r(c) ? c : null
-                                     );
-                                     h = d.title !== w ? d.title : l.title || "";
-                                     n = (
-                                                 k = d.content || l.content
-                                         ) ? "html" : d.type || l.type;
-                                     !n && l.isDom && (
-                                             n = c.data("fancybox-type"), n || (
-                                                     n = (
-                                                                 n = c.prop("class").match(/fancybox\.(\w+)/)
-                                                         ) ? n[1] : null
-                                             )
-                                     );
-                                     r(g) && (
-                                             n || (
-                                                     b.isImage(g) ? n = "image" : b.isSWF(g) ? n = "swf" : "#" === g.charAt(0) ? n = "inline" : r(c) && (
-                                                             n = "html", k = c
-                                                     )
-                                             ), "ajax" === n && (
-                                                     m = g.split(/\s+/, 2), g = m.shift(), m = m.shift()
-                                             )
-                                     );
-                                     k || (
-                                             "inline" === n ? g ? k = f(r(g) ? g.replace(/.*(?=#[^\s]+$)/,
-                                                                                         "") : g) : l.isDom && (
-                                                     k = c
-                                             ) :
-                                             "html" === n ? k = g : n || g || !l.isDom || (
-                                                     n = "inline", k = c
-                                             )
-                                     );
-                                     f.extend(l, {href: g, type: n, content: k, title: h, selector: m});
-                                     a[e] = l
-                                 }), b.opts = f.extend(!0, {}, b.defaults, d), d.keys !== w && (
-                                         b.opts.keys = d.keys ? f.extend({}, b.defaults.keys, d.keys) : !1
-                                 ), b.group = a, b._start(b.opts.index)
-                             }
+                                     ))return f.isArray(a) || (
+                                     a = u(a) ? f(a).get() : [a]
+                             ), f.each(a, function (e, c) {
+                                 var l = {}, g, h, k, n, m;
+                                 "object" === f.type(c) && (
+                                         c.nodeType && (
+                                                 c = f(c)
+                                         ), u(c) ? (
+                                                 l = {
+                                                     href: c.data("fancybox-href") || c.attr("href"),
+                                                     title: f("<div/>").text(c.data("fancybox-title") || c.attr("title")).html(),
+                                                     isDom: !0,
+                                                     element: c
+                                                 },
+                                                 f.metadata && f.extend(!0, l, c.metadata())
+                                         ) : l = c
+                                 );
+                                 g = d.href || l.href || (
+                                         r(c) ? c : null
+                                 );
+                                 h = d.title !== w ? d.title : l.title || "";
+                                 n = (
+                                             k = d.content || l.content
+                                     ) ? "html" : d.type || l.type;
+                                 !n && l.isDom && (
+                                         n = c.data("fancybox-type"), n || (
+                                                 n = (
+                                                             n = c.prop("class").match(/fancybox\.(\w+)/)
+                                                     ) ? n[1] : null
+                                         )
+                                 );
+                                 r(g) && (
+                                         n || (
+                                                 b.isImage(g) ? n = "image" : b.isSWF(g) ? n = "swf" : "#" === g.charAt(0) ? n = "inline" : r(c) && (
+                                                         n = "html", k = c
+                                                 )
+                                         ), "ajax" === n && (
+                                                 m = g.split(/\s+/, 2), g = m.shift(), m = m.shift()
+                                         )
+                                 );
+                                 k || (
+                                         "inline" === n ? g ? k = f(r(g) ? g.replace(/.*(?=#[^\s]+$)/,
+                                                                                     "") : g) : l.isDom && (
+                                                 k = c
+                                         ) :
+                                         "html" === n ? k = g : n || g || !l.isDom || (
+                                                 n = "inline", k = c
+                                         )
+                                 );
+                                 f.extend(l, {href: g, type: n, content: k, title: h, selector: m});
+                                 a[e] = l
+                             }), b.opts = f.extend(!0, {}, b.defaults, d), d.keys !== w && (
+                                     b.opts.keys = d.keys ? f.extend({}, b.defaults.keys, d.keys) : !1
+                             ), b.group = a, b._start(b.opts.index)
                          },
                          cancel: function () {
                              var a = b.coming;
