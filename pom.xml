@@ -391,7 +391,16 @@
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
+                    <parallel>methods</parallel>
+                    <threadCount>10</threadCount>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>2.18</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <!--Add JavaDoc and sources to build, to go in a maven repository-->
