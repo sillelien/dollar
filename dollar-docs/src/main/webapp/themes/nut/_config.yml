@@ -1,0 +1,66 @@
+# Header
+menu:
+- name: Archives
+  path: /blog/archives
+  logo: archive
+#- name: Categories
+#  path: /categories
+#  logo: folder
+- name: Tags
+  path: /blog/tags
+  logo: tags
+#- name: About
+#  path: /blog/about
+#  logo: user
+rss: /blog/atom.xml
+
+# Content
+excerpt_link: Read More
+fancybox: true
+
+pages:
+- about
+- wiki
+
+wiki_dir: wiki
+wiki_info:
+
+# Sidebar
+sidebar: right
+home_widgets:
+- search
+- category
+- tag
+- archive
+- blogroll
+act_widgets:
+- search
+- recent_posts
+- blogroll
+post_widgets:
+- nav
+- post_date
+- post_category
+- post_tag
+
+# Miscellaneous
+google_analytics:
+favicon: /favicon.ico
+twitter: neilellis
+google_plus:
+
+links:
+- name: Dollar
+  url: https://github.com/neilellis/dollar
+  logo: dollar
+- name: Twitter
+  url: https://twitter.com/neilellis
+  logo: twitter
+
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+
+sitemap:
+  path: sitemap.xml
