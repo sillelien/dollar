@@ -17,7 +17,8 @@ dependencies:
 #    - sudo apt-get install -y gpg
     - ./gen-key.sh ${GPG_PASSPHRASE}
     - envsubst < settings.xml > ~/.m2/settings.xml
-    - "(mvn -Dgpg.passphrase=${GPG_PASSPHRASE} clean install -Dmaven.test.skip || : ) &> /dev/null"
+    - "(mvn -Dgpg.passphrase=${GPG_PASSPHRASE} clean install -Dmaven.test.skip || : ) &> /dev/null" :
+      timeout: 600
     - echo "login=neilellis" > ~/.github
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
 
