@@ -20,8 +20,7 @@ dependencies:
     - "(mvn -Dgpg.passphrase=${GPG_PASSPHRASE} clean compile -Dmaven.test.skip || : ) &> /dev/null"
     - echo "login=neilellis" > ~/.github
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
-  override:
-    - echo ""
+
 
 
 deployment:
