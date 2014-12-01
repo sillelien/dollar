@@ -8,8 +8,7 @@ git clone git@github.com:neilellis/dollar.git docs
 cd docs
 git checkout gh-pages
 cd $DIR/dollar-docs/src/main/webapp/*
-npm install
-hexo generate
+jekyll build
 cp -rf * $DIR/dist/docs
 cd $DIR
 mvn install exec:java -e -pl me.neilellis:dollar-docs -Dexec.mainClass="me.neilellis.dollar.docs.ParseDocs" -Dexec.args="./dist/docs"
