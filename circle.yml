@@ -21,6 +21,7 @@ dependencies:
         timeout: 600
     - echo "login=neilellis" > ~/.github
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
+    - gem install jekyll
 
 
 
