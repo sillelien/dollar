@@ -16,31 +16,21 @@
 
 package me.neilellis.dollar.script.operators;
 
-import me.neilellis.dollar.script.DollarScriptSupport;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class SendOperator implements Map<Object[], Map<? super var, ? extends var>> {
-    private final ScriptScope scope;
-
-    public SendOperator(ScriptScope scope) {this.scope = scope;}
-
+public class ReadOperator implements Map<Object[], Map<? super var, ? extends var>> {
     @Override
     public Map<? super var, ? extends var> map(Object[] objects) {
         return new Map<var, var>() {
             @Override
             public var map(var rhs) {
-                return DollarScriptSupport.wrapReactiveBinary(scope,
-                                                              (var) objects[1],
-                                                              rhs,
-                                                              () -> rhs.$send((var) objects[1],
-                                                                              objects[2] == null,
-                                                                              objects[3] ==
-                                                                              null));
+                return DollarFactory.fromLambda(i -> rhs.$read(objects[1] != null,
+                                                               objects[2] != null));
             }
         };
     }

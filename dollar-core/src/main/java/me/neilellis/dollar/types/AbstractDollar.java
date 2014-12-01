@@ -133,7 +133,7 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public var $send(var value, boolean blocking, boolean mutating) {
+    public var $write(var value, boolean blocking, boolean mutating) {
         return this;
     }
 
@@ -149,7 +149,7 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public var $receive(boolean blocking, boolean mutating) {
+    public var $read(boolean blocking, boolean mutating) {
         return this;
     }
 
@@ -159,7 +159,7 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public var $send(var given) {
+    public var $write(var given) {
         debug("Cannot send to " + getClass().getName());
         return this;
     }
@@ -681,6 +681,16 @@ public abstract class AbstractDollar implements var {
 
     }
 
+    @Override
+    public void setMetaAttribute(String key, String value) {
+        if (meta.containsKey(key)) {
+            DollarFactory.failure(DollarFail.FailureType.METADATA_IMMUTABLE);
+            return;
+
+        }
+        meta.put(key, value);
+    }
+
     @NotNull
     @Override
     public var $errors() {
@@ -707,16 +717,6 @@ public abstract class AbstractDollar implements var {
             json.putArray("errors", errorArray);
         }
         return DollarFactory.fromValue(json);
-    }
-
-    @Override
-    public void setMetaAttribute(String key, String value) {
-        if (meta.containsKey(key)) {
-            DollarFactory.failure(DollarFail.FailureType.METADATA_IMMUTABLE);
-            return;
-
-        }
-        meta.put(key, value);
     }
 
     @Override

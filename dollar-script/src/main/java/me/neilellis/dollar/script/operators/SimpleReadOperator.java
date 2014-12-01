@@ -25,17 +25,17 @@ import me.neilellis.dollar.var;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class SimpleReceiveOperator extends UnaryOp {
+public class SimpleReadOperator extends UnaryOp {
 
 
-    public SimpleReceiveOperator(ScriptScope scope) {
+    public SimpleReadOperator(ScriptScope scope) {
         super(scope, null);
     }
 
 
     @Override
     public var map(var from) {
-        return DollarScriptSupport.wrapReactiveUnary(scope, from, () -> DollarFactory.fromURI(from).$receive());
+        return DollarScriptSupport.wrapReactiveUnary(scope, from, () -> DollarFactory.fromURI(from).$read());
     }
 
 }

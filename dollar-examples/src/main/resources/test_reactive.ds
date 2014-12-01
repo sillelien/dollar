@@ -214,8 +214,8 @@ colors= ["red","green","blue"]
 k := colors[j * #colors]
 @@k
 volatile updatedK=false
-k ->? {updatedK=true}
-sleep 5
+k ?-> {updatedK=true}
+SLEEP(5 Sec)
 &updatedK <=> true
 sub.unsub();
 

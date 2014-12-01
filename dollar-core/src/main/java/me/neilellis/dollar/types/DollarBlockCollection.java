@@ -280,10 +280,10 @@ public class DollarBlockCollection implements var {
         return getValue().$dispatch(lhs);
     }
 
-    @Override @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class) public var $send(var value,
-                                                                                                 boolean blocking,
-                                                                                                 boolean mutating) {
-        return this.getValue().$send(value, blocking, mutating);
+    @Override @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class) public var $write(var value,
+                                                                                                  boolean blocking,
+                                                                                                  boolean mutating) {
+        return this.getValue().$write(value, blocking, mutating);
     }
 
     @Override @Guarded(ChainGuard.class) public var $drain() {return getValue().$drain();}
@@ -300,9 +300,9 @@ public class DollarBlockCollection implements var {
 
     @Override @Guarded(ChainGuard.class) public var $peek() {return getValue().$peek();}
 
-    @Override @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class) public var $receive(boolean blocking,
-                                                                                                    boolean mutating) {
-        return getValue().$receive(blocking, mutating);
+    @Override @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class) public var $read(boolean blocking,
+                                                                                                 boolean mutating) {
+        return getValue().$read(blocking, mutating);
     }
 
     @Override @Guarded(ChainGuard.class) public var $poll() {return getValue().$poll();}
@@ -320,11 +320,11 @@ public class DollarBlockCollection implements var {
     }
 
     @Override @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class)
-    public var $receive() {return getValue().$receive();}
+    public var $read() {return getValue().$read();}
 
-    @Override @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class) public var $send(
+    @Override @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class) public var $write(
             var value) {
-        return this.getValue().$send(value);
+        return this.getValue().$write(value);
     }
 
     @Override @Guarded(ChainGuard.class) @Guarded(NotNullParametersGuard.class) public var $subscribe(

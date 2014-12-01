@@ -151,16 +151,17 @@ public class DollarURI extends AbstractDollar {
         assertRunning();
         return handler.removeValue(DollarStatic.$(value));
 
-    }    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of();
     }
-
     @NotNull
     @Override
     public var $divide(@NotNull var v) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of();
     }
 
     @NotNull
@@ -263,16 +264,18 @@ public class DollarURI extends AbstractDollar {
     @Override
     public boolean isFalse() {
         return false;
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
     }    @NotNull
     @Override
     public Integer I(@NotNull String key) {
         return 0;
     }
 
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
+
 
 
 
@@ -305,13 +308,13 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public var $receive(boolean blocking, boolean mutating) {
+    public var $read(boolean blocking, boolean mutating) {
         assertRunning();
         return handler.receive(blocking, mutating);
     }
 
     @Override
-    public var $send(var value, boolean blocking, boolean mutating) {
+    public var $write(var value, boolean blocking, boolean mutating) {
         assertRunning();
         return handler.send(value, blocking, mutating);
     }

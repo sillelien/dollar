@@ -27,7 +27,7 @@ dynamicURI=  ("camel:http://google.com?q=" + search) as uri
 
 w = << camel:weather://w ; @@ "The weather in " + w.name + " is '" + w.weather[0].description+"'"
 
-sleep 1
+SLEEP(1 Sec)
 
 &a <=> 4
 &b <=> 5

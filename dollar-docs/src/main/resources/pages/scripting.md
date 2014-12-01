@@ -102,10 +102,28 @@ a=4, b=2
 
 Yep, you can write reactive expressions based on collections or arbitrary expressions. When any component changes the right hand side is re-evaluated (the actual value that changed is passed in as $1).
 
+But it's even simpler than that, many of DollarScripts operators are reactive themselves. That means they understand changes to their values. Take `@@` (or `print`) as an example:
+
+```dollar
+b=1
+@@b
+b=2
+```
+
+Outputs 1 then 2 because @@ heard the change to b and re output the new value. Often this is what you want, however if you don't just add the fix operator `&` before the value. That will stop reactive behaviour.
+
+```dollar
+b=1
+@@ &b
+b=2
+```
+
+
+
 
 ###Assignment
 
-Obviously the declarative/reactive behavior is fantastic for templating and creating lambda style expressions, however a lot of the time we want to simply assign a value.
+Obviously the declarative/reactive behavior is fantastic for templating, eventing, creating lambda style expressions etc. however a lot of the time we want to simply assign a value and perform a single action on that value.
 
 ```dollar
 
@@ -132,7 +150,18 @@ variableA = 2
 .: variableD == 3
 
 ```
-The assignment operator '=' has a 'fix' depth of 1.
+
+The assignment operator `=` has a 'fix' depth of 1. This means that any expression will be evaluated, but no maps or line blocks will be. It is also not reactive. A fix depth of 2 causes all expressions to be evaluated and evaluates one depth of maps or line blocks.
+
+```dollar
+
+lamdaVar = {$1 + 10}
+lamdaVar(5) <=> 15
+
+```
+
+The assert equals operator `<=>` will compare two values and throw an exception if they are not the same.
+
 
 It's important to note that all values in DollarScript are immutable - that means if you wish to change the value of a variable you *must* __reassign__ a new value to the variable. For example `v++` would return the value of `v+1` it does not increment v. If however you want to assign a constant value, one that is both immutable and cannot be reassigned, just use the `const` modifier at the variable assignment (this does not make sense for declarations, so is only available on assignments).
 
@@ -141,24 +170,25 @@ const MEDIUM = 23
 // MEDIUM= 4 would now produce an error
 ```
 
-So `:=` supports the reactive behaviour of Dollar, i.e. it is a declaration not a value assignment, and `=` is used to nail down a particular value. Later we'll come across the value anchor operator or diamond `&` which instructs DollarScript to fix a value at the time of declaration. More on that later.
+So `:=` supports the full reactive behaviour of Dollar, i.e. it is a declaration not a value assignment, and `=` is used to nail down a particular value or reduce the reactive behaviour. Later we'll come across the fix operator `&` which instructs DollarScript to fix a value completely . More on that later.
 
 ###Blocks
+
 ####Line Block
 DollarScript supports several block types, the first is the 'line block' a line block lies between `{` and `}` and is separated by either newlines or `;` characters.
 
 ```dollar
 
-block := {
+myBlock := {
     "Hello "
     "World"
 }
 
-block <=> "World"
+myBlock <=> "World"
 
-block2 := {1;2}
+myBlock2 := {1;2}
 
-block2 <=> 2
+myBlock2 <=> 2
 
 ```
 
@@ -185,7 +215,7 @@ list2 <=> [1,2]
 
 ####Map Block
 
-Finally we have the map block, when an map block is evaluated the result is the aggregation  of the parts from top to bottom into a map. The map block starts and finishes with the `{` `}` braces, however each part is seperated by a `,` not a `;` or *newline*
+Finally we have the map block, when an map block is evaluated the result is the aggregation  of the parts from top to bottom into a map. The map block starts and finishes with the `{` `}` braces, however each part is seperated by a `,` not a `;` or *newline* . The default behaviour of a map block is virtually useless, it takes the string value and makes it the key and keeps the original value as the value to be paired with that key.
 
 ```dollar
 
@@ -202,7 +232,7 @@ mapBlock2 <=> {"1":1,"2":2}
 
 ```
 
-Map blocks can be combined with the pair `:` operator to create maps/JSON like this:
+Map blocks are combined with the pair `:` operator to become useful and create maps/JSON like this:
 
 
 ```dollar
@@ -217,6 +247,8 @@ mapBlock := {
 mapBlock.second <=> "World"
 
 ```
+
+A map block with one entry that is not a pair is assumed to be a *Line Block*.
 
 The stdout operator `@@` is used to send a value to stdout in it's serialized (JSON) format, so the result of the above would be to output `{"first":"Hello ","second":"World"}` a JSON object created using JSON like syntax. Maps can also be created by joining pairs.
 
@@ -288,7 +320,7 @@ a=1/0
 
 ##Type System
 ###Intro
-Although DollarScript is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, NUMBER, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
+Although DollarScript is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, INTEGER,DECIMAL, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
 
 ```dollar
 .: "Hello World" is String
@@ -441,7 +473,7 @@ b <=> 2
 
 ```
 
-So let's start with the `if` operator. The `if` operator is seperate from the `else` operator, it simply evaluates the condition supplied as the first argument. If that value is boolean and true it evaluates the second argument and returns it's value; otherwise it returns boolean false.
+So let's start with the `if` operator. The `if` operator is separate from the `else` operator, it simply evaluates the condition supplied as the first argument. If that value is boolean and true it evaluates the second argument and returns it's value; otherwise it returns boolean false.
 
 The `else` operator is a binary operator which evaluates the left-hand-side (usually the result of an `if` statement), if that has a value of false then the right-hand-side is evaluated and it's result returned, otherwise it returns the left-hand-side.
 
@@ -485,12 +517,12 @@ a <=> 10
 
 DollarScript as previously mentioned is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
 
-Let's start with the simplest reactive control flow operator, the '->?' or 'causes' operator.
+Let's start with the simplest reactive control flow operator, the '?->' or 'causes' operator.
 
 ```dollar
 a=1; b=1
 
-a ->? (b= a)
+a ?-> (b= a)
 
 &a <=> 1 ; &b <=> 1
 
@@ -607,7 +639,7 @@ marinaVideos = << camel:https://itunes.apple.com/search?term=Marina+And+The+Diam
 @@ marinaVideos.results each { $1.trackViewUrl }
 ```
 
-In this example we've requested a single value (using `<+`) from a uri and assigned the value to `marinaVideos` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `trackViewUrl`. The each operator returns a list of the results and that is what is passed to standard out.
+In this example we've requested a single value (using `<<`) from a uri and assigned the value to `marinaVideos` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `trackViewUrl`. The each operator returns a list of the results and that is what is passed to standard out.
 
 
 ##Using Java
@@ -713,7 +745,7 @@ www= (("http:get://127.0.0.1:8111/" + ${channel | "test"}) as URI)
 
 export server := {
            www subscribe {
-            $1.params +> redis
+            $1.params >> redis
             { body :  all redis }
         }
     };
@@ -739,7 +771,7 @@ The parallel operator `|:|` or `parallel` causes the right hand side expression 
 
 ```dollar
 
-testList := [ TIME(), {sleep(1);TIME();}, TIME() ];
+testList := [ TIME(), {SLEEP(1 Sec); TIME();}, TIME() ];
 a= |..| testList;
 b= |:| testList;
 //Test different execution orders
@@ -754,12 +786,12 @@ As you can see the order of evaluation of lists and maps **but not line blocks**
 The fork operator `-<` or `fork` will cause an expression to be evaluated in the background and any reference to the forked expression will block until a value is ready.
 
 ```dollar
-sleepTime := {@@ "Background Sleeping";sleep 4; @@ "Background Finished Sleeping";TIME()}
+sleepTime := {@@ "Background Sleeping";SLEEP(4 Sec); @@ "Background Finished Sleeping";TIME()}
 //Any future reference to c will block until c has completed evaluation
 c= fork sleepTime
-sleep 1
+SLEEP(1 Sec)
 @@ "Main thread sleeping ..."
-sleep 2
+SLEEP(2 Secs)
 @@ "Main thread finished sleeping ..."
 d= TIME()
 .: c > d

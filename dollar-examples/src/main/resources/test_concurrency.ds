@@ -1,5 +1,5 @@
 
-testArray := [ TIME(), {sleep(2);TIME();}, TIME() ];
+testArray := [ TIME(), {SLEEP(2 Secs);TIME();}, TIME() ];
 
 
 a= serial testArray;
@@ -15,16 +15,16 @@ b= parallel testArray;
 .: b[2] < b[1]
 .: a[2] >= a[1]
 
-sleepTime := {@@ "Background Sleeping";sleep 4; @@ "Background Finished Sleeping";TIME()}
+sleepTime := {@@ "Background Sleeping";SLEEP(4 Secs); @@ "Background Finished Sleeping";TIME()}
 
 //Any future reference to c will block until c has completed evaluation
 c= fork sleepTime
 
-sleep 1
+SLEEP (1 Sec)
 
 @@ "Main thread sleeping ..."
 
-sleep 2
+SLEEP (2 Secs)
 
 @@ "Main thread finished sleeping ..."
 

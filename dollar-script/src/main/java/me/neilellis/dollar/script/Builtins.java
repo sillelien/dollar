@@ -29,45 +29,14 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.DollarStatic.$void;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class Builtins {
 
-    private static final HashMap<String, Builtin<var>> map = new HashMap<>();
-
-
-    public static var execute(String name, List<var> parameters, ScriptScope scope) {
-        final Builtin<var> builtin = map.get(name);
-        if (builtin == null) {
-            throw new BuiltinNotFoundException(name);
-        }
-        return builtin.execute(parameters, scope);
-    }
-
-    public static boolean exists(String name) {
-        return map.containsKey(name);
-    }
-
-    public static <T> void addJavaStyle(int minargs, int maxargs, Builtin.JavaStyle<T> lambda, String... names) {
-        for (String name : names) {
-            map.put(name, new Builtin.BuiltinImpl(lambda, minargs, maxargs));
-        }
-    }
-
-    public static void addDollarStyle(int minargs, int maxargs, Builtin.DollarStyle lambda, String... names) {
-        for (String name : names) {
-            map.put(name, new Builtin.BuiltinImpl(lambda, minargs, maxargs));
-        }
-    }
-
-    public static void addDollarSingleNoScope(Function<var, var> lambda, String... names) {
-        for (String name : names) {
-            map.put(name, new Builtin.BuiltinImpl((args, scope) -> lambda.apply((var) args.get(0)), 1, 1));
-        }
-    }
-
+    public static final double DAY_IN_MILLIS = 24.0 * 60.0 * 60.0 * 1000.0;
 
     static {
         addDollarStyle(1, 1, (args, scope) -> args.get(0).$abs(), "ABS");
@@ -105,7 +74,7 @@ public class Builtins {
         addDollarSingleNoScope(StateAware::$unpause, "UNPAUSE");
         addDollarSingleNoScope(StateAware::$state, "STATE");
 
-        addJavaStyle(1, 1, (args, scope) -> args.get(0).D() / (24.0 * 60.0 * 60.0 * 1000.0), "Millis", "Milli", "MS",
+        addJavaStyle(1, 1, (args, scope) -> args.get(0).D() / DAY_IN_MILLIS, "Millis", "Milli", "MS",
                      "Milliseconds", "Millisecond");
         addJavaStyle(1, 1, (args, scope) -> args.get(0).D() / (24.0 * 60.0 * 60.0), "Secs", "S", "Sec", "Seconds",
                      "Second");
@@ -113,10 +82,51 @@ public class Builtins {
         addJavaStyle(1, 1, (args, scope) -> {
             return args.get(0).D() / 24.0;
         }, "Hrs", "Hours", "H", "Hour");
+        addJavaStyle(1, 1, (args, scope) -> {
+            try {
+                Thread.sleep((long) (args.get(0).D() * DAY_IN_MILLIS));
+                return args.get(0);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                return $void();
+            }
+        }, "SLEEP");
         addJavaStyle(1, 1, (args, scope) -> args.get(0).D(), "Days", "Day", "D");
         addJavaStyle(1, 1, (args, scope) -> args.get(0).toString().length(), "LEN");
         addJavaStyle(0, 0, (args, scope) -> $(new Date()), "DATE");
         addJavaStyle(0, 0, (args, scope) -> System.currentTimeMillis(), "TIME");
         addJavaStyle(2, 2, (args, scope) -> args.get(0).toString().matches(args.get(1).$S()), "MATCHES");
+    }
+
+    private static final HashMap<String, Builtin<var>> map = new HashMap<>();
+
+    public static var execute(String name, List<var> parameters, ScriptScope scope) {
+        final Builtin<var> builtin = map.get(name);
+        if (builtin == null) {
+            throw new BuiltinNotFoundException(name);
+        }
+        return builtin.execute(parameters, scope);
+    }
+
+    public static boolean exists(String name) {
+        return map.containsKey(name);
+    }
+
+    public static <T> void addJavaStyle(int minargs, int maxargs, Builtin.JavaStyle<T> lambda, String... names) {
+        for (String name : names) {
+            map.put(name, new Builtin.BuiltinImpl(lambda, minargs, maxargs));
+        }
+    }
+
+    public static void addDollarStyle(int minargs, int maxargs, Builtin.DollarStyle lambda, String... names) {
+        for (String name : names) {
+            map.put(name, new Builtin.BuiltinImpl(lambda, minargs, maxargs));
+        }
+    }
+
+    public static void addDollarSingleNoScope(Function<var, var> lambda, String... names) {
+        for (String name : names) {
+            map.put(name, new Builtin.BuiltinImpl((args, scope) -> lambda.apply((var) args.get(0)), 1, 1));
+        }
     }
 }

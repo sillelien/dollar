@@ -290,8 +290,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public var $send(var value, boolean blocking, boolean mutating) {
-        return getValue().$send(value, blocking, mutating);
+    public var $write(var value, boolean blocking, boolean mutating) {
+        return getValue().$write(value, blocking, mutating);
     }
 
     @Override
@@ -322,8 +322,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public var $receive(boolean blocking, boolean mutating) {
-        return getValue().$receive(blocking, mutating);
+    public var $read(boolean blocking, boolean mutating) {
+        return getValue().$read(blocking, mutating);
     }
 
     @Override
@@ -355,13 +355,13 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public var $receive() {
-        return getValue().$receive();
+    public var $read() {
+        return getValue().$read();
     }
 
     @Override
-    public var $send(var value) {
-        return getValue().$send(value);
+    public var $write(var value) {
+        return getValue().$write(value);
     }
 
     @Override
@@ -537,6 +537,12 @@ public class DollarWrapper implements var {
     }
 
     @NotNull
+    private static String sanitize(@NotNull String location) {
+        return location.replaceAll("[^\\w.]+", "_");
+
+    }
+
+    @NotNull
     @Override
     public var $error(@NotNull String errorMessage) {
         errorLogger.log(errorMessage);
@@ -652,12 +658,6 @@ public class DollarWrapper implements var {
         return clazz.getName().toLowerCase();
     }
 
-    @NotNull
-    private static String sanitize(@NotNull String location) {
-        return location.replaceAll("[^\\w.]+", "_");
-
-    }
-
     @Override
     public String S() {
         return getValue().S();
@@ -694,10 +694,6 @@ public class DollarWrapper implements var {
         return getValue().N();
     }
 
-    @Override public boolean isCollection() {
-        return getValue().isCollection();
-    }
-
     @Override
     public Map<String, Object> toMap() {
         return getValue().toMap();
@@ -712,6 +708,10 @@ public class DollarWrapper implements var {
     @Override
     public boolean is(@NotNull Type... types) {
         return getValue().is(types);
+    }
+
+    @Override public boolean isCollection() {
+        return getValue().isCollection();
     }
 
     @Override
