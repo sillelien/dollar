@@ -37,7 +37,10 @@ import static me.neilellis.dollar.DollarStatic.$void;
 public class Builtins {
 
     public static final double DAY_IN_MILLIS = 24.0 * 60.0 * 60.0 * 1000.0;
+    private static final HashMap<String, Builtin<var>> map;
+
     static {
+        map = new HashMap<>();
         addDollarStyle(1, 1, (args, scope) -> args.get(0).$abs(), "ABS");
         addJavaStyle(1, 1, (args, scope) -> args.get(0).$size(), "COUNT");
 
@@ -96,7 +99,6 @@ public class Builtins {
         addJavaStyle(0, 0, (args, scope) -> System.currentTimeMillis(), "TIME");
         addJavaStyle(2, 2, (args, scope) -> args.get(0).toString().matches(args.get(1).$S()), "MATCHES");
     }
-    private static final HashMap<String, Builtin<var>> map = new HashMap<>();
 
     public static var execute(String name, List<var> parameters, ScriptScope scope) {
         final Builtin<var> builtin = map.get(name);
