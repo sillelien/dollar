@@ -7,7 +7,11 @@ general:
     ignore:
       - gh-pages
 
-
+notify:
+  webhooks:
+    # A list of hook hashes, containing the url field
+    # gitter hook
+    - url: https://webhooks.gitter.im/e/0400df6c845f5a09949d
 
 dependencies:
   cache_directories:
