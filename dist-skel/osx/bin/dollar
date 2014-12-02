@@ -1,5 +1,5 @@
 #!/bin/sh -eu
-cd $(dirname $0)/..
+cd $(dirname $0)/.. &> /dev/null
 DOLLAR_HOME=$(pwd)
 cd -
 export JAVA_HOME=${DOLLAR_HOME}/jdk/
