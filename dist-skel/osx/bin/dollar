@@ -9,5 +9,5 @@ then
     exit 1
 fi
 
-echo "This is experimental software, it may work it may not :-)"
+#echo "This is experimental software, it may work it may not :-)"
 ${DOLLAR_HOME}/jdk/jre/bin/java -classpath "${DOLLAR_HOME}/lib/*:${DOLLAR_HOME}/ext:${DOLLAR_HOME}/plugins:${HOME}/.dollar/lib" me.neilellis.dollar.script.ParserMain $@

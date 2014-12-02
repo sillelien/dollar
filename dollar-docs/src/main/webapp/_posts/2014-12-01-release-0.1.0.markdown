@@ -5,11 +5,9 @@ date:   2014-12-01 16:24:44
 categories: dollar releases
 ---
 
-The 0.1.0 experimental release of DollarScript is ready to download *here*.
+The 0.1.0 experimental release of DollarScript is ready to download in [Bintray](https://bintray.com/neilellis/dollar/dollar-runtime-osx/0.1.0/view/files). This release is just to give you a taste of what Dollar is all about and to encourage hackers to feedback on language features.
 
-{% highlight ruby %}
-
-{% endhighlight %}
+Please let me know of bugs, ideas etc. I'm @neilellis on Twitter or email hello@neilellis.me - good luck!
 
 
 
