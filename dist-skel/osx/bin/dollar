@@ -1,6 +1,13 @@
-#!/bin/sh -x
+#!/bin/sh -eu
 cd $(dirname $0)/..
 DOLLAR_HOME=$(pwd)
 cd -
 export JAVA_HOME=${DOLLAR_HOME}/jdk/
+if [ $# -ne 1 ]
+then
+    echo "Usage: dollar <filename>.ds"
+    exit 1
+fi
+
+echo "This is experimental software, it may work it may not :-)"
 ${DOLLAR_HOME}/jdk/jre/bin/java -classpath "${DOLLAR_HOME}/lib/*:${DOLLAR_HOME}/ext:${DOLLAR_HOME}/plugins:${HOME}/.dollar/lib" me.neilellis.dollar.script.ParserMain $@
