@@ -40,7 +40,7 @@ deployment:
           - git clean -fd
           - git checkout master
           - git pull origin master
-          - github-changes -o neilellis -r dollar
+          - github-changes -o neilellis -r dollar -v
           - git merge staging -m "Auto merge after testing and CHANGELOG update."
           - git push origin master
 
