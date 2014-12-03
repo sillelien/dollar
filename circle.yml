@@ -1,4 +1,6 @@
 machine:
+  environment:
+    release: 0.1.0
   java:
     version: oraclejdk8
 
@@ -43,12 +45,14 @@ deployment:
           - github-changes -o neilellis -r dollar -v
           - git merge staging -m "Auto merge"
           - git commit -a -m "Change log updates"
+          - git tag ${release}
+          - git push --tags
           - git push origin master
 
   production:
     branch: master
     commands:
-        - mvn versions:set -DnewVersion=0.1.0-r${CIRCLE_BUILD_NUM}
+        - mvn versions:set -DnewVersion=${release}-r${CIRCLE_BUILD_NUM}
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
@@ -56,6 +60,6 @@ deployment:
         - ./build-docs.sh:
             timeout: 360
         - pack/pack.sh
-        - pack/upload.sh 0.1.0 ${CIRCLE_BUILD_NUM}
+        - pack/upload.sh ${release} ${CIRCLE_BUILD_NUM}
 #        - mvn site:site site:stage
 #        - mvn scm-publish:publish-scm
