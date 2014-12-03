@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/neilellis/dollar.png?label=ready&title=Ready)](https://waffle.io/neilellis/dollar)
 [![Circle CI](https://circleci.com/gh/neilellis/dollar.png?style=badge)](https://circleci.com/gh/neilellis/dollar)
 
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/neilellis/dollar?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
