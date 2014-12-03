@@ -47,7 +47,7 @@ deployment:
           - github-changes -o neilellis -r dollar -v  -n ${next_release}
           - git merge staging -m "Auto merge"
           - git commit -a -m "Change log updates"
-          - git tag ${release}
+          - "git tag ${release} || :"
           - git push --tags
           - git push origin master
 
