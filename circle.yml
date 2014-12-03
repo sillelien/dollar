@@ -34,6 +34,8 @@ deployment:
   staging:
         branch: staging
         commands:
+          - git config --global user.email "neil@cazcade.com"
+          - git config --global user.name "Neil Ellis"
           - git reset HEAD --hard
           - git clean -fd
           - git checkout master
@@ -45,8 +47,6 @@ deployment:
   production:
     branch: master
     commands:
-        - git config --global user.email "neil@cazcade.com"
-        - git config --global user.name "Neil Ellis"
         - mvn versions:set -DnewVersion=0.1.0-r${CIRCLE_BUILD_NUM}
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
