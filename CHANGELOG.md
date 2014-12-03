@@ -1,1 +1,279 @@
-Place holder
+## Change Log
+
+### upcoming (2014/12/03 20:49 +00:00)
+- [606067b](https://github.com/neilellis/dollar/commit/606067bc430dcc1657311ff8cf4679b9db13f29c) General tooling and planning integration.
+- [#4](https://github.com/neilellis/dollar/pull/4) Merge pull request #4 from neilellis/master (@neilellis)
+- [b120bb0](https://github.com/neilellis/dollar/commit/b120bb0d2661c2764e7c62146474a15d1e8f8bef) Auto merge after testing and CHANGELOG update.
+- [e6dc413](https://github.com/neilellis/dollar/commit/e6dc413c75335471750037478a16a6728e4dd7db) Auto merge after testing and CHANGELOG update.
+- [26006e6](https://github.com/neilellis/dollar/commit/26006e682308e3cb9a1edebbb3b8dfc8be5dbfda) General tooling and planning integration.
+- [d5c5bd4](https://github.com/neilellis/dollar/commit/d5c5bd4c497102c56d343ac6fc8f90116e390659) General tooling and planning integration.
+- [13e7da8](https://github.com/neilellis/dollar/commit/13e7da87869fb32364ec378ee95719eb3bb259d2) Merge remote-tracking branch 'origin/master' into staging
+- [8467980](https://github.com/neilellis/dollar/commit/8467980a8330c88768005eb893173c3c73672994) Create ROADMAP.md (@neilellis)
+- [ed51253](https://github.com/neilellis/dollar/commit/ed51253d1fc11b0a6925cbcc3d7da92ff3e25cf2) Create CHANGELOG.md (@neilellis)
+- [068344f](https://github.com/neilellis/dollar/commit/068344fa4edb32990fe500d7e35dbd4ff46cddd1) Auto merge after testing and CHANGELOG update.
+- [fea8158](https://github.com/neilellis/dollar/commit/fea8158c071e4d5d246bd163cdc003011f52cf86) General tooling and planning integration.
+- [f5305cd](https://github.com/neilellis/dollar/commit/f5305cd269db63a56786edb149233127e84ad071) General tooling and planning integration.
+- [f4cfd6a](https://github.com/neilellis/dollar/commit/f4cfd6a5e8786d9c636b998c53fce543469a0fa0) General tooling and planning integration.
+- [702144e](https://github.com/neilellis/dollar/commit/702144e33e1f0a23028bff599b7a82816cec3971) General tooling and planning integration.
+- [97d278a](https://github.com/neilellis/dollar/commit/97d278a74e32df8afb8b377d40c559e36bcdd38b) General tooling and planning integration.
+- [#3](https://github.com/neilellis/dollar/pull/3) Merge pull request #3 from waffle-iron/master (@waffle-iron)
+- [b16cb2b](https://github.com/neilellis/dollar/commit/b16cb2ba43c40c2ff1cebeef25764979b1ccf3d5) add waffle.io badge (@waffle-iron)
+- [2da5e74](https://github.com/neilellis/dollar/commit/2da5e7444af528a7e7562bcaf8335d5ebfd15a60) General tooling and planning integration.
+- [ff017cf](https://github.com/neilellis/dollar/commit/ff017cfb872cde0179b85f15049ba57071a94a78) Gitter.im integration started.
+- [bdd2b99](https://github.com/neilellis/dollar/commit/bdd2b99422f98177c381f8703dc609b1cbfc680e) Gitter.im integration started.
+- [f1917d1](https://github.com/neilellis/dollar/commit/f1917d17e9d06362bc39cbc9898a133de517d26e) Gitter.im integration started.
+- [5ca28c4](https://github.com/neilellis/dollar/commit/5ca28c4fa27b96c0cd87efcba048e05c6a3b05a3) Gitter.im integration started.
+- [2e6a9ce](https://github.com/neilellis/dollar/commit/2e6a9ce78392042b37c88080b464105c1683fc2d) Added github links
+- [e071ce3](https://github.com/neilellis/dollar/commit/e071ce38a29b1f92500f784617db9690b2f70301) Added github links
+- [2d592df](https://github.com/neilellis/dollar/commit/2d592dfb62379e6098c9ffb5d8c6a32576f43696) Removed API link
+- [2a8dbb7](https://github.com/neilellis/dollar/commit/2a8dbb77fc9a4422127018951bf47ef9980d2730) Preparing 0.1.0
+- [98cc476](https://github.com/neilellis/dollar/commit/98cc476a36e276f9d3913b7d8cd214a102da8ae2) Preparing 0.1.0
+- [7b1d62a](https://github.com/neilellis/dollar/commit/7b1d62a28b3556d9eb96e827762ed198ff63f8ae) Preparing 0.1.0
+- [117cb00](https://github.com/neilellis/dollar/commit/117cb00176f12093ab33ba235242100183c8f5a3) Preparing 0.1.0
+- [44e055f](https://github.com/neilellis/dollar/commit/44e055f22af27d1e73a0d8686cb55f384354153c) Preparing 0.1.0
+- [4f4e4ce](https://github.com/neilellis/dollar/commit/4f4e4ce0804014b11d5977946412174d2a91d4c1) Preparing 0.1.0
+- [d1434a2](https://github.com/neilellis/dollar/commit/d1434a27338863bd5a8d3ab67343e7486c97f5eb) Preparing 0.1.0
+- [d555264](https://github.com/neilellis/dollar/commit/d5552640b4a06032e630a41a9d21b00e9a63b046) Switching to Jekyll ;-)
+- [25b048e](https://github.com/neilellis/dollar/commit/25b048ef0118a8837a97cddb87aea2f002716116) Switching to Jekyll ;-)
+- [75f4b1e](https://github.com/neilellis/dollar/commit/75f4b1ea743bb7e4acc50e8c4385d371f398f48d) Switching to Jekyll ;-)
+- [81dfcf2](https://github.com/neilellis/dollar/commit/81dfcf26c6b780d7bb48386b926327571c31d5cf) Switching to Jekyll ;-)
+- [9b8e15d](https://github.com/neilellis/dollar/commit/9b8e15d4f7532b58fbff3a5cfd4a90d4794e6295) Switching to Jekyll ;-)
+- [b54c93a](https://github.com/neilellis/dollar/commit/b54c93ab563fcb0ff8207c881a024d4d26ea8ffd) Switching to Jekyll ;-)
+- [d86f28d](https://github.com/neilellis/dollar/commit/d86f28d885544da4e37fddd56c7a5a0a4603c167) Switching to Jekyll ;-)
+- [d7ad852](https://github.com/neilellis/dollar/commit/d7ad8526d344eacdf0b43b946b27c613d9f609fd) Switching to Jekyll ;-)
+- [91d84ac](https://github.com/neilellis/dollar/commit/91d84ac59184be00d133ae23a3ad0926e3ffd0c3) Switching to Jekyll ;-)
+- [de37e23](https://github.com/neilellis/dollar/commit/de37e232bf5eb0c03c8c09f580150a0023b47318) Switching to Jekyll ;-)
+- [1f03bd9](https://github.com/neilellis/dollar/commit/1f03bd9e50951266e84b2ce333723476e885d9fc) Switching to Jekyll ;-)
+- [54d1c19](https://github.com/neilellis/dollar/commit/54d1c19ff570706d58b216d4a636e5b54c0ff11d) Switching to Jekyll ;-)
+- [f279a35](https://github.com/neilellis/dollar/commit/f279a353ec32b2cf0e0adf0f2689349bed58186f) Hexo
+- [733e76a](https://github.com/neilellis/dollar/commit/733e76a1f71ae0b9ff2a6ac871bdbba067754f91) Adding hexo for website
+- [cfb4f4d](https://github.com/neilellis/dollar/commit/cfb4f4d9e3e80da3500bbf99e06ec7818bce3ded) Adding hexo for website
+- [253a031](https://github.com/neilellis/dollar/commit/253a031da1496869a81b605077ed30363ec4f442) Adding hexo for website
+- [a4404a8](https://github.com/neilellis/dollar/commit/a4404a87416980ef333c8d734cd994ca688dc63b) Adding hexo for website
+- [cfca1d4](https://github.com/neilellis/dollar/commit/cfca1d4accb2778a82230ad49132a182c717a419) Adding hexo for website
+- [583b462](https://github.com/neilellis/dollar/commit/583b4620e2ed14294cccb52dc6fc3eb3478c4849) Adding hexo for website
+- [a020e71](https://github.com/neilellis/dollar/commit/a020e71575fe7f4c405c21f7c578239b8693b8fa) Adding hexo for website
+- [7e43ba5](https://github.com/neilellis/dollar/commit/7e43ba5d1210579c000c9cae4d9e86cb193516e8) Preparing the 0.1.0 release
+- [b29618b](https://github.com/neilellis/dollar/commit/b29618be9471391b85f2b9359890d86af0c82bf0) Preparing the 0.1.0 release
+- [c14cf2a](https://github.com/neilellis/dollar/commit/c14cf2aa65b1135fe6c95d1604ca6bfabbedecc9) Preparing the 0.1.0 release
+- [91aaba6](https://github.com/neilellis/dollar/commit/91aaba621a9b0dce24636e219c34d1c9a3e9b103) Preparing the 0.1.0 release
+- [0dcf5af](https://github.com/neilellis/dollar/commit/0dcf5af98e927cf3a23b6d6a3cb5ea99a851c145) Preparing the 0.1.0 release
+- [056c93b](https://github.com/neilellis/dollar/commit/056c93bb2ae7d2ec0329a32d3e8f361a4fe0cb8d) Preparing the 0.1.0 release
+- [61f510c](https://github.com/neilellis/dollar/commit/61f510c0a0affb234a7f4699da4ed6546e8c31bb) Preparing the 0.1.0 release
+- [05182b7](https://github.com/neilellis/dollar/commit/05182b7fd8830b2dae921de3abab24aba77b5c24) Preparing the 0.1.0 release
+- [2ed51ae](https://github.com/neilellis/dollar/commit/2ed51aefe4a5d01e582ee5bc4cf6bbdebcb65e45) Massive work around the _fix() methods, closer to get a coherent system of delayed execution in place.
+- [ca23419](https://github.com/neilellis/dollar/commit/ca234198e2399e2eab0f800409fbbd13beb03a74) Massive work around the _fix() methods, closer to get a coherent system of delayed execution in place.
+- [daf3c3e](https://github.com/neilellis/dollar/commit/daf3c3e6dc5be865cde26960169019c8987e51d6) Lining up methods for removal on core api.
+- [f08d883](https://github.com/neilellis/dollar/commit/f08d883103644b538d0e4dead2f935ff2749152e) Fixing reactive support, general bugfixing, random uri, better scope debugging.
+- [8138378](https://github.com/neilellis/dollar/commit/8138378e439878a70bcd74c9e171a57f25128127) Bugfixing
+- [b2bb338](https://github.com/neilellis/dollar/commit/b2bb3388c6aa09f883f574facfb80fb4d5ff8136) Bugfixing
+- [f6f4477](https://github.com/neilellis/dollar/commit/f6f44776a94263a3b2affda29d28d7315b81fa8e) Bugfixing
+- [61b2acf](https://github.com/neilellis/dollar/commit/61b2acfb56e7502204a8ff7cc49813a1779fcf03) Bugfixing
+- [7c7e617](https://github.com/neilellis/dollar/commit/7c7e617da24af3ccee2ee6ad7e858118b7e8fc5f) Bugfixing
+- [bc24fc5](https://github.com/neilellis/dollar/commit/bc24fc53ea2c0d99cc6afe4b4e4f8adb5c173f41) Bugfixing
+- [fea3f2b](https://github.com/neilellis/dollar/commit/fea3f2b399ce29e1cbbf19f17be3ba947b27450d) Date improvements and support for unit operations.
+- [cec49da](https://github.com/neilellis/dollar/commit/cec49da723ad26ff2027fc1b200971295ddefffd) Date improvements and support for unit operations.
+- [dd52ad6](https://github.com/neilellis/dollar/commit/dd52ad6f4890b1d445ef80071577748c8aef21d7) Date improvements and support for unit operations.
+- [02a50fc](https://github.com/neilellis/dollar/commit/02a50fc794a2f65462c7c880bd3696b2335676f6) Removed logging and improved error handling drastically.
+- [5c1293a](https://github.com/neilellis/dollar/commit/5c1293ab31373deaa8f5368739b545f031f71941) Dates, Integers+Decimals,Concurrency
+- [3f0e856](https://github.com/neilellis/dollar/commit/3f0e8567685fec8e319e9ec9402b77f0063848f0) Dates, Integers+Decimals,Concurrency
+- [181599b](https://github.com/neilellis/dollar/commit/181599b5d89c7b52d1f8a513acd3ba7c744bcb20) Dates, Integers+Decimals,Concurrency
+- [7411724](https://github.com/neilellis/dollar/commit/74117242de9a2075a56f3c6180d7835675fe1a33) Dates, Integers+Decimals,Concurrency
+- [9c4510a](https://github.com/neilellis/dollar/commit/9c4510a1b6c0cd15970e04d10027b642dbc703ad) Dates, Integers+Decimals,Concurrency
+- [1fe49b3](https://github.com/neilellis/dollar/commit/1fe49b3052c79df726199fa76e80136b231eab70) Variable default
+- [9503ae1](https://github.com/neilellis/dollar/commit/9503ae15ffa78d35b9e633804e610f083625d8b3) Module improvements and fixes
+- [5182256](https://github.com/neilellis/dollar/commit/5182256295c164c33b8e046fe1f45db7e8634341) Module improvements and fixes
+- [e5a96ac](https://github.com/neilellis/dollar/commit/e5a96ac11467ff923fd1b05c676a69da054dc7d6) Module improvements and fixes
+- [a91bf09](https://github.com/neilellis/dollar/commit/a91bf0923717618ddbdcc8cb8416cefaccba3939) Module improvements and fixes
+- [733b0a9](https://github.com/neilellis/dollar/commit/733b0a9f1812e8aed347077539c73446ae71b00f) Module improvements and fixes
+- [de79ffb](https://github.com/neilellis/dollar/commit/de79ffbf3efc5e8a6f7d47506478bb3346bcccba) Module improvements and fixes
+- [bafdf94](https://github.com/neilellis/dollar/commit/bafdf9461884be3e49a8c09de62b3c7ad2e96e11) Module improvements and fixes
+- [3844dca](https://github.com/neilellis/dollar/commit/3844dca7e72ead6235a9a2bd857ddbb68be3e41f) Module improvements and fixes
+- [d4897eb](https://github.com/neilellis/dollar/commit/d4897eb542a03f6547cb8faf23642f6c11e6116f) Module improvements and fixes
+- [6f67d9b](https://github.com/neilellis/dollar/commit/6f67d9bbe5e2cf8c613d26b260b10590212751db) Module improvements and fixes
+- [b723adb](https://github.com/neilellis/dollar/commit/b723adb1d54f76b34b0ee51fafe5c963524c24c9) Module improvements and fixes
+- [c833b0c](https://github.com/neilellis/dollar/commit/c833b0c6580dbed2e3f505f6b08e7d72d863d1a8) Module improvements and fixes
+- [6af2265](https://github.com/neilellis/dollar/commit/6af2265a751ff93b594a401bcfc87b78aa4e909e) Module improvements and fixes
+- [a033a41](https://github.com/neilellis/dollar/commit/a033a41a9eec84095829e99dc934af3740a98cad) Module improvements and fixes
+- [8234200](https://github.com/neilellis/dollar/commit/8234200463f070cf1b9e4d7a4dd318566cc79adf) Module improvements and fixes
+- [a7cdc29](https://github.com/neilellis/dollar/commit/a7cdc29a4bb9cf389aeafcbd4c801fcb3bfe2de8) Module improvements
+- [037e24a](https://github.com/neilellis/dollar/commit/037e24ae129334f2361a2bdcb0f108edda0a9244) Module improvements
+- [8d2b200](https://github.com/neilellis/dollar/commit/8d2b20050e1fc3645e9ceb0a29c0095d4c619c8b) Module improvements
+- [209a624](https://github.com/neilellis/dollar/commit/209a6240e5682d9b82f99838ffd96b58602f9996) Constraint fixes and the collect operator
+- [c0332e4](https://github.com/neilellis/dollar/commit/c0332e45298ec98f541d6a72d29a89e449dbb551) Constraint fixes and the collect operator
+- [e802535](https://github.com/neilellis/dollar/commit/e8025351803bfd35a78017866b5adde083176f5c) Constraint fixes and the collect operator
+- [3881cd4](https://github.com/neilellis/dollar/commit/3881cd4e7ebd218838fd66cdc8c4af7bc1f6d685) While loop
+- [7def044](https://github.com/neilellis/dollar/commit/7def04433bb2b8616dca0b97aa14901ed8699ea5) Parser refactoring to make it vaguely understandable
+- [60205d6](https://github.com/neilellis/dollar/commit/60205d6b7bc740af88cba99fd6184949257823f5) Doc cleanup, casting.
+- [9fb0143](https://github.com/neilellis/dollar/commit/9fb014313e945229245475359c035c5202065033) Doc cleanup, casting.
+- [f69c6e6](https://github.com/neilellis/dollar/commit/f69c6e6ada4e7edb3f923b35f22980fe57c3c5d4) Type constraint
+- [58661be](https://github.com/neilellis/dollar/commit/58661be6d829d1a355399b4bc409b266b4728f37) Refactoring of operators
+- [aee879c](https://github.com/neilellis/dollar/commit/aee879c6a56789528f864bf41094849aa0e1ac96) Addition of variable constraints and error handling
+- [004f5c4](https://github.com/neilellis/dollar/commit/004f5c40db4eee5cbe17f25bb7ac706625d48fa0) Addition of variable constraints
+- [1f5a43d](https://github.com/neilellis/dollar/commit/1f5a43df11361fe878627a7a01ed7317263a6f20) Clean up refactoring
+- [93e7035](https://github.com/neilellis/dollar/commit/93e7035aeef152e79a789fa04754cc5297396a3c) Clean up refactoring
+- [487afbb](https://github.com/neilellis/dollar/commit/487afbb546f169eb0106d05187016b76637fba2c) Documentation tidy up.
+- [41ed506](https://github.com/neilellis/dollar/commit/41ed5069687c1209198ca31eb79fa0fc3982ca2b) Removed the need for the $ operator, is now optional or for calculated variable names.
+- [c8c95ad](https://github.com/neilellis/dollar/commit/c8c95ad942353e08c81fc7c6e042d11931d3a95b) Removed the need for the $ operator, is now optional or for calculated variable names.
+- [30afb55](https://github.com/neilellis/dollar/commit/30afb55f567837dd9e8258b6894bacb3a18a70de) More docs, improvements around variables and identifiers
+- [9b5ceb1](https://github.com/neilellis/dollar/commit/9b5ceb1221709b45451f1d1d6952afcbf1f69ade) More docs, improvements around variables and identifiers
+- [3a73292](https://github.com/neilellis/dollar/commit/3a7329241d538c66c10984c86f63f36a08df4e87) URI work and module work also clean up refactoring and error handling.
+- [c9da08c](https://github.com/neilellis/dollar/commit/c9da08c83dcfd98519b3eb4aad9004b98ebe7378) URI work and module work also clean up refactoring and error handling.
+- [a09160a](https://github.com/neilellis/dollar/commit/a09160a0ee3166c1b916cc17f3874c3dbb07dea3) URI work and module work also clean up refactoring and error handling.
+- [a8e6dcd](https://github.com/neilellis/dollar/commit/a8e6dcd8283151fa8f776ce0c0eca1449eaf7217) URI work and module work also clean up refactoring and error handling.
+- [13bfc3f](https://github.com/neilellis/dollar/commit/13bfc3f7eb758ae1f47e1a01cc0eb9a4b1aab1b6) URI work
+- [fa0bbd1](https://github.com/neilellis/dollar/commit/fa0bbd159d8c346e913d51a2a5f5422ca9601bb3) Builtin functions, parameter improvements and Java support
+- [2c904c0](https://github.com/neilellis/dollar/commit/2c904c090b23b8faca7c7dd6638fba2484a520d0) Builtin functions, parameter improvements and Java support
+- [9b7fb79](https://github.com/neilellis/dollar/commit/9b7fb7979937c31eaf4c19f28926a66c24382c73) More tests and a little more docs
+- [4ef5a85](https://github.com/neilellis/dollar/commit/4ef5a8559caccac0afffa1c8cd3b9cb97cf89c73) Doc updates and 'uri' keyword
+- [262184b](https://github.com/neilellis/dollar/commit/262184bc823e52118d5f80f72505eb6fddcf7327) Associative array support
+- [c42ef3b](https://github.com/neilellis/dollar/commit/c42ef3b148b59286e92730bcbfa5cfbe45e76851) Array subscript and operator precedence
+- [83453ac](https://github.com/neilellis/dollar/commit/83453ac631b89191d0b36a4db4391408639975f7) URIs and 'every' keyword
+- [2335f72](https://github.com/neilellis/dollar/commit/2335f72c6207383ecd5068c288bfece23d7c4e2f) Keyword support and reactive control flow
+- [e25ca6c](https://github.com/neilellis/dollar/commit/e25ca6ca53ed7662a4f0e35863a4d360e6379453) Keyword support and reactive control flow
+- [e176239](https://github.com/neilellis/dollar/commit/e17623992a6c7098bbe6568b1decd286d348912f) Keyword support and reactive control flow
+- [6eb1842](https://github.com/neilellis/dollar/commit/6eb184268666c6066906a87e31185e74e5396b33) Keyword support and reactive control flow
+- [1ad2d71](https://github.com/neilellis/dollar/commit/1ad2d71d04b8203452ebb228846892ea8ed00e51) Keyword support and made DollarParser non static
+- [185eaaa](https://github.com/neilellis/dollar/commit/185eaaa4cd7d7dcd00d708a510c82cd27684416a) More reactive. Better scoping for scripts, and parameterization fixes.
+- [68428cb](https://github.com/neilellis/dollar/commit/68428cbbedd819d5e1ed93b8c45facc36abe087b) Reactive expressions and documentation.
+- [1d7afcf](https://github.com/neilellis/dollar/commit/1d7afcf7702920106c820b0361771b5d87040dc2) Reactive expressions and documentation.
+- [d7aa562](https://github.com/neilellis/dollar/commit/d7aa562983e862db581f0fa31d2bfd41cdccafeb) Reactive expressions and documentation.
+- [f8efb75](https://github.com/neilellis/dollar/commit/f8efb7523c41a9e2e096ffb5df37b5267e1edebf) Reactive expressions
+- [82d8e40](https://github.com/neilellis/dollar/commit/82d8e40f8e3837bc69ef88e53c0cc8e445000d64) Reactive expressions
+- [13e28ee](https://github.com/neilellis/dollar/commit/13e28ee8aa787e6838a25befce47cbc5c256ead8) Initial work on scripting language and documentation.
+- [6d67b38](https://github.com/neilellis/dollar/commit/6d67b38f48819c1077e27cf614733b1e647109bd) Initial work on scripting language and documentation.
+- [287dcb4](https://github.com/neilellis/dollar/commit/287dcb4f93b2fb844d78d22515ffde13798a6a22) Initial work on scripting language and documentation.
+- [906dab2](https://github.com/neilellis/dollar/commit/906dab24ad44336f1ca258d5438cb7aeb593fb86) Initial work on scripting language and documentation.
+- [e5cf467](https://github.com/neilellis/dollar/commit/e5cf4671481967fce9b29ae1daa22f07c1ca5021) Initial work on scripting language and documentation.
+- [71ee29e](https://github.com/neilellis/dollar/commit/71ee29e0cae44fd8345109fcb33760574dd36ccd) Initial work on scripting language and documentation.
+- [c479471](https://github.com/neilellis/dollar/commit/c4794710cf9eae49235ff91051ced8fac88ce319) Initial work on scripting language and documentation.
+- [1a5c2f9](https://github.com/neilellis/dollar/commit/1a5c2f9c88e44287d3c6d21063c340c145e71fc9) Initial work on scripting language and documentation.
+- [b902b2f](https://github.com/neilellis/dollar/commit/b902b2fbcc1607f1a327fd2d5f5607685b931aac) Tentative addition of the concept of modules, as well as pipe resolvers
+- [3d1b292](https://github.com/neilellis/dollar/commit/3d1b2928056862495415c471bb9d94528a43e93f) Dollar script and dollar runtime
+- [d9a438d](https://github.com/neilellis/dollar/commit/d9a438db8255a45de551dd83cea470379dc4a7bb) deployment and tools
+- [07d859d](https://github.com/neilellis/dollar/commit/07d859d6d081720969fec87d1fd02420e05e1b8b) deployment and tools
+- [7395be9](https://github.com/neilellis/dollar/commit/7395be90786646d68ddb7d5f53a748e1d8eca981) Test fixes
+- [c72026b](https://github.com/neilellis/dollar/commit/c72026b87ef3b10abe8572e76b04d58782841740) Test fixes
+- [a39f174](https://github.com/neilellis/dollar/commit/a39f174572d50ae09c9f054eb1ba8574378b8237) Added some guards
+- [ada9b18](https://github.com/neilellis/dollar/commit/ada9b180d41fdf89b24f8c974f0bd8aeb58638db) Fixed missing .jar issue
+- [de42072](https://github.com/neilellis/dollar/commit/de42072ff99886b1b5e5023fbc4e9414b0fe0c2a) Fixed missing .jar issue
+- [6f724fc](https://github.com/neilellis/dollar/commit/6f724fc19087b87a0b86812c455124c867d2ab2c) Created Runtime
+- [b5b5d8e](https://github.com/neilellis/dollar/commit/b5b5d8eb7ac99b7bb333926c7958437d386afd9c) Created Runtime
+- [be08865](https://github.com/neilellis/dollar/commit/be08865d8a3093afa1886da383e1f8e41c09b4b7) Created Runtime
+- [a7419b9](https://github.com/neilellis/dollar/commit/a7419b99889b8e7676d2cc845a66e5b3895f009a) Created Runtime
+- [7728307](https://github.com/neilellis/dollar/commit/7728307387bd27f9110ef4288cfe580617a772a6) General fixes, improvements and refactoring.
+- [896ede1](https://github.com/neilellis/dollar/commit/896ede182eeab7ac7f2050db54ef8fda78f2fcf6) General fixes, improvements and refactoring.
+- [ee06e08](https://github.com/neilellis/dollar/commit/ee06e089e5e49424e0a1ae7709a86d5e837b7036) General fixes, improvements and refactoring.
+- [c47c145](https://github.com/neilellis/dollar/commit/c47c145a825f546b3a8cda8cb6c0b164939ade4f) General fixes, improvements and refactoring.
+- [ee90e5b](https://github.com/neilellis/dollar/commit/ee90e5bd392d56afc04e0366ce06fd49510fa4eb) General fixes, improvements and refactoring.
+- [0040d46](https://github.com/neilellis/dollar/commit/0040d4685fb2b267b4bf61e878140d8813a7a078) General fixes, improvements and refactoring.
+- [24f8ed8](https://github.com/neilellis/dollar/commit/24f8ed8e40e02452967223feb572f021557be0b7) General fixes
+- [e3ff867](https://github.com/neilellis/dollar/commit/e3ff867845f0571140fd285101905c657d68de37) General fixes
+- [fe40a40](https://github.com/neilellis/dollar/commit/fe40a4014f3751aed549f31cf601c443e0ca1938) Failure handling and general improvements.
+- [17550d4](https://github.com/neilellis/dollar/commit/17550d46a023cc4c8989ad62d8acbeb6b06b56e4) Failure handling and general improvements.
+- [bf3c027](https://github.com/neilellis/dollar/commit/bf3c02763dc26388b340cd8c1ddc624da9cfc390) Failure handling and general improvements.
+- [eba8b04](https://github.com/neilellis/dollar/commit/eba8b04aaf90cf1ba93e9890c7a91ff9651cf727) Failure handling and general improvements.
+- [623ba96](https://github.com/neilellis/dollar/commit/623ba963608156c23a50c049cc5a9345ea5a7fa1) Major refactorings to start preparing for a 0.1 api
+- [963a211](https://github.com/neilellis/dollar/commit/963a2113b9d5142bd9fa825cc4827d752332fbf9) Major refactorings to start preparing for a 0.1 api
+- [ef70992](https://github.com/neilellis/dollar/commit/ef70992256d2c317c67935cf0b6e14630b4eb031) Major refactorings to start preparing for a 0.1 api
+- [c084aa5](https://github.com/neilellis/dollar/commit/c084aa5ecf756263d04baf275a02ad514f490e24) Major refactorings to start preparing for a 0.1 api
+- [bde9c35](https://github.com/neilellis/dollar/commit/bde9c35166544d85880042fed640e4313b45842e) General updates
+- [f92527c](https://github.com/neilellis/dollar/commit/f92527ce9e9a14c6e70ed2bf1a3fdfb9bad7b22a) General updates
+- [388be73](https://github.com/neilellis/dollar/commit/388be73f359cf521284bf581508bc4f4cb1f4665) General updates
+- [f9de536](https://github.com/neilellis/dollar/commit/f9de536c2b3d89d0961a9669716cf0e40c48491c) State Tracing
+- [f4ddaaf](https://github.com/neilellis/dollar/commit/f4ddaafa12ef3ba320f6f65ee3188a6283654e15) State Tracing
+- [e078ed0](https://github.com/neilellis/dollar/commit/e078ed06229d514070f5a372f0a398d56d703310) State Tracing
+- [50401fb](https://github.com/neilellis/dollar/commit/50401fb0bdde672058527c0f58349cdf80647b80) Minor improvements
+- [71119b9](https://github.com/neilellis/dollar/commit/71119b94b93053a0e6e8dcc7b9df2d075a79a6f1) log
+- [1d47208](https://github.com/neilellis/dollar/commit/1d47208caf9095902c7632949e48a6b704bc7f6f) Re-branding
+- [4ce407d](https://github.com/neilellis/dollar/commit/4ce407d5b0d62a43edabbb48596b790e746d1f46) Re-branding
+- [ac9734c](https://github.com/neilellis/dollar/commit/ac9734c8dd11b21d425a8897fa4d70a1eceefac7) Update README.md (@neilellis)
+- [6078be1](https://github.com/neilellis/dollar/commit/6078be17ba719a8459e350fc20b0459b3c6cf1fb) General improvements and Fat Jar
+- [183db69](https://github.com/neilellis/dollar/commit/183db69a3a2d51dc071627fbce27ff3ae3dfc572) General improvements and Fat Jar
+- [cdd1529](https://github.com/neilellis/dollar/commit/cdd1529eed4b030b88f35fdf00bd020c6118e94c) General improvements and Fat Jar
+- [9a19425](https://github.com/neilellis/dollar/commit/9a194256fc61be1de7e2bc6a213967578ada07aa) Documentation
+- [8ec91f2](https://github.com/neilellis/dollar/commit/8ec91f2a1252396c38a1ecbb2aff7ce4bbcf968a) Minor improvements
+- [68577a6](https://github.com/neilellis/dollar/commit/68577a6e72ef638167b5982afcb6967bea617e9a) Minor improvements
+- [7e5dbae](https://github.com/neilellis/dollar/commit/7e5dbaebc64657738ee8761199a1571626477fe7) Minor improvements
+- [d77bbde](https://github.com/neilellis/dollar/commit/d77bbde20cb9c20a223c43dc6782ccc147a32c06) Minor improvements
+- [89ac278](https://github.com/neilellis/dollar/commit/89ac2785d5ecad86b61efc7a84499de689181f07) Minor improvements
+- [8212dac](https://github.com/neilellis/dollar/commit/8212daca7885c035b4509360727929f9789d0f3e) Minor improvements
+- [d597ea9](https://github.com/neilellis/dollar/commit/d597ea9c7f89208de77b270475cb731de0e04a0f) Version management
+- [199db87](https://github.com/neilellis/dollar/commit/199db873bd4713d4ae350b6076cb02b3de85ade7) Version management
+- [8e31baf](https://github.com/neilellis/dollar/commit/8e31baf77079cdfb3bc5c11d8f23fa6b6381dd2c) Version management
+- [73ee416](https://github.com/neilellis/dollar/commit/73ee416582242332785031c6206fdbab18310a72) Version management
+- [6d742e1](https://github.com/neilellis/dollar/commit/6d742e1c3dd6d8ea1fe774b2df31a5689b3895e1) Version management
+- [b67d6ce](https://github.com/neilellis/dollar/commit/b67d6cee44472a4060575c1341b59b59cddc9c0a) Version management
+- [c1730a2](https://github.com/neilellis/dollar/commit/c1730a2aaee978bf7de231b24d6381aaa52f916f) Version management
+- [0feeef7](https://github.com/neilellis/dollar/commit/0feeef7f0f3e3e7cd3a0256d4a6cfa1d2285f8a9) Version management
+- [2f9286d](https://github.com/neilellis/dollar/commit/2f9286d8091ab3765549e32259aeaff299ef2b9e) Version management
+- [993b55e](https://github.com/neilellis/dollar/commit/993b55e89d9cbc9b019711d0295bb5b815901e35) Version management
+- [94ffa80](https://github.com/neilellis/dollar/commit/94ffa80e78d4a080ed4ef30c54297b4969f32d41) Version management
+- [785fe5c](https://github.com/neilellis/dollar/commit/785fe5c6117cf29c46a1b806d22d25aa5fb1644d) Version management
+- [6af4ef1](https://github.com/neilellis/dollar/commit/6af4ef1884cd896663f8f042deab28efda2cebfe) Version management
+- [7f8e232](https://github.com/neilellis/dollar/commit/7f8e232a3b5e3d0524e6c894f95238555963f45c) Version management
+- [c7e6709](https://github.com/neilellis/dollar/commit/c7e6709a744b65696ef7633a8cfd509e823a1e40) Version management
+- [cf79e05](https://github.com/neilellis/dollar/commit/cf79e0572598b6ae4cef46bfbe8656aa4d168676) Version management
+- [493b498](https://github.com/neilellis/dollar/commit/493b4984f9df63bf84f9156ca6a497ec03a326f9) Version management
+- [6b65c6f](https://github.com/neilellis/dollar/commit/6b65c6f60138b1c043f5874daa31f5906e5ca84c) Version management
+- [f80958c](https://github.com/neilellis/dollar/commit/f80958c21ae0cbeac083e04fa01a275add640056) Version management
+- [2d1bf03](https://github.com/neilellis/dollar/commit/2d1bf03763a5eff5062388b8c4dbfbaec7ff4475) Version management
+- [ebb355f](https://github.com/neilellis/dollar/commit/ebb355f30bb03d00f3a743eae95ef7cc3ad53911) Version management
+- [bb170ac](https://github.com/neilellis/dollar/commit/bb170ac7bb9af8c7846d30dbb53fc512b9a7201b) Fixes
+- [a9a6227](https://github.com/neilellis/dollar/commit/a9a6227ca0fc387a5cff9d881d92cb8f232e0cf0) Fixes
+- [96030d1](https://github.com/neilellis/dollar/commit/96030d1470fbe9ee30d99e8a66b10ecc312f4d5b) Fixes
+- [0645fa2](https://github.com/neilellis/dollar/commit/0645fa237cb0ecee735bfdeee7603ebc090493f8) Fixes
+- [d49b975](https://github.com/neilellis/dollar/commit/d49b975284403c4babfda052aed95cf541ce5a40) Minor improvements
+- [5f60584](https://github.com/neilellis/dollar/commit/5f605849b478d429b3a137727f2ab774b62a28f0) Syntax improvements. Split into modules. Various minor improvements.
+- [7a19f92](https://github.com/neilellis/dollar/commit/7a19f9243f2b5367ffaf745d9b686d6361d212e7) Http Server and various improvements
+- [ae81b35](https://github.com/neilellis/dollar/commit/ae81b353901decc3ec6e66aca1a8c19df95efdf1) Http Server and various improvements
+- [752d18a](https://github.com/neilellis/dollar/commit/752d18a66193b471f99da4b15de7187328151c55) Http Server and various improvements
+- [609e6e0](https://github.com/neilellis/dollar/commit/609e6e0798856c15bb2726f5eaaa327e568310f9) Http Server and various improvements
+- [50435e3](https://github.com/neilellis/dollar/commit/50435e3202f4c293ba35093bdc3f9b4c22344969) Lists equals and hashcode
+- [d318bd8](https://github.com/neilellis/dollar/commit/d318bd8bfb2a80f78fcd856416766462a75185de) Pub Sub
+- [b3cf4a9](https://github.com/neilellis/dollar/commit/b3cf4a982b892936795cb8881c4b9b577d20a402) Pub Sub
+- [2325720](https://github.com/neilellis/dollar/commit/23257209aac3643e1bf5a764d33ee915ee21a66d) General improvements
+- [55c56ab](https://github.com/neilellis/dollar/commit/55c56ab8634568fa6d99608df31d2c70e95f0b96) Moving over to non-vertx version of the library.
+- [eb72a2f](https://github.com/neilellis/dollar/commit/eb72a2f0f8e17a8fab7dd6c6931645e27d52fbc1) Moving over to non-vertx version of the library.
+- [c7bccc9](https://github.com/neilellis/dollar/commit/c7bccc940e587e8c24a7a9dfc80ec15690707e60) Moving over to non-vertx version of the library.
+- [743b17c](https://github.com/neilellis/dollar/commit/743b17ccb6d8c9d6bfa334f709a65c8081aa28a0) Fun support
+- [d341492](https://github.com/neilellis/dollar/commit/d341492cbd567278848976454d0545af1abd93e5) JS support
+- [0f3b0a0](https://github.com/neilellis/dollar/commit/0f3b0a022ca69a3806d06754e0fc4d8cf8602ff4) JS support
+- [1201bce](https://github.com/neilellis/dollar/commit/1201bced38b0c649e7f7fae1b8f0392d8415dd6b) JS support
+- [51b21e8](https://github.com/neilellis/dollar/commit/51b21e8e1adee0083c4be52a5d7638bd69bbc854) Decode
+- [44de242](https://github.com/neilellis/dollar/commit/44de2425b171962b7605f04edaa3faa61ea468df) Cleaning up construction.
+- [ba7b54f](https://github.com/neilellis/dollar/commit/ba7b54f190185f515979fbc99ac2aa59ed10e477) Cleaning up construction.
+- [8e9749a](https://github.com/neilellis/dollar/commit/8e9749adcc904ddff7a0e5b2101503626a820393) Improved the $(key,value) method
+- [7d75155](https://github.com/neilellis/dollar/commit/7d7515502044018191f86d01a98b912f3190e0ee) Added $$ for quick string conversions.
+- [c9f2854](https://github.com/neilellis/dollar/commit/c9f285477de6f2f546f9cd0874cfc287efd0a18e) Support for multiple types including nulls
+- [79e1e89](https://github.com/neilellis/dollar/commit/79e1e891cbce799bd945af2b2f8387278b60dc7b) Support for multiple types including nulls
+- [b596d88](https://github.com/neilellis/dollar/commit/b596d8886baac0c8f53ceb33dff9c46effd952a9) Support for multiple types including nulls
+- [946c207](https://github.com/neilellis/dollar/commit/946c2074496f840188dd910776e530a5f74badea) Support for multiple types including nulls
+- [d00ce7d](https://github.com/neilellis/dollar/commit/d00ce7d6596e9d4e832465a40f3f6dea8cfc24d4) Support for multiple types including nulls
+- [2ce4731](https://github.com/neilellis/dollar/commit/2ce47315de50020a3a00be8136acc94f8e58ed3c) Preparing for distribution
+- [b005b5f](https://github.com/neilellis/dollar/commit/b005b5f8ee401dc777201ad7150bca5203579a4a) Preparing for distribution
+- [c5651f5](https://github.com/neilellis/dollar/commit/c5651f58467f449f05e5188fa65c0ab3fab81af9) Preparing for distribution
+- [150ffd2](https://github.com/neilellis/dollar/commit/150ffd292733b47eab36fe57e3ffe28cf308d74e) Preparing for distribution
+- [399a213](https://github.com/neilellis/dollar/commit/399a213593c0cbba763e73c81af076ea74e0abde) Preparing for distribution
+- [9e17cb5](https://github.com/neilellis/dollar/commit/9e17cb52e3b2042998cf82adbcab5056ab7b35c4) Preparing for distribution
+- [4c17e69](https://github.com/neilellis/dollar/commit/4c17e694b2c66fd1fa8341854204d066d8a6103e) Preparing for distribution
+- [0712ecf](https://github.com/neilellis/dollar/commit/0712ecf68c566471db7681936c2aa96c326c2445) Preparing for distribution
+- [b7fd97b](https://github.com/neilellis/dollar/commit/b7fd97bc976641ddf9afde734578a1f051d411c0) Preparing for distribution
+- [a6190e4](https://github.com/neilellis/dollar/commit/a6190e43ce57600c43b5e3d753bc1b086ef57119) Future values, send and some initial tests.
+- [0614043](https://github.com/neilellis/dollar/commit/0614043ac46d359e6e7cdfa98573d66c3a95c4c1) Future values, send and some initial tests.
+- [52b7358](https://github.com/neilellis/dollar/commit/52b73580573cd805a6e6ca5453a0e3ee9616039e) Future values, send and some initial tests.
+- [c49384d](https://github.com/neilellis/dollar/commit/c49384d1a78263e96db69008fed1190655fddaa9) Future values, send and some initial tests.
+- [0f3bdc4](https://github.com/neilellis/dollar/commit/0f3bdc4d82d336491557c2f491e8caaef25f4871) Future values, send and some initial tests.
+- [32e0002](https://github.com/neilellis/dollar/commit/32e0002d537553647420dd590ad2043e02cf7f9f) Starting Java Docs
+- [efb71d2](https://github.com/neilellis/dollar/commit/efb71d260c2fab02f00ff21f0cc60cc3cf40b340) Starting Java Docs
+- [723d2a5](https://github.com/neilellis/dollar/commit/723d2a52b93d1a6667d96f02ae4fff10afd1e983) Initial check in
+- [7848f17](https://github.com/neilellis/dollar/commit/7848f176101cecab281b8f34532be1b2407c120c) Initial check in
+- [f24d2b6](https://github.com/neilellis/dollar/commit/f24d2b677853914ecf425c2de429fd927887a2ef) Initial check in
+- [e152317](https://github.com/neilellis/dollar/commit/e1523175875f51d65e3c9e82379f8dcdec7927d4) Initial check in
+- [a38dcda](https://github.com/neilellis/dollar/commit/a38dcdacd9e197a5b5ffdc480be6c231abf5b6e8) Initial check in
+- [661587a](https://github.com/neilellis/dollar/commit/661587ad464f187b066a53adc6d2cbf9ec048d16) Initial check in
+- [dcf7f41](https://github.com/neilellis/dollar/commit/dcf7f41afb466aaa73abc7088c6f410944be6723) Merge remote-tracking branch 'origin/master'
+- [4f02826](https://github.com/neilellis/dollar/commit/4f02826c84988719c8205cec8a6f67e1fe991670) Initial check in
+- [1838e08](https://github.com/neilellis/dollar/commit/1838e0879ab13cfd049fdf83ac6ccba6e1349db1) Create README.md (@neilellis)
+- [e15b32e](https://github.com/neilellis/dollar/commit/e15b32ee8fd7b32e5f217dedec98ab36078d7c79) Initial check in
+- [80188f5](https://github.com/neilellis/dollar/commit/80188f5c0cba8b0a484eeb6d1cf8fe358afd3454) Initial commit (@neilellis)
