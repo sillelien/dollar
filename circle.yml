@@ -42,7 +42,7 @@ deployment:
           - git pull origin master
           - github-changes -o neilellis -r dollar -v
           - git merge staging -m "Auto merge"
-          - git commit -m -a "Change log updates"
+          - git commit-a  -m "Change log updates"
           - git push origin master
 
   production:
