@@ -26,6 +26,7 @@ dependencies:
     - echo "login=neilellis" > ~/.github
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
     - gem install jekyll
+    - npm install -g github-changes
 
 
 
@@ -33,18 +34,19 @@ deployment:
   staging:
         branch: staging
         commands:
+          - git config --global user.email "neil@cazcade.com"
+          - git config --global user.name "Neil Ellis"
           - git reset HEAD --hard
           - git clean -fd
           - git checkout master
           - git pull origin master
-          - git merge staging -m "Auto merge after testing."
+          - github-changes -o neilellis -r dollar
+          - git merge staging -m "Auto merge after testing and CHANGELOG update."
           - git push origin master
 
   production:
     branch: master
     commands:
-        - git config --global user.email "neil@cazcade.com"
-        - git config --global user.name "Neil Ellis"
         - mvn versions:set -DnewVersion=0.1.0-r${CIRCLE_BUILD_NUM}
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
