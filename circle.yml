@@ -41,8 +41,8 @@ deployment:
           - git checkout master
           - git pull origin master
           - github-changes -o neilellis -r dollar -v
-          - git commit -m -a "Change log updates"
           - git merge staging -m "Auto merge"
+          - git commit -m -a "Change log updates"
           - git push origin master
 
   production:
