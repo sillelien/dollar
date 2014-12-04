@@ -19,6 +19,20 @@ layout: default
   -->
 
 <div class="home">
+
+  <h1>About</h1>
+
+  <div style="width:100%;min-width:440px;display: inline-block;margin-bottom:2em;">
+    <span style="max-width:30%;min-width:100px;display: inline-block;float: right;margin-left:2em">
+        <img src="https://s3-us-west-2.amazonaws.com/tilt-donations/donate_now.png"
+             data-ct-checkout="dollar.supporting-open-source">
+
+    </span>
+
+    <p>DollarScript is a scripting language for the Java VM, best suited to small to medium server-side projects. Please
+      checkout the <a href="script.html">Manual</a> for a full introduction to DollarScript.
+    </p>
+  </div>
 {% highlight bash %}
 
 geo= read http://freegeoip.net/json/
@@ -42,8 +56,7 @@ if (~ categories["anti-social-behaviour"]) {
 "The End!"
 
 {% endhighlight %}
-  <h1>About</h1>
-  <p>DollarScript is a scripting language for the Java VM, best suited to small to medium server-side projects. Please checkout the <a href="script.html">Manual</a> for a full introduction to DollarScript.</p>
+
   <p>The Dollar API is the base of the language and is designed for dynamic programming on the JVM, details can be found <a href="api.html">here</a>.</p>
   <p>The language and API are at an incredibly early stage so don't expect too much, I have released early mainly to get feedback and swap ideas before the language gets too formalized.</p>
   <p>Oh, and I'm Neil Ellis, the author of both, I lurk on <a href="http://twitter.com/neilellis">Twitter</a> so just @mention me and I'll get back to you.</p>

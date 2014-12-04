@@ -1,4 +1,8 @@
 machine:
+  environment:
+    previous_release: 0.0.0
+    release: 0.1.0
+    next_release: 0.1.1
   java:
     version: oraclejdk8
 
@@ -7,7 +11,11 @@ general:
     ignore:
       - gh-pages
 
-
+notify:
+  webhooks:
+    # A list of hook hashes, containing the url field
+    # gitter hook
+    - url: https://webhooks.gitter.im/e/0400df6c845f5a09949d
 
 dependencies:
   cache_directories:
@@ -22,6 +30,7 @@ dependencies:
     - echo "login=neilellis" > ~/.github
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
     - gem install jekyll
+    - npm install -g github-changes
 
 
 
@@ -29,19 +38,25 @@ deployment:
   staging:
         branch: staging
         commands:
+          - git config --global user.email "hello@neilellis.me"
+          - git config --global user.name "Neil Ellis"
           - git reset HEAD --hard
           - git clean -fd
           - git checkout master
           - git pull origin master
-          - git merge staging -m "Auto merge after testing."
+          - github-changes -o neilellis -r dollar -v  -n ${next_release}
+          - git merge staging -m "Auto merge"
+          - git commit -a -m "Change log updates"
+          - "git tag ${release} || :"
+          - git push --tags
           - git push origin master
 
   production:
     branch: master
     commands:
-        - git config --global user.email "neil@cazcade.com"
+        - git config --global user.email "hello@neilellis.me"
         - git config --global user.name "Neil Ellis"
-        - mvn versions:set -DnewVersion=0.1.0-r${CIRCLE_BUILD_NUM}
+        - mvn versions:set -DnewVersion=${release}-r${CIRCLE_BUILD_NUM}
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
@@ -49,6 +64,6 @@ deployment:
         - ./build-docs.sh:
             timeout: 360
         - pack/pack.sh
-        - pack/upload.sh 0.1.0 ${CIRCLE_BUILD_NUM}
+        - pack/upload.sh ${release} ${CIRCLE_BUILD_NUM}
 #        - mvn site:site site:stage
 #        - mvn scm-publish:publish-scm
