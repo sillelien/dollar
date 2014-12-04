@@ -305,7 +305,7 @@ public class DollarParser {
                         }, scope), "*|*", "each"),
                         MULTIPLY_DIVIDE_PRIORITY)
                 .infixl(op(new BinaryOp((lhs, rhs) -> {
-                    return lhs.toList().stream().reduce((x, y) -> {
+                    return lhs.$list().stream().reduce((x, y) -> {
                         return inScope("reduce", scope, newScope -> {
                             newScope.setParameter("1", x);
                             newScope.setParameter("2", y);

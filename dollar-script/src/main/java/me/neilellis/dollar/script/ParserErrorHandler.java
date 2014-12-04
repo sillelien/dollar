@@ -21,7 +21,7 @@ import me.neilellis.dollar.exceptions.LambdaRecursionException;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
 import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.types.DollarFail;
+import me.neilellis.dollar.types.FailureType;
 import me.neilellis.dollar.var;
 
 import java.lang.reflect.InvocationTargetException;
@@ -74,7 +74,7 @@ public class ParserErrorHandler {
             ((DollarException) e).addSource(source);
             throw (DollarException) e;
         } else {
-            return DollarFactory.failureWithSource(DollarFail.FailureType.EXCEPTION, unravel(e), source);
+            return DollarFactory.failureWithSource(FailureType.EXCEPTION, unravel(e), source);
         }
 
     }

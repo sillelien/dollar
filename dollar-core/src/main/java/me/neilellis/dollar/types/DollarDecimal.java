@@ -89,7 +89,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
             case VOID:
                 return DollarStatic.$void();
             default:
-                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
+                return DollarFactory.failure(FailureType.INVALID_CAST);
 
         }
     }
@@ -207,21 +207,5 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         return true;
     }
 
-    @Override
-    @NotNull
-    public Number number(@NotNull String key) {
-        return value;
-    }
 
-    @NotNull
-    @Override
-    public var $dec(@NotNull var amount) {
-        return DollarFactory.fromValue(value - amount.D(), errors(), amount.errors());
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return DollarFactory.fromValue(value + amount.D(), errors(), amount.errors());
-    }
 }

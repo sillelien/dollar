@@ -29,7 +29,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -61,7 +60,7 @@ public class DollarURI extends AbstractDollar {
     @NotNull
     @Override
     public var $abs() {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_URI_OPERATION);
     }
 
     @NotNull
@@ -75,7 +74,7 @@ public class DollarURI extends AbstractDollar {
     @NotNull
     @Override
     public var $divide(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_URI_OPERATION);
     }
 
     @NotNull
@@ -88,42 +87,25 @@ public class DollarURI extends AbstractDollar {
     @NotNull
     @Override
     public var $modulus(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
     public var $multiply(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
     public var $negate() {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_URI_OPERATION);
     }
 
-    @NotNull
-    @Override
-    public var $dec(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
-    }
-
-    @Override
-    public Stream<String> keyStream() {
-        return Stream.empty();
-    }
-
-    @Nullable
-    @Override
-    public Number number(@NotNull String key) {
-        return 0;
+    private void assertRunning() {
+        if (!stateMachine.isInState(ResourceState.RUNNING)) {
+            throw new DollarException("Resource is in state " + stateMachine.getState() + " should be RUNNING");
+        }
     }
 
     @NotNull
@@ -180,14 +162,8 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull @Override
     public var $remove(var key) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_URI_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_URI_OPERATION);
 
-    }
-
-    private void assertRunning() {
-        if (!stateMachine.isInState(ResourceState.RUNNING)) {
-            throw new DollarException("Resource is in state " + stateMachine.getState() + " should be RUNNING");
-        }
     }
 
     @Override
@@ -248,6 +224,7 @@ public class DollarURI extends AbstractDollar {
     public boolean isNeitherTrueNorFalse() {
         return true;
     }
+
 
     @NotNull
 
@@ -318,9 +295,13 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableList<var> toList() {
+    public ImmutableList<var> $list() {
         assertRunning();
-        return ImmutableList.copyOf(handler.all().toList());
+        return ImmutableList.copyOf(handler.all().$list());
+    }
+
+    @NotNull @Override public ImmutableList<Object> toList() {
+        return ImmutableList.of(uri);
     }
 
 
@@ -339,17 +320,6 @@ public class DollarURI extends AbstractDollar {
 
 
 
-
-    @Nullable
-    @Override
-    public JsonObject json(@NotNull String key) {
-        return new JsonObject();
-    }
-
-
-
-
-
     @Nullable
     @Override
     public JsonObject json() {
@@ -364,8 +334,7 @@ public class DollarURI extends AbstractDollar {
     }
 
 
-    @Nullable
-    @Override
+    @NotNull @Override
     public Map<String, Object> toMap() {
         return Collections.emptyMap();
     }
@@ -404,7 +373,7 @@ public class DollarURI extends AbstractDollar {
             case VOID:
                 return DollarStatic.$void();
             default:
-                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
+                return DollarFactory.failure(FailureType.INVALID_CAST);
         }
     }
 }

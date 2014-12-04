@@ -102,7 +102,7 @@ public class GithubModuleResolver implements ModuleResolver {
             content = new String(Files.readAllBytes(mainFile.toPath()));
             classLoader =
                     DependencyRetriever.retrieve(module.$("dependencies")
-                                                       .toList()
+                                                       .$list()
                                                        .stream()
                                                        .map(TypeAware::$S)
                                                        .collect(Collectors.toList()));

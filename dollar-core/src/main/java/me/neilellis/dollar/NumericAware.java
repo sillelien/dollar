@@ -79,4 +79,8 @@ public interface NumericAware {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class) var $negate();
+
+    default var $plus(int i) {
+        return $plus(DollarStatic.$(i));
+    }
 }

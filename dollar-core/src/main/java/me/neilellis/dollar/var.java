@@ -17,7 +17,6 @@
 package me.neilellis.dollar;
 
 import me.neilellis.dollar.guard.*;
-import me.neilellis.dollar.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -95,11 +94,6 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @NotNull
     @Guarded(ChainGuard.class) var $isEmpty();
 
-    @NotNull
-    @Guarded(ChainGuard.class)
-    default var $list() {
-        return DollarFactory.fromValue(toList(), errors());
-    }
 
     @NotNull
     @Guarded(ChainGuard.class)

@@ -201,7 +201,7 @@ public class DollarFactory {
     }
 
     @NotNull
-    public static var failure(DollarFail.FailureType failureType) {
+    public static var failure(FailureType failureType) {
         if (DollarStatic.config.failFast()) {
             throw new DollarFailureException(failureType);
         } else {
@@ -235,7 +235,7 @@ public class DollarFactory {
     }
 
     @NotNull
-    public static var failure(DollarFail.FailureType failureType, Throwable t) {
+    public static var failure(FailureType failureType, Throwable t) {
         if (DollarStatic.config.failFast()) {
             throw new DollarFailureException(t, failureType);
         } else {
@@ -243,7 +243,7 @@ public class DollarFactory {
         }
     }
 
-    public static var failure(DollarFail.FailureType failureType, String message) {
+    public static var failure(FailureType failureType, String message) {
         if (DollarStatic.config.failFast()) {
             throw new DollarFailureException(failureType, message);
         } else {
@@ -252,7 +252,7 @@ public class DollarFactory {
     }
 
     public static var failure(Throwable throwable) {
-        return failure(DollarFail.FailureType.EXCEPTION, throwable);
+        return failure(FailureType.EXCEPTION, throwable);
     }
 
     public static var newVoid() {
@@ -306,7 +306,7 @@ public class DollarFactory {
                 new DollarLambda(i -> future.get(), false)));
     }
 
-    public static var failureWithSource(DollarFail.FailureType failureType, Throwable throwable, SourceAware source) {
+    public static var failureWithSource(FailureType failureType, Throwable throwable, SourceAware source) {
         if (DollarStatic.config.failFast()) {
             final DollarFailureException dollarFailureException = new DollarFailureException(throwable, failureType);
             dollarFailureException.addSource(source);

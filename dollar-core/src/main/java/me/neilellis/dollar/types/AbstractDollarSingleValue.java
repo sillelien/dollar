@@ -83,12 +83,12 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     @NotNull
     @Override
     public var $plus(var newValue) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
     @NotNull
     public var $set(@NotNull var key, Object value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
     @NotNull @Override
@@ -106,13 +106,13 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         } else if (rhs.isInteger() && rhs.I() == 0) {
             return DollarFactory.wrap(this);
         } else {
-            return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+            return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
         }
     }
 
     @NotNull
     public var $removeByKey(@NotNull String value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
 
     }
 
@@ -124,7 +124,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     @NotNull
     @Override
     public var $remove(var value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
     @NotNull
@@ -133,7 +133,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return value.toString();
     }
 
-    public Map<String, Object> toMap() {
+    @NotNull public Map<String, Object> toMap() {
         return Collections.singletonMap("value", value);
     }
 
@@ -147,14 +147,9 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return false;
     }
 
-    @Nullable
-    public JsonObject json(@NotNull String key) {
-        return null;
-    }
-
     @NotNull
     @Override
-    public ImmutableList<var> toList() {
+    public ImmutableList<var> $list() {
         return ImmutableList.of(this);
     }
 
@@ -177,6 +172,17 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     @Override
     public ImmutableList<String> strings() {
         return ImmutableList.of(S());
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<Object> toList() {
+        return ImmutableList.of(value);
+    }
+
+    @Nullable
+    public JsonObject json(@NotNull String key) {
+        return null;
     }
 
     public Stream<String> keyStream() {

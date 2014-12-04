@@ -34,7 +34,7 @@ public class DollarRangeTest {
 
     @Test
     public void testBasics() {
-        System.err.println(range.toList());
+        System.err.println(range.$list());
         final var actual = $list(1).$plus($(2)).$plus($(3)).$plus($(4));
         assertTrue(range.equals(actual));
         assertTrue(actual.equals(range));

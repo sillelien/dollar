@@ -104,7 +104,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
             case VOID:
                 return DollarStatic.$void();
             default:
-                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
+                return DollarFactory.failure(FailureType.INVALID_CAST);
 
         }
     }
@@ -227,21 +227,5 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         return true;
     }
 
-    @Override
-    @NotNull
-    public Number number(@NotNull String key) {
-        return value;
-    }
 
-    @NotNull
-    @Override
-    public var $dec(@NotNull var amount) {
-        return DollarFactory.fromValue(value - amount.L(), errors(), amount.errors());
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return DollarFactory.fromValue(value + amount.L(), errors(), amount.errors());
-    }
 }

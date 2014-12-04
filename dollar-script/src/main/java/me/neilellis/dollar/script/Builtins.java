@@ -51,21 +51,21 @@ public class Builtins {
             return $(String.format(message, values.stream().map(i -> i.$()).toArray()));
         }, "FORMAT");
         addJavaStyle(1, 1, (args, scope) -> {
-            return args.get(0).toList().stream().min((o1, o2) -> (int) Math.signum(o1.D() - o2.D())).get();
+            return args.get(0).$list().stream().min((o1, o2) -> (int) Math.signum(o1.D() - o2.D())).get();
         }, "MIN");
         addJavaStyle(1, 1, (args, scope) -> {
-            return args.get(0).toList().stream().max((o1, o2) -> (int) Math.signum(o1.D() - o2.D())).get();
+            return args.get(0).$list().stream().max((o1, o2) -> (int) Math.signum(o1.D() - o2.D())).get();
         }, "MAX");
         addJavaStyle(1, 1, (args, scope) -> {
-            return $(args.get(0).toList().stream().sorted().collect(Collectors.toList()));
+            return $(args.get(0).$list().stream().sorted().collect(Collectors.toList()));
         }, "SORT");
 
         addJavaStyle(1, 1, (args, scope) -> {
-            return $(args.get(0).toList().get(0));
+            return $(args.get(0).$list().get(0));
         }, "FIRST");
 
         addJavaStyle(1, 1, (args, scope) -> {
-            ImmutableList<var> list = args.get(0).toList();
+            ImmutableList<var> list = args.get(0).$list();
             return $(list.get(list.size() - 1));
         }, "LAST");
         addDollarSingleNoScope(StateAware::$start, "START");

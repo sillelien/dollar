@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar;
+package me.neilellis.dollar.types;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface OldAndDeprecated {
+public enum FailureType {
+    INVALID_LIST_OPERATION, INVALID_MAP_OPERATION, INVALID_SINGLE_VALUE_OPERATION, EXCEPTION,
+    INVALID_RANGE_OPERATION, INVALID_BOOLEAN_VALUE_OPERATION, ASSERTION, INVALID_STRING_OPERATION,
+    INVALID_URI_OPERATION,
 
-
+    INVALID_OPERATION, EVALUATION_FAILURE, METADATA_IMMUTABLE, INVALID_CAST, EXECUTION_FAILURE, INTERRUPTED,
+    VOID_FAILURE
 }
