@@ -41,16 +41,16 @@ import static me.neilellis.dollar.DollarStatic.*;
 public class ScriptScope implements Scope {
     private static final Logger log = LoggerFactory.getLogger(ScriptScope.class);
 
-    private static AtomicInteger counter = new AtomicInteger();
+    private static final AtomicInteger counter = new AtomicInteger();
     private final String id;
     private final String source;
+    private final ConcurrentHashMap<String, Variable> variables = new ConcurrentHashMap<>();
+    private final Multimap<String, var> listeners = LinkedListMultimap.create();
+    private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
     private ScriptScope parent;
-    private ConcurrentHashMap<String, Variable> variables = new ConcurrentHashMap<>();
     private Parser<var> parser;
     private DollarParser dollarParser;
-    private Multimap<String, var> listeners = LinkedListMultimap.create();
     private boolean parameterScope;
-    private List<var> errorHandlers = new CopyOnWriteArrayList<>();
 
     public ScriptScope(String name) {
         this.parent = null;
@@ -163,9 +163,7 @@ public class ScriptScope implements Scope {
             throw new NullPointerException();
         }
         if (listeners.containsKey(key)) {
-            for (var listener : listeners.get(key)) {
-                listener.$notify();
-            }
+            listeners.get(key).forEach(me.neilellis.dollar.var::$notify);
         }
     }
 
@@ -207,30 +205,6 @@ public class ScriptScope implements Scope {
         if (DollarStatic.config.isDebugScope()) { log.info("Clearing scope " + this); }
         variables.clear();
         listeners.clear();
-    }
-
-    public var get(String key, boolean mustFind) {
-        if (key.matches("[0-9]+")) {
-            throw new AssertionError("Cannot get numerical keys, use getParameter");
-        }
-        if (DollarStatic.config.isDebugScope()) { log.info("Looking up " + key + " in " + this); }
-        ScriptScope scope = getScopeForKey(key);
-        if (scope == null) {
-            scope = this;
-        } else {
-            if (DollarStatic.config.isDebugScope()) { log.info("Found " + key + " in " + scope); }
-        }
-        Variable result = scope.variables.get(key);
-
-        if (mustFind) {
-            if (result == null) {
-                throw new VariableNotFoundException(key, this);
-            } else {
-                return result.value;
-            }
-        } else {
-            return result != null ? result.value : $void();
-        }
     }
 
     public var getConstraint(String key) {
@@ -291,10 +265,7 @@ public class ScriptScope implements Scope {
         if (scopeForKey == null) {
             return $void();
         }
-        int count = 0;
-        for (var listener : scopeForKey.listeners.get(variableName)) {
-            listener.$notify();
-        }
+        scopeForKey.listeners.get(variableName).forEach(me.neilellis.dollar.var::$notify);
         return scopeForKey.get(variableName);
     }
 
@@ -337,9 +308,32 @@ public class ScriptScope implements Scope {
 
             Variable variable = (Variable) o;
 
-            if (!value.equals(variable.value)) { return false; }
+            return value.equals(variable.value);
 
-            return true;
+        }
+    }
+
+    var get(String key, boolean mustFind) {
+        if (key.matches("[0-9]+")) {
+            throw new AssertionError("Cannot get numerical keys, use getParameter");
+        }
+        if (DollarStatic.config.isDebugScope()) { log.info("Looking up " + key + " in " + this); }
+        ScriptScope scope = getScopeForKey(key);
+        if (scope == null) {
+            scope = this;
+        } else {
+            if (DollarStatic.config.isDebugScope()) { log.info("Found " + key + " in " + scope); }
+        }
+        Variable result = scope.variables.get(key);
+
+        if (mustFind) {
+            if (result == null) {
+                throw new VariableNotFoundException(key, this);
+            } else {
+                return result.value;
+            }
+        } else {
+            return result != null ? result.value : $void();
         }
     }
 

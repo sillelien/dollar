@@ -30,8 +30,8 @@ import static me.neilellis.dollar.DollarStatic.$;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class ListenOperator implements Binary<var>, Operator {
+    private final ScriptScope scope;
     private Supplier<String> source;
-    private ScriptScope scope;
 
 
     public ListenOperator(ScriptScope scope) {

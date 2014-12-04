@@ -20,7 +20,7 @@ import me.neilellis.dollar.script.DollarParser;
 
 import java.io.IOException;
 
-public class ExampleApp {
+class ExampleApp {
 
 
     public static void main(String[] args) throws IOException {

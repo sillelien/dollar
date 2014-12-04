@@ -27,9 +27,9 @@ import java.util.*;
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-public class JsonObject extends JsonElement {
+@SuppressWarnings("SuspiciousMethodCalls") public class JsonObject extends JsonElement {
 
-  protected Map<String, Object> map;
+  final Map<String, Object> map;
 
   /**
    * Create a JSON object based on the specified Map
@@ -38,7 +38,7 @@ public class JsonObject extends JsonElement {
     this(map, true);
   }
 
-  protected JsonObject(Map<String, Object> map, boolean copy) {
+  JsonObject(Map<String, Object> map, boolean copy) {
     this.map = copy ? convertMap(map) : map;
   }
 
@@ -133,6 +133,12 @@ public class JsonObject extends JsonElement {
     throw new ClassCastException();
   }
 
+  @SuppressWarnings("unchecked")
+  public JsonObject getObject(String fieldName) {
+    Map<String, Object> m = (Map<String, Object>) map.get(fieldName);
+    return m == null ? null : new JsonObject(m, false);
+  }
+
   public Set<String> getFieldNames() {
     return map.keySet();
   }
@@ -169,12 +175,6 @@ public class JsonObject extends JsonElement {
   public JsonObject getObject(String fieldName, JsonObject def) {
     JsonObject obj = getObject(fieldName);
     return obj == null ? def : obj;
-  }
-
-  @SuppressWarnings("unchecked")
-  public JsonObject getObject(String fieldName) {
-    Map<String, Object> m = (Map<String, Object>) map.get(fieldName);
-    return m == null ? null : new JsonObject(m, false);
   }
 
   public String getString(String fieldName, String def) {
@@ -249,7 +249,7 @@ public class JsonObject extends JsonElement {
     return this;
   }
 
-  public JsonObject putObject(String fieldName, JsonObject value) {
+  JsonObject putObject(String fieldName, JsonObject value) {
     map.put(fieldName, value == null ? null : value.map);
     return this;
   }
@@ -285,12 +285,12 @@ public class JsonObject extends JsonElement {
     return this;
   }
 
-  public JsonObject putBoolean(String fieldName, Boolean value) {
+  JsonObject putBoolean(String fieldName, Boolean value) {
     map.put(fieldName, value);
     return this;
   }
 
-  public JsonObject putBinary(String fieldName, byte[] binary) {
+  JsonObject putBinary(String fieldName, byte[] binary) {
     map.put(fieldName, binary == null ? null : Base64.getEncoder().encodeToString(binary));
     return this;
   }

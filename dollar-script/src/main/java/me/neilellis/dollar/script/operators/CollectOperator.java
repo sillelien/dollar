@@ -31,7 +31,7 @@ import static me.neilellis.dollar.DollarStatic.*;
  */
 public class CollectOperator implements Map<Object[], var> {
     private final ScriptScope scope;
-    private DollarParser dollarParser;
+    private final DollarParser dollarParser;
 
     public CollectOperator(DollarParser dollarParser, ScriptScope scope) {
         this.dollarParser = dollarParser;
@@ -41,7 +41,7 @@ public class CollectOperator implements Map<Object[], var> {
     @Override public var map(Object[] objects) {
         ((var) objects[0]).$listen(new Pipeable() {
             private final int[] count = new int[]{-1};
-            private ArrayList<var> collected = new ArrayList<var>();
+            private final ArrayList<var> collected = new ArrayList<>();
 
             @Override public var pipe(var in) throws Exception {
                 var value = fix((var) objects[0], false);
@@ -49,6 +49,7 @@ public class CollectOperator implements Map<Object[], var> {
                 return dollarParser.inScope("collect", scope, newScope -> {
                     newScope.setParameter("count", $(count[0]));
                     newScope.setParameter("it", value);
+                    //noinspection StatementWithEmptyBody
                     if (objects[2] instanceof var && ((var) objects[2]).isTrue()) {
                         //skip
                     } else {

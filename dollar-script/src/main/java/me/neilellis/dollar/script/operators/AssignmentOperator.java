@@ -32,11 +32,9 @@ import static me.neilellis.dollar.DollarStatic.*;
  */
 public class AssignmentOperator implements Map<Object[], Map<? super var, ? extends var>> {
     private final ScriptScope scope;
-    private boolean push;
 
     public AssignmentOperator(ScriptScope scope, boolean push) {
         this.scope = scope;
-        this.push = push;
     }
 
     public Map<? super var, ? extends var> map(Object[] objects) {

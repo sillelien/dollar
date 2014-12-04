@@ -40,7 +40,7 @@ public interface Builtin<T> {
 
         private final int minargs;
         private final int maxargs;
-        private Builtin function;
+        private final Builtin function;
 
         public BuiltinImpl(Builtin function, int minargs, int maxargs) {
             this.function = function;

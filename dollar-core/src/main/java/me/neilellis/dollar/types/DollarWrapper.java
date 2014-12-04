@@ -43,10 +43,10 @@ import java.util.stream.Stream;
  */
 public class DollarWrapper implements var {
 
-    private DollarMonitor monitor;
-    private StateTracer tracer;
-    private ErrorLogger errorLogger;
-    private var value;
+    private final DollarMonitor monitor;
+    private final StateTracer tracer;
+    private final ErrorLogger errorLogger;
+    private final var value;
 
     DollarWrapper(var value, DollarMonitor monitor, StateTracer tracer, ErrorLogger errorLogger) {
 //        tracer.trace(DollarNull.INSTANCE,value, StateTracer.Operations.CREATE);
@@ -67,8 +67,8 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var value) {
-        return getValue().$minus(value);
+    public var $minus(@NotNull var v) {
+        return getValue().$minus(v);
     }
 
     @NotNull
@@ -79,8 +79,8 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $plus(var value) {
-        return getValue().$plus(value);
+    public var $plus(var v) {
+        return getValue().$plus(v);
     }
 
     @NotNull
@@ -270,7 +270,7 @@ public class DollarWrapper implements var {
         return getValue().$pause();
     }
 
-    @NotNull @Override public void $signal(@NotNull Signal signal) {
+    @Override public void $signal(@NotNull Signal signal) {
         getValue().$signal(signal);
     }
 
@@ -684,7 +684,7 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public int compareTo(var o) {
+    public int compareTo(@NotNull var o) {
         return getValue().compareTo(o);
     }
 
@@ -743,7 +743,7 @@ public class DollarWrapper implements var {
         return getValue().hashCode();
     }
 
-    @Override
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass") @Override
     public boolean equals(Object obj) {
         return getValue().equals(obj);
     }

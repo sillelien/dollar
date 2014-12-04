@@ -33,9 +33,11 @@ import javax.script.ScriptEngineManager;
 import javax.script.SimpleScriptContext;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -47,17 +49,17 @@ import java.util.stream.Stream;
 public abstract class AbstractDollar implements var {
 
     private static
-    @NotNull
+    @NotNull final
     ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final
     @NotNull
     ImmutableList<Throwable> errors;
+    private final ConcurrentHashMap<String, String> meta = new ConcurrentHashMap<>();
     private String src;
-    private ConcurrentHashMap<String, String> meta = new ConcurrentHashMap<>();
 
 
-    protected AbstractDollar(@NotNull List<Throwable> errors) {
+    AbstractDollar(@NotNull List<Throwable> errors) {
         this.errors = new ImmutableList.Builder<Throwable>().addAll(errors).build();
     }
 
@@ -159,10 +161,10 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull @Override public StateMachine<ResourceState, Signal> getStateMachine() {
-        return new StateMachine<ResourceState, Signal>(ResourceState.INITIAL, getDefaultStateMachineConfig());
+        return new StateMachine<>(ResourceState.INITIAL, getDefaultStateMachineConfig());
     }
 
-    protected static StateMachineConfig<ResourceState, Signal> getDefaultStateMachineConfig() {
+    static StateMachineConfig<ResourceState, Signal> getDefaultStateMachineConfig() {
         final StateMachineConfig<ResourceState, Signal> stateMachineConfig = new StateMachineConfig<>();
         stateMachineConfig.configure(ResourceState.STOPPED)
                           .permitReentry(Signal.STOP)
@@ -401,23 +403,6 @@ public abstract class AbstractDollar implements var {
         }
     }
 
-    public var compute(String key, @NotNull BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
-        return $map().compute(key, remappingFunction);
-    }
-
-    public var computeIfAbsent(String key, @NotNull Function<? super String, ? extends var> mappingFunction) {
-        return $map().computeIfAbsent(key, mappingFunction);
-    }
-
-    public var computeIfPresent(String key,
-                                @NotNull BiFunction<? super String, ? super var, ? extends var> remappingFunction) {
-        return $map().computeIfPresent(key, remappingFunction);
-    }
-
-    public boolean containsKey(Object key) {
-        return $has(String.valueOf(key)).isTrue();
-    }
-
     @Override
     public var debugf(String message, Object... values) {
         logger.debug(message, values);
@@ -479,23 +464,6 @@ public abstract class AbstractDollar implements var {
         return this;
     }
 
-    @NotNull
-    public Set<Map.Entry<String, var>> entrySet() {
-        return kvStream().collect(Collectors.toSet());
-    }
-
-    @NotNull
-    public Stream<Map.Entry<String, var>> kvStream() {
-        return $map().entrySet().stream();
-
-    }
-
-    @NotNull
-    public var eval(String label, @NotNull DollarEval lambda) {
-        return DollarFactory.failure(FailureType.INVALID_OPERATION);
-
-    }
-
     @Override
     public int hashCode() {
         return $().hashCode();
@@ -539,47 +507,9 @@ public abstract class AbstractDollar implements var {
         return S();
     }
 
-
-    public var merge(String key, @NotNull var value,
-                     @NotNull BiFunction<? super var, ? super var, ? extends var> remappingFunction) {
-        return $map().mutable().merge(key, value, remappingFunction);
-    }
-
     @NotNull
-    public var put(@NotNull String key, var value) {
-        return $set($(key), value);
-    }
-
-    public void putAll(Map<? extends String, ? extends var> m) {
-        DollarFactory.failure(FailureType.INVALID_OPERATION);
-
-    }
-
-    @NotNull
-    public var putIfAbsent(String key, var value) {
-        return DollarFactory.failure(FailureType.INVALID_OPERATION);
-
-    }
-
-    public boolean remove(Object key, Object value) {
-        DollarFactory.failure(FailureType.INVALID_OPERATION);
-        return false;
-    }
-
-    public boolean replace(String key, var oldValue, var newValue) {
-        DollarFactory.failure(FailureType.INVALID_OPERATION);
-        return false;
-
-    }
-
-    @NotNull
-    public var replace(String key, var value) {
-        return DollarFactory.failure(FailureType.INVALID_OPERATION);
-
-    }
-
-    public void replaceAll(BiFunction<? super String, ? super var, ? extends var> function) {
-        DollarFactory.failure(FailureType.INVALID_OPERATION);
+    public Stream<Map.Entry<String, var>> kvStream() {
+        return $map().entrySet().stream();
 
     }
 
@@ -596,11 +526,6 @@ public abstract class AbstractDollar implements var {
     @Override
     public String getMetaAttribute(String key) {
         return meta.get(key);
-    }
-
-    @NotNull
-    public Collection<var> values() {
-        return $list();
     }
 
     @NotNull

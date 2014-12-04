@@ -59,9 +59,7 @@ public class DollarParser {
 
 
     private final ClassLoader classLoader;
-    private File file;
-    private File sourceDir;
-    private ThreadLocal<List<ScriptScope>> scopes = new ThreadLocal<List<ScriptScope>>() {
+    private final ThreadLocal<List<ScriptScope>> scopes = new ThreadLocal<List<ScriptScope>>() {
         @Override
         protected List<ScriptScope> initialValue() {
             ArrayList<ScriptScope> list = new ArrayList<>();
@@ -69,9 +67,11 @@ public class DollarParser {
             return list;
         }
     };
+    private final ParserErrorHandler errorHandler = new ParserErrorHandler();
+    private final ConcurrentHashMap<String, var> exports = new ConcurrentHashMap<>();
+    private File file;
+    private File sourceDir;
     private Parser<?> topLevelParser;
-    private ParserErrorHandler errorHandler = new ParserErrorHandler();
-    private ConcurrentHashMap<String, var> exports = new ConcurrentHashMap<>();
 
     public DollarParser() {
         classLoader = DollarParser.class.getClassLoader();
@@ -100,12 +100,12 @@ public class DollarParser {
             return parseMarkdown(file);
         } else {
             String source = new String(Files.readAllBytes(file.toPath()));
-            return parse(new ScriptScope(this, source), source, parallel);
+            return parse(new ScriptScope(this, source), source);
         }
 
     }
 
-    public var parseMarkdown(File file) throws IOException {
+    var parseMarkdown(File file) throws IOException {
         PegDownProcessor pegDownProcessor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
         RootNode root =
                 pegDownProcessor.parseMarkdown(com.google.common.io.Files.toString(file, Charset.forName("utf-8"))
@@ -118,7 +118,7 @@ public class DollarParser {
 //        return expression1.infixl(term("[").next(expression2).followedBy(term("]")));
 //    }
 
-    public var parse(ScriptScope scope, String source, boolean parallel) throws IOException {
+    public var parse(ScriptScope scope, String source) throws IOException {
         addScope(scope);
         try {
             DollarStatic.context().setClassLoader(classLoader);
@@ -142,7 +142,7 @@ public class DollarParser {
         }
     }
 
-    public void addScope(ScriptScope scope) {
+    void addScope(ScriptScope scope) {
         scopes.get().add(scope);
     }
 
@@ -151,7 +151,7 @@ public class DollarParser {
         return topLevelParser;
     }
 
-    public ScriptScope endScope() {
+    ScriptScope endScope() {
         return scopes.get().remove(scopes.get().size() - 1);
     }
 
@@ -167,6 +167,7 @@ public class DollarParser {
         });
     }
 
+    @SuppressWarnings("ThrowFromFinallyBlock")
     public <T> T inScope(String scopeName, ScriptScope currentScope, Function<ScriptScope, T> r) {
         ScriptScope newScope = new ScriptScope(currentScope, currentScope.getSource(), scopeName);
         addScope(currentScope);
@@ -206,10 +207,10 @@ public class DollarParser {
         Parser.Reference<var> ref = Parser.newReference();
         Parser<var> main = ref.lazy()
                               .between(OP("("), OP(")"))
-                              .or(or(unitValue(ref.lazy(), scope), list(ref.lazy(), scope), map(ref.lazy(), scope),
+                              .or(or(unitValue(scope), list(ref.lazy(), scope), map(ref.lazy(), scope),
                                      moduleStatement(scope, ref), assertOperator(ref, scope),
                                      collectStatement(ref.lazy(), scope),
-                                     whenStatement(ref.lazy(), scope), everyStatement(ref.lazy(), scope),
+                                     whenStatement(ref.lazy()), everyStatement(ref.lazy(), scope),
                                      functionCall(ref, scope),
                                      java(scope), URL, DECIMAL_LITERAL, INTEGER_LITERAL,
                                      STRING_LITERAL,
@@ -277,7 +278,7 @@ public class DollarParser {
                     }
                 }, scope), "<=>"), LINE_PREFIX_PRIORITY)
                 .prefix(writeOperator(ref, scope), OUTPUT_PRIORITY)
-                .prefix(readOperator(ref, scope), OUTPUT_PRIORITY)
+                .prefix(readOperator(), OUTPUT_PRIORITY)
                 .prefix(op(new UnaryOp(scope, i -> $(i.isTruthy())), "~", "truthy"), UNARY_PRIORITY)
                 .prefix(op(new UnaryOp(scope, var::$size), "#", "size"), UNARY_PRIORITY)
                 .prefix(op(new UnaryOp(scope, URIAware::$drain), "<--", "drain"), OUTPUT_PRIORITY)
@@ -296,7 +297,7 @@ public class DollarParser {
                 .infixl(op(new BinaryOp((lhs, rhs) -> rhs.$publish(lhs), scope), "*>", "publish"), OUTPUT_PRIORITY)
                 .infixl(op(new SubscribeOperator(scope), "<*", "subscribe"), OUTPUT_PRIORITY)
                 .infixl(op(new BinaryOp((lhs, rhs) -> rhs.$write(lhs), scope), ">>"), OUTPUT_PRIORITY)
-                .postfix(isOperator(ref, scope), EQUIVALENCE_PRIORITY)
+                .postfix(isOperator(scope), EQUIVALENCE_PRIORITY)
                 .infixl(op(new BinaryOp((lhs, rhs) -> {
                             return lhs.$each(i -> inScope("each", scope, newScope -> {
                                 newScope.setParameter("1", i);
@@ -351,8 +352,8 @@ public class DollarParser {
                 .postfix(subscriptOperator(ref, scope), MEMBER_PRIORITY)
                 .postfix(parameterOperator(ref, scope), MEMBER_PRIORITY)
                 .prefix(op(new UnaryOp(scope, true, v -> v._fixDeep(false)), "&", "fix"), 1000)
-                .prefix(variableUsageOperator(ref, scope), 1000)
-                .postfix(castOperator(ref, scope), UNARY_PRIORITY)
+                .prefix(variableUsageOperator(scope), 1000)
+                .postfix(castOperator(scope), UNARY_PRIORITY)
                 .prefix(assignmentOperator(scope, ref), ASSIGNMENT_PRIORITY)
                 .prefix(declarationOperator(scope, ref), ASSIGNMENT_PRIORITY)
                 .build(main);
@@ -369,7 +370,7 @@ public class DollarParser {
 
     }
 
-    private Parser<var> unitValue(Parser<var> ref, ScriptScope scope) {
+    private Parser<var> unitValue(ScriptScope scope) {
         return array(DECIMAL_LITERAL.or(INTEGER_LITERAL), BUILTIN).map(new UnitOperator(this, scope));
     }
 
@@ -418,14 +419,14 @@ public class DollarParser {
         return sequence.map(new CollectOperator(this, scope));
     }
 
-    private Parser<var> whenStatement(Parser<var> expression, ScriptScope scope) {
+    private Parser<var> whenStatement(Parser<var> expression) {
         Parser<Object[]> sequence = KEYWORD_NL("when").next(array(expression, expression));
         return sequence.map(new WhenOperator());
     }
 
     private Parser<var> everyStatement(Parser<var> expression, ScriptScope scope) {
         Parser<Object[]> sequence = KEYWORD_NL("every")
-                .next(array(unitValue(expression, scope),
+                .next(array(unitValue(scope),
                             KEYWORD("until").next(expression).optional(),
                             KEYWORD("unless").next(expression).optional(),
                             expression));
@@ -463,7 +464,7 @@ public class DollarParser {
         });
     }
 
-    static Parser<var> dollarIdentifier(ScriptScope scope, Parser.Reference ref) {
+    private static Parser<var> dollarIdentifier(ScriptScope scope, Parser.Reference ref) {
         return OP("$").next(
                 array(Terminals.Identifier.PARSER, OP("|").next(ref.lazy()).optional()).between(OP("{"), OP("}"))).map(
                 new Map<Object[], var>() {
@@ -501,7 +502,7 @@ public class DollarParser {
                 .map(new WriteOperator(scope));
     }
 
-    private Parser<Map<? super var, ? extends var>> readOperator(Parser.Reference<var> ref, ScriptScope scope) {
+    private Parser<Map<? super var, ? extends var>> readOperator() {
         return array(KEYWORD("read"), KEYWORD("block").optional(), KEYWORD("mutate").optional())
                 .followedBy(KEYWORD("from").optional())
                 .map(new ReadOperator());
@@ -511,7 +512,7 @@ public class DollarParser {
         return KEYWORD_NL("if").next(ref.lazy()).map(new IfOperator(scope));
     }
 
-    private Parser<Map<? super var, ? extends var>> isOperator(Parser.Reference<var> ref, ScriptScope scope) {
+    private Parser<Map<? super var, ? extends var>> isOperator(ScriptScope scope) {
         return KEYWORD("is").next(IDENTIFIER.sepBy(OP(","))).map(new IsOperator(scope));
     }
 
@@ -552,15 +553,14 @@ public class DollarParser {
                 new ParameterOperator(this, scope));
     }
 
-    private Parser<Map<? super var, ? extends var>> variableUsageOperator(Parser.Reference<var> ref,
-                                                                          ScriptScope scope) {
+    private Parser<Map<? super var, ? extends var>> variableUsageOperator(ScriptScope scope) {
         return or(OP("$").followedBy(OP("(").peek())
                          .map(new VariableUsageOperator(scope)),
                   OP("$").followedBy(INTEGER_LITERAL.peek()).map(
                           lhs -> rhs -> getVariable(scope, rhs.toString(), true, null)));
     }
 
-    private Parser<Map<? super var, ? extends var>> castOperator(Parser.Reference<var> ref, ScriptScope scope) {
+    private Parser<Map<? super var, ? extends var>> castOperator(ScriptScope scope) {
         return KEYWORD("as").next(IDENTIFIER).map(new CastOperator(scope));
     }
 
@@ -585,21 +585,21 @@ public class DollarParser {
 
     public var parse(ScriptScope scope, File file, boolean parallel) throws IOException {
         String source = new String(Files.readAllBytes(file.toPath()));
-        return parse(new ScriptScope(scope, source, file.getName()), source, parallel);
+        return parse(new ScriptScope(scope, source, file.getName()), source);
     }
 
     public var parse(ScriptScope scope, InputStream in, boolean parallel) throws IOException {
         String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(scope, source, "(stream)"), source, parallel);
+        return parse(new ScriptScope(scope, source, "(stream)"), source);
     }
 
     public var parse(InputStream in, boolean parallel) throws IOException {
         String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(this, source), source, parallel);
+        return parse(new ScriptScope(this, source), source);
     }
 
     public var parse(String s, boolean parallel) throws IOException {
-        return parse(new ScriptScope(this, s), s, parallel);
+        return parse(new ScriptScope(this, s), s);
     }
 
     public var parseMarkdown(String source) throws IOException {

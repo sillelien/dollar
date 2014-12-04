@@ -43,7 +43,7 @@ public class VariableOperator extends UnaryOp {
             String key = from.$S();
             boolean numeric = from.isNumber();
 
-            List<ScriptScope> scopes = new ArrayList<ScriptScope>(scope.getDollarParser().scopes());
+            List<ScriptScope> scopes = new ArrayList<>(scope.getDollarParser().scopes());
             Collections.reverse(scopes);
             for (ScriptScope scriptScope : scopes) {
                 if (numeric) {

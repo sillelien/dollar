@@ -57,7 +57,7 @@ public class JsonUtil {
         return json;
     }
 
-    static Object convert(String arg) {
+    private static Object convert(String arg) {
         Object argConverted = arg;
         if (arg.equals("true") || arg.equals("false")) {
             argConverted = Boolean.valueOf(arg);

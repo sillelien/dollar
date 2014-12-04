@@ -27,7 +27,7 @@ import java.util.List;
  */
 class ListOperator implements Map<List<var>, var> {
     private final ScriptScope scope;
-    private DollarParser dollarParser;
+    private final DollarParser dollarParser;
 
     public ListOperator(DollarParser dollarParser, ScriptScope scope) {
         this.dollarParser = dollarParser;

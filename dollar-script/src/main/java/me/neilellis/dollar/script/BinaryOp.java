@@ -29,9 +29,9 @@ import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactiveBinary;
  */
 public class BinaryOp implements Binary<var>, Operator {
     private final boolean immediate;
-    private Map2<var, var, var> function;
+    private final Map2<var, var, var> function;
+    private final ScriptScope scope;
     private Supplier<String> source;
-    private ScriptScope scope;
 
 
     public BinaryOp(Map2<var, var, var> function, ScriptScope scope) {

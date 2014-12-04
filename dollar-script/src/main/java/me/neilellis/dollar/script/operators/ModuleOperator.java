@@ -42,14 +42,13 @@ public class ModuleOperator implements Map<Object[], var> {
             throw new IllegalArgumentException("Module " + moduleName + " needs to have a scheme");
         }
         final List<var> params = (List<var>) objects[2];
-        HashMap<String, var> paramMap = new HashMap<String, var>();
+        HashMap<String, var> paramMap = new HashMap<>();
         if (params != null) {
             for (var param : params) {
                 paramMap.put(param.getMetaAttribute(DollarParser.NAMED_PARAMETER_META_ATTR), param);
             }
         }
         System.out.println(params);
-        var lambda;
         try {
 
             return ModuleResolver.resolveModule(parts[0])

@@ -30,8 +30,8 @@ import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactiveBinary;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class SubscribeOperator implements Binary<var>, Operator {
+    private final ScriptScope scope;
     private Supplier<String> source;
-    private ScriptScope scope;
 
 
     public SubscribeOperator(ScriptScope scope) {

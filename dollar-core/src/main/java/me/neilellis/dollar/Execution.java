@@ -41,7 +41,7 @@ public class Execution {
 
     }
 
-    public static void forceShutdown() {
+    static void forceShutdown() {
         backgroundExecutor.shutdownNow();
         forkJoinPool.shutdownNow();
         scheduledExecutor.shutdownNow();
@@ -58,7 +58,7 @@ public class Execution {
         scheduledExecutor.shutdown();
     }
 
-    public static void init() {
+    private static void init() {
         forkJoinPool = new ForkJoinPool(getRuntime().availableProcessors() * 8);
         backgroundExecutor = newFixedThreadPool(getRuntime().availableProcessors());
         scheduledExecutor = Executors.newScheduledThreadPool(getRuntime().availableProcessors());

@@ -23,7 +23,7 @@ import java.util.Date;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class HelloUnit extends Unit {
+class HelloUnit extends Unit {
 
     static {
         mainClass(HelloUnit.class);

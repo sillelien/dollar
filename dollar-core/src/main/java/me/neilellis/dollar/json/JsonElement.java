@@ -44,8 +44,7 @@ public abstract class JsonElement implements Serializable {
         return this instanceof JsonObject;
     }
 
-    @SuppressWarnings("unchecked")
-    protected Map<String, Object> convertMap(Map<String, Object> map) {
+    @SuppressWarnings("unchecked") Map<String, Object> convertMap(Map<String, Object> map) {
         Map<String, Object> converted = new LinkedHashMap<>(map.size());
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             Object obj = entry.getValue();
@@ -75,8 +74,7 @@ public abstract class JsonElement implements Serializable {
         return converted;
     }
 
-    @SuppressWarnings("unchecked")
-    protected List<Object> convertList(List<?> list) {
+    @SuppressWarnings("unchecked") List<Object> convertList(List<?> list) {
         List<Object> arr = new ArrayList<>(list.size());
         for (Object obj : list) {
             if (obj instanceof Map) {

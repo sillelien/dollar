@@ -32,7 +32,7 @@ import static me.neilellis.dollar.types.DollarFactory.fromLambda;
  */
 public class BlockOperator implements Map<List<var>, var> {
     private final ScriptScope scope;
-    private DollarParser dollarParser;
+    private final DollarParser dollarParser;
 
     public BlockOperator(DollarParser dollarParser, ScriptScope scope) {
         this.dollarParser = dollarParser;

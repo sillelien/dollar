@@ -29,9 +29,10 @@ import java.util.function.Function;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class ImmutableMap<K extends Comparable<K>, V> implements Iterable<Map.Entry<K, V>> {
+@SuppressWarnings("SuspiciousMethodCalls") public class ImmutableMap<K extends Comparable<K>, V> implements
+                                                                                                 Iterable<Map.Entry<K, V>> {
 
-  private Map<K, V> map = Maps.<K, V>newLinkedHashMap();
+  private final Map<K, V> map = Maps.<K, V>newLinkedHashMap();
 
   public static <K extends Comparable<K>, V> ImmutableMap<K, V> of(K key, V value) {
     ImmutableMap<K, V> immutableMap = new ImmutableMap<>();
@@ -90,7 +91,7 @@ public class ImmutableMap<K extends Comparable<K>, V> implements Iterable<Map.En
     return map.hashCode();
   }
 
-  @Override
+  @SuppressWarnings("EqualsWhichDoesntCheckParameterClass") @Override
   public boolean equals(Object o) {
     return map.equals(o);
   }

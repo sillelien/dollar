@@ -32,7 +32,7 @@ import static me.neilellis.dollar.DollarStatic.$;
  */
 public class PipeOperator implements Map<var, Map<? super var, ? extends var>> {
     private final ScriptScope scope;
-    private DollarParser dollarParser;
+    private final DollarParser dollarParser;
 
     public PipeOperator(DollarParser dollarParser, ScriptScope scope) {
         this.dollarParser = dollarParser;

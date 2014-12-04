@@ -20,6 +20,7 @@ import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.Guards;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -27,7 +28,7 @@ import java.lang.reflect.Method;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DollarGuard implements java.lang.reflect.InvocationHandler {
+class DollarGuard implements java.lang.reflect.InvocationHandler {
 
     private final var in;
 
@@ -39,7 +40,7 @@ public class DollarGuard implements java.lang.reflect.InvocationHandler {
     }
 
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(Object proxy, @NotNull Method method, Object[] args) throws Throwable {
         try {
             String name = method.getName();
 

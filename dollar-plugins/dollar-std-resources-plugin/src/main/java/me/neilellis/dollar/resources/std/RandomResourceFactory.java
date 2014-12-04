@@ -32,7 +32,7 @@ import static me.neilellis.dollar.DollarStatic.$void;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class RandomResourceFactory implements URIHandlerFactory {
-    public HashMap<String, Pipeable> consumers = new HashMap<>();
+    private final HashMap<String, Pipeable> consumers = new HashMap<>();
 
     public RandomResourceFactory() {
         Execution.schedule(500, () -> {

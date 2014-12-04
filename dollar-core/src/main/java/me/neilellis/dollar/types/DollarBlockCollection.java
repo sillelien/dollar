@@ -44,7 +44,7 @@ import java.util.stream.Stream;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarBlockCollection implements var {
-    private List<var> value;
+    private final List<var> value;
 
 
     public DollarBlockCollection(List<var> value) {
@@ -109,7 +109,7 @@ public class DollarBlockCollection implements var {
 
     @Override public void clear() {getValue().clear();}
 
-    @Override @Guarded(ChainGuard.class) public var err() {return getValue().err();}
+    @NotNull @Override @Guarded(ChainGuard.class) public var err() {return getValue().err();}
 
     @Override @NotNull @Guarded(ChainGuard.class) public var out() {return getValue().out();}
 
@@ -117,7 +117,7 @@ public class DollarBlockCollection implements var {
         return getValue().$remove(value);
     }
 
-    public var getValue() {
+    var getValue() {
         for (int i = 0; i < value.size() - 1; i++) {
             value.get(i)._fixDeep(false);
         }
@@ -201,8 +201,8 @@ public class DollarBlockCollection implements var {
     public var $dec() {return getValue().$dec();}
 
     @Override @NotNull @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class) public var $minus(
-            @NotNull var value) {
-        return this.getValue().$minus(value);
+            @NotNull var v) {
+        return this.getValue().$minus(v);
     }
 
     @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) public var $divide(
@@ -213,8 +213,8 @@ public class DollarBlockCollection implements var {
     @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class)
     public var $inc() {return getValue().$inc();}
 
-    @Override @NotNull @Guarded(ChainGuard.class) public var $plus(@Nullable var value) {
-        return this.getValue().$plus(value);
+    @Override @NotNull @Guarded(ChainGuard.class) public var $plus(@Nullable var v) {
+        return this.getValue().$plus(v);
     }
 
     @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) public var $modulus(
@@ -427,7 +427,7 @@ public class DollarBlockCollection implements var {
         return getValue().assertFalse(assertion, message);
     }
 
-    @Override public int compareTo(var o) {return getValue().compareTo(o);}
+    @Override public int compareTo(@NotNull var o) {return getValue().compareTo(o);}
 
     @Override @Guarded(ChainGuard.class) @Guarded(NotNullGuard.class) public var debugf(String message,
                                                                                         Object... values) {

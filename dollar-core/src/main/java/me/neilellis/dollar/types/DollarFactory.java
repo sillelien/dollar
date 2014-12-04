@@ -92,7 +92,7 @@ public class DollarFactory {
 
 
     @NotNull
-    static var create(@NotNull ImmutableList<Throwable> errors, @Nullable Object o) {
+    private static var create(@NotNull ImmutableList<Throwable> errors, @Nullable Object o) {
         if (o == null) {
             return wrap(new DollarVoid(errors));
         }
@@ -215,7 +215,7 @@ public class DollarFactory {
     }
 
     @NotNull
-    public static var wrap(var value, DollarMonitor monitor, StateTracer tracer, ErrorLogger errorLogger) {
+    private static var wrap(var value, DollarMonitor monitor, StateTracer tracer, ErrorLogger errorLogger) {
         final var val;
         if (DollarStatic.config.wrapForMonitoring()) {
             val = new DollarWrapper(value, monitor, tracer, errorLogger);

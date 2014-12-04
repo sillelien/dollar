@@ -16,6 +16,8 @@
 
 package me.neilellis.dollar;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Method;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
@@ -23,7 +25,7 @@ import java.util.concurrent.Future;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DollarFuture implements java.lang.reflect.InvocationHandler {
+class DollarFuture implements java.lang.reflect.InvocationHandler {
 
     private Future<var> value = new CompletableFuture<>();
 
@@ -32,7 +34,7 @@ public class DollarFuture implements java.lang.reflect.InvocationHandler {
     }
 
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(Object proxy, @NotNull Method method, Object[] args) throws Throwable {
         return method.invoke(value.get(), args);
     }
 }

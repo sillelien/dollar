@@ -25,7 +25,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.neilellis</groupId>
     <artifactId>dollar-github-resolver-plugin</artifactId>
     <dependencies>
         <dependency>

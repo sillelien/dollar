@@ -21,7 +21,7 @@ import me.neilellis.dollar.types.DollarMap;
 import me.neilellis.dollar.types.DollarVoid;
 
 /**
- * Created by neil on 10/15/14.
+ * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class SimpleLogStateTracer implements StateTracer {
     @Override

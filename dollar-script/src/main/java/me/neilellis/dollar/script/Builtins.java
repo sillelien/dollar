@@ -36,7 +36,7 @@ import static me.neilellis.dollar.DollarStatic.$void;
  */
 public class Builtins {
 
-    public static final double DAY_IN_MILLIS = 24.0 * 60.0 * 60.0 * 1000.0;
+    private static final double DAY_IN_MILLIS = 24.0 * 60.0 * 60.0 * 1000.0;
     private static final HashMap<String, Builtin<var>> map;
 
     static {
@@ -48,7 +48,7 @@ public class Builtins {
             String message = args.get(0).$S();
             ArrayList<var> values = new ArrayList<>(args);
             values.remove(0);
-            return $(String.format(message, values.stream().map(i -> i.$()).toArray()));
+            return $(String.format(message, values.stream().map(var::$).toArray()));
         }, "FORMAT");
         addJavaStyle(1, 1, (args, scope) -> {
             return args.get(0).$list().stream().min((o1, o2) -> (int) Math.signum(o1.D() - o2.D())).get();
@@ -112,19 +112,19 @@ public class Builtins {
         return map.containsKey(name);
     }
 
-    public static <T> void addJavaStyle(int minargs, int maxargs, Builtin.JavaStyle<T> lambda, String... names) {
+    private static <T> void addJavaStyle(int minargs, int maxargs, Builtin.JavaStyle<T> lambda, String... names) {
         for (String name : names) {
             map.put(name, new Builtin.BuiltinImpl(lambda, minargs, maxargs));
         }
     }
 
-    public static void addDollarStyle(int minargs, int maxargs, Builtin.DollarStyle lambda, String... names) {
+    private static void addDollarStyle(int minargs, int maxargs, Builtin.DollarStyle lambda, String... names) {
         for (String name : names) {
             map.put(name, new Builtin.BuiltinImpl(lambda, minargs, maxargs));
         }
     }
 
-    public static void addDollarSingleNoScope(Function<var, var> lambda, String... names) {
+    private static void addDollarSingleNoScope(Function<var, var> lambda, String... names) {
         for (String name : names) {
             map.put(name, new Builtin.BuiltinImpl((args, scope) -> lambda.apply((var) args.get(0)), 1, 1));
         }

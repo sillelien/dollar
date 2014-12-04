@@ -24,7 +24,7 @@ import java.util.Date;
 import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$jsonArray;
 
-public class DollarHttpTest {
+class DollarHttpTest {
 
     static {
         RestAssured.port = 4567;

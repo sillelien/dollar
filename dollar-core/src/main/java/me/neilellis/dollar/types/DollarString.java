@@ -134,8 +134,8 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
-    public var $plus(var newValue) {
-        return DollarFactory.fromValue(value + newValue.toString(), errors());
+    public var $plus(var v) {
+        return DollarFactory.fromValue(value + v.toString(), errors());
     }
 
     @NotNull @Override
@@ -144,7 +144,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
-    public int compareTo(var o) {
+    public int compareTo(@NotNull var o) {
         return Comparator.<String>naturalOrder().compare(value, o.$S());
     }
 
@@ -178,7 +178,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return true;
     }
 
-    @Override
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass") @Override
     public boolean equals(@Nullable Object obj) {
         return obj != null && value.equals(obj.toString());
     }

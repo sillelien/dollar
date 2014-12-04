@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 
-public class ParseDocs {
+class ParseDocs {
 
     public static void main(String[] args) throws IOException {
         parseDoc("scripting", new File(args[0]));

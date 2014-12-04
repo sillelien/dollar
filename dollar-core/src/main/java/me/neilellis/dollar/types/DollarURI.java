@@ -36,7 +36,7 @@ import java.util.*;
 public class DollarURI extends AbstractDollar {
 
     private final StateMachine<ResourceState, Signal> stateMachine;
-    private String uri;
+    private final String uri;
     private URIHandler handler;
 
 
@@ -52,7 +52,7 @@ public class DollarURI extends AbstractDollar {
         stateMachineConfig.configure(ResourceState.DESTROYED).onEntry(i -> {handler.destroy();});
         stateMachineConfig.configure(ResourceState.PAUSED).onEntry(i -> {handler.pause();});
         stateMachineConfig.configure(ResourceState.PAUSED).onExit(i -> {handler.unpause();});
-        stateMachine = new StateMachine<ResourceState, Signal>(ResourceState.INITIAL, stateMachineConfig);
+        stateMachine = new StateMachine<>(ResourceState.INITIAL, stateMachineConfig);
         stateMachine.fire(Signal.START);
 
     }
@@ -65,9 +65,9 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var value) {
+    public var $minus(@NotNull var v) {
         assertRunning();
-        return handler.removeValue(DollarStatic.$(value));
+        return handler.removeValue(DollarStatic.$(v));
 
     }
 
@@ -79,9 +79,9 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $plus(@Nullable var value) {
+    public var $plus(@Nullable var v) {
         assertRunning();
-        return handler.send(DollarStatic.$(value), true, true);
+        return handler.send(DollarStatic.$(v), true, true);
     }
 
     @NotNull
@@ -123,14 +123,14 @@ public class DollarURI extends AbstractDollar {
         return (R) uri;
     }
 
+    @NotNull public var $containsValue(@NotNull var value) {
+        return DollarStatic.$(false);
+    }
+
     @NotNull
     @Override
     public ImmutableMap<String, var> $map() {
         return ImmutableMap.of();
-    }
-
-    @NotNull public var $containsValue(@NotNull var value) {
-        return DollarStatic.$(false);
     }
 
     @NotNull @Override
@@ -196,7 +196,7 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public int compareTo(var o) {
+    public int compareTo(@NotNull var o) {
         return Comparator.<String>naturalOrder().compare(uri, o.toString());
     }
 

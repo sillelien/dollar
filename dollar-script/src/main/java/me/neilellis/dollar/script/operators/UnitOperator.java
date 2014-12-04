@@ -34,7 +34,7 @@ import static me.neilellis.dollar.script.DollarScriptSupport.getVariable;
  */
 public class UnitOperator implements Map<Object[], var> {
     private final ScriptScope scope;
-    private DollarParser dollarParser;
+    private final DollarParser dollarParser;
 
     public UnitOperator(DollarParser dollarParser, ScriptScope scope) {
         this.dollarParser = dollarParser;

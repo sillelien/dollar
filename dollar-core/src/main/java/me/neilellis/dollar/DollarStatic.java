@@ -35,6 +35,7 @@ import spark.Spark;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -52,7 +53,7 @@ public class DollarStatic {
     public static final Configuration config = new Configuration();
 
     @NotNull
-    public static ThreadLocal<DollarThreadContext> threadContext = new ThreadLocal<DollarThreadContext>() {
+    public static final ThreadLocal<DollarThreadContext> threadContext = new ThreadLocal<DollarThreadContext>() {
         @NotNull
         @Override
         protected DollarThreadContext initialValue() {
@@ -61,10 +62,10 @@ public class DollarStatic {
     };
 
     @NotNull
-    private static ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
+    private static final ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
 
 
-    private static URIHandlerFactory URIHandler = Plugins.sharedInstance(URIHandlerFactory.class);
+    private static final URIHandlerFactory URIHandler = Plugins.sharedInstance(URIHandlerFactory.class);
 
     public static Pipeable $jsFile(String name) {
         try {
@@ -124,7 +125,7 @@ public class DollarStatic {
         return $(o, false);
     }
 
-    public static var $(@Nullable Object o, boolean parallel) {
+    private static var $(@Nullable Object o, boolean parallel) {
         if (o instanceof var) {
             return fix((var) o, parallel);
         }
@@ -298,7 +299,7 @@ public class DollarStatic {
      *
      * @param run the lambda to run.
      */
-    public static void $run(@NotNull Runnable run) {
+    static void $run(@NotNull Runnable run) {
         try {
             run.run();
         } finally {
@@ -310,7 +311,7 @@ public class DollarStatic {
     public static Sub $sub(DollarPubSub.SubAction action, String... locations) {
         return monitor().run("$sub",
                              "dollar.sub",
-                             "Subscription to " + locations,
+                             "Subscription to " + Arrays.toString(locations),
                              () -> threadContext.get().getPubsub().sub(action, locations));
     }
 

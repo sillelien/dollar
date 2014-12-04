@@ -156,7 +156,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         }
     }
 
-    public boolean $equals(var other) {
+    boolean $equals(var other) {
         if (isInteger()) {
             return value.longValue() == other.L();
         } else {
@@ -165,21 +165,21 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     }
 
     @Override
-    public int compareTo(var o) {
+    public int compareTo(@NotNull var o) {
         return $minus(o).I();
     }
 
     @NotNull
     @Override
-    public var $minus(var newValue) {
-        return DollarFactory.fromValue(value - ((var) newValue).D(), errors(), ((var) newValue).errors());
+    public var $minus(@NotNull var v) {
+        return DollarFactory.fromValue(value - v.D(), errors(), v.errors());
 
     }
 
     @NotNull
     @Override
-    public var $plus(var newValue) {
-        return DollarFactory.fromValue(value + ((var) newValue).D(), errors(), ((var) newValue).errors());
+    public var $plus(var v) {
+        return DollarFactory.fromValue(value + v.D(), errors(), v.errors());
     }
 
     @Override

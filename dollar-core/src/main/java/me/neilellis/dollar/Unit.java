@@ -33,14 +33,14 @@ import java.util.List;
  */
 public abstract class Unit extends DollarStatic implements Pipeable {
 
-    protected static final ThreadLocal<Class<? extends Unit>> $THIS = new ThreadLocal<>();
+    private static final ThreadLocal<Class<? extends Unit>> $THIS = new ThreadLocal<>();
     protected static List<String> args;
     @NotNull
 //  protected var passedIn = DollarStatic.threadContext.get().getPassValue();
-    protected var in = DollarFactory.fromValue(JsonUtil.argsToJson(args));
+    protected final var in = DollarFactory.fromValue(JsonUtil.argsToJson(args));
     protected var out;
 
-    public static void mainClass(Class<? extends Unit> main) {
+    protected static void mainClass(Class<? extends Unit> main) {
         $THIS.set(main);
     }
 

@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class DollarException extends RuntimeException {
 
-    private List<SourceAware> sourceList = new ArrayList<>();
+    private final List<SourceAware> sourceList = new ArrayList<>();
 
     public DollarException(Throwable e) {
         super(e);
@@ -36,7 +36,7 @@ public class DollarException extends RuntimeException {
         super(errorMessage);
     }
 
-    public DollarException(Throwable t, String s) {
+    protected DollarException(Throwable t, String s) {
         super(s, t);
     }
 

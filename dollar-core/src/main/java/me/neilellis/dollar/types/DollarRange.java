@@ -58,7 +58,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var value) {
+    public var $minus(@NotNull var v) {
         return DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
     }
 
@@ -70,7 +70,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $plus(var value) {
+    public var $plus(var v) {
         return DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
     }
 
@@ -149,7 +149,7 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public int compareTo(var o) {
+    public int compareTo(@NotNull var o) {
         if ($containsValue(o).isTrue()) {
             return 0;
         }
@@ -177,16 +177,16 @@ public class DollarRange extends AbstractDollar {
         return !range.isEmpty();
     }
 
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
     @NotNull
     @Override
     public ImmutableMap<String, var> $map() {
         DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
         return ImmutableMap.of();
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
     }
 
     @Override
@@ -221,6 +221,7 @@ public class DollarRange extends AbstractDollar {
         return false;
 
     }
+
 
     @NotNull
     @Override

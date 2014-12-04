@@ -39,9 +39,9 @@ import java.util.List;
  *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DollarFail extends DollarVoid {
+class DollarFail extends DollarVoid {
 
-    private FailureType failureType;
+    private final FailureType failureType;
 
     public DollarFail(@NotNull List<Throwable> errors, FailureType failureType) {
         super(errors);

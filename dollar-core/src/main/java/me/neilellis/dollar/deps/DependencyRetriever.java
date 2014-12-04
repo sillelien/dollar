@@ -38,7 +38,7 @@ public class DependencyRetriever {
         dollarLib = new File(System.getProperty("user.home"), ".dollar/lib");
     }
 
-    private static File dollarLib;
+    private static final File dollarLib;
 
     public static JarFileLoader retrieve(String artifact) throws DependencyResolutionException {
         return retrieve(new DefaultArtifact(artifact));
@@ -47,14 +47,6 @@ public class DependencyRetriever {
     public static JarFileLoader retrieve(Artifact artifact) throws DependencyResolutionException {
         JarFileLoader jarFileClassLoader = new JarFileLoader(new URL[]{});
         loadInternal(artifact, jarFileClassLoader);
-        return jarFileClassLoader;
-    }
-
-    public static JarFileLoader retrieve(List<String> artifacts) throws DependencyResolutionException {
-        JarFileLoader jarFileClassLoader = new JarFileLoader(new URL[]{});
-        for (String artifact : artifacts) {
-            loadInternal(new DefaultArtifact(artifact), jarFileClassLoader);
-        }
         return jarFileClassLoader;
     }
 
@@ -84,5 +76,13 @@ public class DependencyRetriever {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static JarFileLoader retrieve(List<String> artifacts) throws DependencyResolutionException {
+        JarFileLoader jarFileClassLoader = new JarFileLoader(new URL[]{});
+        for (String artifact : artifacts) {
+            loadInternal(new DefaultArtifact(artifact), jarFileClassLoader);
+        }
+        return jarFileClassLoader;
     }
 }

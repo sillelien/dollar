@@ -79,7 +79,7 @@ public class GithubModuleResolver implements ModuleResolver {
         } else {
             Repository localRepo = builder.setGitDir(dir).readEnvironment().findGitDir().build();
             Git git = new Git(localRepo);
-            CloneCommand clone = git.cloneRepository();
+            CloneCommand clone = Git.cloneRepository();
             clone.setBranch(branch);
             clone.setBare(false);
             clone.setCloneAllBranches(false);
@@ -115,7 +115,7 @@ public class GithubModuleResolver implements ModuleResolver {
                 for (Map.Entry<String, var> entry : paramMap.entrySet()) {
                     newScope.set(entry.getKey(), entry.getValue(), true, null, false);
                 }
-                return new DollarParser(classLoader, dir, mainFile).parse(newScope, content, false);
+                return new DollarParser(classLoader, dir, mainFile).parse(newScope, content);
             } catch (IOException e) {
                 return DollarStatic.logAndRethrow(e);
             }

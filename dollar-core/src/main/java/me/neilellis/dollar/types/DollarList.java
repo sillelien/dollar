@@ -51,7 +51,8 @@ public class DollarList extends AbstractDollar {
                 if (((var) value).isLambda() || !((var) value).isVoid()) {
                     l.add((var) value);
                 }
-            } else if (value == null) {
+            } else //noinspection StatementWithEmptyBody
+                if (value == null) {
                 //Skip
             } else {
                 l.add(DollarFactory.fromValue(value, errors));
@@ -68,7 +69,8 @@ public class DollarList extends AbstractDollar {
                 if (((var) value).isLambda() || !((var) value).isVoid()) {
                     l.add((var) value);
                 }
-            } else if (value == null) {
+            } else //noinspection StatementWithEmptyBody
+                if (value == null) {
                 //Skip
             } else {
                 l.add(DollarFactory.fromValue(value, errors));
@@ -85,9 +87,9 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var value) {
+    public var $minus(@NotNull var v) {
         ArrayList<var> newVal = new ArrayList<>(list);
-        newVal.remove(value);
+        newVal.remove(v);
         return DollarFactory.fromValue(newVal, errors());
     }
 
@@ -99,10 +101,10 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $plus(var value) {
+    public var $plus(var v) {
         return DollarFactory.fromValue(ImmutableList.builder()
                                                     .addAll(list)
-                                                    .addAll(value == null ? Arrays.asList() : value.$list())
+                                                    .addAll(v == null ? Arrays.asList() : v.$list())
                                                     .build(), errors()
         );
 
@@ -147,18 +149,16 @@ public class DollarList extends AbstractDollar {
         return DollarStatic.$(key);
     }
 
+    @Override
+    public var $notify() {
+        list.forEach(me.neilellis.dollar.var::$notify);
+        return this;
+    }
+
     @NotNull
     @Override
     public ImmutableMap<String, var> $map() {
         return null;
-    }
-
-    @Override
-    public var $notify() {
-        for (var v : list) {
-            v.$notify();
-        }
-        return this;
     }
 
     @NotNull
@@ -215,12 +215,6 @@ public class DollarList extends AbstractDollar {
         return true;
     }
 
-    @NotNull
-    @Override
-    public Stream<Map.Entry<String, var>> kvStream() {
-        return null;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -233,6 +227,12 @@ public class DollarList extends AbstractDollar {
             return list.equals(((var) obj).$list());
         }
         return false;
+    }
+
+    @NotNull
+    @Override
+    public Stream<Map.Entry<String, var>> kvStream() {
+        return null;
     }
 
     @NotNull
@@ -291,13 +291,25 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public var $remove(var value) {
-        List<var> newList = new ArrayList<>();
-        for (var val : list) {
-            if (!val.equals(value)) {
-                newList.add(val);
-            }
-        }
+        List<var> newList = list.stream().filter(val -> !val.equals(value)).collect(Collectors.toList());
         return DollarFactory.fromValue(newList, errors());
+    }
+
+    @Override
+    public int compareTo(@NotNull var o) {
+        //TODO: improve comparisons
+        if (list.stream().allMatch(v -> v.compareTo(o) == -1)) {
+            return -1;
+        }
+        if (list.stream().allMatch(v -> v.compareTo(o) == 1)) {
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
     }
 
     @NotNull
@@ -318,15 +330,13 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public int compareTo(var o) {
-        //TODO: improve comparisons
-        if (list.stream().allMatch(v -> v.compareTo(o) == -1)) {
-            return -1;
-        }
-        if (list.stream().allMatch(v -> v.compareTo(o) == 1)) {
-            return 1;
-        }
-        return 0;
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return !list.isEmpty();
     }
 
     @NotNull
@@ -338,21 +348,6 @@ public class DollarList extends AbstractDollar {
         }
         return ImmutableList.copyOf(newList);
 
-    }
-
-    @Override
-    public boolean isBoolean() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean isTruthy() {
-        return !list.isEmpty();
     }
 
     @Override
@@ -374,7 +369,7 @@ public class DollarList extends AbstractDollar {
 
     @NotNull @Override
     public Integer I() {
-        return $stream(false).collect(Collectors.summingInt((i) -> i.I()));
+        return $stream(false).collect(Collectors.summingInt(TypeAware::I));
     }
 
 
@@ -398,7 +393,7 @@ public class DollarList extends AbstractDollar {
 
     @Override
     public ImmutableList<String> strings() {
-        return ImmutableList.<String>copyOf(list.stream().map(Object::toString).collect(Collectors.toList()));
+        return ImmutableList.copyOf(list.stream().map(Object::toString).collect(Collectors.toList()));
     }
 
 

@@ -29,7 +29,7 @@ import static me.neilellis.dollar.DollarStatic.fix;
  */
 public class ForOperator implements Map<Object[], Map<? super var, ? extends var>> {
     private final ScriptScope scope;
-    private DollarParser dollarParser;
+    private final DollarParser dollarParser;
 
     public ForOperator(DollarParser dollarParser, ScriptScope scope) {
         this.dollarParser = dollarParser;

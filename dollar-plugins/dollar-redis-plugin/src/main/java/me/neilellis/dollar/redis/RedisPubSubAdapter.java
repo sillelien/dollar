@@ -35,8 +35,8 @@ import java.util.concurrent.TimeUnit;
 public class RedisPubSubAdapter extends JedisPubSub implements Sub {
     private final DollarPubSub.SubAction action;
     @NotNull
-    private Semaphore lock = new Semaphore(0);
-    private Semaphore firstMessageLock = new Semaphore(0);
+    private final Semaphore lock = new Semaphore(0);
+    private final Semaphore firstMessageLock = new Semaphore(0);
 
     public RedisPubSubAdapter(DollarPubSub.SubAction lambda) {
         this.action = lambda;

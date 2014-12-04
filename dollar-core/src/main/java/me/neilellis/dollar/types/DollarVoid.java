@@ -18,9 +18,12 @@ package me.neilellis.dollar.types;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Range;
-import me.neilellis.dollar.*;
+import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.Pipeable;
+import me.neilellis.dollar.Type;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.json.JsonObject;
+import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
@@ -71,7 +74,7 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var value) {
+    public var $minus(@NotNull var v) {
         return this;
     }
 
@@ -83,7 +86,7 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $plus(var value) {
+    public var $plus(var v) {
         return $copy();
     }
 
@@ -152,6 +155,46 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull @Override public var $remove(var value) {
         return this;
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $stream(boolean parallel) {
+        return Stream.empty();
+    }
+
+    @NotNull
+    @Override
+    public var $eval(@NotNull String js) {
+        return $copy();
+    }
+
+    @NotNull
+    @Override
+    public var $pipe(@NotNull String js, @NotNull String label) {
+        return $copy();
+    }
+
+    @NotNull
+    @Override
+    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
+        return $copy();
+    }
+
+    @NotNull
+    @Override
+    public Stream<Map.Entry<String, var>> kvStream() {
+        return Collections.<String, var>emptyMap().entrySet().stream();
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return (obj instanceof var && ((var) obj).$() == null) || obj == null;
     }
 
     @NotNull
@@ -226,10 +269,6 @@ public class DollarVoid extends AbstractDollar implements var {
         return ImmutableList.of();
     }
 
-    @NotNull @Override public ImmutableList<Object> toList() {
-        return ImmutableList.of();
-    }
-
     @Override
     public boolean isVoid() {
         return true;
@@ -252,59 +291,17 @@ public class DollarVoid extends AbstractDollar implements var {
         return ImmutableList.of();
     }
 
+    @NotNull @Override public ImmutableList<Object> toList() {
+        return ImmutableList.of();
+    }
+
     @Override
-    public int compareTo(var o) {
+    public int compareTo(@NotNull var o) {
         if (o.isVoid()) {
             return 0;
         } else {
             return 1;
         }
-    }
-
-    @NotNull
-    @Override
-    public var eval(String label, @NotNull DollarEval lambda) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public Stream<Map.Entry<String, var>> kvStream() {
-        return Collections.<String, var>emptyMap().entrySet().stream();
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $stream(boolean parallel) {
-        return Stream.empty();
-    }
-
-    @NotNull
-    @Override
-    public var $eval(@NotNull String js) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull String js, @NotNull String label) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
-        return $copy();
-    }
-
-    @Override
-    public int hashCode() {
-        return 0;
-    }
-
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        return (obj instanceof var && ((var) obj).$() == null) || obj == null;
     }
 
     @Override
@@ -338,7 +335,8 @@ public class DollarVoid extends AbstractDollar implements var {
      *
      * @param you - you.
      */
-    public void stare(var you) {
+    @SuppressWarnings("InfiniteRecursion")
+    void stare(var you) {
         this.stare(you);
     }
 }

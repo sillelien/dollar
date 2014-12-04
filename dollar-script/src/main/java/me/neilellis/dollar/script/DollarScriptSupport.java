@@ -72,7 +72,7 @@ public class DollarScriptSupport {
 
         var lambda = DollarFactory.fromLambda(v -> {
             try {
-                List<ScriptScope> scopes = new ArrayList<ScriptScope>(scope.getDollarParser().scopes());
+                List<ScriptScope> scopes = new ArrayList<>(scope.getDollarParser().scopes());
                 Collections.reverse(scopes);
                 for (ScriptScope scriptScope : scopes) {
                     if (numeric) {

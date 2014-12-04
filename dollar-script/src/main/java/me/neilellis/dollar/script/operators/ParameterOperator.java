@@ -33,7 +33,7 @@ import static me.neilellis.dollar.DollarStatic.$;
  */
 public class ParameterOperator implements Map<List<var>, Map<? super var, ? extends var>> {
     private final ScriptScope scope;
-    private DollarParser dollarParser;
+    private final DollarParser dollarParser;
 
     public ParameterOperator(DollarParser dollarParser, ScriptScope scope) {
         this.dollarParser = dollarParser;

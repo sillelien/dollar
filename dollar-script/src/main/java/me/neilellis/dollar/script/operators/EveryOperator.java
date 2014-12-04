@@ -31,7 +31,7 @@ import static me.neilellis.dollar.DollarStatic.$void;
  */
 public class EveryOperator implements Map<Object[], var> {
     private final ScriptScope scope;
-    private DollarParser dollarParser;
+    private final DollarParser dollarParser;
 
     public EveryOperator(DollarParser dollarParser, ScriptScope scope) {
         this.dollarParser = dollarParser;

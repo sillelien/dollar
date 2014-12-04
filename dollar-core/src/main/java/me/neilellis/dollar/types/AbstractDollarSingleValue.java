@@ -36,9 +36,9 @@ import java.util.stream.Stream;
 public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implements var {
 
     @NotNull
-    protected final T value;
+    final T value;
 
-    public AbstractDollarSingleValue(@NotNull List<Throwable> errors, @NotNull T value) {
+    AbstractDollarSingleValue(@NotNull List<Throwable> errors, @NotNull T value) {
         super(errors);
         this.value = value;
     }
@@ -72,8 +72,8 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     @Override
-    public var $minus(@NotNull var value) {
-        if (value.equals(this)) {
+    public var $minus(@NotNull var v) {
+        if (v.equals(this)) {
             return DollarStatic.$void();
         } else {
             return this;
@@ -82,7 +82,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     @Override
-    public var $plus(var newValue) {
+    public var $plus(var v) {
         return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
@@ -180,10 +180,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return ImmutableList.of(value);
     }
 
-    @Nullable
-    public JsonObject json(@NotNull String key) {
-        return null;
-    }
 
     public Stream<String> keyStream() {
         return Stream.empty();

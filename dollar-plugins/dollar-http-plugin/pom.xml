@@ -47,10 +47,6 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-        </dependency>
     </dependencies>
     <properties>
         <plugin.id>redis-plugin</plugin.id>

@@ -16,6 +16,8 @@
 
 package me.neilellis.dollar.plugin;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Method;
 
 /**
@@ -35,10 +37,10 @@ public class NoOpProxy<T extends ExtensionPoint<T>> implements java.lang.reflect
     return (T) java.lang.reflect.Proxy.newProxyInstance(
         c.getClassLoader(),
         new Class<?>[]{c},
-        new NoOpProxy<T>(c));
+        new NoOpProxy<>(c));
   }
 
-  public Object invoke(Object proxy, Method m, Object[] args)
+    public Object invoke(Object proxy, @NotNull Method m, Object[] args)
       throws Throwable {
     throw new UnsupportedOperationException("Method " + m + " cannot be invoked as no provider for " + c.getName() + " could be found on the classpath, please add the appropriate plugin to the classpath.");
   }

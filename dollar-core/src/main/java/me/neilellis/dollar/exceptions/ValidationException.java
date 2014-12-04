@@ -19,7 +19,7 @@ package me.neilellis.dollar.exceptions;
 import me.neilellis.dollar.DollarException;
 
 /**
- * Created by neil on 10/16/14.
+ * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class ValidationException extends DollarException{
     public ValidationException(Throwable e) {

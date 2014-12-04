@@ -29,7 +29,7 @@ import static me.neilellis.dollar.DollarStatic.$;
  */
 public class WhileOperator implements Map<var, Map<? super var, ? extends var>> {
     private final ScriptScope scope;
-    private DollarParser parser;
+    private final DollarParser parser;
 
     public WhileOperator(DollarParser dollarParser, ScriptScope scope) {
         this.parser = dollarParser;

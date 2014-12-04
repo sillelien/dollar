@@ -21,7 +21,7 @@ import me.neilellis.dollar.DollarException;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class SyntaxException extends DollarException {
+class SyntaxException extends DollarException {
     public SyntaxException(Throwable e) {
         super(e);
     }
