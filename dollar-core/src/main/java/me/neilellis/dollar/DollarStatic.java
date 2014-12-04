@@ -117,7 +117,7 @@ public class DollarStatic {
 
     @NotNull
     public static var $(@NotNull String name, Object o) {
-        return DollarFactory.fromValue().$($(name), o);
+        return DollarFactory.fromValue().$set($(name), o);
     }
 
     public static var $(@Nullable Object o) {

@@ -53,15 +53,6 @@ public interface TypeAware {
     @Guarded(NotNullGuard.class)
     Integer I();
 
-    /**
-     * Returns the value for the supplied key as an Integer.
-     *
-     * @param key the key
-     * @return an Integer value (or null).
-     */
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    Integer I(@NotNull String key);
 
     @Guarded(NotNullGuard.class)
     @NotNull Long L();

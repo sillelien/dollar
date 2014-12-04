@@ -43,122 +43,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         this.value = value;
     }
 
-    @NotNull
-    public var $(@NotNull var key, Object value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull Number n) {
-        if (n.longValue() != 0) {
-            return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
-        } else {
-            return this;
-        }
-    }
-
-    @NotNull
-    public Stream<var> $children() {
-        return Stream.empty();
-
-    }
-
-    @NotNull
-    public Stream<var> $children(@NotNull String key) {
-        return Stream.empty();
-    }
-
-    @Override
-    public var $containsValue(var value) {
-        return DollarStatic.$(this.value.equals(value));
-    }
-
-    @NotNull
-    public var $(@NotNull String key) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
-    }
-
-    public var $has(@NotNull String key) {
-        return DollarStatic.$(S().equals(key));
-    }
-
-    @NotNull
-    @Override
-    public String S(@NotNull String key) {
-        return $(key).S();
-    }
-
-    @NotNull
-    public var $rm(@NotNull String value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
-
-    }
-
-    @Override
-    public var $size() {
-        return DollarStatic.$(1);
-    }
-
-    @NotNull
-    @Override
-    public var remove(Object newValue) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public String S() {
-        return value.toString();
-    }
-
-    @Override public boolean isCollection() {
-        return false;
-    }
-
-    public Map<String, Object> toMap() {
-        return Collections.singletonMap("value", value);
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of("value", this);
-    }
-
-    @Nullable
-    public JsonObject json(@NotNull String key) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> toList() {
-        return ImmutableList.of(this);
-    }
-
-    @Override
-    public boolean isVoid() {
-        return false;
-    }
-
-    @Nullable
-    public JSONObject orgjson() {
-        return null;
-
-    }
-
-    @Nullable
-    public JsonObject json() {
-        return null;
-    }
-
-    @Override
-    public ImmutableList<String> strings() {
-        return ImmutableList.of(S());
-    }
-
-    @Override
+    @NotNull @Override
     public var $isEmpty() {
         return DollarStatic.$(false);
     }
@@ -199,6 +84,99 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     @Override
     public var $plus(var newValue) {
         return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    }
+
+    @NotNull
+    public var $set(@NotNull var key, Object value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    }
+
+    @NotNull @Override
+    public var $containsValue(@NotNull var value) {
+        return DollarStatic.$(this.value.equals(value));
+    }
+
+    @NotNull public var $has(@NotNull String key) {
+        return DollarStatic.$(S().equals(key));
+    }
+
+    @NotNull @Override public var $get(@NotNull var rhs) {
+        if (equals(rhs)) {
+            return DollarFactory.wrap(this);
+        } else if (rhs.isInteger() && rhs.I() == 0) {
+            return DollarFactory.wrap(this);
+        } else {
+            return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+        }
+    }
+
+    @NotNull
+    public var $removeByKey(@NotNull String value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+
+    }
+
+    @NotNull @Override
+    public var $size() {
+        return DollarStatic.$(1);
+    }
+
+    @NotNull
+    @Override
+    public var $remove(var value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public String S() {
+        return value.toString();
+    }
+
+    public Map<String, Object> toMap() {
+        return Collections.singletonMap("value", value);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of("value", this);
+    }
+
+    @Override public boolean isCollection() {
+        return false;
+    }
+
+    @Nullable
+    public JsonObject json(@NotNull String key) {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> toList() {
+        return ImmutableList.of(this);
+    }
+
+    @Override
+    public boolean isVoid() {
+        return false;
+    }
+
+    @Nullable
+    public JSONObject orgjson() {
+        return null;
+
+    }
+
+    @Nullable
+    public JsonObject json() {
+        return null;
+    }
+
+    @Override
+    public ImmutableList<String> strings() {
+        return ImmutableList.of(S());
     }
 
     public Stream<String> keyStream() {

@@ -150,15 +150,15 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return new BigDecimal(key);
     }
 
+    @NotNull @Override
+    public var $size() {
+        return DollarStatic.$(value.length());
+    }
+
     @NotNull
     @Override
     public var $plus(var newValue) {
         return DollarFactory.fromValue(value + newValue.toString(), errors());
-    }
-
-    @Override
-    public var $size() {
-        return DollarStatic.$(value.length());
     }
 
     @Override

@@ -37,7 +37,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -62,69 +61,6 @@ public abstract class AbstractDollar implements var {
 
     protected AbstractDollar(@NotNull List<Throwable> errors) {
         this.errors = new ImmutableList.Builder<Throwable>().addAll(errors).build();
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull Pipeable lambda) {
-        return (var) java.lang.reflect.Proxy.newProxyInstance(
-                DollarStatic.class.getClassLoader(),
-                new Class<?>[]{var.class},
-                new DollarLambda(lambda));
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull var key) {
-        if (key.isNumber()) {
-            return $(key.N());
-        } else {
-            return $(key.$S());
-        }
-    }
-
-    @Override
-    public var $default(Object o) {
-        if (isVoid()) {
-            return DollarStatic.$(o);
-        } else {
-            return this;
-        }
-    }
-
-    @Override
-    public var $isEmpty() {
-        return DollarFactory.fromValue($size().I() > 0);
-    }
-
-    @NotNull
-    @Override
-    public var $mimeType() {
-        return DollarStatic.$("text/plain");
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $stream(boolean parallel) {
-        return toList().stream();
-    }
-
-    public void clear() {
-        DollarFactory.failure(DollarFail.FailureType.INVALID_OPERATION);
-    }
-
-    public boolean containsKey(Object key) {
-        return $has(String.valueOf(key)).isTrue();
-    }
-
-    @NotNull
-    public Set<Map.Entry<String, var>> entrySet() {
-        return kvStream().collect(Collectors.toSet());
-    }
-
-    @NotNull
-    public Collection<var> values() {
-        return toList();
     }
 
     @Override
@@ -253,13 +189,13 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var $dec(@NotNull var key, @NotNull var amount) {
-        return $(key, $(key).L() - amount.L());
+        return $set(key, $get(key).L() - amount.L());
     }
 
     @NotNull
     @Override
     public var $inc(@NotNull var key, @NotNull var amount) {
-        return $(key, $(key).L() + amount.L());
+        return $set(key, $get(key).L() + amount.L());
     }
 
     @NotNull
@@ -313,6 +249,36 @@ public abstract class AbstractDollar implements var {
     public Stream<Map.Entry<String, var>> kvStream() {
         return $map().entrySet().stream();
 
+    }
+
+    @NotNull @Override
+    public var $default(Object o) {
+        if (isVoid()) {
+            return DollarStatic.$(o);
+        } else {
+            return this;
+        }
+    }
+
+    @NotNull @Override
+    public var $isEmpty() {
+        return DollarFactory.fromValue($size().I() > 0);
+    }
+
+    @NotNull
+    @Override
+    public var $mimeType() {
+        return DollarStatic.$("text/plain");
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $stream(boolean parallel) {
+        return toList().stream();
+    }
+
+    public void clear() {
+        DollarFactory.failure(DollarFail.FailureType.INVALID_OPERATION);
     }
 
     @NotNull
@@ -373,7 +339,6 @@ public abstract class AbstractDollar implements var {
         return _fix(1, parallel);
     }
 
-
     @Override public var _fix(int depth, boolean parallel) {
         return this;
     }
@@ -410,10 +375,6 @@ public abstract class AbstractDollar implements var {
     @Override
     public Double D() {
         return 0.0;
-    }
-
-    @NotNull public Integer I(@NotNull String key) {
-        return $get(key).I();
     }
 
     @NotNull
@@ -520,6 +481,10 @@ public abstract class AbstractDollar implements var {
         return $map().computeIfPresent(key, remappingFunction);
     }
 
+    public boolean containsKey(Object key) {
+        return $has(String.valueOf(key)).isTrue();
+    }
+
     @Override
     public var debugf(String message, Object... values) {
         logger.debug(message, values);
@@ -581,13 +546,9 @@ public abstract class AbstractDollar implements var {
         return this;
     }
 
-    public void forEach(@NotNull BiConsumer<? super String, ? super var> action) {
-        $map().forEach(action);
-    }
-
     @NotNull
-    public var getOrDefault(@NotNull Object key, @NotNull var defaultValue) {
-        return $has(String.valueOf(key)).isTrue() ? $get(key) : defaultValue;
+    public Set<Map.Entry<String, var>> entrySet() {
+        return kvStream().collect(Collectors.toSet());
     }
 
     @Override
@@ -645,7 +606,7 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     public var put(@NotNull String key, var value) {
-        return $($(key), value);
+        return $set($(key), value);
     }
 
     public void putAll(Map<? extends String, ? extends var> m) {
@@ -691,6 +652,16 @@ public abstract class AbstractDollar implements var {
         meta.put(key, value);
     }
 
+    @Override
+    public String getMetaAttribute(String key) {
+        return meta.get(key);
+    }
+
+    @NotNull
+    public Collection<var> values() {
+        return toList();
+    }
+
     @NotNull
     @Override
     public var $errors() {
@@ -717,11 +688,6 @@ public abstract class AbstractDollar implements var {
             json.putArray("errors", errorArray);
         }
         return DollarFactory.fromValue(json);
-    }
-
-    @Override
-    public String getMetaAttribute(String key) {
-        return meta.get(key);
     }
 
 

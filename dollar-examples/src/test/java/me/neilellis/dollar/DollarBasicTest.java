@@ -109,7 +109,7 @@ public class DollarBasicTest {
         assertEquals(1L, $(map).$("sub").toMap().get("thing"));
         assertEquals("1", $(map).$("sub").$("thing").S());
         assertEquals("{\"thing\":1}", $(map).$("sub").S());
-        assertEquals(1, $(map).$("sub").I("thing").longValue());
+        assertEquals(1, $(map).$("sub").$("thing").I().longValue());
     }
 
     @Test

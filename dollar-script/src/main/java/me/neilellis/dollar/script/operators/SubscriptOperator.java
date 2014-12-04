@@ -32,9 +32,10 @@ public class SubscriptOperator implements Map<Object[], Map<? super var, ? exten
     @Override public Map<? super var, ? extends var> map(Object[] rhs) {
         return lhs -> {
             if (rhs[1] == null) {
-                return DollarScriptSupport.wrapReactiveBinary(scope, lhs, (var) rhs[0], () -> lhs.$(((var) rhs[0])));
+                return DollarScriptSupport.wrapReactiveBinary(scope, lhs, (var) rhs[0], () -> lhs.$get(
+                        ((var) rhs[0])));
             } else {
-                return DollarScriptSupport.wrapBinary(scope, () -> lhs.$((var) rhs[0], rhs[1]));
+                return DollarScriptSupport.wrapBinary(scope, () -> lhs.$set((var) rhs[0], rhs[1]));
             }
         };
     }

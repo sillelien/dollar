@@ -82,7 +82,7 @@ public class DollarHttpContext {
         var result = $();
         Set<String> headers = request.headers();
         for (String header : headers) {
-            result = result.$($(header), request.headers(header));
+            result = result.$set($(header), request.headers(header));
         }
         return result;
     }

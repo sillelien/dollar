@@ -51,36 +51,6 @@ public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
         return value.toString();
     }
 
-    @NotNull @Override public var $(@NotNull var key, Object v) {
-        return DollarFactory.fromValue(
-                value.with(ChronoField.valueOf(key.S().toUpperCase()), DollarFactory.fromValue(v).L()), errors(),
-                key.errors());
-    }
-
-    @NotNull @Override public var $(@NotNull String key) {
-        return DollarFactory.fromValue(value.get(ChronoField.valueOf(key.toUpperCase())), errors());
-    }
-
-    @NotNull
-    @Override
-    public var $minus(var newValue) {
-        return DollarFactory.fromValue(value.minusSeconds((long) (ONE_DAY_SECONDS * newValue.D())), errors(),
-                                       newValue.errors());
-
-    }
-
-    @NotNull
-    @Override
-    public var $plus(var newValue) {
-        return DollarFactory.fromValue(value.plusSeconds((long) (ONE_DAY_SECONDS * newValue.D())), errors(),
-                                       newValue.errors());
-
-    }
-
-    @NotNull @Override public String S() {
-        return value.toString();
-    }
-
     @NotNull
     @Override
     public var $abs() {
@@ -178,6 +148,36 @@ public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
     @NotNull
     public Number number(@NotNull String key) {
         return asDecimal();
+    }
+
+    @NotNull @Override public var $set(@NotNull var key, Object v) {
+        return DollarFactory.fromValue(
+                value.with(ChronoField.valueOf(key.S().toUpperCase()), DollarFactory.fromValue(v).L()), errors(),
+                key.errors());
+    }
+
+    @NotNull @Override public var $get(@NotNull var key) {
+        return DollarFactory.fromValue(value.get(ChronoField.valueOf(key.S().toUpperCase())), errors());
+    }
+
+    @NotNull @Override public String S() {
+        return value.toString();
+    }
+
+    @NotNull
+    @Override
+    public var $minus(var newValue) {
+        return DollarFactory.fromValue(value.minusSeconds((long) (ONE_DAY_SECONDS * newValue.D())), errors(),
+                                       newValue.errors());
+
+    }
+
+    @NotNull
+    @Override
+    public var $plus(var newValue) {
+        return DollarFactory.fromValue(value.plusSeconds((long) (ONE_DAY_SECONDS * newValue.D())), errors(),
+                                       newValue.errors());
+
     }
 
     @NotNull

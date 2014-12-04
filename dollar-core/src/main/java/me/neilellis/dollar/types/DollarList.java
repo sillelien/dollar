@@ -22,7 +22,6 @@ import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -80,92 +79,6 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $(@NotNull var key, Object value) {
-        ArrayList<var> newVal = new ArrayList<>(list);
-        if (key.isInteger()) {
-            newVal.set(key.I(), DollarFactory.fromValue(value));
-        } else {
-            return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
-        }
-        return DollarFactory.fromValue(newVal, errors());
-    }
-
-    @NotNull
-    @Override
-    public <R> R $() {
-        return (R) jsonArray();
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull Number n) {
-        return list.get(n.intValue());
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $children() {
-        return list.stream();
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $children(@NotNull String key) {
-        return Stream.empty();
-    }
-
-    @Override
-    public var $containsValue(var value) {
-        return DollarStatic.$(list.contains(fix(value, false)));
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull String key) {
-        for (var var : list) {
-            if (var.$S().equals(key)) {
-                return var;
-            }
-        }
-        return DollarStatic.$void();
-    }
-
-    @Override
-    public var $has(@NotNull String key) {
-        return DollarStatic.$(false);
-    }
-
-    @Nullable
-    @Override
-    public String S(@NotNull String key) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public var $rm(@NotNull String value) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
-    }
-
-    @Override
-    public var $size() {
-        return DollarStatic.$(list.size());
-    }
-
-    @NotNull
-    @Override
-    public var remove(Object value) {
-        List<var> newList = new ArrayList<>();
-        for (var val : list) {
-            if (!val.equals(value)) {
-                newList.add(val);
-            }
-        }
-        return DollarFactory.fromValue(newList, errors());
-    }
-
-    @NotNull
-    @Override
     public var $abs() {
         return this;
     }
@@ -193,12 +106,6 @@ public class DollarList extends AbstractDollar {
                                                     .build(), errors()
         );
 
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-        return null;
     }
 
     @NotNull
@@ -255,6 +162,12 @@ public class DollarList extends AbstractDollar {
         return DollarStatic.$(key);
     }
 
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return null;
+    }
+
     @Override
     public var $listen(Pipeable pipe, String key) {
         for (var v : list) {
@@ -266,60 +179,36 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public int compareTo(var o) {
-        //TODO: improve comparisons
-        if (list.stream().allMatch(v -> v.compareTo(o) == -1)) {
-            return -1;
+    public var $notify() {
+        for (var v : list) {
+            v.$notify();
         }
-        if (list.stream().allMatch(v -> v.compareTo(o) == 1)) {
-            return 1;
-        }
-        return 0;
-    }
-
-    @Override
-    public boolean isBoolean() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean isTruthy() {
-        return !list.isEmpty();
+        return this;
     }
 
     @NotNull
     @Override
-    public ImmutableList<var> toList() {
-        try {
-            return ImmutableList.copyOf(
-                    Execution.forkJoinPool.submit(() -> $stream(false).map(v -> v._fix(false)).collect(
-                            Collectors.toList())).get());
-        } catch (InterruptedException e) {
-            Thread.interrupted();
-            return ImmutableList.of(DollarFactory.failure(DollarFail.FailureType.INTERRUPTED, e));
+    public Stream<Map.Entry<String, var>> kvStream() {
+        return null;
+    }
 
-        } catch (ExecutionException e) {
-            return ImmutableList.of(DollarFactory.failure(DollarFail.FailureType.EXECUTION_FAILURE, e));
-
+    @NotNull
+    @Override
+    public Stream<var> $stream(boolean parallel) {
+        Stream<var> stream;
+        if (parallel) {
+            stream = list.stream().parallel();
+        } else {
+            stream = list.stream();
         }
+        return stream;
     }
 
+    @NotNull
     @Override
-    public boolean isFalse() {
-        return false;
+    public var $copy() {
+        return DollarFactory.fromValue(list.stream().map(var::$copy).collect(Collectors.toList()), errors());
     }
-
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
-
-
 
     @Override public var _fix(int depth, boolean parallel) {
         if (depth <= 1) {
@@ -352,42 +241,6 @@ public class DollarList extends AbstractDollar {
 
     }
 
-
-    @NotNull
-    @Override
-    public Stream<var> $stream(boolean parallel) {
-        Stream<var> stream;
-        if (parallel) {
-            stream = list.stream().parallel();
-        } else {
-            stream = list.stream();
-        }
-        return stream;
-    }
-
-
-    @NotNull
-    @Override
-    public Stream<Map.Entry<String, var>> kvStream() {
-        return null;
-    }
-
-
-    @Override
-    public var $notify() {
-        for (var v : list) {
-            v.$notify();
-        }
-        return this;
-    }
-
-
-    @NotNull @Override
-    public Integer I(@NotNull String key) {
-        DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
-        return null;
-    }
-
     @Override
     public boolean isList() {
         return true;
@@ -409,8 +262,121 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $copy() {
-        return DollarFactory.fromValue(list.stream().map(var::$copy).collect(Collectors.toList()), errors());
+    public var $set(@NotNull var key, Object value) {
+        ArrayList<var> newVal = new ArrayList<>(list);
+        if (key.isInteger()) {
+            newVal.set(key.I(), DollarFactory.fromValue(value));
+        } else {
+            return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+        }
+        return DollarFactory.fromValue(newVal, errors());
+    }
+
+    @NotNull
+    @Override
+    public <R> R $() {
+        return (R) jsonArray();
+    }
+
+    @NotNull @Override
+    public var $containsValue(@NotNull var value) {
+        return DollarStatic.$(list.contains(fix(value, false)));
+    }
+
+    @NotNull @Override
+    public var $has(@NotNull String key) {
+        return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public var $get(@NotNull var key) {
+        if (key.isInteger()) {
+            return list.get(key.I());
+        }
+        for (var var : list) {
+            if (var.equals(key)) {
+                return var;
+            }
+        }
+        return DollarStatic.$void();
+    }
+
+    @NotNull
+    @Override
+    public var $removeByKey(@NotNull String value) {
+        return DollarFactory.failure(DollarFail.FailureType.INVALID_LIST_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> toList() {
+        try {
+            return ImmutableList.copyOf(
+                    Execution.forkJoinPool.submit(() -> $stream(false).map(v -> v._fix(false)).collect(
+                            Collectors.toList())).get());
+        } catch (InterruptedException e) {
+            Thread.interrupted();
+            return ImmutableList.of(DollarFactory.failure(DollarFail.FailureType.INTERRUPTED, e));
+
+        } catch (ExecutionException e) {
+            return ImmutableList.of(DollarFactory.failure(DollarFail.FailureType.EXECUTION_FAILURE, e));
+
+        }
+    }
+
+    @NotNull @Override
+    public var $size() {
+        return DollarStatic.$(list.size());
+    }
+
+    @NotNull
+    @Override
+    public var $remove(var value) {
+        List<var> newList = new ArrayList<>();
+        for (var val : list) {
+            if (!val.equals(value)) {
+                newList.add(val);
+            }
+        }
+        return DollarFactory.fromValue(newList, errors());
+    }
+
+    @Override
+    public int compareTo(var o) {
+        //TODO: improve comparisons
+        if (list.stream().allMatch(v -> v.compareTo(o) == -1)) {
+            return -1;
+        }
+        if (list.stream().allMatch(v -> v.compareTo(o) == 1)) {
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return !list.isEmpty();
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
     }
 
 
