@@ -34,6 +34,11 @@ import java.util.Map;
  */
 public interface TypeAware {
 
+    /**
+     * Returns the same as S() but defaults to "" if null.
+     *
+     * @return a null safe version of S()
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     default String $S() {
@@ -46,7 +51,7 @@ public interface TypeAware {
 
     /**
      * Cast this object to the {@link Type} specified. If the object cannot be converted it will fail with
-     * FailureType.INVALID_CAST
+     * {@link me.neilellis.dollar.types.FailureType#INVALID_CAST}
      *
      * @param type the type to cast to
      *
