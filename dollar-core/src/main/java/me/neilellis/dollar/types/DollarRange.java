@@ -112,8 +112,14 @@ public class DollarRange extends AbstractDollar {
     }
 
     @NotNull @Override
-    public var $has(@NotNull String key) {
+    public var $has(@NotNull var key) {
         return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public var $size() {
+        return DollarStatic.$($list().size());
     }
 
     @NotNull
@@ -130,12 +136,6 @@ public class DollarRange extends AbstractDollar {
     public var $removeByKey(@NotNull String value) {
         return $copy();
 
-    }
-
-    @NotNull
-    @Override
-    public var $size() {
-        return DollarStatic.$($list().size());
     }
 
     @NotNull
@@ -182,16 +182,16 @@ public class DollarRange extends AbstractDollar {
         return false;
     }
 
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
+    }
+
     @NotNull
     @Override
     public ImmutableMap<String, var> $map() {
         DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
         return ImmutableMap.of();
-    }
-
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
     }
 
     @Override

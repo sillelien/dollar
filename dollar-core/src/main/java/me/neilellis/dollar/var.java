@@ -66,6 +66,16 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
 
     @NotNull
     @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class) default var $(@NotNull Object key) {
+        return $get(DollarStatic.$(key));
+    }
+
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class) var $get(@NotNull var rhs);
+
+    @NotNull
+    @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
     default var $contains(@NotNull var value) {
         return $containsValue(value);
@@ -88,14 +98,26 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @Guarded(NotNullParametersGuard.class) var $default(var v);
 
     /**
-     * Returns true if this JSON object has the supplied key.
+     * Convenience method for the Java API. Returns true if this object has the supplied key.
      *
      * @param key the key
      *
      * @return true if the key exists.
      */
     @NotNull
-    @Guarded(NotNullParametersGuard.class) var $has(@NotNull String key);
+    @Guarded(NotNullParametersGuard.class) default var $has(@NotNull String key) {
+        return $has(DollarStatic.$(key));
+    }
+
+    /**
+     * Returns true if this object has the supplied key.
+     *
+     * @param key the key
+     *
+     * @return true if the key exists.
+     */
+    @NotNull
+    @Guarded(NotNullParametersGuard.class) var $has(@NotNull var key);
 
     /**
      * Returns a boolean var which is true if this is empty.
@@ -109,22 +131,6 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
 
     @NotNull
     @Guarded(ChainGuard.class) var $size();
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    default var $match(@NotNull String key, @Nullable String value) {
-        return DollarStatic.$(value != null && value.equals($(key).S()));
-    }
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class) default var $(@NotNull Object key) {
-        return $get(DollarStatic.$(key));
-    }
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class) var $get(@NotNull var rhs);
 
     /**
      * Returns the mime type of this {@link var} object. By default this will be 'application/json'
@@ -162,7 +168,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
 
 
     /**
-     * Output the value to standard error.
+     * Prints the S() value of this {@link var} to standard error.
      *
      * @return this
      */
@@ -178,7 +184,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @Override String toString();
 
     /**
-     * Prints the S() value of this {@link var} to stdout.
+     * Prints the S() value of this {@link var} to standard out.
      */
     @NotNull
     @Guarded(ChainGuard.class)

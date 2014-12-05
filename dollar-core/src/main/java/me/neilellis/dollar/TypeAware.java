@@ -65,13 +65,20 @@ public interface TypeAware {
         return DollarFactory.fromValue($list());
     }
 
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    Double D();
+    /**
+     * Converts this to a list of vars. Only really useful for collection types.
+     *
+     * @return a list of vars.
+     */
+    @Guarded(NotNullCollectionGuard.class)
+    @Guarded(AllVarCollectionGuard.class)
+    @NotNull ImmutableList<var> $list();
 
     @NotNull
-    @Guarded(NotNullGuard.class)
-    Integer I();
+    @Guarded(NotNullGuard.class) Double D();
+
+    @NotNull
+    @Guarded(NotNullGuard.class) Integer I();
 
     @Guarded(NotNullGuard.class)
     @NotNull Long L();
@@ -106,6 +113,7 @@ public interface TypeAware {
      * Returns true if this object is of any of the supplied types.
      *
      * @param types a list of types
+     *
      * @return true if of one of the types
      */
     @Guarded(NotNullGuard.class) boolean is(@NotNull Type... types);
@@ -153,20 +161,12 @@ public interface TypeAware {
     }
 
     /**
-     * Converts this to a list of vars. Only really useful for collection types.
-     *
-     * @return a list of vars.
-     */
-    @Guarded(NotNullCollectionGuard.class)
-    @Guarded(AllVarCollectionGuard.class)
-    @NotNull ImmutableList<var> $list();
-
-    /**
      * Is this object a void object? Void objects are similar to null, except they can have methods called on them.
      *
      * This is a similar concept to nil in Objective-C.
      *
      * @return true if this is a void object
+     *
      * @see me.neilellis.dollar.types.DollarVoid
      * @see me.neilellis.dollar.types.DollarFail
      */
@@ -204,7 +204,8 @@ public interface TypeAware {
     @Nullable ImmutableList<String> strings();
 
     /**
-     * Converts this to a list of value objects such as you would get from $(). Only really useful for collection types.
+     * Converts this to a list of value objects such as you would get from $(). Only really useful for collection
+     * types.
      *
      * @return a list of vars.
      */
@@ -217,7 +218,6 @@ public interface TypeAware {
      * @return an InputStream
      */
     @Guarded(NotNullGuard.class)
-    @NotNull
-    InputStream toStream();
+    @NotNull InputStream toStream();
 
 }

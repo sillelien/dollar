@@ -157,12 +157,6 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        return null;
-    }
-
-    @NotNull
-    @Override
     public Stream<var> $stream(boolean parallel) {
         Stream<var> stream;
         if (parallel) {
@@ -171,6 +165,12 @@ public class DollarList extends AbstractDollar {
             stream = list.stream();
         }
         return stream;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return null;
     }
 
     @NotNull
@@ -253,16 +253,6 @@ public class DollarList extends AbstractDollar {
         return (R) jsonArray();
     }
 
-    @NotNull @Override
-    public var $containsValue(@NotNull var value) {
-        return DollarStatic.$(list.contains(fix(value, false)));
-    }
-
-    @NotNull @Override
-    public var $has(@NotNull String key) {
-        return DollarStatic.$(false);
-    }
-
     @NotNull
     @Override
     public var $get(@NotNull var key) {
@@ -277,15 +267,25 @@ public class DollarList extends AbstractDollar {
         return DollarStatic.$void();
     }
 
-    @NotNull
-    @Override
-    public var $removeByKey(@NotNull String value) {
-        return DollarFactory.failure(FailureType.INVALID_LIST_OPERATION);
+    @NotNull @Override
+    public var $containsValue(@NotNull var value) {
+        return DollarStatic.$(list.contains(fix(value, false)));
+    }
+
+    @NotNull @Override
+    public var $has(@NotNull var key) {
+        return $containsValue(key);
     }
 
     @NotNull @Override
     public var $size() {
         return DollarStatic.$(list.size());
+    }
+
+    @NotNull
+    @Override
+    public var $removeByKey(@NotNull String value) {
+        return DollarFactory.failure(FailureType.INVALID_LIST_OPERATION);
     }
 
     @NotNull
@@ -312,6 +312,16 @@ public class DollarList extends AbstractDollar {
         return false;
     }
 
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return !list.isEmpty();
+    }
+
     @NotNull
     @Override
     public ImmutableList<var> $list() {
@@ -330,13 +340,13 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public boolean isTrue() {
+    public boolean isFalse() {
         return false;
     }
 
     @Override
-    public boolean isTruthy() {
-        return !list.isEmpty();
+    public boolean isNeitherTrueNorFalse() {
+        return true;
     }
 
     @NotNull
@@ -348,16 +358,6 @@ public class DollarList extends AbstractDollar {
         }
         return ImmutableList.copyOf(newList);
 
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
     }
 
 

@@ -126,8 +126,13 @@ public class DollarVoid extends AbstractDollar implements var {
     }
 
     @NotNull @Override
-    public var $has(@NotNull String key) {
+    public var $has(@NotNull var key) {
         return DollarStatic.$(false);
+    }
+
+    @NotNull @Override
+    public var $size() {
+        return DollarStatic.$(0);
     }
 
     @NotNull
@@ -140,11 +145,6 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public var $removeByKey(@NotNull String value) {
         return $copy();
-    }
-
-    @NotNull @Override
-    public var $size() {
-        return DollarStatic.$(0);
     }
 
     @NotNull
@@ -181,12 +181,6 @@ public class DollarVoid extends AbstractDollar implements var {
         return $copy();
     }
 
-    @NotNull
-    @Override
-    public Stream<Map.Entry<String, var>> kvStream() {
-        return Collections.<String, var>emptyMap().entrySet().stream();
-    }
-
     @Override
     public int hashCode() {
         return 0;
@@ -195,6 +189,12 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public boolean equals(@Nullable Object obj) {
         return (obj instanceof var && ((var) obj).$() == null) || obj == null;
+    }
+
+    @NotNull
+    @Override
+    public Stream<Map.Entry<String, var>> kvStream() {
+        return Collections.<String, var>emptyMap().entrySet().stream();
     }
 
     @NotNull
@@ -225,6 +225,12 @@ public class DollarVoid extends AbstractDollar implements var {
             default:
                 return DollarFactory.failure(FailureType.INVALID_CAST, type.toString());
         }
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> $list() {
+        return ImmutableList.of();
     }
 
     @NotNull @Override
@@ -261,12 +267,6 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @Override public boolean isCollection() {
         return false;
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> $list() {
-        return ImmutableList.of();
     }
 
     @Override

@@ -127,6 +127,12 @@ public class DollarURI extends AbstractDollar {
         return DollarStatic.$(false);
     }
 
+    @NotNull @Override
+    public var $has(@NotNull var key) {
+        assertRunning();
+        return DollarStatic.$(!handler.get(key).isVoid());
+    }
+
     @NotNull
     @Override
     public ImmutableMap<String, var> $map() {
@@ -134,9 +140,9 @@ public class DollarURI extends AbstractDollar {
     }
 
     @NotNull @Override
-    public var $has(@NotNull String key) {
+    public var $size() {
         assertRunning();
-        return DollarStatic.$(!handler.get(DollarStatic.$(key)).isVoid());
+        return DollarStatic.$(handler.size());
     }
 
     @NotNull
@@ -152,12 +158,6 @@ public class DollarURI extends AbstractDollar {
         assertRunning();
         return handler.remove(DollarStatic.$(key));
 
-    }
-
-    @NotNull @Override
-    public var $size() {
-        assertRunning();
-        return DollarStatic.$(handler.size());
     }
 
     @NotNull @Override

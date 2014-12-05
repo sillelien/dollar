@@ -429,6 +429,12 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
+    public var $get(@NotNull var rhs) {
+        return getValue().$get(rhs);
+    }
+
+    @NotNull
+    @Override
     public var $containsValue(@NotNull var value) {
         return getValue().$containsValue(value);
     }
@@ -441,7 +447,7 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $has(@NotNull String key) {
+    public var $has(@NotNull var key) {
         return DollarStatic.$(getValue().$has(key));
     }
 
@@ -455,18 +461,6 @@ public class DollarWrapper implements var {
     @Override
     public var $size() {
         return DollarStatic.$(getValue().$size());
-    }
-
-    @NotNull
-    @Override
-    public var $match(@NotNull String key, String value) {
-        return DollarStatic.$(getValue().$match(key, value));
-    }
-
-    @NotNull
-    @Override
-    public var $get(@NotNull var rhs) {
-        return getValue().$get(rhs);
     }
 
     @NotNull
@@ -528,6 +522,12 @@ public class DollarWrapper implements var {
         return getValue().$as(type);
     }
 
+    @NotNull
+    @Override
+    public ImmutableList<var> $list() {
+        return getValue().$list();
+    }
+
     @NotNull @Override
     public Double D() {
         return getValue().D();
@@ -537,7 +537,6 @@ public class DollarWrapper implements var {
     public Integer I() {
         return getValue().I();
     }
-
 
     @NotNull @Override
     public Long L() {
@@ -617,14 +616,6 @@ public class DollarWrapper implements var {
     @Override
     public boolean isUri() {
         return getValue().isUri();
-    }
-
-
-
-    @NotNull
-    @Override
-    public ImmutableList<var> $list() {
-        return getValue().$list();
     }
 
     @Override

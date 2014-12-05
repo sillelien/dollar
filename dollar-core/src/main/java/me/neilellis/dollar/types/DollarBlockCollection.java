@@ -60,6 +60,11 @@ public class DollarBlockCollection implements var {
 
     @Override @Nullable public <R> R $() {return getValue().$();}
 
+    @Override @NotNull @Guarded(ChainGuard.class) @Guarded(NotNullParametersGuard.class) public var $get(
+            @NotNull var rhs) {
+        return getValue().$get(rhs);
+    }
+
     @Override @NotNull @Guarded(ChainGuard.class) @Guarded(NotNullParametersGuard.class) public var $contains(
             @NotNull var value) {
         return this.getValue().$contains(value);
@@ -74,22 +79,13 @@ public class DollarBlockCollection implements var {
             .class)
     public var $default(var v) {return getValue().$default(v);}
 
-    @Override @NotNull @Guarded(NotNullParametersGuard.class) public var $has(@NotNull String key) {
+    @Override @NotNull @Guarded(NotNullParametersGuard.class) public var $has(@NotNull var key) {
         return getValue().$has(key);
     }
 
     @Override @NotNull @Guarded(ChainGuard.class) public var $isEmpty() {return getValue().$isEmpty();}
 
     @Override @NotNull @Guarded(ChainGuard.class) public var $size() {return getValue().$size();}
-
-    @Override @NotNull @Guarded(ChainGuard.class) public var $match(@NotNull String key, @Nullable String value) {
-        return this.getValue().$match(key, value);
-    }
-
-    @Override @NotNull @Guarded(ChainGuard.class) @Guarded(NotNullParametersGuard.class) public var $get(
-            @NotNull var rhs) {
-        return getValue().$get(rhs);
-    }
 
     @Override @NotNull @Guarded(ChainGuard.class) public var $mimeType() {return getValue().$mimeType();}
 
@@ -126,10 +122,12 @@ public class DollarBlockCollection implements var {
 
     @Override @NotNull @Guarded(ChainGuard.class) public var $split() {return getValue().$split();}
 
+    @Override @Guarded(NotNullCollectionGuard.class) @Guarded(AllVarCollectionGuard.class) @NotNull
+    public ImmutableList<var> $list() {return getValue().$list();}
+
     @Override @NotNull @Guarded(NotNullGuard.class) public Double D() {return getValue().D();}
 
     @Override @NotNull @Guarded(NotNullGuard.class) public Integer I() {return getValue().I();}
-
 
     @Override @Guarded(NotNullGuard.class) @NotNull public Long L() {return getValue().L();}
 
@@ -168,11 +166,7 @@ public class DollarBlockCollection implements var {
 
     @Override public boolean isUri() {return getValue().isUri();}
 
-
     @Override @NotNull @Guarded(NotNullGuard.class) public JsonArray jsonArray() {return getValue().jsonArray();}
-
-    @Override @Guarded(NotNullCollectionGuard.class) @Guarded(AllVarCollectionGuard.class) @NotNull
-    public ImmutableList<var> $list() {return getValue().$list();}
 
     @Override public boolean isVoid() {return getValue().isVoid();}
 

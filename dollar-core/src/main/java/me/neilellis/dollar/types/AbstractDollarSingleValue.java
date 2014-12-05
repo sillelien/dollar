@@ -43,33 +43,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         this.value = value;
     }
 
-    @NotNull @Override
-    public var $isEmpty() {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $stream(boolean parallel) {
-        return Stream.of(this);
-    }
-
-    @NotNull
-    @Override
-    public var $copy() {
-        return DollarFactory.fromValue(value, errors());
-    }
-
-    @Override
-    public boolean isSingleValue() {
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return value.toString().hashCode();
-    }
-
     @NotNull
     @Override
     public var $minus(@NotNull var v) {
@@ -96,8 +69,18 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return DollarStatic.$(this.value.equals(value));
     }
 
-    @NotNull public var $has(@NotNull String key) {
-        return DollarStatic.$(S().equals(key));
+    @NotNull public var $has(@NotNull var key) {
+        return DollarStatic.$(equals(key));
+    }
+
+    @NotNull @Override
+    public var $isEmpty() {
+        return DollarStatic.$(false);
+    }
+
+    @NotNull @Override
+    public var $size() {
+        return DollarStatic.$(1);
     }
 
     @NotNull @Override public var $get(@NotNull var rhs) {
@@ -116,15 +99,37 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     }
 
-    @NotNull @Override
-    public var $size() {
-        return DollarStatic.$(1);
-    }
-
     @NotNull
     @Override
     public var $remove(var value) {
         return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $stream(boolean parallel) {
+        return Stream.of(this);
+    }
+
+    @NotNull
+    @Override
+    public var $copy() {
+        return DollarFactory.fromValue(value, errors());
+    }
+
+    @Override
+    public boolean isSingleValue() {
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return value.toString().hashCode();
+    }
+
+    public Stream<String> keyStream() {
+        return Stream.empty();
+
     }
 
     @NotNull
@@ -181,10 +186,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
 
-    public Stream<String> keyStream() {
-        return Stream.empty();
 
-    }
 
 
 }

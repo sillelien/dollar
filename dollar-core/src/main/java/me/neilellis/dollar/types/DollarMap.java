@@ -249,8 +249,13 @@ public class DollarMap extends AbstractDollar implements var {
     }
 
     @NotNull @Override
-    public var $has(@NotNull String key) {
-        return DollarStatic.$(map.containsKey(key));
+    public var $has(@NotNull var key) {
+        return DollarStatic.$(map.containsKey(key.S()));
+    }
+
+    @NotNull @Override
+    public var $size() {
+        return DollarStatic.$(toMap().size());
     }
 
     @NotNull
@@ -282,11 +287,6 @@ public class DollarMap extends AbstractDollar implements var {
         JsonObject jsonObject = json();
         jsonObject.removeField(value);
         return DollarFactory.fromValue(jsonObject, errors());
-    }
-
-    @NotNull @Override
-    public var $size() {
-        return DollarStatic.$(toMap().size());
     }
 
     @NotNull
@@ -323,12 +323,6 @@ public class DollarMap extends AbstractDollar implements var {
         return !map.isEmpty();
     }
 
-    @NotNull
-    @Override
-    public String S() {
-        return json().toString();
-    }
-
     @Override
     public boolean isFalse() {
         return false;
@@ -337,6 +331,12 @@ public class DollarMap extends AbstractDollar implements var {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return true;
+    }
+
+    @NotNull
+    @Override
+    public String S() {
+        return json().toString();
     }
 
 
