@@ -29,7 +29,6 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -436,8 +435,8 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $default(Object o) {
-        return getValue().$default(o);
+    public var $default(var v) {
+        return getValue().$default(v);
     }
 
     @NotNull
@@ -450,6 +449,12 @@ public class DollarWrapper implements var {
     @Override
     public var $isEmpty() {
         return DollarStatic.$(getValue().$isEmpty());
+    }
+
+    @NotNull
+    @Override
+    public var $size() {
+        return DollarStatic.$(getValue().$size());
     }
 
     @NotNull
@@ -484,26 +489,11 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $size() {
-        return DollarStatic.$(getValue().$size());
-    }
-
-    @NotNull
-    @Override
     public Stream<var> $stream(boolean parallel) {
         return getValue().$stream(false);
     }
 
-    @NotNull
-    @Override
-    public var $void(@NotNull Callable<var> handler) {
-        return getValue().$void(handler);
-    }
 
-    @Override
-    public void clear() {
-        getValue().clear();
-    }
 
     @NotNull
     @Override

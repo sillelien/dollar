@@ -20,7 +20,6 @@ import me.neilellis.dollar.guard.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
 /**
@@ -76,10 +75,17 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @NotNull
     @Guarded(NotNullParametersGuard.class) var $containsValue(@NotNull var value);
 
+    /**
+     * If this is a void object return v otherwise return this.
+     *
+     * @param v the object to return if this is void.
+     *
+     * @return this or v
+     */
     @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(ReturnVarOnlyGuard.class)
-    @Guarded(NotNullParametersGuard.class) var $default(Object o);
+    @Guarded(NotNullParametersGuard.class) var $default(var v);
 
     /**
      * Returns true if this JSON object has the supplied key.
@@ -91,9 +97,18 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @NotNull
     @Guarded(NotNullParametersGuard.class) var $has(@NotNull String key);
 
+    /**
+     * Returns a boolean var which is true if this is empty.
+     *
+     * @return a true var if it is empty.
+     */
     @NotNull
-    @Guarded(ChainGuard.class) var $isEmpty();
+    @Guarded(ChainGuard.class) default var $isEmpty() {
+        return DollarStatic.$($size().I() == 0);
+    }
 
+    @NotNull
+    @Guarded(ChainGuard.class) var $size();
 
     @NotNull
     @Guarded(ChainGuard.class)
@@ -136,38 +151,21 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
         return $set(DollarStatic.$(key), value);
     }
 
-    @NotNull
-    @Guarded(ChainGuard.class) var $size();
-
+    /**
+     * Return the content of this object as a stream of values.
+     *
+     * @param parallel allow actions to be taken on the stream in parallel.
+     *
+     * @return a stream of values.
+     */
     @NotNull Stream<var> $stream(boolean parallel);
 
+
     /**
-     * Execute the handler if {@link #$void} is true.
+     * Output the value to standard error.
      *
-     * @param handler the handler to execute
-     *
-     * @return the result of executing the handler if this is void, otherwise this
-     *
-     * @see me.neilellis.dollar.types.DollarVoid
+     * @return this
      */
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    default var $void(@NotNull Callable<var> handler) {
-        if (isVoid()) {
-            try {
-                return handler.call();
-            } catch (Exception e) {
-                return DollarStatic.handleError(e, this);
-            }
-        } else {
-            return this;
-        }
-    }
-
-    void clear();
-
-
     @NotNull
     @Guarded(ChainGuard.class)
     default var err() {
@@ -189,11 +187,25 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
         return this;
     }
 
+    /**
+     * Convenience version of {@link #$remove(me.neilellis.dollar.var)} for the Java API.
+     *
+     * @param value the value to be removed.
+     *
+     * @return a new object with the value removed.
+     */
     @NotNull
     @Guarded(ChainGuard.class) default var remove(Object value) {
         return $remove(DollarStatic.$(value));
     }
 
+    /**
+     * Return a new version of this object with the supplied value removed. THe removal is type specific.
+     *
+     * @param value the value to remove.
+     *
+     * @return a new object with the value removed.
+     */
     @NotNull
     @Guarded(ChainGuard.class) var $remove(var value);
 

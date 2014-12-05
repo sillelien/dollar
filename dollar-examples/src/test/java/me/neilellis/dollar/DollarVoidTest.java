@@ -19,8 +19,7 @@ package me.neilellis.dollar;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static me.neilellis.dollar.DollarStatic.*;
-import static org.junit.Assert.assertTrue;
+import static me.neilellis.dollar.DollarStatic.$list;
 
 public class DollarVoidTest {
   private static var list;
@@ -32,10 +31,7 @@ public class DollarVoidTest {
 
   @Test
   public void testBasics() {
-    assertTrue($void().$void(() -> $().$error(
-        "Sorry your key is not recognized, maybe you need to check http://app.snapito.io/#/account",
-        var.ErrorType.VALIDATION))
-                      .hasErrors());
+
   }
 
 }

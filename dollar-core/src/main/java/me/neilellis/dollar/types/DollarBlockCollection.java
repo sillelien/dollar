@@ -32,7 +32,6 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -73,13 +72,15 @@ public class DollarBlockCollection implements var {
 
     @Override @NotNull @Guarded(ChainGuard.class) @Guarded(ReturnVarOnlyGuard.class) @Guarded(NotNullParametersGuard
             .class)
-    public var $default(Object o) {return getValue().$default(o);}
+    public var $default(var v) {return getValue().$default(v);}
 
     @Override @NotNull @Guarded(NotNullParametersGuard.class) public var $has(@NotNull String key) {
         return getValue().$has(key);
     }
 
     @Override @NotNull @Guarded(ChainGuard.class) public var $isEmpty() {return getValue().$isEmpty();}
+
+    @Override @NotNull @Guarded(ChainGuard.class) public var $size() {return getValue().$size();}
 
     @Override @NotNull @Guarded(ChainGuard.class) public var $match(@NotNull String key, @Nullable String value) {
         return this.getValue().$match(key, value);
@@ -98,16 +99,9 @@ public class DollarBlockCollection implements var {
         return this.getValue().$set(key, value);
     }
 
-    @Override @NotNull @Guarded(ChainGuard.class) public var $size() {return getValue().$size();}
-
     @Override @NotNull public Stream<var> $stream(boolean parallel) {return getValue().$stream(parallel);}
 
-    @Override @NotNull @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class) public var $void(
-            @NotNull Callable<var> handler) {
-        return getValue().$void(handler);
-    }
 
-    @Override public void clear() {getValue().clear();}
 
     @NotNull @Override @Guarded(ChainGuard.class) public var err() {return getValue().err();}
 

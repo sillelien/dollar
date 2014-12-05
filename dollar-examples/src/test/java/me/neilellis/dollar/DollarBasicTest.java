@@ -145,7 +145,7 @@ public class DollarBasicTest {
         assertFalse($((Object) null).$("bar").$has("foo").isTrue());
         assertFalse($((Object) null).$has("foo").isTrue());
         assertTrue($((Object) null).$("foo", "bar").$("foo").isVoid());
-        assertEquals("twasnull", $((Object) null).$void(() -> $("twasnull")).S());
+        assertEquals("twasnull", $((Object) null).$default($(i -> $("twasnull"))).S());
     }
 
 

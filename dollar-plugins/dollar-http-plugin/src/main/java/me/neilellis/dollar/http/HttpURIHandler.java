@@ -207,13 +207,13 @@ public class HttpURIHandler implements URIHandler {
                 var body = out.$("body");
                 NanoHttpd.Response response = new NanoHttpd.Response(new NanoHttpd.Response.IStatus() {
                     @Override
-                    public int getRequestStatus() {
-                        return out.$("status").$default(200).I();
+                    public String getDescription() {
+                        return out.$("reason").$default($("")).S();
                     }
 
                     @Override
-                    public String getDescription() {
-                        return out.$("reason").$default("").S();
+                    public int getRequestStatus() {
+                        return out.$("status").$default($(200)).I();
                     }
                 }, body.$mimeType().$S(), body.S());
                 out.$("headers").$map().forEach((s, v) -> response.addHeader(s, v.$S()));

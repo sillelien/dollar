@@ -158,7 +158,7 @@ public class DollarParser {
     private Parser<List<var>> script(ScriptScope scope) {
         return inScope("(script)", scope, newScope -> {
             Parser.Reference<var> ref = Parser.newReference();
-            Parser<var> block = block(ref.lazy(), newScope).between(OP_NL("{"), NL_TERM("}"));
+            Parser<var> block = block(ref.lazy(), newScope).between(OP_NL("{"), NL_OP("}"));
             Parser<var> expression = expression(newScope);
             Parser<List<var>> parser = (TERMINATOR_SYMBOL.optional()).next(or(expression, block).followedBy(
                     TERMINATOR_SYMBOL).map(v -> v._fix(false)).many1());
@@ -195,7 +195,7 @@ public class DollarParser {
         Parser<var>
                 or =
                 (
-                        or(parentParser, parentParser.between(OP_NL("{"), NL_TERM("}")))
+                        or(parentParser, parentParser.between(OP_NL("{"), NL_OP("}")))
                 ).sepBy1(SEMICOLON_TERMINATOR).followedBy(SEMICOLON_TERMINATOR.optional()).map(
                         new BlockOperator(this, scope));
         ref.set(or);
@@ -225,7 +225,7 @@ public class DollarParser {
                                              return getVariable(scope, var.S(), false, null);
                                          }
                                      })))
-                              .or(block(ref.lazy(), scope).between(OP_NL("{"), NL_TERM("}")));
+                              .or(block(ref.lazy(), scope).between(OP_NL("{"), NL_OP("}")));
 
         Parser<var> parser = new OperatorTable<var>()
                 .infixl(op(new BinaryOp((lhs, rhs) -> $(!lhs.equals(rhs)), scope), "!="), EQUIVALENCE_PRIORITY)
@@ -377,7 +377,7 @@ public class DollarParser {
     private Parser<var> list(Parser<var> expression, ScriptScope scope) {
         return OP_NL("[")
                 .next(expression.sepBy(COMMA_OR_NEWLINE_TERMINATOR))
-                .followedBy(NL_TERM("]")).map(
+                .followedBy(NL_OP("]")).map(
                         new ListOperator(this, scope));
     }
 
@@ -385,7 +385,7 @@ public class DollarParser {
         Parser<List<var>>
                 sequence =
                 OP_NL("{").next(expression.sepBy1(COMMA_TERMINATOR))
-                          .followedBy(NL_TERM("}"));
+                          .followedBy(NL_OP("}"));
         return sequence.map(new MapOperator(this, scope));
     }
 

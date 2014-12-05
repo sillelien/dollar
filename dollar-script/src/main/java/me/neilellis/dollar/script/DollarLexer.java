@@ -34,29 +34,7 @@ import static org.codehaus.jparsec.Parsers.token;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 class DollarLexer {
-    static final Parser<?> TERMINATOR_SYMBOL = Parsers.or(OP("\n"), OP(";")).many1();
-    static final Parser<?> COMMA_TERMINATOR = Parsers.sequence(OP(","), OP("\n").many());
-    static final Parser<?> COMMA_OR_NEWLINE_TERMINATOR = Parsers.or(OP(","), OP("\n")).many1();
-    static final Parser<?> SEMICOLON_TERMINATOR = Parsers.or(OP(";").followedBy(OP("\n").many()), OP("\n").many1());
-    static final Parser<Void> IGNORED =
-            Parsers.or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT, Scanners.among(" \t\r").many1(),
-                       Scanners.lineComment("#!")).skipMany();
-    //Grammar
-    static final Parser<var> IDENTIFIER = identifier();
-    static final Parser<var> IDENTIFIER_KEYWORD = identifierKeyword();
-    static final Parser<var> STRING_LITERAL = Terminals.StringLiteral.PARSER.map(DollarStatic::$);
-    static final Parser<var>
-            DECIMAL_LITERAL =
-            Terminals.DecimalLiteral.PARSER.map(s -> s.contains(".") ? $(Double.parseDouble(s)) : $(Long.parseLong(s))
-            );
-    static final Parser<var> INTEGER_LITERAL = Terminals.IntegerLiteral.PARSER.map(s -> $(Long.parseLong(s)));
-    static final Parser<var> BUILTIN = token(new TokenTagMap("builtin")).map(s -> {
-        var v = $(s);
-        v.setMetaAttribute("__builtin", s);
-        return v;
-    });
-    static final Parser<var> URL = token(new TokenTagMap("uri")).map(DollarFactory::fromURI);
-    private static final Terminals
+    public static final Terminals
             KEYWORDS =
             Terminals.operators("out", "err", "debug", "fix", "causes", "when", "if", "then", "for", "each", "fail",
                                 "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default",
@@ -66,7 +44,7 @@ class DollarLexer {
                                 "yes", "no", "void", "error", "to", "from", "size", "as",
                                 "while", "collect", "module", "include", "export", "with", "parallel", "serial",
                                 "fork", "null", "volatile", "read", "write", "block", "mutate");
-    private static final Terminals
+    public static final Terminals
             OPERATORS =
             Terminals.operators("|", ">>", "<<", "->", "=>", ".:", "<=", ">=", "<-", "(", ")", "--", "++", ".", ":",
                                 "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "??",
@@ -75,16 +53,8 @@ class DollarLexer {
                                 "::", "/", "%", "*", "&&", "||", "<--", "<++", "\u2357", "~", "?$?", "-:", "..", "?..?",
                                 "€", "@@", "<@", "@>", "#", "!?#*!", "?*", "(!)", "(>)", "(=)", "(~)", "(-)", "(+)",
                                 "(?)", "?->", "|:|", "|..|", "-<", "?=", "*=");
-    static final Parser<?> TOKENIZER =
-            or(DollarLexer.url(),
-               OPERATORS.tokenizer(),
-               DollarLexer.decimal(),
-               java(),
-               Terminals.StringLiteral.DOUBLE_QUOTE_TOKENIZER,
-               Terminals.StringLiteral.SINGLE_QUOTE_TOKENIZER,
-               Terminals.IntegerLiteral.TOKENIZER,
-               Parsers.longest(DollarLexer.builtin(), KEYWORDS.tokenizer(), Terminals.Identifier.TOKENIZER));
-    private static final Map<String, Tokens.Fragment> BACKTICK_QUOTE_STRING = new Map<String, Tokens.Fragment>() {
+
+    public static final Map<String, Tokens.Fragment> BACKTICK_QUOTE_STRING = new Map<String, Tokens.Fragment>() {
         public Tokens.Fragment map(String text) {
             return Tokens.fragment(tokenizeBackTick(text), "java");
         }
@@ -95,7 +65,42 @@ class DollarLexer {
         }
     };
 
-    private static Parser<?> url() {
+
+    public static final Parser<?> TERMINATOR_SYMBOL = Parsers.or(OP("\n"), OP(";")).many1();
+    public static final Parser<?> COMMA_TERMINATOR = Parsers.sequence(OP(","), OP("\n").many());
+    public static final Parser<?> COMMA_OR_NEWLINE_TERMINATOR = Parsers.or(OP(","), OP("\n")).many1();
+    public static final Parser<?>
+            SEMICOLON_TERMINATOR =
+            Parsers.or(OP(";").followedBy(OP("\n").many()), OP("\n").many1());
+    public static final Parser<Void> IGNORED =
+            Parsers.or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT, Scanners.among(" \t\r").many1(),
+                       Scanners.lineComment("#!")).skipMany();
+    public static final Parser<var> IDENTIFIER = identifier();
+    public static final Parser<var> IDENTIFIER_KEYWORD = identifierKeyword();
+    public static final Parser<var> STRING_LITERAL = Terminals.StringLiteral.PARSER.map(DollarStatic::$);
+    public static final Parser<var>
+            DECIMAL_LITERAL =
+            Terminals.DecimalLiteral.PARSER.map(s -> s.contains(".") ? $(Double.parseDouble(s)) : $(Long.parseLong(s))
+            );
+    public static final Parser<var> INTEGER_LITERAL = Terminals.IntegerLiteral.PARSER.map(s -> $(Long.parseLong(s)));
+    public static final Parser<var> BUILTIN = token(new TokenTagMap("builtin")).map(s -> {
+        var v = $(s);
+        v.setMetaAttribute("__builtin", s);
+        return v;
+    });
+    public static final Parser<var> URL = token(new TokenTagMap("uri")).map(DollarFactory::fromURI);
+    public static final Parser<?> TOKENIZER =
+            or(DollarLexer.url(),
+               OPERATORS.tokenizer(),
+               DollarLexer.decimal(),
+               java(),
+               Terminals.StringLiteral.DOUBLE_QUOTE_TOKENIZER,
+               Terminals.StringLiteral.SINGLE_QUOTE_TOKENIZER,
+               Terminals.IntegerLiteral.TOKENIZER,
+               Parsers.longest(DollarLexer.builtin(), KEYWORDS.tokenizer(), Terminals.Identifier.TOKENIZER));
+
+
+    public static Parser<?> url() {
         return (
                 Scanners.pattern(Patterns.isChar(CharPredicates.IS_ALPHA_).many1()
                                          .next(Patterns.isChar(':').next(Patterns.among("=\"").not())
@@ -117,7 +122,7 @@ class DollarLexer {
         });
     }
 
-    private static Parser<?> java() {
+    public static Parser<?> java() {
         Parser<?> quote = Scanners.isChar('`');
         return Scanners.pattern(Patterns.regex("((``)|[^`])*"), "Java Snippet")
                        .between(quote, quote)
@@ -125,7 +130,7 @@ class DollarLexer {
                        .map(BACKTICK_QUOTE_STRING);
     }
 
-    private static String tokenizeBackTick(String text) {
+    public static String tokenizeBackTick(String text) {
         int end = text.length() - 1;
         StringBuilder buf = new StringBuilder();
         for (int i = 1; i < end; i++) {
@@ -140,7 +145,7 @@ class DollarLexer {
         return buf.toString();
     }
 
-    private static Parser<?> decimal() {
+    public static Parser<?> decimal() {
         return Scanners.pattern(
                 Patterns.INTEGER.next(Patterns.isChar('.').next(Patterns.many1(CharPredicates.IS_DIGIT))), "decimal")
                        .source()
@@ -157,7 +162,7 @@ class DollarLexer {
     }
 
 
-    static Parser<?> OP(String name, String keyword) {
+    public static Parser<?> OP(String name, String keyword) {
         return OPERATORS.token(name).or(KEYWORDS.token(keyword));
     }
 
@@ -167,28 +172,28 @@ class DollarLexer {
 //    }
 // --Commented out by Inspection STOP (04/12/14 18:27)
 
-    static Parser<?> OP_NL(String... names) {
+    public static Parser<?> OP_NL(String... names) {
         return OPERATORS.token(names).followedBy(OP("\n").many());
     }
 
-    static Parser<?> OP(String name) {
+    public static Parser<?> OP(String name) {
         return OPERATORS.token(name);
     }
 
-    static Parser<?> KEYWORD_NL(String... names) {
+    public static Parser<?> KEYWORD_NL(String... names) {
         return KEYWORDS.token(names).followedBy(OP("\n").many());
     }
 
-    static Parser<?> NL_TERM(String... names) {
+    public static Parser<?> NL_OP(String... names) {
         return OP("\n").many().followedBy(OPERATORS.token(names));
     }
 
-    private static Parser<String> identifierTokenizer() {
+    public static Parser<String> identifierTokenizer() {
         return Scanners.pattern(Patterns.isChar(CharPredicates.IS_ALPHA_).many1(), "identifier").source();
 
     }
 
-    private static Parser<?> builtin() {
+    public static Parser<?> builtin() {
         return Scanners.pattern(new Pattern() {
             @Override public int match(CharSequence src, int begin, int end) {
                 int i = begin;
@@ -217,7 +222,7 @@ class DollarLexer {
     }
 
 
-    static Parser<var> identifier() {
+    public static Parser<var> identifier() {
         return Terminals.Identifier.PARSER.map(i -> {
             switch (i) {
                 case "true":
@@ -237,7 +242,7 @@ class DollarLexer {
         });
     }
 
-    private static Parser<var> identifierKeyword() {
+    public static Parser<var> identifierKeyword() {
         return or(KEYWORD("true"), KEYWORD("false"), KEYWORD("yes"), KEYWORD("no"), KEYWORD("null"), KEYWORD("void"))
                 .map(new Map<Object, var>() {
                     @Override
@@ -261,11 +266,11 @@ class DollarLexer {
                 });
     }
 
-    static Parser<?> KEYWORD(String... names) {
+    public static Parser<?> KEYWORD(String... names) {
         return KEYWORDS.token(names);
     }
 
-    private static class TokenTagMap implements TokenMap<String> {
+    public static class TokenTagMap implements TokenMap<String> {
         private final String tag;
 
         private TokenTagMap(String tag) {this.tag = tag;}

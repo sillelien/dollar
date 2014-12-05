@@ -187,18 +187,14 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull @Override
-    public var $default(Object o) {
+    public var $default(var v) {
         if (isVoid()) {
-            return DollarStatic.$(o);
+            return v;
         } else {
             return this;
         }
     }
 
-    @NotNull @Override
-    public var $isEmpty() {
-        return DollarFactory.fromValue($size().I() > 0);
-    }
 
     @NotNull
     @Override
@@ -210,10 +206,6 @@ public abstract class AbstractDollar implements var {
     @Override
     public Stream<var> $stream(boolean parallel) {
         return $list().stream();
-    }
-
-    public void clear() {
-        DollarFactory.failure(FailureType.INVALID_OPERATION);
     }
 
     @NotNull
@@ -401,6 +393,10 @@ public abstract class AbstractDollar implements var {
         } catch (Exception e) {
             return DollarStatic.logAndRethrow(e);
         }
+    }
+
+    public void clear() {
+        DollarFactory.failure(FailureType.INVALID_OPERATION);
     }
 
     @Override
