@@ -26,13 +26,13 @@ Make sure your PATH variable includes the `bin` directory within the `dollar` di
 j *= random:dummy
 colors= ["red","green","blue"]
 k := colors[j * #colors]
-{% endhighlight%}
+{% endhighlight %}
 
 And run it:
 
 {% highlight bash %}
 dollar colors.ds
-{% endhighlight%}
+{% endhighlight %}
 
 And that's it, make sure you read the full manual before continuing.
 
