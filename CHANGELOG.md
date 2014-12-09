@@ -1,11 +1,25 @@
 ## Change Log
 
-### In Progress: 0.1.2 (2014/12/09 01:23 +00:00)
+### 0.1.1 (2014/12/09 01:23 +00:00)
+- [2b0c46b](https://github.com/neilellis/dollar/commit/2b0c46b0a0c71408165fe0c5da6e2af1a4d20989) Change log updates
+- [c1b5d7a](https://github.com/neilellis/dollar/commit/c1b5d7af61cc09da05bbee49d2f2dcebabfa2ebc) Auto merge
+- [f8e31b5](https://github.com/neilellis/dollar/commit/f8e31b59d606f05f69b3eb09bf6474579a85dab6) Release bump
+- [c0201c2](https://github.com/neilellis/dollar/commit/c0201c2ddb5cd85e93a4e9874fc03b32d4274dea) Release bump
+- [b683a5a](https://github.com/neilellis/dollar/commit/b683a5a92ddaa8e384fa68ebc13d9e56787a7c26) Release bump
+- [4626719](https://github.com/neilellis/dollar/commit/4626719f11d9b9f2a985dcc64b3ddf51125936c9) Release bump
+- [d27c189](https://github.com/neilellis/dollar/commit/d27c189f8ac1720476b191e4248b8b0614029069) The 'pure' operator for functional programming.
+- [d56e890](https://github.com/neilellis/dollar/commit/d56e890cfad85dc1007fb5ed0db4ea7b8d0ba17a) Code cleanup, removing superfluous methods. Also started on short presentation.
+- [f401a57](https://github.com/neilellis/dollar/commit/f401a579704f2880d1e7ddab65f5db975215faf4) Code cleanup, removing superfluous methods.
+- [501a072](https://github.com/neilellis/dollar/commit/501a072de0999ee8038ab5316323374d222c9343) Code cleanup, removing superfluous methods.
+- [b321995](https://github.com/neilellis/dollar/commit/b321995c166c07b6393322a265d570c551d67bc7) Code cleanup, removing superfluous methods.
+- [a7d7c21](https://github.com/neilellis/dollar/commit/a7d7c219a01d406ff6d163b27e96125d1c45686f) Code cleanup, removing superfluous methods.
+- [9a8617b](https://github.com/neilellis/dollar/commit/9a8617bcf1f29df3fff10ac3ad218e9c44718ba8) Code cleanup, removing superfluous methods.
+- [bdc9966](https://github.com/neilellis/dollar/commit/bdc99669d60f60cfdd95f13058cb2fd96f579dc6) Merge branch 'staging' into dev
 - [393ac19](https://github.com/neilellis/dollar/commit/393ac199ca42de27ee65359ca000feef6b59269a) Change log updates
 - [9044c23](https://github.com/neilellis/dollar/commit/9044c2397b98e52f2e1cae7eb7f6f42157399952) Auto merge
 - [ba012fd](https://github.com/neilellis/dollar/commit/ba012fd10e2162070a25591b67a55b209382052b) General tooling and planning integration.
-- [c35685f](https://github.com/neilellis/dollar/commit/c35685fc8316fe1c4b1a1f16cc622c7572b29281) Change log updates
 - [a7bbb4a](https://github.com/neilellis/dollar/commit/a7bbb4addec58e95b893098f0c07b9691f5ca8e3) Auto merge
+- [c35685f](https://github.com/neilellis/dollar/commit/c35685fc8316fe1c4b1a1f16cc622c7572b29281) Change log updates
 - [090ccab](https://github.com/neilellis/dollar/commit/090ccab321c92fc0bf43072e42966b0e53ce10cf) General tooling and planning integration.
 - [d81bade](https://github.com/neilellis/dollar/commit/d81badedf3d3c8fa6a9a71900b2a83bb542b5e15) General tooling and planning integration.
 
@@ -44,8 +58,10 @@
 - [f1917d1](https://github.com/neilellis/dollar/commit/f1917d17e9d06362bc39cbc9898a133de517d26e) Gitter.im integration started.
 - [5ca28c4](https://github.com/neilellis/dollar/commit/5ca28c4fa27b96c0cd87efcba048e05c6a3b05a3) Gitter.im integration started.
 - [2e6a9ce](https://github.com/neilellis/dollar/commit/2e6a9ce78392042b37c88080b464105c1683fc2d) Added github links
+- [e31d364](https://github.com/neilellis/dollar/commit/e31d364751f0e003e808d12c05ecfb7e1861ac8f) Merge branch 'staging' into dev
 - [e071ce3](https://github.com/neilellis/dollar/commit/e071ce38a29b1f92500f784617db9690b2f70301) Added github links
 - [2d592df](https://github.com/neilellis/dollar/commit/2d592dfb62379e6098c9ffb5d8c6a32576f43696) Removed API link
+- [a848c55](https://github.com/neilellis/dollar/commit/a848c55a2950ca5b098a4e9a70e808dfc107a5fe) Moving on to dev branch.
 - [2a8dbb7](https://github.com/neilellis/dollar/commit/2a8dbb77fc9a4422127018951bf47ef9980d2730) Preparing 0.1.0
 - [98cc476](https://github.com/neilellis/dollar/commit/98cc476a36e276f9d3913b7d8cd214a102da8ae2) Preparing 0.1.0
 - [7b1d62a](https://github.com/neilellis/dollar/commit/7b1d62a28b3556d9eb96e827762ed198ff63f8ae) Preparing 0.1.0
