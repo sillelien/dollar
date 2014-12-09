@@ -19,7 +19,7 @@ package me.neilellis.dollar.script.operators;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.script.DollarParserException;
 import me.neilellis.dollar.script.DollarScriptSupport;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
@@ -31,10 +31,12 @@ import static me.neilellis.dollar.DollarStatic.*;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class AssignmentOperator implements Map<Object[], Map<? super var, ? extends var>> {
-    private final ScriptScope scope;
+    private final Scope scope;
+    private boolean pure;
 
-    public AssignmentOperator(ScriptScope scope, boolean push) {
+    public AssignmentOperator(Scope scope, boolean push, boolean pure) {
         this.scope = scope;
+        this.pure = pure;
     }
 
     public Map<? super var, ? extends var> map(Object[] objects) {
@@ -74,16 +76,16 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
                         useConstraint = scope.getConstraint(varName);
                     }
                     if (operator.equals("?=")) {
-                        scope.set(varName, $void(), constant, null, isVolatile);
+                        scope.set(varName, $void(), false, null, isVolatile, false, pure);
                         return $(rhs.$listen(
                                 i -> scope.set(varName, fix(i, false), false,
-                                               useConstraint, isVolatile)));
+                                               useConstraint, isVolatile, false, pure)));
 
                     } else if (operator.equals("*=")) {
-                        scope.set(varName, $void(), constant, null, true);
+                        scope.set(varName, $void(), false, null, true, true, pure);
                         return $(rhs.$subscribe(
                                 i -> scope.set(varName, fix(i, false), false,
-                                               useConstraint, true)));
+                                               useConstraint, true, false, pure)));
                     }
                 }
                 return assign(rhs, objects, constraint, constant, isVolatile);
@@ -101,7 +103,7 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
             } else {
                 useConstraint = scope.getConstraint(varName);
             }
-            return scope.getDollarParser().inScope("assignment-constraint", scope, newScope -> {
+            return scope.getDollarParser().inScope(pure, "assignment-constraint", scope, newScope -> {
                 final var rhsFixed = rhs._fix(1, false);
                 if (useConstraint != null) {
                     newScope.setParameter("it", rhsFixed);
@@ -115,7 +117,7 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
                     scope.getDollarParser().export(varName, rhsFixed);
                 }
                 return scope.set(varName, rhsFixed, constant,
-                                 constraint, isVolatile);
+                                 constraint, isVolatile, constant, pure);
             });
         });
     }

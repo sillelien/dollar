@@ -16,7 +16,7 @@
 
 package me.neilellis.dollar.script.exceptions;
 
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -28,7 +28,7 @@ public class VariableNotFoundException extends DollarScriptException {
         super(e);
     }
 
-    public VariableNotFoundException(String variable, ScriptScope scope) {
+    public VariableNotFoundException(String variable, Scope scope) {
         super("Variable not found '" + variable + "' in scope " + scope);
         this.variable = variable;
     }

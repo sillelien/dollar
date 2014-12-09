@@ -19,7 +19,7 @@ package me.neilellis.dollar.plugins.pipe;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.script.ModuleResolver;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -36,7 +36,7 @@ public class ClassModuleResolver implements ModuleResolver {
     }
 
     @Override
-    public Pipeable resolve(String uriWithoutScheme, ScriptScope scope) throws Exception {
+    public Pipeable resolve(String uriWithoutScheme, Scope scope) throws Exception {
         return (Pipeable) DollarStatic.context().getClassLoader().loadClass(uriWithoutScheme).newInstance();
     }
 }

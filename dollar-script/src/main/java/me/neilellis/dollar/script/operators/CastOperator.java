@@ -18,7 +18,7 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.script.DollarScriptSupport;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
@@ -26,9 +26,9 @@ import org.codehaus.jparsec.functors.Map;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class CastOperator implements Map<var, Map<? super var, ? extends var>> {
-    private final ScriptScope scope;
+    private final Scope scope;
 
-    public CastOperator(ScriptScope scope) {this.scope = scope;}
+    public CastOperator(Scope scope) {this.scope = scope;}
 
     @Override public Map<? super var, ? extends var> map(var rhs) {
         return lhs -> DollarScriptSupport.wrapReactiveUnary(scope,

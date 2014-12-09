@@ -41,50 +41,51 @@ public class Builtins {
 
     static {
         map = new HashMap<>();
-        addDollarStyle(1, 1, (args, scope) -> args.get(0).$abs(), "ABS");
-        addJavaStyle(1, 1, (args, scope) -> args.get(0).$size(), "COUNT");
+        addDollarStyle(1, 1, (pure, args, scope) -> args.get(0).$abs(), true, "ABS");
+        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).$size(), true, "COUNT");
 
-        addJavaStyle(1, Integer.MAX_VALUE, (args, scope) -> {
+        addJavaStyle(1, Integer.MAX_VALUE, (pure, args, scope) -> {
             String message = args.get(0).$S();
             ArrayList<var> values = new ArrayList<>(args);
             values.remove(0);
             return $(String.format(message, values.stream().map(var::$).toArray()));
-        }, "FORMAT");
-        addJavaStyle(1, 1, (args, scope) -> {
+        }, true, "FORMAT");
+        addJavaStyle(1, 1, (pure, args, scope) -> {
             return args.get(0).$list().stream().min((o1, o2) -> (int) Math.signum(o1.D() - o2.D())).get();
-        }, "MIN");
-        addJavaStyle(1, 1, (args, scope) -> {
+        }, true, "MIN");
+        addJavaStyle(1, 1, (pure, args, scope) -> {
             return args.get(0).$list().stream().max((o1, o2) -> (int) Math.signum(o1.D() - o2.D())).get();
-        }, "MAX");
-        addJavaStyle(1, 1, (args, scope) -> {
+        }, true, "MAX");
+        addJavaStyle(1, 1, (pure, args, scope) -> {
             return $(args.get(0).$list().stream().sorted().collect(Collectors.toList()));
-        }, "SORT");
+        }, true, "SORT");
 
-        addJavaStyle(1, 1, (args, scope) -> {
+        addJavaStyle(1, 1, (pure, args, scope) -> {
             return $(args.get(0).$list().get(0));
-        }, "FIRST");
+        }, true, "FIRST");
 
-        addJavaStyle(1, 1, (args, scope) -> {
+        addJavaStyle(1, 1, (pure, args, scope) -> {
             ImmutableList<var> list = args.get(0).$list();
             return $(list.get(list.size() - 1));
-        }, "LAST");
-        addDollarSingleNoScope(StateAware::$start, "START");
-        addDollarSingleNoScope(StateAware::$stop, "STOP");
-        addDollarSingleNoScope(StateAware::$create, "CREATE");
-        addDollarSingleNoScope(StateAware::$destroy, "DESTROY");
-        addDollarSingleNoScope(StateAware::$pause, "PAUSE");
-        addDollarSingleNoScope(StateAware::$unpause, "UNPAUSE");
-        addDollarSingleNoScope(StateAware::$state, "STATE");
+        }, true, "LAST");
+        addDollarSingleNoScope(false, StateAware::$start, "START");
+        addDollarSingleNoScope(false, StateAware::$stop, "STOP");
+        addDollarSingleNoScope(false, StateAware::$create, "CREATE");
+        addDollarSingleNoScope(false, StateAware::$destroy, "DESTROY");
+        addDollarSingleNoScope(false, StateAware::$pause, "PAUSE");
+        addDollarSingleNoScope(false, StateAware::$unpause, "UNPAUSE");
+        addDollarSingleNoScope(false, StateAware::$state, "STATE");
 
-        addJavaStyle(1, 1, (args, scope) -> args.get(0).D() / DAY_IN_MILLIS, "Millis", "Milli", "MS",
+        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).D() / DAY_IN_MILLIS, true, "Millis", "Milli", "MS",
                      "Milliseconds", "Millisecond");
-        addJavaStyle(1, 1, (args, scope) -> args.get(0).D() / (24.0 * 60.0 * 60.0), "Secs", "S", "Sec", "Seconds",
+        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).D() / (24.0 * 60.0 * 60.0), true, "Secs", "S", "Sec",
+                     "Seconds",
                      "Second");
-        addJavaStyle(1, 1, (args, scope) -> args.get(0).D() / (24.0 * 60.0), "M", "Minutes", "Minute");
-        addJavaStyle(1, 1, (args, scope) -> {
+        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).D() / (24.0 * 60.0), true, "M", "Minutes", "Minute");
+        addJavaStyle(1, 1, (pure, args, scope) -> {
             return args.get(0).D() / 24.0;
-        }, "Hrs", "Hours", "H", "Hour");
-        addJavaStyle(1, 1, (args, scope) -> {
+        }, true, "Hrs", "Hours", "H", "Hour");
+        addJavaStyle(1, 1, (pure, args, scope) -> {
             try {
                 Thread.sleep((long) (args.get(0).D() * DAY_IN_MILLIS));
                 return args.get(0);
@@ -92,41 +93,48 @@ public class Builtins {
                 e.printStackTrace();
                 return $void();
             }
-        }, "SLEEP");
-        addJavaStyle(1, 1, (args, scope) -> args.get(0).D(), "Days", "Day", "D");
-        addJavaStyle(1, 1, (args, scope) -> args.get(0).toString().length(), "LEN");
-        addJavaStyle(0, 0, (args, scope) -> $(new Date()), "DATE");
-        addJavaStyle(0, 0, (args, scope) -> System.currentTimeMillis(), "TIME");
-        addJavaStyle(2, 2, (args, scope) -> args.get(0).toString().matches(args.get(1).$S()), "MATCHES");
+        }, false, "SLEEP");
+        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).D(), true, "Days", "Day", "D");
+        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toString().length(), true, "LEN");
+        addJavaStyle(0, 0, (pure, args, scope) -> $(new Date()), false, "DATE");
+        addJavaStyle(0, 0, (pure, args, scope) -> System.currentTimeMillis(), false, "TIME");
+        addJavaStyle(2, 2, (pure, args, scope) -> args.get(0).toString().matches(args.get(1).$S()), true, "MATCHES");
     }
 
-    public static var execute(String name, List<var> parameters, ScriptScope scope) {
+    public static var execute(String name, List<var> parameters, Scope scope, boolean pure) {
         final Builtin<var> builtin = map.get(name);
         if (builtin == null) {
             throw new BuiltinNotFoundException(name);
         }
-        return builtin.execute(parameters, scope);
+        return builtin.execute(pure, parameters, scope);
     }
 
     public static boolean exists(String name) {
         return map.containsKey(name);
     }
 
-    private static <T> void addJavaStyle(int minargs, int maxargs, Builtin.JavaStyle<T> lambda, String... names) {
+    private static <T> void addJavaStyle(int minargs, int maxargs, Builtin.JavaStyle<T> lambda, boolean pure,
+                                         String... names) {
         for (String name : names) {
-            map.put(name, new Builtin.BuiltinImpl(lambda, minargs, maxargs));
+            map.put(name, new Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure));
         }
     }
 
-    private static void addDollarStyle(int minargs, int maxargs, Builtin.DollarStyle lambda, String... names) {
+    private static void addDollarStyle(int minargs, int maxargs, Builtin.DollarStyle lambda, boolean pure,
+                                       String... names) {
         for (String name : names) {
-            map.put(name, new Builtin.BuiltinImpl(lambda, minargs, maxargs));
+            map.put(name, new Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure));
         }
     }
 
-    private static void addDollarSingleNoScope(Function<var, var> lambda, String... names) {
+    private static void addDollarSingleNoScope(boolean isPure, Function<var, var> lambda, String... names) {
         for (String name : names) {
-            map.put(name, new Builtin.BuiltinImpl((args, scope) -> lambda.apply((var) args.get(0)), 1, 1));
+            map.put(name, new Builtin.BuiltinImpl(name, (pure, args, scope) -> lambda.apply((var) args.get(0)), 1, 1,
+                                                  isPure));
         }
+    }
+
+    public static boolean isPure(String lhsString) {
+        return map.get(lhsString) != null && ((Builtin.BuiltinImpl) map.get(lhsString)).isPure();
     }
 }

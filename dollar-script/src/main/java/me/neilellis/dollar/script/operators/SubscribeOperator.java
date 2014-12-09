@@ -17,7 +17,7 @@
 package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.Operator;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
 
@@ -30,12 +30,14 @@ import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactiveBinary;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class SubscribeOperator implements Binary<var>, Operator {
-    private final ScriptScope scope;
+    private final Scope scope;
     private Supplier<String> source;
+    private boolean pure;
 
 
-    public SubscribeOperator(ScriptScope scope) {
+    public SubscribeOperator(Scope scope, boolean pure) {
         this.scope = scope;
+        this.pure = pure;
     }
 
 
@@ -44,7 +46,7 @@ public class SubscribeOperator implements Binary<var>, Operator {
 
         return wrapReactiveBinary(scope, lhs, rhs,
                                   () -> lhs.$subscribe(
-                                          i -> scope.getDollarParser().inScope("subscribe", scope, newScope -> {
+                                          i -> scope.getDollarParser().inScope(pure, "subscribe", scope, newScope -> {
                                       final var it = fix(i, false);
                                       scope.getDollarParser().currentScope().setParameter("1", it);
                                       scope.getDollarParser().currentScope().setParameter("it", it);

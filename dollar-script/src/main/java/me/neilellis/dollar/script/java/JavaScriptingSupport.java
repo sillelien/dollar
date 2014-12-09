@@ -20,7 +20,7 @@ import com.innowhere.relproxy.jproxy.JProxy;
 import com.innowhere.relproxy.jproxy.JProxyConfig;
 import com.innowhere.relproxy.jproxy.JProxyScriptEngineFactory;
 import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.var;
 
 import javax.script.Bindings;
@@ -39,7 +39,7 @@ import static me.neilellis.dollar.DollarStatic.$;
  */
 public class JavaScriptingSupport {
 
-    public static var compile(var in, String java, ScriptScope scope) {
+    public static var compile(var in, String java, Scope scope) {
         JProxyConfig jpConfig = JProxy.createJProxyConfig();
         jpConfig.setEnabled(true)
                 .setRelProxyOnReloadListener((objOld, objNew, proxy, method, args) -> {

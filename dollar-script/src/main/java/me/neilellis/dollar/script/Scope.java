@@ -16,17 +16,43 @@
 
 package me.neilellis.dollar.script;
 
+import com.google.common.collect.Multimap;
 import me.neilellis.dollar.var;
+
+import java.util.Map;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface Scope {
+
     var addErrorHandler(var handler);
+
+    void clear();
+
+    var get(String key, boolean mustFind);
 
     var get(String key);
 
+    var getConstraint(String key);
+
+    DollarParser getDollarParser();
+
+    void setDollarParser(DollarParser dollarParser);
+
+    Multimap<String, var> getListeners();
+
     var getParameter(String key);
+
+    Scope getScopeForKey(String key);
+
+    Scope getScopeForParameters();
+
+    String getSource();
+
+    Map<String, Variable> getVariables();
+
+    var handleError(Throwable t);
 
     boolean has(String key);
 
@@ -34,7 +60,14 @@ public interface Scope {
 
     void listen(String key, var listener);
 
+    var notify(String variableName);
+
     void notifyScope(String key, var value);
 
-    var set(String key, var value, boolean readonly, var constraint, boolean isVolatile);
+    var set(String key, var value, boolean readonly, var constraint, boolean isVolatile, boolean fixed, boolean pure);
+
+    var setParameter(String key, var value);
+
+    void setParent(Scope scope);
+
 }

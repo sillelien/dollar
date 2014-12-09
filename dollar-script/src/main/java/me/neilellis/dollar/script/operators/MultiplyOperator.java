@@ -16,26 +16,24 @@
 
 package me.neilellis.dollar.script.operators;
 
-import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.UnaryOp;
-import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.functors.Map2;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
-public class SimpleReadOperator extends UnaryOp {
+public class MultiplyOperator {
+    private final Map2<var, var, var> function;
+    private final Scope scope;
 
-
-    public SimpleReadOperator(Scope scope) {
-        super(scope, null);
+    public MultiplyOperator(Map2<var, var, var> function, Scope scope) {
+        this.function = function;
+        this.scope = scope;
     }
 
-
-    @Override
-    public var map(var from) {
-        return DollarScriptSupport.wrapReactiveUnary(scope, from, () -> DollarFactory.fromURI(from).$read());
+    public Map2<var, var, var> getFunction() {
+        return function;
     }
 
+    public Scope getScope() {
+        return scope;
+    }
 }

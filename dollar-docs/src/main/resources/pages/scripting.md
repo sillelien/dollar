@@ -41,6 +41,25 @@ testParams := ($2 + " " + $1)
 
 DollarScript has it's own peculiarities, mostly these exists to help with it's major function - data/API centric Internet applications. So it's important to understand the basic concepts before getting started.
 
+###Functional Programming
+
+Support for functional programming is included in DollarScript, this will be widened as the language is developed. For now it is provided by the `pure` operator. This signals that an expression or declaration is a pure expression or function.
+
+In this example we're declaring reverse to be an expression that reverses two values from a supplied array. Because we declare it as `pure` the expression supplied must also be `pure`. To understand what a pure function is please see http://en.wikipedia.org/wiki/Pure_function. Basically it prohibits the reading of external state or the setting of external state. We next swap `[2,1]` within a newly created pure expression, which is subsequently assigned to a. If reverse had not been declared pure it would not be allowed within the pure expression.
+
+ ```dollar
+ pure reverse := [$1[1],$1[0]]
+
+ a= pure {
+     reverse([2,1])
+ }
+
+ ```
+
+Note some builtin functions are not themselves pure and will trigger parser errors if you attempt to use them in a pure expression. Take DATE() for example which supplies an external state (the computers clock).
+
+
+
 ###Reactive Programming
 
 DollarScript expressions are by default *lazy*, this is really important to understand otherwise you may get some surprises. This lazy evaluation is combined with a simple event system to make DollarScript a [reactive programming language](http://en.wikipedia.org/wiki/Reactive_programming) by default.

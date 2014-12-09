@@ -21,6 +21,8 @@ import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,8 +34,9 @@ import java.util.concurrent.Callable;
  */
 public class DollarScriptSupport {
 
+    private static final Logger log = LoggerFactory.getLogger(DollarScriptSupport.class);
 
-    public static var wrapReactiveUnary(ScriptScope scope, var lhs, Callable<var> callable) {
+    public static var wrapReactiveUnary(Scope scope, var lhs, Callable<var> callable) {
         if (scope == null) {
             throw new NullPointerException();
         }
@@ -42,7 +45,7 @@ public class DollarScriptSupport {
         return lambda;
     }
 
-    private static var toLambda(ScriptScope scope, Callable<var> callable) {
+    private static var toLambda(Scope scope, Callable<var> callable) {
         if (scope == null) {
             throw new NullPointerException();
         }
@@ -52,7 +55,7 @@ public class DollarScriptSupport {
                 new DollarSource(i -> callable.call(), scope)));
     }
 
-    public static var wrapReactiveBinary(ScriptScope scope, var lhs, var rhs, Callable<var> callable) {
+    public static var wrapReactiveBinary(Scope scope, var lhs, var rhs, Callable<var> callable) {
         final var lambda = toLambda(scope, callable);
 
         rhs.$listen(i -> lambda.$notify());
@@ -60,21 +63,29 @@ public class DollarScriptSupport {
         return lambda;
     }
 
-    public static var wrapUnary(ScriptScope scope, Callable<var> callable) {
+    public static var wrapUnary(Scope scope, Callable<var> callable) {
         return toLambda(scope, callable);
     }
 
-    public static var wrapBinary(ScriptScope scope, Callable<var> callable) {
+    public static var wrapBinary(Scope scope, Callable<var> callable) {
         return toLambda(scope, callable);
     }
 
-    public static var getVariable(ScriptScope scope, String key, boolean numeric, var defaultValue) {
-
-        var lambda = DollarFactory.fromLambda(v -> {
+    public static var getVariable(boolean pure, Scope scope, String key, boolean numeric, var defaultValue) {
+//       if(pure && !(scope instanceof  PureScope)) {
+//           throw new IllegalStateException("Attempting to get a pure variable in an impure scope");
+//       }
+        var lambda = toLambda(scope, () -> {
+            if (scope.has(key)) {
+                return scope.get(key);
+            }
             try {
-                List<ScriptScope> scopes = new ArrayList<>(scope.getDollarParser().scopes());
+                List<Scope> scopes = new ArrayList<>(scope.getDollarParser().scopes());
                 Collections.reverse(scopes);
-                for (ScriptScope scriptScope : scopes) {
+                for (Scope scriptScope : scopes) {
+                    if (!(scriptScope instanceof PureScope) && pure) {
+                        log.debug("Skipping " + scriptScope);
+                    }
                     if (numeric) {
                         if (scriptScope.hasParameter(key)) {
                             return scriptScope.getParameter(key);
@@ -95,14 +106,12 @@ public class DollarScriptSupport {
             if (numeric) {
                 return scope.getParameter(key);
             }
-            if (!scope.has(key)) {
+
                 if (defaultValue != null) {
                     return defaultValue;
                 } else {
-                    throw new VariableNotFoundException(key,scope);
+                    throw new VariableNotFoundException(key, scope);
                 }
-            }
-            return scope.get(key);
         });
         scope.listen(key, lambda);
         lambda.setMetaAttribute("variable", key);

@@ -26,17 +26,19 @@ import java.util.List;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 class ListOperator implements Map<List<var>, var> {
-    private final ScriptScope scope;
+    private final Scope scope;
     private final DollarParser dollarParser;
+    private boolean pure;
 
-    public ListOperator(DollarParser dollarParser, ScriptScope scope) {
+    public ListOperator(DollarParser dollarParser, Scope scope, boolean pure) {
         this.dollarParser = dollarParser;
         this.scope = scope;
+        this.pure = pure;
     }
 
     @Override public var map(List<var> o) {
 
-        final var lambda = DollarFactory.fromLambda(parallel -> dollarParser.inScope("list", scope, newScope -> {
+        final var lambda = DollarFactory.fromLambda(parallel -> dollarParser.inScope(pure, "list", scope, newScope -> {
             Scope scope2 = newScope;
             return DollarFactory.fromValue(o);
         }));

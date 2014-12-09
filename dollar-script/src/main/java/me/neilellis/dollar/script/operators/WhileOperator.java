@@ -17,7 +17,7 @@
 package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarParser;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
@@ -28,16 +28,18 @@ import static me.neilellis.dollar.DollarStatic.$;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class WhileOperator implements Map<var, Map<? super var, ? extends var>> {
-    private final ScriptScope scope;
+    private final Scope scope;
     private final DollarParser parser;
+    private boolean pure;
 
-    public WhileOperator(DollarParser dollarParser, ScriptScope scope) {
+    public WhileOperator(DollarParser dollarParser, Scope scope, boolean pure) {
         this.parser = dollarParser;
         this.scope = scope;
+        this.pure = pure;
     }
 
     public Map<? super var, ? extends var> map(var lhs) {
-        return rhs -> DollarFactory.fromLambda(l -> parser.inScope("while", scope, newScope -> {
+        return rhs -> DollarFactory.fromLambda(l -> parser.inScope(pure, "while", scope, newScope -> {
             while (lhs.isTrue()) {
                 rhs._fixDeep();
             }

@@ -307,6 +307,9 @@ public class DollarFactory {
     }
 
     public static var failureWithSource(FailureType failureType, Throwable throwable, SourceAware source) {
+        if (source == null) {
+            throw new NullPointerException();
+        }
         if (DollarStatic.config.failFast()) {
             final DollarFailureException dollarFailureException = new DollarFailureException(throwable, failureType);
             dollarFailureException.addSource(source);

@@ -18,7 +18,7 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarParser;
 import me.neilellis.dollar.script.DollarScriptSupport;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
@@ -28,20 +28,22 @@ import static me.neilellis.dollar.DollarStatic.fix;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class ForOperator implements Map<Object[], Map<? super var, ? extends var>> {
-    private final ScriptScope scope;
+    private final Scope scope;
     private final DollarParser dollarParser;
+    private boolean pure;
 
-    public ForOperator(DollarParser dollarParser, ScriptScope scope) {
+    public ForOperator(DollarParser dollarParser, Scope scope, boolean pure) {
         this.dollarParser = dollarParser;
         this.scope = scope;
+        this.pure = pure;
     }
 
     public Map<? super var, ? extends var> map(Object[] objects) {
         return rhs -> {
             return DollarScriptSupport.wrapReactiveUnary(scope, rhs, () -> {
-                return dollarParser.inScope("for", scope, newScope -> {
+                return dollarParser.inScope(pure, "for", scope, newScope -> {
                     return ((var) objects[3]).$each(i -> {
-                        newScope.set(objects[1].toString(), fix(i, false), false, null, false);
+                        newScope.set(objects[1].toString(), fix(i, false), false, null, false, false, pure);
                         return rhs._fixDeep(false);
                     });
                 });

@@ -41,6 +41,9 @@ public class DollarException extends RuntimeException {
     }
 
     public void addSource(SourceAware source) {
+        if (source == null) {
+            throw new NullPointerException();
+        }
         sourceList.add(source);
     }
 

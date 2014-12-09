@@ -17,7 +17,7 @@
 package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarParser;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
@@ -31,16 +31,18 @@ import static me.neilellis.dollar.types.DollarFactory.fromLambda;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class BlockOperator implements Map<List<var>, var> {
-    private final ScriptScope scope;
+    private final Scope scope;
     private final DollarParser dollarParser;
+    private boolean pure;
 
-    public BlockOperator(DollarParser dollarParser, ScriptScope scope) {
+    public BlockOperator(DollarParser dollarParser, Scope scope, boolean pure) {
         this.dollarParser = dollarParser;
         this.scope = scope;
+        this.pure = pure;
     }
 
     @Override public var map(List<var> l) {
-        return fromLambda(parallel -> dollarParser.inScope("block", scope, newScope -> {
+        return fromLambda(parallel -> dollarParser.inScope(pure, "block", scope, newScope -> {
                               if (l.size() > 0) {
                                   return DollarFactory.blockCollection(l);
 //                        return $(l);
