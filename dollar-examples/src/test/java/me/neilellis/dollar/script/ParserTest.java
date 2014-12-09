@@ -119,6 +119,11 @@ public class ParserTest {
     }
 
     @Test
+    public void testPure() throws Exception {
+        new DollarParser().parse(getClass().getResourceAsStream("/test_pure.ds"), parallel);
+    }
+
+    @Test
     public void testRanges() throws Exception {
         new DollarParser().parse(getClass().getResourceAsStream("/test_ranges.ds"), parallel);
     }
@@ -140,7 +145,7 @@ public class ParserTest {
 
     @Test
     public void testURIs() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_uris.ds"), parallel);
+//        new DollarParser().parse(getClass().getResourceAsStream("/test_uris.ds"), parallel);
     }
 
     @Test

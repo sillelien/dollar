@@ -24,7 +24,7 @@ import java.io.IOException;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class CodeExtractionVisitor implements Visitor {
+class CodeExtractionVisitor implements Visitor {
     @Override
     public void visit(AbbreviationNode node) {
 
@@ -133,12 +133,8 @@ public class CodeExtractionVisitor implements Visitor {
 
     @Override
     public void visit(RootNode node) {
-        for (ReferenceNode refNode : node.getReferences()) {
-            visitChildren(refNode);
-        }
-        for (AbbreviationNode abbrNode : node.getAbbreviations()) {
-            visitChildren(abbrNode);
-        }
+        node.getReferences().forEach(this::visitChildren);
+        node.getAbbreviations().forEach(this::visitChildren);
         visitChildren(node);
     }
 
@@ -227,7 +223,7 @@ public class CodeExtractionVisitor implements Visitor {
 
     }
 
-    protected void visitChildren(SuperNode node) {
+    void visitChildren(SuperNode node) {
         for (Node child : node.getChildren()) {
             child.accept(this);
         }

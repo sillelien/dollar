@@ -40,5 +40,5 @@ public interface ModuleResolver extends ExtensionPoint<ModuleResolver> {
 
     String getScheme();
 
-    Pipeable resolve(String uriWithoutScheme, ScriptScope scope) throws Exception;
+    Pipeable resolve(String uriWithoutScheme, Scope scope) throws Exception;
 }

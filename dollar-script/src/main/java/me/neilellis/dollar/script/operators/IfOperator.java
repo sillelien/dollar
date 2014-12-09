@@ -16,7 +16,7 @@
 
 package me.neilellis.dollar.script.operators;
 
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
@@ -27,9 +27,9 @@ import static me.neilellis.dollar.script.DollarScriptSupport.wrapBinary;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class IfOperator implements Map<var, Map<var, var>> {
-    private final ScriptScope scope;
+    private final Scope scope;
 
-    public IfOperator(ScriptScope scope) {this.scope = scope;}
+    public IfOperator(Scope scope) {this.scope = scope;}
 
     @Override public Map<var, var> map(var lhs) {
         return rhs -> wrapBinary(scope, () -> {

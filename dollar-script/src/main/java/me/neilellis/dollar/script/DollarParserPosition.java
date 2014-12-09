@@ -19,5 +19,5 @@ package me.neilellis.dollar.script;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DollarParserPosition {
+class DollarParserPosition {
 }

@@ -27,11 +27,8 @@ import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -45,10 +42,10 @@ import java.util.stream.Stream;
  */
 public class DollarWrapper implements var {
 
-    private DollarMonitor monitor;
-    private StateTracer tracer;
-    private ErrorLogger errorLogger;
-    private var value;
+    private final DollarMonitor monitor;
+    private final StateTracer tracer;
+    private final ErrorLogger errorLogger;
+    private final var value;
 
     DollarWrapper(var value, DollarMonitor monitor, StateTracer tracer, ErrorLogger errorLogger) {
 //        tracer.trace(DollarNull.INSTANCE,value, StateTracer.Operations.CREATE);
@@ -63,189 +60,14 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $(@NotNull var key, Object value) {
-        return tracer.trace(this, getValue().$(key, value), StateTracer.Operations.SET, key, value);
-    }
-
-    @Nullable
-    @Override
-    public <R> R $() {
-        return getValue().$();
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull Pipeable lambda) {
-        return getValue().$(lambda);
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull Number n) {
-        return getValue().$(n);
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull var rhs) {
-        return getValue().$(rhs);
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $children() {
-        return getValue().$children();
-    }
-
-    @NotNull
-    @Override
-    public Stream $children(@NotNull String key) {
-        return getValue().$children(key);
-    }
-
-    @NotNull
-    @Override
-    public var $containsValue(@NotNull var value) {
-        return getValue().$containsValue(value);
-    }
-
-    @NotNull
-    @Override
-    public var $default(Object o) {
-        return getValue().$default(o);
-    }
-
-    @NotNull
-    @Override
-    public var $(@NotNull String key) {
-        return getValue().$(key);
-    }
-
-    @NotNull
-    @Override
-    public var $get(@NotNull Object key) {
-        return getValue().$get(key);
-    }
-
-    @NotNull
-    @Override
-    public var $has(@NotNull String key) {
-        return DollarStatic.$(getValue().$has(key));
-    }
-
-    @NotNull
-    @Override
-    public var $isEmpty() {
-        return DollarStatic.$(getValue().$isEmpty());
-    }
-
-    @NotNull
-    @Override
-    public var $match(@NotNull String key, String value) {
-        return DollarStatic.$(getValue().$match(key, value));
-    }
-
-    @NotNull
-    @Override
-    public String S(@NotNull String key) {
-        return getValue().S(key);
-    }
-
-    @NotNull
-    @Override
-    public var $mimeType() {
-        return DollarStatic.$(getValue().$mimeType());
-    }
-
-    @NotNull
-    @Override
-    public var $rm(@NotNull String key) {
-        return tracer.trace(this, getValue().$rm(key), StateTracer.Operations.REMOVE_BY_KEY, key);
-    }
-
-    @NotNull
-    @Override
-    public var $set(@NotNull String key, Object value) {
-        return tracer.trace(null, getValue().$set(key, value), StateTracer.Operations.SET, key, value);
-    }
-
-    @NotNull
-    @Override
-    public var $size() {
-        return DollarStatic.$(getValue().$size());
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $stream(boolean parallel) {
-        return getValue().$stream(false);
-    }
-
-    @NotNull
-    @Override
-    public var $void(@NotNull Callable<var> handler) {
-        return getValue().$void(handler);
-    }
-
-    @Override
-    public void clear() {
-        getValue().clear();
-    }
-
-    @NotNull
-    @Override
-    public boolean containsKey(Object key) {
-        return getValue().containsKey(key);
-    }
-
-    @NotNull
-    @Override
-    public Set<Map.Entry<String, var>> entrySet() {
-        return getValue().entrySet();
-    }
-
-    @NotNull
-    @Override
-    public var err() {
-        return getValue().err();
-
-    }
-
-    @NotNull
-    @Override
-    public var out() {
-        return getValue().out();
-    }
-
-    @NotNull
-    @Override
-    public var remove(Object value) {
-        return tracer.trace(this, getValue().remove(value), StateTracer.Operations.REMOVE_BY_VALUE, value);
-    }
-
-    @NotNull
-    @Override
-    public Collection<var> values() {
-        return getValue().values();
-    }
-
-    var getValue() {
-        if (value == null) {
-            throw new IllegalStateException("Value has become null!!");
-        }
-        return value;
-    }
-
-    @NotNull
-    @Override
     public var $abs() {
         return getValue().$abs();
     }
 
     @NotNull
     @Override
-    public var $minus(@NotNull var value) {
-        return getValue().$minus(value);
+    public var $minus(@NotNull var v) {
+        return getValue().$minus(v);
     }
 
     @NotNull
@@ -256,8 +78,8 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $plus(var value) {
-        return getValue().$plus(value);
+    public var $plus(var v) {
+        return getValue().$plus(v);
     }
 
     @NotNull
@@ -276,6 +98,13 @@ public class DollarWrapper implements var {
     @Override
     public var $negate() {
         return getValue().$negate();
+    }
+
+    var getValue() {
+        if (value == null) {
+            throw new IllegalStateException("Value has become null!!");
+        }
+        return value;
     }
 
     @Override
@@ -360,11 +189,6 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public var $write(var value) {
-        return getValue().$write(value);
-    }
-
-    @Override
     public var $subscribe(Pipeable subscription) {
         return getValue().$subscribe(subscription);
     }
@@ -376,6 +200,11 @@ public class DollarWrapper implements var {
 
     @Override public var $subscribe(Pipeable subscription, String key) {
         return getValue().$subscribe(subscription, key);
+    }
+
+    @Override
+    public var $write(var value) {
+        return getValue().$write(value);
     }
 
     @Override
@@ -440,7 +269,7 @@ public class DollarWrapper implements var {
         return getValue().$pause();
     }
 
-    @NotNull @Override public void $signal(@NotNull Signal signal) {
+    @Override public void $signal(@NotNull Signal signal) {
         getValue().$signal(signal);
     }
 
@@ -462,84 +291,6 @@ public class DollarWrapper implements var {
 
     @NotNull @Override public StateMachine<ResourceState, Signal> getStateMachine() {
         return getValue().getStateMachine();
-    }
-
-    @NotNull
-    @Override
-    public var $dec(@NotNull var key, @NotNull var amount) {
-        return tracer.trace(this, getValue().$dec(key, amount), StateTracer.Operations.DEC, key, amount);
-    }
-
-    @NotNull
-    @Override
-    public var $dec(@NotNull var amount) {
-        return tracer.trace(this, getValue().$dec(amount), StateTracer.Operations.DEC, amount);
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var key, @NotNull var amount) {
-        return tracer.trace(this, getValue().$inc(key, amount), StateTracer.Operations.INC, key, amount);
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return tracer.trace(this, getValue().$inc(amount), StateTracer.Operations.INC, amount);
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull String classModule) {
-        return getValue().$pipe(classModule);
-    }
-
-    @Override
-    public var eval(@NotNull String label, DollarEval lambda) {
-        return tracer.trace(this,
-                            monitor.run("$fun",
-                                        "dollar.pipe.java." + sanitize(label),
-                                        "Evaluating Lambda",
-                                        () -> getValue().eval(label, lambda)),
-                            StateTracer.Operations.EVAL,
-                            label,
-                            lambda);
-    }
-
-    @Override
-    public var eval(DollarEval lambda) {
-        return eval("anon", lambda);
-    }
-
-    @Override
-    public var eval(@NotNull Class clazz) {
-        return monitor.run("save",
-                           "dollar.run." + clazz.getName(),
-                           "Running class " + clazz,
-                           () -> getValue().eval(clazz));
-    }
-
-    @NotNull
-    @Override
-    public Stream<String> keyStream() {
-        return getValue().keyStream();
-    }
-
-    @NotNull
-    @Override
-    public Stream<Map.Entry<String, var>> kvStream() {
-        return getValue().kvStream();
-    }
-
-    @Override
-    public Number number(@NotNull String key) {
-        return getValue().number(key);
-    }
-
-    @NotNull
-    private static String sanitize(@NotNull String location) {
-        return location.replaceAll("[^\\w.]+", "_");
-
     }
 
     @NotNull
@@ -589,7 +340,7 @@ public class DollarWrapper implements var {
         return getValue().$error(errorMessage, type);
     }
 
-    @Override
+    @NotNull @Override
     public var clearErrors() {
         return tracer.trace(this, getValue().clearErrors(), StateTracer.Operations.CLEAR_ERRORS);
     }
@@ -615,6 +366,12 @@ public class DollarWrapper implements var {
     @Override
     public var $eval(@NotNull String js) {
         return $pipe("anon", js);
+    }
+
+    @NotNull
+    private static String sanitize(@NotNull String location) {
+        return location.replaceAll("[^\\w.]+", "_");
+
     }
 
     @NotNull
@@ -658,6 +415,103 @@ public class DollarWrapper implements var {
         return clazz.getName().toLowerCase();
     }
 
+    @NotNull
+    @Override
+    public var $set(@NotNull var key, Object value) {
+        return tracer.trace(this, getValue().$set(key, value), StateTracer.Operations.SET, key, value);
+    }
+
+    @Nullable
+    @Override
+    public <R> R $() {
+        return getValue().$();
+    }
+
+    @NotNull
+    @Override
+    public var $get(@NotNull var rhs) {
+        return getValue().$get(rhs);
+    }
+
+    @NotNull
+    @Override
+    public var $containsValue(@NotNull var value) {
+        return getValue().$containsValue(value);
+    }
+
+    @NotNull
+    @Override
+    public var $default(var v) {
+        return getValue().$default(v);
+    }
+
+    @NotNull
+    @Override
+    public var $has(@NotNull var key) {
+        return DollarStatic.$(getValue().$has(key));
+    }
+
+    @NotNull
+    @Override
+    public var $isEmpty() {
+        return DollarStatic.$(getValue().$isEmpty());
+    }
+
+    @NotNull
+    @Override
+    public var $size() {
+        return DollarStatic.$(getValue().$size());
+    }
+
+    @NotNull
+    @Override
+    public var $mimeType() {
+        return DollarStatic.$(getValue().$mimeType());
+    }
+
+    @NotNull
+    @Override
+    public var $removeByKey(@NotNull String key) {
+        return tracer.trace(this, getValue().$removeByKey(key), StateTracer.Operations.REMOVE_BY_KEY, key);
+    }
+
+    @NotNull
+    @Override
+    public var $set(@NotNull String key, Object value) {
+        return tracer.trace(null, getValue().$set(key, value), StateTracer.Operations.SET, key, value);
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $stream(boolean parallel) {
+        return getValue().$stream(false);
+    }
+
+
+
+    @NotNull
+    @Override
+    public var err() {
+        return getValue().err();
+
+    }
+
+    @NotNull
+    @Override
+    public var out() {
+        return getValue().out();
+    }
+
+    @NotNull
+    @Override
+    public var remove(Object value) {
+        return tracer.trace(this, getValue().remove(value), StateTracer.Operations.REMOVE_BY_VALUE, value);
+    }
+
+    @NotNull @Override public var $remove(var value) {
+        return getValue().$remove(value);
+    }
+
     @Override
     public String S() {
         return getValue().S();
@@ -666,6 +520,12 @@ public class DollarWrapper implements var {
     @Override
     public var $as(Type type) {
         return getValue().$as(type);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> $list() {
+        return getValue().$list();
     }
 
     @NotNull @Override
@@ -679,11 +539,6 @@ public class DollarWrapper implements var {
     }
 
     @NotNull @Override
-    public Integer I(@NotNull String key) {
-        return getValue().I(key);
-    }
-
-    @NotNull @Override
     public Long L() {
         return getValue().L();
     }
@@ -694,7 +549,7 @@ public class DollarWrapper implements var {
         return getValue().N();
     }
 
-    @Override
+    @NotNull @Override
     public Map<String, Object> toMap() {
         return getValue().toMap();
     }
@@ -763,18 +618,6 @@ public class DollarWrapper implements var {
         return getValue().isUri();
     }
 
-    @Nullable
-    @Override
-    public JsonObject json(@NotNull String key) {
-        return getValue().json(key);
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> toList() {
-        return getValue().toList();
-    }
-
     @Override
     public boolean isVoid() {
         return getValue().isVoid();
@@ -795,6 +638,10 @@ public class DollarWrapper implements var {
     @Override
     public ImmutableList<String> strings() {
         return getValue().strings();
+    }
+
+    @NotNull @Override public ImmutableList<Object> toList() {
+        return getValue().toList();
     }
 
     @NotNull @Override
@@ -818,7 +665,7 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public int compareTo(var o) {
+    public int compareTo(@NotNull var o) {
         return getValue().compareTo(o);
     }
 
@@ -877,7 +724,7 @@ public class DollarWrapper implements var {
         return getValue().hashCode();
     }
 
-    @Override
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass") @Override
     public boolean equals(Object obj) {
         return getValue().equals(obj);
     }

@@ -42,19 +42,19 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     @NotNull
     @Override
     public var $divide(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
     @NotNull
     @Override
     public var $modulus(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
     @NotNull
     @Override
     public var $multiply(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
     @NotNull
@@ -81,7 +81,7 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
             case VOID:
                 return DollarStatic.$void();
             default:
-                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
+                return DollarFactory.failure(FailureType.INVALID_CAST);
 
         }
     }
@@ -106,24 +106,6 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
             }
         }
         return false;
-    }
-
-    @NotNull
-    @Override
-    public var $dec(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_BOOLEAN_VALUE_OPERATION);
-    }
-
-    @Override
-    @NotNull
-    public Number number(@NotNull String key) {
-        return 0;
     }
 
     @NotNull
@@ -168,7 +150,7 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     }
 
     @Override
-    public int compareTo(var o) {
+    public int compareTo(@NotNull var o) {
         return I() - o.I();
     }
 

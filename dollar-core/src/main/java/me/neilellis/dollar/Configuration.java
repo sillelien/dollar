@@ -19,11 +19,11 @@ package me.neilellis.dollar;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class Configuration {
+@SuppressWarnings("PointlessBooleanExpression") public class Configuration {
+    private final boolean safe = true;
+    private final boolean monitor = false;
     private boolean production;
     private boolean debugScope = true;
-    private boolean safe = true;
-    private boolean monitor = false;
 
     public boolean failFast() {
         return true;

@@ -19,6 +19,7 @@ package me.neilellis.dollar.json;
 
 import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.json.impl.Json;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -29,7 +30,7 @@ import java.util.*;
  */
 public class JsonArray extends JsonElement implements Iterable<Object> {
 
-  protected List list;
+  final List list;
 
   public JsonArray(List list) {
     this(list, true);
@@ -74,22 +75,32 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     return this;
   }
 
-  public JsonArray addString(String str) {
+  public JsonArray addObject(JsonObject value) {
+    list.add(value == null ? null : value.map);
+    return this;
+  }
+
+  JsonArray addArray(JsonArray value) {
+    list.add(value == null ? null : value.list);
+    return this;
+  }
+
+  JsonArray addString(String str) {
     list.add(str);
     return this;
   }
 
-  public JsonArray addNumber(Number value) {
+  JsonArray addNumber(Number value) {
     list.add(value);
     return this;
   }
 
-  public JsonArray addBoolean(Boolean value) {
+  JsonArray addBoolean(Boolean value) {
     list.add(value);
     return this;
   }
 
-  public JsonArray addBinary(byte[] value) {
+  JsonArray addBinary(byte[] value) {
     String encoded = (value == null) ? null : Base64.getEncoder().encodeToString(value);
     list.add(encoded);
     return this;
@@ -104,16 +115,6 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
       return addArray(value.asArray());
     }
     return addObject(value.asObject());
-  }
-
-  public JsonArray addArray(JsonArray value) {
-    list.add(value == null ? null : value.list);
-    return this;
-  }
-
-  public JsonArray addObject(JsonObject value) {
-    list.add(value == null ? null : value.map);
-    return this;
   }
 
   public boolean contains(Object value) {
@@ -166,15 +167,15 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     return encode();
   }
 
-  public String encode() throws EncodeException {
+  String encode() throws EncodeException {
     return Json.encode(this.list);
   }
 
-  @Override
+  @NotNull @Override
   public Iterator<Object> iterator() {
     return new Iterator<Object>() {
 
-      Iterator<Object> iter = list.iterator();
+      final Iterator<Object> iter = list.iterator();
 
       @Override
       public boolean hasNext() {

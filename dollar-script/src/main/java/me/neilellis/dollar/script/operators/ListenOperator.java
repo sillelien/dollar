@@ -18,7 +18,7 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Operator;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
 
@@ -30,12 +30,14 @@ import static me.neilellis.dollar.DollarStatic.$;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class ListenOperator implements Binary<var>, Operator {
+    private final Scope scope;
     private Supplier<String> source;
-    private ScriptScope scope;
+    private boolean pure;
 
 
-    public ListenOperator(ScriptScope scope) {
+    public ListenOperator(Scope scope, boolean pure) {
         this.scope = scope;
+        this.pure = pure;
     }
 
 
@@ -43,7 +45,7 @@ public class ListenOperator implements Binary<var>, Operator {
     public var map(var lhs, var rhs) {
         try {
             return DollarScriptSupport.wrapUnary(scope, () -> {
-                return $(lhs.$listen(i -> scope.getDollarParser().inScope("listen", scope, newScope -> {
+                return $(lhs.$listen(i -> scope.getDollarParser().inScope(pure, "listen", scope, newScope -> {
                     newScope.setParameter("1", i);
                     //todo: change to receive
                     return rhs._fixDeep(false);

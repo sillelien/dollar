@@ -37,7 +37,7 @@ import java.nio.file.Files;
  */
 public class JSFileScript implements Pipeable {
   private static
-  @NotNull
+  @NotNull final
   ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
 
 

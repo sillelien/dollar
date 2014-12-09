@@ -21,7 +21,7 @@ import java.io.File;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class ParserMain {
+class ParserMain {
 
     public static void main(String[] args) throws Throwable {
         File file = new File(args[0]);

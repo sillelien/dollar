@@ -40,8 +40,8 @@ public class DollarThreadContext {
     private String threadKey = UUID.randomUUID().toString();
     private ClassLoader classLoader = DollarThreadContext.class.getClassLoader();
 
-    public DollarThreadContext(List<String> labels, DollarMonitor monitor, var passValue, DollarPubSub pubsub,
-                               DollarStore store, String threadKey) {
+    private DollarThreadContext(List<String> labels, DollarMonitor monitor, var passValue, DollarPubSub pubsub,
+                                DollarStore store, String threadKey) {
         this.labels = labels;
         this.monitor = monitor;
         this.passValue = passValue;
@@ -64,6 +64,14 @@ public class DollarThreadContext {
         return new DollarThreadContext(new ArrayList<>(labels), monitor, passValue, pubsub, store, threadKey + ":" + s);
     }
 
+    public ClassLoader getClassLoader() {
+        return classLoader;
+    }
+
+    public void setClassLoader(ClassLoader classLoader) {
+        this.classLoader = classLoader;
+    }
+
     public List<String> getLabels() {
         return labels;
     }
@@ -71,7 +79,6 @@ public class DollarThreadContext {
     public void setLabels(List<String> labels) {
         this.labels = labels;
     }
-
 
     public DollarMonitor getMonitor() {
         return monitor;
@@ -124,13 +131,5 @@ public class DollarThreadContext {
 
     public void pushLabel(String label) {
         labels.add(label);
-    }
-
-    public ClassLoader getClassLoader() {
-        return classLoader;
-    }
-
-    public void setClassLoader(ClassLoader classLoader) {
-        this.classLoader = classLoader;
     }
 }

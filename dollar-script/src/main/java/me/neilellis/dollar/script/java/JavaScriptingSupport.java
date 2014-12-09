@@ -16,13 +16,11 @@
 
 package me.neilellis.dollar.script.java;
 
-import com.innowhere.relproxy.RelProxyOnReloadListener;
 import com.innowhere.relproxy.jproxy.JProxy;
 import com.innowhere.relproxy.jproxy.JProxyConfig;
-import com.innowhere.relproxy.jproxy.JProxyDiagnosticsListener;
 import com.innowhere.relproxy.jproxy.JProxyScriptEngineFactory;
 import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.var;
 
 import javax.script.Bindings;
@@ -30,9 +28,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.tools.Diagnostic;
-import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,29 +39,21 @@ import static me.neilellis.dollar.DollarStatic.$;
  */
 public class JavaScriptingSupport {
 
-    public static var compile(var in, String java, ScriptScope scope) {
+    public static var compile(var in, String java, Scope scope) {
         JProxyConfig jpConfig = JProxy.createJProxyConfig();
         jpConfig.setEnabled(true)
-                .setRelProxyOnReloadListener(new RelProxyOnReloadListener() {
-                    @Override
-                    public void onReload(Object objOld, Object objNew, Object proxy, Method method, Object[] args) {
-                        //TODO
-                    }
+                .setRelProxyOnReloadListener((objOld, objNew, proxy, method, args) -> {
+                    //TODO
                 })
 //                .setInputPath(".")
                 .setScanPeriod(-1)
                 .setClassFolder(System.getProperty("user.home") + "/.dollar/tmp/classes")
                 .setCompilationOptions(Collections.emptyList())
-                .setJProxyDiagnosticsListener(new JProxyDiagnosticsListener() {
-                    @Override
-                    public void onDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics) {
-                        List<Diagnostic<? extends JavaFileObject>> diagnosticList = diagnostics.getDiagnostics();
-                        for (Diagnostic<? extends JavaFileObject> diagnostic : diagnosticList) {
-                            if (diagnostic.getKind().equals(Diagnostic.Kind.ERROR)) {
-                                System.err.println(diagnostic);
-                            }
-                        }
-                    }
+                .setJProxyDiagnosticsListener(diagnostics -> {
+                    List<Diagnostic<? extends JavaFileObject>> diagnosticList = diagnostics.getDiagnostics();
+                    diagnosticList.stream()
+                                  .filter(diagnostic -> diagnostic.getKind().equals(Diagnostic.Kind.ERROR))
+                                  .forEach(System.err::println);
                 });
 
         JProxyScriptEngineFactory factory = JProxyScriptEngineFactory.create(jpConfig);

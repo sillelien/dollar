@@ -21,6 +21,7 @@ import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.guard.*;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
+import me.neilellis.dollar.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
@@ -33,6 +34,11 @@ import java.util.Map;
  */
 public interface TypeAware {
 
+    /**
+     * Returns the same as S() but defaults to "" if null.
+     *
+     * @return a null safe version of S()
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     default String $S() {
@@ -43,25 +49,41 @@ public interface TypeAware {
 
     String S();
 
+    /**
+     * Cast this object to the {@link Type} specified. If the object cannot be converted it will fail with
+     * {@link me.neilellis.dollar.types.FailureType#INVALID_CAST}
+     *
+     * @param type the type to cast to
+     *
+     * @return this casted
+     */
     var $as(Type type);
 
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    Double D();
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    Integer I();
-
     /**
-     * Returns the value for the supplied key as an Integer.
+     * Convert this object into a list of objects, basically the same as casting to a List.
      *
-     * @param key the key
-     * @return an Integer value (or null).
+     * @return a list type var.
      */
     @NotNull
-    @Guarded(NotNullGuard.class)
-    Integer I(@NotNull String key);
+    @Guarded(ChainGuard.class)
+    default var $split() {
+        return DollarFactory.fromValue($list());
+    }
+
+    /**
+     * Converts this to a list of vars. Only really useful for collection types.
+     *
+     * @return a list of vars.
+     */
+    @Guarded(NotNullCollectionGuard.class)
+    @Guarded(AllVarCollectionGuard.class)
+    @NotNull ImmutableList<var> $list();
+
+    @NotNull
+    @Guarded(NotNullGuard.class) Double D();
+
+    @NotNull
+    @Guarded(NotNullGuard.class) Integer I();
 
     @Guarded(NotNullGuard.class)
     @NotNull Long L();
@@ -75,13 +97,14 @@ public interface TypeAware {
     }
 
     /**
-     * Returns this object as a set of nested maps.
+     * Returns this object as a set of nested maps the values are completely unwrapped and don't contain 'var' objects.
      *
      * @return a nested Map or null if the operation doesn't make sense (i.e. on a single valued object or list)
      */
-    @Guarded(NotNullGuard.class)
-    @Nullable Map<String, Object> toMap();
+    @NotNull
+    @Guarded(NotNullGuard.class) Map<String, Object> toMap();
 
+    @NotNull
     @Guarded(NotNullGuard.class)
     default var getPairValue() {
         return $map().values().iterator().next();
@@ -91,7 +114,13 @@ public interface TypeAware {
     @Guarded(NotNullGuard.class)
     @Guarded(AllVarMapGuard.class) ImmutableMap<String, var> $map();
 
-    //Any of these
+    /**
+     * Returns true if this object is of any of the supplied types.
+     *
+     * @param types a list of types
+     *
+     * @return true if of one of the types
+     */
     @Guarded(NotNullGuard.class) boolean is(@NotNull Type... types);
 
     boolean isCollection();
@@ -116,15 +145,16 @@ public interface TypeAware {
 
     boolean isUri();
 
-
-    @Nullable
-    JsonObject json(@NotNull String key);
-
+    /**
+     * Convert this object into a Dollar JsonArray.
+     *
+     * @return a JsonArray
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     default JsonArray jsonArray() {
         JsonArray array = new JsonArray();
-        for (me.neilellis.dollar.var item : toList()) {
+        for (me.neilellis.dollar.var item : $list()) {
             if (item == this) {
                 throw new IllegalArgumentException();
             }
@@ -135,18 +165,13 @@ public interface TypeAware {
         return array;
     }
 
-    @Guarded(NotNullCollectionGuard.class)
-    @Guarded(AllVarCollectionGuard.class)
-    @NotNull ImmutableList<var> toList();
-
     /**
      * Is this object a void object? Void objects are similar to null, except they can have methods called on them.
      *
      * This is a similar concept to nil in Objective-C.
      *
      * @return true if this is a void object
-     * @see me.neilellis.dollar.types.DollarVoid
-     * @see me.neilellis.dollar.types.DollarFail
+     *
      */
     boolean isVoid();
 
@@ -168,23 +193,34 @@ public interface TypeAware {
     }
 
     /**
-     * Convert this to a Vert.x JsonObject
+     * Convert this to a Dollar JsonObject
      *
      * @return this as a JsonObject
      */
-    @Nullable
-    JsonObject json();
+    @Nullable JsonObject json();
 
     /**
      * Returns this object as a list of string values or null if this is not applicable.
      *
      * @return a list of strings
      */
-    @Nullable
-    ImmutableList<String> strings();
+    @Nullable ImmutableList<String> strings();
 
+    /**
+     * Converts this to a list of value objects such as you would get from $(). Only really useful for collection
+     * types.
+     *
+     * @return a list of vars.
+     */
+    @Guarded(NotNullCollectionGuard.class)
+    @NotNull ImmutableList<Object> toList();
+
+    /**
+     * Convert this object into a stream.
+     *
+     * @return an InputStream
+     */
     @Guarded(NotNullGuard.class)
-    @NotNull
-    InputStream toStream();
+    @NotNull InputStream toStream();
 
 }

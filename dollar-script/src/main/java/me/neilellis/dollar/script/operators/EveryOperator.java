@@ -17,7 +17,7 @@
 package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarParser;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
@@ -30,12 +30,14 @@ import static me.neilellis.dollar.DollarStatic.$void;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class EveryOperator implements Map<Object[], var> {
-    private final ScriptScope scope;
-    private DollarParser dollarParser;
+    private final Scope scope;
+    private final DollarParser dollarParser;
+    private boolean pure;
 
-    public EveryOperator(DollarParser dollarParser, ScriptScope scope) {
+    public EveryOperator(DollarParser dollarParser, Scope scope, boolean pure) {
         this.dollarParser = dollarParser;
         this.scope = scope;
+        this.pure = pure;
     }
 
     @Override public var map(Object[] objects) {
@@ -43,7 +45,7 @@ public class EveryOperator implements Map<Object[], var> {
         Scheduler.schedule(i -> {
             count[0]++; // William Gibson
 //                System.out.println("COUNT "+count[0]);
-            return dollarParser.inScope("every", scope, newScope -> {
+            return dollarParser.inScope(pure, "every", scope, newScope -> {
                 try {
 //                    System.err.println(newScope);
                     newScope.setParameter("1", $(count[0]));

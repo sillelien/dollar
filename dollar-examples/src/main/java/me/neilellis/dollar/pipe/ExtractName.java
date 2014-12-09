@@ -21,7 +21,7 @@ import me.neilellis.dollar.Unit;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class ExtractName extends Unit {
+class ExtractName extends Unit {
     static {
         mainClass(ExtractName.class);
     }

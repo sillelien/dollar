@@ -26,9 +26,9 @@ import java.lang.reflect.Method;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarSource extends DollarLambda implements SourceAware {
-    private final ScriptScope scope;
+    private final Scope scope;
 
-    public DollarSource(Pipeable lambda, ScriptScope scope) {
+    public DollarSource(Pipeable lambda, Scope scope) {
         super(lambda);
         if (scope == null) {
             throw new NullPointerException();
@@ -36,7 +36,7 @@ public class DollarSource extends DollarLambda implements SourceAware {
         this.scope = scope;
     }
 
-    public DollarSource(Pipeable lambda, ScriptScope scope, boolean fixable) {
+    public DollarSource(Pipeable lambda, Scope scope, boolean fixable) {
         super(lambda, fixable);
         if (scope == null) {
             throw new NullPointerException();

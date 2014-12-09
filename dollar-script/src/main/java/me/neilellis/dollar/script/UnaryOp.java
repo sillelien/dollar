@@ -27,12 +27,12 @@ import java.util.function.Supplier;
  */
 public class UnaryOp implements Unary<var>, Operator {
     private final boolean immediate;
-    protected Map<var, var> function;
     protected Supplier<String> source;
-    protected ScriptScope scope;
+    protected Scope scope;
+    private Map<var, var> function;
 
 
-    public UnaryOp(ScriptScope scope, Map<var, var> function) {
+    public UnaryOp(Scope scope, Map<var, var> function) {
         if (scope == null) {
             throw new NullPointerException();
         }
@@ -41,7 +41,7 @@ public class UnaryOp implements Unary<var>, Operator {
         this.immediate = false;
     }
 
-    public UnaryOp(ScriptScope scope, boolean immediate, Map<var, var> function) {
+    public UnaryOp(Scope scope, boolean immediate, Map<var, var> function) {
         if (scope == null) {
             throw new NullPointerException();
         }

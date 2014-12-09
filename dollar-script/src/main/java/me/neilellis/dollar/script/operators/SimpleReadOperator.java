@@ -17,7 +17,7 @@
 package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.script.UnaryOp;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
@@ -28,7 +28,7 @@ import me.neilellis.dollar.var;
 public class SimpleReadOperator extends UnaryOp {
 
 
-    public SimpleReadOperator(ScriptScope scope) {
+    public SimpleReadOperator(Scope scope) {
         super(scope, null);
     }
 

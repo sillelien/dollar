@@ -17,7 +17,7 @@
 package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
@@ -25,9 +25,9 @@ import org.codehaus.jparsec.functors.Map;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class WriteOperator implements Map<Object[], Map<? super var, ? extends var>> {
-    private final ScriptScope scope;
+    private final Scope scope;
 
-    public WriteOperator(ScriptScope scope) {this.scope = scope;}
+    public WriteOperator(Scope scope) {this.scope = scope;}
 
     @Override
     public Map<? super var, ? extends var> map(Object[] objects) {

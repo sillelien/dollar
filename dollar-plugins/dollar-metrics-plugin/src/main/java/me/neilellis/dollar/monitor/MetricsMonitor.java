@@ -38,7 +38,7 @@ public class MetricsMonitor implements DollarMonitor {
   static {
   }
 
-  private Logger log = LoggerFactory.getLogger(this.getClass());
+  private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 
   public MetricsMonitor() {

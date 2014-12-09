@@ -22,7 +22,6 @@ import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -68,7 +67,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @NotNull
     @Override
     public var $modulus(@NotNull var v) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_STRING_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_STRING_OPERATION);
     }
 
     @NotNull
@@ -108,7 +107,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
             case URI:
                 return DollarFactory.fromURI(value);
             default:
-                return DollarFactory.failure(DollarFail.FailureType.INVALID_CAST);
+                return DollarFactory.failure(FailureType.INVALID_CAST);
         }
     }
 
@@ -135,34 +134,17 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
-    public var $dec(@NotNull var amount) {
-        return this;
+    public var $plus(var v) {
+        return DollarFactory.fromValue(value + v.toString(), errors());
     }
 
-    @NotNull
-    @Override
-    public var $inc(@NotNull var amount) {
-        return DollarFactory.failure(DollarFail.FailureType.INVALID_STRING_OPERATION);
-    }
-
-    @Override
-    public Number number(@NotNull String key) {
-        return new BigDecimal(key);
-    }
-
-    @NotNull
-    @Override
-    public var $plus(var newValue) {
-        return DollarFactory.fromValue(value + newValue.toString(), errors());
-    }
-
-    @Override
+    @NotNull @Override
     public var $size() {
         return DollarStatic.$(value.length());
     }
 
     @Override
-    public int compareTo(var o) {
+    public int compareTo(@NotNull var o) {
         return Comparator.<String>naturalOrder().compare(value, o.$S());
     }
 
@@ -196,7 +178,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return true;
     }
 
-    @Override
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass") @Override
     public boolean equals(@Nullable Object obj) {
         return obj != null && value.equals(obj.toString());
     }

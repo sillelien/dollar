@@ -23,7 +23,7 @@ import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.deps.DependencyRetriever;
 import me.neilellis.dollar.script.DollarParser;
 import me.neilellis.dollar.script.ModuleResolver;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.var;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
@@ -59,7 +59,7 @@ public class GithubModuleResolver implements ModuleResolver {
     }
 
     @Override
-    public Pipeable resolve(String uriWithoutScheme, ScriptScope scope) throws Exception {
+    public Pipeable resolve(String uriWithoutScheme, Scope scope) throws Exception {
         logger.debug(uriWithoutScheme);
         String[] githubRepo = uriWithoutScheme.split(":");
         GitHub github = GitHub.connect();
@@ -79,7 +79,7 @@ public class GithubModuleResolver implements ModuleResolver {
         } else {
             Repository localRepo = builder.setGitDir(dir).readEnvironment().findGitDir().build();
             Git git = new Git(localRepo);
-            CloneCommand clone = git.cloneRepository();
+            CloneCommand clone = Git.cloneRepository();
             clone.setBranch(branch);
             clone.setBare(false);
             clone.setCloneAllBranches(false);
@@ -102,20 +102,20 @@ public class GithubModuleResolver implements ModuleResolver {
             content = new String(Files.readAllBytes(mainFile.toPath()));
             classLoader =
                     DependencyRetriever.retrieve(module.$("dependencies")
-                                                       .toList()
+                                                       .$list()
                                                        .stream()
                                                        .map(TypeAware::$S)
                                                        .collect(Collectors.toList()));
         }
-        return (params) -> scope.getDollarParser().inScope("github-module", scope, newScope -> {
+        return (params) -> scope.getDollarParser().inScope(false, "github-module", scope, newScope -> {
             try {
 
 
                 final ImmutableMap<String, var> paramMap = params.$map();
                 for (Map.Entry<String, var> entry : paramMap.entrySet()) {
-                    newScope.set(entry.getKey(), entry.getValue(), true, null, false);
+                    newScope.set(entry.getKey(), entry.getValue(), true, null, false, false, false);
                 }
-                return new DollarParser(classLoader, dir, mainFile).parse(newScope, content, false);
+                return new DollarParser(classLoader, dir, mainFile).parse(newScope, content);
             } catch (IOException e) {
                 return DollarStatic.logAndRethrow(e);
             }

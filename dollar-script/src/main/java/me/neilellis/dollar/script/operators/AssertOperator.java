@@ -17,7 +17,7 @@
 package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.WithSource;
@@ -29,9 +29,9 @@ import static me.neilellis.dollar.DollarStatic.$void;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class AssertOperator implements Map<WithSource<Object[]>, var> {
-    private final ScriptScope scope;
+    private final Scope scope;
 
-    public AssertOperator(ScriptScope scope) {this.scope = scope;}
+    public AssertOperator(Scope scope) {this.scope = scope;}
 
     @Override public var map(WithSource<Object[]> withSource) {
         return DollarScriptSupport.wrapReactiveUnary(scope, (var) withSource.getValue()[1], () -> {

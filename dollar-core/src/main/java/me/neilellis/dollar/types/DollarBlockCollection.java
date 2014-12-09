@@ -18,7 +18,6 @@ package me.neilellis.dollar.types;
 
 import com.github.oxo42.stateless4j.StateMachine;
 import com.google.common.collect.ImmutableList;
-import me.neilellis.dollar.DollarEval;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.collections.ImmutableMap;
@@ -31,11 +30,8 @@ import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -47,7 +43,7 @@ import java.util.stream.Stream;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarBlockCollection implements var {
-    private List<var> value;
+    private final List<var> value;
 
 
     public DollarBlockCollection(List<var> value) {
@@ -58,29 +54,15 @@ public class DollarBlockCollection implements var {
         return this.getValue().$(key, value);
     }
 
-    @Override @NotNull @Guarded(ChainGuard.class) public var $(@NotNull var key, @Nullable Object value) {
-        return this.getValue().$(key, value);
+    @Override @NotNull @Guarded(ChainGuard.class) public var $set(@NotNull var key, @Nullable Object value) {
+        return this.getValue().$set(key, value);
     }
 
     @Override @Nullable public <R> R $() {return getValue().$();}
 
-    @Override @NotNull @Guarded(ChainGuard.class) @Guarded(NotNullParametersGuard.class) public var $(
-            @NotNull Pipeable lambda) {
-        return getValue().$(lambda);
-    }
-
-    @Override @NotNull @Guarded(NotNullParametersGuard.class) public var $(@NotNull Number n) {return getValue().$(n);}
-
-    @Override @NotNull @Guarded(ChainGuard.class) @Guarded(NotNullParametersGuard.class) public var $(
+    @Override @NotNull @Guarded(ChainGuard.class) @Guarded(NotNullParametersGuard.class) public var $get(
             @NotNull var rhs) {
-        return getValue().$(rhs);
-    }
-
-    @Override @NotNull @Guarded(ChainGuard.class) public Stream<var> $children() {return getValue().$children();}
-
-    @Override @NotNull @Guarded(ChainGuard.class) @Guarded(NotNullParametersGuard.class) public Stream<var> $children(
-            @NotNull String key) {
-        return getValue().$children(key);
+        return getValue().$get(rhs);
     }
 
     @Override @NotNull @Guarded(ChainGuard.class) @Guarded(NotNullParametersGuard.class) public var $contains(
@@ -95,76 +77,37 @@ public class DollarBlockCollection implements var {
 
     @Override @NotNull @Guarded(ChainGuard.class) @Guarded(ReturnVarOnlyGuard.class) @Guarded(NotNullParametersGuard
             .class)
-    public var $default(Object o) {return getValue().$default(o);}
+    public var $default(var v) {return getValue().$default(v);}
 
-    @Override @NotNull @Guarded(ChainGuard.class) @Guarded(NotNullParametersGuard.class) public var $get(
-            @NotNull String key) {
-        return getValue().$get(key);
-    }
-
-    @Override @NotNull public var $(@NotNull String key) {return getValue().$(key);}
-
-    @Override @NotNull @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class) public var $get(
-            @NotNull Object key) {
-        return getValue().$get(key);
-    }
-
-    @Override @NotNull @Guarded(NotNullParametersGuard.class) public var $has(@NotNull String key) {
+    @Override @NotNull @Guarded(NotNullParametersGuard.class) public var $has(@NotNull var key) {
         return getValue().$has(key);
     }
 
     @Override @NotNull @Guarded(ChainGuard.class) public var $isEmpty() {return getValue().$isEmpty();}
 
-    @Override @NotNull @Guarded(ChainGuard.class) public var $list() {return getValue().$list();}
-
-    @Override @NotNull @Guarded(ChainGuard.class) public var $match(@NotNull String key, @Nullable String value) {
-        return this.getValue().$match(key, value);
-    }
-
-    @Override @Nullable @Guarded(NotNullParametersGuard.class) public String S(@NotNull String key) {
-        return getValue().S(key);
-    }
+    @Override @NotNull @Guarded(ChainGuard.class) public var $size() {return getValue().$size();}
 
     @Override @NotNull @Guarded(ChainGuard.class) public var $mimeType() {return getValue().$mimeType();}
 
-    @Override @NotNull public var $rm(@NotNull String key) {return getValue().$rm(key);}
+    @Override @NotNull public var $removeByKey(@NotNull String key) {return getValue().$removeByKey(key);}
 
     @Override @NotNull public var $set(@NotNull String key, @Nullable Object value) {
         return this.getValue().$set(key, value);
     }
 
-    @Override @NotNull @Guarded(ChainGuard.class) public var $size() {return getValue().$size();}
-
     @Override @NotNull public Stream<var> $stream(boolean parallel) {return getValue().$stream(parallel);}
 
-    @Override @NotNull @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class) public var $void(
-            @NotNull Callable<var> handler) {
-        return getValue().$void(handler);
-    }
 
-    @Override public void clear() {getValue().clear();}
 
-    @Override @NotNull @Guarded(ChainGuard.class) @Guarded(NotNullParametersGuard.class) public boolean containsKey(
-            Object key) {
-        return getValue().containsKey(key);
-    }
-
-    @Override @NotNull @Guarded(ChainGuard.class) @Guarded(NotNullCollectionGuard.class)
-    public Set<Map.Entry<String, var>> entrySet() {return getValue().entrySet();}
-
-    @Override @NotNull @Guarded(ChainGuard.class) public var err() {return getValue().err();}
+    @NotNull @Override @Guarded(ChainGuard.class) public var err() {return getValue().err();}
 
     @Override @NotNull @Guarded(ChainGuard.class) public var out() {return getValue().out();}
 
-    @Override @NotNull @Guarded(ChainGuard.class) public <R> R remove(Object value) {
-        return this.getValue()
-                   .remove(value);
+    @NotNull @Override public var $remove(var value) {
+        return getValue().$remove(value);
     }
 
-    @Override @NotNull @Guarded(ChainGuard.class) @Guarded(NotNullCollectionGuard.class)
-    public Collection<var> values() {return getValue().values();}
-
-    public var getValue() {
+    var getValue() {
         for (int i = 0; i < value.size() - 1; i++) {
             value.get(i)._fixDeep(false);
         }
@@ -177,11 +120,14 @@ public class DollarBlockCollection implements var {
 
     @Override public var $as(Type type) {return getValue().$as(type);}
 
+    @Override @NotNull @Guarded(ChainGuard.class) public var $split() {return getValue().$split();}
+
+    @Override @Guarded(NotNullCollectionGuard.class) @Guarded(AllVarCollectionGuard.class) @NotNull
+    public ImmutableList<var> $list() {return getValue().$list();}
+
     @Override @NotNull @Guarded(NotNullGuard.class) public Double D() {return getValue().D();}
 
     @Override @NotNull @Guarded(NotNullGuard.class) public Integer I() {return getValue().I();}
-
-    @Override @NotNull @Guarded(NotNullGuard.class) public Integer I(@NotNull String key) {return getValue().I(key);}
 
     @Override @Guarded(NotNullGuard.class) @NotNull public Long L() {return getValue().L();}
 
@@ -189,9 +135,9 @@ public class DollarBlockCollection implements var {
 
     @Override @Guarded(NotNullGuard.class) public String getPairKey() {return getValue().getPairKey();}
 
-    @Override @Guarded(NotNullGuard.class) @Nullable public Map<String, Object> toMap() {return getValue().toMap();}
+    @NotNull @Override @Guarded(NotNullGuard.class) public Map<String, Object> toMap() {return getValue().toMap();}
 
-    @Override @Guarded(NotNullGuard.class) public var getPairValue() {return getValue().getPairValue();}
+    @NotNull @Override @Guarded(NotNullGuard.class) public var getPairValue() {return getValue().getPairValue();}
 
     @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(AllVarMapGuard.class)
     public ImmutableMap<String, var> $map() {return getValue().$map();}
@@ -220,12 +166,7 @@ public class DollarBlockCollection implements var {
 
     @Override public boolean isUri() {return getValue().isUri();}
 
-    @Override @Nullable public JsonObject json(@NotNull String key) {return getValue().json(key);}
-
     @Override @NotNull @Guarded(NotNullGuard.class) public JsonArray jsonArray() {return getValue().jsonArray();}
-
-    @Override @Guarded(NotNullCollectionGuard.class) @Guarded(AllVarCollectionGuard.class) @NotNull
-    public ImmutableList<var> toList() {return getValue().toList();}
 
     @Override public boolean isVoid() {return getValue().isVoid();}
 
@@ -234,6 +175,10 @@ public class DollarBlockCollection implements var {
     @Override @Nullable public JsonObject json() {return getValue().json();}
 
     @Override @Nullable public ImmutableList<String> strings() {return getValue().strings();}
+
+    @NotNull @Override public ImmutableList<Object> toList() {
+        return ImmutableList.of(getValue().$());
+    }
 
     @Override @Guarded(NotNullGuard.class) @NotNull public InputStream toStream() {return getValue().toStream();}
 
@@ -244,8 +189,8 @@ public class DollarBlockCollection implements var {
     public var $dec() {return getValue().$dec();}
 
     @Override @NotNull @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class) public var $minus(
-            @NotNull var value) {
-        return this.getValue().$minus(value);
+            @NotNull var v) {
+        return this.getValue().$minus(v);
     }
 
     @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) public var $divide(
@@ -256,8 +201,8 @@ public class DollarBlockCollection implements var {
     @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class)
     public var $inc() {return getValue().$inc();}
 
-    @Override @NotNull @Guarded(ChainGuard.class) public var $plus(@Nullable var value) {
-        return this.getValue().$plus(value);
+    @Override @NotNull @Guarded(ChainGuard.class) public var $plus(@Nullable var v) {
+        return this.getValue().$plus(v);
     }
 
     @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) public var $modulus(
@@ -322,11 +267,6 @@ public class DollarBlockCollection implements var {
     @Override @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class)
     public var $read() {return getValue().$read();}
 
-    @Override @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class) public var $write(
-            var value) {
-        return this.getValue().$write(value);
-    }
-
     @Override @Guarded(ChainGuard.class) @Guarded(NotNullParametersGuard.class) public var $subscribe(
             Pipeable subscription) {
         return getValue().$subscribe(subscription);
@@ -337,6 +277,11 @@ public class DollarBlockCollection implements var {
     @Override @Guarded(ChainGuard.class) @Guarded(NotNullParametersGuard.class) public var $subscribe(
             Pipeable subscription, String key) {
         return getValue().$subscribe(subscription, key);
+    }
+
+    @Override @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class) public var $write(
+            var value) {
+        return this.getValue().$write(value);
     }
 
     @Override @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) public var $choose(var map) {
@@ -392,83 +337,7 @@ public class DollarBlockCollection implements var {
     @Override @NotNull @Guarded(NotNullGuard.class)
     public StateMachine<ResourceState, Signal> getStateMachine() {return getValue().getStateMachine();}
 
-    @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) @Deprecated public var $dec(
-            @NotNull String key, @NotNull var amount) {
-        return getValue().$dec(key, amount);
-    }
 
-    @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) @Deprecated public var $dec(
-            @NotNull var key, @NotNull var amount) {
-        return getValue().$dec(key, amount);
-    }
-
-    @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) @Deprecated public var $dec(
-            @NotNull String key, @NotNull Number amount) {
-        return getValue().$dec(key, amount);
-    }
-
-    @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) @Deprecated public var $dec(
-            @NotNull Number amount) {
-        return getValue().$dec(amount);
-    }
-
-    @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) @Deprecated public var $dec(
-            @NotNull var amount) {
-        return getValue().$dec(amount);
-    }
-
-    @Override @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) @NotNull @Deprecated public var $inc(
-            @NotNull String key, @NotNull var amount) {
-        return getValue().$inc(key, amount);
-    }
-
-    @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) @Deprecated public var $inc(
-            @NotNull var key, @NotNull var amount) {
-        return getValue().$inc(key, amount);
-    }
-
-    @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) @Deprecated public var $inc(
-            @NotNull String key, @NotNull Number amount) {
-        return getValue().$inc(key, amount);
-    }
-
-    @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) @Deprecated public var $inc(
-            @NotNull Number amount) {
-        return getValue().$inc(amount);
-    }
-
-    @Override @NotNull @Guarded(NotNullGuard.class) @Deprecated @Guarded(ChainGuard.class) public var $inc(
-            @NotNull var amount) {
-        return getValue().$inc(amount);
-    }
-
-    @Override @NotNull @Deprecated @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) public var $pipe(
-            @NotNull String classModule) {
-        return getValue().$pipe(classModule);
-    }
-
-    @Override @Deprecated @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) public var eval(String label,
-                                                                                                  DollarEval eval) {
-        return getValue().eval(label, eval);
-    }
-
-    @Override @Deprecated @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) public var eval(
-            DollarEval eval) {
-        return getValue().eval(eval);
-    }
-
-    @Override @Deprecated @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class) public var eval(
-            Class clazz) {
-        return getValue().eval(clazz);
-    }
-
-    @Override @NotNull @Deprecated @Guarded(NotNullGuard.class)
-    public Stream<String> keyStream() {return getValue().keyStream();}
-
-    @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(NotNullCollectionGuard.class) @Deprecated
-    public Stream<Map.Entry<String, var>> kvStream() {return getValue().kvStream();}
-
-    @Override @Nullable @Deprecated public Number number(@NotNull String key) {return getValue().number(key);}
 
     @Override @NotNull @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class) public var $error(
             @NotNull String errorMessage) {
@@ -546,7 +415,7 @@ public class DollarBlockCollection implements var {
         return getValue().assertFalse(assertion, message);
     }
 
-    @Override public int compareTo(var o) {return getValue().compareTo(o);}
+    @Override public int compareTo(@NotNull var o) {return getValue().compareTo(o);}
 
     @Override @Guarded(ChainGuard.class) @Guarded(NotNullGuard.class) public var debugf(String message,
                                                                                         Object... values) {

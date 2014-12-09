@@ -44,7 +44,7 @@ public interface NumericAware {
 
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class) var $minus(@NotNull var value);
+    @Guarded(ChainGuard.class) var $minus(@NotNull var v);
 
     @NotNull
     @Guarded(NotNullGuard.class)
@@ -60,13 +60,17 @@ public interface NumericAware {
     /**
      * Returns a new {@link me.neilellis.dollar.var} with this value appended to it.
      *
-     * @param value the value to append, this value may be null
+     * @param v the value to append, this value may be null
      *
      * @return a new object with the value supplied appended
      */
 
     @NotNull
-    @Guarded(ChainGuard.class) var $plus(@Nullable var value);
+    @Guarded(ChainGuard.class) var $plus(@Nullable var v);
+
+    default var $minus(int i) {
+        return $minus(DollarStatic.$(i));
+    }
 
     @NotNull
     @Guarded(NotNullGuard.class)
@@ -79,4 +83,8 @@ public interface NumericAware {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class) var $negate();
+
+    default var $plus(int i) {
+        return $plus(DollarStatic.$(i));
+    }
 }

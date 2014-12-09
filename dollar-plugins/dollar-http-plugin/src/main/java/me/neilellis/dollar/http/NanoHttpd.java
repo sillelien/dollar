@@ -16,6 +16,8 @@
 
 package me.neilellis.dollar.http;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
@@ -29,23 +31,39 @@ public abstract class NanoHttpd {
      * This is required as the Keep-Alive HTTP connections would otherwise
      * block the socket reading thread forever (or as long the browser is open).
      */
-    public static final int SOCKET_READ_TIMEOUT = 5000;
+    private static final int SOCKET_READ_TIMEOUT = 5000;
     /**
      * Common mime type for dynamic content: plain text
      */
-    public static final String MIME_PLAINTEXT = "text/plain";
+    private static final String MIME_PLAINTEXT = "text/plain";
     /**
      * Common mime type for dynamic content: html
      */
-    public static final String MIME_HTML = "text/html";
+    private static final String MIME_HTML = "text/html";
     /**
      * Pseudo-Parameter to use to store the actual query string in the parameters map for later re-processing.
      */
     private static final String QUERY_STRING_PARAMETER = "NanoHttpd.QUERY_STRING";
     private final String hostname;
     private final int myPort;
+    private final Set<Socket> openConnections = new HashSet<>();
+
+    /**
+     * HTTP Request methods, with the ability to decode a <code>String</code> back to its enum value.
+     */
+    public enum Method {
+        GET, PUT, POST, DELETE, HEAD, OPTIONS;
+
+        static Method lookup(String method) {
+            for (Method m : Method.values()) {
+                if (m.toString().equalsIgnoreCase(method)) {
+                    return m;
+                }
+            }
+            return null;
+        }
+    }
     private ServerSocket myServerSocket;
-    private Set<Socket> openConnections = new HashSet<>();
     private Thread myThread;
     /**
      * Pluggable strategy for asynchronously executing requests.
@@ -73,6 +91,24 @@ public abstract class NanoHttpd {
         setAsyncRunner(new DefaultAsyncRunner());
     }
 
+    /**
+     * Pluggable strategy for creating and cleaning up temporary files.
+     *
+     * @param tempFileManagerFactory new strategy for handling temp files.
+     */
+    void setTempFileManagerFactory(TempFileManagerFactory tempFileManagerFactory) {
+        this.tempFileManagerFactory = tempFileManagerFactory;
+    }
+
+    /**
+     * Pluggable strategy for asynchronously executing requests.
+     *
+     * @param asyncRunner new strategy for handling threads.
+     */
+    void setAsyncRunner(AsyncRunner asyncRunner) {
+        this.asyncRunner = asyncRunner;
+    }
+
     private static void safeClose(Closeable closeable) {
         if (closeable != null) {
             try {
@@ -91,13 +127,63 @@ public abstract class NanoHttpd {
         }
     }
 
-    private static void safeClose(ServerSocket closeable) {
-        if (closeable != null) {
+    public final int getListeningPort() {
+        return myServerSocket == null ? -1 : myServerSocket.getLocalPort();
+    }
+
+    public final boolean isAlive() {
+        return wasStarted() && !myServerSocket.isClosed() && myThread.isAlive();
+    }
+
+    final boolean wasStarted() {
+        return myServerSocket != null && myThread != null;
+    }
+
+    /**
+     * Override this to customize the server.
+     *
+     *
+     * (By default, this delegates to serveFile() and allows directory listing.)
+     *
+     * @param session The HTTP session
+     *
+     * @return HTTP response, see class Response for details
+     */
+    public Response serve(IHTTPSession session) {
+        Map<String, String> files = new HashMap<>();
+        Method method = session.getMethod();
+        if (Method.PUT.equals(method) || Method.POST.equals(method)) {
             try {
-                closeable.close();
-            } catch (IOException e) {
+                session.parseBody(files);
+            } catch (IOException ioe) {
+                return new Response(Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT,
+                                    "SERVER INTERNAL ERROR: IOException: " + ioe.getMessage());
+            } catch (ResponseException re) {
+                return new Response(re.getStatus(), MIME_PLAINTEXT, re.getMessage());
             }
         }
+
+        Map<String, String> parms = session.getParms();
+        parms.put(QUERY_STRING_PARAMETER, session.getQueryParameterString());
+        return serve(session.getUri(), method, session.getHeaders(), parms, files);
+    }
+
+    /**
+     * Override this to customize the server.
+     *
+     *
+     * (By default, this delegates to serveFile() and allows directory listing.)
+     *
+     * @param uri     Percent-decoded URI without parameters, for example "/index.cgi"
+     * @param method  "GET", "POST" etc.
+     * @param parms   Parsed, percent decoded parameters from URI and, in case of POST, data.
+     * @param headers Header entries, percent decoded
+     *
+     * @return HTTP response, see class Response for details
+     */
+    @Deprecated Response serve(String uri, Method method, Map<String, String> headers, Map<String, String> parms,
+                               Map<String, String> files) {
+        return new Response(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "Not Found");
     }
 
     /**
@@ -142,6 +228,24 @@ public abstract class NanoHttpd {
     }
 
     /**
+     * Registers that a new connection has been set up.
+     *
+     * @param socket the {@link Socket} for the connection.
+     */
+    synchronized void registerConnection(Socket socket) {
+        openConnections.add(socket);
+    }
+
+    /**
+     * Registers that a connection has been closed
+     *
+     * @param socket the {@link Socket} for the connection.
+     */
+    synchronized void unRegisterConnection(Socket socket) {
+        openConnections.remove(socket);
+    }
+
+    /**
      * Stop the server.
      */
     public void stop() {
@@ -156,141 +260,20 @@ public abstract class NanoHttpd {
         }
     }
 
-    /**
-     * Registers that a new connection has been set up.
-     *
-     * @param socket the {@link Socket} for the connection.
-     */
-    public synchronized void registerConnection(Socket socket) {
-        openConnections.add(socket);
-    }
-
-    /**
-     * Registers that a connection has been closed
-     *
-     * @param socket the {@link Socket} for the connection.
-     */
-    public synchronized void unRegisterConnection(Socket socket) {
-        openConnections.remove(socket);
+    private static void safeClose(ServerSocket closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (IOException e) {
+            }
+        }
     }
 
     /**
      * Forcibly closes all connections that are open.
      */
-    public synchronized void closeAllConnections() {
+    synchronized void closeAllConnections() {
         openConnections.forEach(NanoHttpd::safeClose);
-    }
-
-    public final int getListeningPort() {
-        return myServerSocket == null ? -1 : myServerSocket.getLocalPort();
-    }
-
-    public final boolean wasStarted() {
-        return myServerSocket != null && myThread != null;
-    }
-
-    public final boolean isAlive() {
-        return wasStarted() && !myServerSocket.isClosed() && myThread.isAlive();
-    }
-
-    /**
-     * Override this to customize the server.
-     *
-     *
-     * (By default, this delegates to serveFile() and allows directory listing.)
-     *
-     * @param uri     Percent-decoded URI without parameters, for example "/index.cgi"
-     * @param method  "GET", "POST" etc.
-     * @param parms   Parsed, percent decoded parameters from URI and, in case of POST, data.
-     * @param headers Header entries, percent decoded
-     * @return HTTP response, see class Response for details
-     */
-    @Deprecated
-    public Response serve(String uri, Method method, Map<String, String> headers, Map<String, String> parms,
-                          Map<String, String> files) {
-        return new Response(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "Not Found");
-    }
-
-    /**
-     * Override this to customize the server.
-     *
-     *
-     * (By default, this delegates to serveFile() and allows directory listing.)
-     *
-     * @param session The HTTP session
-     * @return HTTP response, see class Response for details
-     */
-    public Response serve(IHTTPSession session) {
-        Map<String, String> files = new HashMap<>();
-        Method method = session.getMethod();
-        if (Method.PUT.equals(method) || Method.POST.equals(method)) {
-            try {
-                session.parseBody(files);
-            } catch (IOException ioe) {
-                return new Response(Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, "SERVER INTERNAL ERROR: IOException: " + ioe.getMessage());
-            } catch (ResponseException re) {
-                return new Response(re.getStatus(), MIME_PLAINTEXT, re.getMessage());
-            }
-        }
-
-        Map<String, String> parms = session.getParms();
-        parms.put(QUERY_STRING_PARAMETER, session.getQueryParameterString());
-        return serve(session.getUri(), method, session.getHeaders(), parms, files);
-    }
-
-    /**
-     * Decode percent encoded <code>String</code> values.
-     *
-     * @param str the percent encoded <code>String</code>
-     * @return expanded form of the input, for example "foo%20bar" becomes "foo bar"
-     */
-    protected String decodePercent(String str) {
-        String decoded = null;
-        try {
-            decoded = URLDecoder.decode(str, "UTF8");
-        } catch (UnsupportedEncodingException ignored) {
-        }
-        return decoded;
-    }
-
-    /**
-     * Decode parameters from a URL, handing the case where a single parameter name might have been
-     * supplied several times, by return lists of values.  In general these lists will contain a single
-     * element.
-     *
-     * @param parms original <b>NanoHttpd</b> parameters values, as passed to the <code>serve()</code> method.
-     * @return a map of <code>String</code> (parameter name) to <code>List&lt;String&gt;</code> (a list of the values supplied).
-     */
-    protected Map<String, List<String>> decodeParameters(Map<String, String> parms) {
-        return this.decodeParameters(parms.get(QUERY_STRING_PARAMETER));
-    }
-
-    /**
-     * Decode parameters from a URL, handing the case where a single parameter name might have been
-     * supplied several times, by return lists of values.  In general these lists will contain a single
-     * element.
-     *
-     * @param queryString a query string pulled from the URL.
-     * @return a map of <code>String</code> (parameter name) to <code>List&lt;String&gt;</code> (a list of the values supplied).
-     */
-    protected Map<String, List<String>> decodeParameters(String queryString) {
-        Map<String, List<String>> parms = new HashMap<>();
-        if (queryString != null) {
-            StringTokenizer st = new StringTokenizer(queryString, "&");
-            while (st.hasMoreTokens()) {
-                String e = st.nextToken();
-                int sep = e.indexOf('=');
-                String propertyName = (sep >= 0) ? decodePercent(e.substring(0, sep)).trim() : decodePercent(e).trim();
-                if (!parms.containsKey(propertyName)) {
-                    parms.put(propertyName, new ArrayList<>());
-                }
-                String propertyValue = (sep >= 0) ? decodePercent(e.substring(sep + 1)) : null;
-                if (propertyValue != null) {
-                    parms.get(propertyName).add(propertyValue);
-                }
-            }
-        }
-        return parms;
     }
 
     // ------------------------------------------------------------------------------- //
@@ -301,11 +284,9 @@ public abstract class NanoHttpd {
 
     /**
      * Pluggable strategy for asynchronously executing requests.
-     *
-     * @param asyncRunner new strategy for handling threads.
      */
-    public void setAsyncRunner(AsyncRunner asyncRunner) {
-        this.asyncRunner = asyncRunner;
+    public interface AsyncRunner {
+        void exec(Runnable code);
     }
 
     // ------------------------------------------------------------------------------- //
@@ -315,45 +296,11 @@ public abstract class NanoHttpd {
     // ------------------------------------------------------------------------------- //
 
     /**
-     * Pluggable strategy for creating and cleaning up temporary files.
-     *
-     * @param tempFileManagerFactory new strategy for handling temp files.
-     */
-    public void setTempFileManagerFactory(TempFileManagerFactory tempFileManagerFactory) {
-        this.tempFileManagerFactory = tempFileManagerFactory;
-    }
-
-    /**
-     * HTTP Request methods, with the ability to decode a <code>String</code> back to its enum value.
-     */
-    public enum Method {
-        GET, PUT, POST, DELETE, HEAD, OPTIONS;
-
-        static Method lookup(String method) {
-            for (Method m : Method.values()) {
-                if (m.toString().equalsIgnoreCase(method)) {
-                    return m;
-                }
-            }
-            return null;
-        }
-    }
-
-    /**
-     * Pluggable strategy for asynchronously executing requests.
-     */
-    public interface AsyncRunner {
-        void exec(Runnable code);
-    }
-
-    /**
      * Factory to create temp file managers.
      */
     public interface TempFileManagerFactory {
         TempFileManager create();
     }
-
-    // ------------------------------------------------------------------------------- //
 
     /**
      * Temp file manager.
@@ -362,9 +309,9 @@ public abstract class NanoHttpd {
      * temporary files created as a result of handling the request.</p>
      */
     public interface TempFileManager {
-        TempFile createTempFile() throws Exception;
-
         void clear();
+
+        TempFile createTempFile() throws Exception;
     }
 
     /**
@@ -374,11 +321,11 @@ public abstract class NanoHttpd {
      * themselves up when no longer needed.</p>
      */
     public interface TempFile {
-        OutputStream open() throws Exception;
-
         void delete() throws Exception;
 
         String getName();
+
+        OutputStream open() throws Exception;
     }
 
     /**
@@ -387,22 +334,22 @@ public abstract class NanoHttpd {
     public interface IHTTPSession {
         void execute() throws IOException;
 
-        Map<String, String> getParms();
+        CookieHandler getCookies();
 
         Map<String, String> getHeaders();
+
+        InputStream getInputStream();
+
+        Method getMethod();
+
+        Map<String, String> getParms();
+
+        String getQueryParameterString();
 
         /**
          * @return the path part of the URL.
          */
         String getUri();
-
-        String getQueryParameterString();
-
-        Method getMethod();
-
-        InputStream getInputStream();
-
-        CookieHandler getCookies();
 
         /**
          * Adds the files in the request body to the files map.
@@ -411,6 +358,8 @@ public abstract class NanoHttpd {
          */
         void parseBody(Map<String, String> files) throws IOException, ResponseException;
     }
+
+    // ------------------------------------------------------------------------------- //
 
     /**
      * Default threading strategy for NanoHttpd.
@@ -447,7 +396,7 @@ public abstract class NanoHttpd {
 
         public DefaultTempFileManager() {
             tmpdir = System.getProperty("java.io.tmpdir");
-            tempFiles = new ArrayList<TempFile>();
+            tempFiles = new ArrayList<>();
         }
 
         @Override
@@ -506,6 +455,42 @@ public abstract class NanoHttpd {
      */
     public static class Response {
         /**
+         * Headers for the HTTP response. Use addHeader() to add lines.
+         */
+        private final Map<String, String> header = new HashMap<>();
+
+        /**
+         * Some HTTP response status codes
+         */
+        public enum Status implements IStatus {
+            SWITCH_PROTOCOL(101, "Switching Protocols"), OK(200, "OK"), CREATED(201, "Created"),
+            ACCEPTED(202, "Accepted"), NO_CONTENT(204, "No Content"), PARTIAL_CONTENT(206, "Partial Content"),
+            REDIRECT(301,
+                     "Moved Permanently"), NOT_MODIFIED(304, "Not Modified"), BAD_REQUEST(400, "Bad Request"),
+            UNAUTHORIZED(401,
+                         "Unauthorized"), FORBIDDEN(403, "Forbidden"), NOT_FOUND(404, "Not Found"),
+            METHOD_NOT_ALLOWED(405, "Method Not Allowed"), RANGE_NOT_SATISFIABLE(416,
+                                                                                 "Requested Range Not Satisfiable"),
+            INTERNAL_ERROR(500, "Internal Server Error");
+            private final int requestStatus;
+            private final String description;
+
+            Status(int requestStatus, String description) {
+                this.requestStatus = requestStatus;
+                this.description = description;
+            }
+
+            @Override
+            public int getRequestStatus() {
+                return this.requestStatus;
+            }
+
+            @Override
+            public String getDescription() {
+                return "" + this.requestStatus + " " + description;
+            }
+        }
+        /**
          * HTTP status code after processing, e.g. "200 OK", HTTP_OK
          */
         private IStatus status;
@@ -517,10 +502,6 @@ public abstract class NanoHttpd {
          * Data of the response, may be null.
          */
         private InputStream data;
-        /**
-         * Headers for the HTTP response. Use addHeader() to add lines.
-         */
-        private Map<String, String> header = new HashMap<>();
         /**
          * The request method that spawned this response.
          */
@@ -538,15 +519,6 @@ public abstract class NanoHttpd {
         }
 
         /**
-         * Basic constructor.
-         */
-        public Response(IStatus status, String mimeType, InputStream data) {
-            this.status = status;
-            this.mimeType = mimeType;
-            this.data = data;
-        }
-
-        /**
          * Convenience method that makes an InputStream out of given text.
          */
         public Response(IStatus status, String mimeType, String txt) {
@@ -560,20 +532,71 @@ public abstract class NanoHttpd {
         }
 
         /**
+         * Basic constructor.
+         */
+        public Response(IStatus status, String mimeType, InputStream data) {
+            this.status = status;
+            this.mimeType = mimeType;
+            this.data = data;
+        }
+
+        /**
          * Adds given line to the header.
          */
         public void addHeader(String name, String value) {
             header.put(name, value);
         }
 
+        public InputStream getData() {
+            return data;
+        }
+
+        public void setData(InputStream data) {
+            this.data = data;
+        }
+
         public String getHeader(String name) {
             return header.get(name);
+        }
+
+        public String getMimeType() {
+            return mimeType;
+        }
+
+        public void setMimeType(String mimeType) {
+            this.mimeType = mimeType;
+        }
+
+        public Method getRequestMethod() {
+            return requestMethod;
+        }
+
+        public void setRequestMethod(Method requestMethod) {
+            this.requestMethod = requestMethod;
+        }
+
+        public IStatus getStatus() {
+            return status;
+        }
+
+        public void setStatus(Status status) {
+            this.status = status;
+        }
+
+        public void setChunkedTransfer(boolean chunkedTransfer) {
+            this.chunkedTransfer = chunkedTransfer;
+        }
+
+        public interface IStatus {
+            String getDescription();
+
+            int getRequestStatus();
         }
 
         /**
          * Sends given response to the socket.
          */
-        protected void send(OutputStream outputStream) {
+        void send(OutputStream outputStream) {
             String mime = mimeType;
             SimpleDateFormat gmtFrmt = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
             gmtFrmt.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -618,24 +641,10 @@ public abstract class NanoHttpd {
             }
         }
 
-        protected void sendContentLengthHeaderIfNotAlreadyPresent(PrintWriter pw, Map<String, String> header, int size) {
-            if (!headerAlreadySent(header, "content-length")) {
-                pw.print("Content-Length: " + size + "\r\n");
-            }
-        }
-
-        protected void sendConnectionHeaderIfNotAlreadyPresent(PrintWriter pw, Map<String, String> header) {
+        void sendConnectionHeaderIfNotAlreadyPresent(PrintWriter pw, Map<String, String> header) {
             if (!headerAlreadySent(header, "connection")) {
                 pw.print("Connection: keep-alive\r\n");
             }
-        }
-
-        private boolean headerAlreadySent(Map<String, String> header, String name) {
-            boolean alreadySent = false;
-            for (String headerName : header.keySet()) {
-                alreadySent |= headerName.equalsIgnoreCase(name);
-            }
-            return alreadySent;
         }
 
         private void sendAsChunked(OutputStream outputStream, PrintWriter pw) throws IOException {
@@ -654,6 +663,12 @@ public abstract class NanoHttpd {
             outputStream.write(String.format("0\r\n\r\n").getBytes());
         }
 
+        void sendContentLengthHeaderIfNotAlreadyPresent(PrintWriter pw, Map<String, String> header, int size) {
+            if (!headerAlreadySent(header, "content-length")) {
+                pw.print("Content-Length: " + size + "\r\n");
+            }
+        }
+
         private void sendAsFixedLength(OutputStream outputStream, int pending) throws IOException {
             if (requestMethod != Method.HEAD && data != null) {
                 int BUFFER_SIZE = 16 * 1024;
@@ -669,73 +684,12 @@ public abstract class NanoHttpd {
             }
         }
 
-        public IStatus getStatus() {
-            return status;
-        }
-
-        public void setStatus(Status status) {
-            this.status = status;
-        }
-
-        public String getMimeType() {
-            return mimeType;
-        }
-
-        public void setMimeType(String mimeType) {
-            this.mimeType = mimeType;
-        }
-
-        public InputStream getData() {
-            return data;
-        }
-
-        public void setData(InputStream data) {
-            this.data = data;
-        }
-
-        public Method getRequestMethod() {
-            return requestMethod;
-        }
-
-        public void setRequestMethod(Method requestMethod) {
-            this.requestMethod = requestMethod;
-        }
-
-        public void setChunkedTransfer(boolean chunkedTransfer) {
-            this.chunkedTransfer = chunkedTransfer;
-        }
-
-        /**
-         * Some HTTP response status codes
-         */
-        public enum Status implements IStatus {
-            SWITCH_PROTOCOL(101, "Switching Protocols"), OK(200, "OK"), CREATED(201, "Created"), ACCEPTED(202, "Accepted"), NO_CONTENT(204, "No Content"), PARTIAL_CONTENT(206, "Partial Content"), REDIRECT(301,
-                    "Moved Permanently"), NOT_MODIFIED(304, "Not Modified"), BAD_REQUEST(400, "Bad Request"), UNAUTHORIZED(401,
-                    "Unauthorized"), FORBIDDEN(403, "Forbidden"), NOT_FOUND(404, "Not Found"), METHOD_NOT_ALLOWED(405, "Method Not Allowed"), RANGE_NOT_SATISFIABLE(416,
-                    "Requested Range Not Satisfiable"), INTERNAL_ERROR(500, "Internal Server Error");
-            private final int requestStatus;
-            private final String description;
-
-            Status(int requestStatus, String description) {
-                this.requestStatus = requestStatus;
-                this.description = description;
+        private boolean headerAlreadySent(Map<String, String> header, String name) {
+            boolean alreadySent = false;
+            for (String headerName : header.keySet()) {
+                alreadySent |= headerName.equalsIgnoreCase(name);
             }
-
-            @Override
-            public int getRequestStatus() {
-                return this.requestStatus;
-            }
-
-            @Override
-            public String getDescription() {
-                return "" + this.requestStatus + " " + description;
-            }
-        }
-
-        public interface IStatus {
-            int getRequestStatus();
-
-            String getDescription();
+            return alreadySent;
         }
     }
 
@@ -759,7 +713,9 @@ public abstract class NanoHttpd {
     }
 
     public static class Cookie {
-        private String n, v, e;
+        private final String n;
+        private final String v;
+        private final String e;
 
         public Cookie(String name, String value, String expires) {
             n = name;
@@ -805,7 +761,7 @@ public abstract class NanoHttpd {
         public static final int BUFSIZE = 8192;
         private final TempFileManager tempFileManager;
         private final OutputStream outputStream;
-        private PushbackInputStream inputStream;
+        private final PushbackInputStream inputStream;
         private int splitbyte;
         private int rlen;
         private String uri;
@@ -825,8 +781,9 @@ public abstract class NanoHttpd {
             this.tempFileManager = tempFileManager;
             this.inputStream = new PushbackInputStream(inputStream, BUFSIZE);
             this.outputStream = outputStream;
-            String remoteIp = inetAddress.isLoopbackAddress() || inetAddress.isAnyLocalAddress() ? "127.0.0.1" : inetAddress.getHostAddress().toString();
-            headers = new HashMap<String, String>();
+            String remoteIp = inetAddress.isLoopbackAddress() || inetAddress.isAnyLocalAddress() ? "127.0.0.1" : inetAddress.getHostAddress()
+                                                                                                                            .toString();
+            headers = new HashMap<>();
 
             headers.put("remote-addr", remoteIp);
             headers.put("http-client-ip", remoteIp);
@@ -870,16 +827,16 @@ public abstract class NanoHttpd {
                     inputStream.unread(buf, splitbyte, rlen - splitbyte);
                 }
 
-                parms = new HashMap<String, String>();
+                parms = new HashMap<>();
                 if (null == headers) {
-                    headers = new HashMap<String, String>();
+                    headers = new HashMap<>();
                 }
 
                 // Create a BufferedReader for parsing the header.
                 BufferedReader hin = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(buf, 0, rlen)));
 
                 // Decode the header into parms and header java properties
-                Map<String, String> pre = new HashMap<String, String>();
+                Map<String, String> pre = new HashMap<>();
                 decodeHeader(hin, pre, parms, headers);
 
                 method = Method.lookup(pre.get("method"));
@@ -900,11 +857,9 @@ public abstract class NanoHttpd {
                     r.setRequestMethod(method);
                     r.send(outputStream);
                 }
-            } catch (SocketException e) {
+            } catch (SocketException | SocketTimeoutException e) {
                 // throw it out to close socket object (finalAccept)
                 throw e;
-            } catch (SocketTimeoutException ste) {
-                throw ste;
             } catch (IOException ioe) {
                 Response r = new Response(Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, "SERVER INTERNAL ERROR: IOException: " + ioe.getMessage());
                 r.send(outputStream);
@@ -916,6 +871,141 @@ public abstract class NanoHttpd {
             } finally {
                 tempFileManager.clear();
             }
+        }
+
+        /**
+         * Find byte index separating header from body. It must be the last byte of the first two sequential new lines.
+         */
+        private int findHeaderEnd(final byte[] buf, int rlen) {
+            int splitbyte = 0;
+            while (splitbyte + 3 < rlen) {
+                if (buf[splitbyte] == '\r' &&
+                    buf[splitbyte + 1] == '\n' &&
+                    buf[splitbyte + 2] == '\r' &&
+                    buf[splitbyte + 3] == '\n') {
+                    return splitbyte + 4;
+                }
+                splitbyte++;
+            }
+            return 0;
+        }
+
+        /**
+         * Decodes the sent headers and loads the data into Key/value pairs
+         */
+        private void decodeHeader(BufferedReader in, Map<String, String> pre, Map<String, String> parms,
+                                  Map<String, String> headers)
+                throws ResponseException {
+            try {
+                // Read the request line
+                String inLine = in.readLine();
+                if (inLine == null) {
+                    return;
+                }
+
+                StringTokenizer st = new StringTokenizer(inLine);
+                if (!st.hasMoreTokens()) {
+                    throw new ResponseException(Response.Status.BAD_REQUEST,
+                                                "BAD REQUEST: Syntax error. Usage: GET /example/file.html");
+                }
+
+                pre.put("method", st.nextToken());
+
+                if (!st.hasMoreTokens()) {
+                    throw new ResponseException(Response.Status.BAD_REQUEST,
+                                                "BAD REQUEST: Missing URI. Usage: GET /example/file.html");
+                }
+
+                String uri = st.nextToken();
+
+                // Decode parameters from the URI
+                int qmi = uri.indexOf('?');
+                if (qmi >= 0) {
+                    decodeParms(uri.substring(qmi + 1), parms);
+                    uri = decodePercent(uri.substring(0, qmi));
+                } else {
+                    uri = decodePercent(uri);
+                }
+
+                // If there's another token, it's protocol version,
+                // followed by HTTP headers. Ignore version but parse headers.
+                // NOTE: this now forces header names lowercase since they are
+                // case insensitive and vary by client.
+                if (st.hasMoreTokens()) {
+                    String line = in.readLine();
+                    while (line != null && line.trim().length() > 0) {
+                        int p = line.indexOf(':');
+                        if (p >= 0) {
+                            headers.put(line.substring(0, p).trim().toLowerCase(Locale.US),
+                                        line.substring(p + 1).trim());
+                        }
+                        line = in.readLine();
+                    }
+                }
+
+                pre.put("uri", uri);
+            } catch (IOException ioe) {
+                throw new ResponseException(Response.Status.INTERNAL_ERROR,
+                                            "SERVER INTERNAL ERROR: IOException: " + ioe.getMessage(), ioe);
+            }
+        }
+
+        /**
+         * Decodes parameters in percent-encoded URI-format ( e.g. "name=Jack%20Daniels&pass=Single%20Malt" ) and adds
+         * them to given Map. NOTE: this doesn't support multiple identical keys due to the simplicity of Map.
+         */
+        private void decodeParms(String parms, Map<String, String> p) {
+            if (parms == null) {
+                queryParameterString = "";
+                return;
+            }
+
+            queryParameterString = parms;
+            StringTokenizer st = new StringTokenizer(parms, "&");
+            while (st.hasMoreTokens()) {
+                String e = st.nextToken();
+                int sep = e.indexOf('=');
+                if (sep >= 0) {
+                    p.put(decodePercent(e.substring(0, sep)).trim(),
+                          decodePercent(e.substring(sep + 1)));
+                } else {
+                    p.put(decodePercent(e).trim(), "");
+                }
+            }
+        }
+
+        @Override
+        public final Map<String, String> getParms() {
+            return parms;
+        }
+
+        @Override
+        public final Map<String, String> getHeaders() {
+            return headers;
+        }
+
+        @Override
+        public final String getUri() {
+            return uri;
+        }
+
+        public String getQueryParameterString() {
+            return queryParameterString;
+        }
+
+        @Override
+        public final Method getMethod() {
+            return method;
+        }
+
+        @Override
+        public final InputStream getInputStream() {
+            return inputStream;
+        }
+
+        @Override
+        public CookieHandler getCookies() {
+            return cookies;
         }
 
         @Override
@@ -996,7 +1086,8 @@ public abstract class NanoHttpd {
                         if ("application/x-www-form-urlencoded".equalsIgnoreCase(contentType)) {
                             decodeParms(postLine, parms);
                         } else if (postLine.length() != 0) {
-                            // Special case for raw POST data => create a special files entry "postData" with raw content data
+                            // Special case for raw POST data => create a special files entry "postData" with raw
+                            // content data
                             files.put("postData", postLine);
                         }
                     }
@@ -1009,57 +1100,12 @@ public abstract class NanoHttpd {
             }
         }
 
-        /**
-         * Decodes the sent headers and loads the data into Key/value pairs
-         */
-        private void decodeHeader(BufferedReader in, Map<String, String> pre, Map<String, String> parms, Map<String, String> headers)
-                throws ResponseException {
+        private RandomAccessFile getTmpBucket() {
             try {
-                // Read the request line
-                String inLine = in.readLine();
-                if (inLine == null) {
-                    return;
-                }
-
-                StringTokenizer st = new StringTokenizer(inLine);
-                if (!st.hasMoreTokens()) {
-                    throw new ResponseException(Response.Status.BAD_REQUEST, "BAD REQUEST: Syntax error. Usage: GET /example/file.html");
-                }
-
-                pre.put("method", st.nextToken());
-
-                if (!st.hasMoreTokens()) {
-                    throw new ResponseException(Response.Status.BAD_REQUEST, "BAD REQUEST: Missing URI. Usage: GET /example/file.html");
-                }
-
-                String uri = st.nextToken();
-
-                // Decode parameters from the URI
-                int qmi = uri.indexOf('?');
-                if (qmi >= 0) {
-                    decodeParms(uri.substring(qmi + 1), parms);
-                    uri = decodePercent(uri.substring(0, qmi));
-                } else {
-                    uri = decodePercent(uri);
-                }
-
-                // If there's another token, it's protocol version,
-                // followed by HTTP headers. Ignore version but parse headers.
-                // NOTE: this now forces header names lowercase since they are
-                // case insensitive and vary by client.
-                if (st.hasMoreTokens()) {
-                    String line = in.readLine();
-                    while (line != null && line.trim().length() > 0) {
-                        int p = line.indexOf(':');
-                        if (p >= 0)
-                            headers.put(line.substring(0, p).trim().toLowerCase(Locale.US), line.substring(p + 1).trim());
-                        line = in.readLine();
-                    }
-                }
-
-                pre.put("uri", uri);
-            } catch (IOException ioe) {
-                throw new ResponseException(Response.Status.INTERNAL_ERROR, "SERVER INTERNAL ERROR: IOException: " + ioe.getMessage(), ioe);
+                TempFile tempFile = tempFileManager.createTempFile();
+                return new RandomAccessFile(tempFile.getName(), "rw");
+            } catch (Exception e) {
+                throw new Error(e); // we won't recover, so throw an error
             }
         }
 
@@ -1077,7 +1123,7 @@ public abstract class NanoHttpd {
                         throw new ResponseException(Response.Status.BAD_REQUEST, "BAD REQUEST: Content type is multipart/form-data but next chunk does not start with boundary. Usage: GET /example/file.html");
                     }
                     boundarycount++;
-                    Map<String, String> item = new HashMap<String, String>();
+                    Map<String, String> item = new HashMap<>();
                     mpline = in.readLine();
                     while (mpline != null && mpline.trim().length() > 0) {
                         int p = mpline.indexOf(':');
@@ -1092,7 +1138,7 @@ public abstract class NanoHttpd {
                             throw new ResponseException(Response.Status.BAD_REQUEST, "BAD REQUEST: Content type is multipart/form-data but no content-disposition info found. Usage: GET /example/file.html");
                         }
                         StringTokenizer st = new StringTokenizer(contentDisposition, ";");
-                        Map<String, String> disposition = new HashMap<String, String>();
+                        Map<String, String> disposition = new HashMap<>();
                         while (st.hasMoreTokens()) {
                             String token = st.nextToken().trim();
                             int p = token.indexOf('=');
@@ -1133,22 +1179,34 @@ public abstract class NanoHttpd {
                     }
                 }
             } catch (IOException ioe) {
-                throw new ResponseException(Response.Status.INTERNAL_ERROR, "SERVER INTERNAL ERROR: IOException: " + ioe.getMessage(), ioe);
+                throw new ResponseException(Response.Status.INTERNAL_ERROR, "SERVER INTERNAL ERROR: IOException: " +
+                                                                            ioe.getMessage(), ioe);
             }
         }
 
         /**
-         * Find byte index separating header from body. It must be the last byte of the first two sequential new lines.
+         * Retrieves the content of a sent file and saves it to a temporary file. The full path to the saved file is
+         * returned.
          */
-        private int findHeaderEnd(final byte[] buf, int rlen) {
-            int splitbyte = 0;
-            while (splitbyte + 3 < rlen) {
-                if (buf[splitbyte] == '\r' && buf[splitbyte + 1] == '\n' && buf[splitbyte + 2] == '\r' && buf[splitbyte + 3] == '\n') {
-                    return splitbyte + 4;
+        private String saveTmpFile(ByteBuffer b, int offset, int len) {
+            String path = "";
+            if (len > 0) {
+                FileOutputStream fileOutputStream = null;
+                try {
+                    TempFile tempFile = tempFileManager.createTempFile();
+                    ByteBuffer src = b.duplicate();
+                    fileOutputStream = new FileOutputStream(tempFile.getName());
+                    FileChannel dest = fileOutputStream.getChannel();
+                    src.position(offset).limit(offset + len);
+                    dest.write(src.slice());
+                    path = tempFile.getName();
+                } catch (Exception e) { // Catch exception if any
+                    throw new Error(e); // we won't recover, so throw an error
+                } finally {
+                    safeClose(fileOutputStream);
                 }
-                splitbyte++;
             }
-            return 0;
+            return path;
         }
 
         /**
@@ -1182,39 +1240,6 @@ public abstract class NanoHttpd {
         }
 
         /**
-         * Retrieves the content of a sent file and saves it to a temporary file. The full path to the saved file is returned.
-         */
-        private String saveTmpFile(ByteBuffer b, int offset, int len) {
-            String path = "";
-            if (len > 0) {
-                FileOutputStream fileOutputStream = null;
-                try {
-                    TempFile tempFile = tempFileManager.createTempFile();
-                    ByteBuffer src = b.duplicate();
-                    fileOutputStream = new FileOutputStream(tempFile.getName());
-                    FileChannel dest = fileOutputStream.getChannel();
-                    src.position(offset).limit(offset + len);
-                    dest.write(src.slice());
-                    path = tempFile.getName();
-                } catch (Exception e) { // Catch exception if any
-                    throw new Error(e); // we won't recover, so throw an error
-                } finally {
-                    safeClose(fileOutputStream);
-                }
-            }
-            return path;
-        }
-
-        private RandomAccessFile getTmpBucket() {
-            try {
-                TempFile tempFile = tempFileManager.createTempFile();
-                return new RandomAccessFile(tempFile.getName(), "rw");
-            } catch (Exception e) {
-                throw new Error(e); // we won't recover, so throw an error
-            }
-        }
-
-        /**
          * It returns the offset separating multipart file headers from the file's data.
          */
         private int stripMultipartHeaders(ByteBuffer b, int offset) {
@@ -1226,64 +1251,6 @@ public abstract class NanoHttpd {
             }
             return i + 1;
         }
-
-        /**
-         * Decodes parameters in percent-encoded URI-format ( e.g. "name=Jack%20Daniels&pass=Single%20Malt" ) and
-         * adds them to given Map. NOTE: this doesn't support multiple identical keys due to the simplicity of Map.
-         */
-        private void decodeParms(String parms, Map<String, String> p) {
-            if (parms == null) {
-                queryParameterString = "";
-                return;
-            }
-
-            queryParameterString = parms;
-            StringTokenizer st = new StringTokenizer(parms, "&");
-            while (st.hasMoreTokens()) {
-                String e = st.nextToken();
-                int sep = e.indexOf('=');
-                if (sep >= 0) {
-                    p.put(decodePercent(e.substring(0, sep)).trim(),
-                            decodePercent(e.substring(sep + 1)));
-                } else {
-                    p.put(decodePercent(e).trim(), "");
-                }
-            }
-        }
-
-        @Override
-        public final Map<String, String> getParms() {
-            return parms;
-        }
-
-        public String getQueryParameterString() {
-            return queryParameterString;
-        }
-
-        @Override
-        public final Map<String, String> getHeaders() {
-            return headers;
-        }
-
-        @Override
-        public final String getUri() {
-            return uri;
-        }
-
-        @Override
-        public final Method getMethod() {
-            return method;
-        }
-
-        @Override
-        public final InputStream getInputStream() {
-            return inputStream;
-        }
-
-        @Override
-        public CookieHandler getCookies() {
-            return cookies;
-        }
     }
 
     /**
@@ -1294,8 +1261,8 @@ public abstract class NanoHttpd {
      * @author LordFokas
      */
     public class CookieHandler implements Iterable<String> {
-        private HashMap<String, String> cookies = new HashMap<>();
-        private ArrayList<Cookie> queue = new ArrayList<>();
+        private final HashMap<String, String> cookies = new HashMap<>();
+        private final ArrayList<Cookie> queue = new ArrayList<>();
 
         public CookieHandler(Map<String, String> httpHeaders) {
             String raw = httpHeaders.get("cookie");
@@ -1310,7 +1277,27 @@ public abstract class NanoHttpd {
             }
         }
 
-        @Override
+        /**
+         * Set a cookie with an expiration date from a month ago, effectively deleting it on the client side.
+         *
+         * @param name The cookie name.
+         */
+        public void delete(String name) {
+            set(name, "-delete-", -30);
+        }
+
+        /**
+         * Sets a cookie.
+         *
+         * @param name    The cookie's name.
+         * @param value   The cookie's value.
+         * @param expires How many days until the cookie expires.
+         */
+        public void set(String name, String value, int expires) {
+            queue.add(new Cookie(name, value, Cookie.getHTTPTime(expires)));
+        }
+
+        @NotNull @Override
         public Iterator<String> iterator() {
             return cookies.keySet().iterator();
         }
@@ -1325,28 +1312,8 @@ public abstract class NanoHttpd {
             return cookies.get(name);
         }
 
-        /**
-         * Sets a cookie.
-         *
-         * @param name    The cookie's name.
-         * @param value   The cookie's value.
-         * @param expires How many days until the cookie expires.
-         */
-        public void set(String name, String value, int expires) {
-            queue.add(new Cookie(name, value, Cookie.getHTTPTime(expires)));
-        }
-
         public void set(Cookie cookie) {
             queue.add(cookie);
-        }
-
-        /**
-         * Set a cookie with an expiration date from a month ago, effectively deleting it on the client side.
-         *
-         * @param name The cookie name.
-         */
-        public void delete(String name) {
-            set(name, "-delete-", -30);
         }
 
         /**
@@ -1359,5 +1326,63 @@ public abstract class NanoHttpd {
                 response.addHeader("Set-Cookie", cookie.getHTTPHeader());
             }
         }
+    }
+
+    /**
+     * Decode parameters from a URL, handing the case where a single parameter name might have been supplied several
+     * times, by return lists of values.  In general these lists will contain a single element.
+     *
+     * @param parms original <b>NanoHttpd</b> parameters values, as passed to the <code>serve()</code> method.
+     *
+     * @return a map of <code>String</code> (parameter name) to <code>List&lt;String&gt;</code> (a list of the values
+     * supplied).
+     */
+    protected Map<String, List<String>> decodeParameters(Map<String, String> parms) {
+        return this.decodeParameters(parms.get(QUERY_STRING_PARAMETER));
+    }
+
+    /**
+     * Decode parameters from a URL, handing the case where a single parameter name might have been supplied several
+     * times, by return lists of values.  In general these lists will contain a single element.
+     *
+     * @param queryString a query string pulled from the URL.
+     *
+     * @return a map of <code>String</code> (parameter name) to <code>List&lt;String&gt;</code> (a list of the values
+     * supplied).
+     */
+    Map<String, List<String>> decodeParameters(String queryString) {
+        Map<String, List<String>> parms = new HashMap<>();
+        if (queryString != null) {
+            StringTokenizer st = new StringTokenizer(queryString, "&");
+            while (st.hasMoreTokens()) {
+                String e = st.nextToken();
+                int sep = e.indexOf('=');
+                String propertyName = (sep >= 0) ? decodePercent(e.substring(0, sep)).trim() : decodePercent(e).trim();
+                if (!parms.containsKey(propertyName)) {
+                    parms.put(propertyName, new ArrayList<>());
+                }
+                String propertyValue = (sep >= 0) ? decodePercent(e.substring(sep + 1)) : null;
+                if (propertyValue != null) {
+                    parms.get(propertyName).add(propertyValue);
+                }
+            }
+        }
+        return parms;
+    }
+
+    /**
+     * Decode percent encoded <code>String</code> values.
+     *
+     * @param str the percent encoded <code>String</code>
+     *
+     * @return expanded form of the input, for example "foo%20bar" becomes "foo bar"
+     */
+    String decodePercent(String str) {
+        String decoded = null;
+        try {
+            decoded = URLDecoder.decode(str, "UTF8");
+        } catch (UnsupportedEncodingException ignored) {
+        }
+        return decoded;
     }
 }

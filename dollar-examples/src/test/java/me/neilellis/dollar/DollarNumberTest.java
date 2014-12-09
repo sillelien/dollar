@@ -34,13 +34,10 @@ public class DollarNumberTest {
     public void testBasics() {
         var map = $("foo", 1).$("bar", 10);
         assertEquals(2, (long) $(1).$inc().I());
-        assertEquals(4, (long) $(1).$inc(3).I());
-        map = map.$inc("foobar", 1);
-        map = map.$inc("bar", 10);
-        map = map.$dec("foo", 5);
-        assertEquals(20, (long) map.$("bar").I());
-        assertEquals(-4, (long) map.$("foo").I());
-        assertEquals(1, (long) map.$("foobar").I());
+        assertEquals(4, (long) $(1).$plus(3).I());
+        assertEquals(10, (long) map.$("bar").I());
+        assertEquals(1, (long) map.$("foo").I());
+        assertEquals(0, (long) map.$("foobar").I());
 
     }
 

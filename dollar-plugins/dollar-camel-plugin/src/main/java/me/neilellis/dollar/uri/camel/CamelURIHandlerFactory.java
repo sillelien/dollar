@@ -33,7 +33,7 @@ import static me.neilellis.dollar.DollarStatic.$void;
  */
 public class CamelURIHandlerFactory implements URIHandlerFactory {
 
-    private DefaultCamelContext context = new DefaultCamelContext();
+    private final DefaultCamelContext context = new DefaultCamelContext();
 
     @Override
     public URIHandlerFactory copy() {

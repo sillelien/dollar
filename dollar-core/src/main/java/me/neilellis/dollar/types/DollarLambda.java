@@ -20,6 +20,7 @@ import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.exceptions.LambdaRecursionException;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -33,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DollarLambda implements java.lang.reflect.InvocationHandler {
 
-    public static final int MAX_STACK_DEPTH = 100;
+    private static final int MAX_STACK_DEPTH = 100;
     private static final ThreadLocal<List<DollarLambda>> notifyStack = new ThreadLocal<List<DollarLambda>>() {
         @Override
         protected List<DollarLambda> initialValue() {
@@ -46,11 +47,11 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             return new ArrayList<>();
         }
     };
+    protected final ConcurrentHashMap<String, String> meta = new ConcurrentHashMap<>();
     private final var in;
     private final boolean fixable;
-    protected ConcurrentHashMap<String, String> meta = new ConcurrentHashMap<>();
-    private Pipeable lambda;
-    private ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
+    private final Pipeable lambda;
+    private final ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
 
     public DollarLambda(Pipeable lambda) {
         this(lambda, true);
@@ -69,7 +70,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
     }
 
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(Object proxy, @NotNull Method method, Object[] args) throws Throwable {
         if (stack.get().size() > MAX_STACK_DEPTH) {
             in.error("Stack consists of the following Lambda types: ");
             for (DollarLambda stackEntry : stack.get()) {
@@ -119,7 +120,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                     return proxy;
                 }
             } else if (method.getName().equals("getMetaAttribute")) {
-                return meta.get(args[0]);
+                return meta.get(args[0].toString());
             } else if (method.getName().equals("setMetaAttribute")) {
                 meta.put(String.valueOf(args[0]), String.valueOf(args[1]));
                 return null;
@@ -143,6 +144,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 notifyStack.get().remove(this);
                 return proxy;
             } else if (method.getName().equals("$remove")) {
+                //noinspection SuspiciousMethodCalls
                 listeners.remove(args[0]);
                 return args[0];
             } else if (method.getName().equals("hasErrors")) {

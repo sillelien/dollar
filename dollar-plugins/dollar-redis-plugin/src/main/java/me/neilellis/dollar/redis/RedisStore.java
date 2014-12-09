@@ -32,7 +32,7 @@ import java.util.List;
 public class RedisStore implements DollarStore {
 
     @NotNull
-    private Jedis jedis = new Jedis(System.getProperty("dollar.redis", "localhost"));
+    private final Jedis jedis = new Jedis(System.getProperty("dollar.redis", "localhost"));
 
     @Override
     public DollarStore copy() {

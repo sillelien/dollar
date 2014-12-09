@@ -17,7 +17,7 @@
 package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
@@ -25,16 +25,17 @@ import org.codehaus.jparsec.functors.Map;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class SubscriptOperator implements Map<Object[], Map<? super var, ? extends var>> {
-    private final ScriptScope scope;
+    private final Scope scope;
 
-    public SubscriptOperator(ScriptScope scope) {this.scope = scope;}
+    public SubscriptOperator(Scope scope) {this.scope = scope;}
 
     @Override public Map<? super var, ? extends var> map(Object[] rhs) {
         return lhs -> {
             if (rhs[1] == null) {
-                return DollarScriptSupport.wrapReactiveBinary(scope, lhs, (var) rhs[0], () -> lhs.$(((var) rhs[0])));
+                return DollarScriptSupport.wrapReactiveBinary(scope, lhs, (var) rhs[0], () -> lhs.$get(
+                        ((var) rhs[0])));
             } else {
-                return DollarScriptSupport.wrapBinary(scope, () -> lhs.$((var) rhs[0], rhs[1]));
+                return DollarScriptSupport.wrapBinary(scope, () -> lhs.$set((var) rhs[0], rhs[1]));
             }
         };
     }

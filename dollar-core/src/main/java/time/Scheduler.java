@@ -29,8 +29,8 @@ import static me.neilellis.dollar.DollarStatic.$;
  */
 public class Scheduler {
 
-    private static ScheduledExecutorService scheduler = new ScheduledThreadPoolExecutor(3);
-    private static ConcurrentHashMap<String, ScheduledFuture> scheduledTasks = new ConcurrentHashMap<>();
+    private static final ScheduledExecutorService scheduler = new ScheduledThreadPoolExecutor(3);
+    private static final ConcurrentHashMap<String, ScheduledFuture> scheduledTasks = new ConcurrentHashMap<>();
 
     public static String schedule(Pipeable task, long duration) {
 

@@ -41,9 +41,9 @@ public class HttpURIHandler implements URIHandler {
     public static final int BLOCKING_TIMEOUT = 10;
     private static final ConcurrentHashMap<String, RouteableNanoHttpd> servers = new ConcurrentHashMap<>();
     private final URI uri;
+    private final ConcurrentHashMap<String, String> subscriptions = new ConcurrentHashMap<>();
     private RouteableNanoHttpd httpd;
     private String method = "GET";
-    private ConcurrentHashMap<String, String> subscriptions = new ConcurrentHashMap<>();
 
     public HttpURIHandler(String scheme, String uri) throws URISyntaxException, IOException {
         if (uri.startsWith("//")) {
@@ -154,7 +154,7 @@ public class HttpURIHandler implements URIHandler {
 
     public static class RouteableNanoHttpd extends NanoHttpd {
 
-        private Map<String, RequestHandler> handlers = new HashMap<>();
+        private final Map<String, RequestHandler> handlers = new HashMap<>();
 
         public RouteableNanoHttpd(String hostname, int port) {
             super(hostname, port);
@@ -196,24 +196,24 @@ public class HttpURIHandler implements URIHandler {
         public NanoHttpd.Response invoke(NanoHttpd.IHTTPSession session) {
             try {
                 var in = $()
-                        .$($("headers"), session.getHeaders())
-                        .$($("params"), session.getParms())
-                        .$($("uri"), session.getUri())
-                        .$($("query"), session.getQueryParameterString())
-                        .$($("method"), session.getMethod().name())
-                        .$($("body"), "");
+                        .$set($("headers"), session.getHeaders())
+                        .$set($("params"), session.getParms())
+                        .$set($("uri"), session.getUri())
+                        .$set($("query"), session.getQueryParameterString())
+                        .$set($("method"), session.getMethod().name())
+                        .$set($("body"), "");
 //                session.getInputStream().close();
                 var out = consumer.pipe(in);
                 var body = out.$("body");
                 NanoHttpd.Response response = new NanoHttpd.Response(new NanoHttpd.Response.IStatus() {
                     @Override
-                    public int getRequestStatus() {
-                        return out.$("status").$default(200).I();
+                    public String getDescription() {
+                        return out.$("reason").$default($("")).S();
                     }
 
                     @Override
-                    public String getDescription() {
-                        return out.$("reason").$default("").S();
+                    public int getRequestStatus() {
+                        return out.$("status").$default($(200)).I();
                     }
                 }, body.$mimeType().$S(), body.S());
                 out.$("headers").$map().forEach((s, v) -> response.addHeader(s, v.$S()));

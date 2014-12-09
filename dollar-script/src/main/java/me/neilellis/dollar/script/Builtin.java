@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.script;
 
+import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 
@@ -26,42 +27,56 @@ import java.util.List;
  */
 public interface Builtin<T> {
 
-    T execute(List<var> args, ScriptScope scope);
+    T execute(boolean pure, List<var> args, Scope scope);
+
 
     interface DollarStyle extends Builtin<var> {
-        var execute(List<var> args, ScriptScope scope);
+        var execute(boolean pure, List<var> args, Scope scope);
     }
 
     interface JavaStyle<T> extends Builtin<T> {
-        T execute(List<var> args, ScriptScope scope);
+        T execute(boolean pure, List<var> args, Scope scope);
     }
 
     class BuiltinImpl implements Builtin<var> {
 
         private final int minargs;
         private final int maxargs;
-        private Builtin function;
+        private final Builtin function;
+        private boolean pure;
+        private String name;
 
-        public BuiltinImpl(Builtin function, int minargs, int maxargs) {
+        public BuiltinImpl(String name, Builtin function, int minargs, int maxargs, boolean pure) {
+            this.name = name;
             this.function = function;
             this.minargs = minargs;
             this.maxargs = maxargs;
+            this.pure = pure;
+        }
+
+        public boolean isPure() {
+            return pure;
         }
 
         @Override
-        public var execute(List<var> args, ScriptScope scope) {
+        public var execute(boolean pure, List<var> args, Scope scope) {
+            if (!this.pure && pure) {
+                throw new DollarScriptException("Cannot use an impure function '" + name + "' in a pure expression");
+            }
+
             if (args.size() < minargs) {
-                throw new IllegalArgumentException("Minimum number of arguments is " + minargs);
+                throw new IllegalArgumentException("Minimum number of arguments for '" + name + "' is " + minargs);
             }
             if (args.size() > maxargs) {
-                throw new IllegalArgumentException("Maximum number of arguments is " + maxargs);
+                throw new IllegalArgumentException("Maximum number of arguments for '" + name + "' is " + maxargs);
             }
-            Object result = function.execute(args, scope);
+            Object result = function.execute(pure, args, scope);
             if (result instanceof var) {
                 return (var) result;
             }
             return DollarFactory.fromValue(result);
         }
+
     }
 
 }

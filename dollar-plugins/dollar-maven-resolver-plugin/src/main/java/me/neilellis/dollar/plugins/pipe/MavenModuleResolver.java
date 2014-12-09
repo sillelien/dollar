@@ -20,7 +20,7 @@ import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.deps.DependencyRetriever;
 import me.neilellis.dollar.script.ModuleResolver;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import org.sonatype.aether.resolution.DependencyResolutionException;
 
 /**
@@ -38,7 +38,7 @@ public class MavenModuleResolver implements ModuleResolver {
     }
 
     @Override
-    public Pipeable resolve(String uriWithoutScheme, ScriptScope scope) {
+    public Pipeable resolve(String uriWithoutScheme, Scope scope) {
         String[] strings = uriWithoutScheme.split(":", 2);
         try {
             return (Pipeable) DependencyRetriever.retrieve(strings[1]).loadClass(strings[0]).newInstance();

@@ -19,7 +19,7 @@ package me.neilellis.dollar;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Created by neil on 10/16/14.
+ * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class SimpleErrorLogger implements ErrorLogger {
     @Override

@@ -17,7 +17,7 @@
 package me.neilellis.dollar;
 
 /**
- * Created by neil on 10/16/14.
+ * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface ErrorLogger {
     void log(String errorMessage);

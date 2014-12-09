@@ -33,17 +33,12 @@ public interface URIAware {
         return $write(lhs, false, false);
     }
 
-    /**
-     * Generic Send.
-     */
+
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class) var $write(var value, boolean blocking, boolean mutating);
 
     @Guarded(ChainGuard.class) var $drain();
 
-//    @Guarded(NotNullParametersGuard.class) String $listen(Pipeable pipe);
-//
-//    @Guarded(NotNullParametersGuard.class) String $listen(Pipeable pipe, String key);
 
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
@@ -102,8 +97,7 @@ public interface URIAware {
 
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class) default var $subscribe(Pipeable subscription) {
-        return $listen(subscription,
-                       null);
+        return $listen(subscription, null);
     }
 
     default var $listen(Pipeable pipeable, String id) {return DollarStatic.$void();}

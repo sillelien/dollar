@@ -27,7 +27,7 @@ import java.util.*;
 public class Plugins {
 
     public static <T extends ExtensionPoint<T>> List<T> allProviders(Class<T> serviceClass) {
-        final ServiceLoader<T> loader = ServiceLoader.<T>load(serviceClass);
+        final ServiceLoader<T> loader = ServiceLoader.load(serviceClass);
         final Iterator<T> iterator = loader.iterator();
         if (!iterator.hasNext()) {
             return Collections.singletonList(NoOpProxy.newInstance(serviceClass));

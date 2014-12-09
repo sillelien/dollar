@@ -1,8 +1,8 @@
 machine:
   environment:
-    previous_release: 0.0.0
-    release: 0.1.0
-    next_release: 0.1.1
+    previous_release: 0.1.0
+    release: 0.1.1
+    next_release: 0.1.2
   java:
     version: oraclejdk8
 
@@ -44,7 +44,7 @@ deployment:
           - git clean -fd
           - git checkout master
           - git pull origin master
-          - github-changes -o neilellis -r dollar -v  -n ${next_release}
+          - 'github-changes -o neilellis -r dollar -v  -n "In Progress: ${next_release}"'
           - git merge staging -m "Auto merge"
           - git commit -a -m "Change log updates"
           - "git tag ${release} || :"

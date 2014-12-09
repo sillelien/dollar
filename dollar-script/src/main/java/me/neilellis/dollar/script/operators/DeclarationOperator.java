@@ -18,7 +18,7 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.Type;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
@@ -31,14 +31,26 @@ import static me.neilellis.dollar.DollarStatic.$void;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DeclarationOperator implements Map<Object[], Map<? super var, ? extends var>> {
-    private final ScriptScope scope;
+    private final Scope scope;
+    private boolean pure;
 
-    public DeclarationOperator(ScriptScope scope) {this.scope = scope;}
+    public DeclarationOperator(Scope scope, boolean pure) {
+        this.scope = scope;
+        this.pure = pure;
+    }
 
     public Map<? super var, ? extends var> map(Object[] objects) {
 
         return new Map<var, var>() {
-            public var map(var value) {
+            public var map(var v) {
+                var value;
+                if (objects.length == 5) {
+                    //Pure prefix in action here so objects[4] is the pure expression instead of the parameter v
+                    // passed in
+                    value = (var) objects[4];
+                } else {
+                    value = v;
+                }
                 var constraint;
                 if (objects[1] != null) {
                     constraint =
@@ -51,7 +63,7 @@ public class DeclarationOperator implements Map<Object[], Map<? super var, ? ext
                     constraint = null;
                 }
                 final String variableName = objects[2].toString();
-                Pipeable action = i -> scope.set(variableName, value, false, constraint, false);
+                Pipeable action = i -> scope.set(variableName, value, pure, constraint, false, false, pure);
                 try {
                     action.pipe($void());
                 } catch (Exception e) {

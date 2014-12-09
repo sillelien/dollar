@@ -91,7 +91,7 @@ public class DollarBasicTest {
                                 .$("postcode", "bn1 6jj")
                                 .$("number", 343)
                 );
-        var result = profile.eval("getWeight", (var value) -> value.$("weight", "none of your business"));
+        var result = profile.$pipe(v -> v.$("weight", "none of your business"));
         String weight = result.$("weight").S();
         assertEquals(weight, "none of your business");
         assertTrue("Profile's state was mutated!!!", profile.$("weight").isVoid());
@@ -109,7 +109,7 @@ public class DollarBasicTest {
         assertEquals(1L, $(map).$("sub").toMap().get("thing"));
         assertEquals("1", $(map).$("sub").$("thing").S());
         assertEquals("{\"thing\":1}", $(map).$("sub").S());
-        assertEquals(1, $(map).$("sub").I("thing").longValue());
+        assertEquals(1, $(map).$("sub").$("thing").I().longValue());
     }
 
     @Test
@@ -145,7 +145,7 @@ public class DollarBasicTest {
         assertFalse($((Object) null).$("bar").$has("foo").isTrue());
         assertFalse($((Object) null).$has("foo").isTrue());
         assertTrue($((Object) null).$("foo", "bar").$("foo").isVoid());
-        assertEquals("twasnull", $((Object) null).$void(() -> $("twasnull")).S());
+        assertEquals("twasnull", $((Object) null).$default($(i -> $("twasnull"))).S());
     }
 
 

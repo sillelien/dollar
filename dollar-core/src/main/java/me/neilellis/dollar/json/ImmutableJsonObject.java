@@ -144,10 +144,7 @@ public class ImmutableJsonObject {
     if (obj instanceof JsonObject) {
       return json.equals(obj);
     }
-    if (obj instanceof ImmutableJsonObject) {
-      return ((ImmutableJsonObject) obj).json.equals(((ImmutableJsonObject) obj).json);
-    }
-    return false;
+    return obj instanceof ImmutableJsonObject && json.equals(((ImmutableJsonObject) obj).json);
   }
 
   @Override

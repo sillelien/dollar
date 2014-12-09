@@ -35,7 +35,7 @@ import static me.neilellis.dollar.DollarStatic.$;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class RedisURIHandler implements URIHandler {
-    public static final int BLOCKING_TIMEOUT = 10;
+    private static final int BLOCKING_TIMEOUT = 10;
     private final JedisPool jedisPool;
     private final int timeout = 60000;
     private final String path;
@@ -195,25 +195,25 @@ public class RedisURIHandler implements URIHandler {
         //TODO
     }
 
-    public var receive() {
+    var receive() {
         try (Jedis jedis = jedisPool.getResource()) {
             return $(jedis.brpop(BLOCKING_TIMEOUT, path).get(1));
         }
     }
 
-    public var poll() {
+    var poll() {
         try (Jedis jedis = jedisPool.getResource()) {
             return $(jedis.rpop(path));
         }
     }
 
-    public var peek() {
+    var peek() {
         try (Jedis jedis = jedisPool.getResource()) {
             return $(jedis.lindex(path, -1));
         }
     }
 
-    public var send(var value) {
+    var send(var value) {
         try (Jedis jedis = jedisPool.getResource()) {
             jedis.lpush(path, value.$S());
         }

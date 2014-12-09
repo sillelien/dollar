@@ -19,7 +19,8 @@ package me.neilellis.dollar.script.operators;
 import me.neilellis.dollar.script.Builtins;
 import me.neilellis.dollar.script.DollarParser;
 import me.neilellis.dollar.script.DollarScriptSupport;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
@@ -32,18 +33,26 @@ import static me.neilellis.dollar.DollarStatic.$;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class ParameterOperator implements Map<List<var>, Map<? super var, ? extends var>> {
-    private final ScriptScope scope;
-    private DollarParser dollarParser;
+    private final Scope scope;
+    private final DollarParser dollarParser;
+    private boolean pure;
 
-    public ParameterOperator(DollarParser dollarParser, ScriptScope scope) {
+    public ParameterOperator(DollarParser dollarParser, Scope scope, boolean pure) {
         this.dollarParser = dollarParser;
         this.scope = scope;
+        this.pure = pure;
     }
 
     @Override public Map<? super var, ? extends var> map(List<var> rhs) {
         return lhs -> {
+            if(!lhs.isLambda()) {
+                String lhsString = lhs.toString();
+                if(pure && Builtins.exists(lhsString) && !Builtins.isPure(lhsString)) {
+                    throw new DollarScriptException("Cannot call the impure function '"+lhsString+"' in a pure expression.");
+                }
+            }
 
-            var lambda = DollarFactory.fromLambda(i -> dollarParser.inScope("parameter", scope, newScope -> {
+            var lambda = DollarFactory.fromLambda(i -> dollarParser.inScope(pure,"parameter", scope, newScope -> {
                         //Add the special $* value for all the parameters
                         newScope.setParameter("*", $(rhs));
                         int count = 0;
@@ -53,7 +62,7 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
                             //on the value).
                             if (param.getMetaAttribute(DollarParser.NAMED_PARAMETER_META_ATTR) != null) {
                                 newScope.set(param.getMetaAttribute(DollarParser.NAMED_PARAMETER_META_ATTR), param,
-                                             true, null, false);
+                                             true, null, false, false, pure);
                             }
                         }
                         var result;
@@ -64,11 +73,11 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
                             //The lhs is a string, so let's see if it's a builtin function
                             //if not then assume it's a variable.
                             if (Builtins.exists(lhsString)) {
-                                result = Builtins.execute(lhsString, rhs, newScope);
+                                result = Builtins.execute(lhsString, rhs, newScope,pure);
                             } else {
                                 final var
                                         valueUnfixed =
-                                        DollarScriptSupport.getVariable(newScope, lhsString, false, null);
+                                        DollarScriptSupport.getVariable(pure, newScope, lhsString, false, null);
                                 result = valueUnfixed._fix(2, false);
                             }
                         }

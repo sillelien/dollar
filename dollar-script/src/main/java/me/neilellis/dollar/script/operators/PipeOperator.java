@@ -18,7 +18,7 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.Builtins;
 import me.neilellis.dollar.script.DollarParser;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
@@ -31,16 +31,18 @@ import static me.neilellis.dollar.DollarStatic.$;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class PipeOperator implements Map<var, Map<? super var, ? extends var>> {
-    private final ScriptScope scope;
-    private DollarParser dollarParser;
+    private final Scope scope;
+    private final DollarParser dollarParser;
+    private boolean pure;
 
-    public PipeOperator(DollarParser dollarParser, ScriptScope scope) {
+    public PipeOperator(DollarParser dollarParser, Scope scope, boolean pure) {
         this.dollarParser = dollarParser;
         this.scope = scope;
+        this.pure = pure;
     }
 
     @Override public Map<? super var, ? extends var> map(var rhs) {
-        return lhs -> dollarParser.inScope("pipe", scope, newScope -> {
+        return lhs -> dollarParser.inScope(pure, "pipe", scope, newScope -> {
             var lhsFix = lhs._fix(false);
             newScope.setParameter("1", lhsFix);
             Object rhsVal = rhs.$();
@@ -48,7 +50,7 @@ public class PipeOperator implements Map<var, Map<? super var, ? extends var>> {
                 String rhsStr = rhsVal.toString();
                 if (rhs.getMetaAttribute("__builtin") != null) {
                     return Builtins.execute(rhsStr, Collections.singletonList(lhsFix),
-                                            newScope);
+                                            newScope, pure);
                 } else if (newScope.has(rhsStr)) {
                     return newScope.get(rhsVal.toString())._fix(2, false);
                 } else {

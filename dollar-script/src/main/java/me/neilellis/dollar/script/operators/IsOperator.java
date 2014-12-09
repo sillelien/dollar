@@ -18,7 +18,7 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.script.DollarScriptSupport;
-import me.neilellis.dollar.script.ScriptScope;
+import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
@@ -30,9 +30,9 @@ import static me.neilellis.dollar.DollarStatic.$;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class IsOperator implements Map<List<var>, Map<? super var, ? extends var>> {
-    private final ScriptScope scope;
+    private final Scope scope;
 
-    public IsOperator(ScriptScope scope) {this.scope = scope;}
+    public IsOperator(Scope scope) {this.scope = scope;}
 
     @Override public Map<? super var, ? extends var> map(List<var> rhs) {
         return lhs -> DollarScriptSupport.wrapReactiveUnary(scope, lhs, () -> {
