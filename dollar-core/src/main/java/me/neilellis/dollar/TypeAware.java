@@ -172,8 +172,6 @@ public interface TypeAware {
      *
      * @return true if this is a void object
      *
-     * @see me.neilellis.dollar.types.DollarVoid
-     * @see me.neilellis.dollar.types.DollarFail
      */
     boolean isVoid();
 
