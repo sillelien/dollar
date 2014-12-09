@@ -120,6 +120,12 @@ public class DollarVoid extends AbstractDollar implements var {
         return null;
     }
 
+    @NotNull
+    @Override
+    public var $get(@NotNull var key) {
+        return this;
+    }
+
     @NotNull @Override
     public var $containsValue(@NotNull var value) {
         return DollarStatic.$(false);
@@ -133,12 +139,6 @@ public class DollarVoid extends AbstractDollar implements var {
     @NotNull @Override
     public var $size() {
         return DollarStatic.$(0);
-    }
-
-    @NotNull
-    @Override
-    public var $get(@NotNull var key) {
-        return this;
     }
 
     @NotNull
@@ -223,7 +223,7 @@ public class DollarVoid extends AbstractDollar implements var {
             case RANGE:
                 return DollarFactory.fromValue(Range.closed(0, 0));
             default:
-                return DollarFactory.failure(FailureType.INVALID_CAST, type.toString());
+                return DollarFactory.failure(FailureType.INVALID_CAST, type.toString(), false);
         }
     }
 

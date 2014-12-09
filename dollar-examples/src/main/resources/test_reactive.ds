@@ -208,8 +208,9 @@ i <=> 6
 // Subscription assignment
 
 
-sub := j *= random:dummy
+sub= (j *= random:dummy)
 colors= ["red","green","blue"]
+@@j * #colors
 k := colors[j * #colors]
 @@k
 volatile updatedK=false

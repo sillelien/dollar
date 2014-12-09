@@ -3,10 +3,20 @@ cd $(dirname $0)
 [ -d ~/.dollar-cache ] || mkdir ~/.dollar-cache
 [ -f ~/.dollar-cache/zulu-mac.zip ] || curl -H "Referer: http://www.azulsystems.com/products/zulu/downloads#mac"  http://cdn.azulsystems.com/zulu/2014-09-8.3-bin/zulu1.8.0_20-8.3.0.4-macosx.zip   > ~/.dollar-cache/zulu-mac.zip
 [ -d ../dist ] && rm -rf ../dist || :
-rm  ../dollar-runtime/target/dollar-runtime-0-SNAPSHOT-fat.jar
-jar=$(ls ../dollar-runtime/target/dollar-runtime*-fat.jar)
+#rm  ../dollar-runtime/target/dollar-runtime-0-SNAPSHOT-fat.jar
 dist_osx=../dist/osx/dollar
+[ -d ${dist_osx}/plugins ] || mkdir -p ${dist_osx}/plugins
+jar=$(ls ../dollar-runtime/target/dollar-runtime*-fat.jar)
 mkdir -p ${dist_osx}
+
+for pd in $(ls ../dollar-plugins)
+do
+    if [ -d ../dollar-plugins/${pd}/target ]
+    then
+        cp ../dollar-plugins/${pd}/target/*plugin.jar ${dist_osx}/plugins
+    fi
+done
+
 cp -r ../dist-skel/common/* ${dist_osx}
 cp -r ../dist-skel/osx/* ${dist_osx}
 cp ../LICENSE ../README.md $dist_osx

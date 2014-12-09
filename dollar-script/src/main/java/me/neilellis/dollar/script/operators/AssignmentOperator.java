@@ -77,15 +77,15 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
                     }
                     if (operator.equals("?=")) {
                         scope.set(varName, $void(), false, null, isVolatile, false, pure);
-                        return $(rhs.$listen(
+                        return DollarScriptSupport.wrapUnary(scope, () -> $($(rhs.$listen(
                                 i -> scope.set(varName, fix(i, false), false,
-                                               useConstraint, isVolatile, false, pure)));
+                                               useConstraint, isVolatile, false, pure)))));
 
                     } else if (operator.equals("*=")) {
                         scope.set(varName, $void(), false, null, true, true, pure);
-                        return $(rhs.$subscribe(
+                        return DollarScriptSupport.wrapUnary(scope, () -> $(rhs.$subscribe(
                                 i -> scope.set(varName, fix(i, false), false,
-                                               useConstraint, true, false, pure)));
+                                               useConstraint, true, false, pure))));
                     }
                 }
                 return assign(rhs, objects, constraint, constant, isVolatile);

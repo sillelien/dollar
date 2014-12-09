@@ -169,14 +169,14 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        return null;
+    public var $copy() {
+        return DollarFactory.fromValue(list.stream().map(var::$copy).collect(Collectors.toList()), errors());
     }
 
     @NotNull
     @Override
-    public var $copy() {
-        return DollarFactory.fromValue(list.stream().map(var::$copy).collect(Collectors.toList()), errors());
+    public ImmutableMap<String, var> $map() {
+        return null;
     }
 
     @Override public var _fix(int depth, boolean parallel) {
@@ -256,7 +256,7 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public var $get(@NotNull var key) {
-        if (key.isInteger()) {
+        if (key.isNumber()) {
             return list.get(key.I());
         }
         for (var var : list) {
@@ -322,6 +322,16 @@ public class DollarList extends AbstractDollar {
         return !list.isEmpty();
     }
 
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
+    }
+
     @NotNull
     @Override
     public ImmutableList<var> $list() {
@@ -339,15 +349,6 @@ public class DollarList extends AbstractDollar {
         }
     }
 
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
 
     @NotNull
     @Override

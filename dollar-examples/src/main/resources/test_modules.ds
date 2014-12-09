@@ -15,7 +15,7 @@
 //Pass some parameters to the module. The module has a brand new scope so only has access to these parameters passed in.
 chat:= module "github:neilellis:dollar-example-module::chat.ds" (channel="test",hello="world")
 sub= chat.server()
-chat.state <=> ["RUNNING","RUNNING"]
+chat.state <=> ["RUNNING","INITIAL"]
 sub.unsub()
 @@ chat.state
 chat.stop()

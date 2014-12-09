@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.types;
+package me.neilellis.dollar;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
-public enum FailureType {
-    INVALID_LIST_OPERATION, INVALID_MAP_OPERATION, INVALID_SINGLE_VALUE_OPERATION, EXCEPTION,
-    INVALID_RANGE_OPERATION, INVALID_BOOLEAN_VALUE_OPERATION, ASSERTION, INVALID_STRING_OPERATION,
-    INVALID_URI_OPERATION,
+import me.neilellis.dollar.script.DollarParser;
 
-    INVALID_OPERATION, EVALUATION_FAILURE, METADATA_IMMUTABLE, INVALID_CAST, EXECUTION_FAILURE, INTERRUPTED,
-    IO, VOID_FAILURE
+import java.io.IOException;
+
+class Bulletin {
+
+
+    public static void main(String[] args) throws IOException {
+        new DollarParser().parse(Bulletin.class.getResourceAsStream("/bulletin.ds"), false);
+    }
 }
