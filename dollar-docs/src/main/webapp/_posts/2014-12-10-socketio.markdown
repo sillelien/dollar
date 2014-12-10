@@ -31,7 +31,7 @@ Now we have the magic, the `*=` is the subscriptive assignment operator. This is
 ("chatevent" : message) publish server
 {% endhighlight %}
 
-Finally we have the reactive part. The first thing we do is create a 'pair', a pair is a map with a single key/value entry. The key is the type of event we are going to send, the value is the actual message itself. Because we have the variable message in this expression any change to message will cause the expression to be re-evaluated causing the pair to be published using the `publish` operator to our previously defined `server`.
+Finally we have the reactive part. The first thing we do is create a 'pair', a pair is a map with a single key/value entry created using `:`. The key is the type of event we are going to send, the value is the actual message itself. Because we have the variable `message` in this expression any change to `message` will cause the expression to be re-evaluated causing the pair to be published using the `publish` operator to our previously defined `server`.
 
 And that my friends is it. It's obviously a very simple example, however I feel it amply illustrates the value of the reactive side of Dollar.
 
