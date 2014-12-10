@@ -20,7 +20,6 @@ import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 
 /**
@@ -41,11 +40,7 @@ public class SocketIOURIFactory implements URIHandlerFactory {
 
     @Override
     public URIHandler forURI(String scheme, String uri) throws IOException {
-        try {
-            return new SocketURIHandler(scheme, uri);
-        } catch (URISyntaxException e) {
-            return null;
-        }
+        return new SocketURIHandler(scheme, uri);
     }
 }
 

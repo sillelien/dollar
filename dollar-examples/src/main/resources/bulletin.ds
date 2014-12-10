@@ -1,9 +1,7 @@
 #!/usr/bin/env dollar
-server= socketio://127.0.0.1:8092/bulletin
-socketsub= (message *= server)
-
-@@message
-(message.userName) publish server
+server= socketio://127.0.0.1:8092/bulletin?eventType=chatevent
+message *= server
+("chatevent" : message) publish server
 
 
 

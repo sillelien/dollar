@@ -23,12 +23,7 @@ import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.types.FailureType;
 import me.neilellis.dollar.var;
-
-import java.net.URI;
-
-import static me.neilellis.dollar.DollarStatic.$void;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -36,11 +31,10 @@ import static me.neilellis.dollar.DollarStatic.$void;
 class SocketIOSubscription implements DataListener<String>, ConnectListener, DisconnectListener {
     private final Pipeable consumer;
     private final String id;
-    private final URI uri;
+    private final me.neilellis.dollar.uri.URI uri;
     private boolean destroyed;
-    private SocketIOClient client;
 
-    public SocketIOSubscription(Pipeable consumer, String id, URI uri) {
+    public SocketIOSubscription(Pipeable consumer, String id, me.neilellis.dollar.uri.URI uri) {
 
         this.consumer = consumer;
         this.id = id;
@@ -49,18 +43,15 @@ class SocketIOSubscription implements DataListener<String>, ConnectListener, Dis
 
     public void destroy() {
         destroyed = true;
-        client.leaveRoom(getPath());
-        client = null;
     }
-
-    private String getPath() {return uri.getPath().substring(1);}
 
     @Override public void onConnect(SocketIOClient client) {
         if (!destroyed) {
-            this.client = client;
             client.joinRoom(getPath());
         }
     }
+
+    private String getPath() {return uri.path().substring(1);}
 
     @Override public void onData(SocketIOClient client, String data, AckRequest ackSender) throws Exception {
         if (!destroyed) {
@@ -73,18 +64,7 @@ class SocketIOSubscription implements DataListener<String>, ConnectListener, Dis
     }
 
     @Override public void onDisconnect(SocketIOClient client) {
-        this.client = null;
+        client.leaveRoom(getPath());
     }
 
-    public var push(var value) {
-        if (!destroyed) {
-            if (this.client == null) {
-                return DollarFactory.failure(FailureType.IO, "Could not push value as client has disconnected", true);
-            }
-            client.sendJsonObject(value.S());
-            return $void();
-        } else {
-            return DollarFactory.failure(FailureType.IO, "Subscription is destroyed", true);
-        }
-    }
 }

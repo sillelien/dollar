@@ -21,13 +21,15 @@ import com.corundumstudio.socketio.SocketIOServer;
 import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.types.DollarFactory;
+import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.var;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -40,11 +42,17 @@ public class SocketURIHandler implements URIHandler {
     private final ConcurrentHashMap<String, SocketIOSubscription> subscriptions = new ConcurrentHashMap<>();
     private SocketIOServer server;
 
-    public SocketURIHandler(String scheme, String uri) throws URISyntaxException, IOException {
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            servers.values().forEach(SocketIOServer::stop);
+        }));
+    }
+
+    public SocketURIHandler(String scheme, String uri) throws IOException {
         if (uri.startsWith("//")) {
-            this.uri = new URI(scheme + ":" + uri);
+            this.uri = URI.parse(scheme + ":" + uri);
         } else {
-            this.uri = new URI(uri);
+            this.uri = URI.parse(uri);
         }
     }
 
@@ -73,7 +81,7 @@ public class SocketURIHandler implements URIHandler {
 
     @Override public void init() {
         try {
-            server = getServerFor(this.uri.getHost(), this.uri.getPort());
+            server = getServerFor(this.uri.host(), this.uri.port());
         } catch (IOException e) {
             throw new DollarException(e);
         }
@@ -86,8 +94,8 @@ public class SocketURIHandler implements URIHandler {
 
     @Override public var publish(var value) {
         ArrayList<var> responses = new ArrayList<>();
+        server.getBroadcastOperations().sendEvent(value.getPairKey(), value.getPairValue().json().toMap());
         for (SocketIOSubscription subscription : subscriptions.values()) {
-            responses.add(subscription.push(value));
         }
         return DollarFactory.fromValue(responses);
     }
@@ -135,6 +143,13 @@ public class SocketURIHandler implements URIHandler {
         server.addMessageListener(listener);
         server.addConnectListener(listener);
         server.addDisconnectListener(listener);
+        final Map<String, List<String>> query = uri.query();
+        if (uri.hasParam("eventType")) {
+            final List<String> eventTypes = query.getOrDefault("eventType", Collections.EMPTY_LIST);
+            for (String eventType : eventTypes) {
+                server.addEventListener(eventType, String.class, listener);
+            }
+        }
         subscriptions.put(id, listener);
     }
 
