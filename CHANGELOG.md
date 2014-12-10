@@ -1,6 +1,11 @@
 ## Change Log
 
-### In Progress: 0.1.3 (2014/12/10 12:36 +00:00)
+### In Progress: 0.1.3 (2014/12/10 12:43 +00:00)
+- [4e8fdb8](https://github.com/neilellis/dollar/commit/4e8fdb878d408e06f2b780900f96f5ed8d93be9c) Change log updates
+- [7466052](https://github.com/neilellis/dollar/commit/74660526154094d43aaa88bdc18484e90e389a1d) Auto merge
+- [d58dfdb](https://github.com/neilellis/dollar/commit/d58dfdb55687e6070776fb9dd8338bec4725760e) Blog about reactive chat server
+- [68dd08f](https://github.com/neilellis/dollar/commit/68dd08f6e827a848873c39567b865ee7e4bd1c5d) Blog about reactive chat server
+- [a721b84](https://github.com/neilellis/dollar/commit/a721b84c34f361bb76093748a996aeacecdee5d8) Work on chat server example.
 - [e549b72](https://github.com/neilellis/dollar/commit/e549b72ccfe6809b16535a11edb9d344e63fc07d) Change log updates
 - [4af9feb](https://github.com/neilellis/dollar/commit/4af9feb2f3e55fdd8e9489d53dde1f841f6cc8cd) Auto merge
 - [e3e2631](https://github.com/neilellis/dollar/commit/e3e263168866f52a3d56cc4f1e0dbb352591810b) Added logo to website
@@ -39,8 +44,8 @@
 - [393ac19](https://github.com/neilellis/dollar/commit/393ac199ca42de27ee65359ca000feef6b59269a) Change log updates
 - [9044c23](https://github.com/neilellis/dollar/commit/9044c2397b98e52f2e1cae7eb7f6f42157399952) Auto merge
 - [ba012fd](https://github.com/neilellis/dollar/commit/ba012fd10e2162070a25591b67a55b209382052b) General tooling and planning integration.
-- [a7bbb4a](https://github.com/neilellis/dollar/commit/a7bbb4addec58e95b893098f0c07b9691f5ca8e3) Auto merge
 - [c35685f](https://github.com/neilellis/dollar/commit/c35685fc8316fe1c4b1a1f16cc622c7572b29281) Change log updates
+- [a7bbb4a](https://github.com/neilellis/dollar/commit/a7bbb4addec58e95b893098f0c07b9691f5ca8e3) Auto merge
 - [090ccab](https://github.com/neilellis/dollar/commit/090ccab321c92fc0bf43072e42966b0e53ce10cf) General tooling and planning integration.
 - [d81bade](https://github.com/neilellis/dollar/commit/d81badedf3d3c8fa6a9a71900b2a83bb542b5e15) General tooling and planning integration.
 
