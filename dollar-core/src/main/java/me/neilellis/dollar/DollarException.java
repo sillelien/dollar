@@ -36,7 +36,7 @@ public class DollarException extends RuntimeException {
         super(errorMessage);
     }
 
-    protected DollarException(Throwable t, String s) {
+    public DollarException(Throwable t, String s) {
         super(s, t);
     }
 
