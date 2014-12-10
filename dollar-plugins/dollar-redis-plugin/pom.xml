@@ -30,6 +30,8 @@
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-core</artifactId>
             <version>0-SNAPSHOT</version>
+            <scope>provided</scope>
+
         </dependency>
         <dependency>
             <groupId>redis.clients</groupId>

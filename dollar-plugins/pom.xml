@@ -32,6 +32,7 @@
         <module>dollar-redis-plugin</module>
         <module>dollar-metrics-plugin</module>
         <module>dollar-camel-plugin</module>
+        <module>dollar-socketio-plugin</module>
         <module>dollar-http-plugin</module>
         <module>dollar-maven-resolver-plugin</module>
         <module>dollar-github-resolver-plugin</module>
@@ -39,5 +40,50 @@
         <module>dollar-std-resources-plugin</module>
     </modules>
 
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <configuration>
+                    <artifactSet>
+                        <!--<excludes>-->
+                        <!--<exclude>me.neilellis.dollar:*</exclude>-->
+                        <!--<exclude>me.neilellis:*</exclude>-->
+                        <!--</excludes>-->
+                    </artifactSet>
+                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                    <shadedClassifierName>plugin</shadedClassifierName>
+                    <!--Change to true if/when http://jira.codehaus.org/browse/MSHADE-174 is fixed -->
+                    <minimizeJar>false</minimizeJar>
+                    <filters>
+                        <filter>
+                            <!--
+                                Exclude files that sign a jar
+                                (one or multiple of the dependencies).
+                                One may not repack a signed jar without
+                                this, or you will get a
+                                SecurityException at program start.
+                            -->
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                                <exclude>META-INF/*.INF</exclude>
+                                <exclude>META-INF/license</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

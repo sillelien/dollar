@@ -104,7 +104,7 @@ class DollarLexer {
         return (
                 Scanners.pattern(Patterns.isChar(CharPredicates.IS_ALPHA_).many1()
                                          .next(Patterns.isChar(':').next(Patterns.among("=\"").not())
-                                                       .next(Patterns.among("-._~:/?#[]@!$&'()*+,;=%")
+                                                       .next(Patterns.among("-._~:/?#@!$&'*+,;=%")
                                                                      .or(Patterns.isChar(
                                                                                  CharPredicates.IS_ALPHA_NUMERIC_)
                                                                      )

@@ -243,8 +243,8 @@ public class DollarFactory {
         }
     }
 
-    public static var failure(FailureType failureType, String message) {
-        if (DollarStatic.config.failFast()) {
+    public static var failure(FailureType failureType, String message, boolean quiet) {
+        if (DollarStatic.config.failFast() && !quiet) {
             throw new DollarFailureException(failureType, message);
         } else {
             return wrap(new DollarFail(Arrays.asList(new DollarException(message)), failureType));

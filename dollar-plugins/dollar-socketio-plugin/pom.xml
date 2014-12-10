@@ -25,7 +25,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dollar-metrics-plugin</artifactId>
+    <artifactId>dollar-socketio-plugin</artifactId>
     <dependencies>
         <dependency>
             <groupId>me.neilellis</groupId>
@@ -35,9 +35,9 @@
 
         </dependency>
         <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-core</artifactId>
-            <version>3.1.0</version>
+            <groupId>com.corundumstudio.socketio</groupId>
+            <artifactId>netty-socketio</artifactId>
+            <version>1.6.5</version>
         </dependency>
     </dependencies>
 
