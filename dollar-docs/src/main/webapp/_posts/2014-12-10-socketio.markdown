@@ -1,0 +1,36 @@
+---
+layout: post
+title:  "Reactive chat server in 3 lines, explained"
+date:   2014-12-10 12:23:00
+categories: dollar socketio examples
+---
+
+It's good to be wary about 3 line code, **wow** examples. But it's hard not to want to show off the reactive aspects of DollarScript, so here goes:
+
+{% highlight bash %}
+server= socketio://127.0.0.1:8092/bulletin?eventType=chatevent
+message *= server
+("chatevent" : message) publish server
+{% endhighlight %}
+
+Let's break it down.
+
+{% highlight bash %}
+server= socketio://127.0.0.1:8092/bulletin?eventType=chatevent
+{% endhighlight %}
+
+This simply sets the variable server to be the url of the server we're going to create. The important parts are the hostname, socket and the type of event we're interested in - in this case `chatevent`.
+
+{% highlight bash %}
+message *= server
+{% endhighlight %}
+
+Now we have the magic, the `*=` is the subscriptive assignment operator. This is essential syntactic sugar to say subscribe to server and when a new value is available assign it to message.
+
+{% highlight bash %}
+("chatevent" : message) publish server
+{% endhighlight %}
+
+Finally we have the reactive part. The first thing we do is create a 'pair', a pair is a map with a single key/value entry. The key is the type of event we are going to send, the value is the actual message itself. Because we have the variable message in this expression any change to message will cause the expression to be re-evaluated causing the pair to be published using the `publish` operator to our previously defined `server`.
+
+And that my friends is it. It's obviously a very simple example, however I feel it amply illustrates the value of the reactive side of Dollar.
