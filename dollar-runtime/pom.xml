@@ -32,6 +32,11 @@
             <artifactId>dollar-core</artifactId>
             <version>0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!--<dependency>-->
         <!--<groupId>me.neilellis</groupId>-->
         <!--<artifactId>dollar-metrics-plugin</artifactId>-->
