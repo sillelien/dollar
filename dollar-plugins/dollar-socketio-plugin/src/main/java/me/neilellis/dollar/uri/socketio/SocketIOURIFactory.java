@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.uri.socketio;
 
+import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
 
@@ -39,7 +40,7 @@ public class SocketIOURIFactory implements URIHandlerFactory {
     }
 
     @Override
-    public URIHandler forURI(String scheme, String uri) throws IOException {
+    public URIHandler forURI(String scheme, URI uri) throws IOException {
         return new SocketURIHandler(scheme, uri);
     }
 }

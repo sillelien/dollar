@@ -14,27 +14,20 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.redis;
+package me.neilellis.dollar.uri.mapdb;
 
 import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
-import redis.clients.jedis.JedisPoolConfig;
 
-import java.net.URISyntaxException;
+import java.io.IOException;
+
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class RedisURIHandlerFactory implements URIHandlerFactory {
+public class MapDBURIFactory implements URIHandlerFactory {
 
-
-    private static final JedisPoolConfig poolConfig = new JedisPoolConfig();
-
-    static {
-        poolConfig.setMaxTotal(128);
-
-    }
 
     @Override
     public URIHandlerFactory copy() {
@@ -42,17 +35,13 @@ public class RedisURIHandlerFactory implements URIHandlerFactory {
     }
 
     @Override
-    public URIHandler forURI(String scheme, URI uri) {
-        try {
-            return new RedisURIHandler(uri, poolConfig);
-        } catch (URISyntaxException e) {
-            return null;
-        }
+    public URIHandler forURI(String scheme, URI uri) throws IOException {
+        return new MapDBURIHandler(scheme, uri);
     }
 
     @Override
     public boolean handlesScheme(String scheme) {
-        return scheme.equals("redis");
+        return scheme.equals("socketio");
     }
 }
 

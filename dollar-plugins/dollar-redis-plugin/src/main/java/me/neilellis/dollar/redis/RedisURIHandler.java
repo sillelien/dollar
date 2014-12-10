@@ -25,7 +25,6 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisPubSub;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -41,13 +40,13 @@ public class RedisURIHandler implements URIHandler {
     private final String path;
     private final String query;
 
-    public RedisURIHandler(String uri, JedisPoolConfig jedisPoolConfig) throws URISyntaxException {
-        URI uri1 = new URI(uri);
-        String host = uri1.getHost();
-        int port = uri1.getPort();
-        String userInfo = uri1.getUserInfo();
-        path = uri1.getPath().substring(1);
-        query = uri1.getQuery();
+    public RedisURIHandler(me.neilellis.dollar.uri.URI uri, JedisPoolConfig jedisPoolConfig) throws URISyntaxException {
+        me.neilellis.dollar.uri.URI uri1 = uri;
+        String host = uri1.host();
+        int port = uri1.port();
+        String userInfo = uri1.userInfo();
+        path = uri1.path().substring(1);
+        query = uri1.queryString();
         if (userInfo != null) {
             String[] usernamePassword = userInfo.split(":");
             jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, usernamePassword[1]);

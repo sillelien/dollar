@@ -19,6 +19,7 @@ package me.neilellis.dollar.script;
 import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.exceptions.LambdaRecursionException;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
+import me.neilellis.dollar.script.exceptions.ErrorReporter;
 import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.types.FailureType;
@@ -94,9 +95,11 @@ public class ParserErrorHandler {
             System.err.println(t.getMessage());
         }
         if (t instanceof DollarException) {
+            ErrorReporter.report(getClass(), t);
             System.err.println(t.getMessage());
         }
         if (t instanceof DollarScriptException) {
+            ErrorReporter.report(getClass(), t);
             System.err.println(t.getMessage());
         } else { throw t; }
     }

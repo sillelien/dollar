@@ -18,6 +18,7 @@ package me.neilellis.dollar.resources.std;
 
 import me.neilellis.dollar.Execution;
 import me.neilellis.dollar.Pipeable;
+import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
 import me.neilellis.dollar.var;
@@ -50,11 +51,7 @@ public class RandomResourceFactory implements URIHandlerFactory {
         return this;
     }
 
-    @Override public boolean handlesScheme(String scheme) {
-        return scheme.equals("random");
-    }
-
-    @Override public URIHandler forURI(String scheme, String uri) throws Exception {
+    @Override public URIHandler forURI(String scheme, URI uri) throws Exception {
 
         return new URIHandler() {
 
@@ -115,5 +112,9 @@ public class RandomResourceFactory implements URIHandlerFactory {
                 consumers.remove(subId);
             }
         };
+    }
+
+    @Override public boolean handlesScheme(String scheme) {
+        return scheme.equals("random");
     }
 }

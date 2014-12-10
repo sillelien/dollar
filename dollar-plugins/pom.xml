@@ -33,6 +33,7 @@
         <module>dollar-metrics-plugin</module>
         <module>dollar-camel-plugin</module>
         <module>dollar-socketio-plugin</module>
+        <module>dollar-mapdb-plugin</module>
         <module>dollar-http-plugin</module>
         <module>dollar-maven-resolver-plugin</module>
         <module>dollar-github-resolver-plugin</module>

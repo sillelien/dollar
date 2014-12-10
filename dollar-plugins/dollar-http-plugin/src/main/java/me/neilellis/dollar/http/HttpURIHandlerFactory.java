@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.http;
 
+import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
 
@@ -32,12 +33,12 @@ public class HttpURIHandlerFactory implements URIHandlerFactory {
 
 
     @Override
-    public boolean handlesScheme(String scheme) {
-        return scheme.equals("http") || scheme.equals("https");
+    public URIHandlerFactory copy() {
+        return this;
     }
 
     @Override
-    public URIHandler forURI(String scheme, String uri) throws IOException {
+    public URIHandler forURI(String scheme, URI uri) throws IOException {
         try {
             return new HttpURIHandler(scheme, uri);
         } catch (URISyntaxException e) {
@@ -46,8 +47,8 @@ public class HttpURIHandlerFactory implements URIHandlerFactory {
     }
 
     @Override
-    public URIHandlerFactory copy() {
-        return this;
+    public boolean handlesScheme(String scheme) {
+        return scheme.equals("http") || scheme.equals("https");
     }
 }
 

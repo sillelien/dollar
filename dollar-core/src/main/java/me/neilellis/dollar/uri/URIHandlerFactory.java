@@ -24,7 +24,7 @@ import me.neilellis.dollar.plugin.ExtensionPoint;
 public interface URIHandlerFactory extends ExtensionPoint<URIHandlerFactory> {
 
 
-    boolean handlesScheme(String scheme);
+    URIHandler forURI(String scheme, URI uri) throws Exception;
 
-    URIHandler forURI(String scheme, String uri) throws Exception;
+    boolean handlesScheme(String scheme);
 }

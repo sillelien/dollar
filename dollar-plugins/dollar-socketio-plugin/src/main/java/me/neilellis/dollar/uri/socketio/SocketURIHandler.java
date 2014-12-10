@@ -48,12 +48,8 @@ public class SocketURIHandler implements URIHandler {
         }));
     }
 
-    public SocketURIHandler(String scheme, String uri) throws IOException {
-        if (uri.startsWith("//")) {
-            this.uri = URI.parse(scheme + ":" + uri);
-        } else {
-            this.uri = URI.parse(uri);
-        }
+    public SocketURIHandler(String scheme, URI uri) throws IOException {
+        this.uri = uri.sub();
     }
 
     @Override

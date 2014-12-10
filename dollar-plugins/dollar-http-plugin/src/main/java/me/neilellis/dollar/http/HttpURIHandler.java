@@ -22,11 +22,11 @@ import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.types.SerializedType;
+import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.var;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,12 +45,12 @@ public class HttpURIHandler implements URIHandler {
     private RouteableNanoHttpd httpd;
     private String method = "GET";
 
-    public HttpURIHandler(String scheme, String uri) throws URISyntaxException, IOException {
-        if (uri.startsWith("//")) {
-            this.uri = new URI(scheme + ":" + uri);
+    public HttpURIHandler(String scheme, me.neilellis.dollar.uri.URI uri) throws URISyntaxException, IOException {
+        if (uri.hasSubScheme()) {
+            this.uri = URI.parse(scheme + ":" + uri.sub());
         } else {
-            this.uri = new URI(uri);
-            this.method = this.uri.getScheme();
+            this.uri = uri;
+            this.method = this.uri.sub().scheme();
         }
     }
 
@@ -90,7 +90,7 @@ public class HttpURIHandler implements URIHandler {
     public var receive(boolean blocking, boolean mutating) {
         try {
             return DollarFactory.fromStream(SerializedType.JSON, Unirest.get(uri.toString())
-                    .asJson().getRawBody());
+                                                                        .asJson().getRawBody());
         } catch (UnirestException e) {
             return DollarStatic.handleError(e, null);
         } catch (IOException e) {
@@ -127,9 +127,9 @@ public class HttpURIHandler implements URIHandler {
 
     @Override
     public void subscribe(Pipeable consumer, String id) throws IOException {
-        httpd = getHttpServerFor(this.uri.getHost(), this.uri.getPort());
-        httpd.handle(this.uri.getPath(), new RequestHandler(consumer));
-        subscriptions.put(id, this.uri.getPath());
+        httpd = getHttpServerFor(this.uri.host(), this.uri.port());
+        httpd.handle(this.uri.path(), new RequestHandler(consumer));
+        subscriptions.put(id, this.uri.path());
     }
 
     @Override public void unpause() {
@@ -171,17 +171,12 @@ public class HttpURIHandler implements URIHandler {
         @Override
         public Response serve(IHTTPSession session) {
             URI uri;
-            try {
-                uri = new URI(session.getUri());
-                RequestHandler requestHandler = handlers.get(uri.getPath());
-                if (requestHandler == null) {
-                    return new Response(Response.Status.NOT_FOUND, "text/plain", "");
-                }
-                return requestHandler.invoke(session);
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-                return new Response(Response.Status.BAD_REQUEST, "text/plain", "");
+            uri = URI.parse(session.getUri());
+            RequestHandler requestHandler = handlers.get(uri.path());
+            if (requestHandler == null) {
+                return new Response(Response.Status.NOT_FOUND, "text/plain", "");
             }
+            return requestHandler.invoke(session);
         }
 
     }

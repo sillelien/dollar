@@ -23,6 +23,7 @@ import me.neilellis.dollar.*;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.plugin.Plugins;
+import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,7 +45,7 @@ public class DollarURI extends AbstractDollar {
         super(errors);
         this.uri = uri.substring(uri.indexOf(":") + 1);
         String scheme = uri.substring(0, uri.indexOf(":"));
-        handler = Plugins.resolveURIProvider(scheme).forURI(scheme, this.uri);
+        handler = Plugins.resolveURIProvider(scheme).forURI(scheme, URI.parse(uri));
         StateMachineConfig<ResourceState, Signal> stateMachineConfig = getDefaultStateMachineConfig();
         stateMachineConfig.configure(ResourceState.RUNNING).onEntry(i -> {handler.start();});
         stateMachineConfig.configure(ResourceState.RUNNING).onExit(i -> {handler.stop();});
@@ -142,16 +143,16 @@ public class DollarURI extends AbstractDollar {
         return DollarStatic.$(!handler.get(key).isVoid());
     }
 
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of();
-    }
-
     @NotNull @Override
     public var $size() {
         ensureRunning();
         return DollarStatic.$(handler.size());
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of();
     }
 
     @NotNull

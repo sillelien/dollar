@@ -173,6 +173,19 @@ public class URI implements Serializable {
 
     public String queryString() {return (uri.split("\\?")[1]);}
 
+    public boolean hasSubScheme() {
+        final int i = getColonPos();
+        return uri.substring(i + 1).matches("[a-zA-Z-9_-]+:");
+    }
+
+    private int getColonPos() {
+        final int i = uri.indexOf(':');
+        if (i < 0) {
+            throw new DollarException("No scheme.");
+        }
+        return i;
+    }
+
     @Override
     public int hashCode() {
         return uri.hashCode();
@@ -268,6 +281,14 @@ public class URI implements Serializable {
         return new URI(uri.substring(i + 1));
     }
 
+    public String userInfo() {
+        try {
+            return new java.net.URI(uri).getUserInfo();
+        } catch (URISyntaxException e) {
+            throw new DollarException(e);
+        }
+    }
+
     public URI withoutFragmentOrComment() {
         String newStr = uri;
         if (uri.contains("#")) {
@@ -279,14 +300,6 @@ public class URI implements Serializable {
             newStr = uri.substring(0, i);
         }
         return new URI(newStr);
-    }
-
-    private int getColonPos() {
-        final int i = uri.indexOf(':');
-        if (i < 0) {
-            throw new DollarException("No scheme.");
-        }
-        return i;
     }
 
 }
