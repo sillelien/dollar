@@ -1,6 +1,11 @@
 ## Change Log
 
-### In Progress: 0.1.3 (2014/12/10 04:31 +00:00)
+### 0.1.2 (2014/12/10 04:31 +00:00)
+- [a581574](https://github.com/neilellis/dollar/commit/a5815740180851292287b6c7633b32ec51062f65) Change log updates
+- [9dc221a](https://github.com/neilellis/dollar/commit/9dc221aa179226525d2c8eddf8d000f702f5cf85) Auto merge
+- [aa0f2f4](https://github.com/neilellis/dollar/commit/aa0f2f446afa00e69f418efe9c87a44dc1791beb) Better plugin support release
+- [04dae5d](https://github.com/neilellis/dollar/commit/04dae5deb460caea3067dbad699561231cb92d60) Reduced plugin sizes
+- [3eb86d1](https://github.com/neilellis/dollar/commit/3eb86d11a98e05b2c12cc5c354c4e5519a8c34c1) Improved plugin system.
 - [f6d5ded](https://github.com/neilellis/dollar/commit/f6d5ded30913dce8a54f14bec97a2df4bdbe2cc9) Change log updates
 - [c0d4252](https://github.com/neilellis/dollar/commit/c0d425292ed99238f623249107ff80d5fe1ea20d) Auto merge
 - [be07525](https://github.com/neilellis/dollar/commit/be07525110869f00175fce612968a790ad007175) Blog fix
