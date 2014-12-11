@@ -17,6 +17,7 @@
 package me.neilellis.dollar.uri.camel;
 
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.var;
 import org.apache.camel.CamelContext;
@@ -42,9 +43,9 @@ public class CamelURIHandlerFactoryTest {
     @Test
     public void testListen() throws Exception {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
-        String vmListenURI = "vm://testListen";
+        String vmListenURI = "camel:vm://testListen";
         CamelURIHandlerFactory camelURIHandlerFactory = new CamelURIHandlerFactory();
-        final URIHandler camelIntegrationProvider = camelURIHandlerFactory.forURI("camel", vmListenURI);
+        final URIHandler camelIntegrationProvider = camelURIHandlerFactory.forURI("camel", URI.parse(vmListenURI));
         camelIntegrationProvider.subscribe((value) -> {
             try {
                 System.out.println("***: " + value);
@@ -65,7 +66,8 @@ public class CamelURIHandlerFactoryTest {
     @Test
     public void testPoll() throws Exception {
         CamelURIHandlerFactory camelURIHandlerFactory = new CamelURIHandlerFactory();
-        final var page = camelURIHandlerFactory.forURI("camel", "http://google.com").receive(true, false);
+        final var page = camelURIHandlerFactory.forURI("camel", URI.parse("camel:http://google.com")).receive(true,
+                                                                                                              false);
         assertTrue(page.$S().contains("html"));
     }
 
@@ -90,7 +92,8 @@ public class CamelURIHandlerFactoryTest {
         Thread.sleep(1000);
         CamelURIHandlerFactory camelURIHandlerFactory = new CamelURIHandlerFactory();
 
-        final var result = camelURIHandlerFactory.forURI("camel", "direct-vm:test").send(DollarStatic.$("test"), true, false);
+        final var result = camelURIHandlerFactory.forURI("camel", URI.parse("camel:direct-vm:test")).send(
+                DollarStatic.$("test"), true, false);
         assertEquals("RESULT", result.$S());
         System.out.println(result);
         context.stop();

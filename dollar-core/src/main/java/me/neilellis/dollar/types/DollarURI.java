@@ -151,16 +151,16 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of();
-    }
-
-    @NotNull
-    @Override
     public var $removeByKey(@NotNull String key) {
         ensureRunning();
         return handler.remove(DollarStatic.$(key));
 
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of();
     }
 
     @NotNull @Override
@@ -375,6 +375,8 @@ public class DollarURI extends AbstractDollar {
                 return DollarStatic.$("value", this);
             case VOID:
                 return DollarStatic.$void();
+            case URI:
+                return this;
             default:
                 return DollarFactory.failure(FailureType.INVALID_CAST);
         }

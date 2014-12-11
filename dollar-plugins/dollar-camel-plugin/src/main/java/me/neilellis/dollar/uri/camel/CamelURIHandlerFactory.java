@@ -41,15 +41,14 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
         return new CamelURIHandlerFactory();
     }
 
+    @Override
+    public URIHandler forURI(String scheme, URI uri) {
+        return new CamelURIHandler(uri, context);
+    }
 
     @Override
     public boolean handlesScheme(String scheme) {
         return scheme.equals("camel");
-    }
-
-    @Override
-    public URIHandler forURI(String scheme, URI uri) {
-        return new CamelURIHandler(uri, context);
     }
 
     @Override
@@ -72,7 +71,7 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
 
 
         CamelURIHandler(URI uri, DefaultCamelContext context) {
-            this.uri = uri;
+            this.uri = uri.sub();
             this.context = context;
             try {
                 this.context.start();

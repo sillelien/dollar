@@ -171,11 +171,15 @@ public class URI implements Serializable {
         return query_pairs;
     }
 
-    public String queryString() {return (uri.split("\\?")[1]);}
+    public String queryString() {return uri.contains("?") ? uri.split("\\?")[1] : "";}
 
     public boolean hasSubScheme() {
         final int i = getColonPos();
-        return uri.substring(i + 1).matches("[a-zA-Z-9_-]+:");
+        if (i <= 0) {
+            return false;
+        }
+        final String substring = uri.substring(i + 1);
+        return substring.matches("^[a-zA-Z0-9_-]+:.*");
     }
 
     private int getColonPos() {

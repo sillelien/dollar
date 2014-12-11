@@ -47,10 +47,10 @@ public class HttpURIHandler implements URIHandler {
 
     public HttpURIHandler(String scheme, me.neilellis.dollar.uri.URI uri) throws URISyntaxException, IOException {
         if (uri.hasSubScheme()) {
-            this.uri = URI.parse(scheme + ":" + uri.sub());
+            this.uri = URI.parse(scheme + ":" + uri.sub().sub().asString());
+            this.method = this.uri.sub().scheme();
         } else {
             this.uri = uri;
-            this.method = this.uri.sub().scheme();
         }
     }
 
@@ -127,7 +127,7 @@ public class HttpURIHandler implements URIHandler {
 
     @Override
     public void subscribe(Pipeable consumer, String id) throws IOException {
-        httpd = getHttpServerFor(this.uri.host(), this.uri.port());
+        httpd = getHttpServerFor(this.uri.host(), this.uri.port() > 0 ? this.uri.port() : 80);
         httpd.handle(this.uri.path(), new RequestHandler(consumer));
         subscriptions.put(id, this.uri.path());
     }

@@ -64,6 +64,16 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
+    @NotNull @Override public var $get(@NotNull var rhs) {
+        if (equals(rhs)) {
+            return DollarFactory.wrap(this);
+        } else if (rhs.isInteger() && rhs.I() == 0) {
+            return DollarFactory.wrap(this);
+        } else {
+            return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION, getClass().toString(), false);
+        }
+    }
+
     @NotNull @Override
     public var $containsValue(@NotNull var value) {
         return DollarStatic.$(this.value.equals(value));
@@ -83,26 +93,16 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return DollarStatic.$(1);
     }
 
-    @NotNull @Override public var $get(@NotNull var rhs) {
-        if (equals(rhs)) {
-            return DollarFactory.wrap(this);
-        } else if (rhs.isInteger() && rhs.I() == 0) {
-            return DollarFactory.wrap(this);
-        } else {
-            return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
-        }
-    }
-
     @NotNull
     public var $removeByKey(@NotNull String value) {
-        return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION, getClass().toString(), false);
 
     }
 
     @NotNull
     @Override
     public var $remove(var value) {
-        return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
+        return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION, getClass().toString(), false);
     }
 
     @NotNull
