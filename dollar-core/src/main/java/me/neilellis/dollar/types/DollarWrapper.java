@@ -466,7 +466,7 @@ public class DollarWrapper implements var {
     @NotNull
     @Override
     public var $mimeType() {
-        return DollarStatic.$(getValue().$mimeType());
+        return getValue().$mimeType();
     }
 
     @NotNull
@@ -526,6 +526,10 @@ public class DollarWrapper implements var {
     @Override
     public ImmutableList<var> $list() {
         return getValue().$list();
+    }
+
+    @Override public Type $type() {
+        return getValue().$type();
     }
 
     @NotNull @Override

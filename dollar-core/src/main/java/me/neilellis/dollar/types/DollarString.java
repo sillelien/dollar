@@ -111,6 +111,10 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         }
     }
 
+    @Override public Type $type() {
+        return Type.STRING;
+    }
+
     @NotNull @Override
     public Integer I() {
         return Integer.parseInt(value);

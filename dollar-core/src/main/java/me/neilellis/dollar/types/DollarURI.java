@@ -41,11 +41,15 @@ public class DollarURI extends AbstractDollar {
     private URIHandler handler;
 
 
-    public DollarURI(@NotNull List<Throwable> errors, String uri) throws Exception {
+    public DollarURI(@NotNull List<Throwable> errors, String uri) {
         super(errors);
-        this.uri = uri.substring(uri.indexOf(":") + 1);
+        this.uri = uri;
         String scheme = uri.substring(0, uri.indexOf(":"));
-        handler = Plugins.resolveURIProvider(scheme).forURI(scheme, URI.parse(uri));
+        try {
+            handler = Plugins.resolveURIProvider(scheme).forURI(scheme, URI.parse(uri));
+        } catch (Exception e) {
+            throw new DollarException(e);
+        }
         StateMachineConfig<ResourceState, Signal> stateMachineConfig = getDefaultStateMachineConfig();
         stateMachineConfig.configure(ResourceState.RUNNING).onEntry(i -> {handler.start();});
         stateMachineConfig.configure(ResourceState.RUNNING).onExit(i -> {handler.stop();});
@@ -81,7 +85,7 @@ public class DollarURI extends AbstractDollar {
     @Override
     public var $plus(@Nullable var v) {
         ensureRunning();
-        return handler.send(DollarStatic.$(v), true, true);
+        return handler.write(DollarStatic.$(v), true, true);
     }
 
     @NotNull
@@ -157,12 +161,6 @@ public class DollarURI extends AbstractDollar {
 
     }
 
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of();
-    }
-
     @NotNull @Override
     public var $remove(var key) {
         return DollarFactory.failure(FailureType.INVALID_URI_OPERATION);
@@ -172,6 +170,12 @@ public class DollarURI extends AbstractDollar {
     @Override
     public var $subscribe(Pipeable pipe) {
         return $subscribe(pipe, null);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of();
     }
 
     @Override
@@ -253,7 +257,7 @@ public class DollarURI extends AbstractDollar {
     @Override
     public var $notify() {
         ensureRunning();
-        return handler.send(this, false, false);
+        return handler.write(this, false, false);
     }
 
     @Override
@@ -265,13 +269,13 @@ public class DollarURI extends AbstractDollar {
     @Override
     public var $read(boolean blocking, boolean mutating) {
         ensureRunning();
-        return handler.receive(blocking, mutating);
+        return handler.read(blocking, mutating);
     }
 
     @Override
     public var $write(var value, boolean blocking, boolean mutating) {
         ensureRunning();
-        return handler.send(value, blocking, mutating);
+        return handler.write(value, blocking, mutating);
     }
 
 
@@ -289,6 +293,10 @@ public class DollarURI extends AbstractDollar {
         return true;
     }
 
+
+    @Override public Type $type() {
+        return Type.URI;
+    }
 
     @Override
     public String S() {

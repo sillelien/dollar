@@ -125,6 +125,10 @@ public class DollarBlockCollection implements var {
     @Override @Guarded(NotNullCollectionGuard.class) @Guarded(AllVarCollectionGuard.class) @NotNull
     public ImmutableList<var> $list() {return getValue().$list();}
 
+    @Override public Type $type() {
+        return getValue().$type();
+    }
+
     @Override @NotNull @Guarded(NotNullGuard.class) public Double D() {return getValue().D();}
 
     @Override @NotNull @Guarded(NotNullGuard.class) public Integer I() {return getValue().I();}

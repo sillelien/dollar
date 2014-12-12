@@ -24,10 +24,7 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -35,6 +32,7 @@ import java.util.Map;
 public class URI implements Serializable {
     @NotNull
     protected String uri;
+    private volatile Map<String, List<String>> query;
 
 
     protected URI(@NotNull final String scheme, @NotNull final String path) {
@@ -78,19 +76,23 @@ public class URI implements Serializable {
     }
 
     public String path() {
-        final String withoutFragment;
-        final int i = uri.indexOf(':');
-        withoutFragment = withoutFragment().asString();
+        final String withoutQuery;
+        withoutQuery = withoutQuery().asString();
+        int i = withoutQuery.indexOf(':');
         if (i >= 0) {
-            return withoutFragment.substring(i + 1);
+            final String withoutScheme = withoutQuery.substring(i + 1);
+            if (withoutScheme.startsWith("//")) {
+                i = withoutScheme.indexOf('/', 3);
+            }
+            return withoutScheme.substring(i);
         } else {
-            return withoutFragment;
+            return withoutQuery;
         }
     }
 
-    public URI withoutFragment() {
-        if (uri.contains("#")) {
-            final int i = uri.indexOf('#');
+    public URI withoutQuery() {
+        if (uri.contains("?")) {
+            final int i = uri.indexOf('?');
             return new URI(uri.substring(0, i));
         } else {
             return new URI(uri);
@@ -151,24 +153,33 @@ public class URI implements Serializable {
     }
 
     public Map<String, List<String>> query() {
-        final Map<String, List<String>> query_pairs = new LinkedHashMap<>();
-        final String[] pairs = queryString().split("&");
-        for (String pair : pairs) {
-            final int idx = pair.indexOf("=");
-            final String key;
-            try {
-                key = idx > 0 ? URLDecoder.decode(pair.substring(0, idx), "UTF-8") : pair;
-                if (!query_pairs.containsKey(key)) {
-                    query_pairs.put(key, new LinkedList<String>());
+        if (this.query == null) {
+            final Map<String, List<String>> query_pairs = new LinkedHashMap<>();
+            final String[] pairs = queryString().split("&");
+            for (String pair : pairs) {
+                final int idx = pair.indexOf("=");
+                final String key;
+                try {
+                    key = idx > 0 ? URLDecoder.decode(pair.substring(0, idx), "UTF-8") : pair;
+                    if (!query_pairs.containsKey(key)) {
+                        query_pairs.put(key, new LinkedList<String>());
+                    }
+                    final String value;
+                    value =
+                            idx > 0 && pair.length() > idx + 1 ?
+                            URLDecoder.decode(pair.substring(idx + 1), "UTF-8") :
+                            null;
+                    query_pairs.get(key).add(value);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
                 }
-                final String value;
-                value = idx > 0 && pair.length() > idx + 1 ? URLDecoder.decode(pair.substring(idx + 1), "UTF-8") : null;
-                query_pairs.get(key).add(value);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
             }
+            this.query = query_pairs;
+            return query_pairs;
+        } else {
+            return this.query;
         }
-        return query_pairs;
+
     }
 
     public String queryString() {return uri.contains("?") ? uri.split("\\?")[1] : "";}
@@ -241,6 +252,10 @@ public class URI implements Serializable {
         return path.split("/");
     }
 
+    public List<String> paramWithDefault(String key, String defaultValue) {
+        return query().getOrDefault(key, Arrays.asList(defaultValue));
+    }
+
     /**
      * parent().equals(this) if  top level path element
      */
@@ -290,6 +305,15 @@ public class URI implements Serializable {
             return new java.net.URI(uri).getUserInfo();
         } catch (URISyntaxException e) {
             throw new DollarException(e);
+        }
+    }
+
+    public URI withoutFragment() {
+        if (uri.contains("#")) {
+            final int i = uri.indexOf('#');
+            return new URI(uri.substring(0, i));
+        } else {
+            return new URI(uri);
         }
     }
 

@@ -50,8 +50,8 @@ public interface TypeAware {
     String S();
 
     /**
-     * Cast this object to the {@link Type} specified. If the object cannot be converted it will fail with
-     * {@link me.neilellis.dollar.types.FailureType#INVALID_CAST}
+     * Cast this object to the {@link Type} specified. If the object cannot be converted it will fail with {@link
+     * me.neilellis.dollar.types.FailureType#INVALID_CAST}
      *
      * @param type the type to cast to
      *
@@ -78,6 +78,8 @@ public interface TypeAware {
     @Guarded(NotNullCollectionGuard.class)
     @Guarded(AllVarCollectionGuard.class)
     @NotNull ImmutableList<var> $list();
+
+    Type $type();
 
     @NotNull
     @Guarded(NotNullGuard.class) Double D();

@@ -82,12 +82,12 @@ public class HttpURIHandler implements URIHandler {
     }
 
     @Override
-    public var send(var value, boolean blocking, boolean mutating) {
+    public var write(var value, boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public var receive(boolean blocking, boolean mutating) {
+    public var read(boolean blocking, boolean mutating) {
         try {
             return DollarFactory.fromStream(SerializedType.JSON, Unirest.get(uri.toString())
                                                                         .asJson().getRawBody());
@@ -128,8 +128,9 @@ public class HttpURIHandler implements URIHandler {
     @Override
     public void subscribe(Pipeable consumer, String id) throws IOException {
         httpd = getHttpServerFor(this.uri.host(), this.uri.port() > 0 ? this.uri.port() : 80);
-        httpd.handle(this.uri.path(), new RequestHandler(consumer));
-        subscriptions.put(id, this.uri.path());
+        final String path = this.uri.path();
+        httpd.handle(path, new RequestHandler(consumer));
+        subscriptions.put(id, path);
     }
 
     @Override public void unpause() {
@@ -152,7 +153,7 @@ public class HttpURIHandler implements URIHandler {
         }
     }
 
-    public static class RouteableNanoHttpd extends NanoHttpd {
+    public static class RouteableNanoHttpd extends NanoHttpdServer {
 
         private final Map<String, RequestHandler> handlers = new HashMap<>();
 
@@ -188,7 +189,7 @@ public class HttpURIHandler implements URIHandler {
             this.consumer = consumer;
         }
 
-        public NanoHttpd.Response invoke(NanoHttpd.IHTTPSession session) {
+        public NanoHttpdServer.Response invoke(NanoHttpdServer.IHTTPSession session) {
             try {
                 var in = $()
                         .$set($("headers"), session.getHeaders())
@@ -200,7 +201,9 @@ public class HttpURIHandler implements URIHandler {
 //                session.getInputStream().close();
                 var out = consumer.pipe(in);
                 var body = out.$("body");
-                NanoHttpd.Response response = new NanoHttpd.Response(new NanoHttpd.Response.IStatus() {
+                NanoHttpdServer.Response
+                        response =
+                        new NanoHttpdServer.Response(new NanoHttpdServer.Response.IStatus() {
                     @Override
                     public String getDescription() {
                         return out.$("reason").$default($("")).S();
@@ -210,13 +213,13 @@ public class HttpURIHandler implements URIHandler {
                     public int getRequestStatus() {
                         return out.$("status").$default($(200)).I();
                     }
-                }, body.$mimeType().$S(), body.S());
+                        }, body.$mimeType().$S(), body.toStream());
                 out.$("headers").$map().forEach((s, v) -> response.addHeader(s, v.$S()));
-                response.setData(body.toStream());
                 return response;
             } catch (Exception e) {
                 e.printStackTrace();
-                return new NanoHttpd.Response(NanoHttpd.Response.Status.INTERNAL_ERROR, "text/plain", e.getMessage());
+                return new NanoHttpdServer.Response(NanoHttpdServer.Response.Status.INTERNAL_ERROR, "text/plain",
+                                                    e.getMessage());
             }
         }
     }

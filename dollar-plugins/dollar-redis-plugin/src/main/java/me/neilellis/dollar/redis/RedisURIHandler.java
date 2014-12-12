@@ -92,12 +92,12 @@ public class RedisURIHandler implements URIHandler {
     }
 
     @Override
-    public var send(var value, boolean blocking, boolean mutating) {
+    public var write(var value, boolean blocking, boolean mutating) {
         return send(value);
     }
 
     @Override
-    public var receive(boolean blocking, boolean mutating) {
+    public var read(boolean blocking, boolean mutating) {
         if (blocking && !mutating) {
             return receive();
         } else if (!blocking && mutating) {

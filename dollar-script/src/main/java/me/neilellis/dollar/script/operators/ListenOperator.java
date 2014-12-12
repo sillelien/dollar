@@ -47,7 +47,7 @@ public class ListenOperator implements Binary<var>, Operator {
             return DollarScriptSupport.wrapUnary(scope, () -> {
                 return $(lhs.$listen(i -> scope.getDollarParser().inScope(pure, "listen", scope, newScope -> {
                     newScope.setParameter("1", i);
-                    //todo: change to receive
+                    //todo: change to read
                     return rhs._fixDeep(false);
                 })));
             });

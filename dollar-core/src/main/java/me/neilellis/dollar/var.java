@@ -17,15 +17,17 @@
 package me.neilellis.dollar;
 
 import me.neilellis.dollar.guard.*;
+import me.neilellis.dollar.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Serializable;
 import java.util.stream.Stream;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface var extends ErrorAware, TypeAware, PipeAware,
+public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
                              OldAndDeprecated, VarInternal, NumericAware, BooleanAware, ControlFlowAware,
                              AssertionAware, URIAware, MetadataAware, Comparable<var>, LogAware, StateAware<var> {
 
@@ -46,11 +48,12 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     }
 
     /**
-     * If this type supports the setting of Key/Value pairs this will set the supplied key value pair on a copy of
-     * this object. If it doesn't an exception will be thrown.
+     * If this type supports the setting of Key/Value pairs this will set the supplied key value pair on a copy of this
+     * object. If it doesn't an exception will be thrown.
      *
-     * @param key a String key for the value to be stored in this value.
+     * @param key   a String key for the value to be stored in this value.
      * @param value the {@link var} to add.
+     *
      * @return the updated copy.
      */
     @NotNull
@@ -132,6 +135,10 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
     @NotNull
     @Guarded(ChainGuard.class) var $size();
 
+    default Object $json() {
+        return DollarFactory.toJson(this);
+    }
+
     /**
      * Returns the mime type of this {@link var} object. By default this will be 'application/json'
      *
@@ -151,6 +158,10 @@ public interface var extends ErrorAware, TypeAware, PipeAware,
      * @return the modified var
      */
     @NotNull var $removeByKey(@NotNull String key);
+
+    default String $serialized() {
+        return DollarFactory.toJson(this).toString();
+    }
 
     @NotNull
     default var $set(@NotNull String key, @Nullable Object value) {

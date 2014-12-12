@@ -71,11 +71,11 @@ public class RandomResourceFactory implements URIHandlerFactory {
 
             @Override public void pause() { }
 
-            @Override public var send(var value, boolean blocking, boolean mutating) {
+            @Override public var write(var value, boolean blocking, boolean mutating) {
                 return $(Math.random() % value.D());
             }
 
-            @Override public var receive(boolean blocking, boolean mutating) {
+            @Override public var read(boolean blocking, boolean mutating) {
                 return $(Math.random());
             }
 

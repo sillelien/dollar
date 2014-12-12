@@ -24,6 +24,7 @@ import com.google.common.collect.Range;
 import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import me.neilellis.dollar.*;
+import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.exceptions.DollarFailureException;
 import me.neilellis.dollar.json.DecodeException;
 import me.neilellis.dollar.json.ImmutableJsonObject;
@@ -44,16 +45,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Future;
+
+import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.DollarStatic.$void;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarFactory {
+    public static final String VALUE_KEY = "value";
+    public static final String TYPE_KEY = "$type";
+    public static final String LOWERBOUND_KEY = "lower";
+    public static final String UPPERBOUND_KEY = "upper";
+    public static final String TEXT_KEY = "text";
+    public static final String MILLISECOND_KEY = "millis";
     static DollarMonitor monitor = DollarStatic.monitor();
     @NotNull
     static StateTracer tracer = DollarStatic.tracer();
@@ -77,9 +84,9 @@ public class DollarFactory {
 
 
     @NotNull
-    public static var fromValue(Object o, @NotNull ImmutableList<Throwable>... errors) {
+    public static var fromValue(Object o, @NotNull List<Throwable>... errors) {
         ImmutableList.Builder<Throwable> builder = ImmutableList.builder();
-        for (ImmutableList<Throwable> error : errors) {
+        for (List<Throwable> error : errors) {
             builder = builder.addAll(error);
         }
         return create(builder.build(), o);
@@ -126,6 +133,9 @@ public class DollarFactory {
 
         if (o instanceof List) {
             return wrap(new DollarList(errors, (List<Object>) o));
+        }
+        if (o instanceof Collection) {
+            return wrap(new DollarList(errors, new ArrayList<>((Collection<Object>) o)));
         }
         if (o.getClass().isArray()) {
             return wrap(new DollarList(errors, (Object[]) o));
@@ -322,4 +332,212 @@ public class DollarFactory {
     public static var blockCollection(List<var> var) {
         return wrap(new DollarBlockCollection(var));
     }
+
+    //    public static var _old`deserialize(Type type, String s) {
+//        switch(type) {
+//            case VOID:
+//                return $void();
+//            case INTEGER:
+//                return wrap(new DollarInteger(Arrays.asList(), Long.parseLong(s)));
+//            case BOOLEAN:
+//                return wrap(new DollarBoolean(Arrays.asList(), Boolean.parseBoolean(s)));
+//            case DATE:
+//                return wrap(new DollarDate(Arrays.asList(), LocalDateTime.parse(s)));
+//            case DECIMAL:
+//                return wrap(new DollarDecimal(Arrays.asList(), Double.parseDouble(s)));
+//            case LIST:
+//                final JsonArray array = new JsonArray(s);
+//                ArrayList<Object> arrayList= new ArrayList<>();
+//                for (Object o : array) {
+//                    JsonObject jsonObject= (JsonObject) o;
+//                    final Type arrayElementType = Type.valueOf(jsonObject.getString("type"));
+//                    arrayList.add(deserialize(arrayElementType, jsonObject.getString("value")));
+//                }
+//                return wrap(new DollarList(Arrays.asList(), arrayList));
+//            case MAP:
+//                final JsonObject json = new JsonObject(s);
+//                LinkedHashMap<String,Object> map= new LinkedHashMap<>();
+//                final Set<String> fieldNames = json.getFieldNames();
+//                for (String fieldName : fieldNames) {
+//                    final JsonObject fieldObject = json.getObject(fieldName);
+//                    final Type arrayElementType = Type.valueOf(fieldObject.getString("type"));
+//                    map.put(fieldName, deserialize(arrayElementType, fieldObject.getString("value")));
+//                }
+//                return wrap(new DollarMap(Arrays.asList(), map));
+//            case RANGE:
+//                final JsonObject jsonObject = new JsonObject(s);
+//                final Type rangeType = Type.valueOf(jsonObject.getString("type"));
+//                final var lower = deserialize(rangeType, jsonObject.getString("lower"));
+//                final var upper = deserialize(rangeType, jsonObject.getString("upper"));
+//                return wrap(new DollarRange(Arrays.asList(), lower, upper));
+//            case URI:
+//                return wrap(new DollarURI(Arrays.asList(), s));
+//            case STRING:
+//                return wrap(new DollarString(Arrays.asList(), s));
+//            default:
+//                throw new DollarException("Unrecognized type " + type);
+//        }
+//    }
+//
+    public static var deserialize(String s) {
+        JsonObject jsonObject = new JsonObject(s);
+        return fromJson(jsonObject);
+    }
+
+    private static var fromJson(JsonObject jsonObject) {
+        final Type type;
+        if (!jsonObject.containsField(TYPE_KEY)) {
+            type = Type.MAP;
+        } else {
+            type = Type.valueOf(jsonObject.getString(TYPE_KEY));
+        }
+        switch (type) {
+            case VOID:
+                return $void();
+            case INTEGER:
+                return fromValue(jsonObject.getLong(VALUE_KEY));
+            case BOOLEAN:
+                return fromValue(jsonObject.getBoolean(VALUE_KEY));
+            case ERROR:
+                return $void();
+            case DATE:
+                return wrap(new DollarDate(Arrays.asList(), LocalDateTime.parse(jsonObject.getString(TEXT_KEY))));
+            case DECIMAL:
+                return fromValue(jsonObject.getNumber(VALUE_KEY));
+            case LIST:
+                final JsonArray array = jsonObject.getArray(VALUE_KEY);
+                ArrayList<Object> arrayList = new ArrayList<>();
+                for (Object o : array) {
+                    arrayList.add(fromJson(o));
+                }
+                return wrap(new DollarList(Arrays.asList(), arrayList));
+            case MAP:
+                final JsonObject json;
+                if (jsonObject.containsField(VALUE_KEY)) {
+                    json = jsonObject.getObject(VALUE_KEY);
+                } else {
+                    json = jsonObject;
+                }
+                LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+                final Set<String> fieldNames = json.getFieldNames();
+                for (String fieldName : fieldNames) {
+                    map.put(fieldName, fromJson(json.get(fieldName)));
+                }
+                return wrap(new DollarMap(Arrays.asList(), map));
+            case RANGE:
+                final var lower = fromJson(jsonObject.get(LOWERBOUND_KEY));
+                final var upper = fromJson(jsonObject.get(UPPERBOUND_KEY));
+                return wrap(new DollarRange(Arrays.asList(), lower, upper));
+            case URI:
+                return wrap(new DollarURI(Arrays.asList(), jsonObject.getString(VALUE_KEY)));
+            case STRING:
+                if (!(jsonObject.get(VALUE_KEY) instanceof String)) {
+                    System.out.println(jsonObject.get(VALUE_KEY));
+                }
+                return wrap(new DollarString(Arrays.asList(), jsonObject.getString(VALUE_KEY)));
+            default:
+                throw new DollarException("Unrecognized type " + type);
+        }
+    }
+
+    private static var fromJson(Object value) {
+        if (value == null) {
+            return $void();
+        } else if (value instanceof LinkedHashMap) {
+            JsonObject json = new JsonObject((Map<String, Object>) value);
+            if (json.containsField(TYPE_KEY)) {
+                return fromJson(json);
+            } else {
+                return fromValue(value);
+            }
+        } else if (value instanceof ArrayList) {
+            ArrayList list = (ArrayList) value;
+            ArrayList<var> result = new ArrayList<>();
+            for (Object o : list) {
+                result.add(fromJson(o));
+            }
+            return fromValue(result);
+
+        } else if (value instanceof JsonObject) {
+            if (((JsonObject) value).containsField(TYPE_KEY)) {
+                return fromJson((JsonObject) value);
+            } else {
+                return fromValue(value);
+            }
+        } else if (value instanceof JsonArray) {
+            return fromValue(value);
+        } else if (value instanceof String) {
+            return fromValue(value);
+        } else if (value instanceof Number) {
+            return fromValue(value);
+        } else if (value instanceof Boolean) {
+            return fromValue(value);
+        } else if (value instanceof byte[]) {
+            return fromValue(value);
+        } else {
+            throw new DollarException("Unrecognized type " + value.getClass() + " for " + value);
+        }
+    }
+
+    public static String serialize(var value) {
+        final Object jsonObject = toJson(value._fixDeep());
+        return jsonObject.toString();
+    }
+
+    private static JsonObject valueToJson(var value) {
+        final JsonObject jsonObject = new JsonObject();
+        jsonObject.putString(TYPE_KEY, value.$type().name());
+        jsonObject.putValue(VALUE_KEY, value.$());
+        return jsonObject;
+    }
+
+    public static Object toJson(var value) {
+        switch (value.$type()) {
+            case VOID:
+            case INTEGER:
+            case BOOLEAN:
+            case DECIMAL:
+            case STRING:
+                return value.$();
+            case DATE:
+                final JsonObject jsonObject = new JsonObject();
+                jsonObject.putValue(TYPE_KEY, value.$type().name());
+                jsonObject.putValue(TEXT_KEY, value.$S());
+                jsonObject.putValue(MILLISECOND_KEY, (long) (value.D() * 24 * 60 * 60 * 1000));
+                return jsonObject;
+            case URI:
+                final JsonObject uriJsonObject = new JsonObject();
+                uriJsonObject.putValue(TYPE_KEY, value.$type().name());
+                uriJsonObject.putValue(VALUE_KEY, value.$S());
+                return uriJsonObject;
+            case LIST:
+                final JsonArray array = new JsonArray();
+                ImmutableList<var> arrayList = value.$list();
+                for (var v : arrayList) {
+                    array.add(toJson(v));
+                }
+
+                return array;
+            case MAP:
+                final JsonObject json = new JsonObject();
+                ImmutableMap<String, var> map = value.$map();
+                final Set<String> fieldNames = map.keySet();
+                for (String fieldName : fieldNames) {
+                    var v = map.get(fieldName);
+                    json.putValue(fieldName, toJson(v));
+                }
+                final JsonObject containerObject = new JsonObject();
+                return json;
+            case RANGE:
+                final JsonObject rangeObject = new JsonObject();
+                rangeObject.putString(TYPE_KEY, value.$type().name());
+                final Range range = (Range) value.$();
+                rangeObject.put(LOWERBOUND_KEY, toJson($(range.lowerEndpoint())));
+                rangeObject.put(UPPERBOUND_KEY, toJson($(range.upperEndpoint())));
+                return rangeObject;
+            default:
+                throw new DollarException("Unrecognized type " + value.$type());
+        }
+    }
+
 }

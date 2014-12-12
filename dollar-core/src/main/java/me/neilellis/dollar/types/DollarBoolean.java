@@ -86,6 +86,10 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         }
     }
 
+    @Override public Type $type() {
+        return Type.BOOLEAN;
+    }
+
     @Override
     @NotNull
     public Integer I() {

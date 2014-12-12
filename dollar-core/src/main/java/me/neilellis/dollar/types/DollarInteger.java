@@ -109,6 +109,10 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         }
     }
 
+    @Override public Type $type() {
+        return Type.INTEGER;
+    }
+
     @Override
     @NotNull
     public Integer I() {

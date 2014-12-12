@@ -58,7 +58,7 @@ public class CamelURIHandlerFactoryTest {
             }
         }, UUID.randomUUID().toString());
         camelURIHandlerFactory.start();
-        camelIntegrationProvider.send(DollarStatic.$("Listen Test"), false, false);
+        camelIntegrationProvider.write(DollarStatic.$("Listen Test"), false, false);
         countDownLatch.await();
         camelURIHandlerFactory.stop();
     }
@@ -66,8 +66,8 @@ public class CamelURIHandlerFactoryTest {
     @Test
     public void testPoll() throws Exception {
         CamelURIHandlerFactory camelURIHandlerFactory = new CamelURIHandlerFactory();
-        final var page = camelURIHandlerFactory.forURI("camel", URI.parse("camel:http://google.com")).receive(true,
-                                                                                                              false);
+        final var page = camelURIHandlerFactory.forURI("camel", URI.parse("camel:http://google.com")).read(true,
+                                                                                                           false);
         assertTrue(page.$S().contains("html"));
     }
 
@@ -92,7 +92,7 @@ public class CamelURIHandlerFactoryTest {
         Thread.sleep(1000);
         CamelURIHandlerFactory camelURIHandlerFactory = new CamelURIHandlerFactory();
 
-        final var result = camelURIHandlerFactory.forURI("camel", URI.parse("camel:direct-vm:test")).send(
+        final var result = camelURIHandlerFactory.forURI("camel", URI.parse("camel:direct-vm:test")).write(
                 DollarStatic.$("test"), true, false);
         assertEquals("RESULT", result.$S());
         System.out.println(result);

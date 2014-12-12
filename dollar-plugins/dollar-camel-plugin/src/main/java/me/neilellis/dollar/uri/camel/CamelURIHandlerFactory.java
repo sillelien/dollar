@@ -120,7 +120,7 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
         }
 
         @Override
-        public var send(var value, boolean blocking, boolean mutating) {
+        public var write(var value, boolean blocking, boolean mutating) {
             try {
                 if (blocking) {
                     return DollarFactory.fromStringValue(
@@ -136,7 +136,7 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
         }
 
         @Override
-        public var receive(boolean blocking, boolean mutating) {
+        public var read(boolean blocking, boolean mutating) {
             try {
                 if (blocking) {
                     return DollarFactory.fromStringValue(consumerTemplate.receiveBody(uri.asString(), String.class));

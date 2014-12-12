@@ -28,7 +28,7 @@ import java.lang.reflect.Method;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-class DollarGuard implements java.lang.reflect.InvocationHandler {
+public class DollarGuard implements java.lang.reflect.InvocationHandler {
 
     private final var in;
 
@@ -52,6 +52,13 @@ class DollarGuard implements java.lang.reflect.InvocationHandler {
                     return in._fix((Boolean) args[0]);
                 } else {
                     return in._fix((Integer) args[0], (Boolean) args[1]);
+                }
+            }
+            if ("_fixDeep".equals(name)) {
+                if (args == null) {
+                    return in._fixDeep();
+                } else {
+                    return in._fixDeep((Boolean) args[0]);
                 }
             }
             if ("$notify".equals(name)) {

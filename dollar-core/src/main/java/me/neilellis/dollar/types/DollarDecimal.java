@@ -94,6 +94,10 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         }
     }
 
+    @Override public Type $type() {
+        return Type.DECIMAL;
+    }
+
     @Override
     @NotNull
     public Integer I() {

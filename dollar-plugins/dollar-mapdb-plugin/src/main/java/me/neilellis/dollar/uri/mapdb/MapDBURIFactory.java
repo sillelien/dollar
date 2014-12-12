@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.uri.mapdb;
 
+import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
@@ -36,12 +37,22 @@ public class MapDBURIFactory implements URIHandlerFactory {
 
     @Override
     public URIHandler forURI(String scheme, URI uri) throws IOException {
-        return new MapDBURIHandler(scheme, uri);
+        if (uri.hasSubScheme()) {
+            final URI sub = uri.sub();
+            //noinspection ConstantConditions
+            switch (sub.schemeString()) {
+                case "map":
+                    return new MapDBMapURI(scheme, sub);
+                case "circular":
+                    return new MapDBCircleURI(scheme, sub);
+            }
+        }
+        throw new DollarException("Need to supply a sub scheme such as list, map, set");
     }
 
     @Override
     public boolean handlesScheme(String scheme) {
-        return scheme.equals("socketio");
+        return scheme.equals("db");
     }
 }
 

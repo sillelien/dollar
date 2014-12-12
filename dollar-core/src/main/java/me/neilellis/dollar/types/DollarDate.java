@@ -108,6 +108,10 @@ public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
         }
     }
 
+    @Override public Type $type() {
+        return Type.DATE;
+    }
+
     @Override
     @NotNull
     public Integer I() {
@@ -118,16 +122,6 @@ public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
     @Override
     public Number N() {
         return asDecimal();
-    }
-
-    @Override
-    public boolean is(@NotNull Type... types) {
-        for (Type type : types) {
-            if (type == Type.DATE) {
-                return true;
-            }
-        }
-        return false;
     }
 
 //    @NotNull
@@ -143,6 +137,16 @@ public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
 //        return DollarFactory.fromValue(value.minusSeconds((long) (ONE_DAY_SECONDS * amount.D())), errors(),
 //                                       amount.errors());
 //    }
+
+    @Override
+    public boolean is(@NotNull Type... types) {
+        for (Type type : types) {
+            if (type == Type.DATE) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @NotNull
     @Override

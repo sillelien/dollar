@@ -106,6 +106,15 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
+    public var $get(@NotNull var key) {
+        if (key.isInteger()) {
+            return DollarFactory.fromValue($list().get(key.I()));
+        }
+        return DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
+    }
+
+    @NotNull
+    @Override
     public var $containsValue(@NotNull var value) {
         return DollarStatic.$(range.lowerEndpoint().compareTo(DollarStatic.$(value)) <= 0 &&
                               range.upperEndpoint().compareTo(DollarStatic.$(value)) >= 0);
@@ -120,15 +129,6 @@ public class DollarRange extends AbstractDollar {
     @Override
     public var $size() {
         return DollarStatic.$($list().size());
-    }
-
-    @NotNull
-    @Override
-    public var $get(@NotNull var key) {
-        if (key.isInteger()) {
-            return DollarFactory.fromValue($list().get(key.I()));
-        }
-        return DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
@@ -162,9 +162,19 @@ public class DollarRange extends AbstractDollar {
         throw new IllegalStateException();
     }
 
+    @Override public Type $type() {
+        return Type.RANGE;
+    }
+
     @Override
     public boolean isBoolean() {
         return false;
+    }
+
+    @NotNull
+    @Override
+    public String S() {
+        return String.format("%s..%s", range.lowerEndpoint(), range.upperEndpoint());
     }
 
     @Override
@@ -173,13 +183,46 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
+    public var $as(Type type) {
+        switch (type) {
+            case LIST:
+                return DollarStatic.$($list());
+            case MAP:
+                return DollarStatic.$(toMap());
+            case STRING:
+                return DollarFactory.fromStringValue(S());
+            case VOID:
+                return DollarStatic.$void();
+            default:
+                return DollarFactory.failure(FailureType.INVALID_CAST);
+        }
+    }
+
+    @Override
     public boolean isTruthy() {
         return !range.isEmpty();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> $list() {
+        List<var> values = new ArrayList<>();
+        var start = range.lowerEndpoint();
+        var finish = range.upperEndpoint();
+        for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
+            values.add(i);
+        }
+        return ImmutableList.copyOf(values);
     }
 
     @Override
     public boolean isFalse() {
         return false;
+    }
+
+    @NotNull @Override
+    public Integer I() {
+        return null;
     }
 
     @Override
@@ -189,9 +232,8 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
-        return ImmutableMap.of();
+    public Number N() {
+        return range.upperEndpoint().L() - range.lowerEndpoint().L();
     }
 
     @Override
@@ -199,9 +241,21 @@ public class DollarRange extends AbstractDollar {
         return true;
     }
 
+    @NotNull @Override
+    public Map<String, Object> toMap() {
+        return null;
+    }
+
     @Override
     public int hashCode() {
         return range.hashCode();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
+        return ImmutableMap.of();
     }
 
     @Override
@@ -222,46 +276,6 @@ public class DollarRange extends AbstractDollar {
 
     }
 
-
-    @NotNull
-    @Override
-    public String S() {
-        return String.format("%s..%s", range.lowerEndpoint(), range.upperEndpoint());
-    }
-
-
-
-
-    @Override
-    public var $as(Type type) {
-        switch (type) {
-            case LIST:
-                return DollarStatic.$($list());
-            case MAP:
-                return DollarStatic.$(toMap());
-            case STRING:
-                return DollarFactory.fromStringValue(S());
-            case VOID:
-                return DollarStatic.$void();
-            default:
-                return DollarFactory.failure(FailureType.INVALID_CAST);
-        }
-    }
-
-
-    @NotNull @Override
-    public Integer I() {
-        return null;
-    }
-
-
-    @NotNull
-    @Override
-    public Number N() {
-        return range.upperEndpoint().L() - range.lowerEndpoint().L();
-    }
-
-
     @Override
     public boolean is(@NotNull Type... types) {
         for (Type type : types) {
@@ -272,39 +286,13 @@ public class DollarRange extends AbstractDollar {
         return false;
     }
 
-
-
-
-    @NotNull
-    @Override
-    public ImmutableList<var> $list() {
-        List<var> values = new ArrayList<>();
-        var start = range.lowerEndpoint();
-        var finish = range.upperEndpoint();
-        for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
-            values.add(i);
-        }
-        return ImmutableList.copyOf(values);
+    @Override public boolean isCollection() {
+        return true;
     }
-
-    @NotNull @Override public ImmutableList<Object> toList() {
-        List<Object> values = new ArrayList<>();
-        var start = range.lowerEndpoint();
-        var finish = range.upperEndpoint();
-        for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
-            values.add(i.$());
-        }
-        return ImmutableList.copyOf(values);
-    }
-
 
     @Override
     public boolean isVoid() {
         return false;
-    }
-
-    @Override public boolean isCollection() {
-        return true;
     }
 
     @NotNull
@@ -322,9 +310,14 @@ public class DollarRange extends AbstractDollar {
         return null;
     }
 
-    @NotNull @Override
-    public Map<String, Object> toMap() {
-        return null;
+    @NotNull @Override public ImmutableList<Object> toList() {
+        List<Object> values = new ArrayList<>();
+        var start = range.lowerEndpoint();
+        var finish = range.upperEndpoint();
+        for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
+            values.add(i.$());
+        }
+        return ImmutableList.copyOf(values);
     }
 
 }

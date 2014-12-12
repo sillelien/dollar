@@ -233,6 +233,10 @@ public class DollarVoid extends AbstractDollar implements var {
         return ImmutableList.of();
     }
 
+    @Override public Type $type() {
+        return Type.VOID;
+    }
+
     @NotNull @Override
     public Integer I() {
         return 0;

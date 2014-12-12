@@ -16,8 +16,6 @@
 
 package me.neilellis.dollar.http;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
@@ -25,28 +23,26 @@ import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public abstract class NanoHttpd {
+public abstract class NanoHttpdServer {
     /**
-     * Maximum time to wait on Socket.getInputStream().read() (in milliseconds)
-     * This is required as the Keep-Alive HTTP connections would otherwise
-     * block the socket reading thread forever (or as long the browser is open).
+     * Maximum time to wait on Socket.getInputStream().read() (in milliseconds) This is required as the Keep-Alive HTTP
+     * connections would otherwise block the socket reading thread forever (or as long the browser is open).
      */
-    private static final int SOCKET_READ_TIMEOUT = 5000;
+    public static final int SOCKET_READ_TIMEOUT = 5000;
     /**
      * Common mime type for dynamic content: plain text
      */
-    private static final String MIME_PLAINTEXT = "text/plain";
+    public static final String MIME_PLAINTEXT = "text/plain";
     /**
      * Common mime type for dynamic content: html
      */
-    private static final String MIME_HTML = "text/html";
+    public static final String MIME_HTML = "text/html";
     /**
      * Pseudo-Parameter to use to store the actual query string in the parameters map for later re-processing.
      */
     private static final String QUERY_STRING_PARAMETER = "NanoHttpd.QUERY_STRING";
     private final String hostname;
     private final int myPort;
-    private final Set<Socket> openConnections = new HashSet<>();
 
     /**
      * HTTP Request methods, with the ability to decode a <code>String</code> back to its enum value.
@@ -63,7 +59,9 @@ public abstract class NanoHttpd {
             return null;
         }
     }
+
     private ServerSocket myServerSocket;
+    private Set<Socket> openConnections = new HashSet<Socket>();
     private Thread myThread;
     /**
      * Pluggable strategy for asynchronously executing requests.
@@ -77,14 +75,14 @@ public abstract class NanoHttpd {
     /**
      * Constructs an HTTP server on given port.
      */
-    public NanoHttpd(int port) {
+    public NanoHttpdServer(int port) {
         this(null, port);
     }
 
     /**
      * Constructs an HTTP server on given hostname and port.
      */
-    public NanoHttpd(String hostname, int port) {
+    public NanoHttpdServer(String hostname, int port) {
         this.hostname = hostname;
         this.myPort = port;
         setTempFileManagerFactory(new DefaultTempFileManagerFactory());
@@ -96,7 +94,7 @@ public abstract class NanoHttpd {
      *
      * @param tempFileManagerFactory new strategy for handling temp files.
      */
-    void setTempFileManagerFactory(TempFileManagerFactory tempFileManagerFactory) {
+    public void setTempFileManagerFactory(TempFileManagerFactory tempFileManagerFactory) {
         this.tempFileManagerFactory = tempFileManagerFactory;
     }
 
@@ -105,26 +103,8 @@ public abstract class NanoHttpd {
      *
      * @param asyncRunner new strategy for handling threads.
      */
-    void setAsyncRunner(AsyncRunner asyncRunner) {
+    public void setAsyncRunner(AsyncRunner asyncRunner) {
         this.asyncRunner = asyncRunner;
-    }
-
-    private static void safeClose(Closeable closeable) {
-        if (closeable != null) {
-            try {
-                closeable.close();
-            } catch (IOException e) {
-            }
-        }
-    }
-
-    private static void safeClose(Socket closeable) {
-        if (closeable != null) {
-            try {
-                closeable.close();
-            } catch (IOException e) {
-            }
-        }
     }
 
     public final int getListeningPort() {
@@ -135,22 +115,20 @@ public abstract class NanoHttpd {
         return wasStarted() && !myServerSocket.isClosed() && myThread.isAlive();
     }
 
-    final boolean wasStarted() {
+    public final boolean wasStarted() {
         return myServerSocket != null && myThread != null;
     }
 
     /**
-     * Override this to customize the server.
-     *
-     *
-     * (By default, this delegates to serveFile() and allows directory listing.)
+     * Override this to customize the server. <p/> <p/> (By default, this delegates to serveFile() and allows directory
+     * listing.)
      *
      * @param session The HTTP session
      *
      * @return HTTP response, see class Response for details
      */
     public Response serve(IHTTPSession session) {
-        Map<String, String> files = new HashMap<>();
+        Map<String, String> files = new HashMap<String, String>();
         Method method = session.getMethod();
         if (Method.PUT.equals(method) || Method.POST.equals(method)) {
             try {
@@ -169,10 +147,8 @@ public abstract class NanoHttpd {
     }
 
     /**
-     * Override this to customize the server.
-     *
-     *
-     * (By default, this delegates to serveFile() and allows directory listing.)
+     * Override this to customize the server. <p/> <p/> (By default, this delegates to serveFile() and allows directory
+     * listing.)
      *
      * @param uri     Percent-decoded URI without parameters, for example "/index.cgi"
      * @param method  "GET", "POST" etc.
@@ -181,8 +157,9 @@ public abstract class NanoHttpd {
      *
      * @return HTTP response, see class Response for details
      */
-    @Deprecated Response serve(String uri, Method method, Map<String, String> headers, Map<String, String> parms,
-                               Map<String, String> files) {
+    @Deprecated
+    public Response serve(String uri, Method method, Map<String, String> headers, Map<String, String> parms,
+                          Map<String, String> files) {
         return new Response(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "Not Found");
     }
 
@@ -193,34 +170,53 @@ public abstract class NanoHttpd {
      */
     public void start() throws IOException {
         myServerSocket = new ServerSocket();
-        myServerSocket.bind((hostname != null) ? new InetSocketAddress(hostname, myPort) : new InetSocketAddress(myPort));
+        myServerSocket.bind(
+                (hostname != null) ? new InetSocketAddress(hostname, myPort) : new InetSocketAddress(myPort));
 
-        myThread = new Thread(() -> {
-            do {
-                try (Socket finalAccept = myServerSocket.accept()) {
-                    registerConnection(finalAccept);
-                    finalAccept.setSoTimeout(SOCKET_READ_TIMEOUT);
-                    asyncRunner.exec(() -> {
-                        try (OutputStream outputStream = finalAccept.getOutputStream(); InputStream inputStream = finalAccept.getInputStream()) {
-
-                            TempFileManager tempFileManager = tempFileManagerFactory.create();
-                            HTTPSession session = new HTTPSession(tempFileManager, inputStream, outputStream, finalAccept.getInetAddress());
-                            while (!finalAccept.isClosed()) {
-                                session.execute();
+        myThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                do {
+                    try {
+                        final Socket finalAccept = myServerSocket.accept();
+                        registerConnection(finalAccept);
+                        finalAccept.setSoTimeout(SOCKET_READ_TIMEOUT);
+                        final InputStream inputStream = finalAccept.getInputStream();
+                        asyncRunner.exec(new Runnable() {
+                            @Override
+                            public void run() {
+                                OutputStream outputStream = null;
+                                try {
+                                    outputStream = finalAccept.getOutputStream();
+                                    TempFileManager tempFileManager = tempFileManagerFactory.create();
+                                    HTTPSession
+                                            session =
+                                            new HTTPSession(tempFileManager, inputStream, outputStream,
+                                                            finalAccept.getInetAddress());
+                                    while (!finalAccept.isClosed()) {
+                                        session.execute();
+                                    }
+                                } catch (Exception e) {
+                                    // When the socket is closed by the client, we throw our own SocketException
+                                    // to break the  "keep alive" loop above.
+                                    if (!(
+                                            e instanceof SocketException &&
+                                            "NanoHttpd Shutdown".equals(e.getMessage())
+                                    )) {
+                                        e.printStackTrace();
+                                    }
+                                } finally {
+                                    safeClose(outputStream);
+                                    safeClose(inputStream);
+                                    safeClose(finalAccept);
+                                    unRegisterConnection(finalAccept);
+                                }
                             }
-                        } catch (Exception e) {
-                            // When the socket is closed by the client, we throw our own SocketException
-                            // to break the  "keep alive" loop above.
-                            if (!(e instanceof SocketException && "NanoHttpd Shutdown".equals(e.getMessage()))) {
-                                e.printStackTrace();
-                            }
-                            unRegisterConnection(finalAccept);
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } while (!myServerSocket.isClosed());
+                        });
+                    } catch (IOException e) {
+                    }
+                } while (!myServerSocket.isClosed());
+            }
         });
         myThread.setDaemon(true);
         myThread.setName("NanoHttpd Main Listener");
@@ -232,8 +228,26 @@ public abstract class NanoHttpd {
      *
      * @param socket the {@link Socket} for the connection.
      */
-    synchronized void registerConnection(Socket socket) {
+    public synchronized void registerConnection(Socket socket) {
         openConnections.add(socket);
+    }
+
+    private static final void safeClose(Closeable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+
+    private static final void safeClose(Socket closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (IOException e) {
+            }
+        }
     }
 
     /**
@@ -241,7 +255,7 @@ public abstract class NanoHttpd {
      *
      * @param socket the {@link Socket} for the connection.
      */
-    synchronized void unRegisterConnection(Socket socket) {
+    public synchronized void unRegisterConnection(Socket socket) {
         openConnections.remove(socket);
     }
 
@@ -260,7 +274,7 @@ public abstract class NanoHttpd {
         }
     }
 
-    private static void safeClose(ServerSocket closeable) {
+    private static final void safeClose(ServerSocket closeable) {
         if (closeable != null) {
             try {
                 closeable.close();
@@ -272,8 +286,10 @@ public abstract class NanoHttpd {
     /**
      * Forcibly closes all connections that are open.
      */
-    synchronized void closeAllConnections() {
-        openConnections.forEach(NanoHttpd::safeClose);
+    public synchronized void closeAllConnections() {
+        for (Socket socket : openConnections) {
+            safeClose(socket);
+        }
     }
 
     // ------------------------------------------------------------------------------- //
@@ -303,9 +319,7 @@ public abstract class NanoHttpd {
     }
 
     /**
-     * Temp file manager.
-     *
-     * <p>Temp file managers are created 1-to-1 with incoming requests, to create and cleanup
+     * Temp file manager. <p/> <p>Temp file managers are created 1-to-1 with incoming requests, to create and cleanup
      * temporary files created as a result of handling the request.</p>
      */
     public interface TempFileManager {
@@ -315,10 +329,8 @@ public abstract class NanoHttpd {
     }
 
     /**
-     * A temp file.
-     *
-     * <p>Temp files are responsible for managing the actual temporary storage and cleaning
-     * themselves up when no longer needed.</p>
+     * A temp file. <p/> <p>Temp files are responsible for managing the actual temporary storage and cleaning themselves
+     * up when no longer needed.</p>
      */
     public interface TempFile {
         void delete() throws Exception;
@@ -353,8 +365,6 @@ public abstract class NanoHttpd {
 
         /**
          * Adds the files in the request body to the files map.
-         *
-         * @param files - map to modify
          */
         void parseBody(Map<String, String> files) throws IOException, ResponseException;
     }
@@ -362,11 +372,9 @@ public abstract class NanoHttpd {
     // ------------------------------------------------------------------------------- //
 
     /**
-     * Default threading strategy for NanoHttpd.
-     *
-     * <p>By default, the server spawns a new Thread for every incoming request.  These are set
-     * to <i>daemon</i> status, and named according to the request number.  The name is
-     * useful when profiling the application.</p>
+     * Default threading strategy for NanoHttpd. <p/> <p>By default, the server spawns a new Thread for every incoming
+     * request.  These are set to <i>daemon</i> status, and named according to the request number.  The name is useful
+     * when profiling the application.</p>
      */
     public static class DefaultAsyncRunner implements AsyncRunner {
         private long requestCount;
@@ -382,12 +390,9 @@ public abstract class NanoHttpd {
     }
 
     /**
-     * Default strategy for creating and cleaning up temporary files.
-     *
-     * <p>This class stores its files in the standard location (that is,
-     * wherever <code>java.io.tmpdir</code> points to).  Files are added
-     * to an internal list, and deleted when no longer needed (that is,
-     * when <code>clear()</code> is invoked at the end of processing a
+     * Default strategy for creating and cleaning up temporary files. <p/> <p></p>This class stores its files in the
+     * standard location (that is, wherever <code>java.io.tmpdir</code> points to).  Files are added to an internal
+     * list, and deleted when no longer needed (that is, when <code>clear()</code> is invoked at the end of processing a
      * request).</p>
      */
     public static class DefaultTempFileManager implements TempFileManager {
@@ -396,14 +401,7 @@ public abstract class NanoHttpd {
 
         public DefaultTempFileManager() {
             tmpdir = System.getProperty("java.io.tmpdir");
-            tempFiles = new ArrayList<>();
-        }
-
-        @Override
-        public TempFile createTempFile() throws Exception {
-            DefaultTempFile tempFile = new DefaultTempFile(tmpdir);
-            tempFiles.add(tempFile);
-            return tempFile;
+            tempFiles = new ArrayList<TempFile>();
         }
 
         @Override
@@ -416,13 +414,18 @@ public abstract class NanoHttpd {
             }
             tempFiles.clear();
         }
+
+        @Override
+        public TempFile createTempFile() throws Exception {
+            DefaultTempFile tempFile = new DefaultTempFile(tmpdir);
+            tempFiles.add(tempFile);
+            return tempFile;
+        }
     }
 
     /**
-     * Default strategy for creating and cleaning up temporary files.
-     *
-     * <p>By default, files are created by <code>File.createTempFile()</code> in
-     * the directory specified.</p>
+     * Default strategy for creating and cleaning up temporary files. <p/> <p></p></[>By default, files are created by
+     * <code>File.createTempFile()</code> in the directory specified.</p>
      */
     public static class DefaultTempFile implements TempFile {
         private File file;
@@ -431,11 +434,6 @@ public abstract class NanoHttpd {
         public DefaultTempFile(String tempdir) throws IOException {
             file = File.createTempFile("NanoHTTPD-", "", new File(tempdir));
             fstream = new FileOutputStream(file);
-        }
-
-        @Override
-        public OutputStream open() throws Exception {
-            return fstream;
         }
 
         @Override
@@ -448,17 +446,17 @@ public abstract class NanoHttpd {
         public String getName() {
             return file.getAbsolutePath();
         }
+
+        @Override
+        public OutputStream open() throws Exception {
+            return fstream;
+        }
     }
 
     /**
      * HTTP response. Return one of these from serve().
      */
     public static class Response {
-        /**
-         * Headers for the HTTP response. Use addHeader() to add lines.
-         */
-        private final Map<String, String> header = new HashMap<>();
-
         /**
          * Some HTTP response status codes
          */
@@ -481,15 +479,16 @@ public abstract class NanoHttpd {
             }
 
             @Override
-            public int getRequestStatus() {
-                return this.requestStatus;
-            }
-
-            @Override
             public String getDescription() {
                 return "" + this.requestStatus + " " + description;
             }
+
+            @Override
+            public int getRequestStatus() {
+                return this.requestStatus;
+            }
         }
+
         /**
          * HTTP status code after processing, e.g. "200 OK", HTTP_OK
          */
@@ -502,6 +501,10 @@ public abstract class NanoHttpd {
          * Data of the response, may be null.
          */
         private InputStream data;
+        /**
+         * Headers for the HTTP response. Use addHeader() to add lines.
+         */
+        private Map<String, String> header = new HashMap<String, String>();
         /**
          * The request method that spawned this response.
          */
@@ -596,7 +599,7 @@ public abstract class NanoHttpd {
         /**
          * Sends given response to the socket.
          */
-        void send(OutputStream outputStream) {
+        protected void send(OutputStream outputStream) {
             String mime = mimeType;
             SimpleDateFormat gmtFrmt = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
             gmtFrmt.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -641,7 +644,7 @@ public abstract class NanoHttpd {
             }
         }
 
-        void sendConnectionHeaderIfNotAlreadyPresent(PrintWriter pw, Map<String, String> header) {
+        protected void sendConnectionHeaderIfNotAlreadyPresent(PrintWriter pw, Map<String, String> header) {
             if (!headerAlreadySent(header, "connection")) {
                 pw.print("Connection: keep-alive\r\n");
             }
@@ -663,7 +666,8 @@ public abstract class NanoHttpd {
             outputStream.write(String.format("0\r\n\r\n").getBytes());
         }
 
-        void sendContentLengthHeaderIfNotAlreadyPresent(PrintWriter pw, Map<String, String> header, int size) {
+        protected void sendContentLengthHeaderIfNotAlreadyPresent(PrintWriter pw, Map<String, String> header,
+                                                                  int size) {
             if (!headerAlreadySent(header, "content-length")) {
                 pw.print("Content-Length: " + size + "\r\n");
             }
@@ -713,9 +717,7 @@ public abstract class NanoHttpd {
     }
 
     public static class Cookie {
-        private final String n;
-        private final String v;
-        private final String e;
+        private String n, v, e;
 
         public Cookie(String name, String value, String expires) {
             n = name;
@@ -761,7 +763,7 @@ public abstract class NanoHttpd {
         public static final int BUFSIZE = 8192;
         private final TempFileManager tempFileManager;
         private final OutputStream outputStream;
-        private final PushbackInputStream inputStream;
+        private PushbackInputStream inputStream;
         private int splitbyte;
         private int rlen;
         private String uri;
@@ -777,13 +779,17 @@ public abstract class NanoHttpd {
             this.outputStream = outputStream;
         }
 
-        public HTTPSession(TempFileManager tempFileManager, InputStream inputStream, OutputStream outputStream, InetAddress inetAddress) {
+        public HTTPSession(TempFileManager tempFileManager, InputStream inputStream, OutputStream outputStream,
+                           InetAddress inetAddress) {
             this.tempFileManager = tempFileManager;
             this.inputStream = new PushbackInputStream(inputStream, BUFSIZE);
             this.outputStream = outputStream;
-            String remoteIp = inetAddress.isLoopbackAddress() || inetAddress.isAnyLocalAddress() ? "127.0.0.1" : inetAddress.getHostAddress()
-                                                                                                                            .toString();
-            headers = new HashMap<>();
+            String
+                    remoteIp =
+                    inetAddress.isLoopbackAddress() || inetAddress.isAnyLocalAddress() ?
+                    "127.0.0.1" :
+                    inetAddress.getHostAddress().toString();
+            headers = new HashMap<String, String>();
 
             headers.put("remote-addr", remoteIp);
             headers.put("http-client-ip", remoteIp);
@@ -817,8 +823,7 @@ public abstract class NanoHttpd {
                     while (read > 0) {
                         rlen += read;
                         splitbyte = findHeaderEnd(buf, rlen);
-                        if (splitbyte > 0)
-                            break;
+                        if (splitbyte > 0) { break; }
                         read = inputStream.read(buf, rlen, BUFSIZE - rlen);
                     }
                 }
@@ -827,16 +832,16 @@ public abstract class NanoHttpd {
                     inputStream.unread(buf, splitbyte, rlen - splitbyte);
                 }
 
-                parms = new HashMap<>();
+                parms = new HashMap<String, String>();
                 if (null == headers) {
-                    headers = new HashMap<>();
+                    headers = new HashMap<String, String>();
                 }
 
                 // Create a BufferedReader for parsing the header.
                 BufferedReader hin = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(buf, 0, rlen)));
 
                 // Decode the header into parms and header java properties
-                Map<String, String> pre = new HashMap<>();
+                Map<String, String> pre = new HashMap<String, String>();
                 decodeHeader(hin, pre, parms, headers);
 
                 method = Method.lookup(pre.get("method"));
@@ -851,17 +856,23 @@ public abstract class NanoHttpd {
                 // Ok, now do the serve()
                 Response r = serve(this);
                 if (r == null) {
-                    throw new ResponseException(Response.Status.INTERNAL_ERROR, "SERVER INTERNAL ERROR: Serve() returned a null response.");
+                    throw new ResponseException(Response.Status.INTERNAL_ERROR,
+                                                "SERVER INTERNAL ERROR: Serve() returned a null response.");
                 } else {
                     cookies.unloadQueue(r);
                     r.setRequestMethod(method);
                     r.send(outputStream);
                 }
-            } catch (SocketException | SocketTimeoutException e) {
+            } catch (SocketException e) {
                 // throw it out to close socket object (finalAccept)
                 throw e;
+            } catch (SocketTimeoutException ste) {
+                throw ste;
             } catch (IOException ioe) {
-                Response r = new Response(Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, "SERVER INTERNAL ERROR: IOException: " + ioe.getMessage());
+                Response
+                        r =
+                        new Response(Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT,
+                                     "SERVER INTERNAL ERROR: IOException: " + ioe.getMessage());
                 r.send(outputStream);
                 safeClose(outputStream);
             } catch (ResponseException re) {
@@ -975,8 +986,8 @@ public abstract class NanoHttpd {
         }
 
         @Override
-        public final Map<String, String> getParms() {
-            return parms;
+        public CookieHandler getCookies() {
+            return cookies;
         }
 
         @Override
@@ -985,12 +996,8 @@ public abstract class NanoHttpd {
         }
 
         @Override
-        public final String getUri() {
-            return uri;
-        }
-
-        public String getQueryParameterString() {
-            return queryParameterString;
+        public final InputStream getInputStream() {
+            return inputStream;
         }
 
         @Override
@@ -999,13 +1006,17 @@ public abstract class NanoHttpd {
         }
 
         @Override
-        public final InputStream getInputStream() {
-            return inputStream;
+        public final Map<String, String> getParms() {
+            return parms;
+        }
+
+        public String getQueryParameterString() {
+            return queryParameterString;
         }
 
         @Override
-        public CookieHandler getCookies() {
-            return cookies;
+        public final String getUri() {
+            return uri;
         }
 
         @Override
@@ -1036,7 +1047,9 @@ public abstract class NanoHttpd {
                 }
 
                 // Get the raw body as a byte []
-                ByteBuffer fbuf = randomAccessFile.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, randomAccessFile.length());
+                ByteBuffer
+                        fbuf =
+                        randomAccessFile.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, randomAccessFile.length());
                 randomAccessFile.seek(0);
 
                 // Create a BufferedReader for easily reading it as string.
@@ -1060,11 +1073,15 @@ public abstract class NanoHttpd {
                     if ("multipart/form-data".equalsIgnoreCase(contentType)) {
                         // Handle multipart/form-data
                         if (!st.hasMoreTokens()) {
-                            throw new ResponseException(Response.Status.BAD_REQUEST, "BAD REQUEST: Content type is multipart/form-data but boundary missing. Usage: GET /example/file.html");
+                            throw new ResponseException(Response.Status.BAD_REQUEST,
+                                                        "BAD REQUEST: Content type is multipart/form-data but " +
+                                                        "boundary missing. Usage: GET /example/file.html");
                         }
 
                         String boundaryStartString = "boundary=";
-                        int boundaryContentStart = contentTypeHeader.indexOf(boundaryStartString) + boundaryStartString.length();
+                        int
+                                boundaryContentStart =
+                                contentTypeHeader.indexOf(boundaryStartString) + boundaryStartString.length();
                         String boundary = contentTypeHeader.substring(boundaryContentStart, contentTypeHeader.length());
                         if (boundary.startsWith("\"") && boundary.endsWith("\"")) {
                             boundary = boundary.substring(1, boundary.length() - 1);
@@ -1120,30 +1137,37 @@ public abstract class NanoHttpd {
                 String mpline = in.readLine();
                 while (mpline != null) {
                     if (!mpline.contains(boundary)) {
-                        throw new ResponseException(Response.Status.BAD_REQUEST, "BAD REQUEST: Content type is multipart/form-data but next chunk does not start with boundary. Usage: GET /example/file.html");
+                        throw new ResponseException(Response.Status.BAD_REQUEST,
+                                                    "BAD REQUEST: Content type is multipart/form-data but next chunk " +
+                                                    "does not start with boundary. Usage: GET /example/file.html");
                     }
                     boundarycount++;
-                    Map<String, String> item = new HashMap<>();
+                    Map<String, String> item = new HashMap<String, String>();
                     mpline = in.readLine();
                     while (mpline != null && mpline.trim().length() > 0) {
                         int p = mpline.indexOf(':');
                         if (p != -1) {
-                            item.put(mpline.substring(0, p).trim().toLowerCase(Locale.US), mpline.substring(p + 1).trim());
+                            item.put(mpline.substring(0, p).trim().toLowerCase(Locale.US),
+                                     mpline.substring(p + 1).trim());
                         }
                         mpline = in.readLine();
                     }
                     if (mpline != null) {
                         String contentDisposition = item.get("content-disposition");
                         if (contentDisposition == null) {
-                            throw new ResponseException(Response.Status.BAD_REQUEST, "BAD REQUEST: Content type is multipart/form-data but no content-disposition info found. Usage: GET /example/file.html");
+                            throw new ResponseException(Response.Status.BAD_REQUEST,
+                                                        "BAD REQUEST: Content type is multipart/form-data but no " +
+                                                        "content-disposition info found. Usage: GET /example/file" +
+                                                        ".html");
                         }
                         StringTokenizer st = new StringTokenizer(contentDisposition, ";");
-                        Map<String, String> disposition = new HashMap<>();
+                        Map<String, String> disposition = new HashMap<String, String>();
                         while (st.hasMoreTokens()) {
                             String token = st.nextToken().trim();
                             int p = token.indexOf('=');
                             if (p != -1) {
-                                disposition.put(token.substring(0, p).trim().toLowerCase(Locale.US), token.substring(p + 1).trim());
+                                disposition.put(token.substring(0, p).trim().toLowerCase(Locale.US),
+                                                token.substring(p + 1).trim());
                             }
                         }
                         String pname = disposition.get("name");
@@ -1179,8 +1203,8 @@ public abstract class NanoHttpd {
                     }
                 }
             } catch (IOException ioe) {
-                throw new ResponseException(Response.Status.INTERNAL_ERROR, "SERVER INTERNAL ERROR: IOException: " +
-                                                                            ioe.getMessage(), ioe);
+                throw new ResponseException(Response.Status.INTERNAL_ERROR,
+                                            "SERVER INTERNAL ERROR: IOException: " + ioe.getMessage(), ioe);
             }
         }
 
@@ -1215,11 +1239,10 @@ public abstract class NanoHttpd {
         private int[] getBoundaryPositions(ByteBuffer b, byte[] boundary) {
             int matchcount = 0;
             int matchbyte = -1;
-            List<Integer> matchbytes = new ArrayList<>();
+            List<Integer> matchbytes = new ArrayList<Integer>();
             for (int i = 0; i < b.limit(); i++) {
                 if (b.get(i) == boundary[matchcount]) {
-                    if (matchcount == 0)
-                        matchbyte = i;
+                    if (matchcount == 0) { matchbyte = i; }
                     matchcount++;
                     if (matchcount == boundary.length) {
                         matchbytes.add(matchbyte);
@@ -1254,15 +1277,14 @@ public abstract class NanoHttpd {
     }
 
     /**
-     * Provides rudimentary support for cookies.
-     * Doesn't support 'path', 'secure' nor 'httpOnly'.
-     * Feel free to improve it and/or add unsupported features.
+     * Provides rudimentary support for cookies. Doesn't support 'path', 'secure' nor 'httpOnly'. Feel free to improve
+     * it and/or add unsupported features.
      *
      * @author LordFokas
      */
     public class CookieHandler implements Iterable<String> {
-        private final HashMap<String, String> cookies = new HashMap<>();
-        private final ArrayList<Cookie> queue = new ArrayList<>();
+        private HashMap<String, String> cookies = new HashMap<String, String>();
+        private ArrayList<Cookie> queue = new ArrayList<Cookie>();
 
         public CookieHandler(Map<String, String> httpHeaders) {
             String raw = httpHeaders.get("cookie");
@@ -1297,8 +1319,7 @@ public abstract class NanoHttpd {
             queue.add(new Cookie(name, value, Cookie.getHTTPTime(expires)));
         }
 
-        @NotNull @Override
-        public Iterator<String> iterator() {
+        @Override public Iterator<String> iterator() {
             return cookies.keySet().iterator();
         }
 
@@ -1306,6 +1327,7 @@ public abstract class NanoHttpd {
          * Read a cookie from the HTTP Headers.
          *
          * @param name The cookie's name.
+         *
          * @return The cookie's value if it exists, null otherwise.
          */
         public String read(String name) {
@@ -1350,8 +1372,8 @@ public abstract class NanoHttpd {
      * @return a map of <code>String</code> (parameter name) to <code>List&lt;String&gt;</code> (a list of the values
      * supplied).
      */
-    Map<String, List<String>> decodeParameters(String queryString) {
-        Map<String, List<String>> parms = new HashMap<>();
+    protected Map<String, List<String>> decodeParameters(String queryString) {
+        Map<String, List<String>> parms = new HashMap<String, List<String>>();
         if (queryString != null) {
             StringTokenizer st = new StringTokenizer(queryString, "&");
             while (st.hasMoreTokens()) {
@@ -1359,7 +1381,7 @@ public abstract class NanoHttpd {
                 int sep = e.indexOf('=');
                 String propertyName = (sep >= 0) ? decodePercent(e.substring(0, sep)).trim() : decodePercent(e).trim();
                 if (!parms.containsKey(propertyName)) {
-                    parms.put(propertyName, new ArrayList<>());
+                    parms.put(propertyName, new ArrayList<String>());
                 }
                 String propertyValue = (sep >= 0) ? decodePercent(e.substring(sep + 1)) : null;
                 if (propertyValue != null) {
@@ -1377,7 +1399,7 @@ public abstract class NanoHttpd {
      *
      * @return expanded form of the input, for example "foo%20bar" becomes "foo bar"
      */
-    String decodePercent(String str) {
+    protected String decodePercent(String str) {
         String decoded = null;
         try {
             decoded = URLDecoder.decode(str, "UTF8");

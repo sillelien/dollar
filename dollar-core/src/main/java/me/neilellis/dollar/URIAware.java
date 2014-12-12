@@ -62,7 +62,7 @@ public interface URIAware {
     }
 
     /**
-     * Generic receive
+     * Generic read
      */
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class) var $read(boolean blocking, boolean mutating);

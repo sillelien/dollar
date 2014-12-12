@@ -97,12 +97,12 @@ public class SocketURIHandler implements URIHandler {
     }
 
     @Override
-    public var send(var value, boolean blocking, boolean mutating) {
+    public var write(var value, boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public var receive(boolean blocking, boolean mutating) {
+    public var read(boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
 

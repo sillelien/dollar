@@ -1,8 +1,22 @@
 #!/usr/bin/env dollar
 server= socketio://127.0.0.1:8092/bulletin?eventType=chatevent
+users= db:map://users/tmp/users10.db
+lastMessages= db:circular://messages/tmp/messages10.db?size=10
+
 message *= server
-("chatevent" : message) publish server
+timestampedMessage := (message + {"timestamp":DATE()})
+timestampedMessage >> lastMessages
 
+("chatevent" : timestampedMessage) publish server
 
+when (~message.userName) {
+    users[message.userName]={"msg":message}
+}
 
+http://127.0.0.1:8091/messages subscribe {
+    {"body":all lastMessages, "headers":{"Access-Control-Allow-Origin":"*"}}
+}
 
+http://127.0.0.1:8091/users subscribe {
+    {"body" : all users}
+}

@@ -55,12 +55,12 @@ public interface URIHandler {
      * @return
      */
     default var publish(var value) {
-        return send(value, false, false);
+        return write(value, false, false);
     }
 
-    var send(var value, boolean blocking, boolean mutating);
+    var write(var value, boolean blocking, boolean mutating);
 
-    var receive(boolean blocking, boolean mutating);
+    var read(boolean blocking, boolean mutating);
 
     var remove(var v);
 

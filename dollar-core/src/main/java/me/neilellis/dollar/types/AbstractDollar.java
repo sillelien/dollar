@@ -94,11 +94,7 @@ public abstract class AbstractDollar implements var {
         return this;
     }
 
-    @Override
-    public var $write(var given) {
-        debug("Cannot send to " + getClass().getName());
-        return this;
-    }
+
 
     @Override
     public var $choose(var map) {
@@ -196,11 +192,6 @@ public abstract class AbstractDollar implements var {
     }
 
 
-    @NotNull
-    @Override
-    public var $mimeType() {
-        return DollarStatic.$("text/plain");
-    }
 
     @NotNull
     @Override
@@ -361,7 +352,7 @@ public abstract class AbstractDollar implements var {
 
     @NotNull @Override
     public InputStream toStream() {
-        return new ByteArrayInputStream($S().getBytes());
+        return new ByteArrayInputStream($serialized().getBytes());
     }
 
     @Override
