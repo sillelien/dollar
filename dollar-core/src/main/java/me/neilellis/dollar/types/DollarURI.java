@@ -18,10 +18,9 @@ package me.neilellis.dollar.types;
 
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
-import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.*;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
-import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
@@ -41,7 +40,7 @@ public class DollarURI extends AbstractDollar {
     private URIHandler handler;
 
 
-    public DollarURI(@NotNull List<Throwable> errors, String uri) {
+    public DollarURI(@NotNull ImmutableList<Throwable> errors, String uri) {
         super(errors);
         this.uri = uri;
         String scheme = uri.substring(0, uri.indexOf(":"));
@@ -172,12 +171,6 @@ public class DollarURI extends AbstractDollar {
         return $subscribe(pipe, null);
     }
 
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of();
-    }
-
     @Override
     public var $subscribe(Pipeable pipe, String id) {
         ensureRunning();
@@ -200,6 +193,12 @@ public class DollarURI extends AbstractDollar {
                     handler.unsubscribe(subId);
                     return DollarStatic.$(subId);
                 }))));
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return ImmutableMap.of();
     }
 
     @Override
@@ -329,13 +328,6 @@ public class DollarURI extends AbstractDollar {
     }
 
 
-
-
-    @Nullable
-    @Override
-    public JsonObject json() {
-        return new JsonObject();
-    }
 
 
     @Nullable

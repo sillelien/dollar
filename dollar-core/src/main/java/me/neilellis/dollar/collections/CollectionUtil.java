@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.store;
+package me.neilellis.dollar.collections;
 
-import me.neilellis.dollar.plugin.ExtensionPoint;
-import me.neilellis.dollar.var;
-import org.jetbrains.annotations.NotNull;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface DollarStore extends ExtensionPoint<DollarStore> {
+public class CollectionUtil {
+    public static String fromStream(InputStream stream) throws IOException {
+        String s;
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[0xFFFF];
 
-    @NotNull
-    var get(String location);
+            for (int len; (len = stream.read(buffer)) != -1; ) { os.write(buffer, 0, len); }
 
-    @NotNull
-    var pop(String location, int timeoutInMillis);
+            os.flush();
 
-    void push(String location, var value);
-
-    void set(String location, var value);
-
-    void set(String location, var value, int expiryInMilliseconds);
-
+            s = new String(os.toByteArray(), "UTF-8");
+        }
+        return s;
+    }
 }

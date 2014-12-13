@@ -18,9 +18,8 @@ package me.neilellis.dollar.types;
 
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
-import com.google.common.collect.ImmutableList;
-import com.google.common.hash.Hashing;
 import me.neilellis.dollar.*;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.exceptions.ValidationException;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
@@ -33,6 +32,8 @@ import javax.script.ScriptEngineManager;
 import javax.script.SimpleScriptContext;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,8 +60,8 @@ public abstract class AbstractDollar implements var {
     private String src;
 
 
-    AbstractDollar(@NotNull List<Throwable> errors) {
-        this.errors = new ImmutableList.Builder<Throwable>().addAll(errors).build();
+    AbstractDollar(@NotNull ImmutableList<Throwable> errors) {
+        this.errors = errors;
     }
 
     @Override
@@ -250,7 +251,7 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var $copy() {
-        return DollarFactory.fromValue($(), new ImmutableList.Builder<Throwable>().addAll(errors()).build());
+        return DollarFactory.fromValue($(), ImmutableList.copyOf(errors()));
     }
 
     @NotNull final @Override public var _fix(boolean parallel) {
@@ -282,11 +283,8 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull
-    @Override
     public var copy(@NotNull ImmutableList<Throwable> errors) {
-        return DollarFactory.fromValue($(),
-                                       new ImmutableList.Builder<Throwable>().addAll(errors()).addAll(errors).build()
-        );
+        return DollarFactory.fromValue($(), ImmutableList.copyOf(errors(), errors));
     }
 
     @NotNull
@@ -532,15 +530,34 @@ public abstract class AbstractDollar implements var {
                     errorJson.putString("stack", Arrays.toString(error.getStackTrace()));
                 } else {
                     errorJson.putString("hash",
-                                        Hashing.sha1()
-                                               .hashBytes(Arrays.toString(error.getStackTrace()).getBytes())
-                                               .toString());
+                                        hash(Arrays.toString(error.getStackTrace()).getBytes()));
                 }
                 errorArray.addObject(errorJson);
             }
             json.putArray("errors", errorArray);
         }
         return DollarFactory.fromValue(json);
+    }
+
+    private String hash(byte[] bytes) {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            throw new DollarException(e);
+        }
+
+        md.update(bytes);
+        byte[] digest = md.digest();
+        StringBuffer hexString = new StringBuffer();
+
+        for (byte aDigest : digest) {
+            String hex = Integer.toHexString(0xff & aDigest);
+            if (hex.length() == 1) { hexString.append('0'); }
+            hexString.append(hex);
+        }
+
+        return hexString.toString();
     }
 
 
@@ -568,7 +585,7 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var $error(@NotNull Throwable error) {
-        return copy(new ImmutableList.Builder<Throwable>().add(error).build());
+        return copy(ImmutableList.of(error));
     }
 
 
@@ -605,13 +622,13 @@ public abstract class AbstractDollar implements var {
 
     @NotNull @Override
     public var clearErrors() {
-        return DollarFactory.fromValue($(), ImmutableList.<Throwable>builder().build());
+        return DollarFactory.fromValue($(), ImmutableList.of());
     }
 
 
     @NotNull
     @Override
-    public var $fail(@NotNull Consumer<List<Throwable>> handler) {
+    public var $fail(@NotNull Consumer<ImmutableList<Throwable>> handler) {
         if (hasErrors()) {
             handler.accept(errors());
             return DollarFactory.fromValue(null, errors());

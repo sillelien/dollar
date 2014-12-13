@@ -16,10 +16,8 @@
 
 package me.neilellis.dollar.types;
 
+import me.neilellis.dollar.collections.ImmutableList;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * To better understand the rationale behind this class, take a look at http://homepages.ecs.vuw.ac.nz/~tk/publications/papers/void.pdf
@@ -43,7 +41,7 @@ class DollarFail extends DollarVoid {
 
     private final FailureType failureType;
 
-    public DollarFail(@NotNull List<Throwable> errors, FailureType failureType) {
+    public DollarFail(@NotNull ImmutableList<Throwable> errors, FailureType failureType) {
         super(errors);
         this.failureType = failureType;
     }
@@ -51,7 +49,7 @@ class DollarFail extends DollarVoid {
 
     public DollarFail(FailureType failureType) {
 
-        super(Collections.emptyList());
+        super(ImmutableList.of());
         this.failureType = failureType;
     }
 }

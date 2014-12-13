@@ -18,18 +18,18 @@ package me.neilellis.dollar.types;
 
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Type;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
 
-    public DollarBoolean(@NotNull List<Throwable> errors, @NotNull Boolean value) {
+    public DollarBoolean(@NotNull ImmutableList<Throwable> errors, @NotNull Boolean value) {
         super(errors, value);
     }
 

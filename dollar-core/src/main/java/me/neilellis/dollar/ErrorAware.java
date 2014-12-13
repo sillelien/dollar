@@ -16,7 +16,7 @@
 
 package me.neilellis.dollar;
 
-import com.google.common.collect.ImmutableList;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.guard.ChainGuard;
 import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.NotNullCollectionGuard;
@@ -49,7 +49,7 @@ public interface ErrorAware {
 
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class) var $fail(@NotNull Consumer<List<Throwable>> handler);
+    @Guarded(ChainGuard.class) var $fail(@NotNull Consumer<ImmutableList<Throwable>> handler);
 
     @NotNull
     @Guarded(NotNullParametersGuard.class)

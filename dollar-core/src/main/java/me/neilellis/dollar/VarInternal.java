@@ -16,7 +16,7 @@
 
 package me.neilellis.dollar;
 
-import com.google.common.collect.ImmutableList;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.guard.ChainGuard;
 import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.NotNullCollectionGuard;

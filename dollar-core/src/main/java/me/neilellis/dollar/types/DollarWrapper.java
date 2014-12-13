@@ -17,10 +17,10 @@
 package me.neilellis.dollar.types;
 
 import com.github.oxo42.stateless4j.StateMachine;
-import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.*;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
-import me.neilellis.dollar.json.JsonObject;
+import me.neilellis.dollar.json.ImmutableJsonObject;
 import me.neilellis.dollar.monitor.DollarMonitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -322,7 +322,7 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $fail(@NotNull Consumer<List<Throwable>> handler) {
+    public var $fail(@NotNull Consumer<ImmutableList<Throwable>> handler) {
         return getValue().$fail(handler);
     }
 
@@ -496,6 +496,18 @@ public class DollarWrapper implements var {
 
     }
 
+    @Nullable
+    @Override
+    public JSONObject orgjson() {
+        return getValue().orgjson();
+    }
+
+    @Nullable
+    @Override
+    public ImmutableJsonObject json() {
+        return getValue().json();
+    }
+
     @NotNull
     @Override
     public var out() {
@@ -625,18 +637,6 @@ public class DollarWrapper implements var {
     @Override
     public boolean isVoid() {
         return getValue().isVoid();
-    }
-
-    @Nullable
-    @Override
-    public JSONObject orgjson() {
-        return getValue().orgjson();
-    }
-
-    @Nullable
-    @Override
-    public JsonObject json() {
-        return getValue().json();
     }
 
     @Override

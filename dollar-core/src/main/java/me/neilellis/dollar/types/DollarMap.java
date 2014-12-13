@@ -16,10 +16,10 @@
 
 package me.neilellis.dollar.types;
 
-import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.Type;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.json.ImmutableJsonObject;
 import me.neilellis.dollar.json.JsonObject;
@@ -57,7 +57,7 @@ public class DollarMap extends AbstractDollar implements var {
      *
      * @param errors
      */
-    DollarMap(@NotNull List<Throwable> errors) {
+    DollarMap(@NotNull ImmutableList<Throwable> errors) {
         super(errors);
         map = new LinkedHashMap<>();
     }
@@ -74,7 +74,7 @@ public class DollarMap extends AbstractDollar implements var {
      *
      * @param o the object of unknown type to be converted to a JsonObject and then wrapped by the $ class.
      */
-    DollarMap(@NotNull List<Throwable> errors, @NotNull JsonObject o) {
+    DollarMap(@NotNull ImmutableList<Throwable> errors, @NotNull JsonObject o) {
         super(errors);
         map = mapToVarMap(o.toMap());
     }
@@ -87,12 +87,12 @@ public class DollarMap extends AbstractDollar implements var {
         return result;
     }
 
-    public DollarMap(List<Throwable> errors, Map<String, Object> o) {
+    public DollarMap(ImmutableList<Throwable> errors, Map<String, Object> o) {
         super(errors);
         map = mapToVarMap(o);
     }
 
-    private DollarMap(List<Throwable> errors, LinkedHashMap<String, var> o) {
+    private DollarMap(ImmutableList<Throwable> errors, LinkedHashMap<String, var> o) {
         super(errors);
         this.map = deepClone(o);
     }
@@ -273,9 +273,15 @@ public class DollarMap extends AbstractDollar implements var {
     @NotNull
     @Override
     public var $removeByKey(@NotNull String value) {
-        JsonObject jsonObject = json();
+        JsonObject jsonObject = json().mutable();
         jsonObject.removeField(value);
         return DollarFactory.fromValue(jsonObject, errors());
+    }
+
+    @NotNull
+    @Override
+    public JSONObject orgjson() {
+        return new JSONObject(varMapToMap());
     }
 
     @NotNull
@@ -306,6 +312,11 @@ public class DollarMap extends AbstractDollar implements var {
         return false;
     }
 
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
     @NotNull
     @Override
     public String S() {
@@ -313,7 +324,12 @@ public class DollarMap extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean isTrue() {
+    public boolean isTruthy() {
+        return !map.isEmpty();
+    }
+
+    @Override
+    public boolean isFalse() {
         return false;
     }
 
@@ -336,8 +352,8 @@ public class DollarMap extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean isTruthy() {
-        return !map.isEmpty();
+    public boolean isNeitherTrueNorFalse() {
+        return true;
     }
 
     @NotNull
@@ -351,10 +367,6 @@ public class DollarMap extends AbstractDollar implements var {
         return ImmutableList.copyOf(entries);
     }
 
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
 
     @NotNull @Override
     public Integer I() {
@@ -362,10 +374,6 @@ public class DollarMap extends AbstractDollar implements var {
         return null;
     }
 
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
 
     @NotNull
     @Override
@@ -408,17 +416,6 @@ public class DollarMap extends AbstractDollar implements var {
         return false;
     }
 
-    @NotNull
-    @Override
-    public JSONObject orgjson() {
-        return new JSONObject(varMapToMap());
-    }
-
-    @NotNull
-    @Override
-    public JsonObject json() {
-        return (JsonObject) DollarFactory.toJson(this);
-    }
 
     @Override
     public ImmutableList<String> strings() {

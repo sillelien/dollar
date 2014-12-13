@@ -18,6 +18,7 @@ package me.neilellis.dollar.types;
 
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Type;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +27,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoField;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -37,11 +37,11 @@ public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
     private static final double ONE_DAY_MILLIS = 24.0 * 60.0 * 60.0 * 1000.0;
     private static final double ONE_DAY_SECONDS = 24.0 * 60.0 * 60.0;
 
-    public DollarDate(@NotNull List<Throwable> errors, @NotNull Long value) {
+    public DollarDate(@NotNull ImmutableList<Throwable> errors, @NotNull Long value) {
         super(errors, LocalDateTime.ofInstant(Instant.ofEpochMilli(value), ZoneId.systemDefault()));
     }
 
-    public DollarDate(List<Throwable> errors, LocalDateTime value) {
+    public DollarDate(ImmutableList<Throwable> errors, LocalDateTime value) {
         super(errors, value);
     }
 

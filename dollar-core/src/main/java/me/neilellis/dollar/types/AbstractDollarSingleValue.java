@@ -16,17 +16,16 @@
 
 package me.neilellis.dollar.types;
 
-import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
-import me.neilellis.dollar.json.JsonObject;
+import me.neilellis.dollar.json.ImmutableJsonObject;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -38,7 +37,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     @NotNull
     final T value;
 
-    AbstractDollarSingleValue(@NotNull List<Throwable> errors, @NotNull T value) {
+    AbstractDollarSingleValue(@NotNull ImmutableList<Throwable> errors, @NotNull T value) {
         super(errors);
         this.value = value;
     }
@@ -99,6 +98,17 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     }
 
+    @Nullable
+    public JSONObject orgjson() {
+        return null;
+
+    }
+
+    @Nullable
+    public ImmutableJsonObject json() {
+        return null;
+    }
+
     @NotNull
     @Override
     public var $remove(var value) {
@@ -127,15 +137,15 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return value.toString().hashCode();
     }
 
-    public Stream<String> keyStream() {
-        return Stream.empty();
-
-    }
-
     @NotNull
     @Override
     public String S() {
         return value.toString();
+    }
+
+    public Stream<String> keyStream() {
+        return Stream.empty();
+
     }
 
     @NotNull public Map<String, Object> toMap() {
@@ -163,16 +173,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return false;
     }
 
-    @Nullable
-    public JSONObject orgjson() {
-        return null;
-
-    }
-
-    @Nullable
-    public JsonObject json() {
-        return null;
-    }
 
     @Override
     public ImmutableList<String> strings() {

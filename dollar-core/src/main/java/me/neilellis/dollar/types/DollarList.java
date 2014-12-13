@@ -16,9 +16,10 @@
 
 package me.neilellis.dollar.types;
 
-import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.*;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
+import me.neilellis.dollar.json.ImmutableJsonObject;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import org.jetbrains.annotations.NotNull;
@@ -38,12 +39,12 @@ public class DollarList extends AbstractDollar {
 
     private final ImmutableList<var> list;
 
-    DollarList(@NotNull List<Throwable> errors, @NotNull JsonArray array) {
-        this(errors, array.toList());
+    DollarList(@NotNull ImmutableList<Throwable> errors, @NotNull JsonArray array) {
+        this(errors, ImmutableList.copyOf(array.toList()));
     }
 
 
-    DollarList(@NotNull List<Throwable> errors, @NotNull List<Object> list) {
+    DollarList(@NotNull ImmutableList<Throwable> errors, @NotNull ImmutableList<?> list) {
         super(errors);
         List<var> l = new ArrayList<>();
         for (Object value : list) {
@@ -53,10 +54,10 @@ public class DollarList extends AbstractDollar {
                 }
             } else //noinspection StatementWithEmptyBody
                 if (value == null) {
-                //Skip
-            } else {
-                l.add(DollarFactory.fromValue(value, errors));
-            }
+                    //Skip
+                } else {
+                    l.add(DollarFactory.fromValue(value, errors));
+                }
         }
         this.list = ImmutableList.copyOf(l);
     }
@@ -71,10 +72,10 @@ public class DollarList extends AbstractDollar {
                 }
             } else //noinspection StatementWithEmptyBody
                 if (value == null) {
-                //Skip
-            } else {
-                l.add(DollarFactory.fromValue(value, errors));
-            }
+                    //Skip
+                } else {
+                    l.add(DollarFactory.fromValue(value, errors));
+                }
         }
         this.list = ImmutableList.copyOf(l);
     }
@@ -88,7 +89,7 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public var $minus(@NotNull var v) {
-        ArrayList<var> newVal = new ArrayList<>(list);
+        ArrayList<var> newVal = new ArrayList<>(list.mutable());
         newVal.remove(v);
         return DollarFactory.fromValue(newVal, errors());
     }
@@ -102,10 +103,7 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public var $plus(var v) {
-        return DollarFactory.fromValue(ImmutableList.builder()
-                                                    .addAll(list)
-                                                    .addAll(v == null ? Arrays.asList() : v.$list())
-                                                    .build(), errors()
+        return DollarFactory.fromValue(ImmutableList.copyOf(list, v == null ? ImmutableList.of() : v.$list()), errors()
         );
 
     }
@@ -125,11 +123,10 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public var $negate() {
-        ArrayList<var> result = new ArrayList<>(list);
+        ArrayList<var> result = new ArrayList<var>(list.mutable());
         Collections.reverse(result);
         return DollarFactory.fromValue(result, errors());
     }
-
 
 
     @Override
@@ -152,7 +149,7 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public var $set(@NotNull var key, Object value) {
-        ArrayList<var> newVal = new ArrayList<>(list);
+        ArrayList<var> newVal = new ArrayList<>(list.mutable());
         if (key.isInteger()) {
             newVal.set(key.I(), DollarFactory.fromValue(value));
         } else {
@@ -191,12 +188,6 @@ public class DollarList extends AbstractDollar {
         return $containsValue(key);
     }
 
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-        return null;
-    }
-
     @NotNull @Override
     public var $size() {
         return DollarStatic.$(list.size());
@@ -206,6 +197,27 @@ public class DollarList extends AbstractDollar {
     @Override
     public var $removeByKey(@NotNull String value) {
         return DollarFactory.failure(FailureType.INVALID_LIST_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<String, var> $map() {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public JSONObject orgjson() {
+        return new JSONObject(json().toMap());
+    }
+
+    @org.jetbrains.annotations.NotNull
+    @Override
+    public ImmutableJsonObject json() {
+        JsonArray array = jsonArray();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.putArray("value", array);
+        return new ImmutableJsonObject(jsonObject);
     }
 
     @NotNull
@@ -247,7 +259,7 @@ public class DollarList extends AbstractDollar {
         if (depth <= 1) {
             return this;
         } else {
-            ImmutableList<Object> result;
+            ImmutableList<var> result;
             if (parallel) {
                 try {
                     result =
@@ -257,7 +269,7 @@ public class DollarList extends AbstractDollar {
 
                 } catch (InterruptedException e) {
                     Thread.interrupted();
-                    result = ImmutableList.of(DollarFactory.failure(FailureType.INTERRUPTED, e));
+                    result = ImmutableList.<var>of(DollarFactory.failure(FailureType.INTERRUPTED, e));
 
                 } catch (ExecutionException e) {
                     result =
@@ -268,8 +280,8 @@ public class DollarList extends AbstractDollar {
                 return new DollarList(errors(), result);
             } else {
                 return new DollarList(errors(),
-                                      $stream(parallel).map(v -> v._fix(depth - 1, parallel))
-                                                       .collect(Collectors.toList()));
+                                      ImmutableList.copyOf($stream(parallel).map(v -> v._fix(depth - 1, parallel))
+                                                                            .collect(Collectors.toList())));
             }
         }
 
@@ -337,7 +349,6 @@ public class DollarList extends AbstractDollar {
         return true;
     }
 
-
     @NotNull
     @Override
     public ImmutableList<var> $list() {
@@ -381,21 +392,9 @@ public class DollarList extends AbstractDollar {
 
 
 
-    @NotNull
-    @Override
-    public JSONObject orgjson() {
-        return new JSONObject(json().toMap());
-    }
 
 
-    @org.jetbrains.annotations.NotNull
-    @Override
-    public JsonObject json() {
-        JsonArray array = jsonArray();
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.putArray("value", array);
-        return jsonObject;
-    }
+
 
 
     @Override
@@ -406,7 +405,7 @@ public class DollarList extends AbstractDollar {
 
     @NotNull @Override
     public Map<String, Object> toMap() {
-        return Collections.singletonMap("value", new ArrayList<>($list()));
+        return Collections.singletonMap("value", $list());
     }
 
 

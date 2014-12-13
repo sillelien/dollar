@@ -16,16 +16,14 @@
 
 package me.neilellis.dollar;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Range;
+import me.neilellis.dollar.collections.ImmutableList;
+import me.neilellis.dollar.collections.MultiMap;
+import me.neilellis.dollar.collections.Range;
 import me.neilellis.dollar.js.JSFileScript;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.monitor.DollarMonitor;
 import me.neilellis.dollar.plugin.Plugins;
-import me.neilellis.dollar.pubsub.DollarPubSub;
-import me.neilellis.dollar.pubsub.Sub;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.uri.URIHandlerFactory;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +33,6 @@ import spark.Spark;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -147,7 +144,7 @@ public class DollarStatic {
     }
 
     public static var $(var start, var finish) {
-        return $(Range.closed(start, finish));
+        return $(new Range(start, finish));
     }
 
     public static List<var> fixList(@Nullable List list) {
@@ -168,7 +165,7 @@ public class DollarStatic {
     }
 
     @NotNull
-    public static JsonObject mapToJson(@NotNull Multimap<String, String> map) {
+    public static JsonObject mapToJson(@NotNull MultiMap<String, String> map) {
         JsonObject jsonObject = new JsonObject();
         for (Map.Entry<String, String> entry : map.entries()) {
             jsonObject.putString(entry.getKey(), entry.getValue());
@@ -307,34 +304,11 @@ public class DollarStatic {
         }
     }
 
-    @NotNull
-    public static Sub $sub(DollarPubSub.SubAction action, String... locations) {
-        return monitor().run("$sub",
-                             "dollar.sub",
-                             "Subscription to " + Arrays.toString(locations),
-                             () -> threadContext.get().getPubsub().sub(action, locations));
-    }
 
     public static DollarMonitor monitor() {
         return threadContext.get().getMonitor();
     }
 
-    public static var $await(int seconds, String... locations) {
-        try {
-            var[] result = new var[]{$()};
-            Sub sub = threadContext.get().getPubsub().sub((v, s) -> {
-                result[0] = v;
-                s.cancel();
-            }, locations);
-            sub.awaitFirst(seconds);
-            return result[0];
-        } catch (InterruptedException e) {
-            Thread.interrupted();
-            return handleError(e, null);
-        } catch (Exception e) {
-            return handleError(e, null);
-        }
-    }
 
     @NotNull
     public static var create() {

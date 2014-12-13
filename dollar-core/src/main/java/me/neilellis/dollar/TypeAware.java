@@ -16,15 +16,12 @@
 
 package me.neilellis.dollar;
 
-import com.google.common.collect.ImmutableList;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.guard.*;
-import me.neilellis.dollar.json.JsonArray;
-import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.Map;
@@ -147,25 +144,6 @@ public interface TypeAware {
 
     boolean isUri();
 
-    /**
-     * Convert this object into a Dollar JsonArray.
-     *
-     * @return a JsonArray
-     */
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    default JsonArray jsonArray() {
-        JsonArray array = new JsonArray();
-        for (me.neilellis.dollar.var item : $list()) {
-            if (item == this) {
-                throw new IllegalArgumentException();
-            }
-            if (!item.isVoid()) {
-                array.add(item.$());
-            }
-        }
-        return array;
-    }
 
     /**
      * Is this object a void object? Void objects are similar to null, except they can have methods called on them.
@@ -177,29 +155,6 @@ public interface TypeAware {
      */
     boolean isVoid();
 
-    /**
-     * Returns this object as a org.json.JSONObject.
-     *
-     * NB: This conversion is quite efficient.
-     *
-     * @return a JSONObject
-     */
-    @Nullable
-    default JSONObject orgjson() {
-        JsonObject json = json();
-        if (json != null) {
-            return new JSONObject(json.toMap());
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Convert this to a Dollar JsonObject
-     *
-     * @return this as a JsonObject
-     */
-    @Nullable JsonObject json();
 
     /**
      * Returns this object as a list of string values or null if this is not applicable.

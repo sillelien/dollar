@@ -41,6 +41,14 @@
             <scope>provided</scope>
 
         </dependency>
+        <dependency>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-aether</artifactId>
+        </dependency>
+        <dependency>
+            <artifactId>maven-core</artifactId>
+            <groupId>org.apache.maven</groupId>
+        </dependency>
     </dependencies>
 
 </project>

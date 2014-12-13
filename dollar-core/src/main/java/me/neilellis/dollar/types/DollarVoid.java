@@ -16,13 +16,12 @@
 
 package me.neilellis.dollar.types;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Range;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.Type;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
-import me.neilellis.dollar.json.JsonObject;
+import me.neilellis.dollar.collections.Range;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +29,6 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -57,13 +55,13 @@ public class DollarVoid extends AbstractDollar implements var {
 
     public static final var INSTANCE = DollarFactory.newVoid();
 
-    public DollarVoid(@NotNull List<Throwable> errors) {
+    public DollarVoid(@NotNull ImmutableList<Throwable> errors) {
         super(errors);
     }
 
     public DollarVoid() {
 
-        super(Collections.emptyList());
+        super(ImmutableList.of());
     }
 
     @NotNull
@@ -149,6 +147,12 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
+    public JSONObject orgjson() {
+        return new JSONObject();
+    }
+
+    @NotNull
+    @Override
     public var remove(Object value) {
         return $copy();
     }
@@ -221,7 +225,7 @@ public class DollarVoid extends AbstractDollar implements var {
             case VOID:
                 return this;
             case RANGE:
-                return DollarFactory.fromValue(Range.closed(0, 0));
+                return DollarFactory.fromValue(new Range($(0), $(0)));
             default:
                 return DollarFactory.failure(FailureType.INVALID_CAST, type.toString(), false);
         }
@@ -276,18 +280,6 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public boolean isVoid() {
         return true;
-    }
-
-    @NotNull
-    @Override
-    public JSONObject orgjson() {
-        return new JSONObject();
-    }
-
-    @NotNull
-    @Override
-    public JsonObject json() {
-        return new JsonObject();
     }
 
     @Override

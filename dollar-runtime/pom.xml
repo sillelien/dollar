@@ -81,6 +81,7 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-quartz</artifactId>
         </dependency>
+
     </dependencies>
     <build>
         <plugins>

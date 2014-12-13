@@ -17,13 +17,13 @@
 package me.neilellis.dollar.types;
 
 import com.github.oxo42.stateless4j.StateMachine;
-import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.Type;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.guard.*;
+import me.neilellis.dollar.json.ImmutableJsonObject;
 import me.neilellis.dollar.json.JsonArray;
-import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -101,6 +101,12 @@ public class DollarBlockCollection implements var {
 
     @NotNull @Override @Guarded(ChainGuard.class) public var err() {return getValue().err();}
 
+    @Override @NotNull @Guarded(NotNullGuard.class) public JsonArray jsonArray() {return getValue().jsonArray();}
+
+    @Override @Nullable public JSONObject orgjson() {return getValue().orgjson();}
+
+    @Override @Nullable public ImmutableJsonObject json() {return getValue().json();}
+
     @Override @NotNull @Guarded(ChainGuard.class) public var out() {return getValue().out();}
 
     @NotNull @Override public var $remove(var value) {
@@ -170,13 +176,7 @@ public class DollarBlockCollection implements var {
 
     @Override public boolean isUri() {return getValue().isUri();}
 
-    @Override @NotNull @Guarded(NotNullGuard.class) public JsonArray jsonArray() {return getValue().jsonArray();}
-
     @Override public boolean isVoid() {return getValue().isVoid();}
-
-    @Override @Nullable public JSONObject orgjson() {return getValue().orgjson();}
-
-    @Override @Nullable public JsonObject json() {return getValue().json();}
 
     @Override @Nullable public ImmutableList<String> strings() {return getValue().strings();}
 
@@ -359,7 +359,7 @@ public class DollarBlockCollection implements var {
     public var $errors() {return getValue().$errors();}
 
     @Override @NotNull @Guarded(NotNullParametersGuard.class) @Guarded(ChainGuard.class) public var $fail(
-            @NotNull Consumer<List<Throwable>> handler) {
+            @NotNull Consumer<ImmutableList<Throwable>> handler) {
         return getValue().$fail(handler);
     }
 

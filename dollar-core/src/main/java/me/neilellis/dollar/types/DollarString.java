@@ -18,13 +18,13 @@ package me.neilellis.dollar.types;
 
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Type;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -32,7 +32,7 @@ import java.util.List;
 public class DollarString extends AbstractDollarSingleValue<String> {
 
 
-    public DollarString(@NotNull List<Throwable> errors, @NotNull String value) {
+    public DollarString(@NotNull ImmutableList<Throwable> errors, @NotNull String value) {
         super(errors, value);
     }
 

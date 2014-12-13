@@ -17,9 +17,13 @@
 package me.neilellis.dollar;
 
 import me.neilellis.dollar.guard.*;
+import me.neilellis.dollar.json.ImmutableJsonObject;
+import me.neilellis.dollar.json.JsonArray;
+import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.stream.Stream;
@@ -195,6 +199,43 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
     @Override String toString();
 
     /**
+     * Convert this object into a Dollar JsonArray.
+     *
+     * @return a JsonArray
+     */
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    default JsonArray jsonArray() {
+        return (JsonArray) DollarFactory.toJson(this);
+    }
+
+    /**
+     * Returns this object as a org.json.JSONObject.
+     *
+     * NB: This conversion is quite efficient.
+     *
+     * @return a JSONObject
+     */
+    @Nullable
+    default JSONObject orgjson() {
+        ImmutableJsonObject json = json();
+        if (json != null) {
+            return new JSONObject(json.toMap());
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Convert this to a Dollar JsonObject
+     *
+     * @return this as a JsonObject
+     */
+    default @Nullable ImmutableJsonObject json() {
+        return new ImmutableJsonObject((JsonObject) DollarFactory.toJson(this));
+    }
+
+    /**
      * Prints the S() value of this {@link var} to standard out.
      */
     @NotNull
@@ -225,7 +266,6 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
      */
     @NotNull
     @Guarded(ChainGuard.class) var $remove(var value);
-
 
 
 }

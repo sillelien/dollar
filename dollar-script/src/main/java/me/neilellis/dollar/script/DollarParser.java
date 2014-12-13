@@ -16,9 +16,9 @@
 
 package me.neilellis.dollar.script;
 
-import com.google.common.collect.Range;
 import com.google.common.io.ByteStreams;
 import me.neilellis.dollar.*;
+import me.neilellis.dollar.collections.Range;
 import me.neilellis.dollar.script.java.JavaScriptingSupport;
 import me.neilellis.dollar.script.operators.*;
 import me.neilellis.dollar.types.DollarFactory;
@@ -348,7 +348,7 @@ public class DollarParser {
                 .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.isTrue() || rhs.isTrue()), scope), "||", "or"),
                         LOGICAL_OR_PRIORITY)
                 .postfix(pipeOperator(ref, scope, pure), PIPE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> fromValue(Range.closed(lhs, rhs)), scope), ".."), RANGE_PRIORITY)
+                .infixl(op(new BinaryOp((lhs, rhs) -> fromValue(new Range(lhs, rhs)), scope), ".."), RANGE_PRIORITY)
                 .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.compareTo(rhs) < 0), scope), "<"), COMPARISON_PRIORITY)
                 .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.compareTo(rhs) > 0), scope), ">"), EQUIVALENCE_PRIORITY)
                 .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.compareTo(rhs) <= 0), scope), "<="), EQUIVALENCE_PRIORITY)

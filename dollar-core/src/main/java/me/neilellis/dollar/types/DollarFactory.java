@@ -18,13 +18,9 @@ package me.neilellis.dollar.types;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Range;
-import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import me.neilellis.dollar.*;
-import me.neilellis.dollar.collections.ImmutableMap;
+import me.neilellis.dollar.collections.*;
 import me.neilellis.dollar.exceptions.DollarFailureException;
 import me.neilellis.dollar.json.DecodeException;
 import me.neilellis.dollar.json.ImmutableJsonObject;
@@ -43,7 +39,6 @@ import spark.QueryParamsMap;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.Future;
@@ -84,12 +79,8 @@ public class DollarFactory {
 
 
     @NotNull
-    public static var fromValue(Object o, @NotNull List<Throwable>... errors) {
-        ImmutableList.Builder<Throwable> builder = ImmutableList.builder();
-        for (List<Throwable> error : errors) {
-            builder = builder.addAll(error);
-        }
-        return create(builder.build(), o);
+    public static var fromValue(Object o, @NotNull ImmutableList<Throwable>... errors) {
+        return create(ImmutableList.copyOf(errors), o);
     }
 
     @NotNull
@@ -130,12 +121,14 @@ public class DollarFactory {
         if (o instanceof QueryParamsMap) {
             return create(errors, DollarStatic.paramMapToJson(((QueryParamsMap) o).toMap()));
         }
-
+        if (o instanceof ImmutableList) {
+            return wrap(new DollarList(errors, (ImmutableList<?>) o));
+        }
         if (o instanceof List) {
-            return wrap(new DollarList(errors, (List<Object>) o));
+            return wrap(new DollarList(errors, ImmutableList.copyOf((List<Object>) o)));
         }
         if (o instanceof Collection) {
-            return wrap(new DollarList(errors, new ArrayList<>((Collection<Object>) o)));
+            return wrap(new DollarList(errors, ImmutableList.copyOf(new ArrayList<>((Collection<Object>) o))));
         }
         if (o.getClass().isArray()) {
             return wrap(new DollarList(errors, (Object[]) o));
@@ -172,7 +165,7 @@ public class DollarFactory {
         }
         if (o instanceof InputStream) {
             try {
-                return create(errors, CharStreams.toString(new InputStreamReader((InputStream) o)));
+                return create(errors, CollectionUtil.fromStream((InputStream) o));
             } catch (IOException e) {
                 return failure(e);
             }
@@ -189,8 +182,8 @@ public class DollarFactory {
             }
         }
         JsonObject json;
-        if (o instanceof Multimap) {
-            json = DollarStatic.mapToJson((Multimap) o);
+        if (o instanceof MultiMap) {
+            json = DollarStatic.mapToJson((MultiMap) o);
         } else {
             json = Json.fromJavaObject(o);
         }
@@ -249,7 +242,7 @@ public class DollarFactory {
         if (DollarStatic.config.failFast()) {
             throw new DollarFailureException(t, failureType);
         } else {
-            return wrap(new DollarFail(Arrays.asList(t), failureType));
+            return wrap(new DollarFail(ImmutableList.of(t), failureType));
         }
     }
 
@@ -257,7 +250,7 @@ public class DollarFactory {
         if (DollarStatic.config.failFast() && !quiet) {
             throw new DollarFailureException(failureType, message);
         } else {
-            return wrap(new DollarFail(Arrays.asList(new DollarException(message)), failureType));
+            return wrap(new DollarFail(ImmutableList.of(new DollarException(message)), failureType));
         }
     }
 
@@ -325,7 +318,7 @@ public class DollarFactory {
             dollarFailureException.addSource(source);
             throw dollarFailureException;
         } else {
-            return wrap(new DollarFail(Arrays.asList(throwable), failureType));
+            return wrap(new DollarFail(ImmutableList.of(throwable), failureType));
         }
     }
 
@@ -401,7 +394,7 @@ public class DollarFactory {
             case ERROR:
                 return $void();
             case DATE:
-                return wrap(new DollarDate(Arrays.asList(), LocalDateTime.parse(jsonObject.getString(TEXT_KEY))));
+                return wrap(new DollarDate(ImmutableList.of(), LocalDateTime.parse(jsonObject.getString(TEXT_KEY))));
             case DECIMAL:
                 return fromValue(jsonObject.getNumber(VALUE_KEY));
             case LIST:
@@ -410,7 +403,7 @@ public class DollarFactory {
                 for (Object o : array) {
                     arrayList.add(fromJson(o));
                 }
-                return wrap(new DollarList(Arrays.asList(), arrayList));
+                return wrap(new DollarList(ImmutableList.of(), ImmutableList.copyOf(arrayList)));
             case MAP:
                 final JsonObject json;
                 if (jsonObject.containsField(VALUE_KEY)) {
@@ -423,18 +416,18 @@ public class DollarFactory {
                 for (String fieldName : fieldNames) {
                     map.put(fieldName, fromJson(json.get(fieldName)));
                 }
-                return wrap(new DollarMap(Arrays.asList(), map));
+                return wrap(new DollarMap(ImmutableList.of(), map));
             case RANGE:
                 final var lower = fromJson(jsonObject.get(LOWERBOUND_KEY));
                 final var upper = fromJson(jsonObject.get(UPPERBOUND_KEY));
-                return wrap(new DollarRange(Arrays.asList(), lower, upper));
+                return wrap(new DollarRange(ImmutableList.of(), lower, upper));
             case URI:
-                return wrap(new DollarURI(Arrays.asList(), jsonObject.getString(VALUE_KEY)));
+                return wrap(new DollarURI(ImmutableList.of(), jsonObject.getString(VALUE_KEY)));
             case STRING:
                 if (!(jsonObject.get(VALUE_KEY) instanceof String)) {
                     System.out.println(jsonObject.get(VALUE_KEY));
                 }
-                return wrap(new DollarString(Arrays.asList(), jsonObject.getString(VALUE_KEY)));
+                return wrap(new DollarString(ImmutableList.of(), jsonObject.getString(VALUE_KEY)));
             default:
                 throw new DollarException("Unrecognized type " + type);
         }

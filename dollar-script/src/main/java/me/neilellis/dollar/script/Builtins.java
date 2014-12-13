@@ -16,8 +16,8 @@
 
 package me.neilellis.dollar.script;
 
-import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.StateAware;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.script.exceptions.BuiltinNotFoundException;
 import me.neilellis.dollar.var;
 

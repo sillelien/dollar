@@ -18,8 +18,6 @@ package me.neilellis.dollar;
 
 import me.neilellis.dollar.monitor.DollarMonitor;
 import me.neilellis.dollar.plugin.Plugins;
-import me.neilellis.dollar.pubsub.DollarPubSub;
-import me.neilellis.dollar.store.DollarStore;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -35,18 +33,14 @@ public class DollarThreadContext {
     private List<String> labels = new ArrayList<>();
     private DollarMonitor monitor = Plugins.newInstance(DollarMonitor.class);
     private var passValue;
-    private DollarPubSub pubsub = Plugins.newInstance(DollarPubSub.class);
-    private DollarStore store = Plugins.newInstance(DollarStore.class);
     private String threadKey = UUID.randomUUID().toString();
     private ClassLoader classLoader = DollarThreadContext.class.getClassLoader();
 
-    private DollarThreadContext(List<String> labels, DollarMonitor monitor, var passValue, DollarPubSub pubsub,
-                                DollarStore store, String threadKey) {
+    private DollarThreadContext(List<String> labels, DollarMonitor monitor, var passValue,
+                                String threadKey) {
         this.labels = labels;
         this.monitor = monitor;
         this.passValue = passValue;
-        this.pubsub = pubsub;
-        this.store = store;
         this.threadKey = threadKey;
     }
 
@@ -61,7 +55,7 @@ public class DollarThreadContext {
 
     @NotNull
     public DollarThreadContext child(String s) {
-        return new DollarThreadContext(new ArrayList<>(labels), monitor, passValue, pubsub, store, threadKey + ":" + s);
+        return new DollarThreadContext(new ArrayList<>(labels), monitor, passValue, threadKey + ":" + s);
     }
 
     public ClassLoader getClassLoader() {
@@ -94,24 +88,6 @@ public class DollarThreadContext {
 
     public void setPassValue(var passValue) {
         this.passValue = passValue;
-    }
-
-    public DollarPubSub getPubsub() {
-        return pubsub;
-    }
-
-    public void setPubsub(DollarPubSub pubsub) {
-        this.pubsub = pubsub;
-    }
-
-    public DollarStore getStore() {
-
-        System.err.println("STORE IS DEPRECATED, PLEASE USE URIs INSTEAD");
-        return store;
-    }
-
-    public void setStore(DollarStore store) {
-        this.store = store;
     }
 
     public String getThreadKey() {

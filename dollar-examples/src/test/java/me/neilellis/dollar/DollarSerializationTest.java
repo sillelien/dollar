@@ -17,6 +17,7 @@
 package me.neilellis.dollar;
 
 import com.jayway.restassured.RestAssured;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.types.DollarRange;
 import me.neilellis.dollar.types.DollarURI;
@@ -24,7 +25,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;
@@ -41,8 +41,8 @@ public class DollarSerializationTest {
     @BeforeClass
     public static void setUp() {
         profile = $("name", "Neil")
-                .$("progYears", new DollarRange(Arrays.asList(), 1981, 2014))
-                .$("blog", new DollarURI(Arrays.asList(), "http://neilellis.me"))
+                .$("progYears", new DollarRange(ImmutableList.of(), 1981, 2014))
+                .$("blog", new DollarURI(ImmutableList.of(), "http://neilellis.me"))
                 .$("age", new Date().getYear() + 1900 - 1970)
                 .$("timestamp", $(LocalDateTime.now()))
                 .$("wroteDollar", $(true))
