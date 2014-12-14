@@ -113,8 +113,8 @@
                     <targetTests>
                         <param>me.neilellis.*</param>
                     </targetTests>
-                    <mutationThreshold>10</mutationThreshold>
-                    <coverageThreshold>10</coverageThreshold>
+                    <mutationThreshold>0</mutationThreshold>
+                    <coverageThreshold>0</coverageThreshold>
                 </configuration>
             </plugin>
         </plugins>
