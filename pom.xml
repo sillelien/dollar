@@ -63,6 +63,7 @@
 
     <modules>
         <module>dollar-core</module>
+        <module>dollar-resolver</module>
         <module>dollar-plugins</module>
         <module>dollar-runtime</module>
         <module>dollar-examples</module>
@@ -187,6 +188,11 @@
                 <groupId>net.kencochrane.raven</groupId>
                 <artifactId>raven</artifactId>
                 <version>4.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-mapper-asl</artifactId>
+                <version>1.9.10</version>
             </dependency>
 
         </dependencies>

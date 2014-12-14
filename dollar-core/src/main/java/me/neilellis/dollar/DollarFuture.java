@@ -23,12 +23,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 /**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
+ * The type DollarFuture
+ * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 class DollarFuture implements java.lang.reflect.InvocationHandler {
 
     private Future<var> value = new CompletableFuture<>();
 
+    /**
+     * Instantiates a new DollarFuture
+     *
+     * @param value the value
+     */
     public DollarFuture(Future<var> value) {
         this.value = value;
     }

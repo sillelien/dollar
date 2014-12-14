@@ -22,24 +22,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
+ * The type Dollar exception.
+ * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarException extends RuntimeException {
 
     private final List<SourceAware> sourceList = new ArrayList<>();
 
+    /**
+     * Instantiates a new Dollar exception.
+     *
+     * @param e the e
+     */
     public DollarException(Throwable e) {
         super(e);
     }
 
+    /**
+     * Instantiates a new Dollar exception.
+     *
+     * @param errorMessage the error message
+     */
     public DollarException(String errorMessage) {
         super(errorMessage);
     }
 
+    /**
+     * Instantiates a new Dollar exception.
+     *
+     * @param t the t
+     * @param s the s
+     */
     public DollarException(Throwable t, String s) {
         super(s, t);
     }
 
+    /**
+     * Add source.
+     *
+     * @param source the source
+     */
     public void addSource(SourceAware source) {
         if (source == null) {
             throw new NullPointerException();
@@ -60,6 +82,11 @@ public class DollarException extends RuntimeException {
         }
     }
 
+    /**
+     * Http code.
+     *
+     * @return the int
+     */
     public int httpCode() {
         return 500;
     }

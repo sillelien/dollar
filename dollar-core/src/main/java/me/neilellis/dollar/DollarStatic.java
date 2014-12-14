@@ -19,21 +19,16 @@ package me.neilellis.dollar;
 import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.MultiMap;
 import me.neilellis.dollar.collections.Range;
-import me.neilellis.dollar.js.JSFileScript;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.monitor.DollarMonitor;
-import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.uri.URIHandlerFactory;
+import me.neilellis.dollar.uri.URI;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import spark.Spark;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -41,14 +36,21 @@ import java.util.concurrent.Executors;
 
 /**
  * To use the $ class you need to statically import all of the methods from this class. This is effectively a factory
- * class for the $ class with additional convenience methods.
+ * and convenience class for the var class.
  *
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
+ * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarStatic {
 
+    /**
+     * The shared configuration for Dollar.
+     */
     public static final Configuration config = new Configuration();
 
+
+    /**
+     * The thread context that all Dollar classes have access to.
+     */
     @NotNull
     public static final ThreadLocal<DollarThreadContext> threadContext = new ThreadLocal<DollarThreadContext>() {
         @NotNull
@@ -62,17 +64,16 @@ public class DollarStatic {
     private static final ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
 
 
-    private static final URIHandlerFactory URIHandler = Plugins.sharedInstance(URIHandlerFactory.class);
-
-    public static Pipeable $jsFile(String name) {
-        try {
-            return new JSFileScript(new File(name));
-        } catch (IOException e) {
-            return DollarStatic.logAndRethrow(e);
-        }
-    }
-
+    /**
+     * Log and rethrow.
+     *
+     * @param <R>       the type parameter
+     * @param throwable the throwable
+     *
+     * @return the r
+     */
     @NotNull
+    @Deprecated
     public static <R> R logAndRethrow(@NotNull Throwable throwable) {
         if (throwable instanceof DollarException) {
             throw (DollarException) throwable;
@@ -82,14 +83,213 @@ public class DollarStatic {
 
     }
 
-    public static Pipeable $jsResource(String name) {
-        try {
-            return new JSFileScript(DollarStatic.class.getResourceAsStream(name));
-        } catch (IOException e) {
-            return DollarStatic.logAndRethrow(e);
-        }
+    /**
+     * $ range.
+     *
+     * @param from the from
+     * @param to   the to
+     *
+     * @return the var
+     */
+    public static var $range(var from, var to) {
+        return DollarFactory.fromRange(from, to);
     }
 
+    /**
+     * $ range.
+     *
+     * @param from the from
+     * @param to   the to
+     *
+     * @return the var
+     */
+    public static var $range(long from, long to) {
+        return DollarFactory.fromRange($(from), $(to));
+    }
+
+    /**
+     * $ var.
+     *
+     * @param o the o
+     *
+     * @return the var
+     */
+    public static var $(@Nullable Object o) {
+        return $(o, false);
+    }
+
+    private static var $(@Nullable Object o, boolean parallel) {
+        return DollarFactory.fromValue(o, ImmutableList.of());
+    }
+
+    /**
+     * Fix var.
+     *
+     * @param v        the v
+     * @param parallel the parallel
+     *
+     * @return the var
+     */
+    public static var fix(@Nullable var v, boolean parallel) {
+        return v != null ? DollarFactory.wrap(v._fix(parallel)) : $void();
+    }
+
+    /**
+     * $ void.
+     *
+     * @return the var
+     */
+    @NotNull
+    public static var $void() {
+        return DollarFactory.newVoid();
+    }
+
+    /**
+     * Fix, i.e. evaluate lambdas to the depth supplied, optionally hinting that parallel behaviour is fine
+     *
+     * @param v        the object to be fixed
+     * @param depth    the depth at which to stop evaluation, 1 means do not penetrate any layers of maps/blocks, 2
+     *                 means penetrate one layer of maps.
+     * @param parallel if true parallel evaluation if fine
+     *
+     * @return the 'fixed' var
+     */
+    public static var fix(@Nullable var v, int depth, boolean parallel) {
+        return v != null ? DollarFactory.wrap(v._fix(depth, parallel)) : $void();
+    }
+
+    /**
+     * Fix var.
+     *
+     * @param v the v
+     *
+     * @return the var
+     */
+    public static var fix(@Nullable var v) {
+        return v != null ? DollarFactory.wrap(v._fix(false)) : $void();
+    }
+
+    /**
+     * Fix deep.
+     *
+     * @param v the v
+     *
+     * @return the var
+     */
+    public static var fixDeep(@Nullable var v) {
+        return v != null ? DollarFactory.wrap(v._fixDeep(false)) : $void();
+    }
+
+    /**
+     * Fix deep.
+     *
+     * @param v        the v
+     * @param parallel the parallel
+     *
+     * @return the var
+     */
+    public static var fixDeep(@Nullable var v, boolean parallel) {
+        return v != null ? DollarFactory.wrap(v._fixDeep(parallel)) : $void();
+    }
+
+    /**
+     * $ range.
+     *
+     * @param from the from
+     * @param to   the to
+     *
+     * @return the var
+     */
+    public static var $range(double from, double to) {
+        return DollarFactory.fromRange($(from), $(to));
+    }
+
+    /**
+     * $ range.
+     *
+     * @param from the from
+     * @param to   the to
+     *
+     * @return the var
+     */
+    public static var $range(String from, String to) {
+        return DollarFactory.fromRange($(from), $(to));
+    }
+
+    /**
+     * $ range.
+     *
+     * @param from the from
+     * @param to   the to
+     *
+     * @return the var
+     */
+    public static var $range(Date from, Date to) {
+        return DollarFactory.fromRange($(from), $(to));
+    }
+
+    /**
+     * $ range.
+     *
+     * @param from the from
+     * @param to   the to
+     *
+     * @return the var
+     */
+    public static var $range(LocalDateTime from, LocalDateTime to) {
+        return DollarFactory.fromRange($(from), $(to));
+    }
+
+    /**
+     * $ uri.
+     *
+     * @param uri the uri
+     *
+     * @return the var
+     */
+    public static var $uri(URI uri) {
+        return DollarFactory.fromValue(uri);
+    }
+
+    /**
+     * $ uri.
+     *
+     * @param uri the uri
+     *
+     * @return the var
+     */
+    public static var $uri(String uri) {
+        return DollarFactory.fromValue(URI.parse(uri));
+    }
+
+    /**
+     * $ date.
+     *
+     * @param date the date
+     *
+     * @return the var
+     */
+    public static var $date(Date date) {
+        return DollarFactory.fromValue(date);
+    }
+
+    /**
+     * $ date.
+     *
+     * @param date the date
+     *
+     * @return the var
+     */
+    public static var $date(LocalDateTime date) {
+        return DollarFactory.fromValue(date);
+    }
+
+    /**
+     * $ var.
+     *
+     * @param values the values
+     * @return the var
+     */
     @NotNull
     public static var $(@NotNull var... values) {
         var v = $();
@@ -99,11 +299,23 @@ public class DollarStatic {
         return v;
     }
 
+    /**
+     * $ var.
+     *
+     * @return the var
+     */
     @NotNull
     public static var $() {
         return DollarFactory.fromValue();
     }
 
+    /**
+     * $ var.
+     *
+     * @param name the name
+     * @param values the values
+     * @return the var
+     */
     @NotNull
     public static var $(@NotNull String name, @NotNull var... values) {
         var v = $();
@@ -113,57 +325,57 @@ public class DollarStatic {
         return $(name, v);
     }
 
+    /**
+     * $ var.
+     *
+     * @param name the name
+     * @param o the o
+     * @return the var
+     */
     @NotNull
     public static var $(@NotNull String name, Object o) {
         return DollarFactory.fromValue().$set($(name), o);
     }
 
-    public static var $(@Nullable Object o) {
-        return $(o, false);
-    }
-
-    private static var $(@Nullable Object o, boolean parallel) {
-        if (o instanceof var) {
-            return fix((var) o, parallel);
-        }
-        return DollarFactory.fromValue(o, ImmutableList.of());
-    }
-
-    public static var fix(@Nullable var v, boolean parallel) {
-        return v != null ? DollarFactory.wrap(v._fix(parallel)) : $void();
-    }
-
-    @NotNull
-    public static var $void() {
-        return DollarFactory.newVoid();
-    }
-
+    /**
+     * $ var.
+     *
+     * @param json the json
+     * @return the var
+     */
     @NotNull
     public static var $(JsonObject json) {
         return DollarFactory.fromValue(json, ImmutableList.of());
     }
 
+    /**
+     * $ var.
+     *
+     * @param start the start
+     * @param finish the finish
+     * @return the var
+     */
     public static var $(var start, var finish) {
         return $(new Range(start, finish));
     }
 
-    public static List<var> fixList(@Nullable List list) {
-        ArrayList<var> result = new ArrayList<>();
-        for (Object value : list) {
-            if (value instanceof var) {
-                result.add(((var) value)._fix(false));
-            } else {
-                result.add($(value));
-            }
-        }
-        return result;
-    }
 
+    /**
+     * Tracer state tracer.
+     *
+     * @return the state tracer
+     */
     @NotNull
     public static StateTracer tracer() {
         return new SimpleLogStateTracer();
     }
 
+    /**
+     * Map to json.
+     *
+     * @param map the map
+     * @return the json object
+     */
     @NotNull
     public static JsonObject mapToJson(@NotNull MultiMap<String, String> map) {
         JsonObject jsonObject = new JsonObject();
@@ -173,6 +385,12 @@ public class DollarStatic {
         return jsonObject;
     }
 
+    /**
+     * Param map to json.
+     *
+     * @param map the map
+     * @return the json object
+     */
     @NotNull
     public static JsonObject paramMapToJson(@NotNull Map<String, String[]> map) {
         JsonObject jsonObject = new JsonObject();
@@ -186,26 +404,33 @@ public class DollarStatic {
         return jsonObject;
     }
 
+    /**
+     * $ begin.
+     *
+     * @param value the value
+     */
     public static void $begin(String value) {
         threadContext.get().pushLabel(value);
     }
 
     /**
-     * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used
-     * to link context's together.
+     * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier
+     * used to link context's together.
      *
      * @param call the lambda to run.
+     * @return the var
      */
     public static var $call(@NotNull Callable<var> call) {
         return $call(threadContext.get().child(), call);
     }
 
     /**
-     * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier used
-     * to link context's together.
+     * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier
+     * used to link context's together.
      *
      * @param context the current thread context
-     * @param call    the lambda to run.
+     * @param call the lambda to run.
+     * @return the var
      */
     public static var $call(@NotNull DollarThreadContext context, @NotNull Callable<var> call) {
         threadContext.set(context.child());
@@ -218,11 +443,15 @@ public class DollarStatic {
         }
     }
 
+    /**
+     * Handle error.
+     *
+     * @param throwable the throwable
+     * @param failee the failee
+     * @return the var
+     */
     @NotNull
     public static var handleError(@NotNull Throwable throwable, var failee) {
-//        log(throwable.getMessage());
-////        log(throwable);
-//        throwable.printStackTrace(System.err);
         if (failee == null) {
             return DollarFactory.failure(throwable);
         }
@@ -230,28 +459,58 @@ public class DollarStatic {
 
     }
 
+    /**
+     * $ dump.
+     */
     public static void $dump() {
         threadContext.get().getMonitor().dump();
     }
 
+    /**
+     * $ dump thread.
+     */
     public static void $dumpThread() {
         threadContext.get().getMonitor().dumpThread();
     }
 
+    /**
+     * $ end.
+     *
+     * @param value the value
+     */
     public static void $end(@NotNull String value) {
         threadContext.get().popLabel(value);
     }
 
+    /**
+     * $ eval.
+     *
+     * @param label the label
+     * @param js the js
+     * @return the var
+     */
     @NotNull
     public static var $eval(@NotNull String label, @NotNull String js) {
         return $().$pipe(label, js);
     }
 
+    /**
+     * $ eval.
+     *
+     * @param js the js
+     * @return the var
+     */
     @NotNull
     public static var $eval(@NotNull String js) {
         return $().$eval(js);
     }
 
+    /**
+     * $ fork.
+     *
+     * @param call the call
+     * @return the var
+     */
     @NotNull
     public static var $fork(@NotNull Callable<var> call) {
         DollarThreadContext child = threadContext.get().child();
@@ -260,14 +519,25 @@ public class DollarStatic {
                 new Class<?>[]{var.class},
                 new DollarFuture(threadPoolExecutor.submit(() -> $call(child, call))));
 
-
     }
 
+    /**
+     * $ json array.
+     *
+     * @param values the values
+     * @return the json array
+     */
     @NotNull
     public static JsonArray $jsonArray(@NotNull Object... values) {
         return new JsonArray(values);
     }
 
+    /**
+     * $ list.
+     *
+     * @param values the values
+     * @return the var
+     */
     @NotNull
 
     public static var $list(Object... values) {
@@ -279,7 +549,7 @@ public class DollarStatic {
      *
      * @param context this is an identifier used to link context's together, it should be unique to the request being
      *                processed.
-     * @param run     the lambda to run.
+     * @param run the lambda to run.
      */
     public static void $run(@NotNull DollarThreadContext context, @NotNull Runnable run) {
         threadContext.set(context.child());
@@ -291,8 +561,8 @@ public class DollarStatic {
     }
 
     /**
-     * The beginning of any new Dollar Code should start with a DollarStatic.run/call method. This creates an object used
-     * to link context's together.
+     * The beginning of any new Dollar Code should start with a DollarStatic.run/call method. This creates an object
+     * used to link context's together.
      *
      * @param run the lambda to run.
      */
@@ -305,38 +575,63 @@ public class DollarStatic {
     }
 
 
+    /**
+     * Monitor dollar monitor.
+     *
+     * @return the dollar monitor
+     */
     public static DollarMonitor monitor() {
         return threadContext.get().getMonitor();
     }
 
 
+    /**
+     * Create var.
+     *
+     * @return the var
+     */
     @NotNull
     public static var create() {
         return $();
     }
 
+    /**
+     * Create var.
+     *
+     * @param value the value
+     * @return the var
+     */
     @NotNull
-    public static var create(String value) {
-        return $();
+    public static var create(Object value) {
+        return $(value);
     }
 
+    /**
+     * Log void.
+     *
+     * @param message the message
+     */
     public static void log(Object message) {
         System.out.println(threadContext.get().getLabels().toString() + ":" + message);
     }
 
-    public static void logf(String message, Object... values) {
-        System.out.printf(threadContext.get().getLabels().toString() + ":" + message, values);
-    }
-
-    public static void stopHttpServer() {
-        Spark.stop();
-    }
-
+    /**
+     * Child context.
+     *
+     * @return the dollar thread context
+     */
     @NotNull
     public static DollarThreadContext childContext() {
         return threadContext.get().child();
     }
 
+    /**
+     * Handle interrupt.
+     *
+     * @param <R>  the type parameter
+     * @param ie the ie
+     * @return the r
+     */
     @NotNull
     public static <R> R handleInterrupt(InterruptedException ie) {
         if (Thread.interrupted()) {
@@ -345,32 +640,60 @@ public class DollarStatic {
         throw new Error("Interrupted");
     }
 
+    /**
+     * Log void.
+     *
+     * @param message the message
+     */
     public static void log(String message) {
         System.out.println(threadContext.get().getLabels().toString() + ":" + message);
     }
 
+    /**
+     * Child context.
+     *
+     * @param s the s
+     * @return the dollar thread context
+     */
     @NotNull
     public static DollarThreadContext childContext(String s) {
         return threadContext.get().child(s);
     }
 
+    /**
+     * Label void.
+     *
+     * @param label the label
+     */
     public static void label(String label) {
         context().pushLabel(label);
     }
 
+    /**
+     * Context dollar thread context.
+     *
+     * @return the dollar thread context
+     */
     public static DollarThreadContext context() {
         return threadContext.get();
     }
 
+    /**
+     * Error logger.
+     *
+     * @return the error logger
+     */
     @NotNull
     public static ErrorLogger errorLogger() {
         return new SimpleErrorLogger();
     }
 
-    public static URIHandlerFactory integrationProvider() {
-        return URIHandler;
-    }
-
+    /**
+     * $ var.
+     *
+     * @param lambda the lambda
+     * @return the var
+     */
     public static var $(Pipeable lambda) {
         return DollarFactory.fromValue(lambda);
     }

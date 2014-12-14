@@ -17,17 +17,44 @@
 package me.neilellis.dollar;
 
 /**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
+ * The interface BooleanAware.
+ *
+ * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface BooleanAware {
 
+    /**
+     * Is boolean.
+     *
+     * @return true if this object is a boolean
+     */
     boolean isBoolean();
 
-    boolean isTrue();
-
-    boolean isTruthy();
-
+    /**
+     * Is false.
+     *
+     * @return true if this object is a boolean and is false
+     */
     boolean isFalse();
 
+    /**
+     * Is neither true nor false.
+     *
+     * @return true if this object is neither true nor false
+     */
     boolean isNeitherTrueNorFalse();
+
+    /**
+     * Is true.
+     *
+     * @return true if this object is a boolean and is true
+     */
+    boolean isTrue();
+
+    /**
+     * Is truthy, i.e. if numeric then non zero, if a string,list or map then not empty etc.
+     *
+     * @return if this object is more true than false
+     */
+    boolean isTruthy();
 }

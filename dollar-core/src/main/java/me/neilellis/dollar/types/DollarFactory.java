@@ -29,6 +29,7 @@ import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.json.impl.Json;
 import me.neilellis.dollar.monitor.DollarMonitor;
 import me.neilellis.dollar.script.SourceAware;
+import me.neilellis.dollar.uri.URI;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.jetbrains.annotations.NotNull;
@@ -47,42 +48,85 @@ import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$void;
 
 /**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
+ * The type Dollar factory.
+ * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarFactory {
+    /**
+     * The constant VALUE_KEY.
+     */
     public static final String VALUE_KEY = "value";
+    /**
+     * The constant TYPE_KEY.
+     */
     public static final String TYPE_KEY = "$type";
+    /**
+     * The constant LOWERBOUND_KEY.
+     */
     public static final String LOWERBOUND_KEY = "lower";
+    /**
+     * The constant UPPERBOUND_KEY.
+     */
     public static final String UPPERBOUND_KEY = "upper";
+    /**
+     * The constant TEXT_KEY.
+     */
     public static final String TEXT_KEY = "text";
+    /**
+     * The constant MILLISECOND_KEY.
+     */
     public static final String MILLISECOND_KEY = "millis";
+    /**
+     * The constant TRUE.
+     */
+    public static final var TRUE = wrap(new DollarBoolean(ImmutableList.of(), true));
+    /**
+     * The constant FALSE.
+     */
+    public static final var FALSE = wrap(new DollarBoolean(ImmutableList.of(), false));
+    /**
+     * The constant VOID.
+     */
+    public static final var VOID = wrap(new DollarVoid());
+    /**
+     * The constant DOUBLE_ZERO.
+     */
+    public static final var DOUBLE_ZERO = wrap(new DollarDecimal(ImmutableList.of(), 0.0));
+    /**
+     * The constant INTEGER_ZERO.
+     */
+    public static final var INTEGER_ZERO = wrap(new DollarInteger(ImmutableList.of(), 0L));
+
+
+    /**
+     * The Monitor.
+     */
     static DollarMonitor monitor = DollarStatic.monitor();
+    /**
+     * The constant tracer.
+     */
     @NotNull
     static StateTracer tracer = DollarStatic.tracer();
 
-    @NotNull
-    public static var fromField(@NotNull ImmutableList<Throwable> errors, Object field) {
-//            return new DollarWrapper(DollarNull.INSTANCE, monitor, tracer);
-//        }
-//        if (field instanceof String) {
-//            return new DollarWrapper(new DollarString((String) field), monitor, tracer);
-//        }
-//        if (field instanceof Number) {
-//            return new DollarWrapper(new DollarNumber((Number) field), monitor, tracer);
-//        }
-//        if (field instanceof JsonObject) {
-//            return DollarStatic.$(field);
-//        }
-//        return new DollarWrapper(DollarStatic.$(field.toString()), monitor, tracer);
-        return create(errors, field);
-    }
 
-
+    /**
+     * From value.
+     *
+     * @param o      the o
+     * @param errors the errors
+     *
+     * @return the var
+     */
     @NotNull
     public static var fromValue(Object o, @NotNull ImmutableList<Throwable>... errors) {
         return create(ImmutableList.copyOf(errors), o);
     }
 
+    /**
+     * From value.
+     *
+     * @return the var
+     */
     @NotNull
     public static var fromValue() {
         return create(ImmutableList.of(), new JsonObject());
@@ -92,11 +136,25 @@ public class DollarFactory {
     @NotNull
     private static var create(@NotNull ImmutableList<Throwable> errors, @Nullable Object o) {
         if (o == null) {
+            if (errors.size() == 0) {
+                return VOID;
+            }
             return wrap(new DollarVoid(errors));
         }
         if (o instanceof var) {
             return (var) o;
         }
+        if (o instanceof Boolean) {
+            if (errors.size() == 0) {
+                if ((Boolean) o) {
+                    return TRUE;
+                } else {
+                    return FALSE;
+                }
+            }
+            return wrap(new DollarBoolean(errors, (Boolean) o));
+        }
+
         if (o instanceof Pipeable) {
             return wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                     DollarStatic.class.getClassLoader(),
@@ -133,8 +191,11 @@ public class DollarFactory {
         if (o.getClass().isArray()) {
             return wrap(new DollarList(errors, (Object[]) o));
         }
-        if (o instanceof Boolean) {
-            return wrap(new DollarBoolean(errors, (Boolean) o));
+        if (o instanceof URI) {
+            return wrap(new DollarURI(errors, (URI) o));
+        }
+        if (o instanceof java.net.URI || o instanceof java.net.URL) {
+            return wrap(new DollarURI(errors, URI.parse(o.toString())));
         }
         if (o instanceof Date) {
             return wrap(new DollarDate(errors, ((Date) o).getTime()));
@@ -143,18 +204,33 @@ public class DollarFactory {
             return wrap(new DollarDate(errors, (LocalDateTime) o));
         }
         if (o instanceof Double) {
+            if (errors.size() == 0 && (Double) o == 0.0) {
+                return DOUBLE_ZERO;
+            }
             return wrap(new DollarDecimal(errors, (Double) o));
         }
         if (o instanceof Float) {
+            if (errors.size() == 0 && (Float) o == 0.0) {
+                return DOUBLE_ZERO;
+            }
             return wrap(new DollarDecimal(errors, ((Float) o).doubleValue()));
         }
         if (o instanceof Long) {
+            if (errors.size() == 0 && (Long) o == 0) {
+                return INTEGER_ZERO;
+            }
             return wrap(new DollarInteger(errors, (Long) o));
         }
         if (o instanceof Integer) {
+            if (errors.size() == 0 && (Integer) o == 0) {
+                return INTEGER_ZERO;
+            }
             return wrap(new DollarInteger(errors, ((Integer) o).longValue()));
         }
         if (o instanceof Short) {
+            if (errors.size() == 0 && (Short) o == 0) {
+                return INTEGER_ZERO;
+            }
             return wrap(new DollarInteger(errors, ((Short) o).longValue()));
         }
         if (o instanceof Range) {
@@ -191,6 +267,12 @@ public class DollarFactory {
     }
 
 
+    /**
+     * From gson object.
+     *
+     * @param o the o
+     * @return the var
+     */
     @NotNull
     public static var fromGsonObject(Object o) {
         Gson gson = new Gson();
@@ -198,11 +280,23 @@ public class DollarFactory {
         return create(ImmutableList.<Throwable>of(), json);
     }
 
+    /**
+     * From value.
+     *
+     * @param o the o
+     * @return the var
+     */
     @NotNull
     public static var fromValue(Object o) {
         return fromValue(o, ImmutableList.of());
     }
 
+    /**
+     * Failure var.
+     *
+     * @param failureType the failure type
+     * @return the var
+     */
     @NotNull
     public static var failure(FailureType failureType) {
         if (DollarStatic.config.failFast()) {
@@ -212,6 +306,12 @@ public class DollarFactory {
         }
     }
 
+    /**
+     * Wrap var.
+     *
+     * @param value the value
+     * @return the var
+     */
     @NotNull
     public static var wrap(var value) {
         return wrap(value, DollarStatic.monitor(), DollarStatic.tracer(), DollarStatic.errorLogger());
@@ -234,9 +334,15 @@ public class DollarFactory {
             return val;
         }
 
-
     }
 
+    /**
+     * Failure var.
+     *
+     * @param failureType the failure type
+     * @param t the t
+     * @return the var
+     */
     @NotNull
     public static var failure(FailureType failureType, Throwable t) {
         if (DollarStatic.config.failFast()) {
@@ -246,6 +352,14 @@ public class DollarFactory {
         }
     }
 
+    /**
+     * Failure var.
+     *
+     * @param failureType the failure type
+     * @param message the message
+     * @param quiet the quiet
+     * @return the var
+     */
     public static var failure(FailureType failureType, String message, boolean quiet) {
         if (DollarStatic.config.failFast() && !quiet) {
             throw new DollarFailureException(failureType, message);
@@ -254,22 +368,51 @@ public class DollarFactory {
         }
     }
 
+    /**
+     * Failure var.
+     *
+     * @param throwable the throwable
+     * @return the var
+     */
     public static var failure(Throwable throwable) {
         return failure(FailureType.EXCEPTION, throwable);
     }
 
+    /**
+     * New void.
+     *
+     * @return the var
+     */
     public static var newVoid() {
         return wrap(new DollarVoid());
     }
 
+    /**
+     * From string value.
+     *
+     * @param body the body
+     * @return the var
+     */
     public static var fromStringValue(String body) {
         return create(ImmutableList.<Throwable>of(), body);
     }
 
+    /**
+     * From lambda.
+     *
+     * @param pipeable the pipeable
+     * @return the var
+     */
     public static var fromLambda(Pipeable pipeable) {
         return fromValue(pipeable);
     }
 
+    /**
+     * From uRI.
+     *
+     * @param from the from
+     * @return the var
+     */
     public static var fromURI(var from) {
         if (from.isUri()) {
             return from;
@@ -278,14 +421,28 @@ public class DollarFactory {
         }
     }
 
+    /**
+     * From uRI.
+     *
+     * @param uri the uri
+     * @return the var
+     */
     public static var fromURI(String uri) {
         try {
-            return wrap(new DollarURI(ImmutableList.of(), uri));
+            return wrap(new DollarURI(ImmutableList.of(), URI.parse(uri)));
         } catch (Exception e) {
             return DollarStatic.handleError(e, null);
         }
     }
 
+    /**
+     * From stream.
+     *
+     * @param type the type
+     * @param rawBody the raw body
+     * @return the var
+     * @throws IOException the iO exception
+     */
     public static var fromStream(SerializedType type, InputStream rawBody) throws IOException {
         if (type == SerializedType.JSON) {
             ObjectMapper mapper = new ObjectMapper();
@@ -302,6 +459,12 @@ public class DollarFactory {
         }
     }
 
+    /**
+     * From future.
+     *
+     * @param future the future
+     * @return the var
+     */
     public static var fromFuture(Future<var> future) {
         return wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
@@ -309,6 +472,14 @@ public class DollarFactory {
                 new DollarLambda(i -> future.get(), false)));
     }
 
+    /**
+     * Failure with source.
+     *
+     * @param failureType the failure type
+     * @param throwable the throwable
+     * @param source the source
+     * @return the var
+     */
     public static var failureWithSource(FailureType failureType, Throwable throwable, SourceAware source) {
         if (source == null) {
             throw new NullPointerException();
@@ -322,56 +493,22 @@ public class DollarFactory {
         }
     }
 
+    /**
+     * Block collection.
+     *
+     * @param var the var
+     * @return the var
+     */
     public static var blockCollection(List<var> var) {
         return wrap(new DollarBlockCollection(var));
     }
 
-    //    public static var _old`deserialize(Type type, String s) {
-//        switch(type) {
-//            case VOID:
-//                return $void();
-//            case INTEGER:
-//                return wrap(new DollarInteger(Arrays.asList(), Long.parseLong(s)));
-//            case BOOLEAN:
-//                return wrap(new DollarBoolean(Arrays.asList(), Boolean.parseBoolean(s)));
-//            case DATE:
-//                return wrap(new DollarDate(Arrays.asList(), LocalDateTime.parse(s)));
-//            case DECIMAL:
-//                return wrap(new DollarDecimal(Arrays.asList(), Double.parseDouble(s)));
-//            case LIST:
-//                final JsonArray array = new JsonArray(s);
-//                ArrayList<Object> arrayList= new ArrayList<>();
-//                for (Object o : array) {
-//                    JsonObject jsonObject= (JsonObject) o;
-//                    final Type arrayElementType = Type.valueOf(jsonObject.getString("type"));
-//                    arrayList.add(deserialize(arrayElementType, jsonObject.getString("value")));
-//                }
-//                return wrap(new DollarList(Arrays.asList(), arrayList));
-//            case MAP:
-//                final JsonObject json = new JsonObject(s);
-//                LinkedHashMap<String,Object> map= new LinkedHashMap<>();
-//                final Set<String> fieldNames = json.getFieldNames();
-//                for (String fieldName : fieldNames) {
-//                    final JsonObject fieldObject = json.getObject(fieldName);
-//                    final Type arrayElementType = Type.valueOf(fieldObject.getString("type"));
-//                    map.put(fieldName, deserialize(arrayElementType, fieldObject.getString("value")));
-//                }
-//                return wrap(new DollarMap(Arrays.asList(), map));
-//            case RANGE:
-//                final JsonObject jsonObject = new JsonObject(s);
-//                final Type rangeType = Type.valueOf(jsonObject.getString("type"));
-//                final var lower = deserialize(rangeType, jsonObject.getString("lower"));
-//                final var upper = deserialize(rangeType, jsonObject.getString("upper"));
-//                return wrap(new DollarRange(Arrays.asList(), lower, upper));
-//            case URI:
-//                return wrap(new DollarURI(Arrays.asList(), s));
-//            case STRING:
-//                return wrap(new DollarString(Arrays.asList(), s));
-//            default:
-//                throw new DollarException("Unrecognized type " + type);
-//        }
-//    }
-//
+    /**
+     * Deserialize var.
+     *
+     * @param s the s
+     * @return the var
+     */
     public static var deserialize(String s) {
         JsonObject jsonObject = new JsonObject(s);
         return fromJson(jsonObject);
@@ -422,7 +559,7 @@ public class DollarFactory {
                 final var upper = fromJson(jsonObject.get(UPPERBOUND_KEY));
                 return wrap(new DollarRange(ImmutableList.of(), lower, upper));
             case URI:
-                return wrap(new DollarURI(ImmutableList.of(), jsonObject.getString(VALUE_KEY)));
+                return wrap(new DollarURI(ImmutableList.of(), URI.parse(jsonObject.getString(VALUE_KEY))));
             case STRING:
                 if (!(jsonObject.get(VALUE_KEY) instanceof String)) {
                     System.out.println(jsonObject.get(VALUE_KEY));
@@ -472,6 +609,12 @@ public class DollarFactory {
         }
     }
 
+    /**
+     * Serialize string.
+     *
+     * @param value the value
+     * @return the string
+     */
     public static String serialize(var value) {
         final Object jsonObject = toJson(value._fixDeep());
         return jsonObject.toString();
@@ -484,6 +627,12 @@ public class DollarFactory {
         return jsonObject;
     }
 
+    /**
+     * To json.
+     *
+     * @param value the value
+     * @return the object
+     */
     public static Object toJson(var value) {
         switch (value.$type()) {
             case VOID:
@@ -524,7 +673,7 @@ public class DollarFactory {
             case RANGE:
                 final JsonObject rangeObject = new JsonObject();
                 rangeObject.putString(TYPE_KEY, value.$type().name());
-                final Range range = (Range) value.$();
+                final Range range = value.$();
                 rangeObject.put(LOWERBOUND_KEY, toJson($(range.lowerEndpoint())));
                 rangeObject.put(UPPERBOUND_KEY, toJson($(range.upperEndpoint())));
                 return rangeObject;
@@ -533,4 +682,15 @@ public class DollarFactory {
         }
     }
 
+    /**
+     * From range.
+     *
+     * @param from the from
+     * @param to   the to
+     *
+     * @return the var
+     */
+    public static var fromRange(var from,
+                                var to) {
+        return wrap(new DollarRange(ImmutableList.of(), from, to));}
 }

@@ -209,6 +209,7 @@ i <=> 6
 
 
 sub= (j *= random:dummy)
+@@j
 colors= ["red","green","blue"]
 @@j * #colors
 k := colors[j * #colors]

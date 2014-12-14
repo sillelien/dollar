@@ -16,12 +16,9 @@
 
 package me.neilellis.dollar;
 
-import me.neilellis.dollar.deps.DependencyRetriever;
 import me.neilellis.dollar.json.JsonUtil;
 import me.neilellis.dollar.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
-import org.sonatype.aether.resolution.DependencyResolutionException;
-import org.sonatype.aether.util.artifact.DefaultArtifact;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,13 +41,13 @@ public abstract class Unit extends DollarStatic implements Pipeable {
         $THIS.set(main);
     }
 
-    public static void requires(String artifact) {
-        try {
-            DependencyRetriever.retrieve(new DefaultArtifact(artifact));
-        } catch (DependencyResolutionException e) {
-            DollarStatic.logAndRethrow(e);
-        }
-    }
+//    public static void requires(String artifact) {
+//        try {
+//            DependencyRetriever.retrieve(new DefaultArtifact(artifact));
+//        } catch (DependencyResolutionException e) {
+//            DollarStatic.logAndRethrow(e);
+//        }
+//    }
 
     public static void main(String[] args) throws IllegalAccessException, InstantiationException {
         if ($THIS.get() == null) {

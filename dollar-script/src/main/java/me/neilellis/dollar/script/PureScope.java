@@ -37,6 +37,44 @@ public class PureScope extends ScriptScope {
         super(parent, source, name);
     }
 
+    @Override public void clear() {
+        throw new UnsupportedOperationException("Cannot clear a pure scope");
+    }
+
+    @Override public var get(String key, boolean mustFind) {
+        if (key.matches("[0-9]+")) {
+            throw new AssertionError("Cannot get numerical keys, use getParameter");
+        }
+        if (DollarStatic.config.debugScope()) { log.info("Looking up " + key + " in " + this); }
+        Scope scope = getScopeForKey(key);
+        if (scope == null) {
+            scope = this;
+        } else {
+            if (DollarStatic.config.debugScope()) { log.info("Found " + key + " in " + scope); }
+        }
+        Variable result = scope.getVariables().get(key);
+        if (result != null && !(result.readonly && result.fixed) && !result.pure) {
+            throw new UnsupportedOperationException(
+                    "Cannot access non constant values in a pure expression, put either 'pure' or 'const' as " +
+                    "appropriate before '" +
+                    key +
+                    "'");
+        }
+        if (mustFind) {
+            if (result == null) {
+                throw new VariableNotFoundException(key, this);
+            } else {
+                return result.value;
+            }
+        } else {
+            return result != null ? result.value : $void();
+        }
+    }
+
+    @Override public Scope getScopeForParameters() {
+        return this;
+    }
+
     @Override public var set(String key, var value, boolean readonly, var constraint, boolean isVolatile, boolean fixed,
                              boolean pure) {
         if (isVolatile) {
@@ -52,7 +90,7 @@ public class PureScope extends ScriptScope {
         if (scope == null) {
             scope = this;
         }
-        if (DollarStatic.config.isDebugScope()) { log.info("Setting " + key + " in " + scope); }
+        if (DollarStatic.config.debugScope()) { log.info("Setting " + key + " in " + scope); }
         if (scope != null && scope.getVariables().containsKey(key) && scope.getVariables().get(key).readonly) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
@@ -76,44 +114,6 @@ public class PureScope extends ScriptScope {
         }
         scope.notifyScope(key, fixedValue);
         return value;
-    }
-
-    @Override public void clear() {
-        throw new UnsupportedOperationException("Cannot clear a pure scope");
-    }
-
-    @Override public var get(String key, boolean mustFind) {
-        if (key.matches("[0-9]+")) {
-            throw new AssertionError("Cannot get numerical keys, use getParameter");
-        }
-        if (DollarStatic.config.isDebugScope()) { log.info("Looking up " + key + " in " + this); }
-        Scope scope = getScopeForKey(key);
-        if (scope == null) {
-            scope = this;
-        } else {
-            if (DollarStatic.config.isDebugScope()) { log.info("Found " + key + " in " + scope); }
-        }
-        Variable result = scope.getVariables().get(key);
-        if (result != null && !(result.readonly && result.fixed) && !result.pure) {
-            throw new UnsupportedOperationException(
-                    "Cannot access non constant values in a pure expression, put either 'pure' or 'const' as " +
-                    "appropriate before '" +
-                    key +
-                    "'");
-        }
-        if (mustFind) {
-            if (result == null) {
-                throw new VariableNotFoundException(key, this);
-            } else {
-                return result.value;
-            }
-        } else {
-            return result != null ? result.value : $void();
-        }
-    }
-
-    @Override public Scope getScopeForParameters() {
-        return this;
     }
 
     @Override

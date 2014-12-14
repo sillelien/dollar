@@ -17,10 +17,7 @@
 package me.neilellis.dollar;
 
 import com.jayway.restassured.RestAssured;
-import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.types.DollarRange;
-import me.neilellis.dollar.types.DollarURI;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -41,15 +38,15 @@ public class DollarSerializationTest {
     @BeforeClass
     public static void setUp() {
         profile = $("name", "Neil")
-                .$("progYears", new DollarRange(ImmutableList.of(), 1981, 2014))
-                .$("blog", new DollarURI(ImmutableList.of(), "http://neilellis.me"))
+                .$("progYears", $range(1981, 2014))
+                .$("blog", $uri("http://neilellis.me"))
                 .$("age", new Date().getYear() + 1900 - 1970)
-                .$("timestamp", $(LocalDateTime.now()))
+                .$("timestamp", LocalDateTime.now())
                 .$("wroteDollar", $(true))
                 .$("empty", $void())
-                .$("rating", $(0.7))
+                .$("rating", 0.7)
                 .$("gender", "male")
-                .$("projects", $jsonArray("snapito", "dollar"))
+                .$("projects", $list("snapito", "dollar"))
                 .$("location",
                    $("city", "brighton")
                            .$("postcode", "bn1 6jj")

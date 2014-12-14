@@ -36,16 +36,16 @@ import java.util.*;
 public class DollarURI extends AbstractDollar {
 
     private final StateMachine<ResourceState, Signal> stateMachine;
-    private final String uri;
+    private final URI uri;
     private URIHandler handler;
 
 
-    public DollarURI(@NotNull ImmutableList<Throwable> errors, String uri) {
+    public DollarURI(@NotNull ImmutableList<Throwable> errors, URI uri) {
         super(errors);
         this.uri = uri;
-        String scheme = uri.substring(0, uri.indexOf(":"));
+        String scheme = uri.scheme();
         try {
-            handler = Plugins.resolveURIProvider(scheme).forURI(scheme, URI.parse(uri));
+            handler = Plugins.resolveURIProvider(scheme).forURI(scheme, uri);
         } catch (Exception e) {
             throw new DollarException(e);
         }
@@ -195,6 +195,11 @@ public class DollarURI extends AbstractDollar {
                 }))));
     }
 
+    @Override
+    public int compareTo(@NotNull var o) {
+        return Comparator.<String>naturalOrder().compare(uri.toString(), o.toString());
+    }
+
     @NotNull
     @Override
     public ImmutableMap<String, var> $map() {
@@ -202,23 +207,8 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public int compareTo(@NotNull var o) {
-        return Comparator.<String>naturalOrder().compare(uri, o.toString());
-    }
-
-    @Override
     public boolean isBoolean() {
         return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean isTruthy() {
-        return handler != null;
     }
 
     @Override
@@ -229,6 +219,16 @@ public class DollarURI extends AbstractDollar {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return true;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return handler != null;
     }
 
 
@@ -299,7 +299,7 @@ public class DollarURI extends AbstractDollar {
 
     @Override
     public String S() {
-        return uri;
+        return uri.toString();
     }
 
 

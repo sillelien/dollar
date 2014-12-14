@@ -48,7 +48,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
     @NotNull
     @Guarded(ChainGuard.class)
     default var $(@NotNull String key, @Nullable Object value) {
-        return $set(DollarStatic.$(key), value);
+        return $set(DollarStatic.$(key), DollarStatic.$(value));
     }
 
     /**
@@ -248,24 +248,24 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
     /**
      * Convenience version of {@link #$remove(me.neilellis.dollar.var)} for the Java API.
      *
-     * @param value the value to be removed.
+     * @param valueToRemove the value to be removed.
      *
      * @return a new object with the value removed.
      */
     @NotNull
-    @Guarded(ChainGuard.class) default var remove(Object value) {
-        return $remove(DollarStatic.$(value));
+    @Guarded(ChainGuard.class) default var remove(Object valueToRemove) {
+        return $remove(DollarStatic.$(valueToRemove));
     }
 
     /**
      * Return a new version of this object with the supplied value removed. THe removal is type specific.
      *
-     * @param value the value to remove.
+     * @param valueToRemove the value to remove.
      *
      * @return a new object with the value removed.
      */
     @NotNull
-    @Guarded(ChainGuard.class) var $remove(var value);
+    @Guarded(ChainGuard.class) var $remove(var valueToRemove);
 
 
 }

@@ -21,46 +21,102 @@ import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.NotNullGuard;
 
 /**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
+ * The interface Log aware.
+ * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface LogAware {
 
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullGuard.class)
-    var debugf(String message, Object... values);
-
+    /**
+     * Debug var.
+     *
+     * @param message the message
+     *
+     * @return the var
+     */
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
     var debug(Object message);
 
+    /**
+     * Debug var.
+     *
+     * @return the var
+     */
     @Guarded(ChainGuard.class)
     var debug();
 
+    /**
+     * Debugf var.
+     *
+     * @param message the message
+     * @param values the values
+     * @return the var
+     */
     @Guarded(ChainGuard.class)
-    @Guarded(NotNullGuard.class)
-    var infof(String message, Object... values);
+    @Guarded(NotNullGuard.class) var debugf(String message, Object... values);
 
+    /**
+     * Error var.
+     *
+     * @param exception the exception
+     * @return the var
+     */
     @Guarded(ChainGuard.class)
-    @Guarded(NotNullGuard.class)
-    var info(Object message);
+    @Guarded(NotNullGuard.class) var error(Throwable exception);
 
+    /**
+     * Error var.
+     *
+     * @param message the message
+     * @return the var
+     */
     @Guarded(ChainGuard.class)
-    var info();
+    @Guarded(NotNullGuard.class) var error(Object message);
 
+    /**
+     * Error var.
+     *
+     * @return the var
+     */
+    @Guarded(ChainGuard.class) var error();
+
+    /**
+     * Errorf var.
+     *
+     * @param message the message
+     * @param values  the values
+     *
+     * @return the var
+     */
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
     var errorf(String message, Object... values);
 
+    /**
+     * Info var.
+     *
+     * @param message the message
+     * @return the var
+     */
     @Guarded(ChainGuard.class)
-    @Guarded(NotNullGuard.class)
-    var error(Throwable exception);
+    @Guarded(NotNullGuard.class) var info(Object message);
 
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullGuard.class)
-    var error(Object message);
+    /**
+     * Info var.
+     *
+     * @return the var
+     */
+    @Guarded(ChainGuard.class) var info();
 
+    /**
+     * Infof var.
+     *
+     * @param message the message
+     * @param values the values
+     * @return the var
+     */
     @Guarded(ChainGuard.class)
-    var error();
+    @Guarded(NotNullGuard.class) var infof(String message, Object... values);
 
 
 }

@@ -120,7 +120,7 @@ public abstract class NanoHttpdServer {
     }
 
     /**
-     * Override this to customize the server. <p/> <p/> (By default, this delegates to serveFile() and allows directory
+     * Override this to customize the server.   (By default, this delegates to serveFile() and allows directory
      * listing.)
      *
      * @param session The HTTP session
@@ -147,7 +147,7 @@ public abstract class NanoHttpdServer {
     }
 
     /**
-     * Override this to customize the server. <p/> <p/> (By default, this delegates to serveFile() and allows directory
+     * Override this to customize the server.   (By default, this delegates to serveFile() and allows directory
      * listing.)
      *
      * @param uri     Percent-decoded URI without parameters, for example "/index.cgi"
@@ -319,7 +319,7 @@ public abstract class NanoHttpdServer {
     }
 
     /**
-     * Temp file manager. <p/> <p>Temp file managers are created 1-to-1 with incoming requests, to create and cleanup
+     * Temp file manager.  <p>Temp file managers are created 1-to-1 with incoming requests, to create and cleanup
      * temporary files created as a result of handling the request.</p>
      */
     public interface TempFileManager {
@@ -329,7 +329,7 @@ public abstract class NanoHttpdServer {
     }
 
     /**
-     * A temp file. <p/> <p>Temp files are responsible for managing the actual temporary storage and cleaning themselves
+     * A temp file. <p>Temp files are responsible for managing the actual temporary storage and cleaning themselves
      * up when no longer needed.</p>
      */
     public interface TempFile {
@@ -372,7 +372,7 @@ public abstract class NanoHttpdServer {
     // ------------------------------------------------------------------------------- //
 
     /**
-     * Default threading strategy for NanoHttpd. <p/> <p>By default, the server spawns a new Thread for every incoming
+     * Default threading strategy for NanoHttpd.  <p>By default, the server spawns a new Thread for every incoming
      * request.  These are set to <i>daemon</i> status, and named according to the request number.  The name is useful
      * when profiling the application.</p>
      */
@@ -390,7 +390,7 @@ public abstract class NanoHttpdServer {
     }
 
     /**
-     * Default strategy for creating and cleaning up temporary files. <p/> <p></p>This class stores its files in the
+     * Default strategy for creating and cleaning up temporary files.  <p></p>This class stores its files in the
      * standard location (that is, wherever <code>java.io.tmpdir</code> points to).  Files are added to an internal
      * list, and deleted when no longer needed (that is, when <code>clear()</code> is invoked at the end of processing a
      * request).</p>
@@ -424,7 +424,7 @@ public abstract class NanoHttpdServer {
     }
 
     /**
-     * Default strategy for creating and cleaning up temporary files. <p/> <p></p></[>By default, files are created by
+     * Default strategy for creating and cleaning up temporary files.  <p></p></[>By default, files are created by
      * <code>File.createTempFile()</code> in the directory specified.</p>
      */
     public static class DefaultTempFile implements TempFile {

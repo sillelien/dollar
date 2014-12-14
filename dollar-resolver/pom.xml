@@ -19,33 +19,22 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>dollar-plugins</artifactId>
+        <artifactId>dollar</artifactId>
         <groupId>me.neilellis</groupId>
         <version>0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dollar-github-resolver-plugin</artifactId>
+    <artifactId>dollar-resolver</artifactId>
     <dependencies>
         <dependency>
-            <groupId>me.neilellis</groupId>
-            <artifactId>dollar-core</artifactId>
-            <version>0-SNAPSHOT</version>
-            <scope>provided</scope>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-aether</artifactId>
         </dependency>
         <dependency>
-            <groupId>me.neilellis</groupId>
-            <artifactId>dollar-script</artifactId>
-            <version>0-SNAPSHOT</version>
-            <scope>provided</scope>
+            <artifactId>maven-core</artifactId>
+            <groupId>org.apache.maven</groupId>
         </dependency>
-        <dependency>
-            <groupId>me.neilellis</groupId>
-            <artifactId>dollar-resolver</artifactId>
-            <version>0-SNAPSHOT</version>
-        </dependency>
-
-
     </dependencies>
 
 

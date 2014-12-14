@@ -31,6 +31,42 @@ public class DollarTypeTest {
     }
 
     @Test
+    public void testDouble() throws InterruptedException {
+        //Number types
+        assertEquals(1L, (long) $(1.0).L());
+
+        //identity
+        assertEquals($(1.0), $(1.0).D());
+        assertEquals($(1.0), $(1.0));
+        assertNotEquals($(1.0).D(), $(1.0));
+
+        //Lambda
+
+        assertEquals($((v) -> $(1)), $(1));
+        assertEquals($(1), $((v) -> $(1)));
+        assertTrue($((v) -> $(1.0)).isLambda());
+        assertTrue($((v) -> $(1.0)).isDecimal());
+        assertTrue($((v) -> $(1.0)).isNumber());
+        assertTrue($((v) -> $(1.0)).isSingleValue());
+
+        //isChecks
+        assertTrue($(1.0).isDecimal());
+        assertTrue($(1.0).isNumber());
+        assertTrue($(1.0).isSingleValue());
+
+        assertFalse($(1.0).isInteger());
+        assertFalse($(1.0).isMap());
+        assertFalse($(1.0).isList());
+        assertFalse($(1.0).isLambda());
+        assertFalse($(1.0).isString());
+        assertFalse($(1.0).isVoid());
+        assertFalse($(1.0).$isEmpty().isTrue());
+
+        //numeric functions
+        assertEquals(2.0, $(1.0).$inc().D(), 0.00001);
+    }
+
+    @Test
     public void testIntegers() throws InterruptedException {
         //Number types
         assertEquals(1, (int) $(1).I());
@@ -69,44 +105,6 @@ public class DollarTypeTest {
         assertEquals(2, (long) $(1).$inc().L());
 
 
-    }
-
-
-    @Test
-    public void testDouble() throws InterruptedException {
-        //Number types
-        assertEquals(1L, (long) $(1.0).L());
-
-        //identity
-        assertEquals($(1.0), $(1.0).D());
-        assertEquals($(1.0), $(1.0));
-        assertNotEquals($(1.0).D(), $(1.0));
-
-        //Lambda
-
-        assertEquals($((v) -> $(1)), $(1));
-        assertEquals($(1), $((v) -> $(1)));
-        assertTrue($((v) -> $(1.0)).isLambda());
-        assertTrue($((v) -> $(1.0)).isDecimal());
-        assertTrue($((v) -> $(1.0)).isNumber());
-        assertTrue($((v) -> $(1.0)).isSingleValue());
-
-
-        //isChecks
-        assertTrue($(1.0).isDecimal());
-        assertTrue($(1.0).isNumber());
-        assertTrue($(1.0).isSingleValue());
-
-        assertFalse($(1.0).isInteger());
-        assertFalse($(1.0).isMap());
-        assertFalse($(1.0).isList());
-        assertFalse($(1.0).isLambda());
-        assertFalse($(1.0).isString());
-        assertFalse($(1.0).isVoid());
-        assertFalse($(1.0).$isEmpty().isTrue());
-
-        //numeric functions
-        assertEquals(2.0, $(1.0).$inc().D(), 0.00001);
     }
 
 
