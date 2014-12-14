@@ -424,7 +424,7 @@ public abstract class NanoHttpdServer {
     }
 
     /**
-     * Default strategy for creating and cleaning up temporary files.  <p></p></[>By default, files are created by
+     * Default strategy for creating and cleaning up temporary files.  <p></p>By default, files are created by
      * <code>File.createTempFile()</code> in the directory specified.
      */
     public static class DefaultTempFile implements TempFile {
