@@ -33,7 +33,8 @@ import java.util.stream.Stream;
  */
 public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
                              OldAndDeprecated, VarInternal, NumericAware, BooleanAware, ControlFlowAware,
-                             AssertionAware, URIAware, MetadataAware, Comparable<var>, LogAware, StateAware<var> {
+                             AssertionAware, URIAware, MetadataAware, Comparable<var>, LogAware, StateAware<var>,
+                             CollectionLike {
 
 
     /**
@@ -52,47 +53,6 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
     }
 
     /**
-     * If this type supports the setting of Key/Value pairs this will set the supplied key value pair on a copy of this
-     * object. If it doesn't an exception will be thrown.
-     *
-     * @param key   a String key for the value to be stored in this value.
-     * @param value the {@link var} to add.
-     *
-     * @return the updated copy.
-     */
-    @NotNull
-    @Guarded(ChainGuard.class) var $set(@NotNull var key, @Nullable Object value);
-
-    /**
-     * Returns a {@link me.neilellis.dollar.json.JsonObject}, JsonArray or primitive type such that it can be added to
-     * either a {@link me.neilellis.dollar.json.JsonObject} or JsonArray.
-     *
-     * @return a Json friendly object.
-     */
-    @Nullable <R> R $();
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class) default var $(@NotNull Object key) {
-        return $get(DollarStatic.$(key));
-    }
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class) var $get(@NotNull var rhs);
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    default var $contains(@NotNull var value) {
-        return $containsValue(value);
-    }
-
-    @Guarded(ChainGuard.class)
-    @NotNull
-    @Guarded(NotNullParametersGuard.class) var $containsValue(@NotNull var value);
-
-    /**
      * If this is a void object return v otherwise return this.
      *
      * @param v the object to return if this is void.
@@ -105,45 +65,6 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
     @Guarded(NotNullParametersGuard.class) var $default(var v);
 
     /**
-     * Convenience method for the Java API. Returns true if this object has the supplied key.
-     *
-     * @param key the key
-     *
-     * @return true if the key exists.
-     */
-    @NotNull
-    @Guarded(NotNullParametersGuard.class) default var $has(@NotNull String key) {
-        return $has(DollarStatic.$(key));
-    }
-
-    /**
-     * Returns true if this object has the supplied key.
-     *
-     * @param key the key
-     *
-     * @return true if the key exists.
-     */
-    @NotNull
-    @Guarded(NotNullParametersGuard.class) var $has(@NotNull var key);
-
-    /**
-     * Returns a boolean var which is true if this is empty.
-     *
-     * @return a true var if it is empty.
-     */
-    @NotNull
-    @Guarded(ChainGuard.class) default var $isEmpty() {
-        return DollarStatic.$($size().I() == 0);
-    }
-
-    @NotNull
-    @Guarded(ChainGuard.class) var $size();
-
-    default Object $json() {
-        return DollarFactory.toJson(this);
-    }
-
-    /**
      * Returns the mime type of this {@link var} object. By default this will be 'application/json'
      *
      * @return the mime type associated with this object.
@@ -154,22 +75,8 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
         return DollarStatic.$("application/json");
     }
 
-    /**
-     * Remove by key. (Map like data only).
-     *
-     * @param key the key of the key/value pair to remove
-     *
-     * @return the modified var
-     */
-    @NotNull var $removeByKey(@NotNull String key);
-
     default String $serialized() {
         return DollarFactory.toJson(this).toString();
-    }
-
-    @NotNull
-    default var $set(@NotNull String key, @Nullable Object value) {
-        return $set(DollarStatic.$(key), value);
     }
 
     /**
@@ -180,7 +87,6 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
      * @return a stream of values.
      */
     @NotNull Stream<var> $stream(boolean parallel);
-
 
     /**
      * Prints the S() value of this {@link var} to standard error.
@@ -206,33 +112,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
     @NotNull
     @Guarded(NotNullGuard.class)
     default JsonArray jsonArray() {
-        return (JsonArray) DollarFactory.toJson(this);
-    }
-
-    /**
-     * Returns this object as a org.json.JSONObject.
-     *
-     * NB: This conversion is quite efficient.
-     *
-     * @return a JSONObject
-     */
-    @Nullable
-    default JSONObject orgjson() {
-        ImmutableJsonObject json = json();
-        if (json != null) {
-            return new JSONObject(json.toMap());
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Convert this to a Dollar JsonObject
-     *
-     * @return this as a JsonObject
-     */
-    default @Nullable ImmutableJsonObject json() {
-        return new ImmutableJsonObject((JsonObject) DollarFactory.toJson(this));
+        return (JsonArray) DollarFactory.toJson(DollarStatic.$list(this));
     }
 
     /**
@@ -245,27 +125,44 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
         return this;
     }
 
+    @NotNull String toDollarScript();
+
     /**
-     * Convenience version of {@link #$remove(me.neilellis.dollar.var)} for the Java API.
+     * Returns a {@link me.neilellis.dollar.json.JsonObject}, JsonArray or primitive type such that it can be added to
+     * either a {@link me.neilellis.dollar.json.JsonObject} or JsonArray.
      *
-     * @param valueToRemove the value to be removed.
-     *
-     * @return a new object with the value removed.
+     * @return a Json friendly object.
      */
-    @NotNull
-    @Guarded(ChainGuard.class) default var remove(Object valueToRemove) {
-        return $remove(DollarStatic.$(valueToRemove));
+    @Nullable <R> R toJavaObject();
+
+    /**
+     * Returns this object as a org.json.JSONObject.
+     *
+     * NB: This conversion is quite efficient.
+     *
+     * @return a JSONObject
+     */
+    @Nullable
+    default JSONObject toOrgJson() {
+        ImmutableJsonObject json = toJsonObject();
+        if (json != null) {
+            return new JSONObject(json.toMap());
+        } else {
+            return null;
+        }
     }
 
     /**
-     * Return a new version of this object with the supplied value removed. THe removal is type specific.
+     * Convert this to a Dollar JsonObject
      *
-     * @param valueToRemove the value to remove.
-     *
-     * @return a new object with the value removed.
+     * @return this as a JsonObject
      */
-    @NotNull
-    @Guarded(ChainGuard.class) var $remove(var valueToRemove);
+    default @Nullable ImmutableJsonObject toJsonObject() {
+        return new ImmutableJsonObject((JsonObject) toJsonType());
+    }
 
+    default Object toJsonType() {
+        return DollarFactory.toJson(this);
+    }
 
 }

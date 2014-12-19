@@ -24,6 +24,6 @@ class Bulletin {
 
 
     public static void main(String[] args) throws IOException {
-        new DollarParser().parse(Bulletin.class.getResourceAsStream("/bulletin.ds"), false);
+        new DollarParser().parse(Bulletin.class.getResourceAsStream("/bulletin.ds"), "/bulletin.ds", false);
     }
 }

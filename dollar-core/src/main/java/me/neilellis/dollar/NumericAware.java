@@ -44,17 +44,8 @@ public interface NumericAware {
 
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class) var $minus(@NotNull var v);
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class) var $divide(@NotNull var v);
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    default var $inc() {
-        return $plus($(1));
+    default @Guarded(ChainGuard.class) var $minus(@NotNull var v) {
+        return $plus(v.$negate());
     }
 
     /**
@@ -68,6 +59,21 @@ public interface NumericAware {
     @NotNull
     @Guarded(ChainGuard.class) var $plus(@Nullable var v);
 
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class) var $negate();
+
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class) var $divide(@NotNull var v);
+
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    default var $inc() {
+        return $plus($(1));
+    }
+
     default var $minus(int i) {
         return $minus(DollarStatic.$(i));
     }
@@ -80,11 +86,37 @@ public interface NumericAware {
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class) var $multiply(@NotNull var v);
 
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class) var $negate();
-
     default var $plus(int i) {
         return $plus(DollarStatic.$(i));
     }
+
+    Integer I();
+
+    Long L();
+
+    default Number N() {
+        return D();
+    }
+
+    default boolean isNegative() {
+        return sign() <= 0;
+    }
+
+    default boolean isPositive() {
+        return sign() >= 0;
+    }
+
+    default boolean isZero() {
+        return sign() == 0;
+    }
+
+    default int sign() {
+        if (D() == null) {
+            return 0;
+        }
+        return (int) Math.signum(D());
+    }
+
+    Double D();
+
 }

@@ -19,7 +19,9 @@ package me.neilellis.dollar.script.operators;
 import me.neilellis.dollar.script.DollarParser;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.SourceValue;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
 import static me.neilellis.dollar.DollarStatic.fix;
@@ -27,7 +29,7 @@ import static me.neilellis.dollar.DollarStatic.fix;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class ForOperator implements Map<Object[], Map<? super var, ? extends var>> {
+public class ForOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
     private final DollarParser dollarParser;
     private boolean pure;
@@ -38,7 +40,8 @@ public class ForOperator implements Map<Object[], Map<? super var, ? extends var
         this.pure = pure;
     }
 
-    public Map<? super var, ? extends var> map(Object[] objects) {
+    public Map<? super var, ? extends var> map(Token token) {
+        Object[] objects = (Object[]) token.value();
         return rhs -> {
             return DollarScriptSupport.wrapReactiveUnary(scope, rhs, () -> {
                 return dollarParser.inScope(pure, "for", scope, newScope -> {
@@ -47,7 +50,7 @@ public class ForOperator implements Map<Object[], Map<? super var, ? extends var
                         return rhs._fixDeep(false);
                     });
                 });
-            });
+            }, new SourceValue(scope, token));
         };
     }
 }

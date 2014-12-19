@@ -61,7 +61,7 @@ public class VariableOperator extends UnaryOp {
                 return scope.getParameter(key);
             }
             return scope.get(key);
-        });
+        }, source);
         scope.listen(from.$S(), lambda);
         lambda.setMetaAttribute("variable", from.$S());
         return lambda;

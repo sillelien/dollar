@@ -48,20 +48,22 @@ public class ScriptScope implements Scope {
     private final String source;
     private final Multimap<String, var> listeners = LinkedListMultimap.create();
     private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
+    private final String file;
     Scope parent;
     private Parser<var> parser;
     private DollarParser dollarParser;
     private boolean parameterScope;
-
     public ScriptScope(String name) {
         this.parent = null;
         this.source = "<unknown>";
+        this.file = "<unknown file>";
         this.dollarParser = null;
         id = String.valueOf(name + ":" + counter.incrementAndGet());
     }
 
-    public ScriptScope(Scope parent, String source, String name) {
+    public ScriptScope(Scope parent, String file, String source, String name) {
         this.parent = parent;
+        this.file = file;
         if (source == null) {
             this.source = "<unknown>";
         } else {
@@ -72,14 +74,15 @@ public class ScriptScope implements Scope {
         id = String.valueOf(name + ":" + counter.incrementAndGet());
     }
 
-    public ScriptScope(DollarParser dollarParser, String source) {
+    public ScriptScope(DollarParser dollarParser, String source, String file) {
         this.source = source;
         this.dollarParser = dollarParser;
+        this.file = file;
         id = String.valueOf("(top):" + counter.incrementAndGet());
     }
 
     public Scope addChild(String source, String name) {
-        return new ScriptScope(this, source, name);
+        return new ScriptScope(this, file, source, name);
     }
 
     @Override
@@ -141,6 +144,10 @@ public class ScriptScope implements Scope {
 
     @Override public void setDollarParser(DollarParser dollarParser) {
         this.dollarParser = dollarParser;
+    }
+
+    @Override public String getFile() {
+        return file;
     }
 
     @Override public Multimap<String, var> getListeners() {

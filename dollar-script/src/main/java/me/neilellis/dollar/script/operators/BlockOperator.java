@@ -17,20 +17,22 @@
 package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarParser;
+import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.SourceValue;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
 import java.util.List;
 
 import static me.neilellis.dollar.DollarStatic.$void;
-import static me.neilellis.dollar.types.DollarFactory.fromLambda;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class BlockOperator implements Map<List<var>, var> {
+public class BlockOperator implements Map<Token, var> {
     private final Scope scope;
     private final DollarParser dollarParser;
     private boolean pure;
@@ -41,15 +43,17 @@ public class BlockOperator implements Map<List<var>, var> {
         this.pure = pure;
     }
 
-    @Override public var map(List<var> l) {
-        return fromLambda(parallel -> dollarParser.inScope(pure, "block", scope, newScope -> {
-                              if (l.size() > 0) {
-                                  return DollarFactory.blockCollection(l);
+    @Override public var map(Token token) {
+        List<var> l = (List<var>) token.value();
+        return DollarScriptSupport.wrapLambda(new SourceValue(scope, token), scope,
+                                              parallel -> dollarParser.inScope(pure, "block", scope, newScope -> {
+                                                  if (l.size() > 0) {
+                                                      return DollarFactory.blockCollection(l);
 //                        return $(l);
-                              } else {
-                                  return $void();
-                              }
-                          })
+                                                  } else {
+                                                      return $void();
+                                                  }
+                                              })
         );
     }
 }

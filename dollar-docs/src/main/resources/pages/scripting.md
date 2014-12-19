@@ -355,7 +355,7 @@ Dollar supports a decimal date system where each day is 1.0. This means it's pos
 @@ DATE() + 1
 @@ DATE() - 1
 
-.: DATE() + "1.0" is Date
+.: DATE() + "1.0" is String
 .: DATE() / "1.0" is Decimal
 ```
 

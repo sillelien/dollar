@@ -19,12 +19,22 @@ package me.neilellis.dollar.types;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.collections.ImmutableList;
+import me.neilellis.dollar.guard.Guarded;
+import me.neilellis.dollar.guard.NotNullGuard;
+import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import static me.neilellis.dollar.types.DollarFactory.*;
+import static me.neilellis.dollar.types.ErrorType.*;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -32,14 +42,10 @@ import java.util.Comparator;
 public class DollarString extends AbstractDollarSingleValue<String> {
 
 
+    private static final int MAX_STRING_LENGTH = Integer.MAX_VALUE;
+
     public DollarString(@NotNull ImmutableList<Throwable> errors, @NotNull String value) {
         super(errors, value);
-    }
-
-    @NotNull
-    @Override
-    public <R> R $() {
-        return (R) value;
     }
 
     @NotNull
@@ -52,11 +58,48 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return DollarStatic.$(String.valueOf((char) (value.charAt(value.length() - 1) - 1)));
     }
 
+    @NotNull @Override public var $minus(@NotNull var rhs) {
+        return fromStringValue(value.replace(rhs.toString(), ""), errors(), rhs.errors());
+    }
+
     @NotNull
     @Override
-    public var $divide(@NotNull var v) {
-        final String[] split = value.split(v.S());
-        return DollarFactory.fromValue(Arrays.asList(split), errors());
+    public var $negate() {
+        return fromValue(new StringBuilder(value).reverse().toString(), errors());
+    }
+
+    @NotNull
+    @Override
+    public var $divide(@NotNull var rhs) {
+        var rhsFix = rhs._fixDeep();
+        if (rhsFix.isString() && !rhsFix.toString().isEmpty()) {
+            try {
+//                final Pattern pattern = Pattern.compile(rhsFix.toString(),Pattern.LITERAL);
+                final String quote = Pattern.quote(rhsFix.toString());
+                final String[] split = value.split(quote);
+                if (split.length == 1) {
+                    return this;
+                }
+
+                return fromValue(Arrays.asList(split), errors(), rhsFix.errors());
+            } catch (PatternSyntaxException pse) {
+                return failure(BAD_REGEX, pse, false);
+            }
+        } else if (rhsFix.isNumber()) {
+            if (rhsFix.D() == 0.0) {
+                return infinity(true, errors(), rhsFix.errors());
+            }
+            if (rhsFix.D() > 0.0 && rhsFix.D() < 1.0) {
+                return $multiply(fromValue(1.0 / rhsFix.D(), rhs.errors()));
+            }
+            if (rhsFix.D() < 0) {
+                return this;
+            }
+            return fromStringValue(value.substring(0, (int) ((double) value.length() / rhsFix.D())), errors(),
+                                   rhsFix.errors());
+        } else {
+            return this;
+        }
 
     }
 
@@ -67,24 +110,44 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @NotNull
     @Override
     public var $modulus(@NotNull var v) {
-        return DollarFactory.failure(FailureType.INVALID_STRING_OPERATION);
+        return failure(INVALID_STRING_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $multiply(@NotNull var v) {
+    public var $multiply(@NotNull var rhs) {
         String newValue = "";
-        Long max = v.L();
+        var rhsFix = rhs._fixDeep();
+        if (rhsFix.isNumber()) {
+            if (rhsFix.D() == 0.0) {
+                return fromStringValue("", errors(), rhsFix.errors());
+            }
+            if (rhsFix.D() > 0.0 && rhsFix.D() < 1.0) {
+                return $divide(fromValue(1.0 / rhsFix.D(), rhs.errors()));
+            }
+            if (rhsFix.I() < 0) {
+                return this;
+            }
+        }
+        Long max = rhs.L();
+        if (max * value.length() > MAX_STRING_LENGTH) {
+            return failure(STRING_TOO_LARGE,
+                           "String multiplication would result in a string with size of " + (max * value.length()),
+                           false);
+        }
         for (int i = 0; i < max; i++) {
             newValue = newValue + value;
         }
-        return DollarFactory.fromValue(newValue, errors());
+        return fromValue(newValue, errors());
     }
 
-    @NotNull
     @Override
-    public var $negate() {
-        return DollarFactory.fromValue(new StringBuilder(value).reverse().toString(), errors());
+    public Integer I() {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException nfe) {
+            return null;
+        }
     }
 
     @Override
@@ -104,26 +167,17 @@ public class DollarString extends AbstractDollarSingleValue<String> {
                 return DollarStatic.$(Long.parseLong(value));
             case VOID:
                 return DollarStatic.$void();
+            case DATE:
+                return fromValue(LocalDateTime.parse(value));
             case URI:
-                return DollarFactory.fromURI(value);
+                return fromURI(value);
             default:
-                return DollarFactory.failure(FailureType.INVALID_CAST);
+                return failure(INVALID_CAST);
         }
     }
 
     @Override public Type $type() {
         return Type.STRING;
-    }
-
-    @NotNull @Override
-    public Integer I() {
-        return Integer.parseInt(value);
-    }
-
-    @NotNull
-    @Override
-    public Number N() {
-        return D();
     }
 
     @Override
@@ -136,15 +190,38 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return false;
     }
 
-    @NotNull
-    @Override
-    public var $plus(var v) {
-        return DollarFactory.fromValue(value + v.toString(), errors());
-    }
-
     @NotNull @Override
     public var $size() {
         return DollarStatic.$(value.length());
+    }
+
+    @NotNull
+    @Override
+    public var $plus(var rhs) {
+        final ImmutableList<Throwable> thisErrors = errors();
+        final ArrayList<Throwable> errors = new ArrayList<>();
+        errors.addAll(thisErrors.mutable());
+        errors.addAll(rhs.errors().mutable());
+        return wrap(new DollarString(ImmutableList.copyOf(errors), value + rhs.S()));
+    }
+
+    @Override
+    public Double D() {
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException nfe) {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean isString() {
+        return true;
+    }
+
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass") @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj != null && value.equals(obj.toString());
     }
 
     @Override
@@ -158,16 +235,6 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean isTruthy() {
-        return !value.isEmpty();
-    }
-
-    @Override
     public boolean isFalse() {
         return false;
     }
@@ -178,12 +245,28 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
-    public boolean isString() {
-        return true;
+    public boolean isTrue() {
+        return false;
     }
 
-    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass") @Override
-    public boolean equals(@Nullable Object obj) {
-        return obj != null && value.equals(obj.toString());
+    @Override
+    public boolean isTruthy() {
+        return !value.isEmpty();
+    }
+
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    public JsonArray jsonArray() {
+        return new JsonArray(value);
+    }
+
+    @NotNull @Override public String toDollarScript() {
+        return String.format("\"%s\"", org.apache.commons.lang.StringEscapeUtils.escapeJava(value));
+    }
+
+    @NotNull
+    @Override
+    public <R> R toJavaObject() {
+        return (R) value;
     }
 }

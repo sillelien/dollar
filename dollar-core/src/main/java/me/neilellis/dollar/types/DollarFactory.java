@@ -28,7 +28,7 @@ import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.json.impl.Json;
 import me.neilellis.dollar.monitor.DollarMonitor;
-import me.neilellis.dollar.script.SourceAware;
+import me.neilellis.dollar.script.Source;
 import me.neilellis.dollar.uri.URI;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
@@ -40,6 +40,7 @@ import spark.QueryParamsMap;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.Future;
@@ -56,6 +57,10 @@ public class DollarFactory {
      * The constant VALUE_KEY.
      */
     public static final String VALUE_KEY = "value";
+    /**
+     * The constant VALUE_KEY.
+     */
+    public static final String POSITIVE_KEY = "positive";
     /**
      * The constant TYPE_KEY.
      */
@@ -96,6 +101,8 @@ public class DollarFactory {
      * The constant INTEGER_ZERO.
      */
     public static final var INTEGER_ZERO = wrap(new DollarInteger(ImmutableList.of(), 0L));
+
+    public static final var INFINITY = wrap(new DollarInfinity(true));
 
 
     /**
@@ -174,7 +181,7 @@ public class DollarFactory {
             return wrap(new DollarList(errors, new JsonArray(o.toString())));
         }
         if (o instanceof Map) {
-            return wrap(new DollarMap(errors, (Map<String, Object>) o));
+            return wrap(new DollarMap(errors, (Map) o));
         }
         if (o instanceof QueryParamsMap) {
             return create(errors, DollarStatic.paramMapToJson(((QueryParamsMap) o).toMap()));
@@ -183,10 +190,10 @@ public class DollarFactory {
             return wrap(new DollarList(errors, (ImmutableList<?>) o));
         }
         if (o instanceof List) {
-            return wrap(new DollarList(errors, ImmutableList.copyOf((List<Object>) o)));
+            return wrap(new DollarList(errors, ImmutableList.copyOf((List) o)));
         }
         if (o instanceof Collection) {
-            return wrap(new DollarList(errors, ImmutableList.copyOf(new ArrayList<>((Collection<Object>) o))));
+            return wrap(new DollarList(errors, ImmutableList.copyOf(new ArrayList<>((Collection<?>) o))));
         }
         if (o.getClass().isArray()) {
             return wrap(new DollarList(errors, (Object[]) o));
@@ -208,6 +215,12 @@ public class DollarFactory {
                 return DOUBLE_ZERO;
             }
             return wrap(new DollarDecimal(errors, (Double) o));
+        }
+        if (o instanceof BigDecimal) {
+            if (errors.size() == 0 && ((BigDecimal) o).doubleValue() == 0.0) {
+                return DOUBLE_ZERO;
+            }
+            return wrap(new DollarDecimal(errors, ((BigDecimal) o).doubleValue()));
         }
         if (o instanceof Float) {
             if (errors.size() == 0 && (Float) o == 0.0) {
@@ -249,6 +262,9 @@ public class DollarFactory {
         if (o instanceof String) {
             if (((String) o).matches("^[a-zA-Z0-9]+$")) {
                 return wrap(new DollarString(errors, (String) o));
+
+            } else if (((String) o).matches("^\\s*\\[.*")) {
+                return wrap(new DollarList(errors, new JsonArray(o.toString())));
             } else {
                 try {
                     return wrap(new DollarMap(errors, new JsonObject((String) o)));
@@ -294,15 +310,15 @@ public class DollarFactory {
     /**
      * Failure var.
      *
-     * @param failureType the failure type
+     * @param errorType the failure type
      * @return the var
      */
     @NotNull
-    public static var failure(FailureType failureType) {
+    public static var failure(ErrorType errorType) {
         if (DollarStatic.config.failFast()) {
-            throw new DollarFailureException(failureType);
+            throw new DollarFailureException(errorType);
         } else {
-            return wrap(new DollarFail(failureType));
+            return wrap(new DollarError(errorType, ""));
         }
     }
 
@@ -339,34 +355,37 @@ public class DollarFactory {
     /**
      * Failure var.
      *
-     * @param failureType the failure type
+     * @param errorType the failure type
      * @param t the t
+     * @param quiet to always avoid failing fast
      * @return the var
      */
     @NotNull
-    public static var failure(FailureType failureType, Throwable t) {
-        if (DollarStatic.config.failFast()) {
-            throw new DollarFailureException(t, failureType);
+    public static var failure(ErrorType errorType, Throwable t, boolean quiet) {
+        if (DollarStatic.config.failFast() && !quiet) {
+            throw new DollarFailureException(t, errorType);
         } else {
-            return wrap(new DollarFail(ImmutableList.of(t), failureType));
+            t.printStackTrace(System.err);
+            return wrap(new DollarError(ImmutableList.of(t), errorType, t.getMessage()));
         }
     }
 
     /**
      * Failure var.
      *
-     * @param failureType the failure type
+     * @param errorType the failure type
      * @param message the message
      * @param quiet the quiet
      * @return the var
      */
-    public static var failure(FailureType failureType, String message, boolean quiet) {
+    public static var failure(ErrorType errorType, String message, boolean quiet) {
         if (DollarStatic.config.failFast() && !quiet) {
-            throw new DollarFailureException(failureType, message);
+            throw new DollarFailureException(errorType, message);
         } else {
-            return wrap(new DollarFail(ImmutableList.of(new DollarException(message)), failureType));
+            return wrap(new DollarError(ImmutableList.of(new DollarException(message)), errorType, message));
         }
     }
+
 
     /**
      * Failure var.
@@ -375,7 +394,7 @@ public class DollarFactory {
      * @return the var
      */
     public static var failure(Throwable throwable) {
-        return failure(FailureType.EXCEPTION, throwable);
+        return failure(ErrorType.EXCEPTION, throwable, false);
     }
 
     /**
@@ -394,7 +413,17 @@ public class DollarFactory {
      * @return the var
      */
     public static var fromStringValue(String body) {
-        return create(ImmutableList.<Throwable>of(), body);
+        return wrap(new DollarString(ImmutableList.of(), body));
+    }
+
+    /**
+     * From string value.
+     *
+     * @param body the body
+     * @return the var
+     */
+    public static var fromStringValue(String body, ImmutableList<Throwable>... errors) {
+        return wrap(new DollarString(ImmutableList.copyOf(errors), body));
     }
 
     /**
@@ -475,21 +504,21 @@ public class DollarFactory {
     /**
      * Failure with source.
      *
-     * @param failureType the failure type
+     * @param errorType the failure type
      * @param throwable the throwable
      * @param source the source
      * @return the var
      */
-    public static var failureWithSource(FailureType failureType, Throwable throwable, SourceAware source) {
+    public static var failureWithSource(ErrorType errorType, Throwable throwable, Source source) {
         if (source == null) {
             throw new NullPointerException();
         }
         if (DollarStatic.config.failFast()) {
-            final DollarFailureException dollarFailureException = new DollarFailureException(throwable, failureType);
+            final DollarFailureException dollarFailureException = new DollarFailureException(throwable, errorType);
             dollarFailureException.addSource(source);
             throw dollarFailureException;
         } else {
-            return wrap(new DollarFail(ImmutableList.of(throwable), failureType));
+            return wrap(new DollarError(ImmutableList.of(throwable), errorType, null));
         }
     }
 
@@ -528,8 +557,6 @@ public class DollarFactory {
                 return fromValue(jsonObject.getLong(VALUE_KEY));
             case BOOLEAN:
                 return fromValue(jsonObject.getBoolean(VALUE_KEY));
-            case ERROR:
-                return $void();
             case DATE:
                 return wrap(new DollarDate(ImmutableList.of(), LocalDateTime.parse(jsonObject.getString(TEXT_KEY))));
             case DECIMAL:
@@ -554,12 +581,18 @@ public class DollarFactory {
                     map.put(fieldName, fromJson(json.get(fieldName)));
                 }
                 return wrap(new DollarMap(ImmutableList.of(), map));
+            case ERROR:
+                final String errorType = jsonObject.getString("errorType");
+                final String errorMessage = jsonObject.getString("errorMessage");
+                return wrap(new DollarError(ImmutableList.<Throwable>of(), ErrorType.valueOf(errorType), errorMessage));
             case RANGE:
                 final var lower = fromJson(jsonObject.get(LOWERBOUND_KEY));
                 final var upper = fromJson(jsonObject.get(UPPERBOUND_KEY));
                 return wrap(new DollarRange(ImmutableList.of(), lower, upper));
             case URI:
                 return wrap(new DollarURI(ImmutableList.of(), URI.parse(jsonObject.getString(VALUE_KEY))));
+            case INFINITY:
+                return wrap(new DollarInfinity(ImmutableList.of(), jsonObject.getBoolean(POSITIVE_KEY)));
             case STRING:
                 if (!(jsonObject.get(VALUE_KEY) instanceof String)) {
                     System.out.println(jsonObject.get(VALUE_KEY));
@@ -623,7 +656,7 @@ public class DollarFactory {
     private static JsonObject valueToJson(var value) {
         final JsonObject jsonObject = new JsonObject();
         jsonObject.putString(TYPE_KEY, value.$type().name());
-        jsonObject.putValue(VALUE_KEY, value.$());
+        jsonObject.putValue(VALUE_KEY, value.toJavaObject());
         return jsonObject;
     }
 
@@ -640,7 +673,7 @@ public class DollarFactory {
             case BOOLEAN:
             case DECIMAL:
             case STRING:
-                return value.$();
+                return value.toJavaObject();
             case DATE:
                 final JsonObject jsonObject = new JsonObject();
                 jsonObject.putValue(TYPE_KEY, value.$type().name());
@@ -652,6 +685,16 @@ public class DollarFactory {
                 uriJsonObject.putValue(TYPE_KEY, value.$type().name());
                 uriJsonObject.putValue(VALUE_KEY, value.$S());
                 return uriJsonObject;
+            case ERROR:
+                final JsonObject errorJsonObject = new JsonObject();
+                errorJsonObject.putValue(TYPE_KEY, value.$type().name());
+                errorJsonObject.putValue(VALUE_KEY, value.toJsonType());
+                return errorJsonObject;
+            case INFINITY:
+                final JsonObject infinityJsonObject = new JsonObject();
+                infinityJsonObject.putValue(TYPE_KEY, value.$type().name());
+                infinityJsonObject.putValue(POSITIVE_KEY, value.isPositive());
+                return infinityJsonObject;
             case LIST:
                 final JsonArray array = new JsonArray();
                 ImmutableList<var> arrayList = value.$list();
@@ -662,21 +705,23 @@ public class DollarFactory {
                 return array;
             case MAP:
                 final JsonObject json = new JsonObject();
-                ImmutableMap<String, var> map = value.$map();
-                final Set<String> fieldNames = map.keySet();
-                for (String fieldName : fieldNames) {
+                ImmutableMap<var, var> map = value.$map();
+                final Set<var> fieldNames = map.keySet();
+                for (var fieldName : fieldNames) {
                     var v = map.get(fieldName);
-                    json.putValue(fieldName, toJson(v));
+                    json.putValue(fieldName.toString(), toJson(v));
                 }
                 final JsonObject containerObject = new JsonObject();
                 return json;
             case RANGE:
                 final JsonObject rangeObject = new JsonObject();
                 rangeObject.putString(TYPE_KEY, value.$type().name());
-                final Range range = value.$();
+                final Range range = value.toJavaObject();
                 rangeObject.put(LOWERBOUND_KEY, toJson($(range.lowerEndpoint())));
                 rangeObject.put(UPPERBOUND_KEY, toJson($(range.upperEndpoint())));
                 return rangeObject;
+            case ANY:
+                return null;
             default:
                 throw new DollarException("Unrecognized type " + value.$type());
         }
@@ -693,4 +738,12 @@ public class DollarFactory {
     public static var fromRange(var from,
                                 var to) {
         return wrap(new DollarRange(ImmutableList.of(), from, to));}
+
+    public static var infinity(boolean positive, ImmutableList<Throwable>... errors) {
+        return wrap(new DollarInfinity(ImmutableList.copyOf(errors), positive));
+    }
+
+    public static var newNull(Type type, ImmutableList<Throwable>... errors) {
+        return new DollarNull(ImmutableList.copyOf(errors), type);
+    }
 }

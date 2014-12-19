@@ -63,7 +63,7 @@ public class DollarURI extends AbstractDollar {
     @NotNull
     @Override
     public var $abs() {
-        return DollarFactory.failure(FailureType.INVALID_URI_OPERATION);
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
@@ -77,32 +77,48 @@ public class DollarURI extends AbstractDollar {
     @NotNull
     @Override
     public var $divide(@NotNull var v) {
-        return DollarFactory.failure(FailureType.INVALID_URI_OPERATION);
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
     public var $plus(@Nullable var v) {
         ensureRunning();
-        return handler.write(DollarStatic.$(v), true, true);
+        return handler.append(v);
     }
 
     @NotNull
     @Override
     public var $modulus(@NotNull var v) {
-        return DollarFactory.failure(FailureType.INVALID_URI_OPERATION);
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
     public var $multiply(@NotNull var v) {
-        return DollarFactory.failure(FailureType.INVALID_URI_OPERATION);
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
     public var $negate() {
-        return DollarFactory.failure(FailureType.INVALID_URI_OPERATION);
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_URI_OPERATION);
+    }
+
+    @Override public int sign() {
+        return 1;
+    }
+
+    @NotNull
+    @Override
+    public Integer I() {
+        return 0;
+    }
+
+    @NotNull
+    @Override
+    public Number N() {
+        return 0;
     }
 
     private void ensureRunning() {
@@ -116,24 +132,13 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $set(@NotNull var key, @Nullable Object value) {
-        ensureRunning();
-
-        return handler.set(DollarStatic.$(key), DollarStatic.$(value));
-
-    }
-
-    @NotNull
-    @Override
-    public <R> R $() {
-        return (R) uri;
-    }
-
-    @NotNull
-    @Override
     public var $get(@NotNull var key) {
         ensureRunning();
         return handler.get(key);
+    }
+
+    @NotNull @Override public var $append(@NotNull var value) {
+        return handler.append(DollarStatic.$(value));
     }
 
     @NotNull public var $containsValue(@NotNull var value) {
@@ -152,6 +157,10 @@ public class DollarURI extends AbstractDollar {
         return DollarStatic.$(handler.size());
     }
 
+    @NotNull @Override public var $prepend(@NotNull var value) {
+        return handler.prepend(DollarStatic.$(value));
+    }
+
     @NotNull
     @Override
     public var $removeByKey(@NotNull String key) {
@@ -160,9 +169,18 @@ public class DollarURI extends AbstractDollar {
 
     }
 
+    @NotNull
+    @Override
+    public var $set(@NotNull var key, @Nullable Object value) {
+        ensureRunning();
+
+        return handler.set(DollarStatic.$(key), DollarStatic.$(value));
+
+    }
+
     @NotNull @Override
     public var $remove(var key) {
-        return DollarFactory.failure(FailureType.INVALID_URI_OPERATION);
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_URI_OPERATION);
 
     }
 
@@ -200,15 +218,15 @@ public class DollarURI extends AbstractDollar {
         return Comparator.<String>naturalOrder().compare(uri.toString(), o.toString());
     }
 
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of();
-    }
-
     @Override
     public boolean isBoolean() {
         return false;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> $map() {
+        return ImmutableMap.of();
     }
 
     @Override
@@ -231,6 +249,15 @@ public class DollarURI extends AbstractDollar {
         return handler != null;
     }
 
+    @NotNull @Override public String toDollarScript() {
+        return String.format("(\"%s\" as Uri)", org.apache.commons.lang.StringEscapeUtils.escapeJava(uri.toString()));
+    }
+
+    @NotNull
+    @Override
+    public <R> R toJavaObject() {
+        return (R) uri;
+    }
 
     @NotNull
 
@@ -321,11 +348,7 @@ public class DollarURI extends AbstractDollar {
     }
 
 
-    @NotNull
-    @Override
-    public Integer I() {
-        return 0;
-    }
+
 
 
 
@@ -342,12 +365,6 @@ public class DollarURI extends AbstractDollar {
         return Collections.emptyMap();
     }
 
-
-    @NotNull
-    @Override
-    public Number N() {
-        return 0;
-    }
 
     @Override public boolean isCollection() {
         return false;
@@ -378,7 +395,7 @@ public class DollarURI extends AbstractDollar {
             case URI:
                 return this;
             default:
-                return DollarFactory.failure(FailureType.INVALID_CAST);
+                return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
         }
     }
 }

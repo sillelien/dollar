@@ -57,6 +57,11 @@ public class SocketURIHandler implements URIHandler {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public var write(var value, boolean blocking, boolean mutating) {
+        throw new UnsupportedOperationException();
+    }
+
     @Override public void destroy() {
         for (SocketIOSubscription socketIOSubscription : subscriptions.values()) {
             socketIOSubscription.destroy();
@@ -90,15 +95,11 @@ public class SocketURIHandler implements URIHandler {
 
     @Override public var publish(var value) {
         ArrayList<var> responses = new ArrayList<>();
-        server.getBroadcastOperations().sendEvent(value.getPairKey(), value.getPairValue().json().toMap());
+        server.getBroadcastOperations()
+              .sendEvent(value.getPairKey().toString(), value.getPairValue().toJsonObject().toMap());
         for (SocketIOSubscription subscription : subscriptions.values()) {
         }
         return DollarFactory.fromValue(responses);
-    }
-
-    @Override
-    public var write(var value, boolean blocking, boolean mutating) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

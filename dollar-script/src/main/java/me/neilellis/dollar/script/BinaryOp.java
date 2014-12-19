@@ -20,8 +20,6 @@ import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
 import org.codehaus.jparsec.functors.Map2;
 
-import java.util.function.Supplier;
-
 import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactiveBinary;
 
 /**
@@ -31,7 +29,7 @@ public class BinaryOp implements Binary<var>, Operator {
     private final boolean immediate;
     private final Map2<var, var, var> function;
     private final Scope scope;
-    private Supplier<String> source;
+    private Source source;
 
 
     public BinaryOp(Map2<var, var, var> function, Scope scope) {
@@ -52,11 +50,11 @@ public class BinaryOp implements Binary<var>, Operator {
             return function.map(lhs, rhs);
         }
         //Lazy evaluation
-        return wrapReactiveBinary(scope, lhs, rhs, () -> function.map(lhs, rhs));
+        return wrapReactiveBinary(scope, lhs, rhs, () -> function.map(lhs, rhs), source);
     }
 
     @Override
-    public void setSource(Supplier<String> source) {
+    public void setSource(Source source) {
         this.source = source;
     }
 }

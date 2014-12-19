@@ -16,7 +16,7 @@
 
 package me.neilellis.dollar;
 
-import me.neilellis.dollar.script.SourceAware;
+import me.neilellis.dollar.script.Source;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class DollarException extends RuntimeException {
 
-    private final List<SourceAware> sourceList = new ArrayList<>();
+    private final List<Source> sourceList = new ArrayList<>();
 
     /**
      * Instantiates a new Dollar exception.
@@ -62,7 +62,7 @@ public class DollarException extends RuntimeException {
      *
      * @param source the source
      */
-    public void addSource(SourceAware source) {
+    public void addSource(Source source) {
         if (source == null) {
             throw new NullPointerException();
         }
@@ -71,11 +71,11 @@ public class DollarException extends RuntimeException {
 
     @Override public String getMessage() {
         if (sourceList.size() == 0) {
-            return super.getMessage() + " (no source available)";
+            return super.getMessage();
 
         } else {
             StringBuilder builder = new StringBuilder(super.getMessage() + "\n");
-            for (SourceAware sourceEntry : sourceList) {
+            for (Source sourceEntry : sourceList) {
                 builder.append(sourceEntry.getSourceMessage()).append("\n");
             }
             return builder.toString();

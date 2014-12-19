@@ -22,7 +22,7 @@ import org.junit.Test;
 import static me.neilellis.dollar.DollarStatic.$list;
 import static org.junit.Assert.*;
 
-public class DollarFailTest {
+public class DollarErrorTest {
   private static var list;
 
   @BeforeClass

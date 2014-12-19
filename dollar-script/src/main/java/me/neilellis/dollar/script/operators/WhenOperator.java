@@ -16,8 +16,11 @@
 
 package me.neilellis.dollar.script.operators;
 
-import me.neilellis.dollar.types.DollarFactory;
+import me.neilellis.dollar.script.DollarScriptSupport;
+import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.SourceValue;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
 import static me.neilellis.dollar.DollarStatic.$;
@@ -26,15 +29,23 @@ import static me.neilellis.dollar.DollarStatic.$void;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class WhenOperator implements Map<Object[], var> {
-    @Override public var map(Object[] objects) {
+public class WhenOperator implements Map<Token, var> {
+    private Scope scope;
+
+    public WhenOperator(Scope scope) {this.scope = scope;}
+
+    @Override public var map(Token token) {
+        Object[] objects = (Object[]) token.value();
         var lhs = (var) objects[0];
         var rhs = (var) objects[1];
-        var lambda = DollarFactory.fromLambda(i -> lhs.isTrue() ? $((Object) rhs.$()) : $void());
+        var
+                lambda =
+                DollarScriptSupport.wrapLambda(new SourceValue(scope, token), scope,
+                                               i -> lhs.isTrue() ? $((Object) rhs.toJavaObject()) : $void());
         lhs.$listen(i -> {
 //            lambda.$notify();
             if (lhs.isTrue()) {
-                return $((Object) rhs.$());
+                return $((Object) rhs.toJavaObject());
             }
             return $void();
         });

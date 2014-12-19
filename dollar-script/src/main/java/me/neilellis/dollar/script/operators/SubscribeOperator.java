@@ -18,10 +18,9 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.Operator;
 import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.Source;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
-
-import java.util.function.Supplier;
 
 import static me.neilellis.dollar.DollarStatic.fix;
 import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactiveBinary;
@@ -31,7 +30,7 @@ import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactiveBinary;
  */
 public class SubscribeOperator implements Binary<var>, Operator {
     private final Scope scope;
-    private Supplier<String> source;
+    private Source source;
     private boolean pure;
 
 
@@ -51,12 +50,12 @@ public class SubscribeOperator implements Binary<var>, Operator {
                                       scope.getDollarParser().currentScope().setParameter("1", it);
                                       scope.getDollarParser().currentScope().setParameter("it", it);
                                       return fix(rhs, false);
-                                  })));
+                                          })), source);
 
     }
 
     @Override
-    public void setSource(Supplier<String> source) {
+    public void setSource(Source source) {
         this.source = source;
     }
 }

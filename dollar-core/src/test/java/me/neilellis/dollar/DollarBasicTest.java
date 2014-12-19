@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar;
 
+import me.neilellis.dollar.json.ImmutableJsonObject;
 import org.junit.Test;
 
 import java.util.Date;
@@ -104,7 +105,7 @@ public class DollarBasicTest {
         Map submap = new HashMap();
         submap.put("thing", 1);
         map.put("sub", submap);
-        assertEquals("bar", $(map).$("foo").$());
+        assertEquals("bar", $(map).$("foo").toJavaObject());
         assertEquals("bar", $(map).toMap().get("foo"));
         assertEquals(1L, $(map).$("sub").toMap().get("thing"));
         assertEquals("1", $(map).$("sub").$("thing").S());
@@ -129,7 +130,7 @@ public class DollarBasicTest {
         System.out.println(ageRetrieved);
         assertEquals(age, (int) ageRetrieved.I());
         assertEquals(age / 11, (int) profile.$eval("($['age'] / 11)").I());
-        assertEquals("male", profile.$eval("$.gender").$());
+        assertEquals("male", profile.$eval("$.gender").toJavaObject());
         assertEquals(10, (int) profile.$eval("5*2").I());
         assertEquals(10, (int) $eval("10").I());
         assertEquals($("{\"name\":\"Dave\"}").$("name").S(), "Dave");
@@ -138,10 +139,10 @@ public class DollarBasicTest {
 
     @Test
     public void testNull() {
-        assertNull($((Object) null).$("foo", "bar").$("foo").$());
+        assertNull($((Object) null).$("foo", "bar").$("foo").toJavaObject());
         assertTrue($((Object) null).isVoid());
         assertTrue($((Object) null).$("bar").isVoid());
-        assertNull($((Object) null).$());
+        assertNull($((Object) null).toJavaObject());
         assertFalse($((Object) null).$("bar").$has("foo").isTrue());
         assertFalse($((Object) null).$has("foo").isTrue());
         assertTrue($((Object) null).$("foo", "bar").$("foo").isVoid());
@@ -151,9 +152,11 @@ public class DollarBasicTest {
 
     @Test
     public void testStringCreation() {
-        System.out.println($("{\"foo\":\"bar\"}"));
-        assertEquals("bar", $("{\"foo\":\"bar\"}").$("foo").$());
-        assertEquals("bar", $("{\"foo\":\"bar\"}").json().getString("foo"));
+        final ImmutableJsonObject jsonObject = $("{\"foo\":\"bar\"}").toJsonObject();
+        System.out.println(jsonObject);
+        assertEquals("bar", $("{\"foo\":\"bar\"}").$("foo").toJsonType());
+        final String foo = jsonObject.getString("foo");
+        assertEquals("bar", foo);
     }
 
 }

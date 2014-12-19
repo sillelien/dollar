@@ -59,6 +59,11 @@ public class HttpURIHandler implements URIHandler {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public var write(var value, boolean blocking, boolean mutating) {
+        throw new UnsupportedOperationException();
+    }
+
     @Override public void destroy() {
         //TODO
     }
@@ -79,11 +84,6 @@ public class HttpURIHandler implements URIHandler {
 
     @Override public void pause() {
         //TODO
-    }
-
-    @Override
-    public var write(var value, boolean blocking, boolean mutating) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -214,7 +214,7 @@ public class HttpURIHandler implements URIHandler {
                         return out.$("status").$default($(200)).I();
                     }
                         }, body.$mimeType().$S(), body.toStream());
-                out.$("headers").$map().forEach((s, v) -> response.addHeader(s, v.$S()));
+                out.$("headers").$map().forEach((s, v) -> response.addHeader(s.$S(), v.$S()));
                 return response;
             } catch (Exception e) {
                 e.printStackTrace();

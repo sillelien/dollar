@@ -17,7 +17,9 @@
 package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.SourceValue;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
 import static me.neilellis.dollar.DollarStatic.$;
@@ -26,12 +28,13 @@ import static me.neilellis.dollar.script.DollarScriptSupport.wrapBinary;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class IfOperator implements Map<var, Map<var, var>> {
+public class IfOperator implements Map<Token, Map<var, var>> {
     private final Scope scope;
 
     public IfOperator(Scope scope) {this.scope = scope;}
 
-    @Override public Map<var, var> map(var lhs) {
+    @Override public Map<var, var> map(Token token) {
+        var lhs = (var) token.value();
         return rhs -> wrapBinary(scope, () -> {
             final var lhsFix = lhs._fixDeep();
             if (lhsFix.isBoolean() && lhsFix.isTrue()) {
@@ -39,6 +42,6 @@ public class IfOperator implements Map<var, Map<var, var>> {
             } else {
                 return $(false);
             }
-        });
+        }, new SourceValue(scope, token));
     }
 }

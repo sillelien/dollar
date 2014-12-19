@@ -18,7 +18,6 @@ package me.neilellis.dollar;
 
 import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.MultiMap;
-import me.neilellis.dollar.collections.Range;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.monitor.DollarMonitor;
@@ -143,6 +142,12 @@ public class DollarStatic {
     public static var $void() {
         return DollarFactory.newVoid();
     }
+
+    @NotNull
+    public static var $null(Type type) {
+        return DollarFactory.newNull(type);
+    }
+
 
     /**
      * Fix, i.e. evaluate lambdas to the depth supplied, optionally hinting that parallel behaviour is fine
@@ -333,7 +338,7 @@ public class DollarStatic {
      * @return the var
      */
     @NotNull
-    public static var $(@NotNull String name, Object o) {
+    public static var $(@NotNull Object name, Object o) {
         return DollarFactory.fromValue().$set($(name), o);
     }
 
@@ -347,18 +352,6 @@ public class DollarStatic {
     public static var $(JsonObject json) {
         return DollarFactory.fromValue(json, ImmutableList.of());
     }
-
-    /**
-     * $ var.
-     *
-     * @param start the start
-     * @param finish the finish
-     * @return the var
-     */
-    public static var $(var start, var finish) {
-        return $(new Range(start, finish));
-    }
-
 
     /**
      * Tracer state tracer.

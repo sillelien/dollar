@@ -18,7 +18,7 @@ package me.neilellis.dollar.uri.mapdb;
 
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.types.FailureType;
+import me.neilellis.dollar.types.ErrorType;
 import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.var;
 import org.mapdb.BTreeMap;
@@ -54,6 +54,14 @@ public class MapDBMapURI extends AbstractMapDBURI {
         return tx.execute((DB d) -> DollarFactory.fromValue(getTreeMap(d).snapshot()));
     }
 
+    @Override public var write(var value, boolean blocking, boolean mutating) {
+        if (value.isPair()) {
+            return set($(value.getPairKey()), value.getPairValue());
+        } else {
+            throw new UnsupportedOperationException("Can only write pairs to a map");
+        }
+    }
+
     @Override public var drain() {
         return tx.execute((DB d) -> {
             final BTreeMap<String, var> treeMap = getTreeMap(d);
@@ -65,14 +73,6 @@ public class MapDBMapURI extends AbstractMapDBURI {
 
     @Override public var get(var key) {
         return tx.execute((DB d) -> DollarFactory.fromValue(getTreeMap(d).get(key._fixDeep())));
-    }
-
-    @Override public var write(var value, boolean blocking, boolean mutating) {
-        if (value.isPair()) {
-            return set($(value.getPairKey()), value.getPairValue());
-        } else {
-            throw new UnsupportedOperationException("Can only write pairs to a map");
-        }
     }
 
     @Override public var read(boolean blocking, boolean mutating) {
@@ -115,7 +115,7 @@ public class MapDBMapURI extends AbstractMapDBURI {
                 try {
                     consumer.pipe($(key, newVal));
                 } catch (Exception e) {
-                    DollarFactory.failure(FailureType.EXCEPTION, e);
+                    DollarFactory.failure(ErrorType.EXCEPTION, e, false);
                 }
             };
             getTreeMap(d).modificationListenerAdd(listener);

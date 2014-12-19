@@ -18,6 +18,7 @@ package me.neilellis.dollar.script;
 
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.List;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-class ListOperator implements Map<List<var>, var> {
+class ListOperator implements Map<Token, var> {
     private final Scope scope;
     private final DollarParser dollarParser;
     private boolean pure;
@@ -36,12 +37,16 @@ class ListOperator implements Map<List<var>, var> {
         this.pure = pure;
     }
 
-    @Override public var map(List<var> o) {
-
-        final var lambda = DollarFactory.fromLambda(parallel -> dollarParser.inScope(pure, "list", scope, newScope -> {
-            Scope scope2 = newScope;
-            return DollarFactory.fromValue(o);
-        }));
+    @Override public var map(Token t) {
+        List<var> o = (List<var>) t.value();
+        final var lambda = DollarScriptSupport.wrapLambda(new SourceValue(scope, t), scope,
+                                                          parallel -> dollarParser.inScope(pure, "list", scope,
+                                                                                           newScope -> {
+                                                                                               Scope scope2 = newScope;
+                                                                                               return DollarFactory
+                                                                                                       .fromValue(
+                                                                                                               o);
+                                                                                           }));
         for (var v : o) {
             v.$listen(i -> lambda.$notify());
         }

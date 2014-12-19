@@ -16,17 +16,19 @@
 
 package me.neilellis.dollar.script;
 
-import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.Type;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jparsec.*;
 import org.codehaus.jparsec.functors.Map;
 import org.codehaus.jparsec.pattern.CharPredicates;
 import org.codehaus.jparsec.pattern.Pattern;
 import org.codehaus.jparsec.pattern.Patterns;
 
-import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.DollarStatic.$void;
+import java.math.BigDecimal;
+
+import static me.neilellis.dollar.DollarStatic.*;
 import static org.codehaus.jparsec.Parsers.or;
 import static org.codehaus.jparsec.Parsers.token;
 
@@ -44,7 +46,7 @@ class DollarLexer {
                                 "yes", "no", "void", "error", "to", "from", "size", "as",
                                 "while", "collect", "module", "include", "export", "with", "parallel", "serial",
                                 "fork", "null", "volatile", "read", "write", "block", "mutate", "pure", "variant",
-                                "variance", "pluripotent", "vary", "varies");
+                                "variance", "pluripotent", "vary", "varies", "infinity");
     public static final Terminals
             OPERATORS =
             Terminals.operators("|", ">>", "<<", "->", "=>", ".:", "<=", ">=", "<-", "(", ")", "--", "++", ".", ":",
@@ -78,12 +80,24 @@ class DollarLexer {
                        Scanners.lineComment("#!")).skipMany();
     public static final Parser<var> IDENTIFIER = identifier();
     public static final Parser<var> IDENTIFIER_KEYWORD = identifierKeyword();
-    public static final Parser<var> STRING_LITERAL = Terminals.StringLiteral.PARSER.map(DollarStatic::$);
+    public static final Parser<var>
+            STRING_LITERAL =
+            Terminals.StringLiteral.PARSER.map((o) -> DollarFactory.fromStringValue(
+                    o));
     public static final Parser<var>
             DECIMAL_LITERAL =
             Terminals.DecimalLiteral.PARSER.map(s -> s.contains(".") ? $(Double.parseDouble(s)) : $(Long.parseLong(s))
             );
-    public static final Parser<var> INTEGER_LITERAL = Terminals.IntegerLiteral.PARSER.map(s -> $(Long.parseLong(s)));
+    public static final Parser<var> INTEGER_LITERAL = Terminals.IntegerLiteral.PARSER.map(
+            s -> {
+                if (new BigDecimal(s).compareTo(new BigDecimal(Long.MAX_VALUE)) > 0) {
+                    return $(Double.parseDouble(s));
+                } else if (new BigDecimal(s).compareTo(new BigDecimal(-Long.MAX_VALUE)) < 0) {
+                    return $(Double.parseDouble(s));
+                } else {
+                    return $(Long.parseLong(s));
+                }
+            });
     public static final Parser<var> BUILTIN = token(new TokenTagMap("builtin")).map(s -> {
         var v = $(s);
         v.setMetaAttribute("__builtin", s);
@@ -95,11 +109,35 @@ class DollarLexer {
                OPERATORS.tokenizer(),
                DollarLexer.decimal(),
                java(),
-               Terminals.StringLiteral.DOUBLE_QUOTE_TOKENIZER,
-               Terminals.StringLiteral.SINGLE_QUOTE_TOKENIZER,
+               Scanners.DOUBLE_QUOTE_STRING.map(new Map<String, String>() {
+                   public String map(String text) {
+                       return tokenizeDoubleQuote(text);
+                   }
+
+                   @Override public String toString() {
+                       return "DOUBLE_QUOTE_STRING";
+                   }
+               }),
+               Scanners.SINGLE_QUOTE_STRING.map(new Map<String, String>() {
+                   public String map(String text) {
+                       return tokenizeSingleQuote(text);
+                   }
+
+                   @Override public String toString() {
+                       return "SINGLE_QUOTE_STRING";
+                   }
+               }),
                Terminals.IntegerLiteral.TOKENIZER,
                Parsers.longest(DollarLexer.builtin(), KEYWORDS.tokenizer(), Terminals.Identifier.TOKENIZER));
 
+    static String tokenizeDoubleQuote(String text) {
+        return StringEscapeUtils.unescapeJava(text.substring(1, text.length() - 1));
+
+    }
+
+    static String tokenizeSingleQuote(String text) {
+        return StringEscapeUtils.unescapeJava(text.substring(1, text.length() - 1));
+    }
 
     public static Parser<?> url() {
         return (
@@ -148,7 +186,10 @@ class DollarLexer {
 
     public static Parser<?> decimal() {
         return Scanners.pattern(
-                Patterns.INTEGER.next(Patterns.isChar('.').next(Patterns.many1(CharPredicates.IS_DIGIT))), "decimal")
+                Patterns.INTEGER.next(Patterns.isChar('.').next(Patterns.many1(CharPredicates.IS_DIGIT)).next(
+                        Patterns.sequence(Patterns.among("eE"), Patterns.among("+-").optional(), Patterns.INTEGER)
+                                .optional())),
+                "decimal")
                        .source()
                        .map(new Map<String, Tokens.Fragment>() {
                            public Tokens.Fragment map(String text) {
@@ -225,41 +266,49 @@ class DollarLexer {
 
     public static Parser<var> identifier() {
         return Terminals.Identifier.PARSER.map(i -> {
-            switch (i) {
+            switch (i.toLowerCase()) {
                 case "true":
-                    return $(true);
+                    return DollarFactory.TRUE;
                 case "false":
-                    return $(false);
+                    return DollarFactory.FALSE;
                 case "yes":
-                    return $(true);
+                    return DollarFactory.TRUE;
                 case "no":
-                    return $(false);
+                    return DollarFactory.FALSE;
+                case "infinity":
+                    return DollarFactory.INFINITY;
                 case "void":
-                case "null":
                     return $void();
+                case "null":
+                    return $null(Type.ANY);
                 default:
                     return $(i);
             }
         });
     }
 
+
     public static Parser<var> identifierKeyword() {
-        return or(KEYWORD("true"), KEYWORD("false"), KEYWORD("yes"), KEYWORD("no"), KEYWORD("null"), KEYWORD("void"))
+        return or(KEYWORD("true"), KEYWORD("false"), KEYWORD("yes"), KEYWORD("no"), KEYWORD("null"), KEYWORD("void"),
+                  KEYWORD("infinity"))
                 .map(new Map<Object, var>() {
                     @Override
                     public var map(Object i) {
                         switch (i.toString()) {
                             case "true":
-                                return $(true);
+                                return DollarFactory.TRUE;
                             case "false":
-                                return $(false);
+                                return DollarFactory.FALSE;
                             case "yes":
-                                return $(true);
+                                return DollarFactory.TRUE;
                             case "no":
-                                return $(false);
+                                return DollarFactory.FALSE;
                             case "null":
+                                return DollarFactory.newNull(Type.ANY);
+                            case "infinity":
+                                return DollarFactory.INFINITY;
                             case "void":
-                                return $void();
+                                return DollarFactory.VOID;
                             default:
                                 return $(i);
                         }

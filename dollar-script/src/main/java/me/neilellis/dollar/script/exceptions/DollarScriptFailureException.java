@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script;
+package me.neilellis.dollar.script.exceptions;
+
+import me.neilellis.dollar.types.ErrorType;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public interface SourceAware {
+public class DollarScriptFailureException extends DollarScriptException {
+    public DollarScriptFailureException(ErrorType errorType) {
+        super(errorType.toString());
+    }
 
-    int getLength();
+    public DollarScriptFailureException(ErrorType errorType, String message) {
+        super(errorType.toString() + ":" + message);
+    }
 
-    String getSource();
+    public DollarScriptFailureException(Throwable t, ErrorType errorType) {
+        super(t, errorType.toString() + ": " + t.getMessage());
+    }
 
-    String getSourceMessage();
-
-    int getStart();
 }

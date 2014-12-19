@@ -16,7 +16,6 @@
 
 package me.neilellis.dollar.collections;
 
-import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -46,7 +45,7 @@ import java.util.function.Function;
         return immutableMap;
     }
 
-    public static ImmutableMap<String, var> of() {
+    public static <K extends Comparable<K>,V> ImmutableMap<K, V> of() {
         return new ImmutableMap<>();
     }
 
@@ -110,6 +109,8 @@ import java.util.function.Function;
     public void forEach(Consumer<? super Map.Entry<K, V>> action) {
         map.entrySet().forEach(action);
     }
+
+
 
     @Override
     public Spliterator<Map.Entry<K, V>> spliterator() {

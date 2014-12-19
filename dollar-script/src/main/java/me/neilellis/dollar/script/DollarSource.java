@@ -25,78 +25,39 @@ import java.lang.reflect.Method;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DollarSource extends DollarLambda implements SourceAware {
+public class DollarSource extends DollarLambda {
     private final Scope scope;
+    private final Source source;
 
-    public DollarSource(Pipeable lambda, Scope scope) {
+    public DollarSource(Pipeable lambda, Scope scope, Source source) {
         super(lambda);
         if (scope == null) {
             throw new NullPointerException();
         }
         this.scope = scope;
+        this.source = source;
     }
 
-    public DollarSource(Pipeable lambda, Scope scope, boolean fixable) {
+    public DollarSource(Pipeable lambda, Scope scope, Source source, boolean fixable) {
         super(lambda, fixable);
         if (scope == null) {
             throw new NullPointerException();
         }
         this.scope = scope;
+        this.source = source;
     }
 
     @Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         try {
             return super.invoke(proxy, method, args);
         } catch (AssertionError e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, this, e);
+            return scope.getDollarParser().getErrorHandler().handle(scope, source, e);
         } catch (DollarException e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, this, e);
+            return scope.getDollarParser().getErrorHandler().handle(scope, source, e);
         } catch (Exception e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, this, e);
+            return scope.getDollarParser().getErrorHandler().handle(scope, source, e);
         }
     }
 
-    @Override public int getStart() {
-        final String parseStart = meta.get("__parse_start");
-        if (parseStart != null) {
-            return Integer.parseInt(parseStart);
-        } else {
-            return -1;
-        }
-    }
-
-    @Override public int getLength() {
-        final String parseStart = meta.get("__parse_length");
-        if (parseStart != null) {
-            return Integer.parseInt(parseStart);
-        } else {
-            return -1;
-        }
-    }
-
-    @Override public String getSource() {
-        return scope.getSource();
-    }
-
-    @Override public String getSourceMessage() {
-        int index = getStart();
-        int length = getLength();
-        if (index < 0 || length < 0) {
-            return "<unknown location>";
-        }
-        String theSource = scope.getSource();
-        int end = theSource.indexOf('\n', index + length);
-        int start = index > 10 ? index - 10 : 0;
-        String
-                highlightedSource =
-                "... " +
-                theSource.substring(start, index) +
-                " \u261E " +
-                theSource.substring(index, index + length) +
-                " \u261C " +
-                theSource.substring(index + length, end) +
-                " ...";
-        return highlightedSource.replaceAll("\n", "\\\\n");
-    }
 
 }

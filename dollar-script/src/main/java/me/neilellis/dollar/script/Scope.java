@@ -40,6 +40,8 @@ public interface Scope {
 
     void setDollarParser(DollarParser dollarParser);
 
+    String getFile();
+
     Multimap<String, var> getListeners();
 
     var getParameter(String key);

@@ -48,7 +48,7 @@ public interface TypeAware {
 
     /**
      * Cast this object to the {@link Type} specified. If the object cannot be converted it will fail with {@link
-     * me.neilellis.dollar.types.FailureType#INVALID_CAST}
+     * me.neilellis.dollar.types.ErrorType#INVALID_CAST}
      *
      * @param type the type to cast to
      *
@@ -78,40 +78,21 @@ public interface TypeAware {
 
     Type $type();
 
-    @NotNull
-    @Guarded(NotNullGuard.class) Double D();
-
-    @NotNull
-    @Guarded(NotNullGuard.class) Integer I();
 
     @Guarded(NotNullGuard.class)
-    @NotNull Long L();
-
-    @Guarded(NotNullGuard.class)
-    @NotNull Number N();
-
-    @Guarded(NotNullGuard.class)
-    default String getPairKey() {
-        return toMap().keySet().iterator().next();
+    default var getPairKey() {
+        return $map().keySet().iterator().next();
     }
 
-    /**
-     * Returns this object as a set of nested maps the values are completely unwrapped and don't contain 'var' objects.
-     *
-     * @return a nested Map or null if the operation doesn't make sense (i.e. on a single valued object or list)
-     */
     @NotNull
-    @Guarded(NotNullGuard.class) Map<String, Object> toMap();
+    @Guarded(NotNullGuard.class)
+    @Guarded(AllVarMapGuard.class) ImmutableMap<var, var> $map();
 
     @NotNull
     @Guarded(NotNullGuard.class)
     default var getPairValue() {
         return $map().values().iterator().next();
     }
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(AllVarMapGuard.class) ImmutableMap<String, var> $map();
 
     /**
      * Returns true if this object is of any of the supplied types.
@@ -122,28 +103,63 @@ public interface TypeAware {
      */
     @Guarded(NotNullGuard.class) boolean is(@NotNull Type... types);
 
-    boolean isCollection();
+    default boolean isCollection() {
+        return false;
+    }
 
-    boolean isDecimal();
+    default boolean isDecimal() {
+        return false;
+    }
 
-    boolean isInteger();
+    default boolean isError() {
+        return false;
+    }
 
-    boolean isLambda();
+    default boolean isInfinite() {
+        return false;
+    }
 
-    boolean isList();
+    default boolean isInteger() {
+        return false;
+    }
 
-    boolean isMap();
+    default boolean isLambda() {
+        return false;
+    }
 
-    boolean isNumber();
+    default boolean isList() {
+        return false;
+    }
 
-    boolean isPair();
+    default boolean isMap() {
+        return false;
+    }
 
-    boolean isSingleValue();
+    default boolean isNull() { return false;}
 
-    boolean isString();
+    default boolean isNumber() {
+        return false;
+    }
 
-    boolean isUri();
+    default boolean isPair() {
+        return false;
+    }
 
+    default boolean isRange() {
+        return false;
+    }
+
+    default boolean isSingleValue() {
+        return false;
+    }
+
+    default boolean isString() {
+        return false;
+    }
+
+    default boolean isUri() {
+        return false;
+    }
 
     /**
      * Is this object a void object? Void objects are similar to null, except they can have methods called on them.
@@ -151,10 +167,10 @@ public interface TypeAware {
      * This is a similar concept to nil in Objective-C.
      *
      * @return true if this is a void object
-     *
      */
-    boolean isVoid();
-
+    default boolean isVoid() {
+        return false;
+    }
 
     /**
      * Returns this object as a list of string values or null if this is not applicable.
@@ -170,7 +186,15 @@ public interface TypeAware {
      * @return a list of vars.
      */
     @Guarded(NotNullCollectionGuard.class)
-    @NotNull ImmutableList<Object> toList();
+    @NotNull ImmutableList<?> toList();
+
+    /**
+     * Returns this object as a set of nested maps the values are completely unwrapped and don't contain 'var' objects.
+     *
+     * @return a nested Map or null if the operation doesn't make sense (i.e. on a single valued object or list)
+     */
+    @NotNull
+    @Guarded(NotNullGuard.class) <K, V> Map<K, V> toMap();
 
     /**
      * Convert this object into a stream.

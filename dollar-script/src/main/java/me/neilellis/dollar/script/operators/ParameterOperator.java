@@ -16,13 +16,10 @@
 
 package me.neilellis.dollar.script.operators;
 
-import me.neilellis.dollar.script.Builtins;
-import me.neilellis.dollar.script.DollarParser;
-import me.neilellis.dollar.script.DollarScriptSupport;
-import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.*;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
-import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
 import java.util.List;
@@ -32,7 +29,7 @@ import static me.neilellis.dollar.DollarStatic.$;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class ParameterOperator implements Map<List<var>, Map<? super var, ? extends var>> {
+public class ParameterOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
     private final DollarParser dollarParser;
     private boolean pure;
@@ -43,47 +40,20 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
         this.pure = pure;
     }
 
-    @Override public Map<? super var, ? extends var> map(List<var> rhs) {
+    @Override public Map<? super var, ? extends var> map(Token token) {
+        List<var> rhs = (List<var>) token.value();
         return lhs -> {
-            if(!lhs.isLambda()) {
+            if (!lhs.isLambda()) {
                 String lhsString = lhs.toString();
-                if(pure && Builtins.exists(lhsString) && !Builtins.isPure(lhsString)) {
-                    throw new DollarScriptException("Cannot call the impure function '"+lhsString+"' in a pure expression.");
+                if (pure && Builtins.exists(lhsString) && !Builtins.isPure(lhsString)) {
+                    throw new DollarScriptException(
+                            "Cannot call the impure function '" + lhsString + "' in a pure expression.");
                 }
             }
 
-            var lambda = DollarFactory.fromLambda(i -> dollarParser.inScope(pure,"parameter", scope, newScope -> {
-                        //Add the special $* value for all the parameters
-                        newScope.setParameter("*", $(rhs));
-                        int count = 0;
-                        for (var param : rhs) {
-                            newScope.setParameter(String.valueOf(++count), param);
-                            //If the parameter is a named parameter then use the name (set as metadata
-                            //on the value).
-                            if (param.getMetaAttribute(DollarParser.NAMED_PARAMETER_META_ATTR) != null) {
-                                newScope.set(param.getMetaAttribute(DollarParser.NAMED_PARAMETER_META_ATTR), param,
-                                             true, null, false, false, pure);
-                            }
-                        }
-                        var result;
-                        if (lhs.isLambda()) {
-                            result = lhs._fix(2, false);
-                        } else {
-                            String lhsString = lhs.toString();
-                            //The lhs is a string, so let's see if it's a builtin function
-                            //if not then assume it's a variable.
-                            if (Builtins.exists(lhsString)) {
-                                result = Builtins.execute(lhsString, rhs, newScope,pure);
-                            } else {
-                                final var
-                                        valueUnfixed =
-                                        DollarScriptSupport.getVariable(pure, newScope, lhsString, false, null);
-                                result = valueUnfixed._fix(2, false);
-                            }
-                        }
-
-                        return result;
-                    }));
+            var lambda = DollarScriptSupport.wrapUnary(scope, () -> dollarParser.inScope(pure, "parameter", scope,
+                                                                                         new Function(rhs, lhs, token)),
+                                                       new SourceValue(scope, token));
             //reactive links
             lhs.$listen(i -> lambda.$notify());
             for (var param : rhs) {
@@ -91,5 +61,56 @@ public class ParameterOperator implements Map<List<var>, Map<? super var, ? exte
             }
             return lambda;
         };
+    }
+
+    private class Function implements java.util.function.Function<Scope, var> {
+        private final List<var> rhs;
+        private final var lhs;
+        private final Token token;
+
+        public Function(List<var> rhs, var lhs, Token token) {
+            this.rhs = rhs;
+            this.lhs = lhs;
+            this.token = token;
+        }
+
+        @Override
+        public var apply(
+                Scope newScope) {
+            //Add the special $*
+            // value for all the
+            // parameters
+            newScope.setParameter(
+                    "*",
+                    $(rhs));
+            int count = 0;
+            for (var param : rhs) {
+                newScope.setParameter(String.valueOf(++count), param);
+                //If the parameter is a named parameter then use the name (set as metadata on the value).
+                if (param.getMetaAttribute(DollarParser.NAMED_PARAMETER_META_ATTR) != null) {
+                    newScope.set(param.getMetaAttribute(DollarParser.NAMED_PARAMETER_META_ATTR), param, true, null,
+                                 false, false, pure);
+                }
+            }
+            var result;
+            if (lhs.isLambda()) { result = lhs._fix(2, false); } else {
+                String lhsString = lhs.toString();
+                //The lhs is a
+                // string, so
+                // let's
+                // see if it's a
+                // builtin function
+                //if not then
+                // assume
+                // it's a variable.
+                if (Builtins.exists(lhsString)) { result = Builtins.execute(lhsString, rhs, newScope, pure); } else {
+                    final var valueUnfixed = DollarScriptSupport.getVariable(
+                            pure, newScope, lhsString, false, null, new SourceValue(scope, token));
+                    result = valueUnfixed._fix(2, false);
+                }
+            }
+
+            return result;
+        }
     }
 }

@@ -18,9 +18,10 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.SourceValue;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.var;
-import org.codehaus.jparsec.WithSource;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
 import static me.neilellis.dollar.DollarStatic.$void;
@@ -28,19 +29,21 @@ import static me.neilellis.dollar.DollarStatic.$void;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class AssertOperator implements Map<WithSource<Object[]>, var> {
+public class AssertOperator implements Map<Token, var> {
     private final Scope scope;
 
     public AssertOperator(Scope scope) {this.scope = scope;}
 
-    @Override public var map(WithSource<Object[]> withSource) {
-        return DollarScriptSupport.wrapReactiveUnary(scope, (var) withSource.getValue()[1], () -> {
-            if (((var) withSource.getValue()[1]).isTrue()) { return $void(); } else {
+    @Override public var map(Token token) {
+        final SourceValue source = new SourceValue(scope, token);
+        Object[] objects = (Object[]) token.value();
+        return DollarScriptSupport.wrapReactiveUnary(scope, (var) objects[1], () -> {
+            if (((var) objects[1]).isTrue()) { return $void(); } else {
                 throw new DollarScriptException("Assertion failed: " +
-                                                (withSource.getValue()[0] != null ? withSource.getValue()[0] : "") +
+                                                (objects[0] != null ? objects[0] : "") +
                                                 " : " +
-                                                withSource.getSource());
+                                                source.getSourceMessage());
             }
-        });
+        }, source);
     }
 }

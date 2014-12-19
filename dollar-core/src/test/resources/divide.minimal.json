@@ -1,0 +1,10312 @@
+[
+  [
+    0,
+    -2147483648,
+    0
+  ],
+  [
+    0,
+    2147483647,
+    0
+  ],
+  [
+    0,
+    -9223372036854775807,
+    0
+  ],
+  [
+    0,
+    9223372036854775807,
+    0
+  ],
+  [
+    0,
+    0,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    1,
+    0
+  ],
+  [
+    0,
+    -1,
+    0
+  ],
+  [
+    0,
+    100,
+    0
+  ],
+  [
+    0,
+    -100,
+    0
+  ],
+  [
+    0,
+    -3.4028234663852886E38,
+    0.0
+  ],
+  [
+    0,
+    3.4028234663852886E38,
+    0.0
+  ],
+  [
+    0,
+    -1.7976931348623157E308,
+    0.0
+  ],
+  [
+    0,
+    1.7976931348623157E308,
+    0.0
+  ],
+  [
+    0,
+    0.0,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    1.0,
+    0.0
+  ],
+  [
+    0,
+    -1.0,
+    0.0
+  ],
+  [
+    0,
+    100.0,
+    0.0
+  ],
+  [
+    0,
+    -100.0,
+    0.0
+  ],
+  [
+    0,
+    0.5,
+    0.0
+  ],
+  [
+    0,
+    -0.5,
+    0.0
+  ],
+  [
+    0,
+    -0.1,
+    0.0
+  ],
+  [
+    0,
+    0.1,
+    0.0
+  ],
+  [
+    0,
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30",
+      "millis": 15921000000
+    },
+    0
+  ],
+  [
+    0,
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30:30",
+      "millis": 15921030000
+    },
+    0
+  ],
+  [
+    0,
+    {
+      "$type": "DATE",
+      "text": "3900-07-04T07:30",
+      "millis": 60920836200000
+    },
+    0
+  ],
+  [
+    0,
+    "",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    "@",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    "@@ @@ @@@ @@ @@ @@",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    " ",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    "\n\t\r",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    "1",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    "true",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    "false",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    "0",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    true,
+    0
+  ],
+  [
+    0,
+    false,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    [
+      -2147483648,
+      2147483647,
+      -9223372036854775807,
+      9223372036854775807,
+      0,
+      1,
+      -1,
+      100,
+      -100
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    [
+      -3.4028234663852886E38,
+      3.4028234663852886E38,
+      -1.7976931348623157E308,
+      1.7976931348623157E308,
+      0.0,
+      1.0,
+      -1.0,
+      100.0,
+      -100.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30",
+        "millis": 15921000000
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30:30",
+        "millis": 15921030000
+      },
+      {
+        "$type": "DATE",
+        "text": "3900-07-04T07:30",
+        "millis": 60920836200000
+      }
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    [
+      true,
+      false
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    [],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      }
+    },
+    0
+  ],
+  [
+    0,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    0
+  ],
+  [
+    0,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    0
+  ],
+  [
+    0,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    0
+  ],
+  [
+    0,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 9223372036854775807
+    },
+    0
+  ],
+  [
+    0,
+    {
+      "$type": "RANGE",
+      "lower": -9223372036854775807,
+      "upper": 9223372036854775807
+    },
+    0
+  ],
+  [
+    0,
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "z"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    {
+      "$type": "RANGE",
+      "lower": "@",
+      "upper": ""
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    {
+      "$type": "RANGE",
+      "lower": "z",
+      "upper": "a"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    0
+  ],
+  [
+    0,
+    {},
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    {
+      "1": "one"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    {
+      "true": "true"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    {
+      "3870-07-04T07:30": true
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    {
+      "0.1": "0.1"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    {
+      "string": "string"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    -2147483648,
+    0
+  ],
+  [
+    1,
+    2147483647,
+    0
+  ],
+  [
+    1,
+    -9223372036854775807,
+    0
+  ],
+  [
+    1,
+    9223372036854775807,
+    0
+  ],
+  [
+    1,
+    0,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    1,
+    1
+  ],
+  [
+    1,
+    -1,
+    -1
+  ],
+  [
+    1,
+    100,
+    0
+  ],
+  [
+    1,
+    -100,
+    0
+  ],
+  [
+    1,
+    -3.4028234663852886E38,
+    -2.938736052218037E-39
+  ],
+  [
+    1,
+    3.4028234663852886E38,
+    2.938736052218037E-39
+  ],
+  [
+    1,
+    -1.7976931348623157E308,
+    -5.562684646268003E-309
+  ],
+  [
+    1,
+    1.7976931348623157E308,
+    5.562684646268003E-309
+  ],
+  [
+    1,
+    0.0,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    1.0,
+    1.0
+  ],
+  [
+    1,
+    -1.0,
+    -1.0
+  ],
+  [
+    1,
+    100.0,
+    0.01
+  ],
+  [
+    1,
+    -100.0,
+    -0.01
+  ],
+  [
+    1,
+    0.5,
+    2.0
+  ],
+  [
+    1,
+    -0.5,
+    -2.0
+  ],
+  [
+    1,
+    -0.1,
+    -10.0
+  ],
+  [
+    1,
+    0.1,
+    10.0
+  ],
+  [
+    1,
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30",
+      "millis": 15921000000
+    },
+    0
+  ],
+  [
+    1,
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30:30",
+      "millis": 15921030000
+    },
+    0
+  ],
+  [
+    1,
+    {
+      "$type": "DATE",
+      "text": "3900-07-04T07:30",
+      "millis": 60920836200000
+    },
+    0
+  ],
+  [
+    1,
+    "",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    "@",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    "@@ @@ @@@ @@ @@ @@",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    " ",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    "\n\t\r",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    "1",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    "true",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    "false",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    "0",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    true,
+    1
+  ],
+  [
+    1,
+    false,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    [
+      -2147483648,
+      2147483647,
+      -9223372036854775807,
+      9223372036854775807,
+      0,
+      1,
+      -1,
+      100,
+      -100
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    [
+      -3.4028234663852886E38,
+      3.4028234663852886E38,
+      -1.7976931348623157E308,
+      1.7976931348623157E308,
+      0.0,
+      1.0,
+      -1.0,
+      100.0,
+      -100.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30",
+        "millis": 15921000000
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30:30",
+        "millis": 15921030000
+      },
+      {
+        "$type": "DATE",
+        "text": "3900-07-04T07:30",
+        "millis": 60920836200000
+      }
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    [
+      true,
+      false
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    [],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      }
+    },
+    0
+  ],
+  [
+    1,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    0
+  ],
+  [
+    1,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    -1
+  ],
+  [
+    1,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    0
+  ],
+  [
+    1,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 9223372036854775807
+    },
+    0
+  ],
+  [
+    1,
+    {
+      "$type": "RANGE",
+      "lower": -9223372036854775807,
+      "upper": 9223372036854775807
+    },
+    0
+  ],
+  [
+    1,
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "z"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    {
+      "$type": "RANGE",
+      "lower": "@",
+      "upper": ""
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    {
+      "$type": "RANGE",
+      "lower": "z",
+      "upper": "a"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    -1
+  ],
+  [
+    1,
+    {},
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    {
+      "1": "one"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    {
+      "true": "true"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    {
+      "3870-07-04T07:30": true
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    {
+      "0.1": "0.1"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    {
+      "string": "string"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    -1,
+    -2147483648,
+    0
+  ],
+  [
+    -1,
+    2147483647,
+    0
+  ],
+  [
+    -1,
+    -9223372036854775807,
+    0
+  ],
+  [
+    -1,
+    9223372036854775807,
+    0
+  ],
+  [
+    -1,
+    0,
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    1,
+    -1
+  ],
+  [
+    -1,
+    -1,
+    1
+  ],
+  [
+    -1,
+    100,
+    0
+  ],
+  [
+    -1,
+    -100,
+    0
+  ],
+  [
+    -1,
+    -3.4028234663852886E38,
+    2.938736052218037E-39
+  ],
+  [
+    -1,
+    3.4028234663852886E38,
+    -2.938736052218037E-39
+  ],
+  [
+    -1,
+    -1.7976931348623157E308,
+    5.562684646268003E-309
+  ],
+  [
+    -1,
+    1.7976931348623157E308,
+    -5.562684646268003E-309
+  ],
+  [
+    -1,
+    0.0,
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    1.0,
+    -1.0
+  ],
+  [
+    -1,
+    -1.0,
+    1.0
+  ],
+  [
+    -1,
+    100.0,
+    -0.01
+  ],
+  [
+    -1,
+    -100.0,
+    0.01
+  ],
+  [
+    -1,
+    0.5,
+    -2.0
+  ],
+  [
+    -1,
+    -0.5,
+    2.0
+  ],
+  [
+    -1,
+    -0.1,
+    10.0
+  ],
+  [
+    -1,
+    0.1,
+    -10.0
+  ],
+  [
+    -1,
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30",
+      "millis": 15921000000
+    },
+    0
+  ],
+  [
+    -1,
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30:30",
+      "millis": 15921030000
+    },
+    0
+  ],
+  [
+    -1,
+    {
+      "$type": "DATE",
+      "text": "3900-07-04T07:30",
+      "millis": 60920836200000
+    },
+    0
+  ],
+  [
+    -1,
+    "",
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    "@",
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    "@@ @@ @@@ @@ @@ @@",
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    " ",
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    "\n\t\r",
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    "1",
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    "true",
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    "false",
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    "0",
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    true,
+    -1
+  ],
+  [
+    -1,
+    false,
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    [
+      -2147483648,
+      2147483647,
+      -9223372036854775807,
+      9223372036854775807,
+      0,
+      1,
+      -1,
+      100,
+      -100
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    [
+      -3.4028234663852886E38,
+      3.4028234663852886E38,
+      -1.7976931348623157E308,
+      1.7976931348623157E308,
+      0.0,
+      1.0,
+      -1.0,
+      100.0,
+      -100.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30",
+        "millis": 15921000000
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30:30",
+        "millis": 15921030000
+      },
+      {
+        "$type": "DATE",
+        "text": "3900-07-04T07:30",
+        "millis": 60920836200000
+      }
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    [
+      true,
+      false
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    [],
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      }
+    },
+    0
+  ],
+  [
+    -1,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    0
+  ],
+  [
+    -1,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    1
+  ],
+  [
+    -1,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    0
+  ],
+  [
+    -1,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 9223372036854775807
+    },
+    0
+  ],
+  [
+    -1,
+    {
+      "$type": "RANGE",
+      "lower": -9223372036854775807,
+      "upper": 9223372036854775807
+    },
+    0
+  ],
+  [
+    -1,
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "z"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    {
+      "$type": "RANGE",
+      "lower": "@",
+      "upper": ""
+    },
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    {
+      "$type": "RANGE",
+      "lower": "z",
+      "upper": "a"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    1
+  ],
+  [
+    -1,
+    {},
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    {
+      "1": "one"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    {
+      "true": "true"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    {
+      "3870-07-04T07:30": true
+    },
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    {
+      "0.1": "0.1"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    {
+      "string": "string"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    0.1,
+    -2147483648,
+    -4.656612873077393E-11
+  ],
+  [
+    0.1,
+    2147483647,
+    4.656612875245797E-11
+  ],
+  [
+    0.1,
+    -9223372036854775807,
+    -1.0842021724855045E-20
+  ],
+  [
+    0.1,
+    9223372036854775807,
+    1.0842021724855045E-20
+  ],
+  [
+    0.1,
+    0,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    1,
+    0.1
+  ],
+  [
+    0.1,
+    -1,
+    -0.1
+  ],
+  [
+    0.1,
+    100,
+    0.001
+  ],
+  [
+    0.1,
+    -100,
+    -0.001
+  ],
+  [
+    0.1,
+    -3.4028234663852886E38,
+    -2.9387360522180373E-40
+  ],
+  [
+    0.1,
+    3.4028234663852886E38,
+    2.9387360522180373E-40
+  ],
+  [
+    0.1,
+    -1.7976931348623157E308,
+    -5.562684646268E-310
+  ],
+  [
+    0.1,
+    1.7976931348623157E308,
+    5.562684646268E-310
+  ],
+  [
+    0.1,
+    0.0,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    1.0,
+    0.1
+  ],
+  [
+    0.1,
+    -1.0,
+    -0.1
+  ],
+  [
+    0.1,
+    100.0,
+    0.001
+  ],
+  [
+    0.1,
+    -100.0,
+    -0.001
+  ],
+  [
+    0.1,
+    0.5,
+    0.2
+  ],
+  [
+    0.1,
+    -0.5,
+    -0.2
+  ],
+  [
+    0.1,
+    -0.1,
+    -1.0
+  ],
+  [
+    0.1,
+    0.1,
+    1.0
+  ],
+  [
+    0.1,
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30",
+      "millis": 15921000000
+    },
+    5.426794799321651E-4
+  ],
+  [
+    0.1,
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30:30",
+      "millis": 15921030000
+    },
+    5.42678457361113E-4
+  ],
+  [
+    0.1,
+    {
+      "$type": "DATE",
+      "text": "3900-07-04T07:30",
+      "millis": 60920836200000
+    },
+    1.4182339801829575E-7
+  ],
+  [
+    0.1,
+    "",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    "@",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    "@@ @@ @@@ @@ @@ @@",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    " ",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    "\n\t\r",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    "1",
+    0.1
+  ],
+  [
+    0.1,
+    "true",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    "false",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    "0",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    true,
+    0.1
+  ],
+  [
+    0.1,
+    false,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    [
+      -2147483648,
+      2147483647,
+      -9223372036854775807,
+      9223372036854775807,
+      0,
+      1,
+      -1,
+      100,
+      -100
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    [
+      -3.4028234663852886E38,
+      3.4028234663852886E38,
+      -1.7976931348623157E308,
+      1.7976931348623157E308,
+      0.0,
+      1.0,
+      -1.0,
+      100.0,
+      -100.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30",
+        "millis": 15921000000
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30:30",
+        "millis": 15921030000
+      },
+      {
+        "$type": "DATE",
+        "text": "3900-07-04T07:30",
+        "millis": 60920836200000
+      }
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    [
+      true,
+      false
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    [],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      }
+    },
+    0.0033333333333333335
+  ],
+  [
+    0.1,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    0.05
+  ],
+  [
+    0.1,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    -0.1
+  ],
+  [
+    0.1,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    -0.05
+  ],
+  [
+    0.1,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 9223372036854775807
+    },
+    1.0842021724855045E-20
+  ],
+  [
+    0.1,
+    {
+      "$type": "RANGE",
+      "lower": -9223372036854775807,
+      "upper": 9223372036854775807
+    },
+    5.4210108624275225E-21
+  ],
+  [
+    0.1,
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "z"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    {
+      "$type": "RANGE",
+      "lower": "@",
+      "upper": ""
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    {
+      "$type": "RANGE",
+      "lower": "z",
+      "upper": "a"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    2.0
+  ],
+  [
+    0.1,
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    -0.09090909090909091
+  ],
+  [
+    0.1,
+    {},
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    {
+      "1": "one"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    {
+      "true": "true"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    {
+      "3870-07-04T07:30": true
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    {
+      "0.1": "0.1"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    {
+      "string": "string"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    -2147483648,
+    -5.3895982327284635E-18
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    2147483647,
+    5.3895982352381906E-18
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    -9223372036854775807,
+    -1.2548636255619264E-27
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    9223372036854775807,
+    1.2548636255619264E-27
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    0,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    1,
+    1.1574074074074074E-8
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    -1,
+    -1.1574074074074074E-8
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    100,
+    1.1574074074074074E-10
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    -100,
+    -1.1574074074074074E-10
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    -3.4028234663852886E38,
+    -3.4013148752523577E-47
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    3.4028234663852886E38,
+    3.4013148752523577E-47
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    -1.7976931348623157E308,
+    -6.4382925E-317
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    1.7976931348623157E308,
+    6.4382925E-317
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    0.0,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    1.0,
+    1.1574074074074074E-8
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    -1.0,
+    -1.1574074074074074E-8
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    100.0,
+    1.1574074074074074E-10
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    -100.0,
+    -1.1574074074074074E-10
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    0.5,
+    2.3148148148148148E-8
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    -0.5,
+    -2.3148148148148148E-8
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    -0.1,
+    -1.1574074074074073E-7
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    0.1,
+    1.1574074074074073E-7
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30",
+      "millis": 15921000000
+    },
+    6.281012499214873E-11
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30:30",
+      "millis": 15921030000
+    },
+    6.28100066390177E-11
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "DATE",
+      "text": "3900-07-04T07:30",
+      "millis": 60920836200000
+    },
+    1.641474514100645E-14
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    "",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    "@",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    "@@ @@ @@@ @@ @@ @@",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    " ",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    "\n\t\r",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    "1",
+    1.1574074074074074E-8
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    "true",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    "false",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    "0",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    true,
+    1.1574074074074074E-8
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    false,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    [
+      -2147483648,
+      2147483647,
+      -9223372036854775807,
+      9223372036854775807,
+      0,
+      1,
+      -1,
+      100,
+      -100
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    [
+      -3.4028234663852886E38,
+      3.4028234663852886E38,
+      -1.7976931348623157E308,
+      1.7976931348623157E308,
+      0.0,
+      1.0,
+      -1.0,
+      100.0,
+      -100.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30",
+        "millis": 15921000000
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30:30",
+        "millis": 15921030000
+      },
+      {
+        "$type": "DATE",
+        "text": "3900-07-04T07:30",
+        "millis": 60920836200000
+      }
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    [
+      true,
+      false
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    [],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      }
+    },
+    3.858024691358025E-10
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    5.787037037037037E-9
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    -1.1574074074074074E-8
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    -5.787037037037037E-9
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 9223372036854775807
+    },
+    1.2548636255619264E-27
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "RANGE",
+      "lower": -9223372036854775807,
+      "upper": 9223372036854775807
+    },
+    6.274318127809632E-28
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "z"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "RANGE",
+      "lower": "@",
+      "upper": ""
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "RANGE",
+      "lower": "z",
+      "upper": "a"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    2.3148148148148146E-7
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    -1.0521885521885521E-8
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {},
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "1": "one"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "true": "true"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "3870-07-04T07:30": true
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "0.1": "0.1"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "string": "string"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    "",
+    -2147483648,
+    ""
+  ],
+  [
+    "",
+    2147483647,
+    ""
+  ],
+  [
+    "",
+    -9223372036854775807,
+    ""
+  ],
+  [
+    "",
+    9223372036854775807,
+    ""
+  ],
+  [
+    "",
+    0,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    "",
+    1,
+    ""
+  ],
+  [
+    "",
+    -1,
+    ""
+  ],
+  [
+    "",
+    100,
+    ""
+  ],
+  [
+    "",
+    -100,
+    ""
+  ],
+  [
+    "",
+    -3.4028234663852886E38,
+    ""
+  ],
+  [
+    "",
+    3.4028234663852886E38,
+    ""
+  ],
+  [
+    "",
+    -1.7976931348623157E308,
+    ""
+  ],
+  [
+    "",
+    1.7976931348623157E308,
+    ""
+  ],
+  [
+    "",
+    0.0,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    "",
+    1.0,
+    ""
+  ],
+  [
+    "",
+    -1.0,
+    ""
+  ],
+  [
+    "",
+    100.0,
+    ""
+  ],
+  [
+    "",
+    -100.0,
+    ""
+  ],
+  [
+    "",
+    0.5,
+    ""
+  ],
+  [
+    "",
+    -0.5,
+    ""
+  ],
+  [
+    "",
+    -0.1,
+    ""
+  ],
+  [
+    "",
+    0.1,
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30",
+      "millis": 15921000000
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30:30",
+      "millis": 15921030000
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "DATE",
+      "text": "3900-07-04T07:30",
+      "millis": 60920836200000
+    },
+    ""
+  ],
+  [
+    "",
+    "",
+    ""
+  ],
+  [
+    "",
+    "@",
+    ""
+  ],
+  [
+    "",
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    ""
+  ],
+  [
+    "",
+    "@@ @@ @@@ @@ @@ @@",
+    ""
+  ],
+  [
+    "",
+    " ",
+    ""
+  ],
+  [
+    "",
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    ""
+  ],
+  [
+    "",
+    "\n\t\r",
+    ""
+  ],
+  [
+    "",
+    "1",
+    ""
+  ],
+  [
+    "",
+    "true",
+    ""
+  ],
+  [
+    "",
+    "false",
+    ""
+  ],
+  [
+    "",
+    "0",
+    ""
+  ],
+  [
+    "",
+    true,
+    ""
+  ],
+  [
+    "",
+    false,
+    ""
+  ],
+  [
+    "",
+    [
+      -2147483648,
+      2147483647,
+      -9223372036854775807,
+      9223372036854775807,
+      0,
+      1,
+      -1,
+      100,
+      -100
+    ],
+    ""
+  ],
+  [
+    "",
+    [
+      -3.4028234663852886E38,
+      3.4028234663852886E38,
+      -1.7976931348623157E308,
+      1.7976931348623157E308,
+      0.0,
+      1.0,
+      -1.0,
+      100.0,
+      -100.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
+    ""
+  ],
+  [
+    "",
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30",
+        "millis": 15921000000
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30:30",
+        "millis": 15921030000
+      },
+      {
+        "$type": "DATE",
+        "text": "3900-07-04T07:30",
+        "millis": 60920836200000
+      }
+    ],
+    ""
+  ],
+  [
+    "",
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
+    ""
+  ],
+  [
+    "",
+    [
+      true,
+      false
+    ],
+    ""
+  ],
+  [
+    "",
+    [],
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      }
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 9223372036854775807
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "RANGE",
+      "lower": -9223372036854775807,
+      "upper": 9223372036854775807
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "z"
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "RANGE",
+      "lower": "@",
+      "upper": ""
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "RANGE",
+      "lower": "z",
+      "upper": "a"
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    ""
+  ],
+  [
+    "",
+    {},
+    ""
+  ],
+  [
+    "",
+    {
+      "1": "one"
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "true": "true"
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "3870-07-04T07:30": true
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "0.1": "0.1"
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "string": "string"
+    },
+    ""
+  ],
+  [
+    "",
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    },
+    ""
+  ],
+  [
+    "@",
+    -2147483648,
+    "@"
+  ],
+  [
+    "@",
+    2147483647,
+    ""
+  ],
+  [
+    "@",
+    -9223372036854775807,
+    "@"
+  ],
+  [
+    "@",
+    9223372036854775807,
+    ""
+  ],
+  [
+    "@",
+    0,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    "@",
+    1,
+    "@"
+  ],
+  [
+    "@",
+    -1,
+    "@"
+  ],
+  [
+    "@",
+    100,
+    ""
+  ],
+  [
+    "@",
+    -100,
+    "@"
+  ],
+  [
+    "@",
+    -3.4028234663852886E38,
+    "@"
+  ],
+  [
+    "@",
+    3.4028234663852886E38,
+    ""
+  ],
+  [
+    "@",
+    -1.7976931348623157E308,
+    "@"
+  ],
+  [
+    "@",
+    1.7976931348623157E308,
+    ""
+  ],
+  [
+    "@",
+    0.0,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    "@",
+    1.0,
+    "@"
+  ],
+  [
+    "@",
+    -1.0,
+    "@"
+  ],
+  [
+    "@",
+    100.0,
+    ""
+  ],
+  [
+    "@",
+    -100.0,
+    "@"
+  ],
+  [
+    "@",
+    0.5,
+    "@@"
+  ],
+  [
+    "@",
+    -0.5,
+    "@"
+  ],
+  [
+    "@",
+    -0.1,
+    "@"
+  ],
+  [
+    "@",
+    0.1,
+    "@@@@@@@@@@"
+  ],
+  [
+    "@",
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30",
+      "millis": 15921000000
+    },
+    ""
+  ],
+  [
+    "@",
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30:30",
+      "millis": 15921030000
+    },
+    ""
+  ],
+  [
+    "@",
+    {
+      "$type": "DATE",
+      "text": "3900-07-04T07:30",
+      "millis": 60920836200000
+    },
+    ""
+  ],
+  [
+    "@",
+    "",
+    "@"
+  ],
+  [
+    "@",
+    "@",
+    []
+  ],
+  [
+    "@",
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    "@"
+  ],
+  [
+    "@",
+    "@@ @@ @@@ @@ @@ @@",
+    "@"
+  ],
+  [
+    "@",
+    " ",
+    "@"
+  ],
+  [
+    "@",
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    "@"
+  ],
+  [
+    "@",
+    "\n\t\r",
+    "@"
+  ],
+  [
+    "@",
+    "1",
+    "@"
+  ],
+  [
+    "@",
+    "true",
+    "@"
+  ],
+  [
+    "@",
+    "false",
+    "@"
+  ],
+  [
+    "@",
+    "0",
+    "@"
+  ],
+  [
+    "@",
+    true,
+    "@"
+  ],
+  [
+    "@",
+    false,
+    "@"
+  ],
+  [
+    "@",
+    [
+      -2147483648,
+      2147483647,
+      -9223372036854775807,
+      9223372036854775807,
+      0,
+      1,
+      -1,
+      100,
+      -100
+    ],
+    "@"
+  ],
+  [
+    "@",
+    [
+      -3.4028234663852886E38,
+      3.4028234663852886E38,
+      -1.7976931348623157E308,
+      1.7976931348623157E308,
+      0.0,
+      1.0,
+      -1.0,
+      100.0,
+      -100.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
+    "@"
+  ],
+  [
+    "@",
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30",
+        "millis": 15921000000
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30:30",
+        "millis": 15921030000
+      },
+      {
+        "$type": "DATE",
+        "text": "3900-07-04T07:30",
+        "millis": 60920836200000
+      }
+    ],
+    "@"
+  ],
+  [
+    "@",
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
+    "@"
+  ],
+  [
+    "@",
+    [
+      true,
+      false
+    ],
+    "@"
+  ],
+  [
+    "@",
+    [],
+    "@"
+  ],
+  [
+    "@",
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      }
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 9223372036854775807
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "$type": "RANGE",
+      "lower": -9223372036854775807,
+      "upper": 9223372036854775807
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "z"
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "$type": "RANGE",
+      "lower": "@",
+      "upper": ""
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "$type": "RANGE",
+      "lower": "z",
+      "upper": "a"
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    "@"
+  ],
+  [
+    "@",
+    {},
+    "@"
+  ],
+  [
+    "@",
+    {
+      "1": "one"
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "true": "true"
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "3870-07-04T07:30": true
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "0.1": "0.1"
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "string": "string"
+    },
+    "@"
+  ],
+  [
+    "@",
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    },
+    "@"
+  ],
+  [
+    true,
+    -2147483648,
+    true
+  ],
+  [
+    true,
+    2147483647,
+    true
+  ],
+  [
+    true,
+    -9223372036854775807,
+    true
+  ],
+  [
+    true,
+    9223372036854775807,
+    true
+  ],
+  [
+    true,
+    0,
+    false
+  ],
+  [
+    true,
+    1,
+    true
+  ],
+  [
+    true,
+    -1,
+    true
+  ],
+  [
+    true,
+    100,
+    true
+  ],
+  [
+    true,
+    -100,
+    true
+  ],
+  [
+    true,
+    -3.4028234663852886E38,
+    true
+  ],
+  [
+    true,
+    3.4028234663852886E38,
+    true
+  ],
+  [
+    true,
+    -1.7976931348623157E308,
+    true
+  ],
+  [
+    true,
+    1.7976931348623157E308,
+    true
+  ],
+  [
+    true,
+    0.0,
+    false
+  ],
+  [
+    true,
+    1.0,
+    true
+  ],
+  [
+    true,
+    -1.0,
+    true
+  ],
+  [
+    true,
+    100.0,
+    true
+  ],
+  [
+    true,
+    -100.0,
+    true
+  ],
+  [
+    true,
+    0.5,
+    false
+  ],
+  [
+    true,
+    -0.5,
+    false
+  ],
+  [
+    true,
+    -0.1,
+    false
+  ],
+  [
+    true,
+    0.1,
+    false
+  ],
+  [
+    true,
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30",
+      "millis": 15921000000
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30:30",
+      "millis": 15921030000
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "DATE",
+      "text": "3900-07-04T07:30",
+      "millis": 60920836200000
+    },
+    true
+  ],
+  [
+    true,
+    "",
+    false
+  ],
+  [
+    true,
+    "@",
+    true
+  ],
+  [
+    true,
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    true
+  ],
+  [
+    true,
+    "@@ @@ @@@ @@ @@ @@",
+    true
+  ],
+  [
+    true,
+    " ",
+    true
+  ],
+  [
+    true,
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    true
+  ],
+  [
+    true,
+    "\n\t\r",
+    true
+  ],
+  [
+    true,
+    "1",
+    true
+  ],
+  [
+    true,
+    "true",
+    true
+  ],
+  [
+    true,
+    "false",
+    true
+  ],
+  [
+    true,
+    "0",
+    true
+  ],
+  [
+    true,
+    true,
+    true
+  ],
+  [
+    true,
+    false,
+    false
+  ],
+  [
+    true,
+    [
+      -2147483648,
+      2147483647,
+      -9223372036854775807,
+      9223372036854775807,
+      0,
+      1,
+      -1,
+      100,
+      -100
+    ],
+    true
+  ],
+  [
+    true,
+    [
+      -3.4028234663852886E38,
+      3.4028234663852886E38,
+      -1.7976931348623157E308,
+      1.7976931348623157E308,
+      0.0,
+      1.0,
+      -1.0,
+      100.0,
+      -100.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
+    true
+  ],
+  [
+    true,
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30",
+        "millis": 15921000000
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30:30",
+        "millis": 15921030000
+      },
+      {
+        "$type": "DATE",
+        "text": "3900-07-04T07:30",
+        "millis": 60920836200000
+      }
+    ],
+    true
+  ],
+  [
+    true,
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
+    true
+  ],
+  [
+    true,
+    [
+      true,
+      false
+    ],
+    true
+  ],
+  [
+    true,
+    [],
+    false
+  ],
+  [
+    true,
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      }
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 9223372036854775807
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "RANGE",
+      "lower": -9223372036854775807,
+      "upper": 9223372036854775807
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "z"
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "RANGE",
+      "lower": "@",
+      "upper": ""
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "RANGE",
+      "lower": "z",
+      "upper": "a"
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    true
+  ],
+  [
+    true,
+    {},
+    false
+  ],
+  [
+    true,
+    {
+      "1": "one"
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "true": "true"
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "3870-07-04T07:30": true
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "0.1": "0.1"
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "string": "string"
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    },
+    true
+  ],
+  [
+    false,
+    -2147483648,
+    false
+  ],
+  [
+    false,
+    2147483647,
+    false
+  ],
+  [
+    false,
+    -9223372036854775807,
+    false
+  ],
+  [
+    false,
+    9223372036854775807,
+    false
+  ],
+  [
+    false,
+    0,
+    true
+  ],
+  [
+    false,
+    1,
+    false
+  ],
+  [
+    false,
+    -1,
+    false
+  ],
+  [
+    false,
+    100,
+    false
+  ],
+  [
+    false,
+    -100,
+    false
+  ],
+  [
+    false,
+    -3.4028234663852886E38,
+    false
+  ],
+  [
+    false,
+    3.4028234663852886E38,
+    false
+  ],
+  [
+    false,
+    -1.7976931348623157E308,
+    false
+  ],
+  [
+    false,
+    1.7976931348623157E308,
+    false
+  ],
+  [
+    false,
+    0.0,
+    true
+  ],
+  [
+    false,
+    1.0,
+    false
+  ],
+  [
+    false,
+    -1.0,
+    false
+  ],
+  [
+    false,
+    100.0,
+    false
+  ],
+  [
+    false,
+    -100.0,
+    false
+  ],
+  [
+    false,
+    0.5,
+    true
+  ],
+  [
+    false,
+    -0.5,
+    true
+  ],
+  [
+    false,
+    -0.1,
+    true
+  ],
+  [
+    false,
+    0.1,
+    true
+  ],
+  [
+    false,
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30",
+      "millis": 15921000000
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30:30",
+      "millis": 15921030000
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "$type": "DATE",
+      "text": "3900-07-04T07:30",
+      "millis": 60920836200000
+    },
+    false
+  ],
+  [
+    false,
+    "",
+    true
+  ],
+  [
+    false,
+    "@",
+    false
+  ],
+  [
+    false,
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    false
+  ],
+  [
+    false,
+    "@@ @@ @@@ @@ @@ @@",
+    false
+  ],
+  [
+    false,
+    " ",
+    false
+  ],
+  [
+    false,
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    false
+  ],
+  [
+    false,
+    "\n\t\r",
+    false
+  ],
+  [
+    false,
+    "1",
+    false
+  ],
+  [
+    false,
+    "true",
+    false
+  ],
+  [
+    false,
+    "false",
+    false
+  ],
+  [
+    false,
+    "0",
+    false
+  ],
+  [
+    false,
+    true,
+    false
+  ],
+  [
+    false,
+    false,
+    true
+  ],
+  [
+    false,
+    [
+      -2147483648,
+      2147483647,
+      -9223372036854775807,
+      9223372036854775807,
+      0,
+      1,
+      -1,
+      100,
+      -100
+    ],
+    false
+  ],
+  [
+    false,
+    [
+      -3.4028234663852886E38,
+      3.4028234663852886E38,
+      -1.7976931348623157E308,
+      1.7976931348623157E308,
+      0.0,
+      1.0,
+      -1.0,
+      100.0,
+      -100.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
+    false
+  ],
+  [
+    false,
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30",
+        "millis": 15921000000
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30:30",
+        "millis": 15921030000
+      },
+      {
+        "$type": "DATE",
+        "text": "3900-07-04T07:30",
+        "millis": 60920836200000
+      }
+    ],
+    false
+  ],
+  [
+    false,
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
+    false
+  ],
+  [
+    false,
+    [
+      true,
+      false
+    ],
+    false
+  ],
+  [
+    false,
+    [],
+    true
+  ],
+  [
+    false,
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      }
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 9223372036854775807
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "$type": "RANGE",
+      "lower": -9223372036854775807,
+      "upper": 9223372036854775807
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "z"
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "$type": "RANGE",
+      "lower": "@",
+      "upper": ""
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "$type": "RANGE",
+      "lower": "z",
+      "upper": "a"
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    false
+  ],
+  [
+    false,
+    {},
+    true
+  ],
+  [
+    false,
+    {
+      "1": "one"
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "true": "true"
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "3870-07-04T07:30": true
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "0.1": "0.1"
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "string": "string"
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    },
+    false
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    -2147483648,
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    2147483647,
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    -9223372036854775807,
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    9223372036854775807,
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    0,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    1,
+    [
+      0,
+      1,
+      -1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    -1,
+    [
+      0,
+      1,
+      -1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    100,
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    -100,
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    -3.4028234663852886E38,
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    3.4028234663852886E38,
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    -1.7976931348623157E308,
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    1.7976931348623157E308,
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    0.0,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    1.0,
+    [
+      0,
+      1,
+      -1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    -1.0,
+    [
+      0,
+      1,
+      -1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    100.0,
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    -100.0,
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    0.5,
+    [
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    -0.5,
+    [
+      -1,
+      1,
+      0,
+      -1,
+      1,
+      0
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    -0.1,
+    [
+      -1,
+      1,
+      0,
+      -1,
+      1,
+      0,
+      -1,
+      1,
+      0,
+      -1,
+      1,
+      0,
+      -1,
+      1,
+      0,
+      -1,
+      1,
+      0,
+      -1,
+      1,
+      0,
+      -1,
+      1,
+      0,
+      -1,
+      1,
+      0,
+      -1,
+      1,
+      0
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    0.1,
+    [
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30",
+      "millis": 15921000000
+    },
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30:30",
+      "millis": 15921030000
+    },
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "DATE",
+      "text": "3900-07-04T07:30",
+      "millis": 60920836200000
+    },
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    "",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    "@",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    "@@ @@ @@@ @@ @@ @@",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    " ",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    "\n\t\r",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    "1",
+    [
+      0,
+      1,
+      -1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    "true",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    "false",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    "0",
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    true,
+    [
+      0,
+      1,
+      -1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    false,
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      -2147483648,
+      2147483647,
+      -9223372036854775807,
+      9223372036854775807,
+      0,
+      1,
+      -1,
+      100,
+      -100
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      -3.4028234663852886E38,
+      3.4028234663852886E38,
+      -1.7976931348623157E308,
+      1.7976931348623157E308,
+      0.0,
+      1.0,
+      -1.0,
+      100.0,
+      -100.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30",
+        "millis": 15921000000
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30:30",
+        "millis": 15921030000
+      },
+      {
+        "$type": "DATE",
+        "text": "3900-07-04T07:30",
+        "millis": 60920836200000
+      }
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      true,
+      false
+    ],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    [],
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      }
+    },
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    [0]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    [
+      0,
+      1,
+      -1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    [-1]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 9223372036854775807
+    },
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "RANGE",
+      "lower": -9223372036854775807,
+      "upper": 9223372036854775807
+    },
+    []
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "z"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "RANGE",
+      "lower": "@",
+      "upper": ""
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "RANGE",
+      "lower": "z",
+      "upper": "a"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    [
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    [
+      1,
+      -1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {},
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "1": "one"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "true": "true"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "3870-07-04T07:30": true
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "0.1": "0.1"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "string": "string"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    },
+    {
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    -2147483648,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    2147483647,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    -9223372036854775807,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    9223372036854775807,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    0,
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    1,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    -1,
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    100,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    -100,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    -3.4028234663852886E38,
+    {
+      "$type": "RANGE",
+      "lower": 2.938736052218037E-39,
+      "upper": -2.938736052218037E-39
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    3.4028234663852886E38,
+    {
+      "$type": "RANGE",
+      "lower": -2.938736052218037E-39,
+      "upper": 2.938736052218037E-39
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    -1.7976931348623157E308,
+    {
+      "$type": "RANGE",
+      "lower": 5.562684646268003E-309,
+      "upper": -5.562684646268003E-309
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    1.7976931348623157E308,
+    {
+      "$type": "RANGE",
+      "lower": -5.562684646268003E-309,
+      "upper": 5.562684646268003E-309
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    0.0,
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    1.0,
+    {
+      "$type": "RANGE",
+      "lower": -1.0,
+      "upper": 1.0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    -1.0,
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -1.0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    100.0,
+    {
+      "$type": "RANGE",
+      "lower": -0.01,
+      "upper": 0.01
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    -100.0,
+    {
+      "$type": "RANGE",
+      "lower": 0.01,
+      "upper": -0.01
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    0.5,
+    {
+      "$type": "RANGE",
+      "lower": -2.0,
+      "upper": 2.0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    -0.5,
+    {
+      "$type": "RANGE",
+      "lower": 2.0,
+      "upper": -2.0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    -0.1,
+    {
+      "$type": "RANGE",
+      "lower": 10.0,
+      "upper": -10.0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    0.1,
+    {
+      "$type": "RANGE",
+      "lower": -10.0,
+      "upper": 10.0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30",
+      "millis": 15921000000
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30:30",
+      "millis": 15921030000
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "DATE",
+      "text": "3900-07-04T07:30",
+      "millis": 60920836200000
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    "",
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    "@",
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    "@@ @@ @@@ @@ @@ @@",
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    " ",
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    "\n\t\r",
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    "1",
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    "true",
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    "false",
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    "0",
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    true,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    false,
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    [
+      -2147483648,
+      2147483647,
+      -9223372036854775807,
+      9223372036854775807,
+      0,
+      1,
+      -1,
+      100,
+      -100
+    ],
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    [
+      -3.4028234663852886E38,
+      3.4028234663852886E38,
+      -1.7976931348623157E308,
+      1.7976931348623157E308,
+      0.0,
+      1.0,
+      -1.0,
+      100.0,
+      -100.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30",
+        "millis": 15921000000
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30:30",
+        "millis": 15921030000
+      },
+      {
+        "$type": "DATE",
+        "text": "3900-07-04T07:30",
+        "millis": 60920836200000
+      }
+    ],
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    [
+      true,
+      false
+    ],
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    [],
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      }
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 9223372036854775807
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": -9223372036854775807,
+      "upper": 9223372036854775807
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "z"
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": "@",
+      "upper": ""
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": "z",
+      "upper": "a"
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {},
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "1": "one"
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "true": "true"
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "3870-07-04T07:30": true
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "0.1": "0.1"
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "string": "string"
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "positive"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    null,
+    -2147483648,
+    null
+  ],
+  [
+    null,
+    2147483647,
+    null
+  ],
+  [
+    null,
+    -9223372036854775807,
+    null
+  ],
+  [
+    null,
+    9223372036854775807,
+    null
+  ],
+  [
+    null,
+    0,
+    null
+  ],
+  [
+    null,
+    1,
+    null
+  ],
+  [
+    null,
+    -1,
+    null
+  ],
+  [
+    null,
+    100,
+    null
+  ],
+  [
+    null,
+    -100,
+    null
+  ],
+  [
+    null,
+    -3.4028234663852886E38,
+    null
+  ],
+  [
+    null,
+    3.4028234663852886E38,
+    null
+  ],
+  [
+    null,
+    -1.7976931348623157E308,
+    null
+  ],
+  [
+    null,
+    1.7976931348623157E308,
+    null
+  ],
+  [
+    null,
+    0.0,
+    null
+  ],
+  [
+    null,
+    1.0,
+    null
+  ],
+  [
+    null,
+    -1.0,
+    null
+  ],
+  [
+    null,
+    100.0,
+    null
+  ],
+  [
+    null,
+    -100.0,
+    null
+  ],
+  [
+    null,
+    0.5,
+    null
+  ],
+  [
+    null,
+    -0.5,
+    null
+  ],
+  [
+    null,
+    -0.1,
+    null
+  ],
+  [
+    null,
+    0.1,
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30",
+      "millis": 15921000000
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30:30",
+      "millis": 15921030000
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "DATE",
+      "text": "3900-07-04T07:30",
+      "millis": 60920836200000
+    },
+    null
+  ],
+  [
+    null,
+    "",
+    null
+  ],
+  [
+    null,
+    "@",
+    null
+  ],
+  [
+    null,
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    null
+  ],
+  [
+    null,
+    "@@ @@ @@@ @@ @@ @@",
+    null
+  ],
+  [
+    null,
+    " ",
+    null
+  ],
+  [
+    null,
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    null
+  ],
+  [
+    null,
+    "\n\t\r",
+    null
+  ],
+  [
+    null,
+    "1",
+    null
+  ],
+  [
+    null,
+    "true",
+    null
+  ],
+  [
+    null,
+    "false",
+    null
+  ],
+  [
+    null,
+    "0",
+    null
+  ],
+  [
+    null,
+    true,
+    null
+  ],
+  [
+    null,
+    false,
+    null
+  ],
+  [
+    null,
+    [
+      -2147483648,
+      2147483647,
+      -9223372036854775807,
+      9223372036854775807,
+      0,
+      1,
+      -1,
+      100,
+      -100
+    ],
+    null
+  ],
+  [
+    null,
+    [
+      -3.4028234663852886E38,
+      3.4028234663852886E38,
+      -1.7976931348623157E308,
+      1.7976931348623157E308,
+      0.0,
+      1.0,
+      -1.0,
+      100.0,
+      -100.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
+    null
+  ],
+  [
+    null,
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30",
+        "millis": 15921000000
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30:30",
+        "millis": 15921030000
+      },
+      {
+        "$type": "DATE",
+        "text": "3900-07-04T07:30",
+        "millis": 60920836200000
+      }
+    ],
+    null
+  ],
+  [
+    null,
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
+    null
+  ],
+  [
+    null,
+    [
+      true,
+      false
+    ],
+    null
+  ],
+  [
+    null,
+    [],
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      }
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 9223372036854775807
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "RANGE",
+      "lower": -9223372036854775807,
+      "upper": 9223372036854775807
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "z"
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "RANGE",
+      "lower": "@",
+      "upper": ""
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "RANGE",
+      "lower": "z",
+      "upper": "a"
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    null
+  ],
+  [
+    null,
+    {},
+    null
+  ],
+  [
+    null,
+    {
+      "1": "one"
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "true": "true"
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "3870-07-04T07:30": true
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "0.1": "0.1"
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "string": "string"
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    },
+    null
+  ],
+  [-2147483648],
+  [2147483647],
+  [-9223372036854775807],
+  [9223372036854775807],
+  [0],
+  [1],
+  [-1],
+  [100],
+  [-100],
+  [-3.4028234663852886E38],
+  [3.4028234663852886E38],
+  [-1.7976931348623157E308],
+  [1.7976931348623157E308],
+  [0.0],
+  [1.0],
+  [-1.0],
+  [100.0],
+  [-100.0],
+  [0.5],
+  [-0.5],
+  [-0.1],
+  [0.1],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30",
+      "millis": 15921000000
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30:30",
+      "millis": 15921030000
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "3900-07-04T07:30",
+      "millis": 60920836200000
+    }
+  ],
+  [""],
+  ["@"],
+  ["@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"],
+  ["@@ @@ @@@ @@ @@ @@"],
+  [" "],
+  ["ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…"],
+  ["\n\t\r"],
+  ["1"],
+  ["true"],
+  ["false"],
+  ["0"],
+  [true],
+  [false],
+  [
+    [
+      -2147483648,
+      2147483647,
+      -9223372036854775807,
+      9223372036854775807,
+      0,
+      1,
+      -1,
+      100,
+      -100
+    ]
+  ],
+  [
+    [
+      -3.4028234663852886E38,
+      3.4028234663852886E38,
+      -1.7976931348623157E308,
+      1.7976931348623157E308,
+      0.0,
+      1.0,
+      -1.0,
+      100.0,
+      -100.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ]
+  ],
+  [
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30",
+        "millis": 15921000000
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30:30",
+        "millis": 15921030000
+      },
+      {
+        "$type": "DATE",
+        "text": "3900-07-04T07:30",
+        "millis": 60920836200000
+      }
+    ]
+  ],
+  [
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ]
+  ],
+  [
+    [
+      true,
+      false
+    ]
+  ],
+  [[]],
+  [
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 9223372036854775807
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -9223372036854775807,
+      "upper": 9223372036854775807
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "z"
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": "@",
+      "upper": ""
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": "z",
+      "upper": "a"
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    }
+  ],
+  [{}],
+  [
+    {
+      "1": "one"
+    }
+  ],
+  [
+    {
+      "true": "true"
+    }
+  ],
+  [
+    {
+      "3870-07-04T07:30": true
+    }
+  ],
+  [
+    {
+      "0.1": "0.1"
+    }
+  ],
+  [
+    {
+      "string": "string"
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    -2147483648,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    2147483647,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    -9223372036854775807,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    9223372036854775807,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    0,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    1,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    -1,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    100,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    -100,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    -3.4028234663852886E38,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    3.4028234663852886E38,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    -1.7976931348623157E308,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    1.7976931348623157E308,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    0.0,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    1.0,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    -1.0,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    100.0,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    -100.0,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    0.5,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    -0.5,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    -0.1,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    0.1,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30",
+      "millis": 15921000000
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30:30",
+      "millis": 15921030000
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "DATE",
+      "text": "3900-07-04T07:30",
+      "millis": 60920836200000
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    "",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    "@",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    "@@ @@ @@@ @@ @@ @@",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    " ",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    "\n\t\r",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    "1",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    "true",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    "false",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    "0",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    true,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    false,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    [
+      -2147483648,
+      2147483647,
+      -9223372036854775807,
+      9223372036854775807,
+      0,
+      1,
+      -1,
+      100,
+      -100
+    ],
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    [
+      -3.4028234663852886E38,
+      3.4028234663852886E38,
+      -1.7976931348623157E308,
+      1.7976931348623157E308,
+      0.0,
+      1.0,
+      -1.0,
+      100.0,
+      -100.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30",
+        "millis": 15921000000
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30:30",
+        "millis": 15921030000
+      },
+      {
+        "$type": "DATE",
+        "text": "3900-07-04T07:30",
+        "millis": 60920836200000
+      }
+    ],
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    [
+      true,
+      false
+    ],
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    [],
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      }
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 9223372036854775807
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "RANGE",
+      "lower": -9223372036854775807,
+      "upper": 9223372036854775807
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "z"
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "RANGE",
+      "lower": "@",
+      "upper": ""
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "RANGE",
+      "lower": "z",
+      "upper": "a"
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {},
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "1": "one"
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "true": "true"
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "3870-07-04T07:30": true
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "0.1": "0.1"
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "string": "string"
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    -2147483648,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    2147483647,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    -9223372036854775807,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    9223372036854775807,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    0,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    1,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    -1,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    100,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    -100,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    -3.4028234663852886E38,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    3.4028234663852886E38,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    -1.7976931348623157E308,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    1.7976931348623157E308,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    0.0,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    1.0,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    -1.0,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    100.0,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    -100.0,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    0.5,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    -0.5,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    -0.1,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    0.1,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30",
+      "millis": 15921000000
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-07-04T07:30:30",
+      "millis": 15921030000
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "DATE",
+      "text": "3900-07-04T07:30",
+      "millis": 60920836200000
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    "",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    "@",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    "@@ @@ @@@ @@ @@ @@",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    " ",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    "\n\t\r",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    "1",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    "true",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    "false",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    "0",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    true,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    false,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    [
+      -2147483648,
+      2147483647,
+      -9223372036854775807,
+      9223372036854775807,
+      0,
+      1,
+      -1,
+      100,
+      -100
+    ],
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    [
+      -3.4028234663852886E38,
+      3.4028234663852886E38,
+      -1.7976931348623157E308,
+      1.7976931348623157E308,
+      0.0,
+      1.0,
+      -1.0,
+      100.0,
+      -100.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30",
+        "millis": 15921000000
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-07-04T07:30:30",
+        "millis": 15921030000
+      },
+      {
+        "$type": "DATE",
+        "text": "3900-07-04T07:30",
+        "millis": 60920836200000
+      }
+    ],
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    [
+      true,
+      false
+    ],
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    [],
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "text",
+          "millis"
+        ],
+        "array": false,
+        "object": true
+      }
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 9223372036854775807
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "RANGE",
+      "lower": -9223372036854775807,
+      "upper": 9223372036854775807
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "z"
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "RANGE",
+      "lower": "@",
+      "upper": ""
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "RANGE",
+      "lower": "z",
+      "upper": "a"
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {},
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "1": "one"
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "true": "true"
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "3870-07-04T07:30": true
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "0.1": "0.1"
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "string": "string"
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ]
+]

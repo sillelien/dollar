@@ -20,5 +20,5 @@ package me.neilellis.dollar;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public enum Type {
-    STRING, DECIMAL, LIST, MAP, URI, VOID, RANGE, BOOLEAN, ERROR, DATE, INTEGER
+    STRING, DECIMAL, LIST, MAP, URI, VOID, RANGE, BOOLEAN, ERROR, DATE, INFINITY, ANY, INTEGER
 }

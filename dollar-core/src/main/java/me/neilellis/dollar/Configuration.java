@@ -23,10 +23,11 @@ package me.neilellis.dollar;
  */
 @SuppressWarnings("PointlessBooleanExpression") public class Configuration {
 
-    private boolean safe = Boolean.parseBoolean(System.getProperty("dollar.safe", "false"));
+    private boolean safe = Boolean.parseBoolean(System.getProperty("dollar.safe", "true"));
     private boolean monitor = Boolean.parseBoolean(System.getProperty("dollar.monitor", "false"));
     private boolean production = Boolean.parseBoolean(System.getProperty("dollar.production", "false"));
     private boolean debugScope = Boolean.parseBoolean(System.getProperty("dollar.debug.scope", "false"));
+    private boolean failFast = true;
 
 
     public Configuration(boolean safe, boolean monitor, boolean production, boolean debugScope) {
@@ -54,7 +55,11 @@ package me.neilellis.dollar;
      * @return true if we're failing fast
      */
     public boolean failFast() {
-        return true;
+        return failFast;
+    }
+
+    public void failFast(boolean failFast) {
+        this.failFast = failFast;
     }
 
     /**

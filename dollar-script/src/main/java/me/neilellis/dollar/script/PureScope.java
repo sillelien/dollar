@@ -33,8 +33,8 @@ import static me.neilellis.dollar.DollarStatic.$void;
 public class PureScope extends ScriptScope {
     private static final Logger log = LoggerFactory.getLogger(ScriptScope.class);
 
-    public PureScope(Scope parent, String source, String name) {
-        super(parent, source, name);
+    public PureScope(Scope parent, String source, String name, String file) {
+        super(parent, file != null ? file : parent.getFile(), source, name);
     }
 
     @Override public void clear() {

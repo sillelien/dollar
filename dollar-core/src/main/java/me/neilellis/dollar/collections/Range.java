@@ -21,7 +21,7 @@ import me.neilellis.dollar.var;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class Range {
+public final class Range {
     private final var start;
     private final var finish;
 

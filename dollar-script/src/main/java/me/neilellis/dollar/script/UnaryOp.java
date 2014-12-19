@@ -20,15 +20,13 @@ import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 import org.codehaus.jparsec.functors.Unary;
 
-import java.util.function.Supplier;
-
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class UnaryOp implements Unary<var>, Operator {
     private final boolean immediate;
-    protected Supplier<String> source;
     protected Scope scope;
+    protected Source source;
     private Map<var, var> function;
 
 
@@ -58,14 +56,14 @@ public class UnaryOp implements Unary<var>, Operator {
         }
 
         //Lazy evaluation
-        final var lambda = DollarScriptSupport.wrapReactiveUnary(scope, from, () -> function.map(from));
+        final var lambda = DollarScriptSupport.wrapReactiveUnary(scope, from, () -> function.map(from), source);
         return lambda;
 
     }
 
 
     @Override
-    public void setSource(Supplier<String> source) {
+    public void setSource(Source source) {
         this.source = source;
     }
 }

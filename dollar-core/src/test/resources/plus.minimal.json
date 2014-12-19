@@ -1,0 +1,2180 @@
+[
+  [
+    0,
+    0,
+    0
+  ],
+  [
+    0,
+    1,
+    1
+  ],
+  [
+    0,
+    -1,
+    -1
+  ],
+  [
+    0,
+    0.1,
+    0.1
+  ],
+  [
+    0,
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    0
+  ],
+  [
+    0,
+    "",
+    "0"
+  ],
+  [
+    0,
+    "@",
+    "0@"
+  ],
+  [
+    0,
+    true,
+    1
+  ],
+  [
+    0,
+    false,
+    0
+  ],
+  [
+    0,
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      0,
+      1,
+      -1,
+      0
+    ]
+  ],
+  [
+    0,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    }
+  ],
+  [
+    0,
+    null,
+    0
+  ],
+  [
+    0,
+    0
+  ],
+  [
+    0,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    0
+  ],
+  [
+    0,
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    0
+  ],
+  [
+    1,
+    0,
+    1
+  ],
+  [
+    1,
+    1,
+    2
+  ],
+  [
+    1,
+    -1,
+    0
+  ],
+  [
+    1,
+    0.1,
+    1.1
+  ],
+  [
+    1,
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    1
+  ],
+  [
+    1,
+    "",
+    "1"
+  ],
+  [
+    1,
+    "@",
+    "1@"
+  ],
+  [
+    1,
+    true,
+    2
+  ],
+  [
+    1,
+    false,
+    1
+  ],
+  [
+    1,
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      0,
+      1,
+      -1,
+      1
+    ]
+  ],
+  [
+    1,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 2
+    }
+  ],
+  [
+    1,
+    null,
+    1
+  ],
+  [
+    1,
+    1
+  ],
+  [
+    1,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    1
+  ],
+  [
+    1,
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    1
+  ],
+  [
+    -1,
+    0,
+    -1
+  ],
+  [
+    -1,
+    1,
+    0
+  ],
+  [
+    -1,
+    -1,
+    -2
+  ],
+  [
+    -1,
+    0.1,
+    -0.9
+  ],
+  [
+    -1,
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    -1
+  ],
+  [
+    -1,
+    "",
+    "-1"
+  ],
+  [
+    -1,
+    "@",
+    "-1@"
+  ],
+  [
+    -1,
+    true,
+    0
+  ],
+  [
+    -1,
+    false,
+    -1
+  ],
+  [
+    -1,
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      0,
+      1,
+      -1,
+      -1
+    ]
+  ],
+  [
+    -1,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": -2,
+      "upper": 0
+    }
+  ],
+  [
+    -1,
+    null,
+    -1
+  ],
+  [
+    -1,
+    -1
+  ],
+  [
+    -1,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    -1
+  ],
+  [
+    -1,
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    -1
+  ],
+  [
+    0.1,
+    0,
+    0.1
+  ],
+  [
+    0.1,
+    1,
+    1.1
+  ],
+  [
+    0.1,
+    -1,
+    -0.9
+  ],
+  [
+    0.1,
+    0.1,
+    0.2
+  ],
+  [
+    0.1,
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    0.10000001157407408
+  ],
+  [
+    0.1,
+    "",
+    "0.1"
+  ],
+  [
+    0.1,
+    "@",
+    "0.1@"
+  ],
+  [
+    0.1,
+    true,
+    1.1
+  ],
+  [
+    0.1,
+    false,
+    0.1
+  ],
+  [
+    0.1,
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      0,
+      1,
+      -1,
+      0.1
+    ]
+  ],
+  [
+    0.1,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": -0.9,
+      "upper": 1.1
+    }
+  ],
+  [
+    0.1,
+    null,
+    0.1
+  ],
+  [
+    0.1,
+    0.1
+  ],
+  [
+    0.1,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    0.1
+  ],
+  [
+    0.1,
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    0.1
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    0,
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    1,
+    {
+      "$type": "DATE",
+      "text": "1970-01-02T01:00:00.001",
+      "millis": 86400001
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    -1,
+    {
+      "$type": "DATE",
+      "text": "1969-12-31T01:00:00.001",
+      "millis": -86399999
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    0.1,
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T03:24:00.001",
+      "millis": 8640001
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    "",
+    "1970-01-01T01:00:00.001"
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    "@",
+    "1970-01-01T01:00:00.001@"
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    true,
+    {
+      "$type": "DATE",
+      "text": "1970-01-02T01:00:00.001",
+      "millis": 86400001
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    false,
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      0,
+      1,
+      -1,
+      {
+        "$type": "DATE",
+        "text": "1970-01-01T01:00:00.001",
+        "millis": 0
+      }
+    ]
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    null,
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    }
+  ],
+  [
+    "",
+    0,
+    "0"
+  ],
+  [
+    "",
+    1,
+    "1"
+  ],
+  [
+    "",
+    -1,
+    "-1"
+  ],
+  [
+    "",
+    0.1,
+    "0.1"
+  ],
+  [
+    "",
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    "1970-01-01T01:00:00.001"
+  ],
+  [
+    "",
+    "",
+    ""
+  ],
+  [
+    "",
+    "@",
+    "@"
+  ],
+  [
+    "",
+    true,
+    "true"
+  ],
+  [
+    "",
+    false,
+    "false"
+  ],
+  [
+    "",
+    [
+      0,
+      1,
+      -1
+    ],
+    "[0,1,-1]"
+  ],
+  [
+    "",
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    "-1..1"
+  ],
+  [
+    "",
+    null,
+    ""
+  ],
+  [
+    "",
+    ""
+  ],
+  [
+    "",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    "EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+  ],
+  [
+    "",
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    "{\"1\":0.1,\"value1\":true,\"true\":5}"
+  ],
+  [
+    "@",
+    0,
+    "@0"
+  ],
+  [
+    "@",
+    1,
+    "@1"
+  ],
+  [
+    "@",
+    -1,
+    "@-1"
+  ],
+  [
+    "@",
+    0.1,
+    "@0.1"
+  ],
+  [
+    "@",
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    "@1970-01-01T01:00:00.001"
+  ],
+  [
+    "@",
+    "",
+    "@"
+  ],
+  [
+    "@",
+    "@",
+    "@@"
+  ],
+  [
+    "@",
+    true,
+    "@true"
+  ],
+  [
+    "@",
+    false,
+    "@false"
+  ],
+  [
+    "@",
+    [
+      0,
+      1,
+      -1
+    ],
+    "@[0,1,-1]"
+  ],
+  [
+    "@",
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    "@-1..1"
+  ],
+  [
+    "@",
+    null,
+    "@"
+  ],
+  [
+    "@",
+    "@"
+  ],
+  [
+    "@",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    "@EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+  ],
+  [
+    "@",
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    "@{\"1\":0.1,\"value1\":true,\"true\":5}"
+  ],
+  [
+    true,
+    0,
+    true
+  ],
+  [
+    true,
+    1,
+    true
+  ],
+  [
+    true,
+    -1,
+    true
+  ],
+  [
+    true,
+    0.1,
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    true
+  ],
+  [
+    true,
+    "",
+    "true"
+  ],
+  [
+    true,
+    "@",
+    "true@"
+  ],
+  [
+    true,
+    true,
+    true
+  ],
+  [
+    true,
+    false,
+    true
+  ],
+  [
+    true,
+    [
+      0,
+      1,
+      -1
+    ],
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 2
+    }
+  ],
+  [
+    true,
+    null,
+    true
+  ],
+  [
+    true,
+    true
+  ],
+  [
+    true,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    true
+  ],
+  [
+    true,
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    true
+  ],
+  [
+    false,
+    0,
+    false
+  ],
+  [
+    false,
+    1,
+    true
+  ],
+  [
+    false,
+    -1,
+    true
+  ],
+  [
+    false,
+    0.1,
+    false
+  ],
+  [
+    false,
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    true
+  ],
+  [
+    false,
+    "",
+    "false"
+  ],
+  [
+    false,
+    "@",
+    "false@"
+  ],
+  [
+    false,
+    true,
+    true
+  ],
+  [
+    false,
+    false,
+    false
+  ],
+  [
+    false,
+    [
+      0,
+      1,
+      -1
+    ],
+    true
+  ],
+  [
+    false,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    }
+  ],
+  [
+    false,
+    null,
+    false
+  ],
+  [
+    false,
+    false
+  ],
+  [
+    false,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    false
+  ],
+  [
+    false,
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    true
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    0,
+    [
+      0,
+      1,
+      -1,
+      0
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    1,
+    [
+      0,
+      1,
+      -1,
+      1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    -1,
+    [
+      0,
+      1,
+      -1,
+      -1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    0.1,
+    [
+      0,
+      1,
+      -1,
+      0.1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    [
+      0,
+      1,
+      -1,
+      {
+        "$type": "DATE",
+        "text": "1970-01-01T01:00:00.001",
+        "millis": 0
+      }
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    "",
+    [
+      0,
+      1,
+      -1,
+      ""
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    "@",
+    [
+      0,
+      1,
+      -1,
+      "@"
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    true,
+    [
+      0,
+      1,
+      -1,
+      true
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    false,
+    [
+      0,
+      1,
+      -1,
+      false
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      0,
+      1,
+      -1,
+      0,
+      1,
+      -1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    [
+      0,
+      1,
+      -1,
+      {
+        "$type": "RANGE",
+        "lower": -1,
+        "upper": 1
+      }
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    null,
+    [
+      0,
+      1,
+      -1,
+      null
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      0,
+      1,
+      -1
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    [
+      0,
+      1,
+      -1,
+      {
+        "$type": "ERROR",
+        "value": {
+          "errorType": "EXCEPTION",
+          "errorMessage": "Test Exception"
+        }
+      }
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    [
+      0,
+      1,
+      -1,
+      {
+        "1": 0.1,
+        "value1": true,
+        "true": 5
+      }
+    ]
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    0,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    1,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 2
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    -1,
+    {
+      "$type": "RANGE",
+      "lower": -2,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    0.1,
+    {
+      "$type": "RANGE",
+      "lower": -0.9,
+      "upper": 1.1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    "",
+    {
+      "$type": "RANGE",
+      "lower": "-1",
+      "upper": "1"
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    "@",
+    {
+      "$type": "RANGE",
+      "lower": "-1@",
+      "upper": "1@"
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    true,
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 2
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    false,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "RANGE",
+      "lower": {
+        "array": true,
+        "object": false
+      },
+      "upper": {
+        "array": true,
+        "object": false
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": {
+        "fieldNames": [
+          "$type",
+          "lower",
+          "upper"
+        ],
+        "array": false,
+        "object": true
+      },
+      "upper": {
+        "fieldNames": [
+          "$type",
+          "lower",
+          "upper"
+        ],
+        "array": false,
+        "object": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    null,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    }
+  ],
+  [
+    null,
+    0,
+    null
+  ],
+  [
+    null,
+    1,
+    null
+  ],
+  [
+    null,
+    -1,
+    null
+  ],
+  [
+    null,
+    0.1,
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    null
+  ],
+  [
+    null,
+    "",
+    null
+  ],
+  [
+    null,
+    "@",
+    null
+  ],
+  [
+    null,
+    true,
+    null
+  ],
+  [
+    null,
+    false,
+    null
+  ],
+  [
+    null,
+    [
+      0,
+      1,
+      -1
+    ],
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    null
+  ],
+  [
+    null,
+    null,
+    null
+  ],
+  [
+    null,
+    null
+  ],
+  [
+    null,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    null
+  ],
+  [0],
+  [1],
+  [-1],
+  [0.1],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    }
+  ],
+  [""],
+  ["@"],
+  [true],
+  [false],
+  [
+    [
+      0,
+      1,
+      -1
+    ]
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    }
+  ],
+  [null],
+  [],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    0,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    1,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    -1,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    0.1,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    "",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    "@",
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    true,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    false,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    null,
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    0,
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5,
+      "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9": 0
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    1,
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5,
+      "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b": 1
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    -1,
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5,
+      "1bad6b8cf97131fceab8543e81f7757195fbb1d36b376ee994ad1cf17699c464": -1
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    0.1,
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5,
+      "14be4b45f18e0d8c67b4f719b5144eee88497e413709d11d85b096d8e2346310": 0.1
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5,
+      "d78d0dcd5f67f5c4437485026eefedb32a64db588c2d2f6e031c7dd841ac0413": {
+        "$type": "DATE",
+        "text": "1970-01-01T01:00:00.001",
+        "millis": 0
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    "",
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    "@",
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    true,
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5,
+      "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b": true
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    false,
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5,
+      "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa": false
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5,
+      "9b5d4d1d58aa42a7bfda214f0f22a30c04d64c96fa7ee4321b158929d3774a73": [
+        0,
+        1,
+        -1
+      ]
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5,
+      "43cc37c0fafe1e52e755e427008d6a201ac58477deb731801108dc728a020151": {
+        "$type": "RANGE",
+        "lower": -1,
+        "upper": 1
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    null,
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5,
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855": null
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5,
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855": null
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5,
+      "7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb": {
+        "$type": "ERROR",
+        "value": {
+          "errorType": "EXCEPTION",
+          "errorMessage": "Test Exception"
+        }
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    },
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
+    }
+  ]
+]

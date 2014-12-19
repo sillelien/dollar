@@ -35,7 +35,7 @@ public class SimpleReadOperator extends UnaryOp {
 
     @Override
     public var map(var from) {
-        return DollarScriptSupport.wrapReactiveUnary(scope, from, () -> DollarFactory.fromURI(from).$read());
+        return DollarScriptSupport.wrapReactiveUnary(scope, from, () -> DollarFactory.fromURI(from).$read(), source);
     }
 
 }

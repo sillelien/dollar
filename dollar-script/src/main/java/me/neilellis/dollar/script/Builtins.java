@@ -19,6 +19,8 @@ package me.neilellis.dollar.script;
 import me.neilellis.dollar.StateAware;
 import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.script.exceptions.BuiltinNotFoundException;
+import me.neilellis.dollar.types.DollarFactory;
+import me.neilellis.dollar.types.ErrorType;
 import me.neilellis.dollar.var;
 
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ public class Builtins {
             String message = args.get(0).$S();
             ArrayList<var> values = new ArrayList<>(args);
             values.remove(0);
-            return $(String.format(message, values.stream().map(var::$).toArray()));
+            return $(String.format(message, values.stream().map(var::toJavaObject).toArray()));
         }, true, "FORMAT");
         addJavaStyle(1, 1, (pure, args, scope) -> {
             return args.get(0).$list().stream().min((o1, o2) -> (int) Math.signum(o1.D() - o2.D())).get();
@@ -94,6 +96,13 @@ public class Builtins {
                 return $void();
             }
         }, false, "SLEEP");
+        addDollarStyle(1, 2, (pure, args, scope) -> {
+            if (args.size() == 1) {
+                return DollarFactory.failure(ErrorType.valueOf(args.get(0).toString()), "", true);
+            } else {
+                return DollarFactory.failure(ErrorType.valueOf(args.get(0).toString()), args.get(1).toString(), true);
+            }
+        }, true, "ERROR");
         addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).D(), true, "Days", "Day", "D");
         addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toString().length(), true, "LEN");
         addJavaStyle(0, 0, (pure, args, scope) -> $(new Date()), false, "DATE");

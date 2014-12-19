@@ -35,12 +35,11 @@ public class DollarArrayTest {
 
     @Test
     public void testBasics() {
-        $list(null, null).$plus(null);
         assertEquals(list, $list("Neil").$plus($("Dimple")).$plus($("Charlie")));
         assertEquals(list.remove("Neil"), $list("Dimple").$plus($("Charlie")));
         assertEquals(list.remove("Dimple"), $list("Neil").$plus($("Charlie")));
         assertEquals(list.remove("Charlie"), $list("Neil").$plus($("Dimple")));
-        Object value = list.$();
+        Object value = list.toJavaObject();
         assertEquals(JsonArray.class, value.getClass());
         assertEquals("[\"Neil\",\"Dimple\",\"Charlie\"]", list.toString());
         assertEquals("[\"Neil\",\"Dimple\",\"Charlie\"]", value.toString());

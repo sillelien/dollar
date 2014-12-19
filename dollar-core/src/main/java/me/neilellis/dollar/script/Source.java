@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.types;
+package me.neilellis.dollar.script;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public enum FailureType {
-    INVALID_LIST_OPERATION, INVALID_MAP_OPERATION, INVALID_SINGLE_VALUE_OPERATION, EXCEPTION,
-    INVALID_RANGE_OPERATION, INVALID_BOOLEAN_VALUE_OPERATION, ASSERTION, INVALID_STRING_OPERATION,
-    INVALID_URI_OPERATION,
+public interface Source {
 
-    INVALID_OPERATION, EVALUATION_FAILURE, METADATA_IMMUTABLE, INVALID_CAST, EXECUTION_FAILURE, INTERRUPTED,
-    IO, VOID_FAILURE
+    int getLength();
+
+    String getSource();
+
+    String getSourceFile();
+
+    String getSourceMessage();
+
+    int getStart();
 }

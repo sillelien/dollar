@@ -21,71 +21,52 @@ import me.neilellis.dollar.var;
 
 import java.io.IOException;
 
+import static me.neilellis.dollar.DollarStatic.$void;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface URIHandler {
 
-    var all();
+    default var all() {return $void();}
 
-    void destroy();
+    default var append(var value) {return write(value, true, true);}
 
-    var drain();
+    default var write(var value, boolean blocking, boolean mutating) {return $void();}
 
-    /**
-     * Think Map.
-     *
-     * Map behaviour.
-     *
-     * @param key
-     * @return
-     */
-    var get(var key);
+    default void destroy() {}
 
-    void init();
+    default var drain() {return $void();}
 
-    void pause();
+    default var get(var key) {return $void();}
 
-    /**
-     * Send to a point with multiple listeners.
-     *
-     * Think Chat.
-     *
-     * @param value
-     * @return
-     */
+    default void init() {}
+
+    default void pause() {}
+
+    default var prepend(var value) {return $void();}
+
     default var publish(var value) {
         return write(value, false, false);
     }
 
-    var write(var value, boolean blocking, boolean mutating);
+    default var read(boolean blocking, boolean mutating) {return $void();}
 
-    var read(boolean blocking, boolean mutating);
+    default var remove(var v) {return $void();}
 
-    var remove(var v);
+    default var removeValue(var v) {return $void();}
 
-    var removeValue(var v);
+    default var set(var key, var value) {return $void();}
 
-    /**
-     * Think Map.
-     */
-    var set(var key, var value);
+    default int size() { return 0;}
 
-    int size();
+    default void start() {}
 
-    void start();
+    default void stop() {}
 
-    void stop();
+    default void subscribe(Pipeable consumer, String id) throws IOException {}
 
-    /**
-     * Subscribe, listen semantics.
-     *
-     * @param consumer
-     * @param id
-     */
-    void subscribe(Pipeable consumer, String id) throws IOException;
+    default void unpause() {}
 
-    void unpause();
-
-    void unsubscribe(String subId);
+    default void unsubscribe(String subId) {}
 }

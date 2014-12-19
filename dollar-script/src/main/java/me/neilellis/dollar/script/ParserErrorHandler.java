@@ -22,7 +22,7 @@ import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.script.exceptions.ErrorReporter;
 import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
 import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.types.FailureType;
+import me.neilellis.dollar.types.ErrorType;
 import me.neilellis.dollar.var;
 
 import java.lang.reflect.InvocationTargetException;
@@ -42,7 +42,7 @@ public class ParserErrorHandler {
     }
 
 
-    public var handle(Scope scope, SourceAware source, AssertionError e) {
+    public var handle(Scope scope, Source source, AssertionError e) {
         AssertionError throwable = new AssertionError(e.getMessage() + " at " + source.getSourceMessage(), e);
         if (!faultTolerant) {
             return scope.handleError(e);
@@ -51,7 +51,7 @@ public class ParserErrorHandler {
         }
     }
 
-    public var handle(Scope scope, SourceAware source, DollarException e) {
+    public var handle(Scope scope, Source source, DollarException e) {
         DollarParserException
                 throwable =
                 new DollarParserException(e.getMessage() + " at " + source.getSourceMessage(), e);
@@ -62,7 +62,7 @@ public class ParserErrorHandler {
         }
     }
 
-    public var handle(Scope scope, SourceAware source, Exception e) {
+    public var handle(Scope scope, Source source, Exception e) {
         if (e instanceof LambdaRecursionException) {
             throw new DollarParserException(
                     "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
@@ -75,9 +75,9 @@ public class ParserErrorHandler {
             ((DollarException) e).addSource(source);
             throw (DollarException) e;
         } else if (source != null) {
-            return DollarFactory.failureWithSource(FailureType.EXCEPTION, unravel(e), source);
+            return DollarFactory.failureWithSource(ErrorType.EXCEPTION, unravel(e), source);
         } else {
-            return DollarFactory.failure(FailureType.EXCEPTION, unravel(e));
+            return DollarFactory.failure(ErrorType.EXCEPTION, unravel(e), false);
         }
 
     }

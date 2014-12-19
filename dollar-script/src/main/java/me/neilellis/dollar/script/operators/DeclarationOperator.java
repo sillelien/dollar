@@ -18,10 +18,12 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.Type;
+import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.SourceValue;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
-import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
 import static me.neilellis.dollar.DollarStatic.$;
@@ -30,7 +32,7 @@ import static me.neilellis.dollar.DollarStatic.$void;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DeclarationOperator implements Map<Object[], Map<? super var, ? extends var>> {
+public class DeclarationOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
     private boolean pure;
 
@@ -39,7 +41,8 @@ public class DeclarationOperator implements Map<Object[], Map<? super var, ? ext
         this.pure = pure;
     }
 
-    public Map<? super var, ? extends var> map(Object[] objects) {
+    public Map<? super var, ? extends var> map(Token token) {
+        Object[] objects = (Object[]) token.value();
 
         return new Map<var, var>() {
             public var map(var v) {
@@ -54,7 +57,7 @@ public class DeclarationOperator implements Map<Object[], Map<? super var, ? ext
                 var constraint;
                 if (objects[1] != null) {
                     constraint =
-                            DollarFactory.fromLambda(i -> {
+                            DollarScriptSupport.wrapLambda(new SourceValue(scope, token), scope, i -> {
                                 final Type type = Type.valueOf(objects[1].toString().toUpperCase());
                                 var it = scope.getParameter("it");
                                 return $(it.is(type));
