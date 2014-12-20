@@ -23,6 +23,8 @@ import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
+import java.util.Arrays;
+
 import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$void;
 
@@ -41,7 +43,9 @@ public class WhenOperator implements Map<Token, var> {
         var
                 lambda =
                 DollarScriptSupport.wrapLambda(new SourceValue(scope, token), scope,
-                                               i -> lhs.isTrue() ? $((Object) rhs.toJavaObject()) : $void());
+                                               i -> lhs.isTrue() ? $((Object) rhs.toJavaObject()) : $void(),
+                                               Arrays.asList(lhs, rhs),
+                                               "when");
         lhs.$listen(i -> {
 //            lambda.$notify();
             if (lhs.isTrue()) {

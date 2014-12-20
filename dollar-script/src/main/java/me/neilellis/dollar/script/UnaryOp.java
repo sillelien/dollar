@@ -27,10 +27,12 @@ public class UnaryOp implements Unary<var>, Operator {
     private final boolean immediate;
     protected Scope scope;
     protected Source source;
+    protected String operation;
     private Map<var, var> function;
 
 
-    public UnaryOp(Scope scope, Map<var, var> function) {
+    public UnaryOp(String operation, Scope scope, Map<var, var> function) {
+        this.operation = operation;
         if (scope == null) {
             throw new NullPointerException();
         }
@@ -39,7 +41,8 @@ public class UnaryOp implements Unary<var>, Operator {
         this.immediate = false;
     }
 
-    public UnaryOp(Scope scope, boolean immediate, Map<var, var> function) {
+    public UnaryOp(Scope scope, boolean immediate, Map<var, var> function, String operation) {
+        this.operation = operation;
         if (scope == null) {
             throw new NullPointerException();
         }
@@ -56,7 +59,7 @@ public class UnaryOp implements Unary<var>, Operator {
         }
 
         //Lazy evaluation
-        final var lambda = DollarScriptSupport.wrapReactiveUnary(scope, from, () -> function.map(from), source);
+        final var lambda = DollarScriptSupport.wrapReactive(scope, () -> function.map(from), source, operation, from);
         return lambda;
 
     }

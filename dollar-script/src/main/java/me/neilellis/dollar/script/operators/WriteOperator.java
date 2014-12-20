@@ -37,13 +37,14 @@ public class WriteOperator implements Map<Token, Map<? super var, ? extends var>
         return new Map<var, var>() {
             @Override
             public var map(var rhs) {
-                return DollarScriptSupport.wrapReactiveBinary(scope,
-                                                              (var) objects[1],
-                                                              rhs,
-                                                              () -> rhs.$write((var) objects[1],
-                                                                               objects[2] != null,
-                                                                               objects[3] !=
-                                                                               null), new SourceValue(scope, token));
+                return DollarScriptSupport.wrapReactive(scope,
+                                                        () -> rhs.$write((var) objects[1],
+                                                                         objects[2] != null,
+                                                                         objects[3] !=
+                                                                         null), new SourceValue(scope, token),
+                                                        "write:" + objects[2] + ":" + objects[3], (var) objects[1],
+                                                        rhs
+                );
             }
         };
     }

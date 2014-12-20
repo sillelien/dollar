@@ -42,15 +42,17 @@ public class ForOperator implements Map<Token, Map<? super var, ? extends var>> 
 
     public Map<? super var, ? extends var> map(Token token) {
         Object[] objects = (Object[]) token.value();
+        String constraintSource = null;
         return rhs -> {
-            return DollarScriptSupport.wrapReactiveUnary(scope, rhs, () -> {
+            return DollarScriptSupport.wrapReactive(scope, () -> {
                 return dollarParser.inScope(pure, "for", scope, newScope -> {
                     return ((var) objects[3]).$each(i -> {
-                        newScope.set(objects[1].toString(), fix(i, false), false, null, false, false, pure);
+                        newScope.set(objects[1].toString(), fix(i, false), false, null, constraintSource, false, false,
+                                     pure);
                         return rhs._fixDeep(false);
                     });
                 });
-            }, new SourceValue(scope, token));
+            }, new SourceValue(scope, token), "for", rhs);
         };
     }
 }

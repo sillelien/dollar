@@ -38,13 +38,13 @@ public class IsOperator implements Map<Token, Map<? super var, ? extends var>> {
 
     @Override public Map<? super var, ? extends var> map(Token token) {
         List<var> rhs = (List<var>) token.value();
-        return lhs -> DollarScriptSupport.wrapReactiveUnary(scope, lhs, () -> {
+        return lhs -> DollarScriptSupport.wrapReactive(scope, () -> {
             for (var value : rhs) {
                 if (lhs.is(Type.valueOf(value.$S().toUpperCase()))) {
                     return $(true);
                 }
             }
             return $(false);
-        }, new SourceValue(scope, token));
+        }, new SourceValue(scope, token), "is", lhs);
     }
 }

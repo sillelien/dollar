@@ -23,6 +23,9 @@ import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
+import java.util.Arrays;
+import java.util.concurrent.Callable;
+
 import static me.neilellis.dollar.DollarStatic.$void;
 
 /**
@@ -40,8 +43,12 @@ public class VariableUsageOperator implements Map<Token, Map<? super var, ? exte
     @Override public Map<? super var, ? extends var> map(Token token) {
 
         final SourceValue source = new SourceValue(scope, token);
-        return rhs -> DollarScriptSupport.wrapUnary(scope, () -> {
-            return DollarScriptSupport.getVariable(pure, scope, rhs.toString(), false, $void(), source);
-        }, source);
+        return rhs -> {
+            Callable<var> callable = () -> {
+                return DollarScriptSupport.getVariable(pure, scope, rhs.toString(), false, $void(), source);
+            };
+            return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(rhs),
+                                                "variable-usage--" + rhs.toString());
+        };
     }
 }

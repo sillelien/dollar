@@ -265,6 +265,12 @@ public abstract class AbstractDollar implements var {
         return _fix(Integer.MAX_VALUE, parallel);
     }
 
+    @Override public TypePrediction _predictType() {
+        final TypePrediction typePrediction = new TypePrediction("<static>");
+        typePrediction.addCount($type().toString(), 1);
+        return typePrediction;
+    }
+
     @Override
     public void _src(String src) {
         this.src = src;
@@ -403,19 +409,6 @@ public abstract class AbstractDollar implements var {
         }
     }
 
-    @Override
-    public var assertTrue(Function<var, Boolean> assertion, String message) throws AssertionError {
-        try {
-            if (!assertion.apply(this)) {
-                throw new AssertionError(message);
-            } else {
-                return this;
-            }
-        } catch (Exception e) {
-            return DollarStatic.logAndRethrow(e);
-        }
-    }
-
     @NotNull
     @Override
     public String toString() {
@@ -423,9 +416,9 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
+    public var assertTrue(Function<var, Boolean> assertion, String message) throws AssertionError {
         try {
-            if (assertion.apply(this)) {
+            if (!assertion.apply(this)) {
                 throw new AssertionError(message);
             } else {
                 return this;
@@ -443,6 +436,19 @@ public abstract class AbstractDollar implements var {
     @Override
     public boolean isInteger() {
         return false;
+    }
+
+    @Override
+    public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
+        try {
+            if (assertion.apply(this)) {
+                throw new AssertionError(message);
+            } else {
+                return this;
+            }
+        } catch (Exception e) {
+            return DollarStatic.logAndRethrow(e);
+        }
     }
 
     @Override

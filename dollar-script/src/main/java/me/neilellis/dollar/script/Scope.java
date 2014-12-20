@@ -66,7 +66,8 @@ public interface Scope {
 
     void notifyScope(String key, var value);
 
-    var set(String key, var value, boolean readonly, var constraint, boolean isVolatile, boolean fixed, boolean pure);
+    var set(String key, var value, boolean readonly, var constraint, String constraintSource, boolean isVolatile,
+            boolean fixed, boolean pure);
 
     var setParameter(String key, var value);
 

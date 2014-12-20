@@ -19,6 +19,7 @@ package me.neilellis.dollar.types;
 import com.github.oxo42.stateless4j.StateMachine;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.Type;
+import me.neilellis.dollar.TypePrediction;
 import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.guard.*;
@@ -287,6 +288,10 @@ public class DollarBlockCollection implements var {
 
     @Override @Guarded(ChainGuard.class) public var _fixDeep(boolean parallel) {
         return _fix(Integer.MAX_VALUE, parallel);
+    }
+
+    @Override public TypePrediction _predictType() {
+        return getValue()._predictType();
     }
 
     @Override @Guarded(NotNullGuard.class) public void _src(String src) {getValue()._src(src);}

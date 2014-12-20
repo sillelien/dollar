@@ -23,6 +23,8 @@ public interface Source {
 
     int getLength();
 
+    String getShortHash();
+
     String getSource();
 
     String getSourceFile();
@@ -30,4 +32,6 @@ public interface Source {
     String getSourceMessage();
 
     int getStart();
+
+    String getTokenSource();
 }

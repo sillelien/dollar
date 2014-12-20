@@ -87,24 +87,22 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
 
     @Override
     public var $as(Type type) {
-        switch (type) {
-            case BOOLEAN:
-                return this;
-            case STRING:
-                return DollarStatic.$(S());
-            case LIST:
-                return DollarStatic.$(Arrays.asList(this));
-            case MAP:
-                return DollarStatic.$("value", this);
-            case DECIMAL:
-                return DollarStatic.$(value ? 1.0 : 0.0);
-            case INTEGER:
-                return DollarStatic.$(value ? 1 : 0);
-            case VOID:
-                return DollarStatic.$void();
-            default:
-                return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
-
+        if (type.equals(Type.BOOLEAN)) {
+            return this;
+        } else if (type.equals(Type.STRING)) {
+            return DollarStatic.$(S());
+        } else if (type.equals(Type.LIST)) {
+            return DollarStatic.$(Arrays.asList(this));
+        } else if (type.equals(Type.MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.equals(Type.DECIMAL)) {
+            return DollarStatic.$(value ? 1.0 : 0.0);
+        } else if (type.equals(Type.INTEGER)) {
+            return DollarStatic.$(value ? 1 : 0);
+        } else if (type.equals(Type.VOID)) {
+            return DollarStatic.$void();
+        } else {
+            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
         }
     }
 
@@ -136,15 +134,24 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         return DollarFactory.fromValue(value || rhsFix.isTruthy(), errors(), rhsFix.errors());
     }
 
+    @NotNull @Override
+    public Long L() {
+        return value ? 1L : 0L;
+    }
+
     @NotNull
     @Override
     public Double D() {
         return value ? 1.0 : 0.0;
     }
 
-    @NotNull @Override
-    public Long L() {
-        return value ? 1L : 0L;
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof DollarBoolean) {
+            return toJavaObject().equals(((DollarBoolean) obj).toJavaObject());
+        } else {
+            return value.toString().equals(obj.toString());
+        }
     }
 
     @Override
@@ -160,15 +167,6 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     @Override
     public boolean isNumber() {
         return false;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof DollarBoolean) {
-            return toJavaObject().equals(((DollarBoolean) obj).toJavaObject());
-        } else {
-            return value.toString().equals(obj.toString());
-        }
     }
 
     @Override

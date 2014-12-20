@@ -23,6 +23,9 @@ import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
+import java.util.Arrays;
+import java.util.concurrent.Callable;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
@@ -36,10 +39,13 @@ public class SubscriptOperator implements Map<Token, Map<? super var, ? extends 
         final SourceValue source = new SourceValue(scope, token);
         return lhs -> {
             if (rhs[1] == null) {
-                return DollarScriptSupport.wrapReactiveBinary(scope, lhs, (var) rhs[0], () -> lhs.$get(
-                        ((var) rhs[0])), source);
+                return DollarScriptSupport.wrapReactive(scope, () -> lhs.$get(
+                        ((var) rhs[0])), source, "subscript", lhs, (var) rhs[0]);
             } else {
-                return DollarScriptSupport.wrapBinary(scope, () -> lhs.$set((var) rhs[0], rhs[1]), source);
+                Callable<var> callable = () -> lhs.$set((var) rhs[0], rhs[1]);
+                return DollarScriptSupport.toLambda(scope, callable, source,
+                                                    Arrays.asList(lhs, (var) rhs[0], (var) rhs[1]),
+                                                    "subscript-assignment");
             }
         };
     }

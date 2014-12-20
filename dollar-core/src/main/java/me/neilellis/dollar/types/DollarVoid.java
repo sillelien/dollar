@@ -214,25 +214,24 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @Override
     public var $as(Type type) {
-        switch (type) {
-            case BOOLEAN:
-                return DollarStatic.$(false);
-            case STRING:
-                return DollarStatic.$("");
-            case LIST:
-                return DollarStatic.$(Arrays.asList());
-            case MAP:
-                return DollarStatic.$("value", this);
-            case DECIMAL:
-                return DollarStatic.$(0.0d);
-            case INTEGER:
-                return DollarStatic.$(0);
-            case VOID:
-                return this;
-            case RANGE:
-                return DollarFactory.fromValue(new Range($(0), $(0)));
-            default:
-                return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST, type.toString(), false);
+        if (type.equals(Type.BOOLEAN)) {
+            return DollarStatic.$(false);
+        } else if (type.equals(Type.STRING)) {
+            return DollarStatic.$("");
+        } else if (type.equals(Type.LIST)) {
+            return DollarStatic.$(Arrays.asList());
+        } else if (type.equals(Type.MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.equals(Type.DECIMAL)) {
+            return DollarStatic.$(0.0d);
+        } else if (type.equals(Type.INTEGER)) {
+            return DollarStatic.$(0);
+        } else if (type.equals(Type.VOID)) {
+            return this;
+        } else if (type.equals(Type.RANGE)) {
+            return DollarFactory.fromValue(new Range($(0), $(0)));
+        } else {
+            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST, type.toString(), false);
         }
     }
 

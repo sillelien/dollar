@@ -550,56 +550,55 @@ public class DollarFactory {
         } else {
             type = Type.valueOf(jsonObject.getString(TYPE_KEY));
         }
-        switch (type) {
-            case VOID:
-                return $void();
-            case INTEGER:
-                return fromValue(jsonObject.getLong(VALUE_KEY));
-            case BOOLEAN:
-                return fromValue(jsonObject.getBoolean(VALUE_KEY));
-            case DATE:
-                return wrap(new DollarDate(ImmutableList.of(), LocalDateTime.parse(jsonObject.getString(TEXT_KEY))));
-            case DECIMAL:
-                return fromValue(jsonObject.getNumber(VALUE_KEY));
-            case LIST:
-                final JsonArray array = jsonObject.getArray(VALUE_KEY);
-                ArrayList<Object> arrayList = new ArrayList<>();
-                for (Object o : array) {
-                    arrayList.add(fromJson(o));
-                }
-                return wrap(new DollarList(ImmutableList.of(), ImmutableList.copyOf(arrayList)));
-            case MAP:
-                final JsonObject json;
-                if (jsonObject.containsField(VALUE_KEY)) {
-                    json = jsonObject.getObject(VALUE_KEY);
-                } else {
-                    json = jsonObject;
-                }
-                LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-                final Set<String> fieldNames = json.getFieldNames();
-                for (String fieldName : fieldNames) {
-                    map.put(fieldName, fromJson(json.get(fieldName)));
-                }
-                return wrap(new DollarMap(ImmutableList.of(), map));
-            case ERROR:
-                final String errorType = jsonObject.getString("errorType");
-                final String errorMessage = jsonObject.getString("errorMessage");
-                return wrap(new DollarError(ImmutableList.<Throwable>of(), ErrorType.valueOf(errorType), errorMessage));
-            case RANGE:
-                final var lower = fromJson(jsonObject.get(LOWERBOUND_KEY));
-                final var upper = fromJson(jsonObject.get(UPPERBOUND_KEY));
-                return wrap(new DollarRange(ImmutableList.of(), lower, upper));
-            case URI:
-                return wrap(new DollarURI(ImmutableList.of(), URI.parse(jsonObject.getString(VALUE_KEY))));
-            case INFINITY:
-                return wrap(new DollarInfinity(ImmutableList.of(), jsonObject.getBoolean(POSITIVE_KEY)));
-            case STRING:
-                if (!(jsonObject.get(VALUE_KEY) instanceof String)) {
-                    System.out.println(jsonObject.get(VALUE_KEY));
-                }
-                return wrap(new DollarString(ImmutableList.of(), jsonObject.getString(VALUE_KEY)));
-            default:
-                throw new DollarException("Unrecognized type " + type);
+        if (type.equals(Type.VOID)) {
+            return $void();
+        } else if (type.equals(Type.INTEGER)) {
+            return fromValue(jsonObject.getLong(VALUE_KEY));
+        } else if (type.equals(Type.BOOLEAN)) {
+            return fromValue(jsonObject.getBoolean(VALUE_KEY));
+        } else if (type.equals(Type.DATE)) {
+            return wrap(new DollarDate(ImmutableList.of(), LocalDateTime.parse(jsonObject.getString(TEXT_KEY))));
+        } else if (type.equals(Type.DECIMAL)) {
+            return fromValue(jsonObject.getNumber(VALUE_KEY));
+        } else if (type.equals(Type.LIST)) {
+            final JsonArray array = jsonObject.getArray(VALUE_KEY);
+            ArrayList<Object> arrayList = new ArrayList<>();
+            for (Object o : array) {
+                arrayList.add(fromJson(o));
+            }
+            return wrap(new DollarList(ImmutableList.of(), ImmutableList.copyOf(arrayList)));
+        } else if (type.equals(Type.MAP)) {
+            final JsonObject json;
+            if (jsonObject.containsField(VALUE_KEY)) {
+                json = jsonObject.getObject(VALUE_KEY);
+            } else {
+                json = jsonObject;
+            }
+            LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+            final Set<String> fieldNames = json.getFieldNames();
+            for (String fieldName : fieldNames) {
+                map.put(fieldName, fromJson(json.get(fieldName)));
+            }
+            return wrap(new DollarMap(ImmutableList.of(), map));
+        } else if (type.equals(Type.ERROR)) {
+            final String errorType = jsonObject.getString("errorType");
+            final String errorMessage = jsonObject.getString("errorMessage");
+            return wrap(new DollarError(ImmutableList.<Throwable>of(), ErrorType.valueOf(errorType), errorMessage));
+        } else if (type.equals(Type.RANGE)) {
+            final var lower = fromJson(jsonObject.get(LOWERBOUND_KEY));
+            final var upper = fromJson(jsonObject.get(UPPERBOUND_KEY));
+            return wrap(new DollarRange(ImmutableList.of(), lower, upper));
+        } else if (type.equals(Type.URI)) {
+            return wrap(new DollarURI(ImmutableList.of(), URI.parse(jsonObject.getString(VALUE_KEY))));
+        } else if (type.equals(Type.INFINITY)) {
+            return wrap(new DollarInfinity(ImmutableList.of(), jsonObject.getBoolean(POSITIVE_KEY)));
+        } else if (type.equals(Type.STRING)) {
+            if (!(jsonObject.get(VALUE_KEY) instanceof String)) {
+                System.out.println(jsonObject.get(VALUE_KEY));
+            }
+            return wrap(new DollarString(ImmutableList.of(), jsonObject.getString(VALUE_KEY)));
+        } else {
+            throw new DollarException("Unrecognized type " + type);
         }
     }
 
@@ -667,63 +666,64 @@ public class DollarFactory {
      * @return the object
      */
     public static Object toJson(var value) {
-        switch (value.$type()) {
-            case VOID:
-            case INTEGER:
-            case BOOLEAN:
-            case DECIMAL:
-            case STRING:
-                return value.toJavaObject();
-            case DATE:
-                final JsonObject jsonObject = new JsonObject();
-                jsonObject.putValue(TYPE_KEY, value.$type().name());
-                jsonObject.putValue(TEXT_KEY, value.$S());
-                jsonObject.putValue(MILLISECOND_KEY, (long) (value.D() * 24 * 60 * 60 * 1000));
-                return jsonObject;
-            case URI:
-                final JsonObject uriJsonObject = new JsonObject();
-                uriJsonObject.putValue(TYPE_KEY, value.$type().name());
-                uriJsonObject.putValue(VALUE_KEY, value.$S());
-                return uriJsonObject;
-            case ERROR:
-                final JsonObject errorJsonObject = new JsonObject();
-                errorJsonObject.putValue(TYPE_KEY, value.$type().name());
-                errorJsonObject.putValue(VALUE_KEY, value.toJsonType());
-                return errorJsonObject;
-            case INFINITY:
-                final JsonObject infinityJsonObject = new JsonObject();
-                infinityJsonObject.putValue(TYPE_KEY, value.$type().name());
-                infinityJsonObject.putValue(POSITIVE_KEY, value.isPositive());
-                return infinityJsonObject;
-            case LIST:
-                final JsonArray array = new JsonArray();
-                ImmutableList<var> arrayList = value.$list();
-                for (var v : arrayList) {
-                    array.add(toJson(v));
-                }
+        Type i = value.$type();
+        if (i.equals(Type.VOID) ||
+            i.equals(Type.INTEGER) ||
+            i.equals(Type.BOOLEAN) ||
+            i.equals(Type.DECIMAL) ||
+            i.equals(
+                    Type.STRING)) {
+            return value.toJavaObject();
+        } else if (i.equals(Type.DATE)) {
+            final JsonObject jsonObject = new JsonObject();
+            jsonObject.putValue(TYPE_KEY, value.$type().name());
+            jsonObject.putValue(TEXT_KEY, value.$S());
+            jsonObject.putValue(MILLISECOND_KEY, (long) (value.D() * 24 * 60 * 60 * 1000));
+            return jsonObject;
+        } else if (i.equals(Type.URI)) {
+            final JsonObject uriJsonObject = new JsonObject();
+            uriJsonObject.putValue(TYPE_KEY, value.$type().name());
+            uriJsonObject.putValue(VALUE_KEY, value.$S());
+            return uriJsonObject;
+        } else if (i.equals(Type.ERROR)) {
+            final JsonObject errorJsonObject = new JsonObject();
+            errorJsonObject.putValue(TYPE_KEY, value.$type().name());
+            errorJsonObject.putValue(VALUE_KEY, value.toJsonType());
+            return errorJsonObject;
+        } else if (i.equals(Type.INFINITY)) {
+            final JsonObject infinityJsonObject = new JsonObject();
+            infinityJsonObject.putValue(TYPE_KEY, value.$type().name());
+            infinityJsonObject.putValue(POSITIVE_KEY, value.isPositive());
+            return infinityJsonObject;
+        } else if (i.equals(Type.LIST)) {
+            final JsonArray array = new JsonArray();
+            ImmutableList<var> arrayList = value.$list();
+            for (var v : arrayList) {
+                array.add(toJson(v));
+            }
 
-                return array;
-            case MAP:
-                final JsonObject json = new JsonObject();
-                ImmutableMap<var, var> map = value.$map();
-                final Set<var> fieldNames = map.keySet();
-                for (var fieldName : fieldNames) {
-                    var v = map.get(fieldName);
-                    json.putValue(fieldName.toString(), toJson(v));
-                }
-                final JsonObject containerObject = new JsonObject();
-                return json;
-            case RANGE:
-                final JsonObject rangeObject = new JsonObject();
-                rangeObject.putString(TYPE_KEY, value.$type().name());
-                final Range range = value.toJavaObject();
-                rangeObject.put(LOWERBOUND_KEY, toJson($(range.lowerEndpoint())));
-                rangeObject.put(UPPERBOUND_KEY, toJson($(range.upperEndpoint())));
-                return rangeObject;
-            case ANY:
-                return null;
-            default:
-                throw new DollarException("Unrecognized type " + value.$type());
+            return array;
+        } else if (i.equals(Type.MAP)) {
+            final JsonObject json = new JsonObject();
+            ImmutableMap<var, var> map = value.$map();
+            final Set<var> fieldNames = map.keySet();
+            for (var fieldName : fieldNames) {
+                var v = map.get(fieldName);
+                json.putValue(fieldName.toString(), toJson(v));
+            }
+            final JsonObject containerObject = new JsonObject();
+            return json;
+        } else if (i.equals(Type.RANGE)) {
+            final JsonObject rangeObject = new JsonObject();
+            rangeObject.putString(TYPE_KEY, value.$type().name());
+            final Range range = value.toJavaObject();
+            rangeObject.put(LOWERBOUND_KEY, toJson($(range.lowerEndpoint())));
+            rangeObject.put(UPPERBOUND_KEY, toJson($(range.upperEndpoint())));
+            return rangeObject;
+        } else if (i.equals(Type.ANY)) {
+            return null;
+        } else {
+            throw new DollarException("Unrecognized type " + value.$type());
         }
     }
 

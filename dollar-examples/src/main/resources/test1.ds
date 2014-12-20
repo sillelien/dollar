@@ -1,6 +1,6 @@
 testPipe='class:me.neilellis.dollar.script.TestPipe'
 
-c={
+<list>c={
 "test" : 1,
 "test2" : [1,2,3,{"foo":"bar"}]} | $testPipe
 

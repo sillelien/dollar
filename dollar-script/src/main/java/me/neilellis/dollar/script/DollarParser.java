@@ -44,7 +44,8 @@ import java.util.function.Function;
 
 import static me.neilellis.dollar.DollarStatic.*;
 import static me.neilellis.dollar.script.DollarLexer.*;
-import static me.neilellis.dollar.script.DollarScriptSupport.*;
+import static me.neilellis.dollar.script.DollarScriptSupport.getVariable;
+import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactive;
 import static me.neilellis.dollar.script.OperatorPriority.*;
 import static me.neilellis.dollar.types.DollarFactory.fromValue;
 import static org.codehaus.jparsec.Parsers.*;
@@ -293,10 +294,11 @@ public class DollarParser {
                              BUILTIN.token().map(new Map<Token, var>() {
                                  public var map(Token token) {
                                      final var v = (var) token.value();
-                                     return wrapReactiveUnary(scope, v,
-                                                              () -> Builtins.execute(v.S(), Arrays.asList(), scope,
-                                                                                     pure),
-                                                              new SourceValue(scope, token));
+                                     return wrapReactive(scope,
+                                                         () -> Builtins.execute(v.S(), Arrays.asList(), scope,
+                                                                                pure),
+                                                         new SourceValue(scope, token), v.S(), v
+                                     );
                                  }
                              }),
                              identifier().followedBy(OP("(").not().peek()).token().map(new Map<Token, var>() {
@@ -329,29 +331,30 @@ public class DollarParser {
                              BUILTIN.token().map(new Map<Token, var>() {
                                  public var map(Token token) {
                                      final var v = (var) token.value();
-                                     return wrapReactiveUnary(scope, v,
-                                                              () -> Builtins.execute(v.S(), Arrays.asList(), scope,
-                                                                                     pure),
-                                                              new SourceValue(scope, token));
+                                     return wrapReactive(scope,
+                                                         () -> Builtins.execute(v.S(), Arrays.asList(), scope,
+                                                                                pure),
+                                                         new SourceValue(scope, token), v.S(), v
+                                     );
                                  }
                              })))
                       .or(block(ref.lazy(), scope, pure).between(OP_NL("{"), NL_OP("}")));
         }
 
         OperatorTable<var> table = new OperatorTable<var>()
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(!lhs.equals(rhs)), scope), "!="), EQUIVALENCE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.equals(rhs)), scope), "=="), EQUIVALENCE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.isTrue() && rhs.isTrue()), scope), "&&", "and"),
+                .infixl(op(new BinaryOp("not-equal", (lhs, rhs) -> $(!lhs.equals(rhs)), scope), "!="), EQUIVALENCE_PRIORITY)
+                .infixl(op(new BinaryOp("equal", (lhs, rhs) -> $(lhs.equals(rhs)), scope), "=="), EQUIVALENCE_PRIORITY)
+                .infixl(op(new BinaryOp("and", (lhs, rhs) -> $(lhs.isTrue() && rhs.isTrue()), scope), "&&", "and"),
                         LOGICAL_AND_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.isTrue() || rhs.isTrue()), scope), "||", "or"),
+                .infixl(op(new BinaryOp("or", (lhs, rhs) -> $(lhs.isTrue() || rhs.isTrue()), scope), "||", "or"),
                         LOGICAL_OR_PRIORITY)
                 .postfix(pipeOperator(ref, scope, pure), PIPE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> fromValue(new Range(lhs, rhs)), scope), ".."), RANGE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.compareTo(rhs) < 0), scope), "<"), COMPARISON_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.compareTo(rhs) > 0), scope), ">"), EQUIVALENCE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.compareTo(rhs) <= 0), scope), "<="), EQUIVALENCE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.compareTo(rhs) >= 0), scope), ">="), EQUIVALENCE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> {
+                .infixl(op(new BinaryOp("range", (lhs, rhs) -> fromValue(new Range(lhs, rhs)), scope), ".."), RANGE_PRIORITY)
+                .infixl(op(new BinaryOp("less-than", (lhs, rhs) -> $(lhs.compareTo(rhs) < 0), scope), "<"), COMPARISON_PRIORITY)
+                .infixl(op(new BinaryOp("greater-than", (lhs, rhs) -> $(lhs.compareTo(rhs) > 0), scope), ">"), EQUIVALENCE_PRIORITY)
+                .infixl(op(new BinaryOp("less-than-equal", (lhs, rhs) -> $(lhs.compareTo(rhs) <= 0), scope), "<="), EQUIVALENCE_PRIORITY)
+                .infixl(op(new BinaryOp("greater-than-equal", (lhs, rhs) -> $(lhs.compareTo(rhs) >= 0), scope), ">="), EQUIVALENCE_PRIORITY)
+                .infixl(op(new BinaryOp("multiply", (lhs, rhs) -> {
                     final var lhsFix = lhs._fix(false);
                     if (lhsFix.isCollection()) {
                         var newValue = lhsFix._fixDeep(false);
@@ -362,13 +365,14 @@ public class DollarParser {
                         return newValue;
                     } else {return lhsFix.$multiply(rhs);}
                 }, scope), "*"), MULTIPLY_DIVIDE_PRIORITY)
-                .infixl(op(new BinaryOp(NumericAware::$divide, scope), "/"), MULTIPLY_DIVIDE_PRIORITY)
-                .infixl(op(new BinaryOp(NumericAware::$modulus, scope), "%"), MULTIPLY_DIVIDE_PRIORITY)
-                .infixl(op(new BinaryOp(var::$plus, scope), "+"), PLUS_MINUS_PRIORITY)
-                .infixl(op(new BinaryOp(var::$minus, scope), "-"), PLUS_MINUS_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.$S(), rhs), scope), ":"), 30)
+                .infixl(op(new BinaryOp("divide", NumericAware::$divide, scope), "/"), MULTIPLY_DIVIDE_PRIORITY)
+                .infixl(op(new BinaryOp("modulus", NumericAware::$modulus, scope), "%"), MULTIPLY_DIVIDE_PRIORITY)
+                .infixl(op(new BinaryOp("plus", var::$plus, scope), "+"), PLUS_MINUS_PRIORITY)
+                .infixl(op(new BinaryOp("minus", var::$minus, scope), "-"), PLUS_MINUS_PRIORITY)
+                .infixl(op(new BinaryOp("pair", (lhs, rhs) -> $(lhs.$S(), rhs), scope), ":"), 30)
 
-                .infixl(op(new BinaryOp((lhs, rhs) -> {
+                .infixl(op(new BinaryOp("assert-equal", (lhs, rhs) -> {
+
                     final var lhsFix = lhs._fixDeep(true);
                     final var rhsFix = rhs._fixDeep(true);
                     if (lhsFix.equals(rhsFix)) {
@@ -379,10 +383,10 @@ public class DollarParser {
                                                                                     rhsFix.toDollarScript());
                     }
                 }, scope), "<=>"), LINE_PREFIX_PRIORITY)
-                .prefix(op(new UnaryOp(scope, i -> $(i.isTruthy())), "~", "truthy"), UNARY_PRIORITY)
-                .prefix(op(new UnaryOp(scope, var::$size), "#", "size"), UNARY_PRIORITY)
+                .prefix(op(new UnaryOp("truthy", scope, i -> $(i.isTruthy())), "~", "truthy"), UNARY_PRIORITY)
+                .prefix(op(new UnaryOp("size", scope, var::$size), "#", "size"), UNARY_PRIORITY)
                 .infixl(op(new BinaryOp(
-                        (lhs, rhs) -> {
+                        "else", (lhs, rhs) -> {
                             final var fixLhs = lhs._fixDeep();
                             if (fixLhs.isBoolean() && fixLhs.isFalse()) { return rhs._fix(2, false); } else {
                                 return fixLhs;
@@ -390,17 +394,17 @@ public class DollarParser {
                         },
                         scope), "-:", "else"), IF_PRIORITY)
                 .prefix(ifOperator(ref, scope), IF_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> rhs.$contains(lhs), scope), "€", "in"), IN_PRIORITY)
-                .prefix(op(new UnaryOp(scope, scope::addErrorHandler), "!?#*!", "error"), LINE_PREFIX_PRIORITY)
+                .infixl(op(new BinaryOp("in", (lhs, rhs) -> rhs.$contains(lhs), scope), "€", "in"), IN_PRIORITY)
+                .prefix(op(new UnaryOp("error", scope, scope::addErrorHandler), "!?#*!", "error"), LINE_PREFIX_PRIORITY)
                 .postfix(isOperator(scope), EQUIVALENCE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> {
+                .infixl(op(new BinaryOp("each", (lhs, rhs) -> {
                             return lhs.$each(i -> inScope(pure, "each", scope, newScope -> {
                                 newScope.setParameter("1", i);
                                 return rhs._fixDeep(false);
                             }));
                         }, scope), "*|*", "each"),
                         MULTIPLY_DIVIDE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> {
+                .infixl(op(new BinaryOp("reduce", (lhs, rhs) -> {
                     return lhs.$list().stream().reduce((x, y) -> {
                         return inScope(pure, "reduce", scope, newScope -> {
                             newScope.setParameter("1", x);
@@ -410,22 +414,22 @@ public class DollarParser {
                     }).get();
                 }, scope), "*|", "reduce"), MULTIPLY_DIVIDE_PRIORITY)
                 .infixl(op(new ListenOperator(scope, pure), "?->", "causes"), CONTROL_FLOW_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> lhs.isTrue() ? fix(rhs, false) : $void(), scope), "?"),
+                .infixl(op(new BinaryOp("listen", (lhs, rhs) -> lhs.isTrue() ? fix(rhs, false) : $void(), scope), "?"),
                         CONTROL_FLOW_PRIORITY)
-                .infixl(op(new BinaryOp(ControlFlowAware::$choose, scope), "?*", "choose"), CONTROL_FLOW_PRIORITY)
-                .infixl(op(new BinaryOp(var::$default, scope), "|", "default"), CONTROL_FLOW_PRIORITY)
+                .infixl(op(new BinaryOp("choose", ControlFlowAware::$choose, scope), "?*", "choose"), CONTROL_FLOW_PRIORITY)
+                .infixl(op(new BinaryOp("default", var::$default, scope), "|", "default"), CONTROL_FLOW_PRIORITY)
                 .postfix(memberOperator(ref, scope), MEMBER_PRIORITY)
-                .prefix(op(new UnaryOp(scope, v -> $(!v.isTrue())), "!", "not"), UNARY_PRIORITY)
-                .postfix(op(new UnaryOp(scope, var::$dec), "--"), INC_DEC_PRIORITY)
-                .postfix(op(new UnaryOp(scope, var::$inc), "++"), INC_DEC_PRIORITY)
-                .prefix(op(new UnaryOp(scope, var::$negate), "-"), UNARY_PRIORITY)
-                .prefix(op(new UnaryOp(scope, true, v -> v._fixDeep(true)), "|:|", "parallel"), SIGNAL_PRIORITY)
-                .prefix(op(new UnaryOp(scope, true, v -> v._fixDeep(false)), "|..|", "serial"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp("not", scope, v -> $(!v.isTrue())), "!", "not"), UNARY_PRIORITY)
+                .postfix(op(new UnaryOp("dec", scope, var::$dec), "--"), INC_DEC_PRIORITY)
+                .postfix(op(new UnaryOp("inc", scope, var::$inc), "++"), INC_DEC_PRIORITY)
+                .prefix(op(new UnaryOp("negate", scope, var::$negate), "-"), UNARY_PRIORITY)
+                .prefix(op(new UnaryOp(scope, true, v -> v._fixDeep(true), "parallel"), "|:|", "parallel"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp(scope, true, v -> v._fixDeep(false), "serial"), "|..|", "serial"), SIGNAL_PRIORITY)
                 .prefix(forOperator(scope, ref, pure), UNARY_PRIORITY)
                 .prefix(whileOperator(scope, ref, pure), UNARY_PRIORITY)
                 .postfix(subscriptOperator(ref, scope), MEMBER_PRIORITY)
                 .postfix(parameterOperator(ref, scope, pure), MEMBER_PRIORITY)
-                .prefix(op(new UnaryOp(scope, true, v -> v._fixDeep(false)), "&", "fix"), 1000)
+                .prefix(op(new UnaryOp(scope, true, v -> v._fixDeep(false), "fix"), "&", "fix"), 1000)
                 .postfix(castOperator(scope), UNARY_PRIORITY)
                 .prefix(variableUsageOperator(scope, pure), 1000)
                 .prefix(assignmentOperator(scope, ref, pure), ASSIGNMENT_PRIORITY)
@@ -435,34 +439,34 @@ public class DollarParser {
             table = table.prefix(op(new UnaryOp(scope, false, i -> {
                 i.out();
                 return $void();
-            }), "@@", "print"), LINE_PREFIX_PRIORITY)
+            }, "print"), "@@", "print"), LINE_PREFIX_PRIORITY)
                          .prefix(op(new UnaryOp(scope, false, i -> {
                              i.debug();
                              return $void();
-                         }), "!!", "debug"), LINE_PREFIX_PRIORITY)
+                         }, "debug"), "!!", "debug"), LINE_PREFIX_PRIORITY)
                          .prefix(op(new UnaryOp(scope, false, i -> {
                              i.err();
                              return $void();
-                         }), "??", "err"), LINE_PREFIX_PRIORITY)
+                         }, "err"), "??", "err"), LINE_PREFIX_PRIORITY)
                          .prefix(writeOperator(ref, scope), OUTPUT_PRIORITY)
                          .prefix(readOperator(scope), OUTPUT_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, var::$stop), "(!)"), SIGNAL_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, var::$start), "(>)"), SIGNAL_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, var::$pause), "(=)"), SIGNAL_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, var::$unpause), "(~)"), SIGNAL_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, var::$destroy), "(-)"), SIGNAL_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, var::$create), "(+)"), SIGNAL_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, var::$state), "(?)"), SIGNAL_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, v -> DollarFactory.fromFuture(
+                         .prefix(op(new UnaryOp("stop", scope, var::$stop), "(!)"), SIGNAL_PRIORITY)
+                         .prefix(op(new UnaryOp("start", scope, var::$start), "(>)"), SIGNAL_PRIORITY)
+                         .prefix(op(new UnaryOp("pause", scope, var::$pause), "(=)"), SIGNAL_PRIORITY)
+                         .prefix(op(new UnaryOp("unpause", scope, var::$unpause), "(~)"), SIGNAL_PRIORITY)
+                         .prefix(op(new UnaryOp("destroy", scope, var::$destroy), "(-)"), SIGNAL_PRIORITY)
+                         .prefix(op(new UnaryOp("create", scope, var::$create), "(+)"), SIGNAL_PRIORITY)
+                         .prefix(op(new UnaryOp("state", scope, var::$state), "(?)"), SIGNAL_PRIORITY)
+                         .prefix(op(new UnaryOp("fork", scope, v -> DollarFactory.fromFuture(
                                          Execution.executeInBackground(i -> fix(v, false)))), "-<", "fork"),
                                  SIGNAL_PRIORITY)
-                         .infixl(op(new BinaryOp((lhs, rhs) -> rhs.$publish(lhs), scope), "*>",
+                         .infixl(op(new BinaryOp("fork", (lhs, rhs) -> rhs.$publish(lhs), scope), "*>",
                                     "publish"), OUTPUT_PRIORITY)
                          .infixl(op(new SubscribeOperator(scope, pure), "<*", "subscribe"), OUTPUT_PRIORITY)
-                         .infixl(op(new BinaryOp((lhs, rhs) -> rhs.$write(lhs), scope), ">>"), OUTPUT_PRIORITY)
+                         .infixl(op(new BinaryOp("write-simple", (lhs, rhs) -> rhs.$write(lhs), scope), ">>"), OUTPUT_PRIORITY)
                          .prefix(op(new SimpleReadOperator(scope), "<<"), OUTPUT_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, URIAware::$drain), "<--", "drain"), OUTPUT_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, URIAware::$all), "<@", "all"), OUTPUT_PRIORITY);
+                         .prefix(op(new UnaryOp("drain", scope, URIAware::$drain), "<--", "drain"), OUTPUT_PRIORITY)
+                         .prefix(op(new UnaryOp("all", scope, URIAware::$all), "<@", "all"), OUTPUT_PRIORITY);
 
         }
         Parser<var> parser = table.build(main);
@@ -616,9 +620,10 @@ public class DollarParser {
         return OP(".").followedBy(OP(".").not())
                       .next(ref.lazy().between(OP("("), OP(")")).or(IDENTIFIER))
                       .token().map(
-                        (Token rhs) -> lhs -> wrapReactiveBinary(scope, lhs, (var) rhs.value(),
-                                                                 () -> lhs.$(rhs.value().toString()),
-                                                                 new SourceValue(scope, rhs)));
+                        (Token rhs) -> lhs -> wrapReactive(scope, () -> lhs.$(rhs.value().toString()),
+                                                           new SourceValue(scope, rhs), "."+rhs.toString(), lhs, (var)
+                                        rhs.value()
+                        ));
     }
 
     private Parser<Map<? super var, ? extends var>> forOperator(final Scope scope, Parser.Reference<var> ref,

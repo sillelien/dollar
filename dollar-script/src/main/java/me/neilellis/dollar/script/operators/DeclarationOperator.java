@@ -43,7 +43,12 @@ public class DeclarationOperator implements Map<Token, Map<? super var, ? extend
 
     public Map<? super var, ? extends var> map(Token token) {
         Object[] objects = (Object[]) token.value();
-
+        final String constraintSource;
+        if (objects[1] instanceof var) {
+            constraintSource = ((var) objects[1])._source().getTokenSource();
+        } else {
+            constraintSource = null;
+        }
         return new Map<var, var>() {
             public var map(var v) {
                 var value;
@@ -61,12 +66,14 @@ public class DeclarationOperator implements Map<Token, Map<? super var, ? extend
                                 final Type type = Type.valueOf(objects[1].toString().toUpperCase());
                                 var it = scope.getParameter("it");
                                 return $(it.is(type));
-                            });
+                            }, null, null);
                 } else {
                     constraint = null;
                 }
                 final String variableName = objects[2].toString();
-                Pipeable action = i -> scope.set(variableName, value, pure, constraint, false, false, pure);
+                Pipeable
+                        action =
+                        i -> scope.set(variableName, value, pure, constraint, constraintSource, false, false, pure);
                 try {
                     action.pipe($void());
                 } catch (Exception e) {

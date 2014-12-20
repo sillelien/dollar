@@ -64,7 +64,7 @@ public class MapOperator implements Map<Token, var> {
             return $(stream.map(v -> v._fix(parallel.isTrue()))
                            .collect(Collectors.toConcurrentMap(v -> v.isPair() ? v.getPairKey() : v.$S(),
                                                                v -> v.isPair() ? v.getPairValue() : v)));
-        }));
+                                               }), o, "map");
         for (var value : o) {
             value.$listen(i->lambda.$notify());
         }

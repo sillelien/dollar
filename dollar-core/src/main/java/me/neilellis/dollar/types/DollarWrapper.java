@@ -282,6 +282,10 @@ public class DollarWrapper implements var {
         return getValue().$copy();
     }
 
+    @Override public TypePrediction _predictType() {
+        return getValue()._predictType();
+    }
+
     @NotNull @Override public var $create() {
         return getValue().$create();
     }

@@ -23,6 +23,9 @@ import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
+import java.util.Arrays;
+import java.util.concurrent.Callable;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
@@ -37,9 +40,10 @@ public class ReadOperator implements Map<Token, Map<? super var, ? extends var>>
         return new Map<var, var>() {
             @Override
             public var map(var rhs) {
-                return DollarScriptSupport.wrapUnary(scope, () -> rhs.$read(objects[1] != null,
-                                                                            objects[2] != null),
-                                                     new SourceValue(scope, token));
+                Callable<var> callable = () -> rhs.$read(objects[1] != null,
+                                                         objects[2] != null);
+                return DollarScriptSupport.toLambda(scope, callable, new SourceValue(scope, token), Arrays.asList(rhs),
+                                                    "read:" + objects[1] + ":" + objects[2]);
             }
         };
     }

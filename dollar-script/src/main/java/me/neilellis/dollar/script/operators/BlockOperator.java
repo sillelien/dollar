@@ -53,7 +53,7 @@ public class BlockOperator implements Map<Token, var> {
                                                   } else {
                                                       return $void();
                                                   }
-                                              })
-        );
+                                              }),
+                                              l, "block");
     }
 }

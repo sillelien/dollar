@@ -46,7 +46,7 @@ class ListOperator implements Map<Token, var> {
                                                                                                return DollarFactory
                                                                                                        .fromValue(
                                                                                                                o);
-                                                                                           }));
+                                                                                           }), o, "list");
         for (var v : o) {
             v.$listen(i -> lambda.$notify());
         }

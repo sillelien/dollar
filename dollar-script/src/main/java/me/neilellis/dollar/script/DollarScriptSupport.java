@@ -26,9 +26,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
+
+import static me.neilellis.dollar.DollarStatic.$;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -37,46 +40,40 @@ public class DollarScriptSupport {
 
     private static final Logger log = LoggerFactory.getLogger(DollarScriptSupport.class);
 
-    public static var wrapReactiveUnary(Scope scope, var lhs, Callable<var> callable, Source source) {
+    public static var wrapReactive(Scope scope, Callable<var> callable, Source source, String operation, var lhs) {
         if (scope == null) {
             throw new NullPointerException();
         }
-        final var lambda = toLambda(scope, callable, source);
+        final var lambda = toLambda(scope, callable, source, Arrays.asList(lhs), operation);
         lhs.$listen(i -> lambda.$notify());
         return lambda;
     }
 
-    private static var toLambda(Scope scope, Callable<var> callable, Source source) {
+
+    public static var toLambda(Scope scope, Callable<var> callable, Source source, List<var> inputs, String operation) {
         if (scope == null) {
             throw new NullPointerException();
         }
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
-                new DollarSource(i -> callable.call(), scope, source)));
+                new DollarSource(i -> callable.call(), scope, source, inputs, operation)));
     }
 
-    public static var wrapReactiveBinary(Scope scope, var lhs, var rhs, Callable<var> callable, Source source) {
-        final var lambda = toLambda(scope, callable, source);
+    public static var wrapReactive(Scope scope, Callable<var> callable, Source source, String operation, var lhs,
+                                   var rhs) {
+        final var lambda = toLambda(scope, callable, source, Arrays.asList(lhs, rhs), operation);
 
         rhs.$listen(i -> lambda.$notify());
         lhs.$listen(i -> lambda.$notify());
         return lambda;
     }
 
-    public static var wrapLambda(Source source, Scope scope, Pipeable pipeable) {
+    public static var wrapLambda(Source source, Scope scope, Pipeable pipeable, List<var> inputs, String operation) {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
-                new DollarSource(i -> pipeable.pipe(i), scope, source)));
-    }
-
-    public static var wrapUnary(Scope scope, Callable<var> callable, Source source) {
-        return toLambda(scope, callable, source);
-    }
-
-    public static var wrapBinary(Scope scope, Callable<var> callable, Source source) {
-        return toLambda(scope, callable, source);
+                new DollarSource(i -> pipeable.pipe(i), scope, source, inputs, operation)));
     }
 
     public static var getVariable(boolean pure, Scope scope, String key, boolean numeric, var defaultValue,
@@ -121,7 +118,7 @@ public class DollarScriptSupport {
                 } else {
                     throw new VariableNotFoundException(key, scope);
                 }
-        }, source);
+        }, source, $(key).$list().mutable(), "get-variable-" + key + "-" + source.getShortHash());
         scope.listen(key, lambda);
         lambda.setMetaAttribute("variable", key);
         return lambda;

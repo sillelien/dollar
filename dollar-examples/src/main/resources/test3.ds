@@ -25,3 +25,20 @@ a=2
 
 
 
+<string> divider= 1 + ""
+
+
+@@ divider
+//this is never run but we will get a type warning for it anyway during the initial parse phase
+//The error will be 'Type assertion may fail, expected STRING most likely type is LIST (100%)'
+
+if(false) {
+    <boolean> c= "test1test" / 1
+}
+
+
+
+
+
+
+

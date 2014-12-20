@@ -37,13 +37,13 @@ public class AssertOperator implements Map<Token, var> {
     @Override public var map(Token token) {
         final SourceValue source = new SourceValue(scope, token);
         Object[] objects = (Object[]) token.value();
-        return DollarScriptSupport.wrapReactiveUnary(scope, (var) objects[1], () -> {
+        return DollarScriptSupport.wrapReactive(scope, () -> {
             if (((var) objects[1]).isTrue()) { return $void(); } else {
                 throw new DollarScriptException("Assertion failed: " +
                                                 (objects[0] != null ? objects[0] : "") +
                                                 " : " +
                                                 source.getSourceMessage());
             }
-        }, source);
+        }, source, "assert", (var) objects[1]);
     }
 }

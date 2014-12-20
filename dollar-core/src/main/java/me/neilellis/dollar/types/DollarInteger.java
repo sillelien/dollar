@@ -122,24 +122,23 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
 
     @Override
     public var $as(Type type) {
-        switch (type) {
-            case BOOLEAN:
-                return DollarStatic.$(value != 0);
-            case STRING:
-                return DollarStatic.$(S());
-            case LIST:
-                return DollarStatic.$(Arrays.asList(this));
-            case MAP:
-                return DollarStatic.$("value", this);
-            case INTEGER:
-                return this;
-            case DECIMAL:
-                return DollarStatic.$((double) value);
-            case VOID:
-                return DollarStatic.$void();
-            default:
-                return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
 
+        if (type.equals(Type.BOOLEAN)) {
+            return DollarStatic.$(value != 0);
+        } else if (type.equals(Type.STRING)) {
+            return DollarStatic.$(S());
+        } else if (type.equals(Type.LIST)) {
+            return DollarStatic.$(Arrays.asList(this));
+        } else if (type.equals(Type.MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.equals(Type.INTEGER)) {
+            return this;
+        } else if (type.equals(Type.DECIMAL)) {
+            return DollarStatic.$((double) value);
+        } else if (type.equals(Type.VOID)) {
+            return DollarStatic.$void();
+        } else {
+            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
         }
     }
 
@@ -187,15 +186,29 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         }
     }
 
+    @NotNull @Override
+    public Long L() {
+        return value;
+    }
+
     @NotNull
     @Override
     public Double D() {
         return value.doubleValue();
     }
 
-    @NotNull @Override
-    public Long L() {
-        return value;
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof var) {
+            var unwrapped = ((var) obj)._unwrap();
+            if (unwrapped instanceof DollarInteger) {
+                return $equals(unwrapped);
+            } else {
+                return value.toString().equals(obj.toString());
+            }
+        } else {
+            return value.toString().equals(obj.toString());
+        }
     }
 
     @Override
@@ -211,20 +224,6 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     @Override
     public boolean isNumber() {
         return true;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof var) {
-            var unwrapped = ((var) obj)._unwrap();
-            if (unwrapped instanceof DollarInteger) {
-                return $equals(unwrapped);
-            } else {
-                return value.toString().equals(obj.toString());
-            }
-        } else {
-            return value.toString().equals(obj.toString());
-        }
     }
 
     boolean $equals(var other) {

@@ -296,7 +296,8 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public var set(String key, var value, boolean readonly, var constraint, boolean isVolatile, boolean fixed,
+    public var set(String key, var value, boolean readonly, var constraint, String constraintSource, boolean isVolatile,
+                   boolean fixed,
                    boolean pure) {
         if (key.matches("[0-9]+")) {
             throw new AssertionError("Cannot set numerical keys, use setParameter");
@@ -324,7 +325,8 @@ public class ScriptScope implements Scope {
             }
             variable.value = value;
         } else {
-            scope.getVariables().put(key, new Variable(value, readonly, constraint, isVolatile, fixed, pure));
+            scope.getVariables()
+                 .put(key, new Variable(value, readonly, constraint, constraintSource, isVolatile, fixed, pure));
         }
         scope.notifyScope(key, value);
         return value;
@@ -336,7 +338,7 @@ public class ScriptScope implements Scope {
             throw new AssertionError("Cannot change the value of positional variables.");
         }
         this.parameterScope = true;
-        variables.put(key, new Variable(value, null));
+        variables.put(key, new Variable(value, null, null));
         this.notifyScope(key, value);
         return value;
     }

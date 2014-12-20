@@ -76,15 +76,21 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $divide(@NotNull var v) {
+    public var $plus(@Nullable var v) {
+        ensureRunning();
+        return handler.append(v);
+    }
+
+    @NotNull
+    @Override
+    public var $negate() {
         return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $plus(@Nullable var v) {
-        ensureRunning();
-        return handler.append(v);
+    public var $divide(@NotNull var v) {
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
@@ -101,16 +107,6 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $negate() {
-        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_URI_OPERATION);
-    }
-
-    @Override public int sign() {
-        return 1;
-    }
-
-    @NotNull
-    @Override
     public Integer I() {
         return 0;
     }
@@ -119,6 +115,10 @@ public class DollarURI extends AbstractDollar {
     @Override
     public Number N() {
         return 0;
+    }
+
+    @Override public int sign() {
+        return 1;
     }
 
     private void ensureRunning() {
@@ -223,15 +223,15 @@ public class DollarURI extends AbstractDollar {
         return false;
     }
 
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
     @NotNull
     @Override
     public ImmutableMap<var, var> $map() {
         return ImmutableMap.of();
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
     }
 
     @Override
@@ -258,6 +258,7 @@ public class DollarURI extends AbstractDollar {
     public <R> R toJavaObject() {
         return (R) uri;
     }
+
 
     @NotNull
 
@@ -383,19 +384,18 @@ public class DollarURI extends AbstractDollar {
 
     @Override
     public var $as(Type type) {
-        switch (type) {
-            case STRING:
-                return DollarStatic.$(S());
-            case LIST:
-                return $all();
-            case MAP:
-                return DollarStatic.$("value", this);
-            case VOID:
-                return DollarStatic.$void();
-            case URI:
-                return this;
-            default:
-                return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
+        if (type.equals(Type.STRING)) {
+            return DollarStatic.$(S());
+        } else if (type.equals(Type.LIST)) {
+            return $all();
+        } else if (type.equals(Type.MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.equals(Type.VOID)) {
+            return DollarStatic.$void();
+        } else if (type.equals(Type.URI)) {
+            return this;
+        } else {
+            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
         }
     }
 }

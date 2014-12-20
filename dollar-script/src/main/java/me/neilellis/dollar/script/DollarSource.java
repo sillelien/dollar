@@ -19,8 +19,11 @@ package me.neilellis.dollar.script;
 import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.types.DollarLambda;
+import me.neilellis.dollar.var;
 
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -28,9 +31,17 @@ import java.lang.reflect.Method;
 public class DollarSource extends DollarLambda {
     private final Scope scope;
     private final Source source;
+    private List<var> inputs;
+    private String operation;
 
-    public DollarSource(Pipeable lambda, Scope scope, Source source) {
+    public DollarSource(Pipeable lambda, Scope scope, Source source, List<var> inputs, String operation) {
         super(lambda);
+        if (operation == null) {
+            throw new NullPointerException();
+        }
+
+        this.inputs = inputs;
+        this.operation = operation;
         if (scope == null) {
             throw new NullPointerException();
         }
@@ -38,8 +49,11 @@ public class DollarSource extends DollarLambda {
         this.source = source;
     }
 
-    public DollarSource(Pipeable lambda, Scope scope, Source source, boolean fixable) {
+    public DollarSource(Pipeable lambda, Scope scope, Source source, boolean fixable, List<var> inputs,
+                        String operation) {
         super(lambda, fixable);
+        this.inputs = inputs;
+        this.operation = operation;
         if (scope == null) {
             throw new NullPointerException();
         }
@@ -49,7 +63,17 @@ public class DollarSource extends DollarLambda {
 
     @Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         try {
-            return super.invoke(proxy, method, args);
+            if (Objects.equals(method.getName(), "_source")) {
+                return source;
+            }
+            if (Objects.equals(method.getName(), "_predictType")) {
+                return TypeLearner.predict(operation, source, inputs);
+            }
+            final Object result = super.invoke(proxy, method, args);
+            if (method.getName().startsWith("_fix")) {
+                TypeLearner.learn(operation, source, inputs, ((var) result).$type());
+            }
+            return result;
         } catch (AssertionError e) {
             return scope.getDollarParser().getErrorHandler().handle(scope, source, e);
         } catch (DollarException e) {

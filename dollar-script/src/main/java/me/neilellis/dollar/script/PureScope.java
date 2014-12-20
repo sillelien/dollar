@@ -75,7 +75,8 @@ public class PureScope extends ScriptScope {
         return this;
     }
 
-    @Override public var set(String key, var value, boolean readonly, var constraint, boolean isVolatile, boolean fixed,
+    @Override public var set(String key, var value, boolean readonly, var constraint, String constraintSource,
+                             boolean isVolatile, boolean fixed,
                              boolean pure) {
         if (isVolatile) {
             throw new UnsupportedOperationException("Cannot have volatile variables in a pure expression");
@@ -110,7 +111,8 @@ public class PureScope extends ScriptScope {
             }
             variable.value = fixedValue;
         } else {
-            scope.getVariables().put(key, new Variable(fixedValue, readonly, constraint, false, fixed, pure));
+            scope.getVariables()
+                 .put(key, new Variable(fixedValue, readonly, constraint, constraintSource, false, fixed, pure));
         }
         scope.notifyScope(key, fixedValue);
         return value;

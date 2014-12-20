@@ -22,6 +22,7 @@ import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
 import java.util.Arrays;
+import java.util.concurrent.Callable;
 
 import static me.neilellis.dollar.DollarStatic.$void;
 import static me.neilellis.dollar.DollarStatic.fix;
@@ -44,7 +45,7 @@ public class UnitOperator implements Map<Token, var> {
     @Override public var map(Token token) {
         Object[] objects = (Object[]) token.value();
         final SourceValue source = new SourceValue(scope, token);
-        return DollarScriptSupport.wrapUnary(scope, () -> dollarParser.inScope(pure,"unit", scope, newScope -> {
+        Callable<var> callable = () -> dollarParser.inScope(pure, "unit", scope, newScope -> {
             if (Builtins.exists(objects[1].toString())) {
                 return Builtins.execute(objects[1].toString(), Arrays.asList((var) objects[0]), newScope, pure);
             } else {
@@ -53,6 +54,8 @@ public class UnitOperator implements Map<Token, var> {
                 newScope.setParameter("1", (var) objects[0]);
                 return fix(variable, false);
             }
-        }), source);
+        });
+        return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList((var) objects[0], (var) objects[1]),
+                                            "unit");
     }
 }

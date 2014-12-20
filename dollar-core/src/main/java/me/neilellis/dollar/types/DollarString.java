@@ -152,27 +152,26 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @Override
     public var $as(Type type) {
-        switch (type) {
-            case BOOLEAN:
-                return DollarStatic.$(value.equals("true") || value.equals("yes"));
-            case STRING:
-                return this;
-            case LIST:
-                return DollarStatic.$(Arrays.asList(this));
-            case MAP:
-                return DollarStatic.$("value", this);
-            case DECIMAL:
-                return DollarStatic.$(Double.parseDouble(value));
-            case INTEGER:
-                return DollarStatic.$(Long.parseLong(value));
-            case VOID:
-                return DollarStatic.$void();
-            case DATE:
-                return fromValue(LocalDateTime.parse(value));
-            case URI:
-                return fromURI(value);
-            default:
-                return failure(INVALID_CAST);
+        if (type.equals(Type.BOOLEAN)) {
+            return DollarStatic.$(value.equals("true") || value.equals("yes"));
+        } else if (type.equals(Type.STRING)) {
+            return this;
+        } else if (type.equals(Type.LIST)) {
+            return DollarStatic.$(Arrays.asList(this));
+        } else if (type.equals(Type.MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.equals(Type.DECIMAL)) {
+            return DollarStatic.$(Double.parseDouble(value));
+        } else if (type.equals(Type.INTEGER)) {
+            return DollarStatic.$(Long.parseLong(value));
+        } else if (type.equals(Type.VOID)) {
+            return DollarStatic.$void();
+        } else if (type.equals(Type.DATE)) {
+            return fromValue(LocalDateTime.parse(value));
+        } else if (type.equals(Type.URI)) {
+            return fromURI(value);
+        } else {
+            return failure(INVALID_CAST);
         }
     }
 
@@ -214,14 +213,14 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         }
     }
 
-    @Override
-    public boolean isString() {
-        return true;
-    }
-
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass") @Override
     public boolean equals(@Nullable Object obj) {
         return obj != null && value.equals(obj.toString());
+    }
+
+    @Override
+    public boolean isString() {
+        return true;
     }
 
     @Override

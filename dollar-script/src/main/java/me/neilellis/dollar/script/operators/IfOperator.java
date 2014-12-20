@@ -16,14 +16,17 @@
 
 package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.script.SourceValue;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
+import java.util.Arrays;
+import java.util.concurrent.Callable;
+
 import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.script.DollarScriptSupport.wrapBinary;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -35,13 +38,17 @@ public class IfOperator implements Map<Token, Map<var, var>> {
 
     @Override public Map<var, var> map(Token token) {
         var lhs = (var) token.value();
-        return rhs -> wrapBinary(scope, () -> {
-            final var lhsFix = lhs._fixDeep();
-            if (lhsFix.isBoolean() && lhsFix.isTrue()) {
-                return rhs._fix(2, false);
-            } else {
-                return $(false);
-            }
-        }, new SourceValue(scope, token));
+        return rhs -> {
+            Callable<var> callable = () -> {
+                final var lhsFix = lhs._fixDeep();
+                if (lhsFix.isBoolean() && lhsFix.isTrue()) {
+                    return rhs._fix(2, false);
+                } else {
+                    return $(false);
+                }
+            };
+            return DollarScriptSupport.toLambda(scope, callable, new SourceValue(scope, token), Arrays.asList(lhs, rhs),
+                                                "if");
+        };
     }
 }

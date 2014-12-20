@@ -106,24 +106,22 @@ public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
 
     @Override
     public var $as(Type type) {
-        switch (type) {
-            case BOOLEAN:
-                return DollarStatic.$(true);
-            case STRING:
-                return DollarStatic.$(value.toString());
-            case LIST:
-                return DollarStatic.$(Arrays.asList(this));
-            case MAP:
-                return DollarStatic.$("value", this);
-            case DECIMAL:
-                return DollarStatic.$(asDecimal());
-            case INTEGER:
-                return DollarStatic.$(asDecimal().longValue());
-            case VOID:
-                return DollarStatic.$void();
-            default:
-                return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
-
+        if (type.equals(Type.BOOLEAN)) {
+            return DollarStatic.$(true);
+        } else if (type.equals(Type.STRING)) {
+            return DollarStatic.$(value.toString());
+        } else if (type.equals(Type.LIST)) {
+            return DollarStatic.$(Arrays.asList(this));
+        } else if (type.equals(Type.MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.equals(Type.DECIMAL)) {
+            return DollarStatic.$(asDecimal());
+        } else if (type.equals(Type.INTEGER)) {
+            return DollarStatic.$(asDecimal().longValue());
+        } else if (type.equals(Type.VOID)) {
+            return DollarStatic.$void();
+        } else {
+            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
         }
     }
 
@@ -198,15 +196,29 @@ public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
         return value.toString();
     }
 
+    @NotNull @Override
+    public Long L() {
+        return asDecimal().longValue();
+    }
+
     @NotNull
     @Override
     public Double D() {
         return asDecimal();
     }
 
-    @NotNull @Override
-    public Long L() {
-        return asDecimal().longValue();
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof var) {
+            var unwrapped = ((var) obj)._unwrap();
+            if (unwrapped instanceof DollarDate) {
+                return $equals(unwrapped);
+            } else {
+                return toString().equals(obj.toString());
+            }
+        } else {
+            return toString().equals(obj.toString());
+        }
     }
 
     @Override
@@ -222,20 +234,6 @@ public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
     @Override
     public boolean isNumber() {
         return true;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof var) {
-            var unwrapped = ((var) obj)._unwrap();
-            if (unwrapped instanceof DollarDate) {
-                return $equals(unwrapped);
-            } else {
-                return toString().equals(obj.toString());
-            }
-        } else {
-            return toString().equals(obj.toString());
-        }
     }
 
     boolean $equals(var other) {

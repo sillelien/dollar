@@ -194,19 +194,18 @@ public class DollarMap extends AbstractDollar implements var {
 
     @Override
     public var $as(Type type) {
-        switch (type) {
-            case MAP:
-                return this;
-            case LIST:
-                return DollarStatic.$($list());
-            case BOOLEAN:
-                return DollarStatic.$(!map.isEmpty());
-            case STRING:
-                return DollarFactory.fromStringValue(S());
-            case VOID:
-                return DollarStatic.$void();
-            default:
-                return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
+        if (type.equals(Type.MAP)) {
+            return this;
+        } else if (type.equals(Type.LIST)) {
+            return DollarStatic.$($list());
+        } else if (type.equals(Type.BOOLEAN)) {
+            return DollarStatic.$(!map.isEmpty());
+        } else if (type.equals(Type.STRING)) {
+            return DollarFactory.fromStringValue(S());
+        } else if (type.equals(Type.VOID)) {
+            return DollarStatic.$void();
+        } else {
+            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
         }
     }
 
@@ -279,6 +278,14 @@ public class DollarMap extends AbstractDollar implements var {
         return varMapToMap();
     }
 
+    private Map<Object, Object> varMapToMap() {
+        Map<Object, Object> result = new LinkedHashMap<>();
+        for (Map.Entry<var, var> entry : $map().entrySet()) {
+            result.put(entry.getKey().toJavaObject(), entry.getValue().toJavaObject());
+        }
+        return result;
+    }
+
     private LinkedHashMap<var, var> copyMap() {
         return deepClone(map);
     }
@@ -342,14 +349,6 @@ public class DollarMap extends AbstractDollar implements var {
     @Override
     public var $remove(var value) {
         return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_MAP_OPERATION);
-    }
-
-    private Map<Object, Object> varMapToMap() {
-        Map<Object, Object> result = new LinkedHashMap<>();
-        for (Map.Entry<var, var> entry : $map().entrySet()) {
-            result.put(entry.getKey().toJavaObject(), entry.getValue().toJavaObject());
-        }
-        return result;
     }
 
     @Override

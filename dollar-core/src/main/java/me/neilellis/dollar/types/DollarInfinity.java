@@ -195,27 +195,26 @@ public final class DollarInfinity extends AbstractDollar implements var {
 
     @Override
     public var $as(Type type) {
-        switch (type) {
-            case BOOLEAN:
-                return DollarStatic.$(true);
-            case STRING:
-                return DollarStatic.$(positive ? "infinity" : "-infinity");
-            case LIST:
-                return DollarStatic.$(Arrays.asList(this));
-            case MAP:
-                return DollarStatic.$("value", this);
-            case DECIMAL:
-                return DollarStatic.$(positive ? Double.MAX_VALUE : Double.MIN_VALUE);
-            case INTEGER:
-                return DollarStatic.$(positive ? Long.MAX_VALUE : Long.MIN_VALUE);
-            case VOID:
-                return $void();
-            case DATE:
-                return this;
-            case RANGE:
-                return DollarFactory.fromValue(new Range($(0), $(0)));
-            default:
-                return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST, type.toString(), false);
+        if (type.equals(Type.BOOLEAN)) {
+            return DollarStatic.$(true);
+        } else if (type.equals(Type.STRING)) {
+            return DollarStatic.$(positive ? "infinity" : "-infinity");
+        } else if (type.equals(Type.LIST)) {
+            return DollarStatic.$(Arrays.asList(this));
+        } else if (type.equals(Type.MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.equals(Type.DECIMAL)) {
+            return DollarStatic.$(positive ? Double.MAX_VALUE : Double.MIN_VALUE);
+        } else if (type.equals(Type.INTEGER)) {
+            return DollarStatic.$(positive ? Long.MAX_VALUE : Long.MIN_VALUE);
+        } else if (type.equals(Type.VOID)) {
+            return $void();
+        } else if (type.equals(Type.DATE)) {
+            return this;
+        } else if (type.equals(Type.RANGE)) {
+            return DollarFactory.fromValue(new Range($(0), $(0)));
+        } else {
+            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST, type.toString(), false);
         }
     }
 

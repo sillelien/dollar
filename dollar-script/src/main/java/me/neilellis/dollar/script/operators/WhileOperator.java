@@ -24,6 +24,9 @@ import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
+import java.util.Arrays;
+import java.util.concurrent.Callable;
+
 import static me.neilellis.dollar.DollarStatic.$;
 
 /**
@@ -42,11 +45,14 @@ public class WhileOperator implements Map<Token, Map<? super var, ? extends var>
 
     public Map<? super var, ? extends var> map(Token token) {
         var lhs = (var) token.value();
-        return rhs -> DollarScriptSupport.wrapBinary(scope, () -> parser.inScope(pure, "while", scope, newScope -> {
-            while (lhs.isTrue()) {
-                rhs._fixDeep();
-            }
-            return $(false);
-        }), new SourceValue(scope, token));
+        return rhs -> {
+            Callable<var> callable = () -> parser.inScope(pure, "while", scope, newScope -> {
+                        while (lhs.isTrue()) {
+                            rhs._fixDeep();
+                        }
+                        return $(false);
+                    });
+            return DollarScriptSupport.toLambda(scope, callable, new SourceValue(scope, token), Arrays.asList(lhs,rhs), "while");
+        };
     }
 }

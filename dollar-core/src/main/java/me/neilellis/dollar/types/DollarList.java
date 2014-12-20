@@ -274,16 +274,16 @@ public class DollarList extends AbstractDollar {
         return $plus(value);
     }
 
-    @NotNull
-    @Override
-    public ImmutableMap<var, var> $map() {
-        return null;
-    }
-
     @Override
     public var $notify() {
         list.forEach(me.neilellis.dollar.var::$notify);
         return this;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> $map() {
+        return null;
     }
 
     @NotNull
@@ -494,20 +494,18 @@ public class DollarList extends AbstractDollar {
 
     @Override
     public var $as(Type type) {
-        switch (type) {
-            case LIST:
-                return this;
-            case MAP:
-                return DollarStatic.$(toMap());
-            case STRING:
-                return DollarFactory.fromStringValue(S());
-            case VOID:
-                return DollarStatic.$void();
-            case BOOLEAN:
-                return DollarStatic.$(!list.isEmpty());
-            default:
-                return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
-
+        if (type.equals(Type.LIST)) {
+            return this;
+        } else if (type.equals(Type.MAP)) {
+            return DollarStatic.$(toMap());
+        } else if (type.equals(Type.STRING)) {
+            return DollarFactory.fromStringValue(S());
+        } else if (type.equals(Type.VOID)) {
+            return DollarStatic.$void();
+        } else if (type.equals(Type.BOOLEAN)) {
+            return DollarStatic.$(!list.isEmpty());
+        } else {
+            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
         }
     }
 

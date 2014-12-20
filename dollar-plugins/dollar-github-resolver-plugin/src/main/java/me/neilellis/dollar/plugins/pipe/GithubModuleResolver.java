@@ -112,7 +112,7 @@ public class GithubModuleResolver implements ModuleResolver {
 
                 final ImmutableMap<var, var> paramMap = params.$map();
                 for (Map.Entry<var, var> entry : paramMap.entrySet()) {
-                    newScope.set(entry.getKey().$S(), entry.getValue(), true, null, false, false, false);
+                    newScope.set(entry.getKey().$S(), entry.getValue(), true, null, null, false, false, false);
                 }
                 return new DollarParser(classLoader, dir).parse(newScope, content);
             } catch (IOException e) {

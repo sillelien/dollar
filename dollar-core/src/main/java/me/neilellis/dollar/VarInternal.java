@@ -21,6 +21,7 @@ import me.neilellis.dollar.guard.ChainGuard;
 import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.NotNullCollectionGuard;
 import me.neilellis.dollar.guard.NotNullGuard;
+import me.neilellis.dollar.script.Source;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -51,6 +52,12 @@ public interface VarInternal {
 
     @Guarded(ChainGuard.class)
     var _fixDeep(boolean parallel);
+
+    TypePrediction _predictType();
+
+    default Source _source() {
+        return null;
+    }
 
     @Guarded(NotNullGuard.class)
     void _src(String src);

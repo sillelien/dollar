@@ -48,9 +48,9 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
         }
     };
     protected final ConcurrentHashMap<String, String> meta = new ConcurrentHashMap<>();
+    protected final Pipeable lambda;
     private final var in;
     private final boolean fixable;
-    private final Pipeable lambda;
     private final ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
 
     public DollarLambda(Pipeable lambda) {

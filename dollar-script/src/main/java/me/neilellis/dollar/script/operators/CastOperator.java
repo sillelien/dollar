@@ -34,12 +34,12 @@ public class CastOperator implements Map<Token, Map<? super var, ? extends var>>
 
     @Override public Map<? super var, ? extends var> map(Token token) {
         var rhs = (var) token.value();
-        return lhs -> DollarScriptSupport.wrapReactiveUnary(scope,
-                                                            lhs,
-                                                            () -> lhs.$as(Type
-                                                                                  .valueOf(
-                                                                                          rhs.toString()
-                                                                                             .toUpperCase())),
-                                                            new SourceValue(scope, token));
+        return lhs -> DollarScriptSupport.wrapReactive(scope,
+                                                       () -> lhs.$as(Type
+                                                                             .valueOf(
+                                                                                     rhs.toString()
+                                                                                        .toUpperCase())),
+                                                       new SourceValue(scope, token), "as", lhs
+        );
     }
 }

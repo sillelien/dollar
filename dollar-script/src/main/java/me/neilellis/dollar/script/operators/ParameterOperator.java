@@ -23,6 +23,7 @@ import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static me.neilellis.dollar.DollarStatic.$;
 
@@ -51,9 +52,12 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                 }
             }
 
-            var lambda = DollarScriptSupport.wrapUnary(scope, () -> dollarParser.inScope(pure, "parameter", scope,
-                                                                                         new Function(rhs, lhs, token)),
-                                                       new SourceValue(scope, token));
+            String constraintSource = null;
+            Callable<var> callable = () -> dollarParser.inScope(pure, "parameter", scope,
+                                                                new Function(rhs, lhs, token,
+                                                                             constraintSource));
+            var lambda =
+                    DollarScriptSupport.toLambda(scope, callable, new SourceValue(scope, token), rhs, "parameter");
             //reactive links
             lhs.$listen(i -> lambda.$notify());
             for (var param : rhs) {
@@ -67,11 +71,13 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
         private final List<var> rhs;
         private final var lhs;
         private final Token token;
+        private String constraintSource;
 
-        public Function(List<var> rhs, var lhs, Token token) {
+        public Function(List<var> rhs, var lhs, Token token, String constraintSource) {
             this.rhs = rhs;
             this.lhs = lhs;
             this.token = token;
+            this.constraintSource = constraintSource;
         }
 
         @Override
@@ -89,7 +95,7 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                 //If the parameter is a named parameter then use the name (set as metadata on the value).
                 if (param.getMetaAttribute(DollarParser.NAMED_PARAMETER_META_ATTR) != null) {
                     newScope.set(param.getMetaAttribute(DollarParser.NAMED_PARAMETER_META_ATTR), param, true, null,
-                                 false, false, pure);
+                                 constraintSource, false, false, pure);
                 }
             }
             var result;

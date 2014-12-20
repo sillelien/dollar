@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.script;
 
+import me.neilellis.dollar.script.util.FNV;
 import org.codehaus.jparsec.Token;
 
 /**
@@ -27,6 +28,7 @@ public class SourceValue implements Source {
     private int length;
     private String source;
     private int start;
+    private String shortHash;
 
     public SourceValue(Scope scope, String sourceFile, String source, int start, int length) {
         this.scope = scope;
@@ -42,6 +44,7 @@ public class SourceValue implements Source {
         this.length = t.length();
         this.start = t.index();
         this.source = scope.getSource();
+        this.shortHash = new FNV().fnv1_32(source.getBytes()).toString(36);
     }
 
     @Override public String getSourceFile() {
@@ -50,6 +53,10 @@ public class SourceValue implements Source {
 
     @Override public int getLength() {
         return length;
+    }
+
+    @Override public String getShortHash() {
+        return shortHash;
     }
 
     @Override public String getSource() {
@@ -79,5 +86,9 @@ public class SourceValue implements Source {
 
     @Override public int getStart() {
         return start; //TODO
+    }
+
+    @Override public String getTokenSource() {
+        return scope.getSource().substring(start, start + length);
     }
 }

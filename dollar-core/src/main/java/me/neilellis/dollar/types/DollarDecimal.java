@@ -43,6 +43,12 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
 
     @NotNull
     @Override
+    public var $negate() {
+        return DollarFactory.fromValue(-value, errors());
+    }
+
+    @NotNull
+    @Override
     public var $divide(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
         if (rhsFix.D() == null || rhsFix.isZero()) {
@@ -85,12 +91,6 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         return DollarFactory.fromValue(value * rhsFix.D(), errors(), rhsFix.errors());
     }
 
-    @NotNull
-    @Override
-    public var $negate() {
-        return DollarFactory.fromValue(-value, errors());
-    }
-
     @Override
     @NotNull
     public Integer I() {
@@ -105,24 +105,22 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
 
     @Override
     public var $as(Type type) {
-        switch (type) {
-            case BOOLEAN:
-                return DollarStatic.$(value.intValue() != 0);
-            case STRING:
-                return DollarStatic.$(S());
-            case LIST:
-                return DollarStatic.$(Arrays.asList(this));
-            case MAP:
-                return DollarStatic.$("value", this);
-            case DECIMAL:
-                return this;
-            case INTEGER:
-                return DollarStatic.$(value.longValue());
-            case VOID:
-                return DollarStatic.$void();
-            default:
-                return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
-
+        if (type.equals(Type.BOOLEAN)) {
+            return DollarStatic.$(value.intValue() != 0);
+        } else if (type.equals(Type.STRING)) {
+            return DollarStatic.$(S());
+        } else if (type.equals(Type.LIST)) {
+            return DollarStatic.$(Arrays.asList(this));
+        } else if (type.equals(Type.MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.equals(Type.DECIMAL)) {
+            return this;
+        } else if (type.equals(Type.INTEGER)) {
+            return DollarStatic.$(value.longValue());
+        } else if (type.equals(Type.VOID)) {
+            return DollarStatic.$void();
+        } else {
+            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
         }
     }
 
@@ -158,15 +156,29 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         }
     }
 
+    @NotNull @Override
+    public Long L() {
+        return value.longValue();
+    }
+
     @NotNull
     @Override
     public Double D() {
         return value;
     }
 
-    @NotNull @Override
-    public Long L() {
-        return value.longValue();
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof var) {
+            var unwrapped = ((var) obj)._unwrap();
+            if (unwrapped instanceof DollarDecimal) {
+                return $equals(unwrapped);
+            } else {
+                return value.toString().equals(obj.toString());
+            }
+        } else {
+            return value.toString().equals(obj.toString());
+        }
     }
 
     @Override
@@ -182,20 +194,6 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     @Override
     public boolean isNumber() {
         return true;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof var) {
-            var unwrapped = ((var) obj)._unwrap();
-            if (unwrapped instanceof DollarDecimal) {
-                return $equals(unwrapped);
-            } else {
-                return value.toString().equals(obj.toString());
-            }
-        } else {
-            return value.toString().equals(obj.toString());
-        }
     }
 
     boolean $equals(var other) {
