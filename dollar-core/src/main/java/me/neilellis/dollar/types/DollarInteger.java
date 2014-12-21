@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Objects;
 
 import static java.lang.Math.abs;
 
@@ -149,7 +150,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     @Override
     public boolean is(@NotNull Type... types) {
         for (Type type : types) {
-            if (type == Type.INTEGER) {
+            if (Objects.equals(type, Type.INTEGER)) {
                 return true;
             }
         }

@@ -16,69 +16,18 @@
 
 package me.neilellis.dollar;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class TypePrediction {
-    private final String name;
-    long total;
-    HashMap<String, Long> values = new HashMap<>();
+public interface TypePrediction {
 
-    public TypePrediction(String name) {
+    boolean empty();
 
-        this.name = name;
-    }
+    Double probability(Type type);
 
-    public void addCount(String type, long l) {
-        total += l;
-        if (values.containsKey(type)) {
-            values.put(type, values.get(type) + l);
-        } else {
-            values.put(type, l);
-        }
-    }
+    Type probableType();
 
-    public long getCount(String type) {
-        return values.get(type);
-    }
-
-    public Double probability(String type) {
-        final Long value = values.get(type);
-        if (value == null) {
-            return 0.0;
-        }
-        return ((double) value) / total;
-    }
-
-    public String probableType() {
-        long max = 0;
-        String result = null;
-        for (Map.Entry<String, Long> entry : values.entrySet()) {
-            if (entry.getValue() > max) {
-                max = entry.getValue();
-                result = entry.getKey();
-            }
-        }
-        return result;
-    }
-
-    @Override public String toString() {
-        return "TypePrediction{" +
-               "name='" + name + '\'' +
-               ", total=" + total +
-               ", values=" + values +
-               '}';
-    }
-
-    public long total() {
-        return total;
-    }
-
-    public Set<String> types() {
-        return values.keySet();
-    }
+    Set<Type> types();
 }

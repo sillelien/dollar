@@ -48,7 +48,7 @@ public class VariableUsageOperator implements Map<Token, Map<? super var, ? exte
                 return DollarScriptSupport.getVariable(pure, scope, rhs.toString(), false, $void(), source);
             };
             return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(rhs),
-                                                "variable-usage--" + rhs.toString());
+                                                "variable-usage--" + rhs._source().getTokenSource());
         };
     }
 }

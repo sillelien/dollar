@@ -238,7 +238,7 @@ public class DollarMap extends AbstractDollar implements var {
     @Override
     public boolean is(@NotNull Type... types) {
         for (Type type : types) {
-            if (type == Type.MAP) {
+            if (Objects.equals(type, Type.MAP)) {
                 return true;
             }
         }

@@ -80,9 +80,9 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
 
             public var map(var rhs) {
                 final TypePrediction prediction = rhs._predictType();
-                if (type != null) {
-                    final Double probability = prediction.probability(type.toString());
-                    if (probability < 0.5 && prediction.total() > 0) {
+                if (type != null && prediction != null) {
+                    final Double probability = prediction.probability(type);
+                    if (probability < 0.5 && !prediction.empty()) {
                         System.err.println("Type assertion may fail, expected " +
                                            type +
                                            " most likely type is " +
@@ -108,14 +108,16 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                         Callable<var> callable = () -> $($(rhs.$listen(
                                 i -> scope.set(varName, fix(i, false), false,
                                                useConstraint, constraintSource, isVolatile, false, pure))));
-                        return DollarScriptSupport.toLambda(scope, callable, source, null, null);
+                        return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(rhs),
+                                                            "listen-assign");
 
                     } else if (operator.equals("*=")) {
                         scope.set(varName, $void(), false, null, constraintSource, true, true, pure);
                         Callable<var> callable = () -> $(rhs.$subscribe(
                                 i -> scope.set(varName, fix(i, false), false,
                                                useConstraint, constraintSource, true, false, pure)));
-                        return DollarScriptSupport.toLambda(scope, callable, source, null, null);
+                        return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(rhs),
+                                                            "subscribe-assign");
                     }
                 }
                 return assign(rhs, objects, constraint, constant, isVolatile, source, constraintSource);
@@ -140,6 +142,8 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                     newScope.setParameter("it", rhsFixed);
                     newScope.setParameter("previous", scope.get(varName));
                     if (useConstraint.isFalse()) {
+//                        System.out.println(rhsFixed.toDollarScript());
+//                        System.out.println(useConstraint.isFalse());
                         newScope.handleError(new DollarScriptException(
                                 "Constraint failed for variable " + varName + ""));
                     }

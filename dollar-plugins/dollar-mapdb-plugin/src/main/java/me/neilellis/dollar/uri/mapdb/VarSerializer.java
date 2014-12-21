@@ -25,6 +25,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Objects;
 
 import static me.neilellis.dollar.DollarStatic.$void;
 
@@ -44,7 +45,7 @@ public class VarSerializer implements Serializer<var>, Serializable {
 
     @Override public var deserialize(DataInput in, int available) throws IOException {
         final Type type = Type.values()[in.readInt()];
-        if (type == Type.VOID) {
+        if (Objects.equals(type, Type.VOID)) {
             in.readUTF();
             return $void();
         } else {

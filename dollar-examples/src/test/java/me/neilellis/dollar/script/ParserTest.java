@@ -118,7 +118,7 @@ public class ParserTest {
         new DollarParser().parse(getClass().getResourceAsStream("/test_numeric.ds"), "/test_numeric.ds", parallel);
     }
 
-    @Test
+    //    @Test
     public void testOperators() throws Exception {
         DollarStatic.config.failFast(false);
         final List<String>

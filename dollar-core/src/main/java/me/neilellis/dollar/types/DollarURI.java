@@ -228,15 +228,15 @@ public class DollarURI extends AbstractDollar {
         return false;
     }
 
+    @Override
+    public boolean isNeitherTrueNorFalse() {
+        return true;
+    }
+
     @NotNull
     @Override
     public ImmutableMap<var, var> $map() {
         return ImmutableMap.of();
-    }
-
-    @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
     }
 
     @Override
@@ -375,7 +375,7 @@ public class DollarURI extends AbstractDollar {
     @Override
     public boolean is(@NotNull Type... types) {
         for (Type type : types) {
-            if (type == Type.URI) {
+            if (Objects.equals(type, Type.URI)) {
                 return true;
             }
         }

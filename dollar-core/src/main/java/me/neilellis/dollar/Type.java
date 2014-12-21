@@ -16,13 +16,15 @@
 
 package me.neilellis.dollar;
 
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class Type {
+public final class Type {
     public static final ConcurrentHashMap<String, Type> lookup = new ConcurrentHashMap<>();
     public static final AtomicInteger nextOrdinal = new AtomicInteger(0);
 
@@ -48,7 +50,7 @@ public class Type {
     Type(String name) {
 
         this.name = name.toUpperCase();
-        lookup.put(name, this);
+        lookup.put(name.toUpperCase(), this);
         this.ordinal = nextOrdinal.getAndIncrement();
     }
 
@@ -58,6 +60,10 @@ public class Type {
 
     public static Type[] values() {
         return lookup.values().toArray(new Type[lookup.values().size()]);
+    }
+
+    public static Set<String> stringValues() {
+        return lookup.values().stream().map(i->i.toString()).collect(Collectors.toSet());
     }
 
     @Override
@@ -72,7 +78,7 @@ public class Type {
 
         Type type = (Type) o;
 
-        if (!name.equals(type.name)) { return false; }
+        if (!name.equalsIgnoreCase(type.name)) { return false; }
 
         return true;
     }

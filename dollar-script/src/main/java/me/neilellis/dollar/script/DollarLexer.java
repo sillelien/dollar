@@ -266,7 +266,7 @@ class DollarLexer {
 
     public static Parser<var> identifier() {
         return Terminals.Identifier.PARSER.map(i -> {
-            switch (i.toLowerCase()) {
+            switch (i) {
                 case "true":
                     return DollarFactory.TRUE;
                 case "false":

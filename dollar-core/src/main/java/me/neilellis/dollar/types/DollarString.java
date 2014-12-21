@@ -30,6 +30,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -182,7 +183,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @Override
     public boolean is(@NotNull Type... types) {
         for (Type type : types) {
-            if (type == Type.STRING) {
+            if (Objects.equals(type, Type.STRING)) {
                 return true;
             }
         }

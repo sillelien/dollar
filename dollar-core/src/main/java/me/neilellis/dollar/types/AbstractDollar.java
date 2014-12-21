@@ -266,9 +266,7 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override public TypePrediction _predictType() {
-        final TypePrediction typePrediction = new TypePrediction("<static>");
-        typePrediction.addCount($type().toString(), 1);
-        return typePrediction;
+        return new SingleValueTypePrediction($type());
     }
 
     @Override
@@ -373,11 +371,6 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public var assertNotVoid(String message) throws AssertionError {
-        return assertFalse(TypeAware::isVoid, message);
-    }
-
-    @Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
@@ -409,23 +402,15 @@ public abstract class AbstractDollar implements var {
         }
     }
 
+    @Override
+    public var assertNotVoid(String message) throws AssertionError {
+        return assertFalse(TypeAware::isVoid, message);
+    }
+
     @NotNull
     @Override
     public String toString() {
         return S();
-    }
-
-    @Override
-    public var assertTrue(Function<var, Boolean> assertion, String message) throws AssertionError {
-        try {
-            if (!assertion.apply(this)) {
-                throw new AssertionError(message);
-            } else {
-                return this;
-            }
-        } catch (Exception e) {
-            return DollarStatic.logAndRethrow(e);
-        }
     }
 
     @Override
@@ -439,9 +424,9 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
+    public var assertTrue(Function<var, Boolean> assertion, String message) throws AssertionError {
         try {
-            if (assertion.apply(this)) {
+            if (!assertion.apply(this)) {
                 throw new AssertionError(message);
             } else {
                 return this;
@@ -464,6 +449,19 @@ public abstract class AbstractDollar implements var {
     @Override
     public boolean isMap() {
         return false;
+    }
+
+    @Override
+    public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
+        try {
+            if (assertion.apply(this)) {
+                throw new AssertionError(message);
+            } else {
+                return this;
+            }
+        } catch (Exception e) {
+            return DollarStatic.logAndRethrow(e);
+        }
     }
 
     @Override

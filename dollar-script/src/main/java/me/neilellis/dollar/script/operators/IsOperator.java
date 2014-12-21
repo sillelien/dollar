@@ -40,11 +40,11 @@ public class IsOperator implements Map<Token, Map<? super var, ? extends var>> {
         List<var> rhs = (List<var>) token.value();
         return lhs -> DollarScriptSupport.wrapReactive(scope, () -> {
             for (var value : rhs) {
-                if (lhs.is(Type.valueOf(value.$S().toUpperCase()))) {
+                if (lhs.is(Type.valueOf(value.toString()))) {
                     return $(true);
                 }
             }
             return $(false);
-        }, new SourceValue(scope, token), "is", lhs);
+        }, new SourceValue(scope, token), "is " + rhs, lhs);
     }
 }

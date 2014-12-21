@@ -321,8 +321,8 @@ DollarScript (at present) supports numerical and character ranges
 
 ```dollar
 
-"a".."c" <=> ["a","b","c"]
-1..3 <=> [1,2,3]
+#("a".."c") <=> 3
+(1..3)[1] <=>2
 
 ```
 

@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -254,7 +255,7 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public boolean is(@NotNull Type... types) {
         for (Type type : types) {
-            if (type == Type.VOID) {
+            if (Objects.equals(type, Type.VOID)) {
                 return true;
             }
         }

@@ -39,6 +39,9 @@
         <module>dollar-github-resolver-plugin</module>
         <module>dollar-class-resolver-plugin</module>
         <module>dollar-std-resources-plugin</module>
+        <module>dollar-orientdb-learner-plugin</module>
+        <module>dollar-hazelcast-learner-plugin</module>
+        <module>dollar-simple-learner-plugin</module>
     </modules>
 
     <build>

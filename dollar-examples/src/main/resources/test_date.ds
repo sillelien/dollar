@@ -8,7 +8,7 @@
 .: DATE() - 1.0 is Date
 
 .: DATE() + "1.0" is String
-.: DATE() / "1.0" is Date
+.: DATE() / "1.0" is Decimal
 
 .: DATE() * 10 is Decimal
 .: DATE() / 10 is Decimal

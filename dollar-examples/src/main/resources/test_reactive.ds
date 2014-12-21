@@ -125,14 +125,16 @@ c=5
 
 ///////////////////////////////////////////////////////////////////////////////
 
+.: void is VOID
+
 e=void
 
 //Length is greater than or equal to 4 unless void
 (#it >= 4 || it is VOID) collectedValues=void
 
 //count starts at 0 so this means five to collect
-collect e until count == 4 unless it == 10{
-    print count
+collect e until count == 4 unless it == 10 {
+    print "count=" + count
     print collected
     collectedValues= collected
 }

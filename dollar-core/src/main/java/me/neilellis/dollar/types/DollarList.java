@@ -282,12 +282,6 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<var, var> $map() {
-        return null;
-    }
-
-    @NotNull
-    @Override
     public Stream<var> $stream(boolean parallel) {
         Stream<var> stream;
         if (parallel) {
@@ -296,6 +290,12 @@ public class DollarList extends AbstractDollar {
             stream = list.stream();
         }
         return stream;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> $map() {
+        return null;
     }
 
     @NotNull
@@ -524,7 +524,7 @@ public class DollarList extends AbstractDollar {
     @Override
     public boolean is(@NotNull Type... types) {
         for (Type type : types) {
-            if (type == Type.LIST) {
+            if (Objects.equals(type, Type.LIST)) {
                 return true;
             }
         }

@@ -29,7 +29,7 @@
     <dependencies>
         <dependency>
             <groupId>me.neilellis</groupId>
-            <artifactId>dollar-runtime</artifactId>
+            <artifactId>dollar-examples</artifactId>
             <version>0-SNAPSHOT</version>
         </dependency>
         <dependency>

@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * To better understand the rationale behind this class, take a look at http://homepages.ecs.vuw.ac
@@ -203,11 +204,11 @@ public class DollarNull extends AbstractDollar implements var {
 
     @Override
     public boolean is(@NotNull Type... types) {
-        if (type == Type.ANY) {
+        if (Objects.equals(type, Type.ANY)) {
             return true;
         }
         for (Type type : types) {
-            if (type == this.type) {
+            if (Objects.equals(type, this.type)) {
                 return true;
             }
         }
@@ -270,7 +271,7 @@ public class DollarNull extends AbstractDollar implements var {
 
     @Override
     public boolean isBoolean() {
-        return type == Type.BOOLEAN;
+        return Objects.equals(type, Type.BOOLEAN);
     }
 
     @Override

@@ -23,6 +23,7 @@ import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import static java.lang.Math.abs;
 
@@ -131,7 +132,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     @Override
     public boolean is(@NotNull Type... types) {
         for (Type type : types) {
-            if (type == Type.DECIMAL) {
+            if (Objects.equals(type, Type.DECIMAL)) {
                 return true;
             }
         }

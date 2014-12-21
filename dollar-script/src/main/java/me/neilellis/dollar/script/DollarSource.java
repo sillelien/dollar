@@ -18,6 +18,8 @@ package me.neilellis.dollar.script;
 
 import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.Pipeable;
+import me.neilellis.dollar.TypePrediction;
+import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.types.DollarLambda;
 import me.neilellis.dollar.var;
 
@@ -29,10 +31,12 @@ import java.util.Objects;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarSource extends DollarLambda {
+    public static TypeLearner typeLearner = Plugins.sharedInstance(TypeLearner.class);
     private final Scope scope;
     private final Source source;
     private List<var> inputs;
     private String operation;
+    private volatile TypePrediction prediction;
 
     public DollarSource(Pipeable lambda, Scope scope, Source source, List<var> inputs, String operation) {
         super(lambda);
@@ -67,11 +71,14 @@ public class DollarSource extends DollarLambda {
                 return source;
             }
             if (Objects.equals(method.getName(), "_predictType")) {
-                return TypeLearner.predict(operation, source, inputs);
+                if (this.prediction == null) {
+                    this.prediction = typeLearner.predict(operation, source, inputs);
+                }
+                return this.prediction;
             }
             final Object result = super.invoke(proxy, method, args);
-            if (method.getName().startsWith("_fix")) {
-                TypeLearner.learn(operation, source, inputs, ((var) result).$type());
+            if (method.getName().startsWith("_fixDeep")) {
+                typeLearner.learn(operation, source, inputs, ((var) result).$type());
             }
             return result;
         } catch (AssertionError e) {
