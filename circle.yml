@@ -32,9 +32,9 @@ dependencies:
     - gem install jekyll
     - npm install -g github-changes
 
-test:
-  pre:
-     - mvn org.pitest:pitest-maven:mutationCoverage
+#test:
+#  pre:
+#     - mvn org.pitest:pitest-maven:mutationCoverage
 
 deployment:
   staging:
