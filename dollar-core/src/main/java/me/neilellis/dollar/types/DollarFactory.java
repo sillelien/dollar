@@ -36,7 +36,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import spark.QueryParamsMap;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -182,9 +181,6 @@ public class DollarFactory {
         }
         if (o instanceof Map) {
             return wrap(new DollarMap(errors, (Map) o));
-        }
-        if (o instanceof QueryParamsMap) {
-            return create(errors, DollarStatic.paramMapToJson(((QueryParamsMap) o).toMap()));
         }
         if (o instanceof ImmutableList) {
             return wrap(new DollarList(errors, (ImmutableList<?>) o));

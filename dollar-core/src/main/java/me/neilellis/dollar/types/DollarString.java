@@ -105,7 +105,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @NotNull @Override public var $inc() {
-        return DollarStatic.$(String.valueOf((char) (value.charAt(value.length() - 1) + 1)));
+        return DollarFactory.fromStringValue(String.valueOf((char) (value.charAt(value.length() - 1) + 1)));
     }
 
     @NotNull

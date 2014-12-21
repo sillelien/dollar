@@ -447,13 +447,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4a1c0752; line: 1, column: 0])\n at [Source: java.io.StringReader@4a1c0752; line: 1, column: 3]"
-      }
-    }
+    -33723
   ],
   [
     -2147483648,
@@ -1005,13 +999,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@264c5d07; line: 1, column: 0])\n at [Source: java.io.StringReader@264c5d07; line: 1, column: 3]"
-      }
-    }
+    33723
   ],
   [
     2147483647,
@@ -1563,13 +1551,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@6ad6fa53; line: 1, column: 0])\n at [Source: java.io.StringReader@6ad6fa53; line: 1, column: 3]"
-      }
-    }
+    -144839385000860
   ],
   [
     -9223372036854775807,
@@ -2121,13 +2103,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4e868ef5; line: 1, column: 0])\n at [Source: java.io.StringReader@4e868ef5; line: 1, column: 3]"
-      }
-    }
+    144839385000860
   ],
   [
     9223372036854775807,
@@ -2679,13 +2655,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@247667dd; line: 1, column: 0])\n at [Source: java.io.StringReader@247667dd; line: 1, column: 3]"
-      }
-    }
+    0
   ],
   [
     0,
@@ -3237,13 +3207,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@7fedfe27; line: 1, column: 0])\n at [Source: java.io.StringReader@7fedfe27; line: 1, column: 3]"
-      }
-    }
+    0
   ],
   [
     1,
@@ -3795,13 +3759,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@458544e0; line: 1, column: 0])\n at [Source: java.io.StringReader@458544e0; line: 1, column: 3]"
-      }
-    }
+    0
   ],
   [
     -1,
@@ -4353,13 +4311,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4690f583; line: 1, column: 0])\n at [Source: java.io.StringReader@4690f583; line: 1, column: 3]"
-      }
-    }
+    0
   ],
   [
     100,
@@ -4911,13 +4863,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@488b50ec; line: 1, column: 0])\n at [Source: java.io.StringReader@488b50ec; line: 1, column: 3]"
-      }
-    }
+    0
   ],
   [
     -100,
@@ -5466,13 +5412,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@bdecc21; line: 1, column: 0])\n at [Source: java.io.StringReader@bdecc21; line: 1, column: 3]"
-      }
-    }
+    2.2005315080477657E-50
   ],
   [
     1.401298464324817E-45,
@@ -6021,13 +5961,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@54da32dc; line: 1, column: 0])\n at [Source: java.io.StringReader@54da32dc; line: 1, column: 3]"
-      }
-    }
+    5.343629815303532E33
   ],
   [
     3.4028234663852886E38,
@@ -6576,13 +6510,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4aac85fa; line: 1, column: 0])\n at [Source: java.io.StringReader@4aac85fa; line: 1, column: 3]"
-      }
-    }
+    0.0
   ],
   [
     4.9E-324,
@@ -7131,13 +7059,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@1440c311; line: 1, column: 0])\n at [Source: java.io.StringReader@1440c311; line: 1, column: 3]"
-      }
-    }
+    2.823010576102883E303
   ],
   [
     1.7976931348623157E308,
@@ -7686,13 +7608,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@1c025cb; line: 1, column: 0])\n at [Source: java.io.StringReader@1c025cb; line: 1, column: 3]"
-      }
-    }
+    0.0
   ],
   [
     0.0,
@@ -8241,13 +8157,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@2abc224d; line: 1, column: 0])\n at [Source: java.io.StringReader@2abc224d; line: 1, column: 3]"
-      }
-    }
+    1.57035175879397E-5
   ],
   [
     1.0,
@@ -8796,13 +8706,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@ff6077; line: 1, column: 0])\n at [Source: java.io.StringReader@ff6077; line: 1, column: 3]"
-      }
-    }
+    -1.57035175879397E-5
   ],
   [
     -1.0,
@@ -9351,13 +9255,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@5f84abe8; line: 1, column: 0])\n at [Source: java.io.StringReader@5f84abe8; line: 1, column: 3]"
-      }
-    }
+    0.00157035175879397
   ],
   [
     100.0,
@@ -9906,13 +9804,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@aced190; line: 1, column: 0])\n at [Source: java.io.StringReader@aced190; line: 1, column: 3]"
-      }
-    }
+    -0.00157035175879397
   ],
   [
     -100.0,
@@ -10461,13 +10353,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@21ab988f; line: 1, column: 0])\n at [Source: java.io.StringReader@21ab988f; line: 1, column: 3]"
-      }
-    }
+    7.85175879396985E-6
   ],
   [
     0.5,
@@ -11016,13 +10902,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@a50ae65; line: 1, column: 0])\n at [Source: java.io.StringReader@a50ae65; line: 1, column: 3]"
-      }
-    }
+    -7.85175879396985E-6
   ],
   [
     -0.5,
@@ -11571,13 +11451,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@5b5c0057; line: 1, column: 0])\n at [Source: java.io.StringReader@5b5c0057; line: 1, column: 3]"
-      }
-    }
+    -1.5703517587939699E-6
   ],
   [
     -0.1,
@@ -12126,13 +12000,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@273842a6; line: 1, column: 0])\n at [Source: java.io.StringReader@273842a6; line: 1, column: 3]"
-      }
-    }
+    1.5703517587939699E-6
   ],
   [
     0.1,
@@ -12893,13 +12761,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4c9e38; line: 1, column: 0])\n at [Source: java.io.StringReader@4c9e38; line: 1, column: 3]"
-      }
-    }
+    0.0
   ],
   [
     {
@@ -13700,13 +13562,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@76911385; line: 1, column: 0])\n at [Source: java.io.StringReader@76911385; line: 1, column: 3]"
-      }
-    }
+    -1.817536757863391E-13
   ],
   [
     {
@@ -14507,13 +14363,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@21719a0; line: 1, column: 0])\n at [Source: java.io.StringReader@21719a0; line: 1, column: 3]"
-      }
-    }
+    0.002893700272194305
   ],
   [
     {
@@ -15314,13 +15164,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@aa10649; line: 1, column: 0])\n at [Source: java.io.StringReader@aa10649; line: 1, column: 3]"
-      }
-    }
+    0.0028937057248045787
   ],
   [
     {
@@ -16121,13 +15965,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@7578e06a; line: 1, column: 0])\n at [Source: java.io.StringReader@7578e06a; line: 1, column: 3]"
-      }
-    }
+    11.07258591132747
   ],
   [
     {
@@ -23645,13 +23483,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@a7f0ab6; line: 1, column: 0])\n at [Source: java.io.StringReader@a7f0ab6; line: 1, column: 3]"
-      }
-    }
+    []
   ],
   [
     [
@@ -25492,13 +25324,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@7a639ec5; line: 1, column: 0])\n at [Source: java.io.StringReader@7a639ec5; line: 1, column: 3]"
-      }
-    }
+    []
   ],
   [
     [
@@ -28400,13 +28226,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@982bb90; line: 1, column: 0])\n at [Source: java.io.StringReader@982bb90; line: 1, column: 3]"
-      }
-    }
+    []
   ],
   [
     [
@@ -30253,13 +30073,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@44c5a16f; line: 1, column: 0])\n at [Source: java.io.StringReader@44c5a16f; line: 1, column: 3]"
-      }
-    }
+    []
   ],
   [
     [
@@ -31177,13 +30991,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@3c89bb12; line: 1, column: 0])\n at [Source: java.io.StringReader@3c89bb12; line: 1, column: 3]"
-      }
-    }
+    []
   ],
   [
     [
@@ -31762,13 +31570,7 @@
       "lower": "@",
       "upper": ""
     },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@659925f4; line: 1, column: 0])\n at [Source: java.io.StringReader@659925f4; line: 1, column: 3]"
-      }
-    }
+    []
   ],
   [
     [],
@@ -33791,11 +33593,9 @@
       "upper": ""
     },
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4b2a30d; line: 1, column: 0])\n at [Source: java.io.StringReader@4b2a30d; line: 1, column: 3]"
-      }
+      "$type": "RANGE",
+      "lower": 0.002417687395309883,
+      "upper": 0.0028887929229480737
     }
   ],
   [
@@ -35313,11 +35113,9 @@
       "upper": ""
     },
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@3a91d146; line: 1, column: 0])\n at [Source: java.io.StringReader@3a91d146; line: 1, column: 3]"
-      }
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
     }
   ],
   [
@@ -36675,11 +36473,9 @@
       "upper": ""
     },
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@392a04e7; line: 1, column: 0])\n at [Source: java.io.StringReader@392a04e7; line: 1, column: 3]"
-      }
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
     }
   ],
   [
@@ -38037,11 +37833,9 @@
       "upper": ""
     },
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@5f404594; line: 1, column: 0])\n at [Source: java.io.StringReader@5f404594; line: 1, column: 3]"
-      }
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
     }
   ],
   [
@@ -39399,11 +39193,9 @@
       "upper": ""
     },
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@3a4ba480; line: 1, column: 0])\n at [Source: java.io.StringReader@3a4ba480; line: 1, column: 3]"
-      }
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
     }
   ],
   [
@@ -40761,11 +40553,9 @@
       "upper": ""
     },
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4455f57d; line: 1, column: 0])\n at [Source: java.io.StringReader@4455f57d; line: 1, column: 3]"
-      }
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 144839385000860
     }
   ],
   [
@@ -42123,11 +41913,9 @@
       "upper": ""
     },
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@2571066a; line: 1, column: 0])\n at [Source: java.io.StringReader@2571066a; line: 1, column: 3]"
-      }
+      "$type": "RANGE",
+      "lower": -144839385000860,
+      "upper": 144839385000860
     }
   ],
   [
@@ -46456,11 +46244,9 @@
       "upper": ""
     },
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@3adbe50f; line: 1, column: 0])\n at [Source: java.io.StringReader@3adbe50f; line: 1, column: 3]"
-      }
+      "$type": "RANGE",
+      "lower": -1.5703517587939699E-6,
+      "upper": -7.851758793969849E-7
     }
   ],
   [
@@ -47804,11 +47590,9 @@
       "upper": ""
     },
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4d23015c; line: 1, column: 0])\n at [Source: java.io.StringReader@4d23015c; line: 1, column: 3]"
-      }
+      "$type": "RANGE",
+      "lower": 1.57035175879397E-5,
+      "upper": -1.5703517587939699E-6
     }
   ],
   [

@@ -90,7 +90,7 @@ public class MultiHashMap extends HashMap implements MultiMap {
     public MultiHashMap(Map mapToCopy) {
         // be careful of JDK 1.3 vs 1.4 differences
         super((int) (mapToCopy.size() * 1.4f));
-        if (mapToCopy instanceof org.eclipse.jetty.util.MultiMap) {
+        if (mapToCopy instanceof MultiMap) {
             for (Iterator it = mapToCopy.entrySet().iterator(); it.hasNext(); ) {
                 Map.Entry entry = (Map.Entry) it.next();
                 Collection coll = (Collection) entry.getValue();

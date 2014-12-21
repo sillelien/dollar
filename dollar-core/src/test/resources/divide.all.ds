@@ -815,7 +815,7 @@ true : "true",
 ("1970-01-01T00:59:59.999" as Date) / ("1970-07-04T07:30" as Date) <=> -6.281012499214873E-11
 ("1970-01-01T00:59:59.999" as Date) / ("1970-07-04T07:30:30" as Date) <=> -6.28100066390177E-11
 ("1970-01-01T00:59:59.999" as Date) / ("3900-07-04T07:30" as Date) <=> -1.641474514100645E-14
-("1970-01-01T00:59:59.999" as Date) / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@76911385; line: 1, column: 0])\n at [Source: java.io.StringReader@76911385; line: 1, column: 3]")
+("1970-01-01T00:59:59.999" as Date) / (("@")..("\uF8FF")) <=> -1.817536757863391E-13
 ("1970-01-01T00:59:59.999" as Date) / (("a")..("z")) <=> -4.4515669515669515E-10
 ("1970-01-01T00:59:59.999" as Date) / (("z")..("a")) <=> infinity
 ("1970-01-01T00:59:59.999" as Date) / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> -3.7335722819593786E-10
@@ -888,7 +888,7 @@ true : "true",
 ("1970-01-01T01:00" as Date) / ("1970-07-04T07:30" as Date) <=> 0.0
 ("1970-01-01T01:00" as Date) / ("1970-07-04T07:30:30" as Date) <=> 0.0
 ("1970-01-01T01:00" as Date) / ("3900-07-04T07:30" as Date) <=> 0.0
-("1970-01-01T01:00" as Date) / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4c9e38; line: 1, column: 0])\n at [Source: java.io.StringReader@4c9e38; line: 1, column: 3]")
+("1970-01-01T01:00" as Date) / (("@")..("\uF8FF")) <=> 0.0
 ("1970-01-01T01:00" as Date) / (("a")..("z")) <=> 0.0
 ("1970-01-01T01:00" as Date) / (("z")..("a")) <=> infinity
 ("1970-01-01T01:00" as Date) / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 0.0
@@ -961,7 +961,7 @@ true : "true",
 ("1970-07-04T07:30" as Date) / ("1970-07-04T07:30" as Date) <=> 1.0
 ("1970-07-04T07:30" as Date) / ("1970-07-04T07:30:30" as Date) <=> 0.9999981156998009
 ("1970-07-04T07:30" as Date) / ("3900-07-04T07:30" as Date) <=> 2.613391573899637E-4
-("1970-07-04T07:30" as Date) / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@21719a0; line: 1, column: 0])\n at [Source: java.io.StringReader@21719a0; line: 1, column: 3]")
+("1970-07-04T07:30" as Date) / (("@")..("\uF8FF")) <=> 0.002893700272194305
 ("1970-07-04T07:30" as Date) / (("a")..("z")) <=> 7.087339743589744
 ("1970-07-04T07:30" as Date) / (("z")..("a")) <=> infinity
 ("1970-07-04T07:30" as Date) / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 5.944220430107527
@@ -1034,7 +1034,7 @@ true : "true",
 ("1970-07-04T07:30:30" as Date) / ("1970-07-04T07:30" as Date) <=> 1.0000018843037497
 ("1970-07-04T07:30:30" as Date) / ("1970-07-04T07:30:30" as Date) <=> 1.0
 ("1970-07-04T07:30:30" as Date) / ("3900-07-04T07:30" as Date) <=> 2.61339649832318E-4
-("1970-07-04T07:30:30" as Date) / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@aa10649; line: 1, column: 0])\n at [Source: java.io.StringReader@aa10649; line: 1, column: 3]")
+("1970-07-04T07:30:30" as Date) / (("@")..("\uF8FF")) <=> 0.0028937057248045787
 ("1970-07-04T07:30:30" as Date) / (("a")..("z")) <=> 7.087353098290598
 ("1970-07-04T07:30:30" as Date) / (("z")..("a")) <=> infinity
 ("1970-07-04T07:30:30" as Date) / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 5.944231630824373
@@ -1107,7 +1107,7 @@ true : "true",
 ("3900-07-04T07:30" as Date) / ("1970-07-04T07:30" as Date) <=> 3826.4453363482194
 ("3900-07-04T07:30" as Date) / ("1970-07-04T07:30:30" as Date) <=> 3826.43812617651
 ("3900-07-04T07:30" as Date) / ("3900-07-04T07:30" as Date) <=> 1.0
-("3900-07-04T07:30" as Date) / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@7578e06a; line: 1, column: 0])\n at [Source: java.io.StringReader@7578e06a; line: 1, column: 3]")
+("3900-07-04T07:30" as Date) / (("@")..("\uF8FF")) <=> 11.07258591132747
 ("3900-07-04T07:30" as Date) / (("a")..("z")) <=> 27119.31810897436
 ("3900-07-04T07:30" as Date) / (("z")..("a")) <=> infinity
 ("3900-07-04T07:30" as Date) / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 22745.234543010753
@@ -1399,7 +1399,7 @@ true : "true",
 ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) / ("1970-07-04T07:30" as Date) <=> ((0.8355002826455624)..(0.998304126625212))
 ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) / ("1970-07-04T07:30:30" as Date) <=> ((0.8354987083122135)..(0.9983022455205474))
 ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) / ("3900-07-04T07:30" as Date) <=> ((2.1834893986566784E-4)..(2.6089595927115657E-4))
-((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4b2a30d; line: 1, column: 0])\n at [Source: java.io.StringReader@4b2a30d; line: 1, column: 3]")
+((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) / (("@")..("\uF8FF")) <=> ((0.002417687395309883)..(0.0028887929229480737))
 ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) / (("a")..("z")) <=> ((5.9214743589743595)..(7.075320512820513))
 ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) / (("z")..("a")) <=> ((infinity)..(infinity))
 ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> ((4.966397849462366)..(5.934139784946237))
@@ -1472,7 +1472,7 @@ true : "true",
 ((-0.1)..(-0.05)) / ("1970-07-04T07:30" as Date) <=> ((-5.426794799321651E-4)..(-2.7133973996608255E-4))
 ((-0.1)..(-0.05)) / ("1970-07-04T07:30:30" as Date) <=> ((-5.42678457361113E-4)..(-2.713392286805565E-4))
 ((-0.1)..(-0.05)) / ("3900-07-04T07:30" as Date) <=> ((-1.4182339801829575E-7)..(-7.091169900914788E-8))
-((-0.1)..(-0.05)) / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@3adbe50f; line: 1, column: 0])\n at [Source: java.io.StringReader@3adbe50f; line: 1, column: 3]")
+((-0.1)..(-0.05)) / (("@")..("\uF8FF")) <=> ((-1.5703517587939699E-6)..(-7.851758793969849E-7))
 ((-0.1)..(-0.05)) / (("a")..("z")) <=> ((-0.0038461538461538464)..(-0.0019230769230769232))
 ((-0.1)..(-0.05)) / (("z")..("a")) <=> ((-infinity)..(-infinity))
 ((-0.1)..(-0.05)) / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> ((-0.0032258064516129032)..(-0.0016129032258064516))
@@ -1545,7 +1545,7 @@ true : "true",
 ((-1)..(1)) / ("1970-07-04T07:30" as Date) <=> ((0)..(0))
 ((-1)..(1)) / ("1970-07-04T07:30:30" as Date) <=> ((0)..(0))
 ((-1)..(1)) / ("3900-07-04T07:30" as Date) <=> ((0)..(0))
-((-1)..(1)) / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@3a91d146; line: 1, column: 0])\n at [Source: java.io.StringReader@3a91d146; line: 1, column: 3]")
+((-1)..(1)) / (("@")..("\uF8FF")) <=> ((0)..(0))
 ((-1)..(1)) / (("a")..("z")) <=> ((0)..(0))
 ((-1)..(1)) / (("z")..("a")) <=> ((-infinity)..(infinity))
 ((-1)..(1)) / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> ((0)..(0))
@@ -1618,7 +1618,7 @@ true : "true",
 ((-9223372036854775807)..(9223372036854775807)) / ("1970-07-04T07:30" as Date) <=> ((-50127021939428129)..(50127021939428129))
 ((-9223372036854775807)..(9223372036854775807)) / ("1970-07-04T07:30:30" as Date) <=> ((-50127021939428129)..(50127021939428129))
 ((-9223372036854775807)..(9223372036854775807)) / ("3900-07-04T07:30" as Date) <=> ((-13080904658978)..(13080904658978))
-((-9223372036854775807)..(9223372036854775807)) / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@2571066a; line: 1, column: 0])\n at [Source: java.io.StringReader@2571066a; line: 1, column: 3]")
+((-9223372036854775807)..(9223372036854775807)) / (("@")..("\uF8FF")) <=> ((-144839385000860)..(144839385000860))
 ((-9223372036854775807)..(9223372036854775807)) / (("a")..("z")) <=> ((-354745078340568300)..(354745078340568300))
 ((-9223372036854775807)..(9223372036854775807)) / (("z")..("a")) <=> ((-infinity)..(infinity))
 ((-9223372036854775807)..(9223372036854775807)) / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> ((-297528130221121800)..(297528130221121800))
@@ -1691,7 +1691,7 @@ true : "true",
 ((0)..(-1)) / ("1970-07-04T07:30" as Date) <=> ((0)..(0))
 ((0)..(-1)) / ("1970-07-04T07:30:30" as Date) <=> ((0)..(0))
 ((0)..(-1)) / ("3900-07-04T07:30" as Date) <=> ((0)..(0))
-((0)..(-1)) / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@392a04e7; line: 1, column: 0])\n at [Source: java.io.StringReader@392a04e7; line: 1, column: 3]")
+((0)..(-1)) / (("@")..("\uF8FF")) <=> ((0)..(0))
 ((0)..(-1)) / (("a")..("z")) <=> ((0)..(0))
 ((0)..(-1)) / (("z")..("a")) <=> ((infinity)..(-infinity))
 ((0)..(-1)) / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> ((0)..(0))
@@ -1764,7 +1764,7 @@ true : "true",
 ((0)..(0)) / ("1970-07-04T07:30" as Date) <=> ((0)..(0))
 ((0)..(0)) / ("1970-07-04T07:30:30" as Date) <=> ((0)..(0))
 ((0)..(0)) / ("3900-07-04T07:30" as Date) <=> ((0)..(0))
-((0)..(0)) / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@5f404594; line: 1, column: 0])\n at [Source: java.io.StringReader@5f404594; line: 1, column: 3]")
+((0)..(0)) / (("@")..("\uF8FF")) <=> ((0)..(0))
 ((0)..(0)) / (("a")..("z")) <=> ((0)..(0))
 ((0)..(0)) / (("z")..("a")) <=> ((infinity)..(infinity))
 ((0)..(0)) / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> ((0)..(0))
@@ -1837,7 +1837,7 @@ true : "true",
 ((0)..(9223372036854775807)) / ("1970-07-04T07:30" as Date) <=> ((0)..(50127021939428129))
 ((0)..(9223372036854775807)) / ("1970-07-04T07:30:30" as Date) <=> ((0)..(50127021939428129))
 ((0)..(9223372036854775807)) / ("3900-07-04T07:30" as Date) <=> ((0)..(13080904658978))
-((0)..(9223372036854775807)) / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4455f57d; line: 1, column: 0])\n at [Source: java.io.StringReader@4455f57d; line: 1, column: 3]")
+((0)..(9223372036854775807)) / (("@")..("\uF8FF")) <=> ((0)..(144839385000860))
 ((0)..(9223372036854775807)) / (("a")..("z")) <=> ((0)..(354745078340568300))
 ((0)..(9223372036854775807)) / (("z")..("a")) <=> ((infinity)..(infinity))
 ((0)..(9223372036854775807)) / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> ((0)..(297528130221121800))
@@ -1910,7 +1910,7 @@ true : "true",
 ((1)..(-1)) / ("1970-07-04T07:30" as Date) <=> ((0)..(0))
 ((1)..(-1)) / ("1970-07-04T07:30:30" as Date) <=> ((0)..(0))
 ((1)..(-1)) / ("3900-07-04T07:30" as Date) <=> ((0)..(0))
-((1)..(-1)) / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@3a4ba480; line: 1, column: 0])\n at [Source: java.io.StringReader@3a4ba480; line: 1, column: 3]")
+((1)..(-1)) / (("@")..("\uF8FF")) <=> ((0)..(0))
 ((1)..(-1)) / (("a")..("z")) <=> ((0)..(0))
 ((1)..(-1)) / (("z")..("a")) <=> ((infinity)..(-infinity))
 ((1)..(-1)) / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> ((0)..(0))
@@ -1983,7 +1983,7 @@ true : "true",
 ((1.0)..(-0.1)) / ("1970-07-04T07:30" as Date) <=> ((0.00542679479932165)..(-5.426794799321651E-4))
 ((1.0)..(-0.1)) / ("1970-07-04T07:30:30" as Date) <=> ((0.0054267845736111296)..(-5.42678457361113E-4))
 ((1.0)..(-0.1)) / ("3900-07-04T07:30" as Date) <=> ((1.4182339801829575E-6)..(-1.4182339801829575E-7))
-((1.0)..(-0.1)) / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4d23015c; line: 1, column: 0])\n at [Source: java.io.StringReader@4d23015c; line: 1, column: 3]")
+((1.0)..(-0.1)) / (("@")..("\uF8FF")) <=> ((1.57035175879397E-5)..(-1.5703517587939699E-6))
 ((1.0)..(-0.1)) / (("a")..("z")) <=> ((0.038461538461538464)..(-0.0038461538461538464))
 ((1.0)..(-0.1)) / (("z")..("a")) <=> ((infinity)..(-infinity))
 ((1.0)..(-0.1)) / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> ((0.03225806451612903)..(-0.0032258064516129032))
@@ -2056,7 +2056,7 @@ true : "true",
 -0.1 / ("1970-07-04T07:30" as Date) <=> -5.426794799321651E-4
 -0.1 / ("1970-07-04T07:30:30" as Date) <=> -5.42678457361113E-4
 -0.1 / ("3900-07-04T07:30" as Date) <=> -1.4182339801829575E-7
--0.1 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@5b5c0057; line: 1, column: 0])\n at [Source: java.io.StringReader@5b5c0057; line: 1, column: 3]")
+-0.1 / (("@")..("\uF8FF")) <=> -1.5703517587939699E-6
 -0.1 / (("a")..("z")) <=> -0.0038461538461538464
 -0.1 / (("z")..("a")) <=> -infinity
 -0.1 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> -0.0032258064516129032
@@ -2129,7 +2129,7 @@ true : "true",
 -0.5 / ("1970-07-04T07:30" as Date) <=> -0.002713397399660825
 -0.5 / ("1970-07-04T07:30:30" as Date) <=> -0.0027133922868055648
 -0.5 / ("3900-07-04T07:30" as Date) <=> -7.091169900914787E-7
--0.5 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@a50ae65; line: 1, column: 0])\n at [Source: java.io.StringReader@a50ae65; line: 1, column: 3]")
+-0.5 / (("@")..("\uF8FF")) <=> -7.85175879396985E-6
 -0.5 / (("a")..("z")) <=> -0.019230769230769232
 -0.5 / (("z")..("a")) <=> -infinity
 -0.5 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> -0.016129032258064516
@@ -2202,7 +2202,7 @@ true : "true",
 -1 / ("1970-07-04T07:30" as Date) <=> 0
 -1 / ("1970-07-04T07:30:30" as Date) <=> 0
 -1 / ("3900-07-04T07:30" as Date) <=> 0
--1 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@458544e0; line: 1, column: 0])\n at [Source: java.io.StringReader@458544e0; line: 1, column: 3]")
+-1 / (("@")..("\uF8FF")) <=> 0
 -1 / (("a")..("z")) <=> 0
 -1 / (("z")..("a")) <=> -infinity
 -1 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 0
@@ -2275,7 +2275,7 @@ true : "true",
 -1.0 / ("1970-07-04T07:30" as Date) <=> -0.00542679479932165
 -1.0 / ("1970-07-04T07:30:30" as Date) <=> -0.0054267845736111296
 -1.0 / ("3900-07-04T07:30" as Date) <=> -1.4182339801829575E-6
--1.0 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@ff6077; line: 1, column: 0])\n at [Source: java.io.StringReader@ff6077; line: 1, column: 3]")
+-1.0 / (("@")..("\uF8FF")) <=> -1.57035175879397E-5
 -1.0 / (("a")..("z")) <=> -0.038461538461538464
 -1.0 / (("z")..("a")) <=> -infinity
 -1.0 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> -0.03225806451612903
@@ -2348,7 +2348,7 @@ true : "true",
 -100 / ("1970-07-04T07:30" as Date) <=> 0
 -100 / ("1970-07-04T07:30:30" as Date) <=> 0
 -100 / ("3900-07-04T07:30" as Date) <=> 0
--100 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@488b50ec; line: 1, column: 0])\n at [Source: java.io.StringReader@488b50ec; line: 1, column: 3]")
+-100 / (("@")..("\uF8FF")) <=> 0
 -100 / (("a")..("z")) <=> -3
 -100 / (("z")..("a")) <=> -infinity
 -100 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> -3
@@ -2421,7 +2421,7 @@ true : "true",
 -100.0 / ("1970-07-04T07:30" as Date) <=> -0.542679479932165
 -100.0 / ("1970-07-04T07:30:30" as Date) <=> -0.542678457361113
 -100.0 / ("3900-07-04T07:30" as Date) <=> -1.4182339801829574E-4
--100.0 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@aced190; line: 1, column: 0])\n at [Source: java.io.StringReader@aced190; line: 1, column: 3]")
+-100.0 / (("@")..("\uF8FF")) <=> -0.00157035175879397
 -100.0 / (("a")..("z")) <=> -3.8461538461538463
 -100.0 / (("z")..("a")) <=> -infinity
 -100.0 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> -3.225806451612903
@@ -2494,7 +2494,7 @@ true : "true",
 -2147483648 / ("1970-07-04T07:30" as Date) <=> -11671106
 -2147483648 / ("1970-07-04T07:30:30" as Date) <=> -11671106
 -2147483648 / ("3900-07-04T07:30" as Date) <=> -3045
--2147483648 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4a1c0752; line: 1, column: 0])\n at [Source: java.io.StringReader@4a1c0752; line: 1, column: 3]")
+-2147483648 / (("@")..("\uF8FF")) <=> -33723
 -2147483648 / (("a")..("z")) <=> -82595524
 -2147483648 / (("z")..("a")) <=> -infinity
 -2147483648 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> -69273666
@@ -2567,7 +2567,7 @@ true : "true",
 -9223372036854775807 / ("1970-07-04T07:30" as Date) <=> -50127021939428129
 -9223372036854775807 / ("1970-07-04T07:30:30" as Date) <=> -50127021939428129
 -9223372036854775807 / ("3900-07-04T07:30" as Date) <=> -13080904658978
--9223372036854775807 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@6ad6fa53; line: 1, column: 0])\n at [Source: java.io.StringReader@6ad6fa53; line: 1, column: 3]")
+-9223372036854775807 / (("@")..("\uF8FF")) <=> -144839385000860
 -9223372036854775807 / (("a")..("z")) <=> -354745078340568300
 -9223372036854775807 / (("z")..("a")) <=> -infinity
 -9223372036854775807 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> -297528130221121800
@@ -2713,7 +2713,7 @@ true : "true",
 0 / ("1970-07-04T07:30" as Date) <=> 0
 0 / ("1970-07-04T07:30:30" as Date) <=> 0
 0 / ("3900-07-04T07:30" as Date) <=> 0
-0 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@247667dd; line: 1, column: 0])\n at [Source: java.io.StringReader@247667dd; line: 1, column: 3]")
+0 / (("@")..("\uF8FF")) <=> 0
 0 / (("a")..("z")) <=> 0
 0 / (("z")..("a")) <=> infinity
 0 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 0
@@ -2786,7 +2786,7 @@ true : "true",
 0.0 / ("1970-07-04T07:30" as Date) <=> 0.0
 0.0 / ("1970-07-04T07:30:30" as Date) <=> 0.0
 0.0 / ("3900-07-04T07:30" as Date) <=> 0.0
-0.0 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@1c025cb; line: 1, column: 0])\n at [Source: java.io.StringReader@1c025cb; line: 1, column: 3]")
+0.0 / (("@")..("\uF8FF")) <=> 0.0
 0.0 / (("a")..("z")) <=> 0.0
 0.0 / (("z")..("a")) <=> infinity
 0.0 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 0.0
@@ -2859,7 +2859,7 @@ true : "true",
 0.1 / ("1970-07-04T07:30" as Date) <=> 5.426794799321651E-4
 0.1 / ("1970-07-04T07:30:30" as Date) <=> 5.42678457361113E-4
 0.1 / ("3900-07-04T07:30" as Date) <=> 1.4182339801829575E-7
-0.1 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@273842a6; line: 1, column: 0])\n at [Source: java.io.StringReader@273842a6; line: 1, column: 3]")
+0.1 / (("@")..("\uF8FF")) <=> 1.5703517587939699E-6
 0.1 / (("a")..("z")) <=> 0.0038461538461538464
 0.1 / (("z")..("a")) <=> infinity
 0.1 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 0.0032258064516129032
@@ -2932,7 +2932,7 @@ true : "true",
 0.5 / ("1970-07-04T07:30" as Date) <=> 0.002713397399660825
 0.5 / ("1970-07-04T07:30:30" as Date) <=> 0.0027133922868055648
 0.5 / ("3900-07-04T07:30" as Date) <=> 7.091169900914787E-7
-0.5 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@21ab988f; line: 1, column: 0])\n at [Source: java.io.StringReader@21ab988f; line: 1, column: 3]")
+0.5 / (("@")..("\uF8FF")) <=> 7.85175879396985E-6
 0.5 / (("a")..("z")) <=> 0.019230769230769232
 0.5 / (("z")..("a")) <=> infinity
 0.5 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 0.016129032258064516
@@ -3005,7 +3005,7 @@ true : "true",
 1 / ("1970-07-04T07:30" as Date) <=> 0
 1 / ("1970-07-04T07:30:30" as Date) <=> 0
 1 / ("3900-07-04T07:30" as Date) <=> 0
-1 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@7fedfe27; line: 1, column: 0])\n at [Source: java.io.StringReader@7fedfe27; line: 1, column: 3]")
+1 / (("@")..("\uF8FF")) <=> 0
 1 / (("a")..("z")) <=> 0
 1 / (("z")..("a")) <=> infinity
 1 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 0
@@ -3078,7 +3078,7 @@ true : "true",
 1.0 / ("1970-07-04T07:30" as Date) <=> 0.00542679479932165
 1.0 / ("1970-07-04T07:30:30" as Date) <=> 0.0054267845736111296
 1.0 / ("3900-07-04T07:30" as Date) <=> 1.4182339801829575E-6
-1.0 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@2abc224d; line: 1, column: 0])\n at [Source: java.io.StringReader@2abc224d; line: 1, column: 3]")
+1.0 / (("@")..("\uF8FF")) <=> 1.57035175879397E-5
 1.0 / (("a")..("z")) <=> 0.038461538461538464
 1.0 / (("z")..("a")) <=> infinity
 1.0 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 0.03225806451612903
@@ -3151,7 +3151,7 @@ true : "true",
 1.401298464324817E-45 / ("1970-07-04T07:30" as Date) <=> 7.604559218495332E-48
 1.401298464324817E-45 / ("1970-07-04T07:30:30" as Date) <=> 7.604544889222883E-48
 1.401298464324817E-45 / ("3900-07-04T07:30" as Date) <=> 1.9873690984836514E-51
-1.401298464324817E-45 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@bdecc21; line: 1, column: 0])\n at [Source: java.io.StringReader@bdecc21; line: 1, column: 3]")
+1.401298464324817E-45 / (("@")..("\uF8FF")) <=> 2.2005315080477657E-50
 1.401298464324817E-45 / (("a")..("z")) <=> 5.389609478172374E-47
 1.401298464324817E-45 / (("z")..("a")) <=> infinity
 1.401298464324817E-45 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 4.5203176268542485E-47
@@ -3224,7 +3224,7 @@ true : "true",
 1.7976931348623157E308 / ("1970-07-04T07:30" as Date) <=> 9.75571175504705E305
 1.7976931348623157E308 / ("1970-07-04T07:30:30" as Date) <=> 9.755693372357446E305
 1.7976931348623157E308 / ("3900-07-04T07:30" as Date) <=> 2.54954948980336E302
-1.7976931348623157E308 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@1440c311; line: 1, column: 0])\n at [Source: java.io.StringReader@1440c311; line: 1, column: 3]")
+1.7976931348623157E308 / (("@")..("\uF8FF")) <=> 2.823010576102883E303
 1.7976931348623157E308 / (("a")..("z")) <=> 6.91420436485506E306
 1.7976931348623157E308 / (("z")..("a")) <=> infinity
 1.7976931348623157E308 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 5.799010112459083E306
@@ -3297,7 +3297,7 @@ true : "true",
 100 / ("1970-07-04T07:30" as Date) <=> 0
 100 / ("1970-07-04T07:30:30" as Date) <=> 0
 100 / ("3900-07-04T07:30" as Date) <=> 0
-100 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4690f583; line: 1, column: 0])\n at [Source: java.io.StringReader@4690f583; line: 1, column: 3]")
+100 / (("@")..("\uF8FF")) <=> 0
 100 / (("a")..("z")) <=> 3
 100 / (("z")..("a")) <=> infinity
 100 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 3
@@ -3370,7 +3370,7 @@ true : "true",
 100.0 / ("1970-07-04T07:30" as Date) <=> 0.542679479932165
 100.0 / ("1970-07-04T07:30:30" as Date) <=> 0.542678457361113
 100.0 / ("3900-07-04T07:30" as Date) <=> 1.4182339801829574E-4
-100.0 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@5f84abe8; line: 1, column: 0])\n at [Source: java.io.StringReader@5f84abe8; line: 1, column: 3]")
+100.0 / (("@")..("\uF8FF")) <=> 0.00157035175879397
 100.0 / (("a")..("z")) <=> 3.8461538461538463
 100.0 / (("z")..("a")) <=> infinity
 100.0 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 3.225806451612903
@@ -3443,7 +3443,7 @@ true : "true",
 2147483647 / ("1970-07-04T07:30" as Date) <=> 11671106
 2147483647 / ("1970-07-04T07:30:30" as Date) <=> 11671106
 2147483647 / ("3900-07-04T07:30" as Date) <=> 3045
-2147483647 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@264c5d07; line: 1, column: 0])\n at [Source: java.io.StringReader@264c5d07; line: 1, column: 3]")
+2147483647 / (("@")..("\uF8FF")) <=> 33723
 2147483647 / (("a")..("z")) <=> 82595524
 2147483647 / (("z")..("a")) <=> infinity
 2147483647 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 69273666
@@ -3516,7 +3516,7 @@ true : "true",
 3.4028234663852886E38 / ("1970-07-04T07:30" as Date) <=> 1.8466424690389354E36
 3.4028234663852886E38 / ("1970-07-04T07:30:30" as Date) <=> 1.8466389894101632E36
 3.4028234663852886E38 / ("3900-07-04T07:30" as Date) <=> 4.825999868591576E32
-3.4028234663852886E38 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@54da32dc; line: 1, column: 0])\n at [Source: java.io.StringReader@54da32dc; line: 1, column: 3]")
+3.4028234663852886E38 / (("@")..("\uF8FF")) <=> 5.343629815303532E33
 3.4028234663852886E38 / (("a")..("z")) <=> 1.308778256302034E37
 3.4028234663852886E38 / (("z")..("a")) <=> infinity
 3.4028234663852886E38 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 1.0976849891565447E37
@@ -3589,7 +3589,7 @@ true : "true",
 4.9E-324 / ("1970-07-04T07:30" as Date) <=> 0.0
 4.9E-324 / ("1970-07-04T07:30:30" as Date) <=> 0.0
 4.9E-324 / ("3900-07-04T07:30" as Date) <=> 0.0
-4.9E-324 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4aac85fa; line: 1, column: 0])\n at [Source: java.io.StringReader@4aac85fa; line: 1, column: 3]")
+4.9E-324 / (("@")..("\uF8FF")) <=> 0.0
 4.9E-324 / (("a")..("z")) <=> 0.0
 4.9E-324 / (("z")..("a")) <=> infinity
 4.9E-324 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 0.0
@@ -3662,7 +3662,7 @@ true : "true",
 9223372036854775807 / ("1970-07-04T07:30" as Date) <=> 50127021939428129
 9223372036854775807 / ("1970-07-04T07:30:30" as Date) <=> 50127021939428129
 9223372036854775807 / ("3900-07-04T07:30" as Date) <=> 13080904658978
-9223372036854775807 / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@4e868ef5; line: 1, column: 0])\n at [Source: java.io.StringReader@4e868ef5; line: 1, column: 3]")
+9223372036854775807 / (("@")..("\uF8FF")) <=> 144839385000860
 9223372036854775807 / (("a")..("z")) <=> 354745078340568300
 9223372036854775807 / (("z")..("a")) <=> infinity
 9223372036854775807 / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> 297528130221121800
@@ -3808,7 +3808,7 @@ ERROR('EXCEPTION',"Test Exception") / {} <=> ERROR('EXCEPTION',"Test Exception")
 ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] / ("1970-07-04T07:30" as Date) <=> []
 ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] / ("1970-07-04T07:30:30" as Date) <=> []
 ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] / ("3900-07-04T07:30" as Date) <=> []
-["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@44c5a16f; line: 1, column: 0])\n at [Source: java.io.StringReader@44c5a16f; line: 1, column: 3]")
+["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] / (("@")..("\uF8FF")) <=> []
 ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] / (("a")..("z")) <=> []
 ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] / (("z")..("a")) <=> infinity
 ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> []
@@ -3881,7 +3881,7 @@ true : "true",
 [("1970-01-01T01:00" as Date),("1970-01-01T00:59:59.999" as Date),("1970-07-04T07:30" as Date),("1970-07-04T07:30:30" as Date),("3900-07-04T07:30" as Date),] / ("1970-07-04T07:30" as Date) <=> []
 [("1970-01-01T01:00" as Date),("1970-01-01T00:59:59.999" as Date),("1970-07-04T07:30" as Date),("1970-07-04T07:30:30" as Date),("3900-07-04T07:30" as Date),] / ("1970-07-04T07:30:30" as Date) <=> []
 [("1970-01-01T01:00" as Date),("1970-01-01T00:59:59.999" as Date),("1970-07-04T07:30" as Date),("1970-07-04T07:30:30" as Date),("3900-07-04T07:30" as Date),] / ("3900-07-04T07:30" as Date) <=> []
-[("1970-01-01T01:00" as Date),("1970-01-01T00:59:59.999" as Date),("1970-07-04T07:30" as Date),("1970-07-04T07:30:30" as Date),("3900-07-04T07:30" as Date),] / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@982bb90; line: 1, column: 0])\n at [Source: java.io.StringReader@982bb90; line: 1, column: 3]")
+[("1970-01-01T01:00" as Date),("1970-01-01T00:59:59.999" as Date),("1970-07-04T07:30" as Date),("1970-07-04T07:30:30" as Date),("3900-07-04T07:30" as Date),] / (("@")..("\uF8FF")) <=> []
 [("1970-01-01T01:00" as Date),("1970-01-01T00:59:59.999" as Date),("1970-07-04T07:30" as Date),("1970-07-04T07:30:30" as Date),("3900-07-04T07:30" as Date),] / (("a")..("z")) <=> []
 [("1970-01-01T01:00" as Date),("1970-01-01T00:59:59.999" as Date),("1970-07-04T07:30" as Date),("1970-07-04T07:30:30" as Date),("3900-07-04T07:30" as Date),] / (("z")..("a")) <=> infinity
 [("1970-01-01T01:00" as Date),("1970-01-01T00:59:59.999" as Date),("1970-07-04T07:30" as Date),("1970-07-04T07:30:30" as Date),("3900-07-04T07:30" as Date),] / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> []
@@ -3954,7 +3954,7 @@ true : "true",
 [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] / ("1970-07-04T07:30" as Date) <=> []
 [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] / ("1970-07-04T07:30:30" as Date) <=> []
 [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] / ("3900-07-04T07:30" as Date) <=> []
-[-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@a7f0ab6; line: 1, column: 0])\n at [Source: java.io.StringReader@a7f0ab6; line: 1, column: 3]")
+[-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] / (("@")..("\uF8FF")) <=> []
 [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] / (("a")..("z")) <=> []
 [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] / (("z")..("a")) <=> infinity
 [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> []
@@ -4027,7 +4027,7 @@ true : "true",
 [1.401298464324817E-45,3.4028234663852886E38,4.9E-324,1.7976931348623157E308,0.0,1.0,-1.0,100.0,-100.0,0.5,-0.5,-0.1,0.1,] / ("1970-07-04T07:30" as Date) <=> []
 [1.401298464324817E-45,3.4028234663852886E38,4.9E-324,1.7976931348623157E308,0.0,1.0,-1.0,100.0,-100.0,0.5,-0.5,-0.1,0.1,] / ("1970-07-04T07:30:30" as Date) <=> []
 [1.401298464324817E-45,3.4028234663852886E38,4.9E-324,1.7976931348623157E308,0.0,1.0,-1.0,100.0,-100.0,0.5,-0.5,-0.1,0.1,] / ("3900-07-04T07:30" as Date) <=> []
-[1.401298464324817E-45,3.4028234663852886E38,4.9E-324,1.7976931348623157E308,0.0,1.0,-1.0,100.0,-100.0,0.5,-0.5,-0.1,0.1,] / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@7a639ec5; line: 1, column: 0])\n at [Source: java.io.StringReader@7a639ec5; line: 1, column: 3]")
+[1.401298464324817E-45,3.4028234663852886E38,4.9E-324,1.7976931348623157E308,0.0,1.0,-1.0,100.0,-100.0,0.5,-0.5,-0.1,0.1,] / (("@")..("\uF8FF")) <=> []
 [1.401298464324817E-45,3.4028234663852886E38,4.9E-324,1.7976931348623157E308,0.0,1.0,-1.0,100.0,-100.0,0.5,-0.5,-0.1,0.1,] / (("a")..("z")) <=> []
 [1.401298464324817E-45,3.4028234663852886E38,4.9E-324,1.7976931348623157E308,0.0,1.0,-1.0,100.0,-100.0,0.5,-0.5,-0.1,0.1,] / (("z")..("a")) <=> infinity
 [1.401298464324817E-45,3.4028234663852886E38,4.9E-324,1.7976931348623157E308,0.0,1.0,-1.0,100.0,-100.0,0.5,-0.5,-0.1,0.1,] / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> []
@@ -4100,7 +4100,7 @@ true : "true",
 [] / ("1970-07-04T07:30" as Date) <=> []
 [] / ("1970-07-04T07:30:30" as Date) <=> []
 [] / ("3900-07-04T07:30" as Date) <=> []
-[] / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@659925f4; line: 1, column: 0])\n at [Source: java.io.StringReader@659925f4; line: 1, column: 3]")
+[] / (("@")..("\uF8FF")) <=> []
 [] / (("a")..("z")) <=> []
 [] / (("z")..("a")) <=> infinity
 [] / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> []
@@ -4173,7 +4173,7 @@ true : "true",
 [true,false,] / ("1970-07-04T07:30" as Date) <=> []
 [true,false,] / ("1970-07-04T07:30:30" as Date) <=> []
 [true,false,] / ("3900-07-04T07:30" as Date) <=> []
-[true,false,] / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"Failed to decode:Unexpected end-of-input: expected close marker for ARRAY (from [Source: java.io.StringReader@3c89bb12; line: 1, column: 0])\n at [Source: java.io.StringReader@3c89bb12; line: 1, column: 3]")
+[true,false,] / (("@")..("\uF8FF")) <=> []
 [true,false,] / (("a")..("z")) <=> []
 [true,false,] / (("z")..("a")) <=> infinity
 [true,false,] / ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) <=> []
