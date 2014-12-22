@@ -26,6 +26,7 @@ import me.neilellis.dollar.uri.URI;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
@@ -242,6 +243,18 @@ public class DollarStatic {
      * @return the var
      */
     public static var $range(LocalDateTime from, LocalDateTime to) {
+        return DollarFactory.fromRange($(from), $(to));
+    }
+
+    /**
+     * $ range.
+     *
+     * @param from the from
+     * @param to   the to
+     *
+     * @return the var
+     */
+    public static var $range(Instant from, Instant to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 

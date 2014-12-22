@@ -32,6 +32,7 @@ package me.neilellis.dollar;/*
 
 import me.neilellis.dollar.types.*;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.function.Function;
 
@@ -75,8 +76,9 @@ public class TestGenerator {
     }
 
     public static List<var> dateValues() {
-        return toVarValues(new Date(0), new Date(-1), new Date(70, 6, 4, 7, 30, 0), new Date(70, 6, 4, 7, 30, 30),
-                           new Date(2000, 6, 4, 7, 30, 0));
+        return toVarValues(Instant.ofEpochSecond(0), Instant.ofEpochSecond(-1), Instant.ofEpochSecond(1_000_000),
+                           Instant.ofEpochSecond(2_000_000),
+                           Instant.ofEpochSecond(3_000_000));
     }
 
     public static List<var> stringValues() {
@@ -98,7 +100,7 @@ public class TestGenerator {
     }
 
     public static List<var> rangeValues() {
-        return toVarValues($range(new Date(70, 5, 4), new Date(70, 6, 4)), $range(-1, 1),
+        return toVarValues($range(Instant.ofEpochSecond(1_000_000), Instant.ofEpochSecond(2_000_000)), $range(-1, 1),
                            $range(0,
                                   -1), $range(
                         0, 0), $range(1, -1), $range(0, Long.MAX_VALUE), $range(-Long.MAX_VALUE, Long.MAX_VALUE),
@@ -115,7 +117,7 @@ public class TestGenerator {
         mixedMap.put("value3", true);
         mixedMap.put(true, "true");
         return toVarValues(Collections.EMPTY_MAP, singletonMap(1, "one"), singletonMap(true, "true"),
-                           singletonMap(new Date(1970, 6, 4, 7, 30, 0), true), singletonMap(0.1, "0.1"),
+                           singletonMap(Instant.ofEpochSecond(1_000_000), true), singletonMap(0.1, "0.1"),
                            singletonMap("string", "string"),
                            mixedMap);
     }
@@ -161,7 +163,7 @@ public class TestGenerator {
         List<var> all = new ArrayList<>();
         all.addAll(toVarValues(0, 1, -1));
         all.addAll(toVarValues(0.1));
-        all.addAll(toVarValues(new Date(1)));
+        all.addAll(toVarValues(Instant.ofEpochSecond(1)));
         all.addAll(toVarValues("", "@"));
         all.addAll(booleanValues());
         all.addAll(toVarValues(toVarValues(0, 1, -1)));
@@ -224,12 +226,12 @@ public class TestGenerator {
     }
 
     public static List<var> largeDateValues() {
-        return toVarValues(new Date(70, 6, 4, 7, 30, 0), new Date(70, 6, 4, 7, 30, 30),
-                           new Date(2000, 6, 4, 7, 30, 0));
+        return toVarValues(Instant.ofEpochSecond(1_000_000), Instant.ofEpochSecond(2_000_000),
+                           Instant.ofEpochSecond(3_000_000));
     }
 
     public static List<var> smallDateValues() {
-        return toVarValues(new Date(0), new Date(-1));
+        return toVarValues(Instant.ofEpochSecond(0), Instant.ofEpochSecond(-1));
     }
 
     public static List<var> largeListValues() {
@@ -244,7 +246,7 @@ public class TestGenerator {
     }
 
     public static List<var> largeRangeValues() {
-        return toVarValues($range(new Date(70, 5, 4), new Date(70, 6, 4)), $range(-1, 1),
+        return toVarValues($range(Instant.ofEpochSecond(1_000_000), Instant.ofEpochSecond(1_100_000)), $range(-1, 1),
                            $range(0,
                                   -1), $range(
                         0, 0), $range(1, -1), $range(0, Long.MAX_VALUE), $range(-Long.MAX_VALUE, Long.MAX_VALUE),
@@ -253,7 +255,7 @@ public class TestGenerator {
     }
 
     public static List<var> smallRangeValues() {
-        return toVarValues($range(new Date(0), new Date(1)), $range(-1, 1),
+        return toVarValues($range(Instant.ofEpochSecond(1), Instant.ofEpochSecond(1)), $range(-1, 1),
                            $range(0,
                                   -1), $range(
                         0, 0), $range(1, -1), $range(0, 5), $range(-5, 5),
@@ -270,7 +272,7 @@ public class TestGenerator {
         mixedMap.put("value3", true);
         mixedMap.put(true, "true");
         return toVarValues(Collections.EMPTY_MAP, singletonMap(1, "one"), singletonMap(true, "true"),
-                           singletonMap(new Date(1970, 6, 4, 7, 30, 0), true), singletonMap(0.1, "0.1"),
+                           singletonMap(Instant.ofEpochSecond(1_000_000), true), singletonMap(0.1, "0.1"),
                            singletonMap("string", "string"),
                            mixedMap);
     }
