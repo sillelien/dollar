@@ -147,7 +147,8 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     }
 
     @NotNull @Override public var $get(@NotNull var key) {
-        return DollarFactory.fromValue(value.get(ChronoField.valueOf(key.S().toUpperCase())), errors());
+        return DollarFactory.fromValue(LocalDateTime.from(value).get(ChronoField.valueOf(key.S().toUpperCase())),
+                                       errors());
     }
 
 //    @NotNull
