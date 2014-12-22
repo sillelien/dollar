@@ -19,21 +19,50 @@ layout: default
 
 <div class="post">
 
-  <header class="post-header">
-    <h1 class="post-title">{{ page.title }}</h1>
-    <p class="post-meta">{{ page.date | date: "%b %-d, %Y" }}{% if page.author %} • {{ page.author }}{% endif %}{% if page.meta %} • {{ page.meta }}{% endif %}</p>
-  </header>
+    <header class="post-header">
+        <h1 class="post-title">{{ page.title }}</h1>
 
-  <article class="post-content">
-    {{ content }}
-  </article>
+        <p class="post-meta">{{ page.date | date: "%b %-d, %Y" }}{% if page.author %} • {{ page.author }}{% endif %}{%
+            if page.meta %} • {{ page.meta }}{% endif %}</p>
+    </header>
 
-  <!-- Go to www.addthis.com/dashboard to customize your tools -->
-  <div class="addthis_sharing_toolbox"></div>
+    <article class="post-content">
+        {{ content }}
+    </article>
+
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <div class="addthis_sharing_toolbox"></div>
   <span style="max-width:150px;min-width:100px;display: inline-block;float: right;margin-left:2em">
         <img src="https://s3-us-west-2.amazonaws.com/tilt-donations/donate_now.png"
              data-ct-checkout="dollar.supporting-open-source">
 
     </span>
+
+  <span>
+
+
+  {% if page.comments %}
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      var disqus_shortname = 'cazcade';
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (
+              function () {
+                  var dsq = document.createElement('script');
+                  dsq.type = 'text/javascript';
+                  dsq.async = true;
+                  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                  (
+                  document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]
+                  ).appendChild(dsq);
+              }
+      )();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+      Disqus.</a></noscript>
+
+  {% endif %}
+      </span>
 
 </div>
