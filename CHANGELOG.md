@@ -1,6 +1,9 @@
 ## Change Log
 
-### In Progress: 0.1.3 (2014/12/10 13:02 +00:00)
+### In Progress: 0.1.4 (2014/12/22 12:07 +00:00)
+- [7f28e63](https://github.com/neilellis/dollar/commit/7f28e63dc60becd992849c3ceadbb2516040702e) Change log updates
+- [89a2e77](https://github.com/neilellis/dollar/commit/89a2e77b8a6bb47083fdda5eb223e21e8bcd21a4) Auto merge
+- [fd2a4ce](https://github.com/neilellis/dollar/commit/fd2a4ce1cc463bf522d5033dff97ed708a77735d) Blog about reactive chat server
 - [1197d8d](https://github.com/neilellis/dollar/commit/1197d8df2830d7365874bb7a016b8fce913ca69a) Change log updates
 - [8f8a3d4](https://github.com/neilellis/dollar/commit/8f8a3d48c01e234c94c8ac0babe8e275c62f7183) Auto merge
 - [32e32fd](https://github.com/neilellis/dollar/commit/32e32fd562d650db4ebe43807557ff0399eca54a) Blog about reactive chat server
@@ -19,8 +22,8 @@
 - [aa0f2f4](https://github.com/neilellis/dollar/commit/aa0f2f446afa00e69f418efe9c87a44dc1791beb) Better plugin support release
 - [04dae5d](https://github.com/neilellis/dollar/commit/04dae5deb460caea3067dbad699561231cb92d60) Reduced plugin sizes
 - [3eb86d1](https://github.com/neilellis/dollar/commit/3eb86d11a98e05b2c12cc5c354c4e5519a8c34c1) Improved plugin system.
-- [f6d5ded](https://github.com/neilellis/dollar/commit/f6d5ded30913dce8a54f14bec97a2df4bdbe2cc9) Change log updates
 - [c0d4252](https://github.com/neilellis/dollar/commit/c0d425292ed99238f623249107ff80d5fe1ea20d) Auto merge
+- [f6d5ded](https://github.com/neilellis/dollar/commit/f6d5ded30913dce8a54f14bec97a2df4bdbe2cc9) Change log updates
 - [be07525](https://github.com/neilellis/dollar/commit/be07525110869f00175fce612968a790ad007175) Blog fix
 - [668e002](https://github.com/neilellis/dollar/commit/668e0026aecc84b8c9f9b2ee6fb93d2be90ba981) Change log updates
 - [2b74434](https://github.com/neilellis/dollar/commit/2b744342160f2f5c282dbdfb60ab1732c28858ff) Auto merge
