@@ -22,10 +22,7 @@ import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.DateTimeException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.temporal.ChronoField;
 import java.util.Arrays;
 import java.util.Objects;
@@ -147,7 +144,8 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     }
 
     @NotNull @Override public var $get(@NotNull var key) {
-        return DollarFactory.fromValue(LocalDateTime.from(value).get(ChronoField.valueOf(key.S().toUpperCase())),
+        return DollarFactory.fromValue(LocalDateTime.ofInstant(value, ZoneId.systemDefault()).get(
+                                               ChronoField.valueOf(key.S().toUpperCase())),
                                        errors());
     }
 
