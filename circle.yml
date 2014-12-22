@@ -69,7 +69,7 @@ deployment:
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
-        - mvn -q -Dgpg.passphrase=${GPG_PASSPHRASE} -Dmaven.test.skip install deploy
+        - mvn -q -Dgpg.passphrase=${GPG_PASSPHRASE} install deploy
         - ./build-docs.sh:
             timeout: 360
         - pack/pack.sh
