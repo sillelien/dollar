@@ -1,8 +1,8 @@
 machine:
   environment:
-    previous_release: 0.1.1
-    release: 0.1.2
-    next_release: 0.1.3
+    previous_release: 0.1.2
+    release: 0.1.3
+    next_release: 0.1.4
   java:
     version: oraclejdk8
 
