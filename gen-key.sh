@@ -1,3 +1,4 @@
+rm -rf ~/.gnupg
 if [[ ! -d ~/.gnupg ]]
 then
   cat >key.txt <<EOF
@@ -6,9 +7,9 @@ Key-Type: DSA
 Key-Length: 1024
 Subkey-Type: ELG-E
 Subkey-Length: 1024
-Name-Real: Cazcade Limited
-Name-Comment: Build Key For dollar-vertx
-Name-Email: support@cazcade.com
+Name-Real: Neil Ellis
+Name-Comment: Build Key For dollar
+Name-Email: hello@neilellis.me
 Expire-Date: 0
 Passphrase: ${GPG_PASSPHRASE}
 # Do a commit here, so that we can later print "done" :-)
