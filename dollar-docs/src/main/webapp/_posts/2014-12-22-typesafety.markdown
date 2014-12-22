@@ -5,13 +5,13 @@ date:   2014-12-22 11:23:00
 categories: dollar socketio type type-safety predictive
 ---
 
-A common complaint about dynamic languages is the lack of type safety, interestingly there seems to be a very binary view about type systems. So let's get to the bottom of that first.
+A common complaint about dynamic languages is the lack of type safety, and that the only solution is a complete formal one. Interestingly there really does seem to be a very binary view about type systems. So let's get to the bottom of that before we discuss the heuristic approach.
 
-Static typing is largely a good thing because it helps us to spot bugs before our code goes into production and reduces (in theory) the amount of unit testing required to find bugs. The received wisdom is that unless you use a formally proven post-doctorate level type system then your code is sloppy and weak. In reality this is a super complex subject within a huge terrain of possible solutions.
+Static typing is largely a good thing because it helps us to spot bugs before our code goes into production and reduces (in theory) the amount of unit testing required to find bugs. The received wisdom is that unless you use a formally proven post-doctorate level type system then your code is sloppy and weak. In reality this is a super complex subject within a huge terrain of possible solutions and that many answers are appropriate for many different situations.
 
-The problem with binary thinking is that we actually have to do a lot of work to maintain a type system  to get it's rewards - and it does give rewards. I think this somewhat illusory dichotomy is best understood with the metaphor of real world contracts.
+The problem with the simple binary thinking is that it oftend does not actually allow for the extra required work to maintain a viable type system and therefore to get it's rewards. This extra effort if used in systems that require minimal type safety can cause less experienced developers to try and throw the baby out with the bathwater - and stick to only using languages with a very loose type system. I think this somewhat illusory dichotomy is better understood with the metaphor of real world contracts.
 
-I lend my friend £20 there is an implied contract that I will return that money by her next paycheck.  However if I went to court over my £20 (like I would!) I have nothing but my word to rely upon. This is the level of types afety we would find in, say,  JavaScript. Most of the time it works - there's little consequence (in the browser!) if it doesn't and it's a quick simple friendly solution that doesn't slow people's lives down.
+If I lend my friend £20 there is an implied contract that I she will return that money by her next paycheck. If she doesn't then my trust is weakened but hey I'm only down £20.  However if I then went to court over my £20 (like I would!) I have nothing but my word to rely upon. This is the level of type safety we would find in, say, JavaScript. Most of the time it works - there's little consequence (in the browser!) if it doesn't and it's a quick simple friendly solution that doesn't slow people's lives down.
 
 Now let's go to the other extreme.
 
@@ -25,11 +25,11 @@ So where does [DollarScript](http://neilellis.github.io/dollar) lie on this cont
 
 Heh?
 
-DollarScript will learn from usage what types are usually returned from expressions, modules, resources etc. and then warn you if your code produces a type that in all probability is wrong. The massive advantage of this approach is that you get a lot of the type safety of a statically typed language without the constant fussing around with importing type declarations from external resources. It also means that type safety can be applied in places that a static type system cannot calculate the type - i.e. from an external service.
+DollarScript will learn from runtime usage what types are usually returned from expressions, modules, resources etc. and then warn you if your code depends on a type that in all probability is wrong. The massive advantage of this approach is that you get a lot of the type safety of a statically typed language without the constant fussing around with importing type declarations from external resources. It also means that type safety can be applied in places that a static type system cannot calculate the type - i.e. from an external service.
 
 We're not enforcing a type system, just warning you if you appear to be breaching it. This gives 98% of the result for 2% of the effort.
 
-To go back to our analogy - this is saying that our contracts are based on what other people are using as contracts. We're taking a calculated risk that those borrowed contracts may be flawed but we're getting most of the safety for a fraction of the cost/effort.
+To go back to our analogy - this is saying that our contracts are based on what other people are currently using as contracts. We're taking a calculated risk that those borrowed contracts may be flawed but we're getting the vast majority of the safety for a fraction of the cost/effort.
 
 So here is this in action:
 
@@ -45,11 +45,11 @@ if(false) {
 
 {% endhighlight %}
 
-The above example is really too over simplified to be useful but it does illustrate the principle that static analysis is being performed - and that analysis is based on past experience. In this case the experience of what happens when a String is added to an Integer. The `<Integer>` represents a type assertion during assignment.
+The above example is really too over simplified to be useful (better ones to come) but it does illustrate the principle that static analysis is being performed - and that analysis is based on past experience. In this case the experience of what happens when a String is added to an Integer. The `<Integer>` represents a type assertion during assignment.
 
 Of course the above example could easily be hardcoded into the language, but what if `i` came from an external service? Or a function from a separate module? Without a reasonable degree of type annotation the type system would quickly weaken. DollarScript avoids this by using a statistical approach to predicting the type from previous runtime usage.
 
-If I can emphasize this a littlr further, a formal type system is like the [Travelling Salesman Problem](http://en.wikipedia.org/wiki/Travelling_salesman_problem), that is, a complete formal solution with 100% accuracy is extremely (in that case NP) hard, yet the 98% solution is relatively fast and simple to achieve.
+If I can emphasize this a little further, a type system is like the [Travelling Salesman Problem](http://en.wikipedia.org/wiki/Travelling_salesman_problem), that is, a complete formal solution with 100% accuracy is extremely (in that case NP) hard, yet the 98% solution is relatively fast and simple to achieve.
 
 The actual prediction mechanism in DollarScript is pluggable - allowing for anything from simple statistics to machine learning to be used to increase the accuracy of predictions. Naturally in later versions of DollarScript this mechanism will be switched off outside of development environments.
 
