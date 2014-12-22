@@ -62,7 +62,9 @@ public class SimpleTypeLearner implements TypeLearner {
                 map = (ConcurrentHashMap<String, CountBasedTypePrediction>) new XStream().fromXML(file);
             } catch (Exception e) {
                 file.delete();
-                map = (ConcurrentHashMap<String, CountBasedTypePrediction>) new XStream().fromXML(backupFile);
+                if (backupFile.exists()) {
+                    map = (ConcurrentHashMap<String, CountBasedTypePrediction>) new XStream().fromXML(backupFile);
+                }
             }
         } else if (backupFile.exists()) {
             map = (ConcurrentHashMap<String, CountBasedTypePrediction>) new XStream().fromXML(backupFile);
