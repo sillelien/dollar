@@ -40,6 +40,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.Future;
@@ -204,6 +205,9 @@ public class DollarFactory {
         }
         if (o instanceof LocalDateTime) {
             return wrap(new DollarDate(errors, (LocalDateTime) o));
+        }
+        if (o instanceof Instant) {
+            return wrap(new DollarDate(errors, (Instant) o));
         }
         if (o instanceof Double) {
             if (errors.size() == 0 && (Double) o == 0.0) {
@@ -553,7 +557,7 @@ public class DollarFactory {
         } else if (type.equals(Type.BOOLEAN)) {
             return fromValue(jsonObject.getBoolean(VALUE_KEY));
         } else if (type.equals(Type.DATE)) {
-            return wrap(new DollarDate(ImmutableList.of(), LocalDateTime.parse(jsonObject.getString(TEXT_KEY))));
+            return wrap(new DollarDate(ImmutableList.of(), Instant.parse(jsonObject.getString(TEXT_KEY))));
         } else if (type.equals(Type.DECIMAL)) {
             return fromValue(jsonObject.getNumber(VALUE_KEY));
         } else if (type.equals(Type.LIST)) {

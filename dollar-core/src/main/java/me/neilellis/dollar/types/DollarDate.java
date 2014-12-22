@@ -30,17 +30,21 @@ import java.util.Objects;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
+public class DollarDate extends AbstractDollarSingleValue<Instant> {
 
     private static final double ONE_DAY_MILLIS = 24.0 * 60.0 * 60.0 * 1000.0;
     private static final double ONE_DAY_SECONDS = 24.0 * 60.0 * 60.0;
 
     public DollarDate(@NotNull ImmutableList<Throwable> errors, @NotNull Long value) {
-        super(errors, LocalDateTime.ofInstant(Instant.ofEpochMilli(value), ZoneId.systemDefault()));
+        super(errors, Instant.ofEpochMilli(value));
+    }
+
+    public DollarDate(ImmutableList<Throwable> errors, Instant value) {
+        super(errors, value);
     }
 
     public DollarDate(ImmutableList<Throwable> errors, LocalDateTime value) {
-        super(errors, value);
+        super(errors, value.toInstant(ZoneOffset.UTC));
     }
 
     @NotNull
@@ -180,7 +184,7 @@ public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
                 return DollarFactory.fromValue(value.plusSeconds((long) (ONE_DAY_SECONDS * rhsFix.D())), errors(),
                                                rhsFix.errors());
             } catch (DateTimeException dte) {
-                if (value.toEpochSecond(ZoneOffset.UTC) + (ONE_DAY_SECONDS * rhsFix.D()) > 0) {
+                if (value.getEpochSecond() + (ONE_DAY_SECONDS * rhsFix.D()) > 0) {
                     return DollarFactory.fromValue(LocalDateTime.MAX, errors(),
                                                    rhsFix.errors());
                 } else {
