@@ -95,10 +95,10 @@ public class DollarDate extends AbstractDollarSingleValue<LocalDateTime> {
 
     private Double asDecimal() {
         try {
-            final long millis = value.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+            final long millis = value.atZone(ZoneId.of("UTC")).toInstant().toEpochMilli();
             return ((double) millis) / (24 * 60 * 60 * 1000);
         } catch (ArithmeticException e) {
-            final long seconds = value.atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
+            final long seconds = value.atZone(ZoneId.of("UTC")).toInstant().getEpochSecond();
             return ((double) seconds) / (24 * 60 * 60);
 
         }
