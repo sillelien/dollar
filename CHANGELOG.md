@@ -1,6 +1,42 @@
 ## Change Log
 
-### In Progress: 0.1.4 (2014/12/22 12:07 +00:00)
+### 0.1.3 (2014/12/22 12:07 +00:00)
+- [080d01c](https://github.com/neilellis/dollar/commit/080d01ce4956a6ab4a2b8bae15e13cd67a99e3d5) Change log updates
+- [1d80b66](https://github.com/neilellis/dollar/commit/1d80b66e71db3cfe2f8e358a5592a3e96e1d21c9) Auto merge
+- [ceaa00b](https://github.com/neilellis/dollar/commit/ceaa00b2349e595fae5ac155f5ac46120a9c3ec9) Started on blog about predictive typing.
+- [4af00d7](https://github.com/neilellis/dollar/commit/4af00d7907fd907a1b2afdca4c9e091dc6b406a7) Better predictive type system.
+- [2a5a718](https://github.com/neilellis/dollar/commit/2a5a7186a21315797227366c729f89e6fea308a1) Better predictive type system.
+- [7158401](https://github.com/neilellis/dollar/commit/715840107abe9d7ef743514eca95ea05fb1cd319) Better predictive type system.
+- [5aef191](https://github.com/neilellis/dollar/commit/5aef1918327d45b42e99538b5c238ceedc466b60) Better predictive type system.
+- [cac071a](https://github.com/neilellis/dollar/commit/cac071ada4b02f2f5f68d1839bd46f5917b53e0c) Better predictive type system.
+- [4908667](https://github.com/neilellis/dollar/commit/49086673bf85deddc4d4c268ed897319f61c8867) Better predictive type system.
+- [81c1c6f](https://github.com/neilellis/dollar/commit/81c1c6f1e30a46de707a443855688d27160061c2) Better predictive type system.
+- [087e1a0](https://github.com/neilellis/dollar/commit/087e1a058fefb430745a1cbbfbe1dba7baa43d0a) Better predictive type system.
+- [752c438](https://github.com/neilellis/dollar/commit/752c43886acb0a84d86adc10bd144b74de0dfa94) Better predictive type system.
+- [49b65d0](https://github.com/neilellis/dollar/commit/49b65d0cc0b385b3f405996466d328cba05ef8b0) Better predictive type system.
+- [c2fc469](https://github.com/neilellis/dollar/commit/c2fc4695b82652e67334a573b19c17234c7738c4) Better predictive type system.
+- [de6dcba](https://github.com/neilellis/dollar/commit/de6dcbaf538d309c6f0b5a8e930fff0afcd989d2) Better predictive type system.
+- [d144be1](https://github.com/neilellis/dollar/commit/d144be1ad645a0d8caf27fb925fed5e012d222a7) Better predictive type system.
+- [fe954d2](https://github.com/neilellis/dollar/commit/fe954d2521d8519db71777f97888ae88792a4ac9) Better predictive type system.
+- [d7d5c6f](https://github.com/neilellis/dollar/commit/d7d5c6fce4077cc7e6be5e5c8a5f8a0cbb30d6db) Better predictive type system.
+- [fc9b2b2](https://github.com/neilellis/dollar/commit/fc9b2b224f1b06f8cf63d3f67443a699e6400e68) Better predictive type system.
+- [92aa82b](https://github.com/neilellis/dollar/commit/92aa82b66520c285978d418ca2c92bdbcd431429) Better predictive type system.
+- [485b9cb](https://github.com/neilellis/dollar/commit/485b9cbf64ba5893b63febef41103d3803bfc816) Better predictive type system.
+- [35af836](https://github.com/neilellis/dollar/commit/35af836fb1d26b38bc46a9ec71d6f8f54c5c168a) Better predictive type system.
+- [655ef84](https://github.com/neilellis/dollar/commit/655ef842f6808fbe81e3ce8d0b71882dd5eb1f2b) Better predictive type system.
+- [e7334f5](https://github.com/neilellis/dollar/commit/e7334f5e79829e93e4da3c0f6a93462b74148587) Better predictive type system.
+- [42a4d8e](https://github.com/neilellis/dollar/commit/42a4d8ea300509d39db5610a7262cf79ce88a343) Incomplete predictive type system.
+- [1a1397e](https://github.com/neilellis/dollar/commit/1a1397e37ec13f7736c732c9f52fcd9961b323b7) Operator testing and resultant fixes
+- [f427018](https://github.com/neilellis/dollar/commit/f427018476efbaff3a6e9b6eef24b83623f69445) Code clean up and docs + PIT
+- [21ec071](https://github.com/neilellis/dollar/commit/21ec071ad97786469f2a384b60e22082483459d1) Code clean up and docs + PIT
+- [e7e52c7](https://github.com/neilellis/dollar/commit/e7e52c7a00e626fe495b0aa472d8df5c48b2bfed) Code clean up and docs + PIT
+- [6718004](https://github.com/neilellis/dollar/commit/6718004e665b07566b9a6e5293f3ffb74b051474) Code clean up and docs + PIT
+- [319ad71](https://github.com/neilellis/dollar/commit/319ad71a4469f9f9d7ed6269b8e6b95398da3ccb) Code clean up and docs + PIT
+- [92c2d36](https://github.com/neilellis/dollar/commit/92c2d36f7e3ebbbbf8456e9e114e8093c3ced0d1) Code clean up and reducing dependency on Guava
+- [05c1a34](https://github.com/neilellis/dollar/commit/05c1a349e13bb287b8ecc55809196bc753936c46) Showing off the new chat code
+- [598a1e2](https://github.com/neilellis/dollar/commit/598a1e2adc5687214106a5479fc7b92f09742747) Support for the new db URI - including a lot of work around serialization
+- [50d5e9c](https://github.com/neilellis/dollar/commit/50d5e9c4daad226167f7ccd583db049d89468ec7) Bugfixes after URI clean up
+- [bd01a98](https://github.com/neilellis/dollar/commit/bd01a987b14146c95f970e357d679b2e94e85a4a) URI clean up
 - [7f28e63](https://github.com/neilellis/dollar/commit/7f28e63dc60becd992849c3ceadbb2516040702e) Change log updates
 - [89a2e77](https://github.com/neilellis/dollar/commit/89a2e77b8a6bb47083fdda5eb223e21e8bcd21a4) Auto merge
 - [fd2a4ce](https://github.com/neilellis/dollar/commit/fd2a4ce1cc463bf522d5033dff97ed708a77735d) Blog about reactive chat server
@@ -56,11 +92,11 @@
 - [d81bade](https://github.com/neilellis/dollar/commit/d81badedf3d3c8fa6a9a71900b2a83bb542b5e15) General tooling and planning integration.
 
 ### 0.1.0 (2014/12/03 21:11 +00:00)
-- [2cb5363](https://github.com/neilellis/dollar/commit/2cb53636ad0ae5d4012345548df27fafe516574b) Change log updates
 - [0ffe3f1](https://github.com/neilellis/dollar/commit/0ffe3f1b0d7bed82bb76fa96105958e83b738c53) Auto merge
+- [2cb5363](https://github.com/neilellis/dollar/commit/2cb53636ad0ae5d4012345548df27fafe516574b) Change log updates
 - [624127d](https://github.com/neilellis/dollar/commit/624127d9b366e723f7ec480251be0de129d23201) General tooling and planning integration.
-- [eb2149c](https://github.com/neilellis/dollar/commit/eb2149c4d8769f66841cb3e1e213334274f699de) Auto merge
 - [fdcb039](https://github.com/neilellis/dollar/commit/fdcb03923d60acc319ef421c97882ca82e0f88db) Change log updates
+- [eb2149c](https://github.com/neilellis/dollar/commit/eb2149c4d8769f66841cb3e1e213334274f699de) Auto merge
 - [b561689](https://github.com/neilellis/dollar/commit/b5616894ebe04dec8e4ed35bc8c496cdb3c31be5) General tooling and planning integration.
 - [3a6c1ea](https://github.com/neilellis/dollar/commit/3a6c1ea3f0e76799ca62cc7b7fe3be126d5f9a8a) Change log updates
 - [b1afd07](https://github.com/neilellis/dollar/commit/b1afd079030df5e9ec699004dbe27bdec90d63cf) General tooling and planning integration.
