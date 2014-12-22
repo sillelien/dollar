@@ -31,8 +31,15 @@ dependencies:
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
     - gem install jekyll
     - npm install -g github-changes
+  override:
+    - mvn -q dependency:resolve
 
-#test:
+
+test:
+  override:
+    - sudo ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
+    - mvn -q integration-test
+
 #  pre:
 #     - mvn org.pitest:pitest-maven:mutationCoverage
 
