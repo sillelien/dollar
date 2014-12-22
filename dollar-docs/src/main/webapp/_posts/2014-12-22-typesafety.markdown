@@ -25,7 +25,7 @@ So where does [DollarScript](http://neilellis.github.io/dollar) lie on this cont
 
 Heh?
 
-DollarScript will learn from runtime usage what types are usually returned from expressions, modules, resources etc. and then warn you if your code depends on a type that in all probability is wrong. The massive advantage of this approach is that you get a lot of the type safety of a statically typed language without the constant fussing around with importing type declarations from external resources. It also means that type safety can be applied in places that a static type system cannot calculate the type - i.e. from an external service.
+DollarScript learns from runtime usage what types are usually returned from expressions, modules, resources etc. and then warns you if your code depends on a type that in all probability is wrong. The massive advantage of this approach is that you get a lot of the type safety of a statically typed language without the constant fussing around with importing type declarations from external resources. It also means that type safety can be applied in places that a static type system cannot calculate the type - i.e. from an external service.
 
 We're not enforcing a type system, just warning you if you appear to be breaching it. This gives 98% of the result for 2% of the effort.
 
@@ -49,7 +49,7 @@ The above example is really too over simplified to be useful (better ones to com
 
 Of course the above example could easily be hardcoded into the language, but what if `i` came from an external service? Or a function from a separate module? Without a reasonable degree of type annotation the type system would quickly weaken. DollarScript avoids this by using a statistical approach to predicting the type from previous runtime usage.
 
-If I can emphasize this a little further, a type system is like the [Travelling Salesman Problem](http://en.wikipedia.org/wiki/Travelling_salesman_problem), that is, a complete formal solution with 100% accuracy is extremely (in that case NP) hard, yet the 98% solution is relatively fast and simple to achieve.
+If I can emphasize this a little further, a type system is like the [Travelling Salesperson Problem](http://en.wikipedia.org/wiki/Travelling_salesman_problem), that is, a complete formal solution with 100% accuracy is extremely (in that case NP) hard, yet the 98% solution is relatively fast and simple to achieve.
 
 The actual prediction mechanism in DollarScript is pluggable - allowing for anything from simple statistics to machine learning to be used to increase the accuracy of predictions. Naturally in later versions of DollarScript this mechanism will be switched off outside of development environments.
 
