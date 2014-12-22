@@ -19,7 +19,9 @@ package me.neilellis.dollar.script.operators;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.SourceValue;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
 import java.util.List;
@@ -29,19 +31,20 @@ import static me.neilellis.dollar.DollarStatic.$;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class IsOperator implements Map<List<var>, Map<? super var, ? extends var>> {
+public class IsOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
 
     public IsOperator(Scope scope) {this.scope = scope;}
 
-    @Override public Map<? super var, ? extends var> map(List<var> rhs) {
-        return lhs -> DollarScriptSupport.wrapReactiveUnary(scope, lhs, () -> {
+    @Override public Map<? super var, ? extends var> map(Token token) {
+        List<var> rhs = (List<var>) token.value();
+        return lhs -> DollarScriptSupport.wrapReactive(scope, () -> {
             for (var value : rhs) {
-                if (lhs.is(Type.valueOf(value.$S().toUpperCase()))) {
+                if (lhs.is(Type.valueOf(value.toString()))) {
                     return $(true);
                 }
             }
             return $(false);
-        });
+        }, new SourceValue(scope, token), "is " + rhs, lhs);
     }
 }

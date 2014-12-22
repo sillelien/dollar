@@ -17,17 +17,22 @@
 package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarParser;
+import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.types.DollarFactory;
+import me.neilellis.dollar.script.SourceValue;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
+
+import java.util.Arrays;
+import java.util.concurrent.Callable;
 
 import static me.neilellis.dollar.DollarStatic.$;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class WhileOperator implements Map<var, Map<? super var, ? extends var>> {
+public class WhileOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
     private final DollarParser parser;
     private boolean pure;
@@ -38,12 +43,16 @@ public class WhileOperator implements Map<var, Map<? super var, ? extends var>> 
         this.pure = pure;
     }
 
-    public Map<? super var, ? extends var> map(var lhs) {
-        return rhs -> DollarFactory.fromLambda(l -> parser.inScope(pure, "while", scope, newScope -> {
-            while (lhs.isTrue()) {
-                rhs._fixDeep();
-            }
-            return $(false);
-        }));
+    public Map<? super var, ? extends var> map(Token token) {
+        var lhs = (var) token.value();
+        return rhs -> {
+            Callable<var> callable = () -> parser.inScope(pure, "while", scope, newScope -> {
+                        while (lhs.isTrue()) {
+                            rhs._fixDeep();
+                        }
+                        return $(false);
+                    });
+            return DollarScriptSupport.toLambda(scope, callable, new SourceValue(scope, token), Arrays.asList(lhs,rhs), "while");
+        };
     }
 }

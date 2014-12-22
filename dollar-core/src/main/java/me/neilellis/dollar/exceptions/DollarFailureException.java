@@ -17,22 +17,22 @@
 package me.neilellis.dollar.exceptions;
 
 import me.neilellis.dollar.DollarException;
-import me.neilellis.dollar.types.FailureType;
+import me.neilellis.dollar.types.ErrorType;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarFailureException extends DollarException {
-    public DollarFailureException(FailureType failureType) {
-        super(failureType.toString());
+    public DollarFailureException(ErrorType errorType) {
+        super(errorType.toString());
     }
 
-    public DollarFailureException(FailureType failureType, String message) {
-        super(failureType.toString() + ":" + message);
+    public DollarFailureException(ErrorType errorType, String message) {
+        super(errorType.toString() + ":" + message);
     }
 
-    public DollarFailureException(Throwable t, FailureType failureType) {
-        super(t, failureType.toString() + ": " + t.getMessage());
+    public DollarFailureException(Throwable t, ErrorType errorType) {
+        super(t, errorType.toString() + ": " + t.getMessage());
     }
 
 }

@@ -45,7 +45,7 @@ public class PipeOperator implements Map<var, Map<? super var, ? extends var>> {
         return lhs -> dollarParser.inScope(pure, "pipe", scope, newScope -> {
             var lhsFix = lhs._fix(false);
             newScope.setParameter("1", lhsFix);
-            Object rhsVal = rhs.$();
+            Object rhsVal = rhs.toJavaObject();
             if ((rhsVal instanceof String)) {
                 String rhsStr = rhsVal.toString();
                 if (rhs.getMetaAttribute("__builtin") != null) {

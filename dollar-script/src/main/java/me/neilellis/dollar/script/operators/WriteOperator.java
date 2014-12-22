@@ -18,29 +18,33 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.SourceValue;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class WriteOperator implements Map<Object[], Map<? super var, ? extends var>> {
+public class WriteOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
 
     public WriteOperator(Scope scope) {this.scope = scope;}
 
     @Override
-    public Map<? super var, ? extends var> map(Object[] objects) {
+    public Map<? super var, ? extends var> map(Token token) {
+        Object[] objects = (Object[]) token.value();
         return new Map<var, var>() {
             @Override
             public var map(var rhs) {
-                return DollarScriptSupport.wrapReactiveBinary(scope,
-                                                              (var) objects[1],
-                                                              rhs,
-                                                              () -> rhs.$write((var) objects[1],
-                                                                               objects[2] != null,
-                                                                               objects[3] !=
-                                                                               null));
+                return DollarScriptSupport.wrapReactive(scope,
+                                                        () -> rhs.$write((var) objects[1],
+                                                                         objects[2] != null,
+                                                                         objects[3] !=
+                                                                         null), new SourceValue(scope, token),
+                                                        "write:" + objects[2] + ":" + objects[3], (var) objects[1],
+                                                        rhs
+                );
             }
         };
     }

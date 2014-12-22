@@ -17,9 +17,12 @@
 package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarParser;
+import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.SourceValue;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
 import java.util.List;
@@ -31,7 +34,7 @@ import static me.neilellis.dollar.DollarStatic.$;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class MapOperator implements Map<List<var>, var> {
+public class MapOperator implements Map<Token, var> {
     private final Scope scope;
     private final DollarParser dollarParser;
     private boolean pure;
@@ -42,8 +45,12 @@ public class MapOperator implements Map<List<var>, var> {
         this.pure = pure;
     }
 
-    @Override public var map(List<var> o) {
-        final var lambda = DollarFactory.fromLambda(parallel -> dollarParser.inScope(pure, "map", scope, newScope -> {
+    @Override public var map(Token t) {
+        List<var> o = (List<var>) t.value();
+        final var
+                lambda =
+                DollarScriptSupport.wrapLambda(new SourceValue(scope, t), scope,
+                                               parallel -> dollarParser.inScope(pure, "map", scope, newScope -> {
             if (o.size() == 1) {
                 return DollarFactory.blockCollection(o);
             }
@@ -57,7 +64,7 @@ public class MapOperator implements Map<List<var>, var> {
             return $(stream.map(v -> v._fix(parallel.isTrue()))
                            .collect(Collectors.toConcurrentMap(v -> v.isPair() ? v.getPairKey() : v.$S(),
                                                                v -> v.isPair() ? v.getPairValue() : v)));
-        }));
+                                               }), o, "map");
         for (var value : o) {
             value.$listen(i->lambda.$notify());
         }

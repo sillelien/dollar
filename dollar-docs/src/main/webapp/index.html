@@ -34,27 +34,19 @@ layout: default
     </p>
   </div>
 {% highlight bash %}
+  //Fully working persistent chat server
+  server= socketio://127.0.0.1:8092/bulletin?eventType=chatevent
+  lastMessages= db:circular://messages/tmp/messages10.db?size=10
 
-geo= read http://freegeoip.net/json/
-.: geo is Map
+  message *= server
+  timestampedMessage := (message + {"timestamp":DATE()})
+  timestampedMessage >> lastMessages
 
-lat= geo.latitude
-lon= geo.longitude
+  ("chatevent" : timestampedMessage) publish server
 
-month= (DATE()-30)['MONTH_OF_YEAR']
-year= (DATE()-30)['YEAR_OF_ERA']
-crimes= read (("http://data.police.uk/api/crimes-at-location?date=" + year + "-" + month + "&lat=" + lat + "&lng=" + lon) as Uri)
-categories= crimes each { $1.category }
-.: categories is List
-
-if (~ categories["anti-social-behaviour"]) {
-  @@ "Anti-Social behaviour in your area last month!"
-} else {
-  @@ "No anti-social behaviour in your area last month!"
-}
-
-"The End!"
-
+  http://127.0.0.1:8091/messages subscribe {
+  {"body":all lastMessages, "headers":{"Access-Control-Allow-Origin":"*"}}
+  }
 {% endhighlight %}
 
   <p>The Dollar API is the base of the language and is designed for dynamic programming on the JVM, details can be found <a href="api.html">here</a>.</p>

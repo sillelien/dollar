@@ -20,19 +20,19 @@ import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 import org.codehaus.jparsec.functors.Unary;
 
-import java.util.function.Supplier;
-
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class UnaryOp implements Unary<var>, Operator {
     private final boolean immediate;
-    protected Supplier<String> source;
     protected Scope scope;
+    protected Source source;
+    protected String operation;
     private Map<var, var> function;
 
 
-    public UnaryOp(Scope scope, Map<var, var> function) {
+    public UnaryOp(String operation, Scope scope, Map<var, var> function) {
+        this.operation = operation;
         if (scope == null) {
             throw new NullPointerException();
         }
@@ -41,7 +41,8 @@ public class UnaryOp implements Unary<var>, Operator {
         this.immediate = false;
     }
 
-    public UnaryOp(Scope scope, boolean immediate, Map<var, var> function) {
+    public UnaryOp(Scope scope, boolean immediate, Map<var, var> function, String operation) {
+        this.operation = operation;
         if (scope == null) {
             throw new NullPointerException();
         }
@@ -58,14 +59,14 @@ public class UnaryOp implements Unary<var>, Operator {
         }
 
         //Lazy evaluation
-        final var lambda = DollarScriptSupport.wrapReactiveUnary(scope, from, () -> function.map(from));
+        final var lambda = DollarScriptSupport.wrapReactive(scope, () -> function.map(from), source, operation, from);
         return lambda;
 
     }
 
 
     @Override
-    public void setSource(Supplier<String> source) {
+    public void setSource(Source source) {
         this.source = source;
     }
 }

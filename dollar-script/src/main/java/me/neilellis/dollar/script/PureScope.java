@@ -33,49 +33,8 @@ import static me.neilellis.dollar.DollarStatic.$void;
 public class PureScope extends ScriptScope {
     private static final Logger log = LoggerFactory.getLogger(ScriptScope.class);
 
-    public PureScope(Scope parent, String source, String name) {
-        super(parent, source, name);
-    }
-
-    @Override public var set(String key, var value, boolean readonly, var constraint, boolean isVolatile, boolean fixed,
-                             boolean pure) {
-        if (isVolatile) {
-            throw new UnsupportedOperationException("Cannot have volatile variables in a pure expression");
-        }
-        if (key.matches("[0-9]+")) {
-            throw new AssertionError("Cannot set numerical keys, use setParameter");
-        }
-        Scope scope = getScopeForKey(key);
-        if (scope != null && scope != this) {
-            throw new UnsupportedOperationException("Cannot modify variables outside of a pure scope");
-        }
-        if (scope == null) {
-            scope = this;
-        }
-        if (DollarStatic.config.isDebugScope()) { log.info("Setting " + key + " in " + scope); }
-        if (scope != null && scope.getVariables().containsKey(key) && scope.getVariables().get(key).readonly) {
-            throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
-        }
-        final var fixedValue = fixed ? value._fixDeep() : value;
-        if (scope.getVariables().containsKey(key)) {
-            final Variable variable = scope.getVariables().get(key);
-            if (!variable.isVolatile && variable.thread != Thread.currentThread().getId()) {
-                handleError(new DollarScriptException("Concurrency Error: Cannot change the variable " +
-                                                      key +
-                                                      " in a different thread from that which is created in."));
-            }
-            if (variable.constraint != null) {
-                if (constraint != null) {
-                    handleError(new DollarScriptException(
-                            "Cannot change the constraint on a variable, attempted to redeclare for " + key));
-                }
-            }
-            variable.value = fixedValue;
-        } else {
-            scope.getVariables().put(key, new Variable(fixedValue, readonly, constraint, false, fixed, pure));
-        }
-        scope.notifyScope(key, fixedValue);
-        return value;
+    public PureScope(Scope parent, String source, String name, String file) {
+        super(parent, file != null ? file : parent.getFile(), source, name);
     }
 
     @Override public void clear() {
@@ -86,12 +45,12 @@ public class PureScope extends ScriptScope {
         if (key.matches("[0-9]+")) {
             throw new AssertionError("Cannot get numerical keys, use getParameter");
         }
-        if (DollarStatic.config.isDebugScope()) { log.info("Looking up " + key + " in " + this); }
+        if (DollarStatic.config.debugScope()) { log.info("Looking up " + key + " in " + this); }
         Scope scope = getScopeForKey(key);
         if (scope == null) {
             scope = this;
         } else {
-            if (DollarStatic.config.isDebugScope()) { log.info("Found " + key + " in " + scope); }
+            if (DollarStatic.config.debugScope()) { log.info("Found " + key + " in " + scope); }
         }
         Variable result = scope.getVariables().get(key);
         if (result != null && !(result.readonly && result.fixed) && !result.pure) {
@@ -114,6 +73,49 @@ public class PureScope extends ScriptScope {
 
     @Override public Scope getScopeForParameters() {
         return this;
+    }
+
+    @Override public var set(String key, var value, boolean readonly, var constraint, String constraintSource,
+                             boolean isVolatile, boolean fixed,
+                             boolean pure) {
+        if (isVolatile) {
+            throw new UnsupportedOperationException("Cannot have volatile variables in a pure expression");
+        }
+        if (key.matches("[0-9]+")) {
+            throw new AssertionError("Cannot set numerical keys, use setParameter");
+        }
+        Scope scope = getScopeForKey(key);
+        if (scope != null && scope != this) {
+            throw new UnsupportedOperationException("Cannot modify variables outside of a pure scope");
+        }
+        if (scope == null) {
+            scope = this;
+        }
+        if (DollarStatic.config.debugScope()) { log.info("Setting " + key + " in " + scope); }
+        if (scope != null && scope.getVariables().containsKey(key) && scope.getVariables().get(key).readonly) {
+            throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
+        }
+        final var fixedValue = fixed ? value._fixDeep() : value;
+        if (scope.getVariables().containsKey(key)) {
+            final Variable variable = scope.getVariables().get(key);
+            if (!variable.isVolatile && variable.thread != Thread.currentThread().getId()) {
+                handleError(new DollarScriptException("Concurrency Error: Cannot change the variable " +
+                                                      key +
+                                                      " in a different thread from that which is created in."));
+            }
+            if (variable.constraint != null) {
+                if (constraint != null) {
+                    handleError(new DollarScriptException(
+                            "Cannot change the constraint on a variable, attempted to redeclare for " + key));
+                }
+            }
+            variable.value = fixedValue;
+        } else {
+            scope.getVariables()
+                 .put(key, new Variable(fixedValue, readonly, constraint, constraintSource, false, fixed, pure));
+        }
+        scope.notifyScope(key, fixedValue);
+        return value;
     }
 
     @Override

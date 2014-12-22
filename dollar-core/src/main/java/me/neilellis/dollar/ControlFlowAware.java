@@ -21,17 +21,28 @@ import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.NotNullGuard;
 
 /**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
+ * The interface ControlFlowAware
+ *
+ * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface ControlFlowAware {
 
     /**
      * Select a value from map based upon the current value and return that.
+     * @param map the map
+     * @return the var
      */
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
     var $choose(var map);
 
+    /**
+     * $ each.
+     *
+     * @param pipe the pipe
+     *
+     * @return the var
+     */
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
     var $each(Pipeable pipe);

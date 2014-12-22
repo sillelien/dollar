@@ -17,11 +17,14 @@
 package me.neilellis.dollar.script;
 
 import com.google.common.io.CharStreams;
+import me.neilellis.dollar.DollarStatic;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 
 public class ParserTest {
 
@@ -39,62 +42,64 @@ public class ParserTest {
 
     @Test
     public void testArrays() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_arrays.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_arrays.ds"), "/test_arrays.ds", parallel);
     }
 
     @Test
     public void testBasics1() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test1.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test1.ds"), "/test1.ds", parallel);
     }
 
     @Test
     public void testBasics3() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test3.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test3.ds"), "/test3.ds", parallel);
     }
 
     @Test
     public void testBuiltins() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_builtins.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_builtins.ds"), "/test_builtins.ds", parallel);
     }
 
     @Test
     public void testCasting() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_casting.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_casting.ds"), "/test_casting.ds", parallel);
     }
 
     @Test
     public void testConcurrency() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_concurrency.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_concurrency.ds"), "/test_concurrency.ds",
+                                 parallel);
     }
 
     @Test
     public void testControlFlow() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_control_flow.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_control_flow.ds"), "/test_control_flow.ds",
+                                 parallel);
     }
 
     @Test
     public void testDate() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_date.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_date.ds"), "/test_date.ds", parallel);
     }
 
     @Test
     public void testFix() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_fix.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_fix.ds"), "/test_fix.ds", parallel);
     }
 
     @Test
     public void testIteration() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_iteration.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_iteration.ds"), "/test_iteration.ds", parallel);
     }
 
     @Test
     public void testJava() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_java.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_java.ds"), "/test_java.ds", parallel);
     }
 
     @Test
     public void testLogic() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_logic.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_logic.ds"), "/test_logic.ds", parallel);
     }
 
     @Test
@@ -105,42 +110,57 @@ public class ParserTest {
 
     @Test
     public void testModules() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_modules.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_modules.ds"), "/test_modules.ds", parallel);
     }
 
     @Test
     public void testNumeric() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_numeric.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_numeric.ds"), "/test_numeric.ds", parallel);
+    }
+
+    //    @Test
+    public void testOperators() throws Exception {
+        DollarStatic.config.failFast(false);
+        final List<String>
+                operatorTestFiles =
+                Arrays.asList("divide.all.ds", "plus.all.ds", "plus.minimal.ds", "divide.minimal.ds",
+                              "minus.minimal.ds", "minus.small.ds");
+        for (String operatorTestFile : operatorTestFiles) {
+            System.out.println(operatorTestFile);
+            new DollarParser().parse(getClass().getResourceAsStream("/regression/operators/" + operatorTestFile),
+                                     operatorTestFile, parallel);
+        }
     }
 
     @Test
     public void testParameters() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_parameters.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_parameters.ds"), "/test_parameters.ds",
+                                 parallel);
     }
 
     @Test
     public void testPure() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_pure.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_pure.ds"), "/test_pure.ds", parallel);
     }
 
     @Test
     public void testRanges() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_ranges.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_ranges.ds"), "/test_ranges.ds", parallel);
     }
 
     @Test
     public void testReactive() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_reactive.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_reactive.ds"), "/test_reactive.ds", parallel);
     }
 
     @Test
     public void testRedis() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_redis.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_redis.ds"), "/test_redis.ds", parallel);
     }
 
     @Test
     public void testStrings() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_strings.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_strings.ds"), "/test_strings.ds", parallel);
     }
 
     @Test
@@ -150,6 +170,6 @@ public class ParserTest {
 
     @Test
     public void testVariables() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test_variables.ds"), parallel);
+        new DollarParser().parse(getClass().getResourceAsStream("/test_variables.ds"), "/test_variables.ds", parallel);
     }
 }

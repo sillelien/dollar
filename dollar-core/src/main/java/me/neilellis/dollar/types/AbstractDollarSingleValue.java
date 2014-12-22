@@ -16,17 +16,17 @@
 
 package me.neilellis.dollar.types;
 
-import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
-import me.neilellis.dollar.json.JsonObject;
+import me.neilellis.dollar.json.ImmutableJsonObject;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -38,30 +38,24 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     @NotNull
     final T value;
 
-    AbstractDollarSingleValue(@NotNull List<Throwable> errors, @NotNull T value) {
+    AbstractDollarSingleValue(@NotNull ImmutableList<Throwable> errors, @NotNull T value) {
         super(errors);
         this.value = value;
     }
 
-    @NotNull
-    @Override
-    public var $minus(@NotNull var v) {
-        if (v.equals(this)) {
-            return DollarStatic.$void();
+    @NotNull @Override public var $get(@NotNull var rhs) {
+        if (equals(rhs)) {
+            return DollarFactory.wrap(this);
+        } else if (rhs.isInteger() && rhs.I() == 0) {
+            return DollarFactory.wrap(this);
         } else {
-            return this;
+            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_SINGLE_VALUE_OPERATION,
+                                         getClass().toString(), false);
         }
     }
 
-    @NotNull
-    @Override
-    public var $plus(var v) {
-        return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
-    }
-
-    @NotNull
-    public var $set(@NotNull var key, Object value) {
-        return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
+    @NotNull @Override public var $append(@NotNull var value) {
+        return DollarFactory.fromValue(Arrays.asList(this, value), errors(), value.errors());
     }
 
     @NotNull @Override
@@ -83,26 +77,33 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return DollarStatic.$(1);
     }
 
-    @NotNull @Override public var $get(@NotNull var rhs) {
-        if (equals(rhs)) {
-            return DollarFactory.wrap(this);
-        } else if (rhs.isInteger() && rhs.I() == 0) {
-            return DollarFactory.wrap(this);
-        } else {
-            return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
-        }
+    @NotNull @Override public var $prepend(@NotNull var value) {
+        return DollarFactory.fromValue(Arrays.asList(value, this), errors(), value.errors());
     }
 
     @NotNull
     public var $removeByKey(@NotNull String value) {
-        return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_SINGLE_VALUE_OPERATION,
+                                     getClass().toString(), false);
 
+    }
+
+    @NotNull
+    public var $set(@NotNull var key, Object value) {
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
     @NotNull
     @Override
     public var $remove(var value) {
-        return DollarFactory.failure(FailureType.INVALID_SINGLE_VALUE_OPERATION);
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_SINGLE_VALUE_OPERATION,
+                                     getClass().toString(), false);
+    }
+
+    @NotNull
+    @Override
+    public var $plus(var v) {
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
     @NotNull
@@ -132,20 +133,32 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     }
 
+    @Nullable
+    public JSONObject toOrgJson() {
+        return null;
+
+    }
+
     @NotNull
     @Override
     public String S() {
         return value.toString();
     }
 
-    @NotNull public Map<String, Object> toMap() {
+    @Nullable
+    public ImmutableJsonObject toJsonObject() {
+        return null;
+    }
+
+
+    @NotNull public Map<Object, Object> toMap() {
         return Collections.singletonMap("value", value);
     }
 
     @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        return ImmutableMap.of("value", this);
+    public ImmutableMap<var, var> $map() {
+        return ImmutableMap.of($("value"), this);
     }
 
     @Override public boolean isCollection() {
@@ -163,16 +176,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return false;
     }
 
-    @Nullable
-    public JSONObject orgjson() {
-        return null;
-
-    }
-
-    @Nullable
-    public JsonObject json() {
-        return null;
-    }
 
     @Override
     public ImmutableList<String> strings() {
@@ -184,9 +187,5 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     public ImmutableList<Object> toList() {
         return ImmutableList.of(value);
     }
-
-
-
-
 
 }

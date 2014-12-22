@@ -16,12 +16,14 @@
 
 package me.neilellis.dollar.script;
 
-import com.google.common.collect.Range;
 import com.google.common.io.ByteStreams;
 import me.neilellis.dollar.*;
+import me.neilellis.dollar.collections.Range;
+import me.neilellis.dollar.script.exceptions.DollarScriptFailureException;
 import me.neilellis.dollar.script.java.JavaScriptingSupport;
 import me.neilellis.dollar.script.operators.*;
 import me.neilellis.dollar.types.DollarFactory;
+import me.neilellis.dollar.types.ErrorType;
 import org.codehaus.jparsec.*;
 import org.codehaus.jparsec.error.ParserException;
 import org.codehaus.jparsec.functors.Map;
@@ -42,7 +44,8 @@ import java.util.function.Function;
 
 import static me.neilellis.dollar.DollarStatic.*;
 import static me.neilellis.dollar.script.DollarLexer.*;
-import static me.neilellis.dollar.script.DollarScriptSupport.*;
+import static me.neilellis.dollar.script.DollarScriptSupport.getVariable;
+import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactive;
 import static me.neilellis.dollar.script.OperatorPriority.*;
 import static me.neilellis.dollar.types.DollarFactory.fromValue;
 import static org.codehaus.jparsec.Parsers.*;
@@ -68,7 +71,7 @@ public class DollarParser {
     };
     private final ParserErrorHandler errorHandler = new ParserErrorHandler();
     private final ConcurrentHashMap<String, var> exports = new ConcurrentHashMap<>();
-    private File file;
+    private String file;
     private File sourceDir;
     private Parser<?> topLevelParser;
 
@@ -76,19 +79,19 @@ public class DollarParser {
         classLoader = DollarParser.class.getClassLoader();
     }
 
-    public DollarParser(ClassLoader classLoader, File dir, File mainFile) {
+    public DollarParser(ClassLoader classLoader, File dir) {
         this.classLoader = classLoader;
         this.sourceDir = dir;
-        this.file = mainFile;
     }
 
     private static Parser<var> dollarIdentifier(Scope scope, Parser.Reference ref, boolean pure) {
         return OP("$").next(
-                array(Terminals.Identifier.PARSER, OP("|").next(ref.lazy()).optional()).between(OP("{"), OP("}"))).map(
-                new Map<Object[], var>() {
-                    @Override public var map(Object[] objects) {
-                        return getVariable(pure, scope, objects[0].toString(), false, (var) objects[1]);
-                    }
+                array(Terminals.Identifier.PARSER, OP("|").next(ref.lazy()).optional()).between(OP("{"),
+                                                                                                OP("}"))).token().map(
+                t -> {
+                    Object[] objects = (Object[]) t.value();
+                    return getVariable(pure, scope, objects[0].toString(), false, (var) objects[1],
+                                       new SourceValue(scope, t));
                 });
     }
 
@@ -108,12 +111,12 @@ public class DollarParser {
     public <T> T inScope(boolean pure, String scopeName, Scope currentScope, Function<Scope, T> r) {
         Scope newScope;
         if (pure) {
-            newScope = new PureScope(currentScope, currentScope.getSource(), scopeName);
+            newScope = new PureScope(currentScope, currentScope.getSource(), scopeName, file);
         } else {
             if ((currentScope instanceof PureScope)) {
                 throw new IllegalStateException("trying to switch to an impure scope in a pure scope.");
             }
-            newScope = new ScriptScope(currentScope, currentScope.getSource(), scopeName);
+            newScope = new ScriptScope(currentScope, file, currentScope.getSource(), scopeName);
         }
         addScope(currentScope);
         addScope(newScope);
@@ -136,11 +139,13 @@ public class DollarParser {
 //    }
 
     public var parse(File file, boolean parallel) throws IOException {
+
+        this.file = file.getAbsolutePath();
         if (file.getName().endsWith(".md") || file.getName().endsWith(".markdown")) {
             return parseMarkdown(file);
         } else {
             String source = new String(Files.readAllBytes(file.toPath()));
-            return parse(new ScriptScope(this, source), source);
+            return parse(new ScriptScope(this, source, file.getName()), source);
         }
 
     }
@@ -171,21 +176,23 @@ public class DollarParser {
 
     public var parse(Scope scope, File file, boolean parallel) throws IOException {
         String source = new String(Files.readAllBytes(file.toPath()));
-        return parse(new ScriptScope(scope, source, file.getName()), source);
+        this.file = file.getAbsolutePath();
+        return parse(new ScriptScope(scope, file.getName(), source, file.getName()), source);
     }
 
     public var parse(Scope scope, InputStream in, boolean parallel) throws IOException {
         String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(scope, source, "(stream)"), source);
+        return parse(new ScriptScope(scope, "(stream)", source, "(stream)"), source);
     }
 
-    public var parse(InputStream in, boolean parallel) throws IOException {
+    public var parse(InputStream in, String file, boolean parallel) throws IOException {
+        this.file = file;
         String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(this, source), source);
+        return parse(new ScriptScope(this, source, file), source);
     }
 
     public var parse(String s, boolean parallel) throws IOException {
-        return parse(new ScriptScope(this, s), s);
+        return parse(new ScriptScope(this, s, "(string)"), s);
     }
 
     public var parseMarkdown(String source) throws IOException {
@@ -202,28 +209,13 @@ public class DollarParser {
     private class SourceMapper<T> implements Map<Token, T> {
         private final T value;
 
+
         public SourceMapper(T value) {this.value = value;}
 
         @Override
         public T map(Token token) {
             if (value instanceof Operator) {
-                ((Operator) value).setSource(() -> {
-                    int index = token.index();
-                    int length = token.length();
-                    String theSource = currentScope().getSource();
-                    int end = theSource.indexOf('\n', index + length);
-                    int start = index > 10 ? index - 10 : 0;
-                    String
-                            highlightedSource =
-                            "... " +
-                            theSource.substring(start, index) +
-                            " \u261E " +
-                            theSource.substring(index, index + length) +
-                            " \u261C " +
-                            theSource.substring(index + length, end) +
-                            " ...";
-                    return highlightedSource.replaceAll("\n", "\\\\n");
-                });
+                ((Operator) value).setSource(new SourceValue(currentScope(), token));
             }
             return value;
         }
@@ -273,7 +265,7 @@ public class DollarParser {
                 or =
                 (
                         or(parentParser, parentParser.between(OP_NL("{"), NL_OP("}")))
-                ).sepBy1(SEMICOLON_TERMINATOR).followedBy(SEMICOLON_TERMINATOR.optional()).map(
+                ).sepBy1(SEMICOLON_TERMINATOR).followedBy(SEMICOLON_TERMINATOR.optional()).token().map(
                         new BlockOperator(this, scope, pure));
         ref.set(or);
         return or;
@@ -290,24 +282,29 @@ public class DollarParser {
                       .or(or(unitValue(scope, pure), list(ref.lazy(), scope, pure), map(ref.lazy(), scope, pure),
                              pureDeclarationOperator(scope, ref, pure),
                              KEYWORD("pure").next(
-                                     expression(null, new PureScope(scope, scope.getSource(), "pure-scope"), true)),
+                                     expression(null, new PureScope(scope, scope.getSource(), "pure-scope", file),
+                                                true)),
                              moduleStatement(scope, ref), assertOperator(ref, scope, pure),
                              collectStatement(ref.lazy(), scope, pure),
-                             whenStatement(ref.lazy(), pure), everyStatement(ref.lazy(), scope, pure),
+                             whenStatement(ref.lazy(), pure, scope), everyStatement(ref.lazy(), scope, pure),
                              functionCall(ref, scope, pure),
                              java(scope), URL, DECIMAL_LITERAL, INTEGER_LITERAL,
                              STRING_LITERAL,
                              dollarIdentifier(scope, ref, pure), IDENTIFIER_KEYWORD,
-                             BUILTIN.map(new Map<var, var>() {
-                                 public var map(var var) {
-                                     return wrapReactiveUnary(scope, var,
-                                                              () -> Builtins.execute(var.S(), Arrays.asList(), scope,
-                                                                                     pure));
+                             BUILTIN.token().map(new Map<Token, var>() {
+                                 public var map(Token token) {
+                                     final var v = (var) token.value();
+                                     return wrapReactive(scope,
+                                                         () -> Builtins.execute(v.S(), Arrays.asList(), scope,
+                                                                                pure),
+                                                         new SourceValue(scope, token), v.S(), v
+                                     );
                                  }
                              }),
-                             identifier().followedBy(OP("(").not().peek()).map(new Map<var, var>() {
-                                 public var map(var var) {
-                                     return getVariable(pure, scope, var.S(), false, null);
+                             identifier().followedBy(OP("(").not().peek()).token().map(new Map<Token, var>() {
+                                 public var map(Token token) {
+                                     return getVariable(pure, scope, token.value().toString(), false, null,
+                                                        new SourceValue(scope, token));
                                  }
                              })))
                       .or(block(ref.lazy(), scope, pure).between(OP_NL("{"), NL_OP("}")));
@@ -319,41 +316,45 @@ public class DollarParser {
                              map(ref.lazy(), scope, pure),
                              assertOperator(ref, scope, pure),
                              collectStatement(ref.lazy(), scope, pure),
-                             whenStatement(ref.lazy(), pure),
+                             whenStatement(ref.lazy(), pure, scope),
                              functionCall(ref, scope, pure),
                              DECIMAL_LITERAL,
                              INTEGER_LITERAL,
                              STRING_LITERAL,
                              IDENTIFIER_KEYWORD,
-                             identifier().followedBy(OP("(").not().peek()).map(new Map<var, var>() {
-                                 public var map(var var) {
-                                     return getVariable(pure, scope, var.S(), false, null);
+                             identifier().followedBy(OP("(").not().peek()).token().map(new Map<Token, var>() {
+                                 public var map(Token token) {
+                                     return getVariable(pure, scope, token.value().toString(), false, null,
+                                                        new SourceValue(scope, token));
                                  }
                              }),
-                             BUILTIN.map(new Map<var, var>() {
-                                 public var map(var var) {
-                                     return wrapReactiveUnary(scope, var,
-                                                              () -> Builtins.execute(var.S(), Arrays.asList(), scope,
-                                                                                     pure));
+                             BUILTIN.token().map(new Map<Token, var>() {
+                                 public var map(Token token) {
+                                     final var v = (var) token.value();
+                                     return wrapReactive(scope,
+                                                         () -> Builtins.execute(v.S(), Arrays.asList(), scope,
+                                                                                pure),
+                                                         new SourceValue(scope, token), v.S(), v
+                                     );
                                  }
                              })))
                       .or(block(ref.lazy(), scope, pure).between(OP_NL("{"), NL_OP("}")));
         }
 
         OperatorTable<var> table = new OperatorTable<var>()
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(!lhs.equals(rhs)), scope), "!="), EQUIVALENCE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.equals(rhs)), scope), "=="), EQUIVALENCE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.isTrue() && rhs.isTrue()), scope), "&&", "and"),
+                .infixl(op(new BinaryOp("not-equal", (lhs, rhs) -> $(!lhs.equals(rhs)), scope), "!="), EQUIVALENCE_PRIORITY)
+                .infixl(op(new BinaryOp("equal", (lhs, rhs) -> $(lhs.equals(rhs)), scope), "=="), EQUIVALENCE_PRIORITY)
+                .infixl(op(new BinaryOp("and", (lhs, rhs) -> $(lhs.isTrue() && rhs.isTrue()), scope), "&&", "and"),
                         LOGICAL_AND_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.isTrue() || rhs.isTrue()), scope), "||", "or"),
+                .infixl(op(new BinaryOp("or", (lhs, rhs) -> $(lhs.isTrue() || rhs.isTrue()), scope), "||", "or"),
                         LOGICAL_OR_PRIORITY)
                 .postfix(pipeOperator(ref, scope, pure), PIPE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> fromValue(Range.closed(lhs, rhs)), scope), ".."), RANGE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.compareTo(rhs) < 0), scope), "<"), COMPARISON_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.compareTo(rhs) > 0), scope), ">"), EQUIVALENCE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.compareTo(rhs) <= 0), scope), "<="), EQUIVALENCE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.compareTo(rhs) >= 0), scope), ">="), EQUIVALENCE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> {
+                .infixl(op(new BinaryOp("range", (lhs, rhs) -> fromValue(new Range(lhs, rhs)), scope), ".."), RANGE_PRIORITY)
+                .infixl(op(new BinaryOp("less-than", (lhs, rhs) -> $(lhs.compareTo(rhs) < 0), scope), "<"), COMPARISON_PRIORITY)
+                .infixl(op(new BinaryOp("greater-than", (lhs, rhs) -> $(lhs.compareTo(rhs) > 0), scope), ">"), EQUIVALENCE_PRIORITY)
+                .infixl(op(new BinaryOp("less-than-equal", (lhs, rhs) -> $(lhs.compareTo(rhs) <= 0), scope), "<="), EQUIVALENCE_PRIORITY)
+                .infixl(op(new BinaryOp("greater-than-equal", (lhs, rhs) -> $(lhs.compareTo(rhs) >= 0), scope), ">="), EQUIVALENCE_PRIORITY)
+                .infixl(op(new BinaryOp("multiply", (lhs, rhs) -> {
                     final var lhsFix = lhs._fix(false);
                     if (lhsFix.isCollection()) {
                         var newValue = lhsFix._fixDeep(false);
@@ -364,25 +365,28 @@ public class DollarParser {
                         return newValue;
                     } else {return lhsFix.$multiply(rhs);}
                 }, scope), "*"), MULTIPLY_DIVIDE_PRIORITY)
-                .infixl(op(new BinaryOp(NumericAware::$divide, scope), "/"), MULTIPLY_DIVIDE_PRIORITY)
-                .infixl(op(new BinaryOp(NumericAware::$modulus, scope), "%"), MULTIPLY_DIVIDE_PRIORITY)
-                .infixl(op(new BinaryOp(var::$plus, scope), "+"), PLUS_MINUS_PRIORITY)
-                .infixl(op(new BinaryOp(var::$minus, scope), "-"), PLUS_MINUS_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> $(lhs.$S(), rhs), scope), ":"), 30)
+                .infixl(op(new BinaryOp("divide", NumericAware::$divide, scope), "/"), MULTIPLY_DIVIDE_PRIORITY)
+                .infixl(op(new BinaryOp("modulus", NumericAware::$modulus, scope), "%"), MULTIPLY_DIVIDE_PRIORITY)
+                .infixl(op(new BinaryOp("plus", var::$plus, scope), "+"), PLUS_MINUS_PRIORITY)
+                .infixl(op(new BinaryOp("minus", var::$minus, scope), "-"), PLUS_MINUS_PRIORITY)
+                .infixl(op(new BinaryOp("pair", (lhs, rhs) -> $(lhs.$S(), rhs), scope), ":"), 30)
 
-                .infixl(op(new BinaryOp((lhs, rhs) -> {
+                .infixl(op(new BinaryOp("assert-equal", (lhs, rhs) -> {
+
                     final var lhsFix = lhs._fixDeep(true);
                     final var rhsFix = rhs._fixDeep(true);
                     if (lhsFix.equals(rhsFix)) {
                         return $(true);
                     } else {
-                        throw new AssertionError(lhsFix.$S() + " != " + rhsFix.$S());
+                        throw new DollarScriptFailureException(ErrorType.ASSERTION, lhsFix.toDollarScript() +
+                                                                                    " != " +
+                                                                                    rhsFix.toDollarScript());
                     }
                 }, scope), "<=>"), LINE_PREFIX_PRIORITY)
-                .prefix(op(new UnaryOp(scope, i -> $(i.isTruthy())), "~", "truthy"), UNARY_PRIORITY)
-                .prefix(op(new UnaryOp(scope, var::$size), "#", "size"), UNARY_PRIORITY)
+                .prefix(op(new UnaryOp("truthy", scope, i -> $(i.isTruthy())), "~", "truthy"), UNARY_PRIORITY)
+                .prefix(op(new UnaryOp("size", scope, var::$size), "#", "size"), UNARY_PRIORITY)
                 .infixl(op(new BinaryOp(
-                        (lhs, rhs) -> {
+                        "else", (lhs, rhs) -> {
                             final var fixLhs = lhs._fixDeep();
                             if (fixLhs.isBoolean() && fixLhs.isFalse()) { return rhs._fix(2, false); } else {
                                 return fixLhs;
@@ -390,17 +394,17 @@ public class DollarParser {
                         },
                         scope), "-:", "else"), IF_PRIORITY)
                 .prefix(ifOperator(ref, scope), IF_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> rhs.$contains(lhs), scope), "€", "in"), IN_PRIORITY)
-                .prefix(op(new UnaryOp(scope, scope::addErrorHandler), "!?#*!", "error"), LINE_PREFIX_PRIORITY)
+                .infixl(op(new BinaryOp("in", (lhs, rhs) -> rhs.$contains(lhs), scope), "€", "in"), IN_PRIORITY)
+                .prefix(op(new UnaryOp("error", scope, scope::addErrorHandler), "!?#*!", "error"), LINE_PREFIX_PRIORITY)
                 .postfix(isOperator(scope), EQUIVALENCE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> {
+                .infixl(op(new BinaryOp("each", (lhs, rhs) -> {
                             return lhs.$each(i -> inScope(pure, "each", scope, newScope -> {
                                 newScope.setParameter("1", i);
                                 return rhs._fixDeep(false);
                             }));
                         }, scope), "*|*", "each"),
                         MULTIPLY_DIVIDE_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> {
+                .infixl(op(new BinaryOp("reduce", (lhs, rhs) -> {
                     return lhs.$list().stream().reduce((x, y) -> {
                         return inScope(pure, "reduce", scope, newScope -> {
                             newScope.setParameter("1", x);
@@ -410,25 +414,22 @@ public class DollarParser {
                     }).get();
                 }, scope), "*|", "reduce"), MULTIPLY_DIVIDE_PRIORITY)
                 .infixl(op(new ListenOperator(scope, pure), "?->", "causes"), CONTROL_FLOW_PRIORITY)
-                .infixl(op(new BinaryOp((lhs, rhs) -> DollarScriptSupport.wrapReactiveBinary(scope, lhs, rhs,
-                                                                                             () -> lhs.isTrue() ?
-                                                                                                   fix(rhs, false) :
-                                                                                                   $void()), scope),
-                           "?"), CONTROL_FLOW_PRIORITY)
-                .infixl(op(new BinaryOp(ControlFlowAware::$choose, scope), "?*", "choose"), CONTROL_FLOW_PRIORITY)
-                .infixl(op(new BinaryOp(var::$default, scope), "|", "default"), CONTROL_FLOW_PRIORITY)
+                .infixl(op(new BinaryOp("listen", (lhs, rhs) -> lhs.isTrue() ? fix(rhs, false) : $void(), scope), "?"),
+                        CONTROL_FLOW_PRIORITY)
+                .infixl(op(new BinaryOp("choose", ControlFlowAware::$choose, scope), "?*", "choose"), CONTROL_FLOW_PRIORITY)
+                .infixl(op(new BinaryOp("default", var::$default, scope), "|", "default"), CONTROL_FLOW_PRIORITY)
                 .postfix(memberOperator(ref, scope), MEMBER_PRIORITY)
-                .prefix(op(new UnaryOp(scope, v -> $(!v.isTrue())), "!", "not"), UNARY_PRIORITY)
-                .postfix(op(new UnaryOp(scope, var::$dec), "--"), INC_DEC_PRIORITY)
-                .postfix(op(new UnaryOp(scope, var::$inc), "++"), INC_DEC_PRIORITY)
-                .prefix(op(new UnaryOp(scope, var::$negate), "-"), UNARY_PRIORITY)
-                .prefix(op(new UnaryOp(scope, true, v -> v._fixDeep(true)), "|:|", "parallel"), SIGNAL_PRIORITY)
-                .prefix(op(new UnaryOp(scope, true, v -> v._fixDeep(false)), "|..|", "serial"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp("not", scope, v -> $(!v.isTrue())), "!", "not"), UNARY_PRIORITY)
+                .postfix(op(new UnaryOp("dec", scope, var::$dec), "--"), INC_DEC_PRIORITY)
+                .postfix(op(new UnaryOp("inc", scope, var::$inc), "++"), INC_DEC_PRIORITY)
+                .prefix(op(new UnaryOp("negate", scope, var::$negate), "-"), UNARY_PRIORITY)
+                .prefix(op(new UnaryOp(scope, true, v -> v._fixDeep(true), "parallel"), "|:|", "parallel"), SIGNAL_PRIORITY)
+                .prefix(op(new UnaryOp(scope, true, v -> v._fixDeep(false), "serial"), "|..|", "serial"), SIGNAL_PRIORITY)
                 .prefix(forOperator(scope, ref, pure), UNARY_PRIORITY)
                 .prefix(whileOperator(scope, ref, pure), UNARY_PRIORITY)
                 .postfix(subscriptOperator(ref, scope), MEMBER_PRIORITY)
                 .postfix(parameterOperator(ref, scope, pure), MEMBER_PRIORITY)
-                .prefix(op(new UnaryOp(scope, true, v -> v._fixDeep(false)), "&", "fix"), 1000)
+                .prefix(op(new UnaryOp(scope, true, v -> v._fixDeep(false), "fix"), "&", "fix"), 1000)
                 .postfix(castOperator(scope), UNARY_PRIORITY)
                 .prefix(variableUsageOperator(scope, pure), 1000)
                 .prefix(assignmentOperator(scope, ref, pure), ASSIGNMENT_PRIORITY)
@@ -438,68 +439,62 @@ public class DollarParser {
             table = table.prefix(op(new UnaryOp(scope, false, i -> {
                 i.out();
                 return $void();
-            }), "@@", "print"), LINE_PREFIX_PRIORITY)
+            }, "print"), "@@", "print"), LINE_PREFIX_PRIORITY)
                          .prefix(op(new UnaryOp(scope, false, i -> {
                              i.debug();
                              return $void();
-                         }), "!!", "debug"), LINE_PREFIX_PRIORITY)
+                         }, "debug"), "!!", "debug"), LINE_PREFIX_PRIORITY)
                          .prefix(op(new UnaryOp(scope, false, i -> {
                              i.err();
                              return $void();
-                         }), "??", "err"), LINE_PREFIX_PRIORITY)
+                         }, "err"), "??", "err"), LINE_PREFIX_PRIORITY)
                          .prefix(writeOperator(ref, scope), OUTPUT_PRIORITY)
-                         .prefix(readOperator(), OUTPUT_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, var::$stop), "(!)"), SIGNAL_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, var::$start), "(>)"), SIGNAL_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, var::$pause), "(=)"), SIGNAL_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, var::$unpause), "(~)"), SIGNAL_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, var::$destroy), "(-)"), SIGNAL_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, var::$create), "(+)"), SIGNAL_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, var::$state), "(?)"), SIGNAL_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, v -> DollarFactory.fromFuture(
+                         .prefix(readOperator(scope), OUTPUT_PRIORITY)
+                         .prefix(op(new UnaryOp("stop", scope, var::$stop), "(!)"), SIGNAL_PRIORITY)
+                         .prefix(op(new UnaryOp("start", scope, var::$start), "(>)"), SIGNAL_PRIORITY)
+                         .prefix(op(new UnaryOp("pause", scope, var::$pause), "(=)"), SIGNAL_PRIORITY)
+                         .prefix(op(new UnaryOp("unpause", scope, var::$unpause), "(~)"), SIGNAL_PRIORITY)
+                         .prefix(op(new UnaryOp("destroy", scope, var::$destroy), "(-)"), SIGNAL_PRIORITY)
+                         .prefix(op(new UnaryOp("create", scope, var::$create), "(+)"), SIGNAL_PRIORITY)
+                         .prefix(op(new UnaryOp("state", scope, var::$state), "(?)"), SIGNAL_PRIORITY)
+                         .prefix(op(new UnaryOp("fork", scope, v -> DollarFactory.fromFuture(
                                          Execution.executeInBackground(i -> fix(v, false)))), "-<", "fork"),
                                  SIGNAL_PRIORITY)
-                         .infixl(op(new BinaryOp((lhs, rhs) -> rhs.$publish(lhs), scope), "*>",
+                         .infixl(op(new BinaryOp("fork", (lhs, rhs) -> rhs.$publish(lhs), scope), "*>",
                                     "publish"), OUTPUT_PRIORITY)
                          .infixl(op(new SubscribeOperator(scope, pure), "<*", "subscribe"), OUTPUT_PRIORITY)
-                         .infixl(op(new BinaryOp((lhs, rhs) -> rhs.$write(lhs), scope), ">>"), OUTPUT_PRIORITY)
+                         .infixl(op(new BinaryOp("write-simple", (lhs, rhs) -> rhs.$write(lhs), scope), ">>"), OUTPUT_PRIORITY)
                          .prefix(op(new SimpleReadOperator(scope), "<<"), OUTPUT_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, URIAware::$drain), "<--", "drain"), OUTPUT_PRIORITY)
-                         .prefix(op(new UnaryOp(scope, URIAware::$all), "<@", "all"), OUTPUT_PRIORITY);
+                         .prefix(op(new UnaryOp("drain", scope, URIAware::$drain), "<--", "drain"), OUTPUT_PRIORITY)
+                         .prefix(op(new UnaryOp("all", scope, URIAware::$all), "<@", "all"), OUTPUT_PRIORITY);
 
         }
         Parser<var> parser = table.build(main);
         ref.set(parser);
-        return parser.token().map(new Map<Token, var>() {
-            @Override public var map(Token token) {
-                final var value = (var) token.value();
-                if (value.getMetaAttribute("__parse_start") == null) {
-                    value.setMetaAttribute("__parse_start", String.valueOf(token.index()));
-                    value.setMetaAttribute("__parse_length", String.valueOf(token.length()));
-                }
-                return value;
-            }
-        });
+        return parser;
 
     }
 
+
     private Parser<var> unitValue(Scope scope, boolean pure) {
-        return array(DECIMAL_LITERAL.or(INTEGER_LITERAL), BUILTIN).map(new UnitOperator(this, scope, pure));
+        return array(DECIMAL_LITERAL.or(INTEGER_LITERAL), BUILTIN).token().map(new UnitOperator(this, scope, pure));
     }
 
     private Parser<var> list(Parser<var> expression, Scope scope, boolean pure) {
         return OP_NL("[")
                 .next(expression.sepBy(COMMA_OR_NEWLINE_TERMINATOR))
-                .followedBy(NL_OP("]")).map(
+                .followedBy(COMMA_OR_NEWLINE_TERMINATOR.optional())
+                .followedBy(NL_OP("]")).token().map(
                         new ListOperator(this, scope, pure));
     }
 
     private Parser<var> map(Parser<var> expression, Scope scope, boolean pure) {
         Parser<List<var>>
                 sequence =
-                OP_NL("{").next(expression.sepBy1(COMMA_TERMINATOR))
+                OP_NL("{").next(expression.sepBy(COMMA_TERMINATOR))
+                          .followedBy(COMMA_TERMINATOR.optional())
                           .followedBy(NL_OP("}"));
-        return sequence.map(new MapOperator(this, scope, pure));
+        return sequence.token().map(new MapOperator(this, scope, pure));
     }
 
     private Parser<var> moduleStatement(Scope scope, Parser.Reference<var> ref) {
@@ -521,7 +516,7 @@ public class DollarParser {
     private Parser<var> assertOperator(Parser.Reference<var> ref, Scope scope, boolean pure) {
         return OP(".:").next(
                 or(array(STRING_LITERAL.followedBy(OP(":")), ref.lazy()), array(OP(":").optional(), ref.lazy()))
-                        .withSource()
+                        .token()
                         .map(new AssertOperator(scope)));
     }
 
@@ -532,9 +527,9 @@ public class DollarParser {
         return sequence.map(new CollectOperator(this, scope, pure));
     }
 
-    private Parser<var> whenStatement(Parser<var> expression, boolean pure) {
+    private Parser<var> whenStatement(Parser<var> expression, boolean pure, Scope scope) {
         Parser<Object[]> sequence = KEYWORD_NL("when").next(array(expression, expression));
-        return sequence.map(new WhenOperator());
+        return sequence.token().map(new WhenOperator(scope));
     }
 
     private Parser<var> everyStatement(Parser<var> expression, Scope scope, boolean pure) {
@@ -604,42 +599,47 @@ public class DollarParser {
     private Parser<Map<? super var, ? extends var>> writeOperator(Parser.Reference<var> ref, Scope scope) {
         return array(KEYWORD("write"), ref.lazy(), KEYWORD("block").optional(), KEYWORD("mutate").optional())
                 .followedBy(KEYWORD("to").optional())
-                .map(new WriteOperator(scope));
+                .token().map(new WriteOperator(scope));
     }
 
-    private Parser<Map<? super var, ? extends var>> readOperator() {
+    private Parser<Map<? super var, ? extends var>> readOperator(Scope scope) {
         return array(KEYWORD("read"), KEYWORD("block").optional(), KEYWORD("mutate").optional())
-                .followedBy(KEYWORD("from").optional())
-                .map(new ReadOperator());
+                .followedBy(KEYWORD("from").optional()).
+                        token().map(new ReadOperator(scope));
     }
 
     private Parser<Map<var, var>> ifOperator(Parser.Reference<var> ref, Scope scope) {
-        return KEYWORD_NL("if").next(ref.lazy()).map(new IfOperator(scope));
+        return KEYWORD_NL("if").next(ref.lazy()).token().map(new IfOperator(scope));
     }
 
     private Parser<Map<? super var, ? extends var>> isOperator(Scope scope) {
-        return KEYWORD("is").next(IDENTIFIER.sepBy(OP(","))).map(new IsOperator(scope));
+        return KEYWORD("is").next(IDENTIFIER.sepBy(OP(","))).token().map(new IsOperator(scope));
     }
 
     private Parser<Map<? super var, ? extends var>> memberOperator(Parser.Reference<var> ref, Scope scope) {
         return OP(".").followedBy(OP(".").not())
                       .next(ref.lazy().between(OP("("), OP(")")).or(IDENTIFIER))
-                      .map(rhs -> lhs -> wrapReactiveBinary(scope, lhs, rhs, () -> lhs.$(rhs.$S())));
+                      .token().map(
+                        (Token rhs) -> lhs -> wrapReactive(scope, () -> lhs.$(rhs.value().toString()),
+                                                           new SourceValue(scope, rhs), "."+rhs.toString(), lhs, (var)
+                                        rhs.value()
+                        ));
     }
 
     private Parser<Map<? super var, ? extends var>> forOperator(final Scope scope, Parser.Reference<var> ref,
                                                                 boolean pure) {
-        return array(KEYWORD("for"), IDENTIFIER, KEYWORD("in"), ref.lazy()).map(new ForOperator(this, scope, pure));
+        return array(KEYWORD("for"), IDENTIFIER, KEYWORD("in"), ref.lazy()).token().map(
+                new ForOperator(this, scope, pure));
     }
 
     private Parser<Map<? super var, ? extends var>> whileOperator(final Scope scope, Parser.Reference<var> ref,
                                                                   boolean pure) {
-        return KEYWORD("while").next(ref.lazy()).map(new WhileOperator(this, scope, pure));
+        return KEYWORD("while").next(ref.lazy()).token().map(new WhileOperator(this, scope, pure));
     }
 
     private Parser<Map<? super var, ? extends var>> subscriptOperator(Parser.Reference<var> ref, Scope scope) {
         return OP("[").next(array(ref.lazy().followedBy(OP("]")), OP("=").next(ref.lazy()).optional()))
-                      .map(new SubscriptOperator(scope));
+                      .token().map(new SubscriptOperator(scope));
     }
 
     private Parser<Map<? super var, ? extends var>> parameterOperator(Parser.Reference<var> ref, Scope scope,
@@ -657,19 +657,22 @@ public class DollarParser {
                                 //no, just use the value
                                 return (var) objects[1];
                             }
-                        }).sepBy(COMMA_TERMINATOR)).followedBy(OP(")")).map(
+                        }).sepBy(COMMA_TERMINATOR)).followedBy(OP(")")).token().map(
                 new ParameterOperator(this, scope, pure));
     }
 
     private Parser<Map<? super var, ? extends var>> variableUsageOperator(Scope scope, boolean pure) {
-        return or(OP("$").followedBy(OP("(").peek())
+        return or(OP("$").followedBy(OP("(").peek()).token()
                          .map(new VariableUsageOperator(scope, pure)),
-                  OP("$").followedBy(INTEGER_LITERAL.peek()).map(
-                          lhs -> rhs -> getVariable(pure, scope, rhs.toString(), true, null)));
+                  OP("$").followedBy(INTEGER_LITERAL.peek()).token().map(
+                          (Token lhs) -> {
+                              return rhs -> getVariable(pure, scope, rhs.toString(), true, null,
+                                                        new SourceValue(scope, lhs));
+                          }));
     }
 
     private Parser<Map<? super var, ? extends var>> castOperator(Scope scope) {
-        return KEYWORD("as").next(IDENTIFIER).map(new CastOperator(scope));
+        return KEYWORD("as").next(IDENTIFIER).token().map(new CastOperator(scope));
     }
 
     private Parser<Map<? super var, ? extends var>> assignmentOperator(final Scope scope,
@@ -679,7 +682,7 @@ public class DollarParser {
                      ref.lazy().between(OP("("), OP(")")).optional(),
                      OP("$").next(ref.lazy().between(OP("("), OP(")")))
                             .or(IDENTIFIER).or(BUILTIN),
-                     or(OP("="), OP("?="), OP("*="))).map(new AssignmentOperator(scope, false, pure));
+                     or(OP("="), OP("?="), OP("*="))).token().map(new AssignmentOperator(scope, false, pure));
     }
 
 
@@ -689,7 +692,7 @@ public class DollarParser {
         return array(KEYWORD("export").optional(), IDENTIFIER.between(OP("<"), OP(">")).optional(),
                      OP("$").next(ref.lazy().between(OP("("), OP(")")))
                             .or(IDENTIFIER),
-                     OP(":=")).map(new DeclarationOperator(scope, pure));
+                     OP(":=")).token().map(new DeclarationOperator(scope, pure));
     }
 
     private Parser<var> pureDeclarationOperator(final Scope scope,
@@ -698,7 +701,7 @@ public class DollarParser {
         return KEYWORD("pure").next(array(KEYWORD("export").optional(), IDENTIFIER.between(OP("<"), OP(">")).optional(),
                                           OP("$").next(ref.lazy().between(OP("("), OP(")")))
                                                  .or(IDENTIFIER),
-                                          OP(":="), expression(null, scope, true)).map(
+                                          OP(":="), expression(null, scope, true)).token().map(
                 new DeclarationOperator(scope, true))).map(new Map<Map<? super var, ? extends var>, var>() {
             @Override public var map(Map<? super var, ? extends var> map) {
                 return map.map(null);

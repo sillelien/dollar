@@ -17,20 +17,22 @@
 package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.Type;
-import me.neilellis.dollar.script.DollarParserException;
-import me.neilellis.dollar.script.DollarScriptSupport;
-import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.TypePrediction;
+import me.neilellis.dollar.script.*;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
-import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
+
+import java.util.Arrays;
+import java.util.concurrent.Callable;
 
 import static me.neilellis.dollar.DollarStatic.*;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class AssignmentOperator implements Map<Object[], Map<? super var, ? extends var>> {
+public class AssignmentOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
     private boolean pure;
 
@@ -39,16 +41,26 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
         this.pure = pure;
     }
 
-    public Map<? super var, ? extends var> map(Object[] objects) {
+    public Map<? super var, ? extends var> map(Token token) {
+        Type type;
+        Object[] objects = (Object[]) token.value();
         var constraint;
+        final String constraintSource;
+        if (objects[3] instanceof var) {
+            constraintSource = ((var) objects[3])._source().getTokenSource();
+        } else {
+            constraintSource = null;
+        }
+        final SourceValue source = new SourceValue(scope, token);
         if (objects[2] != null) {
-            final Type type = Type.valueOf(objects[2].toString().toUpperCase());
-            constraint = DollarFactory.fromLambda(i -> {
+            type = Type.valueOf(objects[2].toString().toUpperCase());
+            constraint = DollarScriptSupport.wrapLambda(source, scope, i -> {
                 return $(scope.getDollarParser().currentScope().getParameter("it")
                               .is(type) &&
                          (objects[3] == null || ((var) objects[3]).isTrue()));
-            });
+            }, Arrays.asList(), "constraint");
         } else {
+            type = null;
             constraint = (var) objects[3];
 
         }
@@ -65,7 +77,23 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
         final String varName = objects[4].toString();
 
         return new Map<var, var>() {
+
             public var map(var rhs) {
+                final TypePrediction prediction = rhs._predictType();
+                if (type != null && prediction != null) {
+                    final Double probability = prediction.probability(type);
+                    if (probability < 0.5 && !prediction.empty()) {
+                        System.err.println("Type assertion may fail, expected " +
+                                           type +
+                                           " most likely type is " +
+                                           prediction.probableType() +
+                                           " (" +
+                                           (int) (prediction.probability(prediction.probableType()) * 100) +
+                                           "%) at " +
+                                           source.getSourceMessage());
+                    }
+                }
+
                 final String operator = objects[5].toString();
 
                 if (operator.equals("?=") || operator.equals("*=")) {
@@ -76,27 +104,32 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
                         useConstraint = scope.getConstraint(varName);
                     }
                     if (operator.equals("?=")) {
-                        scope.set(varName, $void(), false, null, isVolatile, false, pure);
-                        return DollarScriptSupport.wrapUnary(scope, () -> $($(rhs.$listen(
+                        scope.set(varName, $void(), false, null, constraintSource, isVolatile, false, pure);
+                        Callable<var> callable = () -> $($(rhs.$listen(
                                 i -> scope.set(varName, fix(i, false), false,
-                                               useConstraint, isVolatile, false, pure)))));
+                                               useConstraint, constraintSource, isVolatile, false, pure))));
+                        return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(rhs),
+                                                            "listen-assign");
 
                     } else if (operator.equals("*=")) {
-                        scope.set(varName, $void(), false, null, true, true, pure);
-                        return DollarScriptSupport.wrapUnary(scope, () -> $(rhs.$subscribe(
+                        scope.set(varName, $void(), false, null, constraintSource, true, true, pure);
+                        Callable<var> callable = () -> $(rhs.$subscribe(
                                 i -> scope.set(varName, fix(i, false), false,
-                                               useConstraint, true, false, pure))));
+                                               useConstraint, constraintSource, true, false, pure)));
+                        return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(rhs),
+                                                            "subscribe-assign");
                     }
                 }
-                return assign(rhs, objects, constraint, constant, isVolatile);
+                return assign(rhs, objects, constraint, constant, isVolatile, source, constraintSource);
             }
         };
     }
 
-    private var assign(var rhs, Object[] objects, var constraint, boolean constant, boolean isVolatile) {
+    private var assign(var rhs, Object[] objects, var constraint, boolean constant, boolean isVolatile, Source source,
+                       String constraintSource) {
 
         final String varName = objects[4].toString();
-        return DollarScriptSupport.wrapBinary(scope, () -> {
+        Callable<var> callable = () -> {
             var useConstraint;
             if (constraint != null) {
                 useConstraint = constraint;
@@ -109,6 +142,8 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
                     newScope.setParameter("it", rhsFixed);
                     newScope.setParameter("previous", scope.get(varName));
                     if (useConstraint.isFalse()) {
+//                        System.out.println(rhsFixed.toDollarScript());
+//                        System.out.println(useConstraint.isFalse());
                         newScope.handleError(new DollarScriptException(
                                 "Constraint failed for variable " + varName + ""));
                     }
@@ -117,8 +152,9 @@ public class AssignmentOperator implements Map<Object[], Map<? super var, ? exte
                     scope.getDollarParser().export(varName, rhsFixed);
                 }
                 return scope.set(varName, rhsFixed, constant,
-                                 constraint, isVolatile, constant, pure);
+                                 constraint, constraintSource, isVolatile, constant, pure);
             });
-        });
+        };
+        return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(rhs), "assignment");
     }
 }

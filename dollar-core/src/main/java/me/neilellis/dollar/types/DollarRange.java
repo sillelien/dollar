@@ -17,12 +17,11 @@
 package me.neilellis.dollar.types;
 
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Range;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Type;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
-import me.neilellis.dollar.json.JsonObject;
+import me.neilellis.dollar.collections.Range;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,22 +29,21 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static me.neilellis.dollar.DollarStatic.fix;
+import java.util.Objects;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarRange extends AbstractDollar {
 
-    private final Range<var> range;
+    private final Range range;
 
-    public DollarRange(@NotNull List<Throwable> errors, Object start, Object finish) {
+    public DollarRange(@NotNull ImmutableList<Throwable> errors, Object start, Object finish) {
         super(errors);
-        range = Range.closed(DollarStatic.$(start), DollarStatic.$(finish));
+        range = new Range(DollarStatic.$(start), DollarStatic.$(finish));
     }
 
-    public DollarRange(@NotNull List<Throwable> errors, Range range) {
+    public DollarRange(@NotNull ImmutableList<Throwable> errors, Range range) {
         super(errors);
         this.range = range;
     }
@@ -53,55 +51,109 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $abs() {
-        return DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
+        return DollarFactory.fromValue(new Range(DollarFactory.fromValue(range.lowerEndpoint().$abs()),
+                                                 DollarFactory.fromValue(range.upperEndpoint().$abs())),
+                                       errors());
     }
 
     @NotNull
     @Override
-    public var $minus(@NotNull var v) {
-        return DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
+    public var $minus(var rhs) {
+        var rhsFix = rhs._fixDeep();
+        return DollarFactory.fromValue(new Range(DollarFactory.fromValue(range.lowerEndpoint().$minus(rhsFix)),
+                                                 DollarFactory.fromValue(range.upperEndpoint().$minus(rhsFix))),
+                                       errors(), rhsFix.errors());
     }
 
     @NotNull
     @Override
-    public var $divide(@NotNull var v) {
-        return DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION); //TODO
-    }
+    public var $plus(var rhs) {
+        var rhsFix = rhs._fixDeep();
 
-    @NotNull
-    @Override
-    public var $plus(var v) {
-        return DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
-    }
+        return DollarFactory.fromValue(new Range(DollarFactory.fromValue(range.lowerEndpoint().$plus(rhsFix)),
+                                                 DollarFactory.fromValue(range.upperEndpoint().$plus(rhsFix))),
+                                       errors(), rhsFix.errors());
 
-    @NotNull
-    @Override
-    public var $modulus(@NotNull var v) {
-        return DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION); //TODO
-    }
-
-    @NotNull
-    @Override
-    public var $multiply(@NotNull var v) {
-        return DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION); //TODO
     }
 
     @NotNull
     @Override
     public var $negate() {
-        return DollarFactory.fromValue(Range.closed(range.upperEndpoint(), range.lowerEndpoint()), errors());
+        return DollarFactory.fromValue(new Range(range.upperEndpoint(), range.lowerEndpoint()), errors());
     }
 
     @NotNull
     @Override
-    public var $set(@NotNull var key, Object value) {
-        return DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
+    public var $divide(@NotNull var rhs) {
+        var rhsFix = rhs._fixDeep();
+        return DollarFactory.fromValue(new Range(DollarFactory.fromValue(range.lowerEndpoint().$divide(rhsFix)),
+                                                 DollarFactory.fromValue(range.upperEndpoint().$divide(rhsFix))),
+                                       errors(), rhsFix.errors());
     }
 
     @NotNull
     @Override
-    public Range<var> $() {
-        return range;
+    public var $modulus(@NotNull var rhs) {
+        var rhsFix = rhs._fixDeep();
+        return DollarFactory.fromValue(new Range(DollarFactory.fromValue(range.lowerEndpoint().$modulus(rhsFix)),
+                                                 DollarFactory.fromValue(range.upperEndpoint().$modulus(rhsFix))),
+                                       errors(), rhsFix.errors());
+    }
+
+    @NotNull
+    @Override
+    public var $multiply(@NotNull var rhs) {
+        var rhsFix = rhs._fixDeep();
+        return DollarFactory.fromValue(new Range(DollarFactory.fromValue(range.lowerEndpoint().$multiply(rhsFix)),
+                                                 DollarFactory.fromValue(range.upperEndpoint().$multiply(rhsFix))),
+                                       errors(), rhsFix.errors());
+    }
+
+    @Override
+    public Integer I() {
+        return diff().I();
+    }
+
+    public var diff() {
+        if (range.upperEndpoint().equals(range.lowerEndpoint())) {
+            return DollarFactory.fromValue(1, errors());
+        }
+        if (range.upperEndpoint().isInteger()) {
+            final long diff = range.upperEndpoint().L() - range.lowerEndpoint().L();
+            return DollarFactory.fromValue(diff + ((long) Math.signum(diff)), errors());
+        }
+        if (range.upperEndpoint().isDecimal()) {
+            final double diff = range.upperEndpoint().D() - range.lowerEndpoint().D();
+            return DollarFactory.fromValue(diff + Math.signum(diff), errors());
+        }
+        int count = 0;
+        var start = range.lowerEndpoint();
+        var finish = range.upperEndpoint();
+        if (start.compareTo(finish) < 1) {
+            for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
+                count++;
+            }
+        } else {
+            for (var i = start; i.compareTo(finish) <= 0; i = i.$dec()) {
+                count--;
+            }
+        }
+        return DollarFactory.fromValue(count, errors());
+
+    }
+
+
+    @NotNull
+    @Override
+    public var $get(@NotNull var key) {
+        if (key.isInteger()) {
+            return DollarFactory.fromValue($list().get(key.I()));
+        }
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_RANGE_OPERATION);
+    }
+
+    @NotNull @Override public var $append(@NotNull var value) {
+        return $plus(value);
     }
 
     @NotNull
@@ -109,6 +161,12 @@ public class DollarRange extends AbstractDollar {
     public var $containsValue(@NotNull var value) {
         return DollarStatic.$(range.lowerEndpoint().compareTo(DollarStatic.$(value)) <= 0 &&
                               range.upperEndpoint().compareTo(DollarStatic.$(value)) >= 0);
+    }
+
+    @NotNull
+    @Override
+    public String S() {
+        return String.format("%s..%s", range.lowerEndpoint(), range.upperEndpoint());
     }
 
     @NotNull @Override
@@ -119,16 +177,11 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $size() {
-        return DollarStatic.$($list().size());
+        return diff();
     }
 
-    @NotNull
-    @Override
-    public var $get(@NotNull var key) {
-        if (key.isInteger()) {
-            return DollarFactory.fromValue($list().get(key.I()));
-        }
-        return DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
+    @NotNull @Override public var $prepend(@NotNull var value) {
+        return value.$append(value);
     }
 
     @NotNull
@@ -138,14 +191,83 @@ public class DollarRange extends AbstractDollar {
 
     }
 
+    @Override
+    public var $as(Type type) {
+        if (type.equals(Type.LIST)) {
+            return DollarStatic.$($list());
+        } else if (type.equals(Type.MAP)) {
+            return DollarStatic.$(toMap());
+        } else if (type.equals(Type.STRING)) {
+            return DollarFactory.fromStringValue(S());
+        } else if (type.equals(Type.VOID)) {
+            return DollarStatic.$void();
+        } else {
+            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
+        }
+    }
+
+    @NotNull
+    @Override
+    public var $set(@NotNull var key, Object value) {
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_RANGE_OPERATION);
+    }
+
     @NotNull
     @Override
     public var remove(Object value) {
-        return DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull @Override public var $remove(var value) {
-        return DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_RANGE_OPERATION);
+    }
+
+    @Override
+    public Long L() {
+        return diff().L();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> $list() {
+        List<var> values = new ArrayList<>();
+        var start = range.lowerEndpoint();
+        var finish = range.upperEndpoint();
+        if (start.compareTo(finish) < 1) {
+            for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
+                values.add(i);
+            }
+        } else {
+            for (var i = start; i.compareTo(finish) <= 0; i = i.$dec()) {
+                values.add(i);
+            }
+        }
+        return ImmutableList.copyOf(values);
+    }
+
+    @Override
+    public Double D() {
+        return diff().D();
+    }
+
+    @Override
+    public int hashCode() {
+        return range.hashCode();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof var) {
+            var unwrapped = ((var) obj)._fixDeep()._unwrap();
+            if (unwrapped instanceof DollarRange) {
+                return range.equals(((DollarRange) unwrapped).range);
+            }
+        }
+        return false;
+
     }
 
     @Override
@@ -162,19 +284,13 @@ public class DollarRange extends AbstractDollar {
         throw new IllegalStateException();
     }
 
+    @Override public Type $type() {
+        return Type.RANGE;
+    }
+
     @Override
     public boolean isBoolean() {
         return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean isTruthy() {
-        return !range.isEmpty();
     }
 
     @Override
@@ -187,85 +303,49 @@ public class DollarRange extends AbstractDollar {
         return true;
     }
 
-    @NotNull
     @Override
-    public ImmutableMap<String, var> $map() {
-        DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
-        return ImmutableMap.of();
-    }
-
-    @Override
-    public boolean isList() {
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return range.hashCode();
-    }
-
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (obj instanceof var) {
-            var unwrapped = fix(((var) obj), false)._unwrap();
-            if (unwrapped instanceof DollarRange) {
-                return range.equals(((DollarRange) unwrapped).range);
-            }
-            if (unwrapped instanceof DollarList) {
-                return unwrapped.$list().equals($list());
-            }
-        }
+    public boolean isTrue() {
         return false;
-
     }
 
+    @Override
+    public boolean isTruthy() {
+        return !range.isEmpty();
+    }
+
+    @NotNull @Override public String toDollarScript() {
+        return "((" + range.lowerEndpoint().toDollarScript() + ")..(" + range.upperEndpoint().toDollarScript() + "))";
+    }
 
     @NotNull
     @Override
-    public String S() {
-        return String.format("%s..%s", range.lowerEndpoint(), range.upperEndpoint());
+    public Range toJavaObject() {
+        return range;
     }
 
-
-
-
-    @Override
-    public var $as(Type type) {
-        switch (type) {
-            case LIST:
-                return DollarStatic.$($list());
-            case MAP:
-                return DollarStatic.$(toMap());
-            case STRING:
-                return DollarFactory.fromStringValue(S());
-            case VOID:
-                return DollarStatic.$void();
-            default:
-                return DollarFactory.failure(FailureType.INVALID_CAST);
-        }
+    @Override public boolean isRange() {
+        return true;
     }
 
 
     @NotNull @Override
-    public Integer I() {
+    public Map<String, Object> toMap() {
         return null;
     }
 
 
     @NotNull
     @Override
-    public Number N() {
-        return range.upperEndpoint().L() - range.lowerEndpoint().L();
+    public ImmutableMap<var, var> $map() {
+        DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_RANGE_OPERATION);
+        return ImmutableMap.of();
     }
 
 
     @Override
     public boolean is(@NotNull Type... types) {
         for (Type type : types) {
-            if (type == Type.RANGE) {
+            if (Objects.equals(type, Type.RANGE)) {
                 return true;
             }
         }
@@ -273,58 +353,26 @@ public class DollarRange extends AbstractDollar {
     }
 
 
-
-
-    @NotNull
-    @Override
-    public ImmutableList<var> $list() {
-        List<var> values = new ArrayList<>();
-        var start = range.lowerEndpoint();
-        var finish = range.upperEndpoint();
-        for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
-            values.add(i);
-        }
-        return ImmutableList.copyOf(values);
+    @Override public boolean isCollection() {
+        return true;
     }
+
+
+    @Override
+    public ImmutableList<String> strings() {
+        DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_RANGE_OPERATION);
+        return null;
+    }
+
 
     @NotNull @Override public ImmutableList<Object> toList() {
         List<Object> values = new ArrayList<>();
         var start = range.lowerEndpoint();
         var finish = range.upperEndpoint();
         for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
-            values.add(i.$());
+            values.add(i.toJavaObject());
         }
         return ImmutableList.copyOf(values);
-    }
-
-
-    @Override
-    public boolean isVoid() {
-        return false;
-    }
-
-    @Override public boolean isCollection() {
-        return true;
-    }
-
-    @NotNull
-    @Override
-    public JsonObject json() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.putArray("value", jsonArray());
-        return jsonObject;
-
-    }
-
-    @Override
-    public ImmutableList<String> strings() {
-        DollarFactory.failure(FailureType.INVALID_RANGE_OPERATION);
-        return null;
-    }
-
-    @NotNull @Override
-    public Map<String, Object> toMap() {
-        return null;
     }
 
 }

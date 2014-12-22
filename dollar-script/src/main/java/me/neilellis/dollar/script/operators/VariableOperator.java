@@ -32,14 +32,14 @@ public class VariableOperator extends UnaryOp {
 
 
     public VariableOperator(Scope scope) {
-        super(scope, null);
+        super("variable-operator", scope, null);
     }
 
 
     @Override
     public var map(var from) {
 
-        var lambda = DollarScriptSupport.wrapReactiveUnary(scope, from, () -> {
+        var lambda = DollarScriptSupport.wrapReactive(scope, () -> {
             String key = from.$S();
             boolean numeric = from.isNumber();
 
@@ -61,7 +61,7 @@ public class VariableOperator extends UnaryOp {
                 return scope.getParameter(key);
             }
             return scope.get(key);
-        });
+        }, source, operation, from);
         scope.listen(from.$S(), lambda);
         lambda.setMetaAttribute("variable", from.$S());
         return lambda;

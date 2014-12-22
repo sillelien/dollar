@@ -18,15 +18,20 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.SourceValue;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
+
+import java.util.Arrays;
+import java.util.concurrent.Callable;
 
 import static me.neilellis.dollar.DollarStatic.$void;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class VariableUsageOperator implements Map<Object, Map<? super var, ? extends var>> {
+public class VariableUsageOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
     private boolean pure;
 
@@ -35,9 +40,15 @@ public class VariableUsageOperator implements Map<Object, Map<? super var, ? ext
         this.pure = pure;
     }
 
-    @Override public Map<? super var, ? extends var> map(Object lhs) {
-        return rhs -> DollarScriptSupport.wrapUnary(scope, () ->
-                DollarScriptSupport.getVariable(pure, scope, rhs.toString(), false,
-                                                $void()));
+    @Override public Map<? super var, ? extends var> map(Token token) {
+
+        final SourceValue source = new SourceValue(scope, token);
+        return rhs -> {
+            Callable<var> callable = () -> {
+                return DollarScriptSupport.getVariable(pure, scope, rhs.toString(), false, $void(), source);
+            };
+            return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(rhs),
+                                                "variable-usage--" + rhs._source().getTokenSource());
+        };
     }
 }

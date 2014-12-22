@@ -68,7 +68,7 @@ public class Execution {
         return backgroundExecutor.submit(() -> pipe.pipe($void()));
     }
 
-    public static void schedule(long millis, Runnable runnable) {
-        scheduledExecutor.scheduleAtFixedRate(runnable, millis, millis, TimeUnit.MILLISECONDS);
+    public static ScheduledFuture<?> schedule(long millis, Runnable runnable) {
+        return scheduledExecutor.scheduleAtFixedRate(runnable, millis, millis, TimeUnit.MILLISECONDS);
     }
 }

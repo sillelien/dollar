@@ -37,27 +37,6 @@ public class ClassDescriptorSourceScript extends ClassDescriptorSourceUnit {
         generateSourceCode();
     }
 
-    public static Object callMainMethod(Class scriptClass, ScriptEngine engine, ScriptContext context) throws Throwable {
-        try {
-            Method method = scriptClass.getDeclaredMethod("main", new Class[]{ScriptEngine.class, ScriptContext.class});
-            return method.invoke(null, new Object[]{engine, context});
-        } catch (IllegalAccessException ex) {
-            throw new RelProxyException(ex);
-        } catch (NoSuchMethodException ex) {
-            throw new RelProxyException(ex);
-        } catch (SecurityException ex) {
-            throw new RelProxyException(ex);
-        } catch (IllegalArgumentException ex) {
-            throw new RelProxyException(ex);
-        } catch (InvocationTargetException ex) {
-            throw ex.getCause();
-        } // Los errores de ejecución se envuelven en un InvocationTargetException
-    }
-
-    public SourceScript getSourceScript() {
-        return (SourceScript) sourceFile;
-    }
-
     private void generateSourceCode() {
         boolean[] hasHashBang = new boolean[1];
 
@@ -113,6 +92,10 @@ public class ClassDescriptorSourceScript extends ClassDescriptorSourceUnit {
         this.source = finalCode.toString();
     }
 
+    public SourceScript getSourceScript() {
+        return (SourceScript) sourceFile;
+    }
+
     private boolean isCompleteClass(String code) {
         // Buscamos si hay un " class ..." o un "import..." al comienzo para soportar la definición de una clase completa como script
         int pos = code.indexOf("class");
@@ -162,22 +145,10 @@ public class ClassDescriptorSourceScript extends ClassDescriptorSourceUnit {
         return code.indexOf("*/", start);
     }
 
-    @Override
-    public void updateTimestamp(long timestamp) {
-        long oldTimestamp = this.timestamp;
-        if (oldTimestamp != timestamp)
-            generateSourceCode();
-        super.updateTimestamp(timestamp);
-    }
-
-    public String getSourceCode() {
-        return source;
-    }
-
     public void callMainMethod(LinkedList<String> argsToScript) throws Throwable {
         try {
             Class scriptClass = getLastLoadedClass();
-            Method method = scriptClass.getDeclaredMethod("main", new Class[]{String[].class});
+            Method method = scriptClass.getDeclaredMethod("main", String[].class);
             String[] argsToScriptArr = argsToScript.size() > 0 ? argsToScript.toArray(new String[argsToScript.size()]) : new String[0];
             method.invoke(null, new Object[]{argsToScriptArr});
         } catch (IllegalAccessException ex) {
@@ -196,5 +167,34 @@ public class ClassDescriptorSourceScript extends ClassDescriptorSourceUnit {
     public Object callMainMethod(ScriptEngine engine, ScriptContext context) throws Throwable {
         Class scriptClass = getLastLoadedClass();
         return callMainMethod(scriptClass, engine, context);
+    }
+
+    public static Object callMainMethod(Class scriptClass, ScriptEngine engine, ScriptContext context) throws
+                                                                                                       Throwable {
+        try {
+            Method method = scriptClass.getDeclaredMethod("main", ScriptEngine.class, ScriptContext.class);
+            return method.invoke(null, engine, context);
+        } catch (IllegalAccessException ex) {
+            throw new RelProxyException(ex);
+        } catch (NoSuchMethodException ex) {
+            throw new RelProxyException(ex);
+        } catch (SecurityException ex) {
+            throw new RelProxyException(ex);
+        } catch (IllegalArgumentException ex) {
+            throw new RelProxyException(ex);
+        } catch (InvocationTargetException ex) {
+            throw ex.getCause();
+        } // Los errores de ejecución se envuelven en un InvocationTargetException
+    }
+
+    public String getSourceCode() {
+        return source;
+    }
+
+    @Override
+    public void updateTimestamp(long timestamp) {
+        long oldTimestamp = this.timestamp;
+        if (oldTimestamp != timestamp) { generateSourceCode(); }
+        super.updateTimestamp(timestamp);
     }
 }

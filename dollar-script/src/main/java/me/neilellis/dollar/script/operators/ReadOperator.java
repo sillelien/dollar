@@ -16,21 +16,34 @@
 
 package me.neilellis.dollar.script.operators;
 
-import me.neilellis.dollar.types.DollarFactory;
+import me.neilellis.dollar.script.DollarScriptSupport;
+import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.SourceValue;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
+
+import java.util.Arrays;
+import java.util.concurrent.Callable;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class ReadOperator implements Map<Object[], Map<? super var, ? extends var>> {
+public class ReadOperator implements Map<Token, Map<? super var, ? extends var>> {
+    private Scope scope;
+
+    public ReadOperator(Scope scope) {this.scope = scope;}
+
     @Override
-    public Map<? super var, ? extends var> map(Object[] objects) {
+    public Map<? super var, ? extends var> map(Token token) {
+        Object[] objects = (Object[]) token.value();
         return new Map<var, var>() {
             @Override
             public var map(var rhs) {
-                return DollarFactory.fromLambda(i -> rhs.$read(objects[1] != null,
-                                                               objects[2] != null));
+                Callable<var> callable = () -> rhs.$read(objects[1] != null,
+                                                         objects[2] != null);
+                return DollarScriptSupport.toLambda(scope, callable, new SourceValue(scope, token), Arrays.asList(rhs),
+                                                    "read:" + objects[1] + ":" + objects[2]);
             }
         };
     }

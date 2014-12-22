@@ -18,20 +18,19 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.Operator;
 import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.Source;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
 
-import java.util.function.Supplier;
-
 import static me.neilellis.dollar.DollarStatic.fix;
-import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactiveBinary;
+import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactive;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class SubscribeOperator implements Binary<var>, Operator {
     private final Scope scope;
-    private Supplier<String> source;
+    private Source source;
     private boolean pure;
 
 
@@ -44,19 +43,19 @@ public class SubscribeOperator implements Binary<var>, Operator {
     @Override
     public var map(var lhs, var rhs) {
 
-        return wrapReactiveBinary(scope, lhs, rhs,
-                                  () -> lhs.$subscribe(
-                                          i -> scope.getDollarParser().inScope(pure, "subscribe", scope, newScope -> {
-                                      final var it = fix(i, false);
-                                      scope.getDollarParser().currentScope().setParameter("1", it);
-                                      scope.getDollarParser().currentScope().setParameter("it", it);
-                                      return fix(rhs, false);
-                                  })));
+        return wrapReactive(scope, () -> lhs.$subscribe(
+                                    i -> scope.getDollarParser().inScope(pure, "subscribe", scope, newScope -> {
+                                        final var it = fix(i, false);
+                                        scope.getDollarParser().currentScope().setParameter("1", it);
+                                        scope.getDollarParser().currentScope().setParameter("it", it);
+                                        return fix(rhs, false);
+                                    })), source, "subscribe", lhs, rhs
+        );
 
     }
 
     @Override
-    public void setSource(Supplier<String> source) {
+    public void setSource(Source source) {
         this.source = source;
     }
 }

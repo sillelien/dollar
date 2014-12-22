@@ -24,6 +24,6 @@ class ExampleApp {
 
 
     public static void main(String[] args) throws IOException {
-        new DollarParser().parse(ExampleApp.class.getResourceAsStream("/example.ds"), false);
+        new DollarParser().parse(ExampleApp.class.getResourceAsStream("/example.ds"), "/example.ds", false);
     }
 }

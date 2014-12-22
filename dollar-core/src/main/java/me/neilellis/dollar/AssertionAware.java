@@ -19,13 +19,41 @@ package me.neilellis.dollar;
 import java.util.function.Function;
 
 /**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
+ * The interface Assertion aware.
+ * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface AssertionAware {
 
+    /**
+     * Assert false.
+     *
+     * @param assertion the assertion
+     * @param message   the message
+     *
+     * @return the var
+     *
+     * @throws AssertionError the assertion error
+     */
+    var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError;
+
+    /**
+     * Assert not void.
+     *
+     * @param message the message
+     *
+     * @return the var
+     *
+     * @throws AssertionError the assertion error
+     */
     var assertNotVoid(String message) throws AssertionError;
 
+    /**
+     * Assert true.
+     *
+     * @param assertion the assertion
+     * @param message the message
+     * @return the var
+     * @throws AssertionError the assertion error
+     */
     var assertTrue(Function<var, Boolean> assertion, String message) throws AssertionError;
-
-    var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError;
 }

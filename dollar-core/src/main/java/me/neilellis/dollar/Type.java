@@ -16,9 +16,82 @@
 
 package me.neilellis.dollar;
 
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public enum Type {
-    STRING, DECIMAL, LIST, MAP, URI, VOID, RANGE, BOOLEAN, ERROR, DATE, INTEGER
+public final class Type {
+    public static final ConcurrentHashMap<String, Type> lookup = new ConcurrentHashMap<>();
+    public static final AtomicInteger nextOrdinal = new AtomicInteger(0);
+
+    public static final Type STRING = new Type("STRING");
+    public static final Type DECIMAL = new Type("DECIMAL");
+    public static final Type INTEGER = new Type("INTEGER");
+    public static final Type LIST = new Type("LIST");
+    public static final Type MAP = new Type("MAP");
+    public static final Type URI = new Type("URI");
+    public static final Type VOID = new Type("VOID");
+    public static final Type RANGE = new Type("RANGE");
+    public static final Type BOOLEAN = new Type("BOOLEAN");
+    public static final Type ERROR = new Type("ERROR");
+    public static final Type DATE = new Type("DATE");
+    public static final Type INFINITY = new Type("INFINITY");
+    public static final Type ANY = new Type("ANY");
+
+
+    private final String name;
+    private final int ordinal;
+
+
+    Type(String name) {
+
+        this.name = name.toUpperCase();
+        lookup.put(name.toUpperCase(), this);
+        this.ordinal = nextOrdinal.getAndIncrement();
+    }
+
+    public static Type valueOf(String name) {
+        return lookup.get(name.toUpperCase());
+    }
+
+    public static Type[] values() {
+        return lookup.values().toArray(new Type[lookup.values().size()]);
+    }
+
+    public static Set<String> stringValues() {
+        return lookup.values().stream().map(i->i.toString()).collect(Collectors.toSet());
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
+
+        Type type = (Type) o;
+
+        if (!name.equalsIgnoreCase(type.name)) { return false; }
+
+        return true;
+    }
+
+    @Override public String toString() {
+        return name;
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public int ordinal() {
+        return ordinal;
+    }
 }

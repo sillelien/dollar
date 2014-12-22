@@ -16,14 +16,13 @@
 
 package me.neilellis.dollar.script.operators;
 
-import me.neilellis.dollar.script.Builtins;
-import me.neilellis.dollar.script.DollarParser;
-import me.neilellis.dollar.script.DollarScriptSupport;
-import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.*;
 import me.neilellis.dollar.var;
+import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 
 import java.util.Arrays;
+import java.util.concurrent.Callable;
 
 import static me.neilellis.dollar.DollarStatic.$void;
 import static me.neilellis.dollar.DollarStatic.fix;
@@ -32,7 +31,7 @@ import static me.neilellis.dollar.script.DollarScriptSupport.getVariable;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class UnitOperator implements Map<Object[], var> {
+public class UnitOperator implements Map<Token, var> {
     private final Scope scope;
     private final DollarParser dollarParser;
     private boolean pure;
@@ -43,16 +42,20 @@ public class UnitOperator implements Map<Object[], var> {
         this.pure = pure;
     }
 
-    @Override public var map(Object[] objects) {
-        return DollarScriptSupport.wrapUnary(scope, () -> dollarParser.inScope(pure,"unit", scope, newScope -> {
+    @Override public var map(Token token) {
+        Object[] objects = (Object[]) token.value();
+        final SourceValue source = new SourceValue(scope, token);
+        Callable<var> callable = () -> dollarParser.inScope(pure, "unit", scope, newScope -> {
             if (Builtins.exists(objects[1].toString())) {
                 return Builtins.execute(objects[1].toString(), Arrays.asList((var) objects[0]), newScope, pure);
             } else {
                 final var defaultValue = $void();
-                final var variable = getVariable(pure, newScope, objects[1].toString(), false, defaultValue);
+                final var variable = getVariable(pure, newScope, objects[1].toString(), false, defaultValue, source);
                 newScope.setParameter("1", (var) objects[0]);
                 return fix(variable, false);
             }
-        }));
+        });
+        return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList((var) objects[0], (var) objects[1]),
+                                            "unit");
     }
 }

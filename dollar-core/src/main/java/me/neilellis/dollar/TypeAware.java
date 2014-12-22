@@ -16,15 +16,12 @@
 
 package me.neilellis.dollar;
 
-import com.google.common.collect.ImmutableList;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.guard.*;
-import me.neilellis.dollar.json.JsonArray;
-import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.Map;
@@ -50,8 +47,8 @@ public interface TypeAware {
     String S();
 
     /**
-     * Cast this object to the {@link Type} specified. If the object cannot be converted it will fail with
-     * {@link me.neilellis.dollar.types.FailureType#INVALID_CAST}
+     * Cast this object to the {@link Type} specified. If the object cannot be converted it will fail with {@link
+     * me.neilellis.dollar.types.ErrorType#INVALID_CAST}
      *
      * @param type the type to cast to
      *
@@ -79,40 +76,23 @@ public interface TypeAware {
     @Guarded(AllVarCollectionGuard.class)
     @NotNull ImmutableList<var> $list();
 
-    @NotNull
-    @Guarded(NotNullGuard.class) Double D();
+    Type $type();
 
-    @NotNull
-    @Guarded(NotNullGuard.class) Integer I();
 
     @Guarded(NotNullGuard.class)
-    @NotNull Long L();
-
-    @Guarded(NotNullGuard.class)
-    @NotNull Number N();
-
-    @Guarded(NotNullGuard.class)
-    default String getPairKey() {
-        return toMap().keySet().iterator().next();
+    default var getPairKey() {
+        return $map().keySet().iterator().next();
     }
 
-    /**
-     * Returns this object as a set of nested maps the values are completely unwrapped and don't contain 'var' objects.
-     *
-     * @return a nested Map or null if the operation doesn't make sense (i.e. on a single valued object or list)
-     */
     @NotNull
-    @Guarded(NotNullGuard.class) Map<String, Object> toMap();
+    @Guarded(NotNullGuard.class)
+    @Guarded(AllVarMapGuard.class) ImmutableMap<var, var> $map();
 
     @NotNull
     @Guarded(NotNullGuard.class)
     default var getPairValue() {
         return $map().values().iterator().next();
     }
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(AllVarMapGuard.class) ImmutableMap<String, var> $map();
 
     /**
      * Returns true if this object is of any of the supplied types.
@@ -123,46 +103,62 @@ public interface TypeAware {
      */
     @Guarded(NotNullGuard.class) boolean is(@NotNull Type... types);
 
-    boolean isCollection();
+    default boolean isCollection() {
+        return false;
+    }
 
-    boolean isDecimal();
+    default boolean isDecimal() {
+        return false;
+    }
 
-    boolean isInteger();
+    default boolean isError() {
+        return false;
+    }
 
-    boolean isLambda();
+    default boolean isInfinite() {
+        return false;
+    }
 
-    boolean isList();
+    default boolean isInteger() {
+        return false;
+    }
 
-    boolean isMap();
+    default boolean isLambda() {
+        return false;
+    }
 
-    boolean isNumber();
+    default boolean isList() {
+        return false;
+    }
 
-    boolean isPair();
+    default boolean isMap() {
+        return false;
+    }
 
-    boolean isSingleValue();
+    default boolean isNull() { return false;}
 
-    boolean isString();
+    default boolean isNumber() {
+        return false;
+    }
 
-    boolean isUri();
+    default boolean isPair() {
+        return false;
+    }
 
-    /**
-     * Convert this object into a Dollar JsonArray.
-     *
-     * @return a JsonArray
-     */
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    default JsonArray jsonArray() {
-        JsonArray array = new JsonArray();
-        for (me.neilellis.dollar.var item : $list()) {
-            if (item == this) {
-                throw new IllegalArgumentException();
-            }
-            if (!item.isVoid()) {
-                array.add(item.$());
-            }
-        }
-        return array;
+    default boolean isRange() {
+        return false;
+    }
+
+    default boolean isSingleValue() {
+        return false;
+    }
+
+    default boolean isString() {
+        return false;
+    }
+
+    default boolean isUri() {
+        return false;
     }
 
     /**
@@ -171,33 +167,10 @@ public interface TypeAware {
      * This is a similar concept to nil in Objective-C.
      *
      * @return true if this is a void object
-     *
      */
-    boolean isVoid();
-
-    /**
-     * Returns this object as a org.json.JSONObject.
-     *
-     * NB: This conversion is quite efficient.
-     *
-     * @return a JSONObject
-     */
-    @Nullable
-    default JSONObject orgjson() {
-        JsonObject json = json();
-        if (json != null) {
-            return new JSONObject(json.toMap());
-        } else {
-            return null;
-        }
+    default boolean isVoid() {
+        return false;
     }
-
-    /**
-     * Convert this to a Dollar JsonObject
-     *
-     * @return this as a JsonObject
-     */
-    @Nullable JsonObject json();
 
     /**
      * Returns this object as a list of string values or null if this is not applicable.
@@ -213,7 +186,15 @@ public interface TypeAware {
      * @return a list of vars.
      */
     @Guarded(NotNullCollectionGuard.class)
-    @NotNull ImmutableList<Object> toList();
+    @NotNull ImmutableList<?> toList();
+
+    /**
+     * Returns this object as a set of nested maps the values are completely unwrapped and don't contain 'var' objects.
+     *
+     * @return a nested Map or null if the operation doesn't make sense (i.e. on a single valued object or list)
+     */
+    @NotNull
+    @Guarded(NotNullGuard.class) <K, V> Map<K, V> toMap();
 
     /**
      * Convert this object into a stream.

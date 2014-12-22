@@ -27,23 +27,27 @@ class Variable {
     final long thread;
     final boolean pure;
     final boolean fixed;
+    final String constraintSource;
     boolean isVolatile;
     var value;
 
-    public Variable(var value, var constraint) {
+    public Variable(var value, var constraint, String constraintSource) {
 
         this.value = value;
         this.constraint = constraint;
+        this.constraintSource = constraintSource;
         this.fixed = false;
         readonly = false;
         pure = false;
         thread = Thread.currentThread().getId();
     }
 
-    public Variable(var value, boolean readonly, var constraint, boolean isVolatile, boolean fixed, boolean pure) {
+    public Variable(var value, boolean readonly, var constraint, String constraintSource, boolean isVolatile,
+                    boolean fixed, boolean pure) {
         this.value = value;
         this.readonly = readonly;
         this.constraint = constraint;
+        this.constraintSource = constraintSource;
         this.isVolatile = isVolatile;
         this.fixed = fixed;
         this.pure = pure;

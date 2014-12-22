@@ -19,6 +19,7 @@ package me.neilellis.dollar.uri.camel;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.types.DollarFactory;
+import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
 import me.neilellis.dollar.var;
@@ -40,15 +41,14 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
         return new CamelURIHandlerFactory();
     }
 
+    @Override
+    public URIHandler forURI(String scheme, URI uri) {
+        return new CamelURIHandler(uri, context);
+    }
 
     @Override
     public boolean handlesScheme(String scheme) {
         return scheme.equals("camel");
-    }
-
-    @Override
-    public URIHandler forURI(String scheme, String uri) {
-        return new CamelURIHandler(uri, context);
     }
 
     @Override
@@ -66,12 +66,12 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
 
         private final ConsumerTemplate consumerTemplate;
         private final ProducerTemplate producerTemplate;
-        private final String uri;
+        private final URI uri;
         private CamelContext context;
 
 
-        CamelURIHandler(String uri, DefaultCamelContext context) {
-            this.uri = uri;
+        CamelURIHandler(URI uri, DefaultCamelContext context) {
+            this.uri = uri.sub();
             this.context = context;
             try {
                 this.context.start();
@@ -112,7 +112,7 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
         @Override
         public var publish(var value) {
             try {
-                producerTemplate.asyncSendBody(uri, value.$S());
+                producerTemplate.asyncSendBody(uri.asString(), value.$S());
             } catch (Exception e) {
                 return DollarStatic.handleError(e, value);
             }
@@ -120,14 +120,14 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
         }
 
         @Override
-        public var send(var value, boolean blocking, boolean mutating) {
+        public var write(var value, boolean blocking, boolean mutating) {
             try {
                 if (blocking) {
                     return DollarFactory.fromStringValue(
-                            producerTemplate.sendBody(uri, ExchangePattern.InOut, value.$S())
+                            producerTemplate.sendBody(uri.asString(), ExchangePattern.InOut, value.$S())
                                             .toString());
                 } else {
-                    producerTemplate.asyncSendBody(uri, value.$S());
+                    producerTemplate.asyncSendBody(uri.asString(), value.$S());
                     return value;
                 }
             } catch (CamelExecutionException e) {
@@ -136,12 +136,12 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
         }
 
         @Override
-        public var receive(boolean blocking, boolean mutating) {
+        public var read(boolean blocking, boolean mutating) {
             try {
                 if (blocking) {
-                    return DollarFactory.fromStringValue(consumerTemplate.receiveBody(uri, String.class));
+                    return DollarFactory.fromStringValue(consumerTemplate.receiveBody(uri.asString(), String.class));
                 } else {
-                    return DollarFactory.fromStringValue(consumerTemplate.receiveBody(uri, 0, String.class));
+                    return DollarFactory.fromStringValue(consumerTemplate.receiveBody(uri.asString(), 0, String.class));
                 }
             } catch (Exception e) {
                 return DollarStatic.handleError(e, $void());
@@ -183,7 +183,7 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
                         new RouteBuilder(context) {
                             @Override
                             public void configure() throws Exception {
-                                from(uri).process((ex) -> {
+                                from(uri.asString()).process((ex) -> {
                                     try {
                                         consumer.pipe(DollarFactory.fromStringValue(ex.getIn().getBody(String.class)));
                                     } catch (Exception e) {

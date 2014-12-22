@@ -48,20 +48,22 @@ public class ScriptScope implements Scope {
     private final String source;
     private final Multimap<String, var> listeners = LinkedListMultimap.create();
     private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
+    private final String file;
     Scope parent;
     private Parser<var> parser;
     private DollarParser dollarParser;
     private boolean parameterScope;
-
     public ScriptScope(String name) {
         this.parent = null;
         this.source = "<unknown>";
+        this.file = "<unknown file>";
         this.dollarParser = null;
         id = String.valueOf(name + ":" + counter.incrementAndGet());
     }
 
-    public ScriptScope(Scope parent, String source, String name) {
+    public ScriptScope(Scope parent, String file, String source, String name) {
         this.parent = parent;
+        this.file = file;
         if (source == null) {
             this.source = "<unknown>";
         } else {
@@ -72,14 +74,15 @@ public class ScriptScope implements Scope {
         id = String.valueOf(name + ":" + counter.incrementAndGet());
     }
 
-    public ScriptScope(DollarParser dollarParser, String source) {
+    public ScriptScope(DollarParser dollarParser, String source, String file) {
         this.source = source;
         this.dollarParser = dollarParser;
+        this.file = file;
         id = String.valueOf("(top):" + counter.incrementAndGet());
     }
 
     public Scope addChild(String source, String name) {
-        return new ScriptScope(this, source, name);
+        return new ScriptScope(this, file, source, name);
     }
 
     @Override
@@ -89,7 +92,7 @@ public class ScriptScope implements Scope {
     }
 
     @Override public void clear() {
-        if (DollarStatic.config.isDebugScope()) { log.info("Clearing scope " + this); }
+        if (DollarStatic.config.debugScope()) { log.info("Clearing scope " + this); }
         variables.clear();
         listeners.clear();
     }
@@ -98,12 +101,12 @@ public class ScriptScope implements Scope {
         if (key.matches("[0-9]+")) {
             throw new AssertionError("Cannot get numerical keys, use getParameter");
         }
-        if (DollarStatic.config.isDebugScope()) { log.info("Looking up " + key + " in " + this); }
+        if (DollarStatic.config.debugScope()) { log.info("Looking up " + key + " in " + this); }
         Scope scope = getScopeForKey(key);
         if (scope == null) {
             scope = this;
         } else {
-            if (DollarStatic.config.isDebugScope()) { log.info("Found " + key + " in " + scope); }
+            if (DollarStatic.config.debugScope()) { log.info("Found " + key + " in " + scope); }
         }
         Variable result = scope.getVariables().get(key);
 
@@ -128,7 +131,7 @@ public class ScriptScope implements Scope {
         if (scope == null) {
             scope = this;
         }
-        if (DollarStatic.config.isDebugScope()) { log.info("Getting constraint for " + key + " in " + scope); }
+        if (DollarStatic.config.debugScope()) { log.info("Getting constraint for " + key + " in " + scope); }
         if (scope.getVariables().containsKey(key) && scope.getVariables().get(key).constraint != null) {
             return scope.getVariables().get(key).constraint;
         }
@@ -143,18 +146,22 @@ public class ScriptScope implements Scope {
         this.dollarParser = dollarParser;
     }
 
+    @Override public String getFile() {
+        return file;
+    }
+
     @Override public Multimap<String, var> getListeners() {
         return listeners;
     }
 
     @Override
     public var getParameter(String key) {
-        if (DollarStatic.config.isDebugScope()) { log.info("Looking up parameter " + key + " in " + this); }
+        if (DollarStatic.config.debugScope()) { log.info("Looking up parameter " + key + " in " + this); }
         Scope scope = getScopeForParameters();
         if (scope == null) {
             scope = this;
         } else {
-            if (DollarStatic.config.isDebugScope()) { log.info("Found " + key + " in " + scope); }
+            if (DollarStatic.config.debugScope()) { log.info("Found " + key + " in " + scope); }
         }
         Variable result = scope.getVariables().get(key);
 
@@ -168,7 +175,7 @@ public class ScriptScope implements Scope {
         if (parent != null) {
             return parent.getScopeForKey(key);
         } else {
-            if (DollarStatic.config.isDebugScope()) { log.info("Scope not found for " + key); }
+            if (DollarStatic.config.debugScope()) { log.info("Scope not found for " + key); }
             return null;
         }
     }
@@ -180,7 +187,7 @@ public class ScriptScope implements Scope {
         if (parent != null) {
             return parent.getScopeForParameters();
         } else {
-            if (DollarStatic.config.isDebugScope()) { log.info("Parameter scope not found."); }
+            if (DollarStatic.config.debugScope()) { log.info("Parameter scope not found."); }
             return null;
         }
     }
@@ -228,7 +235,7 @@ public class ScriptScope implements Scope {
         if (scope == null) {
             scope = this;
         }
-        if (DollarStatic.config.isDebugScope()) {
+        if (DollarStatic.config.debugScope()) {
             log.info("Checking for " + key + " in " + scope);
         }
 
@@ -239,12 +246,12 @@ public class ScriptScope implements Scope {
 
     @Override
     public boolean hasParameter(String key) {
-        if (DollarStatic.config.isDebugScope()) { log.info("Looking up parameter " + key + " in " + this); }
+        if (DollarStatic.config.debugScope()) { log.info("Looking up parameter " + key + " in " + this); }
         Scope scope = getScopeForParameters();
         if (scope == null) {
             scope = this;
         } else {
-            if (DollarStatic.config.isDebugScope()) { log.info("Found " + key + " in " + scope); }
+            if (DollarStatic.config.debugScope()) { log.info("Found " + key + " in " + scope); }
         }
         Variable result = scope.getVariables().get(key);
 
@@ -254,18 +261,18 @@ public class ScriptScope implements Scope {
     @Override
     public void listen(String key, var listener) {
         if (key.matches("[0-9]+")) {
-            if (DollarStatic.config.isDebugScope()) {
+            if (DollarStatic.config.debugScope()) {
                 log.info("Cannot listen to positional parameter $" + key + " in " + this);
             }
             return;
         }
         Scope scopeForKey = getScopeForKey(key);
         if (scopeForKey == null) {
-            if (DollarStatic.config.isDebugScope()) { log.info("Key " + key + " not found in " + this); }
+            if (DollarStatic.config.debugScope()) { log.info("Key " + key + " not found in " + this); }
             listeners.put(key, listener);
             return;
         }
-        if (DollarStatic.config.isDebugScope()) { log.info("Listening for " + key + " in " + scopeForKey); }
+        if (DollarStatic.config.debugScope()) { log.info("Listening for " + key + " in " + scopeForKey); }
         scopeForKey.getListeners().put(key, listener);
     }
 
@@ -289,7 +296,8 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public var set(String key, var value, boolean readonly, var constraint, boolean isVolatile, boolean fixed,
+    public var set(String key, var value, boolean readonly, var constraint, String constraintSource, boolean isVolatile,
+                   boolean fixed,
                    boolean pure) {
         if (key.matches("[0-9]+")) {
             throw new AssertionError("Cannot set numerical keys, use setParameter");
@@ -298,7 +306,7 @@ public class ScriptScope implements Scope {
         if (scope == null) {
             scope = this;
         }
-        if (DollarStatic.config.isDebugScope()) { log.info("Setting " + key + " in " + scope); }
+        if (DollarStatic.config.debugScope()) { log.info("Setting " + key + " in " + scope); }
         if (scope.getVariables().containsKey(key) && scope.getVariables().get(key).readonly) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
@@ -317,19 +325,20 @@ public class ScriptScope implements Scope {
             }
             variable.value = value;
         } else {
-            scope.getVariables().put(key, new Variable(value, readonly, constraint, isVolatile, fixed, pure));
+            scope.getVariables()
+                 .put(key, new Variable(value, readonly, constraint, constraintSource, isVolatile, fixed, pure));
         }
         scope.notifyScope(key, value);
         return value;
     }
 
     @Override public var setParameter(String key, var value) {
-        if (DollarStatic.config.isDebugScope()) { log.info("Setting parameter " + key + " in " + this); }
+        if (DollarStatic.config.debugScope()) { log.info("Setting parameter " + key + " in " + this); }
         if (key.matches("[0-9]+") && variables.containsKey(key)) {
             throw new AssertionError("Cannot change the value of positional variables.");
         }
         this.parameterScope = true;
-        variables.put(key, new Variable(value, null));
+        variables.put(key, new Variable(value, null, null));
         this.notifyScope(key, value);
         return value;
     }

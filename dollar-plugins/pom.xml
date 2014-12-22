@@ -33,11 +33,15 @@
         <module>dollar-metrics-plugin</module>
         <module>dollar-camel-plugin</module>
         <module>dollar-socketio-plugin</module>
+        <module>dollar-mapdb-plugin</module>
         <module>dollar-http-plugin</module>
         <module>dollar-maven-resolver-plugin</module>
         <module>dollar-github-resolver-plugin</module>
         <module>dollar-class-resolver-plugin</module>
         <module>dollar-std-resources-plugin</module>
+        <module>dollar-orientdb-learner-plugin</module>
+        <module>dollar-hazelcast-learner-plugin</module>
+        <module>dollar-simple-learner-plugin</module>
     </modules>
 
     <build>

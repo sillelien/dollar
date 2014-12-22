@@ -16,6 +16,7 @@
 
 package me.neilellis.dollar.redis;
 
+import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
 import redis.clients.jedis.JedisPoolConfig;
@@ -35,14 +36,13 @@ public class RedisURIHandlerFactory implements URIHandlerFactory {
 
     }
 
-
     @Override
-    public boolean handlesScheme(String scheme) {
-        return scheme.equals("redis");
+    public URIHandlerFactory copy() {
+        return this;
     }
 
     @Override
-    public URIHandler forURI(String scheme, String uri) {
+    public URIHandler forURI(String scheme, URI uri) {
         try {
             return new RedisURIHandler(uri, poolConfig);
         } catch (URISyntaxException e) {
@@ -51,8 +51,8 @@ public class RedisURIHandlerFactory implements URIHandlerFactory {
     }
 
     @Override
-    public URIHandlerFactory copy() {
-        return this;
+    public boolean handlesScheme(String scheme) {
+        return scheme.equals("redis");
     }
 }
 

@@ -17,10 +17,10 @@
 package me.neilellis.dollar.types;
 
 import com.github.oxo42.stateless4j.StateMachine;
-import com.google.common.collect.ImmutableList;
 import me.neilellis.dollar.*;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
-import me.neilellis.dollar.json.JsonObject;
+import me.neilellis.dollar.json.ImmutableJsonObject;
 import me.neilellis.dollar.monitor.DollarMonitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -72,14 +72,20 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $divide(@NotNull var v) {
-        return getValue().$divide(v);
+    public var $plus(var v) {
+        return getValue().$plus(v);
     }
 
     @NotNull
     @Override
-    public var $plus(var v) {
-        return getValue().$plus(v);
+    public var $negate() {
+        return getValue().$negate();
+    }
+
+    @NotNull
+    @Override
+    public var $divide(@NotNull var v) {
+        return getValue().$divide(v);
     }
 
     @NotNull
@@ -94,10 +100,29 @@ public class DollarWrapper implements var {
         return getValue().$multiply(v);
     }
 
+    @NotNull @Override
+    public Integer I() {
+        return getValue().I();
+    }
+
+    @NotNull @Override
+    public Long L() {
+        return getValue().L();
+    }
+
     @NotNull
     @Override
-    public var $negate() {
-        return getValue().$negate();
+    public Number N() {
+        return getValue().N();
+    }
+
+    @Override public int sign() {
+        return getValue().sign();
+    }
+
+    @NotNull @Override
+    public Double D() {
+        return getValue().D();
     }
 
     var getValue() {
@@ -257,6 +282,10 @@ public class DollarWrapper implements var {
         return getValue().$copy();
     }
 
+    @Override public TypePrediction _predictType() {
+        return getValue()._predictType();
+    }
+
     @NotNull @Override public var $create() {
         return getValue().$create();
     }
@@ -295,6 +324,59 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
+    public var $default(var v) {
+        return getValue().$default(v);
+    }
+
+    @NotNull
+    @Override
+    public var $mimeType() {
+        return getValue().$mimeType();
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $stream(boolean parallel) {
+        return getValue().$stream(false);
+    }
+
+    @NotNull
+    @Override
+    public var err() {
+        return getValue().err();
+
+    }
+
+    @NotNull
+    @Override
+    public var out() {
+        return getValue().out();
+    }
+
+    @NotNull @Override public String toDollarScript() {
+        return getValue().toString();
+    }
+
+    @Nullable
+    @Override
+    public <R> R toJavaObject() {
+        return getValue().toJavaObject();
+    }
+
+    @Nullable
+    @Override
+    public JSONObject toOrgJson() {
+        return getValue().toOrgJson();
+    }
+
+    @Nullable
+    @Override
+    public ImmutableJsonObject toJsonObject() {
+        return getValue().toJsonObject();
+    }
+
+    @NotNull
+    @Override
     public var $error(@NotNull String errorMessage) {
         errorLogger.log(errorMessage);
         return getValue().$error(errorMessage);
@@ -322,7 +404,7 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $fail(@NotNull Consumer<List<Throwable>> handler) {
+    public var $fail(@NotNull Consumer<ImmutableList<Throwable>> handler) {
         return getValue().$fail(handler);
     }
 
@@ -417,32 +499,18 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $set(@NotNull var key, Object value) {
-        return tracer.trace(this, getValue().$set(key, value), StateTracer.Operations.SET, key, value);
-    }
-
-    @Nullable
-    @Override
-    public <R> R $() {
-        return getValue().$();
-    }
-
-    @NotNull
-    @Override
     public var $get(@NotNull var rhs) {
         return getValue().$get(rhs);
+    }
+
+    @NotNull @Override public var $append(@NotNull var value) {
+        return getValue().$append(value);
     }
 
     @NotNull
     @Override
     public var $containsValue(@NotNull var value) {
         return getValue().$containsValue(value);
-    }
-
-    @NotNull
-    @Override
-    public var $default(var v) {
-        return getValue().$default(v);
     }
 
     @NotNull
@@ -463,10 +531,8 @@ public class DollarWrapper implements var {
         return DollarStatic.$(getValue().$size());
     }
 
-    @NotNull
-    @Override
-    public var $mimeType() {
-        return DollarStatic.$(getValue().$mimeType());
+    @NotNull @Override public var $prepend(@NotNull var value) {
+        return getValue().$prepend(value);
     }
 
     @NotNull
@@ -483,23 +549,8 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public Stream<var> $stream(boolean parallel) {
-        return getValue().$stream(false);
-    }
-
-
-
-    @NotNull
-    @Override
-    public var err() {
-        return getValue().err();
-
-    }
-
-    @NotNull
-    @Override
-    public var out() {
-        return getValue().out();
+    public var $set(@NotNull var key, Object value) {
+        return tracer.trace(this, getValue().$set(key, value), StateTracer.Operations.SET, key, value);
     }
 
     @NotNull
@@ -528,35 +579,13 @@ public class DollarWrapper implements var {
         return getValue().$list();
     }
 
-    @NotNull @Override
-    public Double D() {
-        return getValue().D();
-    }
-
-    @NotNull @Override
-    public Integer I() {
-        return getValue().I();
-    }
-
-    @NotNull @Override
-    public Long L() {
-        return getValue().L();
+    @Override public Type $type() {
+        return getValue().$type();
     }
 
     @NotNull
     @Override
-    public Number N() {
-        return getValue().N();
-    }
-
-    @NotNull @Override
-    public Map<String, Object> toMap() {
-        return getValue().toMap();
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<String, var> $map() {
+    public ImmutableMap<var, var> $map() {
         return getValue().$map();
     }
 
@@ -623,30 +652,28 @@ public class DollarWrapper implements var {
         return getValue().isVoid();
     }
 
-    @Nullable
-    @Override
-    public JSONObject orgjson() {
-        return getValue().orgjson();
-    }
-
-    @Nullable
-    @Override
-    public JsonObject json() {
-        return getValue().json();
-    }
-
     @Override
     public ImmutableList<String> strings() {
         return getValue().strings();
     }
 
-    @NotNull @Override public ImmutableList<Object> toList() {
+    @NotNull @Override public ImmutableList<?> toList() {
         return getValue().toList();
+    }
+
+    @NotNull @Override
+    public Map<?, ?> toMap() {
+        return getValue().toMap();
     }
 
     @NotNull @Override
     public InputStream toStream() {
         return getValue().toStream();
+    }
+
+    @Override
+    public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
+        return getValue().assertFalse(assertion, message);
     }
 
     @Override
@@ -660,18 +687,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
-        return getValue().assertFalse(assertion, message);
-    }
-
-    @Override
     public int compareTo(@NotNull var o) {
         return getValue().compareTo(o);
-    }
-
-    @Override
-    public var debugf(String message, Object... values) {
-        return getValue().debugf(message, values);
     }
 
     @Override
@@ -685,23 +702,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public var infof(String message, Object... values) {
-        return getValue().infof(message, values);
-    }
-
-    @Override
-    public var info(Object message) {
-        return getValue().info(message);
-    }
-
-    @Override
-    public var info() {
-        return getValue().info();
-    }
-
-    @Override
-    public var errorf(String message, Object... values) {
-        return getValue().errorf(message, values);
+    public var debugf(String message, Object... values) {
+        return getValue().debugf(message, values);
     }
 
     @Override
@@ -717,6 +719,26 @@ public class DollarWrapper implements var {
     @Override
     public var error() {
         return getValue().error();
+    }
+
+    @Override
+    public var errorf(String message, Object... values) {
+        return getValue().errorf(message, values);
+    }
+
+    @Override
+    public var info(Object message) {
+        return getValue().info(message);
+    }
+
+    @Override
+    public var info() {
+        return getValue().info();
+    }
+
+    @Override
+    public var infof(String message, Object... values) {
+        return getValue().infof(message, values);
     }
 
     @Override
@@ -741,16 +763,6 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public boolean isTrue() {
-        return getValue().isTrue();
-    }
-
-    @Override
-    public boolean isTruthy() {
-        return getValue().isTruthy();
-    }
-
-    @Override
     public boolean isFalse() {
         return getValue().isFalse();
     }
@@ -758,6 +770,16 @@ public class DollarWrapper implements var {
     @Override
     public boolean isNeitherTrueNorFalse() {
         return getValue().isNeitherTrueNorFalse();
+    }
+
+    @Override
+    public boolean isTrue() {
+        return getValue().isTrue();
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return getValue().isTruthy();
     }
 
     @Override

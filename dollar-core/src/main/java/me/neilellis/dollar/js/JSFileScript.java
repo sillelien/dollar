@@ -16,9 +16,9 @@
 
 package me.neilellis.dollar.js;
 
-import com.google.common.io.CharStreams;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
+import me.neilellis.dollar.collections.CollectionUtil;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +29,6 @@ import javax.script.SimpleScriptContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 
 /**
@@ -49,13 +48,15 @@ public class JSFileScript implements Pipeable {
   }
 
   public JSFileScript(InputStream stream) throws IOException {
-    script = CharStreams.toString(new InputStreamReader(stream, "UTF-8"));
+    final String s;
+    s = CollectionUtil.fromStream(stream);
+    script= s;
   }
 
   @Override
   public var pipe(var in) throws Exception {
     SimpleScriptContext context = new SimpleScriptContext();
-    nashorn.eval("var $=" + in.json().toString() + ";", context);
+    nashorn.eval("var $=" + in.toJsonObject().toString() + ";", context);
     try {
       Object result = nashorn.eval(script, context);
       return DollarFactory.fromValue(result);

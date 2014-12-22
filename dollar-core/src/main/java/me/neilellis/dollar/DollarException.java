@@ -16,31 +16,53 @@
 
 package me.neilellis.dollar;
 
-import me.neilellis.dollar.script.SourceAware;
+import me.neilellis.dollar.script.Source;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
+ * The type Dollar exception.
+ * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarException extends RuntimeException {
 
-    private final List<SourceAware> sourceList = new ArrayList<>();
+    private final List<Source> sourceList = new ArrayList<>();
 
+    /**
+     * Instantiates a new Dollar exception.
+     *
+     * @param e the e
+     */
     public DollarException(Throwable e) {
         super(e);
     }
 
+    /**
+     * Instantiates a new Dollar exception.
+     *
+     * @param errorMessage the error message
+     */
     public DollarException(String errorMessage) {
         super(errorMessage);
     }
 
+    /**
+     * Instantiates a new Dollar exception.
+     *
+     * @param t the t
+     * @param s the s
+     */
     public DollarException(Throwable t, String s) {
         super(s, t);
     }
 
-    public void addSource(SourceAware source) {
+    /**
+     * Add source.
+     *
+     * @param source the source
+     */
+    public void addSource(Source source) {
         if (source == null) {
             throw new NullPointerException();
         }
@@ -49,17 +71,22 @@ public class DollarException extends RuntimeException {
 
     @Override public String getMessage() {
         if (sourceList.size() == 0) {
-            return super.getMessage() + " (no source available)";
+            return super.getMessage();
 
         } else {
             StringBuilder builder = new StringBuilder(super.getMessage() + "\n");
-            for (SourceAware sourceEntry : sourceList) {
+            for (Source sourceEntry : sourceList) {
                 builder.append(sourceEntry.getSourceMessage()).append("\n");
             }
             return builder.toString();
         }
     }
 
+    /**
+     * Http code.
+     *
+     * @return the int
+     */
     public int httpCode() {
         return 500;
     }

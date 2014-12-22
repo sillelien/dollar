@@ -18,9 +18,8 @@ package me.neilellis.dollar.types;
 
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
-import com.google.common.collect.ImmutableList;
-import com.google.common.hash.Hashing;
 import me.neilellis.dollar.*;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.exceptions.ValidationException;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
@@ -33,10 +32,11 @@ import javax.script.ScriptEngineManager;
 import javax.script.SimpleScriptContext;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -59,8 +59,8 @@ public abstract class AbstractDollar implements var {
     private String src;
 
 
-    AbstractDollar(@NotNull List<Throwable> errors) {
-        this.errors = new ImmutableList.Builder<Throwable>().addAll(errors).build();
+    AbstractDollar(@NotNull ImmutableList<Throwable> errors) {
+        this.errors = errors;
     }
 
     @Override
@@ -94,11 +94,7 @@ public abstract class AbstractDollar implements var {
         return this;
     }
 
-    @Override
-    public var $write(var given) {
-        debug("Cannot send to " + getClass().getName());
-        return this;
-    }
+
 
     @Override
     public var $choose(var map) {
@@ -113,7 +109,7 @@ public abstract class AbstractDollar implements var {
             try {
                 res = pipe.pipe(v);
             } catch (Exception e) {
-                return DollarFactory.failure(FailureType.EXCEPTION, e);
+                return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.EXCEPTION, e, false);
             }
             result.add(res);
 
@@ -196,11 +192,6 @@ public abstract class AbstractDollar implements var {
     }
 
 
-    @NotNull
-    @Override
-    public var $mimeType() {
-        return DollarStatic.$("text/plain");
-    }
 
     @NotNull
     @Override
@@ -229,7 +220,7 @@ public abstract class AbstractDollar implements var {
         SimpleScriptContext context = new SimpleScriptContext();
         Object value;
         try {
-            nashorn.eval("var $=" + json().toString() + ";", context);
+            nashorn.eval("var $=" + toJsonObject().toString() + ";", context);
             value = nashorn.eval(js, context);
         } catch (Exception e) {
             return DollarStatic.handleError(e, this);
@@ -259,7 +250,7 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var $copy() {
-        return DollarFactory.fromValue($(), new ImmutableList.Builder<Throwable>().addAll(errors()).build());
+        return DollarFactory.fromValue(toJavaObject(), ImmutableList.copyOf(errors()));
     }
 
     @NotNull final @Override public var _fix(boolean parallel) {
@@ -272,6 +263,10 @@ public abstract class AbstractDollar implements var {
 
     @Override public final var _fixDeep(boolean parallel) {
         return _fix(Integer.MAX_VALUE, parallel);
+    }
+
+    @Override public TypePrediction _predictType() {
+        return new SingleValueTypePrediction($type());
     }
 
     @Override
@@ -291,23 +286,131 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull
-    @Override
     public var copy(@NotNull ImmutableList<Throwable> errors) {
-        return DollarFactory.fromValue($(),
-                                       new ImmutableList.Builder<Throwable>().addAll(errors()).addAll(errors).build()
-        );
+        return DollarFactory.fromValue(toJavaObject(), ImmutableList.copyOf(errors(), errors));
     }
 
-    @NotNull
+    @Override
+    public Long L() {
+        return 0L;
+    }
+
     @Override
     public Double D() {
         return 0.0;
     }
 
+    public void clear() {
+        DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_OPERATION);
+    }
+
+    @Override
+    public var debug(Object message) {
+        logger.debug(message.toString());
+        return this;
+    }
+
+    @Override
+    public var debug() {
+        logger.debug(this.toString());
+        return this;
+    }
+
+    @Override
+    public var debugf(String message, Object... values) {
+        logger.debug(message, values);
+        return this;
+    }
+
+    @Override
+    public var error(Throwable exception) {
+        logger.error(exception.getMessage(), exception);
+        return this;
+    }
+
+    @Override
+    public var error(Object message) {
+        logger.error(message.toString());
+        return this;
+
+    }
+
+    @Override
+    public var error() {
+        logger.error(this.toString());
+        return this;
+    }
+
+    @Override
+    public var errorf(String message, Object... values) {
+        logger.error(message, values);
+        return this;
+    }
+
+    @Override
+    public var info(Object message) {
+        logger.info(message.toString());
+        return this;
+    }
+
+    @Override
+    public var info() {
+        logger.info(this.toString());
+        return this;
+    }
+
+    @Override
+    public var infof(String message, Object... values) {
+        logger.info(message, values);
+        return this;
+    }
+
+    @Override
+    public int hashCode() {
+        return toJavaObject().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        Object val = toJavaObject();
+        if (val == null) {
+            return false;
+        }
+        Object dollarVal = toJavaObject();
+        if (dollarVal == null) {
+            return false;
+        }
+        if (obj instanceof var) {
+            var unwrapped = ((var) obj)._unwrap();
+            if (unwrapped == null) {
+                return false;
+            }
+            Object unwrappedDollar = unwrapped.toJavaObject();
+            if (unwrappedDollar == null) {
+                return false;
+            }
+            Object unwrappedVal = unwrapped.toJavaObject();
+            if (unwrappedVal == null) {
+                return false;
+            }
+            return dollarVal.equals(unwrappedDollar) || (val.equals(unwrappedVal));
+        } else {
+            return dollarVal.equals(obj) || val.equals(obj);
+        }
+    }
+
+    @Override
+    public var assertNotVoid(String message) throws AssertionError {
+        return assertFalse(TypeAware::isVoid, message);
+    }
+
     @NotNull
     @Override
-    public Long L() {
-        return 0L;
+    public String toString() {
+        return S();
     }
 
     @Override
@@ -318,6 +421,19 @@ public abstract class AbstractDollar implements var {
     @Override
     public boolean isInteger() {
         return false;
+    }
+
+    @Override
+    public var assertTrue(Function<var, Boolean> assertion, String message) throws AssertionError {
+        try {
+            if (!assertion.apply(this)) {
+                throw new AssertionError(message);
+            } else {
+                return this;
+            }
+        } catch (Exception e) {
+            return DollarStatic.logAndRethrow(e);
+        }
     }
 
     @Override
@@ -333,6 +449,19 @@ public abstract class AbstractDollar implements var {
     @Override
     public boolean isMap() {
         return false;
+    }
+
+    @Override
+    public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
+        try {
+            if (assertion.apply(this)) {
+                throw new AssertionError(message);
+            } else {
+                return this;
+            }
+        } catch (Exception e) {
+            return DollarStatic.logAndRethrow(e);
+        }
     }
 
     @Override
@@ -361,158 +490,13 @@ public abstract class AbstractDollar implements var {
 
     @NotNull @Override
     public InputStream toStream() {
-        return new ByteArrayInputStream($S().getBytes());
-    }
-
-    @Override
-    public var assertNotVoid(String message) throws AssertionError {
-        return assertFalse(TypeAware::isVoid, message);
-    }
-
-    @Override
-    public var assertTrue(Function<var, Boolean> assertion, String message) throws AssertionError {
-        try {
-            if (!assertion.apply(this)) {
-                throw new AssertionError(message);
-            } else {
-                return this;
-            }
-        } catch (Exception e) {
-            return DollarStatic.logAndRethrow(e);
-        }
-    }
-
-    @Override
-    public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
-        try {
-            if (assertion.apply(this)) {
-                throw new AssertionError(message);
-            } else {
-                return this;
-            }
-        } catch (Exception e) {
-            return DollarStatic.logAndRethrow(e);
-        }
-    }
-
-    public void clear() {
-        DollarFactory.failure(FailureType.INVALID_OPERATION);
-    }
-
-    @Override
-    public var debugf(String message, Object... values) {
-        logger.debug(message, values);
-        return this;
-    }
-
-    @Override
-    public var debug(Object message) {
-        logger.debug(message.toString());
-        return this;
-    }
-
-    @Override
-    public var debug() {
-        logger.debug(this.toString());
-        return this;
-    }
-
-    @Override
-    public var infof(String message, Object... values) {
-        logger.info(message, values);
-        return this;
-    }
-
-    @Override
-    public var info(Object message) {
-        logger.info(message.toString());
-        return this;
-    }
-
-    @Override
-    public var info() {
-        logger.info(this.toString());
-        return this;
-    }
-
-    @Override
-    public var errorf(String message, Object... values) {
-        logger.error(message, values);
-        return this;
-    }
-
-    @Override
-    public var error(Throwable exception) {
-        logger.error(exception.getMessage(), exception);
-        return this;
-    }
-
-    @Override
-    public var error(Object message) {
-        logger.error(message.toString());
-        return this;
-
-    }
-
-    @Override
-    public var error() {
-        logger.error(this.toString());
-        return this;
-    }
-
-    @Override
-    public int hashCode() {
-        return $().hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        Object val = $();
-        if (val == null) {
-            return false;
-        }
-        Object dollarVal = $();
-        if (dollarVal == null) {
-            return false;
-        }
-        if (obj instanceof var) {
-            var unwrapped = ((var) obj)._unwrap();
-            if (unwrapped == null) {
-                return false;
-            }
-            Object unwrappedDollar = unwrapped.$();
-            if (unwrappedDollar == null) {
-                return false;
-            }
-            Object unwrappedVal = unwrapped.$();
-            if (unwrappedVal == null) {
-                return false;
-            }
-            return dollarVal.equals(unwrappedDollar) || (val.equals(unwrappedVal));
-        } else {
-            return dollarVal.equals(obj) || val.equals(obj);
-        }
-    }
-
-    @NotNull
-    @Override
-    public String toString() {
-        return S();
-    }
-
-    @NotNull
-    public Stream<Map.Entry<String, var>> kvStream() {
-        return $map().entrySet().stream();
-
+        return new ByteArrayInputStream($serialized().getBytes());
     }
 
     @Override
     public void setMetaAttribute(String key, String value) {
         if (meta.containsKey(key)) {
-            DollarFactory.failure(FailureType.METADATA_IMMUTABLE);
+            DollarFactory.failure(me.neilellis.dollar.types.ErrorType.METADATA_IMMUTABLE);
             return;
 
         }
@@ -523,6 +507,7 @@ public abstract class AbstractDollar implements var {
     public String getMetaAttribute(String key) {
         return meta.get(key);
     }
+
 
     @NotNull
     @Override
@@ -541,15 +526,34 @@ public abstract class AbstractDollar implements var {
                     errorJson.putString("stack", Arrays.toString(error.getStackTrace()));
                 } else {
                     errorJson.putString("hash",
-                                        Hashing.sha1()
-                                               .hashBytes(Arrays.toString(error.getStackTrace()).getBytes())
-                                               .toString());
+                                        hash(Arrays.toString(error.getStackTrace()).getBytes()));
                 }
                 errorArray.addObject(errorJson);
             }
             json.putArray("errors", errorArray);
         }
         return DollarFactory.fromValue(json);
+    }
+
+    String hash(byte[] bytes) {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            throw new DollarException(e);
+        }
+
+        md.update(bytes);
+        byte[] digest = md.digest();
+        StringBuffer hexString = new StringBuffer();
+
+        for (byte aDigest : digest) {
+            String hex = Integer.toHexString(0xff & aDigest);
+            if (hex.length() == 1) { hexString.append('0'); }
+            hexString.append(hex);
+        }
+
+        return hexString.toString();
     }
 
 
@@ -577,7 +581,7 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var $error(@NotNull Throwable error) {
-        return copy(new ImmutableList.Builder<Throwable>().add(error).build());
+        return copy(ImmutableList.of(error));
     }
 
 
@@ -614,13 +618,13 @@ public abstract class AbstractDollar implements var {
 
     @NotNull @Override
     public var clearErrors() {
-        return DollarFactory.fromValue($(), ImmutableList.<Throwable>builder().build());
+        return DollarFactory.fromValue(toJavaObject(), ImmutableList.of());
     }
 
 
     @NotNull
     @Override
-    public var $fail(@NotNull Consumer<List<Throwable>> handler) {
+    public var $fail(@NotNull Consumer<ImmutableList<Throwable>> handler) {
         if (hasErrors()) {
             handler.accept(errors());
             return DollarFactory.fromValue(null, errors());

@@ -22,11 +22,11 @@ import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.types.SerializedType;
+import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.var;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,17 +45,22 @@ public class HttpURIHandler implements URIHandler {
     private RouteableNanoHttpd httpd;
     private String method = "GET";
 
-    public HttpURIHandler(String scheme, String uri) throws URISyntaxException, IOException {
-        if (uri.startsWith("//")) {
-            this.uri = new URI(scheme + ":" + uri);
+    public HttpURIHandler(String scheme, me.neilellis.dollar.uri.URI uri) throws URISyntaxException, IOException {
+        if (uri.hasSubScheme()) {
+            this.uri = URI.parse(scheme + ":" + uri.sub().sub().asString());
+            this.method = this.uri.sub().scheme();
         } else {
-            this.uri = new URI(uri);
-            this.method = this.uri.getScheme();
+            this.uri = uri;
         }
     }
 
     @Override
     public var all() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public var write(var value, boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
 
@@ -82,15 +87,10 @@ public class HttpURIHandler implements URIHandler {
     }
 
     @Override
-    public var send(var value, boolean blocking, boolean mutating) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public var receive(boolean blocking, boolean mutating) {
+    public var read(boolean blocking, boolean mutating) {
         try {
             return DollarFactory.fromStream(SerializedType.JSON, Unirest.get(uri.toString())
-                    .asJson().getRawBody());
+                                                                        .asJson().getRawBody());
         } catch (UnirestException e) {
             return DollarStatic.handleError(e, null);
         } catch (IOException e) {
@@ -127,9 +127,10 @@ public class HttpURIHandler implements URIHandler {
 
     @Override
     public void subscribe(Pipeable consumer, String id) throws IOException {
-        httpd = getHttpServerFor(this.uri.getHost(), this.uri.getPort());
-        httpd.handle(this.uri.getPath(), new RequestHandler(consumer));
-        subscriptions.put(id, this.uri.getPath());
+        httpd = getHttpServerFor(this.uri.host(), this.uri.port() > 0 ? this.uri.port() : 80);
+        final String path = this.uri.path();
+        httpd.handle(path, new RequestHandler(consumer));
+        subscriptions.put(id, path);
     }
 
     @Override public void unpause() {
@@ -152,7 +153,7 @@ public class HttpURIHandler implements URIHandler {
         }
     }
 
-    public static class RouteableNanoHttpd extends NanoHttpd {
+    public static class RouteableNanoHttpd extends NanoHttpdServer {
 
         private final Map<String, RequestHandler> handlers = new HashMap<>();
 
@@ -171,17 +172,12 @@ public class HttpURIHandler implements URIHandler {
         @Override
         public Response serve(IHTTPSession session) {
             URI uri;
-            try {
-                uri = new URI(session.getUri());
-                RequestHandler requestHandler = handlers.get(uri.getPath());
-                if (requestHandler == null) {
-                    return new Response(Response.Status.NOT_FOUND, "text/plain", "");
-                }
-                return requestHandler.invoke(session);
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-                return new Response(Response.Status.BAD_REQUEST, "text/plain", "");
+            uri = URI.parse(session.getUri());
+            RequestHandler requestHandler = handlers.get(uri.path());
+            if (requestHandler == null) {
+                return new Response(Response.Status.NOT_FOUND, "text/plain", "");
             }
+            return requestHandler.invoke(session);
         }
 
     }
@@ -193,7 +189,7 @@ public class HttpURIHandler implements URIHandler {
             this.consumer = consumer;
         }
 
-        public NanoHttpd.Response invoke(NanoHttpd.IHTTPSession session) {
+        public NanoHttpdServer.Response invoke(NanoHttpdServer.IHTTPSession session) {
             try {
                 var in = $()
                         .$set($("headers"), session.getHeaders())
@@ -205,7 +201,9 @@ public class HttpURIHandler implements URIHandler {
 //                session.getInputStream().close();
                 var out = consumer.pipe(in);
                 var body = out.$("body");
-                NanoHttpd.Response response = new NanoHttpd.Response(new NanoHttpd.Response.IStatus() {
+                NanoHttpdServer.Response
+                        response =
+                        new NanoHttpdServer.Response(new NanoHttpdServer.Response.IStatus() {
                     @Override
                     public String getDescription() {
                         return out.$("reason").$default($("")).S();
@@ -215,13 +213,13 @@ public class HttpURIHandler implements URIHandler {
                     public int getRequestStatus() {
                         return out.$("status").$default($(200)).I();
                     }
-                }, body.$mimeType().$S(), body.S());
-                out.$("headers").$map().forEach((s, v) -> response.addHeader(s, v.$S()));
-                response.setData(body.toStream());
+                        }, body.$mimeType().$S(), body.toStream());
+                out.$("headers").$map().forEach((s, v) -> response.addHeader(s.$S(), v.$S()));
                 return response;
             } catch (Exception e) {
                 e.printStackTrace();
-                return new NanoHttpd.Response(NanoHttpd.Response.Status.INTERNAL_ERROR, "text/plain", e.getMessage());
+                return new NanoHttpdServer.Response(NanoHttpdServer.Response.Status.INTERNAL_ERROR, "text/plain",
+                                                    e.getMessage());
             }
         }
     }

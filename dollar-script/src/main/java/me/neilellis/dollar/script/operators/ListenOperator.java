@@ -19,10 +19,12 @@ package me.neilellis.dollar.script.operators;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Operator;
 import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.Source;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
 
-import java.util.function.Supplier;
+import java.util.Arrays;
+import java.util.concurrent.Callable;
 
 import static me.neilellis.dollar.DollarStatic.$;
 
@@ -31,8 +33,8 @@ import static me.neilellis.dollar.DollarStatic.$;
  */
 public class ListenOperator implements Binary<var>, Operator {
     private final Scope scope;
-    private Supplier<String> source;
     private boolean pure;
+    private Source source;
 
 
     public ListenOperator(Scope scope, boolean pure) {
@@ -43,23 +45,17 @@ public class ListenOperator implements Binary<var>, Operator {
 
     @Override
     public var map(var lhs, var rhs) {
-        try {
-            return DollarScriptSupport.wrapUnary(scope, () -> {
-                return $(lhs.$listen(i -> scope.getDollarParser().inScope(pure, "listen", scope, newScope -> {
-                    newScope.setParameter("1", i);
-                    //todo: change to receive
-                    return rhs._fixDeep(false);
-                })));
-            });
-        } catch (AssertionError e) {
-            throw new AssertionError(e + " at '" + source.get() + "'");
-        } catch (Exception e) {
-            throw new Error(e + " at '" + source.get() + "'");
-        }
+        Callable<var> callable = () -> {
+            return $(lhs.$listen(i -> scope.getDollarParser().inScope(pure, "listen", scope, newScope -> {
+                newScope.setParameter("1", i);
+                //todo: change to read
+                return rhs._fixDeep(false);
+            })));
+        };
+        return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(lhs, rhs), "listen");
     }
 
-    @Override
-    public void setSource(Supplier<String> source) {
+    @Override public void setSource(Source source) {
         this.source = source;
     }
 }

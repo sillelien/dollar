@@ -16,7 +16,7 @@
 
 package me.neilellis.dollar;
 
-import com.google.common.collect.ImmutableList;
+import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.guard.ChainGuard;
 import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.NotNullCollectionGuard;
@@ -27,30 +27,77 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
+ * The interface Error aware.
+ * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface ErrorAware {
-    public enum ErrorType {VALIDATION, SYSTEM}
+    /**
+     * The enum Error type.
+     */
+    public enum ErrorType {
+        /**
+         * The VALIDATION.
+         */
+        VALIDATION, /**
+         * The SYSTEM.
+         */
+        SYSTEM
+    }
 
+    /**
+     * $ error.
+     *
+     * @param errorMessage the error message
+     *
+     * @return the var
+     */
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class) var $error(@NotNull String errorMessage);
 
+    /**
+     * $ error.
+     *
+     * @param error the error
+     * @return the var
+     */
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class) var $error(@NotNull Throwable error);
 
+    /**
+     * $ error.
+     *
+     * @return the var
+     */
     @NotNull
     @Guarded(ChainGuard.class) var $error();
 
+    /**
+     * $ errors.
+     *
+     * @return the var
+     */
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class) var $errors();
 
+    /**
+     * $ fail.
+     *
+     * @param handler the handler
+     * @return the var
+     */
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class) var $fail(@NotNull Consumer<List<Throwable>> handler);
+    @Guarded(ChainGuard.class) var $fail(@NotNull Consumer<ImmutableList<Throwable>> handler);
 
+    /**
+     * $ invalid.
+     *
+     * @param errorMessage the error message
+     * @return the var
+     */
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
@@ -58,19 +105,46 @@ public interface ErrorAware {
         return $error(errorMessage, ErrorType.VALIDATION);
     }
 
+    /**
+     * $ error.
+     *
+     * @param errorMessage the error message
+     * @param type the type
+     * @return the var
+     */
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class) var $error(@NotNull String errorMessage, @NotNull ErrorType type);
 
+    /**
+     * Clear errors.
+     *
+     * @return the var
+     */
     @NotNull
     @Guarded(ChainGuard.class)
     var clearErrors();
 
+    /**
+     * Error texts.
+     *
+     * @return the list
+     */
     @NotNull
     @Guarded(NotNullCollectionGuard.class) List<String> errorTexts();
 
+    /**
+     * Errors immutable list.
+     *
+     * @return the immutable list
+     */
     @NotNull
     @Guarded(NotNullCollectionGuard.class) ImmutableList<Throwable> errors();
 
+    /**
+     * Has errors.
+     *
+     * @return the boolean
+     */
     boolean hasErrors();
 }

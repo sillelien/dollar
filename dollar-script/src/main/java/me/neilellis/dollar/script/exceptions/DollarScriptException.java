@@ -29,4 +29,8 @@ public class DollarScriptException extends DollarException {
     public DollarScriptException(String errorMessage) {
         super(errorMessage);
     }
+
+    public DollarScriptException(Throwable t, String s) {
+        super(t, s);
+    }
 }

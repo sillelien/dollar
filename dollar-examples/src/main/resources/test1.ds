@@ -1,41 +1,36 @@
-testPipe='class:me.neilellis.dollar.script.TestPipe'
-
-c={
-"test" : 1,
-"test2" : [1,2,3,{"foo":"bar"}]} | $testPipe
-
-f={1;2;3;4;}
-@@ $f
+f={1;2;3;4}
+@@ f
 
 multiline={
 "Hello "
 "World"
 }
+c={ "test2": 1}
 
-@@ $multiline
-@@ $c
-@@ $c.test2
+@@ multiline
+@@ c
+@@ c.test2
 
 a="Hello";
 b="World";
 
-@@ $a;
+@@ a;
 
 a="Goodbye";
-d= a.doesntExist ?: 2;
+d= void | 2;
 
 //Assert d == 2
 
-.: $d == 2
+.: d == 2
 
-@@ $d == 2 ? "It's True @@!";
+@@ d == 2 ? "It's True @@!";
 
-@@ $d;
+@@ d;
 
-@@ $a;
-@@ $c ;
+@@ a;
+@@ c ;
 
-@@ [$a, $b, $c] ;
+@@ [a, b, c] ;
 
 
 //@@ {"test" : 1, "test2" : 2} | 'mvn:me.neilellis.dollar.script.TestPipe:me.neilellis:dollar-script:0-SNAPSHOT'

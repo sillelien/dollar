@@ -40,16 +40,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.sparkjava</groupId>
-            <artifactId>spark-core</artifactId>
         </dependency>
 
         <dependency>
@@ -81,14 +73,7 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.jcabi</groupId>
-            <artifactId>jcabi-aether</artifactId>
-        </dependency>
-        <dependency>
-            <artifactId>maven-core</artifactId>
-            <groupId>org.apache.maven</groupId>
-        </dependency>
+
         <dependency>
             <groupId>org.kohsuke</groupId>
             <artifactId>github-api</artifactId>
@@ -103,9 +88,42 @@
             <artifactId>stateless4j</artifactId>
 
         </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.7</version>
+        </dependency>
 
+        <!--<dependency>-->
+        <!--<groupId>com.tinkerpop.blueprints</groupId>-->
+        <!--<artifactId>blueprints-core</artifactId>-->
+        <!--<version>2.6.0</version>-->
+        <!--</dependency>-->
 
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.1.2</version>
+                <configuration>
+                    <targetClasses>
+                        <param>me.neilellis.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>me.neilellis.*</param>
+                    </targetTests>
+                    <mutationThreshold>0</mutationThreshold>
+                    <coverageThreshold>0</coverageThreshold>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -63,10 +63,11 @@
 
     <modules>
         <module>dollar-core</module>
-        <module>dollar-plugins</module>
-        <module>dollar-runtime</module>
-        <module>dollar-examples</module>
+        <module>dollar-resolver</module>
         <module>dollar-script</module>
+        <module>dollar-runtime</module>
+        <module>dollar-plugins</module>
+        <module>dollar-examples</module>
         <module>dollar-docs</module>
     </modules>
     <dependencyManagement>
@@ -179,9 +180,34 @@
                 <version>2.3.3</version>
             </dependency>
             <dependency>
-                <groupId>com.sparkjava</groupId>
-                <artifactId>spark-core</artifactId>
-                <version>2.0.0</version>
+                <groupId>net.kencochrane.raven</groupId>
+                <artifactId>raven</artifactId>
+                <version>4.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-mapper-asl</artifactId>
+                <version>1.9.10</version>
+            </dependency>
+            <dependency>
+                <groupId>com.orientechnologies</groupId>
+                <artifactId>orient-commons</artifactId>
+                <version>1.7.6</version>
+            </dependency>
+            <dependency>
+                <groupId>com.orientechnologies</groupId>
+                <artifactId>orientdb-core</artifactId>
+                <version>1.7.6</version>
+            </dependency>
+            <dependency>
+                <groupId>com.orientechnologies</groupId>
+                <artifactId>orientdb-graphdb</artifactId>
+                <version>1.7.6</version>
+            </dependency>
+            <dependency>
+                <groupId>com.orientechnologies</groupId>
+                <artifactId>orientdb-server</artifactId>
+                <version>1.7.6</version>
             </dependency>
 
         </dependencies>
@@ -516,6 +542,12 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.3.6</version>
+                <extensions>true</extensions>
             </plugin>
         </plugins>
     </build>

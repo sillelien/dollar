@@ -19,8 +19,6 @@ package me.neilellis.dollar.script;
 import me.neilellis.dollar.DollarException;
 import org.pegdown.ast.*;
 
-import java.io.IOException;
-
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
@@ -197,8 +195,8 @@ class CodeExtractionVisitor implements Visitor {
         if ("dollar".equals(node.getType())) {
             try {
                 new DollarParser().parse(node.getText(), false);
-            } catch (IOException e) {
-                throw new DollarException(e);
+            } catch (Exception e) {
+                throw new DollarException(e, node.getText());
             }
         }
     }

@@ -321,8 +321,8 @@ DollarScript (at present) supports numerical and character ranges
 
 ```dollar
 
-"a".."c" <=> ["a","b","c"]
-1..3 <=> [1,2,3]
+#("a".."c") <=> 3
+(1..3)[1] <=>2
 
 ```
 
@@ -355,7 +355,7 @@ Dollar supports a decimal date system where each day is 1.0. This means it's pos
 @@ DATE() + 1
 @@ DATE() - 1
 
-.: DATE() + "1.0" is Date
+.: DATE() + "1.0" is String
 .: DATE() / "1.0" is Decimal
 ```
 
@@ -464,7 +464,7 @@ true as boolean <=> true
 true as VOID <=> void
 
 
-[1,2,3] as string <=> "[1,2,3]"
+[1,2,3] as string <=> "[ 1, 2, 3 ]"
 [1,2,3] as list <=> [1,2,3]
 [1,2,3] as boolean <=> true
 [1,2,3] as map <=> {"value":[1,2,3]}
@@ -654,7 +654,7 @@ search="Unikitty"
 
 dynamicURI= ("camel:http://google.com?q="+search) as uri
 
-marinaVideos = << camel:https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
+marinaVideos = << https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
 @@ marinaVideos.results each { $1.trackViewUrl }
 ```
 

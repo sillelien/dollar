@@ -29,13 +29,14 @@ public class SimpleReadOperator extends UnaryOp {
 
 
     public SimpleReadOperator(Scope scope) {
-        super(scope, null);
+        super("simple-read", scope, null);
     }
 
 
     @Override
     public var map(var from) {
-        return DollarScriptSupport.wrapReactiveUnary(scope, from, () -> DollarFactory.fromURI(from).$read());
+        return DollarScriptSupport.wrapReactive(scope, () -> DollarFactory.fromURI(from).$read(), source, operation,
+                                                from);
     }
 
 }

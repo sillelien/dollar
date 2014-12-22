@@ -18,85 +18,77 @@ package me.neilellis.dollar.script;
 
 import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.Pipeable;
+import me.neilellis.dollar.TypePrediction;
+import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.types.DollarLambda;
+import me.neilellis.dollar.var;
 
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class DollarSource extends DollarLambda implements SourceAware {
+public class DollarSource extends DollarLambda {
+    public static TypeLearner typeLearner = Plugins.sharedInstance(TypeLearner.class);
     private final Scope scope;
+    private final Source source;
+    private List<var> inputs;
+    private String operation;
+    private volatile TypePrediction prediction;
 
-    public DollarSource(Pipeable lambda, Scope scope) {
+    public DollarSource(Pipeable lambda, Scope scope, Source source, List<var> inputs, String operation) {
         super(lambda);
+        if (operation == null) {
+            throw new NullPointerException();
+        }
+
+        this.inputs = inputs;
+        this.operation = operation;
         if (scope == null) {
             throw new NullPointerException();
         }
         this.scope = scope;
+        this.source = source;
     }
 
-    public DollarSource(Pipeable lambda, Scope scope, boolean fixable) {
+    public DollarSource(Pipeable lambda, Scope scope, Source source, boolean fixable, List<var> inputs,
+                        String operation) {
         super(lambda, fixable);
+        this.inputs = inputs;
+        this.operation = operation;
         if (scope == null) {
             throw new NullPointerException();
         }
         this.scope = scope;
+        this.source = source;
     }
 
     @Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         try {
-            return super.invoke(proxy, method, args);
+            if (Objects.equals(method.getName(), "_source")) {
+                return source;
+            }
+            if (Objects.equals(method.getName(), "_predictType")) {
+                if (this.prediction == null) {
+                    this.prediction = typeLearner.predict(operation, source, inputs);
+                }
+                return this.prediction;
+            }
+            final Object result = super.invoke(proxy, method, args);
+            if (method.getName().startsWith("_fixDeep")) {
+                typeLearner.learn(operation, source, inputs, ((var) result).$type());
+            }
+            return result;
         } catch (AssertionError e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, this, e);
+            return scope.getDollarParser().getErrorHandler().handle(scope, source, e);
         } catch (DollarException e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, this, e);
+            return scope.getDollarParser().getErrorHandler().handle(scope, source, e);
         } catch (Exception e) {
-            return scope.getDollarParser().getErrorHandler().handle(scope, this, e);
+            return scope.getDollarParser().getErrorHandler().handle(scope, source, e);
         }
     }
 
-    @Override public int getStart() {
-        final String parseStart = meta.get("__parse_start");
-        if (parseStart != null) {
-            return Integer.parseInt(parseStart);
-        } else {
-            return -1;
-        }
-    }
-
-    @Override public int getLength() {
-        final String parseStart = meta.get("__parse_length");
-        if (parseStart != null) {
-            return Integer.parseInt(parseStart);
-        } else {
-            return -1;
-        }
-    }
-
-    @Override public String getSource() {
-        return scope.getSource();
-    }
-
-    @Override public String getSourceMessage() {
-        int index = getStart();
-        int length = getLength();
-        if (index < 0 || length < 0) {
-            return "<unknown location>";
-        }
-        String theSource = scope.getSource();
-        int end = theSource.indexOf('\n', index + length);
-        int start = index > 10 ? index - 10 : 0;
-        String
-                highlightedSource =
-                "... " +
-                theSource.substring(start, index) +
-                " \u261E " +
-                theSource.substring(index, index + length) +
-                " \u261C " +
-                theSource.substring(index + length, end) +
-                " ...";
-        return highlightedSource.replaceAll("\n", "\\\\n");
-    }
 
 }

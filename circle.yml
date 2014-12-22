@@ -1,8 +1,8 @@
 machine:
   environment:
-    previous_release: 0.1.1
-    release: 0.1.2
-    next_release: 0.1.3
+    previous_release: 0.1.2
+    release: 0.1.3
+    next_release: 0.1.4
   java:
     version: oraclejdk8
 
@@ -25,14 +25,23 @@ dependencies:
 #    - sudo apt-get install -y gpg
     - ./gen-key.sh ${GPG_PASSPHRASE}
     - envsubst < settings.xml > ~/.m2/settings.xml
-    - "(mvn -Dgpg.passphrase=${GPG_PASSPHRASE} clean install -Dmaven.test.skip || : ) &> /dev/null":
+    - "mvn -q -Dgpg.passphrase=${GPG_PASSPHRASE} clean install -Dmaven.test.skip=true || :  &> /dev/null":
         timeout: 600
     - echo "login=neilellis" > ~/.github
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
     - gem install jekyll
     - npm install -g github-changes
+  override:
+    - mvn -q dependency:resolve
 
 
+test:
+  override:
+    - sudo ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
+    - mvn -q integration-test
+
+#  pre:
+#     - mvn org.pitest:pitest-maven:mutationCoverage
 
 deployment:
   staging:
@@ -60,7 +69,7 @@ deployment:
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
-        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} install deploy
+        - mvn -q -Dgpg.passphrase=${GPG_PASSPHRASE} install deploy
         - ./build-docs.sh:
             timeout: 360
         - pack/pack.sh

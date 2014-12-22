@@ -16,12 +16,10 @@
 
 package me.neilellis.dollar.script;
 
-import java.util.function.Supplier;
-
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface Operator {
 
-    void setSource(Supplier<String> source);
+    void setSource(Source source);
 }

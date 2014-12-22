@@ -48,16 +48,17 @@ public class SocketURIHandler implements URIHandler {
         }));
     }
 
-    public SocketURIHandler(String scheme, String uri) throws IOException {
-        if (uri.startsWith("//")) {
-            this.uri = URI.parse(scheme + ":" + uri);
-        } else {
-            this.uri = URI.parse(uri);
-        }
+    public SocketURIHandler(String scheme, URI uri) throws IOException {
+        this.uri = uri.sub();
     }
 
     @Override
     public var all() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public var write(var value, boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
 
@@ -94,19 +95,15 @@ public class SocketURIHandler implements URIHandler {
 
     @Override public var publish(var value) {
         ArrayList<var> responses = new ArrayList<>();
-        server.getBroadcastOperations().sendEvent(value.getPairKey(), value.getPairValue().json().toMap());
+        server.getBroadcastOperations()
+              .sendEvent(value.getPairKey().toString(), value.getPairValue().toJsonObject().toMap());
         for (SocketIOSubscription subscription : subscriptions.values()) {
         }
         return DollarFactory.fromValue(responses);
     }
 
     @Override
-    public var send(var value, boolean blocking, boolean mutating) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public var receive(boolean blocking, boolean mutating) {
+    public var read(boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
 
