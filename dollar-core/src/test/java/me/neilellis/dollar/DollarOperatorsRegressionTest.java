@@ -19,6 +19,7 @@ package me.neilellis.dollar;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -31,7 +32,7 @@ import java.util.function.Function;
 
 import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.TestGenerator.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -53,13 +54,6 @@ public class DollarOperatorsRegressionTest {
         final Function<List<var>, var> operation = v -> v.get(0).$divide(v.get(1));
         regression("/", "divide", "all", testBinary(allValues(), noSmallDecimals(), operation));
         regression("/", "divide", "minimal", testBinary(minimal(), noSmallDecimals(), operation));
-    }
-
-    @Test
-    public void testMinus() throws IOException {
-        final Function<List<var>, var> operation = v -> v.get(0).$minus(v.get(1));
-        regression("-", "minus", "small", testBinary(small(), small(), operation));
-        regression("-", "minus", "minimal", testBinary(allValues(), allValues(), operation));
     }
 
     public void regression(String symbol, String operation, String variant, List<List<var>> result) throws IOException {
@@ -99,8 +93,22 @@ public class DollarOperatorsRegressionTest {
         final TreeSet
                 previousTypeComparison =
                 new TreeSet<String>(IOUtils.readLines(getClass().getResourceAsStream("/" + typesFile)));
-        assertEquals(previousTypeComparison, typeComparison);
-        assertEquals(previous.jsonArray().encodePrettily(), current.jsonArray().encodePrettily());
+        diff("type", previousTypeComparison.toString(), typeComparison.toString());
+        diff("result", previous.jsonArray().encodePrettily(), current.jsonArray().encodePrettily());
+    }
+
+    public void diff(String desc, String lhs, String rhs) {
+        final String difference = StringUtils.difference(lhs, rhs);
+        if (!difference.isEmpty()) {
+            fail("Difference for " + desc + " is " + difference);
+        }
+    }
+
+    @Test
+    public void testMinus() throws IOException {
+        final Function<List<var>, var> operation = v -> v.get(0).$minus(v.get(1));
+        regression("-", "minus", "small", testBinary(small(), small(), operation));
+        regression("-", "minus", "minimal", testBinary(allValues(), allValues(), operation));
     }
 
     @Test

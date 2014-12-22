@@ -361,7 +361,7 @@ public class DollarFactory {
         if (DollarStatic.config.failFast() && !quiet) {
             throw new DollarFailureException(t, errorType);
         } else {
-            t.printStackTrace(System.err);
+//            t.printStackTrace(System.err);
             return wrap(new DollarError(ImmutableList.of(t), errorType, t.getMessage()));
         }
     }
