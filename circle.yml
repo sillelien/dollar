@@ -37,7 +37,7 @@ dependencies:
 
 test:
   override:
-    - sudo ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
+    - ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
     - mvn -q integration-test
 
 #  pre:
