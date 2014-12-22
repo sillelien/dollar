@@ -1,6 +1,9 @@
 ## Change Log
 
-### In Progress: 0.1.4 (2014/12/22 13:08 +00:00)
+### In Progress: 0.1.4 (2014/12/22 13:28 +00:00)
+- [f103cd0](https://github.com/neilellis/dollar/commit/f103cd083ab2e27c3901c5325d29f42fdc4e370b) Change log updates
+- [5188d70](https://github.com/neilellis/dollar/commit/5188d7026ed70dd328671cc826b154f0762e4e32) Auto merge
+- [df5c1ea](https://github.com/neilellis/dollar/commit/df5c1eafdd307b431319358daa64679580d2b6ae) Started on blog about predictive typing.
 - [4ded2a4](https://github.com/neilellis/dollar/commit/4ded2a41fa0d7fd77065884b59660588488f1457) Change log updates
 - [5b7fd46](https://github.com/neilellis/dollar/commit/5b7fd46058f96e269cb4257286333e2217a30cec) Auto merge
 - [ed063b3](https://github.com/neilellis/dollar/commit/ed063b3ea577c5deb67d827c3ba7a93030bb430f) Started on blog about predictive typing.
