@@ -77,8 +77,8 @@ import java.util.*;
     return new JsonObject(map, true);
   }
 
-  public String encode() {
-    return Json.encode(this.map);
+  public String encodePrettily() {
+    return Json.encodePrettily(this.map);
   }
 
   public Object get(Object key) {
@@ -218,11 +218,11 @@ import java.util.*;
 
   @Override
   public String toString() {
-    return encodePrettily();
+    return encode();
   }
 
-  public String encodePrettily() {
-    return Json.encodePrettily(this.map);
+  public String encode() {
+    return Json.encode(this.map);
   }
 
   public JsonObject mergeIn(JsonObject other) {

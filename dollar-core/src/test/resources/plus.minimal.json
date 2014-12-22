@@ -100,8 +100,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     0
   ],
@@ -206,8 +205,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     1
   ],
@@ -312,8 +310,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     -1
   ],
@@ -418,8 +415,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     0.1
   ],
@@ -628,8 +624,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "DATE",
@@ -729,10 +724,9 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
-    "{\n  \"1\" : 0.1,\n  \"value1\" : true,\n  \"true\" : 5,\n  \"$type\" : \"MAP\"\n}"
+    "{\"1\":0.1,\"value1\":true,\"true\":5}"
   ],
   [
     "@",
@@ -826,10 +820,9 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
-    "@{\n  \"1\" : 0.1,\n  \"value1\" : true,\n  \"true\" : 5,\n  \"$type\" : \"MAP\"\n}"
+    "@{\"1\":0.1,\"value1\":true,\"true\":5}"
   ],
   [
     true,
@@ -927,8 +920,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     true
   ],
@@ -1028,8 +1020,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     true
   ],
@@ -1270,8 +1261,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     [
       0,
@@ -1280,8 +1270,7 @@
       {
         "1": 0.1,
         "value1": true,
-        "true": 5,
-        "$type": "MAP"
+        "true": 5
       }
     ]
   ],
@@ -1511,8 +1500,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "RANGE",
@@ -1612,8 +1600,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     null
   ],
@@ -1661,8 +1648,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     }
   ],
   [
@@ -1931,8 +1917,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "ERROR",
@@ -1946,72 +1931,63 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     0,
     {
       "1": 0.1,
       "value1": true,
       "true": 5,
-      "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9": 0,
-      "$type": "MAP"
+      "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9": 0
     }
   ],
   [
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     1,
     {
       "1": 0.1,
       "value1": true,
       "true": 5,
-      "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b": 1,
-      "$type": "MAP"
+      "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b": 1
     }
   ],
   [
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     -1,
     {
       "1": 0.1,
       "value1": true,
       "true": 5,
-      "1bad6b8cf97131fceab8543e81f7757195fbb1d36b376ee994ad1cf17699c464": -1,
-      "$type": "MAP"
+      "1bad6b8cf97131fceab8543e81f7757195fbb1d36b376ee994ad1cf17699c464": -1
     }
   ],
   [
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     0.1,
     {
       "1": 0.1,
       "value1": true,
       "true": 5,
-      "14be4b45f18e0d8c67b4f719b5144eee88497e413709d11d85b096d8e2346310": 0.1,
-      "$type": "MAP"
+      "14be4b45f18e0d8c67b4f719b5144eee88497e413709d11d85b096d8e2346310": 0.1
     }
   ],
   [
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "DATE",
@@ -2026,78 +2002,68 @@
         "$type": "DATE",
         "text": "1970-01-01T01:00:00.001",
         "millis": 0
-      },
-      "$type": "MAP"
+      }
     }
   ],
   [
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     "",
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     }
   ],
   [
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     "@",
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     }
   ],
   [
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     true,
     {
       "1": 0.1,
       "value1": true,
       "true": 5,
-      "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b": true,
-      "$type": "MAP"
+      "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b": true
     }
   ],
   [
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     false,
     {
       "1": 0.1,
       "value1": true,
       "true": 5,
-      "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa": false,
-      "$type": "MAP"
+      "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa": false
     }
   ],
   [
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     [
       0,
@@ -2112,16 +2078,14 @@
         0,
         1,
         -1
-      ],
-      "$type": "MAP"
+      ]
     }
   ],
   [
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "RANGE",
@@ -2136,47 +2100,41 @@
         "$type": "RANGE",
         "lower": -1,
         "upper": 1
-      },
-      "$type": "MAP"
+      }
     }
   ],
   [
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     null,
     {
       "1": 0.1,
       "value1": true,
       "true": 5,
-      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855": null,
-      "$type": "MAP"
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855": null
     }
   ],
   [
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "1": 0.1,
       "value1": true,
       "true": 5,
-      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855": null,
-      "$type": "MAP"
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855": null
     }
   ],
   [
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "ERROR",
@@ -2195,28 +2153,24 @@
           "errorType": "EXCEPTION",
           "errorMessage": "Test Exception"
     }
-      },
-      "$type": "MAP"
+      }
     }
   ],
   [
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     }
   ]
 ]

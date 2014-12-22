@@ -473,8 +473,16 @@
   ],
   [
     0,
+    {},
     {
-      "$type": "MAP"
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0,
+    {
+      "1": "one"
     },
     {
       "$type": "INFINITY",
@@ -484,8 +492,7 @@
   [
     0,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "INFINITY",
@@ -495,8 +502,7 @@
   [
     0,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "INFINITY",
@@ -506,8 +512,7 @@
   [
     0,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "INFINITY",
@@ -517,19 +522,7 @@
   [
     0,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "INFINITY",
-      "positive": true
-    }
-  ],
-  [
-    0,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "INFINITY",
@@ -543,8 +536,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "INFINITY",
@@ -1025,8 +1017,16 @@
   ],
   [
     1,
+    {},
     {
-      "$type": "MAP"
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    1,
+    {
+      "1": "one"
     },
     {
       "$type": "INFINITY",
@@ -1036,8 +1036,7 @@
   [
     1,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "INFINITY",
@@ -1047,8 +1046,7 @@
   [
     1,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "INFINITY",
@@ -1058,8 +1056,7 @@
   [
     1,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "INFINITY",
@@ -1069,19 +1066,7 @@
   [
     1,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "INFINITY",
-      "positive": true
-    }
-  ],
-  [
-    1,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "INFINITY",
@@ -1095,8 +1080,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "INFINITY",
@@ -1577,8 +1561,16 @@
   ],
   [
     -1,
+    {},
     {
-      "$type": "MAP"
+      "$type": "INFINITY",
+      "positive": false
+    }
+  ],
+  [
+    -1,
+    {
+      "1": "one"
     },
     {
       "$type": "INFINITY",
@@ -1588,8 +1580,7 @@
   [
     -1,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "INFINITY",
@@ -1599,8 +1590,7 @@
   [
     -1,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "INFINITY",
@@ -1610,8 +1600,7 @@
   [
     -1,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "INFINITY",
@@ -1621,19 +1610,7 @@
   [
     -1,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "INFINITY",
-      "positive": false
-    }
-  ],
-  [
-    -1,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "INFINITY",
@@ -1647,8 +1624,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "INFINITY",
@@ -2126,8 +2102,16 @@
   ],
   [
     0.1,
+    {},
     {
-      "$type": "MAP"
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    0.1,
+    {
+      "1": "one"
     },
     {
       "$type": "INFINITY",
@@ -2137,8 +2121,7 @@
   [
     0.1,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "INFINITY",
@@ -2148,8 +2131,7 @@
   [
     0.1,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "INFINITY",
@@ -2159,8 +2141,7 @@
   [
     0.1,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "INFINITY",
@@ -2170,19 +2151,7 @@
   [
     0.1,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "INFINITY",
-      "positive": true
-    }
-  ],
-  [
-    0.1,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "INFINITY",
@@ -2196,8 +2165,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "INFINITY",
@@ -2903,8 +2871,20 @@
       "text": "1970-01-01T01:00:00.001",
       "millis": 0
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00:00.001",
+      "millis": 0
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "INFINITY",
@@ -2918,8 +2898,7 @@
       "millis": 0
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "INFINITY",
@@ -2933,8 +2912,7 @@
       "millis": 0
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "INFINITY",
@@ -2948,8 +2926,7 @@
       "millis": 0
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "INFINITY",
@@ -2963,23 +2940,7 @@
       "millis": 0
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "INFINITY",
-      "positive": true
-    }
-  ],
-  [
-    {
-      "$type": "DATE",
-      "text": "1970-01-01T01:00:00.001",
-      "millis": 0
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "INFINITY",
@@ -2997,8 +2958,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "INFINITY",
@@ -3416,48 +3376,41 @@
   ],
   [
     "",
+    {},
+    ""
+  ],
+  [
+    "",
     {
-      "$type": "MAP"
+      "1": "one"
     },
     ""
   ],
   [
     "",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     ""
   ],
   [
     "",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     ""
   ],
   [
     "",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     ""
   ],
   [
     "",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    ""
-  ],
-  [
-    "",
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     ""
   ],
@@ -3468,8 +3421,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     ""
   ],
@@ -3884,48 +3836,41 @@
   ],
   [
     "@",
+    {},
+    "@"
+  ],
+  [
+    "@",
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "@"
   ],
   [
     "@",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "@"
   ],
   [
     "@",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "@"
   ],
   [
     "@",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "@"
   ],
   [
     "@",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    "@"
-  ],
-  [
-    "@",
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     "@"
   ],
@@ -3936,8 +3881,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "@"
   ],
@@ -4346,48 +4290,41 @@
   ],
   [
     true,
-    {
-      "$type": "MAP"
-    },
+    {},
     false
   ],
   [
     true,
     {
-      "1": "one",
-      "$type": "MAP"
+      "1": "one"
     },
     true
   ],
   [
     true,
     {
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     true
   ],
   [
     true,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     true
   ],
   [
     true,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     true
   ],
   [
     true,
     {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     true
   ],
@@ -4398,8 +4335,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     true
   ],
@@ -4808,48 +4744,41 @@
   ],
   [
     false,
-    {
-      "$type": "MAP"
-    },
+    {},
     true
   ],
   [
     false,
     {
-      "1": "one",
-      "$type": "MAP"
+      "1": "one"
     },
     false
   ],
   [
     false,
     {
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     false
   ],
   [
     false,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     false
   ],
   [
     false,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     false
   ],
   [
     false,
     {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     false
   ],
@@ -4860,8 +4789,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     false
   ],
@@ -5671,8 +5599,20 @@
       1,
       -1
     ],
+    {},
     {
-      "$type": "MAP"
+      "$type": "INFINITY",
+      "positive": true
+    }
+  ],
+  [
+    [
+      0,
+      1,
+      -1
+    ],
+    {
+      "1": "one"
     },
     {
       "$type": "INFINITY",
@@ -5686,8 +5626,7 @@
       -1
     ],
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "INFINITY",
@@ -5701,8 +5640,7 @@
       -1
     ],
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "INFINITY",
@@ -5716,8 +5654,7 @@
       -1
     ],
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "INFINITY",
@@ -5731,23 +5668,7 @@
       -1
     ],
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "INFINITY",
-      "positive": true
-    }
-  ],
-  [
-    [
-      0,
-      1,
-      -1
-    ],
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "INFINITY",
@@ -5765,8 +5686,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "INFINITY",
@@ -6758,8 +6678,27 @@
       "lower": -1,
       "upper": 1
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "RANGE",
+      "lower": {
+        "$type": "INFINITY",
+        "positive": false
+      },
+      "upper": {
+        "$type": "INFINITY",
+        "positive": true
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -6780,8 +6719,7 @@
       "upper": 1
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -6802,8 +6740,7 @@
       "upper": 1
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -6824,8 +6761,7 @@
       "upper": 1
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -6846,30 +6782,7 @@
       "upper": 1
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": {
-        "$type": "INFINITY",
-        "positive": false
-      },
-      "upper": {
-        "$type": "INFINITY",
-        "positive": true
-      }
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": -1,
-      "upper": 1
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -6894,8 +6807,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -7314,48 +7226,41 @@
   ],
   [
     null,
+    {},
+    null
+  ],
+  [
+    null,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     null
   ],
   [
     null,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     null
   ],
   [
     null,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     null
   ],
   [
     null,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     null
   ],
   [
     null,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    null
-  ],
-  [
-    null,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     null
   ],
@@ -7366,8 +7271,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     null
   ],
@@ -7590,39 +7494,30 @@
       "upper": -0.1
     }
   ],
+  [{}],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
@@ -7631,8 +7526,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -8718,8 +8612,25 @@
         "errorMessage": "Test Exception"
       }
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "ERROR",
@@ -8738,8 +8649,7 @@
       }
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "ERROR",
@@ -8758,8 +8668,7 @@
       }
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "ERROR",
@@ -8778,8 +8687,7 @@
       }
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "ERROR",
@@ -8798,28 +8706,7 @@
       }
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Test Exception"
-      }
-    }
-  ],
-  [
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Test Exception"
-      }
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "ERROR",
@@ -8842,8 +8729,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "ERROR",
@@ -8857,8 +8743,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     -2147483648,
     {
@@ -8873,8 +8758,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     2147483647,
     {
@@ -8889,8 +8773,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     -9223372036854775807,
     {
@@ -8905,8 +8788,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     9223372036854775807,
     {
@@ -8921,8 +8803,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     0,
     {
@@ -8937,8 +8818,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     1,
     {
@@ -8953,8 +8833,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     -1,
     {
@@ -8969,8 +8848,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     100,
     {
@@ -8985,8 +8863,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     -100,
     {
@@ -9001,8 +8878,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     -3.4028234663852886E38,
     {
@@ -9017,8 +8893,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     3.4028234663852886E38,
     {
@@ -9033,8 +8908,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     -1.7976931348623157E308,
     {
@@ -9049,8 +8923,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     1.7976931348623157E308,
     {
@@ -9065,8 +8938,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     0.0,
     {
@@ -9081,8 +8953,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     1.0,
     {
@@ -9097,8 +8968,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     -1.0,
     {
@@ -9113,8 +8983,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     100.0,
     {
@@ -9129,8 +8998,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     -100.0,
     {
@@ -9145,8 +9013,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     0.5,
     {
@@ -9161,8 +9028,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     -0.5,
     {
@@ -9177,8 +9043,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     -0.1,
     {
@@ -9193,8 +9058,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     0.1,
     {
@@ -9209,8 +9073,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "DATE",
@@ -9229,8 +9092,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "DATE",
@@ -9249,8 +9111,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "DATE",
@@ -9269,8 +9130,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     "",
     {
@@ -9285,8 +9145,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     "@",
     {
@@ -9301,8 +9160,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
@@ -9317,8 +9175,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     "@@ @@ @@@ @@ @@ @@",
     {
@@ -9333,8 +9190,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     " ",
     {
@@ -9349,8 +9205,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
@@ -9365,8 +9220,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     "\n\t\r",
     {
@@ -9381,8 +9235,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     "1",
     {
@@ -9397,8 +9250,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     "true",
     {
@@ -9413,8 +9265,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     "false",
     {
@@ -9429,8 +9280,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     "0",
     {
@@ -9445,8 +9295,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     true,
     {
@@ -9461,8 +9310,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     false,
     {
@@ -9477,8 +9325,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     [
       -2147483648,
@@ -9503,8 +9350,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     [
       -3.4028234663852886E38,
@@ -9533,8 +9379,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     [
       {
@@ -9565,8 +9410,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     [
       "",
@@ -9593,8 +9437,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     [
       true,
@@ -9612,8 +9455,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     [],
     {
@@ -9628,8 +9470,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "RANGE",
@@ -9656,8 +9497,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "RANGE",
@@ -9676,8 +9516,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "RANGE",
@@ -9696,8 +9535,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "RANGE",
@@ -9716,8 +9554,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "RANGE",
@@ -9736,8 +9573,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "RANGE",
@@ -9756,8 +9592,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "RANGE",
@@ -9776,8 +9611,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "RANGE",
@@ -9796,8 +9630,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "RANGE",
@@ -9816,8 +9649,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "RANGE",
@@ -9836,8 +9668,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "RANGE",
@@ -9856,8 +9687,7 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
       "$type": "RANGE",
@@ -9876,11 +9706,25 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
+    },
+    {},
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
     },
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "$type": "ERROR",
@@ -9894,31 +9738,10 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
-      "1": "one",
-      "$type": "MAP"
-    },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
-      }
-    }
-  ],
-  [
-    {
-      "1": 0.1,
-      "value1": true,
-      "true": 5,
-      "$type": "MAP"
-    },
-    {
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "ERROR",
@@ -9932,31 +9755,10 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
-    },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
-      }
-    }
-  ],
-  [
-    {
-      "1": 0.1,
-      "value1": true,
-      "true": 5,
-      "$type": "MAP"
-    },
-    {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "ERROR",
@@ -9970,12 +9772,10 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
     },
     {
-      "string": "string",
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "ERROR",
@@ -9989,16 +9789,31 @@
     {
       "1": 0.1,
       "value1": true,
-      "true": 5,
-      "$type": "MAP"
+      "true": 5
+    },
+    {
+      "string": "string"
+    },
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "INVALID_MAP_OPERATION",
+        "errorMessage": ""
+      }
+    }
+  ],
+  [
+    {
+      "1": 0.1,
+      "value1": true,
+      "true": 5
     },
     {
       "1": 0.1,
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "ERROR",

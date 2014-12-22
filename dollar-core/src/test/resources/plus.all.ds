@@ -62,22 +62,22 @@
 " " + true <=> " true"
 " " + void <=> " "
 " " + {"string" : "string",
-} <=> " {\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}"
+} <=> " {\"string\":\"string\"}"
 " " + {("3870-07-04T07:30" as Date) : true,
-} <=> " {\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}"
+} <=> " {\"3870-07-04T07:30\":true}"
 " " + {0.1 : "0.1",
-} <=> " {\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}"
+} <=> " {\"0.1\":\"0.1\"}"
 " " + {1 : "one",
-} <=> " {\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}"
+} <=> " {\"1\":\"one\"}"
 " " + {1 : 0.1,
 "value2" : true,
 "value1" : true,
 "value3" : true,
 true : "true",
-} <=> " {\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
+} <=> " {\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}"
 " " + {true : "true",
-} <=> " {\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
-" " + {} <=> " {\n  \"$type\" : \"MAP\"\n}"
+} <=> " {\"true\":\"true\"}"
+" " + {} <=> " {}"
 "" + " " <=> " "
 "" + "" <=> ""
 "" + "0" <=> "0"
@@ -142,22 +142,22 @@ true : "true",
 "" + true <=> "true"
 "" + void <=> ""
 "" + {"string" : "string",
-} <=> "{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "{\"string\":\"string\"}"
 "" + {("3870-07-04T07:30" as Date) : true,
-} <=> "{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}"
+} <=> "{\"3870-07-04T07:30\":true}"
 "" + {0.1 : "0.1",
-} <=> "{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "{\"0.1\":\"0.1\"}"
 "" + {1 : "one",
-} <=> "{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "{\"1\":\"one\"}"
 "" + {1 : 0.1,
 "value2" : true,
 "value1" : true,
 "value3" : true,
 true : "true",
-} <=> "{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}"
 "" + {true : "true",
-} <=> "{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
-"" + {} <=> "{\n  \"$type\" : \"MAP\"\n}"
+} <=> "{\"true\":\"true\"}"
+"" + {} <=> "{}"
 "0" + " " <=> "0 "
 "0" + "" <=> "0"
 "0" + "0" <=> "00"
@@ -222,22 +222,22 @@ true : "true",
 "0" + true <=> "0true"
 "0" + void <=> "0"
 "0" + {"string" : "string",
-} <=> "0{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "0{\"string\":\"string\"}"
 "0" + {("3870-07-04T07:30" as Date) : true,
-} <=> "0{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}"
+} <=> "0{\"3870-07-04T07:30\":true}"
 "0" + {0.1 : "0.1",
-} <=> "0{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "0{\"0.1\":\"0.1\"}"
 "0" + {1 : "one",
-} <=> "0{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "0{\"1\":\"one\"}"
 "0" + {1 : 0.1,
 "value2" : true,
 "value1" : true,
 "value3" : true,
 true : "true",
-} <=> "0{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "0{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}"
 "0" + {true : "true",
-} <=> "0{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
-"0" + {} <=> "0{\n  \"$type\" : \"MAP\"\n}"
+} <=> "0{\"true\":\"true\"}"
+"0" + {} <=> "0{}"
 "1" + " " <=> "1 "
 "1" + "" <=> "1"
 "1" + "0" <=> "10"
@@ -302,22 +302,22 @@ true : "true",
 "1" + true <=> "1true"
 "1" + void <=> "1"
 "1" + {"string" : "string",
-} <=> "1{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "1{\"string\":\"string\"}"
 "1" + {("3870-07-04T07:30" as Date) : true,
-} <=> "1{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}"
+} <=> "1{\"3870-07-04T07:30\":true}"
 "1" + {0.1 : "0.1",
-} <=> "1{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "1{\"0.1\":\"0.1\"}"
 "1" + {1 : "one",
-} <=> "1{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "1{\"1\":\"one\"}"
 "1" + {1 : 0.1,
 "value2" : true,
 "value1" : true,
 "value3" : true,
 true : "true",
-} <=> "1{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "1{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}"
 "1" + {true : "true",
-} <=> "1{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
-"1" + {} <=> "1{\n  \"$type\" : \"MAP\"\n}"
+} <=> "1{\"true\":\"true\"}"
+"1" + {} <=> "1{}"
 "@" + " " <=> "@ "
 "@" + "" <=> "@"
 "@" + "0" <=> "@0"
@@ -382,22 +382,22 @@ true : "true",
 "@" + true <=> "@true"
 "@" + void <=> "@"
 "@" + {"string" : "string",
-} <=> "@{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "@{\"string\":\"string\"}"
 "@" + {("3870-07-04T07:30" as Date) : true,
-} <=> "@{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}"
+} <=> "@{\"3870-07-04T07:30\":true}"
 "@" + {0.1 : "0.1",
-} <=> "@{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "@{\"0.1\":\"0.1\"}"
 "@" + {1 : "one",
-} <=> "@{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "@{\"1\":\"one\"}"
 "@" + {1 : 0.1,
 "value2" : true,
 "value1" : true,
 "value3" : true,
 true : "true",
-} <=> "@{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "@{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}"
 "@" + {true : "true",
-} <=> "@{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
-"@" + {} <=> "@{\n  \"$type\" : \"MAP\"\n}"
+} <=> "@{\"true\":\"true\"}"
+"@" + {} <=> "@{}"
 "@@ @@ @@@ @@ @@ @@" + " " <=> "@@ @@ @@@ @@ @@ @@ "
 "@@ @@ @@@ @@ @@ @@" + "" <=> "@@ @@ @@@ @@ @@ @@"
 "@@ @@ @@@ @@ @@ @@" + "0" <=> "@@ @@ @@@ @@ @@ @@0"
@@ -462,22 +462,22 @@ true : "true",
 "@@ @@ @@@ @@ @@ @@" + true <=> "@@ @@ @@@ @@ @@ @@true"
 "@@ @@ @@@ @@ @@ @@" + void <=> "@@ @@ @@@ @@ @@ @@"
 "@@ @@ @@@ @@ @@ @@" + {"string" : "string",
-} <=> "@@ @@ @@@ @@ @@ @@{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "@@ @@ @@@ @@ @@ @@{\"string\":\"string\"}"
 "@@ @@ @@@ @@ @@ @@" + {("3870-07-04T07:30" as Date) : true,
-} <=> "@@ @@ @@@ @@ @@ @@{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}"
+} <=> "@@ @@ @@@ @@ @@ @@{\"3870-07-04T07:30\":true}"
 "@@ @@ @@@ @@ @@ @@" + {0.1 : "0.1",
-} <=> "@@ @@ @@@ @@ @@ @@{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "@@ @@ @@@ @@ @@ @@{\"0.1\":\"0.1\"}"
 "@@ @@ @@@ @@ @@ @@" + {1 : "one",
-} <=> "@@ @@ @@@ @@ @@ @@{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "@@ @@ @@@ @@ @@ @@{\"1\":\"one\"}"
 "@@ @@ @@@ @@ @@ @@" + {1 : 0.1,
 "value2" : true,
 "value1" : true,
 "value3" : true,
 true : "true",
-} <=> "@@ @@ @@@ @@ @@ @@{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "@@ @@ @@@ @@ @@ @@{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}"
 "@@ @@ @@@ @@ @@ @@" + {true : "true",
-} <=> "@@ @@ @@@ @@ @@ @@{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
-"@@ @@ @@@ @@ @@ @@" + {} <=> "@@ @@ @@@ @@ @@ @@{\n  \"$type\" : \"MAP\"\n}"
+} <=> "@@ @@ @@@ @@ @@ @@{\"true\":\"true\"}"
+"@@ @@ @@@ @@ @@ @@" + {} <=> "@@ @@ @@@ @@ @@ @@{}"
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + " " <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ "
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + "" <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + "0" <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@0"
@@ -542,22 +542,22 @@ true : "true",
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + true <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@true"
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + void <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + {"string" : "string",
-} <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{\"string\":\"string\"}"
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + {("3870-07-04T07:30" as Date) : true,
-} <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}"
+} <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{\"3870-07-04T07:30\":true}"
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + {0.1 : "0.1",
-} <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{\"0.1\":\"0.1\"}"
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + {1 : "one",
-} <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{\"1\":\"one\"}"
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + {1 : 0.1,
 "value2" : true,
 "value1" : true,
 "value3" : true,
 true : "true",
-} <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}"
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + {true : "true",
-} <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
-"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + {} <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{\n  \"$type\" : \"MAP\"\n}"
+} <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{\"true\":\"true\"}"
+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + {} <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{}"
 "\n\t\r" + " " <=> "\n\t\r "
 "\n\t\r" + "" <=> "\n\t\r"
 "\n\t\r" + "0" <=> "\n\t\r0"
@@ -622,22 +622,22 @@ true : "true",
 "\n\t\r" + true <=> "\n\t\rtrue"
 "\n\t\r" + void <=> "\n\t\r"
 "\n\t\r" + {"string" : "string",
-} <=> "\n\t\r{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "\n\t\r{\"string\":\"string\"}"
 "\n\t\r" + {("3870-07-04T07:30" as Date) : true,
-} <=> "\n\t\r{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}"
+} <=> "\n\t\r{\"3870-07-04T07:30\":true}"
 "\n\t\r" + {0.1 : "0.1",
-} <=> "\n\t\r{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "\n\t\r{\"0.1\":\"0.1\"}"
 "\n\t\r" + {1 : "one",
-} <=> "\n\t\r{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "\n\t\r{\"1\":\"one\"}"
 "\n\t\r" + {1 : 0.1,
 "value2" : true,
 "value1" : true,
 "value3" : true,
 true : "true",
-} <=> "\n\t\r{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "\n\t\r{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}"
 "\n\t\r" + {true : "true",
-} <=> "\n\t\r{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
-"\n\t\r" + {} <=> "\n\t\r{\n  \"$type\" : \"MAP\"\n}"
+} <=> "\n\t\r{\"true\":\"true\"}"
+"\n\t\r" + {} <=> "\n\t\r{}"
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + " " <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026 "
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + "" <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026"
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + "0" <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u20260"
@@ -702,22 +702,22 @@ true : "true",
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + true <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026true"
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + void <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026"
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + {"string" : "string",
-} <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026{\"string\":\"string\"}"
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + {("3870-07-04T07:30" as Date) : true,
-} <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}"
+} <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026{\"3870-07-04T07:30\":true}"
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + {0.1 : "0.1",
-} <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026{\"0.1\":\"0.1\"}"
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + {1 : "one",
-} <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026{\"1\":\"one\"}"
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + {1 : 0.1,
 "value2" : true,
 "value1" : true,
 "value3" : true,
 true : "true",
-} <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}"
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + {true : "true",
-} <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
-"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + {} <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026{\n  \"$type\" : \"MAP\"\n}"
+} <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026{\"true\":\"true\"}"
+"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + {} <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026{}"
 "false" + " " <=> "false "
 "false" + "" <=> "false"
 "false" + "0" <=> "false0"
@@ -782,22 +782,22 @@ true : "true",
 "false" + true <=> "falsetrue"
 "false" + void <=> "false"
 "false" + {"string" : "string",
-} <=> "false{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "false{\"string\":\"string\"}"
 "false" + {("3870-07-04T07:30" as Date) : true,
-} <=> "false{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}"
+} <=> "false{\"3870-07-04T07:30\":true}"
 "false" + {0.1 : "0.1",
-} <=> "false{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "false{\"0.1\":\"0.1\"}"
 "false" + {1 : "one",
-} <=> "false{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "false{\"1\":\"one\"}"
 "false" + {1 : 0.1,
 "value2" : true,
 "value1" : true,
 "value3" : true,
 true : "true",
-} <=> "false{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "false{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}"
 "false" + {true : "true",
-} <=> "false{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
-"false" + {} <=> "false{\n  \"$type\" : \"MAP\"\n}"
+} <=> "false{\"true\":\"true\"}"
+"false" + {} <=> "false{}"
 "true" + " " <=> "true "
 "true" + "" <=> "true"
 "true" + "0" <=> "true0"
@@ -862,22 +862,22 @@ true : "true",
 "true" + true <=> "truetrue"
 "true" + void <=> "true"
 "true" + {"string" : "string",
-} <=> "true{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "true{\"string\":\"string\"}"
 "true" + {("3870-07-04T07:30" as Date) : true,
-} <=> "true{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}"
+} <=> "true{\"3870-07-04T07:30\":true}"
 "true" + {0.1 : "0.1",
-} <=> "true{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "true{\"0.1\":\"0.1\"}"
 "true" + {1 : "one",
-} <=> "true{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "true{\"1\":\"one\"}"
 "true" + {1 : 0.1,
 "value2" : true,
 "value1" : true,
 "value3" : true,
 true : "true",
-} <=> "true{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
+} <=> "true{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}"
 "true" + {true : "true",
-} <=> "true{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"
-"true" + {} <=> "true{\n  \"$type\" : \"MAP\"\n}"
+} <=> "true{\"true\":\"true\"}"
+"true" + {} <=> "true{}"
 ("1970-01-01T00:59:59.999" as Date) + " " <=> "1970-01-01T00:59:59.999 "
 ("1970-01-01T00:59:59.999" as Date) + "" <=> "1970-01-01T00:59:59.999"
 ("1970-01-01T00:59:59.999" as Date) + "0" <=> "1970-01-01T00:59:59.9990"
@@ -1342,22 +1342,22 @@ true : "true",
 (("@")..("\uF8FF")) + true <=> (("@true")..("\uF8FFtrue"))
 (("@")..("\uF8FF")) + void <=> (("@")..("\uF8FF"))
 (("@")..("\uF8FF")) + {"string" : "string",
-} <=> (("@{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}")..("\uF8FF{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("@{\"string\":\"string\"}")..("\uF8FF{\"string\":\"string\"}"))
 (("@")..("\uF8FF")) + {("3870-07-04T07:30" as Date) : true,
-} <=> (("@{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}")..("\uF8FF{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("@{\"3870-07-04T07:30\":true}")..("\uF8FF{\"3870-07-04T07:30\":true}"))
 (("@")..("\uF8FF")) + {0.1 : "0.1",
-} <=> (("@{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}")..("\uF8FF{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("@{\"0.1\":\"0.1\"}")..("\uF8FF{\"0.1\":\"0.1\"}"))
 (("@")..("\uF8FF")) + {1 : "one",
-} <=> (("@{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}")..("\uF8FF{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("@{\"1\":\"one\"}")..("\uF8FF{\"1\":\"one\"}"))
 (("@")..("\uF8FF")) + {1 : 0.1,
 "value2" : true,
 "value1" : true,
 "value3" : true,
 true : "true",
-} <=> (("@{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}")..("\uF8FF{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("@{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}")..("\uF8FF{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}"))
 (("@")..("\uF8FF")) + {true : "true",
-} <=> (("@{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}")..("\uF8FF{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"))
-(("@")..("\uF8FF")) + {} <=> (("@{\n  \"$type\" : \"MAP\"\n}")..("\uF8FF{\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("@{\"true\":\"true\"}")..("\uF8FF{\"true\":\"true\"}"))
+(("@")..("\uF8FF")) + {} <=> (("@{}")..("\uF8FF{}"))
 (("a")..("z")) + " " <=> (("a ")..("z "))
 (("a")..("z")) + "" <=> (("a")..("z"))
 (("a")..("z")) + "0" <=> (("a0")..("z0"))
@@ -1422,22 +1422,22 @@ true : "true",
 (("a")..("z")) + true <=> (("atrue")..("ztrue"))
 (("a")..("z")) + void <=> (("a")..("z"))
 (("a")..("z")) + {"string" : "string",
-} <=> (("a{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}")..("z{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("a{\"string\":\"string\"}")..("z{\"string\":\"string\"}"))
 (("a")..("z")) + {("3870-07-04T07:30" as Date) : true,
-} <=> (("a{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}")..("z{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("a{\"3870-07-04T07:30\":true}")..("z{\"3870-07-04T07:30\":true}"))
 (("a")..("z")) + {0.1 : "0.1",
-} <=> (("a{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}")..("z{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("a{\"0.1\":\"0.1\"}")..("z{\"0.1\":\"0.1\"}"))
 (("a")..("z")) + {1 : "one",
-} <=> (("a{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}")..("z{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("a{\"1\":\"one\"}")..("z{\"1\":\"one\"}"))
 (("a")..("z")) + {1 : 0.1,
 "value2" : true,
 "value1" : true,
 "value3" : true,
 true : "true",
-} <=> (("a{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}")..("z{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("a{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}")..("z{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}"))
 (("a")..("z")) + {true : "true",
-} <=> (("a{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}")..("z{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"))
-(("a")..("z")) + {} <=> (("a{\n  \"$type\" : \"MAP\"\n}")..("z{\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("a{\"true\":\"true\"}")..("z{\"true\":\"true\"}"))
+(("a")..("z")) + {} <=> (("a{}")..("z{}"))
 (("z")..("a")) + " " <=> (("z ")..("a "))
 (("z")..("a")) + "" <=> (("z")..("a"))
 (("z")..("a")) + "0" <=> (("z0")..("a0"))
@@ -1502,22 +1502,22 @@ true : "true",
 (("z")..("a")) + true <=> (("ztrue")..("atrue"))
 (("z")..("a")) + void <=> (("z")..("a"))
 (("z")..("a")) + {"string" : "string",
-} <=> (("z{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}")..("a{\n  \"string\" : \"string\",\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("z{\"string\":\"string\"}")..("a{\"string\":\"string\"}"))
 (("z")..("a")) + {("3870-07-04T07:30" as Date) : true,
-} <=> (("z{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}")..("a{\n  \"3870-07-04T07:30\" : true,\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("z{\"3870-07-04T07:30\":true}")..("a{\"3870-07-04T07:30\":true}"))
 (("z")..("a")) + {0.1 : "0.1",
-} <=> (("z{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}")..("a{\n  \"0.1\" : \"0.1\",\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("z{\"0.1\":\"0.1\"}")..("a{\"0.1\":\"0.1\"}"))
 (("z")..("a")) + {1 : "one",
-} <=> (("z{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}")..("a{\n  \"1\" : \"one\",\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("z{\"1\":\"one\"}")..("a{\"1\":\"one\"}"))
 (("z")..("a")) + {1 : 0.1,
 "value2" : true,
 "value1" : true,
 "value3" : true,
 true : "true",
-} <=> (("z{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}")..("a{\n  \"1\" : 0.1,\n  \"value2\" : true,\n  \"value1\" : true,\n  \"value3\" : true,\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("z{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}")..("a{\"1\":0.1,\"value2\":true,\"value1\":true,\"value3\":true,\"true\":\"true\"}"))
 (("z")..("a")) + {true : "true",
-} <=> (("z{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}")..("a{\n  \"true\" : \"true\",\n  \"$type\" : \"MAP\"\n}"))
-(("z")..("a")) + {} <=> (("z{\n  \"$type\" : \"MAP\"\n}")..("a{\n  \"$type\" : \"MAP\"\n}"))
+} <=> (("z{\"true\":\"true\"}")..("a{\"true\":\"true\"}"))
+(("z")..("a")) + {} <=> (("z{}")..("a{}"))
 ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) + " " <=> (("1970-06-04T00:00 ")..("1970-07-04T00:00 "))
 ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) + "" <=> (("1970-06-04T00:00")..("1970-07-04T00:00"))
 ((("1970-06-04T00:00" as Date))..(("1970-07-04T00:00" as Date))) + "0" <=> (("1970-06-04T00:000")..("1970-07-04T00:000"))
@@ -5100,47 +5100,36 @@ void + {true : "true",
 void + {} <=> void
 {"string" : "string",
 } + " " <=> {"string" : "string",
-"$type" : "MAP",
 }
 {"string" : "string",
 } + "" <=> {"string" : "string",
-"$type" : "MAP",
 }
 {"string" : "string",
 } + "0" <=> {"string" : "string",
-"$type" : "MAP",
 }
 {"string" : "string",
 } + "1" <=> {"string" : "string",
-"$type" : "MAP",
 }
 {"string" : "string",
 } + "@" <=> {"string" : "string",
-"$type" : "MAP",
 }
 {"string" : "string",
 } + "@@ @@ @@@ @@ @@ @@" <=> {"string" : "string",
-"$type" : "MAP",
 }
 {"string" : "string",
 } + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" <=> {"string" : "string",
-"$type" : "MAP",
 }
 {"string" : "string",
 } + "\n\t\r" <=> {"string" : "string",
-"$type" : "MAP",
 }
 {"string" : "string",
 } + "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" <=> {"string" : "string",
-"$type" : "MAP",
 }
 {"string" : "string",
 } + "false" <=> {"string" : "string",
-"$type" : "MAP",
 }
 {"string" : "string",
 } + "true" <=> {"string" : "string",
-"$type" : "MAP",
 }
 {"string" : "string",
 } + ("1970-01-01T00:59:59.999" as Date) <=> {"string" : "string",
@@ -5392,47 +5381,36 @@ true : "true",
 }
 {("3870-07-04T07:30" as Date) : true,
 } + " " <=> {"3870-07-04T07:30" : true,
-"$type" : "MAP",
 }
 {("3870-07-04T07:30" as Date) : true,
 } + "" <=> {"3870-07-04T07:30" : true,
-"$type" : "MAP",
 }
 {("3870-07-04T07:30" as Date) : true,
 } + "0" <=> {"3870-07-04T07:30" : true,
-"$type" : "MAP",
 }
 {("3870-07-04T07:30" as Date) : true,
 } + "1" <=> {"3870-07-04T07:30" : true,
-"$type" : "MAP",
 }
 {("3870-07-04T07:30" as Date) : true,
 } + "@" <=> {"3870-07-04T07:30" : true,
-"$type" : "MAP",
 }
 {("3870-07-04T07:30" as Date) : true,
 } + "@@ @@ @@@ @@ @@ @@" <=> {"3870-07-04T07:30" : true,
-"$type" : "MAP",
 }
 {("3870-07-04T07:30" as Date) : true,
 } + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" <=> {"3870-07-04T07:30" : true,
-"$type" : "MAP",
 }
 {("3870-07-04T07:30" as Date) : true,
 } + "\n\t\r" <=> {"3870-07-04T07:30" : true,
-"$type" : "MAP",
 }
 {("3870-07-04T07:30" as Date) : true,
 } + "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" <=> {"3870-07-04T07:30" : true,
-"$type" : "MAP",
 }
 {("3870-07-04T07:30" as Date) : true,
 } + "false" <=> {"3870-07-04T07:30" : true,
-"$type" : "MAP",
 }
 {("3870-07-04T07:30" as Date) : true,
 } + "true" <=> {"3870-07-04T07:30" : true,
-"$type" : "MAP",
 }
 {("3870-07-04T07:30" as Date) : true,
 } + ("1970-01-01T00:59:59.999" as Date) <=> {("3870-07-04T07:30" as Date) : true,
@@ -5684,47 +5662,36 @@ true : "true",
 }
 {0.1 : "0.1",
 } + " " <=> {"0.1" : "0.1",
-"$type" : "MAP",
 }
 {0.1 : "0.1",
 } + "" <=> {"0.1" : "0.1",
-"$type" : "MAP",
 }
 {0.1 : "0.1",
 } + "0" <=> {"0.1" : "0.1",
-"$type" : "MAP",
 }
 {0.1 : "0.1",
 } + "1" <=> {"0.1" : "0.1",
-"$type" : "MAP",
 }
 {0.1 : "0.1",
 } + "@" <=> {"0.1" : "0.1",
-"$type" : "MAP",
 }
 {0.1 : "0.1",
 } + "@@ @@ @@@ @@ @@ @@" <=> {"0.1" : "0.1",
-"$type" : "MAP",
 }
 {0.1 : "0.1",
 } + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" <=> {"0.1" : "0.1",
-"$type" : "MAP",
 }
 {0.1 : "0.1",
 } + "\n\t\r" <=> {"0.1" : "0.1",
-"$type" : "MAP",
 }
 {0.1 : "0.1",
 } + "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" <=> {"0.1" : "0.1",
-"$type" : "MAP",
 }
 {0.1 : "0.1",
 } + "false" <=> {"0.1" : "0.1",
-"$type" : "MAP",
 }
 {0.1 : "0.1",
 } + "true" <=> {"0.1" : "0.1",
-"$type" : "MAP",
 }
 {0.1 : "0.1",
 } + ("1970-01-01T00:59:59.999" as Date) <=> {0.1 : "0.1",
@@ -5976,47 +5943,36 @@ true : "true",
 }
 {1 : "one",
 } + " " <=> {"1" : "one",
-"$type" : "MAP",
 }
 {1 : "one",
 } + "" <=> {"1" : "one",
-"$type" : "MAP",
 }
 {1 : "one",
 } + "0" <=> {"1" : "one",
-"$type" : "MAP",
 }
 {1 : "one",
 } + "1" <=> {"1" : "one",
-"$type" : "MAP",
 }
 {1 : "one",
 } + "@" <=> {"1" : "one",
-"$type" : "MAP",
 }
 {1 : "one",
 } + "@@ @@ @@@ @@ @@ @@" <=> {"1" : "one",
-"$type" : "MAP",
 }
 {1 : "one",
 } + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" <=> {"1" : "one",
-"$type" : "MAP",
 }
 {1 : "one",
 } + "\n\t\r" <=> {"1" : "one",
-"$type" : "MAP",
 }
 {1 : "one",
 } + "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" <=> {"1" : "one",
-"$type" : "MAP",
 }
 {1 : "one",
 } + "false" <=> {"1" : "one",
-"$type" : "MAP",
 }
 {1 : "one",
 } + "true" <=> {"1" : "one",
-"$type" : "MAP",
 }
 {1 : "one",
 } + ("1970-01-01T00:59:59.999" as Date) <=> {1 : "one",
@@ -6275,7 +6231,6 @@ true : "true",
 "value1" : true,
 "value3" : true,
 "true" : "true",
-"$type" : "MAP",
 }
 {1 : 0.1,
 "value2" : true,
@@ -6287,7 +6242,6 @@ true : "true",
 "value1" : true,
 "value3" : true,
 "true" : "true",
-"$type" : "MAP",
 }
 {1 : 0.1,
 "value2" : true,
@@ -6299,7 +6253,6 @@ true : "true",
 "value1" : true,
 "value3" : true,
 "true" : "true",
-"$type" : "MAP",
 }
 {1 : 0.1,
 "value2" : true,
@@ -6311,7 +6264,6 @@ true : "true",
 "value1" : true,
 "value3" : true,
 "true" : "true",
-"$type" : "MAP",
 }
 {1 : 0.1,
 "value2" : true,
@@ -6323,7 +6275,6 @@ true : "true",
 "value1" : true,
 "value3" : true,
 "true" : "true",
-"$type" : "MAP",
 }
 {1 : 0.1,
 "value2" : true,
@@ -6335,7 +6286,6 @@ true : "true",
 "value1" : true,
 "value3" : true,
 "true" : "true",
-"$type" : "MAP",
 }
 {1 : 0.1,
 "value2" : true,
@@ -6347,7 +6297,6 @@ true : "true",
 "value1" : true,
 "value3" : true,
 "true" : "true",
-"$type" : "MAP",
 }
 {1 : 0.1,
 "value2" : true,
@@ -6359,7 +6308,6 @@ true : "true",
 "value1" : true,
 "value3" : true,
 "true" : "true",
-"$type" : "MAP",
 }
 {1 : 0.1,
 "value2" : true,
@@ -6371,7 +6319,6 @@ true : "true",
 "value1" : true,
 "value3" : true,
 "true" : "true",
-"$type" : "MAP",
 }
 {1 : 0.1,
 "value2" : true,
@@ -6383,7 +6330,6 @@ true : "true",
 "value1" : true,
 "value3" : true,
 "true" : "true",
-"$type" : "MAP",
 }
 {1 : 0.1,
 "value2" : true,
@@ -6395,7 +6341,6 @@ true : "true",
 "value1" : true,
 "value3" : true,
 "true" : "true",
-"$type" : "MAP",
 }
 {1 : 0.1,
 "value2" : true,
@@ -7113,47 +7058,36 @@ true : "true",
 }
 {true : "true",
 } + " " <=> {"true" : "true",
-"$type" : "MAP",
 }
 {true : "true",
 } + "" <=> {"true" : "true",
-"$type" : "MAP",
 }
 {true : "true",
 } + "0" <=> {"true" : "true",
-"$type" : "MAP",
 }
 {true : "true",
 } + "1" <=> {"true" : "true",
-"$type" : "MAP",
 }
 {true : "true",
 } + "@" <=> {"true" : "true",
-"$type" : "MAP",
 }
 {true : "true",
 } + "@@ @@ @@@ @@ @@ @@" <=> {"true" : "true",
-"$type" : "MAP",
 }
 {true : "true",
 } + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" <=> {"true" : "true",
-"$type" : "MAP",
 }
 {true : "true",
 } + "\n\t\r" <=> {"true" : "true",
-"$type" : "MAP",
 }
 {true : "true",
 } + "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" <=> {"true" : "true",
-"$type" : "MAP",
 }
 {true : "true",
 } + "false" <=> {"true" : "true",
-"$type" : "MAP",
 }
 {true : "true",
 } + "true" <=> {"true" : "true",
-"$type" : "MAP",
 }
 {true : "true",
 } + ("1970-01-01T00:59:59.999" as Date) <=> {true : "true",
@@ -7402,28 +7336,17 @@ true : "true",
 {true : "true",
 } + {} <=> {true : "true",
 }
-{} + " " <=> {"$type" : "MAP",
-}
-{} + "" <=> {"$type" : "MAP",
-}
-{} + "0" <=> {"$type" : "MAP",
-}
-{} + "1" <=> {"$type" : "MAP",
-}
-{} + "@" <=> {"$type" : "MAP",
-}
-{} + "@@ @@ @@@ @@ @@ @@" <=> {"$type" : "MAP",
-}
-{} + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" <=> {"$type" : "MAP",
-}
-{} + "\n\t\r" <=> {"$type" : "MAP",
-}
-{} + "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" <=> {"$type" : "MAP",
-}
-{} + "false" <=> {"$type" : "MAP",
-}
-{} + "true" <=> {"$type" : "MAP",
-}
+{} + " " <=> {}
+{} + "" <=> {}
+{} + "0" <=> {}
+{} + "1" <=> {}
+{} + "@" <=> {}
+{} + "@@ @@ @@@ @@ @@ @@" <=> {}
+{} + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" <=> {}
+{} + "\n\t\r" <=> {}
+{} + "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" <=> {}
+{} + "false" <=> {}
+{} + "true" <=> {}
 {} + ("1970-01-01T00:59:59.999" as Date) <=> {"ea7071484edb43b44d11e8e6b6c7948c34ed3e816e20a1b0111c8350891c83bf" : ("1970-01-01T00:59:59.999" as Date),
 }
 {} + ("1970-01-01T01:00" as Date) <=> {"8d843b0edb8eb799d00d30f2db0e17bfd00e4b6c4960d5c0b10062b5e82879dd" : ("1970-01-01T01:00" as Date),

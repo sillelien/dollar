@@ -566,48 +566,41 @@
   ],
   [
     0,
+    {},
+    0
+  ],
+  [
+    0,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     0
   ],
   [
     0,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     0
   ],
   [
     0,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     0
   ],
   [
     0,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     0
   ],
   [
     0,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    0
-  ],
-  [
-    0,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     0
   ],
@@ -618,8 +611,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     0
   ],
@@ -1220,48 +1212,41 @@
   ],
   [
     1,
+    {},
+    1
+  ],
+  [
+    1,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     1
   ],
   [
     1,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     1
   ],
   [
     1,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     1
   ],
   [
     1,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     1
   ],
   [
     1,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    1
-  ],
-  [
-    1,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     1
   ],
@@ -1272,8 +1257,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     1
   ],
@@ -1874,48 +1858,41 @@
   ],
   [
     -1,
+    {},
+    -1
+  ],
+  [
+    -1,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     -1
   ],
   [
     -1,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     -1
   ],
   [
     -1,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     -1
   ],
   [
     -1,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     -1
   ],
   [
     -1,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    -1
-  ],
-  [
-    -1,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     -1
   ],
@@ -1926,8 +1903,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     -1
   ],
@@ -2528,48 +2504,41 @@
   ],
   [
     10,
+    {},
+    10
+  ],
+  [
+    10,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     10
   ],
   [
     10,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     10
   ],
   [
     10,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     10
   ],
   [
     10,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     10
   ],
   [
     10,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    10
-  ],
-  [
-    10,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     10
   ],
@@ -2580,8 +2549,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     10
   ],
@@ -3182,48 +3150,41 @@
   ],
   [
     -10,
+    {},
+    -10
+  ],
+  [
+    -10,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     -10
   ],
   [
     -10,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     -10
   ],
   [
     -10,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     -10
   ],
   [
     -10,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     -10
   ],
   [
     -10,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    -10
-  ],
-  [
-    -10,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     -10
   ],
@@ -3234,8 +3195,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     -10
   ],
@@ -3836,48 +3796,41 @@
   ],
   [
     0.0,
+    {},
+    0.0
+  ],
+  [
+    0.0,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     0.0
   ],
   [
     0.0,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     0.0
   ],
   [
     0.0,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     0.0
   ],
   [
     0.0,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     0.0
   ],
   [
     0.0,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    0.0
-  ],
-  [
-    0.0,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     0.0
   ],
@@ -3888,8 +3841,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     0.0
   ],
@@ -4490,48 +4442,41 @@
   ],
   [
     1.0,
+    {},
+    1.0
+  ],
+  [
+    1.0,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     1.0
   ],
   [
     1.0,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     1.0
   ],
   [
     1.0,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     1.0
   ],
   [
     1.0,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     1.0
   ],
   [
     1.0,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    1.0
-  ],
-  [
-    1.0,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     1.0
   ],
@@ -4542,8 +4487,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     1.0
   ],
@@ -5144,48 +5088,41 @@
   ],
   [
     -1.0,
+    {},
+    -1.0
+  ],
+  [
+    -1.0,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     -1.0
   ],
   [
     -1.0,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     -1.0
   ],
   [
     -1.0,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     -1.0
   ],
   [
     -1.0,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     -1.0
   ],
   [
     -1.0,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    -1.0
-  ],
-  [
-    -1.0,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     -1.0
   ],
@@ -5196,8 +5133,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     -1.0
   ],
@@ -5798,48 +5734,41 @@
   ],
   [
     10.0,
+    {},
+    10.0
+  ],
+  [
+    10.0,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     10.0
   ],
   [
     10.0,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     10.0
   ],
   [
     10.0,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     10.0
   ],
   [
     10.0,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     10.0
   ],
   [
     10.0,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    10.0
-  ],
-  [
-    10.0,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     10.0
   ],
@@ -5850,8 +5779,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     10.0
   ],
@@ -6452,48 +6380,41 @@
   ],
   [
     -10.0,
+    {},
+    -10.0
+  ],
+  [
+    -10.0,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     -10.0
   ],
   [
     -10.0,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     -10.0
   ],
   [
     -10.0,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     -10.0
   ],
   [
     -10.0,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     -10.0
   ],
   [
     -10.0,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    -10.0
-  ],
-  [
-    -10.0,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     -10.0
   ],
@@ -6504,8 +6425,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     -10.0
   ],
@@ -7106,48 +7026,41 @@
   ],
   [
     0.5,
+    {},
+    0.5
+  ],
+  [
+    0.5,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     0.5
   ],
   [
     0.5,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     0.5
   ],
   [
     0.5,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     0.5
   ],
   [
     0.5,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     0.5
   ],
   [
     0.5,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    0.5
-  ],
-  [
-    0.5,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     0.5
   ],
@@ -7158,8 +7071,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     0.5
   ],
@@ -7760,48 +7672,41 @@
   ],
   [
     -0.5,
+    {},
+    -0.5
+  ],
+  [
+    -0.5,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     -0.5
   ],
   [
     -0.5,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     -0.5
   ],
   [
     -0.5,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     -0.5
   ],
   [
     -0.5,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     -0.5
   ],
   [
     -0.5,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    -0.5
-  ],
-  [
-    -0.5,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     -0.5
   ],
@@ -7812,8 +7717,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     -0.5
   ],
@@ -8414,48 +8318,41 @@
   ],
   [
     -0.1,
+    {},
+    -0.1
+  ],
+  [
+    -0.1,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     -0.1
   ],
   [
     -0.1,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     -0.1
   ],
   [
     -0.1,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     -0.1
   ],
   [
     -0.1,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     -0.1
   ],
   [
     -0.1,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    -0.1
-  ],
-  [
-    -0.1,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     -0.1
   ],
@@ -8466,8 +8363,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     -0.1
   ],
@@ -9068,48 +8964,41 @@
   ],
   [
     0.1,
+    {},
+    0.1
+  ],
+  [
+    0.1,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     0.1
   ],
   [
     0.1,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     0.1
   ],
   [
     0.1,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     0.1
   ],
   [
     0.1,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     0.1
   ],
   [
     0.1,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    0.1
-  ],
-  [
-    0.1,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     0.1
   ],
@@ -9120,8 +9009,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     0.1
   ],
@@ -10016,8 +9904,21 @@
       "text": "1970-01-01T01:00",
       "millis": 0
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "DATE",
+      "text": "1970-01-01T01:00",
+      "millis": 0
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T01:00",
+      "millis": 0
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "DATE",
@@ -10032,8 +9933,7 @@
       "millis": 0
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "DATE",
@@ -10048,8 +9948,7 @@
       "millis": 0
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "DATE",
@@ -10064,8 +9963,7 @@
       "millis": 0
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "DATE",
@@ -10080,24 +9978,7 @@
       "millis": 0
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "DATE",
-      "text": "1970-01-01T01:00",
-      "millis": 0
-    }
-  ],
-  [
-    {
-      "$type": "DATE",
-      "text": "1970-01-01T01:00",
-      "millis": 0
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "DATE",
@@ -10116,8 +9997,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "DATE",
@@ -11056,8 +10936,21 @@
       "text": "1970-01-01T00:59:59.999",
       "millis": 0
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "DATE",
+      "text": "1970-01-01T00:59:59.999",
+      "millis": 0
+    }
+  ],
+  [
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T00:59:59.999",
+      "millis": 0
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "DATE",
@@ -11072,8 +10965,7 @@
       "millis": 0
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "DATE",
@@ -11088,8 +10980,7 @@
       "millis": 0
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "DATE",
@@ -11104,8 +10995,7 @@
       "millis": 0
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "DATE",
@@ -11120,24 +11010,7 @@
       "millis": 0
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "DATE",
-      "text": "1970-01-01T00:59:59.999",
-      "millis": 0
-    }
-  ],
-  [
-    {
-      "$type": "DATE",
-      "text": "1970-01-01T00:59:59.999",
-      "millis": 0
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "DATE",
@@ -11156,8 +11029,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "DATE",
@@ -11638,48 +11510,41 @@
   ],
   [
     "",
+    {},
+    ""
+  ],
+  [
+    "",
     {
-      "$type": "MAP"
+      "1": "one"
     },
     ""
   ],
   [
     "",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     ""
   ],
   [
     "",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     ""
   ],
   [
     "",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     ""
   ],
   [
     "",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    ""
-  ],
-  [
-    "",
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     ""
   ],
@@ -11690,8 +11555,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     ""
   ],
@@ -12128,48 +11992,41 @@
   ],
   [
     "@",
+    {},
+    "@"
+  ],
+  [
+    "@",
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "@"
   ],
   [
     "@",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "@"
   ],
   [
     "@",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "@"
   ],
   [
     "@",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "@"
   ],
   [
     "@",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    "@"
-  ],
-  [
-    "@",
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     "@"
   ],
@@ -12180,8 +12037,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "@"
   ],
@@ -12618,48 +12474,41 @@
   ],
   [
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    {},
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+  ],
+  [
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
   ],
   [
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
   ],
   [
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
   ],
   [
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
   ],
   [
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-  ],
-  [
-    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
   ],
@@ -12670,8 +12519,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
   ],
@@ -13108,48 +12956,41 @@
   ],
   [
     "@@ @@ @@@ @@ @@ @@",
+    {},
+    "@@ @@ @@@ @@ @@ @@"
+  ],
+  [
+    "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "@@ @@ @@@ @@ @@ @@"
   ],
   [
     "@@ @@ @@@ @@ @@ @@",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "@@ @@ @@@ @@ @@ @@"
   ],
   [
     "@@ @@ @@@ @@ @@ @@",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "@@ @@ @@@ @@ @@ @@"
   ],
   [
     "@@ @@ @@@ @@ @@ @@",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "@@ @@ @@@ @@ @@ @@"
   ],
   [
     "@@ @@ @@@ @@ @@ @@",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    "@@ @@ @@@ @@ @@ @@"
-  ],
-  [
-    "@@ @@ @@@ @@ @@ @@",
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     "@@ @@ @@@ @@ @@ @@"
   ],
@@ -13160,8 +13001,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "@@ @@ @@@ @@ @@ @@"
   ],
@@ -13598,48 +13438,41 @@
   ],
   [
     " ",
+    {},
+    " "
+  ],
+  [
+    " ",
     {
-      "$type": "MAP"
+      "1": "one"
     },
     " "
   ],
   [
     " ",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     " "
   ],
   [
     " ",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     " "
   ],
   [
     " ",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     " "
   ],
   [
     " ",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    " "
-  ],
-  [
-    " ",
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     " "
   ],
@@ -13650,8 +13483,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     " "
   ],
@@ -14088,48 +13920,41 @@
   ],
   [
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    {},
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…"
+  ],
+  [
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…"
   ],
   [
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…"
   ],
   [
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…"
   ],
   [
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…"
   ],
   [
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…"
-  ],
-  [
-    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…"
   ],
@@ -14140,8 +13965,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…"
   ],
@@ -14578,48 +14402,41 @@
   ],
   [
     "\n\t\r",
+    {},
+    "\n\t\r"
+  ],
+  [
+    "\n\t\r",
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "\n\t\r"
   ],
   [
     "\n\t\r",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "\n\t\r"
   ],
   [
     "\n\t\r",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "\n\t\r"
   ],
   [
     "\n\t\r",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "\n\t\r"
   ],
   [
     "\n\t\r",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    "\n\t\r"
-  ],
-  [
-    "\n\t\r",
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     "\n\t\r"
   ],
@@ -14630,8 +14447,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "\n\t\r"
   ],
@@ -15068,48 +14884,41 @@
   ],
   [
     "1",
+    {},
+    "1"
+  ],
+  [
+    "1",
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "1"
   ],
   [
     "1",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "1"
   ],
   [
     "1",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "1"
   ],
   [
     "1",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "1"
   ],
   [
     "1",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    "1"
-  ],
-  [
-    "1",
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     "1"
   ],
@@ -15120,8 +14929,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "1"
   ],
@@ -15558,48 +15366,41 @@
   ],
   [
     "true",
+    {},
+    "true"
+  ],
+  [
+    "true",
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "true"
   ],
   [
     "true",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "true"
   ],
   [
     "true",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "true"
   ],
   [
     "true",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "true"
   ],
   [
     "true",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    "true"
-  ],
-  [
-    "true",
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     "true"
   ],
@@ -15610,8 +15411,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "true"
   ],
@@ -16048,48 +15848,41 @@
   ],
   [
     "false",
+    {},
+    "false"
+  ],
+  [
+    "false",
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "false"
   ],
   [
     "false",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "false"
   ],
   [
     "false",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "false"
   ],
   [
     "false",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "false"
   ],
   [
     "false",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    "false"
-  ],
-  [
-    "false",
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     "false"
   ],
@@ -16100,8 +15893,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "false"
   ],
@@ -16538,48 +16330,41 @@
   ],
   [
     "0",
+    {},
+    "0"
+  ],
+  [
+    "0",
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "0"
   ],
   [
     "0",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "0"
   ],
   [
     "0",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "0"
   ],
   [
     "0",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "0"
   ],
   [
     "0",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    "0"
-  ],
-  [
-    "0",
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     "0"
   ],
@@ -16590,8 +16375,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "0"
   ],
@@ -17028,48 +16812,41 @@
   ],
   [
     true,
-    {
-      "$type": "MAP"
-    },
+    {},
     true
   ],
   [
     true,
     {
-      "1": "one",
-      "$type": "MAP"
+      "1": "one"
     },
     false
   ],
   [
     true,
     {
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     false
   ],
   [
     true,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     false
   ],
   [
     true,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     false
   ],
   [
     true,
     {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     false
   ],
@@ -17080,8 +16857,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     false
   ],
@@ -17518,48 +17294,41 @@
   ],
   [
     false,
-    {
-      "$type": "MAP"
-    },
+    {},
     false
   ],
   [
     false,
     {
-      "1": "one",
-      "$type": "MAP"
+      "1": "one"
     },
     true
   ],
   [
     false,
     {
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     true
   ],
   [
     false,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     true
   ],
   [
     false,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     true
   ],
   [
     false,
     {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     true
   ],
@@ -17570,8 +17339,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     true
   ],
@@ -18571,8 +18339,25 @@
       10,
       -10
     ],
+    {},
+    [
+      0,
+      1,
+      -1,
+      10,
+      -10
+    ]
+  ],
+  [
+    [
+      0,
+      1,
+      -1,
+      10,
+      -10
+    ],
     {
-      "$type": "MAP"
+      "1": "one"
     },
     [
       0,
@@ -18591,8 +18376,7 @@
       -10
     ],
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       0,
@@ -18611,8 +18395,7 @@
       -10
     ],
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     [
       0,
@@ -18631,8 +18414,7 @@
       -10
     ],
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     [
       0,
@@ -18651,28 +18433,7 @@
       -10
     ],
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    [
-      0,
-      1,
-      -1,
-      10,
-      -10
-    ]
-  ],
-  [
-    [
-      0,
-      1,
-      -1,
-      10,
-      -10
-    ],
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     [
       0,
@@ -18695,8 +18456,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       0,
@@ -20140,8 +19900,33 @@
       -0.1,
       0.1
     ],
+    {},
+    [
+      0.0,
+      1.0,
+      -1.0,
+      10.0,
+      -10.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ]
+  ],
+  [
+    [
+      0.0,
+      1.0,
+      -1.0,
+      10.0,
+      -10.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
     {
-      "$type": "MAP"
+      "1": "one"
     },
     [
       0.0,
@@ -20168,8 +19953,7 @@
       0.1
     ],
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       0.0,
@@ -20196,8 +19980,7 @@
       0.1
     ],
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     [
       0.0,
@@ -20224,8 +20007,7 @@
       0.1
     ],
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     [
       0.0,
@@ -20252,36 +20034,7 @@
       0.1
     ],
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    [
-      0.0,
-      1.0,
-      -1.0,
-      10.0,
-      -10.0,
-      0.5,
-      -0.5,
-      -0.1,
-      0.1
-    ]
-  ],
-  [
-    [
-      0.0,
-      1.0,
-      -1.0,
-      10.0,
-      -10.0,
-      0.5,
-      -0.5,
-      -0.1,
-      0.1
-    ],
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     [
       0.0,
@@ -20312,8 +20065,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       0.0,
@@ -21895,8 +21647,35 @@
         "millis": 0
       }
     ],
+    {},
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-01-01T01:00",
+        "millis": 0
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-01-01T00:59:59.999",
+        "millis": 0
+      }
+    ]
+  ],
+  [
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-01-01T01:00",
+        "millis": 0
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-01-01T00:59:59.999",
+        "millis": 0
+      }
+    ],
     {
-      "$type": "MAP"
+      "1": "one"
     },
     [
       {
@@ -21925,8 +21704,7 @@
       }
     ],
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       {
@@ -21955,8 +21733,7 @@
       }
     ],
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     [
       {
@@ -21985,8 +21762,7 @@
       }
     ],
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     [
       {
@@ -22015,38 +21791,7 @@
       }
     ],
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    [
-      {
-        "$type": "DATE",
-        "text": "1970-01-01T01:00",
-        "millis": 0
-      },
-      {
-        "$type": "DATE",
-        "text": "1970-01-01T00:59:59.999",
-        "millis": 0
-      }
-    ]
-  ],
-  [
-    [
-      {
-        "$type": "DATE",
-        "text": "1970-01-01T01:00",
-        "millis": 0
-      },
-      {
-        "$type": "DATE",
-        "text": "1970-01-01T00:59:59.999",
-        "millis": 0
-      }
-    ],
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     [
       {
@@ -22079,8 +21824,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       {
@@ -23763,8 +23507,37 @@
       "false",
       "0"
     ],
+    {},
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ]
+  ],
+  [
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
     {
-      "$type": "MAP"
+      "1": "one"
     },
     [
       "",
@@ -23795,8 +23568,7 @@
       "0"
     ],
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       "",
@@ -23827,8 +23599,7 @@
       "0"
     ],
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     [
       "",
@@ -23859,8 +23630,7 @@
       "0"
     ],
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     [
       "",
@@ -23891,40 +23661,7 @@
       "0"
     ],
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    [
-      "",
-      "@",
-      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
-      "@@ @@ @@@ @@ @@ @@",
-      " ",
-      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
-      "\n\t\r",
-      "1",
-      "true",
-      "false",
-      "0"
-    ]
-  ],
-  [
-    [
-      "",
-      "@",
-      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
-      "@@ @@ @@@ @@ @@ @@",
-      " ",
-      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
-      "\n\t\r",
-      "1",
-      "true",
-      "false",
-      "0"
-    ],
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     [
       "",
@@ -23959,8 +23696,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       "",
@@ -24802,8 +24538,19 @@
       true,
       false
     ],
+    {},
+    [
+      true,
+      false
+    ]
+  ],
+  [
+    [
+      true,
+      false
+    ],
     {
-      "$type": "MAP"
+      "1": "one"
     },
     [
       true,
@@ -24816,8 +24563,7 @@
       false
     ],
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       true,
@@ -24830,8 +24576,7 @@
       false
     ],
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     [
       true,
@@ -24844,8 +24589,7 @@
       false
     ],
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     [
       true,
@@ -24858,22 +24602,7 @@
       false
     ],
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    [
-      true,
-      false
-    ]
-  ],
-  [
-    [
-      true,
-      false
-    ],
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     [
       true,
@@ -24890,8 +24619,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       true,
@@ -31373,8 +31101,141 @@
         "upper": -0.1
       }
     ],
+    {},
+    [
+      {
+        "$type": "RANGE",
+        "lower": {
+          "$type": "DATE",
+          "text": "1970-01-01T01:00",
+          "millis": 0
+        },
+        "upper": {
+          "$type": "DATE",
+          "text": "1970-01-01T01:00:00.001",
+          "millis": 0
+        }
+      },
+      {
+        "$type": "RANGE",
+        "lower": -1,
+        "upper": 1
+      },
+      {
+        "$type": "RANGE",
+        "lower": 0,
+        "upper": -1
+      },
+      {
+        "$type": "RANGE",
+        "lower": 0,
+        "upper": 0
+      },
+      {
+        "$type": "RANGE",
+        "lower": 1,
+        "upper": -1
+      },
+      {
+        "$type": "RANGE",
+        "lower": 0,
+        "upper": 5
+      },
+      {
+        "$type": "RANGE",
+        "lower": -5,
+        "upper": 5
+      },
+      {
+        "$type": "RANGE",
+        "lower": "a",
+        "upper": "d"
+      },
+      {
+        "$type": "RANGE",
+        "lower": "s",
+        "upper": "a"
+      },
+      {
+        "$type": "RANGE",
+        "lower": -0.1,
+        "upper": -0.05
+      },
+      {
+        "$type": "RANGE",
+        "lower": 1.0,
+        "upper": -0.1
+      }
+    ]
+  ],
+  [
+    [
+      {
+        "$type": "RANGE",
+        "lower": {
+          "$type": "DATE",
+          "text": "1970-01-01T01:00",
+          "millis": 0
+        },
+        "upper": {
+          "$type": "DATE",
+          "text": "1970-01-01T01:00:00.001",
+          "millis": 0
+        }
+      },
+      {
+        "$type": "RANGE",
+        "lower": -1,
+        "upper": 1
+      },
+      {
+        "$type": "RANGE",
+        "lower": 0,
+        "upper": -1
+      },
+      {
+        "$type": "RANGE",
+        "lower": 0,
+        "upper": 0
+      },
+      {
+        "$type": "RANGE",
+        "lower": 1,
+        "upper": -1
+      },
+      {
+        "$type": "RANGE",
+        "lower": 0,
+        "upper": 5
+      },
+      {
+        "$type": "RANGE",
+        "lower": -5,
+        "upper": 5
+      },
+      {
+        "$type": "RANGE",
+        "lower": "a",
+        "upper": "d"
+      },
+      {
+        "$type": "RANGE",
+        "lower": "s",
+        "upper": "a"
+      },
+      {
+        "$type": "RANGE",
+        "lower": -0.1,
+        "upper": -0.05
+      },
+      {
+        "$type": "RANGE",
+        "lower": 1.0,
+        "upper": -0.1
+      }
+    ],
     {
-      "$type": "MAP"
+      "1": "one"
     },
     [
       {
@@ -31509,8 +31370,7 @@
       }
     ],
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       {
@@ -31645,8 +31505,7 @@
       }
     ],
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     [
       {
@@ -31781,8 +31640,7 @@
       }
     ],
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     [
       {
@@ -31917,144 +31775,7 @@
       }
     ],
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    [
-      {
-        "$type": "RANGE",
-        "lower": {
-          "$type": "DATE",
-          "text": "1970-01-01T01:00",
-          "millis": 0
-        },
-        "upper": {
-          "$type": "DATE",
-          "text": "1970-01-01T01:00:00.001",
-          "millis": 0
-        }
-      },
-      {
-        "$type": "RANGE",
-        "lower": -1,
-        "upper": 1
-      },
-      {
-        "$type": "RANGE",
-        "lower": 0,
-        "upper": -1
-      },
-      {
-        "$type": "RANGE",
-        "lower": 0,
-        "upper": 0
-      },
-      {
-        "$type": "RANGE",
-        "lower": 1,
-        "upper": -1
-      },
-      {
-        "$type": "RANGE",
-        "lower": 0,
-        "upper": 5
-      },
-      {
-        "$type": "RANGE",
-        "lower": -5,
-        "upper": 5
-      },
-      {
-        "$type": "RANGE",
-        "lower": "a",
-        "upper": "d"
-      },
-      {
-        "$type": "RANGE",
-        "lower": "s",
-        "upper": "a"
-      },
-      {
-        "$type": "RANGE",
-        "lower": -0.1,
-        "upper": -0.05
-      },
-      {
-        "$type": "RANGE",
-        "lower": 1.0,
-        "upper": -0.1
-      }
-    ]
-  ],
-  [
-    [
-      {
-        "$type": "RANGE",
-        "lower": {
-          "$type": "DATE",
-          "text": "1970-01-01T01:00",
-          "millis": 0
-        },
-        "upper": {
-          "$type": "DATE",
-          "text": "1970-01-01T01:00:00.001",
-          "millis": 0
-        }
-      },
-      {
-        "$type": "RANGE",
-        "lower": -1,
-        "upper": 1
-      },
-      {
-        "$type": "RANGE",
-        "lower": 0,
-        "upper": -1
-      },
-      {
-        "$type": "RANGE",
-        "lower": 0,
-        "upper": 0
-      },
-      {
-        "$type": "RANGE",
-        "lower": 1,
-        "upper": -1
-      },
-      {
-        "$type": "RANGE",
-        "lower": 0,
-        "upper": 5
-      },
-      {
-        "$type": "RANGE",
-        "lower": -5,
-        "upper": 5
-      },
-      {
-        "$type": "RANGE",
-        "lower": "a",
-        "upper": "d"
-      },
-      {
-        "$type": "RANGE",
-        "lower": "s",
-        "upper": "a"
-      },
-      {
-        "$type": "RANGE",
-        "lower": -0.1,
-        "upper": -0.05
-      },
-      {
-        "$type": "RANGE",
-        "lower": 1.0,
-        "upper": -0.1
-      }
-    ],
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     [
       {
@@ -32193,8 +31914,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       {
@@ -33335,48 +33055,41 @@
   ],
   [
     [],
+    {},
+    []
+  ],
+  [
+    [],
     {
-      "$type": "MAP"
+      "1": "one"
     },
     []
   ],
   [
     [],
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     []
   ],
   [
     [],
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     []
   ],
   [
     [],
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     []
   ],
   [
     [],
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    []
-  ],
-  [
-    [],
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     []
   ],
@@ -33387,8 +33100,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     []
   ],
@@ -35121,8 +34833,37 @@
         "millis": 0
       }
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "RANGE",
+      "lower": {
+        "$type": "DATE",
+        "text": "1970-01-01T01:00",
+        "millis": 0
+      },
+      "upper": {
+        "$type": "DATE",
+        "text": "1970-01-01T01:00:00.001",
+        "millis": 0
+      }
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": {
+        "$type": "DATE",
+        "text": "1970-01-01T01:00",
+        "millis": 0
+      },
+      "upper": {
+        "$type": "DATE",
+        "text": "1970-01-01T01:00:00.001",
+        "millis": 0
+      }
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -35153,8 +34894,7 @@
       }
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -35185,8 +34925,7 @@
       }
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -35217,8 +34956,7 @@
       }
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -35249,40 +34987,7 @@
       }
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": {
-        "$type": "DATE",
-        "text": "1970-01-01T01:00",
-        "millis": 0
-      },
-      "upper": {
-        "$type": "DATE",
-        "text": "1970-01-01T01:00:00.001",
-        "millis": 0
-      }
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": {
-        "$type": "DATE",
-        "text": "1970-01-01T01:00",
-        "millis": 0
-      },
-      "upper": {
-        "$type": "DATE",
-        "text": "1970-01-01T01:00:00.001",
-        "millis": 0
-      }
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -35317,8 +35022,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -36595,8 +36299,21 @@
       "lower": -1,
       "upper": 1
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -36611,8 +36328,7 @@
       "upper": 1
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -36627,8 +36343,7 @@
       "upper": 1
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -36643,8 +36358,7 @@
       "upper": 1
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -36659,24 +36373,7 @@
       "upper": 1
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": -1,
-      "upper": 1
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": -1,
-      "upper": 1
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -36695,8 +36392,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -37885,8 +37581,21 @@
       "lower": 0,
       "upper": -1
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -37901,8 +37610,7 @@
       "upper": -1
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -37917,8 +37625,7 @@
       "upper": -1
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -37933,8 +37640,7 @@
       "upper": -1
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -37949,24 +37655,7 @@
       "upper": -1
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": 0,
-      "upper": -1
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": 0,
-      "upper": -1
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -37985,8 +37674,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -39175,8 +38863,21 @@
       "lower": 0,
       "upper": 0
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -39191,8 +38892,7 @@
       "upper": 0
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -39207,8 +38907,7 @@
       "upper": 0
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -39223,8 +38922,7 @@
       "upper": 0
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -39239,24 +38937,7 @@
       "upper": 0
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": 0,
-      "upper": 0
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": 0,
-      "upper": 0
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -39275,8 +38956,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -40465,8 +40145,21 @@
       "lower": 1,
       "upper": -1
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -40481,8 +40174,7 @@
       "upper": -1
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -40497,8 +40189,7 @@
       "upper": -1
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -40513,8 +40204,7 @@
       "upper": -1
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -40529,24 +40219,7 @@
       "upper": -1
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": 1,
-      "upper": -1
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": 1,
-      "upper": -1
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -40565,8 +40238,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -41755,8 +41427,21 @@
       "lower": 0,
       "upper": 5
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 5
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 5
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -41771,8 +41456,7 @@
       "upper": 5
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -41787,8 +41471,7 @@
       "upper": 5
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -41803,8 +41486,7 @@
       "upper": 5
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -41819,24 +41501,7 @@
       "upper": 5
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": 0,
-      "upper": 5
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": 0,
-      "upper": 5
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -41855,8 +41520,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -43045,8 +42709,21 @@
       "lower": -5,
       "upper": 5
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "RANGE",
+      "lower": -5,
+      "upper": 5
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -5,
+      "upper": 5
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -43061,8 +42738,7 @@
       "upper": 5
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -43077,8 +42753,7 @@
       "upper": 5
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -43093,8 +42768,7 @@
       "upper": 5
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -43109,24 +42783,7 @@
       "upper": 5
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": -5,
-      "upper": 5
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": -5,
-      "upper": 5
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -43145,8 +42802,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -44007,8 +43663,21 @@
       "lower": "a",
       "upper": "d"
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "d"
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "d"
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -44023,8 +43692,7 @@
       "upper": "d"
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -44039,8 +43707,7 @@
       "upper": "d"
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -44055,8 +43722,7 @@
       "upper": "d"
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -44071,24 +43737,7 @@
       "upper": "d"
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": "a",
-      "upper": "d"
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": "a",
-      "upper": "d"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -44107,8 +43756,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -44969,8 +44617,21 @@
       "lower": "s",
       "upper": "a"
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "RANGE",
+      "lower": "s",
+      "upper": "a"
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": "s",
+      "upper": "a"
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -44985,8 +44646,7 @@
       "upper": "a"
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -45001,8 +44661,7 @@
       "upper": "a"
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -45017,8 +44676,7 @@
       "upper": "a"
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -45033,24 +44691,7 @@
       "upper": "a"
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": "s",
-      "upper": "a"
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": "s",
-      "upper": "a"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -45069,8 +44710,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -46259,8 +45899,21 @@
       "lower": -0.1,
       "upper": -0.05
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -46275,8 +45928,7 @@
       "upper": -0.05
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -46291,8 +45943,7 @@
       "upper": -0.05
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -46307,8 +45958,7 @@
       "upper": -0.05
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -46323,24 +45973,7 @@
       "upper": -0.05
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -46359,8 +45992,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -47549,8 +47181,21 @@
       "lower": 1.0,
       "upper": -0.1
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    }
+  ],
+  [
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -47565,8 +47210,7 @@
       "upper": -0.1
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -47581,8 +47225,7 @@
       "upper": -0.1
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -47597,8 +47240,7 @@
       "upper": -0.1
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -47613,24 +47255,7 @@
       "upper": -0.1
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
-      "upper": -0.1
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
-      "upper": -0.1
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -47649,8 +47274,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -47729,134 +47353,616 @@
     }
   ],
   [
+    {},
+    0,
+    {}
+  ],
+  [
+    {},
+    1,
+    {}
+  ],
+  [
+    {},
+    -1,
+    {}
+  ],
+  [
+    {},
+    10,
+    {}
+  ],
+  [
+    {},
+    -10,
+    {}
+  ],
+  [
+    {},
+    0.0,
+    {}
+  ],
+  [
+    {},
+    1.0,
+    {}
+  ],
+  [
+    {},
+    -1.0,
+    {}
+  ],
+  [
+    {},
+    10.0,
+    {}
+  ],
+  [
+    {},
+    -10.0,
+    {}
+  ],
+  [
+    {},
+    0.5,
+    {}
+  ],
+  [
+    {},
+    -0.5,
+    {}
+  ],
+  [
+    {},
+    -0.1,
+    {}
+  ],
+  [
+    {},
+    0.1,
+    {}
+  ],
+  [
+    {},
     {
-      "$type": "MAP"
+      "$type": "DATE",
+      "text": "1970-01-01T01:00",
+      "millis": 0
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "$type": "DATE",
+      "text": "1970-01-01T00:59:59.999",
+      "millis": 0
+    },
+    {}
+  ],
+  [
+    {},
+    "",
+    {}
+  ],
+  [
+    {},
+    "@",
+    {}
+  ],
+  [
+    {},
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+    {}
+  ],
+  [
+    {},
+    "@@ @@ @@@ @@ @@ @@",
+    {}
+  ],
+  [
+    {},
+    " ",
+    {}
+  ],
+  [
+    {},
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+    {}
+  ],
+  [
+    {},
+    "\n\t\r",
+    {}
+  ],
+  [
+    {},
+    "1",
+    {}
+  ],
+  [
+    {},
+    "true",
+    {}
+  ],
+  [
+    {},
+    "false",
+    {}
+  ],
+  [
+    {},
+    "0",
+    {}
+  ],
+  [
+    {},
+    true,
+    {}
+  ],
+  [
+    {},
+    false,
+    {}
+  ],
+  [
+    {},
+    [
+      0,
+      1,
+      -1,
+      10,
+      -10
+    ],
+    {}
+  ],
+  [
+    {},
+    [
+      0.0,
+      1.0,
+      -1.0,
+      10.0,
+      -10.0,
+      0.5,
+      -0.5,
+      -0.1,
+      0.1
+    ],
+    {}
+  ],
+  [
+    {},
+    [
+      {
+        "$type": "DATE",
+        "text": "1970-01-01T01:00",
+        "millis": 0
+      },
+      {
+        "$type": "DATE",
+        "text": "1970-01-01T00:59:59.999",
+        "millis": 0
+      }
+    ],
+    {}
+  ],
+  [
+    {},
+    [
+      "",
+      "@",
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "@@ @@ @@@ @@ @@ @@",
+      " ",
+      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+      "\n\t\r",
+      "1",
+      "true",
+      "false",
+      "0"
+    ],
+    {}
+  ],
+  [
+    {},
+    [
+      true,
+      false
+    ],
+    {}
+  ],
+  [
+    {},
+    [
+      {
+        "$type": "RANGE",
+        "lower": {
+          "$type": "DATE",
+          "text": "1970-01-01T01:00",
+          "millis": 0
+        },
+        "upper": {
+          "$type": "DATE",
+          "text": "1970-01-01T01:00:00.001",
+          "millis": 0
+        }
+      },
+      {
+        "$type": "RANGE",
+        "lower": -1,
+        "upper": 1
+      },
+      {
+        "$type": "RANGE",
+        "lower": 0,
+        "upper": -1
+      },
+      {
+        "$type": "RANGE",
+        "lower": 0,
+        "upper": 0
+      },
+      {
+        "$type": "RANGE",
+        "lower": 1,
+        "upper": -1
+      },
+      {
+        "$type": "RANGE",
+        "lower": 0,
+        "upper": 5
+      },
+      {
+        "$type": "RANGE",
+        "lower": -5,
+        "upper": 5
+      },
+      {
+        "$type": "RANGE",
+        "lower": "a",
+        "upper": "d"
+      },
+      {
+        "$type": "RANGE",
+        "lower": "s",
+        "upper": "a"
+      },
+      {
+        "$type": "RANGE",
+        "lower": -0.1,
+        "upper": -0.05
+      },
+      {
+        "$type": "RANGE",
+        "lower": 1.0,
+        "upper": -0.1
+      }
+    ],
+    {}
+  ],
+  [
+    {},
+    [],
+    {}
+  ],
+  [
+    {},
+    {
+      "$type": "RANGE",
+      "lower": {
+        "$type": "DATE",
+        "text": "1970-01-01T01:00",
+        "millis": 0
+      },
+      "upper": {
+        "$type": "DATE",
+        "text": "1970-01-01T01:00:00.001",
+        "millis": 0
+      }
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "$type": "RANGE",
+      "lower": -1,
+      "upper": 1
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": -1
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 0
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "$type": "RANGE",
+      "lower": 1,
+      "upper": -1
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "$type": "RANGE",
+      "lower": 0,
+      "upper": 5
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "$type": "RANGE",
+      "lower": -5,
+      "upper": 5
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "$type": "RANGE",
+      "lower": "a",
+      "upper": "d"
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "$type": "RANGE",
+      "lower": "s",
+      "upper": "a"
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "$type": "RANGE",
+      "lower": -0.1,
+      "upper": -0.05
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "$type": "RANGE",
+      "lower": 1.0,
+      "upper": -0.1
+    },
+    {}
+  ],
+  [
+    {},
+    {},
+    {}
+  ],
+  [
+    {},
+    {
+      "1": "one"
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "true": "true"
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "3870-07-04T07:30": true
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "0.1": "0.1"
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "string": "string"
+    },
+    {}
+  ],
+  [
+    {},
+    {
+      "1": 0.1,
+      "value2": true,
+      "value1": true,
+      "value3": true,
+      "true": "true"
+    },
+    {}
+  ],
+  [
+    {},
+    null,
+    {}
+  ],
+  [
+    {},
+    null,
+    {}
+  ],
+  [
+    {},
+    null,
+    {}
+  ],
+  [
+    {},
+    {}
+  ],
+  [
+    {},
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {}
+  ],
+  [
+    {
+      "1": "one"
     },
     0,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     1,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     -1,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     10,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     -10,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     0.0,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     1.0,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     -1.0,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     10.0,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     -10.0,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     0.5,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     -0.5,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     -0.1,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     0.1,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "$type": "DATE",
@@ -47864,12 +47970,12 @@
       "millis": 0
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "$type": "DATE",
@@ -47877,129 +47983,129 @@
       "millis": 0
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "",
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "@",
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     " ",
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "\n\t\r",
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "1",
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "true",
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "false",
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     "0",
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     true,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     false,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     [
       0,
@@ -48009,12 +48115,12 @@
       -10
     ],
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     [
       0.0,
@@ -48028,12 +48134,12 @@
       0.1
     ],
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     [
       {
@@ -48048,12 +48154,12 @@
       }
     ],
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     [
       "",
@@ -48069,24 +48175,24 @@
       "0"
     ],
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     [
       true,
       false
     ],
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     [
       {
@@ -48154,21 +48260,21 @@
       }
     ],
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     [],
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -48184,12 +48290,12 @@
       }
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -48197,12 +48303,12 @@
       "upper": 1
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -48210,12 +48316,12 @@
       "upper": -1
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -48223,12 +48329,12 @@
       "upper": 0
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -48236,12 +48342,12 @@
       "upper": -1
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -48249,12 +48355,12 @@
       "upper": 5
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -48262,12 +48368,12 @@
       "upper": 5
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -48275,12 +48381,12 @@
       "upper": "d"
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -48288,12 +48394,12 @@
       "upper": "a"
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -48301,12 +48407,12 @@
       "upper": -0.05
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "$type": "RANGE",
@@ -48314,134 +48420,122 @@
       "upper": -0.1
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
+    {},
     {
-      "$type": "MAP"
-    },
-    {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "1": "one"
+    },
+    {}
+  ],
+  [
+    {
+      "1": "one"
     },
     {
-      "$type": "MAP"
+      "true": "true"
+    },
+    {
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "1": 0.1,
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
-    {
-      "$type": "MAP"
-    }
+    {}
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     null,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     null,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     null,
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "$type": "ERROR",
@@ -48451,167 +48545,138 @@
       }
     },
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     0,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     1,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     -1,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     10,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     -10,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     0.0,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     1.0,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     -1.0,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     10.0,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     -10.0,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     0.5,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     -0.5,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     -0.1,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     0.1,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "DATE",
@@ -48619,14 +48684,12 @@
       "millis": 0
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "DATE",
@@ -48634,157 +48697,129 @@
       "millis": 0
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "@",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "@@ @@ @@@ @@ @@ @@",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     " ",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "\n\t\r",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "1",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "true",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "false",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     "0",
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     true,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     false,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       0,
@@ -48794,14 +48829,12 @@
       -10
     ],
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       0.0,
@@ -48815,14 +48848,12 @@
       0.1
     ],
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       {
@@ -48837,14 +48868,12 @@
       }
     ],
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       "",
@@ -48860,28 +48889,24 @@
       "0"
     ],
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       true,
       false
     ],
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       {
@@ -48949,25 +48974,21 @@
       }
     ],
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     [],
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -48983,14 +49004,12 @@
       }
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -48998,14 +49017,12 @@
       "upper": 1
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -49013,14 +49030,12 @@
       "upper": -1
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -49028,14 +49043,12 @@
       "upper": 0
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -49043,14 +49056,12 @@
       "upper": -1
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -49058,14 +49069,12 @@
       "upper": 5
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -49073,14 +49082,12 @@
       "upper": 5
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -49088,14 +49095,12 @@
       "upper": "d"
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -49103,14 +49108,12 @@
       "upper": "a"
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -49118,14 +49121,12 @@
       "upper": -0.05
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -49133,156 +49134,122 @@
       "upper": -0.1
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
+    {},
     {
-      "$type": "MAP"
-    },
-    {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "1": "one"
     },
     {
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
+    },
+    {}
+  ],
+  [
+    {
+      "true": "true"
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
+    },
+    {
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "1": "one",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "1": 0.1,
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
-    {
-      "$type": "MAP"
-    }
+    {}
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     null,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     null,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     null,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "ERROR",
@@ -49292,168 +49259,138 @@
       }
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     0,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     1,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     -1,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     10,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     -10,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     0.0,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     1.0,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     -1.0,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     10.0,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     -10.0,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     0.5,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     -0.5,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     -0.1,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     0.1,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "DATE",
@@ -49461,14 +49398,12 @@
       "millis": 0
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "DATE",
@@ -49476,157 +49411,129 @@
       "millis": 0
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "@",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "@@ @@ @@@ @@ @@ @@",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     " ",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "\n\t\r",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "1",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "true",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "false",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     "0",
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     true,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     false,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     [
       0,
@@ -49636,14 +49543,12 @@
       -10
     ],
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     [
       0.0,
@@ -49657,14 +49562,12 @@
       0.1
     ],
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     [
       {
@@ -49679,14 +49582,12 @@
       }
     ],
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     [
       "",
@@ -49702,28 +49603,24 @@
       "0"
     ],
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     [
       true,
       false
     ],
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     [
       {
@@ -49791,25 +49688,21 @@
       }
     ],
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     [],
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -49825,14 +49718,12 @@
       }
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -49840,14 +49731,12 @@
       "upper": 1
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -49855,14 +49744,12 @@
       "upper": -1
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -49870,14 +49757,12 @@
       "upper": 0
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -49885,14 +49770,12 @@
       "upper": -1
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -49900,14 +49783,12 @@
       "upper": 5
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -49915,14 +49796,12 @@
       "upper": 5
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -49930,14 +49809,12 @@
       "upper": "d"
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -49945,14 +49822,12 @@
       "upper": "a"
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -49960,14 +49835,12 @@
       "upper": -0.05
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "RANGE",
@@ -49975,156 +49848,124 @@
       "upper": -0.1
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
+    {},
     {
-      "$type": "MAP"
-    },
-    {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "1": "one"
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "3870-07-04T07:30": true
+    },
+    {}
+  ],
+  [
+    {
+      "3870-07-04T07:30": true
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "0.1": "0.1"
+    },
+    {
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "true": "true",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "1": 0.1,
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     null,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     null,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     null,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "ERROR",
@@ -50134,168 +49975,138 @@
       }
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     0,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     1,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     -1,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     10,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     -10,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     0.0,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     1.0,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     -1.0,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     10.0,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     -10.0,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     0.5,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     -0.5,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     -0.1,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     0.1,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "DATE",
@@ -50303,14 +50114,12 @@
       "millis": 0
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "DATE",
@@ -50318,157 +50127,129 @@
       "millis": 0
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "@",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "@@ @@ @@@ @@ @@ @@",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     " ",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "\n\t\r",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "1",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "true",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "false",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     "0",
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     true,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     false,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     [
       0,
@@ -50478,14 +50259,12 @@
       -10
     ],
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     [
       0.0,
@@ -50499,14 +50278,12 @@
       0.1
     ],
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     [
       {
@@ -50521,14 +50298,12 @@
       }
     ],
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     [
       "",
@@ -50544,28 +50319,24 @@
       "0"
     ],
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     [
       true,
       false
     ],
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     [
       {
@@ -50633,25 +50404,21 @@
       }
     ],
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     [],
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -50667,14 +50434,12 @@
       }
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -50682,14 +50447,12 @@
       "upper": 1
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -50697,14 +50460,12 @@
       "upper": -1
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -50712,14 +50473,12 @@
       "upper": 0
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -50727,14 +50486,12 @@
       "upper": -1
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -50742,14 +50499,12 @@
       "upper": 5
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -50757,14 +50512,12 @@
       "upper": 5
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -50772,14 +50525,12 @@
       "upper": "d"
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -50787,14 +50538,12 @@
       "upper": "a"
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -50802,14 +50551,12 @@
       "upper": -0.05
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "RANGE",
@@ -50817,157 +50564,124 @@
       "upper": -0.1
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
+    {},
     {
-      "$type": "MAP"
-    },
-    {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "1": "one"
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "0.1": "0.1"
+    },
+    {}
+  ],
+  [
+    {
+      "0.1": "0.1"
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "string": "string"
+    },
+    {
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "1": 0.1,
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     null,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     null,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     null,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "ERROR",
@@ -50977,168 +50691,138 @@
       }
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     0,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     1,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     -1,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     10,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     -10,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     0.0,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     1.0,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     -1.0,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     10.0,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     -10.0,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     0.5,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     -0.5,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     -0.1,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     0.1,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "DATE",
@@ -51146,14 +50830,12 @@
       "millis": 0
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "DATE",
@@ -51161,157 +50843,129 @@
       "millis": 0
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     "",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     "@",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     "@@ @@ @@@ @@ @@ @@",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     " ",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     "\n\t\r",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     "1",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     "true",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     "false",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     "0",
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     true,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     false,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     [
       0,
@@ -51321,14 +50975,12 @@
       -10
     ],
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     [
       0.0,
@@ -51342,14 +50994,12 @@
       0.1
     ],
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     [
       {
@@ -51364,14 +51014,12 @@
       }
     ],
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     [
       "",
@@ -51387,28 +51035,24 @@
       "0"
     ],
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     [
       true,
       false
     ],
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     [
       {
@@ -51476,25 +51120,21 @@
       }
     ],
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     [],
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -51510,14 +51150,12 @@
       }
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -51525,14 +51163,12 @@
       "upper": 1
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -51540,14 +51176,12 @@
       "upper": -1
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -51555,14 +51189,12 @@
       "upper": 0
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -51570,14 +51202,12 @@
       "upper": -1
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -51585,14 +51215,12 @@
       "upper": 5
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -51600,14 +51228,12 @@
       "upper": 5
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -51615,14 +51241,12 @@
       "upper": "d"
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -51630,14 +51254,12 @@
       "upper": "a"
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -51645,14 +51267,12 @@
       "upper": -0.05
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "RANGE",
@@ -51660,157 +51280,124 @@
       "upper": -0.1
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
+    {},
     {
-      "$type": "MAP"
-    },
-    {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "1": "one"
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
-    {
-      "0.1": "0.1",
-      "$type": "MAP"
-    }
+    {}
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "1": 0.1,
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     null,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     null,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     null,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "ERROR",
@@ -51820,851 +51407,7 @@
       }
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    0,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    1,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    -1,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    10,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    -10,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    0.0,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    1.0,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    -1.0,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    10.0,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    -10.0,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    0.5,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    -0.5,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    -0.1,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    0.1,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "DATE",
-      "text": "1970-01-01T01:00",
-      "millis": 0
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "DATE",
-      "text": "1970-01-01T00:59:59.999",
-      "millis": 0
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    "",
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    "@",
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    "@@ @@ @@@ @@ @@ @@",
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    " ",
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    "\n\t\r",
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    "1",
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    "true",
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    "false",
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    "0",
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    true,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    false,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    [
-      0,
-      1,
-      -1,
-      10,
-      -10
-    ],
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    [
-      0.0,
-      1.0,
-      -1.0,
-      10.0,
-      -10.0,
-      0.5,
-      -0.5,
-      -0.1,
-      0.1
-    ],
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    [
-      {
-        "$type": "DATE",
-        "text": "1970-01-01T01:00",
-        "millis": 0
-      },
-      {
-        "$type": "DATE",
-        "text": "1970-01-01T00:59:59.999",
-        "millis": 0
-      }
-    ],
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    [
-      "",
-      "@",
-      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
-      "@@ @@ @@@ @@ @@ @@",
-      " ",
-      "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
-      "\n\t\r",
-      "1",
-      "true",
-      "false",
-      "0"
-    ],
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    [
-      true,
-      false
-    ],
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    [
-      {
-        "$type": "RANGE",
-        "lower": {
-          "$type": "DATE",
-          "text": "1970-01-01T01:00",
-          "millis": 0
-        },
-        "upper": {
-          "$type": "DATE",
-          "text": "1970-01-01T01:00:00.001",
-          "millis": 0
-        }
-      },
-      {
-        "$type": "RANGE",
-        "lower": -1,
-        "upper": 1
-      },
-      {
-        "$type": "RANGE",
-        "lower": 0,
-        "upper": -1
-      },
-      {
-        "$type": "RANGE",
-        "lower": 0,
-        "upper": 0
-      },
-      {
-        "$type": "RANGE",
-        "lower": 1,
-        "upper": -1
-      },
-      {
-        "$type": "RANGE",
-        "lower": 0,
-        "upper": 5
-      },
-      {
-        "$type": "RANGE",
-        "lower": -5,
-        "upper": 5
-      },
-      {
-        "$type": "RANGE",
-        "lower": "a",
-        "upper": "d"
-      },
-      {
-        "$type": "RANGE",
-        "lower": "s",
-        "upper": "a"
-      },
-      {
-        "$type": "RANGE",
-        "lower": -0.1,
-        "upper": -0.05
-      },
-      {
-        "$type": "RANGE",
-        "lower": 1.0,
-        "upper": -0.1
-      }
-    ],
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    [],
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": {
-        "$type": "DATE",
-        "text": "1970-01-01T01:00",
-        "millis": 0
-      },
-      "upper": {
-        "$type": "DATE",
-        "text": "1970-01-01T01:00:00.001",
-        "millis": 0
-      }
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": -1,
-      "upper": 1
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": 0,
-      "upper": -1
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": 0,
-      "upper": 0
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": 1,
-      "upper": -1
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": 0,
-      "upper": 5
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": -5,
-      "upper": 5
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": "a",
-      "upper": "d"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": "s",
-      "upper": "a"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
-      "upper": -0.1
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "MAP"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "1": "one",
-      "$type": "MAP"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "true": "true",
-      "$type": "MAP"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "1": 0.1,
-      "value2": true,
-      "value1": true,
-      "value3": true,
-      "true": "true",
-      "$type": "MAP"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    null,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    null,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    null,
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
-    },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Test Exception"
-      }
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
@@ -52673,8 +51416,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     0,
     {
@@ -52682,8 +51424,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52692,8 +51433,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     1,
     {
@@ -52701,8 +51441,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52711,8 +51450,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     -1,
     {
@@ -52720,8 +51458,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52730,8 +51467,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     10,
     {
@@ -52739,8 +51475,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52749,8 +51484,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     -10,
     {
@@ -52758,8 +51492,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52768,8 +51501,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     0.0,
     {
@@ -52777,8 +51509,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52787,8 +51518,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     1.0,
     {
@@ -52796,8 +51526,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52806,8 +51535,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     -1.0,
     {
@@ -52815,8 +51543,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52825,8 +51552,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     10.0,
     {
@@ -52834,8 +51560,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52844,8 +51569,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     -10.0,
     {
@@ -52853,8 +51577,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52863,8 +51586,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     0.5,
     {
@@ -52872,8 +51594,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52882,8 +51603,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     -0.5,
     {
@@ -52891,8 +51611,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52901,8 +51620,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     -0.1,
     {
@@ -52910,8 +51628,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52920,8 +51637,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     0.1,
     {
@@ -52929,8 +51645,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52939,8 +51654,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "DATE",
@@ -52952,8 +51666,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52962,8 +51675,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "DATE",
@@ -52975,8 +51687,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -52985,8 +51696,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "",
     {
@@ -52994,8 +51704,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53004,8 +51713,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "@",
     {
@@ -53013,8 +51721,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53023,8 +51730,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
@@ -53032,8 +51738,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53042,8 +51747,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "@@ @@ @@@ @@ @@ @@",
     {
@@ -53051,8 +51755,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53061,8 +51764,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     " ",
     {
@@ -53070,8 +51772,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53080,8 +51781,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
@@ -53089,8 +51789,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53099,8 +51798,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "\n\t\r",
     {
@@ -53108,8 +51806,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53118,8 +51815,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "1",
     {
@@ -53127,8 +51823,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53137,8 +51832,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "true",
     {
@@ -53146,8 +51840,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53156,8 +51849,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "false",
     {
@@ -53165,8 +51857,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53175,8 +51866,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     "0",
     {
@@ -53184,8 +51874,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53194,8 +51883,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     true,
     {
@@ -53203,8 +51891,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53213,8 +51900,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     false,
     {
@@ -53222,8 +51908,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53232,8 +51917,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       0,
@@ -53247,8 +51931,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53257,8 +51940,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       0.0,
@@ -53276,8 +51958,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53286,8 +51967,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       {
@@ -53306,8 +51986,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53316,8 +51995,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       "",
@@ -53337,8 +52015,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53347,8 +52024,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       true,
@@ -53359,8 +52035,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53369,8 +52044,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     [
       {
@@ -53442,8 +52116,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53452,8 +52125,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     [],
     {
@@ -53461,8 +52133,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53471,8 +52142,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -53492,8 +52162,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53502,8 +52171,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -53515,8 +52183,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53525,8 +52192,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -53538,8 +52204,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53548,8 +52213,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -53561,8 +52225,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53571,8 +52234,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -53584,8 +52246,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53594,8 +52255,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -53607,8 +52267,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53617,8 +52276,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -53630,8 +52288,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53640,8 +52297,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -53653,8 +52309,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53663,8 +52318,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -53676,8 +52330,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53686,8 +52339,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -53699,8 +52351,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53709,8 +52360,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "RANGE",
@@ -53722,8 +52372,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53732,19 +52381,15 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
-    {
-      "$type": "MAP"
-    },
+    {},
     {
       "1": 0.1,
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53753,19 +52398,16 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "1": "one"
     },
     {
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53774,19 +52416,16 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "1": 0.1,
       "value2": true,
       "value1": true,
-      "value3": true,
-      "$type": "MAP"
+      "value3": true
     }
   ],
   [
@@ -53795,20 +52434,17 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "1": 0.1,
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53817,20 +52453,17 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "1": 0.1,
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53839,20 +52472,17 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "1": 0.1,
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53861,20 +52491,16 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "1": 0.1,
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
-    {
-      "$type": "MAP"
-    }
+    {}
   ],
   [
     {
@@ -53882,8 +52508,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     null,
     {
@@ -53891,8 +52516,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53901,8 +52525,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     null,
     {
@@ -53910,8 +52533,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53920,8 +52542,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     null,
     {
@@ -53929,8 +52550,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53939,16 +52559,14 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "1": 0.1,
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -53957,8 +52575,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "ERROR",
@@ -53972,8 +52589,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
@@ -54379,48 +52995,41 @@
   ],
   [
     null,
+    {},
+    null
+  ],
+  [
+    null,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     null
   ],
   [
     null,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     null
   ],
   [
     null,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     null
   ],
   [
     null,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     null
   ],
   [
     null,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    null
-  ],
-  [
-    null,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     null
   ],
@@ -54431,8 +53040,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     null
   ],
@@ -54869,48 +53477,41 @@
   ],
   [
     null,
+    {},
+    null
+  ],
+  [
+    null,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     null
   ],
   [
     null,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     null
   ],
   [
     null,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     null
   ],
   [
     null,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     null
   ],
   [
     null,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    null
-  ],
-  [
-    null,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     null
   ],
@@ -54921,8 +53522,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     null
   ],
@@ -55359,48 +53959,41 @@
   ],
   [
     null,
+    {},
+    null
+  ],
+  [
+    null,
     {
-      "$type": "MAP"
+      "1": "one"
     },
     null
   ],
   [
     null,
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     null
   ],
   [
     null,
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     null
   ],
   [
     null,
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     null
   ],
   [
     null,
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    null
-  ],
-  [
-    null,
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     null
   ],
@@ -55411,8 +54004,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     null
   ],
@@ -55697,39 +54289,30 @@
       "upper": -0.1
     }
   ],
+  [{}],
   [
     {
-      "$type": "MAP"
+      "1": "one"
     }
   ],
   [
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     }
   ],
   [
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     }
   ],
   [
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    }
-  ],
-  [
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     }
   ],
   [
@@ -55738,8 +54321,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     }
   ],
   [null],
@@ -56728,8 +55310,25 @@
         "errorMessage": "Test Exception"
       }
     },
+    {},
     {
-      "$type": "MAP"
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    }
+  ],
+  [
+    {
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Test Exception"
+      }
+    },
+    {
+      "1": "one"
     },
     {
       "$type": "ERROR",
@@ -56748,8 +55347,7 @@
       }
     },
     {
-      "1": "one",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "ERROR",
@@ -56768,8 +55366,7 @@
       }
     },
     {
-      "true": "true",
-      "$type": "MAP"
+      "3870-07-04T07:30": true
     },
     {
       "$type": "ERROR",
@@ -56788,8 +55385,7 @@
       }
     },
     {
-      "3870-07-04T07:30": true,
-      "$type": "MAP"
+      "0.1": "0.1"
     },
     {
       "$type": "ERROR",
@@ -56808,28 +55404,7 @@
       }
     },
     {
-      "0.1": "0.1",
-      "$type": "MAP"
-    },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Test Exception"
-      }
-    }
-  ],
-  [
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Test Exception"
-      }
-    },
-    {
-      "string": "string",
-      "$type": "MAP"
+      "string": "string"
     },
     {
       "$type": "ERROR",
@@ -56852,8 +55427,7 @@
       "value2": true,
       "value1": true,
       "value3": true,
-      "true": "true",
-      "$type": "MAP"
+      "true": "true"
     },
     {
       "$type": "ERROR",

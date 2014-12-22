@@ -601,11 +601,11 @@ public class DollarFactory {
             return $void();
         } else if (value instanceof LinkedHashMap) {
             JsonObject json = new JsonObject((Map<String, Object>) value);
-            if (json.containsField(TYPE_KEY)) {
+//            if (json.containsField(TYPE_KEY)) {
                 return fromJson(json);
-            } else {
-                return fromValue(value);
-            }
+//            } else {
+//                return fromValue(value);
+//            }
         } else if (value instanceof ArrayList) {
             ArrayList list = (ArrayList) value;
             ArrayList<var> result = new ArrayList<>();
@@ -706,7 +706,7 @@ public class DollarFactory {
                 json.putValue(fieldName.toString(), toJson(v));
             }
             final JsonObject containerObject = new JsonObject();
-            json.putString(TYPE_KEY, value.$type().name());
+//            json.putString(TYPE_KEY, value.$type().name());
             return json;
         } else if (i.equals(Type.RANGE)) {
             final JsonObject rangeObject = new JsonObject();

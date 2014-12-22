@@ -211,7 +211,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
   public List toStringList() {
     final ArrayList<Object> strings = new ArrayList<>();
     for (Object o : list) {
-      strings.add(Json.encodePrettily(o));
+      strings.add(Json.encode(o));
     }
     return strings;
   }

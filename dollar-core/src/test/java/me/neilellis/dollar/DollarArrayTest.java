@@ -41,8 +41,8 @@ public class DollarArrayTest {
         assertEquals(list.remove("Charlie"), $list("Neil").$plus($("Dimple")));
         Object value = list.toJavaObject();
         assertEquals(JsonArray.class, value.getClass());
-        assertEquals("[\"Neil\",\"Dimple\",\"Charlie\"]", list.toString());
-        assertEquals("[\"Neil\",\"Dimple\",\"Charlie\"]", value.toString());
+        assertEquals("[ \"Neil\", \"Dimple\", \"Charlie\" ]", list.toString());
+        assertEquals("[ \"Neil\", \"Dimple\", \"Charlie\" ]", value.toString());
         assertTrue(list.$stream(false).anyMatch((i) -> i.equals("Neil")));
     }
 

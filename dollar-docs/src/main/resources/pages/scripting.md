@@ -464,7 +464,7 @@ true as boolean <=> true
 true as VOID <=> void
 
 
-[1,2,3] as string <=> "[1,2,3]"
+[1,2,3] as string <=> "[ 1, 2, 3 ]"
 [1,2,3] as list <=> [1,2,3]
 [1,2,3] as boolean <=> true
 [1,2,3] as map <=> {"value":[1,2,3]}
