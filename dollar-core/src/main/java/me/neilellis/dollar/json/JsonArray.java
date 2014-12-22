@@ -18,6 +18,8 @@ package me.neilellis.dollar.json;
 
 
 import me.neilellis.dollar.DollarException;
+import me.neilellis.dollar.collections.ImmutableList;
+import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.json.impl.Json;
 import org.jetbrains.annotations.NotNull;
 
@@ -128,10 +130,6 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     return new JsonArray(list, true);
   }
 
-  public String encodePrettily() throws EncodeException {
-    return Json.encodePrettily(this.list);
-  }
-
   public <T> T get(final int index) {
     return convertObject(list.get(index));
   }
@@ -142,6 +140,10 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     if (obj != null) {
       if (obj instanceof List) {
         retVal = new JsonArray((List) obj, false);
+      } else if (obj instanceof ImmutableList) {
+        retVal = new JsonArray((((ImmutableList) obj).mutable()), false);
+      } else if (obj instanceof ImmutableMap) {
+        retVal = new JsonObject(((ImmutableMap) obj).mutable(), false);
       } else if (obj instanceof Map) {
         retVal = new JsonObject((Map<String, Object>) obj, false);
       }
@@ -164,11 +166,11 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
 
   @Override
   public String toString() {
-    return encode();
+    return encodePrettily();
   }
 
-  String encode() throws EncodeException {
-    return Json.encode(this.list);
+  public String encodePrettily() throws EncodeException {
+    return Json.encodePrettily(this.list);
   }
 
   @NotNull @Override
@@ -204,5 +206,17 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
 
   public List toList() {
     return convertList(list);
+  }
+
+  public List toStringList() {
+    final ArrayList<Object> strings = new ArrayList<>();
+    for (Object o : list) {
+      strings.add(Json.encodePrettily(o));
+    }
+    return strings;
+  }
+
+  String encode() throws EncodeException {
+    return Json.encode(this.list);
   }
 }

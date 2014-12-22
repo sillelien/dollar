@@ -25,7 +25,7 @@ dependencies:
 #    - sudo apt-get install -y gpg
     - ./gen-key.sh ${GPG_PASSPHRASE}
     - envsubst < settings.xml > ~/.m2/settings.xml
-    - "mvn -Dgpg.passphrase=${GPG_PASSPHRASE} clean install -Dmaven.test.skip=true || :  &> /dev/null":
+    - "mvn -q -Dgpg.passphrase=${GPG_PASSPHRASE} clean install -Dmaven.test.skip=true || :  &> /dev/null":
         timeout: 600
     - echo "login=neilellis" > ~/.github
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
@@ -62,7 +62,7 @@ deployment:
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
-        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} install deploy
+        - mvn -q -Dgpg.passphrase=${GPG_PASSPHRASE} install deploy
         - ./build-docs.sh:
             timeout: 360
         - pack/pack.sh

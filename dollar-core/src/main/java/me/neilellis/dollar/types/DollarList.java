@@ -32,6 +32,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static me.neilellis.dollar.DollarStatic.$null;
 import static me.neilellis.dollar.DollarStatic.fix;
 
 /**
@@ -56,7 +57,7 @@ public class DollarList extends AbstractDollar {
                 }
             } else //noinspection StatementWithEmptyBody
                 if (value == null) {
-                    //Skip
+                    l.add($null(Type.ANY));
                 } else {
                     l.add(DollarFactory.fromValue(value, errors));
                 }
@@ -74,7 +75,7 @@ public class DollarList extends AbstractDollar {
                 }
             } else //noinspection StatementWithEmptyBody
                 if (value == null) {
-                    //Skip
+                    l.add($null(Type.ANY));
                 } else {
                     l.add(DollarFactory.fromValue(value, errors));
                 }
@@ -294,14 +295,14 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableMap<var, var> $map() {
-        return null;
+    public var $copy() {
+        return DollarFactory.fromValue(list.stream().map(var::$copy).collect(Collectors.toList()), errors());
     }
 
     @NotNull
     @Override
-    public var $copy() {
-        return DollarFactory.fromValue(list.stream().map(var::$copy).collect(Collectors.toList()), errors());
+    public ImmutableMap<var, var> $map() {
+        return null;
     }
 
     @Override public var _fix(int depth, boolean parallel) {

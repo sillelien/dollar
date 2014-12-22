@@ -17,6 +17,7 @@
 package me.neilellis.dollar;
 
 
+import me.neilellis.dollar.json.JsonArray;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -58,7 +59,7 @@ public class DollarOperatorsRegressionTest {
 
     public void regression(String symbol, String operation, String variant, List<List<var>> result) throws IOException {
         String filename = operation + "." + variant + ".json";
-        final var previous = $(getClass().getResourceAsStream("/" + filename));
+        final JsonArray previous = new JsonArray(IOUtils.toString(getClass().getResourceAsStream("/" + filename)));
         //Use small to stop massive string creation
         final File file = new File("target", filename);
         final var current = $(result);
@@ -94,13 +95,27 @@ public class DollarOperatorsRegressionTest {
                 previousTypeComparison =
                 new TreeSet<String>(IOUtils.readLines(getClass().getResourceAsStream("/" + typesFile)));
         diff("type", previousTypeComparison.toString(), typeComparison.toString());
-        diff("result", previous.jsonArray().encodePrettily(), current.jsonArray().encodePrettily());
+        diff("result", previous, current.jsonArray());
     }
 
     public void diff(String desc, String lhs, String rhs) {
         final String difference = StringUtils.difference(lhs, rhs);
         if (!difference.isEmpty()) {
             fail("Difference for " + desc + " is " + difference);
+        }
+    }
+
+    private void diff(String desc, JsonArray lhs, JsonArray rhs) {
+        final List lhsArray = lhs.toStringList();
+        final List rhsArray = rhs.toStringList();
+        if (lhsArray.size() != rhsArray.size()) {
+            fail("Different lengths for " + desc);
+        } else {
+            for (int i = 0; i < lhsArray.size(); i++) {
+                if (!lhsArray.get(i).toString().equals(rhsArray.get(i).toString())) {
+                    fail("Difference between: \n" + lhsArray.get(i) + "\n\nAnd:\n" + rhsArray.get(i) + "\n\n ");
+                }
+            }
         }
     }
 

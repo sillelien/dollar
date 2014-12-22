@@ -44,7 +44,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.Future;
 
-import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$void;
 
 /**
@@ -546,6 +545,7 @@ public class DollarFactory {
         } else {
             type = Type.valueOf(jsonObject.getString(TYPE_KEY));
         }
+
         if (type.equals(Type.VOID)) {
             return $void();
         } else if (type.equals(Type.INTEGER)) {
@@ -565,15 +565,13 @@ public class DollarFactory {
             return wrap(new DollarList(ImmutableList.of(), ImmutableList.copyOf(arrayList)));
         } else if (type.equals(Type.MAP)) {
             final JsonObject json;
-            if (jsonObject.containsField(VALUE_KEY)) {
-                json = jsonObject.getObject(VALUE_KEY);
-            } else {
                 json = jsonObject;
-            }
             LinkedHashMap<String, Object> map = new LinkedHashMap<>();
             final Set<String> fieldNames = json.getFieldNames();
             for (String fieldName : fieldNames) {
-                map.put(fieldName, fromJson(json.get(fieldName)));
+                if (!fieldName.equals(TYPE_KEY)) {
+                    map.put(fieldName, fromJson(json.get(fieldName)));
+                }
             }
             return wrap(new DollarMap(ImmutableList.of(), map));
         } else if (type.equals(Type.ERROR)) {
@@ -672,23 +670,23 @@ public class DollarFactory {
             return value.toJavaObject();
         } else if (i.equals(Type.DATE)) {
             final JsonObject jsonObject = new JsonObject();
-            jsonObject.putValue(TYPE_KEY, value.$type().name());
-            jsonObject.putValue(TEXT_KEY, value.$S());
-            jsonObject.putValue(MILLISECOND_KEY, (long) (value.D() * 24 * 60 * 60 * 1000));
+            jsonObject.putString(TYPE_KEY, value.$type().name());
+            jsonObject.putString(TEXT_KEY, value.$S());
+            jsonObject.putNumber(MILLISECOND_KEY, (long) (value.D() * 24 * 60 * 60 * 1000));
             return jsonObject;
         } else if (i.equals(Type.URI)) {
             final JsonObject uriJsonObject = new JsonObject();
-            uriJsonObject.putValue(TYPE_KEY, value.$type().name());
-            uriJsonObject.putValue(VALUE_KEY, value.$S());
+            uriJsonObject.putString(TYPE_KEY, value.$type().name());
+            uriJsonObject.putString(VALUE_KEY, value.$S());
             return uriJsonObject;
         } else if (i.equals(Type.ERROR)) {
             final JsonObject errorJsonObject = new JsonObject();
-            errorJsonObject.putValue(TYPE_KEY, value.$type().name());
+            errorJsonObject.putString(TYPE_KEY, value.$type().name());
             errorJsonObject.putValue(VALUE_KEY, value.toJsonType());
             return errorJsonObject;
         } else if (i.equals(Type.INFINITY)) {
             final JsonObject infinityJsonObject = new JsonObject();
-            infinityJsonObject.putValue(TYPE_KEY, value.$type().name());
+            infinityJsonObject.putString(TYPE_KEY, value.$type().name());
             infinityJsonObject.putValue(POSITIVE_KEY, value.isPositive());
             return infinityJsonObject;
         } else if (i.equals(Type.LIST)) {
@@ -708,13 +706,14 @@ public class DollarFactory {
                 json.putValue(fieldName.toString(), toJson(v));
             }
             final JsonObject containerObject = new JsonObject();
+            json.putString(TYPE_KEY, value.$type().name());
             return json;
         } else if (i.equals(Type.RANGE)) {
             final JsonObject rangeObject = new JsonObject();
             rangeObject.putString(TYPE_KEY, value.$type().name());
             final Range range = value.toJavaObject();
-            rangeObject.put(LOWERBOUND_KEY, toJson($(range.lowerEndpoint())));
-            rangeObject.put(UPPERBOUND_KEY, toJson($(range.upperEndpoint())));
+            rangeObject.putValue(LOWERBOUND_KEY, toJson(range.lowerEndpoint()));
+            rangeObject.putValue(UPPERBOUND_KEY, toJson(range.upperEndpoint()));
             return rangeObject;
         } else if (i.equals(Type.ANY)) {
             return null;
