@@ -22,7 +22,10 @@ import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.*;
+import java.time.DateTimeException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoField;
 import java.util.Arrays;
 import java.util.Objects;
@@ -99,10 +102,10 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
 
     private Double asDecimal() {
         try {
-            final long millis = value.atZone(ZoneId.of("UTC")).toInstant().toEpochMilli();
+            final long millis = value.toEpochMilli();
             return ((double) millis) / (24 * 60 * 60 * 1000);
         } catch (ArithmeticException e) {
-            final long seconds = value.atZone(ZoneId.of("UTC")).toInstant().getEpochSecond();
+            final long seconds = value.getEpochSecond();
             return ((double) seconds) / (24 * 60 * 60);
 
         }
