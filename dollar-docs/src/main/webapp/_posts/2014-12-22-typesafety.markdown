@@ -12,7 +12,7 @@ Static typing is largely a good thing because it helps us to spot bugs before ou
 
 The problem with the simple binary thinking is that it oftend does not actually allow for the extra required work to maintain a viable type system and therefore to get it's rewards. This extra effort if used in systems that require minimal type safety can cause less experienced developers to try and throw the baby out with the bathwater - and stick to only using languages with a very loose type system. I think this somewhat illusory dichotomy is better understood with the metaphor of real world contracts.
 
-If I lend my friend £20 there is an implied contract that I she will return that money by her next paycheck. If she doesn't then my trust is weakened but hey I'm only down £20.  However if I then went to court over my £20 (like I would!) I have nothing but my word to rely upon. This is the level of type safety we would find in, say, JavaScript. Most of the time it works - there's little consequence (in the browser!) if it doesn't and it's a quick simple friendly solution that doesn't slow people's lives down.
+If I lend my friend £20 there is an implied contract that she will return that money by her next paycheck. If she doesn't then my trust is weakened but hey I'm only down £20.  However if I then went to court over my £20 (like I would!) I have nothing but my word to rely upon. This is the level of type safety we would find in, say, JavaScript. Most of the time it works - there's little consequence (in the browser!) if it doesn't and it's a quick simple friendly solution that doesn't slow people's lives down.
 
 Now let's go to the other extreme.
 
