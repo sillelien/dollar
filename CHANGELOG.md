@@ -1,6 +1,9 @@
 ## Change Log
 
-### In Progress: 0.1.4 (2014/12/22 22:20 +00:00)
+### In Progress: 0.1.4 (2014/12/23 17:57 +00:00)
+- [165085c](https://github.com/neilellis/dollar/commit/165085c5c56a623e1cae8726947a0805feb493aa) Change log updates
+- [7dbb134](https://github.com/neilellis/dollar/commit/7dbb134c977dfa51be3a8ce6ac3b7e7ba647fffd) Auto merge
+- [f6d8e9b](https://github.com/neilellis/dollar/commit/f6d8e9b9791afeec7b008a500a492a66ee02008a) Disqus on website posts
 - [24b4dcc](https://github.com/neilellis/dollar/commit/24b4dcce28a520433582675d55b935444b8f0f17) Change log updates
 - [88b573b](https://github.com/neilellis/dollar/commit/88b573bbeb1da65997dd5c639e5312e07441cb31) Auto merge
 - [799448b](https://github.com/neilellis/dollar/commit/799448b5677ae0600e629feb2f15124df70beb73) Disqus on website posts
@@ -112,8 +115,8 @@
 - [393ac19](https://github.com/neilellis/dollar/commit/393ac199ca42de27ee65359ca000feef6b59269a) Change log updates
 - [9044c23](https://github.com/neilellis/dollar/commit/9044c2397b98e52f2e1cae7eb7f6f42157399952) Auto merge
 - [ba012fd](https://github.com/neilellis/dollar/commit/ba012fd10e2162070a25591b67a55b209382052b) General tooling and planning integration.
-- [c35685f](https://github.com/neilellis/dollar/commit/c35685fc8316fe1c4b1a1f16cc622c7572b29281) Change log updates
 - [a7bbb4a](https://github.com/neilellis/dollar/commit/a7bbb4addec58e95b893098f0c07b9691f5ca8e3) Auto merge
+- [c35685f](https://github.com/neilellis/dollar/commit/c35685fc8316fe1c4b1a1f16cc622c7572b29281) Change log updates
 - [090ccab](https://github.com/neilellis/dollar/commit/090ccab321c92fc0bf43072e42966b0e53ce10cf) General tooling and planning integration.
 - [d81bade](https://github.com/neilellis/dollar/commit/d81badedf3d3c8fa6a9a71900b2a83bb542b5e15) General tooling and planning integration.
 
