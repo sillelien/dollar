@@ -8,11 +8,11 @@ categories: dollar socketio type type-safety predictive
 
 A common complaint about dynamic languages is the lack of type safety, and that the only solution is a complete formal one. Interestingly there really does seem to be a very binary view about type systems. So let's get to the bottom of that before we discuss the heuristic approach.
 
-Static typing is largely a good thing because it helps us to spot bugs before our code goes into production and reduces (in theory) the amount of unit testing required to find bugs. The received wisdom is that unless you use a formally proven post-doctorate level type system then your code is sloppy and weak. In reality this is a super complex subject within a huge terrain of possible solutions and that many answers are appropriate for many different situations.
+Static typing is largely a good thing because it helps us to spot bugs before our code goes into production and reduces (in theory) the amount of unit testing required to find bugs. The received wisdom is that unless you use a formally proven post-doctorate level type system then your code is sloppy and weak. In reality this is a complex subject within a huge terrain of possible solutions and that many answers are appropriate for many different situations.
 
-The problem with the simple binary thinking is that it oftend does not actually allow for the extra required work to maintain a viable type system and therefore to get it's rewards. This extra effort if used in systems that require minimal type safety can cause less experienced developers to try and throw the baby out with the bathwater - and stick to only using languages with a very loose type system. I think this somewhat illusory dichotomy is better understood with the metaphor of real world contracts.
+The problem with the simple binary viewpoint is that it does not actually allow for trade off of the extra work involved in maintaining a type system and therefore in getting it's rewards. This extra effort if used in systems that require minimal type safety can cause less experienced developers to try and throw the baby out with the bathwater - and stick to only using languages with a very loose type system. I think this somewhat illusory dichotomy can be removed or weakened with the application of a metaphor of real world contracts.
 
-If I lend my friend £20 there is an implied contract that she will return that money by her next paycheck. If she doesn't then my trust is weakened but hey I'm only down £20.  However if I then went to court over my £20 (like I would!) I have nothing but my word to rely upon. This is the level of type safety we would find in, say, JavaScript. Most of the time it works - there's little consequence (in the browser!) if it doesn't and it's a quick simple friendly solution that doesn't slow people's lives down.
+If I lend my friend £20 there is an implied contract that she will return that money by her next paycheck. If she doesn't then my trust in her is weakened but hey I'm only down £20.  However if I then went to court over my £20 (like I would!) I have nothing but my word to rely upon. This is the level of type safety we would find in, say, JavaScript. Most of the time it works - there's little consequence (in the browser!) if it doesn't and it's a quick simple friendly solution that doesn't slow people's lives down.
 
 Now let's go to the other extreme.
 
@@ -26,7 +26,7 @@ So where does [DollarScript](http://neilellis.github.io/dollar) lie on this cont
 
 Heh?
 
-DollarScript learns from runtime usage what types are usually returned from expressions, modules, resources etc. and then warns you if your code depends on a type that in all probability is wrong. The massive advantage of this approach is that you get a lot of the type safety of a statically typed language without the constant fussing around with importing type declarations from external resources. It also means that type safety can be applied in places that a static type system cannot calculate the type - i.e. from an external service.
+DollarScript learns from runtime usage what types are usually returned from expressions, modules, resources etc. for any given set of inputs. It then warns you if your code depends on a type that in all probability is wrong. The huge advantage of this approach is that you get a lot of the type safety of a statically typed language without the constant fussing around with importing type declarations from external resources. It also means that type safety can be applied in places that a static type system cannot calculate the type - i.e. from an external service.
 
 We're not enforcing a type system, just warning you if you appear to be breaching it. This gives 98% of the result for 2% of the effort.
 
