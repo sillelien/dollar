@@ -23,6 +23,7 @@ import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.exceptions.ValidationException;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
+import me.neilellis.dollar.types.prediction.SingleValueTypePrediction;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -402,15 +403,15 @@ public abstract class AbstractDollar implements var {
         }
     }
 
-    @Override
-    public var assertNotVoid(String message) throws AssertionError {
-        return assertFalse(TypeAware::isVoid, message);
-    }
-
     @NotNull
     @Override
     public String toString() {
         return S();
+    }
+
+    @Override
+    public var assertNotVoid(String message) throws AssertionError {
+        return assertFalse(TypeAware::isVoid, message);
     }
 
     @Override
@@ -420,6 +421,16 @@ public abstract class AbstractDollar implements var {
 
     @Override
     public boolean isInteger() {
+        return false;
+    }
+
+    @Override
+    public boolean isLambda() {
+        return false;
+    }
+
+    @Override
+    public boolean isList() {
         return false;
     }
 
@@ -437,31 +448,8 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public boolean isLambda() {
-        return false;
-    }
-
-    @Override
-    public boolean isList() {
-        return false;
-    }
-
-    @Override
     public boolean isMap() {
         return false;
-    }
-
-    @Override
-    public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
-        try {
-            if (assertion.apply(this)) {
-                throw new AssertionError(message);
-            } else {
-                return this;
-            }
-        } catch (Exception e) {
-            return DollarStatic.logAndRethrow(e);
-        }
     }
 
     @Override
@@ -476,6 +464,19 @@ public abstract class AbstractDollar implements var {
     @Override
     public boolean isSingleValue() {
         return false;
+    }
+
+    @Override
+    public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
+        try {
+            if (assertion.apply(this)) {
+                throw new AssertionError(message);
+            } else {
+                return this;
+            }
+        } catch (Exception e) {
+            return DollarStatic.logAndRethrow(e);
+        }
     }
 
     @Override

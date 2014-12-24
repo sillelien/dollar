@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.types;
+package me.neilellis.dollar;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>

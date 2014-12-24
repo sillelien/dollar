@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar;
+package me.neilellis.dollar.types.prediction;
+
+import me.neilellis.dollar.Type;
+import me.neilellis.dollar.TypePrediction;
 
 import java.io.Serializable;
 import java.util.HashMap;

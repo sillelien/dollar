@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package time;
+package me.neilellis.dollar.time;
 
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.types.DollarFactory;

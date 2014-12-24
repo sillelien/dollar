@@ -19,6 +19,8 @@ package me.neilellis.dollar.script;
 import com.google.common.io.ByteStreams;
 import me.neilellis.dollar.*;
 import me.neilellis.dollar.collections.Range;
+import me.neilellis.dollar.execution.Execution;
+import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.script.exceptions.DollarScriptFailureException;
 import me.neilellis.dollar.script.java.JavaScriptingSupport;
 import me.neilellis.dollar.script.operators.*;
@@ -58,6 +60,8 @@ public class DollarParser {
     //Lexer
 
     public static final String NAMED_PARAMETER_META_ATTR = "__named_parameter";
+    private static final Execution executor = Plugins.sharedInstance(Execution.class);
+
 
 
     private final ClassLoader classLoader;
@@ -458,7 +462,7 @@ public class DollarParser {
                          .prefix(op(new UnaryOp("create", scope, var::$create), "(+)"), SIGNAL_PRIORITY)
                          .prefix(op(new UnaryOp("state", scope, var::$state), "(?)"), SIGNAL_PRIORITY)
                          .prefix(op(new UnaryOp("fork", scope, v -> DollarFactory.fromFuture(
-                                         Execution.executeInBackground(i -> fix(v, false)))), "-<", "fork"),
+                                         executor.executeInBackground(i -> fix(v, false)))), "-<", "fork"),
                                  SIGNAL_PRIORITY)
                          .infixl(op(new BinaryOp("fork", (lhs, rhs) -> rhs.$publish(lhs), scope), "*>",
                                     "publish"), OUTPUT_PRIORITY)

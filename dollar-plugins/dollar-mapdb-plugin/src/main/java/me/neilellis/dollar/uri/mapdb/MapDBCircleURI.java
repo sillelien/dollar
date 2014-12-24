@@ -16,8 +16,9 @@
 
 package me.neilellis.dollar.uri.mapdb;
 
-import me.neilellis.dollar.Execution;
 import me.neilellis.dollar.Pipeable;
+import me.neilellis.dollar.execution.Execution;
+import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.var;
@@ -39,6 +40,8 @@ import static me.neilellis.dollar.DollarStatic.$void;
 public class MapDBCircleURI extends AbstractMapDBURI {
 
     private static final ConcurrentHashMap<String, ScheduledFuture> subscribers = new ConcurrentHashMap<>();
+    private static final Execution executor= Plugins.sharedInstance(Execution.class);
+
 
     public MapDBCircleURI(String scheme, URI uri) {
         super(uri, scheme);
@@ -61,21 +64,6 @@ public class MapDBCircleURI extends AbstractMapDBURI {
 
     }
 
-    @Override public var drain() {
-        return tx.execute((DB d) -> {
-            final BlockingQueue<var> queue = getQueue(d);
-            final ArrayList<var> objects = new ArrayList<>();
-            queue.drainTo(objects);
-            final var result = DollarFactory.fromValue(objects);
-            d.commit();
-            return result;
-        });
-    }
-
-    @Override public var get(var key) {
-        throw new UnsupportedOperationException();
-    }
-
     @Override public var write(var value, boolean blocking, boolean mutating) {
         if (value.isVoid()) {
             return $(false);
@@ -94,6 +82,21 @@ public class MapDBCircleURI extends AbstractMapDBURI {
                 return $(false);
             }
         });
+    }
+
+    @Override public var drain() {
+        return tx.execute((DB d) -> {
+            final BlockingQueue<var> queue = getQueue(d);
+            final ArrayList<var> objects = new ArrayList<>();
+            queue.drainTo(objects);
+            final var result = DollarFactory.fromValue(objects);
+            d.commit();
+            return result;
+        });
+    }
+
+    @Override public var get(var key) {
+        throw new UnsupportedOperationException();
     }
 
     @Override public var read(boolean blocking, boolean mutating) {
@@ -132,7 +135,7 @@ public class MapDBCircleURI extends AbstractMapDBURI {
     }
 
     @Override public void subscribe(Pipeable consumer, String id) throws IOException {
-        final ScheduledFuture<?> schedule = Execution.schedule(1000, () -> tx.execute((DB d) -> {
+        final ScheduledFuture<?> schedule = executor.schedule(1000, () -> tx.execute((DB d) -> {
             Object o = MapDBCircleURI.this.getQueue(d).poll();
             if (o != null) {
                 try {

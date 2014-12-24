@@ -32,7 +32,7 @@ import java.util.TreeSet;
 import java.util.function.Function;
 
 import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.TestGenerator.*;
+import static me.neilellis.dollar.test.TestGenerator.*;
 import static org.junit.Assert.fail;
 
 /**

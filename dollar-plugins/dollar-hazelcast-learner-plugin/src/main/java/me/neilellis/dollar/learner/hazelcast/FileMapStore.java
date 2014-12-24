@@ -19,7 +19,8 @@ package me.neilellis.dollar.learner.hazelcast;
 import com.hazelcast.core.MapLoader;
 import com.hazelcast.core.MapStore;
 import com.thoughtworks.xstream.XStream;
-import me.neilellis.dollar.Execution;
+import me.neilellis.dollar.execution.Execution;
+import me.neilellis.dollar.plugin.Plugins;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,12 +33,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class FileMapStore<K, V> implements MapStore<K, V>, MapLoader<K, V> {
 
+    private static final Execution executor = Plugins.sharedInstance(Execution.class);
+
     private ConcurrentHashMap<K, V> map = new ConcurrentHashMap<>();
 
     {
         File file = new File(System.getProperty("user.home") + "/.dollar/typelearning.xml");
         file.getParentFile().mkdirs();
-        Execution.schedule(1000, () -> {
+        executor.schedule(1000, () -> {
             try (FileOutputStream out = new FileOutputStream(file)) {
                 new XStream().toXML(map, out);
             } catch (IOException e) {

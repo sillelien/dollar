@@ -19,11 +19,13 @@ package me.neilellis.dollar.types;
 import me.neilellis.dollar.*;
 import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
+import me.neilellis.dollar.execution.Execution;
 import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.NotNullGuard;
 import me.neilellis.dollar.json.ImmutableJsonObject;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
+import me.neilellis.dollar.plugin.Plugins;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
@@ -41,6 +43,7 @@ import static me.neilellis.dollar.DollarStatic.fix;
 public class DollarList extends AbstractDollar {
 
     public static final int MAX_LIST_MULTIPLIER = 1000;
+    private static final Execution executor = Plugins.sharedInstance(Execution.class);
     private final ImmutableList<var> list;
 
     DollarList(@NotNull ImmutableList<Throwable> errors, @NotNull JsonArray array) {
@@ -299,12 +302,6 @@ public class DollarList extends AbstractDollar {
         return DollarFactory.fromValue(list.stream().map(var::$copy).collect(Collectors.toList()), errors());
     }
 
-    @NotNull
-    @Override
-    public ImmutableMap<var, var> $map() {
-        return null;
-    }
-
     @Override public var _fix(int depth, boolean parallel) {
         if (depth <= 1) {
             return this;
@@ -313,7 +310,7 @@ public class DollarList extends AbstractDollar {
             if (parallel) {
                 try {
                     result =
-                            ImmutableList.copyOf(Execution.forkJoinPool.submit(
+                            ImmutableList.copyOf(executor.submit(
                                     () -> $stream(parallel).map(v -> v._fix(depth - 1, parallel)).collect(
                                             Collectors.toList())).get());
 
@@ -340,6 +337,12 @@ public class DollarList extends AbstractDollar {
             }
         }
 
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> $map() {
+        return null;
     }
 
     @Override
@@ -436,7 +439,7 @@ public class DollarList extends AbstractDollar {
     public ImmutableList<var> $list() {
         try {
             return ImmutableList.copyOf(
-                    Execution.forkJoinPool.submit(() -> $stream(false).map(v -> v._fix(false)).collect(
+                    executor.submit(() -> $stream(false).map(v -> v._fix(false)).collect(
                             Collectors.toList())).get());
         } catch (InterruptedException e) {
             Thread.interrupted();

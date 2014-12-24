@@ -20,7 +20,6 @@ import com.github.oxo42.stateless4j.StateMachine;
 import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.NotNullGuard;
 import me.neilellis.dollar.types.ResourceState;
-import me.neilellis.dollar.types.Signal;
 import org.jetbrains.annotations.NotNull;
 
 /**

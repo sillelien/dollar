@@ -20,11 +20,11 @@ import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import me.neilellis.dollar.CountBasedTypePrediction;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.TypePrediction;
 import me.neilellis.dollar.script.Source;
 import me.neilellis.dollar.script.TypeLearner;
+import me.neilellis.dollar.types.prediction.CountBasedTypePrediction;
 import me.neilellis.dollar.var;
 
 import java.util.ArrayList;

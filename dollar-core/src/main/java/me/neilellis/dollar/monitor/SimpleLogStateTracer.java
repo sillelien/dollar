@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar;
+package me.neilellis.dollar.monitor;
 
+import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.StateTracer;
 import me.neilellis.dollar.types.DollarList;
 import me.neilellis.dollar.types.DollarMap;
 import me.neilellis.dollar.types.DollarVoid;
+import me.neilellis.dollar.var;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
@@ -52,10 +55,10 @@ public class SimpleLogStateTracer implements StateTracer {
         }
         if ((before instanceof DollarVoid || before == null) && (after instanceof DollarVoid || after == null)) {
             DollarStatic.log(String.format("%s%s: %s->%s",
-                    operationType,
-                    toDescription(values),
-                    beforeNotes,
-                    afterNotes));
+                                           operationType,
+                                           toDescription(values),
+                                           beforeNotes,
+                                           afterNotes));
         } else if (before instanceof DollarVoid || before == null) {
             DollarStatic.log(String.format("%s%s: %s%s", operationType, toDescription(values), afterStr, afterNotes));
         } else {

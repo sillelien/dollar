@@ -16,8 +16,9 @@
 
 package me.neilellis.dollar.resources.std;
 
-import me.neilellis.dollar.Execution;
 import me.neilellis.dollar.Pipeable;
+import me.neilellis.dollar.execution.Execution;
+import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
@@ -33,10 +34,12 @@ import static me.neilellis.dollar.DollarStatic.$void;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class RandomResourceFactory implements URIHandlerFactory {
+    private static final Execution executor= Plugins.sharedInstance(Execution.class);
     private final HashMap<String, Pipeable> consumers = new HashMap<>();
 
+
     public RandomResourceFactory() {
-        Execution.schedule(500, () -> {
+        executor.schedule(500, () -> {
             for (Pipeable consumer : consumers.values()) {
                 try {
                     consumer.pipe($(Math.random()));
@@ -59,6 +62,10 @@ public class RandomResourceFactory implements URIHandlerFactory {
                 return $(Math.random());
             }
 
+            @Override public var write(var value, boolean blocking, boolean mutating) {
+                return $(Math.random() % value.D());
+            }
+
             @Override public void destroy() { }
 
             @Override public var drain() { return $(Math.random()); }
@@ -70,10 +77,6 @@ public class RandomResourceFactory implements URIHandlerFactory {
             @Override public void init() { }
 
             @Override public void pause() { }
-
-            @Override public var write(var value, boolean blocking, boolean mutating) {
-                return $(Math.random() % value.D());
-            }
 
             @Override public var read(boolean blocking, boolean mutating) {
                 return $(Math.random());

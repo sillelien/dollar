@@ -26,11 +26,11 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
-import me.neilellis.dollar.CountBasedTypePrediction;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.TypePrediction;
 import me.neilellis.dollar.script.Source;
 import me.neilellis.dollar.script.TypeLearner;
+import me.neilellis.dollar.types.prediction.CountBasedTypePrediction;
 import me.neilellis.dollar.var;
 
 import java.io.File;
@@ -153,26 +153,6 @@ public class OrientDBTypeLearner implements TypeLearner {
         }
     }
 
-    private Edge createEdge(String name, Vertex src, Vertex dest) {
-        final Iterable<Edge>
-                edges =
-                src.getEdges(Direction.OUT, name);
-
-        Edge edge;
-        if (edges.iterator().hasNext()) {
-            edge = edges.iterator().next();
-        } else {
-            edge = src.addEdge(name, dest);
-//            System.out.println("Created "+name);
-        }
-        return edge;
-    }
-
-    public TypePrediction predict(String name, Source source, Object[] args) {
-        List<var> inputs = (List<var>) args[0];
-        return predict(name, source, inputs);
-    }
-
     private Vertex createVertex(String name, OrientGraph graph) {
         final Iterable<Vertex> vertices = graph.getVertices("name", name);
         Vertex vertex;
@@ -189,7 +169,27 @@ public class OrientDBTypeLearner implements TypeLearner {
         return perms;
     }
 
+    private Edge createEdge(String name, Vertex src, Vertex dest) {
+        final Iterable<Edge>
+                edges =
+                src.getEdges(Direction.OUT, name);
+
+        Edge edge;
+        if (edges.iterator().hasNext()) {
+            edge = edges.iterator().next();
+        } else {
+            edge = src.addEdge(name, dest);
+//            System.out.println("Created "+name);
+        }
+        return edge;
+    }
+
     private static String getEdgeKey(String t) {return "input-" + t;}
+
+    public TypePrediction predict(String name, Source source, Object[] args) {
+        List<var> inputs = (List<var>) args[0];
+        return predict(name, source, inputs);
+    }
 
     @Override public void start() throws Exception {
         oServer.activate();

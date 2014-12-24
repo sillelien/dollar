@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar;/*
+package me.neilellis.dollar.test;/*
  * Copyright (c) 2014 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,9 @@ package me.neilellis.dollar;/*
  * limitations under the License.
  */
 
+import me.neilellis.dollar.Type;
 import me.neilellis.dollar.types.*;
+import me.neilellis.dollar.var;
 
 import java.time.Instant;
 import java.util.*;

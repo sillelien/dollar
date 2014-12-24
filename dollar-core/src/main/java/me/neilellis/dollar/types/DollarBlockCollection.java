@@ -17,15 +17,12 @@
 package me.neilellis.dollar.types;
 
 import com.github.oxo42.stateless4j.StateMachine;
-import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.Type;
-import me.neilellis.dollar.TypePrediction;
+import me.neilellis.dollar.*;
 import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.guard.*;
 import me.neilellis.dollar.json.ImmutableJsonObject;
 import me.neilellis.dollar.json.JsonArray;
-import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;

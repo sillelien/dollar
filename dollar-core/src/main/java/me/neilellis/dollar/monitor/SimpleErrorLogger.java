@@ -14,37 +14,34 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.types;
+package me.neilellis.dollar.monitor;
 
-import me.neilellis.dollar.Type;
-import me.neilellis.dollar.TypePrediction;
-
-import java.util.Collections;
-import java.util.Set;
+import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.ErrorAware;
+import me.neilellis.dollar.ErrorLogger;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class SingleValueTypePrediction implements TypePrediction {
-
-    private final Type type;
-
-    public SingleValueTypePrediction(Type type) {this.type = type;}
-
-    @Override public boolean empty() {
-        return false;
+public class SimpleErrorLogger implements ErrorLogger {
+    @Override
+    public void log(String errorMessage) {
+        DollarStatic.log("ERROR: " + errorMessage);
     }
 
-    @Override public Double probability(Type type) {
-        return type.equals(this.type) ? 1.0 : 0.0;
+    @Override
+    public void log(@NotNull Throwable error) {
+        DollarStatic.log("ERROR: "+error.getMessage());
     }
 
-    @Override public Type probableType() {
-        return type;
+    @Override
+    public void log() {
+        DollarStatic.log("ERROR");
     }
 
-    @Override public Set<Type> types() {
-        return Collections.singleton(type);
+    @Override
+    public void log(String errorMessage, ErrorAware.ErrorType type) {
+        DollarStatic.log(type+" ERROR: "+errorMessage);
     }
-
 }

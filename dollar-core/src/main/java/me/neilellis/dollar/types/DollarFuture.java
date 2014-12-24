@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar;
+package me.neilellis.dollar.types;
 
+import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
@@ -26,7 +27,7 @@ import java.util.concurrent.Future;
  * The type DollarFuture
  * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-class DollarFuture implements java.lang.reflect.InvocationHandler {
+public class DollarFuture implements java.lang.reflect.InvocationHandler {
 
     private Future<var> value = new CompletableFuture<>();
 
