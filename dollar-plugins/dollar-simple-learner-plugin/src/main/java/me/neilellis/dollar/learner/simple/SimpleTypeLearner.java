@@ -19,7 +19,7 @@ package me.neilellis.dollar.learner.simple;
 import com.thoughtworks.xstream.XStream;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.TypePrediction;
-import me.neilellis.dollar.execution.Execution;
+import me.neilellis.dollar.execution.DollarExecutor;
 import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.script.Source;
 import me.neilellis.dollar.script.TypeLearner;
@@ -41,7 +41,7 @@ public class SimpleTypeLearner implements TypeLearner {
 
 
     public static final int MAX_POSSIBLE_RETURN_VALUES = 5;
-    private static final Execution executor= Plugins.sharedInstance(Execution.class);
+    private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
 
     private transient boolean modified;
     private ConcurrentHashMap<String, CountBasedTypePrediction> map = new ConcurrentHashMap<>();
@@ -50,7 +50,7 @@ public class SimpleTypeLearner implements TypeLearner {
         File file = new File(System.getProperty("user.home") + "/.dollar/typelearning.xml");
         File backupFile = new File(System.getProperty("user.home") + "/.dollar/typelearning.backup.xml");
         file.getParentFile().mkdirs();
-        executor.schedule(200, () -> {
+        executor.scheduleEvery(200, () -> {
             if (modified) {
 
                 try (FileOutputStream out = new FileOutputStream(file)) {

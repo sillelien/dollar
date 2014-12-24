@@ -17,8 +17,8 @@
 package me.neilellis.dollar.monitor;
 
 import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.ErrorAware;
 import me.neilellis.dollar.ErrorLogger;
+import me.neilellis.dollar.types.ErrorType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -41,7 +41,7 @@ public class SimpleErrorLogger implements ErrorLogger {
     }
 
     @Override
-    public void log(String errorMessage, ErrorAware.ErrorType type) {
+    public void log(String errorMessage, ErrorType type) {
         DollarStatic.log(type+" ERROR: "+errorMessage);
     }
 }

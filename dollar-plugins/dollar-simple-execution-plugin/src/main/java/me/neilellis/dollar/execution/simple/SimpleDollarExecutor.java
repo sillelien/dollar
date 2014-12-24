@@ -16,20 +16,17 @@
 
 package me.neilellis.dollar.execution.simple;
 
-import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.execution.Execution;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.execution.DollarExecutor;
 
 import java.util.concurrent.*;
 
 import static java.lang.Runtime.getRuntime;
 import static java.util.concurrent.Executors.newFixedThreadPool;
-import static me.neilellis.dollar.DollarStatic.$void;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class SimpleExecution implements Execution {
+public class SimpleDollarExecutor implements DollarExecutor {
 
     public ForkJoinPool forkJoinPool;
 
@@ -37,8 +34,8 @@ public class SimpleExecution implements Execution {
     private ScheduledExecutorService scheduledExecutor;
 
 
-    public SimpleExecution() {
-        getRuntime().addShutdownHook(new Thread(this::forceShutdown));
+    public SimpleDollarExecutor() {
+        getRuntime().addShutdownHook(new Thread(this::forceStop));
         start();
     }
 
@@ -54,15 +51,15 @@ public class SimpleExecution implements Execution {
         scheduledExecutor.shutdown();
     }
 
-    @Override public Execution copy() {
+    @Override public DollarExecutor copy() {
         return this;
     }
 
-    @Override public Future<var> executeInBackground(Pipeable pipe) {
-        return backgroundExecutor.submit(() -> pipe.pipe($void()));
+    @Override public <T> Future<T> executeInBackground(Callable<T> callable) {
+        return backgroundExecutor.submit(callable);
     }
 
-    @Override public void forceShutdown() {
+    @Override public void forceStop() {
         backgroundExecutor.shutdownNow();
         forkJoinPool.shutdownNow();
         scheduledExecutor.shutdownNow();
@@ -73,11 +70,17 @@ public class SimpleExecution implements Execution {
         start();
     }
 
-    @Override public ScheduledFuture<?> schedule(long millis, Runnable runnable) {
+    @Override public Future<?> scheduleEvery(long millis, Runnable runnable) {
         return scheduledExecutor.scheduleAtFixedRate(runnable, millis, millis, TimeUnit.MILLISECONDS);
     }
 
-    @Override public ForkJoinTask submit(Callable callable) {
+    @Override public <T> Future<T> submit(Callable<T> callable) {
         return forkJoinPool.submit(callable);
+    }
+
+    @Override public <T> Future<T> executeNow(Callable<T> callable) {
+        final FutureTask<T> tFutureTask = new FutureTask<>(callable);
+        tFutureTask.run();
+        return tFutureTask;
     }
 }

@@ -464,7 +464,7 @@ public class DollarStatic {
         if (failee == null) {
             return DollarFactory.failure(throwable);
         }
-        return failee.copy(ImmutableList.of(throwable));
+        return failee._copy(ImmutableList.of(throwable));
 
     }
 

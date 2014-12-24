@@ -154,19 +154,19 @@ public class DollarVoid extends AbstractDollar implements var {
     @NotNull
     @Override
     public var $removeByKey(@NotNull String value) {
-        return $copy();
+        return _copy();
     }
 
     @NotNull
     @Override
     public var $set(@NotNull var key, Object value) {
-        return $copy();
+        return _copy();
     }
 
     @NotNull
     @Override
     public var remove(Object value) {
-        return $copy();
+        return _copy();
     }
 
     @NotNull @Override public var $remove(var value) {
@@ -182,19 +182,19 @@ public class DollarVoid extends AbstractDollar implements var {
     @NotNull
     @Override
     public var $eval(@NotNull String js) {
-        return $copy();
+        return _copy();
     }
 
     @NotNull
     @Override
     public var $pipe(@NotNull String js, @NotNull String label) {
-        return $copy();
+        return _copy();
     }
 
     @NotNull
     @Override
     public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
-        return $copy();
+        return _copy();
     }
 
     @Override

@@ -17,7 +17,7 @@
 package me.neilellis.dollar.uri.mapdb;
 
 import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.execution.Execution;
+import me.neilellis.dollar.execution.DollarExecutor;
 import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.uri.URI;
@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import static me.neilellis.dollar.DollarStatic.$;
@@ -39,8 +39,8 @@ import static me.neilellis.dollar.DollarStatic.$void;
  */
 public class MapDBCircleURI extends AbstractMapDBURI {
 
-    private static final ConcurrentHashMap<String, ScheduledFuture> subscribers = new ConcurrentHashMap<>();
-    private static final Execution executor= Plugins.sharedInstance(Execution.class);
+    private static final ConcurrentHashMap<String, Future> subscribers = new ConcurrentHashMap<>();
+    private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
 
 
     public MapDBCircleURI(String scheme, URI uri) {
@@ -135,7 +135,7 @@ public class MapDBCircleURI extends AbstractMapDBURI {
     }
 
     @Override public void subscribe(Pipeable consumer, String id) throws IOException {
-        final ScheduledFuture<?> schedule = executor.schedule(1000, () -> tx.execute((DB d) -> {
+        final Future schedule = executor.scheduleEvery(1000, () -> tx.execute((DB d) -> {
             Object o = MapDBCircleURI.this.getQueue(d).poll();
             if (o != null) {
                 try {

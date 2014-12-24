@@ -19,7 +19,7 @@ package me.neilellis.dollar.types;
 import me.neilellis.dollar.*;
 import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
-import me.neilellis.dollar.execution.Execution;
+import me.neilellis.dollar.execution.DollarExecutor;
 import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.NotNullGuard;
 import me.neilellis.dollar.json.ImmutableJsonObject;
@@ -43,7 +43,7 @@ import static me.neilellis.dollar.DollarStatic.fix;
 public class DollarList extends AbstractDollar {
 
     public static final int MAX_LIST_MULTIPLIER = 1000;
-    private static final Execution executor = Plugins.sharedInstance(Execution.class);
+    private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
     private final ImmutableList<var> list;
 
     DollarList(@NotNull ImmutableList<Throwable> errors, @NotNull JsonArray array) {
@@ -298,8 +298,8 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $copy() {
-        return DollarFactory.fromValue(list.stream().map(var::$copy).collect(Collectors.toList()), errors());
+    public var _copy() {
+        return DollarFactory.fromValue(list.stream().map(var::_copy).collect(Collectors.toList()), errors());
     }
 
     @Override public var _fix(int depth, boolean parallel) {
@@ -339,12 +339,6 @@ public class DollarList extends AbstractDollar {
 
     }
 
-    @NotNull
-    @Override
-    public ImmutableMap<var, var> $map() {
-        return null;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -357,6 +351,12 @@ public class DollarList extends AbstractDollar {
             return list.mutable().equals(((var) obj).$list().mutable());
         }
         return false;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> $map() {
+        return null;
     }
 
     @Override

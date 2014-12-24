@@ -114,18 +114,18 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     @Override
-    public var $copy() {
+    public var _copy() {
         return DollarFactory.fromValue(value, errors());
-    }
-
-    @Override
-    public boolean isSingleValue() {
-        return true;
     }
 
     @Override
     public int hashCode() {
         return value.toString().hashCode();
+    }
+
+    @Override
+    public boolean isSingleValue() {
+        return true;
     }
 
     public Stream<String> keyStream() {
@@ -139,15 +139,15 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     }
 
+    @Nullable
+    public ImmutableJsonObject toJsonObject() {
+        return null;
+    }
+
     @NotNull
     @Override
     public String S() {
         return value.toString();
-    }
-
-    @Nullable
-    public ImmutableJsonObject toJsonObject() {
-        return null;
     }
 
 

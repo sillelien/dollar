@@ -163,15 +163,15 @@ public class DollarRange extends AbstractDollar {
                               range.upperEndpoint().compareTo(DollarStatic.$(value)) >= 0);
     }
 
+    @NotNull @Override
+    public var $has(@NotNull var key) {
+        return DollarStatic.$(false);
+    }
+
     @NotNull
     @Override
     public String S() {
         return String.format("%s..%s", range.lowerEndpoint(), range.upperEndpoint());
-    }
-
-    @NotNull @Override
-    public var $has(@NotNull var key) {
-        return DollarStatic.$(false);
     }
 
     @NotNull
@@ -187,8 +187,20 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $removeByKey(@NotNull String value) {
-        return $copy();
+        return _copy();
 
+    }
+
+    @NotNull
+    @Override
+    public var $set(@NotNull var key, Object value) {
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_RANGE_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var remove(Object value) {
+        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_RANGE_OPERATION);
     }
 
     @Override
@@ -206,18 +218,6 @@ public class DollarRange extends AbstractDollar {
         }
     }
 
-    @NotNull
-    @Override
-    public var $set(@NotNull var key, Object value) {
-        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_RANGE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var remove(Object value) {
-        return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_RANGE_OPERATION);
-    }
-
     @NotNull @Override public var $remove(var value) {
         return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_RANGE_OPERATION);
     }
@@ -225,24 +225,6 @@ public class DollarRange extends AbstractDollar {
     @Override
     public Long L() {
         return diff().L();
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> $list() {
-        List<var> values = new ArrayList<>();
-        var start = range.lowerEndpoint();
-        var finish = range.upperEndpoint();
-        if (start.compareTo(finish) < 1) {
-            for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
-                values.add(i);
-            }
-        } else {
-            for (var i = start; i.compareTo(finish) <= 0; i = i.$dec()) {
-                values.add(i);
-            }
-        }
-        return ImmutableList.copyOf(values);
     }
 
     @Override
@@ -270,6 +252,24 @@ public class DollarRange extends AbstractDollar {
 
     }
 
+    @NotNull
+    @Override
+    public ImmutableList<var> $list() {
+        List<var> values = new ArrayList<>();
+        var start = range.lowerEndpoint();
+        var finish = range.upperEndpoint();
+        if (start.compareTo(finish) < 1) {
+            for (var i = start; i.compareTo(finish) <= 0; i = i.$inc()) {
+                values.add(i);
+            }
+        } else {
+            for (var i = start; i.compareTo(finish) <= 0; i = i.$dec()) {
+                values.add(i);
+            }
+        }
+        return ImmutableList.copyOf(values);
+    }
+
     @Override
     public int compareTo(@NotNull var o) {
         if ($containsValue(o).isTrue()) {
@@ -282,10 +282,6 @@ public class DollarRange extends AbstractDollar {
             return 1;
         }
         throw new IllegalStateException();
-    }
-
-    @Override public Type $type() {
-        return Type.RANGE;
     }
 
     @Override
@@ -308,6 +304,10 @@ public class DollarRange extends AbstractDollar {
         return false;
     }
 
+    @Override public Type $type() {
+        return Type.RANGE;
+    }
+
     @Override
     public boolean isTruthy() {
         return !range.isEmpty();
@@ -322,6 +322,7 @@ public class DollarRange extends AbstractDollar {
     public Range toJavaObject() {
         return range;
     }
+
 
     @Override public boolean isRange() {
         return true;

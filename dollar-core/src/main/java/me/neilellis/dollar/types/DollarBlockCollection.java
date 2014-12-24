@@ -31,7 +31,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -271,35 +270,6 @@ public class DollarBlockCollection implements var {
         return getValue().$each(pipe);
     }
 
-    @Override @NotNull @Guarded(ChainGuard.class) public var $copy() {return getValue().$copy();}
-
-    @Override @NotNull @Guarded(ChainGuard.class) public var _fix(boolean parallel) {return _fix(1, parallel);}
-
-    @Override public var _fix(int depth, boolean parallel) {
-        if (depth <= 1) {
-            return this;
-        } else {
-            return getValue()._fix(depth - 1, parallel);
-        }
-    }
-
-    @Override @Guarded(ChainGuard.class) public var _fixDeep(boolean parallel) {
-        return _fix(Integer.MAX_VALUE, parallel);
-    }
-
-    @Override public TypePrediction _predictType() {
-        return getValue()._predictType();
-    }
-
-    @Override @Guarded(NotNullGuard.class) public void _src(String src) {getValue()._src(src);}
-
-    @Override @Guarded(NotNullGuard.class) public String _src() {return getValue()._src();}
-
-    @Override @Guarded(ChainGuard.class) @NotNull public var _unwrap() {return getValue()._unwrap();}
-
-    @Override @Guarded(ChainGuard.class) @Guarded(NotNullGuard.class) @Guarded(NotNullCollectionGuard.class) @NotNull
-    public var copy(@NotNull ImmutableList<Throwable> errors) {return getValue().copy(errors);}
-
     @Override @NotNull @Guarded(NotNullGuard.class) public var $create() {return getValue().$create();}
 
     @Override @NotNull @Guarded(NotNullGuard.class) public var $destroy() {return getValue().$destroy();}
@@ -430,15 +400,34 @@ public class DollarBlockCollection implements var {
         return getValue().$remove(value);
     }
 
-    @Override public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
-        return getValue().assertFalse(assertion, message);
+    @Override @NotNull @Guarded(ChainGuard.class) public var _copy() {return getValue()._copy();}
+
+    @Override @Guarded(ChainGuard.class) @Guarded(NotNullGuard.class) @Guarded(NotNullCollectionGuard.class) @NotNull
+    public var _copy(@NotNull ImmutableList<Throwable> errors) {return getValue()._copy(errors);}
+
+    @Override @NotNull @Guarded(ChainGuard.class) public var _fix(boolean parallel) {return _fix(1, parallel);}
+
+    @Override public var _fix(int depth, boolean parallel) {
+        if (depth <= 1) {
+            return this;
+        } else {
+            return getValue()._fix(depth - 1, parallel);
+        }
     }
 
-    @Override public var assertNotVoid(String message) throws AssertionError {return getValue().assertNotVoid(message);}
-
-    @Override public var assertTrue(Function<var, Boolean> assertion, String message) throws AssertionError {
-        return getValue().assertTrue(assertion, message);
+    @Override @Guarded(ChainGuard.class) public var _fixDeep(boolean parallel) {
+        return _fix(Integer.MAX_VALUE, parallel);
     }
+
+    @Override public TypePrediction _predictType() {
+        return getValue()._predictType();
+    }
+
+    @Override @Guarded(NotNullGuard.class) public void _src(String src) {getValue()._src(src);}
+
+    @Override @Guarded(NotNullGuard.class) public String _src() {return getValue()._src();}
+
+    @Override @Guarded(ChainGuard.class) @NotNull public var _unwrap() {return getValue()._unwrap();}
 
     @Override public int compareTo(@NotNull var o) {return getValue().compareTo(o);}
 

@@ -32,8 +32,8 @@ import java.util.stream.Stream;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
-                             OldAndDeprecated, VarInternal, NumericAware, BooleanAware, ControlFlowAware,
-                             AssertionAware, URIAware, MetadataAware, Comparable<var>, LogAware, StateAware<var>,
+                             VarInternal, NumericAware, BooleanAware, ControlFlowAware,
+                             URIAware, MetadataAware, Comparable<var>, LogAware, StateAware<var>,
                              CollectionLike {
 
 

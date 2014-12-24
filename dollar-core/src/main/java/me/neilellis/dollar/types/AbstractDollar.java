@@ -20,7 +20,6 @@ import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import me.neilellis.dollar.*;
 import me.neilellis.dollar.collections.ImmutableList;
-import me.neilellis.dollar.exceptions.ValidationException;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.types.prediction.SingleValueTypePrediction;
@@ -40,7 +39,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -232,7 +230,7 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
-        DollarStatic.threadContext.get().setPassValue(this.$copy());
+        DollarStatic.threadContext.get().setPassValue(this._copy());
         Pipeable script = null;
         try {
             script = clazz.newInstance();
@@ -250,8 +248,13 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $copy() {
+    public var _copy() {
         return DollarFactory.fromValue(toJavaObject(), ImmutableList.copyOf(errors()));
+    }
+
+    @NotNull
+    public var _copy(@NotNull ImmutableList<Throwable> errors) {
+        return DollarFactory.fromValue(toJavaObject(), ImmutableList.copyOf(errors(), errors));
     }
 
     @NotNull final @Override public var _fix(boolean parallel) {
@@ -284,11 +287,6 @@ public abstract class AbstractDollar implements var {
     @Override
     public var _unwrap() {
         return this;
-    }
-
-    @NotNull
-    public var copy(@NotNull ImmutableList<Throwable> errors) {
-        return DollarFactory.fromValue(toJavaObject(), ImmutableList.copyOf(errors(), errors));
     }
 
     @Override
@@ -409,10 +407,7 @@ public abstract class AbstractDollar implements var {
         return S();
     }
 
-    @Override
-    public var assertNotVoid(String message) throws AssertionError {
-        return assertFalse(TypeAware::isVoid, message);
-    }
+
 
     @Override
     public boolean isDecimal() {
@@ -434,18 +429,6 @@ public abstract class AbstractDollar implements var {
         return false;
     }
 
-    @Override
-    public var assertTrue(Function<var, Boolean> assertion, String message) throws AssertionError {
-        try {
-            if (!assertion.apply(this)) {
-                throw new AssertionError(message);
-            } else {
-                return this;
-            }
-        } catch (Exception e) {
-            return DollarStatic.logAndRethrow(e);
-        }
-    }
 
     @Override
     public boolean isMap() {
@@ -466,18 +449,7 @@ public abstract class AbstractDollar implements var {
         return false;
     }
 
-    @Override
-    public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
-        try {
-            if (assertion.apply(this)) {
-                throw new AssertionError(message);
-            } else {
-                return this;
-            }
-        } catch (Exception e) {
-            return DollarStatic.logAndRethrow(e);
-        }
-    }
+
 
     @Override
     public boolean isString() {
@@ -561,28 +533,21 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var $error(@NotNull String errorMessage, @NotNull ErrorType type) {
-        switch (type) {
-            case SYSTEM:
-                return $error(new DollarException(errorMessage));
-            case VALIDATION:
-                return $error(new ValidationException(errorMessage));
-            default:
-                return $error(errorMessage);
-        }
+        return _copy();
     }
 
 
     @NotNull
     @Override
     public var $error(@NotNull String errorMessage) {
-        return $error(new Exception(errorMessage));
+        return DollarFactory.failure(ErrorType.VALIDATION, errorMessage, true);
     }
 
 
     @NotNull
     @Override
     public var $error(@NotNull Throwable error) {
-        return copy(ImmutableList.of(error));
+        return DollarFactory.failure(error);
     }
 
 

@@ -16,6 +16,8 @@
 
 package me.neilellis.dollar;
 
+import me.neilellis.dollar.types.ErrorType;
+
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
@@ -23,5 +25,6 @@ public interface ErrorLogger {
     void log(String errorMessage);
     void log(Throwable error);
     void log();
-    void log(String errorMessage, var.ErrorType type);
+
+    void log(String errorMessage, ErrorType type);
 }

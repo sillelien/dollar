@@ -412,7 +412,7 @@ public class DollarMap extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $copy() {
+    public var _copy() {
         return DollarFactory.wrap(new DollarMap(errors(), map));
     }
 

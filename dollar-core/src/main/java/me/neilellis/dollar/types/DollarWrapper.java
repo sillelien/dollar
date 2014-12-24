@@ -30,7 +30,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -240,50 +239,6 @@ public class DollarWrapper implements var {
     @Override
     public var $each(Pipeable pipe) {
         return getValue().$each(pipe);
-    }
-
-    @NotNull
-    @Override
-    public var $copy() {
-        return getValue().$copy();
-    }
-
-    @NotNull @Override public var _fix(boolean parallel) {
-        return getValue()._fix(parallel);
-    }
-
-    @Override public var _fix(int depth, boolean parallel) {
-        return getValue()._fix(depth, parallel);
-    }
-
-    @Override public var _fixDeep(boolean parallel) {
-        return getValue()._fixDeep(parallel);
-    }
-
-    @Override
-    public void _src(String src) {
-        getValue()._src(src);
-    }
-
-    @Override
-    public String _src() {
-        return getValue()._src();
-    }
-
-    @NotNull
-    @Override
-    public var _unwrap() {
-        return getValue()._unwrap();
-    }
-
-    @NotNull
-    @Override
-    public var copy(@NotNull ImmutableList<Throwable> errors) {
-        return getValue().$copy();
-    }
-
-    @Override public TypePrediction _predictType() {
-        return getValue()._predictType();
     }
 
     @NotNull @Override public var $create() {
@@ -671,19 +626,48 @@ public class DollarWrapper implements var {
         return getValue().toStream();
     }
 
+    @NotNull
     @Override
-    public var assertFalse(Function<var, Boolean> assertion, String message) throws AssertionError {
-        return getValue().assertFalse(assertion, message);
+    public var _copy() {
+        return getValue()._copy();
+    }
+
+    @NotNull
+    @Override
+    public var _copy(@NotNull ImmutableList<Throwable> errors) {
+        return getValue()._copy();
+    }
+
+    @NotNull @Override public var _fix(boolean parallel) {
+        return getValue()._fix(parallel);
+    }
+
+    @Override public var _fix(int depth, boolean parallel) {
+        return getValue()._fix(depth, parallel);
+    }
+
+    @Override public var _fixDeep(boolean parallel) {
+        return getValue()._fixDeep(parallel);
+    }
+
+    @Override public TypePrediction _predictType() {
+        return getValue()._predictType();
     }
 
     @Override
-    public var assertNotVoid(String message) throws AssertionError {
-        return getValue().assertNotVoid(message);
+    public void _src(String src) {
+        getValue()._src(src);
     }
 
     @Override
-    public var assertTrue(Function<var, Boolean> assertion, String message) throws AssertionError {
-        return getValue().assertTrue(assertion, message);
+    public String _src() {
+        return getValue()._src();
+    }
+
+    @NotNull
+    @Override
+    public var _unwrap() {
+        return getValue()._unwrap();
     }
 
     @Override
