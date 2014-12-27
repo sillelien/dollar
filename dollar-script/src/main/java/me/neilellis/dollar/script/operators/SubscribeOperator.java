@@ -18,7 +18,7 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.Operator;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.Source;
+import me.neilellis.dollar.script.SourceSegment;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
 
@@ -30,7 +30,7 @@ import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactive;
  */
 public class SubscribeOperator implements Binary<var>, Operator {
     private final Scope scope;
-    private Source source;
+    private SourceSegment source;
     private boolean pure;
 
 
@@ -55,7 +55,7 @@ public class SubscribeOperator implements Binary<var>, Operator {
     }
 
     @Override
-    public void setSource(Source source) {
+    public void setSource(SourceSegment source) {
         this.source = source;
     }
 }

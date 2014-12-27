@@ -94,7 +94,7 @@ public class DollarParser {
                 t -> {
                     Object[] objects = (Object[]) t.value();
                     return getVariable(pure, scope, objects[0].toString(), false, (var) objects[1],
-                                       new SourceValue(scope, t));
+                                       new SourceSegmentValue(scope, t));
                 });
     }
 
@@ -218,7 +218,7 @@ public class DollarParser {
         @Override
         public T map(Token token) {
             if (value instanceof Operator) {
-                ((Operator) value).setSource(new SourceValue(currentScope(), token));
+                ((Operator) value).setSource(new SourceSegmentValue(currentScope(), token));
             }
             return value;
         }
@@ -301,14 +301,14 @@ public class DollarParser {
                                                          () -> Builtins.execute(v.toHumanString(), Arrays.asList(),
                                                                                 scope,
                                                                                 pure),
-                                                         new SourceValue(scope, token), v.toHumanString(), v
+                                                         new SourceSegmentValue(scope, token), v.toHumanString(), v
                                      );
                                  }
                              }),
                              identifier().followedBy(OP("(").not().peek()).token().map(new Map<Token, var>() {
                                  public var map(Token token) {
                                      return getVariable(pure, scope, token.value().toString(), false, null,
-                                                        new SourceValue(scope, token));
+                                                        new SourceSegmentValue(scope, token));
                                  }
                              })))
                       .or(block(ref.lazy(), scope, pure).between(OP_NL("{"), NL_OP("}")));
@@ -329,7 +329,7 @@ public class DollarParser {
                              identifier().followedBy(OP("(").not().peek()).token().map(new Map<Token, var>() {
                                  public var map(Token token) {
                                      return getVariable(pure, scope, token.value().toString(), false, null,
-                                                        new SourceValue(scope, token));
+                                                        new SourceSegmentValue(scope, token));
                                  }
                              }),
                              BUILTIN.token().map(new Map<Token, var>() {
@@ -339,7 +339,7 @@ public class DollarParser {
                                                          () -> Builtins.execute(v.toHumanString(), Arrays.asList(),
                                                                                 scope,
                                                                                 pure),
-                                                         new SourceValue(scope, token), v.toHumanString(), v
+                                                         new SourceSegmentValue(scope, token), v.toHumanString(), v
                                      );
                                  }
                              })))
@@ -636,7 +636,8 @@ public class DollarParser {
                       .next(ref.lazy().between(OP("("), OP(")")).or(IDENTIFIER))
                       .token().map(
                         (Token rhs) -> lhs -> wrapReactive(scope, () -> lhs.$(rhs.value().toString()),
-                                                           new SourceValue(scope, rhs), "." + rhs.toString(), lhs, (var)
+                                                           new SourceSegmentValue(scope, rhs), "." + rhs.toString(),
+                                                           lhs, (var)
                                         rhs.value()
                         ));
     }
@@ -682,7 +683,7 @@ public class DollarParser {
                   OP("$").followedBy(INTEGER_LITERAL.peek()).token().map(
                           (Token lhs) -> {
                               return rhs -> getVariable(pure, scope, rhs.toString(), true, null,
-                                                        new SourceValue(scope, lhs));
+                                                        new SourceSegmentValue(scope, lhs));
                           }));
     }
 

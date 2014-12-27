@@ -39,7 +39,7 @@ class ListOperator implements Map<Token, var> {
 
     @Override public var map(Token t) {
         List<var> o = (List<var>) t.value();
-        final var lambda = DollarScriptSupport.wrapLambda(new SourceValue(scope, t), scope,
+        final var lambda = DollarScriptSupport.wrapLambda(new SourceSegmentValue(scope, t), scope,
                                                           parallel -> dollarParser.inScope(pure, "list", scope,
                                                                                            newScope -> {
                                                                                                Scope scope2 = newScope;

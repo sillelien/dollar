@@ -18,7 +18,7 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.SourceValue;
+import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
@@ -42,13 +42,13 @@ public class VariableUsageOperator implements Map<Token, Map<? super var, ? exte
 
     @Override public Map<? super var, ? extends var> map(Token token) {
 
-        final SourceValue source = new SourceValue(scope, token);
+        final SourceSegmentValue source = new SourceSegmentValue(scope, token);
         return rhs -> {
             Callable<var> callable = () -> {
                 return DollarScriptSupport.getVariable(pure, scope, rhs.toString(), false, $void(), source);
             };
             return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(rhs),
-                                                "variable-usage--" + rhs._source().getTokenSource());
+                                                "variable-usage--" + rhs._source().getSourceSegment());
         };
     }
 }

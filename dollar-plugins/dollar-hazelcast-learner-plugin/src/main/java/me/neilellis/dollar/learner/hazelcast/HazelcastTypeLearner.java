@@ -22,7 +22,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.TypePrediction;
-import me.neilellis.dollar.script.Source;
+import me.neilellis.dollar.script.SourceSegment;
 import me.neilellis.dollar.script.TypeLearner;
 import me.neilellis.dollar.types.prediction.CountBasedTypePrediction;
 import me.neilellis.dollar.var;
@@ -50,7 +50,7 @@ public class HazelcastTypeLearner implements TypeLearner {
         return this;
     }
 
-    @Override public void learn(String name, Source source, List<var> inputs, Type type) {
+    @Override public void learn(String name, SourceSegment source, List<var> inputs, Type type) {
         IMap<String, CountBasedTypePrediction> typeLearning = hz.getMap("typeLearner");
         final ArrayList<String> perms = TypeLearner.perms(inputs);
         for (String perm : perms) {
@@ -64,7 +64,7 @@ public class HazelcastTypeLearner implements TypeLearner {
 
     }
 
-    @Override public TypePrediction predict(String name, Source source, List<var> inputs) {
+    @Override public TypePrediction predict(String name, SourceSegment source, List<var> inputs) {
         IMap<String, CountBasedTypePrediction> typeLearning = hz.getMap("typeLearner");
         final ArrayList<String> perms = TypeLearner.perms(inputs);
         CountBasedTypePrediction prediction = new CountBasedTypePrediction(name);

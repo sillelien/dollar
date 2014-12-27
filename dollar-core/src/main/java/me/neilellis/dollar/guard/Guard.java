@@ -19,30 +19,73 @@ package me.neilellis.dollar.guard;
 import java.lang.reflect.Method;
 
 /**
+ * A Guard is the interface that a guard class must implement. Guard classes
+ * can be used in @Guarded annotations.
+ *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface Guard {
 
-    String description();
-
-    void preCondition(Object guarded, Method method, Object[] args);
-
-    void postCondition(Object guarded, Method method, Object[] args, Object result);
-
-    default void assertNotNull(Object o, Method method) {
-        assertNotNull("-", o, method);
+    /**
+     * Assert not null.
+     *
+     * @param value  the value to check for null
+     * @param method the method that the assertion relates to
+     */
+    default void assertNotNull(Object value, Method method) {
+        assertNotNull("-", value, method);
     }
 
-    default void assertNotNull(String message, Object o, Method method) {
-        if (o == null) {
+    /**
+     * Assert not null.
+     *
+     * Helper method for guards that asserts a condition is true.
+     *
+     * @param value  the value to check for null
+     * @param method the method that the assertion relates to
+     */
+    default void assertNotNull(String message, Object value, Method method) {
+        if (value == null) {
             throw new AssertionError(description() + " " + message + " Not Null FAILED for " + method);
         }
     }
 
+    /**
+     * Description of this guard.
+     *
+     * @return the description
+     */
+    String description();
+
+    /**
+     * Helper method for guards that asserts a condition is true.
+     *
+     * @param condition the condition to check
+     * @param method    the method that the assertion relates to
+     */
     default void assertTrue(boolean condition, Method method) {
         if (!condition) {
             throw new AssertionError(description() + " FAILED for " + method);
         }
     }
+
+    /**
+     * Post condition check that is called after the method is executed.
+     *
+     * @param guarded the guarded object
+     * @param method  the method that is being guarded
+     * @param args    the arguments being passed in
+     * @param result  the result that was returned from the method
+     */
+    void postCondition(Object guarded, Method method, Object[] args, Object result);
+
+    /**
+     * Pre condition check that is called before the method is executed.
+     *
+     * @param guarded the guarded object
+     * @param method  the method that is being guarded
+     * @param args    the arguments being passed in
+     */
+    void preCondition(Object guarded, Method method, Object[] args);
 
 }

@@ -42,7 +42,7 @@ public class ParserErrorHandler {
     }
 
 
-    public var handle(Scope scope, Source source, AssertionError e) {
+    public var handle(Scope scope, SourceSegment source, AssertionError e) {
         AssertionError throwable = new AssertionError(e.getMessage() + " at " + source.getSourceMessage(), e);
         if (!faultTolerant) {
             return scope.handleError(e);
@@ -51,7 +51,7 @@ public class ParserErrorHandler {
         }
     }
 
-    public var handle(Scope scope, Source source, DollarException e) {
+    public var handle(Scope scope, SourceSegment source, DollarException e) {
         DollarParserException
                 throwable =
                 new DollarParserException(e.getMessage() + " at " + source.getSourceMessage(), e);
@@ -62,7 +62,7 @@ public class ParserErrorHandler {
         }
     }
 
-    public var handle(Scope scope, Source source, Exception e) {
+    public var handle(Scope scope, SourceSegment source, Exception e) {
         if (e instanceof LambdaRecursionException) {
             throw new DollarParserException(
                     "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +

@@ -44,7 +44,7 @@ public class UnitOperator implements Map<Token, var> {
 
     @Override public var map(Token token) {
         Object[] objects = (Object[]) token.value();
-        final SourceValue source = new SourceValue(scope, token);
+        final SourceSegmentValue source = new SourceSegmentValue(scope, token);
         Callable<var> callable = () -> dollarParser.inScope(pure, "unit", scope, newScope -> {
             if (Builtins.exists(objects[1].toString())) {
                 return Builtins.execute(objects[1].toString(), Arrays.asList((var) objects[0]), newScope, pure);

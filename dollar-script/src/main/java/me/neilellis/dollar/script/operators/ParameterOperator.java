@@ -57,7 +57,8 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                                                                 new Function(rhs, lhs, token,
                                                                              constraintSource));
             var lambda =
-                    DollarScriptSupport.toLambda(scope, callable, new SourceValue(scope, token), rhs, "parameter");
+                    DollarScriptSupport.toLambda(scope, callable, new SourceSegmentValue(scope, token), rhs,
+                                                 "parameter");
             //reactive links
             lhs.$listen(i -> lambda.$notify());
             for (var param : rhs) {
@@ -111,7 +112,7 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                 // it's a variable.
                 if (Builtins.exists(lhsString)) { result = Builtins.execute(lhsString, rhs, newScope, pure); } else {
                     final var valueUnfixed = DollarScriptSupport.getVariable(
-                            pure, newScope, lhsString, false, null, new SourceValue(scope, token));
+                            pure, newScope, lhsString, false, null, new SourceSegmentValue(scope, token));
                     result = valueUnfixed._fix(2, false);
                 }
             }

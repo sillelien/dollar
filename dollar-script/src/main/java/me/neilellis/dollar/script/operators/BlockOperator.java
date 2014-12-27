@@ -19,7 +19,7 @@ package me.neilellis.dollar.script.operators;
 import me.neilellis.dollar.script.DollarParser;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.SourceValue;
+import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
@@ -45,7 +45,7 @@ public class BlockOperator implements Map<Token, var> {
 
     @Override public var map(Token token) {
         List<var> l = (List<var>) token.value();
-        return DollarScriptSupport.wrapLambda(new SourceValue(scope, token), scope,
+        return DollarScriptSupport.wrapLambda(new SourceSegmentValue(scope, token), scope,
                                               parallel -> dollarParser.inScope(pure, "block", scope, newScope -> {
                                                   if (l.size() > 0) {
                                                       return DollarFactory.blockCollection(l);

@@ -43,15 +43,13 @@ public class DollarWrapper implements var {
 
     private final DollarMonitor monitor;
     private final StateTracer tracer;
-    private final ErrorLogger errorLogger;
     private final var value;
 
-    DollarWrapper(var value, DollarMonitor monitor, StateTracer tracer, ErrorLogger errorLogger) {
+    DollarWrapper(var value, DollarMonitor monitor, StateTracer tracer) {
 //        tracer.trace(DollarNull.INSTANCE,value, StateTracer.Operations.CREATE);
         this.value = value;
         this.monitor = monitor;
         this.tracer = tracer;
-        this.errorLogger = errorLogger;
         if (value == null) {
             throw new NullPointerException();
         }
@@ -99,6 +97,10 @@ public class DollarWrapper implements var {
         return getValue().$multiply(v);
     }
 
+    @Override public int sign() {
+        return getValue().sign();
+    }
+
     @NotNull @Override
     public Integer toInteger() {
         return getValue().toInteger();
@@ -118,10 +120,6 @@ public class DollarWrapper implements var {
     @NotNull @Override
     public Double toDouble() {
         return getValue().toDouble();
-    }
-
-    @Override public int sign() {
-        return getValue().sign();
     }
 
     var getValue() {
@@ -246,6 +244,15 @@ public class DollarWrapper implements var {
         return getValue().$type();
     }
 
+    @Override public boolean collection() {
+        return getValue().collection();
+    }
+
+    @Override
+    public boolean dynamic() {
+        return getValue().dynamic();
+    }
+
     @NotNull
     @Override
     public ImmutableMap<var, var> $map() {
@@ -257,13 +264,9 @@ public class DollarWrapper implements var {
         return getValue().is(types);
     }
 
-    @Override public boolean collection() {
-        return getValue().collection();
-    }
-
     @Override
-    public boolean dynamic() {
-        return getValue().dynamic();
+    public boolean isVoid() {
+        return getValue().isVoid();
     }
 
     @Override
@@ -306,16 +309,6 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public boolean uri() {
-        return getValue().uri();
-    }
-
-    @Override
-    public boolean isVoid() {
-        return getValue().isVoid();
-    }
-
-    @Override
     public ImmutableList<String> strings() {
         return getValue().strings();
     }
@@ -332,6 +325,11 @@ public class DollarWrapper implements var {
     @NotNull @Override
     public InputStream toStream() {
         return getValue().toStream();
+    }
+
+    @Override
+    public boolean uri() {
+        return getValue().uri();
     }
 
     @Override
@@ -383,21 +381,18 @@ public class DollarWrapper implements var {
     @NotNull
     @Override
     public var $error(@NotNull String errorMessage) {
-        errorLogger.log(errorMessage);
         return getValue().$error(errorMessage);
     }
 
     @NotNull
     @Override
     public var $error(@NotNull Throwable error) {
-        errorLogger.log(error);
         return getValue().$error(error);
     }
 
     @NotNull
     @Override
     public var $error() {
-        errorLogger.log();
         return getValue().$error();
     }
 
@@ -416,14 +411,12 @@ public class DollarWrapper implements var {
     @NotNull
     @Override
     public var $invalid(@NotNull String errorMessage) {
-        errorLogger.log();
         return getValue().$invalid(errorMessage);
     }
 
     @NotNull
     @Override
     public var $error(@NotNull String errorMessage, @NotNull ErrorType type) {
-        errorLogger.log(errorMessage, type);
         return getValue().$error(errorMessage, type);
     }
 
@@ -694,13 +687,13 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public boolean neitherTrueNorFalse() {
-        return getValue().neitherTrueNorFalse();
+    public boolean isTrue() {
+        return getValue().isTrue();
     }
 
     @Override
-    public boolean isTrue() {
-        return getValue().isTrue();
+    public boolean neitherTrueNorFalse() {
+        return getValue().neitherTrueNorFalse();
     }
 
     @Override

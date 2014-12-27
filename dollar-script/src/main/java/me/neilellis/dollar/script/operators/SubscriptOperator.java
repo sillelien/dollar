@@ -18,7 +18,7 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.SourceValue;
+import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
@@ -36,7 +36,7 @@ public class SubscriptOperator implements Map<Token, Map<? super var, ? extends 
 
     @Override public Map<? super var, ? extends var> map(Token token) {
         Object[] rhs = (Object[]) token.value();
-        final SourceValue source = new SourceValue(scope, token);
+        final SourceSegmentValue source = new SourceSegmentValue(scope, token);
         return lhs -> {
             if (rhs[1] == null) {
                 return DollarScriptSupport.wrapReactive(scope, () -> lhs.$get(

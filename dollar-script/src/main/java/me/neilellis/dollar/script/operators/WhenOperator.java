@@ -18,7 +18,7 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.SourceValue;
+import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
@@ -42,7 +42,7 @@ public class WhenOperator implements Map<Token, var> {
         var rhs = (var) objects[1];
         var
                 lambda =
-                DollarScriptSupport.wrapLambda(new SourceValue(scope, token), scope,
+                DollarScriptSupport.wrapLambda(new SourceSegmentValue(scope, token), scope,
                                                i -> lhs.isTrue() ? $((Object) rhs.toJavaObject()) : $void(),
                                                Arrays.asList(lhs, rhs),
                                                "when");

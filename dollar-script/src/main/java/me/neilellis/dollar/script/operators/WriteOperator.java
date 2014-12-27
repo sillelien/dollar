@@ -18,7 +18,7 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.SourceValue;
+import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
@@ -41,7 +41,7 @@ public class WriteOperator implements Map<Token, Map<? super var, ? extends var>
                                                         () -> rhs.$write((var) objects[1],
                                                                          objects[2] != null,
                                                                          objects[3] !=
-                                                                         null), new SourceValue(scope, token),
+                                                                         null), new SourceSegmentValue(scope, token),
                                                         "write:" + objects[2] + ":" + objects[3], (var) objects[1],
                                                         rhs
                 );

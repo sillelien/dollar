@@ -28,7 +28,7 @@ import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.json.impl.Json;
 import me.neilellis.dollar.monitor.DollarMonitor;
-import me.neilellis.dollar.script.Source;
+import me.neilellis.dollar.script.SourceSegment;
 import me.neilellis.dollar.uri.URI;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
@@ -329,14 +329,14 @@ public class DollarFactory {
      */
     @NotNull
     public static var wrap(var value) {
-        return wrap(value, DollarStatic.monitor(), DollarStatic.tracer(), DollarStatic.errorLogger());
+        return wrap(value, DollarStatic.monitor(), DollarStatic.tracer());
     }
 
     @NotNull
-    private static var wrap(var value, DollarMonitor monitor, StateTracer tracer, ErrorLogger errorLogger) {
+    private static var wrap(var value, DollarMonitor monitor, StateTracer tracer) {
         final var val;
         if (DollarStatic.config.wrapForMonitoring()) {
-            val = new DollarWrapper(value, monitor, tracer, errorLogger);
+            val = new DollarWrapper(value, monitor, tracer);
         } else {
             val = value;
         }
@@ -508,7 +508,7 @@ public class DollarFactory {
      * @param source the source
      * @return the var
      */
-    public static var failureWithSource(ErrorType errorType, Throwable throwable, Source source) {
+    public static var failureWithSource(ErrorType errorType, Throwable throwable, SourceSegment source) {
         if (source == null) {
             throw new NullPointerException();
         }

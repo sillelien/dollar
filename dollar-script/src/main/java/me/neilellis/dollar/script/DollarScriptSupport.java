@@ -40,7 +40,8 @@ public class DollarScriptSupport {
 
     private static final Logger log = LoggerFactory.getLogger(DollarScriptSupport.class);
 
-    public static var wrapReactive(Scope scope, Callable<var> callable, Source source, String operation, var lhs) {
+    public static var wrapReactive(Scope scope, Callable<var> callable, SourceSegment source, String operation,
+                                   var lhs) {
         if (scope == null) {
             throw new NullPointerException();
         }
@@ -50,7 +51,8 @@ public class DollarScriptSupport {
     }
 
 
-    public static var toLambda(Scope scope, Callable<var> callable, Source source, List<var> inputs, String operation) {
+    public static var toLambda(Scope scope, Callable<var> callable, SourceSegment source, List<var> inputs,
+                               String operation) {
         if (scope == null) {
             throw new NullPointerException();
         }
@@ -60,7 +62,7 @@ public class DollarScriptSupport {
                 new DollarSource(i -> callable.call(), scope, source, inputs, operation)));
     }
 
-    public static var wrapReactive(Scope scope, Callable<var> callable, Source source, String operation, var lhs,
+    public static var wrapReactive(Scope scope, Callable<var> callable, SourceSegment source, String operation, var lhs,
                                    var rhs) {
         final var lambda = toLambda(scope, callable, source, Arrays.asList(lhs, rhs), operation);
 
@@ -69,7 +71,8 @@ public class DollarScriptSupport {
         return lambda;
     }
 
-    public static var wrapLambda(Source source, Scope scope, Pipeable pipeable, List<var> inputs, String operation) {
+    public static var wrapLambda(SourceSegment source, Scope scope, Pipeable pipeable, List<var> inputs,
+                                 String operation) {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
@@ -77,7 +80,7 @@ public class DollarScriptSupport {
     }
 
     public static var getVariable(boolean pure, Scope scope, String key, boolean numeric, var defaultValue,
-                                  Source source) {
+                                  SourceSegment source) {
 //       if(pure && !(scope instanceof  PureScope)) {
 //           throw new IllegalStateException("Attempting to get a pure variable in an impure scope");
 //       }

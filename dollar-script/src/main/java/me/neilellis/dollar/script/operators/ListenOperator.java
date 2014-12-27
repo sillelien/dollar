@@ -19,7 +19,7 @@ package me.neilellis.dollar.script.operators;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Operator;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.Source;
+import me.neilellis.dollar.script.SourceSegment;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
 
@@ -34,7 +34,7 @@ import static me.neilellis.dollar.DollarStatic.$;
 public class ListenOperator implements Binary<var>, Operator {
     private final Scope scope;
     private boolean pure;
-    private Source source;
+    private SourceSegment source;
 
 
     public ListenOperator(Scope scope, boolean pure) {
@@ -55,7 +55,7 @@ public class ListenOperator implements Binary<var>, Operator {
         return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(lhs, rhs), "listen");
     }
 
-    @Override public void setSource(Source source) {
+    @Override public void setSource(SourceSegment source) {
         this.source = source;
     }
 }

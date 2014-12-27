@@ -47,11 +47,11 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
         var constraint;
         final String constraintSource;
         if (objects[3] instanceof var) {
-            constraintSource = ((var) objects[3])._source().getTokenSource();
+            constraintSource = ((var) objects[3])._source().getSourceSegment();
         } else {
             constraintSource = null;
         }
-        final SourceValue source = new SourceValue(scope, token);
+        final SourceSegmentValue source = new SourceSegmentValue(scope, token);
         if (objects[2] != null) {
             type = Type.valueOf(objects[2].toString().toUpperCase());
             constraint = DollarScriptSupport.wrapLambda(source, scope, i -> {
@@ -125,7 +125,8 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
         };
     }
 
-    private var assign(var rhs, Object[] objects, var constraint, boolean constant, boolean isVolatile, Source source,
+    private var assign(var rhs, Object[] objects, var constraint, boolean constant, boolean isVolatile,
+                       SourceSegment source,
                        String constraintSource) {
 
         final String varName = objects[4].toString();

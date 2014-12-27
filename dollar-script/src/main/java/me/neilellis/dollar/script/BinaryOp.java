@@ -29,7 +29,7 @@ public class BinaryOp implements Binary<var>, Operator {
     private final boolean immediate;
     private final Map2<var, var, var> function;
     private final Scope scope;
-    private Source source;
+    private SourceSegment source;
     private String operation;
 
 
@@ -57,7 +57,7 @@ public class BinaryOp implements Binary<var>, Operator {
     }
 
     @Override
-    public void setSource(Source source) {
+    public void setSource(SourceSegment source) {
         this.source = source;
     }
 }

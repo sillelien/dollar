@@ -16,7 +16,7 @@
 
 package me.neilellis.dollar;
 
-import me.neilellis.dollar.script.Source;
+import me.neilellis.dollar.script.SourceSegment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class DollarException extends RuntimeException {
 
-    private final List<Source> sourceList = new ArrayList<>();
+    private final List<SourceSegment> sourceList = new ArrayList<>();
 
     /**
      * Instantiates a new Dollar exception.
@@ -63,7 +63,7 @@ public class DollarException extends RuntimeException {
      *
      * @param source the source code to which the exception relates
      */
-    public void addSource(Source source) {
+    public void addSource(SourceSegment source) {
         if (source == null) {
             throw new NullPointerException();
         }
@@ -76,7 +76,7 @@ public class DollarException extends RuntimeException {
 
         } else {
             StringBuilder builder = new StringBuilder(super.getMessage() + "\n");
-            for (Source sourceEntry : sourceList) {
+            for (SourceSegment sourceEntry : sourceList) {
                 builder.append(sourceEntry.getSourceMessage()).append("\n");
             }
             return builder.toString();

@@ -21,7 +21,7 @@ import me.neilellis.dollar.guard.ChainGuard;
 import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.NotNullCollectionGuard;
 import me.neilellis.dollar.guard.NotNullGuard;
-import me.neilellis.dollar.script.Source;
+import me.neilellis.dollar.script.SourceSegment;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -63,7 +63,7 @@ public interface VarInternal {
      */
     TypePrediction _predictType();
 
-    default Source _source() {
+    default SourceSegment _source() {
         return null;
     }
 

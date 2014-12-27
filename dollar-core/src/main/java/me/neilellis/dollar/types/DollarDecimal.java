@@ -158,54 +158,6 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         }
     }
 
-    @NotNull @Override
-    public Long toLong() {
-        return value.longValue();
-    }
-
-    @NotNull
-    @Override
-    public Double toDouble() {
-        return value;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof var) {
-            var unwrapped = ((var) obj)._unwrap();
-            if (unwrapped instanceof DollarDecimal) {
-                return $equals(unwrapped);
-            } else {
-                return value.toString().equals(obj.toString());
-            }
-        } else {
-            return value.toString().equals(obj.toString());
-        }
-    }
-
-    @Override
-    public boolean decimal() {
-        return true;
-    }
-
-    @Override
-    public boolean integer() {
-        return false;
-    }
-
-    @Override
-    public boolean number() {
-        return true;
-    }
-
-    boolean $equals(var other) {
-        if (integer()) {
-            return value.longValue() == other.toLong();
-        } else {
-            return value.doubleValue() == other.toDouble();
-        }
-    }
-
     @Override
     public int compareTo(@NotNull var o) {
         return $minus(o).toInteger();
@@ -222,13 +174,13 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     }
 
     @Override
-    public boolean neitherTrueNorFalse() {
-        return true;
+    public boolean isTrue() {
+        return false;
     }
 
     @Override
-    public boolean isTrue() {
-        return false;
+    public boolean neitherTrueNorFalse() {
+        return true;
     }
 
     @Override
@@ -236,8 +188,44 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         return value.intValue() != 0;
     }
 
-    @NotNull @Override public String toDollarScript() {
-        return toString();
+    @Override
+    public boolean number() {
+        return true;
+    }
+
+    @Override
+    public boolean decimal() {
+        return true;
+    }
+
+    @Override
+    public boolean integer() {
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof var) {
+            var unwrapped = ((var) obj)._unwrap();
+            if (unwrapped instanceof DollarDecimal) {
+                return $equals(unwrapped);
+            } else {
+                return value.toString().equals(obj.toString());
+            }
+        } else {
+            return value.toString().equals(obj.toString());
+        }
+    }
+
+    @NotNull @Override
+    public Long toLong() {
+        return value.longValue();
+    }
+
+    @NotNull
+    @Override
+    public Double toDouble() {
+        return value;
     }
 
     boolean $equals(var other) {
@@ -247,6 +235,11 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
             return value.doubleValue() == other.toDouble();
         }
     }
+
+    @NotNull @Override public String toDollarScript() {
+        return toString();
+    }
+
 
     @NotNull
     @Override

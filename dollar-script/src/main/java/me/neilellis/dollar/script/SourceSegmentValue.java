@@ -22,7 +22,7 @@ import org.codehaus.jparsec.Token;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-public class SourceValue implements Source {
+public class SourceSegmentValue implements SourceSegment {
     private Scope scope;
     private String sourceFile;
     private int length;
@@ -30,7 +30,7 @@ public class SourceValue implements Source {
     private int start;
     private String shortHash;
 
-    public SourceValue(Scope scope, String sourceFile, String source, int start, int length) {
+    public SourceSegmentValue(Scope scope, String sourceFile, String source, int start, int length) {
         this.scope = scope;
         this.sourceFile = sourceFile;
         this.length = length;
@@ -38,7 +38,7 @@ public class SourceValue implements Source {
         this.start = start;
     }
 
-    public SourceValue(Scope scope, Token t) {
+    public SourceSegmentValue(Scope scope, Token t) {
         this.scope = scope;
         this.sourceFile = scope.getFile();
         this.length = t.length();
@@ -59,7 +59,7 @@ public class SourceValue implements Source {
         return shortHash;
     }
 
-    @Override public String getSource() {
+    @Override public String getCompleteSource() {
         return source;
     }
 
@@ -88,7 +88,7 @@ public class SourceValue implements Source {
         return start; //TODO
     }
 
-    @Override public String getTokenSource() {
+    @Override public String getSourceSegment() {
         return scope.getSource().substring(start, start + length);
     }
 }

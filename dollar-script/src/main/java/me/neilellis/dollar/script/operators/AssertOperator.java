@@ -18,7 +18,7 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.SourceValue;
+import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
@@ -35,7 +35,7 @@ public class AssertOperator implements Map<Token, var> {
     public AssertOperator(Scope scope) {this.scope = scope;}
 
     @Override public var map(Token token) {
-        final SourceValue source = new SourceValue(scope, token);
+        final SourceSegmentValue source = new SourceSegmentValue(scope, token);
         Object[] objects = (Object[]) token.value();
         return DollarScriptSupport.wrapReactive(scope, () -> {
             if (((var) objects[1]).isTrue()) { return $void(); } else {

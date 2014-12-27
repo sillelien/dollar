@@ -28,7 +28,7 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.TypePrediction;
-import me.neilellis.dollar.script.Source;
+import me.neilellis.dollar.script.SourceSegment;
 import me.neilellis.dollar.script.TypeLearner;
 import me.neilellis.dollar.types.prediction.CountBasedTypePrediction;
 import me.neilellis.dollar.var;
@@ -84,7 +84,7 @@ public class OrientDBTypeLearner implements TypeLearner {
         return this;
     }
 
-    @Override public void learn(String name, Source source, List<var> inputs, Type type) {
+    @Override public void learn(String name, SourceSegment source, List<var> inputs, Type type) {
         OrientGraph graph = factory.getTx();
         try {
             Vertex operationVertex = createVertex("operation-" + name, graph);
@@ -113,7 +113,7 @@ public class OrientDBTypeLearner implements TypeLearner {
         }
     }
 
-    @Override public TypePrediction predict(String name, Source source, List<var> inputs) {
+    @Override public TypePrediction predict(String name, SourceSegment source, List<var> inputs) {
         CountBasedTypePrediction prediction = new CountBasedTypePrediction(name);
         OrientGraph graph = factory.getTx();
         try {
@@ -186,7 +186,7 @@ public class OrientDBTypeLearner implements TypeLearner {
 
     private static String getEdgeKey(String t) {return "input-" + t;}
 
-    public TypePrediction predict(String name, Source source, Object[] args) {
+    public TypePrediction predict(String name, SourceSegment source, Object[] args) {
         List<var> inputs = (List<var>) args[0];
         return predict(name, source, inputs);
     }

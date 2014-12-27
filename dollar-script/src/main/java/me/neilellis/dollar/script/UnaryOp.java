@@ -26,7 +26,7 @@ import org.codehaus.jparsec.functors.Unary;
 public class UnaryOp implements Unary<var>, Operator {
     private final boolean immediate;
     protected Scope scope;
-    protected Source source;
+    protected SourceSegment source;
     protected String operation;
     private Map<var, var> function;
 
@@ -66,7 +66,7 @@ public class UnaryOp implements Unary<var>, Operator {
 
 
     @Override
-    public void setSource(Source source) {
+    public void setSource(SourceSegment source) {
         this.source = source;
     }
 }

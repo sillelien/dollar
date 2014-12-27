@@ -20,7 +20,7 @@ import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.SourceValue;
+import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
@@ -45,7 +45,7 @@ public class DeclarationOperator implements Map<Token, Map<? super var, ? extend
         Object[] objects = (Object[]) token.value();
         final String constraintSource;
         if (objects[1] instanceof var) {
-            constraintSource = ((var) objects[1])._source().getTokenSource();
+            constraintSource = ((var) objects[1])._source().getSourceSegment();
         } else {
             constraintSource = null;
         }
@@ -62,7 +62,7 @@ public class DeclarationOperator implements Map<Token, Map<? super var, ? extend
                 var constraint;
                 if (objects[1] != null) {
                     constraint =
-                            DollarScriptSupport.wrapLambda(new SourceValue(scope, token), scope, i -> {
+                            DollarScriptSupport.wrapLambda(new SourceSegmentValue(scope, token), scope, i -> {
                                 final Type type = Type.valueOf(objects[1].toString().toUpperCase());
                                 var it = scope.getParameter("it");
                                 return $(it.is(type));

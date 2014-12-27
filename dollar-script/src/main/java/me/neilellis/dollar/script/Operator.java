@@ -21,5 +21,5 @@ package me.neilellis.dollar.script;
  */
 public interface Operator {
 
-    void setSource(Source source);
+    void setSource(SourceSegment source);
 }

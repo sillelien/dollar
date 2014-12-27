@@ -33,12 +33,12 @@ import java.util.Objects;
 public class DollarSource extends DollarLambda {
     public static TypeLearner typeLearner = Plugins.sharedInstance(TypeLearner.class);
     private final Scope scope;
-    private final Source source;
+    private final SourceSegment source;
     private List<var> inputs;
     private String operation;
     private volatile TypePrediction prediction;
 
-    public DollarSource(Pipeable lambda, Scope scope, Source source, List<var> inputs, String operation) {
+    public DollarSource(Pipeable lambda, Scope scope, SourceSegment source, List<var> inputs, String operation) {
         super(lambda);
         if (operation == null) {
             throw new NullPointerException();
@@ -53,7 +53,7 @@ public class DollarSource extends DollarLambda {
         this.source = source;
     }
 
-    public DollarSource(Pipeable lambda, Scope scope, Source source, boolean fixable, List<var> inputs,
+    public DollarSource(Pipeable lambda, Scope scope, SourceSegment source, boolean fixable, List<var> inputs,
                         String operation) {
         super(lambda, fixable);
         this.inputs = inputs;

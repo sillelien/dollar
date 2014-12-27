@@ -21,7 +21,6 @@ import me.neilellis.dollar.collections.MultiMap;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.monitor.DollarMonitor;
-import me.neilellis.dollar.monitor.SimpleErrorLogger;
 import me.neilellis.dollar.monitor.SimpleLogStateTracer;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.types.DollarFuture;
@@ -685,16 +684,6 @@ public class DollarStatic {
      */
     public static DollarThreadContext context() {
         return threadContext.get();
-    }
-
-    /**
-     * Error logger.
-     *
-     * @return the error logger
-     */
-    @NotNull
-    public static ErrorLogger errorLogger() {
-        return new SimpleErrorLogger();
     }
 
     /**

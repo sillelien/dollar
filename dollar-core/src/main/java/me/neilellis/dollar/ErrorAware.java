@@ -107,16 +107,16 @@ public interface ErrorAware {
     @Guarded(ChainGuard.class) var $error(@NotNull String errorMessage, @NotNull ErrorType type);
 
     /**
-     * Clear errors.
+     * Return a copy of this object with no errors associated with it.
      *
-     * @return the var
+     * @return a cleaned object
      */
     @NotNull
     @Guarded(ChainGuard.class)
     var clearErrors();
 
     /**
-     * Error texts.
+     * Return
      *
      * @return the list
      */

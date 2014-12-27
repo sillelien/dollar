@@ -59,8 +59,8 @@ public interface TypeLearner extends ExtensionPoint<TypeLearner> {
         return perms;
     }
 
-    void learn(String name, Source source, List<var> inputs, Type type);
+    void learn(String name, SourceSegment source, List<var> inputs, Type type);
 
-    TypePrediction predict(String name, Source source, List<var> inputs);
+    TypePrediction predict(String name, SourceSegment source, List<var> inputs);
 
 }

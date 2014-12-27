@@ -18,7 +18,7 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.SourceValue;
+import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
@@ -47,7 +47,8 @@ public class IfOperator implements Map<Token, Map<var, var>> {
                     return $(false);
                 }
             };
-            return DollarScriptSupport.toLambda(scope, callable, new SourceValue(scope, token), Arrays.asList(lhs, rhs),
+            return DollarScriptSupport.toLambda(scope, callable, new SourceSegmentValue(scope, token),
+                                                Arrays.asList(lhs, rhs),
                                                 "if");
         };
     }

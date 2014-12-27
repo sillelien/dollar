@@ -19,7 +19,7 @@ package me.neilellis.dollar.script.operators;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.SourceValue;
+import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
@@ -39,7 +39,7 @@ public class CastOperator implements Map<Token, Map<? super var, ? extends var>>
                                                                              .valueOf(
                                                                                      rhs.toString()
                                                                                         .toUpperCase())),
-                                                       new SourceValue(scope, token), "as", lhs
+                                                       new SourceSegmentValue(scope, token), "as", lhs
         );
     }
 }
