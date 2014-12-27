@@ -72,11 +72,11 @@ public class UsageCounter implements com.hazelcast.nio.serialization.DataSeriali
 
     @Override public void writeData(ObjectDataOutput out) throws IOException {
         out.writeLong(usage.get());
-        out.writeInt(resultType.ordinal());
+        out.writeUTF(resultType.name());
     }
 
     @Override public void readData(ObjectDataInput in) throws IOException {
         usage = new AtomicLong(in.readLong());
-        resultType = Type.values()[in.readInt()];
+        resultType = Type.valueOf(in.readUTF());
     }
 }

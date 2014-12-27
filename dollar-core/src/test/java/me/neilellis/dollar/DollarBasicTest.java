@@ -93,7 +93,7 @@ public class DollarBasicTest {
                                 .$("number", 343)
                 );
         var result = profile.$pipe(v -> v.$("weight", "none of your business"));
-        String weight = result.$("weight").S();
+        String weight = result.$("weight").toHumanString();
         assertEquals(weight, "none of your business");
         assertTrue("Profile's state was mutated!!!", profile.$("weight").isVoid());
     }
@@ -108,9 +108,9 @@ public class DollarBasicTest {
         assertEquals("bar", $(map).$("foo").toJavaObject());
         assertEquals("bar", $(map).toMap().get("foo"));
         assertEquals(1L, $(map).$("sub").toMap().get("thing"));
-        assertEquals("1", $(map).$("sub").$("thing").S());
-        assertEquals("{\"thing\":1}", $(map).$("sub").S());
-        assertEquals(1, $(map).$("sub").$("thing").I().longValue());
+        assertEquals("1", $(map).$("sub").$("thing").toHumanString());
+        assertEquals("{\"thing\":1}", $(map).$("sub").toHumanString());
+        assertEquals(1, $(map).$("sub").$("thing").toInteger().longValue());
     }
 
     @Test
@@ -128,13 +128,13 @@ public class DollarBasicTest {
         var ageRetrieved = profile.$eval("$['age']");
         System.out.println(profile.$eval("$"));
         System.out.println(ageRetrieved);
-        assertEquals(age, (int) ageRetrieved.I());
-        assertEquals(age / 11, (int) profile.$eval("($['age'] / 11)").I());
+        assertEquals(age, (int) ageRetrieved.toInteger());
+        assertEquals(age / 11, (int) profile.$eval("($['age'] / 11)").toInteger());
         assertEquals("male", profile.$eval("$.gender").toJavaObject());
-        assertEquals(10, (int) profile.$eval("5*2").I());
-        assertEquals(10, (int) $eval("10").I());
-        assertEquals($("{\"name\":\"Dave\"}").$("name").S(), "Dave");
-        assertEquals($().$eval("({name:'Dave'})").$("name").S(), "Dave");
+        assertEquals(10, (int) profile.$eval("5*2").toInteger());
+        assertEquals(10, (int) $eval("10").toInteger());
+        assertEquals($("{\"name\":\"Dave\"}").$("name").toHumanString(), "Dave");
+        assertEquals($().$eval("({name:'Dave'})").$("name").toHumanString(), "Dave");
     }
 
     @Test
@@ -146,7 +146,7 @@ public class DollarBasicTest {
         assertFalse($((Object) null).$("bar").$has("foo").isTrue());
         assertFalse($((Object) null).$has("foo").isTrue());
         assertTrue($((Object) null).$("foo", "bar").$("foo").isVoid());
-        assertEquals("twasnull", $((Object) null).$default($(i -> $("twasnull"))).S());
+        assertEquals("twasnull", $((Object) null).$default($(i -> $("twasnull"))).toHumanString());
     }
 
 

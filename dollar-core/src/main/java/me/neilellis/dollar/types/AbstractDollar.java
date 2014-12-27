@@ -273,30 +273,11 @@ public abstract class AbstractDollar implements var {
         return new SingleValueTypePrediction($type());
     }
 
-    @Override
-    public void _src(String src) {
-        this.src = src;
-    }
-
-    @Override
-    public String _src() {
-        return this.src;
-    }
 
     @NotNull
     @Override
     public var _unwrap() {
         return this;
-    }
-
-    @Override
-    public Long L() {
-        return 0L;
-    }
-
-    @Override
-    public Double D() {
-        return 0.0;
     }
 
     public void clear() {
@@ -365,6 +346,75 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
+    public boolean dynamic() {
+        return false;
+    }
+
+    @Override
+    public boolean list() {
+        return false;
+    }
+
+    @Override
+    public boolean map() {
+        return false;
+    }
+
+    @Override
+    public boolean number() {
+        return false;
+    }
+
+    @Override
+    public boolean decimal() {
+        return false;
+    }
+
+    @Override
+    public boolean integer() {
+        return false;
+    }
+
+    @Override public boolean pair() {
+        return false;
+    }
+
+    @Override
+    public boolean singleValue() {
+        return false;
+    }
+
+    @Override
+    public boolean string() {
+        return false;
+    }
+
+    @NotNull @Override
+    public InputStream toStream() {
+        return new ByteArrayInputStream($serialized().getBytes());
+    }
+
+    @Override
+    public boolean uri() {
+        return false;
+    }
+
+    @Override
+    public String getMetaAttribute(String key) {
+        return meta.get(key);
+    }
+
+    @Override
+    public void setMetaAttribute(String key, String value) {
+        if (meta.containsKey(key)) {
+            DollarFactory.failure(me.neilellis.dollar.types.ErrorType.METADATA_IMMUTABLE);
+            return;
+
+        }
+        meta.put(key, value);
+    }
+
+    @Override
     public int hashCode() {
         return toJavaObject().hashCode();
     }
@@ -404,81 +454,17 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public String toString() {
-        return S();
-    }
-
-
-
-    @Override
-    public boolean isDecimal() {
-        return false;
+        return toHumanString();
     }
 
     @Override
-    public boolean isInteger() {
-        return false;
+    public Long toLong() {
+        return 0L;
     }
 
     @Override
-    public boolean isLambda() {
-        return false;
-    }
-
-    @Override
-    public boolean isList() {
-        return false;
-    }
-
-
-    @Override
-    public boolean isMap() {
-        return false;
-    }
-
-    @Override
-    public boolean isNumber() {
-        return false;
-    }
-
-    @Override public boolean isPair() {
-        return false;
-    }
-
-    @Override
-    public boolean isSingleValue() {
-        return false;
-    }
-
-
-
-    @Override
-    public boolean isString() {
-        return false;
-    }
-
-    @Override
-    public boolean isUri() {
-        return false;
-    }
-
-    @NotNull @Override
-    public InputStream toStream() {
-        return new ByteArrayInputStream($serialized().getBytes());
-    }
-
-    @Override
-    public void setMetaAttribute(String key, String value) {
-        if (meta.containsKey(key)) {
-            DollarFactory.failure(me.neilellis.dollar.types.ErrorType.METADATA_IMMUTABLE);
-            return;
-
-        }
-        meta.put(key, value);
-    }
-
-    @Override
-    public String getMetaAttribute(String key) {
-        return meta.get(key);
+    public Double toDouble() {
+        return 0.0;
     }
 
 

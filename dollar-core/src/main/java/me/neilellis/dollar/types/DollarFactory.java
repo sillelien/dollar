@@ -442,7 +442,7 @@ public class DollarFactory {
      * @return the var
      */
     public static var fromURI(var from) {
-        if (from.isUri()) {
+        if (from.uri()) {
             return from;
         } else {
             return fromURI(from.$S());
@@ -676,7 +676,7 @@ public class DollarFactory {
             final JsonObject jsonObject = new JsonObject();
             jsonObject.putString(TYPE_KEY, value.$type().name());
             jsonObject.putString(TEXT_KEY, value.$S());
-            jsonObject.putNumber(MILLISECOND_KEY, (long) (value.D() * 24 * 60 * 60 * 1000));
+            jsonObject.putNumber(MILLISECOND_KEY, (long) (value.toDouble() * 24 * 60 * 60 * 1000));
             return jsonObject;
         } else if (i.equals(Type.URI)) {
             final JsonObject uriJsonObject = new JsonObject();
@@ -691,7 +691,7 @@ public class DollarFactory {
         } else if (i.equals(Type.INFINITY)) {
             final JsonObject infinityJsonObject = new JsonObject();
             infinityJsonObject.putString(TYPE_KEY, value.$type().name());
-            infinityJsonObject.putValue(POSITIVE_KEY, value.isPositive());
+            infinityJsonObject.putValue(POSITIVE_KEY, value.positive());
             return infinityJsonObject;
         } else if (i.equals(Type.LIST)) {
             final JsonArray array = new JsonArray();

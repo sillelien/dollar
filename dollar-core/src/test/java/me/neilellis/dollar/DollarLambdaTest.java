@@ -38,9 +38,9 @@ public class DollarLambdaTest {
         long time = System.currentTimeMillis();
         System.out.println(time);
         Thread.sleep(50);
-        System.out.println(lambda.L());
-        assertTrue(lambda.L() > time);
-        assertTrue(lambda.isLambda());
+        System.out.println(lambda.toLong());
+        assertTrue(lambda.toLong() > time);
+        assertTrue(lambda.dynamic());
 
     }
 

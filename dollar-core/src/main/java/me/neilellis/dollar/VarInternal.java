@@ -55,15 +55,19 @@ public interface VarInternal {
 
     @Guarded(ChainGuard.class) var _fixDeep(boolean parallel);
 
+    /**
+     * Attempt to predict what type this object is. For static types this will predict the the same value as returned by
+     * {@link var#$type()}
+     *
+     * @return a prediction of what type this object may be.
+     */
     TypePrediction _predictType();
 
     default Source _source() {
         return null;
     }
 
-    @Guarded(NotNullGuard.class) void _src(String src);
 
-    @Guarded(NotNullGuard.class) String _src();
 
     /**
      * Unwraps any wrapper classes around the actual type class.

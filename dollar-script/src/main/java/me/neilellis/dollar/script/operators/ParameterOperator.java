@@ -44,7 +44,7 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
     @Override public Map<? super var, ? extends var> map(Token token) {
         List<var> rhs = (List<var>) token.value();
         return lhs -> {
-            if (!lhs.isLambda()) {
+            if (!lhs.dynamic()) {
                 String lhsString = lhs.toString();
                 if (pure && Builtins.exists(lhsString) && !Builtins.isPure(lhsString)) {
                     throw new DollarScriptException(
@@ -99,7 +99,7 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                 }
             }
             var result;
-            if (lhs.isLambda()) { result = lhs._fix(2, false); } else {
+            if (lhs.dynamic()) { result = lhs._fix(2, false); } else {
                 String lhsString = lhs.toString();
                 //The lhs is a
                 // string, so

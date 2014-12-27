@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The type Dollar exception.
+ * The base Dollar exception which can optionally have source code associated with it.
+ *
  * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public class DollarException extends RuntimeException {
@@ -32,35 +33,35 @@ public class DollarException extends RuntimeException {
     /**
      * Instantiates a new Dollar exception.
      *
-     * @param e the e
+     * @param cause the cause of this exception
      */
-    public DollarException(Throwable e) {
-        super(e);
+    public DollarException(Throwable cause) {
+        super(cause);
     }
 
     /**
      * Instantiates a new Dollar exception.
      *
-     * @param errorMessage the error message
+     * @param message the error message associated with this exception
      */
-    public DollarException(String errorMessage) {
-        super(errorMessage);
+    public DollarException(String message) {
+        super(message);
     }
 
     /**
      * Instantiates a new Dollar exception.
      *
-     * @param t the t
-     * @param s the s
+     * @param cause the cause of this exception
+     * @param message the error message associated with this exception
      */
-    public DollarException(Throwable t, String s) {
-        super(s, t);
+    public DollarException(Throwable cause, String message) {
+        super(message, cause);
     }
 
     /**
-     * Add source.
+     * Add source information, this is useful if the exception is thrown while executing DollarScript.
      *
-     * @param source the source
+     * @param source the source code to which the exception relates
      */
     public void addSource(Source source) {
         if (source == null) {
@@ -83,7 +84,7 @@ public class DollarException extends RuntimeException {
     }
 
     /**
-     * Http code.
+     * A HTTP code that is appropriate for this exception.
      *
      * @return the int
      */

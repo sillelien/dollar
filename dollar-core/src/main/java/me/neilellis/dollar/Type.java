@@ -18,15 +18,16 @@ package me.neilellis.dollar;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
+ * The type of Dollar's {@link me.neilellis.dollar.var} objects.
+ *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public final class Type {
+
     public static final ConcurrentHashMap<String, Type> lookup = new ConcurrentHashMap<>();
-    public static final AtomicInteger nextOrdinal = new AtomicInteger(0);
 
     public static final Type STRING = new Type("STRING");
     public static final Type DECIMAL = new Type("DECIMAL");
@@ -44,14 +45,12 @@ public final class Type {
 
 
     private final String name;
-    private final int ordinal;
 
 
     Type(String name) {
 
         this.name = name.toUpperCase();
         lookup.put(name.toUpperCase(), this);
-        this.ordinal = nextOrdinal.getAndIncrement();
     }
 
     public static Type valueOf(String name) {
@@ -91,7 +90,4 @@ public final class Type {
         return name;
     }
 
-    public int ordinal() {
-        return ordinal;
-    }
 }

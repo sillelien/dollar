@@ -62,7 +62,7 @@ public class EveryOperator implements Map<Object[], var> {
                 }
 
             });
-        }, ((long) (((var) objects[0]).D() * 24.0 * 60.0 * 60.0 * 1000.0)));
+        }, ((long) (((var) objects[0]).toDouble() * 24.0 * 60.0 * 60.0 * 1000.0)));
         return $void();
     }
 }

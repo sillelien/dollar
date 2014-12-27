@@ -97,7 +97,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 } else {
                     throw new IllegalStateException(String.valueOf(method));
                 }
-            } else if (method.getName().equals("isLambda")) {
+            } else if (method.getName().equals("dynamic")) {
                 return true;
             } else if (method.getName().equals("_unwrap")) {
                 return proxy;

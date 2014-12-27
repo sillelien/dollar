@@ -78,13 +78,13 @@ public final class DollarInfinity extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var v) {
+    public var $minus(@NotNull var rhs) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $plus(var v) {
+    public var $plus(var rhs) {
         return this;
     }
 
@@ -96,13 +96,13 @@ public final class DollarInfinity extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $divide(@NotNull var v) {
+    public var $divide(@NotNull var rhs) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var v) {
+    public var $modulus(@NotNull var rhs) {
         return this;
     }
 
@@ -117,80 +117,23 @@ public final class DollarInfinity extends AbstractDollar implements var {
         }
         boolean
                 positiveResult =
-                positive && v.isPositive() || !(positive && isNegative()) && !(!positive && v.isPositive());
+                positive && v.positive() || !(positive && negative()) && !(!positive && v.positive());
         return DollarFactory.wrap(new DollarInfinity(errors(), positiveResult));
     }
 
     @NotNull @Override
-    public Integer I() {
+    public Integer toInteger() {
         return positive ? Integer.MAX_VALUE : Integer.MIN_VALUE;
     }
 
     @NotNull
     @Override
-    public Number N() {
+    public Number toNumber() {
         return positive ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
 
     @Override public int sign() {
         return positive ? 1 : -1;
-    }
-
-    @NotNull
-    @Override
-    public var $get(@NotNull var key) {
-        return this;
-    }
-
-    @NotNull @Override public var $append(@NotNull var value) {
-        return this;
-    }
-
-    @NotNull @Override
-    public var $containsValue(@NotNull var value) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull @Override
-    public var $has(@NotNull var key) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull @Override
-    public var $size() {
-        return this;
-    }
-
-    @NotNull @Override public var $prepend(@NotNull var value) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $removeByKey(@NotNull String value) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $set(@NotNull var key, Object value) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var remove(Object value) {
-        return this;
-    }
-
-    @NotNull @Override public var $remove(var value) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public String S() {
-        return positive ? "infinity" : "-infinity";
     }
 
     @Override
@@ -244,12 +187,12 @@ public final class DollarInfinity extends AbstractDollar implements var {
         return false;
     }
 
-    @Override public boolean isCollection() {
+    @Override public boolean collection() {
         return false;
     }
 
     @Override
-    public boolean isInfinite() {
+    public boolean infinite() {
         return false;
     }
 
@@ -259,17 +202,68 @@ public final class DollarInfinity extends AbstractDollar implements var {
     }
 
     @NotNull @Override public ImmutableList<Object> toList() {
-        return ImmutableList.of(N());
+        return ImmutableList.of(toNumber());
     }
 
     @NotNull @Override
     public Map<String, Object> toMap() {
-        return Collections.singletonMap("value", N());
+        return Collections.singletonMap("value", toNumber());
+    }
+
+    @NotNull
+    @Override
+    public var $get(@NotNull var key) {
+        return this;
+    }
+
+    @NotNull @Override public var $append(@NotNull var value) {
+        return this;
+    }
+
+    @NotNull @Override
+    public var $containsValue(@NotNull var value) {
+        return DollarStatic.$(false);
+    }
+
+    @NotNull @Override
+    public var $has(@NotNull var key) {
+        return DollarStatic.$(false);
+    }
+
+    @NotNull @Override
+    public var $size() {
+        return this;
+    }
+
+    @NotNull @Override public var $prepend(@NotNull var value) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $removeByKey(@NotNull String value) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $set(@NotNull var key, Object value) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var remove(Object value) {
+        return this;
+    }
+
+    @NotNull @Override public var $remove(var value) {
+        return this;
     }
 
     @Override
     public int compareTo(@NotNull var o) {
-        if (o.isInfinite()) {
+        if (o.infinite()) {
             return new Integer(sign()).compareTo(o.sign());
         } else {
             if (positive) {
@@ -313,7 +307,7 @@ public final class DollarInfinity extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean isNeitherTrueNorFalse() {
+    public boolean neitherTrueNorFalse() {
         return true;
     }
 
@@ -323,8 +317,14 @@ public final class DollarInfinity extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean isTruthy() {
+    public boolean truthy() {
         return true;
+    }
+
+    @NotNull
+    @Override
+    public String toHumanString() {
+        return positive ? "infinity" : "-infinity";
     }
 
     @NotNull @Override public String toDollarScript() {

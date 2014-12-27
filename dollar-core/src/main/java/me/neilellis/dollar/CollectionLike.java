@@ -83,7 +83,7 @@ public interface CollectionLike {
      */
     @NotNull
     @Guarded(ChainGuard.class) default var $isEmpty() {
-        return DollarStatic.$($size().I() == 0);
+        return DollarStatic.$($size().toInteger() == 0);
     }
 
     @NotNull

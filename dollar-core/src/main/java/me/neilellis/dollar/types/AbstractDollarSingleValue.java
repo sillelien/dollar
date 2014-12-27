@@ -46,7 +46,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     @NotNull @Override public var $get(@NotNull var rhs) {
         if (equals(rhs)) {
             return DollarFactory.wrap(this);
-        } else if (rhs.isInteger() && rhs.I() == 0) {
+        } else if (rhs.integer() && rhs.toInteger() == 0) {
             return DollarFactory.wrap(this);
         } else {
             return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_SINGLE_VALUE_OPERATION,
@@ -102,7 +102,60 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     @Override
-    public var $plus(var v) {
+    public ImmutableList<var> $list() {
+        return ImmutableList.of(this);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> $map() {
+        return ImmutableMap.of($("value"), this);
+    }
+
+    @Override public boolean collection() {
+        return false;
+    }
+
+    @Override
+    public boolean isVoid() {
+        return false;
+    }
+
+    @Override
+    public ImmutableList<String> strings() {
+        return ImmutableList.of(toHumanString());
+    }
+
+    @NotNull
+    @Override
+    public String toHumanString() {
+        return value.toString();
+    }
+
+    @Nullable
+    public JSONObject toOrgJson() {
+        return null;
+
+    }
+
+    @Nullable
+    public ImmutableJsonObject toJsonObject() {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<Object> toList() {
+        return ImmutableList.of(value);
+    }
+
+    @NotNull public Map<Object, Object> toMap() {
+        return Collections.singletonMap("value", value);
+    }
+
+    @NotNull
+    @Override
+    public var $plus(var rhs) {
         return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
@@ -124,68 +177,13 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @Override
-    public boolean isSingleValue() {
+    public boolean singleValue() {
         return true;
     }
 
     public Stream<String> keyStream() {
         return Stream.empty();
 
-    }
-
-    @Nullable
-    public JSONObject toOrgJson() {
-        return null;
-
-    }
-
-    @Nullable
-    public ImmutableJsonObject toJsonObject() {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public String S() {
-        return value.toString();
-    }
-
-
-    @NotNull public Map<Object, Object> toMap() {
-        return Collections.singletonMap("value", value);
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<var, var> $map() {
-        return ImmutableMap.of($("value"), this);
-    }
-
-    @Override public boolean isCollection() {
-        return false;
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> $list() {
-        return ImmutableList.of(this);
-    }
-
-    @Override
-    public boolean isVoid() {
-        return false;
-    }
-
-
-    @Override
-    public ImmutableList<String> strings() {
-        return ImmutableList.of(S());
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<Object> toList() {
-        return ImmutableList.of(value);
     }
 
 }

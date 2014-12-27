@@ -74,13 +74,13 @@ public class DollarNull extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var v) {
+    public var $minus(@NotNull var rhs) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $plus(var v) {
+    public var $plus(var rhs) {
         return this;
     }
 
@@ -92,13 +92,13 @@ public class DollarNull extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $divide(@NotNull var v) {
+    public var $divide(@NotNull var rhs) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var v) {
+    public var $modulus(@NotNull var rhs) {
         return this;
     }
 
@@ -108,19 +108,81 @@ public class DollarNull extends AbstractDollar implements var {
         return this;
     }
 
+    @Override public int sign() {
+        return 0;
+    }
+
     @NotNull @Override
-    public Integer I() {
+    public Integer toInteger() {
         return 0;
     }
 
     @NotNull
     @Override
-    public Number N() {
+    public Number toNumber() {
         return 0;
     }
 
-    @Override public int sign() {
-        return 0;
+    @Override
+    public var $as(Type type) {
+        return DollarFactory.newNull(type);
+
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> $list() {
+        return ImmutableList.of();
+    }
+
+    @Override public Type $type() {
+        return type;
+    }
+
+    @Override public boolean collection() {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> $map() {
+        return ImmutableMap.of(DollarStatic.$("value"), this);
+    }
+
+    @Override
+    public boolean is(@NotNull Type... types) {
+        if (Objects.equals(type, Type.ANY)) {
+            return true;
+        }
+        for (Type type : types) {
+            if (Objects.equals(type, this.type)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override public boolean isNull() {
+        return true;
+    }
+
+    @Override
+    public boolean isVoid() {
+        return false;
+    }
+
+    @Override
+    public ImmutableList<String> strings() {
+        return ImmutableList.of(null);
+    }
+
+    @NotNull @Override public ImmutableList<Object> toList() {
+        return ImmutableList.of(this);
+    }
+
+    @NotNull @Override
+    public Map<String, Object> toMap() {
+        return Collections.singletonMap("value", null);
     }
 
     @NotNull
@@ -145,7 +207,7 @@ public class DollarNull extends AbstractDollar implements var {
 
     @NotNull @Override
     public var $size() {
-        return DollarStatic.$(0);
+        return DollarStatic.$(1);
     }
 
     @NotNull @Override public var $prepend(@NotNull var value) {
@@ -172,74 +234,6 @@ public class DollarNull extends AbstractDollar implements var {
 
     @NotNull @Override public var $remove(var value) {
         return this;
-    }
-
-    @NotNull
-    @Override
-    public String S() {
-        return "";
-    }
-
-    @Override
-    public var $as(Type type) {
-        return DollarFactory.newNull(type);
-
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> $list() {
-        return ImmutableList.of();
-    }
-
-    @Override public Type $type() {
-        return type;
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<var, var> $map() {
-        return ImmutableMap.of(DollarStatic.$("value"), this);
-    }
-
-    @Override
-    public boolean is(@NotNull Type... types) {
-        if (Objects.equals(type, Type.ANY)) {
-            return true;
-        }
-        for (Type type : types) {
-            if (Objects.equals(type, this.type)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override public boolean isCollection() {
-        return false;
-    }
-
-    @Override public boolean isNull() {
-        return true;
-    }
-
-    @Override
-    public boolean isVoid() {
-        return false;
-    }
-
-    @Override
-    public ImmutableList<String> strings() {
-        return ImmutableList.of(null);
-    }
-
-    @NotNull @Override public ImmutableList<Object> toList() {
-        return ImmutableList.of(this);
-    }
-
-    @NotNull @Override
-    public Map<String, Object> toMap() {
-        return Collections.singletonMap("value", null);
     }
 
     @Override
@@ -280,18 +274,24 @@ public class DollarNull extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
     public boolean isTrue() {
         return false;
     }
 
     @Override
-    public boolean isTruthy() {
+    public boolean neitherTrueNorFalse() {
+        return true;
+    }
+
+    @Override
+    public boolean truthy() {
         return false;
+    }
+
+    @NotNull
+    @Override
+    public String toHumanString() {
+        return "";
     }
 
     @NotNull @Override public String toDollarScript() {

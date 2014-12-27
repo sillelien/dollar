@@ -55,7 +55,7 @@ public class DollarList extends AbstractDollar {
         List<var> l = new ArrayList<>();
         for (Object value : list) {
             if ((value instanceof var)) {
-                if (((var) value).isLambda() || !((var) value).isVoid()) {
+                if (((var) value).dynamic() || !((var) value).isVoid()) {
                     l.add((var) value);
                 }
             } else //noinspection StatementWithEmptyBody
@@ -73,7 +73,7 @@ public class DollarList extends AbstractDollar {
         List<var> l = new ArrayList<>();
         for (Object value : values) {
             if ((value instanceof var)) {
-                if (((var) value).isLambda() || !((var) value).isVoid()) {
+                if (((var) value).dynamic() || !((var) value).isVoid()) {
                     l.add((var) value);
                 }
             } else //noinspection StatementWithEmptyBody
@@ -94,17 +94,17 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var v) {
+    public var $minus(@NotNull var rhs) {
         ArrayList<var> newVal = new ArrayList<>(list.mutable());
-        newVal.remove(v);
+        newVal.remove(rhs);
         return DollarFactory.fromValue(newVal, errors());
     }
 
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
-    public var $plus(@NotNull var v) {
-        return $append(v);
+    public var $plus(@NotNull var rhs) {
+        return $append(rhs);
 
     }
 
@@ -123,14 +123,14 @@ public class DollarList extends AbstractDollar {
     public var $divide(@NotNull var rhs) {
 
         var rhsFix = rhs._fixDeep();
-        if (rhsFix.D() == null || rhsFix.D() == 0.0) {
+        if (rhsFix.toDouble() == null || rhsFix.toDouble() == 0.0) {
             return DollarFactory.infinity(true, errors(), rhsFix.errors());
         }
-        final int size = (int) ((double) list.size() / Math.abs(rhsFix.D()));
+        final int size = (int) ((double) list.size() / Math.abs(rhsFix.toDouble()));
         if (Math.abs(size) > list.size()) {
-            return $multiply(DollarFactory.fromValue(1.0d / rhsFix.D(), rhsFix.errors()));
+            return $multiply(DollarFactory.fromValue(1.0d / rhsFix.toDouble(), rhsFix.errors()));
         }
-        if (rhsFix.isPositive()) {
+        if (rhsFix.positive()) {
             return DollarFactory.fromValue(list.subList(0, size), errors(), rhsFix.errors());
         } else {
             return DollarFactory.fromValue(list.subList(list.size() - size, list.size()), errors(), rhsFix.errors());
@@ -140,9 +140,9 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
-    public var $modulus(@NotNull var v) {
-        final int size = (int) ((double) list.size() / v.D());
-        return DollarFactory.fromValue(list.subList(list.size() - size, list.size()), errors(), v.errors());
+    public var $modulus(@NotNull var rhs) {
+        final int size = (int) ((double) list.size() / rhs.toDouble());
+        return DollarFactory.fromValue(list.subList(list.size() - size, list.size()), errors(), rhs.errors());
     }
 
     @NotNull
@@ -151,7 +151,7 @@ public class DollarList extends AbstractDollar {
     public var $multiply(@NotNull var rhs) {
         var v = rhs._fixDeep();
         ArrayList<var> list = new ArrayList<>();
-        final int max = Math.abs(v.I());
+        final int max = Math.abs(v.toInteger());
         if (max > MAX_LIST_MULTIPLIER) {
             return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.MULTIPLIER_TOO_LARGE,
                                          "Cannot multiply a list by a value greater than " + MAX_LIST_MULTIPLIER,
@@ -160,29 +160,161 @@ public class DollarList extends AbstractDollar {
         for (int i = 0; i < max; i++) {
             list.addAll(this.list.mutable());
         }
-        if (v.isNegative()) {
+        if (v.negative()) {
             Collections.reverse(list);
         }
         return DollarFactory.fromValue(list, errors(), v.errors());
     }
 
     @NotNull @Override
-    public Integer I() {
+    public Integer toInteger() {
         return $stream(false).collect(Collectors.summingInt(
-                (java.util.function.ToIntFunction<NumericAware>) (numericAware) -> numericAware.I()));
+                (java.util.function.ToIntFunction<NumericAware>) (numericAware) -> numericAware.toInteger()));
     }
 
     @NotNull
     @Override
-    public Number N() {
+    public Number toNumber() {
         return 0;
+    }
+
+    @Override
+    public var $as(Type type) {
+        if (type.equals(Type.LIST)) {
+            return this;
+        } else if (type.equals(Type.MAP)) {
+            return DollarStatic.$(toMap());
+        } else if (type.equals(Type.STRING)) {
+            return DollarFactory.fromStringValue(toHumanString());
+        } else if (type.equals(Type.VOID)) {
+            return DollarStatic.$void();
+        } else if (type.equals(Type.BOOLEAN)) {
+            return DollarStatic.$(!list.isEmpty());
+        } else {
+            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
+        }
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> $list() {
+        try {
+            return ImmutableList.copyOf(
+                    executor.submit(() -> $stream(false).map(v -> v._fix(false)).collect(
+                            Collectors.toList())).get());
+        } catch (InterruptedException e) {
+            Thread.interrupted();
+            return ImmutableList.of(DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INTERRUPTED, e, false));
+
+        } catch (ExecutionException e) {
+            return ImmutableList.of(DollarFactory.failure(me.neilellis.dollar.types.ErrorType.EXECUTION_FAILURE, e,
+                                                          false));
+
+        }
+    }
+
+    @Override public Type $type() {
+        return Type.LIST;
+    }
+
+    @Override public boolean collection() {
+        return true;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> $map() {
+        return null;
+    }
+
+    @Override
+    public boolean is(@NotNull Type... types) {
+        for (Type type : types) {
+            if (Objects.equals(type, Type.LIST)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isVoid() {
+        return false;
+    }
+
+    @Override
+    public ImmutableList<String> strings() {
+        return ImmutableList.copyOf(list.stream().map(Object::toString).collect(Collectors.toList()));
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<Object> toList() {
+        List<Object> newList = new ArrayList<>();
+        for (var val : list) {
+            newList.add(val.toJavaObject());
+        }
+        return ImmutableList.copyOf(newList);
+
+    }
+
+    @NotNull @Override
+    public Map<String, Object> toMap() {
+        return Collections.singletonMap("value", $list());
+    }
+
+    @NotNull
+    @Override
+    public String toHumanString() {
+        return jsonArray().toString();
+    }
+
+    /**
+     * Convert this object into a Dollar JsonArray.
+     *
+     * @return a JsonArray
+     */
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    public JsonArray jsonArray() {
+        return (JsonArray) DollarFactory.toJson(this);
+    }
+
+    @NotNull @Override public String toDollarScript() {
+        StringBuilder builder = new StringBuilder("[");
+        for (var value : list) {
+            builder.append(value.toDollarScript()).append(",");
+        }
+        builder.append("]");
+        return builder.toString();
+    }
+
+    @NotNull
+    @Override
+    public <R> R toJavaObject() {
+        return (R) jsonArray();
+    }
+
+    @NotNull
+    @Override
+    public JSONObject toOrgJson() {
+        return new JSONObject(toJsonObject().toMap());
+    }
+
+    @org.jetbrains.annotations.NotNull
+    @Override
+    public ImmutableJsonObject toJsonObject() {
+        JsonArray array = jsonArray();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.putArray("value", array);
+        return new ImmutableJsonObject(jsonObject);
     }
 
     @NotNull
     @Override
     public var $get(@NotNull var key) {
-        if (key.isNumber()) {
-            return list.get(key.I());
+        if (key.number()) {
+            return list.get(key.toInteger());
         }
         for (var var : list) {
             if (var.equals(key)) {
@@ -196,7 +328,7 @@ public class DollarList extends AbstractDollar {
     @NotNull @Override public var $append(@NotNull var value) {
 
         final ArrayList<var> newList = new ArrayList<>($list().mutable());
-        if (value.isList()) {
+        if (value.list()) {
             newList.addAll(value.$list().mutable());
         } else {
             newList.add(value);
@@ -223,7 +355,7 @@ public class DollarList extends AbstractDollar {
     @NotNull @Override public var $prepend(@NotNull var value) {
         final ArrayList newList = new ArrayList();
         newList.addAll($list().mutable());
-        if (value.isList()) {
+        if (value.list()) {
             newList.addAll(value.$list().mutable());
         } else {
             newList.add(value);
@@ -241,8 +373,8 @@ public class DollarList extends AbstractDollar {
     @Override
     public var $set(@NotNull var key, Object value) {
         ArrayList<var> newVal = new ArrayList<>(list.mutable());
-        if (key.isInteger()) {
-            newVal.set(key.I(), DollarFactory.fromValue(value));
+        if (key.integer()) {
+            newVal.set(key.toInteger(), DollarFactory.fromValue(value));
         } else {
             return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_LIST_OPERATION);
         }
@@ -340,6 +472,11 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public boolean list() {
+        return true;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
@@ -351,17 +488,6 @@ public class DollarList extends AbstractDollar {
             return list.mutable().equals(((var) obj).$list().mutable());
         }
         return false;
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<var, var> $map() {
-        return null;
-    }
-
-    @Override
-    public boolean isList() {
-        return true;
     }
 
     @Override
@@ -387,152 +513,18 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
     public boolean isTrue() {
         return false;
     }
 
     @Override
-    public boolean isTruthy() {
-        return !list.isEmpty();
-    }
-
-
-    @NotNull
-    @Override
-    public <R> R toJavaObject() {
-        return (R) jsonArray();
-    }
-
-    @NotNull @Override public String toDollarScript() {
-        StringBuilder builder = new StringBuilder("[");
-        for (var value : list) {
-            builder.append(value.toDollarScript()).append(",");
-        }
-        builder.append("]");
-        return builder.toString();
-    }
-
-    /**
-     * Convert this object into a Dollar JsonArray.
-     *
-     * @return a JsonArray
-     */
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    public JsonArray jsonArray() {
-        return (JsonArray) DollarFactory.toJson(this);
-    }
-
-    @NotNull
-    @Override
-    public JSONObject toOrgJson() {
-        return new JSONObject(toJsonObject().toMap());
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> $list() {
-        try {
-            return ImmutableList.copyOf(
-                    executor.submit(() -> $stream(false).map(v -> v._fix(false)).collect(
-                            Collectors.toList())).get());
-        } catch (InterruptedException e) {
-            Thread.interrupted();
-            return ImmutableList.of(DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INTERRUPTED, e, false));
-
-        } catch (ExecutionException e) {
-            return ImmutableList.of(DollarFactory.failure(me.neilellis.dollar.types.ErrorType.EXECUTION_FAILURE, e,
-                                                          false));
-
-        }
-    }
-
-    @org.jetbrains.annotations.NotNull
-    @Override
-    public ImmutableJsonObject toJsonObject() {
-        JsonArray array = jsonArray();
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.putArray("value", array);
-        return new ImmutableJsonObject(jsonObject);
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<Object> toList() {
-        List<Object> newList = new ArrayList<>();
-        for (var val : list) {
-            newList.add(val.toJavaObject());
-        }
-        return ImmutableList.copyOf(newList);
-
-    }
-
-
-    @Override
-    public boolean isVoid() {
-        return false;
-    }
-
-
-    @Override
-    public ImmutableList<String> strings() {
-        return ImmutableList.copyOf(list.stream().map(Object::toString).collect(Collectors.toList()));
-    }
-
-
-    @NotNull @Override
-    public Map<String, Object> toMap() {
-        return Collections.singletonMap("value", $list());
-    }
-
-
-    @Override public boolean isCollection() {
+    public boolean neitherTrueNorFalse() {
         return true;
     }
 
-
     @Override
-    public var $as(Type type) {
-        if (type.equals(Type.LIST)) {
-            return this;
-        } else if (type.equals(Type.MAP)) {
-            return DollarStatic.$(toMap());
-        } else if (type.equals(Type.STRING)) {
-            return DollarFactory.fromStringValue(S());
-        } else if (type.equals(Type.VOID)) {
-            return DollarStatic.$void();
-        } else if (type.equals(Type.BOOLEAN)) {
-            return DollarStatic.$(!list.isEmpty());
-        } else {
-            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
-        }
-    }
-
-
-    @Override public Type $type() {
-        return Type.LIST;
-    }
-
-    @NotNull
-    @Override
-    public String S() {
-        return jsonArray().toString();
-    }
-
-
-    @Override
-    public boolean is(@NotNull Type... types) {
-        for (Type type : types) {
-            if (Objects.equals(type, Type.LIST)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean truthy() {
+        return !list.isEmpty();
     }
 
 }

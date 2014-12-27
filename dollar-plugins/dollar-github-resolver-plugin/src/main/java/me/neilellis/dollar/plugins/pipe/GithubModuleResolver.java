@@ -18,7 +18,6 @@ package me.neilellis.dollar.plugins.pipe;
 
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.TypeAware;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.deps.DependencyRetriever;
 import me.neilellis.dollar.script.DollarParser;
@@ -104,7 +103,7 @@ public class GithubModuleResolver implements ModuleResolver {
                     DependencyRetriever.retrieve(module.$("dependencies")
                                                        .$list()
                                                        .stream()
-                                                       .map(TypeAware::$S)
+                                                       .map(var::toString)
                                                        .collect(Collectors.toList()));
         }
         return (params) -> scope.getDollarParser().inScope(false, "github-module", scope, newScope -> {

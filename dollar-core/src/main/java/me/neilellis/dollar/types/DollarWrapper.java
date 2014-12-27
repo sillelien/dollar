@@ -65,14 +65,14 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var v) {
-        return getValue().$minus(v);
+    public var $minus(@NotNull var rhs) {
+        return getValue().$minus(rhs);
     }
 
     @NotNull
     @Override
-    public var $plus(var v) {
-        return getValue().$plus(v);
+    public var $plus(var rhs) {
+        return getValue().$plus(rhs);
     }
 
     @NotNull
@@ -83,14 +83,14 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $divide(@NotNull var v) {
-        return getValue().$divide(v);
+    public var $divide(@NotNull var rhs) {
+        return getValue().$divide(rhs);
     }
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var v) {
-        return getValue().$modulus(v);
+    public var $modulus(@NotNull var rhs) {
+        return getValue().$modulus(rhs);
     }
 
     @NotNull
@@ -100,28 +100,28 @@ public class DollarWrapper implements var {
     }
 
     @NotNull @Override
-    public Integer I() {
-        return getValue().I();
+    public Integer toInteger() {
+        return getValue().toInteger();
     }
 
     @NotNull @Override
-    public Long L() {
-        return getValue().L();
+    public Long toLong() {
+        return getValue().toLong();
     }
 
     @NotNull
     @Override
-    public Number N() {
-        return getValue().N();
+    public Number toNumber() {
+        return getValue().toNumber();
+    }
+
+    @NotNull @Override
+    public Double toDouble() {
+        return getValue().toDouble();
     }
 
     @Override public int sign() {
         return getValue().sign();
-    }
-
-    @NotNull @Override
-    public Double D() {
-        return getValue().D();
     }
 
     var getValue() {
@@ -232,6 +232,109 @@ public class DollarWrapper implements var {
     }
 
     @Override
+    public var $as(Type type) {
+        return getValue().$as(type);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> $list() {
+        return getValue().$list();
+    }
+
+    @Override public Type $type() {
+        return getValue().$type();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> $map() {
+        return getValue().$map();
+    }
+
+    @Override
+    public boolean is(@NotNull Type... types) {
+        return getValue().is(types);
+    }
+
+    @Override public boolean collection() {
+        return getValue().collection();
+    }
+
+    @Override
+    public boolean dynamic() {
+        return getValue().dynamic();
+    }
+
+    @Override
+    public boolean list() {
+        return getValue().list();
+    }
+
+    @Override
+    public boolean map() {
+        return getValue().map();
+    }
+
+    @Override
+    public boolean number() {
+        return getValue().number();
+    }
+
+    @Override
+    public boolean decimal() {
+        return getValue().decimal();
+    }
+
+    @Override
+    public boolean integer() {
+        return getValue().integer();
+    }
+
+    @Override public boolean pair() {
+        return getValue().pair();
+    }
+
+    @Override
+    public boolean singleValue() {
+        return getValue().singleValue();
+    }
+
+    @Override
+    public boolean string() {
+        return getValue().string();
+    }
+
+    @Override
+    public boolean uri() {
+        return getValue().uri();
+    }
+
+    @Override
+    public boolean isVoid() {
+        return getValue().isVoid();
+    }
+
+    @Override
+    public ImmutableList<String> strings() {
+        return getValue().strings();
+    }
+
+    @NotNull @Override public ImmutableList<?> toList() {
+        return getValue().toList();
+    }
+
+    @NotNull @Override
+    public Map<?, ?> toMap() {
+        return getValue().toMap();
+    }
+
+    @NotNull @Override
+    public InputStream toStream() {
+        return getValue().toStream();
+    }
+
+    @Override
     public var $choose(var map) {
         return tracer.trace(this, getValue().$choose(map), StateTracer.Operations.CHOOSE);
     }
@@ -275,59 +378,6 @@ public class DollarWrapper implements var {
 
     @NotNull @Override public StateMachine<ResourceState, Signal> getStateMachine() {
         return getValue().getStateMachine();
-    }
-
-    @NotNull
-    @Override
-    public var $default(var v) {
-        return getValue().$default(v);
-    }
-
-    @NotNull
-    @Override
-    public var $mimeType() {
-        return getValue().$mimeType();
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $stream(boolean parallel) {
-        return getValue().$stream(false);
-    }
-
-    @NotNull
-    @Override
-    public var err() {
-        return getValue().err();
-
-    }
-
-    @NotNull
-    @Override
-    public var out() {
-        return getValue().out();
-    }
-
-    @NotNull @Override public String toDollarScript() {
-        return getValue().toString();
-    }
-
-    @Nullable
-    @Override
-    public <R> R toJavaObject() {
-        return getValue().toJavaObject();
-    }
-
-    @Nullable
-    @Override
-    public JSONObject toOrgJson() {
-        return getValue().toOrgJson();
-    }
-
-    @Nullable
-    @Override
-    public ImmutableJsonObject toJsonObject() {
-        return getValue().toJsonObject();
     }
 
     @NotNull
@@ -518,114 +568,6 @@ public class DollarWrapper implements var {
         return getValue().$remove(value);
     }
 
-    @Override
-    public String S() {
-        return getValue().S();
-    }
-
-    @Override
-    public var $as(Type type) {
-        return getValue().$as(type);
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> $list() {
-        return getValue().$list();
-    }
-
-    @Override public Type $type() {
-        return getValue().$type();
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<var, var> $map() {
-        return getValue().$map();
-    }
-
-    @Override
-    public boolean is(@NotNull Type... types) {
-        return getValue().is(types);
-    }
-
-    @Override public boolean isCollection() {
-        return getValue().isCollection();
-    }
-
-    @Override
-    public boolean isDecimal() {
-        return getValue().isDecimal();
-    }
-
-    @Override
-    public boolean isInteger() {
-        return getValue().isInteger();
-    }
-
-    @Override
-    public boolean isLambda() {
-        return getValue().isLambda();
-    }
-
-    @Override
-    public boolean isList() {
-        return getValue().isList();
-    }
-
-    @Override
-    public boolean isMap() {
-        return getValue().isMap();
-    }
-
-    @Override
-    public boolean isNumber() {
-        return getValue().isNumber();
-    }
-
-    @Override public boolean isPair() {
-        return getValue().isPair();
-    }
-
-    @Override
-    public boolean isSingleValue() {
-        return getValue().isSingleValue();
-    }
-
-    @Override
-    public boolean isString() {
-        return getValue().isString();
-    }
-
-    @Override
-    public boolean isUri() {
-        return getValue().isUri();
-    }
-
-    @Override
-    public boolean isVoid() {
-        return getValue().isVoid();
-    }
-
-    @Override
-    public ImmutableList<String> strings() {
-        return getValue().strings();
-    }
-
-    @NotNull @Override public ImmutableList<?> toList() {
-        return getValue().toList();
-    }
-
-    @NotNull @Override
-    public Map<?, ?> toMap() {
-        return getValue().toMap();
-    }
-
-    @NotNull @Override
-    public InputStream toStream() {
-        return getValue().toStream();
-    }
-
     @NotNull
     @Override
     public var _copy() {
@@ -652,16 +594,6 @@ public class DollarWrapper implements var {
 
     @Override public TypePrediction _predictType() {
         return getValue()._predictType();
-    }
-
-    @Override
-    public void _src(String src) {
-        getValue()._src(src);
-    }
-
-    @Override
-    public String _src() {
-        return getValue()._src();
     }
 
     @NotNull
@@ -726,6 +658,16 @@ public class DollarWrapper implements var {
     }
 
     @Override
+    public String getMetaAttribute(String key) {
+        return getValue().getMetaAttribute(key);
+    }
+
+    @Override
+    public void setMetaAttribute(String key, String value) {
+        getValue().setMetaAttribute(key, value);
+    }
+
+    @Override
     public int hashCode() {
         return getValue().hashCode();
     }
@@ -752,8 +694,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public boolean isNeitherTrueNorFalse() {
-        return getValue().isNeitherTrueNorFalse();
+    public boolean neitherTrueNorFalse() {
+        return getValue().neitherTrueNorFalse();
     }
 
     @Override
@@ -762,18 +704,66 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public boolean isTruthy() {
-        return getValue().isTruthy();
+    public boolean truthy() {
+        return getValue().truthy();
     }
 
     @Override
-    public void setMetaAttribute(String key, String value) {
-        getValue().setMetaAttribute(key, value);
+    public String toHumanString() {
+        return getValue().toHumanString();
     }
 
+    @NotNull
     @Override
-    public String getMetaAttribute(String key) {
-        return getValue().getMetaAttribute(key);
+    public var $default(var v) {
+        return getValue().$default(v);
+    }
+
+    @NotNull
+    @Override
+    public var $mimeType() {
+        return getValue().$mimeType();
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $stream(boolean parallel) {
+        return getValue().$stream(false);
+    }
+
+    @NotNull
+    @Override
+    public var err() {
+        return getValue().err();
+
+    }
+
+    @NotNull
+    @Override
+    public var out() {
+        return getValue().out();
+    }
+
+    @NotNull @Override public String toDollarScript() {
+        return getValue().toString();
+    }
+
+    @Nullable
+    @Override
+    public <R> R toJavaObject() {
+        return getValue().toJavaObject();
+    }
+
+    @Nullable
+    @Override
+    public JSONObject toOrgJson() {
+        return getValue().toOrgJson();
+    }
+
+    @Nullable
+    @Override
+    public ImmutableJsonObject toJsonObject() {
+        return getValue().toJsonObject();
     }
 
 }

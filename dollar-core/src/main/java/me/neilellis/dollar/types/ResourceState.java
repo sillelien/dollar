@@ -17,6 +17,8 @@
 package me.neilellis.dollar.types;
 
 /**
+ * The current state of a resource.
+ *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public enum ResourceState {

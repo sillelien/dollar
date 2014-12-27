@@ -82,7 +82,7 @@ public class SimpleLogStateTracer implements StateTracer {
             unwrapped = value;
         }
         if (value instanceof var &&
-            (((var) unwrapped).isLambda() || unwrapped instanceof DollarList || unwrapped instanceof DollarMap)) {
+            (((var) unwrapped).dynamic() || unwrapped instanceof DollarList || unwrapped instanceof DollarMap)) {
             formatted = "<" + unwrapped.getClass().getSimpleName() + ">";
         } else {
             formatted = String.valueOf(value);

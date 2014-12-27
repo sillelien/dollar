@@ -17,6 +17,8 @@
 package me.neilellis.dollar;
 
 /**
+ * A signal to send to a resource.
+ *
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public enum Signal {

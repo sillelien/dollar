@@ -65,7 +65,7 @@ public class RandomResourceFactory implements URIHandlerFactory {
             }
 
             @Override public var write(var value, boolean blocking, boolean mutating) {
-                return $(Math.random() % value.D());
+                return $(Math.random() % value.toDouble());
             }
 
             @Override public void destroy() { }
@@ -73,7 +73,7 @@ public class RandomResourceFactory implements URIHandlerFactory {
             @Override public var drain() { return $(Math.random()); }
 
             @Override public var get(var key) {
-                return $(Math.random() % key.D());
+                return $(Math.random() % key.toDouble());
             }
 
             @Override public void init() { }

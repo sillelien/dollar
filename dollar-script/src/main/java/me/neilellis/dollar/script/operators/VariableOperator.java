@@ -41,7 +41,7 @@ public class VariableOperator extends UnaryOp {
 
         var lambda = DollarScriptSupport.wrapReactive(scope, () -> {
             String key = from.$S();
-            boolean numeric = from.isNumber();
+            boolean numeric = from.number();
 
             List<Scope> scopes = new ArrayList<>(scope.getDollarParser().scopes());
             Collections.reverse(scopes);

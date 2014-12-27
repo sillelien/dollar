@@ -23,40 +23,86 @@ import me.neilellis.dollar.types.ResourceState;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
+ * The methods that manage the state of service type objects, such as {@link me.neilellis.dollar.types.DollarURI}
+ * @param <R>  the actual type of the subclass
+ * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface StateAware<R extends StateAware<R>> {
 
+    /**
+     * Create the underlying resource.
+     *
+     * @return this
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     R $create();
 
+    /**
+     * Destroy the underlying resource.
+     *
+     * @return this
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     R $destroy();
 
+    /**
+     * Pause the underlying resource.
+     *
+     * @return this
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     R $pause();
 
+    /**
+     * Send an arbitrary {@link me.neilellis.dollar.Signal} to the underlying resource.
+     *
+     * @param signal the signal to send
+     */
     @Guarded(NotNullGuard.class) void $signal(@NotNull Signal signal);
 
+    /**
+     * Start the underlying resource.
+     *
+     * @return this
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     R $start();
 
+    /**
+     * Returns the state of the underlying resource.
+     *
+     * @return the state
+     */
     @NotNull
-    @Guarded(NotNullGuard.class)
-    R $state();
+    @Guarded(NotNullGuard.class) var $state();
 
+    /**
+     * Stop the underlying resource.
+     *
+     * @return the r
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     R $stop();
 
+    /**
+     * Unpause the underlying resource
+     *
+     * @return this
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     R $unpause();
 
+    /**
+     * Returns the state machine used to manage state for the resource.
+     *
+     * @return the state machine
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     StateMachine<ResourceState, Signal> getStateMachine();

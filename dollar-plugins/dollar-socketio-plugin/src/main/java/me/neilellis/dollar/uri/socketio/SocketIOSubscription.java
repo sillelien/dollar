@@ -57,7 +57,7 @@ class SocketIOSubscription implements DataListener<String>, ConnectListener, Dis
         if (!destroyed) {
             final var result = consumer.pipe(DollarFactory.fromStringValue(data));
             if (ackSender.isAckRequested()) {
-                ackSender.sendAckData(result.S());
+                ackSender.sendAckData(result.toHumanString());
             }
         }
 

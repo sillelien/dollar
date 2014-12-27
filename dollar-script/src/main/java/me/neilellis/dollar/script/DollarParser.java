@@ -298,9 +298,10 @@ public class DollarParser {
                                  public var map(Token token) {
                                      final var v = (var) token.value();
                                      return wrapReactive(scope,
-                                                         () -> Builtins.execute(v.S(), Arrays.asList(), scope,
+                                                         () -> Builtins.execute(v.toHumanString(), Arrays.asList(),
+                                                                                scope,
                                                                                 pure),
-                                                         new SourceValue(scope, token), v.S(), v
+                                                         new SourceValue(scope, token), v.toHumanString(), v
                                      );
                                  }
                              }),
@@ -335,9 +336,10 @@ public class DollarParser {
                                  public var map(Token token) {
                                      final var v = (var) token.value();
                                      return wrapReactive(scope,
-                                                         () -> Builtins.execute(v.S(), Arrays.asList(), scope,
+                                                         () -> Builtins.execute(v.toHumanString(), Arrays.asList(),
+                                                                                scope,
                                                                                 pure),
-                                                         new SourceValue(scope, token), v.S(), v
+                                                         new SourceValue(scope, token), v.toHumanString(), v
                                      );
                                  }
                              })))
@@ -365,9 +367,9 @@ public class DollarParser {
                         EQUIVALENCE_PRIORITY)
                 .infixl(op(new BinaryOp("multiply", (lhs, rhs) -> {
                     final var lhsFix = lhs._fix(false);
-                    if (lhsFix.isCollection()) {
+                    if (lhsFix.collection()) {
                         var newValue = lhsFix._fixDeep(false);
-                        Long max = rhs.L();
+                        Long max = rhs.toLong();
                         for (int i = 1; i < max; i++) {
                             newValue = newValue.$plus(lhs._fixDeep());
                         }
@@ -392,7 +394,7 @@ public class DollarParser {
                                                                                     rhsFix.toDollarScript());
                     }
                 }, scope), "<=>"), LINE_PREFIX_PRIORITY)
-                .prefix(op(new UnaryOp("truthy", scope, i -> $(i.isTruthy())), "~", "truthy"), UNARY_PRIORITY)
+                .prefix(op(new UnaryOp("truthy", scope, i -> $(i.truthy())), "~", "truthy"), UNARY_PRIORITY)
                 .prefix(op(new UnaryOp("size", scope, var::$size), "#", "size"), UNARY_PRIORITY)
                 .infixl(op(new BinaryOp(
                         "else", (lhs, rhs) -> {

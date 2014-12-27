@@ -55,7 +55,7 @@ public class MapDBMapURI extends AbstractMapDBURI {
     }
 
     @Override public var write(var value, boolean blocking, boolean mutating) {
-        if (value.isPair()) {
+        if (value.pair()) {
             return set($(value.getPairKey()), value.getPairValue());
         } else {
             throw new UnsupportedOperationException("Can only write pairs to a map");

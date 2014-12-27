@@ -80,10 +80,6 @@ public class DollarError extends DollarVoid {
         this.errorMessage = errorMessage;
     }
 
-    @NotNull @Override public String S() {
-        return errorType.toString() + " " + errorMessage + " " + errors();
-    }
-
     @Override public Type $type() {
         return Type.ERROR;
     }
@@ -94,6 +90,10 @@ public class DollarError extends DollarVoid {
 
     @Override public boolean isVoid() {
         return false;
+    }
+
+    @NotNull @Override public String toHumanString() {
+        return errorType.toString() + " " + errorMessage + " " + errors();
     }
 
     @NotNull @Override public String toDollarScript() {

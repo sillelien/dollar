@@ -35,16 +35,16 @@ import static me.neilellis.dollar.DollarStatic.$void;
 public class VarSerializer implements Serializer<var>, Serializable {
     @Override public void serialize(DataOutput out, var value) throws IOException {
         if (value != null && !value.isVoid()) {
-            out.writeInt(value.$type().ordinal());
+            out.writeUTF(value.$type().name());
             out.writeUTF(DollarFactory.serialize(value));
         } else {
-            out.writeInt(Type.VOID.ordinal());
+            out.writeUTF(Type.VOID.name());
             out.writeUTF("");
         }
     }
 
     @Override public var deserialize(DataInput in, int available) throws IOException {
-        final Type type = Type.values()[in.readInt()];
+        final Type type = Type.valueOf(in.readUTF());
         if (Objects.equals(type, Type.VOID)) {
             in.readUTF();
             return $void();

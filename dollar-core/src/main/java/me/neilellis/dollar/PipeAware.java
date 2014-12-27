@@ -24,15 +24,18 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
+@Deprecated
 public interface PipeAware {
     @NotNull
     @Guarded(NotNullGuard.class)
+    @Deprecated
     @Guarded(ChainGuard.class) var $eval(@NotNull String js);
 
     default
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
+    @Deprecated
     var $pipe(@NotNull Pipeable pipe) {
         return $pipe("anon", pipe);
     }
@@ -40,13 +43,16 @@ public interface PipeAware {
     @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
+    @Deprecated
     var $pipe(@NotNull String label, @NotNull Pipeable pipe);
 
     @NotNull
     @Guarded(NotNullGuard.class)
+    @Deprecated
     @Guarded(ChainGuard.class) var $pipe(@NotNull String label, @NotNull String js);
 
     @NotNull
+    @Deprecated
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
     var $pipe(@NotNull Class<? extends Pipeable> clazz);

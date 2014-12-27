@@ -32,7 +32,7 @@ public class DollarControlFlowTest {
 
     @Test
     public void testBasics() throws InterruptedException {
-        assertEquals(100, (long) $("Charlie").$choose(map).L());
+        assertEquals(100, (long) $("Charlie").$choose(map).toLong());
 
     }
 

@@ -27,6 +27,6 @@ class WelcomeMessage extends Unit {
     }
 
     {
-        out = $("Welcome, " + in.S());
+        out = $("Welcome, " + in.toHumanString());
     }
 }

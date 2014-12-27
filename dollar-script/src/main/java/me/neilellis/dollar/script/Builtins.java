@@ -53,10 +53,10 @@ public class Builtins {
             return $(String.format(message, values.stream().map(var::toJavaObject).toArray()));
         }, true, "FORMAT");
         addJavaStyle(1, 1, (pure, args, scope) -> {
-            return args.get(0).$list().stream().min((o1, o2) -> (int) Math.signum(o1.D() - o2.D())).get();
+            return args.get(0).$list().stream().min((o1, o2) -> (int) Math.signum(o1.toDouble() - o2.toDouble())).get();
         }, true, "MIN");
         addJavaStyle(1, 1, (pure, args, scope) -> {
-            return args.get(0).$list().stream().max((o1, o2) -> (int) Math.signum(o1.D() - o2.D())).get();
+            return args.get(0).$list().stream().max((o1, o2) -> (int) Math.signum(o1.toDouble() - o2.toDouble())).get();
         }, true, "MAX");
         addJavaStyle(1, 1, (pure, args, scope) -> {
             return $(args.get(0).$list().stream().sorted().collect(Collectors.toList()));
@@ -78,18 +78,20 @@ public class Builtins {
         addDollarSingleNoScope(false, StateAware::$unpause, "UNPAUSE");
         addDollarSingleNoScope(false, StateAware::$state, "STATE");
 
-        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).D() / DAY_IN_MILLIS, true, "Millis", "Milli", "MS",
+        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toDouble() / DAY_IN_MILLIS, true, "Millis", "Milli", "MS",
                      "Milliseconds", "Millisecond");
-        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).D() / (24.0 * 60.0 * 60.0), true, "Secs", "S", "Sec",
+        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toDouble() / (24.0 * 60.0 * 60.0), true, "Secs", "S",
+                     "Sec",
                      "Seconds",
                      "Second");
-        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).D() / (24.0 * 60.0), true, "M", "Minutes", "Minute");
+        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toDouble() / (24.0 * 60.0), true, "M", "Minutes",
+                     "Minute");
         addJavaStyle(1, 1, (pure, args, scope) -> {
-            return args.get(0).D() / 24.0;
+            return args.get(0).toDouble() / 24.0;
         }, true, "Hrs", "Hours", "H", "Hour");
         addJavaStyle(1, 1, (pure, args, scope) -> {
             try {
-                Thread.sleep((long) (args.get(0).D() * DAY_IN_MILLIS));
+                Thread.sleep((long) (args.get(0).toDouble() * DAY_IN_MILLIS));
                 return args.get(0);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -103,7 +105,7 @@ public class Builtins {
                 return DollarFactory.failure(ErrorType.valueOf(args.get(0).toString()), args.get(1).toString(), true);
             }
         }, true, "ERROR");
-        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).D(), true, "Days", "Day", "D");
+        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toDouble(), true, "Days", "Day", "D");
         addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toString().length(), true, "LEN");
         addJavaStyle(0, 0, (pure, args, scope) -> $(new Date()), false, "DATE");
         addJavaStyle(0, 0, (pure, args, scope) -> System.currentTimeMillis(), false, "TIME");
