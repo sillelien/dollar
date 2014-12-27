@@ -63,7 +63,15 @@ public class Plugins {
         if (!loader.iterator().hasNext()) {
             return NoOpProxy.newInstance(serviceClass);
         }
-        return loader.iterator().next();
+        int priority = -1;
+        T plugin = null;
+        for (T t : loader) {
+            if (t.priority() > priority) {
+                plugin = t;
+                priority = t.priority();
+            }
+        }
+        return plugin;
     }
 
 }

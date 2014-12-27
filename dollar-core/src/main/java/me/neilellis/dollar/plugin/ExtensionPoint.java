@@ -22,4 +22,8 @@ package me.neilellis.dollar.plugin;
 public interface ExtensionPoint<T extends ExtensionPoint> extends SingletonExtensionPoint {
 
     T copy();
+
+    default int priority() {
+        return 1;
+    }
 }
