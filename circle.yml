@@ -38,7 +38,9 @@ dependencies:
 test:
   override:
     - sudo ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
-    - mvn -q integration-test
+    - mvn -q integration-test:
+      timeout: 360
+
   pre:
 #     - mvn org.pitest:pitest-maven:mutationCoverage
      - mvn com.code-spotter:codespotter-maven-plugin::check

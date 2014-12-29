@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,10 @@ package me.neilellis.dollar.script;
 
 import com.google.common.io.CharStreams;
 import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.test.CircleCiParallelRule;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.io.InputStreamReader;
@@ -27,6 +29,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ParserTest {
+
+    @ClassRule public CircleCiParallelRule className = new CircleCiParallelRule();
 
     private boolean parallel;
     private me.neilellis.dollar.script.ParserOptions options = new ParserOptions();
