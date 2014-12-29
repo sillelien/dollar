@@ -39,9 +39,9 @@ test:
   override:
     - sudo ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
     - mvn -q integration-test
-
-#  pre:
+  pre:
 #     - mvn org.pitest:pitest-maven:mutationCoverage
+     - mvn com.code-spotter:codespotter-maven-plugin::check
 
 deployment:
   staging:
