@@ -74,9 +74,9 @@ deployment:
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
         - mvn -q -Dgpg.passphrase=${GPG_PASSPHRASE} install deploy
+        - mvn site:site site:stage
         - ./build-docs.sh:
             timeout: 360
         - pack/pack.sh
         - pack/upload.sh ${release} ${CIRCLE_BUILD_NUM}
-#        - mvn site:site site:stage
 #        - mvn scm-publish:publish-scm
