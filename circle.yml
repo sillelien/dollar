@@ -44,7 +44,7 @@ test:
         timeout: 600
 
   post:
-    - mvn org.pitest:pitest-maven:mutationCoverage -pl dollar:dollar-core
+    - mvn org.pitest:pitest-maven:mutationCoverage -pl me.neilellis:dollar-core
 #     - mvn com.code-spotter:codespotter-maven-plugin::check  -Dmaven.test.skip=true
 
 deployment:
