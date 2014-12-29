@@ -25,7 +25,7 @@ dependencies:
 #    - sudo apt-get install -y gpg
     - ./gen-key.sh ${GPG_PASSPHRASE}
     - "mkdir -p ~/.codespotter/ || : "
-    - echo "${CODE_SPOTTER_KEY}" > ~/.codespotter/.code-spotter.key
+    - echo "${CODE_SPOTTER_KEY}" > ~/.codespotter/.codespotter-key
     - envsubst < settings.xml > ~/.m2/settings.xml
 #    - "mvn -q -Dgpg.passphrase=${GPG_PASSPHRASE} clean install -Dmaven.test.skip=true":
 #        timeout: 600
