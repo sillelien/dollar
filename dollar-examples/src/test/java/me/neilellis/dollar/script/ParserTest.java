@@ -30,7 +30,7 @@ import java.util.List;
 
 public class ParserTest {
 
-    @ClassRule public CircleCiParallelRule className = new CircleCiParallelRule();
+    @ClassRule public static final CircleCiParallelRule className = new CircleCiParallelRule();
 
     private boolean parallel;
     private me.neilellis.dollar.script.ParserOptions options = new ParserOptions();

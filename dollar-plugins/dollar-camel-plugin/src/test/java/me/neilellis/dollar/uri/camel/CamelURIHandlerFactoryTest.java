@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,8 +48,8 @@ public class CamelURIHandlerFactoryTest {
         final URIHandler camelIntegrationProvider = camelURIHandlerFactory.forURI("camel", URI.parse(vmListenURI));
         camelIntegrationProvider.subscribe((value) -> {
             try {
-                System.out.println("***: " + value);
-                assertEquals("Listen Test", value.toString());
+                System.out.println("***: " + value[0]);
+                assertEquals("Listen Test", value[0].toString());
                 countDownLatch.countDown();
                 return $void();
             } catch (Exception e) {
