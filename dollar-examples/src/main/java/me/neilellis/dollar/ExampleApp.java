@@ -17,13 +17,15 @@
 package me.neilellis.dollar;
 
 import me.neilellis.dollar.script.DollarParser;
+import me.neilellis.dollar.script.ParserOptions;
 
 import java.io.IOException;
 
-class ExampleApp {
+public class ExampleApp {
 
 
     public static void main(String[] args) throws IOException {
-        new DollarParser().parse(ExampleApp.class.getResourceAsStream("/example.ds"), "/example.ds", false);
+        new DollarParser(new ParserOptions()).parse(ExampleApp.class.getResourceAsStream("/example.ds"), "/example.ds",
+                                                    false);
     }
 }

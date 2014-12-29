@@ -45,12 +45,6 @@ import java.util.concurrent.Executors;
 public class DollarStatic {
 
     /**
-     * The shared configuration for Dollar.
-     */
-    public static final Configuration config = new Configuration();
-
-
-    /**
      * The thread context that all Dollar classes have access to.
      */
     @NotNull
@@ -61,10 +55,12 @@ public class DollarStatic {
             return new DollarThreadContext();
         }
     };
-
     @NotNull
     private static final ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
-
+    /**
+     * The shared configuration for Dollar.
+     */
+    public static Configuration config = new SystemPropertyConfiguration();
 
     /**
      * Log and rethrow.

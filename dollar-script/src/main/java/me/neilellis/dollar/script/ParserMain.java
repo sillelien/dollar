@@ -16,16 +16,24 @@
 
 package me.neilellis.dollar.script;
 
+import com.beust.jcommander.JCommander;
+import me.neilellis.dollar.Configuration;
+import me.neilellis.dollar.DollarStatic;
+
 import java.io.File;
 
 /**
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-class ParserMain {
+public class ParserMain {
 
     public static void main(String[] args) throws Throwable {
-        File file = new File(args[0]);
-        DollarParser parser = new DollarParser();
+
+        final ParserOptions options = new ParserOptions();
+        new JCommander(options, args);
+        File file = options.getFile();
+        DollarStatic.config = new ParserConfiguration(options);
+        DollarParser parser = new DollarParser(options);
         try {
             parser.parse(file, false);
         } catch (Throwable t) {
@@ -33,4 +41,33 @@ class ParserMain {
         }
     }
 
+    private static class ParserConfiguration implements Configuration {
+        private final ParserOptions options;
+
+        public ParserConfiguration(ParserOptions options) {this.options = options;}
+
+        @Override public boolean debugScope() {
+            return options.isDebugScope();
+        }
+
+        @Override public boolean failFast() {
+            return !options.isTolerateErrors();
+        }
+
+        @Override public void failFast(boolean failFast) {
+            options.setTolerateErrors(!failFast);
+        }
+
+        @Override public boolean production() {
+            return options.isProduction();
+        }
+
+        @Override public boolean wrapForGuards() {
+            return options.isSafe();
+        }
+
+        @Override public boolean wrapForMonitoring() {
+            return options.isMonitor();
+        }
+    }
 }

@@ -20,5 +20,5 @@ package me.neilellis.dollar;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface Pipeable {
-  var pipe(var in) throws Exception;
+  var pipe(var... in) throws Exception;
 }

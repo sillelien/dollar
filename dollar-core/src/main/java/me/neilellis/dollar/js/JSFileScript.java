@@ -54,14 +54,14 @@ public class JSFileScript implements Pipeable {
   }
 
   @Override
-  public var pipe(var in) throws Exception {
+  public var pipe(var... in) throws Exception {
     SimpleScriptContext context = new SimpleScriptContext();
-    nashorn.eval("var $=" + in.toJsonObject().toString() + ";", context);
+    nashorn.eval("var $=" + in[0].toJsonObject().toString() + ";", context);
     try {
       Object result = nashorn.eval(script, context);
       return DollarFactory.fromValue(result);
     } catch (Exception e) {
-      return DollarStatic.handleError(e, in);
+      return DollarStatic.handleError(e, in[0]);
     }
   }
 }

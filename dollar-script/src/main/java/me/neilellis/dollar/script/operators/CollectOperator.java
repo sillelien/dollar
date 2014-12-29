@@ -45,7 +45,7 @@ public class CollectOperator implements Map<Object[], var> {
             private final int[] count = new int[]{-1};
             private final ArrayList<var> collected = new ArrayList<>();
 
-            @Override public var pipe(var in) throws Exception {
+            @Override public var pipe(var... in) throws Exception {
                 var value = fix((var) objects[0], false);
                 count[0]++;
                 return dollarParser.inScope(pure, "collect", scope, newScope -> {

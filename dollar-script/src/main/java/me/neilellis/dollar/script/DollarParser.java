@@ -61,8 +61,6 @@ public class DollarParser {
 
     public static final String NAMED_PARAMETER_META_ATTR = "__named_parameter";
     private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
-
-
     private final ClassLoader classLoader;
     private final ThreadLocal<List<Scope>> scopes = new ThreadLocal<List<Scope>>() {
         @Override
@@ -74,15 +72,18 @@ public class DollarParser {
     };
     private final ParserErrorHandler errorHandler = new ParserErrorHandler();
     private final ConcurrentHashMap<String, var> exports = new ConcurrentHashMap<>();
+    private ParserOptions options;
     private String file;
     private File sourceDir;
     private Parser<?> topLevelParser;
 
-    public DollarParser() {
+    public DollarParser(ParserOptions options) {
+        this.options = options;
         classLoader = DollarParser.class.getClassLoader();
     }
 
-    public DollarParser(ClassLoader classLoader, File dir) {
+    public DollarParser(ParserOptions options, ClassLoader classLoader, File dir) {
+        this.options = options;
         this.classLoader = classLoader;
         this.sourceDir = dir;
     }
@@ -135,6 +136,10 @@ public class DollarParser {
                 throw new IllegalStateException("Popped wrong scope");
             }
         }
+    }
+
+    public ParserOptions options() {
+        return options;
     }
 
 //    private Parser<var> arrayElementExpression(Parser<var> expression1, Parser<var> expression2, ScriptScope scope) {
@@ -410,7 +415,7 @@ public class DollarParser {
                 .postfix(isOperator(scope), EQUIVALENCE_PRIORITY)
                 .infixl(op(new BinaryOp("each", (lhs, rhs) -> {
                             return lhs.$each(i -> inScope(pure, "each", scope, newScope -> {
-                                newScope.setParameter("1", i);
+                                newScope.setParameter("1", i[0]);
                                 return rhs._fixDeep(false);
                             }));
                         }, scope), "*|*", "each"),

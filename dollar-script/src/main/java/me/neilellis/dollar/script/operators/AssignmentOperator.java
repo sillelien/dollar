@@ -106,7 +106,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                     if (operator.equals("?=")) {
                         scope.set(varName, $void(), false, null, constraintSource, isVolatile, false, pure);
                         Callable<var> callable = () -> $($(rhs.$listen(
-                                i -> scope.set(varName, fix(i, false), false,
+                                i -> scope.set(varName, fix(i[0], false), false,
                                                useConstraint, constraintSource, isVolatile, false, pure))));
                         return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(rhs),
                                                             "listen-assign");
@@ -114,7 +114,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                     } else if (operator.equals("*=")) {
                         scope.set(varName, $void(), false, null, constraintSource, true, true, pure);
                         Callable<var> callable = () -> $(rhs.$subscribe(
-                                i -> scope.set(varName, fix(i, false), false,
+                                i -> scope.set(varName, fix(i[0], false), false,
                                                useConstraint, constraintSource, true, false, pure)));
                         return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(rhs),
                                                             "subscribe-assign");

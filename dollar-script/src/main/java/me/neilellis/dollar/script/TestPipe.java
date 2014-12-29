@@ -24,8 +24,8 @@ import me.neilellis.dollar.var;
  */
 public class TestPipe implements Pipeable {
     @Override
-    public var pipe(var in) throws Exception {
-        in.err();
-        return in;
+    public var pipe(var... in) throws Exception {
+        in[0].err();
+        return in[0];
     }
 }

@@ -47,7 +47,8 @@ public class ForOperator implements Map<Token, Map<? super var, ? extends var>> 
             return DollarScriptSupport.wrapReactive(scope, () -> {
                 return dollarParser.inScope(pure, "for", scope, newScope -> {
                     return ((var) objects[3]).$each(i -> {
-                        newScope.set(objects[1].toString(), fix(i, false), false, null, constraintSource, false, false,
+                        newScope.set(objects[1].toString(), fix(i[0], false), false, null, constraintSource, false,
+                                     false,
                                      pure);
                         return rhs._fixDeep(false);
                     });

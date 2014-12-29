@@ -92,6 +92,11 @@
             <version>1.7.7</version>
         </dependency>
         <dependency>
+            <groupId>com.beust</groupId>
+            <artifactId>jcommander</artifactId>
+            <version>1.30</version>
+        </dependency>
+        <dependency>
             <groupId>net.kencochrane.raven</groupId>
             <artifactId>raven</artifactId>
         </dependency>

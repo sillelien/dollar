@@ -18,6 +18,7 @@ package me.neilellis.dollar.docs;
 
 import com.google.common.io.CharStreams;
 import me.neilellis.dollar.script.DollarParser;
+import me.neilellis.dollar.script.ParserOptions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +39,7 @@ public class DocTest {
 
     @Test
     public void testDocs() throws Exception {
-        new DollarParser().parseMarkdown(CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/pages/scripting.md"))));
+        new DollarParser(new ParserOptions()).parseMarkdown(
+                CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/pages/scripting.md"))));
     }
 }

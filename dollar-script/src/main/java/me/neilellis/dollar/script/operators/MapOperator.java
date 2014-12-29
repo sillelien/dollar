@@ -50,23 +50,26 @@ public class MapOperator implements Map<Token, var> {
         final var
                 lambda =
                 DollarScriptSupport.wrapLambda(new SourceSegmentValue(scope, t), scope,
-                                               parallel -> dollarParser.inScope(pure, "map", scope, newScope -> {
-            if (o.size() == 1) {
-                return DollarFactory.blockCollection(o);
-            }
-            Stream<me.neilellis.dollar.var> stream;
-            if (parallel.isTrue()) {
-                stream = o.stream().parallel();
-            } else {
-                stream = o.stream();
-            }
-            //Not really a map if only one entry unless it's a pair, in fact it's really a block.
-            return $(stream.map(v -> v._fix(parallel.isTrue()))
-                           .collect(Collectors.toConcurrentMap(v -> v.pair() ? v.getPairKey() : v.$S(),
-                                                               v -> v.pair() ? v.getPairValue() : v)));
+                                               i -> dollarParser.inScope(pure, "map", scope, newScope -> {
+                                                   if (o.size() == 1) {
+                                                       return DollarFactory.blockCollection(o);
+                                                   }
+                                                   var parallel = i[0];
+                                                   Stream<me.neilellis.dollar.var> stream;
+                                                   if (parallel.isTrue()) {
+                                                       stream = o.stream().parallel();
+                                                   } else {
+                                                       stream = o.stream();
+                                                   }
+                                                   //Not really a map if only one entry unless it's a pair, in fact
+                                                   // it's really a block.
+                                                   return $(stream.map(v -> v._fix(parallel.isTrue()))
+                                                                  .collect(Collectors.toConcurrentMap(
+                                                                          v -> v.pair() ? v.getPairKey() : v.$S(),
+                                                                          v -> v.pair() ? v.getPairValue() : v)));
                                                }), o, "map");
         for (var value : o) {
-            value.$listen(i->lambda.$notify());
+            value.$listen(i -> lambda.$notify());
         }
         return lambda;
     }

@@ -50,8 +50,8 @@ public class EveryOperator implements Map<Object[], var> {
 //                    System.err.println(newScope);
                     newScope.setParameter("1", $(count[0]));
                     if (objects[1] instanceof var && ((var) objects[1]).isTrue()) {
-                        Scheduler.cancel(i.$S());
-                        return i;
+                        Scheduler.cancel(i[0].$S());
+                        return i[0];
                     } else if (objects[2] instanceof var && ((var) objects[2]).isTrue()) {
                         return $void();
                     } else {

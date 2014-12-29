@@ -194,7 +194,7 @@ class CodeExtractionVisitor implements Visitor {
     public void visit(VerbatimNode node) {
         if ("dollar".equals(node.getType())) {
             try {
-                new DollarParser().parse(node.getText(), false);
+                new DollarParser(new ParserOptions()).parse(node.getText(), false);
             } catch (Exception e) {
                 throw new DollarException(e, node.getText());
             }

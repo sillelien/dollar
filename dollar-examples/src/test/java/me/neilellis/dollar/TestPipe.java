@@ -21,7 +21,7 @@ package me.neilellis.dollar;
  */
 public class TestPipe implements Pipeable {
     @Override
-    public var pipe(var in) throws Exception {
-        return in.$("hello", "world");
+    public var pipe(var... in) throws Exception {
+        return in[0].$("hello", "world");
     }
 }
