@@ -38,8 +38,8 @@ dependencies:
 test:
   override:
     - sudo ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
-    - mvn -q integration-test:
-      timeout: 360
+    - "mvn -q integration-test":
+        timeout: 600
 
   pre:
 #     - mvn org.pitest:pitest-maven:mutationCoverage
