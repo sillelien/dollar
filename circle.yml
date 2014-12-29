@@ -1,8 +1,8 @@
 machine:
   environment:
-    previous_release: 0.1.2
-    release: 0.1.3
-    next_release: 0.1.4
+    previous_release: 0.1.3
+    release: 0.1.4
+    next_release: 0.1.5
   java:
     version: oraclejdk8
 
@@ -43,9 +43,9 @@ test:
     - "mvn -q integration-test":
         timeout: 600
 
-  pre:
+  post:
 #     - mvn org.pitest:pitest-maven:mutationCoverage
-     - mvn com.code-spotter:codespotter-maven-plugin::check
+     - mvn com.code-spotter:codespotter-maven-plugin::check  -Dmaven.test.skip=true
 
 deployment:
   staging:
