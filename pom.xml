@@ -380,6 +380,16 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <excludes>
+                        <param>me.neilellis:dollar-std-resources-plugin:0-SNAPSHOT</param>
+                        <param>me.neilellis:dollar-redis-plugin:0-SNAPSHOT</param>
+                        <param>me.neilellis:dollar-metrics-plugin:0-SNAPSHOT</param>
+                        <param>me.neilellis:dollar-http-plugin:0-SNAPSHOT</param>
+                        <param>me.neilellis:dollar-camel-plugin:0-SNAPSHOT</param>
+                        <param>me.neilellis:dollar-core:0-SNAPSHOT</param>
+                        <param>me.neilellis:dollar-resolver:0-SNAPSHOT</param>
+                        <param>me.neilellis:dollar-script:0-SNAPSHOT</param>
+                    </excludes>
                     <blacklist>
                         <param>agpl-3.0</param>
                         <!--exclude affero-->
