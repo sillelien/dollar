@@ -235,21 +235,21 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>2.7</version>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>project-team</report>
-                            <report>mailing-list</report>
-                            <report>issue-tracking</report>
-                            <report>license</report>
-                            <report>scm</report>
-                            <report>index</report>
-                            <report>summary</report>
-                            <report>cim</report>
-                            <report>plugins</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
+                <!--<reportSets>-->
+                <!--<reportSet>-->
+                <!--<reports>-->
+                <!--<report>project-team</report>-->
+                <!--<report>mailing-list</report>-->
+                <!--<report>issue-tracking</report>-->
+                <!--<report>license</report>-->
+                <!--<report>scm</report>-->
+                <!--<report>index</report>-->
+                <!--<report>summary</report>-->
+                <!--<report>cim</report>-->
+                <!--<report>plugins</report>-->
+                <!--</reports>-->
+                <!--</reportSet>-->
+                <!--</reportSets>-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -267,6 +267,20 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-changelog-plugin</artifactId>
                 <version>2.3</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <xmlOutput>true</xmlOutput>
+                    <!-- Optional directory to put findbugs xdoc xml report -->
+                    <xmlOutputDirectory>target/site</xmlOutputDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </reporting>
@@ -326,6 +340,63 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>download-licenses</id>
+                        <goals>
+                            <goal>download-licenses</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>add-third-party</id>
+                        <goals>
+                            <goal>aggregate-add-third-party</goal>
+                        </goals>
+                        <configuration>
+                            <licenseMerges>
+                                <licenseMerge>The Apache Software License, Version 2.0|Apache License, Version 2.0
+                                </licenseMerge>
+                                <licenseMerge>The Apache Software License, Version 2.0|Apache Public License 2.0
+                                </licenseMerge>
+                            </licenseMerges>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.3.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <DependencyConvergence/>
+                                <requireReleaseDeps>
+                                    <message>No Snapshots Allowed!</message>
+                                </requireReleaseDeps>
+                                <requireMavenVersion>
+                                    <version>3.1</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>1.8</version>
+                                </requireJavaVersion>
+                                <requireOS>
+                                    <family>unix</family>
+                                </requireOS>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- The Compiler Plugin is used to compile the sources of your project.
                 The default compiler is javac and is used to compile Java sources. Also note
                 that at present the default source setting and default target setting is
@@ -511,6 +582,11 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.2.201409121644</version>
             </plugin>
 
         </plugins>
