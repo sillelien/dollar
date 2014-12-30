@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +23,14 @@ import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class CastOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
 
     public CastOperator(Scope scope) {this.scope = scope;}
 
-    @Override public Map<? super var, ? extends var> map(Token token) {
+    @NotNull @Override public Map<? super var, ? extends var> map(@NotNull Token token) {
         var rhs = (var) token.value();
         return lhs -> DollarScriptSupport.wrapReactive(scope,
                                                        () -> lhs.$as(Type

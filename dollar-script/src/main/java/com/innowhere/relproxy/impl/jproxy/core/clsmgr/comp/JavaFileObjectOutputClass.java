@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.innowhere.relproxy.impl.jproxy.core.clsmgr.comp;
 
 import com.innowhere.relproxy.RelProxyException;
+import org.jetbrains.annotations.NotNull;
 
 import javax.tools.SimpleJavaFileObject;
 import java.io.ByteArrayOutputStream;
@@ -24,11 +25,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 
-/**
- * http://www.javablogging.com/dynamic-in-memory-compilation/
- *
- * @author jmarranz
- */
 public class JavaFileObjectOutputClass extends SimpleJavaFileObject {
 
     /**
@@ -47,7 +43,7 @@ public class JavaFileObjectOutputClass extends SimpleJavaFileObject {
      * @param name Full name of the compiled class
      * @param kind Kind of the data. It will be CLASS in our case
      */
-    public JavaFileObjectOutputClass(String name, Kind kind) {
+    public JavaFileObjectOutputClass(@NotNull String name, @NotNull Kind kind) {
         super(URI.create("string:///" + name.replace('.', '/') + kind.extension), kind);
 
         if (!Kind.CLASS.equals(kind)) throw new RelProxyException("Unexpected");
@@ -58,11 +54,11 @@ public class JavaFileObjectOutputClass extends SimpleJavaFileObject {
         return binaryName;
     }
 
-    public byte[] getBytes() {
+    @NotNull public byte[] getBytes() {
         return bos.toByteArray();
     }
 
-    @Override
+    @NotNull @Override
     public OutputStream openOutputStream() throws IOException {
         return bos;
     }

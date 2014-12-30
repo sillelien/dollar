@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,10 @@ import me.neilellis.dollar.collections.ImmutableList;
 import me.neilellis.dollar.collections.ImmutableMap;
 import me.neilellis.dollar.json.impl.Json;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-/**
- * Represents a JSON array.<p> Instances of this class are not thread-safe.<p>
- *
- * @author <a href="http://tfox.org">Tim Fox</a>
- */
 public class JsonArray extends JsonElement implements Iterable<Object> {
 
   final List list;
@@ -54,7 +50,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     list = Json.decodeValue(jsonString, List.class);
   }
 
-  public JsonArray add(Object value) {
+    @NotNull public JsonArray add(@Nullable Object value) {
     if (value == null) {
       list.add(null);
     } else if (value instanceof JsonObject) {
@@ -77,38 +73,38 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     return this;
   }
 
-  public JsonArray addObject(JsonObject value) {
+    @NotNull public JsonArray addObject(@Nullable JsonObject value) {
     list.add(value == null ? null : value.map);
     return this;
   }
 
-  JsonArray addArray(JsonArray value) {
+    @NotNull JsonArray addArray(@Nullable JsonArray value) {
     list.add(value == null ? null : value.list);
     return this;
   }
 
-  JsonArray addString(String str) {
+    @NotNull JsonArray addString(String str) {
     list.add(str);
     return this;
   }
 
-  JsonArray addNumber(Number value) {
+    @NotNull JsonArray addNumber(Number value) {
     list.add(value);
     return this;
   }
 
-  JsonArray addBoolean(Boolean value) {
+    @NotNull JsonArray addBoolean(Boolean value) {
     list.add(value);
     return this;
   }
 
-  JsonArray addBinary(byte[] value) {
+    @NotNull JsonArray addBinary(@Nullable byte[] value) {
     String encoded = (value == null) ? null : Base64.getEncoder().encodeToString(value);
     list.add(encoded);
     return this;
   }
 
-  public JsonArray addElement(JsonElement value) {
+    @NotNull public JsonArray addElement(@Nullable JsonElement value) {
     if (value == null) {
       list.add(null);
       return this;
@@ -126,16 +122,16 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
   /**
    * @return a copy of the JsonArray
    */
-  public JsonArray copy() {
+  @NotNull public JsonArray copy() {
     return new JsonArray(list, true);
   }
 
-  public <T> T get(final int index) {
+    @Nullable public <T> T get(final int index) {
     return convertObject(list.get(index));
   }
 
-  @SuppressWarnings("unchecked")
-  private <T> T convertObject(final Object obj) {
+    @Nullable @SuppressWarnings("unchecked")
+    private <T> T convertObject(@Nullable final Object obj) {
     Object retVal = obj;
     if (obj != null) {
       if (obj instanceof List) {
@@ -157,7 +153,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(@Nullable Object o) {
     if (this == o) { return true; }
     if (o == null || getClass() != o.getClass()) { return false; }
     JsonArray that = (JsonArray) o;
@@ -184,7 +180,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
         return iter.hasNext();
       }
 
-      @Override
+        @Nullable @Override
       public Object next() {
         return convertObject(iter.next());
       }
@@ -200,7 +196,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     return list.size();
   }
 
-  public Object[] toArray() {
+    @NotNull public Object[] toArray() {
     return convertList(list).toArray();
   }
 
@@ -208,7 +204,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     return convertList(list);
   }
 
-  public List toStringList() {
+    @NotNull public List toStringList() {
     final ArrayList<Object> strings = new ArrayList<>();
     for (Object o : list) {
       strings.add(Json.encode(o));

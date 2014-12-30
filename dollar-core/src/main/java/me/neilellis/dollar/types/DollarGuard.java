@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarGuard implements java.lang.reflect.InvocationHandler {
 
     private final var in;
@@ -97,7 +94,10 @@ public class DollarGuard implements java.lang.reflect.InvocationHandler {
         }
     }
 
-    Object invokeWithGuards(Method method, Object[] args, Guarded[] guards) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    Object invokeWithGuards(@NotNull Method method, Object[] args, @NotNull Guarded[] guards) throws
+                                                                                              InstantiationException,
+                                                                                              IllegalAccessException,
+                                                                                              InvocationTargetException {
         for (Guarded guard : guards) {
             guard.value().newInstance().preCondition(in, method, args);
         }

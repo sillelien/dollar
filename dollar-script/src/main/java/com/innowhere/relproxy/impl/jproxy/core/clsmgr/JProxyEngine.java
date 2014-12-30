@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import com.innowhere.relproxy.impl.jproxy.core.JProxyImpl;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.comp.JProxyCompilerContext;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.comp.JProxyCompilerInMemory;
 import com.innowhere.relproxy.jproxy.JProxyDiagnosticsListener;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -31,21 +33,23 @@ import java.util.TimerTask;
  * @author jmarranz
  */
 public class JProxyEngine {
-    public volatile boolean stop = false;
-    protected JProxyImpl parent;
-    protected JProxyCompilerInMemory compiler;
-    protected SourceScript scriptFile; // Puede ser nulo
-    protected ClassLoader rootClassLoader;
-    protected File folderSources;
+    public final boolean stop = false;
+    protected final JProxyImpl parent;
+    protected final JProxyCompilerInMemory compiler;
+    protected final SourceScript scriptFile; // Puede ser nulo
+    protected final ClassLoader rootClassLoader;
+    @Nullable protected final File folderSources;
+    protected final JavaSourcesSearch sourcesSearch;
+    protected final String folderClasses; // Puede ser nulo (es decir NO salvar como .class los cambios)
+    protected final long scanPeriod;
+    @NotNull protected final String sourceEncoding = "UTF-8"; // Por ahora, provisional
     protected JProxyClassLoader customClassLoader;
-    protected JavaSourcesSearch sourcesSearch;
-    protected String folderClasses; // Puede ser nulo (es decir NO salvar como .class los cambios)
-    protected long scanPeriod;
     protected ClassDescriptorSourceFileRegistry sourceRegistry;
-    protected String sourceEncoding = "UTF-8"; // Por ahora, provisional
-    protected TimerTask task;
+    @Nullable protected TimerTask task;
 
-    public JProxyEngine(JProxyImpl parent, SourceScript scriptFile, ClassLoader rootClassLoader, String pathSources, String classFolder, long scanPeriod, Iterable<String> compilationOptions, JProxyDiagnosticsListener diagnosticsListener) {
+    public JProxyEngine(JProxyImpl parent, SourceScript scriptFile, ClassLoader rootClassLoader,
+                        @Nullable String pathSources, String classFolder, long scanPeriod,
+                        Iterable<String> compilationOptions, JProxyDiagnosticsListener diagnosticsListener) {
         this.parent = parent;
         this.scriptFile = scriptFile;
         this.rootClassLoader = rootClassLoader;
@@ -57,8 +61,35 @@ public class JProxyEngine {
         this.sourcesSearch = new JavaSourcesSearch(this);
     }
 
+    @Nullable public synchronized <T> Class<?> findClass(String className) {
+        // Si ya está cargada la devuelve, y si no se cargó por ningún JProxyClassLoader se intenta cargar por el
+        // parent ClassLoader, por lo que siempre devolverá distinto de null si la clase está en el classpath, que
+        // debería ser lo normal
+        try {
+            return customClassLoader.findClass(className);
+        } catch (ClassNotFoundException ex) {
+            return null;
+        }
+    }
+
+    public synchronized ClassDescriptor getClassDescriptor(String className) {
+        return sourceRegistry.getClassDescriptor(className);
+    }
+
+    @Nullable public File getFolderSources() {
+        return folderSources;
+    }
+
     public JProxyImpl getJProxy() {
         return parent;
+    }
+
+    public ClassLoader getRootClassLoader() {
+        return rootClassLoader;
+    }
+
+    @NotNull public String getSourceEncoding() {
+        return sourceEncoding;
     }
 
     public ClassDescriptorSourceScript init() {
@@ -67,6 +98,10 @@ public class JProxyEngine {
         startScanner();
 
         return scriptFileDesc;
+    }
+
+    public synchronized boolean start() {
+        if (task == null) { return startScanner(); } else { return false; }
     }
 
     private boolean startScanner() {
@@ -89,56 +124,79 @@ public class JProxyEngine {
                 }
             };
 
-            timer.schedule(task, scanPeriod, scanPeriod);  // Ojo, después de la primera llamada a detectChangesInSources() 
+            timer.schedule(task, scanPeriod,
+                           scanPeriod);  // Ojo, después de la primera llamada a detectChangesInSources()
             return true;
         } else {
             return false;
         }
     }
 
+    public synchronized ClassDescriptorSourceScript detectChangesInSources() {
+        // boolean firstTime = (sourceFileMap == null); // La primera vez sourceFileMap es null
 
-    public File getFolderSources() {
-        return folderSources;
-    }
+        LinkedList<ClassDescriptorSourceUnit> updatedSourceFiles = new LinkedList<>();
+        LinkedList<ClassDescriptorSourceUnit> newSourceFiles = new LinkedList<>();
+        LinkedList<ClassDescriptorSourceUnit> deletedSourceFiles = new LinkedList<>();
 
-    public ClassLoader getRootClassLoader() {
-        return rootClassLoader;
-    }
+        ClassDescriptorSourceFileRegistry oldSourceRegistry = this.sourceRegistry; // Puede ser null (la primera vez)
+        ClassDescriptorSourceFileRegistry newSourceRegistry = new ClassDescriptorSourceFileRegistry();
 
-    public String getSourceEncoding() {
-        return sourceEncoding;
-    }
+        ClassDescriptorSourceScript
+                scriptFileDesc =
+                sourcesSearch.sourceFileSearch(scriptFile, oldSourceRegistry, newSourceRegistry, updatedSourceFiles,
+                                               newSourceFiles, deletedSourceFiles);
 
-    public synchronized boolean stop() {
-        if (task != null) {
-            task.cancel();
-            this.task = null;
-            return true;
-        } else {
-            return false;
+        this.sourceRegistry = newSourceRegistry;
+
+        if (!updatedSourceFiles.isEmpty() ||
+            !newSourceFiles.isEmpty() ||
+            !deletedSourceFiles.isEmpty()) // También el hecho de eliminar una clase debe implicar crear un
+            // ClassLoader nuevo para que dicha clase desaparezca de las clases cargadas aunque será muy raro que
+            // sólo eliminemos un .java y no añadamos/cambiemos otros, otro motico es porque si tenemos configurado
+            // el autosalvado de .class tenemos que eliminar en ese caso
+        {
+            addNewClassLoader();
+
+            LinkedList<ClassDescriptorSourceUnit> sourceFilesToRecompile = new LinkedList<>();
+            sourceFilesToRecompile.addAll(updatedSourceFiles);
+            sourceFilesToRecompile.addAll(newSourceFiles);
+
+            updatedSourceFiles = null;
+            newSourceFiles = null;
+
+            if (!sourceFilesToRecompile.isEmpty()) {
+                // Eliminamos el estado de la anterior compilación de todas las clases que van a recompilarse antes
+                // de compilarlas porque al compilar una clase es posible que
+                // se necesite recompilar al mismo tiempo una dependiente de otra (ej clase base) y luego se intente
+                // compilar la dependiente y sería un problema que limpiáramos antes de compilar cada archivo
+                for (ClassDescriptorSourceUnit sourceFile : sourceFilesToRecompile) { cleanBeforeCompile(sourceFile); }
+
+                JProxyCompilerContext context = compiler.createJProxyCompilerContext();
+                try {
+                    for (ClassDescriptorSourceUnit sourceFile : sourceFilesToRecompile) {
+                        compile(sourceFile, context);
+                    }
+                } finally {
+                    context.close();
+                }
+
+                for (ClassDescriptorSourceUnit sourceFile : sourceFilesToRecompile) { reloadAndSaveSource(sourceFile); }
+            }
+
+            if (isSaveClassesMode() && !deletedSourceFiles.isEmpty()) {
+                for (ClassDescriptorSourceUnit sourceFile : deletedSourceFiles) { deleteClasses(sourceFile); }
+            }
+
+            for (ClassDescriptorSourceUnit sourceFile : sourceRegistry.getClassDescriptorSourceFileColl()) {
+                if (sourceFilesToRecompile.contains(sourceFile)) { continue; }
+                // las clases deleted no están en sourceFileMap por lo que no hay que filtrarlas
+                reloadSource(sourceFile,
+                             true); // Ponemos detectInnerClasses a true porque son archivos fuente que posiblemente nunca se hayan tocado desde la carga inicial y por tanto quizás se desconocen las innerclasses
+            }
         }
-    }
 
-    public synchronized boolean start() {
-        if (task == null) return startScanner();
-        else return false;
-    }
-
-    private boolean isSaveClassesMode() {
-        return (folderClasses != null);
-    }
-
-    public synchronized ClassDescriptor getClassDescriptor(String className) {
-        return sourceRegistry.getClassDescriptor(className);
-    }
-
-    public synchronized <T> Class<?> findClass(String className) {
-        // Si ya está cargada la devuelve, y si no se cargó por ningún JProxyClassLoader se intenta cargar por el parent ClassLoader, por lo que siempre devolverá distinto de null si la clase está en el classpath, que debería ser lo normal       
-        try {
-            return customClassLoader.findClass(className);
-        } catch (ClassNotFoundException ex) {
-            return null;
-        }
+        return scriptFileDesc;
     }
 
     private void addNewClassLoader() {
@@ -149,27 +207,70 @@ public class JProxyEngine {
         this.customClassLoader = new JProxyClassLoader(this);
     }
 
-    private void cleanBeforeCompile(ClassDescriptorSourceUnit sourceFile) {
+    private void cleanBeforeCompile(@NotNull ClassDescriptorSourceUnit sourceFile) {
         if (isSaveClassesMode())
             deleteClasses(sourceFile); // Antes de que nos las carguemos en memoria la clase principal y las inner tras recompilar
 
-        sourceFile.cleanOnSourceCodeChanged(); // El código fuente nuevo puede haber cambiado totalmente las innerclasses antiguas (añadido, eliminado) y por supuesto el bytecode necesita olvidarse   
+        sourceFile.cleanOnSourceCodeChanged(); // El código fuente nuevo puede haber cambiado totalmente las innerclasses antiguas (añadido, eliminado) y por supuesto el bytecode necesita olvidarse
     }
 
-    private void compile(ClassDescriptorSourceUnit sourceFile, JProxyCompilerContext context) {
+    private void compile(@NotNull ClassDescriptorSourceUnit sourceFile, @NotNull JProxyCompilerContext context) {
         if (sourceFile.getClassBytes() != null)
             return; // Ya ha sido compilado seguramente por dependencia de un archivo compilado inmediatamente antes, recuerda que el atributo classBytes se pone a null antes de compilar los archivos cambiados/nuevos
 
         compiler.compileSourceFile(sourceFile, context, customClassLoader, sourceRegistry);
     }
 
-    private void reloadAndSaveSource(ClassDescriptorSourceUnit sourceFile) {
-        reloadSource(sourceFile, false); // No hace falta que detectemos las innerclasses porque al compilar se "descubren" todas
+    private void reloadAndSaveSource(@NotNull ClassDescriptorSourceUnit sourceFile) {
+        reloadSource(sourceFile, false); // No hace falta que detectemos las innerclasses porque al compilar se
+        // "descubren" todas
 
         if (isSaveClassesMode()) saveClasses(sourceFile);
     }
 
-    private void reloadSource(ClassDescriptorSourceUnit sourceFile, boolean detectInnerClasses) {
+    private boolean isSaveClassesMode() {
+        return (folderClasses != null);
+    }
+
+    private void deleteClasses(@NotNull ClassDescriptorSourceUnit sourceFile) {
+        // Puede ocurrir que esta clase nunca se haya cargado y se ha modificado el código fuente y queramos limpiar
+        // los .class correspondientes pues se van a recrear
+        // como no conocemos qué inner clases están asociadas para saber que .class hay que eliminar, pues lo que
+        // hacemos es directamente obtener los .class que hay
+        // en el directorio con el fin de eliminar todos .class que tengan el patrón de ser inner classes del source
+        // file de acuerdo a su nombre
+        // así conseguimos por ejemplo también eliminar las local classes (inner clases con nombre declaradas dentro
+        // de un método) que no hay manera de conocer
+        // a través de la carga de la clase
+
+        // Hay un caso en el que puede haber .class que ya no están en el código fuente y es cuando tocamos el código
+        // fuente ANTES de cargar y eliminamos algún .java,
+        // al cargar como no existe el archivo no lo relacionamos con los .class
+        // La solución sería en tiempo de carga forzar una carga de todas las clases y de ahí deducir todos los
+        // .class que deben existir (excepto las clases locales
+        // que no podríamos detectarlas), pero el que haya .class sobrantes antiguos no es gran problema.
+
+        File
+                classFilePath =
+                ClassDescriptor.getAbsoluteClassFilePathFromClassNameAndClassPath(sourceFile.getClassName(),
+                                                                                  folderClasses);
+        File parentDir = JProxyUtil.getParentDir(classFilePath);
+        String[] fileNameList = parentDir.list(); // Es más ligero que listFiles() que crea File por cada resultado
+        if (fileNameList != null) // Si es null es que el directorio no está creado
+        {
+            for (String fileName : fileNameList) {
+                int pos = fileName.lastIndexOf(".class");
+                if (pos == -1) { continue; }
+                String simpleClassName = fileName.substring(0, pos);
+                if (sourceFile.getSimpleClassName().equals(simpleClassName) ||
+                    sourceFile.isInnerClass(sourceFile.getPackageName() + simpleClassName)) {
+                    new File(parentDir, fileName).delete();
+                }
+            }
+        }
+    }
+
+    private void reloadSource(@NotNull ClassDescriptorSourceUnit sourceFile, boolean detectInnerClasses) {
         Class clasz = customClassLoader.loadClass(sourceFile, true);
 
         LinkedList<ClassDescriptorInner> innerClassDescList = sourceFile.getInnerClassDescriptors();
@@ -198,7 +299,7 @@ public class JProxyEngine {
         }
     }
 
-    private void saveClasses(ClassDescriptorSourceUnit sourceFile) {
+    private void saveClasses(@NotNull ClassDescriptorSourceUnit sourceFile) {
         // Salvamos la clase principal
         {
             File classFilePath = ClassDescriptor.getAbsoluteClassFilePathFromClassNameAndClassPath(sourceFile.getClassName(), folderClasses);
@@ -209,98 +310,21 @@ public class JProxyEngine {
         LinkedList<ClassDescriptorInner> innerClassDescList = sourceFile.getInnerClassDescriptors();
         if (innerClassDescList != null && !innerClassDescList.isEmpty()) {
             for (ClassDescriptorInner innerClassDesc : innerClassDescList) {
-                File classFilePath = ClassDescriptor.getAbsoluteClassFilePathFromClassNameAndClassPath(innerClassDesc.getClassName(), folderClasses);
+                File classFilePath = ClassDescriptor.getAbsoluteClassFilePathFromClassNameAndClassPath(
+                        innerClassDesc.getClassName(), folderClasses);
                 JProxyUtil.saveFile(classFilePath, innerClassDesc.getClassBytes());
             }
         }
     }
 
-    private void deleteClasses(ClassDescriptorSourceUnit sourceFile) {
-        // Puede ocurrir que esta clase nunca se haya cargado y se ha modificado el código fuente y queramos limpiar los .class correspondientes pues se van a recrear
-        // como no conocemos qué inner clases están asociadas para saber que .class hay que eliminar, pues lo que hacemos es directamente obtener los .class que hay 
-        // en el directorio con el fin de eliminar todos .class que tengan el patrón de ser inner classes del source file de acuerdo a su nombre
-        // así conseguimos por ejemplo también eliminar las local classes (inner clases con nombre declaradas dentro de un método) que no hay manera de conocer 
-        // a través de la carga de la clase
-
-        // Hay un caso en el que puede haber .class que ya no están en el código fuente y es cuando tocamos el código fuente ANTES de cargar y eliminamos algún .java,
-        // al cargar como no existe el archivo no lo relacionamos con los .class
-        // La solución sería en tiempo de carga forzar una carga de todas las clases y de ahí deducir todos los .class que deben existir (excepto las clases locales
-        // que no podríamos detectarlas), pero el que haya .class sobrantes antiguos no es gran problema.
-
-        File classFilePath = ClassDescriptor.getAbsoluteClassFilePathFromClassNameAndClassPath(sourceFile.getClassName(), folderClasses);
-        File parentDir = JProxyUtil.getParentDir(classFilePath);
-        String[] fileNameList = parentDir.list(); // Es más ligero que listFiles() que crea File por cada resultado
-        if (fileNameList != null) // Si es null es que el directorio no está creado
-        {
-            for (String fileName : fileNameList) {
-                int pos = fileName.lastIndexOf(".class");
-                if (pos == -1) continue;
-                String simpleClassName = fileName.substring(0, pos);
-                if (sourceFile.getSimpleClassName().equals(simpleClassName) ||
-                        sourceFile.isInnerClass(sourceFile.getPackageName() + simpleClassName)) {
-                    new File(parentDir, fileName).delete();
-                }
-            }
+    public synchronized boolean stop() {
+        if (task != null) {
+            task.cancel();
+            this.task = null;
+            return true;
+        } else {
+            return false;
         }
-    }
-
-    public synchronized ClassDescriptorSourceScript detectChangesInSources() {
-        // boolean firstTime = (sourceFileMap == null); // La primera vez sourceFileMap es null
-
-        LinkedList<ClassDescriptorSourceUnit> updatedSourceFiles = new LinkedList<ClassDescriptorSourceUnit>();
-        LinkedList<ClassDescriptorSourceUnit> newSourceFiles = new LinkedList<ClassDescriptorSourceUnit>();
-        LinkedList<ClassDescriptorSourceUnit> deletedSourceFiles = new LinkedList<ClassDescriptorSourceUnit>();
-
-        ClassDescriptorSourceFileRegistry oldSourceRegistry = this.sourceRegistry; // Puede ser null (la primera vez)
-        ClassDescriptorSourceFileRegistry newSourceRegistry = new ClassDescriptorSourceFileRegistry();
-
-        ClassDescriptorSourceScript scriptFileDesc = sourcesSearch.sourceFileSearch(scriptFile, oldSourceRegistry, newSourceRegistry, updatedSourceFiles, newSourceFiles, deletedSourceFiles);
-
-        this.sourceRegistry = newSourceRegistry;
-
-        if (!updatedSourceFiles.isEmpty() || !newSourceFiles.isEmpty() || !deletedSourceFiles.isEmpty()) // También el hecho de eliminar una clase debe implicar crear un ClassLoader nuevo para que dicha clase desaparezca de las clases cargadas aunque será muy raro que sólo eliminemos un .java y no añadamos/cambiemos otros, otro motico es porque si tenemos configurado el autosalvado de .class tenemos que eliminar en ese caso
-        {
-            addNewClassLoader();
-
-            LinkedList<ClassDescriptorSourceUnit> sourceFilesToRecompile = new LinkedList<ClassDescriptorSourceUnit>();
-            sourceFilesToRecompile.addAll(updatedSourceFiles);
-            sourceFilesToRecompile.addAll(newSourceFiles);
-
-            updatedSourceFiles = null;
-            newSourceFiles = null;
-
-            if (!sourceFilesToRecompile.isEmpty()) {
-                // Eliminamos el estado de la anterior compilación de todas las clases que van a recompilarse antes de compilarlas porque al compilar una clase es posible que
-                // se necesite recompilar al mismo tiempo una dependiente de otra (ej clase base) y luego se intente compilar la dependiente y sería un problema que limpiáramos antes de compilar cada archivo
-                for (ClassDescriptorSourceUnit sourceFile : sourceFilesToRecompile)
-                    cleanBeforeCompile(sourceFile);
-
-                JProxyCompilerContext context = compiler.createJProxyCompilerContext();
-                try {
-                    for (ClassDescriptorSourceUnit sourceFile : sourceFilesToRecompile)
-                        compile(sourceFile, context);
-                } finally {
-                    context.close();
-                }
-
-                for (ClassDescriptorSourceUnit sourceFile : sourceFilesToRecompile)
-                    reloadAndSaveSource(sourceFile);
-            }
-
-            if (isSaveClassesMode() && !deletedSourceFiles.isEmpty())
-                for (ClassDescriptorSourceUnit sourceFile : deletedSourceFiles)
-                    deleteClasses(sourceFile);
-
-
-            for (ClassDescriptorSourceUnit sourceFile : sourceRegistry.getClassDescriptorSourceFileColl()) {
-                if (sourceFilesToRecompile.contains(sourceFile))
-                    continue;
-                // las clases deleted no están en sourceFileMap por lo que no hay que filtrarlas
-                reloadSource(sourceFile, true); // Ponemos detectInnerClasses a true porque son archivos fuente que posiblemente nunca se hayan tocado desde la carga inicial y por tanto quizás se desconocen las innerclasses
-            }
-        }
-
-        return scriptFileDesc;
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,25 @@
 
 package me.neilellis.dollar.guard;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Method;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class ChainGuard implements Guard {
-    @Override
+    @NotNull @Override
     public String description() {
         return "Chain Guard";
-    }
-
-    @Override
-    public void preCondition(Object guarded, Method method, Object[] args) {
-
     }
 
     @Override
     public void postCondition(Object guarded, Method method, Object[] args, Object result) {
 
         assertNotNull("return value", result, method);
+    }
+
+    @Override
+    public void preCondition(Object guarded, Method method, Object[] args) {
+
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.types.prediction.SingleValueTypePrediction;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,9 +43,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public abstract class AbstractDollar implements var {
 
     private static
@@ -62,7 +60,7 @@ public abstract class AbstractDollar implements var {
         this.errors = errors;
     }
 
-    @Override
+    @NotNull @Override
     public var $all() {
         return DollarStatic.$void();
     }
@@ -94,14 +92,13 @@ public abstract class AbstractDollar implements var {
     }
 
 
-
-    @Override
-    public var $choose(var map) {
+    @NotNull @Override
+    public var $choose(@NotNull var map) {
         return map.$($S());
     }
 
     @Override
-    public var $each(Pipeable pipe) {
+    public var $each(@NotNull Pipeable pipe) {
         List<var> result = new LinkedList<>();
         for (var v : $list()) {
             var res = null;
@@ -159,7 +156,7 @@ public abstract class AbstractDollar implements var {
         return new StateMachine<>(ResourceState.INITIAL, getDefaultStateMachineConfig());
     }
 
-    static StateMachineConfig<ResourceState, Signal> getDefaultStateMachineConfig() {
+    @NotNull static StateMachineConfig<ResourceState, Signal> getDefaultStateMachineConfig() {
         final StateMachineConfig<ResourceState, Signal> stateMachineConfig = new StateMachineConfig<>();
         stateMachineConfig.configure(ResourceState.STOPPED)
                           .permitReentry(Signal.STOP)
@@ -182,7 +179,7 @@ public abstract class AbstractDollar implements var {
     }
 
     @NotNull @Override
-    public var $default(var v) {
+    public var $default(@NotNull var v) {
         if (isVoid()) {
             return v;
         } else {
@@ -261,15 +258,15 @@ public abstract class AbstractDollar implements var {
         return _fix(1, parallel);
     }
 
-    @Override public var _fix(int depth, boolean parallel) {
+    @NotNull @Override public var _fix(int depth, boolean parallel) {
         return this;
     }
 
-    @Override public final var _fixDeep(boolean parallel) {
+    @NotNull @Override public final var _fixDeep(boolean parallel) {
         return _fix(Integer.MAX_VALUE, parallel);
     }
 
-    @Override public TypePrediction _predictType() {
+    @NotNull @Override public TypePrediction _predictType() {
         return new SingleValueTypePrediction($type());
     }
 
@@ -284,62 +281,62 @@ public abstract class AbstractDollar implements var {
         DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_OPERATION);
     }
 
-    @Override
-    public var debug(Object message) {
+    @NotNull @Override
+    public var debug(@NotNull Object message) {
         logger.debug(message.toString());
         return this;
     }
 
-    @Override
+    @NotNull @Override
     public var debug() {
         logger.debug(this.toString());
         return this;
     }
 
-    @Override
+    @NotNull @Override
     public var debugf(String message, Object... values) {
         logger.debug(message, values);
         return this;
     }
 
-    @Override
-    public var error(Throwable exception) {
+    @NotNull @Override
+    public var error(@NotNull Throwable exception) {
         logger.error(exception.getMessage(), exception);
         return this;
     }
 
-    @Override
-    public var error(Object message) {
+    @NotNull @Override
+    public var error(@NotNull Object message) {
         logger.error(message.toString());
         return this;
 
     }
 
-    @Override
+    @NotNull @Override
     public var error() {
         logger.error(this.toString());
         return this;
     }
 
-    @Override
+    @NotNull @Override
     public var errorf(String message, Object... values) {
         logger.error(message, values);
         return this;
     }
 
-    @Override
-    public var info(Object message) {
+    @NotNull @Override
+    public var info(@NotNull Object message) {
         logger.info(message.toString());
         return this;
     }
 
-    @Override
+    @NotNull @Override
     public var info() {
         logger.info(this.toString());
         return this;
     }
 
-    @Override
+    @NotNull @Override
     public var infof(String message, Object... values) {
         logger.info(message, values);
         return this;
@@ -400,12 +397,12 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public String getMetaAttribute(String key) {
+    public String getMetaAttribute(@NotNull String key) {
         return meta.get(key);
     }
 
     @Override
-    public void setMetaAttribute(String key, String value) {
+    public void setMetaAttribute(@NotNull String key, @NotNull String value) {
         if (meta.containsKey(key)) {
             DollarFactory.failure(me.neilellis.dollar.types.ErrorType.METADATA_IMMUTABLE);
             return;
@@ -420,7 +417,7 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (obj == null) {
             return false;
         }
@@ -457,14 +454,14 @@ public abstract class AbstractDollar implements var {
         return toHumanString();
     }
 
-    @Override
-    public Long toLong() {
-        return 0L;
+    @Nullable @Override
+    public Double toDouble() {
+        return 0.0;
     }
 
     @Override
-    public Double toDouble() {
-        return 0.0;
+    public Long toLong() {
+        return 0L;
     }
 
 
@@ -494,7 +491,7 @@ public abstract class AbstractDollar implements var {
         return DollarFactory.fromValue(json);
     }
 
-    String hash(byte[] bytes) {
+    @NotNull String hash(@NotNull byte[] bytes) {
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("SHA-256");
@@ -504,7 +501,7 @@ public abstract class AbstractDollar implements var {
 
         md.update(bytes);
         byte[] digest = md.digest();
-        StringBuffer hexString = new StringBuffer();
+        StringBuilder hexString = new StringBuilder();
 
         for (byte aDigest : digest) {
             String hex = Integer.toHexString(0xff & aDigest);

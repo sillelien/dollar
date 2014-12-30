@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.plugin.Plugins;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -37,9 +38,6 @@ import java.util.stream.Stream;
 import static me.neilellis.dollar.DollarStatic.$null;
 import static me.neilellis.dollar.DollarStatic.fix;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarList extends AbstractDollar {
 
     public static final int MAX_LIST_MULTIPLIER = 1000;
@@ -112,7 +110,7 @@ public class DollarList extends AbstractDollar {
     @Override
     @Guarded(NotNullGuard.class)
     public var $negate() {
-        ArrayList<var> result = new ArrayList<var>(list.mutable());
+        ArrayList<var> result = new ArrayList<>(list.mutable());
         Collections.reverse(result);
         return DollarFactory.fromValue(result, errors());
     }
@@ -169,7 +167,7 @@ public class DollarList extends AbstractDollar {
     @NotNull @Override
     public Integer toInteger() {
         return $stream(false).collect(Collectors.summingInt(
-                (java.util.function.ToIntFunction<NumericAware>) (numericAware) -> numericAware.toInteger()));
+                (java.util.function.ToIntFunction<NumericAware>) NumericAware::toInteger));
     }
 
     @NotNull
@@ -179,7 +177,7 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public var $as(Type type) {
+    public var $as(@NotNull Type type) {
         if (type.equals(Type.LIST)) {
             return this;
         } else if (type.equals(Type.MAP)) {
@@ -406,11 +404,11 @@ public class DollarList extends AbstractDollar {
         return DollarStatic.$(key);
     }
 
-    @Override public var $write(var value, boolean blocking, boolean mutating) {
+    @NotNull @Override public var $write(@NotNull var value, boolean blocking, boolean mutating) {
         return $plus(value);
     }
 
-    @Override
+    @NotNull @Override
     public var $notify() {
         list.forEach(me.neilellis.dollar.var::$notify);
         return this;
@@ -434,7 +432,7 @@ public class DollarList extends AbstractDollar {
         return DollarFactory.fromValue(list.stream().map(var::_copy).collect(Collectors.toList()), errors());
     }
 
-    @Override public var _fix(int depth, boolean parallel) {
+    @NotNull @Override public var _fix(int depth, boolean parallel) {
         if (depth <= 1) {
             return this;
         } else {
@@ -477,7 +475,7 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (obj == null) {
             return false;
         } else if (obj instanceof ImmutableList) {

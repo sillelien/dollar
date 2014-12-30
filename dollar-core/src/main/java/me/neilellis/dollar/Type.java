@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,13 @@
 
 package me.neilellis.dollar;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-/**
- * The type of Dollar's {@link var} objects.
- *
- * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public final class Type {
 
     /**
@@ -86,7 +84,7 @@ public final class Type {
     public static final Type ANY = new Type("ANY");
 
 
-    private final String name;
+    @NotNull private final String name;
 
 
     /**
@@ -94,7 +92,7 @@ public final class Type {
      *
      * @param name the name
      */
-    Type(String name) {
+    Type(@NotNull String name) {
 
         this.name = name.toUpperCase();
         lookup.put(name.toUpperCase(), this);
@@ -107,7 +105,7 @@ public final class Type {
      *
      * @return the Type
      */
-    public static Type valueOf(String name) {
+    public static Type valueOf(@NotNull String name) {
         return lookup.get(name.toUpperCase());
     }
 
@@ -116,7 +114,7 @@ public final class Type {
      *
      * @return an array of {@link Type}s
      */
-    public static Type[] values() {
+    @NotNull public static Type[] values() {
         return lookup.values().toArray(new Type[lookup.values().size()]);
     }
 
@@ -126,7 +124,7 @@ public final class Type {
      * @return a Set of all the names
      */
     public static Set<String> stringValues() {
-        return lookup.values().stream().map(i->i.toString()).collect(Collectors.toSet());
+        return lookup.values().stream().map(Type::toString).collect(Collectors.toSet());
     }
 
     @Override
@@ -135,18 +133,17 @@ public final class Type {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
 
         Type type = (Type) o;
 
-        if (!name.equalsIgnoreCase(type.name)) { return false; }
+        return name.equalsIgnoreCase(type.name);
 
-        return true;
     }
 
-    @Override public String toString() {
+    @NotNull @Override public String toString() {
         return name;
     }
 
@@ -155,7 +152,7 @@ public final class Type {
      *
      * @return the string
      */
-    public String name() {
+    @NotNull public String name() {
         return name;
     }
 

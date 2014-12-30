@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,36 +17,33 @@
 package com.innowhere.relproxy.impl.jproxy.core.clsmgr.comp;
 
 import com.innowhere.relproxy.RelProxyException;
+import org.jetbrains.annotations.NotNull;
 
 import javax.tools.SimpleJavaFileObject;
 import java.io.*;
 import java.net.URI;
 
-/**
- * http://www.javablogging.com/dynamic-in-memory-compilation/
- *
- * @author jmarranz
- */
 public abstract class JavaFileObjectInputSourceBase extends SimpleJavaFileObject implements JProxyJavaFileObjectInput {
-    protected String binaryName;
-    protected String encoding;
+    protected final String binaryName;
+    protected final String encoding;
 
-    public JavaFileObjectInputSourceBase(String name, String encoding) {
+    public JavaFileObjectInputSourceBase(@NotNull String name, String encoding) {
         super(URI.create("string:///" + name.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);  // La extensión .java es necesaria aunque sea falsa sino da error
 
         this.binaryName = name;
         this.encoding = encoding;
     }
 
-    protected abstract String getSource();
-
-
-    @Override
-    public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
-        return getSource();
+    public String getBinaryName() {
+        return binaryName;
     }
 
-    public byte[] getBytes() {
+    @NotNull @Override
+    public InputStream openInputStream() throws IOException {
+        return new ByteArrayInputStream(getBytes());
+    }
+
+    @NotNull public byte[] getBytes() {
         try {
             return getSource().getBytes(encoding);
         } catch (UnsupportedEncodingException ex) {
@@ -54,18 +51,16 @@ public abstract class JavaFileObjectInputSourceBase extends SimpleJavaFileObject
         }
     }
 
-    @Override
-    public InputStream openInputStream() throws IOException {
-        return new ByteArrayInputStream(getBytes());
-    }
-
-    @Override
+    @NotNull @Override
     public OutputStream openOutputStream() throws IOException {
         throw new UnsupportedOperationException();
     }
 
-    public String getBinaryName() {
-        return binaryName;
+    @Override
+    public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
+        return getSource();
     }
+
+    protected abstract String getSource();
 
 }

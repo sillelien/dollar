@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,11 @@
 package me.neilellis.dollar.script;
 
 import com.beust.jcommander.Parameter;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.List;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class ParserOptions {
 
     @Parameter(names = "--safe", description = "Provide extra safety from errors")
@@ -38,7 +36,7 @@ public class ParserOptions {
     private List<File> files;
     private boolean production;
 
-    public File getFile() {
+    @NotNull public File getFile() {
         return files.get(0);
     }
 

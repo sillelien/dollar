@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,24 +33,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-/**
- * To better understand the rationale behind this class, take a look at http://homepages.ecs.vuw.ac.nz/~tk/publications/papers/void.pdf
- *
- * Dollar does not have the concept of null. Instead null {@link me.neilellis.dollar.var} objects are instances of this class.
- *
- * Void is equivalent to 0,"",null except that unlike these values it has behavior that corresponds to a void object.
- *
- * Therefore actions taken against a void object are ignored. Any method that returns a {@link me.neilellis.dollar.var} will return a {@link DollarVoid}.
- *
- * <pre>
- *
- *  var nulled= $null();
- *  nulled.$pipe((i)-&gt;{System.out.println("You'll never see this."});
- *
- * </pre>
- *
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarVoid extends AbstractDollar implements var {
 
 
@@ -79,7 +61,7 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $plus(var rhs) {
+    public var $plus(@NotNull var rhs) {
         return this;
     }
 
@@ -107,6 +89,10 @@ public class DollarVoid extends AbstractDollar implements var {
         return this;
     }
 
+    @Override public int sign() {
+        return 0;
+    }
+
     @NotNull @Override
     public Integer toInteger() {
         return 0;
@@ -118,12 +104,8 @@ public class DollarVoid extends AbstractDollar implements var {
         return 0;
     }
 
-    @Override public int sign() {
-        return 0;
-    }
-
     @Override
-    public var $as(Type type) {
+    public var $as(@NotNull Type type) {
         if (type.equals(Type.BOOLEAN)) {
             return DollarStatic.$(false);
         } else if (type.equals(Type.STRING)) {
@@ -155,6 +137,10 @@ public class DollarVoid extends AbstractDollar implements var {
         return Type.VOID;
     }
 
+    @Override public boolean collection() {
+        return false;
+    }
+
     @NotNull
     @Override
     public ImmutableMap<var, var> $map() {
@@ -168,10 +154,6 @@ public class DollarVoid extends AbstractDollar implements var {
                 return true;
             }
         }
-        return false;
-    }
-
-    @Override public boolean collection() {
         return false;
     }
 
@@ -299,13 +281,13 @@ public class DollarVoid extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean neitherTrueNorFalse() {
-        return true;
+    public boolean isTrue() {
+        return false;
     }
 
     @Override
-    public boolean isTrue() {
-        return false;
+    public boolean neitherTrueNorFalse() {
+        return true;
     }
 
     @Override

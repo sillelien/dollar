@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,25 +23,24 @@ import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 import static me.neilellis.dollar.DollarStatic.*;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class AssignmentOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
-    private boolean pure;
+    private final boolean pure;
 
     public AssignmentOperator(Scope scope, boolean push, boolean pure) {
         this.scope = scope;
         this.pure = pure;
     }
 
-    public Map<? super var, ? extends var> map(Token token) {
+    @Nullable public Map<? super var, ? extends var> map(@NotNull Token token) {
         Type type;
         Object[] objects = (Object[]) token.value();
         var constraint;
@@ -78,7 +77,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
 
         return new Map<var, var>() {
 
-            public var map(var rhs) {
+            public var map(@NotNull var rhs) {
                 final TypePrediction prediction = rhs._predictType();
                 if (type != null && prediction != null) {
                     final Double probability = prediction.probability(type);
@@ -125,7 +124,8 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
         };
     }
 
-    private var assign(var rhs, Object[] objects, var constraint, boolean constant, boolean isVolatile,
+    private var assign(@NotNull var rhs, Object[] objects, @Nullable var constraint, boolean constant,
+                       boolean isVolatile,
                        SourceSegment source,
                        String constraintSource) {
 

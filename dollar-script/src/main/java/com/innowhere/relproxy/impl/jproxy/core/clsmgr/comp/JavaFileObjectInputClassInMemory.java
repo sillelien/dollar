@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package com.innowhere.relproxy.impl.jproxy.core.clsmgr.comp;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.tools.SimpleJavaFileObject;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -23,17 +25,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 
-/**
- * http://www.javablogging.com/dynamic-in-memory-compilation/
- *
- * @author jmarranz
- */
 public class JavaFileObjectInputClassInMemory extends SimpleJavaFileObject implements JProxyJavaFileObjectInput {
-    protected String binaryName;
-    protected byte[] byteCode;
-    protected long timestamp;
+    protected final String binaryName;
+    protected final byte[] byteCode;
+    protected final long timestamp;
 
-    public JavaFileObjectInputClassInMemory(String name, byte[] byteCode, long timestamp) {
+    public JavaFileObjectInputClassInMemory(@NotNull String name, byte[] byteCode, long timestamp) {
         super(URI.create("string:///" + name.replace('.', '/') + Kind.CLASS.extension), Kind.CLASS);
 
         this.binaryName = name;
@@ -41,28 +38,28 @@ public class JavaFileObjectInputClassInMemory extends SimpleJavaFileObject imple
         this.timestamp = timestamp;
     }
 
-    public byte[] getBytes() {
-        return byteCode;
+    @Override
+    public String getBinaryName() {
+        return binaryName;
     }
 
-    @Override
-    public long getLastModified() {
-        return timestamp;
-    }
-
-    @Override
+    @NotNull @Override
     public InputStream openInputStream() throws IOException {
         return new ByteArrayInputStream(getBytes());
     }
 
-    @Override
+    public byte[] getBytes() {
+        return byteCode;
+    }
+
+    @NotNull @Override
     public OutputStream openOutputStream() throws IOException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public String getBinaryName() {
-        return binaryName;
+    public long getLastModified() {
+        return timestamp;
     }
 
 }

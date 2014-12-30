@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,28 +16,25 @@
 
 package com.innowhere.relproxy.impl.jproxy.core.clsmgr.comp;
 
-/**
- * http://www.javablogging.com/dynamic-in-memory-compilation/
- *
- * @author jmarranz
- */
-public class JavaFileObjectInputSourceInMemory extends JavaFileObjectInputSourceBase {
-    protected String source;
-    protected long timestamp;
+import org.jetbrains.annotations.NotNull;
 
-    public JavaFileObjectInputSourceInMemory(String name, String source, String encoding, long timestamp) {
+public class JavaFileObjectInputSourceInMemory extends JavaFileObjectInputSourceBase {
+    protected final String source;
+    protected final long timestamp;
+
+    public JavaFileObjectInputSourceInMemory(@NotNull String name, String source, String encoding, long timestamp) {
         super(name, encoding);
         this.source = source;
         this.timestamp = timestamp;
     }
 
     @Override
-    protected String getSource() {
-        return source;
+    public long getLastModified() {
+        return timestamp;
     }
 
     @Override
-    public long getLastModified() {
-        return timestamp;
+    protected String getSource() {
+        return source;
     }
 }

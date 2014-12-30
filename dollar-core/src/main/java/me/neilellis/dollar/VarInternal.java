@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,8 @@ import me.neilellis.dollar.guard.NotNullCollectionGuard;
 import me.neilellis.dollar.guard.NotNullGuard;
 import me.neilellis.dollar.script.SourceSegment;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public interface VarInternal {
     /**
      * Returns a deep copy of this object. You should never need to use this operation as all {@link
@@ -63,7 +61,7 @@ public interface VarInternal {
      */
     TypePrediction _predictType();
 
-    default SourceSegment _source() {
+    @Nullable default SourceSegment _source() {
         return null;
     }
 

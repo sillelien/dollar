@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,20 +32,13 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-/**
- * The DollarWrapper class exists to provide basic AOP style constructs without having actual AOP magic.
- *
- * Currently the DollarWrapper class provides monitoring and state tracing functions.
- *
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarWrapper implements var {
 
     private final DollarMonitor monitor;
     private final StateTracer tracer;
-    private final var value;
+    @Nullable private final var value;
 
-    DollarWrapper(var value, DollarMonitor monitor, StateTracer tracer) {
+    DollarWrapper(@Nullable var value, DollarMonitor monitor, StateTracer tracer) {
 //        tracer.trace(DollarNull.INSTANCE,value, StateTracer.Operations.CREATE);
         this.value = value;
         this.monitor = monitor;
@@ -69,7 +62,7 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $plus(var rhs) {
+    public var $plus(@NotNull var rhs) {
         return getValue().$plus(rhs);
     }
 
@@ -102,6 +95,11 @@ public class DollarWrapper implements var {
     }
 
     @NotNull @Override
+    public Double toDouble() {
+        return getValue().toDouble();
+    }
+
+    @NotNull @Override
     public Integer toInteger() {
         return getValue().toInteger();
     }
@@ -117,12 +115,7 @@ public class DollarWrapper implements var {
         return getValue().toNumber();
     }
 
-    @NotNull @Override
-    public Double toDouble() {
-        return getValue().toDouble();
-    }
-
-    var getValue() {
+    @Nullable var getValue() {
         if (value == null) {
             throw new IllegalStateException("Value has become null!!");
         }
@@ -753,8 +746,7 @@ public class DollarWrapper implements var {
         return getValue().toOrgJson();
     }
 
-    @Nullable
-    @Override
+    @NotNull @Override
     public ImmutableJsonObject toJsonObject() {
         return getValue().toJsonObject();
     }

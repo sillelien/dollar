@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 package com.innowhere.relproxy.impl.jproxy.shell.inter;
 
 import com.innowhere.relproxy.impl.jproxy.JProxyUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
@@ -26,14 +28,14 @@ import java.util.List;
  */
 public class CommandSave extends Command {
     public static final String NAME = "save";
-    protected String path;
+    protected final String path;
 
     public CommandSave(JProxyShellProcessor parent, String url) {
         super(parent, NAME);
         this.path = url;
     }
 
-    public static CommandSave createCommandSave(JProxyShellProcessor parent, String cmd) {
+    @Nullable public static CommandSave createCommandSave(JProxyShellProcessor parent, @NotNull String cmd) {
         String url = getParameter(NAME, cmd);
         if (url == null) {
             System.out.println("Command error: <path> parameter is required");

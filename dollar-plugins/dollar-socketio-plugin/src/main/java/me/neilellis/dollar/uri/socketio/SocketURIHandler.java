@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package me.neilellis.dollar.uri.socketio;
 
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
-import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,13 +32,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class SocketURIHandler implements URIHandler {
     public static final int BLOCKING_TIMEOUT = 10;
     private static final ConcurrentHashMap<String, SocketIOServer> servers = new ConcurrentHashMap<>();
-    private final URI uri;
+    @NotNull private final URI uri;
     private final ConcurrentHashMap<String, SocketIOSubscription> subscriptions = new ConcurrentHashMap<>();
     private SocketIOServer server;
 
@@ -48,16 +45,16 @@ public class SocketURIHandler implements URIHandler {
         }));
     }
 
-    public SocketURIHandler(String scheme, URI uri) throws IOException {
+    public SocketURIHandler(String scheme, @NotNull URI uri) {
         this.uri = uri.sub();
     }
 
-    @Override
+    @NotNull @Override
     public var all() {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    @NotNull @Override
     public var write(var value, boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
@@ -70,22 +67,18 @@ public class SocketURIHandler implements URIHandler {
 
     }
 
-    @Override
+    @NotNull @Override
     public var drain() {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    @NotNull @Override
     public var get(var key) {
         throw new UnsupportedOperationException();
     }
 
     @Override public void init() {
-        try {
-            server = getServerFor(this.uri.host(), this.uri.port());
-        } catch (IOException e) {
-            throw new DollarException(e);
-        }
+        server = getServerFor(this.uri.host(), this.uri.port());
 
     }
 
@@ -93,7 +86,7 @@ public class SocketURIHandler implements URIHandler {
         server.stop();
     }
 
-    @Override public var publish(var value) {
+    @NotNull @Override public var publish(@NotNull var value) {
         ArrayList<var> responses = new ArrayList<>();
         server.getBroadcastOperations()
               .sendEvent(value.getPairKey().toString(), value.getPairValue().toJsonObject().toMap());
@@ -102,22 +95,22 @@ public class SocketURIHandler implements URIHandler {
         return DollarFactory.fromValue(responses);
     }
 
-    @Override
+    @NotNull @Override
     public var read(boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    @NotNull @Override
     public var remove(var key) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    @NotNull @Override
     public var removeValue(var v) {
         throw new UnsupportedOperationException();
     }
 
-    public var set(var key, var value) {
+    @NotNull public var set(var key, var value) {
         throw new UnsupportedOperationException();
     }
 
@@ -135,7 +128,7 @@ public class SocketURIHandler implements URIHandler {
     }
 
     @Override
-    public void subscribe(Pipeable consumer, String id) throws IOException {
+    public void subscribe(Pipeable consumer, @NotNull String id) throws IOException {
         final SocketIOSubscription listener = new SocketIOSubscription(consumer, id, uri);
         server.addMessageListener(listener);
         server.addConnectListener(listener);
@@ -154,11 +147,11 @@ public class SocketURIHandler implements URIHandler {
         server.start();
     }
 
-    @Override public void unsubscribe(String subId) {
+    @Override public void unsubscribe(@NotNull String subId) {
         subscriptions.remove(subId).destroy();
     }
 
-    private static SocketIOServer getServerFor(String hostname, int port) throws IOException {
+    private static SocketIOServer getServerFor(String hostname, int port) {
         String key = hostname + ":" + port;
         if (servers.containsKey(key)) {
             return servers.get(key);

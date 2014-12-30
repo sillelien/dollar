@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,23 +20,21 @@ import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.script.ModuleResolver;
 import me.neilellis.dollar.script.Scope;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class ClassModuleResolver implements ModuleResolver {
-    @Override
+    @NotNull @Override
     public ModuleResolver copy() {
         return this;
     }
 
-    @Override
+    @NotNull @Override
     public String getScheme() {
         return "class";
     }
 
-    @Override
-    public Pipeable resolve(String uriWithoutScheme, Scope scope) throws Exception {
+    @NotNull @Override
+    public Pipeable resolve(@NotNull String uriWithoutScheme, Scope scope) throws Exception {
         return (Pipeable) DollarStatic.context().getClassLoader().loadClass(uriWithoutScheme).newInstance();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,19 +23,17 @@ import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 import static me.neilellis.dollar.DollarStatic.$;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class WhileOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
     private final DollarParser parser;
-    private boolean pure;
+    private final boolean pure;
 
     public WhileOperator(DollarParser dollarParser, Scope scope, boolean pure) {
         this.parser = dollarParser;
@@ -43,7 +41,7 @@ public class WhileOperator implements Map<Token, Map<? super var, ? extends var>
         this.pure = pure;
     }
 
-    public Map<? super var, ? extends var> map(Token token) {
+    public Map<? super var, ? extends var> map(@NotNull Token token) {
         var lhs = (var) token.value();
         return rhs -> {
             Callable<var> callable = () -> parser.inScope(pure, "while", scope, newScope -> {

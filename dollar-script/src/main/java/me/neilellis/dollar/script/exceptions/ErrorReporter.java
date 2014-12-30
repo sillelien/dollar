@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,10 @@ import net.kencochrane.raven.RavenFactory;
 import net.kencochrane.raven.event.Event;
 import net.kencochrane.raven.event.EventBuilder;
 import net.kencochrane.raven.event.interfaces.ExceptionInterface;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class ErrorReporter {
-    public static void report(Class<?> clazz, Throwable t) {
+    public static void report(@NotNull Class<?> clazz, @NotNull Throwable t) {
         String
                 rawDsn =
                 "https://fd22364656ca4cf0af0de76aeb394876:34c481215db2487fae8308665be2c106@app.getsentry.com/34485";

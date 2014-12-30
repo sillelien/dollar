@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,19 +32,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-/**
- * The $ class is the class used to hold a JsonObject data structure. It can be used for managing other data types too
- * by converting them to JsonObject and back.
- *
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarMap extends AbstractDollar implements var {
 
     /**
      * Publicly accessible object containing the current state as a JsonObject, if you're working in Vert.x primarily
      * with the JsonObject type you will likely end all chained expressions with '.$'
      *
-     * For example: <code> eb.send("api.validate", $("key", key).$("params", request.params()).$) </code>
+     * For example: {@code eb.send("api.validate", $("key", key).$("params", request.params()).$) }
      */
     private final
     @NotNull
@@ -73,7 +67,7 @@ public class DollarMap extends AbstractDollar implements var {
         map = mapToVarMap(o.toMap());
     }
 
-    private LinkedHashMap<var, var> mapToVarMap(Map<?, ?> stringObjectMap) {
+    @NotNull private LinkedHashMap<var, var> mapToVarMap(@NotNull Map<?, ?> stringObjectMap) {
         LinkedHashMap<var, var> result = new LinkedHashMap<>();
         for (Map.Entry<?, ?> entry : stringObjectMap.entrySet()) {
             result.put(DollarFactory.fromValue(entry.getKey()), DollarFactory.fromValue(entry.getValue()));
@@ -81,17 +75,17 @@ public class DollarMap extends AbstractDollar implements var {
         return result;
     }
 
-    public DollarMap(ImmutableList<Throwable> errors, Map<?, ?> o) {
+    public DollarMap(@NotNull ImmutableList<Throwable> errors, @NotNull Map<?, ?> o) {
         super(errors);
         map = mapToVarMap(o);
     }
 
-    private DollarMap(ImmutableList<Throwable> errors, LinkedHashMap<var, var> o) {
+    private DollarMap(@NotNull ImmutableList<Throwable> errors, @NotNull LinkedHashMap<var, var> o) {
         super(errors);
         this.map = deepClone(o);
     }
 
-    private LinkedHashMap<var, var> deepClone(LinkedHashMap<var, var> o) {
+    @NotNull private LinkedHashMap<var, var> deepClone(@NotNull LinkedHashMap<var, var> o) {
         LinkedHashMap<var, var> result = new LinkedHashMap<>();
         for (Map.Entry<var, var> entry : o.entrySet()) {
             result.put(entry.getKey(), entry.getValue());
@@ -99,7 +93,7 @@ public class DollarMap extends AbstractDollar implements var {
         return result;
     }
 
-    public DollarMap(ImmutableList<Throwable> errors, ImmutableJsonObject immutableJsonObject) {
+    public DollarMap(@NotNull ImmutableList<Throwable> errors, @NotNull ImmutableJsonObject immutableJsonObject) {
         super(errors);
         this.map = mapToVarMap(immutableJsonObject.toMap());
     }
@@ -129,7 +123,7 @@ public class DollarMap extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $plus(var rhs) {
+    public var $plus(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
         if (rhsFix.map()) {
             LinkedHashMap<var, var> copy = copyMap();
@@ -222,12 +216,20 @@ public class DollarMap extends AbstractDollar implements var {
         return new JSONObject(varMapToMap());
     }
 
-    private LinkedHashMap<var, var> copyMap() {
+    @NotNull private Map<Object, Object> varMapToMap() {
+        Map<Object, Object> result = new LinkedHashMap<>();
+        for (Map.Entry<var, var> entry : $map().entrySet()) {
+            result.put(entry.getKey().toJavaObject(), entry.getValue().toJavaObject());
+        }
+        return result;
+    }
+
+    @NotNull private LinkedHashMap<var, var> copyMap() {
         return deepClone(map);
     }
 
     @Override
-    public var $as(Type type) {
+    public var $as(@NotNull Type type) {
         if (type.equals(Type.MAP)) {
             return this;
         } else if (type.equals(Type.LIST)) {
@@ -258,6 +260,10 @@ public class DollarMap extends AbstractDollar implements var {
         return Type.MAP;
     }
 
+    @Override public boolean collection() {
+        return true;
+    }
+
     @NotNull
     @Override
     public ImmutableMap<var, var> $map() {
@@ -277,10 +283,6 @@ public class DollarMap extends AbstractDollar implements var {
             }
         }
         return false;
-    }
-
-    @Override public boolean collection() {
-        return true;
     }
 
     @Override
@@ -310,14 +312,6 @@ public class DollarMap extends AbstractDollar implements var {
     @NotNull @Override
     public Map<Object, Object> toMap() {
         return varMapToMap();
-    }
-
-    private Map<Object, Object> varMapToMap() {
-        Map<Object, Object> result = new LinkedHashMap<>();
-        for (Map.Entry<var, var> entry : $map().entrySet()) {
-            result.put(entry.getKey().toJavaObject(), entry.getValue().toJavaObject());
-        }
-        return result;
     }
 
     @NotNull
@@ -398,7 +392,7 @@ public class DollarMap extends AbstractDollar implements var {
         return DollarStatic.$(key);
     }
 
-    @Override
+    @NotNull @Override
     public var $notify() {
         map.values().forEach(me.neilellis.dollar.var::$notify);
         return this;
@@ -416,7 +410,7 @@ public class DollarMap extends AbstractDollar implements var {
         return DollarFactory.wrap(new DollarMap(errors(), map));
     }
 
-    @Override public var _fix(int depth, boolean parallel) {
+    @NotNull @Override public var _fix(int depth, boolean parallel) {
         if (depth <= 1) {
             return this;
         } else {
@@ -457,13 +451,13 @@ public class DollarMap extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean neitherTrueNorFalse() {
-        return true;
+    public boolean isTrue() {
+        return false;
     }
 
     @Override
-    public boolean isTrue() {
-        return false;
+    public boolean neitherTrueNorFalse() {
+        return true;
     }
 
     @Override

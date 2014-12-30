@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,12 +33,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-/**
- * Special collection type, the single value. This is not a single value list or map, it is a collection of one element.
- * In DollarScript this is useful for mathematical functions as it behaves like a true lambda.
- *
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarBlockCollection implements var {
     private final List<var> value;
     private volatile var cachedValue;
@@ -52,7 +46,7 @@ public class DollarBlockCollection implements var {
         return this.getValue().$(key, value);
     }
 
-    var getValue() {
+    @NotNull var getValue() {
         for (int i = 0; i < value.size() - 1; i++) {
             value.get(i)._fixDeep(false);
         }
@@ -90,7 +84,7 @@ public class DollarBlockCollection implements var {
 
     @Override @Nullable public JSONObject toOrgJson() {return getValue().toOrgJson();}
 
-    @Override @Nullable public ImmutableJsonObject toJsonObject() {return getValue().toJsonObject();}
+    @NotNull @Override public ImmutableJsonObject toJsonObject() {return getValue().toJsonObject();}
 
     @Override @NotNull @Guarded(NotNullGuard.class) @Guarded(ChainGuard.class)
     public var $abs() {return getValue().$abs();}
@@ -103,7 +97,7 @@ public class DollarBlockCollection implements var {
         return this.getValue().$minus(rhs);
     }
 
-    @Override @NotNull @Guarded(ChainGuard.class) public var $plus(@Nullable var rhs) {
+    @Override @NotNull @Guarded(ChainGuard.class) public var $plus(@NotNull var rhs) {
         return this.getValue().$plus(rhs);
     }
 
@@ -132,13 +126,13 @@ public class DollarBlockCollection implements var {
         return getValue().sign();
     }
 
+    @Override @NotNull @Guarded(NotNullGuard.class) public Double toDouble() {return getValue().toDouble();}
+
     @Override @NotNull @Guarded(NotNullGuard.class) public Integer toInteger() {return getValue().toInteger();}
 
     @Override @Guarded(NotNullGuard.class) @NotNull public Long toLong() {return getValue().toLong();}
 
     @Override @Guarded(NotNullGuard.class) @NotNull public Number toNumber() {return getValue().toNumber();}
-
-    @Override @NotNull @Guarded(NotNullGuard.class) public Double toDouble() {return getValue().toDouble();}
 
     @Override @Guarded(ChainGuard.class) public var $all() {return getValue().$all();}
 

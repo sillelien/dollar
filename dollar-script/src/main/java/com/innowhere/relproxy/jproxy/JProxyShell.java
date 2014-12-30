@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,6 @@ package com.innowhere.relproxy.jproxy;
 
 import com.innowhere.relproxy.impl.jproxy.shell.JProxyShellImpl;
 
-/**
- * Is the main class to execute shell scripting based on Java.
- *
- * <p>You are not going to use directly this class, use instead <code>jproxysh</code> command line.</p>
- *
- * @author Jose Maria Arranz Santamaria
- */
 public class JProxyShell {
     /**
      * The main method.

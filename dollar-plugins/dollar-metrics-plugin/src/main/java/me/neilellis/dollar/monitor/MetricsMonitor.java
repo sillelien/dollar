@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,6 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class MetricsMonitor implements DollarMonitor {
 
   private final MetricRegistry metrics = new MetricRegistry();
@@ -48,7 +45,7 @@ public class MetricsMonitor implements DollarMonitor {
                               .build();
   }
 
-  @Override public DollarMonitor copy() {
+    @NotNull @Override public DollarMonitor copy() {
     return this;
   }
 

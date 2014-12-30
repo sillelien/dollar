@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,25 +17,23 @@
 package me.neilellis.dollar.guard;
 
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class ReturnVarOnlyGuard implements Guard {
-    @Override
+    @NotNull @Override
     public String description() {
         return "All Var Guard";
     }
 
     @Override
-    public void preCondition(Object guarded, Method method, Object[] args) {
+    public void postCondition(Object guarded, Method method, Object[] args, Object result) {
+        assertTrue(result instanceof var, method);
     }
 
     @Override
-    public void postCondition(Object guarded, Method method, Object[] args, Object result) {
-        assertTrue(result instanceof var, method);
+    public void preCondition(Object guarded, Method method, Object[] args) {
     }
 
 }

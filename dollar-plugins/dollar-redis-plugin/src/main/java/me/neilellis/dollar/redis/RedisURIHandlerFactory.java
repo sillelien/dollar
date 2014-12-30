@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,10 @@ package me.neilellis.dollar.redis;
 import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.JedisPoolConfig;
 
-import java.net.URISyntaxException;
-
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class RedisURIHandlerFactory implements URIHandlerFactory {
 
 
@@ -36,22 +33,18 @@ public class RedisURIHandlerFactory implements URIHandlerFactory {
 
     }
 
-    @Override
+    @NotNull @Override
     public URIHandlerFactory copy() {
         return this;
     }
 
-    @Override
+    @Nullable @Override
     public URIHandler forURI(String scheme, URI uri) {
-        try {
-            return new RedisURIHandler(uri, poolConfig);
-        } catch (URISyntaxException e) {
-            return null;
-        }
+        return new RedisURIHandler(uri, poolConfig);
     }
 
     @Override
-    public boolean handlesScheme(String scheme) {
+    public boolean handlesScheme(@NotNull String scheme) {
         return scheme.equals("redis");
     }
 }

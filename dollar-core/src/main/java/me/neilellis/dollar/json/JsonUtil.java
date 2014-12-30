@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,13 @@
 
 package me.neilellis.dollar.json;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class JsonUtil {
-    public static JsonObject argsToJson(List<String> args) {
+    @NotNull public static JsonObject argsToJson(@NotNull List<String> args) {
         JsonObject json = new JsonObject();
         if (!args.isEmpty()) {
             String key = "";
@@ -57,7 +56,7 @@ public class JsonUtil {
         return json;
     }
 
-    private static Object convert(String arg) {
+    private static Object convert(@NotNull String arg) {
         Object argConverted = arg;
         if (arg.equals("true") || arg.equals("false")) {
             argConverted = Boolean.valueOf(arg);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,12 +28,9 @@ import java.util.concurrent.Callable;
 
 import static me.neilellis.dollar.DollarStatic.$void;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class VariableUsageOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
-    private boolean pure;
+    private final boolean pure;
 
     public VariableUsageOperator(Scope scope, boolean pure) {
         this.scope = scope;

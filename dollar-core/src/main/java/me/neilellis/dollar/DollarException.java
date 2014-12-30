@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,11 @@
 package me.neilellis.dollar;
 
 import me.neilellis.dollar.script.SourceSegment;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The base Dollar exception which can optionally have source code associated with it.
- *
- * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarException extends RuntimeException {
 
     private final List<SourceSegment> sourceList = new ArrayList<>();
@@ -63,7 +59,7 @@ public class DollarException extends RuntimeException {
      *
      * @param source the source code to which the exception relates
      */
-    public void addSource(SourceSegment source) {
+    public void addSource(@NotNull SourceSegment source) {
         if (source == null) {
             throw new NullPointerException();
         }

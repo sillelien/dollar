@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
 
     public DollarBoolean(@NotNull ImmutableList<Throwable> errors, @NotNull Boolean value) {
@@ -86,7 +83,7 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     }
 
     @Override
-    public var $as(Type type) {
+    public var $as(@NotNull Type type) {
         if (type.equals(Type.BOOLEAN)) {
             return this;
         } else if (type.equals(Type.STRING)) {
@@ -120,7 +117,7 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         return false;
     }
 
-    @NotNull @Override public var $plus(var rhs) {
+    @NotNull @Override public var $plus(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
         if (rhsFix.list()) {
             rhsFix.$prepend(this);
@@ -164,34 +161,9 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         return value;
     }
 
-    @NotNull @Override public String toDollarScript() {
-        return toString();
-    }
-
-    @NotNull
     @Override
-    public Boolean toJavaObject() {
-        return value;
-    }
-
-    @NotNull @Override
-    public Long toLong() {
-        return value ? 1L : 0L;
-    }
-
-    @NotNull
-    @Override
-    public Double toDouble() {
-        return value ? 1.0 : 0.0;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof DollarBoolean) {
-            return toJavaObject().equals(((DollarBoolean) obj).toJavaObject());
-        } else {
-            return value.toString().equals(obj.toString());
-        }
+    public boolean number() {
+        return false;
     }
 
     @Override
@@ -205,7 +177,32 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     }
 
     @Override
-    public boolean number() {
-        return false;
+    public boolean equals(Object obj) {
+        if (obj instanceof DollarBoolean) {
+            return toJavaObject().equals(((DollarBoolean) obj).toJavaObject());
+        } else {
+            return value.toString().equals(obj.toString());
+        }
+    }
+
+    @NotNull @Override
+    public Long toLong() {
+        return value ? 1L : 0L;
+    }
+
+    @NotNull
+    @Override
+    public Double toDouble() {
+        return value ? 1.0 : 0.0;
+    }
+
+    @NotNull @Override public String toDollarScript() {
+        return toString();
+    }
+
+    @NotNull
+    @Override
+    public Boolean toJavaObject() {
+        return value;
     }
 }

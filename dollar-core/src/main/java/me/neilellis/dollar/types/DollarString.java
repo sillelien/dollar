@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,9 +37,6 @@ import java.util.regex.PatternSyntaxException;
 import static me.neilellis.dollar.types.DollarFactory.*;
 import static me.neilellis.dollar.types.ErrorType.*;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarString extends AbstractDollarSingleValue<String> {
 
 
@@ -142,7 +139,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return fromValue(newValue, errors());
     }
 
-    @Override
+    @NotNull @Override
     public Integer toInteger() {
         try {
             return Integer.parseInt(value);
@@ -152,7 +149,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
-    public var $as(Type type) {
+    public var $as(@NotNull Type type) {
         if (type.equals(Type.BOOLEAN)) {
             return DollarStatic.$(value.equals("true") || value.equals("yes"));
         } else if (type.equals(Type.STRING)) {
@@ -197,7 +194,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
-    public var $plus(var rhs) {
+    public var $plus(@NotNull var rhs) {
         final ImmutableList<Throwable> thisErrors = errors();
         final ArrayList<Throwable> errors = new ArrayList<>();
         errors.addAll(thisErrors.mutable());
@@ -221,12 +218,12 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
-    public boolean neitherTrueNorFalse() {
+    public boolean isTrue() {
         return false;
     }
 
     @Override
-    public boolean isTrue() {
+    public boolean neitherTrueNorFalse() {
         return false;
     }
 
@@ -252,12 +249,8 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
-    public Double toDouble() {
-        try {
-            return Double.parseDouble(value);
-        } catch (NumberFormatException nfe) {
-            return null;
-        }
+    public boolean string() {
+        return true;
     }
 
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass") @Override
@@ -265,8 +258,12 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return obj != null && value.equals(obj.toString());
     }
 
-    @Override
-    public boolean string() {
-        return true;
+    @Nullable @Override
+    public Double toDouble() {
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException nfe) {
+            return null;
+        }
     }
 }

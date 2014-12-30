@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 package com.innowhere.relproxy.impl;
 
 import com.innowhere.relproxy.RelProxyException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -25,25 +27,27 @@ import java.util.ArrayList;
  * @author jmarranz
  */
 public abstract class GenericProxyVersionedObject<T> {
+    protected final GenericProxyInvocationHandler parent;
     protected T obj;
-    protected GenericProxyInvocationHandler parent;
 
     public GenericProxyVersionedObject(T obj, GenericProxyInvocationHandler parent) {
         this.obj = obj;
         this.parent = parent;
     }
 
-    protected static void getTreeFields(Class clasz, Object obj, ArrayList<Field> fieldList, ArrayList<Object> valueList) throws IllegalAccessException {
+    protected static void getTreeFields(@NotNull Class clasz, Object obj, @NotNull ArrayList<Field> fieldList,
+                                        ArrayList<Object> valueList) throws IllegalAccessException {
         getFields(clasz, obj, fieldList, valueList);
         Class superClass = clasz.getSuperclass();
         if (superClass != null)
             getTreeFields(superClass, obj, fieldList, valueList);
     }
 
-    protected static void getFields(Class clasz, Object obj, ArrayList<Field> fieldList, ArrayList<Object> valueList) throws IllegalAccessException {
+    protected static void getFields(
+            @NotNull Class clasz, Object obj, @NotNull ArrayList<Field> fieldList,
+            @Nullable ArrayList<Object> valueList) throws IllegalAccessException {
         Field[] fieldListClass = clasz.getDeclaredFields();
-        for (int i = 0; i < fieldListClass.length; i++) {
-            Field field = fieldListClass[i];
+        for (Field field : fieldListClass) {
             fieldList.add(field);
             if (valueList != null) {
                 field.setAccessible(true);
@@ -60,18 +64,19 @@ public abstract class GenericProxyVersionedObject<T> {
 
         Class oldClass = obj.getClass();
         if (newClass != oldClass) {
-            ArrayList<Field> fieldListOld = new ArrayList<Field>();
-            ArrayList<Object> valueListOld = new ArrayList<Object>();
+            ArrayList<Field> fieldListOld = new ArrayList<>();
+            ArrayList<Object> valueListOld = new ArrayList<>();
 
             getTreeFields(oldClass, obj, fieldListOld, valueListOld);
 
             try {
                 this.obj = newClass.getConstructor(new Class[0]).newInstance();
             } catch (NoSuchMethodException ex) {
-                throw new RelProxyException("Cannot reload " + newClass.getName() + " a default empty of params constructor is required", ex);
+                throw new RelProxyException("Cannot reload " + newClass.getName() + " a default empty of params " +
+                                            "constructor is required", ex);
             }
 
-            ArrayList<Field> fieldListNew = new ArrayList<Field>();
+            ArrayList<Field> fieldListNew = new ArrayList<>();
 
             getTreeFields(newClass, obj, fieldListNew, null);
 
@@ -94,7 +99,7 @@ public abstract class GenericProxyVersionedObject<T> {
         return obj;
     }
 
-    protected abstract <T> Class<T> reloadClass();
+    @Nullable protected abstract <T> Class<T> reloadClass();
 
     protected abstract T getCurrent();
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,19 @@ package me.neilellis.dollar.time;
 
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.types.DollarFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 import java.util.concurrent.*;
 
 import static me.neilellis.dollar.DollarStatic.$;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class Scheduler {
 
     private static final ScheduledExecutorService scheduler = new ScheduledThreadPoolExecutor(3);
     private static final ConcurrentHashMap<String, ScheduledFuture> scheduledTasks = new ConcurrentHashMap<>();
 
-    public static String schedule(Pipeable task, long duration) {
+    @NotNull public static String schedule(@NotNull Pipeable task, long duration) {
 
         String id = UUID.randomUUID().toString();
         scheduledTasks.put(id, scheduler.scheduleAtFixedRate(() -> {
@@ -46,7 +44,7 @@ public class Scheduler {
         return id;
     }
 
-    public static void cancel(String id) {
+    public static void cancel(@NotNull String id) {
         ScheduledFuture scheduledFuture = scheduledTasks.get(id);
         if (scheduledFuture != null) {
             scheduledFuture.cancel(false);

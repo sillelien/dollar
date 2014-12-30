@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class JsonUtilTest {
     }
 
     @Test
-    public void testArgsToJson() throws Exception {
+    public void testArgsToJson() {
         final JsonObject jsonObject = JsonUtil.argsToJson(Arrays.asList("--remove",
                 "filename",
                 "-add",
@@ -61,7 +61,7 @@ public class JsonUtilTest {
     }
 
     @Test
-    public void testMore() throws Exception {
+    public void testMore() {
         final JsonObject jsonObject = JsonUtil.argsToJson(Arrays.asList("--test", "1", "2", "3"));
         System.out.println(jsonObject);
         assertEquals(3, (long) jsonObject.getArray("test").size());

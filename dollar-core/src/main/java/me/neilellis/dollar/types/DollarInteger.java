@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,6 @@ import java.util.Objects;
 
 import static java.lang.Math.abs;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarInteger extends AbstractDollarSingleValue<Long> {
 
     public DollarInteger(@NotNull ImmutableList<Throwable> errors, @NotNull Long value) {
@@ -105,6 +102,10 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         }
     }
 
+    @Override public int sign() {
+        return (int) Math.signum(value);
+    }
+
     @Override
     @NotNull
     public Integer toInteger() {
@@ -117,12 +118,8 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         return value;
     }
 
-    @Override public int sign() {
-        return (int) Math.signum(value);
-    }
-
     @Override
-    public var $as(Type type) {
+    public var $as(@NotNull Type type) {
 
         if (type.equals(Type.BOOLEAN)) {
             return DollarStatic.$(value != 0);
@@ -159,7 +156,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
 
     @NotNull
     @Override
-    public var $plus(var rhs) {
+    public var $plus(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
         if (rhsFix.infinite()) {
             return rhsFix;
@@ -217,13 +214,13 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     }
 
     @Override
-    public boolean neitherTrueNorFalse() {
-        return true;
+    public boolean isTrue() {
+        return false;
     }
 
     @Override
-    public boolean isTrue() {
-        return false;
+    public boolean neitherTrueNorFalse() {
+        return true;
     }
 
     @Override
@@ -231,15 +228,19 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         return value != 0;
     }
 
-    @NotNull @Override
-    public Long toLong() {
-        return value;
+    @Override
+    public boolean number() {
+        return true;
     }
 
-    @NotNull
     @Override
-    public Double toDouble() {
-        return value.doubleValue();
+    public boolean decimal() {
+        return false;
+    }
+
+    @Override
+    public boolean integer() {
+        return true;
     }
 
     @Override
@@ -256,22 +257,18 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         }
     }
 
-    @Override
-    public boolean decimal() {
-        return false;
+    @NotNull @Override
+    public Long toLong() {
+        return value;
     }
 
+    @NotNull
     @Override
-    public boolean integer() {
-        return true;
+    public Double toDouble() {
+        return value.doubleValue();
     }
 
-    @Override
-    public boolean number() {
-        return true;
-    }
-
-    boolean $equals(var other) {
+    boolean $equals(@NotNull var other) {
         return value.equals(other.toLong());
     }
 

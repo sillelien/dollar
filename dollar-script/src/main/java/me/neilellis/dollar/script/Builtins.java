@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import me.neilellis.dollar.script.exceptions.BuiltinNotFoundException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.types.ErrorType;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,13 +34,10 @@ import java.util.stream.Collectors;
 import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$void;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class Builtins {
 
     private static final double DAY_IN_MILLIS = 24.0 * 60.0 * 60.0 * 1000.0;
-    private static final HashMap<String, Builtin<var>> map;
+    @NotNull private static final HashMap<String, Builtin<var>> map;
 
     static {
         map = new HashMap<>();
@@ -112,7 +110,7 @@ public class Builtins {
         addJavaStyle(2, 2, (pure, args, scope) -> args.get(0).toString().matches(args.get(1).$S()), true, "MATCHES");
     }
 
-    public static var execute(String name, List<var> parameters, Scope scope, boolean pure) {
+    @NotNull public static var execute(String name, List<var> parameters, Scope scope, boolean pure) {
         final Builtin<var> builtin = map.get(name);
         if (builtin == null) {
             throw new BuiltinNotFoundException(name);
@@ -125,20 +123,21 @@ public class Builtins {
     }
 
     private static <T> void addJavaStyle(int minargs, int maxargs, Builtin.JavaStyle<T> lambda, boolean pure,
-                                         String... names) {
+                                         @NotNull String... names) {
         for (String name : names) {
             map.put(name, new Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure));
         }
     }
 
     private static void addDollarStyle(int minargs, int maxargs, Builtin.DollarStyle lambda, boolean pure,
-                                       String... names) {
+                                       @NotNull String... names) {
         for (String name : names) {
             map.put(name, new Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure));
         }
     }
 
-    private static void addDollarSingleNoScope(boolean isPure, Function<var, var> lambda, String... names) {
+    private static void addDollarSingleNoScope(boolean isPure, @NotNull Function<var, var> lambda,
+                                               @NotNull String... names) {
         for (String name : names) {
             map.put(name, new Builtin.BuiltinImpl(name, (pure, args, scope) -> lambda.apply((var) args.get(0)), 1, 1,
                                                   isPure));

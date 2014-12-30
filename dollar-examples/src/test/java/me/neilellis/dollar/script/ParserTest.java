@@ -19,11 +19,13 @@ package me.neilellis.dollar.script;
 import com.google.common.io.CharStreams;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.test.CircleCiParallelRule;
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
@@ -31,9 +33,8 @@ import java.util.List;
 public class ParserTest {
 
     @ClassRule public static final CircleCiParallelRule className = new CircleCiParallelRule();
-
+    @NotNull private final me.neilellis.dollar.script.ParserOptions options = new ParserOptions();
     private boolean parallel;
-    private me.neilellis.dollar.script.ParserOptions options = new ParserOptions();
 
     @Before
     public void setUp() throws Exception {
@@ -112,7 +113,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testMarkdown1() throws Exception {
+    public void testMarkdown1() throws IOException {
         new DollarParser(options).parseMarkdown(
                 CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/test1.md"))));
     }
@@ -177,7 +178,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testURIs() throws Exception {
+    public void testURIs() {
 //        new DollarParser().parse(getClass().getResourceAsStream("/test_uris.ds"), parallel);
     }
 

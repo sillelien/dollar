@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package me.neilellis.dollar;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertFalse;
 import static me.neilellis.dollar.DollarStatic.$;
 import static org.junit.Assert.*;
 
@@ -31,7 +30,7 @@ public class DollarTypeTest {
     }
 
     @Test
-    public void testDouble() throws InterruptedException {
+    public void testDouble() {
         //Number types
         assertEquals(1L, (long) $(1.0).toLong());
 
@@ -67,7 +66,7 @@ public class DollarTypeTest {
     }
 
     @Test
-    public void testIntegers() throws InterruptedException {
+    public void testIntegers() {
         //Number types
         assertEquals(1, (int) $(1).toInteger());
         assertEquals(1, (long) $(1).toLong());

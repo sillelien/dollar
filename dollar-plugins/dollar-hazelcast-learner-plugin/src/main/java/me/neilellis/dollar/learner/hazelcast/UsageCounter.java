@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,12 @@ package me.neilellis.dollar.learner.hazelcast;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import me.neilellis.dollar.Type;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class UsageCounter implements com.hazelcast.nio.serialization.DataSerializable {
     private Type resultType;
     private AtomicLong usage;
@@ -47,14 +46,13 @@ public class UsageCounter implements com.hazelcast.nio.serialization.DataSeriali
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
 
         UsageCounter that = (UsageCounter) o;
 
-        if (!resultType.equals(that.resultType)) { return false; }
-        return true;
+        return resultType.equals(that.resultType);
     }
 
     public void inc() {
@@ -70,12 +68,12 @@ public class UsageCounter implements com.hazelcast.nio.serialization.DataSeriali
     }
 
 
-    @Override public void writeData(ObjectDataOutput out) throws IOException {
+    @Override public void writeData(@NotNull ObjectDataOutput out) throws IOException {
         out.writeLong(usage.get());
         out.writeUTF(resultType.name());
     }
 
-    @Override public void readData(ObjectDataInput in) throws IOException {
+    @Override public void readData(@NotNull ObjectDataInput in) throws IOException {
         usage = new AtomicLong(in.readLong());
         resultType = Type.valueOf(in.readUTF());
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import com.innowhere.relproxy.impl.jproxy.JProxyConfigImpl;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.ClassDescriptorSourceScript;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.SourceScript;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.SourceScriptInMemory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 
@@ -28,21 +30,13 @@ import java.util.LinkedList;
  * @author jmarranz
  */
 public class JProxyShellCodeSnippetImpl extends JProxyShellImpl {
-    public void init(String[] args) {
+    public void init(@NotNull String[] args) {
         super.init(args, null);
     }
 
     @Override
-    protected void executeFirstTime(ClassDescriptorSourceScript scriptFileDesc, LinkedList<String> argsToScript, JProxyShellClassLoader classLoader) {
-        try {
-            scriptFileDesc.callMainMethod(argsToScript);
-        } catch (Throwable ex) {
-            ex.printStackTrace(System.out);
-        }
-    }
-
-    @Override
-    protected void processConfigParams(String[] args, LinkedList<String> argsToScript, JProxyConfigImpl config) {
+    protected void processConfigParams(
+            @NotNull String[] args, @NotNull LinkedList<String> argsToScript, @NotNull JProxyConfigImpl config) {
         super.processConfigParams(args, argsToScript, config);
 
         String classFolder = config.getClassFolder();
@@ -54,19 +48,29 @@ public class JProxyShellCodeSnippetImpl extends JProxyShellImpl {
             throw new RelProxyException("scanPeriod positive value has no sense in code snippet execution");
     }
 
-    @Override
-    protected SourceScript getSourceScript(String[] args, LinkedList<String> argsToScript) {
-        // En argsToScript no está el args[0] ni falta que hace porque es el flag "-c" 
+    @NotNull @Override
+    protected SourceScript getSourceScript(String[] args, @NotNull LinkedList<String> argsToScript) {
+        // En argsToScript no está el args[0] ni falta que hace porque es el flag "-c"
         StringBuilder code = new StringBuilder();
         for (String chunk : argsToScript)
             code.append(chunk);
         return SourceScriptInMemory.createSourceScriptInMemory(code.toString());
     }
 
-    @Override
+    @Nullable @Override
     protected JProxyShellClassLoader getJProxyShellClassLoader(JProxyConfigImpl config) {
         // No hay classFolder => no hay necesidad de nuevo ClassLoader
         return null;
+    }
+
+    @Override
+    protected void executeFirstTime(@NotNull ClassDescriptorSourceScript scriptFileDesc,
+                                    @NotNull LinkedList<String> argsToScript, JProxyShellClassLoader classLoader) {
+        try {
+            scriptFileDesc.callMainMethod(argsToScript);
+        } catch (Throwable ex) {
+            ex.printStackTrace(System.out);
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,18 @@
 package com.innowhere.relproxy.impl.jproxy.core;
 
 import com.innowhere.relproxy.impl.GenericProxyInvocationHandler;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author jmarranz
  */
 public class JProxyInvocationHandler<T> extends GenericProxyInvocationHandler {
-    public JProxyInvocationHandler(T obj, JProxyImpl root) {
+    public JProxyInvocationHandler(@NotNull T obj, JProxyImpl root) {
         super(root);
-        this.verObj = new JProxyVersionedObject<T>(obj, this);
+        this.verObj = new JProxyVersionedObject<>(obj, this);
     }
 
-    public JProxyImpl getJProxyImpl() {
+    @NotNull public JProxyImpl getJProxyImpl() {
         return (JProxyImpl) root;
     }
 

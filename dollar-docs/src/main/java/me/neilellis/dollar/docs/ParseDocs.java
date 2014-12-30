@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package me.neilellis.dollar.docs;
 import com.google.common.io.CharStreams;
 import me.neilellis.dollar.script.DollarParser;
 import me.neilellis.dollar.script.ParserOptions;
+import org.jetbrains.annotations.NotNull;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 
@@ -33,9 +34,10 @@ public class ParseDocs {
         parseDoc("scripting", new File(args[0]));
     }
 
-    private static void parseDoc(String page, File outDir) throws IOException {
+    private static void parseDoc(String page, @NotNull File outDir) throws IOException {
         outDir.mkdirs();
-        String source = CharStreams.toString(new InputStreamReader(ParseDocs.class.getResourceAsStream("/pages/" + page + ".md")));
+        String source = CharStreams.toString(
+                new InputStreamReader(ParseDocs.class.getResourceAsStream("/pages/" + page + ".md")));
         String toParse;
         if (source.startsWith("#!")) {
             toParse = "\n" + source.substring(source.indexOf("\n"));

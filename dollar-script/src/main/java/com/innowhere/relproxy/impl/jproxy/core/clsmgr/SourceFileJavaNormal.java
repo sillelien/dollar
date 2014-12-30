@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,28 +16,22 @@
 
 package com.innowhere.relproxy.impl.jproxy.core.clsmgr;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 
 /**
  * @author jmarranz
  */
 public class SourceFileJavaNormal extends SourceUnit {
-    protected File sourceFile;
+    protected final File sourceFile;
 
     public SourceFileJavaNormal(File sourceFile) {
         this.sourceFile = sourceFile;
     }
 
-    @Override
-    public long lastModified() {
-        return sourceFile.lastModified();
-    }
-
-    public File getFile() {
-        return sourceFile;
-    }
-
-    public String getClassNameFromSourceFileJavaAbsPath(File rootPathOfSourcesFile) {
+    @Nullable public String getClassNameFromSourceFileJavaAbsPath(@NotNull File rootPathOfSourcesFile) {
         String path = sourceFile.getAbsolutePath();
         String rootPathOfSources = rootPathOfSourcesFile.getAbsolutePath();
         int pos = path.indexOf(rootPathOfSources);
@@ -50,5 +44,14 @@ public class SourceFileJavaNormal extends SourceUnit {
         path = path.substring(0, pos);
         path = path.replace(File.separatorChar, '.');  // getAbsolutePath() normaliza con el caracter de la plataforma
         return path;
+    }
+
+    public File getFile() {
+        return sourceFile;
+    }
+
+    @Override
+    public long lastModified() {
+        return sourceFile.lastModified();
     }
 }

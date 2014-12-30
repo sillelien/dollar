@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,10 @@ import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.NotNullGuard;
 import me.neilellis.dollar.guard.NotNullParametersGuard;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static me.neilellis.dollar.DollarStatic.$;
 
-/**
- * A collection of numerical operations for the {@link me.neilellis.dollar.var} interface.
- *
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public interface NumericAware {
 
 
@@ -42,7 +38,7 @@ public interface NumericAware {
     @Guarded(ChainGuard.class) var $abs();
 
     /**
-     * Decrements this value, decrementing is the same as  <code>$minus($(1))</code> for numeric values but may be
+     * Decrements this value, decrementing is the same as  {@code $minus($(1))} for numeric values but may be
      * different behaviour for non-numeric values.
      *
      * @return the new decremented value
@@ -102,7 +98,7 @@ public interface NumericAware {
     @Guarded(ChainGuard.class) var $divide(@NotNull var rhs);
 
     /**
-     * Incrementing is the same as <code>$plus($(1))</code> for numerical values, it has type dependent behaviour for
+     * Incrementing is the same as {@code $plus($(1))} for numerical values, it has type dependent behaviour for
      * the other types.
      *
      * @return the incremented value
@@ -122,7 +118,7 @@ public interface NumericAware {
      *
      * @return the new value
      */
-    default var $minus(int rhs) {
+    @NotNull default var $minus(int rhs) {
         return $minus(DollarStatic.$(rhs));
     }
 
@@ -155,7 +151,7 @@ public interface NumericAware {
      *
      * @return the new value
      */
-    default var $plus(int rhs) {
+    @NotNull default var $plus(int rhs) {
         return $plus(DollarStatic.$(rhs));
     }
 
@@ -181,6 +177,13 @@ public interface NumericAware {
     }
 
     /**
+     * toDouble double.
+     *
+     * @return the double
+     */
+    @Nullable Double toDouble();
+
+    /**
      * Is positive.
      *
      * @return the boolean
@@ -194,7 +197,7 @@ public interface NumericAware {
      *
      * @return the integer
      */
-    Integer toInteger();
+    @NotNull Integer toInteger();
 
     /**
      * toLong long.
@@ -208,16 +211,9 @@ public interface NumericAware {
      *
      * @return the number
      */
-    default Number toNumber() {
+    @Nullable default Number toNumber() {
         return toDouble();
     }
-
-    /**
-     * toDouble double.
-     *
-     * @return the double
-     */
-    Double toDouble();
 
     /**
      * Is zero.

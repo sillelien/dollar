@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package com.innowhere.relproxy.impl.jproxy.core.clsmgr;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 
 /**
@@ -24,7 +26,7 @@ import java.io.File;
 public class SourceScriptInMemory extends SourceScript {
     public static final String DEFAULT_CLASS_NAME = "_jproxyMainClass_";  // OJO NO CAMBIAR, está ya documentada
 
-    protected String className;
+    protected final String className;
     protected String code;
     protected long timestamp;
 
@@ -33,13 +35,13 @@ public class SourceScriptInMemory extends SourceScript {
         setScriptCode(code, System.currentTimeMillis());
     }
 
-    public static SourceScriptInMemory createSourceScriptInMemory(String code) {
-        return new SourceScriptInMemory(DEFAULT_CLASS_NAME, code);
+    public final void setScriptCode(String code, long timestamp) {
+        this.code = code;
+        this.timestamp = timestamp;
     }
 
-    @Override
-    public long lastModified() {
-        return timestamp; // Siempre ha sido modificado
+    @NotNull public static SourceScriptInMemory createSourceScriptInMemory(String code) {
+        return new SourceScriptInMemory(DEFAULT_CLASS_NAME, code);
     }
 
     @Override
@@ -48,17 +50,17 @@ public class SourceScriptInMemory extends SourceScript {
         return code;
     }
 
+    @Override
+    public String getClassNameFromSourceFileScriptAbsPath(File rootPathOfSourcesFile) {
+        return className;
+    }
+
     public String getScriptCode() {
         return code;
     }
 
-    public final void setScriptCode(String code, long timestamp) {
-        this.code = code;
-        this.timestamp = timestamp;
-    }
-
     @Override
-    public String getClassNameFromSourceFileScriptAbsPath(File rootPathOfSourcesFile) {
-        return className;
+    public long lastModified() {
+        return timestamp; // Siempre ha sido modificado
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,18 @@ package me.neilellis.dollar.types.prediction;
 
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.TypePrediction;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class CountBasedTypePrediction implements TypePrediction, Serializable {
+    @NotNull private final HashMap<Type, Long> values = new HashMap<>();
     private String name;
     private long total;
-    private HashMap<Type, Long> values = new HashMap<>();
 
     public CountBasedTypePrediction() {
     }
@@ -53,7 +52,7 @@ public class CountBasedTypePrediction implements TypePrediction, Serializable {
         return values.isEmpty();
     }
 
-    @Override public Double probability(Type type) {
+    @NotNull @Override public Double probability(Type type) {
         final Long value = values.get(type);
         if (value == null) {
             return 0.0;
@@ -61,7 +60,7 @@ public class CountBasedTypePrediction implements TypePrediction, Serializable {
         return ((double) value) / total;
     }
 
-    @Override public Type probableType() {
+    @Nullable @Override public Type probableType() {
         long max = 0;
         Type result = null;
         for (Map.Entry<Type, Long> entry : values.entrySet()) {
@@ -73,7 +72,7 @@ public class CountBasedTypePrediction implements TypePrediction, Serializable {
         return result;
     }
 
-    @Override public Set<Type> types() {
+    @NotNull @Override public Set<Type> types() {
         return values.keySet();
     }
 
@@ -81,7 +80,7 @@ public class CountBasedTypePrediction implements TypePrediction, Serializable {
         return values.get(type);
     }
 
-    @Override public String toString() {
+    @NotNull @Override public String toString() {
         return "TypePrediction{" +
                "name='" + name + '\'' +
                ", total=" + total +

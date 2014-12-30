@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,21 +22,19 @@ import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
 import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$void;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class WhenOperator implements Map<Token, var> {
-    private Scope scope;
+    private final Scope scope;
 
     public WhenOperator(Scope scope) {this.scope = scope;}
 
-    @Override public var map(Token token) {
+    @Override public var map(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
         var lhs = (var) objects[0];
         var rhs = (var) objects[1];

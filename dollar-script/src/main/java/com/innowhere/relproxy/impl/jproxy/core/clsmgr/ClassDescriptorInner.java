@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,24 @@
 
 package com.innowhere.relproxy.impl.jproxy.core.clsmgr;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author jmarranz
  */
 public class ClassDescriptorInner extends ClassDescriptor {
-    protected ClassDescriptorSourceUnit parent;
+    protected final ClassDescriptorSourceUnit parent;
 
-    public ClassDescriptorInner(String className, ClassDescriptorSourceUnit parent) {
+    public ClassDescriptorInner(@NotNull String className, ClassDescriptorSourceUnit parent) {
         super(className);
         this.parent = parent;
     }
 
-    public boolean isInnerClass() {
-        return true;
-    }
-
     public ClassDescriptorSourceUnit getClassDescriptorSourceUnit() {
         return parent;
+    }
+
+    public boolean isInnerClass() {
+        return true;
     }
 }

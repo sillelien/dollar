@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 package com.innowhere.relproxy.impl.jproxy.core.clsmgr;
 
 import com.innowhere.relproxy.impl.jproxy.JProxyUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.URL;
 
@@ -24,36 +26,15 @@ import java.net.URL;
  * @author jmarranz
  */
 public class JProxyClassLoader extends ClassLoader {
-    protected final JProxyEngine engine;
+    @NotNull protected final JProxyEngine engine;
 
-    public JProxyClassLoader(JProxyEngine engine) {
+    public JProxyClassLoader(@NotNull JProxyEngine engine) {
         super(engine.getRootClassLoader());
 
         this.engine = engine;
     }
 
-    public Class defineClass(ClassDescriptor classDesc) {
-        synchronized (engine) {
-            String className = classDesc.getClassName();
-            byte[] classBytes = classDesc.getClassBytes();
-            Class clasz = defineClass(className, classBytes, 0, classBytes.length);
-            classDesc.setLastLoadedClass(clasz);
-            return clasz;
-        }
-    }
-
-    @Override
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
-        synchronized (engine) {
-            Class<?> cls = findLoadedClass(name);
-            if (cls == null)
-                return getParent().loadClass(name); // Dará un ClassNotFoundException si no puede cargarla
-
-            return cls;
-        }
-    }
-
-    public Class loadClass(ClassDescriptor classDesc, boolean resolve) {
+    public Class loadClass(@NotNull ClassDescriptor classDesc, boolean resolve) {
         synchronized (engine) {
             Class clasz = classDesc.getLastLoadedClass();
             if (clasz != null && clasz.getClassLoader() == this) return clasz; // Glup, ya fue cargada
@@ -65,7 +46,18 @@ public class JProxyClassLoader extends ClassLoader {
         }
     }
 
-    public Class loadInnerClass(ClassDescriptorSourceUnit parentDesc, String innerClassName) {
+    public Class defineClass(@NotNull ClassDescriptor classDesc) {
+        synchronized (engine) {
+            String className = classDesc.getClassName();
+            byte[] classBytes = classDesc.getClassBytes();
+            Class clasz = defineClass(className, classBytes, 0, classBytes.length);
+            classDesc.setLastLoadedClass(clasz);
+            return clasz;
+        }
+    }
+
+    @Nullable
+    public Class loadInnerClass(@NotNull ClassDescriptorSourceUnit parentDesc, @NotNull String innerClassName) {
         synchronized (engine) {
             ClassDescriptor classDesc = parentDesc.getInnerClassDescriptor(innerClassName, false);
             if (classDesc == null || classDesc.getClassBytes() == null) {
@@ -79,8 +71,15 @@ public class JProxyClassLoader extends ClassLoader {
         }
     }
 
+    @Nullable private byte[] getClassBytesFromResource(@NotNull String className) {
+        String relClassPath = ClassDescriptor.getRelativeClassFilePathFromClassName(className);
+        URL urlClass = getResource(relClassPath);
+        if (urlClass == null) { return null; }
+        return JProxyUtil.readURL(urlClass);
+    }
+
     @Override
-    protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+    protected Class<?> loadClass(@NotNull String name, boolean resolve) throws ClassNotFoundException {
         // Inspiraciones en URLClassLoader.findClass y en el propio análisis de ClassLoader.loadClass
         // Lo redefinimos por si acaso porque el objetivo es recargar todas las clases hot-reloaded en este ClassLoader y no delegar en el parent 
         // (el comportamiento por defecto de loadClass) pues las clases cargadas con el parent tenderán a cargar las clases vinculadas con dicho ClassLoader
@@ -125,10 +124,15 @@ public class JProxyClassLoader extends ClassLoader {
         }
     }
 
-    private byte[] getClassBytesFromResource(String className) {
-        String relClassPath = ClassDescriptor.getRelativeClassFilePathFromClassName(className);
-        URL urlClass = getResource(relClassPath);
-        if (urlClass == null) return null;
-        return JProxyUtil.readURL(urlClass);
+    @NotNull @Override
+    protected Class<?> findClass(@NotNull String name) throws ClassNotFoundException {
+        synchronized (engine) {
+            Class<?> cls = findLoadedClass(name);
+            if (cls == null) {
+                return getParent().loadClass(name); // Dará un ClassNotFoundException si no puede cargarla
+            }
+
+            return cls;
+        }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,11 @@ import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.types.ErrorType;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class ParserErrorHandler {
     private final boolean missingVariables;
     private final boolean failfast;
@@ -42,7 +41,7 @@ public class ParserErrorHandler {
     }
 
 
-    public var handle(Scope scope, SourceSegment source, AssertionError e) {
+    public var handle(@NotNull Scope scope, @NotNull SourceSegment source, @NotNull AssertionError e) {
         AssertionError throwable = new AssertionError(e.getMessage() + " at " + source.getSourceMessage(), e);
         if (!faultTolerant) {
             return scope.handleError(e);
@@ -51,7 +50,7 @@ public class ParserErrorHandler {
         }
     }
 
-    public var handle(Scope scope, SourceSegment source, DollarException e) {
+    public var handle(@NotNull Scope scope, @NotNull SourceSegment source, @NotNull DollarException e) {
         DollarParserException
                 throwable =
                 new DollarParserException(e.getMessage() + " at " + source.getSourceMessage(), e);
@@ -62,7 +61,7 @@ public class ParserErrorHandler {
         }
     }
 
-    public var handle(Scope scope, SourceSegment source, Exception e) {
+    @NotNull public var handle(Scope scope, @Nullable SourceSegment source, Exception e) {
         if (e instanceof LambdaRecursionException) {
             throw new DollarParserException(
                     "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
@@ -104,7 +103,7 @@ public class ParserErrorHandler {
         } else { throw t; }
     }
 
-    private void log(Throwable e) {
+    private void log(@NotNull Throwable e) {
         e.printStackTrace();
     }
 }

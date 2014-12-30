@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +26,12 @@ import me.neilellis.dollar.script.SourceSegment;
 import me.neilellis.dollar.script.TypeLearner;
 import me.neilellis.dollar.types.prediction.CountBasedTypePrediction;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class HazelcastTypeLearner implements TypeLearner {
 
 
@@ -46,11 +45,11 @@ public class HazelcastTypeLearner implements TypeLearner {
         hz = Hazelcast.newHazelcastInstance(configBuilder.build());
     }
 
-    @Override public TypeLearner copy() {
+    @NotNull @Override public TypeLearner copy() {
         return this;
     }
 
-    @Override public void learn(String name, SourceSegment source, List<var> inputs, Type type) {
+    @Override public void learn(String name, SourceSegment source, @NotNull List<var> inputs, Type type) {
         IMap<String, CountBasedTypePrediction> typeLearning = hz.getMap("typeLearner");
         final ArrayList<String> perms = TypeLearner.perms(inputs);
         for (String perm : perms) {
@@ -64,7 +63,7 @@ public class HazelcastTypeLearner implements TypeLearner {
 
     }
 
-    @Override public TypePrediction predict(String name, SourceSegment source, List<var> inputs) {
+    @Nullable @Override public TypePrediction predict(String name, SourceSegment source, @NotNull List<var> inputs) {
         IMap<String, CountBasedTypePrediction> typeLearning = hz.getMap("typeLearner");
         final ArrayList<String> perms = TypeLearner.perms(inputs);
         CountBasedTypePrediction prediction = new CountBasedTypePrediction(name);
@@ -93,13 +92,13 @@ public class HazelcastTypeLearner implements TypeLearner {
         }
     }
 
-    public String createKey(String name, String perm) {return name + ":" + perm;}
+    @NotNull public String createKey(String name, String perm) {return name + ":" + perm;}
 
-    @Override public void start() throws Exception {
+    @Override public void start() {
 
     }
 
-    @Override public void stop() throws Exception {
+    @Override public void stop() {
 
     }
 

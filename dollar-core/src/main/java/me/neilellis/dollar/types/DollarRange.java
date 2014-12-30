@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarRange extends AbstractDollar {
 
     private final Range range;
@@ -58,7 +55,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $minus(var rhs) {
+    public var $minus(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
         return DollarFactory.fromValue(new Range(DollarFactory.fromValue(range.lowerEndpoint().$minus(rhsFix)),
                                                  DollarFactory.fromValue(range.upperEndpoint().$minus(rhsFix))),
@@ -67,7 +64,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $plus(var rhs) {
+    public var $plus(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
 
         return DollarFactory.fromValue(new Range(DollarFactory.fromValue(range.lowerEndpoint().$plus(rhsFix)),
@@ -109,12 +106,12 @@ public class DollarRange extends AbstractDollar {
                                        errors(), rhsFix.errors());
     }
 
-    @Override
+    @NotNull @Override
     public Integer toInteger() {
         return diff().toInteger();
     }
 
-    public var diff() {
+    @NotNull public var diff() {
         if (range.upperEndpoint().equals(range.lowerEndpoint())) {
             return DollarFactory.fromValue(1, errors());
         }
@@ -143,7 +140,7 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public var $as(Type type) {
+    public var $as(@NotNull Type type) {
         if (type.equals(Type.LIST)) {
             return DollarStatic.$($list());
         } else if (type.equals(Type.MAP)) {
@@ -195,6 +192,10 @@ public class DollarRange extends AbstractDollar {
         return Type.RANGE;
     }
 
+    @Override public boolean collection() {
+        return true;
+    }
+
     @NotNull
     @Override
     public ImmutableMap<var, var> $map() {
@@ -210,10 +211,6 @@ public class DollarRange extends AbstractDollar {
             }
         }
         return false;
-    }
-
-    @Override public boolean collection() {
-        return true;
     }
 
     @Override public boolean range() {
@@ -314,41 +311,6 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public boolean isBoolean() {
-        return false;
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean neitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean truthy() {
-        return !range.isEmpty();
-    }
-
-    @Override
-    public Long toLong() {
-        return diff().toLong();
-    }
-
-    @Override
-    public Double toDouble() {
-        return diff().toDouble();
-    }
-
-    @Override
     public int hashCode() {
         return range.hashCode();
     }
@@ -366,6 +328,41 @@ public class DollarRange extends AbstractDollar {
         }
         return false;
 
+    }
+
+    @Override
+    public Long toLong() {
+        return diff().toLong();
+    }
+
+    @Override
+    public Double toDouble() {
+        return diff().toDouble();
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean neitherTrueNorFalse() {
+        return true;
+    }
+
+    @Override
+    public boolean truthy() {
+        return !range.isEmpty();
     }
 
 }

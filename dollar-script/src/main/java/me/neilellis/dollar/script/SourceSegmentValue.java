@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,14 @@ package me.neilellis.dollar.script;
 
 import me.neilellis.dollar.script.util.FNV;
 import org.codehaus.jparsec.Token;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class SourceSegmentValue implements SourceSegment {
-    private Scope scope;
-    private String sourceFile;
-    private int length;
-    private String source;
-    private int start;
+    private final Scope scope;
+    private final String sourceFile;
+    private final int length;
+    private final String source;
+    private final int start;
     private String shortHash;
 
     public SourceSegmentValue(Scope scope, String sourceFile, String source, int start, int length) {
@@ -38,7 +36,7 @@ public class SourceSegmentValue implements SourceSegment {
         this.start = start;
     }
 
-    public SourceSegmentValue(Scope scope, Token t) {
+    public SourceSegmentValue(@NotNull Scope scope, @NotNull Token t) {
         this.scope = scope;
         this.sourceFile = scope.getFile();
         this.length = t.length();
@@ -47,8 +45,8 @@ public class SourceSegmentValue implements SourceSegment {
         this.shortHash = new FNV().fnv1_32(source.getBytes()).toString(36);
     }
 
-    @Override public String getSourceFile() {
-        return sourceFile;
+    @Override public String getCompleteSource() {
+        return source;
     }
 
     @Override public int getLength() {
@@ -59,11 +57,11 @@ public class SourceSegmentValue implements SourceSegment {
         return shortHash;
     }
 
-    @Override public String getCompleteSource() {
-        return source;
+    @Override public String getSourceFile() {
+        return sourceFile;
     }
 
-    @Override public String getSourceMessage() {
+    @NotNull @Override public String getSourceMessage() {
         int index = getStart();
         int length = getLength();
         if (index < 0 || length < 0) {
@@ -84,11 +82,11 @@ public class SourceSegmentValue implements SourceSegment {
         return highlightedSource.replaceAll("\n", "\\\\n");
     }
 
-    @Override public int getStart() {
-        return start; //TODO
+    @NotNull @Override public String getSourceSegment() {
+        return scope.getSource().substring(start, start + length);
     }
 
-    @Override public String getSourceSegment() {
-        return scope.getSource().substring(start, start + length);
+    @Override public int getStart() {
+        return start; //TODO
     }
 }

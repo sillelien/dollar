@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package com.innowhere.relproxy.impl.jproxy.core;
 
 import com.innowhere.relproxy.impl.GenericProxyVersionedObject;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.JProxyEngine;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 
@@ -26,11 +28,17 @@ import java.lang.reflect.Field;
  * @author jmarranz
  */
 public class JProxyVersionedObject<T> extends GenericProxyVersionedObject<T> {
-    protected String className;
+    protected final String className;
 
-    public JProxyVersionedObject(T obj, JProxyInvocationHandler parent) {
+    public JProxyVersionedObject(@NotNull T obj, JProxyInvocationHandler parent) {
         super(obj, parent);
         this.className = obj.getClass().getName();
+    }
+
+    @Nullable @Override
+    protected <T> Class<T> reloadClass() {
+        JProxyEngine engine = getJProxyInvocationHandler().getJProxyImpl().getJProxyEngine();
+        return (Class<T>) engine.findClass(className);
     }
 
     @Override
@@ -38,18 +46,12 @@ public class JProxyVersionedObject<T> extends GenericProxyVersionedObject<T> {
         return obj;
     }
 
-    public JProxyInvocationHandler getJProxyInvocationHandler() {
-        return (JProxyInvocationHandler) parent;
-    }
-
-    @Override
-    protected <T> Class<T> reloadClass() {
-        JProxyEngine engine = getJProxyInvocationHandler().getJProxyImpl().getJProxyEngine();
-        return (Class<T>) engine.findClass(className);
-    }
-
     @Override
     protected boolean ignoreField(Field field) {
         return false; // Todos cuentan (útil en Groovy no en Java)
+    }
+
+    @NotNull public JProxyInvocationHandler getJProxyInvocationHandler() {
+        return (JProxyInvocationHandler) parent;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,6 @@ import java.util.Objects;
 
 import static java.lang.Math.abs;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarDecimal extends AbstractDollarSingleValue<Double> {
 
     public DollarDecimal(@NotNull ImmutableList<Throwable> errors, @NotNull Double value) {
@@ -106,7 +103,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     }
 
     @Override
-    public var $as(Type type) {
+    public var $as(@NotNull Type type) {
         if (type.equals(Type.BOOLEAN)) {
             return DollarStatic.$(value.intValue() != 0);
         } else if (type.equals(Type.STRING)) {
@@ -142,7 +139,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
 
     @NotNull
     @Override
-    public var $plus(var rhs) {
+    public var $plus(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
         if (rhsFix.string()) {
             return DollarFactory.fromValue(toString() + rhsFix.toString(), errors(), rhsFix.errors());
@@ -228,7 +225,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         return value;
     }
 
-    boolean $equals(var other) {
+    boolean $equals(@NotNull var other) {
         if (integer()) {
             return value.longValue() == other.toLong();
         } else {

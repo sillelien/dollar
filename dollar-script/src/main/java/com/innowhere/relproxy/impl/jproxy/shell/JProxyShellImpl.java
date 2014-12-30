@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,10 @@ import com.innowhere.relproxy.impl.jproxy.JProxyConfigImpl;
 import com.innowhere.relproxy.impl.jproxy.core.JProxyImpl;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.ClassDescriptorSourceScript;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.SourceScript;
+import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 
-/**
- * Inspiraciones: http://groovy.codehaus.org/Running
- *
- * @author jmarranz
- */
 public abstract class JProxyShellImpl extends JProxyImpl {
     public static void main(String[] args) {
         if (args[0].isEmpty()) {
@@ -50,26 +45,16 @@ public abstract class JProxyShellImpl extends JProxyImpl {
         }
     }
 
-    private static Iterable<String> parseCompilationOptions(String value) {
-        // Ej -source 1.6 -target 1.6  se convertiría en Arrays.asList(new String[]{"-source","1.6","-target","1.6"});
-        String[] options = value.split(" ");
-        LinkedList<String> opCol = new LinkedList<String>();
-        for (String option : options) {
-            String op = option.trim(); // Por si hubiera dos espacios
-            if (op.isEmpty()) continue;
-            opCol.add(op);
-        }
-        return opCol;
+    @NotNull @Override
+    public Class getMainParamClass() {
+        return String[].class;
     }
 
-    protected ClassDescriptorSourceScript init(String[] args, String inputPath) {
+    protected ClassDescriptorSourceScript init(@NotNull String[] args, String inputPath) {
         // Esto quizás necesite una opción en plan "verbose" o "log" para mostrar por pantalla o nada
-        RelProxyOnReloadListener proxyListener = new RelProxyOnReloadListener() {
-            @Override
-            public void onReload(Object objOld, Object objNew, Object proxy, Method method, Object[] args) {
-                System.out.println("Reloaded " + objNew + " Calling method: " + method);
-            }
-        };
+        RelProxyOnReloadListener proxyListener =
+                (objOld, objNew, proxy, method,
+                 args1) -> System.out.println("Reloaded " + objNew + " Calling method: " + method);
 
         JProxyConfigImpl config = new JProxyConfigImpl();
         config.setEnabled(true);
@@ -77,7 +62,7 @@ public abstract class JProxyShellImpl extends JProxyImpl {
         config.setInputPath(inputPath);
         config.setJProxyDiagnosticsListener(null); // Nos vale el log por defecto y no hay manera de espeficar otra cosa via comando
 
-        LinkedList<String> argsToScript = new LinkedList<String>();
+        LinkedList<String> argsToScript = new LinkedList<>();
         processConfigParams(args, argsToScript, config);
 
         SourceScript sourceFileScript = getSourceScript(args, argsToScript);
@@ -91,18 +76,8 @@ public abstract class JProxyShellImpl extends JProxyImpl {
         return scriptFileDesc;
     }
 
-    @Override
-    public Class getMainParamClass() {
-        return String[].class;
-    }
-
-    protected abstract SourceScript getSourceScript(String[] args, LinkedList<String> argsToScript);
-
-    protected abstract JProxyShellClassLoader getJProxyShellClassLoader(JProxyConfigImpl config);
-
-    protected abstract void executeFirstTime(ClassDescriptorSourceScript scriptFileDesc, LinkedList<String> argsToScript, JProxyShellClassLoader classLoader);
-
-    protected void processConfigParams(String[] args, LinkedList<String> argsToScript, JProxyConfigImpl config) {
+    protected void processConfigParams(
+            @NotNull String[] args, @NotNull LinkedList<String> argsToScript, @NotNull JProxyConfigImpl config) {
         String classFolder = null;
         long scanPeriod = -1;
         Iterable<String> compilationOptions = null;
@@ -137,6 +112,24 @@ public abstract class JProxyShellImpl extends JProxyImpl {
         config.setScanPeriod(scanPeriod);
         config.setCompilationOptions(compilationOptions);
         config.setTest(test);
+    }
+
+    protected abstract SourceScript getSourceScript(String[] args, LinkedList<String> argsToScript);
+
+    protected abstract JProxyShellClassLoader getJProxyShellClassLoader(JProxyConfigImpl config);
+
+    protected abstract void executeFirstTime(ClassDescriptorSourceScript scriptFileDesc, LinkedList<String> argsToScript, JProxyShellClassLoader classLoader);
+
+    @NotNull private static Iterable<String> parseCompilationOptions(@NotNull String value) {
+        // Ej -source 1.6 -target 1.6  se convertiría en Arrays.asList(new String[]{"-source","1.6","-target","1.6"});
+        String[] options = value.split(" ");
+        LinkedList<String> opCol = new LinkedList<>();
+        for (String option : options) {
+            String op = option.trim(); // Por si hubiera dos espacios
+            if (op.isEmpty()) continue;
+            opCol.add(op);
+        }
+        return opCol;
     }
 
 }

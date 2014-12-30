@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,13 @@
 package me.neilellis.dollar.execution.simple;
 
 import me.neilellis.dollar.execution.DollarExecutor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.*;
 
 import static java.lang.Runtime.getRuntime;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class SimpleDollarExecutor implements DollarExecutor {
 
     public ForkJoinPool forkJoinPool;
@@ -51,12 +49,18 @@ public class SimpleDollarExecutor implements DollarExecutor {
         scheduledExecutor.shutdown();
     }
 
-    @Override public DollarExecutor copy() {
+    @NotNull @Override public DollarExecutor copy() {
         return this;
     }
 
-    @Override public <T> Future<T> executeInBackground(Callable<T> callable) {
+    @NotNull @Override public <T> Future<T> executeInBackground(@NotNull Callable<T> callable) {
         return backgroundExecutor.submit(callable);
+    }
+
+    @NotNull @Override public <T> Future<T> executeNow(@NotNull Callable<T> callable) {
+        final FutureTask<T> tFutureTask = new FutureTask<>(callable);
+        tFutureTask.run();
+        return tFutureTask;
     }
 
     @Override public void forceStop() {
@@ -70,17 +74,11 @@ public class SimpleDollarExecutor implements DollarExecutor {
         start();
     }
 
-    @Override public Future<?> scheduleEvery(long millis, Runnable runnable) {
+    @NotNull @Override public Future<?> scheduleEvery(long millis, @NotNull Runnable runnable) {
         return scheduledExecutor.scheduleAtFixedRate(runnable, millis, millis, TimeUnit.MILLISECONDS);
     }
 
-    @Override public <T> Future<T> submit(Callable<T> callable) {
+    @NotNull @Override public <T> Future<T> submit(@NotNull Callable<T> callable) {
         return forkJoinPool.submit(callable);
-    }
-
-    @Override public <T> Future<T> executeNow(Callable<T> callable) {
-        final FutureTask<T> tFutureTask = new FutureTask<>(callable);
-        tFutureTask.run();
-        return tFutureTask;
     }
 }

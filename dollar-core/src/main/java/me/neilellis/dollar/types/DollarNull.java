@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,31 +29,10 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * To better understand the rationale behind this class, take a look at http://homepages.ecs.vuw.ac
- * .nz/~tk/publications/papers/void.pdf
- *
- * Dollar does not have the concept of null. Instead null {@link me.neilellis.dollar.var} objects are instances of this
- * class.
- *
- * Void is equivalent to 0,"",null except that unlike these values it has behavior that corresponds to a void object.
- *
- * Therefore actions taken against a void object are ignored. Any method that returns a {@link me.neilellis.dollar.var}
- * will return a {@link me.neilellis.dollar.types.DollarNull}.
- *
- * <pre>
- *
- *  var nulled= $null();
- *  nulled.$pipe((i)-&gt;{System.out.println("You'll never see this."});
- *
- * </pre>
- *
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarNull extends AbstractDollar implements var {
 
 
-    private Type type;
+    private final Type type;
 
 
     public DollarNull(@NotNull ImmutableList<Throwable> errors, Type type) {
@@ -80,7 +59,7 @@ public class DollarNull extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $plus(var rhs) {
+    public var $plus(@NotNull var rhs) {
         return this;
     }
 
@@ -173,7 +152,7 @@ public class DollarNull extends AbstractDollar implements var {
 
     @Override
     public ImmutableList<String> strings() {
-        return ImmutableList.of(null);
+        return ImmutableList.of();
     }
 
     @NotNull @Override public ImmutableList<Object> toList() {

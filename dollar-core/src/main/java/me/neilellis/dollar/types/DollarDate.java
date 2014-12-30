@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,6 @@ import java.time.temporal.ChronoField;
 import java.util.Arrays;
 import java.util.Objects;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarDate extends AbstractDollarSingleValue<Instant> {
 
     private static final double ONE_DAY_MILLIS = 24.0 * 60.0 * 60.0 * 1000.0;
@@ -39,11 +36,11 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
         super(errors, Instant.ofEpochMilli(value));
     }
 
-    public DollarDate(ImmutableList<Throwable> errors, Instant value) {
+    public DollarDate(@NotNull ImmutableList<Throwable> errors, @NotNull Instant value) {
         super(errors, value);
     }
 
-    public DollarDate(ImmutableList<Throwable> errors, LocalDateTime value) {
+    public DollarDate(@NotNull ImmutableList<Throwable> errors, @NotNull LocalDateTime value) {
         super(errors, value.toInstant(ZoneOffset.UTC));
     }
 
@@ -97,7 +94,7 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
         return asDecimal();
     }
 
-    private Double asDecimal() {
+    @NotNull private Double asDecimal() {
         try {
             final long millis = value.toEpochMilli();
             return ((double) millis) / (24 * 60 * 60 * 1000);
@@ -109,7 +106,7 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     }
 
     @Override
-    public var $as(Type type) {
+    public var $as(@NotNull Type type) {
         if (type.equals(Type.BOOLEAN)) {
             return DollarStatic.$(true);
         } else if (type.equals(Type.STRING)) {
@@ -178,7 +175,7 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
 
     @NotNull
     @Override
-    public var $plus(var rhs) {
+    public var $plus(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
         if (rhsFix.string()) {
             return DollarFactory.fromValue(toString() + rhsFix.toString(), errors(), rhsFix.errors());
@@ -236,25 +233,19 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
         return true;
     }
 
-    @NotNull @Override public String toDollarScript() {
-        return String.format("(\"%s\" as Date)", toString());
-    }
-
-    @NotNull
     @Override
-    public String toJavaObject() {
-        return value.toString();
+    public boolean number() {
+        return true;
     }
 
-    @NotNull @Override
-    public Long toLong() {
-        return asDecimal().longValue();
-    }
-
-    @NotNull
     @Override
-    public Double toDouble() {
-        return asDecimal();
+    public boolean decimal() {
+        return false;
+    }
+
+    @Override
+    public boolean integer() {
+        return false;
     }
 
     @Override
@@ -271,23 +262,29 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
         }
     }
 
-    @Override
-    public boolean decimal() {
-        return false;
+    @NotNull @Override
+    public Long toLong() {
+        return asDecimal().longValue();
     }
 
+    @NotNull
     @Override
-    public boolean integer() {
-        return false;
+    public Double toDouble() {
+        return asDecimal();
     }
 
-    @Override
-    public boolean number() {
-        return true;
-    }
-
-    boolean $equals(var other) {
+    boolean $equals(@NotNull var other) {
         return Objects.equals(toString(), other.toString());
+    }
+
+    @NotNull @Override public String toDollarScript() {
+        return String.format("(\"%s\" as Date)", toString());
+    }
+
+    @NotNull
+    @Override
+    public String toJavaObject() {
+        return value.toString();
     }
 
     private long asLong(double d) {

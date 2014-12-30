@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package com.innowhere.relproxy.impl.jproxy.core.clsmgr.comp;
 import com.innowhere.relproxy.RelProxyException;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.*;
 import com.innowhere.relproxy.jproxy.JProxyDiagnosticsListener;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.tools.*;
 import java.io.File;
@@ -30,10 +32,10 @@ import java.util.List;
  * @author jmarranz
  */
 public class JProxyCompilerInMemory {
-    protected JProxyEngine engine;
-    protected JavaCompiler compiler;
-    protected Iterable<String> compilationOptions; // puede ser null
-    protected JProxyDiagnosticsListener diagnosticsListener; // puede ser null
+    protected final JProxyEngine engine;
+    protected final JavaCompiler compiler;
+    protected final Iterable<String> compilationOptions; // puede ser null
+    protected final JProxyDiagnosticsListener diagnosticsListener; // puede ser null
 
     public JProxyCompilerInMemory(JProxyEngine engine, Iterable<String> compilationOptions, JProxyDiagnosticsListener diagnosticsListener) {
         this.engine = engine;
@@ -42,15 +44,12 @@ public class JProxyCompilerInMemory {
         this.compiler = ToolProvider.getSystemJavaCompiler();
     }
 
-    public JProxyCompilerContext createJProxyCompilerContext() {
-        DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
-        StandardJavaFileManager standardFileManager = compiler.getStandardFileManager(diagnostics, null, null);
-        return new JProxyCompilerContext(standardFileManager, diagnostics, diagnosticsListener);
-    }
-
-    public void compileSourceFile(ClassDescriptorSourceUnit sourceFileDesc, JProxyCompilerContext context, JProxyClassLoader customClassLoader, ClassDescriptorSourceFileRegistry sourceRegistry) {
+    public void compileSourceFile(@NotNull ClassDescriptorSourceUnit sourceFileDesc,
+                                  @NotNull JProxyCompilerContext context, JProxyClassLoader customClassLoader,
+                                  @NotNull ClassDescriptorSourceFileRegistry sourceRegistry) {
         //File sourceFile = sourceFileDesc.getSourceFile();
-        LinkedList<JavaFileObjectOutputClass> outClassList = compile(sourceFileDesc, context, customClassLoader, sourceRegistry);
+        LinkedList<JavaFileObjectOutputClass> outClassList = compile(sourceFileDesc, context, customClassLoader,
+                                                                     sourceRegistry);
 
         if (outClassList == null)
             throw new JProxyCompilationException(sourceFileDesc);
@@ -85,7 +84,11 @@ public class JProxyCompilerInMemory {
         }
     }
 
-    private LinkedList<JavaFileObjectOutputClass> compile(ClassDescriptorSourceUnit sourceFileDesc, JProxyCompilerContext context, ClassLoader classLoader, ClassDescriptorSourceFileRegistry sourceRegistry) {
+    @Nullable
+    private LinkedList<JavaFileObjectOutputClass> compile(ClassDescriptorSourceUnit sourceFileDesc,
+                                                          @NotNull JProxyCompilerContext context,
+                                                          ClassLoader classLoader,
+                                                          ClassDescriptorSourceFileRegistry sourceRegistry) {
         // http://stackoverflow.com/questions/12173294/compiling-fully-in-memory-with-javax-tools-javacompiler
         // http://www.accordess.com/wpblog/an-overview-of-java-compilation-api-jsr-199/
         // http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/6-b14/com/sun/tools/javac/util/JavacFileManager.java?av=h#JavacFileManager
@@ -104,12 +107,12 @@ public class JProxyCompilerInMemory {
         Iterable<? extends JavaFileObject> compilationUnits;
 
         if (sourceFileDesc instanceof ClassDescriptorSourceFileJava) {
-            List<File> sourceFileList = new ArrayList<File>();
+            List<File> sourceFileList = new ArrayList<>();
             sourceFileList.add(((ClassDescriptorSourceFileJava) sourceFileDesc).getSourceFile());
             compilationUnits = standardFileManager.getJavaFileObjectsFromFiles(sourceFileList);
         } else if (sourceFileDesc instanceof ClassDescriptorSourceScript) {
             ClassDescriptorSourceScript sourceFileDescScript = (ClassDescriptorSourceScript) sourceFileDesc;
-            LinkedList<JavaFileObject> compilationUnitsList = new LinkedList<JavaFileObject>();
+            LinkedList<JavaFileObject> compilationUnitsList = new LinkedList<>();
             String code = sourceFileDescScript.getSourceCode();
             compilationUnitsList.add(new JavaFileObjectInputSourceInMemory(sourceFileDescScript.getClassName(), code, sourceFileDescScript.getEncoding(), sourceFileDescScript.getTimestamp()));
             compilationUnits = compilationUnitsList;
@@ -127,12 +130,13 @@ public class JProxyCompilerInMemory {
 
     }
 
-    private boolean compile(Iterable<? extends JavaFileObject> compilationUnits, JavaFileManager fileManager, JProxyCompilerContext context) {
+    private boolean compile(Iterable<? extends JavaFileObject> compilationUnits, JavaFileManager fileManager,
+                            @NotNull JProxyCompilerContext context) {
         /*
         String systemClassPath = System.getProperty("java.class.path");
         */
 
-        LinkedList<String> finalCompilationOptions = new LinkedList<String>();
+        LinkedList<String> finalCompilationOptions = new LinkedList<>();
         if (compilationOptions != null)
             for (String option : compilationOptions) finalCompilationOptions.add(option);
 
@@ -143,10 +147,17 @@ public class JProxyCompilerInMemory {
         }
 
         DiagnosticCollector<JavaFileObject> diagnostics = context.getDiagnosticCollector();
-        JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, finalCompilationOptions, null, compilationUnits);
+        JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, finalCompilationOptions,
+                                                             null, compilationUnits);
         boolean success = task.call();
 
         return success;
+    }
+
+    @NotNull public JProxyCompilerContext createJProxyCompilerContext() {
+        DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
+        StandardJavaFileManager standardFileManager = compiler.getStandardFileManager(diagnostics, null, null);
+        return new JProxyCompilerContext(standardFileManager, diagnostics, diagnosticsListener);
     }
 
 

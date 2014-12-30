@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,10 @@
 package me.neilellis.dollar.script;
 
 import me.neilellis.dollar.DollarException;
+import org.jetbrains.annotations.NotNull;
 import org.pegdown.ast.*;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
-class CodeExtractionVisitor implements Visitor {
+public class CodeExtractionVisitor implements Visitor {
     @Override
     public void visit(AbbreviationNode node) {
 
@@ -104,7 +102,7 @@ class CodeExtractionVisitor implements Visitor {
     }
 
     @Override
-    public void visit(ParaNode node) {
+    public void visit(@NotNull ParaNode node) {
 
         visitChildren(node);
     }
@@ -130,7 +128,7 @@ class CodeExtractionVisitor implements Visitor {
     }
 
     @Override
-    public void visit(RootNode node) {
+    public void visit(@NotNull RootNode node) {
         node.getReferences().forEach(this::visitChildren);
         node.getAbbreviations().forEach(this::visitChildren);
         visitChildren(node);
@@ -191,7 +189,7 @@ class CodeExtractionVisitor implements Visitor {
     }
 
     @Override
-    public void visit(VerbatimNode node) {
+    public void visit(@NotNull VerbatimNode node) {
         if ("dollar".equals(node.getType())) {
             try {
                 new DollarParser(new ParserOptions()).parse(node.getText(), false);
@@ -212,7 +210,7 @@ class CodeExtractionVisitor implements Visitor {
     }
 
     @Override
-    public void visit(SuperNode node) {
+    public void visit(@NotNull SuperNode node) {
         visitChildren(node);
     }
 
@@ -221,7 +219,7 @@ class CodeExtractionVisitor implements Visitor {
 
     }
 
-    void visitChildren(SuperNode node) {
+    void visitChildren(@NotNull SuperNode node) {
         for (Node child : node.getChildren()) {
             child.accept(this);
         }

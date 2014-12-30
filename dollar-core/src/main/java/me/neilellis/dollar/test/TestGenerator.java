@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ package me.neilellis.dollar.test;/*
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.types.*;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
 import java.util.*;
@@ -42,12 +43,9 @@ import static java.util.Collections.singletonMap;
 import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$range;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class TestGenerator {
 
-    public static List<var> allValues() {
+    @NotNull public static List<var> allValues() {
         List<var> all = new ArrayList<>();
         all.addAll(intValues());
         all.addAll(
@@ -64,11 +62,11 @@ public class TestGenerator {
         return all;
     }
 
-    public static List<var> intValues() {
+    @NotNull public static List<var> intValues() {
         return toVarValues(Integer.MIN_VALUE, Integer.MAX_VALUE, -Long.MAX_VALUE, Long.MAX_VALUE, 0, 1, -1, 100, -100);
     }
 
-    private static List<var> toVarValues(Object... values) {
+    @NotNull private static List<var> toVarValues(@NotNull Object... values) {
         ArrayList<var> result = new ArrayList<>();
         for (Object value : values) {
             result.add($(value));
@@ -77,23 +75,23 @@ public class TestGenerator {
         return result;
     }
 
-    public static List<var> dateValues() {
+    @NotNull public static List<var> dateValues() {
         return toVarValues(Instant.ofEpochSecond(0), Instant.ofEpochSecond(-1), Instant.ofEpochSecond(1_000_000),
                            Instant.ofEpochSecond(2_000_000),
                            Instant.ofEpochSecond(3_000_000));
     }
 
-    public static List<var> stringValues() {
+    @NotNull public static List<var> stringValues() {
         return toVarValues("", "@", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@", "@@ @@ @@@ @@ @@ @@", " ",
                            "ﬂ‡°·‚ÏÌÓÔ\uF8FF^øπåß∂ƒ©˙∆˚¬…æ…;…",
                            "\n\t\r", "1", "true", "false", "0");
     }
 
-    public static List<var> booleanValues() {
+    @NotNull public static List<var> booleanValues() {
         return toVarValues(true, false);
     }
 
-    public static List<var> listValues() {
+    @NotNull public static List<var> listValues() {
         return toVarValues(intValues(),
                            toVarValues(Float.MIN_VALUE, Float.MAX_VALUE, Double.MIN_VALUE, Double.MAX_VALUE, 0.0, 1.0,
                                        -1.0, 100.0,
@@ -101,7 +99,7 @@ public class TestGenerator {
                            Arrays.asList());
     }
 
-    public static List<var> rangeValues() {
+    @NotNull public static List<var> rangeValues() {
         return toVarValues($range(Instant.ofEpochSecond(1_000_000), Instant.ofEpochSecond(2_000_000)), $range(-1, 1),
                            $range(0,
                                   -1), $range(
@@ -110,7 +108,7 @@ public class TestGenerator {
                            $range(1, -0.1));
     }
 
-    public static List<var> mapValues() {
+    @NotNull public static List<var> mapValues() {
         HashMap<Object, Object> mixedMap = new HashMap<>();
         mixedMap.put(1, 0.1);
         mixedMap.put(true, 10);
@@ -124,17 +122,17 @@ public class TestGenerator {
                            mixedMap);
     }
 
-    public static List<var> infinities() {
+    @NotNull public static List<var> infinities() {
         return Arrays.asList(new DollarInfinity(true), new DollarInfinity(false));
     }
 
-    public static List<var> emptyValues() {
+    @NotNull public static List<var> emptyValues() {
         return Arrays.asList(new DollarNull(Type.STRING), new DollarNull(Type.INTEGER), new DollarNull(Type.ANY),
                              new DollarVoid(), DollarFactory.failure(ErrorType.EXCEPTION,
                                                                      "Test Exception", true));
     }
 
-    public static List<var> small() {
+    @NotNull public static List<var> small() {
         List<var> all = new ArrayList<>();
         all.addAll(smallIntValues());
         all.addAll(smallDecimalValues());
@@ -148,7 +146,7 @@ public class TestGenerator {
         return all;
     }
 
-    public static List<var> noSmallDecimals() {
+    @NotNull public static List<var> noSmallDecimals() {
         List<var> all = new ArrayList<>();
         all.addAll(largeIntValues());
         all.addAll(largeDecimalValues());
@@ -161,7 +159,7 @@ public class TestGenerator {
         return all;
     }
 
-    public static List<var> minimal() {
+    @NotNull public static List<var> minimal() {
         List<var> all = new ArrayList<>();
         all.addAll(toVarValues(0, 1, -1));
         all.addAll(toVarValues(0.1));
@@ -179,12 +177,12 @@ public class TestGenerator {
         return all;
     }
 
-    public static List<var> minimalEmptyValues() {
+    @NotNull public static List<var> minimalEmptyValues() {
         return Arrays.asList(new DollarNull(Type.ANY), new DollarVoid(), DollarFactory.failure(ErrorType.EXCEPTION,
                                                                                                "Test Exception", true));
     }
 
-    public static List<var> test1Param(List<var> values, Function<var, var> oneParam) {
+    @NotNull public static List<var> test1Param(@NotNull List<var> values, @NotNull Function<var, var> oneParam) {
         List<var> result = new ArrayList<>();
         for (var value : values) {
             result.add(oneParam.apply(value));
@@ -192,7 +190,9 @@ public class TestGenerator {
         return result;
     }
 
-    public static List<List<var>> testBinary(List<var> values1, List<var> values2, Function<List<var>, var> twoParam) {
+    @NotNull
+    public static List<List<var>> testBinary(@NotNull List<var> values1, @NotNull List<var> values2,
+                                             @NotNull Function<List<var>, var> twoParam) {
         List<List<var>> result = new ArrayList<>();
         for (var value1 : values1) {
             for (var value2 : values2) {
@@ -208,46 +208,46 @@ public class TestGenerator {
         return result;
     }
 
-    public static List<var> largeIntValues() {
+    @NotNull public static List<var> largeIntValues() {
         return intValues();
     }
 
-    public static List<var> smallIntValues() {
+    @NotNull public static List<var> smallIntValues() {
         return toVarValues(0, 1, -1, 10, -10);
     }
 
-    public static List<var> largeDecimalValues() {
+    @NotNull public static List<var> largeDecimalValues() {
         return toVarValues(-Float.MAX_VALUE, Float.MAX_VALUE, -Double.MAX_VALUE, Double.MAX_VALUE, 0.0, 1.0, -1.0,
                            100.0,
                            -100.0, 0.5, -0.5, -0.1, 0.1);
     }
 
-    public static List<var> smallDecimalValues() {
+    @NotNull public static List<var> smallDecimalValues() {
         return toVarValues(0.0, 1.0, -1.0, 10.0,
                            -10.0, 0.5, -0.5, -0.1, 0.1);
     }
 
-    public static List<var> largeDateValues() {
+    @NotNull public static List<var> largeDateValues() {
         return toVarValues(Instant.ofEpochSecond(1_000_000), Instant.ofEpochSecond(2_000_000),
                            Instant.ofEpochSecond(3_000_000));
     }
 
-    public static List<var> smallDateValues() {
+    @NotNull public static List<var> smallDateValues() {
         return toVarValues(Instant.ofEpochSecond(0), Instant.ofEpochSecond(-1));
     }
 
-    public static List<var> largeListValues() {
+    @NotNull public static List<var> largeListValues() {
         return toVarValues(largeIntValues(), largeDecimalValues(), largeDateValues(), stringValues(), booleanValues(),
                            Arrays.asList());
     }
 
-    public static List<var> smallListValues() {
+    @NotNull public static List<var> smallListValues() {
         return toVarValues(smallIntValues(), smallDecimalValues(), smallDateValues(), stringValues(), booleanValues(),
                            smallRangeValues(),
                            Arrays.asList());
     }
 
-    public static List<var> largeRangeValues() {
+    @NotNull public static List<var> largeRangeValues() {
         return toVarValues($range(Instant.ofEpochSecond(1_000_000), Instant.ofEpochSecond(1_100_000)), $range(-1, 1),
                            $range(0,
                                   -1), $range(
@@ -256,7 +256,7 @@ public class TestGenerator {
                            $range(1, -0.1));
     }
 
-    public static List<var> smallRangeValues() {
+    @NotNull public static List<var> smallRangeValues() {
         return toVarValues($range(Instant.ofEpochSecond(1), Instant.ofEpochSecond(1)), $range(-1, 1),
                            $range(0,
                                   -1), $range(
@@ -265,7 +265,7 @@ public class TestGenerator {
                            $range(1, -0.1));
     }
 
-    public static List<var> smallMapValues() {
+    @NotNull public static List<var> smallMapValues() {
         HashMap<Object, Object> mixedMap = new HashMap<>();
         mixedMap.put(1, 0.1);
         mixedMap.put(true, 5);
@@ -279,7 +279,7 @@ public class TestGenerator {
                            mixedMap);
     }
 
-    public static List<var> largeMapValues() {
+    @NotNull public static List<var> largeMapValues() {
         return mapValues();
     }
 }

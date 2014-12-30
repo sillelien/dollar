@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,41 +17,20 @@
 package me.neilellis.dollar.collections;
 
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.*;
 
 
-/**
- * <code>MultiHashMap</code> is the default implementation of the {@link me.neilellis.dollar.collections.MultiMap
- * MultiMap} interface. <p> A <code>MultiMap</code> is a Map with slightly different semantics. Putting a value into the
- * map will add the value to a Collection at that key. Getting a value will return a Collection, holding all the values
- * put to that key. <p> This implementation uses an <code>ArrayList</code> as the collection. The internal storage list
- * is made available without cloning via the <code>get(Object)</code> and <code>entrySet()</code> methods. The
- * implementation returns <code>null</code> when there are no values mapped to a key. <p> For example:
- * <pre>
- * MultiMap mhm = new MultiHashMap();
- * mhm.put(key, "A");
- * mhm.put(key, "B");
- * mhm.put(key, "C");
- * List list = (List) mhm.get(key);</pre>
- * <p> <code>list</code> will be a list containing "A", "B", "C".
- *
- * @author Christopher Berry
- * @author James Strachan
- * @author Steve Downey
- * @author Stephen Colebourne
- * @author Julien Buret
- * @author Serhiy Yevtushenko
- * @version $Revision: 1.20 $ $Date: 2004/06/09 22:11:54 $
- * @since Commons Collections 2.0
- */
 public class MultiHashMap extends HashMap implements MultiMap {
 
     // compatibility with commons-collection releases 2.0/2.1
     private static final long serialVersionUID = 1943563828307035349L;
     // backed values collection
-    private transient Collection values = null;
+    @Nullable private transient Collection values = null;
 
     /**
      * Constructor.
@@ -87,12 +66,12 @@ public class MultiHashMap extends HashMap implements MultiMap {
      *
      * @param mapToCopy a Map to copy
      */
-    public MultiHashMap(Map mapToCopy) {
+    public MultiHashMap(@NotNull Map mapToCopy) {
         // be careful of JDK 1.3 vs 1.4 differences
         super((int) (mapToCopy.size() * 1.4f));
         if (mapToCopy instanceof MultiMap) {
-            for (Iterator it = mapToCopy.entrySet().iterator(); it.hasNext(); ) {
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Object o : mapToCopy.entrySet()) {
+                Entry entry = (Entry) o;
                 Collection coll = (Collection) entry.getValue();
                 Collection newColl = createCollection(coll);
                 super.put(entry.getKey(), newColl);
@@ -110,7 +89,7 @@ public class MultiHashMap extends HashMap implements MultiMap {
      *
      * @return the new collection
      */
-    protected Collection createCollection(Collection coll) {
+    @Nullable protected Collection createCollection(@Nullable Collection coll) {
         if (coll == null) {
             return new ArrayList();
         } else {
@@ -128,15 +107,15 @@ public class MultiHashMap extends HashMap implements MultiMap {
         return coll.contains(value);
     }
 
-    @Override public Iterable<? extends Entry> entries() {
+    @NotNull @Override public Iterable<? extends Entry> entries() {
         return entrySet();
     }
 
-    @Override public Collection getCollection(Object key) {
+    @NotNull @Override public Collection getCollection(Object key) {
         return (Collection) get(key);
     }
 
-    @Override public Iterator iterator(Object key) {
+    @Nullable @Override public Iterator iterator(Object key) {
         Collection coll = getCollection(key);
         if (coll == null) {
             return new Iterator() {
@@ -144,7 +123,7 @@ public class MultiHashMap extends HashMap implements MultiMap {
                     return false;
                 }
 
-                @Override public Object next() {
+                @Nullable @Override public Object next() {
                     return null;
                 }
             };
@@ -152,7 +131,7 @@ public class MultiHashMap extends HashMap implements MultiMap {
         return coll.iterator();
     }
 
-    @Override public boolean putAll(Object key, Collection values) {
+    @Override public boolean putAll(Object key, @Nullable Collection values) {
         if (values == null || values.size() == 0) {
             return false;
         }
@@ -177,7 +156,7 @@ public class MultiHashMap extends HashMap implements MultiMap {
         return coll.size();
     }
 
-    @Override public Object put(Object key, Object value) {
+    @Nullable @Override public Object put(Object key, Object value) {
         // NOTE:: put is called during deserialization in JDK < 1.4 !!!!!!
         //        so we must have a readObject()
         Collection coll = getCollection(key);
@@ -192,9 +171,8 @@ public class MultiHashMap extends HashMap implements MultiMap {
     @Override public void clear() {
         // For gc, clear each list in the map
         Set pairs = super.entrySet();
-        Iterator pairsIterator = pairs.iterator();
-        while (pairsIterator.hasNext()) {
-            Map.Entry keyValuePair = (Map.Entry) pairsIterator.next();
+        for (Object pair : pairs) {
+            Entry keyValuePair = (Entry) pair;
             Collection coll = (Collection) keyValuePair.getValue();
             coll.clear();
         }
@@ -207,9 +185,8 @@ public class MultiHashMap extends HashMap implements MultiMap {
         if (pairs == null) {
             return false;
         }
-        Iterator pairsIterator = pairs.iterator();
-        while (pairsIterator.hasNext()) {
-            Map.Entry keyValuePair = (Map.Entry) pairsIterator.next();
+        for (Object pair : pairs) {
+            Entry keyValuePair = (Entry) pair;
             Collection coll = (Collection) keyValuePair.getValue();
             if (coll.contains(value)) {
                 return true;
@@ -218,7 +195,7 @@ public class MultiHashMap extends HashMap implements MultiMap {
         return false;
     }
 
-    @Override public Collection values() {
+    @NotNull @Override public Collection values() {
         Collection vs = values;
         return (vs != null ? vs : (values = new Values()));
     }
@@ -244,12 +221,12 @@ public class MultiHashMap extends HashMap implements MultiMap {
      *
      * @return the cloned map
      */
-    public Object clone() {
+    @NotNull public Object clone() {
         MultiHashMap cloned = (MultiHashMap) super.clone();
 
         // clone each Collection container
-        for (Iterator it = cloned.entrySet().iterator(); it.hasNext(); ) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Object o : cloned.entrySet()) {
+            Entry entry = (Entry) o;
             Collection coll = (Collection) entry.getValue();
             Collection newColl = createCollection(coll);
             entry.setValue(newColl);
@@ -269,8 +246,8 @@ public class MultiHashMap extends HashMap implements MultiMap {
     public int totalSize() {
         int total = 0;
         Collection values = super.values();
-        for (Iterator it = values.iterator(); it.hasNext(); ) {
-            Collection coll = (Collection) it.next();
+        for (Object value : values) {
+            Collection coll = (Collection) value;
             total += coll.size();
         }
         return total;
@@ -281,15 +258,13 @@ public class MultiHashMap extends HashMap implements MultiMap {
      */
     private class Values extends AbstractCollection {
 
-        public Iterator iterator() {
+        @NotNull public Iterator iterator() {
             return new ValueIterator();
         }
 
         public int size() {
             int compt = 0;
-            Iterator it = iterator();
-            while (it.hasNext()) {
-                it.next();
+            for (Object o : this) {
                 compt++;
             }
             return compt;
@@ -307,7 +282,7 @@ public class MultiHashMap extends HashMap implements MultiMap {
      * Inner iterator to view the elements.
      */
     private class ValueIterator implements Iterator {
-        private Iterator backedIterator;
+        private final Iterator backedIterator;
         private Iterator tempIterator;
 
         private ValueIterator() {
@@ -315,8 +290,8 @@ public class MultiHashMap extends HashMap implements MultiMap {
         }
 
         private boolean searchNextIterator() {
-            while (tempIterator == null || tempIterator.hasNext() == false) {
-                if (backedIterator.hasNext() == false) {
+            while (tempIterator == null || !tempIterator.hasNext()) {
+                if (!backedIterator.hasNext()) {
                     return false;
                 }
                 tempIterator = ((Collection) backedIterator.next()).iterator();
@@ -347,7 +322,7 @@ public class MultiHashMap extends HashMap implements MultiMap {
     /**
      * Read the object during deserialization.
      */
-    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+    private void readObject(@NotNull ObjectInputStream s) throws IOException, ClassNotFoundException {
         // This method is needed because the 1.2/1.3 Java deserialisation called
         // put and thus messed up that method
 
@@ -363,8 +338,8 @@ public class MultiHashMap extends HashMap implements MultiMap {
         }
 
         if (version.startsWith("1.2") || version.startsWith("1.3")) {
-            for (Iterator iterator = entrySet().iterator(); iterator.hasNext(); ) {
-                Map.Entry entry = (Map.Entry) iterator.next();
+            for (Object o : entrySet()) {
+                Entry entry = (Entry) o;
                 // put has created a extra collection level, remove it
                 super.put(entry.getKey(), ((Collection) entry.getValue()).iterator().next());
             }

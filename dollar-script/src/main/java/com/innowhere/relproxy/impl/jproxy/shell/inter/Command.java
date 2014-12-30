@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,22 @@
 
 package com.innowhere.relproxy.impl.jproxy.shell.inter;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * @author jmarranz
  */
 public abstract class Command {
-    protected JProxyShellProcessor parent;
-    protected String name;
+    protected final JProxyShellProcessor parent;
+    protected final String name;
 
     public Command(JProxyShellProcessor parent, String name) {
         this.parent = parent;
         this.name = name;
     }
 
-    public static Command createCommand(JProxyShellProcessor parent, String cmd) {
+    @Nullable public static Command createCommand(JProxyShellProcessor parent, String cmd) {
         cmd = cmd.trim();
         if (cmd.equals("clear")) {
             return new CommandOther(parent, cmd);
@@ -77,7 +80,7 @@ public abstract class Command {
         return null; // No es un comando
     }
 
-    protected static String getParameter(String cmdName, String cmd) {
+    @Nullable protected static String getParameter(String cmdName, @NotNull String cmd) {
         int pos = cmd.indexOf(cmdName + " ");
         if (pos != 0)
             return null;

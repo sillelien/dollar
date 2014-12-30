@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,16 @@
 
 package me.neilellis.dollar.guard;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class NotNullCollectionGuard implements Guard {
-    @Override
+    @NotNull @Override
     public String description() {
         return "Non Null Collection Guard";
-    }
-
-    @Override
-    public void preCondition(Object guarded, Method method, Object[] args) {
-        if (args != null) {
-            for (Object arg : args) {
-                if (arg instanceof Collection) {
-                    ((Collection) arg).forEach((i) -> assertNotNull(i, method));
-                }
-            }
-        }
     }
 
     @Override
@@ -45,6 +34,17 @@ public class NotNullCollectionGuard implements Guard {
             ((Collection) result).forEach(i -> assertNotNull(i, method));
         }
         assertNotNull(result, method);
+    }
+
+    @Override
+    public void preCondition(Object guarded, Method method, @Nullable Object[] args) {
+        if (args != null) {
+            for (Object arg : args) {
+                if (arg instanceof Collection) {
+                    ((Collection) arg).forEach((i) -> assertNotNull(i, method));
+                }
+            }
+        }
     }
 
 }

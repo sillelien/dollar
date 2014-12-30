@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,8 @@
 package com.innowhere.relproxy.jproxy;
 
 import com.innowhere.relproxy.RelProxyOnReloadListener;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * Interface implemented by the configuration object needed to initialize <code>JProxy</code> and {@link JProxyScriptEngineFactory}.
- *
- * @author Jose Maria Arranz Santamaria
- * @see com.innowhere.relproxy.jproxy.JProxy#init(com.innowhere.relproxy.jproxy.JProxyConfig)
- * @see JProxyScriptEngineFactory#create(com.innowhere.relproxy.jproxy.JProxyConfig)
- */
 public interface JProxyConfig {
     /**
      * Sets the folder where to save .class files result of recompiling source code changed.
@@ -39,19 +33,20 @@ public interface JProxyConfig {
      * @param classFolder the folder where to save .class files. By default is null (not defined, .class files are not saved).
      * @return this object for flow API use.
      */
-    public JProxyConfig setClassFolder(String classFolder);
+    @NotNull public JProxyConfig setClassFolder(String classFolder);
 
     /**
-     * Sets the compilation options to be provided to the compiler built-in in JDK like <code>JavaCompiler.getTask()
-     * </code> method and the same you would provide to javac.
+     * Sets the compilation options to be provided to the compiler built-in in JDK like {@code JavaCompiler.getTask()
+     * } method and the same you would provide to javac.
      *
      * <p>Example of compilation options:</p>
-     * <p><code>Iterable&lt;String&gt; compilationOptions = Arrays.asList(new String[]{"-source","1.6","-target","1.6"});</code></p>
+     * <p>{@code Iterable&lt;String&gt; compilationOptions = Arrays.asList(new String[]{"-source","1.6","-target","1
+     * .6"});}</p>
      *
      * @param compilationOptions compilation options passed to the internal compiler. By default is null (default compiler settings).
      * @return this object for flow API use.
      */
-    public JProxyConfig setCompilationOptions(Iterable<String> compilationOptions);
+    @NotNull public JProxyConfig setCompilationOptions(Iterable<String> compilationOptions);
 
     /**
      * Sets whether automatic detection of source code changes is enabled.
@@ -64,7 +59,7 @@ public interface JProxyConfig {
      * @param enabled whether automatic source code change detection and reload is enabled. By default is true.
      * @return this object for flow API use.
      */
-    public JProxyConfig setEnabled(boolean enabled);
+    @NotNull public JProxyConfig setEnabled(boolean enabled);
 
     /**
      * Defines the folder root to locate source code Java files.
@@ -78,7 +73,7 @@ public interface JProxyConfig {
      * @param inputPath the folder root to locate source code Java files.
      * @return this object for flow API use.
      */
-    public JProxyConfig setInputPath(String inputPath);
+    @NotNull public JProxyConfig setInputPath(String inputPath);
 
     /**
      * Sets the diagnostic listener to capture compilation errors and warnings thrown by the internal compiler.
@@ -114,7 +109,7 @@ public interface JProxyConfig {
      * @param diagnosticsListener the diagnostic listener to capture compilation errors and warnings. By default is null, an internal listener is used logging to System.err.
      * @return this object for flow API use.
      */
-    public JProxyConfig setJProxyDiagnosticsListener(JProxyDiagnosticsListener diagnosticsListener);
+    @NotNull public JProxyConfig setJProxyDiagnosticsListener(JProxyDiagnosticsListener diagnosticsListener);
 
     /**
      * Sets the class reload listener.
@@ -123,7 +118,7 @@ public interface JProxyConfig {
      *
      * @return this object for flow API use.
      */
-    public JProxyConfig setRelProxyOnReloadListener(RelProxyOnReloadListener relListener);
+    @NotNull public JProxyConfig setRelProxyOnReloadListener(RelProxyOnReloadListener relListener);
 
     /**
      * Sets the delay between source code change checking.
@@ -136,5 +131,5 @@ public interface JProxyConfig {
      *
      * @return this object for flow API use.
      */
-    public JProxyConfig setScanPeriod(long scanPeriod);
+    @NotNull public JProxyConfig setScanPeriod(long scanPeriod);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,12 @@ package me.neilellis.dollar.types.prediction;
 
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.TypePrediction;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class AnyTypePrediction implements TypePrediction {
 
     public static final HashSet<Type> TYPES = new HashSet<>(Arrays.asList(Type.values()));
@@ -34,7 +32,7 @@ public class AnyTypePrediction implements TypePrediction {
         return false;
     }
 
-    @Override public Double probability(Type type) {
+    @NotNull @Override public Double probability(@NotNull Type type) {
         if (type.equals(Type.ANY)) {
             return 1.0;
         }
@@ -45,7 +43,7 @@ public class AnyTypePrediction implements TypePrediction {
         return Type.ANY;
     }
 
-    @Override public Set<Type> types() {
+    @NotNull @Override public Set<Type> types() {
         return TYPES;
     }
 }

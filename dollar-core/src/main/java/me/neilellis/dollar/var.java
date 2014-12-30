@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,6 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.stream.Stream;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
                              VarInternal, NumericAware, BooleanAware, ControlFlowAware,
                              URIAware, MetadataAware, Comparable<var>, LogAware, StateAware<var>,
@@ -180,7 +177,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
      *
      * @return this as a {@link JsonObject}
      */
-    default @Nullable ImmutableJsonObject toJsonObject() {
+    default @NotNull ImmutableJsonObject toJsonObject() {
         return new ImmutableJsonObject((JsonObject) toJsonType());
     }
 
@@ -190,7 +187,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
      *
      * @return the JSON compatible object
      */
-    default Object toJsonType() {
+    @Nullable default Object toJsonType() {
         return DollarFactory.toJson(this);
     }
 

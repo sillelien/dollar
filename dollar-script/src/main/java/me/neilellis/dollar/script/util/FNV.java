@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package me.neilellis.dollar.script.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.math.BigInteger;
 
 public class FNV {
@@ -26,7 +28,7 @@ public class FNV {
     private static final BigInteger MOD32 = new BigInteger("2").pow(32);
     private static final BigInteger MOD64 = new BigInteger("2").pow(64);
 
-    public BigInteger fnv1_32(byte[] data) {
+    @NotNull public BigInteger fnv1_32(@NotNull byte[] data) {
         BigInteger hash = INIT32;
 
         for (byte b : data) {
@@ -37,7 +39,7 @@ public class FNV {
         return hash;
     }
 
-    public BigInteger fnv1_64(byte[] data) {
+    @NotNull public BigInteger fnv1_64(@NotNull byte[] data) {
         BigInteger hash = INIT64;
 
         for (byte b : data) {
@@ -48,7 +50,7 @@ public class FNV {
         return hash;
     }
 
-    public BigInteger fnv1a_32(byte[] data) {
+    @NotNull public BigInteger fnv1a_32(@NotNull byte[] data) {
         BigInteger hash = INIT32;
 
         for (byte b : data) {
@@ -59,7 +61,7 @@ public class FNV {
         return hash;
     }
 
-    public BigInteger fnv1a_64(byte[] data) {
+    @NotNull public BigInteger fnv1a_64(@NotNull byte[] data) {
         BigInteger hash = INIT64;
 
         for (byte b : data) {

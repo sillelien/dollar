@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,15 +35,14 @@ import java.util.concurrent.Callable;
 
 import static me.neilellis.dollar.DollarStatic.$;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarScriptSupport {
 
     private static final Logger log = LoggerFactory.getLogger(DollarScriptSupport.class);
 
-    public static var wrapReactive(Scope scope, Callable<var> callable, SourceSegment source, String operation,
-                                   var lhs) {
+    @NotNull
+    public static var wrapReactive(@Nullable Scope scope, @NotNull Callable<var> callable, SourceSegment source,
+                                   String operation,
+                                   @NotNull var lhs) {
         if (scope == null) {
             throw new NullPointerException();
         }
@@ -51,7 +52,8 @@ public class DollarScriptSupport {
     }
 
 
-    public static var toLambda(Scope scope, Callable<var> callable, SourceSegment source, List<var> inputs,
+    @NotNull public static var toLambda(@Nullable Scope scope, @NotNull Callable<var> callable, SourceSegment source,
+                                        List<var> inputs,
                                String operation) {
         if (scope == null) {
             throw new NullPointerException();
@@ -62,8 +64,10 @@ public class DollarScriptSupport {
                 new DollarSource(i -> callable.call(), scope, source, inputs, operation)));
     }
 
-    public static var wrapReactive(Scope scope, Callable<var> callable, SourceSegment source, String operation, var lhs,
-                                   var rhs) {
+    @NotNull
+    public static var wrapReactive(Scope scope, @NotNull Callable<var> callable, SourceSegment source, String operation,
+                                   @NotNull var lhs,
+                                   @NotNull var rhs) {
         final var lambda = toLambda(scope, callable, source, Arrays.asList(lhs, rhs), operation);
 
         rhs.$listen(i -> lambda.$notify());
@@ -71,16 +75,19 @@ public class DollarScriptSupport {
         return lambda;
     }
 
-    public static var wrapLambda(SourceSegment source, Scope scope, Pipeable pipeable, List<var> inputs,
+    @NotNull
+    public static var wrapLambda(SourceSegment source, Scope scope, @NotNull Pipeable pipeable, List<var> inputs,
                                  String operation) {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
-                new DollarSource(i -> pipeable.pipe(i), scope, source, inputs, operation)));
+                new DollarSource(pipeable::pipe, scope, source, inputs, operation)));
     }
 
-    public static var getVariable(boolean pure, Scope scope, String key, boolean numeric, var defaultValue,
-                                  SourceSegment source) {
+    @Nullable
+    public static var getVariable(boolean pure, @NotNull Scope scope, String key, boolean numeric,
+                                  @Nullable var defaultValue,
+                                  @NotNull SourceSegment source) {
 //       if(pure && !(scope instanceof  PureScope)) {
 //           throw new IllegalStateException("Attempting to get a pure variable in an impure scope");
 //       }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,9 @@
 
 package com.innowhere.relproxy.impl.jproxy.core.clsmgr;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,33 +27,17 @@ import java.util.Map;
  * @author jmarranz
  */
 public class ClassDescriptorSourceFileRegistry {
-    protected Map<String, ClassDescriptorSourceUnit> sourceUnitMapByClassName;
+    protected final Map<String, ClassDescriptorSourceUnit> sourceUnitMapByClassName;
 
     public ClassDescriptorSourceFileRegistry() {
-        this.sourceUnitMapByClassName = new HashMap<String, ClassDescriptorSourceUnit>();
+        this.sourceUnitMapByClassName = new HashMap<>();
     }
 
-    public boolean isEmpty() {
-        return sourceUnitMapByClassName.isEmpty();
-    }
-
-    public Collection<ClassDescriptorSourceUnit> getClassDescriptorSourceFileColl() {
-        return sourceUnitMapByClassName.values();
-    }
-
-    public ClassDescriptorSourceUnit getClassDescriptorSourceUnit(String className) {
-        return sourceUnitMapByClassName.get(className);
-    }
-
-    public ClassDescriptorSourceUnit removeClassDescriptorSourceUnit(String className) {
-        return sourceUnitMapByClassName.remove(className);
-    }
-
-    public void addClassDescriptorSourceUnit(ClassDescriptorSourceUnit sourceFile) {
+    public void addClassDescriptorSourceUnit(@NotNull ClassDescriptorSourceUnit sourceFile) {
         sourceUnitMapByClassName.put(sourceFile.getClassName(), sourceFile);
     }
 
-    public ClassDescriptor getClassDescriptor(String className) {
+    @Nullable public ClassDescriptor getClassDescriptor(@NotNull String className) {
         // Puede ser el de una innerclass
         // Las innerclasses no están como tales en sourceFileMap pues sólo está la clase contenedora pero también la consideramos hotloadable
         String parentClassName;
@@ -66,5 +53,21 @@ public class ClassDescriptorSourceFileRegistry {
         ClassDescriptorSourceUnit sourceDesc = sourceUnitMapByClassName.get(parentClassName);
         if (!inner) return sourceDesc;
         return sourceDesc.getInnerClassDescriptor(className, true);
+    }
+
+    @NotNull public Collection<ClassDescriptorSourceUnit> getClassDescriptorSourceFileColl() {
+        return sourceUnitMapByClassName.values();
+    }
+
+    public ClassDescriptorSourceUnit getClassDescriptorSourceUnit(String className) {
+        return sourceUnitMapByClassName.get(className);
+    }
+
+    public boolean isEmpty() {
+        return sourceUnitMapByClassName.isEmpty();
+    }
+
+    public ClassDescriptorSourceUnit removeClassDescriptorSourceUnit(String className) {
+        return sourceUnitMapByClassName.remove(className);
     }
 }

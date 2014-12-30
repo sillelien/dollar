@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,18 +24,16 @@ import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 import static me.neilellis.dollar.DollarStatic.$void;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class BlockOperator implements Map<Token, var> {
     private final Scope scope;
     private final DollarParser dollarParser;
-    private boolean pure;
+    private final boolean pure;
 
     public BlockOperator(DollarParser dollarParser, Scope scope, boolean pure) {
         this.dollarParser = dollarParser;
@@ -43,7 +41,7 @@ public class BlockOperator implements Map<Token, var> {
         this.pure = pure;
     }
 
-    @Override public var map(Token token) {
+    @Override public var map(@NotNull Token token) {
         List<var> l = (List<var>) token.value();
         return DollarScriptSupport.wrapLambda(new SourceSegmentValue(scope, token), scope,
                                               parallel -> dollarParser.inScope(pure, "block", scope, newScope -> {

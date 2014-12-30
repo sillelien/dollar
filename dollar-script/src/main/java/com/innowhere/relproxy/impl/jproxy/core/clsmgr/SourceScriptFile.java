@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 package com.innowhere.relproxy.impl.jproxy.core.clsmgr;
 
 import com.innowhere.relproxy.impl.jproxy.JProxyUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
@@ -24,13 +26,13 @@ import java.io.File;
  * @author jmarranz
  */
 public abstract class SourceScriptFile extends SourceScript {
-    protected File sourceFile;
+    protected final File sourceFile;
 
     public SourceScriptFile(File sourceFile) {
         this.sourceFile = sourceFile;
     }
 
-    public static SourceScriptFile createSourceScriptFile(File sourceFile) {
+    @NotNull public static SourceScriptFile createSourceScriptFile(File sourceFile) {
         String ext = JProxyUtil.getFileExtension(sourceFile); // Si no tiene extensión devuelve ""
         if ("java".equals(ext))
             return new SourceScriptFileJavaExt(sourceFile);
@@ -38,17 +40,8 @@ public abstract class SourceScriptFile extends SourceScript {
             return new SourceScriptFileOtherExt(sourceFile);
     }
 
-    @Override
-    public long lastModified() {
-        return sourceFile.lastModified();
-    }
-
-    public File getFile() {
-        return sourceFile;
-    }
-
-    @Override
-    public String getClassNameFromSourceFileScriptAbsPath(File rootPathOfSourcesFile) {
+    @Nullable @Override
+    public String getClassNameFromSourceFileScriptAbsPath(@NotNull File rootPathOfSourcesFile) {
         String path = sourceFile.getAbsolutePath();
         String rootPathOfSources = rootPathOfSourcesFile.getAbsolutePath();
         // path es absoluto, preferentemente obtenido con File.getAbsolutePath()
@@ -63,5 +56,14 @@ public abstract class SourceScriptFile extends SourceScript {
 
         path = path.replace(File.separatorChar, '.');  // getAbsolutePath() normaliza con el caracter de la plataforma
         return path;
+    }
+
+    public File getFile() {
+        return sourceFile;
+    }
+
+    @Override
+    public long lastModified() {
+        return sourceFile.lastModified();
     }
 }

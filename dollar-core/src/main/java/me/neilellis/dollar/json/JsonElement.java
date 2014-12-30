@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package me.neilellis.dollar.json;
 
 import me.neilellis.dollar.DollarException;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -28,11 +29,11 @@ import java.util.Map;
 
 public abstract class JsonElement implements Serializable {
 
-    public JsonArray asArray() {
+    @NotNull public JsonArray asArray() {
         return (JsonArray) this;
     }
 
-    public JsonObject asObject() {
+    @NotNull public JsonObject asObject() {
         return (JsonObject) this;
     }
 
@@ -44,7 +45,7 @@ public abstract class JsonElement implements Serializable {
         return this instanceof JsonObject;
     }
 
-    @SuppressWarnings("unchecked") Map<String, Object> convertMap(Map<String, Object> map) {
+    @NotNull @SuppressWarnings("unchecked") Map<String, Object> convertMap(@NotNull Map<String, Object> map) {
         Map<String, Object> converted = new LinkedHashMap<>(map.size());
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             Object obj = entry.getValue();
@@ -74,7 +75,7 @@ public abstract class JsonElement implements Serializable {
         return converted;
     }
 
-    @SuppressWarnings("unchecked") List<Object> convertList(List<?> list) {
+    @NotNull @SuppressWarnings("unchecked") List<Object> convertList(@NotNull List<?> list) {
         List<Object> arr = new ArrayList<>(list.size());
         for (Object obj : list) {
             if (obj instanceof Map) {

@@ -16,7 +16,8 @@
 
 package me.neilellis.dollar.test;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assume;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
@@ -24,7 +25,7 @@ import org.junit.runners.model.Statement;
 
 public final class CircleCiParallelRule implements TestRule {
     @Override
-    public Statement apply(Statement statement, Description description) {
+    public Statement apply(Statement statement, @NotNull Description description) {
 
         boolean runTest = true;
 
@@ -48,7 +49,7 @@ public final class CircleCiParallelRule implements TestRule {
             if (!runTest) {
                 return new Statement() {
                     @Override
-                    public void evaluate() throws Throwable {
+                    public void evaluate() {
                         Assume.assumeTrue("Skipping test, currentNode: " + curNode + ", targetNode: " + nodeToRunOn,
                                           false);
                     }

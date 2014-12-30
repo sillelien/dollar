@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +18,18 @@ package me.neilellis.dollar.exceptions;
 
 import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.types.ErrorType;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarFailureException extends DollarException {
-    public DollarFailureException(ErrorType errorType) {
+    public DollarFailureException(@NotNull ErrorType errorType) {
         super(errorType.toString());
     }
 
-    public DollarFailureException(ErrorType errorType, String message) {
+    public DollarFailureException(@NotNull ErrorType errorType, String message) {
         super(errorType.toString() + ":" + message);
     }
 
-    public DollarFailureException(Throwable t, ErrorType errorType) {
+    public DollarFailureException(@NotNull Throwable t, @NotNull ErrorType errorType) {
         super(t, errorType.toString() + ": " + t.getMessage());
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 package com.innowhere.relproxy.impl.jproxy.shell.inter;
 
 import com.innowhere.relproxy.impl.jproxy.JProxyUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.net.URI;
@@ -29,14 +31,14 @@ import java.util.Scanner;
  */
 public class CommandLoad extends Command {
     public static final String NAME = "load";
-    protected String url;
+    protected final String url;
 
     public CommandLoad(JProxyShellProcessor parent, String url) {
         super(parent, NAME);
         this.url = url;
     }
 
-    public static CommandLoad createCommandLoad(JProxyShellProcessor parent, String cmd) {
+    @Nullable public static CommandLoad createCommandLoad(JProxyShellProcessor parent, @NotNull String cmd) {
         String url = getParameter(NAME, cmd);
         if (url == null) {
             System.out.println("Command error: <url> parameter is required");
@@ -62,7 +64,7 @@ public class CommandLoad extends Command {
             }
 
             String code = new String(content, parent.getEncoding()); // Como no conocemos encoding...
-            LinkedList<String> lines = new LinkedList<String>();
+            LinkedList<String> lines = new LinkedList<>();
             Scanner scanner = new Scanner(code);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();

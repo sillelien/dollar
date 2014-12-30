@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.innowhere.relproxy.impl.jproxy.core.clsmgr.ClassDescriptorSourceScrip
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.JProxyEngine;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.SourceScript;
 import com.innowhere.relproxy.jproxy.JProxyDiagnosticsListener;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author jmarranz
@@ -34,11 +35,19 @@ public abstract class JProxyImpl extends GenericProxyImpl {
     protected JProxyImpl() {
     }
 
-    public static ClassLoader getDefaultClassLoader() {
-        return Thread.currentThread().getContextClassLoader();
+    @NotNull @Override
+    public <T> GenericProxyInvocationHandler<T> createGenericProxyInvocationHandler(T obj) {
+        return new JProxyInvocationHandler<>(obj, this);
     }
 
-    public ClassDescriptorSourceScript init(JProxyConfigImpl config, SourceScript scriptFile, ClassLoader classLoader) {
+    public JProxyEngine getJProxyEngine() {
+        return engine;
+    }
+
+    public abstract Class getMainParamClass();
+
+    public ClassDescriptorSourceScript init(@NotNull JProxyConfigImpl config, SourceScript scriptFile,
+                                            ClassLoader classLoader) {
         super.init(config);
 
         String inputPath = config.getInputPath();
@@ -52,23 +61,15 @@ public abstract class JProxyImpl extends GenericProxyImpl {
         return engine.init();
     }
 
-
-    public JProxyEngine getJProxyEngine() {
-        return engine;
-    }
-
-    public boolean stop() {
-        return engine.stop();
+    public static ClassLoader getDefaultClassLoader() {
+        return Thread.currentThread().getContextClassLoader();
     }
 
     public boolean start() {
         return engine.start();
     }
 
-    @Override
-    public <T> GenericProxyInvocationHandler<T> createGenericProxyInvocationHandler(T obj) {
-        return new JProxyInvocationHandler<T>(obj, this);
+    public boolean stop() {
+        return engine.stop();
     }
-
-    public abstract Class getMainParamClass();
 }

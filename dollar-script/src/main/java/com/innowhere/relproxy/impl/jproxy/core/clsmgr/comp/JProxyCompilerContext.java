@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,22 +30,14 @@ import java.util.List;
  * @author jmarranz
  */
 public class JProxyCompilerContext {
-    protected StandardJavaFileManager standardFileManager;
-    protected DiagnosticCollector<JavaFileObject> diagnostics;
-    protected JProxyDiagnosticsListener diagnosticsListener;
+    protected final StandardJavaFileManager standardFileManager;
+    protected final DiagnosticCollector<JavaFileObject> diagnostics;
+    protected final JProxyDiagnosticsListener diagnosticsListener;
 
     public JProxyCompilerContext(StandardJavaFileManager standardFileManager, DiagnosticCollector<JavaFileObject> diagnostics, JProxyDiagnosticsListener diagnosticsListener) {
         this.standardFileManager = standardFileManager;
         this.diagnostics = diagnostics;
         this.diagnosticsListener = diagnosticsListener;
-    }
-
-    public StandardJavaFileManager getStandardFileManager() {
-        return standardFileManager;
-    }
-
-    public DiagnosticCollector<JavaFileObject> getDiagnosticCollector() {
-        return diagnostics;
     }
 
     public void close() {
@@ -76,5 +68,13 @@ public class JProxyCompilerContext {
                 }
             }
         }
+    }
+
+    public DiagnosticCollector<JavaFileObject> getDiagnosticCollector() {
+        return diagnostics;
+    }
+
+    public StandardJavaFileManager getStandardFileManager() {
+        return standardFileManager;
     }
 }

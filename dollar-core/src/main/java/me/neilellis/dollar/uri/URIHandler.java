@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,12 @@ package me.neilellis.dollar.uri;
 
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 import static me.neilellis.dollar.DollarStatic.$void;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public interface URIHandler {
 
     default var all() {return $void();}
@@ -44,7 +42,7 @@ public interface URIHandler {
 
     default void pause() {}
 
-    default var prepend(var value) {return $void();}
+    @NotNull default var prepend(var value) {return $void();}
 
     default var publish(var value) {
         return write(value, false, false);

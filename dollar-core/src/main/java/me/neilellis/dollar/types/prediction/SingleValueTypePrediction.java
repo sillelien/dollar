@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,11 @@ package me.neilellis.dollar.types.prediction;
 
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.TypePrediction;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Set;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class SingleValueTypePrediction implements TypePrediction {
 
     private final Type type;
@@ -35,7 +33,7 @@ public class SingleValueTypePrediction implements TypePrediction {
         return false;
     }
 
-    @Override public Double probability(Type type) {
+    @NotNull @Override public Double probability(@NotNull Type type) {
         return type.equals(this.type) ? 1.0 : 0.0;
     }
 
@@ -43,7 +41,7 @@ public class SingleValueTypePrediction implements TypePrediction {
         return type;
     }
 
-    @Override public Set<Type> types() {
+    @NotNull @Override public Set<Type> types() {
         return Collections.singleton(type);
     }
 

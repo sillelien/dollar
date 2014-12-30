@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,36 +29,33 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.jetbrains.annotations.NotNull;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class GithubModuleResolver implements ModuleResolver {
     private static final Logger logger = LoggerFactory.getLogger(GithubModuleResolver.class);
     private static final String BASE_PATH = System.getProperty("user.home") + "/.dollar/repo";
 
-    @Override
+    @NotNull @Override
     public ModuleResolver copy() {
         return this;
     }
 
-    @Override
+    @NotNull @Override
     public String getScheme() {
         return "github";
     }
 
-    @Override
-    public Pipeable resolve(String uriWithoutScheme, Scope scope) throws Exception {
+    @NotNull @Override
+    public Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull Scope scope) throws Exception {
         logger.debug(uriWithoutScheme);
         String[] githubRepo = uriWithoutScheme.split(":");
         GitHub github = GitHub.connect();
@@ -107,16 +104,12 @@ public class GithubModuleResolver implements ModuleResolver {
                                                        .collect(Collectors.toList()));
         }
         return (params) -> scope.getDollarParser().inScope(false, "github-module", scope, newScope -> {
-            try {
 
-                final ImmutableMap<var, var> paramMap = params[0].$map();
-                for (Map.Entry<var, var> entry : paramMap.entrySet()) {
-                    newScope.set(entry.getKey().$S(), entry.getValue(), true, null, null, false, false, false);
-                }
-                return new DollarParser(scope.getDollarParser().options(), classLoader, dir).parse(newScope, content);
-            } catch (IOException e) {
-                return DollarStatic.logAndRethrow(e);
+            final ImmutableMap<var, var> paramMap = params[0].$map();
+            for (Map.Entry<var, var> entry : paramMap.entrySet()) {
+                newScope.set(entry.getKey().$S(), entry.getValue(), true, null, null, false, false, false);
             }
+            return new DollarParser(scope.getDollarParser().options(), classLoader, dir).parse(newScope, content);
         });
     }
 }

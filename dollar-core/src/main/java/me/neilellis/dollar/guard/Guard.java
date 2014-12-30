@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,10 @@
 
 package me.neilellis.dollar.guard;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.Method;
 
-/**
- * A Guard is the interface that a guard class must implement. Guard classes
- * can be used in @Guarded annotations.
- *
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public interface Guard {
 
     /**
@@ -44,7 +40,7 @@ public interface Guard {
      * @param value  the value to check for null
      * @param method the method that the assertion relates to
      */
-    default void assertNotNull(String message, Object value, Method method) {
+    default void assertNotNull(String message, @Nullable Object value, Method method) {
         if (value == null) {
             throw new AssertionError(description() + " " + message + " Not Null FAILED for " + method);
         }

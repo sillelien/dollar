@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ public class DollarDependenciesTest {
     }
 
     @Test
-    public void testBasics() throws InterruptedException, DependencyResolutionException, ClassNotFoundException {
+    public void testBasics() throws DependencyResolutionException, ClassNotFoundException {
         DependencyRetriever.retrieve(new DefaultArtifact("org.twitter4j:twitter4j-core:4.0.2")).loadClass("twitter4j.Twitter");
     }
 

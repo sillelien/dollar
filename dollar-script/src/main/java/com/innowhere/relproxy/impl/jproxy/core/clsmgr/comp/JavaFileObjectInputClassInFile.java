@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package com.innowhere.relproxy.impl.jproxy.core.clsmgr.comp;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.*;
 import java.net.URI;
 
@@ -23,14 +25,14 @@ import java.net.URI;
  * @author jmarranz
  */
 public class JavaFileObjectInputClassInFile extends JavaFileObjectInputClassInFileSystem {
-    protected File file;
+    protected final File file;
 
-    public JavaFileObjectInputClassInFile(File file, String binaryName, URI uri) {
+    public JavaFileObjectInputClassInFile(File file, String binaryName, @NotNull URI uri) {
         super(binaryName, uri, uri.getPath());
         this.file = file;
     }
 
-    @Override
+    @NotNull @Override
     public InputStream openInputStream() throws IOException {
         // Podríamos hacer uri.toURL().openStream() pero si tenemos el File es para algo
         return new BufferedInputStream(new FileInputStream(file), 10 * 1024);
@@ -41,7 +43,7 @@ public class JavaFileObjectInputClassInFile extends JavaFileObjectInputClassInFi
         return file.lastModified();
     }
 
-    @Override
+    @NotNull @Override
     public String toString() {
         return "JavaFileObjectInputClassInFile{uri=" + uri + '}';
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,6 @@ import me.neilellis.dollar.guard.NotNullGuard;
 import me.neilellis.dollar.types.ResourceState;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * The methods that manage the state of service type objects, such as {@link me.neilellis.dollar.types.DollarURI}
- * @param <R>  the actual type of the subclass
- * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public interface StateAware<R extends StateAware<R>> {
 
     /**
@@ -104,7 +99,6 @@ public interface StateAware<R extends StateAware<R>> {
      * @return the state machine
      */
     @NotNull
-    @Guarded(NotNullGuard.class)
-    StateMachine<ResourceState, Signal> getStateMachine();
+    @Guarded(NotNullGuard.class) StateMachine<ResourceState, Signal> getStateMachine();
 
 }

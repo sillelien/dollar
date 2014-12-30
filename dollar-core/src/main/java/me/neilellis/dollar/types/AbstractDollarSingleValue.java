@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Stream;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implements var {
 
     @NotNull
@@ -106,14 +103,14 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
         return ImmutableList.of(this);
     }
 
+    @Override public boolean collection() {
+        return false;
+    }
+
     @NotNull
     @Override
     public ImmutableMap<var, var> $map() {
         return ImmutableMap.of($("value"), this);
-    }
-
-    @Override public boolean collection() {
-        return false;
     }
 
     @Override
@@ -138,8 +135,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     }
 
-    @Nullable
-    public ImmutableJsonObject toJsonObject() {
+    @NotNull public ImmutableJsonObject toJsonObject() {
         return null;
     }
 
@@ -155,7 +151,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     @NotNull
     @Override
-    public var $plus(var rhs) {
+    public var $plus(@NotNull var rhs) {
         return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
@@ -172,16 +168,16 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @Override
-    public int hashCode() {
-        return value.toString().hashCode();
-    }
-
-    @Override
     public boolean singleValue() {
         return true;
     }
 
-    public Stream<String> keyStream() {
+    @Override
+    public int hashCode() {
+        return value.toString().hashCode();
+    }
+
+    @NotNull public Stream<String> keyStream() {
         return Stream.empty();
 
     }

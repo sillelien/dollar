@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,11 @@ import me.neilellis.dollar.types.DollarList;
 import me.neilellis.dollar.types.DollarMap;
 import me.neilellis.dollar.types.DollarVoid;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class SimpleLogStateTracer implements StateTracer {
     @Override
-    public <R> R trace(Object before, R after, Operations operationType, Object... values) {
+    public <R> R trace(Object before, R after, Operations operationType, @NotNull Object... values) {
         String beforeStr = "";
         String afterStr = "";
         String afterNotes = "";
@@ -90,7 +88,7 @@ public class SimpleLogStateTracer implements StateTracer {
         return formatted;
     }
 
-    private String toDescription(Object[] values) {
+    @NotNull private String toDescription(@NotNull Object[] values) {
         String result = "[";
         for (Object value : values) {
             Object unwrapped;

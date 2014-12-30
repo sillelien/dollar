@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import com.innowhere.relproxy.impl.jproxy.JProxyUtil;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.ClassDescriptorSourceScript;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.SourceScript;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.SourceScriptFile;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -32,7 +34,7 @@ import java.util.LinkedList;
 public class JProxyShellScriptFileImpl extends JProxyShellImpl {
     protected File scriptFile;
 
-    public void init(String[] args) {
+    public void init(@NotNull String[] args) {
         File scriptFile = new File(args[0]);
         if (!scriptFile.exists())
             throw new RelProxyException("File " + args[0] + " does not exist");
@@ -44,8 +46,23 @@ public class JProxyShellScriptFileImpl extends JProxyShellImpl {
         super.init(args, inputPath);
     }
 
+    @NotNull @Override
+    protected SourceScript getSourceScript(String[] args, LinkedList<String> argsToScript) {
+        return SourceScriptFile.createSourceScriptFile(scriptFile);
+    }
+
+    @Nullable @Override
+    protected JProxyShellClassLoader getJProxyShellClassLoader(@NotNull JProxyConfigImpl config) {
+        String classFolder = config.getClassFolder();
+        if (classFolder != null)
+            return new JProxyShellClassLoader(getDefaultClassLoader(), new File(classFolder));
+        else
+            return null;
+    }
+
     @Override
-    protected void executeFirstTime(ClassDescriptorSourceScript scriptFileDesc, LinkedList<String> argsToScript, JProxyShellClassLoader classLoader) {
+    protected void executeFirstTime(@NotNull ClassDescriptorSourceScript scriptFileDesc,
+                                    @NotNull LinkedList<String> argsToScript, JProxyShellClassLoader classLoader) {
         fixLastLoadedClass(scriptFileDesc, classLoader);
 
         try {
@@ -55,21 +72,8 @@ public class JProxyShellScriptFileImpl extends JProxyShellImpl {
         }
     }
 
-    @Override
-    protected SourceScript getSourceScript(String[] args, LinkedList<String> argsToScript) {
-        return SourceScriptFile.createSourceScriptFile(scriptFile);
-    }
-
-    @Override
-    protected JProxyShellClassLoader getJProxyShellClassLoader(JProxyConfigImpl config) {
-        String classFolder = config.getClassFolder();
-        if (classFolder != null)
-            return new JProxyShellClassLoader(getDefaultClassLoader(), new File(classFolder));
-        else
-            return null;
-    }
-
-    protected void fixLastLoadedClass(ClassDescriptorSourceScript scriptFileDesc, JProxyShellClassLoader classLoader) {
+    protected void fixLastLoadedClass(
+            @NotNull ClassDescriptorSourceScript scriptFileDesc, @Nullable JProxyShellClassLoader classLoader) {
         Class scriptClass = scriptFileDesc.getLastLoadedClass();
         if (scriptClass != null) return;
 

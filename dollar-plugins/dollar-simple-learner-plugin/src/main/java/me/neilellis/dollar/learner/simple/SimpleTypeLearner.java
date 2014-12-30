@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@ import me.neilellis.dollar.script.TypeLearner;
 import me.neilellis.dollar.types.prediction.AnyTypePrediction;
 import me.neilellis.dollar.types.prediction.CountBasedTypePrediction;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,17 +36,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class SimpleTypeLearner implements TypeLearner {
 
 
     public static final int MAX_POSSIBLE_RETURN_VALUES = 5;
-    private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
+    @Nullable private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
 
     private transient boolean modified;
-    private ConcurrentHashMap<String, CountBasedTypePrediction> map = new ConcurrentHashMap<>();
+    @NotNull private ConcurrentHashMap<String, CountBasedTypePrediction> map = new ConcurrentHashMap<>();
 
     public SimpleTypeLearner() {
         File file = new File(System.getProperty("user.home") + "/.dollar/typelearning.xml");
@@ -80,11 +79,11 @@ public class SimpleTypeLearner implements TypeLearner {
     }
 
 
-    @Override public TypeLearner copy() {
+    @NotNull @Override public TypeLearner copy() {
         return this;
     }
 
-    @Override public void learn(String name, SourceSegment source, List<var> inputs, Type type) {
+    @Override public void learn(String name, SourceSegment source, @NotNull List<var> inputs, Type type) {
         final ArrayList<String> perms = TypeLearner.perms(inputs);
         for (String perm : perms) {
             final String key = createKey(name, perm);
@@ -96,7 +95,7 @@ public class SimpleTypeLearner implements TypeLearner {
 
     }
 
-    @Override public TypePrediction predict(String name, SourceSegment source, List<var> inputs) {
+    @Nullable @Override public TypePrediction predict(String name, SourceSegment source, @NotNull List<var> inputs) {
         final ArrayList<String> perms = TypeLearner.perms(inputs);
         CountBasedTypePrediction prediction = new CountBasedTypePrediction(name);
         try {
@@ -121,13 +120,13 @@ public class SimpleTypeLearner implements TypeLearner {
         }
     }
 
-    public String createKey(String name, String perm) {return name + ":" + perm;}
+    @NotNull public String createKey(String name, String perm) {return name + ":" + perm;}
 
-    @Override public void start() throws Exception {
+    @Override public void start() {
 
     }
 
-    @Override public void stop() throws Exception {
+    @Override public void stop() {
 
     }
 

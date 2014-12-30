@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import me.neilellis.dollar.json.JsonArray;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -35,9 +36,6 @@ import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.test.TestGenerator.*;
 import static org.junit.Assert.fail;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarOperatorsRegressionTest {
 
     @BeforeClass
@@ -57,7 +55,8 @@ public class DollarOperatorsRegressionTest {
         regression("/", "divide", "minimal", testBinary(minimal(), noSmallDecimals(), operation));
     }
 
-    public void regression(String symbol, String operation, String variant, List<List<var>> result) throws IOException {
+    public void regression(String symbol, String operation, String variant, @NotNull List<List<var>> result) throws
+                                                                                                             IOException {
         String filename = operation + "." + variant + ".json";
         final JsonArray previous = new JsonArray(IOUtils.toString(getClass().getResourceAsStream("/" + filename)));
         //Use small to stop massive string creation
@@ -105,7 +104,7 @@ public class DollarOperatorsRegressionTest {
         }
     }
 
-    private void diff(String desc, JsonArray lhs, JsonArray rhs) {
+    private void diff(String desc, @NotNull JsonArray lhs, @NotNull JsonArray rhs) {
         final List lhsArray = lhs.toStringList();
         final List rhsArray = rhs.toStringList();
         if (lhsArray.size() != rhsArray.size()) {

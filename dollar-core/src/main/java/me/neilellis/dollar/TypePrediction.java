@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,11 @@
 
 package me.neilellis.dollar;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Set;
 
-/**
- * A type prediction, type prediction is used to estimate the possible evaluated types of some dynamic values. For
- * static types this will be the actual type.
- *
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public interface TypePrediction {
 
     /**
@@ -41,19 +38,19 @@ public interface TypePrediction {
      *
      * @return the probability as a double
      */
-    Double probability(Type type);
+    @NotNull Double probability(Type type);
 
     /**
      * The most likely type based on the evidence supplied.
      *
      * @return the most probable type
      */
-    Type probableType();
+    @Nullable Type probableType();
 
     /**
      * All possible types.
      *
      * @return the set of possible types
      */
-    Set<Type> types();
+    @NotNull Set<Type> types();
 }

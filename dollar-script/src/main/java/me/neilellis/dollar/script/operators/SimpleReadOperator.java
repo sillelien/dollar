@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,8 @@ import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.script.UnaryOp;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class SimpleReadOperator extends UnaryOp {
 
 
@@ -34,7 +32,7 @@ public class SimpleReadOperator extends UnaryOp {
 
 
     @Override
-    public var map(var from) {
+    public var map(@NotNull var from) {
         return DollarScriptSupport.wrapReactive(scope, () -> DollarFactory.fromURI(from).$read(), source, operation,
                                                 from);
     }

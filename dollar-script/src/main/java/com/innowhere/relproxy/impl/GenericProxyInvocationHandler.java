@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.innowhere.relproxy.impl;
 
 import com.innowhere.relproxy.RelProxyOnReloadListener;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -26,7 +27,7 @@ import java.lang.reflect.Method;
  * @author jmarranz
  */
 public abstract class GenericProxyInvocationHandler<T> implements InvocationHandler {
-    protected GenericProxyImpl root;
+    protected final GenericProxyImpl root;
     protected GenericProxyVersionedObject<T> verObj;
 
     public GenericProxyInvocationHandler(GenericProxyImpl root) {
@@ -34,7 +35,7 @@ public abstract class GenericProxyInvocationHandler<T> implements InvocationHand
     }
 
     @Override
-    public synchronized Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public synchronized Object invoke(Object proxy, @NotNull Method method, Object[] args) throws Throwable {
         T oldObj = verObj.getCurrent();
         T obj = verObj.getNewVersion();
 

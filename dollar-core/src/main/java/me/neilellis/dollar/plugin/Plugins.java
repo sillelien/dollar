@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,14 @@ package me.neilellis.dollar.plugin;
 
 import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.uri.URIHandlerFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class Plugins {
 
-    public static <T extends ExtensionPoint<T>> List<T> allProviders(Class<T> serviceClass) {
+    @NotNull public static <T extends ExtensionPoint<T>> List<T> allProviders(@NotNull Class<T> serviceClass) {
         final ServiceLoader<T> loader = ServiceLoader.load(serviceClass);
         final Iterator<T> iterator = loader.iterator();
         if (!iterator.hasNext()) {
@@ -40,7 +39,7 @@ public class Plugins {
     }
 
     //TODO: aggregate all available providers
-    public static <T extends ExtensionPoint<T>> T newInstance(Class<T> serviceClass) {
+    public static <T extends ExtensionPoint<T>> T newInstance(@NotNull Class<T> serviceClass) {
         final ServiceLoader<T> loader = ServiceLoader.load(serviceClass);
         if (!loader.iterator().hasNext()) {
             return NoOpProxy.newInstance(serviceClass);
@@ -48,7 +47,7 @@ public class Plugins {
         return loader.iterator().next().copy();
     }
 
-    public static URIHandlerFactory resolveURIProvider(String scheme) {
+    @NotNull public static URIHandlerFactory resolveURIProvider(String scheme) {
         final ServiceLoader<URIHandlerFactory> loader = ServiceLoader.load(URIHandlerFactory.class);
         for (URIHandlerFactory handler : loader) {
             if (handler.handlesScheme(scheme)) {
@@ -58,7 +57,7 @@ public class Plugins {
         throw new DollarException("Could not find any provider for URI scheme " + scheme);
     }
 
-    public static <T extends ExtensionPoint<T>> T sharedInstance(Class<T> serviceClass) {
+    @Nullable public static <T extends ExtensionPoint<T>> T sharedInstance(@NotNull Class<T> serviceClass) {
         final ServiceLoader<T> loader = ServiceLoader.load(serviceClass);
         if (!loader.iterator().hasNext()) {
             return NoOpProxy.newInstance(serviceClass);

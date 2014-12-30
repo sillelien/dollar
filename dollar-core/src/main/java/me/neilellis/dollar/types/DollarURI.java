@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,17 +30,14 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarURI extends AbstractDollar {
 
-    private final StateMachine<ResourceState, Signal> stateMachine;
-    private final URI uri;
+    @NotNull private final StateMachine<ResourceState, Signal> stateMachine;
+    @NotNull private final URI uri;
     private URIHandler handler;
 
 
-    public DollarURI(@NotNull ImmutableList<Throwable> errors, URI uri) {
+    public DollarURI(@NotNull ImmutableList<Throwable> errors, @NotNull URI uri) {
         super(errors);
         this.uri = uri;
         String scheme = uri.scheme();
@@ -76,7 +73,7 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $plus(@Nullable var rhs) {
+    public var $plus(@NotNull var rhs) {
         ensureRunning();
         return handler.append(rhs);
     }
@@ -105,6 +102,10 @@ public class DollarURI extends AbstractDollar {
         return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_URI_OPERATION);
     }
 
+    @Override public int sign() {
+        return 1;
+    }
+
     @NotNull
     @Override
     public Integer toInteger() {
@@ -117,10 +118,6 @@ public class DollarURI extends AbstractDollar {
         return 0;
     }
 
-    @Override public int sign() {
-        return 1;
-    }
-
     private void ensureRunning() {
         if (stateMachine.isInState(ResourceState.INITIAL)) {
             stateMachine.fire(Signal.START);
@@ -131,7 +128,7 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public var $as(Type type) {
+    public var $as(@NotNull Type type) {
         if (type.equals(Type.STRING)) {
             return DollarStatic.$(toHumanString());
         } else if (type.equals(Type.LIST)) {
@@ -147,7 +144,7 @@ public class DollarURI extends AbstractDollar {
         }
     }
 
-    @Override
+    @NotNull @Override
     public String toHumanString() {
         return uri.toString();
     }
@@ -201,7 +198,7 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public var $each(Pipeable pipe) {
+    public var $each(@NotNull Pipeable pipe) {
         return super.$each(pipe);
     }
 
@@ -320,12 +317,12 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public var $subscribe(Pipeable pipe) {
+    public var $subscribe(@NotNull Pipeable pipe) {
         return $subscribe(pipe, null);
     }
 
     @Override
-    public var $subscribe(Pipeable pipe, String id) {
+    public var $subscribe(@NotNull Pipeable pipe, @Nullable String id) {
         ensureRunning();
         final String subId = id == null ? UUID.randomUUID().toString() : id;
         try {

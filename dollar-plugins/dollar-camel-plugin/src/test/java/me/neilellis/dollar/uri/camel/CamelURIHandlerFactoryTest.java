@@ -36,7 +36,7 @@ public class CamelURIHandlerFactoryTest {
 
 
     @Test
-    public void testDispatch() throws Exception {
+    public void testDispatch() {
 
     }
 
@@ -64,7 +64,7 @@ public class CamelURIHandlerFactoryTest {
     }
 
     @Test
-    public void testPoll() throws Exception {
+    public void testPoll() {
         CamelURIHandlerFactory camelURIHandlerFactory = new CamelURIHandlerFactory();
         final var page = camelURIHandlerFactory.forURI("camel", URI.parse("camel:http://google.com")).read(true,
                                                                                                            false);
@@ -72,7 +72,7 @@ public class CamelURIHandlerFactoryTest {
     }
 
     @Test
-    public void testPublish() throws Exception {
+    public void testPublish() {
 
     }
 
@@ -81,7 +81,7 @@ public class CamelURIHandlerFactoryTest {
         CamelContext context = new DefaultCamelContext();
         RouteBuilder routeBuilder = new RouteBuilder() {
             @Override
-            public void configure() throws Exception {
+            public void configure() {
                 from("direct-vm:test").process((e) -> {
                     e.getOut().setBody("RESULT");
                 });
@@ -102,7 +102,7 @@ public class CamelURIHandlerFactoryTest {
     }
 
     @Test
-    public void testWrite() throws Exception {
+    public void testWrite() {
 
     }
 

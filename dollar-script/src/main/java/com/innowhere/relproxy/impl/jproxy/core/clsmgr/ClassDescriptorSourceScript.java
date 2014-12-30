@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.innowhere.relproxy.impl.jproxy.core.clsmgr;
 
 import com.innowhere.relproxy.RelProxyException;
 import com.innowhere.relproxy.impl.jproxy.core.JProxyImpl;
+import org.jetbrains.annotations.NotNull;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
@@ -31,7 +32,8 @@ import java.util.LinkedList;
 public class ClassDescriptorSourceScript extends ClassDescriptorSourceUnit {
     protected String source;
 
-    public ClassDescriptorSourceScript(JProxyEngine engine, String className, SourceScript sourceFile, long timestamp) {
+    public ClassDescriptorSourceScript(JProxyEngine engine, @NotNull String className, SourceScript sourceFile,
+                                       long timestamp) {
         super(engine, className, sourceFile, timestamp);
 
         generateSourceCode();
@@ -92,11 +94,11 @@ public class ClassDescriptorSourceScript extends ClassDescriptorSourceUnit {
         this.source = finalCode.toString();
     }
 
-    public SourceScript getSourceScript() {
+    @NotNull public SourceScript getSourceScript() {
         return (SourceScript) sourceFile;
     }
 
-    private boolean isCompleteClass(String code) {
+    private boolean isCompleteClass(@NotNull String code) {
         // Buscamos si hay un " class ..." o un "import..." al comienzo para soportar la definición de una clase completa como script
         int pos = code.indexOf("class");
         if (pos == -1) return false;
@@ -118,7 +120,7 @@ public class ClassDescriptorSourceScript extends ClassDescriptorSourceUnit {
         return ("private".equals(visibility) || "public".equals(visibility) || "protected".equals(visibility));
     }
 
-    private int getFirstPosIgnoringCommentsAndSeparators(String code) {
+    private int getFirstPosIgnoringCommentsAndSeparators(@NotNull String code) {
         int i = -1;
         for (i = 0; i < code.length(); i++) {
             char c = code.charAt(i);
@@ -137,27 +139,21 @@ public class ClassDescriptorSourceScript extends ClassDescriptorSourceUnit {
         return i;
     }
 
-    private int getFirstPosIgnoringOneLineComment(String code, int start) {
+    private int getFirstPosIgnoringOneLineComment(@NotNull String code, int start) {
         return code.indexOf('\n', start);
     }
 
-    private int getFirstPosIgnoringMultiLineComment(String code, int start) {
+    private int getFirstPosIgnoringMultiLineComment(@NotNull String code, int start) {
         return code.indexOf("*/", start);
     }
 
-    public void callMainMethod(LinkedList<String> argsToScript) throws Throwable {
+    public void callMainMethod(@NotNull LinkedList<String> argsToScript) throws Throwable {
         try {
             Class scriptClass = getLastLoadedClass();
             Method method = scriptClass.getDeclaredMethod("main", String[].class);
             String[] argsToScriptArr = argsToScript.size() > 0 ? argsToScript.toArray(new String[argsToScript.size()]) : new String[0];
             method.invoke(null, new Object[]{argsToScriptArr});
-        } catch (IllegalAccessException ex) {
-            throw new RelProxyException(ex);
-        } catch (NoSuchMethodException ex) {
-            throw new RelProxyException(ex);
-        } catch (SecurityException ex) {
-            throw new RelProxyException(ex);
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalAccessException | IllegalArgumentException | SecurityException | NoSuchMethodException ex) {
             throw new RelProxyException(ex);
         } catch (InvocationTargetException ex) {
             throw ex.getCause();
@@ -169,18 +165,12 @@ public class ClassDescriptorSourceScript extends ClassDescriptorSourceUnit {
         return callMainMethod(scriptClass, engine, context);
     }
 
-    public static Object callMainMethod(Class scriptClass, ScriptEngine engine, ScriptContext context) throws
+    public static Object callMainMethod(@NotNull Class scriptClass, ScriptEngine engine, ScriptContext context) throws
                                                                                                        Throwable {
         try {
             Method method = scriptClass.getDeclaredMethod("main", ScriptEngine.class, ScriptContext.class);
             return method.invoke(null, engine, context);
-        } catch (IllegalAccessException ex) {
-            throw new RelProxyException(ex);
-        } catch (NoSuchMethodException ex) {
-            throw new RelProxyException(ex);
-        } catch (SecurityException ex) {
-            throw new RelProxyException(ex);
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalAccessException | IllegalArgumentException | SecurityException | NoSuchMethodException ex) {
             throw new RelProxyException(ex);
         } catch (InvocationTargetException ex) {
             throw ex.getCause();

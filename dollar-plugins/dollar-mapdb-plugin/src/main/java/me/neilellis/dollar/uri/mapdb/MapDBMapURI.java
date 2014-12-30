@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.types.ErrorType;
 import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 import org.mapdb.BTreeMap;
 import org.mapdb.Bind;
 import org.mapdb.DB;
@@ -31,9 +32,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$void;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class MapDBMapURI extends AbstractMapDBURI {
 
     private static final ConcurrentHashMap<String, Bind.MapListener<String, var>>
@@ -54,7 +52,7 @@ public class MapDBMapURI extends AbstractMapDBURI {
         return tx.execute((DB d) -> DollarFactory.fromValue(getTreeMap(d).snapshot()));
     }
 
-    @Override public var write(var value, boolean blocking, boolean mutating) {
+    @Override public var write(@NotNull var value, boolean blocking, boolean mutating) {
         if (value.pair()) {
             return set($(value.getPairKey()), value.getPairValue());
         } else {
@@ -71,24 +69,24 @@ public class MapDBMapURI extends AbstractMapDBURI {
         });
     }
 
-    @Override public var get(var key) {
+    @Override public var get(@NotNull var key) {
         return tx.execute((DB d) -> DollarFactory.fromValue(getTreeMap(d).get(key._fixDeep())));
     }
 
-    @Override public var read(boolean blocking, boolean mutating) {
+    @NotNull @Override public var read(boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
 
-    @Override public var remove(var v) {
+    @Override public var remove(@NotNull var v) {
         return tx.execute((DB d) -> DollarFactory.fromValue(getTreeMap(d).remove(v._fixDeep())));
 
     }
 
-    @Override public var removeValue(var v) {
+    @NotNull @Override public var removeValue(var v) {
         throw new UnsupportedOperationException();
     }
 
-    @Override public var set(var key, var value) {
+    @Override public var set(@NotNull var key, @NotNull var value) {
         final var fixedValue = value._fixDeep();
         final String keyString = key.$S();
         if (!value.isVoid()) {
@@ -109,7 +107,7 @@ public class MapDBMapURI extends AbstractMapDBURI {
         return tx.execute((DB d) -> getTreeMap(d).size());
     }
 
-    @Override public void subscribe(Pipeable consumer, String id) throws IOException {
+    @Override public void subscribe(@NotNull Pipeable consumer, @NotNull String id) throws IOException {
         tx.execute((DB d) -> {
             final Bind.MapListener<String, var> listener = (key, oldVal, newVal) -> {
                 try {
@@ -123,9 +121,9 @@ public class MapDBMapURI extends AbstractMapDBURI {
         });
     }
 
-    @Override public void unsubscribe(String subId) {
+    @Override public void unsubscribe(@NotNull String subId) {
         tx.execute((DB d) -> getTreeMap(d).modificationListenerRemove(subscribers.get(subId)));
     }
 
-    private BTreeMap<String, var> getTreeMap(DB d) {return d.getTreeMap(getHost());}
+    private BTreeMap<String, var> getTreeMap(@NotNull DB d) {return d.getTreeMap(getHost());}
 }

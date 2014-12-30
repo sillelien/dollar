@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class JSFileScript implements Pipeable {
   private static
   @NotNull final
@@ -42,7 +39,7 @@ public class JSFileScript implements Pipeable {
 
   private final String script;
 
-  public JSFileScript(File file) throws IOException {
+    public JSFileScript(@NotNull File file) throws IOException {
     byte[] bytes = Files.readAllBytes(file.toPath());
     script = new String(bytes);
   }
@@ -53,7 +50,7 @@ public class JSFileScript implements Pipeable {
     script= s;
   }
 
-  @Override
+    @NotNull @Override
   public var pipe(var... in) throws Exception {
     SimpleScriptContext context = new SimpleScriptContext();
     nashorn.eval("var $=" + in[0].toJsonObject().toString() + ";", context);
