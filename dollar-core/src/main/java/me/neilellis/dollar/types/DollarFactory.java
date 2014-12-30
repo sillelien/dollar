@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.gson.Gson;
 import me.neilellis.dollar.*;
 import me.neilellis.dollar.collections.*;
 import me.neilellis.dollar.exceptions.DollarFailureException;
@@ -277,19 +276,19 @@ public class DollarFactory {
         return wrap(new DollarMap(errors, json));
     }
 
-
-    /**
-     * From gson object.
-     *
-     * @param o the o
-     * @return the var
-     */
-    @NotNull
-    public static var fromGsonObject(Object o) {
-        Gson gson = new Gson();
-        String json = gson.toJson(o);
-        return create(ImmutableList.<Throwable>of(), json);
-    }
+//
+//    /**
+//     * From gson object.
+//     *
+//     * @param o the o
+//     * @return the var
+//     */
+//    @NotNull
+//    public static var fromGsonObject(Object o) {
+//        Gson gson = new Gson();
+//        String json = gson.toJson(o);
+//        return create(ImmutableList.<Throwable>of(), json);
+//    }
 
     /**
      * From value.
