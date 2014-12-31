@@ -16,7 +16,6 @@
 
 package me.neilellis.dollar.deps;
 
-import com.jcabi.aether.Aether;
 import org.jetbrains.annotations.NotNull;
 import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.repository.RemoteRepository;
@@ -24,7 +23,6 @@ import org.sonatype.aether.resolution.DependencyResolutionException;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
@@ -63,18 +61,18 @@ public class DependencyRetriever {
                         "http://repo1.maven.org/maven2/"
                 )
         );
-        final Aether aether = new Aether(remotes, dollarLib);
-//        new DefaultArtifact("junit", "junit-dep", "", "jar", "4.10")
-        Collection<Artifact> deps = aether.resolve(artifact
-                , "runtime"
-        );
-        for (Artifact dep : deps) {
-            try {
-                jarFileClassLoader.addFile(dep.getFile().getAbsolutePath());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
+//        final Aether aether = new Aether(remotes, dollarLib);
+////        new DefaultArtifact("junit", "junit-dep", "", "jar", "4.10")
+//        Collection<Artifact> deps = aether.resolve(artifact
+//                , "runtime"
+//        );
+//        for (Artifact dep : deps) {
+//            try {
+//                jarFileClassLoader.addFile(dep.getFile().getAbsolutePath());
+//            } catch (MalformedURLException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     @NotNull public static JarFileLoader retrieve(@NotNull List<String> artifacts) throws

@@ -16,11 +16,9 @@
 
 package me.neilellis.dollar;
 
-import me.neilellis.dollar.deps.DependencyRetriever;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sonatype.aether.resolution.DependencyResolutionException;
-import org.sonatype.aether.util.artifact.DefaultArtifact;
 
 public class DollarDependenciesTest {
 
@@ -31,7 +29,8 @@ public class DollarDependenciesTest {
 
     @Test
     public void testBasics() throws DependencyResolutionException, ClassNotFoundException {
-        DependencyRetriever.retrieve(new DefaultArtifact("org.twitter4j:twitter4j-core:4.0.2")).loadClass("twitter4j.Twitter");
+//        DependencyRetriever.retrieve(new DefaultArtifact("org.twitter4j:twitter4j-core:4.0.2")).loadClass
+// ("twitter4j.Twitter");
     }
 
 
