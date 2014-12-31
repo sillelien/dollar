@@ -82,11 +82,11 @@ public class DollarException extends RuntimeException {
         }
     }
 
-    @NotNull @Override public String toString() {
-        String s = getClass().getName();
-        String message = this.getLocalizedMessage();
-        if (message != null) { return (STARS + s + ": " + message + "\n" + STARS); } else { return s; }
-    }
+//    @NotNull @Override public String toString() {
+//        String s = getClass().getName();
+//        String message = this.getLocalizedMessage();
+//        if (message != null) { return (STARS + s + ": " + message + "\n" + STARS); } else { return s; }
+//    }
 
     /**
      * A HTTP code that is appropriate for this exception.

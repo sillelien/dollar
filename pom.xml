@@ -535,11 +535,11 @@
                     <aggregate>true</aggregate>
                 </configuration>
             </plugin>
-            <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-jxr-plugin</artifactId>-->
-            <!--<version>2.1</version>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.1</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
@@ -719,27 +719,28 @@
                 <!--</executions>-->
                 <configuration>
                     <excludes>
+                        <param>org.sonatype.aether:aether-util:1.13.1</param>
+                        <param>org.sonatype.aether:aether:1.13.1</param>
+                        <param>commons-logging:commons-logging:1.2</param>
                         <param>com.fasterxml.jackson.core:jackson-core:2.3.3</param>
                         <param>com.fasterxml.jackson.core:jackson-databind:2.3.3</param>
                         <param>com.jayway.restassured:rest-assured:2.3.3</param>
-                        <param>com.jcabi:jcabi-aether:0.10.1</param>
-                        <param>com.jcabi:jcabi-log:0.7.21</param>
                         <param>commons-codec:commons-codec:1.8</param>
                         <param>commons-io:commons-io:2.4</param>
                         <param>commons-lang:commons-lang:2.6</param>
                         <param>io.dropwizard.metrics:metrics-core:3.1.0</param>
-                        <param>me.neilellis:dollar-camel-plugin:0-SNAPSHOT</param>
-                        <param>me.neilellis:dollar-core:0-SNAPSHOT</param>
-                        <param>me.neilellis:dollar-http-plugin:0-SNAPSHOT</param>
-                        <param>me.neilellis:dollar-metrics-plugin:0-SNAPSHOT</param>
-                        <param>me.neilellis:dollar-redis-plugin:0-SNAPSHOT</param>
-                        <param>me.neilellis:dollar-resolver:0-SNAPSHOT</param>
-                        <param>me.neilellis:dollar-script:0-SNAPSHOT</param>
-                        <param>me.neilellis:dollar-std-resources-plugin:0-SNAPSHOT</param>
-                        <param>org.apache.camel:camel-core:2.14.0</param>
-                        <param>org.apache.camel:camel-http:2.14.0</param>
-                        <param>org.apache.camel:camel-parent:2.14.0</param>
-                        <param>org.apache.camel:camel-test:2.14.0</param>
+                        <param>me.neilellis:dollar-camel-plugin:${project.version}</param>
+                        <param>me.neilellis:dollar-core:${project.version}</param>
+                        <param>me.neilellis:dollar-http-plugin:${project.version}</param>
+                        <param>me.neilellis:dollar-metrics-plugin:${project.version}</param>
+                        <param>me.neilellis:dollar-redis-plugin:${project.version}</param>
+                        <param>me.neilellis:dollar-resolver:${project.version}</param>
+                        <param>me.neilellis:dollar-script:${project.version}</param>
+                        <param>me.neilellis:dollar-std-resources-plugin:${project.version}</param>
+                        <param>org.apache.camel:camel-core:${camel.version}</param>
+                        <param>org.apache.camel:camel-http:${camel.version}</param>
+                        <param>org.apache.camel:camel-parent:${camel.version}</param>
+                        <param>org.apache.camel:camel-test:${camel.version}</param>
                         <param>org.apache.commons:commons-lang3:3.3.2</param>
                         <param>org.apache.httpcomponents:httpasyncclient:4.0.1</param>
                         <param>org.apache.httpcomponents:httpclient:4.3.4</param>
