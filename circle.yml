@@ -27,7 +27,7 @@ dependencies:
     - "mkdir -p ~/.codespotter/ || : "
     - echo "${CODE_SPOTTER_KEY}" > ~/.codespotter/.codespotter-key
     - envsubst < settings.xml > ~/.m2/settings.xml
-    - "mvn -q -Dgpg.passphrase=${GPG_PASSPHRASE} clean install -Dmaven.test.skip=true":
+    - "mvn -Dgpg.passphrase=${GPG_PASSPHRASE} clean install -Dmaven.test.skip=true":
         timeout: 600
     - echo "login=neilellis" > ~/.github
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
