@@ -73,7 +73,7 @@ deployment:
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
-        - mvn -q -Dgpg.passphrase=${GPG_PASSPHRASE} install deploy
+        - mvn -q -Dgpg.passphrase=${GPG_PASSPHRASE} clean install deploy
         - mvn site:site site:stage
         - ./build-docs.sh:
             timeout: 360
