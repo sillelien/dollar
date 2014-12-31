@@ -1,8 +1,11 @@
 ## Change Log
 
-### In Progress: 0.1.5 (2014/12/31 07:34 +00:00)
+### In Progress: 0.1.5 (2014/12/31 08:18 +00:00)
+- [649965b](https://github.com/neilellis/dollar/commit/649965bd4ab08e0d5506495b476c2660e70b7972) Change log updates
+- [90cb58e](https://github.com/neilellis/dollar/commit/90cb58ee0a08a0472c264bdc549913fe8b8a99eb) Auto merge
 - [c7e8a09](https://github.com/neilellis/dollar/commit/c7e8a09703db773cd5a49ffebaaf91836cfa9885) Change log updates
 - [9c35c9f](https://github.com/neilellis/dollar/commit/9c35c9ff988fd85b88c080c068d21b9db0fd4a44) Auto merge
+- [c5b2f20](https://github.com/neilellis/dollar/commit/c5b2f2096f76266f4c7cfc8434dc5b779df6d2c0) Cleanup
 - [7f8e058](https://github.com/neilellis/dollar/commit/7f8e0589278af103000d592372dc47b66fee76a8) Change log updates
 - [f4bfa60](https://github.com/neilellis/dollar/commit/f4bfa600ba0c3f22b17f6445b715bac44b5c0c50) Auto merge
 - [e3db936](https://github.com/neilellis/dollar/commit/e3db9366afd80eb9709a9a14a5f95a53ea607184) Cleanup
@@ -15,8 +18,8 @@
 - [aa3357c](https://github.com/neilellis/dollar/commit/aa3357c2e4f31ae34fa24fc0b29dd039e2ef7622) Cleanup
 
 ### 0.1.4 (2014/12/31 06:39 +00:00)
-- [5c0d9bf](https://github.com/neilellis/dollar/commit/5c0d9bf2fba9b222807fd51fb95d6b46a28013a6) Auto merge
 - [479f5ef](https://github.com/neilellis/dollar/commit/479f5efd105a487ca61e253895f0567040be68c1) Change log updates
+- [5c0d9bf](https://github.com/neilellis/dollar/commit/5c0d9bf2fba9b222807fd51fb95d6b46a28013a6) Auto merge
 - [a8f6a9d](https://github.com/neilellis/dollar/commit/a8f6a9d9fb3be801413d0fd7479724667d40c929) Cleanup
 - [a98900f](https://github.com/neilellis/dollar/commit/a98900f91fa69d694c61ebd5d60ecaa26d1ce416) Cleanup
 - [9eb1e2d](https://github.com/neilellis/dollar/commit/9eb1e2d5ab2c084018b6a061a0b7aca5555163bd) Cleanup
@@ -149,8 +152,8 @@
 - [aa0f2f4](https://github.com/neilellis/dollar/commit/aa0f2f446afa00e69f418efe9c87a44dc1791beb) Better plugin support release
 - [04dae5d](https://github.com/neilellis/dollar/commit/04dae5deb460caea3067dbad699561231cb92d60) Reduced plugin sizes
 - [3eb86d1](https://github.com/neilellis/dollar/commit/3eb86d11a98e05b2c12cc5c354c4e5519a8c34c1) Improved plugin system.
-- [c0d4252](https://github.com/neilellis/dollar/commit/c0d425292ed99238f623249107ff80d5fe1ea20d) Auto merge
 - [f6d5ded](https://github.com/neilellis/dollar/commit/f6d5ded30913dce8a54f14bec97a2df4bdbe2cc9) Change log updates
+- [c0d4252](https://github.com/neilellis/dollar/commit/c0d425292ed99238f623249107ff80d5fe1ea20d) Auto merge
 - [be07525](https://github.com/neilellis/dollar/commit/be07525110869f00175fce612968a790ad007175) Blog fix
 - [668e002](https://github.com/neilellis/dollar/commit/668e0026aecc84b8c9f9b2ee6fb93d2be90ba981) Change log updates
 - [2b74434](https://github.com/neilellis/dollar/commit/2b744342160f2f5c282dbdfb60ab1732c28858ff) Auto merge
@@ -177,8 +180,8 @@
 - [393ac19](https://github.com/neilellis/dollar/commit/393ac199ca42de27ee65359ca000feef6b59269a) Change log updates
 - [9044c23](https://github.com/neilellis/dollar/commit/9044c2397b98e52f2e1cae7eb7f6f42157399952) Auto merge
 - [ba012fd](https://github.com/neilellis/dollar/commit/ba012fd10e2162070a25591b67a55b209382052b) General tooling and planning integration.
-- [c35685f](https://github.com/neilellis/dollar/commit/c35685fc8316fe1c4b1a1f16cc622c7572b29281) Change log updates
 - [a7bbb4a](https://github.com/neilellis/dollar/commit/a7bbb4addec58e95b893098f0c07b9691f5ca8e3) Auto merge
+- [c35685f](https://github.com/neilellis/dollar/commit/c35685fc8316fe1c4b1a1f16cc622c7572b29281) Change log updates
 - [090ccab](https://github.com/neilellis/dollar/commit/090ccab321c92fc0bf43072e42966b0e53ce10cf) General tooling and planning integration.
 - [d81bade](https://github.com/neilellis/dollar/commit/d81badedf3d3c8fa6a9a71900b2a83bb542b5e15) General tooling and planning integration.
 
