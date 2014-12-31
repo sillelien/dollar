@@ -925,7 +925,7 @@
             </snapshots>
             <id>bintray.central</id>
             <name>bintray</name>
-            <url>http://dl.bintray.com/neilellis/dollar</url>
+            <url>http://dl.bintray.com/neilellis/maven</url>
         </repository>
     </repositories>
 
