@@ -24,6 +24,9 @@ import java.util.List;
 
 public class DollarException extends RuntimeException {
 
+    public static final String
+            STARS =
+            "*******************************************************************************\n";
     private final List<SourceSegment> sourceList = new ArrayList<>();
 
     /**
@@ -47,7 +50,7 @@ public class DollarException extends RuntimeException {
     /**
      * Instantiates a new Dollar exception.
      *
-     * @param cause the cause of this exception
+     * @param cause   the cause of this exception
      * @param message the error message associated with this exception
      */
     public DollarException(Throwable cause, String message) {
@@ -77,6 +80,12 @@ public class DollarException extends RuntimeException {
             }
             return builder.toString();
         }
+    }
+
+    @NotNull @Override public String toString() {
+        String s = getClass().getName();
+        String message = this.getLocalizedMessage();
+        if (message != null) { return (STARS + s + ": " + message + "\n" + STARS); } else { return s; }
     }
 
     /**
