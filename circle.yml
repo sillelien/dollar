@@ -3,7 +3,7 @@ machine:
     previous_release: 0.1.3
     release: 0.1.4
     next_release: 0.1.5
-    MAVEN_OPTS: "-Xmx1g"
+    MAVEN_OPTS: "-Xmx1g -DbuildNumber=${CIRCLE_BUILD_NUM} "
   java:
     version: oraclejdk8
 

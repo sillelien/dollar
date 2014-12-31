@@ -653,58 +653,57 @@
                         </dependency>
                     </dependencies>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-shade-plugin</artifactId>
-                    <version>2.3</version>
-                    <configuration>
-                        <shadedArtifactAttached>true</shadedArtifactAttached>
-                        <shadedClassifierName>fat</shadedClassifierName>
-                        <minimizeJar>true</minimizeJar>
-                        <filters>
-                            <filter>
-                                <!--
-                                    Exclude files that sign a jar
-                                    (one or multiple of the dependencies).
-                                    One may not repack a signed jar without
-                                    this, or you will get a
-                                    SecurityException at program start.
-                                -->
-                                <artifact>*:*</artifact>
-                                <excludes>
-                                    <exclude>META-INF/*.SF</exclude>
-                                    <exclude>META-INF/*.RSA</exclude>
-                                    <exclude>META-INF/*.INF</exclude>
-                                    <!-- This one may not be required -->
-                                </excludes>
-                            </filter>
-                        </filters>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>shade</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>com.github.wvengen</groupId>
-                    <artifactId>proguard-maven-plugin</artifactId>
-                    <version>2.0.8</version>
-                    <!--<dependencies>-->
-                    <!--<dependency>-->
-                    <!--<groupId>net.sf.proguard</groupId>-->
-                    <!--<artifactId>proguard-base</artifactId>-->
-                    <!--<version>5.0</version>-->
-                    <!--<scope>runtime</scope>-->
-                    <!--</dependency>-->
-                    <!--</dependencies>-->
-                </plugin>
+
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                    <shadedClassifierName>mod</shadedClassifierName>
+                    <!--<minimizeJar>true</minimizeJar>-->
+                    <filters>
+                        <filter>
+                            <!--
+                                Exclude files that sign a jar
+                                (one or multiple of the dependencies).
+                                One may not repack a signed jar without
+                                this, or you will get a
+                                SecurityException at program start.
+                            -->
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                                <exclude>META-INF/*.INF</exclude>
+                                <!-- This one may not be required -->
+                            </excludes>
+                        </filter>
+                    </filters>
+                    <relocations>
+                        <relocation>
+                            <pattern></pattern>
+                            <shadedPattern>dollar.r${buildNumber}</shadedPattern>
+                            <excludes>
+                                <exclude>me.neilellis.*</exclude>
+                                <exclude>META-INF</exclude>
+                                <exclude>WEB-INF</exclude>
+                            </excludes>
+                        </relocation>
+                    </relocations>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!--<plugin>-->
             <!--<groupId>org.codehaus.mojo</groupId>-->
             <!--<artifactId>license-maven-plugin</artifactId>-->
@@ -810,7 +809,7 @@
                                     <version>${maven.version}</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
-                                    <version>1.8</version>
+                                    <version>${jdk.version}</version>
                                 </requireJavaVersion>
                                 <requireOS>
                                     <family>unix</family>
@@ -877,12 +876,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- maven-surefire-plugin: The Surefire Plugin is used during the test
-                phase of the build lifecycle. It executes the unit tests of an application. -->
-            <!-- It generates reports in 2 different file formats: Plain text files
-                (*.txt) XML files (*.xml)
-                                 By default, these files are generated at ${basedir}/target/surefire-reports.
-                          -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -953,23 +946,6 @@
                     <tag>${project.artifactId}-${project.version}</tag>
                 </configuration>
             </plugin>
-            <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-scm-publish-plugin</artifactId>-->
-            <!--<version>1.0-beta-2</version>-->
-            <!--<configuration>-->
-            <!--<excludes>.DS_Store</excludes>-->
-            <!--<checkoutDirectory>${project.build.directory}/scmpublish</checkoutDirectory>-->
-            <!--<checkinComment>Publishing Github Website for ${project.version}</checkinComment>-->
-            <!--<content>${project.build.directory}/staging</content>-->
-            <!--<skipDeletedFiles>false</skipDeletedFiles>-->
-            <!--<pubScmUrl>scm:git:git@github.com:neilellis/dollar.git</pubScmUrl>-->
-            <!--<scmBranch>gh-pages</scmBranch>-->
-            <!--&lt;!&ndash; branch with static site &ndash;&gt;-->
-            <!--</configuration>-->
-            <!--</plugin>-->
-
-            <!--Now produce a pretty website on github-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
