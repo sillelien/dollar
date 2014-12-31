@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,9 +37,6 @@ import java.util.regex.PatternSyntaxException;
 import static me.neilellis.dollar.types.DollarFactory.*;
 import static me.neilellis.dollar.types.ErrorType.*;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarString extends AbstractDollarSingleValue<String> {
 
 
@@ -73,7 +70,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @Override
     public var $divide(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
-        if (rhsFix.isString() && !rhsFix.toString().isEmpty()) {
+        if (rhsFix.string() && !rhsFix.toString().isEmpty()) {
             try {
 //                final Pattern pattern = Pattern.compile(rhsFix.toString(),Pattern.LITERAL);
                 final String quote = Pattern.quote(rhsFix.toString());
@@ -86,17 +83,17 @@ public class DollarString extends AbstractDollarSingleValue<String> {
             } catch (PatternSyntaxException pse) {
                 return failure(BAD_REGEX, pse, false);
             }
-        } else if (rhsFix.isNumber()) {
-            if (rhsFix.D() == 0.0) {
+        } else if (rhsFix.number()) {
+            if (rhsFix.toDouble() == 0.0) {
                 return infinity(true, errors(), rhsFix.errors());
             }
-            if (rhsFix.D() > 0.0 && rhsFix.D() < 1.0) {
-                return $multiply(fromValue(1.0 / rhsFix.D(), rhs.errors()));
+            if (rhsFix.toDouble() > 0.0 && rhsFix.toDouble() < 1.0) {
+                return $multiply(fromValue(1.0 / rhsFix.toDouble(), rhs.errors()));
             }
-            if (rhsFix.D() < 0) {
+            if (rhsFix.toDouble() < 0) {
                 return this;
             }
-            return fromStringValue(value.substring(0, (int) ((double) value.length() / rhsFix.D())), errors(),
+            return fromStringValue(value.substring(0, (int) ((double) value.length() / rhsFix.toDouble())), errors(),
                                    rhsFix.errors());
         } else {
             return this;
@@ -110,7 +107,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var v) {
+    public var $modulus(@NotNull var rhs) {
         return failure(INVALID_STRING_OPERATION);
     }
 
@@ -119,18 +116,18 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     public var $multiply(@NotNull var rhs) {
         String newValue = "";
         var rhsFix = rhs._fixDeep();
-        if (rhsFix.isNumber()) {
-            if (rhsFix.D() == 0.0) {
+        if (rhsFix.number()) {
+            if (rhsFix.toDouble() == 0.0) {
                 return fromStringValue("", errors(), rhsFix.errors());
             }
-            if (rhsFix.D() > 0.0 && rhsFix.D() < 1.0) {
-                return $divide(fromValue(1.0 / rhsFix.D(), rhs.errors()));
+            if (rhsFix.toDouble() > 0.0 && rhsFix.toDouble() < 1.0) {
+                return $divide(fromValue(1.0 / rhsFix.toDouble(), rhs.errors()));
             }
-            if (rhsFix.I() < 0) {
+            if (rhsFix.toInteger() < 0) {
                 return this;
             }
         }
-        Long max = rhs.L();
+        Long max = rhs.toLong();
         if (max * value.length() > MAX_STRING_LENGTH) {
             return failure(STRING_TOO_LARGE,
                            "String multiplication would result in a string with size of " + (max * value.length()),
@@ -142,8 +139,8 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return fromValue(newValue, errors());
     }
 
-    @Override
-    public Integer I() {
+    @NotNull @Override
+    public Integer toInteger() {
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException nfe) {
@@ -152,7 +149,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
-    public var $as(Type type) {
+    public var $as(@NotNull Type type) {
         if (type.equals(Type.BOOLEAN)) {
             return DollarStatic.$(value.equals("true") || value.equals("yes"));
         } else if (type.equals(Type.STRING)) {
@@ -197,31 +194,12 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
-    public var $plus(var rhs) {
+    public var $plus(@NotNull var rhs) {
         final ImmutableList<Throwable> thisErrors = errors();
         final ArrayList<Throwable> errors = new ArrayList<>();
         errors.addAll(thisErrors.mutable());
         errors.addAll(rhs.errors().mutable());
-        return wrap(new DollarString(ImmutableList.copyOf(errors), value + rhs.S()));
-    }
-
-    @Override
-    public Double D() {
-        try {
-            return Double.parseDouble(value);
-        } catch (NumberFormatException nfe) {
-            return null;
-        }
-    }
-
-    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass") @Override
-    public boolean equals(@Nullable Object obj) {
-        return obj != null && value.equals(obj.toString());
-    }
-
-    @Override
-    public boolean isString() {
-        return true;
+        return wrap(new DollarString(ImmutableList.copyOf(errors), value + rhs.toHumanString()));
     }
 
     @Override
@@ -240,17 +218,17 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
-    public boolean isNeitherTrueNorFalse() {
-        return false;
-    }
-
-    @Override
     public boolean isTrue() {
         return false;
     }
 
     @Override
-    public boolean isTruthy() {
+    public boolean neitherTrueNorFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean truthy() {
         return !value.isEmpty();
     }
 
@@ -268,5 +246,24 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @Override
     public <R> R toJavaObject() {
         return (R) value;
+    }
+
+    @Override
+    public boolean string() {
+        return true;
+    }
+
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass") @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj != null && value.equals(obj.toString());
+    }
+
+    @Nullable @Override
+    public Double toDouble() {
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException nfe) {
+            return null;
+        }
     }
 }

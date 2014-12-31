@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,23 +20,21 @@ import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class MapDBURIFactory implements URIHandlerFactory {
 
 
-    @Override
+    @NotNull @Override
     public URIHandlerFactory copy() {
         return this;
     }
 
-    @Override
-    public URIHandler forURI(String scheme, URI uri) throws IOException {
+    @NotNull @Override
+    public URIHandler forURI(String scheme, @NotNull URI uri) throws IOException {
         if (uri.hasSubScheme()) {
             final URI sub = uri.sub();
             //noinspection ConstantConditions
@@ -51,7 +49,7 @@ public class MapDBURIFactory implements URIHandlerFactory {
     }
 
     @Override
-    public boolean handlesScheme(String scheme) {
+    public boolean handlesScheme(@NotNull String scheme) {
         return scheme.equals("db");
     }
 }

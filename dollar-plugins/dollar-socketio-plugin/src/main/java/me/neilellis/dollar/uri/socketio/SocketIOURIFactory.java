@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,29 +19,27 @@ package me.neilellis.dollar.uri.socketio;
 import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class SocketIOURIFactory implements URIHandlerFactory {
 
 
-    @Override
+    @NotNull @Override
     public URIHandlerFactory copy() {
         return this;
     }
 
-    @Override
-    public boolean handlesScheme(String scheme) {
-        return scheme.equals("socketio");
+    @NotNull @Override
+    public URIHandler forURI(String scheme, @NotNull URI uri) throws IOException {
+        return new SocketURIHandler(scheme, uri);
     }
 
     @Override
-    public URIHandler forURI(String scheme, URI uri) throws IOException {
-        return new SocketURIHandler(scheme, uri);
+    public boolean handlesScheme(@NotNull String scheme) {
+        return scheme.equals("socketio");
     }
 }
 

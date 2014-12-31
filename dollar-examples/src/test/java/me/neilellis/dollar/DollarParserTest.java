@@ -17,6 +17,7 @@
 package me.neilellis.dollar;
 
 import me.neilellis.dollar.script.DollarParser;
+import me.neilellis.dollar.script.ParserOptions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +36,6 @@ public class DollarParserTest {
 
     @Test
     public void test() throws Exception {
-        new DollarParser().parse(getClass().getResourceAsStream("/test1.ds"), "/test1.ds", false);
+        new DollarParser(new ParserOptions()).parse(getClass().getResourceAsStream("/test1.ds"), "/test1.ds", false);
     }
 }

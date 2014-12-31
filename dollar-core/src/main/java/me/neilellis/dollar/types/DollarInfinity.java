@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,32 +32,11 @@ import java.util.Map;
 
 import static me.neilellis.dollar.DollarStatic.$void;
 
-/**
- * To better understand the rationale behind this class, take a look at http://homepages.ecs.vuw.ac
- * .nz/~tk/publications/papers/void.pdf
- *
- * Dollar does not have the concept of null. Instead null {@link me.neilellis.dollar.var} objects are instances of this
- * class.
- *
- * Void is equivalent to 0,"",null except that unlike these values it has behavior that corresponds to a void object.
- *
- * Therefore actions taken against a void object are ignored. Any method that returns a {@link me.neilellis.dollar.var}
- * will return a {@link me.neilellis.dollar.types.DollarInfinity}.
- *
- * <pre>
- *
- *  var nulled= $null();
- *  nulled.$pipe((i)-&gt;{System.out.println("You'll never see this."});
- *
- * </pre>
- *
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public final class DollarInfinity extends AbstractDollar implements var {
 
 
     public static final var INSTANCE = DollarFactory.INFINITY;
-    private boolean positive;
+    private final boolean positive;
 
     public DollarInfinity(@NotNull ImmutableList<Throwable> errors, boolean positive) {
         super(errors);
@@ -78,13 +57,13 @@ public final class DollarInfinity extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var v) {
+    public var $minus(@NotNull var rhs) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $plus(var v) {
+    public var $plus(@NotNull var rhs) {
         return this;
     }
 
@@ -96,13 +75,13 @@ public final class DollarInfinity extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $divide(@NotNull var v) {
+    public var $divide(@NotNull var rhs) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var v) {
+    public var $modulus(@NotNull var rhs) {
         return this;
     }
 
@@ -117,23 +96,97 @@ public final class DollarInfinity extends AbstractDollar implements var {
         }
         boolean
                 positiveResult =
-                positive && v.isPositive() || !(positive && isNegative()) && !(!positive && v.isPositive());
+                positive && v.positive() || !(positive && negative()) && !(!positive && v.positive());
         return DollarFactory.wrap(new DollarInfinity(errors(), positiveResult));
     }
 
+    @Override public int sign() {
+        return positive ? 1 : -1;
+    }
+
     @NotNull @Override
-    public Integer I() {
+    public Integer toInteger() {
         return positive ? Integer.MAX_VALUE : Integer.MIN_VALUE;
     }
 
     @NotNull
     @Override
-    public Number N() {
+    public Number toNumber() {
         return positive ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
 
-    @Override public int sign() {
-        return positive ? 1 : -1;
+    @Override
+    public var $as(@NotNull Type type) {
+        if (type.equals(Type.BOOLEAN)) {
+            return DollarStatic.$(true);
+        } else if (type.equals(Type.STRING)) {
+            return DollarStatic.$(positive ? "infinity" : "-infinity");
+        } else if (type.equals(Type.LIST)) {
+            return DollarStatic.$(Arrays.asList(this));
+        } else if (type.equals(Type.MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.equals(Type.DECIMAL)) {
+            return DollarStatic.$(positive ? Double.MAX_VALUE : Double.MIN_VALUE);
+        } else if (type.equals(Type.INTEGER)) {
+            return DollarStatic.$(positive ? Long.MAX_VALUE : Long.MIN_VALUE);
+        } else if (type.equals(Type.VOID)) {
+            return $void();
+        } else if (type.equals(Type.DATE)) {
+            return this;
+        } else if (type.equals(Type.RANGE)) {
+            return DollarFactory.fromValue(new Range($(0), $(0)));
+        } else {
+            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST, type.toString(), false);
+        }
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> $list() {
+        return ImmutableList.of(this);
+    }
+
+    @Override public Type $type() {
+        return Type.INFINITY;
+    }
+
+    @Override public boolean collection() {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> $map() {
+        return ImmutableMap.of(DollarStatic.$("value"), this);
+    }
+
+    @Override
+    public boolean infinite() {
+        return false;
+    }
+
+    @Override
+    public boolean is(@NotNull Type... types) {
+        for (Type type : types) {
+            if (type == Type.INFINITY || type == Type.INTEGER || type == Type.DECIMAL) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public ImmutableList<String> strings() {
+        return ImmutableList.of();
+    }
+
+    @NotNull @Override public ImmutableList<Object> toList() {
+        return ImmutableList.of(toNumber());
+    }
+
+    @NotNull @Override
+    public Map<String, Object> toMap() {
+        return Collections.singletonMap("value", toNumber());
     }
 
     @NotNull
@@ -187,89 +240,9 @@ public final class DollarInfinity extends AbstractDollar implements var {
         return this;
     }
 
-    @NotNull
-    @Override
-    public String S() {
-        return positive ? "infinity" : "-infinity";
-    }
-
-    @Override
-    public var $as(Type type) {
-        if (type.equals(Type.BOOLEAN)) {
-            return DollarStatic.$(true);
-        } else if (type.equals(Type.STRING)) {
-            return DollarStatic.$(positive ? "infinity" : "-infinity");
-        } else if (type.equals(Type.LIST)) {
-            return DollarStatic.$(Arrays.asList(this));
-        } else if (type.equals(Type.MAP)) {
-            return DollarStatic.$("value", this);
-        } else if (type.equals(Type.DECIMAL)) {
-            return DollarStatic.$(positive ? Double.MAX_VALUE : Double.MIN_VALUE);
-        } else if (type.equals(Type.INTEGER)) {
-            return DollarStatic.$(positive ? Long.MAX_VALUE : Long.MIN_VALUE);
-        } else if (type.equals(Type.VOID)) {
-            return $void();
-        } else if (type.equals(Type.DATE)) {
-            return this;
-        } else if (type.equals(Type.RANGE)) {
-            return DollarFactory.fromValue(new Range($(0), $(0)));
-        } else {
-            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST, type.toString(), false);
-        }
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> $list() {
-        return ImmutableList.of(this);
-    }
-
-    @Override public Type $type() {
-        return Type.INFINITY;
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<var, var> $map() {
-        return ImmutableMap.of(DollarStatic.$("value"), this);
-    }
-
-    @Override
-    public boolean is(@NotNull Type... types) {
-        for (Type type : types) {
-            if (type == Type.INFINITY || type == Type.INTEGER || type == Type.DECIMAL) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override public boolean isCollection() {
-        return false;
-    }
-
-    @Override
-    public boolean isInfinite() {
-        return false;
-    }
-
-    @Override
-    public ImmutableList<String> strings() {
-        return ImmutableList.of();
-    }
-
-    @NotNull @Override public ImmutableList<Object> toList() {
-        return ImmutableList.of(N());
-    }
-
-    @NotNull @Override
-    public Map<String, Object> toMap() {
-        return Collections.singletonMap("value", N());
-    }
-
     @Override
     public int compareTo(@NotNull var o) {
-        if (o.isInfinite()) {
+        if (o.infinite()) {
             return new Integer(sign()).compareTo(o.sign());
         } else {
             if (positive) {
@@ -313,18 +286,24 @@ public final class DollarInfinity extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
     public boolean isTrue() {
         return false;
     }
 
     @Override
-    public boolean isTruthy() {
+    public boolean neitherTrueNorFalse() {
         return true;
+    }
+
+    @Override
+    public boolean truthy() {
+        return true;
+    }
+
+    @NotNull
+    @Override
+    public String toHumanString() {
+        return positive ? "infinity" : "-infinity";
     }
 
     @NotNull @Override public String toDollarScript() {

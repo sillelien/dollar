@@ -84,8 +84,8 @@ public abstract class Unit extends DollarStatic implements Pipeable {
     }
 
     @Override
-    public var pipe(var in) throws Exception {
-        return in;
+    public var pipe(var... in) throws Exception {
+        return in[0];
     }
 
     @NotNull

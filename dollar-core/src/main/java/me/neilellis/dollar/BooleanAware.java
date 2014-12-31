@@ -38,13 +38,6 @@ public interface BooleanAware {
     boolean isFalse();
 
     /**
-     * Is neither true nor false.
-     *
-     * @return true if this object is neither true nor false
-     */
-    boolean isNeitherTrueNorFalse();
-
-    /**
      * Is true.
      *
      * @return true if this object is a boolean and is true
@@ -52,9 +45,16 @@ public interface BooleanAware {
     boolean isTrue();
 
     /**
+     * Is neither true nor false.
+     *
+     * @return true if this object is neither true nor false
+     */
+    boolean neitherTrueNorFalse();
+
+    /**
      * Is truthy, i.e. if numeric then non zero, if a string,list or map then not empty etc.
      *
      * @return if this object is more true than false
      */
-    boolean isTruthy();
+    boolean truthy();
 }

@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="jmarranz" pattern="file[dollar-runtime]:src/main/java/com/innowhere/relproxy//*" />
+</component>

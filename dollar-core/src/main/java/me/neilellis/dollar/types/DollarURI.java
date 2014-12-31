@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,17 +30,14 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarURI extends AbstractDollar {
 
-    private final StateMachine<ResourceState, Signal> stateMachine;
-    private final URI uri;
+    @NotNull private final StateMachine<ResourceState, Signal> stateMachine;
+    @NotNull private final URI uri;
     private URIHandler handler;
 
 
-    public DollarURI(@NotNull ImmutableList<Throwable> errors, URI uri) {
+    public DollarURI(@NotNull ImmutableList<Throwable> errors, @NotNull URI uri) {
         super(errors);
         this.uri = uri;
         String scheme = uri.scheme();
@@ -68,17 +65,17 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var v) {
+    public var $minus(@NotNull var rhs) {
         ensureRunning();
-        return handler.removeValue(DollarStatic.$(v));
+        return handler.removeValue(DollarStatic.$(rhs));
 
     }
 
     @NotNull
     @Override
-    public var $plus(@Nullable var v) {
+    public var $plus(@NotNull var rhs) {
         ensureRunning();
-        return handler.append(v);
+        return handler.append(rhs);
     }
 
     @NotNull
@@ -89,13 +86,13 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $divide(@NotNull var v) {
+    public var $divide(@NotNull var rhs) {
         return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var v) {
+    public var $modulus(@NotNull var rhs) {
         return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_URI_OPERATION);
     }
 
@@ -105,20 +102,20 @@ public class DollarURI extends AbstractDollar {
         return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_URI_OPERATION);
     }
 
-    @NotNull
-    @Override
-    public Integer I() {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public Number N() {
-        return 0;
-    }
-
     @Override public int sign() {
         return 1;
+    }
+
+    @NotNull
+    @Override
+    public Integer toInteger() {
+        return 0;
+    }
+
+    @NotNull
+    @Override
+    public Number toNumber() {
+        return 0;
     }
 
     private void ensureRunning() {
@@ -128,6 +125,141 @@ public class DollarURI extends AbstractDollar {
         if (!stateMachine.isInState(ResourceState.RUNNING)) {
             throw new DollarException("Resource is in state " + stateMachine.getState() + " should be RUNNING");
         }
+    }
+
+    @Override
+    public var $as(@NotNull Type type) {
+        if (type.equals(Type.STRING)) {
+            return DollarStatic.$(toHumanString());
+        } else if (type.equals(Type.LIST)) {
+            return $all();
+        } else if (type.equals(Type.MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.equals(Type.VOID)) {
+            return DollarStatic.$void();
+        } else if (type.equals(Type.URI)) {
+            return this;
+        } else {
+            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
+        }
+    }
+
+    @NotNull @Override
+    public String toHumanString() {
+        return uri.toString();
+    }
+
+    @NotNull @Override public String toDollarScript() {
+        return String.format("(\"%s\" as Uri)", org.apache.commons.lang.StringEscapeUtils.escapeJava(uri.toString()));
+    }
+
+    @NotNull
+    @Override
+    public <R> R toJavaObject() {
+        return (R) uri;
+    }
+
+    @NotNull
+
+    @Override
+    public var $all() {
+        ensureRunning();
+        return handler.all();
+    }
+
+    @Override
+    public var $write(var value, boolean blocking, boolean mutating) {
+        ensureRunning();
+        return handler.write(value, blocking, mutating);
+    }
+
+    @Override
+    public var $drain() {
+        ensureRunning();
+        return handler.drain();
+    }
+
+    @Override
+    public var $notify() {
+        ensureRunning();
+        return handler.write(this, false, false);
+    }
+
+    @Override
+    public var $read(boolean blocking, boolean mutating) {
+        ensureRunning();
+        return handler.read(blocking, mutating);
+    }
+
+    @Override
+    public var $publish(var lhs) {
+        ensureRunning();
+        return handler.publish(lhs);
+    }
+
+    @Override
+    public var $each(@NotNull Pipeable pipe) {
+        return super.$each(pipe);
+    }
+
+    @NotNull @Override public StateMachine<ResourceState, Signal> getStateMachine() {
+        return stateMachine;
+    }
+
+    @Override
+    public boolean uri() {
+        return true;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> $list() {
+        ensureRunning();
+        return ImmutableList.copyOf(handler.all().$list());
+    }
+
+    @Override public Type $type() {
+        return Type.URI;
+    }
+
+    @Override public boolean collection() {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> $map() {
+        return ImmutableMap.of();
+    }
+
+    @Override
+    public boolean is(@NotNull Type... types) {
+        for (Type type : types) {
+            if (Objects.equals(type, Type.URI)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isVoid() {
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public ImmutableList<String> strings() {
+        return ImmutableList.of();
+    }
+
+    @NotNull @Override public ImmutableList<Object> toList() {
+        return ImmutableList.of(uri);
+    }
+
+    @NotNull @Override
+    public Map<String, Object> toMap() {
+        return Collections.emptyMap();
     }
 
     @NotNull
@@ -185,12 +317,12 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public var $subscribe(Pipeable pipe) {
+    public var $subscribe(@NotNull Pipeable pipe) {
         return $subscribe(pipe, null);
     }
 
     @Override
-    public var $subscribe(Pipeable pipe, String id) {
+    public var $subscribe(@NotNull Pipeable pipe, @Nullable String id) {
         ensureRunning();
         final String subId = id == null ? UUID.randomUUID().toString() : id;
         try {
@@ -229,173 +361,17 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<var, var> $map() {
-        return ImmutableMap.of();
-    }
-
-    @Override
     public boolean isTrue() {
         return false;
     }
 
     @Override
-    public boolean isTruthy() {
-        return handler != null;
-    }
-
-    @NotNull @Override public String toDollarScript() {
-        return String.format("(\"%s\" as Uri)", org.apache.commons.lang.StringEscapeUtils.escapeJava(uri.toString()));
-    }
-
-    @NotNull
-    @Override
-    public <R> R toJavaObject() {
-        return (R) uri;
-    }
-
-
-    @NotNull
-
-
-
-
-
-
-    @Override
-    public var $all() {
-        ensureRunning();
-        return handler.all();
-    }
-
-
-    @Override
-    public var $drain() {
-        ensureRunning();
-        return handler.drain();
-    }
-
-
-    @Override
-    public var $notify() {
-        ensureRunning();
-        return handler.write(this, false, false);
-    }
-
-    @Override
-    public var $publish(var lhs) {
-        ensureRunning();
-        return handler.publish(lhs);
-    }
-
-    @Override
-    public var $read(boolean blocking, boolean mutating) {
-        ensureRunning();
-        return handler.read(blocking, mutating);
-    }
-
-    @Override
-    public var $write(var value, boolean blocking, boolean mutating) {
-        ensureRunning();
-        return handler.write(value, blocking, mutating);
-    }
-
-
-    @Override
-    public var $each(Pipeable pipe) {
-        return super.$each(pipe);
-    }
-
-    @NotNull @Override public StateMachine<ResourceState, Signal> getStateMachine() {
-        return stateMachine;
-    }
-
-    @Override
-    public boolean isUri() {
+    public boolean neitherTrueNorFalse() {
         return true;
     }
 
-
-    @Override public Type $type() {
-        return Type.URI;
-    }
-
     @Override
-    public String S() {
-        return uri.toString();
-    }
-
-
-    @NotNull
-    @Override
-    public ImmutableList<var> $list() {
-        ensureRunning();
-        return ImmutableList.copyOf(handler.all().$list());
-    }
-
-    @NotNull @Override public ImmutableList<Object> toList() {
-        return ImmutableList.of(uri);
-    }
-
-
-    @Override
-    public boolean isVoid() {
-        return false;
-    }
-
-
-
-
-
-
-
-    @Nullable
-    @Override
-    public ImmutableList<String> strings() {
-        return ImmutableList.of();
-    }
-
-
-    @NotNull @Override
-    public Map<String, Object> toMap() {
-        return Collections.emptyMap();
-    }
-
-
-    @Override public boolean isCollection() {
-        return false;
-    }
-
-
-    @Override
-    public boolean is(@NotNull Type... types) {
-        for (Type type : types) {
-            if (Objects.equals(type, Type.URI)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public var $as(Type type) {
-        if (type.equals(Type.STRING)) {
-            return DollarStatic.$(S());
-        } else if (type.equals(Type.LIST)) {
-            return $all();
-        } else if (type.equals(Type.MAP)) {
-            return DollarStatic.$("value", this);
-        } else if (type.equals(Type.VOID)) {
-            return DollarStatic.$void();
-        } else if (type.equals(Type.URI)) {
-            return this;
-        } else {
-            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST);
-        }
+    public boolean truthy() {
+        return handler != null;
     }
 }

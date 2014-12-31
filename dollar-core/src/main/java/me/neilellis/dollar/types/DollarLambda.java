@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,11 @@ package me.neilellis.dollar.types;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.exceptions.LambdaRecursionException;
+import me.neilellis.dollar.execution.DollarExecutor;
+import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -29,20 +32,19 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarLambda implements java.lang.reflect.InvocationHandler {
+
+    private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
 
     private static final int MAX_STACK_DEPTH = 100;
     private static final ThreadLocal<List<DollarLambda>> notifyStack = new ThreadLocal<List<DollarLambda>>() {
-        @Override
+        @NotNull @Override
         protected List<DollarLambda> initialValue() {
             return new ArrayList<>();
         }
     };
     private static final ThreadLocal<List<DollarLambda>> stack = new ThreadLocal<List<DollarLambda>>() {
-        @Override
+        @NotNull @Override
         protected List<DollarLambda> initialValue() {
             return new ArrayList<>();
         }
@@ -69,8 +71,8 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
         this.lambda = lambda;
     }
 
-    @Override
-    public Object invoke(Object proxy, @NotNull Method method, Object[] args) throws Throwable {
+    @Nullable @Override
+    public Object invoke(@Nullable Object proxy, @NotNull Method method, Object[] args) throws Throwable {
         if (stack.get().size() > MAX_STACK_DEPTH) {
             in.error("Stack consists of the following Lambda types: ");
             for (DollarLambda stackEntry : stack.get()) {
@@ -85,15 +87,15 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             } else if (Object.class == method.getDeclaringClass()) {
                 String name = method.getName();
                 if ("equals".equals(name)) {
-                    return lambda.pipe(in).equals(args[0]);
+                    return execute().equals(args[0]);
                 } else if ("hashCode".equals(name)) {
-                    return lambda.pipe(in).hashCode();
+                    return execute().hashCode();
                 } else if ("toString".equals(name)) {
-                    return lambda.pipe(in).toString();
+                    return execute().toString();
                 } else {
                     throw new IllegalStateException(String.valueOf(method));
                 }
-            } else if (method.getName().equals("isLambda")) {
+            } else if (method.getName().equals("dynamic")) {
                 return true;
             } else if (method.getName().equals("_unwrap")) {
                 return proxy;
@@ -137,7 +139,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                     return proxy;
                 }
                 notifyStack.get().add(this);
-                final var value = lambda.pipe(in);
+                final var value = execute();
                 for (Pipeable listener : listeners.values()) {
                     listener.pipe(value);
                 }
@@ -154,7 +156,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             } else {
 //            System.err.println(method);
 
-                var out = lambda.pipe(in);
+                var out = execute();
                 if (out == null) {
                     return null;
                 }
@@ -169,4 +171,6 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             throw e.getCause();
         }
     }
+
+    public var execute() throws Exception {return executor.executeNow(() -> lambda.pipe(in)).get();}
 }

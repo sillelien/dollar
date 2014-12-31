@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import com.innowhere.relproxy.jproxy.JProxyScriptEngineFactory;
 import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
@@ -34,12 +36,9 @@ import java.util.List;
 
 import static me.neilellis.dollar.DollarStatic.$;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class JavaScriptingSupport {
 
-    public static var compile(var in, String java, Scope scope) {
+    @Nullable public static var compile(@NotNull var in, String java, @NotNull Scope scope) {
         JProxyConfig jpConfig = JProxy.createJProxyConfig();
         jpConfig.setEnabled(true)
                 .setRelProxyOnReloadListener((objOld, objNew, proxy, method, args) -> {

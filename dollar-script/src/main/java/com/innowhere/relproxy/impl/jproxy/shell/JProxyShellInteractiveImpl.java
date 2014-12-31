@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,20 +22,25 @@ import com.innowhere.relproxy.impl.jproxy.core.clsmgr.ClassDescriptorSourceScrip
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.SourceScript;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.SourceScriptInMemory;
 import com.innowhere.relproxy.impl.jproxy.shell.inter.JProxyShellProcessor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 
-/**
- * Alguna inspiración: http://groovy.codehaus.org/Groovy+Shell
- *
- * @author jmarranz
- */
 public class JProxyShellInteractiveImpl extends JProxyShellImpl {
+    @NotNull protected final JProxyShellProcessor processor = new JProxyShellProcessor(this);
     protected boolean test = false;
-    protected JProxyShellProcessor processor = new JProxyShellProcessor(this);
     protected ClassDescriptorSourceScript classDescSourceScript;
 
-    public void init(String[] args) {
+    public ClassDescriptorSourceScript getClassDescriptorSourceScript() {
+        return classDescSourceScript;
+    }
+
+    @NotNull public SourceScriptInMemory getSourceScriptInMemory() {
+        return (SourceScriptInMemory) classDescSourceScript.getSourceScript();
+    }
+
+    public void init(@NotNull String[] args) {
         this.classDescSourceScript = super.init(args, null);
 
         if (test) {
@@ -46,16 +51,9 @@ public class JProxyShellInteractiveImpl extends JProxyShellImpl {
         processor.loop();
     }
 
-    public ClassDescriptorSourceScript getClassDescriptorSourceScript() {
-        return classDescSourceScript;
-    }
-
-    public SourceScriptInMemory getSourceScriptInMemory() {
-        return (SourceScriptInMemory) classDescSourceScript.getSourceScript();
-    }
-
     @Override
-    public ClassDescriptorSourceScript init(JProxyConfigImpl config, SourceScript scriptFile, ClassLoader classLoader) {
+    public ClassDescriptorSourceScript init(@NotNull JProxyConfigImpl config, SourceScript scriptFile,
+                                            ClassLoader classLoader) {
         ClassDescriptorSourceScript script = super.init(config, scriptFile, classLoader);
 
         this.test = config.isTest();
@@ -64,12 +62,8 @@ public class JProxyShellInteractiveImpl extends JProxyShellImpl {
     }
 
     @Override
-    protected void executeFirstTime(ClassDescriptorSourceScript scriptFileDesc, LinkedList<String> argsToScript, JProxyShellClassLoader classLoader) {
-        // La primera vez el script es vacío, no hay nada que ejecutar
-    }
-
-    @Override
-    protected void processConfigParams(String[] args, LinkedList<String> argsToScript, JProxyConfigImpl config) {
+    protected void processConfigParams(
+            @NotNull String[] args, @NotNull LinkedList<String> argsToScript, @NotNull JProxyConfigImpl config) {
         super.processConfigParams(args, argsToScript, config);
 
         String classFolder = config.getClassFolder();
@@ -81,14 +75,20 @@ public class JProxyShellInteractiveImpl extends JProxyShellImpl {
             throw new RelProxyException("scanPeriod positive value has no sense in interactive execution");
     }
 
-    @Override
+    @NotNull @Override
     protected SourceScript getSourceScript(String[] args, LinkedList<String> argsToScript) {
         return SourceScriptInMemory.createSourceScriptInMemory(""); // La primera vez no hace nada, sirve para "calentar" la app
     }
 
-    @Override
+    @Nullable @Override
     protected JProxyShellClassLoader getJProxyShellClassLoader(JProxyConfigImpl config) {
         // No hay classFolder => no hay necesidad de nuevo ClassLoader
         return null;
+    }
+
+    @Override
+    protected void executeFirstTime(ClassDescriptorSourceScript scriptFileDesc, LinkedList<String> argsToScript,
+                                    JProxyShellClassLoader classLoader) {
+        // La primera vez el script es vacío, no hay nada que ejecutar
     }
 }

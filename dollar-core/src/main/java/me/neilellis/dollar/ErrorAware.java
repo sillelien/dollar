@@ -21,6 +21,7 @@ import me.neilellis.dollar.guard.ChainGuard;
 import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.NotNullCollectionGuard;
 import me.neilellis.dollar.guard.NotNullParametersGuard;
+import me.neilellis.dollar.types.ErrorType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -31,18 +32,7 @@ import java.util.function.Consumer;
  * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface ErrorAware {
-    /**
-     * The enum Error type.
-     */
-    public enum ErrorType {
-        /**
-         * The VALIDATION.
-         */
-        VALIDATION, /**
-         * The SYSTEM.
-         */
-        SYSTEM
-    }
+
 
     /**
      * $ error.
@@ -117,16 +107,16 @@ public interface ErrorAware {
     @Guarded(ChainGuard.class) var $error(@NotNull String errorMessage, @NotNull ErrorType type);
 
     /**
-     * Clear errors.
+     * Return a copy of this object with no errors associated with it.
      *
-     * @return the var
+     * @return a cleaned object
      */
     @NotNull
     @Guarded(ChainGuard.class)
     var clearErrors();
 
     /**
-     * Error texts.
+     * Return
      *
      * @return the list
      */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package me.neilellis.dollar;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertFalse;
 import static me.neilellis.dollar.DollarStatic.$;
 import static org.junit.Assert.*;
 
@@ -31,78 +30,78 @@ public class DollarTypeTest {
     }
 
     @Test
-    public void testDouble() throws InterruptedException {
+    public void testDouble() {
         //Number types
-        assertEquals(1L, (long) $(1.0).L());
+        assertEquals(1L, (long) $(1.0).toLong());
 
         //identity
-        assertEquals($(1.0), $(1.0).D());
+        assertEquals($(1.0), $(1.0).toDouble());
         assertEquals($(1.0), $(1.0));
-        assertNotEquals($(1.0).D(), $(1.0));
+        assertNotEquals($(1.0).toDouble(), $(1.0));
 
         //Lambda
 
         assertEquals($((v) -> $(1)), $(1));
         assertEquals($(1), $((v) -> $(1)));
-        assertTrue($((v) -> $(1.0)).isLambda());
-        assertTrue($((v) -> $(1.0)).isDecimal());
-        assertTrue($((v) -> $(1.0)).isNumber());
-        assertTrue($((v) -> $(1.0)).isSingleValue());
+        assertTrue($((v) -> $(1.0)).dynamic());
+        assertTrue($((v) -> $(1.0)).decimal());
+        assertTrue($((v) -> $(1.0)).number());
+        assertTrue($((v) -> $(1.0)).singleValue());
 
         //isChecks
-        assertTrue($(1.0).isDecimal());
-        assertTrue($(1.0).isNumber());
-        assertTrue($(1.0).isSingleValue());
+        assertTrue($(1.0).decimal());
+        assertTrue($(1.0).number());
+        assertTrue($(1.0).singleValue());
 
-        assertFalse($(1.0).isInteger());
-        assertFalse($(1.0).isMap());
-        assertFalse($(1.0).isList());
-        assertFalse($(1.0).isLambda());
-        assertFalse($(1.0).isString());
+        assertFalse($(1.0).integer());
+        assertFalse($(1.0).map());
+        assertFalse($(1.0).list());
+        assertFalse($(1.0).dynamic());
+        assertFalse($(1.0).string());
         assertFalse($(1.0).isVoid());
         assertFalse($(1.0).$isEmpty().isTrue());
 
         //numeric functions
-        assertEquals(2.0, $(1.0).$inc().D(), 0.00001);
+        assertEquals(2.0, $(1.0).$inc().toDouble(), 0.00001);
     }
 
     @Test
-    public void testIntegers() throws InterruptedException {
+    public void testIntegers() {
         //Number types
-        assertEquals(1, (int) $(1).I());
-        assertEquals(1, (long) $(1).L());
-        assertEquals(1.0, $(1).D(), 0.000001);
+        assertEquals(1, (int) $(1).toInteger());
+        assertEquals(1, (long) $(1).toLong());
+        assertEquals(1.0, $(1).toDouble(), 0.000001);
 
         //identity
-        assertEquals($(1), $(1).L());
+        assertEquals($(1), $(1).toLong());
         assertEquals($(1), $(1));
-        assertNotEquals($(1).L(), $(1));
+        assertNotEquals($(1).toLong(), $(1));
 
         //Lambda
 
         assertEquals($((v) -> $(1)), $(1));
         assertEquals($(1), $((v) -> $(1)));
-        assertTrue($((v) -> $(1)).isLambda());
-        assertTrue($((v) -> $(1)).isInteger());
-        assertTrue($((v) -> $(1)).isNumber());
-        assertTrue($((v) -> $(1)).isSingleValue());
+        assertTrue($((v) -> $(1)).dynamic());
+        assertTrue($((v) -> $(1)).integer());
+        assertTrue($((v) -> $(1)).number());
+        assertTrue($((v) -> $(1)).singleValue());
 
 
         //isChecks
-        assertTrue($(1).isInteger());
-        assertTrue($(1).isNumber());
-        assertTrue($(1).isSingleValue());
+        assertTrue($(1).integer());
+        assertTrue($(1).number());
+        assertTrue($(1).singleValue());
 
-        assertFalse($(1).isDecimal());
-        assertFalse($(1).isMap());
-        assertFalse($(1).isList());
-        assertFalse($(1).isLambda());
-        assertFalse($(1).isString());
+        assertFalse($(1).decimal());
+        assertFalse($(1).map());
+        assertFalse($(1).list());
+        assertFalse($(1).dynamic());
+        assertFalse($(1).string());
         assertFalse($(1).isVoid());
         assertFalse($(1).$isEmpty().isTrue());
 
         //numeric functions
-        assertEquals(2, (long) $(1).$inc().L());
+        assertEquals(2, (long) $(1).$inc().toLong());
 
 
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,9 @@ import me.neilellis.dollar.collections.MultiMap;
 import me.neilellis.dollar.json.JsonArray;
 import me.neilellis.dollar.json.JsonObject;
 import me.neilellis.dollar.monitor.DollarMonitor;
+import me.neilellis.dollar.monitor.SimpleLogStateTracer;
 import me.neilellis.dollar.types.DollarFactory;
+import me.neilellis.dollar.types.DollarFuture;
 import me.neilellis.dollar.uri.URI;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,19 +36,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * To use the $ class you need to statically import all of the methods from this class. This is effectively a factory
- * and convenience class for the var class.
- *
- * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarStatic {
-
-    /**
-     * The shared configuration for Dollar.
-     */
-    public static final Configuration config = new Configuration();
-
 
     /**
      * The thread context that all Dollar classes have access to.
@@ -59,10 +49,12 @@ public class DollarStatic {
             return new DollarThreadContext();
         }
     };
-
     @NotNull
     private static final ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
-
+    /**
+     * The shared configuration for Dollar.
+     */
+    @NotNull public static Configuration config = new SystemPropertyConfiguration();
 
     /**
      * Log and rethrow.
@@ -91,7 +83,7 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var $range(var from, var to) {
+    @NotNull public static var $range(var from, var to) {
         return DollarFactory.fromRange(from, to);
     }
 
@@ -103,7 +95,7 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var $range(long from, long to) {
+    @NotNull public static var $range(long from, long to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 
@@ -114,11 +106,11 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var $(@Nullable Object o) {
+    @NotNull public static var $(@Nullable Object o) {
         return $(o, false);
     }
 
-    private static var $(@Nullable Object o, boolean parallel) {
+    @NotNull private static var $(@Nullable Object o, boolean parallel) {
         return DollarFactory.fromValue(o, ImmutableList.of());
     }
 
@@ -130,7 +122,7 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var fix(@Nullable var v, boolean parallel) {
+    @NotNull public static var fix(@Nullable var v, boolean parallel) {
         return v != null ? DollarFactory.wrap(v._fix(parallel)) : $void();
     }
 
@@ -160,7 +152,7 @@ public class DollarStatic {
      *
      * @return the 'fixed' var
      */
-    public static var fix(@Nullable var v, int depth, boolean parallel) {
+    @NotNull public static var fix(@Nullable var v, int depth, boolean parallel) {
         return v != null ? DollarFactory.wrap(v._fix(depth, parallel)) : $void();
     }
 
@@ -171,7 +163,7 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var fix(@Nullable var v) {
+    @NotNull public static var fix(@Nullable var v) {
         return v != null ? DollarFactory.wrap(v._fix(false)) : $void();
     }
 
@@ -182,7 +174,7 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var fixDeep(@Nullable var v) {
+    @NotNull public static var fixDeep(@Nullable var v) {
         return v != null ? DollarFactory.wrap(v._fixDeep(false)) : $void();
     }
 
@@ -194,7 +186,7 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var fixDeep(@Nullable var v, boolean parallel) {
+    @NotNull public static var fixDeep(@Nullable var v, boolean parallel) {
         return v != null ? DollarFactory.wrap(v._fixDeep(parallel)) : $void();
     }
 
@@ -206,7 +198,7 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var $range(double from, double to) {
+    @NotNull public static var $range(double from, double to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 
@@ -218,7 +210,7 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var $range(String from, String to) {
+    @NotNull public static var $range(String from, String to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 
@@ -230,7 +222,7 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var $range(Date from, Date to) {
+    @NotNull public static var $range(Date from, Date to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 
@@ -242,7 +234,7 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var $range(LocalDateTime from, LocalDateTime to) {
+    @NotNull public static var $range(LocalDateTime from, LocalDateTime to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 
@@ -254,7 +246,7 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var $range(Instant from, Instant to) {
+    @NotNull public static var $range(Instant from, Instant to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 
@@ -265,7 +257,7 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var $uri(URI uri) {
+    @NotNull public static var $uri(URI uri) {
         return DollarFactory.fromValue(uri);
     }
 
@@ -276,7 +268,7 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var $uri(String uri) {
+    @NotNull public static var $uri(String uri) {
         return DollarFactory.fromValue(URI.parse(uri));
     }
 
@@ -287,7 +279,7 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var $date(Date date) {
+    @NotNull public static var $date(Date date) {
         return DollarFactory.fromValue(date);
     }
 
@@ -298,7 +290,7 @@ public class DollarStatic {
      *
      * @return the var
      */
-    public static var $date(LocalDateTime date) {
+    @NotNull public static var $date(LocalDateTime date) {
         return DollarFactory.fromValue(date);
     }
 
@@ -457,11 +449,11 @@ public class DollarStatic {
      * @return the var
      */
     @NotNull
-    public static var handleError(@NotNull Throwable throwable, var failee) {
+    public static var handleError(@NotNull Throwable throwable, @Nullable var failee) {
         if (failee == null) {
             return DollarFactory.failure(throwable);
         }
-        return failee.copy(ImmutableList.of(throwable));
+        return failee._copy(ImmutableList.of(throwable));
 
     }
 
@@ -685,22 +677,12 @@ public class DollarStatic {
     }
 
     /**
-     * Error logger.
-     *
-     * @return the error logger
-     */
-    @NotNull
-    public static ErrorLogger errorLogger() {
-        return new SimpleErrorLogger();
-    }
-
-    /**
      * $ var.
      *
      * @param lambda the lambda
      * @return the var
      */
-    public static var $(Pipeable lambda) {
+    @NotNull public static var $(Pipeable lambda) {
         return DollarFactory.fromValue(lambda);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,22 +19,20 @@ package me.neilellis.dollar.script.operators;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Operator;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.Source;
+import me.neilellis.dollar.script.SourceSegment;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 import static me.neilellis.dollar.DollarStatic.$;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class ListenOperator implements Binary<var>, Operator {
     private final Scope scope;
-    private boolean pure;
-    private Source source;
+    private final boolean pure;
+    private SourceSegment source;
 
 
     public ListenOperator(Scope scope, boolean pure) {
@@ -44,10 +42,10 @@ public class ListenOperator implements Binary<var>, Operator {
 
 
     @Override
-    public var map(var lhs, var rhs) {
+    public var map(@NotNull var lhs, @NotNull var rhs) {
         Callable<var> callable = () -> {
             return $(lhs.$listen(i -> scope.getDollarParser().inScope(pure, "listen", scope, newScope -> {
-                newScope.setParameter("1", i);
+                newScope.setParameter("1", i[0]);
                 //todo: change to read
                 return rhs._fixDeep(false);
             })));
@@ -55,7 +53,7 @@ public class ListenOperator implements Binary<var>, Operator {
         return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(lhs, rhs), "listen");
     }
 
-    @Override public void setSource(Source source) {
+    @Override public void setSource(SourceSegment source) {
         this.source = source;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package me.neilellis.dollar.uri.mapdb;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.mapdb.Serializer;
 
 import java.io.DataInput;
@@ -29,22 +31,19 @@ import java.util.Objects;
 
 import static me.neilellis.dollar.DollarStatic.$void;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class VarSerializer implements Serializer<var>, Serializable {
-    @Override public void serialize(DataOutput out, var value) throws IOException {
+    @Override public void serialize(@NotNull DataOutput out, @Nullable var value) throws IOException {
         if (value != null && !value.isVoid()) {
-            out.writeInt(value.$type().ordinal());
+            out.writeUTF(value.$type().name());
             out.writeUTF(DollarFactory.serialize(value));
         } else {
-            out.writeInt(Type.VOID.ordinal());
+            out.writeUTF(Type.VOID.name());
             out.writeUTF("");
         }
     }
 
-    @Override public var deserialize(DataInput in, int available) throws IOException {
-        final Type type = Type.values()[in.readInt()];
+    @NotNull @Override public var deserialize(@NotNull DataInput in, int available) throws IOException {
+        final Type type = Type.valueOf(in.readUTF());
         if (Objects.equals(type, Type.VOID)) {
             in.readUTF();
             return $void();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,46 +20,85 @@ import com.github.oxo42.stateless4j.StateMachine;
 import me.neilellis.dollar.guard.Guarded;
 import me.neilellis.dollar.guard.NotNullGuard;
 import me.neilellis.dollar.types.ResourceState;
-import me.neilellis.dollar.types.Signal;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public interface StateAware<R extends StateAware<R>> {
 
+    /**
+     * Create the underlying resource.
+     *
+     * @return this
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     R $create();
 
+    /**
+     * Destroy the underlying resource.
+     *
+     * @return this
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     R $destroy();
 
+    /**
+     * Pause the underlying resource.
+     *
+     * @return this
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     R $pause();
 
+    /**
+     * Send an arbitrary {@link me.neilellis.dollar.Signal} to the underlying resource.
+     *
+     * @param signal the signal to send
+     */
     @Guarded(NotNullGuard.class) void $signal(@NotNull Signal signal);
 
+    /**
+     * Start the underlying resource.
+     *
+     * @return this
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     R $start();
 
+    /**
+     * Returns the state of the underlying resource.
+     *
+     * @return the state
+     */
     @NotNull
-    @Guarded(NotNullGuard.class)
-    R $state();
+    @Guarded(NotNullGuard.class) var $state();
 
+    /**
+     * Stop the underlying resource.
+     *
+     * @return the r
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     R $stop();
 
+    /**
+     * Unpause the underlying resource
+     *
+     * @return this
+     */
     @NotNull
     @Guarded(NotNullGuard.class)
     R $unpause();
 
+    /**
+     * Returns the state machine used to manage state for the resource.
+     *
+     * @return the state machine
+     */
     @NotNull
-    @Guarded(NotNullGuard.class)
-    StateMachine<ResourceState, Signal> getStateMachine();
+    @Guarded(NotNullGuard.class) StateMachine<ResourceState, Signal> getStateMachine();
 
 }

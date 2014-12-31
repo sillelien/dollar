@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,41 @@
 
 package me.neilellis.dollar;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Set;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public interface TypePrediction {
 
+    /**
+     * True if no prediction could be made.
+     *
+     * @return true if no prediction
+     */
     boolean empty();
 
-    Double probability(Type type);
+    /**
+     * Probability of this type being correct (0.0 - 1.0). This does not need to be accurate, just indicative. The sum
+     * of the probabilities does not need to equal 1.0.
+     *
+     * @param type the type you would like to know the probability for.
+     *
+     * @return the probability as a double
+     */
+    @NotNull Double probability(Type type);
 
-    Type probableType();
+    /**
+     * The most likely type based on the evidence supplied.
+     *
+     * @return the most probable type
+     */
+    @Nullable Type probableType();
 
-    Set<Type> types();
+    /**
+     * All possible types.
+     *
+     * @return the set of possible types
+     */
+    @NotNull Set<Type> types();
 }

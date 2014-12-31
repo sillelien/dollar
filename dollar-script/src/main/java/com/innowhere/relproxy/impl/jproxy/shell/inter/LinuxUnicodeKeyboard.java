@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,8 @@ import java.nio.charset.Charset;
 
 import static java.awt.event.KeyEvent.*;
 
-/**
- * http://superuser.com/questions/59418/how-to-type-special-characters-in-linux
- *
- * @author jmarranz
- */
 public class LinuxUnicodeKeyboard extends Keyboard {
-    protected Charset cs;
+    protected final Charset cs;
 
     public LinuxUnicodeKeyboard(Charset cs) {
         this.cs = cs;

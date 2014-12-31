@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,23 +22,23 @@ import me.neilellis.dollar.TypePrediction;
 import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.types.DollarLambda;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarSource extends DollarLambda {
-    public static TypeLearner typeLearner = Plugins.sharedInstance(TypeLearner.class);
-    private final Scope scope;
-    private final Source source;
+    @Nullable public static final TypeLearner typeLearner = Plugins.sharedInstance(TypeLearner.class);
+    @Nullable private final Scope scope;
+    private final SourceSegment source;
     private List<var> inputs;
-    private String operation;
+    @Nullable private String operation;
     private volatile TypePrediction prediction;
 
-    public DollarSource(Pipeable lambda, Scope scope, Source source, List<var> inputs, String operation) {
+    public DollarSource(Pipeable lambda, @Nullable Scope scope, SourceSegment source, List<var> inputs,
+                        @Nullable String operation) {
         super(lambda);
         if (operation == null) {
             throw new NullPointerException();
@@ -53,8 +53,8 @@ public class DollarSource extends DollarLambda {
         this.source = source;
     }
 
-    public DollarSource(Pipeable lambda, Scope scope, Source source, boolean fixable, List<var> inputs,
-                        String operation) {
+    public DollarSource(Pipeable lambda, @Nullable Scope scope, SourceSegment source, boolean fixable, List<var> inputs,
+                        @Nullable String operation) {
         super(lambda, fixable);
         this.inputs = inputs;
         this.operation = operation;
@@ -65,7 +65,7 @@ public class DollarSource extends DollarLambda {
         this.source = source;
     }
 
-    @Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    @Nullable @Override public Object invoke(Object proxy, @NotNull Method method, Object[] args) throws Throwable {
         try {
             if (Objects.equals(method.getName(), "_source")) {
                 return source;

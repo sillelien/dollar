@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package com.innowhere.relproxy;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Is the root of RelProxy
  *
@@ -27,7 +29,7 @@ public class RelProxy {
      *
      * @return the version of the library.
      */
-    public static String getVersion() {
+    @NotNull public static String getVersion() {
         return "0.8";
     }
 }

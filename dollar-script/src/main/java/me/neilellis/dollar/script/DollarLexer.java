@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import org.codehaus.jparsec.functors.Map;
 import org.codehaus.jparsec.pattern.CharPredicates;
 import org.codehaus.jparsec.pattern.Pattern;
 import org.codehaus.jparsec.pattern.Patterns;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 
@@ -32,9 +34,6 @@ import static me.neilellis.dollar.DollarStatic.*;
 import static org.codehaus.jparsec.Parsers.or;
 import static org.codehaus.jparsec.Parsers.token;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 class DollarLexer {
     public static final Terminals
             KEYWORDS =
@@ -58,26 +57,26 @@ class DollarLexer {
                                 "(?)", "?->", "|:|", "|..|", "-<", "?=", "*=");
 
     public static final Map<String, Tokens.Fragment> BACKTICK_QUOTE_STRING = new Map<String, Tokens.Fragment>() {
-        public Tokens.Fragment map(String text) {
+        public Tokens.Fragment map(@NotNull String text) {
             return Tokens.fragment(tokenizeBackTick(text), "java");
         }
 
-        @Override
+        @NotNull @Override
         public String toString() {
             return "JAVA_STRING";
         }
     };
 
 
-    public static final Parser<?> TERMINATOR_SYMBOL = Parsers.or(OP("\n"), OP(";")).many1();
+    public static final Parser<?> TERMINATOR_SYMBOL = or(OP("\n"), OP(";")).many1();
     public static final Parser<?> COMMA_TERMINATOR = Parsers.sequence(OP(","), OP("\n").many());
-    public static final Parser<?> COMMA_OR_NEWLINE_TERMINATOR = Parsers.or(OP(","), OP("\n")).many1();
+    public static final Parser<?> COMMA_OR_NEWLINE_TERMINATOR = or(OP(","), OP("\n")).many1();
     public static final Parser<?>
             SEMICOLON_TERMINATOR =
-            Parsers.or(OP(";").followedBy(OP("\n").many()), OP("\n").many1());
+            or(OP(";").followedBy(OP("\n").many()), OP("\n").many1());
     public static final Parser<Void> IGNORED =
-            Parsers.or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT, Scanners.among(" \t\r").many1(),
-                       Scanners.lineComment("#!")).skipMany();
+            or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT, Scanners.among(" \t\r").many1(),
+               Scanners.lineComment("#!")).skipMany();
     public static final Parser<var> IDENTIFIER = identifier();
     public static final Parser<var> IDENTIFIER_KEYWORD = identifierKeyword();
     public static final Parser<var>
@@ -110,32 +109,32 @@ class DollarLexer {
                DollarLexer.decimal(),
                java(),
                Scanners.DOUBLE_QUOTE_STRING.map(new Map<String, String>() {
-                   public String map(String text) {
+                   public String map(@NotNull String text) {
                        return tokenizeDoubleQuote(text);
                    }
 
-                   @Override public String toString() {
+                   @NotNull @Override public String toString() {
                        return "DOUBLE_QUOTE_STRING";
                    }
                }),
                Scanners.SINGLE_QUOTE_STRING.map(new Map<String, String>() {
-                   public String map(String text) {
+                   public String map(@NotNull String text) {
                        return tokenizeSingleQuote(text);
                    }
 
-                   @Override public String toString() {
+                   @NotNull @Override public String toString() {
                        return "SINGLE_QUOTE_STRING";
                    }
                }),
                Terminals.IntegerLiteral.TOKENIZER,
                Parsers.longest(DollarLexer.builtin(), KEYWORDS.tokenizer(), Terminals.Identifier.TOKENIZER));
 
-    static String tokenizeDoubleQuote(String text) {
+    static String tokenizeDoubleQuote(@NotNull String text) {
         return StringEscapeUtils.unescapeJava(text.substring(1, text.length() - 1));
 
     }
 
-    static String tokenizeSingleQuote(String text) {
+    static String tokenizeSingleQuote(@NotNull String text) {
         return StringEscapeUtils.unescapeJava(text.substring(1, text.length() - 1));
     }
 
@@ -154,7 +153,7 @@ class DollarLexer {
                 return Tokens.fragment(text, "uri");
             }
 
-            @Override
+            @NotNull @Override
             public String toString() {
                 return "URI";
             }
@@ -169,7 +168,7 @@ class DollarLexer {
                        .map(BACKTICK_QUOTE_STRING);
     }
 
-    public static String tokenizeBackTick(String text) {
+    @NotNull public static String tokenizeBackTick(@NotNull String text) {
         int end = text.length() - 1;
         StringBuilder buf = new StringBuilder();
         for (int i = 1; i < end; i++) {
@@ -237,7 +236,7 @@ class DollarLexer {
 
     public static Parser<?> builtin() {
         return Scanners.pattern(new Pattern() {
-            @Override public int match(CharSequence src, int begin, int end) {
+            @Override public int match(@NotNull CharSequence src, int begin, int end) {
                 int i = begin;
                 //noinspection StatementWithEmptyBody
                 for (; i < end && Character.isAlphabetic(src.charAt(i)); i++) {
@@ -256,7 +255,7 @@ class DollarLexer {
                                return Tokens.fragment(text, "builtin");
                            }
 
-                           @Override
+                           @NotNull @Override
                            public String toString() {
                                return "builtin";
                            }
@@ -292,8 +291,8 @@ class DollarLexer {
         return or(KEYWORD("true"), KEYWORD("false"), KEYWORD("yes"), KEYWORD("no"), KEYWORD("null"), KEYWORD("void"),
                   KEYWORD("infinity"))
                 .map(new Map<Object, var>() {
-                    @Override
-                    public var map(Object i) {
+                    @NotNull @Override
+                    public var map(@NotNull Object i) {
                         switch (i.toString()) {
                             case "true":
                                 return DollarFactory.TRUE;
@@ -325,8 +324,8 @@ class DollarLexer {
 
         private TokenTagMap(String tag) {this.tag = tag;}
 
-        @Override
-        public String map(Token token) {
+        @Nullable @Override
+        public String map(@NotNull Token token) {
             final Object val = token.value();
             if (val instanceof Tokens.Fragment) {
                 Tokens.Fragment c = (Tokens.Fragment) val;

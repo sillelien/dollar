@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,18 +21,16 @@ import me.neilellis.dollar.script.DollarParser;
 import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 import static me.neilellis.dollar.DollarStatic.*;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class CollectOperator implements Map<Object[], var> {
     private final Scope scope;
     private final DollarParser dollarParser;
-    private boolean pure;
+    private final boolean pure;
 
     public CollectOperator(DollarParser dollarParser, Scope scope, boolean pure) {
         this.dollarParser = dollarParser;
@@ -40,12 +38,12 @@ public class CollectOperator implements Map<Object[], var> {
         this.pure = pure;
     }
 
-    @Override public var map(Object[] objects) {
+    @NotNull @Override public var map(Object[] objects) {
         ((var) objects[0]).$listen(new Pipeable() {
             private final int[] count = new int[]{-1};
             private final ArrayList<var> collected = new ArrayList<>();
 
-            @Override public var pipe(var in) throws Exception {
+            @Override public var pipe(var... in) throws Exception {
                 var value = fix((var) objects[0], false);
                 count[0]++;
                 return dollarParser.inScope(pure, "collect", scope, newScope -> {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,23 +19,21 @@ package me.neilellis.dollar.script;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public interface Builtin<T> {
 
-    T execute(boolean pure, List<var> args, Scope scope);
+    @NotNull T execute(boolean pure, List<var> args, Scope scope);
 
 
     interface DollarStyle extends Builtin<var> {
-        var execute(boolean pure, List<var> args, Scope scope);
+        @NotNull var execute(boolean pure, List<var> args, Scope scope);
     }
 
     interface JavaStyle<T> extends Builtin<T> {
-        T execute(boolean pure, List<var> args, Scope scope);
+        @NotNull T execute(boolean pure, List<var> args, Scope scope);
     }
 
     class BuiltinImpl implements Builtin<var> {
@@ -43,8 +41,8 @@ public interface Builtin<T> {
         private final int minargs;
         private final int maxargs;
         private final Builtin function;
-        private boolean pure;
-        private String name;
+        private final boolean pure;
+        private final String name;
 
         public BuiltinImpl(String name, Builtin function, int minargs, int maxargs, boolean pure) {
             this.name = name;
@@ -58,8 +56,8 @@ public interface Builtin<T> {
             return pure;
         }
 
-        @Override
-        public var execute(boolean pure, List<var> args, Scope scope) {
+        @NotNull @Override
+        public var execute(boolean pure, @NotNull List<var> args, Scope scope) {
             if (!this.pure && pure) {
                 throw new DollarScriptException("Cannot use an impure function '" + name + "' in a pure expression");
             }

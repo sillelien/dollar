@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.error.ParserException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,22 +38,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static me.neilellis.dollar.DollarStatic.*;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class ScriptScope implements Scope {
     private static final Logger log = LoggerFactory.getLogger(ScriptScope.class);
 
     private static final AtomicInteger counter = new AtomicInteger();
     protected final ConcurrentHashMap<String, Variable> variables = new ConcurrentHashMap<>();
-    final String id;
-    private final String source;
+    @NotNull final String id;
+    @Nullable private final String source;
     private final Multimap<String, var> listeners = LinkedListMultimap.create();
     private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
     private final String file;
-    Scope parent;
+    @Nullable Scope parent;
     private Parser<var> parser;
-    private DollarParser dollarParser;
+    @Nullable private DollarParser dollarParser;
     private boolean parameterScope;
     public ScriptScope(String name) {
         this.parent = null;
@@ -61,7 +60,7 @@ public class ScriptScope implements Scope {
         id = String.valueOf(name + ":" + counter.incrementAndGet());
     }
 
-    public ScriptScope(Scope parent, String file, String source, String name) {
+    public ScriptScope(@NotNull Scope parent, String file, @Nullable String source, String name) {
         this.parent = parent;
         this.file = file;
         if (source == null) {
@@ -74,18 +73,18 @@ public class ScriptScope implements Scope {
         id = String.valueOf(name + ":" + counter.incrementAndGet());
     }
 
-    public ScriptScope(DollarParser dollarParser, String source, String file) {
+    public ScriptScope(@Nullable DollarParser dollarParser, @Nullable String source, String file) {
         this.source = source;
         this.dollarParser = dollarParser;
         this.file = file;
         id = String.valueOf("(top):" + counter.incrementAndGet());
     }
 
-    public Scope addChild(String source, String name) {
+    @NotNull public Scope addChild(String source, String name) {
         return new ScriptScope(this, file, source, name);
     }
 
-    @Override
+    @NotNull @Override
     public var addErrorHandler(var handler) {
         errorHandlers.add(handler);
         return $void();
@@ -97,7 +96,7 @@ public class ScriptScope implements Scope {
         listeners.clear();
     }
 
-    @Override public var get(String key, boolean mustFind) {
+    @Override public var get(@NotNull String key, boolean mustFind) {
         if (key.matches("[0-9]+")) {
             throw new AssertionError("Cannot get numerical keys, use getParameter");
         }
@@ -122,11 +121,11 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public var get(String key) {
+    public var get(@NotNull String key) {
         return get(key, false);
     }
 
-    @Override public var getConstraint(String key) {
+    @Nullable @Override public var getConstraint(String key) {
         Scope scope = getScopeForKey(key);
         if (scope == null) {
             scope = this;
@@ -138,11 +137,11 @@ public class ScriptScope implements Scope {
         return null;
     }
 
-    @Override public DollarParser getDollarParser() {
+    @Nullable @Override public DollarParser getDollarParser() {
         return dollarParser;
     }
 
-    @Override public void setDollarParser(DollarParser dollarParser) {
+    @Override public void setDollarParser(@Nullable DollarParser dollarParser) {
         this.dollarParser = dollarParser;
     }
 
@@ -154,7 +153,7 @@ public class ScriptScope implements Scope {
         return listeners;
     }
 
-    @Override
+    @NotNull @Override
     public var getParameter(String key) {
         if (DollarStatic.config.debugScope()) { log.info("Looking up parameter " + key + " in " + this); }
         Scope scope = getScopeForParameters();
@@ -168,7 +167,7 @@ public class ScriptScope implements Scope {
         return result != null ? result.value : $void();
     }
 
-    @Override public Scope getScopeForKey(String key) {
+    @Nullable @Override public Scope getScopeForKey(String key) {
         if (variables.containsKey(key)) {
             return this;
         }
@@ -180,7 +179,7 @@ public class ScriptScope implements Scope {
         }
     }
 
-    @Override public Scope getScopeForParameters() {
+    @Nullable @Override public Scope getScopeForParameters() {
         if (parameterScope) {
             return this;
         }
@@ -192,11 +191,11 @@ public class ScriptScope implements Scope {
         }
     }
 
-    @Override public String getSource() {
+    @Nullable @Override public String getSource() {
         return source;
     }
 
-    @Override public Map<String, Variable> getVariables() {
+    @NotNull @Override public Map<String, Variable> getVariables() {
         return variables;
     }
 
@@ -259,7 +258,7 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public void listen(String key, var listener) {
+    public void listen(@NotNull String key, var listener) {
         if (key.matches("[0-9]+")) {
             if (DollarStatic.config.debugScope()) {
                 log.info("Cannot listen to positional parameter $" + key + " in " + this);
@@ -286,7 +285,7 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public void notifyScope(String key, var value) {
+    public void notifyScope(String key, @Nullable var value) {
         if (value == null) {
             throw new NullPointerException();
         }
@@ -296,7 +295,8 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public var set(String key, var value, boolean readonly, var constraint, String constraintSource, boolean isVolatile,
+    public var set(@NotNull String key, var value, boolean readonly, @Nullable var constraint, String constraintSource,
+                   boolean isVolatile,
                    boolean fixed,
                    boolean pure) {
         if (key.matches("[0-9]+")) {
@@ -332,7 +332,7 @@ public class ScriptScope implements Scope {
         return value;
     }
 
-    @Override public var setParameter(String key, var value) {
+    @Override public var setParameter(@NotNull String key, var value) {
         if (DollarStatic.config.debugScope()) { log.info("Setting parameter " + key + " in " + this); }
         if (key.matches("[0-9]+") && variables.containsKey(key)) {
             throw new AssertionError("Cannot change the value of positional variables.");
@@ -343,7 +343,7 @@ public class ScriptScope implements Scope {
         return value;
     }
 
-    @Override public void setParent(Scope scope) {
+    @Override public void setParent(@Nullable Scope scope) {
         this.parent = scope;
     }
 
@@ -355,12 +355,12 @@ public class ScriptScope implements Scope {
         this.parser = parser;
     }
 
-    @Override
+    @Nullable @Override
     public String toString() {
         return id + "->" + parent;
     }
 
-    private boolean checkConstraint(var value, Variable oldValue, var constraint) {
+    private boolean checkConstraint(var value, @Nullable Variable oldValue, @NotNull var constraint) {
         setParameter("it", value);
         System.out.println("SET it=" + value);
         if (oldValue != null) {

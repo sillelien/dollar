@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,25 +26,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-/**
- * To better understand the rationale behind this class, take a look at http://homepages.ecs.vuw.ac.nz/~tk/publications/papers/void.pdf
- *
- * Dollar does not have the concept of null. Instead null {@link me.neilellis.dollar.var} objects are instances of this class.
- *
- * Void is equivalent to 0,"",null except that unlike these values it has behavior that corresponds to a void object.
- *
- * Therefore actions taken against a void object are ignored. Any method that returns a {@link me.neilellis.dollar
- * .var} will return a {@link DollarError}.
- *
- * <pre>
- *
- *  var nulled= $void();
- *  nulled.$pipe((i)-&gt;{System.out.println("You'll never see this."});
- *
- * </pre>
- *
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarError extends DollarVoid {
 
     private final me.neilellis.dollar.types.ErrorType errorType;
@@ -57,7 +38,7 @@ public class DollarError extends DollarVoid {
         this.errorMessage = errorMessage;
     }
 
-    public DollarError(me.neilellis.dollar.types.ErrorType errorType, Throwable t) {
+    public DollarError(me.neilellis.dollar.types.ErrorType errorType, @NotNull Throwable t) {
 
         super(ImmutableList.of(t));
         this.errorType = errorType;
@@ -80,10 +61,6 @@ public class DollarError extends DollarVoid {
         this.errorMessage = errorMessage;
     }
 
-    @NotNull @Override public String S() {
-        return errorType.toString() + " " + errorMessage + " " + errors();
-    }
-
     @Override public Type $type() {
         return Type.ERROR;
     }
@@ -94,6 +71,10 @@ public class DollarError extends DollarVoid {
 
     @Override public boolean isVoid() {
         return false;
+    }
+
+    @NotNull @Override public String toHumanString() {
+        return errorType.toString() + " " + errorMessage + " " + errors();
     }
 
     @NotNull @Override public String toDollarScript() {

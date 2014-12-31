@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.innowhere.relproxy.impl.jproxy.shell.inter;
 
 import com.innowhere.relproxy.RelProxyException;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -24,14 +25,8 @@ import java.nio.charset.Charset;
 
 import static java.awt.event.KeyEvent.*;
 
-/**
- * http://stackoverflow.com/questions/1248510/convert-string-to-keyevents
- * http://en.wikipedia.org/wiki/Unicode_input#Hexadecimal_code_input
- *
- * @author jmarranz
- */
 public abstract class Keyboard {
-    protected final Robot robot;
+    @NotNull protected final Robot robot;
 
     public Keyboard() {
         try {
@@ -41,7 +36,7 @@ public abstract class Keyboard {
         }
     }
 
-    public static Keyboard create(Charset cs) {
+    @NotNull public static Keyboard create(Charset cs) {
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("windows")) return new WindowUnicodeKeyboard(cs);
         else if (osName.contains("os x"))
@@ -49,7 +44,7 @@ public abstract class Keyboard {
         else return new LinuxUnicodeKeyboard(cs);
     }
 
-    public static int getUnicodeInt(Charset cs, char character) {
+    public static int getUnicodeInt(@NotNull Charset cs, char character) {
         ByteBuffer buffer = cs.encode("" + character);
 
         byte b = buffer.get();
@@ -57,7 +52,7 @@ public abstract class Keyboard {
         return bi;
     }
 
-    public void type(CharSequence characters) {
+    public void type(@NotNull CharSequence characters) {
         int length = characters.length();
         for (int i = 0; i < length; i++) {
             char character = characters.charAt(i);
@@ -306,11 +301,16 @@ public abstract class Keyboard {
         return true;
     }
 
-    protected void doType(int... keyCodes) {
+    protected void doType(int keyCode) {
+        robot.keyPress(keyCode);
+        robot.keyRelease(keyCode);
+    }
+
+    protected void doType(@NotNull int... keyCodes) {
         doTypeArr(keyCodes);
     }
 
-    private void doTypeArr(int[] keyCodes) {
+    private void doTypeArr(@NotNull int[] keyCodes) {
         int length = keyCodes.length;
         if (length == 1) {
             doType(keyCodes[0]);
@@ -322,10 +322,5 @@ public abstract class Keyboard {
             robot.keyRelease(keyCodes[1]);
             robot.keyRelease(keyCodes[0]);
         }
-    }
-
-    protected void doType(int keyCode) {
-        robot.keyPress(keyCode);
-        robot.keyRelease(keyCode);
     }
 }

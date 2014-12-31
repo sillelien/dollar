@@ -17,59 +17,31 @@
 package me.neilellis.dollar;
 
 /**
- * Configuration values used by Dollar API and DollarScript
- *
- * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
+ * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
-@SuppressWarnings("PointlessBooleanExpression") public class Configuration {
-
-    private boolean safe = Boolean.parseBoolean(System.getProperty("dollar.safe", "true"));
-    private boolean monitor = Boolean.parseBoolean(System.getProperty("dollar.monitor", "false"));
-    private boolean production = Boolean.parseBoolean(System.getProperty("dollar.production", "false"));
-    private boolean debugScope = Boolean.parseBoolean(System.getProperty("dollar.debug.scope", "false"));
-    private boolean failFast = true;
-
-
-    public Configuration(boolean safe, boolean monitor, boolean production, boolean debugScope) {
-        this.safe = safe;
-        this.monitor = monitor;
-        this.production = production;
-        this.debugScope = debugScope;
-    }
-
-    public Configuration() {
-    }
-
+public interface Configuration {
     /**
      * Returns true if debug messages will be produced for scope activity (i.e. variables in DollarScript)
      *
      * @return true if the scope is debugged
      */
-    public boolean debugScope() {
-        return debugScope;
-    }
+    boolean debugScope();
 
     /**
      * Returns true if Dollar should throw exceptions rather than return errors.
      *
      * @return true if we're failing fast
      */
-    public boolean failFast() {
-        return failFast;
-    }
+    boolean failFast();
 
-    public void failFast(boolean failFast) {
-        this.failFast = failFast;
-    }
+    void failFast(boolean failFast);
 
     /**
      * Returns true if we're running in a production environment
      *
      * @return true if in production
      */
-    public boolean production() {
-        return production;
-    }
+    boolean production();
 
     /**
      * Returns true if values are being wrapped with safety guards to avoid nulls etc. This is mostly useful for beta
@@ -77,18 +49,14 @@ package me.neilellis.dollar;
      *
      * @return true if objects are being wrapped.
      */
-    public boolean wrapForGuards() {
-        return production || safe;
-    }
+    boolean wrapForGuards();
 
     /**
-     * True if {@link var} objects are being wrapped for monitoring. This includes metrics and trace
+     * True if {@link me.neilellis.dollar.var} objects are being wrapped for monitoring. This includes metrics and trace
      * analysis.
      *
      * @return true if
      * objects are being wrapped.
      */
-    public boolean wrapForMonitoring() {
-        return production || monitor;
-    }
+    boolean wrapForMonitoring();
 }

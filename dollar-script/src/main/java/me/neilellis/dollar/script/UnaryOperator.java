@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,23 +18,21 @@ package me.neilellis.dollar.script;
 
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Unary;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 enum UnaryOperator implements Unary<var> {
     ERR {
-        public var map(var val) {
+        @NotNull public var map(@NotNull var val) {
             return val.out();
         }
     },
     OUT {
-        public var map(var val) {
+        @NotNull public var map(@NotNull var val) {
             return val.out();
         }
     },
     DEC {
-        public var map(var val) {
+        @NotNull public var map(@NotNull var val) {
             return val.$dec();
         }
     }

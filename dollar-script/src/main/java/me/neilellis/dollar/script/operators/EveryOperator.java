@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,18 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarParser;
 import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.time.Scheduler;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
-import time.Scheduler;
 
 import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$void;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class EveryOperator implements Map<Object[], var> {
     private final Scope scope;
     private final DollarParser dollarParser;
-    private boolean pure;
+    private final boolean pure;
 
     public EveryOperator(DollarParser dollarParser, Scope scope, boolean pure) {
         this.dollarParser = dollarParser;
@@ -50,8 +47,8 @@ public class EveryOperator implements Map<Object[], var> {
 //                    System.err.println(newScope);
                     newScope.setParameter("1", $(count[0]));
                     if (objects[1] instanceof var && ((var) objects[1]).isTrue()) {
-                        Scheduler.cancel(i.$S());
-                        return i;
+                        Scheduler.cancel(i[0].$S());
+                        return i[0];
                     } else if (objects[2] instanceof var && ((var) objects[2]).isTrue()) {
                         return $void();
                     } else {
@@ -62,7 +59,7 @@ public class EveryOperator implements Map<Object[], var> {
                 }
 
             });
-        }, ((long) (((var) objects[0]).D() * 24.0 * 60.0 * 60.0 * 1000.0)));
+        }, ((long) (((var) objects[0]).toDouble() * 24.0 * 60.0 * 60.0 * 1000.0)));
         return $void();
     }
 }

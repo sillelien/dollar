@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,8 @@ import java.nio.charset.Charset;
 
 import static java.awt.Event.ALT_MASK;
 
-/**
- * https://discussions.apple.com/thread/1899290
- * http://superuser.com/questions/13086/how-do-you-type-unicode-characters-using-hexadecimal-codes  (buscar OS X)
- * http://controlyourmac.com/2012/05/understanding-mac-keyboard.html
- *
- * @author jmarranz
- */
 public class MacOSXUnicodeKeyboard extends Keyboard {
-    protected Charset cs;
+    protected final Charset cs;
 
     public MacOSXUnicodeKeyboard(Charset cs) {
         this.cs = cs;

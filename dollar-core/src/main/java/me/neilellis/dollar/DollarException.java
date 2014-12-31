@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,53 +16,50 @@
 
 package me.neilellis.dollar;
 
-import me.neilellis.dollar.script.Source;
+import me.neilellis.dollar.script.SourceSegment;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The type Dollar exception.
- * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarException extends RuntimeException {
 
-    private final List<Source> sourceList = new ArrayList<>();
+    private final List<SourceSegment> sourceList = new ArrayList<>();
 
     /**
      * Instantiates a new Dollar exception.
      *
-     * @param e the e
+     * @param cause the cause of this exception
      */
-    public DollarException(Throwable e) {
-        super(e);
+    public DollarException(Throwable cause) {
+        super(cause);
     }
 
     /**
      * Instantiates a new Dollar exception.
      *
-     * @param errorMessage the error message
+     * @param message the error message associated with this exception
      */
-    public DollarException(String errorMessage) {
-        super(errorMessage);
+    public DollarException(String message) {
+        super(message);
     }
 
     /**
      * Instantiates a new Dollar exception.
      *
-     * @param t the t
-     * @param s the s
+     * @param cause the cause of this exception
+     * @param message the error message associated with this exception
      */
-    public DollarException(Throwable t, String s) {
-        super(s, t);
+    public DollarException(Throwable cause, String message) {
+        super(message, cause);
     }
 
     /**
-     * Add source.
+     * Add source information, this is useful if the exception is thrown while executing DollarScript.
      *
-     * @param source the source
+     * @param source the source code to which the exception relates
      */
-    public void addSource(Source source) {
+    public void addSource(@NotNull SourceSegment source) {
         if (source == null) {
             throw new NullPointerException();
         }
@@ -75,7 +72,7 @@ public class DollarException extends RuntimeException {
 
         } else {
             StringBuilder builder = new StringBuilder(super.getMessage() + "\n");
-            for (Source sourceEntry : sourceList) {
+            for (SourceSegment sourceEntry : sourceList) {
                 builder.append(sourceEntry.getSourceMessage()).append("\n");
             }
             return builder.toString();
@@ -83,7 +80,7 @@ public class DollarException extends RuntimeException {
     }
 
     /**
-     * Http code.
+     * A HTTP code that is appropriate for this exception.
      *
      * @return the int
      */

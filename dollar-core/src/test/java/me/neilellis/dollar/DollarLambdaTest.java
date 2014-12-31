@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ package me.neilellis.dollar;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.TestCase.assertTrue;
 import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$list;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class DollarLambdaTest {
     private static var list;
@@ -38,14 +38,14 @@ public class DollarLambdaTest {
         long time = System.currentTimeMillis();
         System.out.println(time);
         Thread.sleep(50);
-        System.out.println(lambda.L());
-        assertTrue(lambda.L() > time);
-        assertTrue(lambda.isLambda());
+        System.out.println(lambda.toLong());
+        assertTrue(lambda.toLong() > time);
+        assertTrue(lambda.dynamic());
 
     }
 
     @Test
-    public void testIdentityEqualsHashCode() throws InterruptedException {
+    public void testIdentityEqualsHashCode() {
         var lambda = $((v) -> $("Hello World"));
         assertEquals("Hello World".hashCode(), lambda.hashCode());
         assertEquals(lambda, "Hello World");

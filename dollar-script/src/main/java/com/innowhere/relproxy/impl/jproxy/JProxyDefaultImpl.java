@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package com.innowhere.relproxy.impl.jproxy;
 
 import com.innowhere.relproxy.impl.jproxy.core.JProxyImpl;
 import com.innowhere.relproxy.jproxy.JProxyConfig;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author jmarranz
@@ -26,11 +28,11 @@ public class JProxyDefaultImpl extends JProxyImpl {
     public JProxyDefaultImpl() {
     }
 
-    public static JProxyConfig createJProxyConfig() {
+    @NotNull public static JProxyConfig createJProxyConfig() {
         return new JProxyConfigImpl();
     }
 
-    public static void initStatic(JProxyConfigImpl config) {
+    public static void initStatic(@NotNull JProxyConfigImpl config) {
         if (!config.isEnabled()) return;
 
         checkSingletonNull(SINGLETON);
@@ -59,7 +61,7 @@ public class JProxyDefaultImpl extends JProxyImpl {
         return SINGLETON.start();
     }
 
-    @Override
+    @Nullable @Override
     public Class getMainParamClass() {
         return null;
     }

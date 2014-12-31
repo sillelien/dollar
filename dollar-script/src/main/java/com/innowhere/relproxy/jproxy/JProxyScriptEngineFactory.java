@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,21 @@
 package com.innowhere.relproxy.jproxy;
 
 import com.innowhere.relproxy.impl.jproxy.screngine.JProxyScriptEngineFactoryImpl;
+import org.jetbrains.annotations.NotNull;
 
 import javax.script.ScriptEngineFactory;
 
-/**
- * Is the root class of JSR-223 Java Scripting API support.
- *
- * @author Jose Maria Arranz Santamaria
- */
 public abstract class JProxyScriptEngineFactory implements ScriptEngineFactory {
     /**
-     * Factory method to create a <code>JProxyScriptEngineFactory</code> based on the provided configuration.
+     * Factory method to create a {@code JProxyScriptEngineFactory} based on the provided configuration.
      *
-     * <p><code>javax.script.ScriptEngine</code> returned by the same factory object calling <code>ScriptEngineFactory.getScriptEngine()</code> will be using the provided configuration.</p>
+     * <p>{@code javax.script.ScriptEngine} returned by the same factory object calling {@code ScriptEngineFactory
+     * .getScriptEngine()} will be using the provided configuration.</p>
      *
      * @param config the configuration object.
      * @return the new factory initialized with the provided configuration.
      */
-    public static JProxyScriptEngineFactory create(JProxyConfig config) {
+    @NotNull public static JProxyScriptEngineFactory create(JProxyConfig config) {
         return JProxyScriptEngineFactoryImpl.create(config);
     }
 }

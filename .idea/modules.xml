@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/dollar.iml" filepath="$PROJECT_DIR$/dollar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-camel-plugin/dollar-camel-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-camel-plugin/dollar-camel-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-class-resolver-plugin/dollar-class-resolver-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-class-resolver-plugin/dollar-class-resolver-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-core/dollar-core.iml" filepath="$PROJECT_DIR$/dollar-core/dollar-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-docs/dollar-docs.iml" filepath="$PROJECT_DIR$/dollar-docs/dollar-docs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-examples/dollar-examples.iml" filepath="$PROJECT_DIR$/dollar-examples/dollar-examples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-github-resolver-plugin/dollar-github-resolver-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-github-resolver-plugin/dollar-github-resolver-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-http-plugin/dollar-http-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-http-plugin/dollar-http-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-mapdb-plugin/dollar-mapdb-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-mapdb-plugin/dollar-mapdb-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-maven-resolver-plugin/dollar-maven-resolver-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-maven-resolver-plugin/dollar-maven-resolver-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-metrics-plugin/dollar-metrics-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-metrics-plugin/dollar-metrics-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-orientdb-learner-plugin/dollar-orientdb-learner-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-orientdb-learner-plugin/dollar-orientdb-learner-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-hazelcast-learner-plugin/dollar-orientdb-learner-plugin (1).iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-hazelcast-learner-plugin/dollar-orientdb-learner-plugin (1).iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-plugins.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-plugins.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-redis-plugin/dollar-redis-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-redis-plugin/dollar-redis-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-resolver/dollar-resolver.iml" filepath="$PROJECT_DIR$/dollar-resolver/dollar-resolver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-runtime/dollar-runtime.iml" filepath="$PROJECT_DIR$/dollar-runtime/dollar-runtime.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-script/dollar-script.iml" filepath="$PROJECT_DIR$/dollar-script/dollar-script.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-simple-execution-plugin/dollar-simple-execution-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-simple-execution-plugin/dollar-simple-execution-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-simple-learner-plugin/dollar-simple-learner-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-simple-learner-plugin/dollar-simple-learner-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-socketio-plugin/dollar-socketio-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-socketio-plugin/dollar-socketio-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-std-resources-plugin/dollar-std-resources-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-std-resources-plugin/dollar-std-resources-plugin.iml" />
+    </modules>
+  </component>
+</project>

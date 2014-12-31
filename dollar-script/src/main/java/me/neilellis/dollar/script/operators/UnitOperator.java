@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import me.neilellis.dollar.script.*;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;
@@ -28,13 +29,10 @@ import static me.neilellis.dollar.DollarStatic.$void;
 import static me.neilellis.dollar.DollarStatic.fix;
 import static me.neilellis.dollar.script.DollarScriptSupport.getVariable;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class UnitOperator implements Map<Token, var> {
     private final Scope scope;
     private final DollarParser dollarParser;
-    private boolean pure;
+    private final boolean pure;
 
     public UnitOperator(DollarParser dollarParser, Scope scope, boolean pure) {
         this.dollarParser = dollarParser;
@@ -42,9 +40,9 @@ public class UnitOperator implements Map<Token, var> {
         this.pure = pure;
     }
 
-    @Override public var map(Token token) {
+    @Override public var map(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
-        final SourceValue source = new SourceValue(scope, token);
+        final SourceSegmentValue source = new SourceSegmentValue(scope, token);
         Callable<var> callable = () -> dollarParser.inScope(pure, "unit", scope, newScope -> {
             if (Builtins.exists(objects[1].toString())) {
                 return Builtins.execute(objects[1].toString(), Arrays.asList((var) objects[0]), newScope, pure);

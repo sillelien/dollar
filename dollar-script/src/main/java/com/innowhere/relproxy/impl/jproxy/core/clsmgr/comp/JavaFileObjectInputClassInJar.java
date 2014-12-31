@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package com.innowhere.relproxy.impl.jproxy.core.clsmgr.comp;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -24,9 +26,9 @@ import java.net.URI;
  * @author jmarranz
  */
 public class JavaFileObjectInputClassInJar extends JavaFileObjectInputClassInFileSystem {
-    protected long timestamp;
+    protected final long timestamp;
 
-    public JavaFileObjectInputClassInJar(String binaryName, URI uri, long timestamp) {
+    public JavaFileObjectInputClassInJar(String binaryName, @NotNull URI uri, long timestamp) {
         super(binaryName, uri, uri.getSchemeSpecificPart());
         this.timestamp = timestamp;
     }
@@ -41,7 +43,7 @@ public class JavaFileObjectInputClassInJar extends JavaFileObjectInputClassInFil
         return timestamp;
     }
 
-    @Override
+    @NotNull @Override
     public String toString() {
         return "JavaFileObjectInputClassInJar{uri=" + uri + '}';
     }

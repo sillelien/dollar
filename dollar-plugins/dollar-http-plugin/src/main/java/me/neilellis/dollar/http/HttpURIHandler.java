@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,27 +25,25 @@ import me.neilellis.dollar.types.SerializedType;
 import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static me.neilellis.dollar.DollarStatic.$;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class HttpURIHandler implements URIHandler {
     public static final int BLOCKING_TIMEOUT = 10;
     private static final ConcurrentHashMap<String, RouteableNanoHttpd> servers = new ConcurrentHashMap<>();
-    private final URI uri;
+    @NotNull private final URI uri;
     private final ConcurrentHashMap<String, String> subscriptions = new ConcurrentHashMap<>();
     private RouteableNanoHttpd httpd;
-    private String method = "GET";
+    @Nullable private String method = "GET";
 
-    public HttpURIHandler(String scheme, me.neilellis.dollar.uri.URI uri) throws URISyntaxException, IOException {
+    public HttpURIHandler(String scheme, @NotNull me.neilellis.dollar.uri.URI uri) {
         if (uri.hasSubScheme()) {
             this.uri = URI.parse(scheme + ":" + uri.sub().sub().asString());
             this.method = this.uri.sub().scheme();
@@ -54,12 +52,12 @@ public class HttpURIHandler implements URIHandler {
         }
     }
 
-    @Override
+    @NotNull @Override
     public var all() {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    @NotNull @Override
     public var write(var value, boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
@@ -68,12 +66,12 @@ public class HttpURIHandler implements URIHandler {
         //TODO
     }
 
-    @Override
+    @NotNull @Override
     public var drain() {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    @NotNull @Override
     public var get(var key) {
         throw new UnsupportedOperationException();
     }
@@ -86,7 +84,7 @@ public class HttpURIHandler implements URIHandler {
         //TODO
     }
 
-    @Override
+    @NotNull @Override
     public var read(boolean blocking, boolean mutating) {
         try {
             return DollarFactory.fromStream(SerializedType.JSON, Unirest.get(uri.toString())
@@ -98,17 +96,17 @@ public class HttpURIHandler implements URIHandler {
         }
     }
 
-    @Override
+    @NotNull @Override
     public var remove(var key) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    @NotNull @Override
     public var removeValue(var v) {
         throw new UnsupportedOperationException();
     }
 
-    public var set(var key, var value) {
+    @NotNull public var set(var key, var value) {
         throw new UnsupportedOperationException();
     }
 
@@ -126,7 +124,7 @@ public class HttpURIHandler implements URIHandler {
     }
 
     @Override
-    public void subscribe(Pipeable consumer, String id) throws IOException {
+    public void subscribe(Pipeable consumer, @NotNull String id) throws IOException {
         httpd = getHttpServerFor(this.uri.host(), this.uri.port() > 0 ? this.uri.port() : 80);
         final String path = this.uri.path();
         httpd.handle(path, new RequestHandler(consumer));
@@ -137,7 +135,7 @@ public class HttpURIHandler implements URIHandler {
         //TODO
     }
 
-    @Override public void unsubscribe(String subId) {
+    @Override public void unsubscribe(@NotNull String subId) {
         httpd.remove(subscriptions.get(subId));
     }
 
@@ -169,8 +167,8 @@ public class HttpURIHandler implements URIHandler {
             handlers.remove(key);
         }
 
-        @Override
-        public Response serve(IHTTPSession session) {
+        @NotNull @Override
+        public Response serve(@NotNull IHTTPSession session) {
             URI uri;
             uri = URI.parse(session.getUri());
             RequestHandler requestHandler = handlers.get(uri.path());
@@ -189,7 +187,7 @@ public class HttpURIHandler implements URIHandler {
             this.consumer = consumer;
         }
 
-        public NanoHttpdServer.Response invoke(NanoHttpdServer.IHTTPSession session) {
+        @NotNull public NanoHttpdServer.Response invoke(@NotNull NanoHttpdServer.IHTTPSession session) {
             try {
                 var in = $()
                         .$set($("headers"), session.getHeaders())
@@ -206,12 +204,12 @@ public class HttpURIHandler implements URIHandler {
                         new NanoHttpdServer.Response(new NanoHttpdServer.Response.IStatus() {
                     @Override
                     public String getDescription() {
-                        return out.$("reason").$default($("")).S();
+                        return out.$("reason").$default($("")).toHumanString();
                     }
 
                     @Override
                     public int getRequestStatus() {
-                        return out.$("status").$default($(200)).I();
+                        return out.$("status").$default($(200)).toInteger();
                     }
                         }, body.$mimeType().$S(), body.toStream());
                 out.$("headers").$map().forEach((s, v) -> response.addHeader(s.$S(), v.$S()));

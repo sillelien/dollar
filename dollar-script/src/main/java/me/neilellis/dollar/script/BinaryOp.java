@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,12 @@ import org.codehaus.jparsec.functors.Map2;
 
 import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactive;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class BinaryOp implements Binary<var>, Operator {
     private final boolean immediate;
     private final Map2<var, var, var> function;
     private final Scope scope;
-    private Source source;
-    private String operation;
+    private final String operation;
+    private SourceSegment source;
 
 
     public BinaryOp(String operation, Map2<var, var, var> function, Scope scope) {
@@ -57,7 +54,7 @@ public class BinaryOp implements Binary<var>, Operator {
     }
 
     @Override
-    public void setSource(Source source) {
+    public void setSource(SourceSegment source) {
         this.source = source;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,27 +20,24 @@ import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisPubSub;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
 import static me.neilellis.dollar.DollarStatic.$;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class RedisURIHandler implements URIHandler {
     private static final int BLOCKING_TIMEOUT = 10;
-    private final JedisPool jedisPool;
+    @NotNull private final JedisPool jedisPool;
     private final int timeout = 60000;
-    private final String path;
-    private final String query;
+    @NotNull private final String path;
+    @NotNull private final String query;
 
-    public RedisURIHandler(me.neilellis.dollar.uri.URI uri, JedisPoolConfig jedisPoolConfig) throws URISyntaxException {
+    public RedisURIHandler(me.neilellis.dollar.uri.URI uri, JedisPoolConfig jedisPoolConfig) {
         me.neilellis.dollar.uri.URI uri1 = uri;
         String host = uri1.host();
         int port = uri1.port();
@@ -55,7 +52,7 @@ public class RedisURIHandler implements URIHandler {
         }
     }
 
-    @Override
+    @NotNull @Override
     public var all() {
         try (Jedis jedis = jedisPool.getResource()) {
             List<String> result = jedis.lrange(path, 0, -1);
@@ -63,11 +60,16 @@ public class RedisURIHandler implements URIHandler {
         }
     }
 
+    @NotNull @Override
+    public var write(@NotNull var value, boolean blocking, boolean mutating) {
+        return send(value);
+    }
+
     @Override public void destroy() {
         //TODO
     }
 
-    @Override
+    @NotNull @Override
     public var drain() {
         try (Jedis jedis = jedisPool.getResource()) {
             List<String> result = jedis.lrange(path, 0, -1);
@@ -77,7 +79,7 @@ public class RedisURIHandler implements URIHandler {
     }
 
     @Override
-    public var get(var key) {
+    public var get(@NotNull var key) {
         try (Jedis jedis = jedisPool.getResource()) {
             return $(jedis.hget(path, key.$S()));
         }
@@ -89,11 +91,6 @@ public class RedisURIHandler implements URIHandler {
 
     @Override public void pause() {
         //TODO
-    }
-
-    @Override
-    public var write(var value, boolean blocking, boolean mutating) {
-        return send(value);
     }
 
     @Override
@@ -110,19 +107,19 @@ public class RedisURIHandler implements URIHandler {
     }
 
     @Override
-    public var remove(var key) {
+    public var remove(@NotNull var key) {
         try (Jedis jedis = jedisPool.getResource()) {
             return $(jedis.hdel(path, key.$S()));
         }
     }
 
-    @Override
+    @NotNull @Override
     public var removeValue(var v) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public var set(var key, var value) {
+    public var set(@NotNull var key, @NotNull var value) {
         try (Jedis jedis = jedisPool.getResource()) {
             return $(jedis.hset(path, key.$S(), value.$S()));
         }
@@ -142,7 +139,7 @@ public class RedisURIHandler implements URIHandler {
     }
 
     @Override
-    public void subscribe(Pipeable consumer, String id) {
+    public void subscribe(@NotNull Pipeable consumer, String id) {
         try (Jedis jedis = jedisPool.getResource()) {
             jedis.subscribe(new JedisPubSub() {
                 @Override
@@ -212,7 +209,7 @@ public class RedisURIHandler implements URIHandler {
         }
     }
 
-    var send(var value) {
+    @NotNull var send(@NotNull var value) {
         try (Jedis jedis = jedisPool.getResource()) {
             jedis.lpush(path, value.$S());
         }

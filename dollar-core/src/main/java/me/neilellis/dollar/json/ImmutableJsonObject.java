@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package me.neilellis.dollar.json;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class ImmutableJsonObject {
 
   private final JsonObject json;
@@ -30,11 +30,11 @@ public class ImmutableJsonObject {
     this.json = json;
   }
 
-  public JsonArray asArray() {
+    @NotNull public JsonArray asArray() {
     return json.asArray().copy();
   }
 
-  public JsonObject asObject() {
+    @NotNull public JsonObject asObject() {
     return json.copy().asObject();
   }
 
@@ -54,11 +54,11 @@ public class ImmutableJsonObject {
     return json.getArray(fieldName, def);
   }
 
-  public JsonArray getArray(String fieldName) {
+    @Nullable public JsonArray getArray(String fieldName) {
     return json.getArray(fieldName);
   }
 
-  public byte[] getBinary(String fieldName) {
+    @Nullable public byte[] getBinary(String fieldName) {
     return json.getBinary(fieldName);
   }
 
@@ -66,7 +66,7 @@ public class ImmutableJsonObject {
     return json.getBinary(fieldName, def);
   }
 
-  public Boolean getBoolean(String fieldName) {
+    @NotNull public Boolean getBoolean(String fieldName) {
     return json.getBoolean(fieldName);
   }
 
@@ -74,7 +74,7 @@ public class ImmutableJsonObject {
     return json.getBoolean(fieldName, def);
   }
 
-  public JsonElement getElement(String fieldName) {
+    @Nullable public JsonElement getElement(String fieldName) {
     return json.getElement(fieldName);
   }
 
@@ -82,15 +82,15 @@ public class ImmutableJsonObject {
     return json.getElement(fieldName, def);
   }
 
-  public <T> T getField(String fieldName) {
+    @NotNull public <T> T getField(String fieldName) {
     return json.getField(fieldName);
   }
 
-  public Set<String> getFieldNames() {
+    @NotNull public Set<String> getFieldNames() {
     return json.getFieldNames();
   }
 
-  public Integer getInteger(String fieldName) {
+    @Nullable public Integer getInteger(String fieldName) {
     return json.getInteger(fieldName);
   }
 
@@ -98,7 +98,7 @@ public class ImmutableJsonObject {
     return json.getInteger(fieldName, def);
   }
 
-  public Long getLong(String fieldName) {
+    @Nullable public Long getLong(String fieldName) {
     return json.getLong(fieldName);
   }
 
@@ -110,7 +110,7 @@ public class ImmutableJsonObject {
     return json.getNumber(fieldName, def);
   }
 
-  public Number getNumber(String fieldName) {
+    @NotNull public Number getNumber(String fieldName) {
     return json.getNumber(fieldName);
   }
 
@@ -118,11 +118,11 @@ public class ImmutableJsonObject {
     return json.getObject(fieldName, def);
   }
 
-  public JsonObject getObject(String fieldName) {
+    @Nullable public JsonObject getObject(String fieldName) {
     return json.getObject(fieldName);
   }
 
-  public String getString(String fieldName) {
+    @NotNull public String getString(String fieldName) {
     return json.getString(fieldName);
   }
 
@@ -130,7 +130,7 @@ public class ImmutableJsonObject {
     return json.getString(fieldName, def);
   }
 
-  public <T> T getValue(String fieldName) {
+    @NotNull public <T> T getValue(String fieldName) {
     return json.getValue(fieldName);
   }
 
@@ -160,11 +160,11 @@ public class ImmutableJsonObject {
     return json.isObject();
   }
 
-  public JsonObject mutable() {
+    @NotNull public JsonObject mutable() {
     return json.copy();
   }
 
-  public JsonObject putNumber(String fieldName, Number value) {
+    @NotNull public JsonObject putNumber(String fieldName, Number value) {
     return json.putNumber(fieldName, value);
   }
 

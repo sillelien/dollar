@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,15 @@
 
 package me.neilellis.dollar.resources.std;
 
-import me.neilellis.dollar.Execution;
 import me.neilellis.dollar.Pipeable;
+import me.neilellis.dollar.execution.DollarExecutor;
+import me.neilellis.dollar.plugin.Plugins;
 import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
 import me.neilellis.dollar.uri.URIHandlerFactory;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,14 +32,15 @@ import java.util.HashMap;
 import static me.neilellis.dollar.DollarStatic.$;
 import static me.neilellis.dollar.DollarStatic.$void;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class RandomResourceFactory implements URIHandlerFactory {
+    @Nullable private static final me.neilellis.dollar.execution.DollarExecutor
+            executor =
+            Plugins.sharedInstance(DollarExecutor.class);
     private final HashMap<String, Pipeable> consumers = new HashMap<>();
 
+
     public RandomResourceFactory() {
-        Execution.schedule(500, () -> {
+        executor.scheduleEvery(500, () -> {
             for (Pipeable consumer : consumers.values()) {
                 try {
                     consumer.pipe($(Math.random()));
@@ -47,47 +51,47 @@ public class RandomResourceFactory implements URIHandlerFactory {
         });
     }
 
-    @Override public URIHandlerFactory copy() {
+    @NotNull @Override public URIHandlerFactory copy() {
         return this;
     }
 
-    @Override public URIHandler forURI(String scheme, URI uri) throws Exception {
+    @NotNull @Override public URIHandler forURI(String scheme, URI uri) throws Exception {
 
         return new URIHandler() {
 
-            @Override public var all() {
+            @NotNull @Override public var all() {
                 return $(Math.random());
+            }
+
+            @NotNull @Override public var write(@NotNull var value, boolean blocking, boolean mutating) {
+                return $(Math.random() % value.toDouble());
             }
 
             @Override public void destroy() { }
 
-            @Override public var drain() { return $(Math.random()); }
+            @NotNull @Override public var drain() { return $(Math.random()); }
 
-            @Override public var get(var key) {
-                return $(Math.random() % key.D());
+            @NotNull @Override public var get(@NotNull var key) {
+                return $(Math.random() % key.toDouble());
             }
 
             @Override public void init() { }
 
             @Override public void pause() { }
 
-            @Override public var write(var value, boolean blocking, boolean mutating) {
-                return $(Math.random() % value.D());
-            }
-
-            @Override public var read(boolean blocking, boolean mutating) {
+            @NotNull @Override public var read(boolean blocking, boolean mutating) {
                 return $(Math.random());
             }
 
-            @Override public var remove(var v) {
+            @NotNull @Override public var remove(var v) {
                 return $void();
             }
 
-            @Override public var removeValue(var v) {
+            @NotNull @Override public var removeValue(var v) {
                 return $void();
             }
 
-            @Override public var set(var key, var value) {
+            @NotNull @Override public var set(var key, var value) {
                 return $void();
             }
 
@@ -114,7 +118,7 @@ public class RandomResourceFactory implements URIHandlerFactory {
         };
     }
 
-    @Override public boolean handlesScheme(String scheme) {
+    @Override public boolean handlesScheme(@NotNull String scheme) {
         return scheme.equals("random");
     }
 }

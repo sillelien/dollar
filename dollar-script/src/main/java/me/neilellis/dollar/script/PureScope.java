@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,20 +20,17 @@ import me.neilellis.dollar.DollarStatic;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static me.neilellis.dollar.DollarStatic.$void;
 
-/**
- * Scope for pure expressions (see http://en.wikipedia.org/wiki/Pure_function)
- *
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class PureScope extends ScriptScope {
     private static final Logger log = LoggerFactory.getLogger(ScriptScope.class);
 
-    public PureScope(Scope parent, String source, String name, String file) {
+    public PureScope(@NotNull Scope parent, String source, String name, @Nullable String file) {
         super(parent, file != null ? file : parent.getFile(), source, name);
     }
 
@@ -41,7 +38,7 @@ public class PureScope extends ScriptScope {
         throw new UnsupportedOperationException("Cannot clear a pure scope");
     }
 
-    @Override public var get(String key, boolean mustFind) {
+    @Override public var get(@NotNull String key, boolean mustFind) {
         if (key.matches("[0-9]+")) {
             throw new AssertionError("Cannot get numerical keys, use getParameter");
         }
@@ -71,11 +68,13 @@ public class PureScope extends ScriptScope {
         }
     }
 
-    @Override public Scope getScopeForParameters() {
+    @NotNull @Override public Scope getScopeForParameters() {
         return this;
     }
 
-    @Override public var set(String key, var value, boolean readonly, var constraint, String constraintSource,
+    @NotNull @Override
+    public var set(@NotNull String key, @NotNull var value, boolean readonly, @Nullable var constraint,
+                   String constraintSource,
                              boolean isVolatile, boolean fixed,
                              boolean pure) {
         if (isVolatile) {
@@ -118,7 +117,7 @@ public class PureScope extends ScriptScope {
         return value;
     }
 
-    @Override
+    @NotNull @Override
     public String toString() {
         return id + "(P)->" + parent;
     }

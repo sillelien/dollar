@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,19 +29,28 @@ public class CommandOther extends Command {
 
     @Override
     public boolean run() {
-        if (name.equals("clear")) {
-            commandClear();
-        } else if (name.equals("display")) {
-            commandDisplay();
-        } else if (name.equals("exec")) {
-            commandExec();
-        } else if (name.equals("exit")) {
-            commandExit();
-        } else if (name.equals("help")) {
-            commandHelp();
-        } else if (name.equals("quit")) {
-            commandExit();
-        } else throw new RelProxyException("Internal Error");
+        switch (name) {
+            case "clear":
+                commandClear();
+                break;
+            case "display":
+                commandDisplay();
+                break;
+            case "exec":
+                commandExec();
+                break;
+            case "exit":
+                commandExit();
+                break;
+            case "help":
+                commandHelp();
+                break;
+            case "quit":
+                commandExit();
+                break;
+            default:
+                throw new RelProxyException("Internal Error");
+        }
 
         return true;
     }
@@ -52,10 +61,6 @@ public class CommandOther extends Command {
 
     private void commandClear() {
         parent.clearCodeBuffer();
-    }
-
-    private void commandExit() {
-        System.exit(0);
     }
 
     private void commandDisplay() {
@@ -73,6 +78,10 @@ public class CommandOther extends Command {
 
     private void commandExec() {
         parent.executeCodeBuffer();
+    }
+
+    private void commandExit() {
+        System.exit(0);
     }
 
     private void commandHelp() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
 
     public DollarBoolean(@NotNull ImmutableList<Throwable> errors, @NotNull Boolean value) {
@@ -41,7 +38,7 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
 
     @NotNull @Override public var $minus(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
-        return DollarFactory.fromValue(value ^ rhsFix.isTruthy(), errors(), rhsFix.errors());
+        return DollarFactory.fromValue(value ^ rhsFix.truthy(), errors(), rhsFix.errors());
     }
 
     @NotNull
@@ -54,12 +51,12 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     @Override
     public var $divide(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
-        return DollarFactory.fromValue(value == rhsFix.isTruthy(), errors(), rhsFix.errors());
+        return DollarFactory.fromValue(value == rhsFix.truthy(), errors(), rhsFix.errors());
     }
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var v) {
+    public var $modulus(@NotNull var rhs) {
         return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
@@ -69,28 +66,28 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
-    @Override
-    @NotNull
-    public Integer I() {
-        return value ? 1 : 0;
-    }
-
-    @NotNull
-    @Override
-    public Number N() {
-        return value ? 1 : 0;
-    }
-
     @Override public int sign() {
-        return I();
+        return toInteger();
     }
 
     @Override
-    public var $as(Type type) {
+    @NotNull
+    public Integer toInteger() {
+        return value ? 1 : 0;
+    }
+
+    @NotNull
+    @Override
+    public Number toNumber() {
+        return value ? 1 : 0;
+    }
+
+    @Override
+    public var $as(@NotNull Type type) {
         if (type.equals(Type.BOOLEAN)) {
             return this;
         } else if (type.equals(Type.STRING)) {
-            return DollarStatic.$(S());
+            return DollarStatic.$(toHumanString());
         } else if (type.equals(Type.LIST)) {
             return DollarStatic.$(Arrays.asList(this));
         } else if (type.equals(Type.MAP)) {
@@ -120,58 +117,23 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         return false;
     }
 
-    @NotNull @Override public var $plus(var r) {
-        var rhsFix = r._fixDeep();
-        if (rhsFix.isList()) {
+    @NotNull @Override public var $plus(@NotNull var rhs) {
+        var rhsFix = rhs._fixDeep();
+        if (rhsFix.list()) {
             rhsFix.$prepend(this);
-        } else if (rhsFix.isList()) {
+        } else if (rhsFix.list()) {
             return DollarFactory.fromValue(rhsFix.$prepend(this), errors(), rhsFix.errors());
-        } else if (rhsFix.isRange()) {
+        } else if (rhsFix.range()) {
             return DollarFactory.fromValue(rhsFix.$plus(this), errors(), rhsFix.errors());
-        } else if (rhsFix.isString()) {
-            return DollarFactory.fromValue(value.toString() + rhsFix.S(), errors(), rhsFix.errors());
+        } else if (rhsFix.string()) {
+            return DollarFactory.fromValue(value.toString() + rhsFix.toHumanString(), errors(), rhsFix.errors());
         }
-        return DollarFactory.fromValue(value || rhsFix.isTruthy(), errors(), rhsFix.errors());
-    }
-
-    @NotNull @Override
-    public Long L() {
-        return value ? 1L : 0L;
-    }
-
-    @NotNull
-    @Override
-    public Double D() {
-        return value ? 1.0 : 0.0;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof DollarBoolean) {
-            return toJavaObject().equals(((DollarBoolean) obj).toJavaObject());
-        } else {
-            return value.toString().equals(obj.toString());
-        }
-    }
-
-    @Override
-    public boolean isDecimal() {
-        return false;
-    }
-
-    @Override
-    public boolean isInteger() {
-        return false;
-    }
-
-    @Override
-    public boolean isNumber() {
-        return false;
+        return DollarFactory.fromValue(value || rhsFix.truthy(), errors(), rhsFix.errors());
     }
 
     @Override
     public int compareTo(@NotNull var o) {
-        return I() - o.I();
+        return toInteger() - o.toInteger();
     }
 
     @Override
@@ -185,18 +147,53 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     }
 
     @Override
-    public boolean isNeitherTrueNorFalse() {
-        return false;
-    }
-
-    @Override
     public boolean isTrue() {
         return value;
     }
 
     @Override
-    public boolean isTruthy() {
+    public boolean neitherTrueNorFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean truthy() {
         return value;
+    }
+
+    @Override
+    public boolean number() {
+        return false;
+    }
+
+    @Override
+    public boolean decimal() {
+        return false;
+    }
+
+    @Override
+    public boolean integer() {
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof DollarBoolean) {
+            return toJavaObject().equals(((DollarBoolean) obj).toJavaObject());
+        } else {
+            return value.toString().equals(obj.toString());
+        }
+    }
+
+    @NotNull @Override
+    public Long toLong() {
+        return value ? 1L : 0L;
+    }
+
+    @NotNull
+    @Override
+    public Double toDouble() {
+        return value ? 1.0 : 0.0;
     }
 
     @NotNull @Override public String toDollarScript() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.innowhere.relproxy.impl.jproxy.core.clsmgr.comp;
 
 import com.innowhere.relproxy.RelProxyException;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.ClassDescriptor;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,11 +31,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 
-/**
- * http://atamur.blogspot.com.es/2009/10/using-built-in-javacompiler-with-custom.html
- *
- * @author jmarranz
- */
 public class JavaFileObjectInputClassFinderByClassLoader {
     private static final String CLASS_FILE_EXTENSION = ".class";
 
@@ -44,10 +40,10 @@ public class JavaFileObjectInputClassFinderByClassLoader {
         this.classLoader = classLoader;
     }
 
-    public List<JavaFileObjectInputClassInFileSystem> find(String packageName) throws IOException {
+    @NotNull public List<JavaFileObjectInputClassInFileSystem> find(@NotNull String packageName) throws IOException {
         String javaPackageName = packageName.replaceAll("\\.", "/");
 
-        List<JavaFileObjectInputClassInFileSystem> result = new ArrayList<JavaFileObjectInputClassInFileSystem>();
+        List<JavaFileObjectInputClassInFileSystem> result = new ArrayList<>();
 
         Enumeration<URL> urlEnumeration = classLoader.getResources(javaPackageName);
         while (urlEnumeration.hasMoreElements()) { // one URL for each jar on the classpath that has the given package
@@ -59,7 +55,8 @@ public class JavaFileObjectInputClassFinderByClassLoader {
         return result;
     }
 
-    private Collection<JavaFileObjectInputClassInFileSystem> listUnder(String packageName, URL packageFolderURL) {
+    @NotNull private Collection<JavaFileObjectInputClassInFileSystem> listUnder(String packageName,
+                                                                                @NotNull URL packageFolderURL) {
         File directory = new File(packageFolderURL.getFile());
         if (directory.isDirectory()) { // browse local .class files - useful for local execution
             return processDir(packageName, directory);
@@ -68,8 +65,27 @@ public class JavaFileObjectInputClassFinderByClassLoader {
         } // maybe there can be something else for more involved class loaders
     }
 
-    private List<JavaFileObjectInputClassInFileSystem> processJar(URL packageFolderURL) {
-        List<JavaFileObjectInputClassInFileSystem> result = new ArrayList<JavaFileObjectInputClassInFileSystem>();
+    @NotNull
+    private List<JavaFileObjectInputClassInFileSystem> processDir(String packageName, @NotNull File directory) {
+        List<JavaFileObjectInputClassInFileSystem> result = new ArrayList<>();
+
+        File[] childFiles = directory.listFiles();
+        for (File childFile : childFiles) {
+            if (!childFile.isFile()) { continue; }
+
+            // We only want the .class files.
+            String name = childFile.getName();
+            if (name.endsWith(CLASS_FILE_EXTENSION)) {
+                String binaryName = ClassDescriptor.getClassNameFromPackageAndClassFileName(packageName, name);
+                result.add(new JavaFileObjectInputClassInFile(childFile, binaryName, childFile.toURI()));
+            }
+        }
+
+        return result;
+    }
+
+    @NotNull private List<JavaFileObjectInputClassInFileSystem> processJar(@NotNull URL packageFolderURL) {
+        List<JavaFileObjectInputClassInFileSystem> result = new ArrayList<>();
         try {
             String jarUri = packageFolderURL.toExternalForm().split("!")[0];
 
@@ -90,24 +106,6 @@ public class JavaFileObjectInputClassFinderByClassLoader {
         } catch (Exception e) {
             throw new RelProxyException("Wasn't able to open " + packageFolderURL + " as a jar file", e);
         }
-        return result;
-    }
-
-    private List<JavaFileObjectInputClassInFileSystem> processDir(String packageName, File directory) {
-        List<JavaFileObjectInputClassInFileSystem> result = new ArrayList<JavaFileObjectInputClassInFileSystem>();
-
-        File[] childFiles = directory.listFiles();
-        for (File childFile : childFiles) {
-            if (!childFile.isFile()) continue;
-
-            // We only want the .class files.
-            String name = childFile.getName();
-            if (name.endsWith(CLASS_FILE_EXTENSION)) {
-                String binaryName = ClassDescriptor.getClassNameFromPackageAndClassFileName(packageName, name);
-                result.add(new JavaFileObjectInputClassInFile(childFile, binaryName, childFile.toURI()));
-            }
-        }
-
         return result;
     }
 }

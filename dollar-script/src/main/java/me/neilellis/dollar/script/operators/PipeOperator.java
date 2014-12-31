@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,18 +22,16 @@ import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 
 import static me.neilellis.dollar.DollarStatic.$;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class PipeOperator implements Map<var, Map<? super var, ? extends var>> {
     private final Scope scope;
     private final DollarParser dollarParser;
-    private boolean pure;
+    private final boolean pure;
 
     public PipeOperator(DollarParser dollarParser, Scope scope, boolean pure) {
         this.dollarParser = dollarParser;
@@ -41,7 +39,7 @@ public class PipeOperator implements Map<var, Map<? super var, ? extends var>> {
         this.pure = pure;
     }
 
-    @Override public Map<? super var, ? extends var> map(var rhs) {
+    @Override public Map<? super var, ? extends var> map(@NotNull var rhs) {
         return lhs -> dollarParser.inScope(pure, "pipe", scope, newScope -> {
             var lhsFix = lhs._fix(false);
             newScope.setParameter("1", lhsFix);

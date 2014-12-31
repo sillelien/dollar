@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package com.innowhere.relproxy.impl;
 
 import com.innowhere.relproxy.RelProxyException;
 import com.innowhere.relproxy.RelProxyOnReloadListener;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
@@ -31,25 +33,17 @@ public abstract class GenericProxyImpl {
     public GenericProxyImpl() {
     }
 
-    protected static void checkSingletonNull(GenericProxyImpl singleton) {
+    protected static void checkSingletonNull(@Nullable GenericProxyImpl singleton) {
         if (singleton != null)
             throw new RelProxyException("Already initialized");
     }
 
-    protected static void checkSingletonExists(GenericProxyImpl singleton) {
+    protected static void checkSingletonExists(@Nullable GenericProxyImpl singleton) {
         if (singleton == null)
             throw new RelProxyException("Execute first the init method");
     }
 
-    protected void init(GenericProxyConfigBaseImpl config) {
-        this.reloadListener = config.getRelProxyOnReloadListener();
-    }
-
-    public RelProxyOnReloadListener getRelProxyOnReloadListener() {
-        return reloadListener;
-    }
-
-    public <T> T create(T obj, Class<T> clasz) {
+    @Nullable public <T> T create(@Nullable T obj, Class<T> clasz) {
         if (obj == null) return null;
 
         InvocationHandler handler = createGenericProxyInvocationHandler(obj);
@@ -58,5 +52,13 @@ public abstract class GenericProxyImpl {
         return proxy;
     }
 
-    public abstract <T> GenericProxyInvocationHandler<T> createGenericProxyInvocationHandler(T obj);
+    @NotNull public abstract <T> GenericProxyInvocationHandler<T> createGenericProxyInvocationHandler(T obj);
+
+    public RelProxyOnReloadListener getRelProxyOnReloadListener() {
+        return reloadListener;
+    }
+
+    protected void init(@NotNull GenericProxyConfigBaseImpl config) {
+        this.reloadListener = config.getRelProxyOnReloadListener();
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,24 +18,22 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.SourceValue;
+import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
+import org.jetbrains.annotations.NotNull;
 
 import static me.neilellis.dollar.DollarStatic.$void;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class AssertOperator implements Map<Token, var> {
     private final Scope scope;
 
     public AssertOperator(Scope scope) {this.scope = scope;}
 
-    @Override public var map(Token token) {
-        final SourceValue source = new SourceValue(scope, token);
+    @Override public var map(@NotNull Token token) {
+        final SourceSegmentValue source = new SourceSegmentValue(scope, token);
         Object[] objects = (Object[]) token.value();
         return DollarScriptSupport.wrapReactive(scope, () -> {
             if (((var) objects[1]).isTrue()) { return $void(); } else {

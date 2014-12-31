@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,14 @@
 
 package me.neilellis.dollar.collections;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class CollectionUtil {
-    public static String fromStream(InputStream stream) throws IOException {
+    public static String fromStream(@NotNull InputStream stream) throws IOException {
         String s;
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             byte[] buffer = new byte[0xFFFF];

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,8 @@
 package me.neilellis.dollar.script;
 
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 class Variable {
     final boolean readonly;
     final var constraint;
@@ -60,7 +58,7 @@ class Variable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
 

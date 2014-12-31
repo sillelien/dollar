@@ -42,6 +42,7 @@
         <module>dollar-orientdb-learner-plugin</module>
         <module>dollar-hazelcast-learner-plugin</module>
         <module>dollar-simple-learner-plugin</module>
+        <module>dollar-simple-execution-plugin</module>
     </modules>
 
     <build>

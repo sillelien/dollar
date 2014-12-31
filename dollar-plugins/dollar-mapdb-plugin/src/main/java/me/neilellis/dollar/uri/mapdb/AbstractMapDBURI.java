@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,31 +18,29 @@ package me.neilellis.dollar.uri.mapdb;
 
 import me.neilellis.dollar.uri.URI;
 import me.neilellis.dollar.uri.URIHandler;
+import org.jetbrains.annotations.NotNull;
 import org.mapdb.DBMaker;
 import org.mapdb.TxMaker;
 
 import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public abstract class AbstractMapDBURI implements URIHandler {
     private static final ConcurrentHashMap<String, TxMaker> txs = new ConcurrentHashMap<>();
     protected final String scheme;
-    protected final URI uri;
-    protected TxMaker tx;
-    private String host;
+    @NotNull protected final URI uri;
+    protected final TxMaker tx;
+    private final String host;
 
     public AbstractMapDBURI(
-            URI uri, String scheme) {
+            @NotNull URI uri, String scheme) {
         this.uri = uri;
         this.scheme = scheme;
         tx = getDB(uri.path());
         host = uri.host();
     }
 
-    protected static TxMaker getDB(String path) {
+    protected static TxMaker getDB(@NotNull String path) {
 
         final TxMaker newDb = DBMaker.newFileDB(new File(path))
                                      .closeOnJvmShutdown()

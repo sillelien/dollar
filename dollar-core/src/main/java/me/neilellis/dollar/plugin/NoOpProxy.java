@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class NoOpProxy<T extends ExtensionPoint<T>> implements java.lang.reflect.InvocationHandler {
 
 
@@ -33,14 +30,14 @@ public class NoOpProxy<T extends ExtensionPoint<T>> implements java.lang.reflect
     this.c = c;
   }
 
-  public static <T extends ExtensionPoint<T>> T newInstance(Class<T> c) {
+    @NotNull public static <T extends ExtensionPoint<T>> T newInstance(@NotNull Class<T> c) {
     return (T) java.lang.reflect.Proxy.newProxyInstance(
         c.getClassLoader(),
         new Class<?>[]{c},
         new NoOpProxy<>(c));
   }
 
-    public Object invoke(Object proxy, @NotNull Method m, Object[] args)
+    @NotNull public Object invoke(Object proxy, @NotNull Method m, Object[] args)
       throws Throwable {
     throw new UnsupportedOperationException("Method " + m + " cannot be invoked as no provider for " + c.getName() + " could be found on the classpath, please add the appropriate plugin to the classpath.");
   }

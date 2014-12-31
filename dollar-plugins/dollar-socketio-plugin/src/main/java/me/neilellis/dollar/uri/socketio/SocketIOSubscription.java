@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,8 @@ import com.corundumstudio.socketio.listener.DisconnectListener;
 import me.neilellis.dollar.Pipeable;
 import me.neilellis.dollar.types.DollarFactory;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 class SocketIOSubscription implements DataListener<String>, ConnectListener, DisconnectListener {
     private final Pipeable consumer;
     private final String id;
@@ -45,25 +43,26 @@ class SocketIOSubscription implements DataListener<String>, ConnectListener, Dis
         destroyed = true;
     }
 
-    @Override public void onConnect(SocketIOClient client) {
+    @Override public void onConnect(@NotNull SocketIOClient client) {
         if (!destroyed) {
             client.joinRoom(getPath());
         }
     }
 
-    private String getPath() {return uri.path().substring(1);}
+    @NotNull private String getPath() {return uri.path().substring(1);}
 
-    @Override public void onData(SocketIOClient client, String data, AckRequest ackSender) throws Exception {
+    @Override public void onData(SocketIOClient client, @NotNull String data, @NotNull AckRequest ackSender) throws
+                                                                                                             Exception {
         if (!destroyed) {
             final var result = consumer.pipe(DollarFactory.fromStringValue(data));
             if (ackSender.isAckRequested()) {
-                ackSender.sendAckData(result.S());
+                ackSender.sendAckData(result.toHumanString());
             }
         }
 
     }
 
-    @Override public void onDisconnect(SocketIOClient client) {
+    @Override public void onDisconnect(@NotNull SocketIOClient client) {
         client.leaveRoom(getPath());
     }
 

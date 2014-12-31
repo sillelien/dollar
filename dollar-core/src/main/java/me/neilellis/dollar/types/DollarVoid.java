@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,24 +33,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-/**
- * To better understand the rationale behind this class, take a look at http://homepages.ecs.vuw.ac.nz/~tk/publications/papers/void.pdf
- *
- * Dollar does not have the concept of null. Instead null {@link me.neilellis.dollar.var} objects are instances of this class.
- *
- * Void is equivalent to 0,"",null except that unlike these values it has behavior that corresponds to a void object.
- *
- * Therefore actions taken against a void object are ignored. Any method that returns a {@link me.neilellis.dollar.var} will return a {@link DollarVoid}.
- *
- * <pre>
- *
- *  var nulled= $null();
- *  nulled.$pipe((i)-&gt;{System.out.println("You'll never see this."});
- *
- * </pre>
- *
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarVoid extends AbstractDollar implements var {
 
 
@@ -73,13 +55,13 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var v) {
+    public var $minus(@NotNull var rhs) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $plus(var v) {
+    public var $plus(@NotNull var rhs) {
         return this;
     }
 
@@ -91,13 +73,13 @@ public class DollarVoid extends AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $divide(@NotNull var v) {
+    public var $divide(@NotNull var rhs) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $modulus(@NotNull var v) {
+    public var $modulus(@NotNull var rhs) {
         return this;
     }
 
@@ -107,19 +89,91 @@ public class DollarVoid extends AbstractDollar implements var {
         return this;
     }
 
+    @Override public int sign() {
+        return 0;
+    }
+
     @NotNull @Override
-    public Integer I() {
+    public Integer toInteger() {
         return 0;
     }
 
     @NotNull
     @Override
-    public Number N() {
+    public Number toNumber() {
         return 0;
     }
 
-    @Override public int sign() {
-        return 0;
+    @Override
+    public var $as(@NotNull Type type) {
+        if (type.equals(Type.BOOLEAN)) {
+            return DollarStatic.$(false);
+        } else if (type.equals(Type.STRING)) {
+            return DollarStatic.$("");
+        } else if (type.equals(Type.LIST)) {
+            return DollarStatic.$(Arrays.asList());
+        } else if (type.equals(Type.MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.equals(Type.DECIMAL)) {
+            return DollarStatic.$(0.0d);
+        } else if (type.equals(Type.INTEGER)) {
+            return DollarStatic.$(0);
+        } else if (type.equals(Type.VOID)) {
+            return this;
+        } else if (type.equals(Type.RANGE)) {
+            return DollarFactory.fromValue(new Range($(0), $(0)));
+        } else {
+            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST, type.toString(), false);
+        }
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> $list() {
+        return ImmutableList.of();
+    }
+
+    @Override public Type $type() {
+        return Type.VOID;
+    }
+
+    @Override public boolean collection() {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> $map() {
+        return ImmutableMap.of();
+    }
+
+    @Override
+    public boolean is(@NotNull Type... types) {
+        for (Type type : types) {
+            if (Objects.equals(type, Type.VOID)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isVoid() {
+        return true;
+    }
+
+    @Override
+    public ImmutableList<String> strings() {
+        return ImmutableList.of();
+    }
+
+    @NotNull @Override public ImmutableList<Object> toList() {
+        return ImmutableList.of();
+    }
+
+    @NotNull @Override
+    public Map<String, Object> toMap() {
+        return Collections.emptyMap();
     }
 
     @NotNull
@@ -154,19 +208,19 @@ public class DollarVoid extends AbstractDollar implements var {
     @NotNull
     @Override
     public var $removeByKey(@NotNull String value) {
-        return $copy();
+        return _copy();
     }
 
     @NotNull
     @Override
     public var $set(@NotNull var key, Object value) {
-        return $copy();
+        return _copy();
     }
 
     @NotNull
     @Override
     public var remove(Object value) {
-        return $copy();
+        return _copy();
     }
 
     @NotNull @Override public var $remove(var value) {
@@ -182,19 +236,19 @@ public class DollarVoid extends AbstractDollar implements var {
     @NotNull
     @Override
     public var $eval(@NotNull String js) {
-        return $copy();
+        return _copy();
     }
 
     @NotNull
     @Override
     public var $pipe(@NotNull String js, @NotNull String label) {
-        return $copy();
+        return _copy();
     }
 
     @NotNull
     @Override
     public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
-        return $copy();
+        return _copy();
     }
 
     @Override
@@ -205,84 +259,6 @@ public class DollarVoid extends AbstractDollar implements var {
     @Override
     public boolean equals(@Nullable Object obj) {
         return (obj instanceof var && ((var) obj).toJavaObject() == null) || obj == null;
-    }
-
-    @NotNull
-    @Override
-    public String S() {
-        return "";
-    }
-
-    @Override
-    public var $as(Type type) {
-        if (type.equals(Type.BOOLEAN)) {
-            return DollarStatic.$(false);
-        } else if (type.equals(Type.STRING)) {
-            return DollarStatic.$("");
-        } else if (type.equals(Type.LIST)) {
-            return DollarStatic.$(Arrays.asList());
-        } else if (type.equals(Type.MAP)) {
-            return DollarStatic.$("value", this);
-        } else if (type.equals(Type.DECIMAL)) {
-            return DollarStatic.$(0.0d);
-        } else if (type.equals(Type.INTEGER)) {
-            return DollarStatic.$(0);
-        } else if (type.equals(Type.VOID)) {
-            return this;
-        } else if (type.equals(Type.RANGE)) {
-            return DollarFactory.fromValue(new Range($(0), $(0)));
-        } else {
-            return DollarFactory.failure(me.neilellis.dollar.types.ErrorType.INVALID_CAST, type.toString(), false);
-        }
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> $list() {
-        return ImmutableList.of();
-    }
-
-    @Override public Type $type() {
-        return Type.VOID;
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<var, var> $map() {
-        return ImmutableMap.of();
-    }
-
-    @Override
-    public boolean is(@NotNull Type... types) {
-        for (Type type : types) {
-            if (Objects.equals(type, Type.VOID)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override public boolean isCollection() {
-        return false;
-    }
-
-    @Override
-    public boolean isVoid() {
-        return true;
-    }
-
-    @Override
-    public ImmutableList<String> strings() {
-        return ImmutableList.of();
-    }
-
-    @NotNull @Override public ImmutableList<Object> toList() {
-        return ImmutableList.of();
-    }
-
-    @NotNull @Override
-    public Map<String, Object> toMap() {
-        return Collections.emptyMap();
     }
 
     @Override
@@ -305,18 +281,24 @@ public class DollarVoid extends AbstractDollar implements var {
     }
 
     @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
     public boolean isTrue() {
         return false;
     }
 
     @Override
-    public boolean isTruthy() {
+    public boolean neitherTrueNorFalse() {
+        return true;
+    }
+
+    @Override
+    public boolean truthy() {
         return false;
+    }
+
+    @NotNull
+    @Override
+    public String toHumanString() {
+        return "";
     }
 
     @NotNull @Override public String toDollarScript() {

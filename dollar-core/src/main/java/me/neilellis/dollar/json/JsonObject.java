@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,11 @@ package me.neilellis.dollar.json;
 
 import me.neilellis.dollar.DollarException;
 import me.neilellis.dollar.json.impl.Json;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-/**
- * Represents a JSON object.<p> Instances of this class are not thread-safe.<p>
- *
- * @author <a href="http://tfox.org">Tim Fox</a>
- */
 @SuppressWarnings("SuspiciousMethodCalls") public class JsonObject extends JsonElement {
 
   final Map<String, Object> map;
@@ -73,7 +70,7 @@ import java.util.*;
   /**
    * @return a copy of this JsonObject such that changes in the original are not reflected in the copy, and vice versa
    */
-  public JsonObject copy() {
+  @NotNull public JsonObject copy() {
     return new JsonObject(map, true);
   }
 
@@ -90,7 +87,7 @@ import java.util.*;
     return arr == null ? def : arr;
   }
 
-  @SuppressWarnings("unchecked")
+    @Nullable @SuppressWarnings("unchecked")
   public JsonArray getArray(String fieldName) {
     List<Object> l = (List<Object>) map.get(fieldName);
     return l == null ? null : new JsonArray(l, false);
@@ -101,7 +98,7 @@ import java.util.*;
     return b == null ? def : b;
   }
 
-  public byte[] getBinary(String fieldName) {
+    @Nullable public byte[] getBinary(String fieldName) {
     String encoded = (String) map.get(fieldName);
     return encoded == null ? null : Base64.getDecoder().decode(encoded);
   }
@@ -111,7 +108,7 @@ import java.util.*;
     return b == null ? def : b;
   }
 
-  public Boolean getBoolean(String fieldName) {
+    @NotNull public Boolean getBoolean(String fieldName) {
     return (Boolean) map.get(fieldName);
   }
 
@@ -120,7 +117,7 @@ import java.util.*;
     return elem == null ? def : elem;
   }
 
-  public JsonElement getElement(String fieldName) {
+    @Nullable public JsonElement getElement(String fieldName) {
     Object element = map.get(fieldName);
     if (element == null) { return null; }
 
@@ -133,17 +130,17 @@ import java.util.*;
     throw new ClassCastException();
   }
 
-  @SuppressWarnings("unchecked")
+    @Nullable @SuppressWarnings("unchecked")
   public JsonObject getObject(String fieldName) {
     Map<String, Object> m = (Map<String, Object>) map.get(fieldName);
     return m == null ? null : new JsonObject(m, false);
   }
 
-  public Set<String> getFieldNames() {
+    @NotNull public Set<String> getFieldNames() {
     return map.keySet();
   }
 
-  public Integer getInteger(String fieldName) {
+    @Nullable public Integer getInteger(String fieldName) {
     Number num = (Number) map.get(fieldName);
     return num == null ? null : num.intValue();
   }
@@ -153,7 +150,7 @@ import java.util.*;
     return num == null ? def : num.intValue();
   }
 
-  public Long getLong(String fieldName) {
+    @Nullable public Long getLong(String fieldName) {
     Number num = (Number) map.get(fieldName);
     return num == null ? null : num.longValue();
   }
@@ -168,7 +165,7 @@ import java.util.*;
     return n == null ? def : n;
   }
 
-  public Number getNumber(String fieldName) {
+    @NotNull public Number getNumber(String fieldName) {
     return (Number) map.get(fieldName);
   }
 
@@ -182,16 +179,16 @@ import java.util.*;
     return str == null ? def : str;
   }
 
-  public String getString(String fieldName) {
+    @NotNull public String getString(String fieldName) {
     return (String) map.get(fieldName);
   }
 
-  @SuppressWarnings("unchecked")
+    @NotNull @SuppressWarnings("unchecked")
   public <T> T getValue(String fieldName) {
     return getField(fieldName);
   }
 
-  @SuppressWarnings("unchecked")
+    @NotNull @SuppressWarnings("unchecked")
   public <T> T getField(String fieldName) {
     Object obj = map.get(fieldName);
     if (obj instanceof Map) {
@@ -208,7 +205,7 @@ import java.util.*;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(@Nullable Object o) {
     if (this == o) { return true; }
     if (o == null || getClass() != o.getClass()) { return false; }
     JsonObject that = (JsonObject) o;
@@ -225,7 +222,7 @@ import java.util.*;
     return Json.encode(this.map);
   }
 
-  public JsonObject mergeIn(JsonObject other) {
+    @NotNull public JsonObject mergeIn(@NotNull JsonObject other) {
     map.putAll(other.map);
     return this;
   }
@@ -234,7 +231,7 @@ import java.util.*;
     return map.put(key, value);
   }
 
-  public JsonObject putElement(String fieldName, JsonElement value) {
+    @NotNull public JsonObject putElement(String fieldName, @Nullable JsonElement value) {
     if (value == null) {
       map.put(fieldName, null);
       return this;
@@ -245,17 +242,17 @@ import java.util.*;
     }
   }
 
-  public JsonObject putArray(String fieldName, JsonArray value) {
+    @NotNull public JsonObject putArray(String fieldName, @Nullable JsonArray value) {
     map.put(fieldName, value == null ? null : value.list);
     return this;
   }
 
-  JsonObject putObject(String fieldName, JsonObject value) {
+    @NotNull JsonObject putObject(String fieldName, @Nullable JsonObject value) {
     map.put(fieldName, value == null ? null : value.map);
     return this;
   }
 
-  public JsonObject putValue(String fieldName, Object value) {
+    @NotNull public JsonObject putValue(String fieldName, @Nullable Object value) {
     if (value == null) {
       putObject(fieldName, null);
     } else if (value instanceof JsonObject) {
@@ -276,22 +273,22 @@ import java.util.*;
     return this;
   }
 
-  public JsonObject putString(String fieldName, String value) {
+    @NotNull public JsonObject putString(String fieldName, String value) {
     map.put(fieldName, value);
     return this;
   }
 
-  public JsonObject putNumber(String fieldName, Number value) {
+    @NotNull public JsonObject putNumber(String fieldName, Number value) {
     map.put(fieldName, value);
     return this;
   }
 
-  JsonObject putBoolean(String fieldName, Boolean value) {
+    @NotNull JsonObject putBoolean(String fieldName, Boolean value) {
     map.put(fieldName, value);
     return this;
   }
 
-  JsonObject putBinary(String fieldName, byte[] binary) {
+    @NotNull JsonObject putBinary(String fieldName, @Nullable byte[] binary) {
     map.put(fieldName, binary == null ? null : Base64.getEncoder().encodeToString(binary));
     return this;
   }

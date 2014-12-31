@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,28 +26,26 @@ import me.neilellis.dollar.var;
 import org.apache.camel.*;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.jetbrains.annotations.NotNull;
 
 import static me.neilellis.dollar.DollarStatic.$void;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class CamelURIHandlerFactory implements URIHandlerFactory {
 
     private final DefaultCamelContext context = new DefaultCamelContext();
 
-    @Override
+    @NotNull @Override
     public URIHandlerFactory copy() {
         return new CamelURIHandlerFactory();
     }
 
-    @Override
-    public URIHandler forURI(String scheme, URI uri) {
+    @NotNull @Override
+    public URIHandler forURI(String scheme, @NotNull URI uri) {
         return new CamelURIHandler(uri, context);
     }
 
     @Override
-    public boolean handlesScheme(String scheme) {
+    public boolean handlesScheme(@NotNull String scheme) {
         return scheme.equals("camel");
     }
 
@@ -66,11 +64,11 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
 
         private final ConsumerTemplate consumerTemplate;
         private final ProducerTemplate producerTemplate;
-        private final URI uri;
+        @NotNull private final URI uri;
         private CamelContext context;
 
 
-        CamelURIHandler(URI uri, DefaultCamelContext context) {
+        CamelURIHandler(@NotNull URI uri, DefaultCamelContext context) {
             this.uri = uri.sub();
             this.context = context;
             try {
@@ -82,45 +80,13 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
             consumerTemplate = this.context.createConsumerTemplate();
         }
 
-        @Override
+        @NotNull @Override
         public var all() {
             throw new UnsupportedOperationException("The Apache Camel uri handler does not support this yet.");
         }
 
-        @Override public void destroy() {
-            //TODO
-        }
-
         @Override
-        public var drain() {
-            throw new UnsupportedOperationException("The Apache Camel uri handler does not support this yet.");
-        }
-
-        @Override
-        public var get(var key) {
-            throw new UnsupportedOperationException("The Apache Camel uri handler does not support this yet.");
-        }
-
-        @Override public void init() {
-            //TODO
-        }
-
-        @Override public void pause() {
-            //TODO
-        }
-
-        @Override
-        public var publish(var value) {
-            try {
-                producerTemplate.asyncSendBody(uri.asString(), value.$S());
-            } catch (Exception e) {
-                return DollarStatic.handleError(e, value);
-            }
-            return value;
-        }
-
-        @Override
-        public var write(var value, boolean blocking, boolean mutating) {
+        public var write(@NotNull var value, boolean blocking, boolean mutating) {
             try {
                 if (blocking) {
                     return DollarFactory.fromStringValue(
@@ -133,6 +99,38 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
             } catch (CamelExecutionException e) {
                 return DollarStatic.handleError(e, value);
             }
+        }
+
+        @Override public void destroy() {
+            //TODO
+        }
+
+        @NotNull @Override
+        public var drain() {
+            throw new UnsupportedOperationException("The Apache Camel uri handler does not support this yet.");
+        }
+
+        @NotNull @Override
+        public var get(var key) {
+            throw new UnsupportedOperationException("The Apache Camel uri handler does not support this yet.");
+        }
+
+        @Override public void init() {
+            //TODO
+        }
+
+        @Override public void pause() {
+            //TODO
+        }
+
+        @NotNull @Override
+        public var publish(@NotNull var value) {
+            try {
+                producerTemplate.asyncSendBody(uri.asString(), value.$S());
+            } catch (Exception e) {
+                return DollarStatic.handleError(e, value);
+            }
+            return value;
         }
 
         @Override
@@ -148,17 +146,17 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
             }
         }
 
-        @Override
+        @NotNull @Override
         public var remove(var v) {
             throw new UnsupportedOperationException("The Apache Camel uri handler does not support this yet.");
         }
 
-        @Override
+        @NotNull @Override
         public var removeValue(var v) {
             throw new UnsupportedOperationException("The Apache Camel uri handler does not support this yet.");
         }
 
-        @Override
+        @NotNull @Override
         public var set(var key, var value) {
             throw new UnsupportedOperationException("The Apache Camel uri handler does not support this yet.");
         }
@@ -177,12 +175,12 @@ public class CamelURIHandlerFactory implements URIHandlerFactory {
         }
 
         @Override
-        public void subscribe(Pipeable consumer, String id) {
+        public void subscribe(@NotNull Pipeable consumer, String id) {
             try {
                 context.addRoutes(
                         new RouteBuilder(context) {
                             @Override
-                            public void configure() throws Exception {
+                            public void configure() {
                                 from(uri.asString()).process((ex) -> {
                                     try {
                                         consumer.pipe(DollarFactory.fromStringValue(ex.getIn().getBody(String.class)));

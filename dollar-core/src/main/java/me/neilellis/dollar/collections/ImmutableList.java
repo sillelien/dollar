@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package me.neilellis.dollar.collections;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public final class ImmutableList<V> implements Iterable<V> {
 
     private List<V> list = new ArrayList<>();
@@ -32,11 +32,11 @@ public final class ImmutableList<V> implements Iterable<V> {
         this.list = list;
     }
 
-    public static <V> ImmutableList<V> of(V... objects) {
+    @NotNull public static <V> ImmutableList<V> of(V... objects) {
         return new ImmutableList<>(Arrays.asList(objects));
     }
 
-    public static <V> ImmutableList<V> copyOf(List<V>... lists) {
+    @NotNull public static <V> ImmutableList<V> copyOf(@NotNull List<V>... lists) {
         List<V> list = new ArrayList<>();
         for (List<V> vList : lists) {
             list.addAll(vList);
@@ -44,7 +44,7 @@ public final class ImmutableList<V> implements Iterable<V> {
         return new ImmutableList<>(list);
     }
 
-    public static <V> ImmutableList<V> copyOf(ImmutableList<V>... lists) {
+    @NotNull public static <V> ImmutableList<V> copyOf(@NotNull ImmutableList<V>... lists) {
         List<V> list = new ArrayList<>();
         for (ImmutableList<V> vList : lists) {
             list.addAll(vList.list);
@@ -54,9 +54,9 @@ public final class ImmutableList<V> implements Iterable<V> {
 
     public boolean contains(Object o) {return list.contains(o);}
 
-    public boolean containsAll(Collection<?> c) {return list.containsAll(c);}
+    public boolean containsAll(@NotNull Collection<?> c) {return list.containsAll(c);}
 
-    public V get(int index) {return list.get(index);}
+    @NotNull public V get(int index) {return list.get(index);}
 
     @Override
     public int hashCode() {
@@ -64,15 +64,14 @@ public final class ImmutableList<V> implements Iterable<V> {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
 
         ImmutableList that = (ImmutableList) o;
 
-        if (!list.equals(that.list)) { return false; }
+        return list.equals(that.list);
 
-        return true;
     }
 
     @Override public String toString() {
@@ -83,19 +82,19 @@ public final class ImmutableList<V> implements Iterable<V> {
 
     public boolean isEmpty() {return list.isEmpty();}
 
-    public Iterator<V> iterator() {return list.iterator();}
+    @NotNull public Iterator<V> iterator() {return list.iterator();}
 
-    public void forEach(Consumer<? super V> action) {list.forEach(action);}
+    public void forEach(@NotNull Consumer<? super V> action) {list.forEach(action);}
 
     public Spliterator<V> spliterator() {return list.spliterator();}
 
     public int lastIndexOf(Object o) {return list.lastIndexOf(o);}
 
-    public ListIterator<V> listIterator() {return list.listIterator();}
+    @NotNull public ListIterator<V> listIterator() {return list.listIterator();}
 
-    public ListIterator<V> listIterator(int index) {return list.listIterator(index);}
+    @NotNull public ListIterator<V> listIterator(int index) {return list.listIterator(index);}
 
-    public List<V> mutable() {
+    @NotNull public List<V> mutable() {
         return new ArrayList<>(list);
     }
 
@@ -105,9 +104,9 @@ public final class ImmutableList<V> implements Iterable<V> {
 
     public Stream<V> stream() {return list.stream();}
 
-    public List<V> subList(int fromIndex, int toIndex) {return list.subList(fromIndex, toIndex);}
+    @NotNull public List<V> subList(int fromIndex, int toIndex) {return list.subList(fromIndex, toIndex);}
 
-    public Object[] toArray() {return list.toArray();}
+    @NotNull public Object[] toArray() {return list.toArray();}
 
-    public <T> T[] toArray(T[] a) {return list.toArray(a);}
+    @NotNull public <T> T[] toArray(@NotNull T[] a) {return list.toArray(a);}
 }

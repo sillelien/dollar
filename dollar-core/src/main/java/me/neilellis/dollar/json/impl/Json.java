@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import me.neilellis.dollar.json.DecodeException;
 import me.neilellis.dollar.json.EncodeException;
 import me.neilellis.dollar.json.JsonObject;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -55,7 +56,7 @@ public class Json {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @NotNull @SuppressWarnings("unchecked")
     public static <T> T decodeValue(String str, Class<?> clazz) throws DecodeException {
         try {
             return (T) mapper.readValue(str, clazz);
@@ -64,7 +65,7 @@ public class Json {
         }
     }
 
-    public static JsonObject fromJavaObject(Object o) {
+    @NotNull public static JsonObject fromJavaObject(Object o) {
 
         return new JsonObject(mapper.convertValue(o, Map.class));
 

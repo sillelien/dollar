@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,6 @@ import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.util.*;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class URI implements Serializable {
     @NotNull
     protected String uri;
@@ -75,7 +72,7 @@ public class URI implements Serializable {
                subPath);
     }
 
-    public String path() {
+    @NotNull public String path() {
         final String withoutQuery;
         withoutQuery = withoutQuery().asString();
         int i = withoutQuery.indexOf(':');
@@ -90,7 +87,7 @@ public class URI implements Serializable {
         }
     }
 
-    public URI withoutQuery() {
+    @NotNull public URI withoutQuery() {
         if (uri.contains("?")) {
             final int i = uri.indexOf('?');
             return new URI(uri.substring(0, i));
@@ -102,7 +99,7 @@ public class URI implements Serializable {
     protected URI() {
     }
 
-    public static URI parse(String s) {
+    @NotNull public static URI parse(String s) {
         return new URI(s);
     }
 
@@ -135,7 +132,7 @@ public class URI implements Serializable {
         }
     }
 
-    public String getFragment() {
+    @NotNull public String getFragment() {
         final int index = uri.indexOf('#');
         if (index < 0) {
             return "";
@@ -162,7 +159,7 @@ public class URI implements Serializable {
                 try {
                     key = idx > 0 ? URLDecoder.decode(pair.substring(0, idx), "UTF-8") : pair;
                     if (!query_pairs.containsKey(key)) {
-                        query_pairs.put(key, new LinkedList<String>());
+                        query_pairs.put(key, new LinkedList<>());
                     }
                     final String value;
                     value =
@@ -182,7 +179,7 @@ public class URI implements Serializable {
 
     }
 
-    public String queryString() {return uri.contains("?") ? uri.split("\\?")[1] : "";}
+    @NotNull public String queryString() {return uri.contains("?") ? uri.split("\\?")[1] : "";}
 
     public boolean hasSubScheme() {
         final int i = getColonPos();
@@ -217,11 +214,8 @@ public class URI implements Serializable {
 
         final URI oUri = (URI) o;
 
-        if (!uri.equals(oUri.uri)) {
-            return false;
-        }
+        return uri.equals(oUri.uri);
 
-        return true;
     }
 
     @NotNull
@@ -287,7 +281,7 @@ public class URI implements Serializable {
         }
     }
 
-    public String scheme() {
+    @Nullable public String scheme() {
         final String schemeStr = schemeString();
         if (schemeStr == null) {
             throw new DollarException("No scheme.");
@@ -295,7 +289,7 @@ public class URI implements Serializable {
         return schemeStr;
     }
 
-    public URI sub() {
+    @NotNull public URI sub() {
         final int i = getColonPos();
         return new URI(uri.substring(i + 1));
     }
@@ -308,7 +302,7 @@ public class URI implements Serializable {
         }
     }
 
-    public URI withoutFragment() {
+    @NotNull public URI withoutFragment() {
         if (uri.contains("#")) {
             final int i = uri.indexOf('#');
             return new URI(uri.substring(0, i));
@@ -317,7 +311,7 @@ public class URI implements Serializable {
         }
     }
 
-    public URI withoutFragmentOrComment() {
+    @NotNull public URI withoutFragmentOrComment() {
         String newStr = uri;
         if (uri.contains("#")) {
             final int i = uri.indexOf('#');

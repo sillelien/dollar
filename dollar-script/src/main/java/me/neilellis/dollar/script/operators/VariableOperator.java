@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,12 @@ import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.script.UnaryOp;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class VariableOperator extends UnaryOp {
 
 
@@ -37,11 +35,11 @@ public class VariableOperator extends UnaryOp {
 
 
     @Override
-    public var map(var from) {
+    public var map(@NotNull var from) {
 
         var lambda = DollarScriptSupport.wrapReactive(scope, () -> {
             String key = from.$S();
-            boolean numeric = from.isNumber();
+            boolean numeric = from.number();
 
             List<Scope> scopes = new ArrayList<>(scope.getDollarParser().scopes());
             Collections.reverse(scopes);

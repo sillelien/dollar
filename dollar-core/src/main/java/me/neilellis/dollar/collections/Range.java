@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,8 @@
 package me.neilellis.dollar.collections;
 
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public final class Range {
     private final var start;
     private final var finish;
@@ -38,16 +36,15 @@ public final class Range {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
 
         Range range = (Range) o;
 
         if (!finish.equals(range.finish)) { return false; }
-        if (!start.equals(range.start)) { return false; }
+        return start.equals(range.start);
 
-        return true;
     }
 
     public boolean isEmpty() {

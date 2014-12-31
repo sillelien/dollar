@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,6 @@ import java.util.Objects;
 
 import static java.lang.Math.abs;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class DollarInteger extends AbstractDollarSingleValue<Long> {
 
     public DollarInteger(@NotNull ImmutableList<Throwable> errors, @NotNull Long value) {
@@ -57,15 +54,15 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     @Override
     public var $divide(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
-        if (rhsFix.isInfinite()) {
+        if (rhsFix.infinite()) {
             return DollarFactory.fromValue(0, errors(), rhsFix.errors());
-        } else if (rhsFix.isDecimal() && rhsFix.D() != 0.0) {
-            return DollarFactory.fromValue(value.doubleValue() / rhsFix.D(), errors(),
+        } else if (rhsFix.decimal() && rhsFix.toDouble() != 0.0) {
+            return DollarFactory.fromValue(value.doubleValue() / rhsFix.toDouble(), errors(),
                                            rhsFix.errors());
-        } else if (rhsFix.L() == 0) {
-            return DollarFactory.infinity(isPositive(), errors(), rhsFix.errors());
+        } else if (rhsFix.toLong() == 0) {
+            return DollarFactory.infinity(positive(), errors(), rhsFix.errors());
         } else {
-            return DollarFactory.fromValue(value / rhsFix.L(), errors(), rhsFix.errors());
+            return DollarFactory.fromValue(value / rhsFix.toLong(), errors(), rhsFix.errors());
         }
     }
 
@@ -73,48 +70,36 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     @Override
     public var $modulus(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
-        if (rhsFix.isInfinite()) {
-            return DollarFactory.infinity(isPositive(), errors(), rhsFix.errors());
+        if (rhsFix.infinite()) {
+            return DollarFactory.infinity(positive(), errors(), rhsFix.errors());
         }
-        if (rhsFix.isZero()) {
-            return DollarFactory.infinity(isPositive(), errors(), rhsFix.errors());
+        if (rhsFix.zero()) {
+            return DollarFactory.infinity(positive(), errors(), rhsFix.errors());
         }
-        if (rhsFix.isDecimal()) {
-            return DollarFactory.fromValue(value.doubleValue() % rhsFix.D(), errors(),
+        if (rhsFix.decimal()) {
+            return DollarFactory.fromValue(value.doubleValue() % rhsFix.toDouble(), errors(),
                                            rhsFix.errors());
         } else {
-            return DollarFactory.fromValue(value % rhsFix.L(), errors(), rhsFix.errors());
+            return DollarFactory.fromValue(value % rhsFix.toLong(), errors(), rhsFix.errors());
         }
     }
 
     @NotNull
     @Override
     public var $multiply(@NotNull var newValue) {
-        if (newValue.isInfinite()) {
+        if (newValue.infinite()) {
             return newValue.$multiply(this);
         }
-        if (newValue.isZero()) {
+        if (newValue.zero()) {
             return DollarFactory.fromValue(0, errors(), newValue.errors());
         }
 
-        if (newValue.isDecimal()) {
-            return DollarFactory.fromValue(value.doubleValue() * newValue.D(), errors(),
+        if (newValue.decimal()) {
+            return DollarFactory.fromValue(value.doubleValue() * newValue.toDouble(), errors(),
                                            newValue.errors());
         } else {
-            return DollarFactory.fromValue(value * newValue.L(), errors(), newValue.errors());
+            return DollarFactory.fromValue(value * newValue.toLong(), errors(), newValue.errors());
         }
-    }
-
-    @Override
-    @NotNull
-    public Integer I() {
-        return value.intValue();
-    }
-
-    @NotNull
-    @Override
-    public Number N() {
-        return value;
     }
 
     @Override public int sign() {
@@ -122,12 +107,24 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     }
 
     @Override
-    public var $as(Type type) {
+    @NotNull
+    public Integer toInteger() {
+        return value.intValue();
+    }
+
+    @NotNull
+    @Override
+    public Number toNumber() {
+        return value;
+    }
+
+    @Override
+    public var $as(@NotNull Type type) {
 
         if (type.equals(Type.BOOLEAN)) {
             return DollarStatic.$(value != 0);
         } else if (type.equals(Type.STRING)) {
-            return DollarStatic.$(S());
+            return DollarStatic.$(toHumanString());
         } else if (type.equals(Type.LIST)) {
             return DollarStatic.$(Arrays.asList(this));
         } else if (type.equals(Type.MAP)) {
@@ -159,82 +156,38 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
 
     @NotNull
     @Override
-    public var $plus(var rhs) {
+    public var $plus(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
-        if (rhsFix.isInfinite()) {
+        if (rhsFix.infinite()) {
             return rhsFix;
         }
-        if (rhsFix.isDecimal()) {
-            return DollarFactory.fromValue(value.doubleValue() + rhsFix.D(), errors(),
+        if (rhsFix.decimal()) {
+            return DollarFactory.fromValue(value.doubleValue() + rhsFix.toDouble(), errors(),
                                            rhsFix.errors());
-        } else if (rhsFix.isList()) {
+        } else if (rhsFix.list()) {
             return DollarFactory.fromValue(rhsFix.$prepend(this), errors(), rhsFix.errors());
-        } else if (rhsFix.isRange()) {
+        } else if (rhsFix.range()) {
             return DollarFactory.fromValue(rhsFix.$plus(this), errors(), rhsFix.errors());
-        } else if (rhsFix.isString()) {
+        } else if (rhsFix.string()) {
             return DollarFactory.fromValue(toString() + rhsFix.toString(), errors(), rhsFix.errors());
         } else {
-            if (Math.abs(value.longValue()) < Long.MAX_VALUE / 2 && Math.abs(rhsFix.L()) < Long.MAX_VALUE / 2) {
-                return DollarFactory.fromValue(value + rhsFix.L(), errors(), rhsFix.errors());
+            if (Math.abs(value.longValue()) < Long.MAX_VALUE / 2 && Math.abs(rhsFix.toLong()) < Long.MAX_VALUE / 2) {
+                return DollarFactory.fromValue(value + rhsFix.toLong(), errors(), rhsFix.errors());
             } else {
-                final BigDecimal added = new BigDecimal(value).add(new BigDecimal(rhsFix.L()));
+                final BigDecimal added = new BigDecimal(value).add(new BigDecimal(rhsFix.toLong()));
                 if (added.abs().compareTo(new BigDecimal(Long.MAX_VALUE)) == 1) {
                     return DollarFactory.fromValue(added, errors(), rhs.errors());
                 } else {
-                    return DollarFactory.fromValue(value + rhsFix.L(), errors(), rhs.errors());
+                    return DollarFactory.fromValue(value + rhsFix.toLong(), errors(), rhs.errors());
                 }
             }
         }
     }
 
-    @NotNull @Override
-    public Long L() {
-        return value;
-    }
-
-    @NotNull
-    @Override
-    public Double D() {
-        return value.doubleValue();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof var) {
-            var unwrapped = ((var) obj)._unwrap();
-            if (unwrapped instanceof DollarInteger) {
-                return $equals(unwrapped);
-            } else {
-                return value.toString().equals(obj.toString());
-            }
-        } else {
-            return value.toString().equals(obj.toString());
-        }
-    }
-
-    @Override
-    public boolean isDecimal() {
-        return false;
-    }
-
-    @Override
-    public boolean isInteger() {
-        return true;
-    }
-
-    @Override
-    public boolean isNumber() {
-        return true;
-    }
-
-    boolean $equals(var other) {
-        return value.equals(other.L());
-    }
-
     @Override
     public int compareTo(@NotNull var o) {
-        if (o.isNumber()) {
-            return $minus(o).I();
+        if (o.number()) {
+            return $minus(o).toInteger();
         } else {
             return toDollarScript().compareTo(o.toDollarScript());
         }
@@ -261,18 +214,62 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     }
 
     @Override
-    public boolean isNeitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
     public boolean isTrue() {
         return false;
     }
 
     @Override
-    public boolean isTruthy() {
+    public boolean neitherTrueNorFalse() {
+        return true;
+    }
+
+    @Override
+    public boolean truthy() {
         return value != 0;
+    }
+
+    @Override
+    public boolean number() {
+        return true;
+    }
+
+    @Override
+    public boolean decimal() {
+        return false;
+    }
+
+    @Override
+    public boolean integer() {
+        return true;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof var) {
+            var unwrapped = ((var) obj)._unwrap();
+            if (unwrapped instanceof DollarInteger) {
+                return $equals(unwrapped);
+            } else {
+                return value.toString().equals(obj.toString());
+            }
+        } else {
+            return value.toString().equals(obj.toString());
+        }
+    }
+
+    @NotNull @Override
+    public Long toLong() {
+        return value;
+    }
+
+    @NotNull
+    @Override
+    public Double toDouble() {
+        return value.doubleValue();
+    }
+
+    boolean $equals(@NotNull var other) {
+        return value.equals(other.toLong());
     }
 
 }

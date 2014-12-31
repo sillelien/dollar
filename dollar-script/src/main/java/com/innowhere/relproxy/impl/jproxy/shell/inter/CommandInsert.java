@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package com.innowhere.relproxy.impl.jproxy.shell.inter;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * @author jmarranz
  */
@@ -26,7 +28,7 @@ public class CommandInsert extends CommandCodeChangerBase {
         super(parent, NAME, line);
     }
 
-    public static CommandInsert createCommandInsert(JProxyShellProcessor parent, String cmd) {
+    @Nullable public static CommandInsert createCommandInsert(JProxyShellProcessor parent, String cmd) {
         int line = getLineFromParam(parent, NAME, cmd);
         if (line < 0) {
             switch (line) {

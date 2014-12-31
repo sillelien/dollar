@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import com.innowhere.relproxy.impl.jproxy.core.clsmgr.ClassDescriptorSourceUnit;
  * @author jmarranz
  */
 public class JProxyCompilationException extends RelProxyException {
-    protected ClassDescriptorSourceUnit sourceUnit;
+    protected final ClassDescriptorSourceUnit sourceUnit;
 
     public JProxyCompilationException(ClassDescriptorSourceUnit sourceUnit) {
         super("Compilation error");

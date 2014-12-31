@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,30 +18,28 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.SourceValue;
+import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class WriteOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
 
     public WriteOperator(Scope scope) {this.scope = scope;}
 
-    @Override
-    public Map<? super var, ? extends var> map(Token token) {
+    @NotNull @Override
+    public Map<? super var, ? extends var> map(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
         return new Map<var, var>() {
             @Override
-            public var map(var rhs) {
+            public var map(@NotNull var rhs) {
                 return DollarScriptSupport.wrapReactive(scope,
                                                         () -> rhs.$write((var) objects[1],
                                                                          objects[2] != null,
                                                                          objects[3] !=
-                                                                         null), new SourceValue(scope, token),
+                                                                         null), new SourceSegmentValue(scope, token),
                                                         "write:" + objects[2] + ":" + objects[3], (var) objects[1],
                                                         rhs
                 );

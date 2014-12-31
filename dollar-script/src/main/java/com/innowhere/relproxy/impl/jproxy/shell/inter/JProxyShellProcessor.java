@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.innowhere.relproxy.impl.jproxy.core.clsmgr.ClassDescriptorSourceScrip
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.JProxyEngine;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.comp.JProxyCompilationException;
 import com.innowhere.relproxy.impl.jproxy.shell.JProxyShellInteractiveImpl;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.Charset;
 import java.util.*;
@@ -32,10 +33,10 @@ import java.util.*;
 public class JProxyShellProcessor {
     public static final int LINE_OFFSET = 2; // El índice en codeBuffer + este valor = al valor de la línea que se muestra al usuario, hay que tener en cuenta que contamos desde uno y la primera línea es siempre vacía
 
-    protected JProxyShellInteractiveImpl parent;
-    protected Charset encoding = Charset.defaultCharset();
-    protected Keyboard keyboard = Keyboard.create(encoding);
-    protected ArrayList<String> codeBuffer = new ArrayList<String>(20);
+    protected final JProxyShellInteractiveImpl parent;
+    @NotNull protected final Charset encoding = Charset.defaultCharset();
+    @NotNull protected final Keyboard keyboard = Keyboard.create(encoding);
+    @NotNull protected final ArrayList<String> codeBuffer = new ArrayList<>(20);
     protected int lastLine = -1; // Indice respecto a codeBuffer
     protected int lineEditing = -1;  // Indice respecto a codeBuffer
     protected long codeBufferModTimestamp = 0;
@@ -45,28 +46,48 @@ public class JProxyShellProcessor {
         this.parent = parent;
     }
 
-    public Keyboard getKeyboard() {
-        return keyboard;
+    public void clearCodeBuffer() {
+        codeBuffer.clear();
+        this.codeBufferModTimestamp = System.currentTimeMillis();
+        this.lastLine = -1;
     }
 
-    public Charset getEncoding() {
+    public void executeCodeBuffer() {
+        StringBuilder code = new StringBuilder();
+        for (String line : codeBuffer) {
+            code.append(line);
+            code.append("\n");
+        }
+        execute(code.toString());
+    }
+
+    @NotNull public List<String> getCodeBuffer() {
+        return Collections.unmodifiableList(codeBuffer);
+    }
+
+    public void setCodeBuffer(@NotNull LinkedList<String> codeBuffer) {
+        codeBuffer.clear();
+        this.codeBuffer.addAll(codeBuffer);
+        this.codeBufferModTimestamp = System.currentTimeMillis();
+        this.lastLine = codeBuffer.size() - 1;
+    }
+
+    @NotNull public Charset getEncoding() {
         return encoding;
+    }
+
+    @NotNull public Keyboard getKeyboard() {
+        return keyboard;
     }
 
     public int getLastLine() {
         return lastLine;
     }
 
-    public void setLineEditing(int lineEditing) {
-        this.lineEditing = lineEditing;
-    }
-
-    public void test() {
-        try {
-            Thread.sleep(2);
-        } catch (InterruptedException ex) {
-        }
-        execute("System.out.println(\"Hello World\");"); //  "Object o = null; o.equals(null);"    
+    public void insertCodeBuffer(int index, @NotNull String line) {
+        codeBuffer.add(index, line);
+        this.codeBufferModTimestamp = System.currentTimeMillis();
+        this.lastLine = index;
     }
 
     public void loop() {
@@ -89,7 +110,7 @@ public class JProxyShellProcessor {
                     System.out.print(">");
 
                     if (success) {
-                        command.runPostCommand(); // Lo normal es que no haga nada                  
+                        command.runPostCommand(); // Lo normal es que no haga nada
                     }
                 }
             } else {
@@ -105,25 +126,8 @@ public class JProxyShellProcessor {
         }
     }
 
-    public List<String> getCodeBuffer() {
-        return Collections.unmodifiableList(codeBuffer);
-    }
-
-    public void setCodeBuffer(LinkedList<String> codeBuffer) {
-        codeBuffer.clear();
-        this.codeBuffer.addAll(codeBuffer);
-        this.codeBufferModTimestamp = System.currentTimeMillis();
-        this.lastLine = codeBuffer.size() - 1;
-    }
-
-    public void setCodeBuffer(int index, String line) {
+    public void setCodeBuffer(int index, @NotNull String line) {
         codeBuffer.set(index, line);
-        this.codeBufferModTimestamp = System.currentTimeMillis();
-        this.lastLine = index;
-    }
-
-    public void insertCodeBuffer(int index, String line) {
-        codeBuffer.add(index, line);
         this.codeBufferModTimestamp = System.currentTimeMillis();
         this.lastLine = index;
     }
@@ -140,19 +144,16 @@ public class JProxyShellProcessor {
         this.lastLine = -1;  // La hemos eliminado, no existe ya
     }
 
-    public void clearCodeBuffer() {
-        codeBuffer.clear();
-        this.codeBufferModTimestamp = System.currentTimeMillis();
-        this.lastLine = -1;
+    public void setLineEditing(int lineEditing) {
+        this.lineEditing = lineEditing;
     }
 
-    public void executeCodeBuffer() {
-        StringBuilder code = new StringBuilder();
-        for (String line : codeBuffer) {
-            code.append(line);
-            code.append("\n");
+    public void test() {
+        try {
+            Thread.sleep(2);
+        } catch (InterruptedException ex) {
         }
-        execute(code.toString());
+        execute("System.out.println(\"Hello World\");"); //  "Object o = null; o.equals(null);"
     }
 
     private void execute(String code) {
@@ -192,7 +193,7 @@ public class JProxyShellProcessor {
         }
 
         try {
-            classDescSourceScript.callMainMethod(new LinkedList<String>());
+            classDescSourceScript.callMainMethod(new LinkedList<>());
         } catch (Throwable ex) {
             ex.printStackTrace(System.out);
         }

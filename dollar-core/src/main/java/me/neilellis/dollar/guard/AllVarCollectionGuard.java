@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,34 +17,33 @@
 package me.neilellis.dollar.guard;
 
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class AllVarCollectionGuard implements Guard {
-    @Override
+    @NotNull @Override
     public String description() {
         return "All Var Collection Guard";
-    }
-
-    @Override
-    public void preCondition(Object guarded, Method method, Object[] args) {
-        if (args != null) {
-            for (Object arg : args) {
-                if (arg instanceof Collection) {
-                    ((Collection) arg).forEach((i) -> assertTrue(i instanceof var, method));
-                }
-            }
-        }
     }
 
     @Override
     public void postCondition(Object guarded, Method method, Object[] args, Object result) {
         if (result instanceof Collection) {
             ((Collection) result).forEach((i) -> assertTrue(i instanceof var, method));
+        }
+    }
+
+    @Override
+    public void preCondition(Object guarded, Method method, @Nullable Object[] args) {
+        if (args != null) {
+            for (Object arg : args) {
+                if (arg instanceof Collection) {
+                    ((Collection) arg).forEach((i) -> assertTrue(i instanceof var, method));
+                }
+            }
         }
     }
 

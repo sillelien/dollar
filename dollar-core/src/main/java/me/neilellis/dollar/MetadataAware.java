@@ -18,17 +18,30 @@ package me.neilellis.dollar;
 
 /**
  * Metadata is really only for use by the DollarScript language,
- * I wouldn't use this for everyday programming.
+ * Don't use this for Java programming.
  *
  * Once an object is given a value it cannot be changed.
  * Also, very importantly if a method returns an object based on this object the new object
  * may or may not contain the metadata.
  *
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
+ * @author  <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface MetadataAware {
 
-    void setMetaAttribute(String key, String value);
-
+    /**
+     * Gets meta attribute.
+     *
+     * @param key the key
+     *
+     * @return the meta attribute
+     */
     String getMetaAttribute(String key);
+
+    /**
+     * Sets meta attribute.
+     *
+     * @param key   the key
+     * @param value the value
+     */
+    void setMetaAttribute(String key, String value);
 }

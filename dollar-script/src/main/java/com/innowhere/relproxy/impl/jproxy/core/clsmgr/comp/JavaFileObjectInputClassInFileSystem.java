@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 
 package com.innowhere.relproxy.impl.jproxy.core.clsmgr.comp;
+
+import org.jetbrains.annotations.NotNull;
 
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.NestingKind;
@@ -40,6 +42,11 @@ public abstract class JavaFileObjectInputClassInFileSystem implements JavaFileOb
     }
 
     @Override
+    public String getBinaryName() {
+        return binaryName;
+    }
+
+    @NotNull @Override
     public URI toUri() {
         return uri;
     }
@@ -49,27 +56,22 @@ public abstract class JavaFileObjectInputClassInFileSystem implements JavaFileOb
         return name;
     }
 
-    @Override
-    public String getBinaryName() {
-        return binaryName;
-    }
-
-    @Override
+    @NotNull @Override
     public OutputStream openOutputStream() throws IOException {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    @NotNull @Override
     public Reader openReader(boolean ignoreEncodingErrors) throws IOException {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    @NotNull @Override
     public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    @NotNull @Override
     public Writer openWriter() throws IOException {
         throw new UnsupportedOperationException();
     }
@@ -79,25 +81,25 @@ public abstract class JavaFileObjectInputClassInFileSystem implements JavaFileOb
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    @NotNull @Override
     public Kind getKind() {
         return Kind.CLASS;
     }
 
     @Override // copied from SimpleJavaFileManager
-    public boolean isNameCompatible(String simpleName, Kind kind) {
+    public boolean isNameCompatible(String simpleName, @NotNull Kind kind) {
         String baseName = simpleName + kind.extension;
         return kind.equals(getKind())
                 && (baseName.equals(getName())
                 || getName().endsWith("/" + baseName));
     }
 
-    @Override
+    @NotNull @Override
     public NestingKind getNestingKind() {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    @NotNull @Override
     public Modifier getAccessLevel() {
         throw new UnsupportedOperationException();
     }

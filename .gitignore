@@ -9,7 +9,7 @@ target
 hs_err_pid*
 
 
-.idea
+.idea/workspace.xml
 *.iml
 .DS_Store
 

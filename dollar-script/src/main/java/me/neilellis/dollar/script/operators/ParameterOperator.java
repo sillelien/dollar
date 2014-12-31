@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,19 +21,18 @@ import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import static me.neilellis.dollar.DollarStatic.$;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class ParameterOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
     private final DollarParser dollarParser;
-    private boolean pure;
+    private final boolean pure;
 
     public ParameterOperator(DollarParser dollarParser, Scope scope, boolean pure) {
         this.dollarParser = dollarParser;
@@ -41,10 +40,10 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
         this.pure = pure;
     }
 
-    @Override public Map<? super var, ? extends var> map(Token token) {
+    @Nullable @Override public Map<? super var, ? extends var> map(@NotNull Token token) {
         List<var> rhs = (List<var>) token.value();
         return lhs -> {
-            if (!lhs.isLambda()) {
+            if (!lhs.dynamic()) {
                 String lhsString = lhs.toString();
                 if (pure && Builtins.exists(lhsString) && !Builtins.isPure(lhsString)) {
                     throw new DollarScriptException(
@@ -57,7 +56,8 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                                                                 new Function(rhs, lhs, token,
                                                                              constraintSource));
             var lambda =
-                    DollarScriptSupport.toLambda(scope, callable, new SourceValue(scope, token), rhs, "parameter");
+                    DollarScriptSupport.toLambda(scope, callable, new SourceSegmentValue(scope, token), rhs,
+                                                 "parameter");
             //reactive links
             lhs.$listen(i -> lambda.$notify());
             for (var param : rhs) {
@@ -71,7 +71,7 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
         private final List<var> rhs;
         private final var lhs;
         private final Token token;
-        private String constraintSource;
+        private final String constraintSource;
 
         public Function(List<var> rhs, var lhs, Token token, String constraintSource) {
             this.rhs = rhs;
@@ -82,7 +82,7 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
 
         @Override
         public var apply(
-                Scope newScope) {
+                @NotNull Scope newScope) {
             //Add the special $*
             // value for all the
             // parameters
@@ -99,7 +99,7 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                 }
             }
             var result;
-            if (lhs.isLambda()) { result = lhs._fix(2, false); } else {
+            if (lhs.dynamic()) { result = lhs._fix(2, false); } else {
                 String lhsString = lhs.toString();
                 //The lhs is a
                 // string, so
@@ -111,7 +111,7 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                 // it's a variable.
                 if (Builtins.exists(lhsString)) { result = Builtins.execute(lhsString, rhs, newScope, pure); } else {
                     final var valueUnfixed = DollarScriptSupport.getVariable(
-                            pure, newScope, lhsString, false, null, new SourceValue(scope, token));
+                            pure, newScope, lhsString, false, null, new SourceSegmentValue(scope, token));
                     result = valueUnfixed._fix(2, false);
                 }
             }

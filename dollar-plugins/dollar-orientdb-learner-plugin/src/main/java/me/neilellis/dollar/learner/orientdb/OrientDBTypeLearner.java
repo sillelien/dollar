@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,22 +26,20 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
-import me.neilellis.dollar.CountBasedTypePrediction;
 import me.neilellis.dollar.Type;
 import me.neilellis.dollar.TypePrediction;
-import me.neilellis.dollar.script.Source;
+import me.neilellis.dollar.script.SourceSegment;
 import me.neilellis.dollar.script.TypeLearner;
+import me.neilellis.dollar.types.prediction.CountBasedTypePrediction;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class OrientDBTypeLearner implements TypeLearner {
 
     private OServer oServer;
@@ -55,17 +53,8 @@ public class OrientDBTypeLearner implements TypeLearner {
             oServer.startup(OrientDBTypeLearner.class.getResourceAsStream("/orientdb.config.xml"));
             factory = new OrientGraphFactory("plocal:" + orientdb.getAbsolutePath() + "/types");
 
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | ClassNotFoundException
+                | IllegalAccessException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,11 +69,11 @@ public class OrientDBTypeLearner implements TypeLearner {
         }
     }
 
-    @Override public TypeLearner copy() {
+    @NotNull @Override public TypeLearner copy() {
         return this;
     }
 
-    @Override public void learn(String name, Source source, List<var> inputs, Type type) {
+    @Override public void learn(String name, SourceSegment source, @NotNull List<var> inputs, @NotNull Type type) {
         OrientGraph graph = factory.getTx();
         try {
             Vertex operationVertex = createVertex("operation-" + name, graph);
@@ -113,7 +102,7 @@ public class OrientDBTypeLearner implements TypeLearner {
         }
     }
 
-    @Override public TypePrediction predict(String name, Source source, List<var> inputs) {
+    @Nullable @Override public TypePrediction predict(String name, SourceSegment source, @NotNull List<var> inputs) {
         CountBasedTypePrediction prediction = new CountBasedTypePrediction(name);
         OrientGraph graph = factory.getTx();
         try {
@@ -132,7 +121,7 @@ public class OrientDBTypeLearner implements TypeLearner {
                 for (Edge edge : edges) {
                     long countForType = (long) edge.getProperty("count");
                     final String typePrediction = edge.getVertex(Direction.IN).getProperty("type");
-                    prediction.addCount(Type.valueOf(typePrediction), (long) countForType);
+                    prediction.addCount(Type.valueOf(typePrediction), countForType);
                     System.out.println("Count for " +
                                        name +
                                        " type " +
@@ -153,7 +142,23 @@ public class OrientDBTypeLearner implements TypeLearner {
         }
     }
 
-    private Edge createEdge(String name, Vertex src, Vertex dest) {
+    private Vertex createVertex(String name, @NotNull OrientGraph graph) {
+        final Iterable<Vertex> vertices = graph.getVertices("name", name);
+        Vertex vertex;
+        if (vertices.iterator().hasNext()) {
+            vertex = vertices.iterator().next();
+        } else {
+            vertex = graph.addVertex(null, "name", name);
+        }
+        return vertex;
+    }
+
+    @NotNull private static ArrayList<String> perms(@NotNull List<var> inputs) {
+        ArrayList<String> perms = TypeLearner.perms(inputs);
+        return perms;
+    }
+
+    private Edge createEdge(String name, @NotNull Vertex src, Vertex dest) {
         final Iterable<Edge>
                 edges =
                 src.getEdges(Direction.OUT, name);
@@ -168,35 +173,19 @@ public class OrientDBTypeLearner implements TypeLearner {
         return edge;
     }
 
-    public TypePrediction predict(String name, Source source, Object[] args) {
+    @NotNull private static String getEdgeKey(String t) {return "input-" + t;}
+
+    @Nullable public TypePrediction predict(String name, SourceSegment source, Object[] args) {
         List<var> inputs = (List<var>) args[0];
         return predict(name, source, inputs);
     }
 
-    private Vertex createVertex(String name, OrientGraph graph) {
-        final Iterable<Vertex> vertices = graph.getVertices("name", name);
-        Vertex vertex;
-        if (vertices.iterator().hasNext()) {
-            vertex = vertices.iterator().next();
-        } else {
-            vertex = graph.addVertex(null, "name", name);
-        }
-        return vertex;
-    }
-
-    private static ArrayList<String> perms(List<var> inputs) {
-        ArrayList<String> perms = TypeLearner.perms(inputs);
-        return perms;
-    }
-
-    private static String getEdgeKey(String t) {return "input-" + t;}
-
-    @Override public void start() throws Exception {
+    @Override public void start() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         oServer.activate();
 
     }
 
-    @Override public void stop() throws Exception {
+    @Override public void stop() {
         oServer.shutdown();
 
     }

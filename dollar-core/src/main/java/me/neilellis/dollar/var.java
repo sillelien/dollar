@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,12 +28,9 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.stream.Stream;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
-                             OldAndDeprecated, VarInternal, NumericAware, BooleanAware, ControlFlowAware,
-                             AssertionAware, URIAware, MetadataAware, Comparable<var>, LogAware, StateAware<var>,
+                             VarInternal, NumericAware, BooleanAware, ControlFlowAware,
+                             URIAware, MetadataAware, Comparable<var>, LogAware, StateAware<var>,
                              CollectionLike {
 
 
@@ -51,6 +48,26 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
     default var $(@NotNull String key, @Nullable Object value) {
         return $set(DollarStatic.$(key), DollarStatic.$(value));
     }
+
+    /**
+     * Returns the same as toHumanString() but defaults to "" if null and is shorter :-)
+     *
+     * @return a null safe version of toHumanString()
+     */
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    default String $S() {
+        String s = toHumanString();
+        return s == null ? "" : s;
+
+    }
+
+    /**
+     * Converts this value to a human readable string.
+     *
+     * @return the string
+     */
+    String toHumanString();
 
     /**
      * If this is a void object return v otherwise return this.
@@ -89,7 +106,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
     @NotNull Stream<var> $stream(boolean parallel);
 
     /**
-     * Prints the S() value of this {@link var} to standard error.
+     * Prints the toHumanString() value of this {@link var} to standard error.
      *
      * @return this
      */
@@ -116,7 +133,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
     }
 
     /**
-     * Prints the S() value of this {@link var} to standard out.
+     * Prints the toHumanString() value of this {@link var} to standard out.
      */
     @NotNull
     @Guarded(ChainGuard.class)
@@ -125,20 +142,23 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
         return this;
     }
 
+    /**
+     * Convert this value to a DollarScript compatible string value. Note that dynamic values <b>will</b> be executed to provide this. The string only represents the computed value.
+     * @return
+     */
     @NotNull String toDollarScript();
 
     /**
-     * Returns a {@link me.neilellis.dollar.json.JsonObject}, JsonArray or primitive type such that it can be added to
-     * either a {@link me.neilellis.dollar.json.JsonObject} or JsonArray.
+     * Returns the underlying storage value for this type.
      *
-     * @return a Json friendly object.
+     * @return the underlying Java object
      */
     @Nullable <R> R toJavaObject();
 
     /**
      * Returns this object as a org.json.JSONObject.
      *
-     * NB: This conversion is quite efficient.
+     * NB: This conversion is very efficient.
      *
      * @return a JSONObject
      */
@@ -153,15 +173,21 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
     }
 
     /**
-     * Convert this to a Dollar JsonObject
+     * Convert this to a Dollar {@link me.neilellis.dollar.json.JsonObject}
      *
-     * @return this as a JsonObject
+     * @return this as a {@link JsonObject}
      */
-    default @Nullable ImmutableJsonObject toJsonObject() {
+    default @NotNull ImmutableJsonObject toJsonObject() {
         return new ImmutableJsonObject((JsonObject) toJsonType());
     }
 
-    default Object toJsonType() {
+    /**
+     * Returns a {@link me.neilellis.dollar.json.JsonObject}, JsonArray or primitive type such that it can be added to
+     * either a {@link me.neilellis.dollar.json.JsonObject} or JsonArray.
+     *
+     * @return the JSON compatible object
+     */
+    @Nullable default Object toJsonType() {
         return DollarFactory.toJson(this);
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,40 +24,37 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 @SuppressWarnings("SuspiciousMethodCalls") public final class ImmutableMap<K extends Comparable<K>, V> implements
                                                                                                        Iterable<Map
                                                                                                                .Entry<K, V>> {
 
     private final Map<K, V> map = new LinkedHashMap<>();
 
-    public static <K extends Comparable<K>, V> ImmutableMap<K, V> of(K key, V value) {
+    @NotNull public static <K extends Comparable<K>, V> ImmutableMap<K, V> of(K key, V value) {
         ImmutableMap<K, V> immutableMap = new ImmutableMap<>();
         immutableMap.map.put(key, value);
         return immutableMap;
     }
 
-    public static <K extends Comparable<K>, V> ImmutableMap<K, V> copyOf(Map<K, V> m) {
+    @NotNull public static <K extends Comparable<K>, V> ImmutableMap<K, V> copyOf(@NotNull Map<K, V> m) {
         ImmutableMap<K, V> immutableMap = new ImmutableMap<>();
         immutableMap.map.putAll(m);
         return immutableMap;
     }
 
-    public static <K extends Comparable<K>,V> ImmutableMap<K, V> of() {
+    @NotNull public static <K extends Comparable<K>, V> ImmutableMap<K, V> of() {
         return new ImmutableMap<>();
     }
 
-    public V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+    public V compute(K key, @NotNull BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
         return map.compute(key, remappingFunction);
     }
 
-    public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
+    public V computeIfAbsent(K key, @NotNull Function<? super K, ? extends V> mappingFunction) {
         return map.computeIfAbsent(key, mappingFunction);
     }
 
-    public V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+    public V computeIfPresent(K key, @NotNull BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
         return map.computeIfPresent(key, remappingFunction);
     }
 
@@ -69,11 +66,11 @@ import java.util.function.Function;
         return map.containsValue(value);
     }
 
-    public Set<Map.Entry<K, V>> entrySet() {
+    @NotNull public Set<Map.Entry<K, V>> entrySet() {
         return map.entrySet();
     }
 
-    public void forEach(BiConsumer<? super K, ? super V> action) {
+    public void forEach(@NotNull BiConsumer<? super K, ? super V> action) {
         map.forEach(action);
     }
 
@@ -106,7 +103,7 @@ import java.util.function.Function;
     }
 
     @Override
-    public void forEach(Consumer<? super Map.Entry<K, V>> action) {
+    public void forEach(@NotNull Consumer<? super Map.Entry<K, V>> action) {
         map.entrySet().forEach(action);
     }
 
@@ -117,11 +114,11 @@ import java.util.function.Function;
         return map.entrySet().spliterator();
     }
 
-    public Set<K> keySet() {
+    @NotNull public Set<K> keySet() {
         return map.keySet();
     }
 
-    public Map<K, V> mutable() {
+    @NotNull public Map<K, V> mutable() {
         return new LinkedHashMap<>(map);
     }
 
@@ -129,7 +126,7 @@ import java.util.function.Function;
         return map.size();
     }
 
-    public Collection<V> values() {
+    @NotNull public Collection<V> values() {
         return map.values();
     }
 }

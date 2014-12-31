@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package com.innowhere.relproxy.impl.jproxy.shell.inter;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author jmarranz
  */
@@ -28,14 +30,14 @@ public abstract class CommandCodeChangerBase extends Command {
     public static final int ERROR_OUT_OF_RANGE = -6;
 
 
-    protected int line;
+    protected final int line;
 
     public CommandCodeChangerBase(JProxyShellProcessor parent, String name, int line) {
         super(parent, name);
         this.line = line;
     }
 
-    public static int getLineFromParam(JProxyShellProcessor parent, String name, String cmd) {
+    public static int getLineFromParam(@NotNull JProxyShellProcessor parent, String name, @NotNull String cmd) {
         String param = getParameter(name, cmd);
         if (param == null) {
             return ERROR_LAST_REQUIRED;

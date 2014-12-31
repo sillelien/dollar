@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import com.innowhere.relproxy.impl.jproxy.core.clsmgr.SourceScript;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.SourceScriptInMemory;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.comp.JProxyCompilationException;
 import com.innowhere.relproxy.impl.jproxy.shell.JProxyShellClassLoader;
+import org.jetbrains.annotations.NotNull;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptException;
@@ -34,12 +35,12 @@ import java.io.File;
  * @author jmarranz
  */
 public class JProxyScriptEngineDelegateImpl extends JProxyImpl {
-    protected JProxyScriptEngineImpl parent;
-    protected ClassDescriptorSourceScript classDescSourceScript;
+    protected final JProxyScriptEngineImpl parent;
+    protected final ClassDescriptorSourceScript classDescSourceScript;
     protected long codeBufferModTimestamp = 0;
     protected long lastCodeCompiledTimestamp = 0;
 
-    public JProxyScriptEngineDelegateImpl(JProxyScriptEngineImpl parent, JProxyConfigImpl config) {
+    public JProxyScriptEngineDelegateImpl(JProxyScriptEngineImpl parent, @NotNull JProxyConfigImpl config) {
         this.parent = parent;
 
         SourceScript sourceFileScript = SourceScriptInMemory.createSourceScriptInMemory("");
@@ -50,15 +51,6 @@ public class JProxyScriptEngineDelegateImpl extends JProxyImpl {
             classLoader = new JProxyShellClassLoader(getDefaultClassLoader(), new File(classFolder));
 
         this.classDescSourceScript = init(config, sourceFileScript, classLoader);
-    }
-
-    @Override
-    public Class getMainParamClass() {
-        return ScriptContext.class;
-    }
-
-    private SourceScriptInMemory getSourceScriptInMemory() {
-        return (SourceScriptInMemory) classDescSourceScript.getSourceScript();
     }
 
     public Object execute(String code, ScriptContext context) throws ScriptException {
@@ -103,5 +95,14 @@ public class JProxyScriptEngineDelegateImpl extends JProxyImpl {
             Exception ex2 = (ex instanceof Exception) ? (Exception) ex : new RelProxyException(ex);
             throw new ScriptException(ex2);
         }
+    }
+
+    @NotNull private SourceScriptInMemory getSourceScriptInMemory() {
+        return (SourceScriptInMemory) classDescSourceScript.getSourceScript();
+    }
+
+    @NotNull @Override
+    public Class getMainParamClass() {
+        return ScriptContext.class;
     }
 }

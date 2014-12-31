@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.innowhere.relproxy.impl.jproxy.shell;
 
 import com.innowhere.relproxy.RelProxyException;
 import com.innowhere.relproxy.impl.jproxy.core.clsmgr.ClassDescriptor;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -28,11 +29,11 @@ import java.net.URLClassLoader;
  * @author jmarranz
  */
 public class JProxyShellClassLoader extends URLClassLoader {
-    public JProxyShellClassLoader(ClassLoader parent, File classFolder) {
+    public JProxyShellClassLoader(ClassLoader parent, @NotNull File classFolder) {
         super(toURLArray(classFolder), parent);
     }
 
-    private static URL[] toURLArray(File file) {
+    @NotNull private static URL[] toURLArray(@NotNull File file) {
         try {
             return new URL[]{file.toURI().toURL()};
         } catch (MalformedURLException ex) {
@@ -40,21 +41,21 @@ public class JProxyShellClassLoader extends URLClassLoader {
         }
     }
 
-    @Override
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
-        return super.findClass(name);
-    }
-
-    @Override
-    protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-        return super.loadClass(name, resolve);
-    }
-
-    public synchronized Class defineClass(ClassDescriptor classDesc) {
+    public synchronized Class defineClass(@NotNull ClassDescriptor classDesc) {
         String className = classDesc.getClassName();
         byte[] classBytes = classDesc.getClassBytes();
         Class clasz = defineClass(className, classBytes, 0, classBytes.length);
         classDesc.setLastLoadedClass(clasz);
         return clasz;
+    }
+
+    @NotNull @Override
+    protected Class<?> findClass(@NotNull String name) throws ClassNotFoundException {
+        return super.findClass(name);
+    }
+
+    @Override
+    protected synchronized Class<?> loadClass(@NotNull String name, boolean resolve) throws ClassNotFoundException {
+        return super.loadClass(name, resolve);
     }
 }

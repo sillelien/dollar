@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,25 @@
 
 package com.innowhere.relproxy.impl.jproxy.core.clsmgr;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 
 /**
  * @author jmarranz
  */
 public class ClassDescriptorSourceFileJava extends ClassDescriptorSourceUnit {
-    public ClassDescriptorSourceFileJava(JProxyEngine engine, String className, SourceFileJavaNormal sourceFile, long timestamp) {
+    public ClassDescriptorSourceFileJava(JProxyEngine engine, @NotNull String className,
+                                         SourceFileJavaNormal sourceFile, long timestamp) {
         super(engine, className, sourceFile, timestamp);
-    }
-
-    public SourceFileJavaNormal getSourceFileJavaNormal() {
-        return (SourceFileJavaNormal) sourceFile;
     }
 
     public File getSourceFile() {
         return getSourceFileJavaNormal().getFile();
+    }
+
+    @NotNull public SourceFileJavaNormal getSourceFileJavaNormal() {
+        return (SourceFileJavaNormal) sourceFile;
     }
 
 }

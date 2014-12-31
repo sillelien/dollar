@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import me.neilellis.dollar.Type;
 import me.neilellis.dollar.TypePrediction;
 import me.neilellis.dollar.plugin.ExtensionPoint;
 import me.neilellis.dollar.var;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,12 +28,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public interface TypeLearner extends ExtensionPoint<TypeLearner> {
 
-    static ArrayList<String> perms(List<var> inputs) {
+    @NotNull static ArrayList<String> perms(@NotNull List<var> inputs) {
         ArrayList<String> perms = new ArrayList<>();
         boolean first = true;
         for (var input : inputs) {
@@ -59,8 +57,8 @@ public interface TypeLearner extends ExtensionPoint<TypeLearner> {
         return perms;
     }
 
-    void learn(String name, Source source, List<var> inputs, Type type);
+    void learn(String name, SourceSegment source, List<var> inputs, Type type);
 
-    TypePrediction predict(String name, Source source, List<var> inputs);
+    TypePrediction predict(String name, SourceSegment source, List<var> inputs);
 
 }

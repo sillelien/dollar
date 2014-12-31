@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,15 @@
 
 package me.neilellis.dollar.guard;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class SetKeyValueGuard implements Guard {
-    @Override
+    @NotNull @Override
     public String description() {
         return "Set K/V Guard";
-    }
-
-    @Override
-    public void preCondition(Object guarded, Method method, Object[] args) {
-
-        assertNotNull("first parameter ", args[0], method);
     }
 
     @Override
@@ -39,6 +32,12 @@ public class SetKeyValueGuard implements Guard {
         if (result instanceof Collection) {
             assertNotNull("return value", result, method);
         }
+    }
+
+    @Override
+    public void preCondition(Object guarded, Method method, Object[] args) {
+
+        assertNotNull("first parameter ", args[0], method);
     }
 
 }

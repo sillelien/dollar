@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,13 @@
 
 package me.neilellis.dollar.collections;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public interface MultiMap<K, V> extends Map<K, V>, Cloneable, Serializable {
     /**
      * Checks whether the map contains the value specified. <p> This checks all collections against all keys for the
@@ -36,7 +35,7 @@ public interface MultiMap<K, V> extends Map<K, V>, Cloneable, Serializable {
     boolean containsValue(Object value);
 
     /**
-     * Adds the value to the collection associated with the specified key. <p> Unlike a normal <code>Map</code> the
+     * Adds the value to the collection associated with the specified key. <p> Unlike a normal {@code Map} the
      * previous value is not replaced. Instead the new value is added to the collection stored against the key.
      *
      * @param key   the key to store against
@@ -57,12 +56,12 @@ public interface MultiMap<K, V> extends Map<K, V>, Cloneable, Serializable {
      *
      * @return a collection view of the values contained in this map
      */
-    Collection values();
+    @NotNull Collection values();
 
     /**
      * Removes a specific value from map. <p> The item is removed from the collection mapped to the specified key. Other
-     * values attached to that key are unaffected. <p> If the last value for a key is removed, <code>null</code> will be
-     * returned from a subsequant <code>get(key)</code>.
+     * values attached to that key are unaffected. <p> If the last value for a key is removed, {@code null} will be
+     * returned from a subsequant {@code get(key)}.
      *
      * @param key  the key to remove from
      * @param item the value to remove
@@ -86,7 +85,7 @@ public interface MultiMap<K, V> extends Map<K, V>, Cloneable, Serializable {
 
     /**
      * Gets the collection mapped to the specified key. This method is a convenience method to typecast the result of
-     * <code>get(key)</code>.
+     * {@code get(key)}.
      *
      * @param key the key to retrieve
      *

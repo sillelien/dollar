@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,18 @@ package me.neilellis.dollar.script.operators;
 import me.neilellis.dollar.script.DollarParser;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.SourceValue;
+import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
+import org.jetbrains.annotations.NotNull;
 
 import static me.neilellis.dollar.DollarStatic.fix;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class ForOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
     private final DollarParser dollarParser;
-    private boolean pure;
+    private final boolean pure;
 
     public ForOperator(DollarParser dollarParser, Scope scope, boolean pure) {
         this.dollarParser = dollarParser;
@@ -40,19 +38,20 @@ public class ForOperator implements Map<Token, Map<? super var, ? extends var>> 
         this.pure = pure;
     }
 
-    public Map<? super var, ? extends var> map(Token token) {
+    public Map<? super var, ? extends var> map(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
         String constraintSource = null;
         return rhs -> {
             return DollarScriptSupport.wrapReactive(scope, () -> {
                 return dollarParser.inScope(pure, "for", scope, newScope -> {
                     return ((var) objects[3]).$each(i -> {
-                        newScope.set(objects[1].toString(), fix(i, false), false, null, constraintSource, false, false,
+                        newScope.set(objects[1].toString(), fix(i[0], false), false, null, constraintSource, false,
+                                     false,
                                      pure);
                         return rhs._fixDeep(false);
                     });
                 });
-            }, new SourceValue(scope, token), "for", rhs);
+            }, new SourceSegmentValue(scope, token), "for", rhs);
         };
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class CamelURIHandlerFactoryTest {
 
 
     @Test
-    public void testDispatch() throws Exception {
+    public void testDispatch() {
 
     }
 
@@ -48,8 +48,8 @@ public class CamelURIHandlerFactoryTest {
         final URIHandler camelIntegrationProvider = camelURIHandlerFactory.forURI("camel", URI.parse(vmListenURI));
         camelIntegrationProvider.subscribe((value) -> {
             try {
-                System.out.println("***: " + value);
-                assertEquals("Listen Test", value.toString());
+                System.out.println("***: " + value[0]);
+                assertEquals("Listen Test", value[0].toString());
                 countDownLatch.countDown();
                 return $void();
             } catch (Exception e) {
@@ -64,7 +64,7 @@ public class CamelURIHandlerFactoryTest {
     }
 
     @Test
-    public void testPoll() throws Exception {
+    public void testPoll() {
         CamelURIHandlerFactory camelURIHandlerFactory = new CamelURIHandlerFactory();
         final var page = camelURIHandlerFactory.forURI("camel", URI.parse("camel:http://google.com")).read(true,
                                                                                                            false);
@@ -72,7 +72,7 @@ public class CamelURIHandlerFactoryTest {
     }
 
     @Test
-    public void testPublish() throws Exception {
+    public void testPublish() {
 
     }
 
@@ -81,7 +81,7 @@ public class CamelURIHandlerFactoryTest {
         CamelContext context = new DefaultCamelContext();
         RouteBuilder routeBuilder = new RouteBuilder() {
             @Override
-            public void configure() throws Exception {
+            public void configure() {
                 from("direct-vm:test").process((e) -> {
                     e.getOut().setBody("RESULT");
                 });
@@ -102,7 +102,7 @@ public class CamelURIHandlerFactoryTest {
     }
 
     @Test
-    public void testWrite() throws Exception {
+    public void testWrite() {
 
     }
 

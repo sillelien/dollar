@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +18,18 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.script.Operator;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.Source;
+import me.neilellis.dollar.script.SourceSegment;
 import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
+import org.jetbrains.annotations.NotNull;
 
 import static me.neilellis.dollar.DollarStatic.fix;
 import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactive;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class SubscribeOperator implements Binary<var>, Operator {
     private final Scope scope;
-    private Source source;
-    private boolean pure;
+    private final boolean pure;
+    private SourceSegment source;
 
 
     public SubscribeOperator(Scope scope, boolean pure) {
@@ -41,11 +39,11 @@ public class SubscribeOperator implements Binary<var>, Operator {
 
 
     @Override
-    public var map(var lhs, var rhs) {
+    public var map(@NotNull var lhs, var rhs) {
 
         return wrapReactive(scope, () -> lhs.$subscribe(
                                     i -> scope.getDollarParser().inScope(pure, "subscribe", scope, newScope -> {
-                                        final var it = fix(i, false);
+                                        final var it = fix(i[0], false);
                                         scope.getDollarParser().currentScope().setParameter("1", it);
                                         scope.getDollarParser().currentScope().setParameter("it", it);
                                         return fix(rhs, false);
@@ -55,7 +53,7 @@ public class SubscribeOperator implements Binary<var>, Operator {
     }
 
     @Override
-    public void setSource(Source source) {
+    public void setSource(SourceSegment source) {
         this.source = source;
     }
 }
