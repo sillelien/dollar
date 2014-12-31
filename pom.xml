@@ -27,7 +27,7 @@
         <httpclient.version>4.3.4</httpclient.version>
         <jackson.version>2.3.3</jackson.version>
         <orientdb.version>1.7.6</orientdb.version>
-        <maven.version>3.2.5</maven.version>
+        <maven.version>3.2.1</maven.version>
         <slf4j.version>1.7.7</slf4j.version>
     </properties>
 
@@ -233,6 +233,10 @@
                 <artifactId>jcabi-aether</artifactId>
                 <version>0.10.1</version>
                 <exclusions>
+                    <exclusion>
+                        <groupId>org.eclipse.aether</groupId>
+                        <artifactId>aether-util</artifactId>
+                    </exclusion>
                     <exclusion>
                         <groupId>org.apache.maven</groupId>
                         <artifactId>maven-aether-provider</artifactId>
