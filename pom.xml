@@ -27,7 +27,7 @@
         <httpclient.version>4.3.4</httpclient.version>
         <jackson.version>2.3.3</jackson.version>
         <orientdb.version>1.7.6</orientdb.version>
-        <maven.version>3.0.5</maven.version>
+        <maven.version>3.2.5</maven.version>
         <slf4j.version>1.7.7</slf4j.version>
     </properties>
 
@@ -37,7 +37,7 @@
     <packaging>pom</packaging>
 
     <name>Dollar</name>
-    <description>Lightweight, dynamic data oriented Java</description>
+    <description>Lightweight, dynamic programming on the JVM</description>
     <ciManagement>
         <url>https://circleci.com/gh/neilellis/dollar/tree/master</url>
     </ciManagement>
@@ -51,7 +51,7 @@
                 <role>developer</role>
             </roles>
             <timezone>GMT</timezone>
-            <email>neil@cazcade.com</email>
+            <email>hello@neilellis.me</email>
         </developer>
     </developers>
 
@@ -220,12 +220,23 @@
                 <groupId>org.apache.maven</groupId>
                 <artifactId>maven-core</artifactId>
                 <version>${maven.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.codehaus.plexus</groupId>
+                        <artifactId>plexus-classworlds</artifactId>
+                    </exclusion>
+
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>com.jcabi</groupId>
                 <artifactId>jcabi-aether</artifactId>
                 <version>0.10.1</version>
                 <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.maven</groupId>
+                        <artifactId>maven-aether-provider</artifactId>
+                    </exclusion>
                     <exclusion>
                         <groupId>org.codehaus.plexus</groupId>
                         <artifactId>plexus-utils</artifactId>
@@ -258,6 +269,18 @@
                         <groupId>org.aspectj</groupId>
                         <artifactId>aspectjrt</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.maven</groupId>
+                        <artifactId>maven-model</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.maven</groupId>
+                        <artifactId>maven-artifact</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.codehaus.plexus</groupId>
+                        <artifactId>plexus-classworlds</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -279,6 +302,12 @@
                 <groupId>org.sonatype.sisu</groupId>
                 <artifactId>sisu-inject-plexus</artifactId>
                 <version>2.3.0</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.codehaus.plexus</groupId>
+                        <artifactId>plexus-classworlds</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>com.jcabi</groupId>
@@ -455,7 +484,75 @@
     <!-- mvn surefire-report:report -->
     <reporting>
         <plugins>
-
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>clirr-maven-plugin</artifactId>
+                <version>2.6.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.14</version>
+                <configuration>
+                    <aggregate>true</aggregate>
+                </configuration>
+            </plugin>
+            <!--<plugin>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-jxr-plugin</artifactId>-->
+            <!--<version>2.1</version>-->
+            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.7</version>
+                <!--<reportSets>-->
+                <!--<reportSet>-->
+                <!--<reports>-->
+                <!--<report>project-team</report>-->
+                <!--<report>mailing-list</report>-->
+                <!--<report>issue-tracking</report>-->
+                <!--<report>license</report>-->
+                <!--<report>scm</report>-->
+                <!--<report>index</report>-->
+                <!--<report>summary</report>-->
+                <!--<report>cim</report>-->
+                <!--<report>plugins</report>-->
+                <!--</reports>-->
+                <!--</reportSet>-->
+                <!--</reportSets>-->
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-changes-plugin</artifactId>
+                <version>2.11</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>changes-report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-changelog-plugin</artifactId>
+                <version>2.3</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <xmlOutput>true</xmlOutput>
+                    <!-- Optional directory to put findbugs xdoc xml report -->
+                    <xmlOutputDirectory>target/site</xmlOutputDirectory>
+                </configuration>
+            </plugin>
         </plugins>
     </reporting>
 
@@ -581,7 +678,7 @@
                         <param>org.apache.httpcomponents:httpclient:4.3.4</param>
                         <param>org.apache.httpcomponents:httpmime:4.3.4</param>
                         <param>org.apache.maven.wagon:wagon-provider-api:2.4</param>
-                        <param>org.apache.maven:maven-core:3.0.5</param>
+                        <param>org.apache.maven:maven-core:${maven.version}</param>
                         <param>org.codehaus.plexus:plexus-utils:3.0.15</param>
                         <param>org.json:json:20140107</param>
                         <param>org.slf4j:slf4j-api:1.7.7</param>
@@ -790,86 +887,10 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <reportPlugins>
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>clirr-maven-plugin</artifactId>
-                            <version>2.6.1</version>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-report-plugin</artifactId>
-                            <version>2.14</version>
-                            <configuration>
-                                <aggregate>true</aggregate>
-                            </configuration>
-                        </plugin>
-                        <!--<plugin>-->
-                        <!--<groupId>org.apache.maven.plugins</groupId>-->
-                        <!--<artifactId>maven-jxr-plugin</artifactId>-->
-                        <!--<version>2.1</version>-->
-                        <!--</plugin>-->
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-project-info-reports-plugin</artifactId>
-                            <version>2.7</version>
-                            <!--<reportSets>-->
-                            <!--<reportSet>-->
-                            <!--<reports>-->
-                            <!--<report>project-team</report>-->
-                            <!--<report>mailing-list</report>-->
-                            <!--<report>issue-tracking</report>-->
-                            <!--<report>license</report>-->
-                            <!--<report>scm</report>-->
-                            <!--<report>index</report>-->
-                            <!--<report>summary</report>-->
-                            <!--<report>cim</report>-->
-                            <!--<report>plugins</report>-->
-                            <!--</reports>-->
-                            <!--</reportSet>-->
-                            <!--</reportSets>-->
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-changes-plugin</artifactId>
-                            <version>2.11</version>
-                            <reportSets>
-                                <reportSet>
-                                    <reports>
-                                        <report>changes-report</report>
-                                    </reports>
-                                </reportSet>
-                            </reportSets>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-changelog-plugin</artifactId>
-                            <version>2.3</version>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>taglist-maven-plugin</artifactId>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>findbugs-maven-plugin</artifactId>
-                            <version>3.0.0</version>
-                            <configuration>
-                                <xmlOutput>true</xmlOutput>
-                                <!-- Optional directory to put findbugs xdoc xml report -->
-                                <xmlOutputDirectory>target/site</xmlOutputDirectory>
-                            </configuration>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>cobertura-maven-plugin</artifactId>
-                            <version>2.5.1</version>
-                            <configuration>
-                                <aggregate>true</aggregate>
-                                <outputDirectory>%{project.reporting.outputDirectory}/cobertura</outputDirectory>
-                            </configuration>
-                        </plugin>
-                    </reportPlugins>
+                    <!--<reportPlugins>-->
+
+
+                    <!--</reportPlugins>-->
                     <locales>en</locales>
                 </configuration>
                 <dependencies>
@@ -905,11 +926,11 @@
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.1</version>
             </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.2.201409121644</version>
-            </plugin>
+            <!--<plugin>-->
+            <!--<groupId>org.jacoco</groupId>-->
+            <!--<artifactId>jacoco-maven-plugin</artifactId>-->
+            <!--<version>0.7.2.201409121644</version>-->
+            <!--</plugin>-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>clirr-maven-plugin</artifactId>
