@@ -34,7 +34,7 @@
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-runtime</artifactId>
-            <version>0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

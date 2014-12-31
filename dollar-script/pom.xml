@@ -31,7 +31,7 @@
         <dependency>
             <artifactId>dollar-std-resources-plugins</artifactId>
             <groupId>me.neilellis</groupId>
-            <version>0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -41,30 +41,30 @@
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-core</artifactId>
-            <version>0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-camel-plugin</artifactId>
-            <version>0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-redis-plugin</artifactId>
-            <version>0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-http-plugin</artifactId>
-            <version>0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-metrics-plugin</artifactId>
-            <version>0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
