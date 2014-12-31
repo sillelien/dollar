@@ -30,19 +30,19 @@
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-core</artifactId>
-            <version>0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-script</artifactId>
-            <version>0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-resolver</artifactId>
-            <version>0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.kohsuke</groupId>
