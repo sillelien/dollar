@@ -694,8 +694,6 @@
                             <shadedPattern>me.neilellis.dollar.r${buildNumber}</shadedPattern>
                             <excludes>
                                 <exclude>me.neilellis.dollar.api.**</exclude>
-                            </excludes>
-                            <excludes>
                                 <exclude>me.neilellis.dollar.main.**</exclude>
                             </excludes>
                         </relocation>
