@@ -16,18 +16,18 @@
 
 package me.neilellis.dollar.script.operators;
 
-import me.neilellis.dollar.Type;
+import me.neilellis.dollar.api.Type;
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.script.SourceSegmentValue;
-import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.api.DollarStatic.$;
 
 public class IsOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;

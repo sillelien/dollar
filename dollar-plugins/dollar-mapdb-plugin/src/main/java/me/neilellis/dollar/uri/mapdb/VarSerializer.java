@@ -16,9 +16,9 @@
 
 package me.neilellis.dollar.uri.mapdb;
 
-import me.neilellis.dollar.Type;
-import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.Type;
+import me.neilellis.dollar.api.types.DollarFactory;
+import me.neilellis.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mapdb.Serializer;
@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Objects;
 
-import static me.neilellis.dollar.DollarStatic.$void;
+import static me.neilellis.dollar.api.DollarStatic.$void;
 
 public class VarSerializer implements Serializer<var>, Serializable {
     @Override public void serialize(@NotNull DataOutput out, @Nullable var value) throws IOException {

@@ -17,7 +17,9 @@
 package me.neilellis.dollar;
 
 
-import me.neilellis.dollar.json.JsonArray;
+import me.neilellis.dollar.api.DollarStatic;
+import me.neilellis.dollar.api.json.JsonArray;
+import me.neilellis.dollar.api.var;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -32,7 +34,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Function;
 
-import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.api.DollarStatic.$;
 import static me.neilellis.dollar.test.TestGenerator.*;
 import static org.junit.Assert.fail;
 

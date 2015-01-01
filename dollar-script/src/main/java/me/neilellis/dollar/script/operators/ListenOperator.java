@@ -16,18 +16,18 @@
 
 package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.api.script.SourceSegment;
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Operator;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.SourceSegment;
-import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
-import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.api.DollarStatic.$;
 
 public class ListenOperator implements Binary<var>, Operator {
     private final Scope scope;

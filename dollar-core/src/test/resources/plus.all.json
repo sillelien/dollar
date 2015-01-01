@@ -20618,7 +20618,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+    "EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
   ],
   [
     "@",
@@ -21146,7 +21146,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "@EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+    "@EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
   ],
   [
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
@@ -21674,7 +21674,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
   ],
   [
     "@@ @@ @@@ @@ @@ @@",
@@ -22202,7 +22202,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "@@ @@ @@@ @@ @@ @@EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+    "@@ @@ @@@ @@ @@ @@EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
   ],
   [
     " ",
@@ -22730,7 +22730,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    " EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+    " EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
   ],
   [
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
@@ -23258,7 +23258,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
   ],
   [
     "\n\t\r",
@@ -23786,7 +23786,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "\n\t\rEXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+    "\n\t\rEXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
   ],
   [
     "1",
@@ -24314,7 +24314,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "1EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+    "1EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
   ],
   [
     "true",
@@ -24842,7 +24842,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "trueEXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+    "trueEXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
   ],
   [
     "false",
@@ -25370,7 +25370,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "falseEXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+    "falseEXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
   ],
   [
     "0",
@@ -25898,7 +25898,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "0EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+    "0EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
   ],
   [
     true,
@@ -52464,8 +52464,8 @@
     },
     {
       "$type": "RANGE",
-      "lower": "aEXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]",
-      "upper": "zEXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+      "lower": "aEXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]",
+      "upper": "zEXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
     }
   ],
   [
@@ -53568,8 +53568,8 @@
     },
     {
       "$type": "RANGE",
-      "lower": "@EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]",
-      "upper": "EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+      "lower": "@EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]",
+      "upper": "EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
     }
   ],
   [
@@ -54672,8 +54672,8 @@
     },
     {
       "$type": "RANGE",
-      "lower": "zEXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]",
-      "upper": "aEXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+      "lower": "zEXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]",
+      "upper": "aEXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
     }
   ],
   [
@@ -58184,7 +58184,7 @@
       }
     },
     {
-      "7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb": {
+      "dbfded4479a78af943d9646ff530ac6adebd942ef9b7cc7afc8963bf09b01c43": {
         "$type": "ERROR",
         "value": {
           "errorType": "EXCEPTION",
@@ -59215,7 +59215,7 @@
     },
     {
       "1": "one",
-      "7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb": {
+      "dbfded4479a78af943d9646ff530ac6adebd942ef9b7cc7afc8963bf09b01c43": {
         "$type": "ERROR",
         "value": {
           "errorType": "EXCEPTION",
@@ -60246,7 +60246,7 @@
     },
     {
       "true": "true",
-      "7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb": {
+      "dbfded4479a78af943d9646ff530ac6adebd942ef9b7cc7afc8963bf09b01c43": {
         "$type": "ERROR",
         "value": {
           "errorType": "EXCEPTION",
@@ -61278,7 +61278,7 @@
     },
     {
       "1970-01-12T13:46:40Z": true,
-      "7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb": {
+      "dbfded4479a78af943d9646ff530ac6adebd942ef9b7cc7afc8963bf09b01c43": {
         "$type": "ERROR",
         "value": {
           "errorType": "EXCEPTION",
@@ -62310,7 +62310,7 @@
     },
     {
       "0.1": "0.1",
-      "7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb": {
+      "dbfded4479a78af943d9646ff530ac6adebd942ef9b7cc7afc8963bf09b01c43": {
         "$type": "ERROR",
         "value": {
           "errorType": "EXCEPTION",
@@ -63342,7 +63342,7 @@
     },
     {
       "string": "string",
-      "7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb": {
+      "dbfded4479a78af943d9646ff530ac6adebd942ef9b7cc7afc8963bf09b01c43": {
         "$type": "ERROR",
         "value": {
           "errorType": "EXCEPTION",
@@ -64944,7 +64944,7 @@
       "value1": true,
       "value3": true,
       "true": "true",
-      "7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb": {
+      "dbfded4479a78af943d9646ff530ac6adebd942ef9b7cc7afc8963bf09b01c43": {
         "$type": "ERROR",
         "value": {
           "errorType": "EXCEPTION",

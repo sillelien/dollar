@@ -16,7 +16,7 @@
 
 package me.neilellis.dollar.script;
 
-import me.neilellis.dollar.DollarException;
+import me.neilellis.dollar.api.DollarException;
 import org.jetbrains.annotations.NotNull;
 import org.pegdown.ast.*;
 

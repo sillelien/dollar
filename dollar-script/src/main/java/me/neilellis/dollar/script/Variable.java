@@ -16,7 +16,7 @@
 
 package me.neilellis.dollar.script;
 
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.var;
 import org.jetbrains.annotations.Nullable;
 
 class Variable {

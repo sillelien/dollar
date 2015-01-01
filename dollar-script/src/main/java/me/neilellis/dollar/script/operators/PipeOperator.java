@@ -16,17 +16,17 @@
 
 package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.Builtins;
 import me.neilellis.dollar.script.DollarParser;
 import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
-import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 
-import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.api.DollarStatic.$;
 
 public class PipeOperator implements Map<var, Map<? super var, ? extends var>> {
     private final Scope scope;

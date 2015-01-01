@@ -18,13 +18,13 @@ package me.neilellis.dollar.http;
 
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.types.SerializedType;
-import me.neilellis.dollar.uri.URI;
-import me.neilellis.dollar.uri.URIHandler;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.DollarStatic;
+import me.neilellis.dollar.api.Pipeable;
+import me.neilellis.dollar.api.types.DollarFactory;
+import me.neilellis.dollar.api.types.SerializedType;
+import me.neilellis.dollar.api.uri.URI;
+import me.neilellis.dollar.api.uri.URIHandler;
+import me.neilellis.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.api.DollarStatic.$;
 
 public class HttpURIHandler implements URIHandler {
     public static final int BLOCKING_TIMEOUT = 10;
@@ -43,7 +43,7 @@ public class HttpURIHandler implements URIHandler {
     private RouteableNanoHttpd httpd;
     @Nullable private String method = "GET";
 
-    public HttpURIHandler(String scheme, @NotNull me.neilellis.dollar.uri.URI uri) {
+    public HttpURIHandler(String scheme, @NotNull URI uri) {
         if (uri.hasSubScheme()) {
             this.uri = URI.parse(scheme + ":" + uri.sub().sub().asString());
             this.method = this.uri.sub().scheme();

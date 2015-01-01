@@ -17,14 +17,16 @@
 package me.neilellis.dollar;
 
 import com.jayway.restassured.RestAssured;
-import me.neilellis.dollar.types.DollarFactory;
+import me.neilellis.dollar.api.Type;
+import me.neilellis.dollar.api.types.DollarFactory;
+import me.neilellis.dollar.api.var;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
-import static me.neilellis.dollar.DollarStatic.*;
+import static me.neilellis.dollar.api.DollarStatic.*;
 import static org.junit.Assert.assertEquals;
 
 public class DollarSerializationTest {

@@ -16,15 +16,15 @@
 
 package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.api.time.Scheduler;
+import me.neilellis.dollar.api.types.DollarFactory;
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.DollarParser;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.time.Scheduler;
-import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
-import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.DollarStatic.$void;
+import static me.neilellis.dollar.api.DollarStatic.$;
+import static me.neilellis.dollar.api.DollarStatic.$void;
 
 public class EveryOperator implements Map<Object[], var> {
     private final Scope scope;

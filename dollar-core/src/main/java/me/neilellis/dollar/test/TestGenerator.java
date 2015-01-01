@@ -30,9 +30,9 @@ package me.neilellis.dollar.test;/*
  * limitations under the License.
  */
 
-import me.neilellis.dollar.Type;
-import me.neilellis.dollar.types.*;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.Type;
+import me.neilellis.dollar.api.types.*;
+import me.neilellis.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
@@ -40,8 +40,8 @@ import java.util.*;
 import java.util.function.Function;
 
 import static java.util.Collections.singletonMap;
-import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.DollarStatic.$range;
+import static me.neilellis.dollar.api.DollarStatic.$;
+import static me.neilellis.dollar.api.DollarStatic.$range;
 
 public class TestGenerator {
 

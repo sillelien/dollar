@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,21 @@
 
 package me.neilellis.dollar;
 
-import me.neilellis.dollar.json.ImmutableJsonObject;
+import me.neilellis.dollar.api.json.ImmutableJsonObject;
+import me.neilellis.dollar.api.var;
 import org.junit.Test;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static me.neilellis.dollar.DollarStatic.*;
+import static me.neilellis.dollar.api.DollarStatic.*;
 import static org.junit.Assert.*;
 
 public class DollarBasicTest {
     @Test
     public void testBuild() {
         var profile = $("name", "Neil")
-                .$("age", new Date().getYear() + 1900 - 1970)
+                .$("age", 44)
                 .$("gender", "male")
                 .$("projects", $jsonArray("snapito", "dollar_vertx"))
                 .$("location",
@@ -48,7 +48,7 @@ public class DollarBasicTest {
     public void testBuildAlt() {
         var profile = $(
                 $("name", "Neil"),
-                $("age", new Date().getYear() + 1900 - 1970),
+                $("age", 44),
                 $("gender", "male"),
                 $("projects", $jsonArray("snapito", "dollar_vertx")),
                 $("location",
@@ -115,7 +115,7 @@ public class DollarBasicTest {
 
     @Test
     public void testNashorn() {
-        int age = new Date().getYear() + 1900 - 1970;
+        int age = 44;
         var profile = $("name", "Neil")
                 .$("age", age)
                 .$("gender", "male")

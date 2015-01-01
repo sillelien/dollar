@@ -16,10 +16,10 @@
 
 package me.neilellis.dollar.uri.camel;
 
-import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.uri.URI;
-import me.neilellis.dollar.uri.URIHandler;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.DollarStatic;
+import me.neilellis.dollar.api.uri.URI;
+import me.neilellis.dollar.api.uri.URIHandler;
+import me.neilellis.dollar.api.var;
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
@@ -28,7 +28,7 @@ import org.junit.Test;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
-import static me.neilellis.dollar.DollarStatic.$void;
+import static me.neilellis.dollar.api.DollarStatic.$void;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

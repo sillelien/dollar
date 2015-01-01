@@ -19,8 +19,8 @@ package me.neilellis.dollar.learner.hazelcast;
 import com.hazelcast.core.MapLoader;
 import com.hazelcast.core.MapStore;
 import com.thoughtworks.xstream.XStream;
-import me.neilellis.dollar.execution.DollarExecutor;
-import me.neilellis.dollar.plugin.Plugins;
+import me.neilellis.dollar.api.execution.DollarExecutor;
+import me.neilellis.dollar.api.plugin.Plugins;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

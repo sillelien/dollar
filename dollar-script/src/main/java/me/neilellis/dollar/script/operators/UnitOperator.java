@@ -16,8 +16,8 @@
 
 package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.*;
-import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
@@ -25,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
-import static me.neilellis.dollar.DollarStatic.$void;
-import static me.neilellis.dollar.DollarStatic.fix;
+import static me.neilellis.dollar.api.DollarStatic.$void;
+import static me.neilellis.dollar.api.DollarStatic.fix;
 import static me.neilellis.dollar.script.DollarScriptSupport.getVariable;
 
 public class UnitOperator implements Map<Token, var> {

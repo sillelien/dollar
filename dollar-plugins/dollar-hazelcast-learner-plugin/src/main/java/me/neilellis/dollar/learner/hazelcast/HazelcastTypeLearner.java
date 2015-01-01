@@ -20,12 +20,12 @@ import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import me.neilellis.dollar.Type;
-import me.neilellis.dollar.TypePrediction;
-import me.neilellis.dollar.script.SourceSegment;
-import me.neilellis.dollar.script.TypeLearner;
-import me.neilellis.dollar.types.prediction.CountBasedTypePrediction;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.Type;
+import me.neilellis.dollar.api.TypePrediction;
+import me.neilellis.dollar.api.script.SourceSegment;
+import me.neilellis.dollar.api.script.TypeLearner;
+import me.neilellis.dollar.api.types.prediction.CountBasedTypePrediction;
+import me.neilellis.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

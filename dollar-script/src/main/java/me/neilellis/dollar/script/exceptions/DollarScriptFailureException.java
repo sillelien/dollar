@@ -16,7 +16,7 @@
 
 package me.neilellis.dollar.script.exceptions;
 
-import me.neilellis.dollar.types.ErrorType;
+import me.neilellis.dollar.api.types.ErrorType;
 import org.jetbrains.annotations.NotNull;
 
 public class DollarScriptFailureException extends DollarScriptException {

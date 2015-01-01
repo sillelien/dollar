@@ -16,16 +16,16 @@
 
 package me.neilellis.dollar.script;
 
-import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.api.DollarStatic;
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
-import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static me.neilellis.dollar.DollarStatic.$void;
+import static me.neilellis.dollar.api.DollarStatic.$void;
 
 public class PureScope extends ScriptScope {
     private static final Logger log = LoggerFactory.getLogger(ScriptScope.class);

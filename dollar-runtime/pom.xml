@@ -45,41 +45,49 @@
             <artifactId>dollar-std-resources-plugins</artifactId>
             <groupId>me.neilellis</groupId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-class-resolver-plugin</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-github-resolver-plugin</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-maven-resolver-plugin</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-socketio-plugin</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-mapdb-plugin</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-camel-plugin</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-simple-learner-plugin</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
@@ -90,62 +98,25 @@
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-redis-plugin</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-http-plugin</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-metrics-plugin</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-quartz</artifactId>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.apache.camel</groupId>-->
+        <!--<artifactId>camel-quartz</artifactId>-->
+        <!--</dependency>-->
 
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <configuration>
-                    <shadedArtifactAttached>true</shadedArtifactAttached>
-                    <shadedClassifierName>fat</shadedClassifierName>
-                    <!--Change to true if/when http://jira.codehaus.org/browse/MSHADE-174 is fixed -->
-                    <minimizeJar>false</minimizeJar>
-                    <filters>
-                        <filter>
-                            <!--
-                                Exclude files that sign a jar
-                                (one or multiple of the dependencies).
-                                One may not repack a signed jar without
-                                this, or you will get a
-                                SecurityException at program start.
-                            -->
-                            <artifact>*:*</artifact>
-                            <excludes>
-                                <exclude>META-INF/*.SF</exclude>
-                                <exclude>META-INF/*.RSA</exclude>
-                                <exclude>META-INF/*.INF</exclude>
-                                <exclude>META-INF/license</exclude>
-                            </excludes>
-                        </filter>
-                    </filters>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

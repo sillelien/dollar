@@ -16,12 +16,13 @@
 
 package me.neilellis.dollar;
 
-import me.neilellis.dollar.json.JsonArray;
+import me.neilellis.dollar.api.json.JsonArray;
+import me.neilellis.dollar.api.var;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.DollarStatic.$list;
+import static me.neilellis.dollar.api.DollarStatic.$;
+import static me.neilellis.dollar.api.DollarStatic.$list;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

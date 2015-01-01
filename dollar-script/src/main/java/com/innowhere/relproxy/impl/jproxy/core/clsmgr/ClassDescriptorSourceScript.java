@@ -49,7 +49,7 @@ public class ClassDescriptorSourceScript extends ClassDescriptorSourceUnit {
         StringBuilder finalCode = new StringBuilder();
         finalCode.append("import me.neilellis.dollar.*;\n");
 //        finalCode.append("import me.neilellis.dollar.script.lang.*;\n");
-        finalCode.append("import static me.neilellis.dollar.DollarStatic.*;\n");
+        finalCode.append("import static me.neilellis.dollar.api.DollarStatic.*;\n");
         finalCode.append("import java.util.*;\n");
         finalCode.append("import java.text.*;\n");
         finalCode.append("import java.util.concurrent.*;\n");
@@ -86,7 +86,13 @@ public class ClassDescriptorSourceScript extends ClassDescriptorSourceUnit {
                 if (scriptCode.equals("")) scriptCode = "return null;";
             }
 
-            finalCode.append("public class " + className + " extends me.neilellis.dollar.Unit { public static " + mainReturnType + " main(" + mainParamsDec + ") {\n"); // Lo ponemos todo en una línea para que en caso de error la línea de error coincida con el script original pues hemos quitado la primera línea #!
+            finalCode.append("public class " +
+                             className +
+                             " extends me.neilellis.dollar.api.Unit { public static " +
+                             mainReturnType +
+                             " main(" +
+                             mainParamsDec +
+                             ") {\n"); // Lo ponemos todo en una línea para que en caso de error la línea de error coincida con el script original pues hemos quitado la primera línea #!
             finalCode.append(scriptCode);
             finalCode.append("  }\n");
             finalCode.append("}\n");

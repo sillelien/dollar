@@ -16,19 +16,19 @@
 
 package me.neilellis.dollar.uri.camel;
 
-import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.uri.URI;
-import me.neilellis.dollar.uri.URIHandler;
-import me.neilellis.dollar.uri.URIHandlerFactory;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.DollarStatic;
+import me.neilellis.dollar.api.Pipeable;
+import me.neilellis.dollar.api.types.DollarFactory;
+import me.neilellis.dollar.api.uri.URI;
+import me.neilellis.dollar.api.uri.URIHandler;
+import me.neilellis.dollar.api.uri.URIHandlerFactory;
+import me.neilellis.dollar.api.var;
 import org.apache.camel.*;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.jetbrains.annotations.NotNull;
 
-import static me.neilellis.dollar.DollarStatic.$void;
+import static me.neilellis.dollar.api.DollarStatic.$void;
 
 public class CamelURIHandlerFactory implements URIHandlerFactory {
 

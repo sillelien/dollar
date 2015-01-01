@@ -16,7 +16,7 @@
 
 package me.neilellis.dollar.execution.simple;
 
-import me.neilellis.dollar.execution.DollarExecutor;
+import me.neilellis.dollar.api.execution.DollarExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.*;

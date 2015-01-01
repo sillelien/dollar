@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,10 @@
 package me.neilellis.dollar.script;
 
 import com.google.common.collect.Multimap;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.var;
 
 import java.util.Map;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public interface Scope {
 
     var addErrorHandler(var handler);

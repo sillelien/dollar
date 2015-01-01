@@ -49,7 +49,7 @@
 " " + 3.4028234663852886E38 <=> " 3.4028234663852886E38"
 " " + 4.9E-324 <=> " 4.9E-324"
 " " + 9223372036854775807 <=> " 9223372036854775807"
-" " + ERROR('EXCEPTION',"Test Exception") <=> " EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+" " + ERROR('EXCEPTION',"Test Exception") <=> " EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
 " " + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> " [ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]"
 " " + [("1970-01-01T00:00:00Z" as Date),("1969-12-31T23:59:59Z" as Date),("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> " [ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]"
 " " + [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> " [ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]"
@@ -129,7 +129,7 @@ true : "true",
 "" + 3.4028234663852886E38 <=> "3.4028234663852886E38"
 "" + 4.9E-324 <=> "4.9E-324"
 "" + 9223372036854775807 <=> "9223372036854775807"
-"" + ERROR('EXCEPTION',"Test Exception") <=> "EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+"" + ERROR('EXCEPTION',"Test Exception") <=> "EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
 "" + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> "[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]"
 "" + [("1970-01-01T00:00:00Z" as Date),("1969-12-31T23:59:59Z" as Date),("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> "[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]"
 "" + [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> "[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]"
@@ -209,7 +209,7 @@ true : "true",
 "0" + 3.4028234663852886E38 <=> "03.4028234663852886E38"
 "0" + 4.9E-324 <=> "04.9E-324"
 "0" + 9223372036854775807 <=> "09223372036854775807"
-"0" + ERROR('EXCEPTION',"Test Exception") <=> "0EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+"0" + ERROR('EXCEPTION',"Test Exception") <=> "0EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
 "0" + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> "0[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]"
 "0" + [("1970-01-01T00:00:00Z" as Date),("1969-12-31T23:59:59Z" as Date),("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> "0[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]"
 "0" + [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> "0[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]"
@@ -289,7 +289,7 @@ true : "true",
 "1" + 3.4028234663852886E38 <=> "13.4028234663852886E38"
 "1" + 4.9E-324 <=> "14.9E-324"
 "1" + 9223372036854775807 <=> "19223372036854775807"
-"1" + ERROR('EXCEPTION',"Test Exception") <=> "1EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+"1" + ERROR('EXCEPTION',"Test Exception") <=> "1EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
 "1" + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> "1[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]"
 "1" + [("1970-01-01T00:00:00Z" as Date),("1969-12-31T23:59:59Z" as Date),("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> "1[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]"
 "1" + [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> "1[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]"
@@ -369,7 +369,7 @@ true : "true",
 "@" + 3.4028234663852886E38 <=> "@3.4028234663852886E38"
 "@" + 4.9E-324 <=> "@4.9E-324"
 "@" + 9223372036854775807 <=> "@9223372036854775807"
-"@" + ERROR('EXCEPTION',"Test Exception") <=> "@EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+"@" + ERROR('EXCEPTION',"Test Exception") <=> "@EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
 "@" + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> "@[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]"
 "@" + [("1970-01-01T00:00:00Z" as Date),("1969-12-31T23:59:59Z" as Date),("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> "@[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]"
 "@" + [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> "@[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]"
@@ -449,7 +449,7 @@ true : "true",
 "@@ @@ @@@ @@ @@ @@" + 3.4028234663852886E38 <=> "@@ @@ @@@ @@ @@ @@3.4028234663852886E38"
 "@@ @@ @@@ @@ @@ @@" + 4.9E-324 <=> "@@ @@ @@@ @@ @@ @@4.9E-324"
 "@@ @@ @@@ @@ @@ @@" + 9223372036854775807 <=> "@@ @@ @@@ @@ @@ @@9223372036854775807"
-"@@ @@ @@@ @@ @@ @@" + ERROR('EXCEPTION',"Test Exception") <=> "@@ @@ @@@ @@ @@ @@EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+"@@ @@ @@@ @@ @@ @@" + ERROR('EXCEPTION',"Test Exception") <=> "@@ @@ @@@ @@ @@ @@EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
 "@@ @@ @@@ @@ @@ @@" + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> "@@ @@ @@@ @@ @@ @@[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]"
 "@@ @@ @@@ @@ @@ @@" + [("1970-01-01T00:00:00Z" as Date),("1969-12-31T23:59:59Z" as Date),("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> "@@ @@ @@@ @@ @@ @@[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]"
 "@@ @@ @@@ @@ @@ @@" + [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> "@@ @@ @@@ @@ @@ @@[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]"
@@ -529,7 +529,7 @@ true : "true",
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + 3.4028234663852886E38 <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@3.4028234663852886E38"
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + 4.9E-324 <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@4.9E-324"
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + 9223372036854775807 <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@9223372036854775807"
-"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + ERROR('EXCEPTION',"Test Exception") <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + ERROR('EXCEPTION',"Test Exception") <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]"
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + [("1970-01-01T00:00:00Z" as Date),("1969-12-31T23:59:59Z" as Date),("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]"
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]"
@@ -609,7 +609,7 @@ true : "true",
 "\n\t\r" + 3.4028234663852886E38 <=> "\n\t\r3.4028234663852886E38"
 "\n\t\r" + 4.9E-324 <=> "\n\t\r4.9E-324"
 "\n\t\r" + 9223372036854775807 <=> "\n\t\r9223372036854775807"
-"\n\t\r" + ERROR('EXCEPTION',"Test Exception") <=> "\n\t\rEXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+"\n\t\r" + ERROR('EXCEPTION',"Test Exception") <=> "\n\t\rEXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
 "\n\t\r" + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> "\n\t\r[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]"
 "\n\t\r" + [("1970-01-01T00:00:00Z" as Date),("1969-12-31T23:59:59Z" as Date),("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> "\n\t\r[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]"
 "\n\t\r" + [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> "\n\t\r[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]"
@@ -689,7 +689,7 @@ true : "true",
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + 3.4028234663852886E38 <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u20263.4028234663852886E38"
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + 4.9E-324 <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u20264.9E-324"
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + 9223372036854775807 <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u20269223372036854775807"
-"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + ERROR('EXCEPTION',"Test Exception") <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + ERROR('EXCEPTION',"Test Exception") <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]"
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + [("1970-01-01T00:00:00Z" as Date),("1969-12-31T23:59:59Z" as Date),("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]"
 "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" + [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]"
@@ -769,7 +769,7 @@ true : "true",
 "false" + 3.4028234663852886E38 <=> "false3.4028234663852886E38"
 "false" + 4.9E-324 <=> "false4.9E-324"
 "false" + 9223372036854775807 <=> "false9223372036854775807"
-"false" + ERROR('EXCEPTION',"Test Exception") <=> "falseEXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+"false" + ERROR('EXCEPTION',"Test Exception") <=> "falseEXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
 "false" + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> "false[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]"
 "false" + [("1970-01-01T00:00:00Z" as Date),("1969-12-31T23:59:59Z" as Date),("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> "false[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]"
 "false" + [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> "false[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]"
@@ -849,7 +849,7 @@ true : "true",
 "true" + 3.4028234663852886E38 <=> "true3.4028234663852886E38"
 "true" + 4.9E-324 <=> "true4.9E-324"
 "true" + 9223372036854775807 <=> "true9223372036854775807"
-"true" + ERROR('EXCEPTION',"Test Exception") <=> "trueEXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+"true" + ERROR('EXCEPTION',"Test Exception") <=> "trueEXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
 "true" + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> "true[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]"
 "true" + [("1970-01-01T00:00:00Z" as Date),("1969-12-31T23:59:59Z" as Date),("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> "true[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]"
 "true" + [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> "true[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]"
@@ -1329,7 +1329,7 @@ true : "true",
 (("@")..("\uF8FF")) + 3.4028234663852886E38 <=> (("@3.4028234663852886E38")..("\uF8FF3.4028234663852886E38"))
 (("@")..("\uF8FF")) + 4.9E-324 <=> (("@4.9E-324")..("\uF8FF4.9E-324"))
 (("@")..("\uF8FF")) + 9223372036854775807 <=> (("@9223372036854775807")..("\uF8FF9223372036854775807"))
-(("@")..("\uF8FF")) + ERROR('EXCEPTION',"Test Exception") <=> (("@EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]")..("\uF8FFEXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"))
+(("@")..("\uF8FF")) + ERROR('EXCEPTION',"Test Exception") <=> (("@EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]")..("\uF8FFEXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"))
 (("@")..("\uF8FF")) + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> (("@[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]")..("\uF8FF[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]"))
 (("@")..("\uF8FF")) + [("1970-01-01T00:00:00Z" as Date),("1969-12-31T23:59:59Z" as Date),("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> (("@[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]")..("\uF8FF[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]"))
 (("@")..("\uF8FF")) + [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> (("@[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]")..("\uF8FF[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]"))
@@ -1409,7 +1409,7 @@ true : "true",
 (("a")..("z")) + 3.4028234663852886E38 <=> (("a3.4028234663852886E38")..("z3.4028234663852886E38"))
 (("a")..("z")) + 4.9E-324 <=> (("a4.9E-324")..("z4.9E-324"))
 (("a")..("z")) + 9223372036854775807 <=> (("a9223372036854775807")..("z9223372036854775807"))
-(("a")..("z")) + ERROR('EXCEPTION',"Test Exception") <=> (("aEXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]")..("zEXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"))
+(("a")..("z")) + ERROR('EXCEPTION',"Test Exception") <=> (("aEXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]")..("zEXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"))
 (("a")..("z")) + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> (("a[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]")..("z[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]"))
 (("a")..("z")) + [("1970-01-01T00:00:00Z" as Date),("1969-12-31T23:59:59Z" as Date),("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> (("a[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]")..("z[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]"))
 (("a")..("z")) + [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> (("a[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]")..("z[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]"))
@@ -1489,7 +1489,7 @@ true : "true",
 (("z")..("a")) + 3.4028234663852886E38 <=> (("z3.4028234663852886E38")..("a3.4028234663852886E38"))
 (("z")..("a")) + 4.9E-324 <=> (("z4.9E-324")..("a4.9E-324"))
 (("z")..("a")) + 9223372036854775807 <=> (("z9223372036854775807")..("a9223372036854775807"))
-(("z")..("a")) + ERROR('EXCEPTION',"Test Exception") <=> (("zEXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]")..("aEXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"))
+(("z")..("a")) + ERROR('EXCEPTION',"Test Exception") <=> (("zEXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]")..("aEXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"))
 (("z")..("a")) + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> (("z[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]")..("a[ \"\", \"@\", \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\", \"@@ @@ @@@ @@ @@ @@\", \" \", \"\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026\", \"\\n\\t\\r\", \"1\", \"true\", \"false\", \"0\" ]"))
 (("z")..("a")) + [("1970-01-01T00:00:00Z" as Date),("1969-12-31T23:59:59Z" as Date),("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> (("z[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]")..("a[ {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-01T00:00:00Z\",\n  \"millis\" : 0\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1969-12-31T23:59:59Z\",\n  \"millis\" : -1000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-12T13:46:40Z\",\n  \"millis\" : 1000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-01-24T03:33:20Z\",\n  \"millis\" : 2000000000\n}, {\n  \"$type\" : \"DATE\",\n  \"text\" : \"1970-02-04T17:20:00Z\",\n  \"millis\" : 2999999999\n} ]"))
 (("z")..("a")) + [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> (("z[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]")..("a[ -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]"))
@@ -5293,7 +5293,7 @@ void + {} <=> void
 }
 {"string" : "string",
 } + ERROR('EXCEPTION',"Test Exception") <=> {"string" : "string",
-"7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb" : ERROR('EXCEPTION',"Test Exception"),
+"dbfded4479a78af943d9646ff530ac6adebd942ef9b7cc7afc8963bf09b01c43" : ERROR('EXCEPTION',"Test Exception"),
 }
 {"string" : "string",
 } + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> {"string" : "string",
@@ -5574,7 +5574,7 @@ true : "true",
 }
 {("1970-01-12T13:46:40Z" as Date) : true,
 } + ERROR('EXCEPTION',"Test Exception") <=> {("1970-01-12T13:46:40Z" as Date) : true,
-"7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb" : ERROR('EXCEPTION',"Test Exception"),
+"dbfded4479a78af943d9646ff530ac6adebd942ef9b7cc7afc8963bf09b01c43" : ERROR('EXCEPTION',"Test Exception"),
 }
 {("1970-01-12T13:46:40Z" as Date) : true,
 } + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> {("1970-01-12T13:46:40Z" as Date) : true,
@@ -5855,7 +5855,7 @@ true : "true",
 }
 {0.1 : "0.1",
 } + ERROR('EXCEPTION',"Test Exception") <=> {0.1 : "0.1",
-"7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb" : ERROR('EXCEPTION',"Test Exception"),
+"dbfded4479a78af943d9646ff530ac6adebd942ef9b7cc7afc8963bf09b01c43" : ERROR('EXCEPTION',"Test Exception"),
 }
 {0.1 : "0.1",
 } + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> {0.1 : "0.1",
@@ -6136,7 +6136,7 @@ true : "true",
 }
 {1 : "one",
 } + ERROR('EXCEPTION',"Test Exception") <=> {1 : "one",
-"7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb" : ERROR('EXCEPTION',"Test Exception"),
+"dbfded4479a78af943d9646ff530ac6adebd942ef9b7cc7afc8963bf09b01c43" : ERROR('EXCEPTION',"Test Exception"),
 }
 {1 : "one",
 } + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> {1 : "one",
@@ -6832,7 +6832,7 @@ true : "true",
 "value1" : true,
 "value3" : true,
 true : "true",
-"7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb" : ERROR('EXCEPTION',"Test Exception"),
+"dbfded4479a78af943d9646ff530ac6adebd942ef9b7cc7afc8963bf09b01c43" : ERROR('EXCEPTION',"Test Exception"),
 }
 {1 : 0.1,
 "value2" : true,
@@ -7251,7 +7251,7 @@ true : "true",
 }
 {true : "true",
 } + ERROR('EXCEPTION',"Test Exception") <=> {true : "true",
-"7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb" : ERROR('EXCEPTION',"Test Exception"),
+"dbfded4479a78af943d9646ff530ac6adebd942ef9b7cc7afc8963bf09b01c43" : ERROR('EXCEPTION',"Test Exception"),
 }
 {true : "true",
 } + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> {true : "true",
@@ -7427,7 +7427,7 @@ true : "true",
 }
 {} + 9223372036854775807 <=> {"b34a1c30a715f6bf8b7243afa7fab883ce3612b7231716bdcbbdc1982e1aed29" : 9223372036854775807,
 }
-{} + ERROR('EXCEPTION',"Test Exception") <=> {"7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb" : ERROR('EXCEPTION',"Test Exception"),
+{} + ERROR('EXCEPTION',"Test Exception") <=> {"dbfded4479a78af943d9646ff530ac6adebd942ef9b7cc7afc8963bf09b01c43" : ERROR('EXCEPTION',"Test Exception"),
 }
 {} + ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> {"3dbec279ea26bb08ace3491ca86834913cda4dc8949cf44a5ede888b83133e8b" : ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",],
 }

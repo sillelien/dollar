@@ -16,9 +16,9 @@
 
 package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.*;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
-import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.api.DollarStatic.$;
 
 public class ParameterOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final Scope scope;
