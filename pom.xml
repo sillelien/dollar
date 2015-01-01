@@ -695,6 +695,9 @@
                             <excludes>
                                 <exclude>me.neilellis.dollar.api.**</exclude>
                             </excludes>
+                            <excludes>
+                                <exclude>me.neilellis.dollar.main.**</exclude>
+                            </excludes>
                         </relocation>
                         <relocation>
                             <pattern>org</pattern>
