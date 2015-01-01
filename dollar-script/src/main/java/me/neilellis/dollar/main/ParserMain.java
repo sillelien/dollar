@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script;
+package me.neilellis.dollar.main;
 
 import com.beust.jcommander.JCommander;
 import me.neilellis.dollar.api.Configuration;
 import me.neilellis.dollar.api.DollarStatic;
+import me.neilellis.dollar.script.DollarParser;
+import me.neilellis.dollar.script.ParserOptions;
 
 import java.io.File;
 
