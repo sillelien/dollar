@@ -75,8 +75,8 @@ deployment:
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
         - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} clean
-        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} install
-        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} deploy
+        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -Dmaven.test.skip install
+        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -Dmaven.test.skip deploy
         - mvn site:site site:stage
         - ./build-docs.sh:
             timeout: 360
