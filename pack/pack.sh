@@ -6,7 +6,7 @@ cd $(dirname $0)
 #rm  ../dollar-runtime/target/dollar-runtime-0-SNAPSHOT-fat.jar
 dist_osx=../dist/osx/dollar
 [ -d ${dist_osx}/plugins ] || mkdir -p ${dist_osx}/plugins
-jar=$(ls ../dollar-runtime/target/dollar-runtime*-fat.jar)
+jar=$(ls ../dollar-runtime/target/dollar-runtime*-mod.jar)
 mkdir -p ${dist_osx}
 
 for pd in $(ls ../dollar-plugins)

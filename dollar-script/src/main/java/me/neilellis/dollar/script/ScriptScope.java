@@ -18,11 +18,11 @@ package me.neilellis.dollar.script;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
-import me.neilellis.dollar.DollarException;
-import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.api.DollarException;
+import me.neilellis.dollar.api.DollarStatic;
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
-import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.error.ParserException;
 import org.jetbrains.annotations.NotNull;
@@ -36,22 +36,27 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static me.neilellis.dollar.DollarStatic.*;
+import static me.neilellis.dollar.api.DollarStatic.*;
 
 public class ScriptScope implements Scope {
-    private static final Logger log = LoggerFactory.getLogger(ScriptScope.class);
 
-    private static final AtomicInteger counter = new AtomicInteger();
-    protected final ConcurrentHashMap<String, Variable> variables = new ConcurrentHashMap<>();
+    @NotNull private static final Logger log = LoggerFactory.getLogger("ScriptScope");
+
+    @NotNull private static final AtomicInteger counter = new AtomicInteger();
+    @NotNull protected final ConcurrentHashMap<String, Variable> variables = new ConcurrentHashMap<>();
+
     @NotNull final String id;
     @Nullable private final String source;
-    private final Multimap<String, var> listeners = LinkedListMultimap.create();
-    private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
+    @NotNull private final Multimap<String, var> listeners = LinkedListMultimap.create();
+    @NotNull private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
+
     private final String file;
     @Nullable Scope parent;
     private Parser<var> parser;
     @Nullable private DollarParser dollarParser;
     private boolean parameterScope;
+
+
     public ScriptScope(String name) {
         this.parent = null;
         this.source = "<unknown>";
@@ -280,7 +285,7 @@ public class ScriptScope implements Scope {
         if (scopeForKey == null) {
             return $void();
         }
-        scopeForKey.getListeners().get(variableName).forEach(me.neilellis.dollar.var::$notify);
+        scopeForKey.getListeners().get(variableName).forEach(var::$notify);
         return scopeForKey.get(variableName);
     }
 
@@ -290,7 +295,7 @@ public class ScriptScope implements Scope {
             throw new NullPointerException();
         }
         if (listeners.containsKey(key)) {
-            listeners.get(key).forEach(me.neilellis.dollar.var::$notify);
+            listeners.get(key).forEach(var::$notify);
         }
     }
 

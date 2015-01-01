@@ -16,10 +16,9 @@
 
 package me.neilellis.dollar.plugins.pipe;
 
-import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.script.ModuleResolver;
-import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.api.DollarStatic;
+import me.neilellis.dollar.api.Pipeable;
+import me.neilellis.dollar.api.script.ModuleResolver;
 import org.jetbrains.annotations.NotNull;
 
 public class ClassModuleResolver implements ModuleResolver {
@@ -34,7 +33,7 @@ public class ClassModuleResolver implements ModuleResolver {
     }
 
     @NotNull @Override
-    public Pipeable resolve(@NotNull String uriWithoutScheme, Scope scope) throws Exception {
+    public <T> Pipeable resolve(@NotNull String uriWithoutScheme, T scope) throws Exception {
         return (Pipeable) DollarStatic.context().getClassLoader().loadClass(uriWithoutScheme).newInstance();
     }
 }

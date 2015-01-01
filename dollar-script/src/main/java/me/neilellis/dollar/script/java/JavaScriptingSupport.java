@@ -19,9 +19,9 @@ package me.neilellis.dollar.script.java;
 import com.innowhere.relproxy.jproxy.JProxy;
 import com.innowhere.relproxy.jproxy.JProxyConfig;
 import com.innowhere.relproxy.jproxy.JProxyScriptEngineFactory;
-import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.api.DollarStatic;
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +34,7 @@ import javax.tools.JavaFileObject;
 import java.util.Collections;
 import java.util.List;
 
-import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.api.DollarStatic.$;
 
 public class JavaScriptingSupport {
 
@@ -70,9 +70,9 @@ public class JavaScriptingSupport {
         bindings.put("scope", scope);
 
         StringBuilder code = new StringBuilder();
-        code.append(" me.neilellis.dollar.var in = (me.neilellis.dollar.var)context.getAttribute(\"in\",javax.script.ScriptContext.ENGINE_SCOPE); \n");
+        code.append(" me.neilellis.dollar.api.var in = (me.neilellis.dollar.api.var)context.getAttribute(\"in\",javax.script.ScriptContext.ENGINE_SCOPE); \n");
         code.append(" me.neilellis.dollar.script.Scope scope = (me.neilellis.dollar.script.ScriptScope)context.getAttribute(\"scope\",javax.script.ScriptContext.ENGINE_SCOPE); \n");
-        code.append(" me.neilellis.dollar.var out = me.neilellis.dollar.DollarStatic.$void();\n");
+        code.append(" me.neilellis.dollar.api.var out = me.neilellis.dollar.api.DollarStatic.$void();\n");
         code.append(java).append("\nreturn out;\n");
 
 

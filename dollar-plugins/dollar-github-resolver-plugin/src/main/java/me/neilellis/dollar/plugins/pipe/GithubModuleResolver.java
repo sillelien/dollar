@@ -16,14 +16,14 @@
 
 package me.neilellis.dollar.plugins.pipe;
 
-import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.collections.ImmutableMap;
+import me.neilellis.dollar.api.DollarStatic;
+import me.neilellis.dollar.api.Pipeable;
+import me.neilellis.dollar.api.collections.ImmutableMap;
+import me.neilellis.dollar.api.script.ModuleResolver;
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.deps.DependencyRetriever;
 import me.neilellis.dollar.script.DollarParser;
-import me.neilellis.dollar.script.ModuleResolver;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.var;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
@@ -55,7 +55,7 @@ public class GithubModuleResolver implements ModuleResolver {
     }
 
     @NotNull @Override
-    public Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull Scope scope) throws Exception {
+    public <T> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope) throws Exception {
         logger.debug(uriWithoutScheme);
         String[] githubRepo = uriWithoutScheme.split(":");
         GitHub github = GitHub.connect();
@@ -103,13 +103,13 @@ public class GithubModuleResolver implements ModuleResolver {
                                                        .map(var::toString)
                                                        .collect(Collectors.toList()));
         }
-        return (params) -> scope.getDollarParser().inScope(false, "github-module", scope, newScope -> {
+        return (params) -> ((Scope)scope).getDollarParser().inScope(false, "github-module", ((Scope)scope), newScope -> {
 
             final ImmutableMap<var, var> paramMap = params[0].$map();
             for (Map.Entry<var, var> entry : paramMap.entrySet()) {
                 newScope.set(entry.getKey().$S(), entry.getValue(), true, null, null, false, false, false);
             }
-            return new DollarParser(scope.getDollarParser().options(), classLoader, dir).parse(newScope, content);
+            return new DollarParser(((Scope)scope).getDollarParser().options(), classLoader, dir).parse(newScope, content);
         });
     }
 }

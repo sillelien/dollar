@@ -26,12 +26,12 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
-import me.neilellis.dollar.Type;
-import me.neilellis.dollar.TypePrediction;
-import me.neilellis.dollar.script.SourceSegment;
-import me.neilellis.dollar.script.TypeLearner;
-import me.neilellis.dollar.types.prediction.CountBasedTypePrediction;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.Type;
+import me.neilellis.dollar.api.TypePrediction;
+import me.neilellis.dollar.api.script.SourceSegment;
+import me.neilellis.dollar.api.script.TypeLearner;
+import me.neilellis.dollar.api.types.prediction.CountBasedTypePrediction;
+import me.neilellis.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -119,7 +119,7 @@ public class OrientDBTypeLearner implements TypeLearner {
                         edges =
                         vertex.getEdges(Direction.OUT, getEdgeKey(type));
                 for (Edge edge : edges) {
-                    long countForType = (long) edge.getProperty("count");
+                    long countForType = edge.getProperty("count");
                     final String typePrediction = edge.getVertex(Direction.IN).getProperty("type");
                     prediction.addCount(Type.valueOf(typePrediction), countForType);
                     System.out.println("Count for " +

@@ -16,6 +16,8 @@
 
 package me.neilellis.dollar;
 
+import me.neilellis.dollar.api.Pipeable;
+import me.neilellis.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 public class TestPipe implements Pipeable {

@@ -18,7 +18,7 @@ package me.neilellis.dollar.learner.hazelcast;
 
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
-import me.neilellis.dollar.Type;
+import me.neilellis.dollar.api.Type;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

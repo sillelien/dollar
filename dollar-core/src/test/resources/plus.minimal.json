@@ -717,7 +717,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+    "EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
   ],
   [
     "",
@@ -813,7 +813,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "@EXCEPTION Test Exception [me.neilellis.dollar.DollarException: Test Exception]"
+    "@EXCEPTION Test Exception [me.neilellis.dollar.api.DollarException: Test Exception]"
   ],
   [
     "@",
@@ -2147,7 +2147,7 @@
       "1": 0.1,
       "value1": true,
       "true": 5,
-      "7d3b171fc9dea55d3050037ac4e13eb9a6652625cc71736c5bdf667a55f39abb": {
+      "dbfded4479a78af943d9646ff530ac6adebd942ef9b7cc7afc8963bf09b01c43": {
         "$type": "ERROR",
         "value": {
           "errorType": "EXCEPTION",

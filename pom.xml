@@ -29,6 +29,7 @@
         <orientdb.version>1.7.6</orientdb.version>
         <maven.version>3.2.1</maven.version>
         <slf4j.version>1.7.7</slf4j.version>
+        <buildNumber>0</buildNumber>
     </properties>
 
     <groupId>me.neilellis</groupId>
@@ -665,35 +666,70 @@
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                     <shadedClassifierName>mod</shadedClassifierName>
                     <!--<minimizeJar>true</minimizeJar>-->
+                    <artifactSet>
+                        <excludes>
+                            <exclude>classworlds:classworlds</exclude>
+                            <exclude>junit:junit</exclude>
+                            <exclude>*:xml-apis</exclude>
+                            <exclude>org.apache.maven:lib:tests</exclude>
+                            <exclude>log4j:log4j:jar:</exclude>
+                        </excludes>
+                    </artifactSet>
                     <filters>
                         <filter>
-                            <!--
-                                Exclude files that sign a jar
-                                (one or multiple of the dependencies).
-                                One may not repack a signed jar without
-                                this, or you will get a
-                                SecurityException at program start.
-                            -->
                             <artifact>*:*</artifact>
                             <excludes>
+                                <exclude>org.slf4j.**</exclude>
+                                <exclude>org.apache.log4j.**</exclude>
                                 <exclude>META-INF/*.SF</exclude>
                                 <exclude>META-INF/*.RSA</exclude>
                                 <exclude>META-INF/*.INF</exclude>
-                                <!-- This one may not be required -->
+                                <exclude>META-INF/license</exclude>
                             </excludes>
                         </filter>
                     </filters>
                     <relocations>
                         <relocation>
-                            <pattern></pattern>
-                            <shadedPattern>dollar.r${buildNumber}</shadedPattern>
+                            <pattern>me.neilellis.dollar</pattern>
+                            <shadedPattern>me.neilellis.dollar.r${buildNumber}</shadedPattern>
                             <excludes>
-                                <exclude>me.neilellis.*</exclude>
-                                <exclude>META-INF</exclude>
-                                <exclude>WEB-INF</exclude>
+                                <exclude>me.neilellis.dollar.api.**</exclude>
                             </excludes>
                         </relocation>
+                        <relocation>
+                            <pattern>org</pattern>
+                            <shadedPattern>dollar.r${buildNumber}</shadedPattern>
+                            <excludes>
+                                <exclude>org.apache.log4j.**</exclude>
+                                <exclude>org.junit.**</exclude>
+                                <exclude>org.w3c.**</exclude>
+                                <exclude>org.xml.**</exclude>
+                                <exclude>org.slf4j.**</exclude>
+                            </excludes>
+                        </relocation>
+                        <relocation>
+                            <pattern>com</pattern>
+                            <shadedPattern>dollar.r${buildNumber}</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net</pattern>
+                            <shadedPattern>dollar.r${buildNumber}</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>io</pattern>
+                            <shadedPattern>dollar.r${buildNumber}</shadedPattern>
+                        </relocation>
                     </relocations>
+                    <transformers>
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer"/>
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
+                            <addHeader>false</addHeader>
+                        </transformer>
+                    </transformers>
                 </configuration>
                 <executions>
                     <execution>

@@ -16,10 +16,10 @@
 
 package me.neilellis.dollar.uri.mapdb;
 
-import me.neilellis.dollar.DollarException;
-import me.neilellis.dollar.uri.URI;
-import me.neilellis.dollar.uri.URIHandler;
-import me.neilellis.dollar.uri.URIHandlerFactory;
+import me.neilellis.dollar.api.DollarException;
+import me.neilellis.dollar.api.uri.URI;
+import me.neilellis.dollar.api.uri.URIHandler;
+import me.neilellis.dollar.api.uri.URIHandlerFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

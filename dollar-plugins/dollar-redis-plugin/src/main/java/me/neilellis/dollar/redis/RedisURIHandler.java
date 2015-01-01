@@ -16,10 +16,11 @@
 
 package me.neilellis.dollar.redis;
 
-import me.neilellis.dollar.DollarStatic;
-import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.uri.URIHandler;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.DollarStatic;
+import me.neilellis.dollar.api.Pipeable;
+import me.neilellis.dollar.api.uri.URI;
+import me.neilellis.dollar.api.uri.URIHandler;
+import me.neilellis.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -28,7 +29,7 @@ import redis.clients.jedis.JedisPubSub;
 
 import java.util.List;
 
-import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.api.DollarStatic.$;
 
 public class RedisURIHandler implements URIHandler {
     private static final int BLOCKING_TIMEOUT = 10;
@@ -37,8 +38,8 @@ public class RedisURIHandler implements URIHandler {
     @NotNull private final String path;
     @NotNull private final String query;
 
-    public RedisURIHandler(me.neilellis.dollar.uri.URI uri, JedisPoolConfig jedisPoolConfig) {
-        me.neilellis.dollar.uri.URI uri1 = uri;
+    public RedisURIHandler(URI uri, JedisPoolConfig jedisPoolConfig) {
+        URI uri1 = uri;
         String host = uri1.host();
         int port = uri1.port();
         String userInfo = uri1.userInfo();

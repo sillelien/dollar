@@ -16,6 +16,8 @@
 
 package me.neilellis.dollar.json;
 
+import me.neilellis.dollar.api.json.JsonObject;
+import me.neilellis.dollar.api.json.JsonUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,15 +42,15 @@ public class JsonUtilTest {
     @Test
     public void testArgsToJson() {
         final JsonObject jsonObject = JsonUtil.argsToJson(Arrays.asList("--remove",
-                "filename",
-                "-add",
-                "file1", "file2",
-                "-send",
-                "fileA", "fileB", "fileC",
-                "--count", "1",
-                "--rate", "2.343434",
-                "--quiet", "false",
-                "--fast"));
+                                                                        "filename",
+                                                                        "-add",
+                                                                        "file1", "file2",
+                                                                        "-send",
+                                                                        "fileA", "fileB", "fileC",
+                                                                        "--count", "1",
+                                                                        "--rate", "2.343434",
+                                                                        "--quiet", "false",
+                                                                        "--fast"));
         System.out.println(jsonObject);
         assertEquals("filename", jsonObject.getString("remove"));
         assertEquals(true, jsonObject.getBoolean("fast"));

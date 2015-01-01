@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,16 @@
 
 package me.neilellis.dollar.script.operators;
 
-import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.api.DollarStatic;
+import me.neilellis.dollar.api.script.ModuleResolver;
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.DollarParser;
-import me.neilellis.dollar.script.ModuleResolver;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Map;
 
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class ModuleOperator implements Map<Object[], var> {
     private final Scope scope;
 

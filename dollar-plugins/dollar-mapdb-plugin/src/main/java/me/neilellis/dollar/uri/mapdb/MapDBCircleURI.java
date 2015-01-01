@@ -16,12 +16,12 @@
 
 package me.neilellis.dollar.uri.mapdb;
 
-import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.execution.DollarExecutor;
-import me.neilellis.dollar.plugin.Plugins;
-import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.uri.URI;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.Pipeable;
+import me.neilellis.dollar.api.execution.DollarExecutor;
+import me.neilellis.dollar.api.plugin.Plugins;
+import me.neilellis.dollar.api.types.DollarFactory;
+import me.neilellis.dollar.api.uri.URI;
+import me.neilellis.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mapdb.DB;
@@ -33,8 +33,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.DollarStatic.$void;
+import static me.neilellis.dollar.api.DollarStatic.$;
+import static me.neilellis.dollar.api.DollarStatic.$void;
 
 public class MapDBCircleURI extends AbstractMapDBURI {
 

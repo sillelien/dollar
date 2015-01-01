@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,8 @@
 
 package me.neilellis.dollar.pipe;
 
-import me.neilellis.dollar.Unit;
+import me.neilellis.dollar.api.Unit;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 class WelcomeMessage extends Unit {
     static {
         mainClass(WelcomeMessage.class);

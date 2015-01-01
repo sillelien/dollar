@@ -19,6 +19,7 @@ package me.neilellis.dollar.monitor;
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import me.neilellis.dollar.api.monitor.DollarMonitor;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

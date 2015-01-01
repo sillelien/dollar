@@ -16,9 +16,9 @@
 
 package me.neilellis.dollar.script;
 
-import me.neilellis.dollar.Type;
-import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.Type;
+import me.neilellis.dollar.api.types.DollarFactory;
+import me.neilellis.dollar.api.var;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jparsec.*;
 import org.codehaus.jparsec.functors.Map;
@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 
-import static me.neilellis.dollar.DollarStatic.*;
+import static me.neilellis.dollar.api.DollarStatic.*;
 import static org.codehaus.jparsec.Parsers.or;
 import static org.codehaus.jparsec.Parsers.token;
 

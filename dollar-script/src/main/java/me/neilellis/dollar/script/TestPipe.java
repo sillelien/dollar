@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,9 @@
 
 package me.neilellis.dollar.script;
 
-import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.Pipeable;
+import me.neilellis.dollar.api.var;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class TestPipe implements Pipeable {
     @Override
     public var pipe(var... in) throws Exception {

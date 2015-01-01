@@ -16,7 +16,8 @@
 
 package me.neilellis.dollar.script;
 
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.script.SourceSegment;
+import me.neilellis.dollar.api.var;
 import org.codehaus.jparsec.functors.Binary;
 import org.codehaus.jparsec.functors.Map2;
 

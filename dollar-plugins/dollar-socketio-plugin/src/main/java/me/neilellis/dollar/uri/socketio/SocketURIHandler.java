@@ -18,11 +18,11 @@ package me.neilellis.dollar.uri.socketio;
 
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
-import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.uri.URI;
-import me.neilellis.dollar.uri.URIHandler;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.Pipeable;
+import me.neilellis.dollar.api.types.DollarFactory;
+import me.neilellis.dollar.api.uri.URI;
+import me.neilellis.dollar.api.uri.URIHandler;
+import me.neilellis.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

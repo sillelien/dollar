@@ -16,12 +16,14 @@
 
 package me.neilellis.dollar.script;
 
-import me.neilellis.dollar.DollarException;
-import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.TypePrediction;
-import me.neilellis.dollar.plugin.Plugins;
-import me.neilellis.dollar.types.DollarLambda;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.DollarException;
+import me.neilellis.dollar.api.Pipeable;
+import me.neilellis.dollar.api.TypePrediction;
+import me.neilellis.dollar.api.plugin.Plugins;
+import me.neilellis.dollar.api.script.SourceSegment;
+import me.neilellis.dollar.api.script.TypeLearner;
+import me.neilellis.dollar.api.types.DollarLambda;
+import me.neilellis.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

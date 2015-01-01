@@ -17,7 +17,7 @@
 package me.neilellis.dollar.script;
 
 import com.google.common.io.CharStreams;
-import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.api.DollarStatic;
 import me.neilellis.dollar.test.CircleCiParallelRule;
 import org.jetbrains.annotations.NotNull;
 import org.junit.After;

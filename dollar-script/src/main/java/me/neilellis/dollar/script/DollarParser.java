@@ -17,15 +17,15 @@
 package me.neilellis.dollar.script;
 
 import com.google.common.io.ByteStreams;
-import me.neilellis.dollar.*;
-import me.neilellis.dollar.collections.Range;
-import me.neilellis.dollar.execution.DollarExecutor;
-import me.neilellis.dollar.plugin.Plugins;
+import me.neilellis.dollar.api.*;
+import me.neilellis.dollar.api.collections.Range;
+import me.neilellis.dollar.api.execution.DollarExecutor;
+import me.neilellis.dollar.api.plugin.Plugins;
+import me.neilellis.dollar.api.types.DollarFactory;
+import me.neilellis.dollar.api.types.ErrorType;
 import me.neilellis.dollar.script.exceptions.DollarScriptFailureException;
 import me.neilellis.dollar.script.java.JavaScriptingSupport;
 import me.neilellis.dollar.script.operators.*;
-import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.types.ErrorType;
 import org.codehaus.jparsec.*;
 import org.codehaus.jparsec.error.ParserException;
 import org.codehaus.jparsec.functors.Map;
@@ -46,12 +46,12 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-import static me.neilellis.dollar.DollarStatic.*;
+import static me.neilellis.dollar.api.DollarStatic.*;
+import static me.neilellis.dollar.api.types.DollarFactory.fromValue;
 import static me.neilellis.dollar.script.DollarLexer.*;
 import static me.neilellis.dollar.script.DollarScriptSupport.getVariable;
 import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactive;
 import static me.neilellis.dollar.script.OperatorPriority.*;
-import static me.neilellis.dollar.types.DollarFactory.fromValue;
 import static org.codehaus.jparsec.Parsers.*;
 
 public class DollarParser {

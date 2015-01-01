@@ -16,8 +16,8 @@
 
 package me.neilellis.dollar.uri.mapdb;
 
-import me.neilellis.dollar.uri.URI;
-import me.neilellis.dollar.uri.URIHandler;
+import me.neilellis.dollar.api.uri.URI;
+import me.neilellis.dollar.api.uri.URIHandler;
 import org.jetbrains.annotations.NotNull;
 import org.mapdb.DBMaker;
 import org.mapdb.TxMaker;

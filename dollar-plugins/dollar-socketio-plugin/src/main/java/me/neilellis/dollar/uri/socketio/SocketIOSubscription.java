@@ -21,18 +21,19 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
-import me.neilellis.dollar.Pipeable;
-import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.var;
+import me.neilellis.dollar.api.Pipeable;
+import me.neilellis.dollar.api.types.DollarFactory;
+import me.neilellis.dollar.api.uri.URI;
+import me.neilellis.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 class SocketIOSubscription implements DataListener<String>, ConnectListener, DisconnectListener {
     private final Pipeable consumer;
     private final String id;
-    private final me.neilellis.dollar.uri.URI uri;
+    private final URI uri;
     private boolean destroyed;
 
-    public SocketIOSubscription(Pipeable consumer, String id, me.neilellis.dollar.uri.URI uri) {
+    public SocketIOSubscription(Pipeable consumer, String id, URI uri) {
 
         this.consumer = consumer;
         this.id = id;

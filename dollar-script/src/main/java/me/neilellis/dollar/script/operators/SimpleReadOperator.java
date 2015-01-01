@@ -16,11 +16,11 @@
 
 package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.api.types.DollarFactory;
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.script.UnaryOp;
-import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 
 public class SimpleReadOperator extends UnaryOp {

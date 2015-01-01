@@ -16,12 +16,12 @@
 
 package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.api.types.DollarFactory;
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.DollarParser;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.script.SourceSegmentValue;
-import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static me.neilellis.dollar.DollarStatic.$;
+import static me.neilellis.dollar.api.DollarStatic.$;
 
 public class MapOperator implements Map<Token, var> {
     private final Scope scope;
@@ -53,7 +53,7 @@ public class MapOperator implements Map<Token, var> {
                                                        return DollarFactory.blockCollection(o);
                                                    }
                                                    var parallel = i[0];
-                                                   Stream<me.neilellis.dollar.var> stream;
+                                                   Stream<var> stream;
                                                    if (parallel.isTrue()) {
                                                        stream = o.stream().parallel();
                                                    } else {

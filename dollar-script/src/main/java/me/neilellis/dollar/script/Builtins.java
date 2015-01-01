@@ -16,12 +16,12 @@
 
 package me.neilellis.dollar.script;
 
-import me.neilellis.dollar.StateAware;
-import me.neilellis.dollar.collections.ImmutableList;
+import me.neilellis.dollar.api.StateAware;
+import me.neilellis.dollar.api.collections.ImmutableList;
+import me.neilellis.dollar.api.types.DollarFactory;
+import me.neilellis.dollar.api.types.ErrorType;
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.exceptions.BuiltinNotFoundException;
-import me.neilellis.dollar.types.DollarFactory;
-import me.neilellis.dollar.types.ErrorType;
-import me.neilellis.dollar.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static me.neilellis.dollar.DollarStatic.$;
-import static me.neilellis.dollar.DollarStatic.$void;
+import static me.neilellis.dollar.api.DollarStatic.$;
+import static me.neilellis.dollar.api.DollarStatic.$void;
 
 public class Builtins {
 

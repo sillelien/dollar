@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,11 @@
 package me.neilellis.dollar.script;
 
 import com.beust.jcommander.JCommander;
-import me.neilellis.dollar.Configuration;
-import me.neilellis.dollar.DollarStatic;
+import me.neilellis.dollar.api.Configuration;
+import me.neilellis.dollar.api.DollarStatic;
 
 import java.io.File;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
 public class ParserMain {
 
     public static void main(String[] args) throws Throwable {

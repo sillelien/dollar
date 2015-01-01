@@ -16,14 +16,14 @@
 
 package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.api.script.SourceSegment;
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.Operator;
 import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.SourceSegment;
-import me.neilellis.dollar.var;
 import org.codehaus.jparsec.functors.Binary;
 import org.jetbrains.annotations.NotNull;
 
-import static me.neilellis.dollar.DollarStatic.fix;
+import static me.neilellis.dollar.api.DollarStatic.fix;
 import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactive;
 
 public class SubscribeOperator implements Binary<var>, Operator {

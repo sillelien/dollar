@@ -16,16 +16,16 @@
 
 package me.neilellis.dollar.script.operators;
 
+import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.script.SourceSegmentValue;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
-import me.neilellis.dollar.var;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
 
-import static me.neilellis.dollar.DollarStatic.$void;
+import static me.neilellis.dollar.api.DollarStatic.$void;
 
 public class AssertOperator implements Map<Token, var> {
     private final Scope scope;
