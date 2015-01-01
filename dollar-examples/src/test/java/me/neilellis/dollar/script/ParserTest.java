@@ -132,7 +132,7 @@ public class ParserTest {
 
     //    @Test
     public void testOperators() throws Exception {
-        DollarStatic.config.failFast(false);
+        DollarStatic.getConfig().failFast(false);
         final List<String>
                 operatorTestFiles =
                 Arrays.asList("divide.all.ds", "plus.all.ds", "plus.minimal.ds", "divide.minimal.ds",

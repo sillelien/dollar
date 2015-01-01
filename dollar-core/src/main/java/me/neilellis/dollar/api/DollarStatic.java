@@ -51,10 +51,7 @@ public class DollarStatic {
     };
     @NotNull
     private static final ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
-    /**
-     * The shared configuration for Dollar.
-     */
-    @NotNull public static Configuration config = new SystemPropertyConfiguration();
+    @NotNull private static Configuration config = new SystemPropertyConfiguration();
 
     /**
      * Log and rethrow.
@@ -684,5 +681,16 @@ public class DollarStatic {
      */
     @NotNull public static var $(Pipeable lambda) {
         return DollarFactory.fromValue(lambda);
+    }
+
+    /**
+     * The shared configuration for Dollar.
+     */
+    @NotNull public static Configuration getConfig() {
+        return config;
+    }
+
+    public static void setConfig(@NotNull Configuration config) {
+        DollarStatic.config = config;
     }
 }

@@ -42,12 +42,12 @@ public class DollarOperatorsRegressionTest {
 
     @BeforeClass
     public static void before() {
-        DollarStatic.config.failFast(false);
+        DollarStatic.getConfig().failFast(false);
     }
 
     @BeforeClass
     public static void after() {
-        DollarStatic.config.failFast(true);
+        DollarStatic.getConfig().failFast(true);
     }
 
     @Test

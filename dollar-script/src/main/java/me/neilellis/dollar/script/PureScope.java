@@ -42,12 +42,12 @@ public class PureScope extends ScriptScope {
         if (key.matches("[0-9]+")) {
             throw new AssertionError("Cannot get numerical keys, use getParameter");
         }
-        if (DollarStatic.config.debugScope()) { log.info("Looking up " + key + " in " + this); }
+        if (DollarStatic.getConfig().debugScope()) { log.info("Looking up " + key + " in " + this); }
         Scope scope = getScopeForKey(key);
         if (scope == null) {
             scope = this;
         } else {
-            if (DollarStatic.config.debugScope()) { log.info("Found " + key + " in " + scope); }
+            if (DollarStatic.getConfig().debugScope()) { log.info("Found " + key + " in " + scope); }
         }
         Variable result = scope.getVariables().get(key);
         if (result != null && !(result.readonly && result.fixed) && !result.pure) {
@@ -90,7 +90,7 @@ public class PureScope extends ScriptScope {
         if (scope == null) {
             scope = this;
         }
-        if (DollarStatic.config.debugScope()) { log.info("Setting " + key + " in " + scope); }
+        if (DollarStatic.getConfig().debugScope()) { log.info("Setting " + key + " in " + scope); }
         if (scope != null && scope.getVariables().containsKey(key) && scope.getVariables().get(key).readonly) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }

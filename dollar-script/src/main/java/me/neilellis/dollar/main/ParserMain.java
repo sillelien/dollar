@@ -31,7 +31,7 @@ public class ParserMain {
         final ParserOptions options = new ParserOptions();
         new JCommander(options, args);
         File file = options.getFile();
-        DollarStatic.config = new ParserConfiguration(options);
+        DollarStatic.setConfig(new ParserConfiguration(options));
         DollarParser parser = new DollarParser(options);
         try {
             parser.parse(file, false);

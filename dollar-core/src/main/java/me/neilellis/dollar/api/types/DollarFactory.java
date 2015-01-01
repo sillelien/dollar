@@ -309,7 +309,7 @@ public class DollarFactory {
      */
     @NotNull
     public static var failure(ErrorType errorType) {
-        if (DollarStatic.config.failFast()) {
+        if (DollarStatic.getConfig().failFast()) {
             throw new DollarFailureException(errorType);
         } else {
             return wrap(new DollarError(errorType, ""));
@@ -330,12 +330,12 @@ public class DollarFactory {
     @NotNull
     private static var wrap(var value, DollarMonitor monitor, StateTracer tracer) {
         final var val;
-        if (DollarStatic.config.wrapForMonitoring()) {
+        if (DollarStatic.getConfig().wrapForMonitoring()) {
             val = new DollarWrapper(value, monitor, tracer);
         } else {
             val = value;
         }
-        if (DollarStatic.config.wrapForGuards()) {
+        if (DollarStatic.getConfig().wrapForGuards()) {
             return (var) java.lang.reflect.Proxy.newProxyInstance(
                     DollarStatic.class.getClassLoader(),
                     new Class<?>[]{var.class},
@@ -356,7 +356,7 @@ public class DollarFactory {
      */
     @NotNull
     public static var failure(ErrorType errorType, @NotNull Throwable t, boolean quiet) {
-        if (DollarStatic.config.failFast() && !quiet) {
+        if (DollarStatic.getConfig().failFast() && !quiet) {
             throw new DollarFailureException(t, errorType);
         } else {
 //            t.printStackTrace(System.err);
@@ -373,7 +373,7 @@ public class DollarFactory {
      * @return the var
      */
     @NotNull public static var failure(ErrorType errorType, String message, boolean quiet) {
-        if (DollarStatic.config.failFast() && !quiet) {
+        if (DollarStatic.getConfig().failFast() && !quiet) {
             throw new DollarFailureException(errorType, message);
         } else {
             return wrap(new DollarError(ImmutableList.of(new DollarException(message)), errorType, message));
@@ -508,7 +508,7 @@ public class DollarFactory {
         if (source == null) {
             throw new NullPointerException();
         }
-        if (DollarStatic.config.failFast()) {
+        if (DollarStatic.getConfig().failFast()) {
             final DollarFailureException dollarFailureException = new DollarFailureException(throwable, errorType);
             dollarFailureException.addSource(source);
             throw dollarFailureException;

@@ -478,7 +478,7 @@ public abstract class AbstractDollar implements var {
             for (Throwable error : errors) {
                 JsonObject errorJson = new JsonObject();
                 errorJson.putString("message", error.getMessage());
-                if (!DollarStatic.config.production()) {
+                if (!DollarStatic.getConfig().production()) {
                     errorJson.putString("stack", Arrays.toString(error.getStackTrace()));
                 } else {
                     errorJson.putString("hash",
