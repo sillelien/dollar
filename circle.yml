@@ -41,7 +41,7 @@ dependencies:
 test:
   override:
     - sudo ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
-    - "mvn -q integration-test":
+    - "mvn integration-test":
         timeout: 600
 
   post:
