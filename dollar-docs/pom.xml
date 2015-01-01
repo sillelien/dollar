@@ -29,7 +29,7 @@
     <dependencies>
         <dependency>
             <groupId>me.neilellis</groupId>
-            <artifactId>dollar-runtime</artifactId>
+            <artifactId>dollar-examples</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
