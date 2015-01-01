@@ -101,7 +101,6 @@
             <groupId>me.neilellis</groupId>
             <artifactId>dollar-http-plugin</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.neilellis</groupId>
