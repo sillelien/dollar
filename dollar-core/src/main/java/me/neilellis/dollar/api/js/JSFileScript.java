@@ -29,6 +29,7 @@ import javax.script.SimpleScriptContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 
 public class JSFileScript implements Pipeable {
@@ -41,7 +42,7 @@ public class JSFileScript implements Pipeable {
 
     public JSFileScript(@NotNull File file) throws IOException {
     byte[] bytes = Files.readAllBytes(file.toPath());
-    script = new String(bytes);
+        script = new String(bytes, Charset.forName("utf-8"));
   }
 
   public JSFileScript(InputStream stream) throws IOException {
