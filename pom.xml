@@ -531,6 +531,7 @@
                     <useIdeaDefaultExcludes>true</useIdeaDefaultExcludes>
                     <excludes>
                         <exclude>dist/**</exclude>
+                        <exclude>dist-skel/**</exclude>
                         <exclude>**/*.markdown</exclude>
                         <exclude>**/*.md</exclude>
                         <exclude>**/*.sh</exclude>

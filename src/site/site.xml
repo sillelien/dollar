@@ -36,7 +36,7 @@
             <gitHub>
                 <projectId>neilellis/dollar</projectId>
                 <ribbonOrientation>right</ribbonOrientation>
-                <ribbonColor>grey</ribbonColor>
+                <ribbonColor>gray</ribbonColor>
             </gitHub>
             <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
             <topBarEnabled>true</topBarEnabled>
