@@ -574,6 +574,7 @@
     <build>
         <pluginManagement>
             <plugins>
+                <!--Check for license headers-->
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
@@ -581,12 +582,16 @@
                     <configuration>
                         <useIdeaDefaultExcludes>true</useIdeaDefaultExcludes>
                         <excludes>
+                            <exclude>src/test/**</exclude>
                             <exclude>dist/**</exclude>
                             <exclude>dist-skel/**</exclude>
                             <exclude>**/*.markdown</exclude>
+                            <exclude>**/*.ds</exclude>
                             <exclude>**/*.md</exclude>
                             <exclude>**/*.sh</exclude>
                             <exclude>**/*.yml</exclude>
+                            <exclude>**/*.iml</exclude>
+                            <exclude>**/*.html</exclude>
                         </excludes>
                     </configuration>
                 </plugin>
