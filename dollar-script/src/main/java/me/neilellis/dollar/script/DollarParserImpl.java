@@ -23,6 +23,8 @@ import me.neilellis.dollar.api.execution.DollarExecutor;
 import me.neilellis.dollar.api.plugin.Plugins;
 import me.neilellis.dollar.api.types.DollarFactory;
 import me.neilellis.dollar.api.types.ErrorType;
+import me.neilellis.dollar.script.api.DollarParser;
+import me.neilellis.dollar.script.api.ParserOptions;
 import me.neilellis.dollar.script.api.Scope;
 import me.neilellis.dollar.script.api.exceptions.DollarScriptFailureException;
 import me.neilellis.dollar.script.java.JavaScriptingSupport;
@@ -54,7 +56,7 @@ import static me.neilellis.dollar.script.DollarScriptSupport.wrapReactive;
 import static me.neilellis.dollar.script.OperatorPriority.*;
 import static org.codehaus.jparsec.Parsers.*;
 
-public class DollarParser {
+public class DollarParserImpl implements DollarParser {
 
     //Lexer
 
@@ -76,12 +78,12 @@ public class DollarParser {
     private File sourceDir;
     private Parser<?> topLevelParser;
 
-    public DollarParser(ParserOptions options) {
+    public DollarParserImpl(ParserOptions options) {
         this.options = options;
         classLoader = DollarParser.class.getClassLoader();
     }
 
-    public DollarParser(ParserOptions options, ClassLoader classLoader, File dir) {
+    public DollarParserImpl(ParserOptions options, ClassLoader classLoader, File dir) {
         this.options = options;
         this.classLoader = classLoader;
         this.sourceDir = dir;
@@ -98,19 +100,19 @@ public class DollarParser {
                 });
     }
 
-    @NotNull public Scope currentScope() {
+    @Override @NotNull public Scope currentScope() {
         return scopes.get().get(scopes.get().size() - 1);
     }
 
-    public void export(@NotNull String name, @NotNull var export) {
+    @Override public void export(@NotNull String name, @NotNull var export) {
         exports.put(name, export);
     }
 
-    @NotNull public ParserErrorHandler getErrorHandler() {
+    @Override @NotNull public ParserErrorHandler getErrorHandler() {
         return errorHandler;
     }
 
-    @SuppressWarnings("ThrowFromFinallyBlock")
+    @Override @SuppressWarnings("ThrowFromFinallyBlock")
     public <T> T inScope(boolean pure, String scopeName, @NotNull Scope currentScope, @NotNull Function<Scope, T> r) {
         Scope newScope;
         if (pure) {
@@ -137,7 +139,7 @@ public class DollarParser {
         }
     }
 
-    public ParserOptions options() {
+    @Override public ParserOptions options() {
         return options;
     }
 
@@ -145,7 +147,7 @@ public class DollarParser {
 //        return expression1.infixl(term("[").next(expression2).followedBy(term("]")));
 //    }
 
-    @NotNull public var parse(@NotNull File file, boolean parallel) throws IOException {
+    @Override @NotNull public var parse(@NotNull File file, boolean parallel) throws IOException {
 
         this.file = file.getAbsolutePath();
         if (file.getName().endsWith(".md") || file.getName().endsWith(".markdown")) {
@@ -157,7 +159,7 @@ public class DollarParser {
 
     }
 
-    @NotNull public var parse(@NotNull Scope scope, @NotNull String source) {
+    @Override @NotNull public var parse(@NotNull Scope scope, @NotNull String source) {
         addScope(scope);
         try {
             DollarStatic.context().setClassLoader(classLoader);
@@ -170,35 +172,35 @@ public class DollarParser {
         }
     }
 
-    @NotNull public var parse(@NotNull Scope scope, @NotNull File file, boolean parallel) throws IOException {
+    @Override @NotNull public var parse(@NotNull Scope scope, @NotNull File file, boolean parallel) throws IOException {
         String source = new String(Files.readAllBytes(file.toPath()));
         this.file = file.getAbsolutePath();
         return parse(new ScriptScope(scope, file.getName(), source, file.getName()), source);
     }
 
-    @NotNull public var parse(@NotNull Scope scope, InputStream in, boolean parallel) throws IOException {
+    @Override @NotNull public var parse(@NotNull Scope scope, InputStream in, boolean parallel) throws IOException {
         String source = new String(ByteStreams.toByteArray(in));
         return parse(new ScriptScope(scope, "(stream)", source, "(stream)"), source);
     }
 
-    @NotNull public var parse(InputStream in, String file, boolean parallel) throws IOException {
+    @Override @NotNull public var parse(InputStream in, String file, boolean parallel) throws IOException {
         this.file = file;
         String source = new String(ByteStreams.toByteArray(in));
         return parse(new ScriptScope(this, source, file), source);
     }
 
-    @NotNull public var parse(@NotNull String s, boolean parallel) throws IOException {
-        return parse(new ScriptScope(this, s, "(string)"), s);
+    @Override @NotNull public var parse(@NotNull String source, boolean parallel) throws IOException {
+        return parse(new ScriptScope(this, source, "(string)"), source);
     }
 
-    @NotNull public var parseMarkdown(@NotNull String source) {
+    @Override @NotNull public var parseMarkdown(@NotNull String source) {
         PegDownProcessor processor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
         RootNode rootNode = processor.parseMarkdown(source.toCharArray());
         rootNode.accept(new CodeExtractionVisitor());
         return $();
     }
 
-    public List<Scope> scopes() {
+    @Override public List<Scope> scopes() {
         return scopes.get();
     }
 

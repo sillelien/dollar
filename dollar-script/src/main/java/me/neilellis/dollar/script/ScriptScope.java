@@ -21,6 +21,7 @@ import com.google.common.collect.Multimap;
 import me.neilellis.dollar.api.DollarException;
 import me.neilellis.dollar.api.DollarStatic;
 import me.neilellis.dollar.api.var;
+import me.neilellis.dollar.script.api.DollarParser;
 import me.neilellis.dollar.script.api.Scope;
 import me.neilellis.dollar.script.api.Variable;
 import me.neilellis.dollar.script.api.exceptions.DollarScriptException;

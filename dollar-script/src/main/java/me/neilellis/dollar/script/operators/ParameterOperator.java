@@ -18,9 +18,10 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.Builtins;
-import me.neilellis.dollar.script.DollarParser;
+import me.neilellis.dollar.script.DollarParserImpl;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.SourceSegmentValue;
+import me.neilellis.dollar.script.api.DollarParser;
 import me.neilellis.dollar.script.api.Scope;
 import me.neilellis.dollar.script.api.exceptions.DollarScriptException;
 import org.codehaus.jparsec.Token;
@@ -97,8 +98,8 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
             for (var param : rhs) {
                 newScope.setParameter(String.valueOf(++count), param);
                 //If the parameter is a named parameter then use the name (set as metadata on the value).
-                if (param.getMetaAttribute(DollarParser.NAMED_PARAMETER_META_ATTR) != null) {
-                    newScope.set(param.getMetaAttribute(DollarParser.NAMED_PARAMETER_META_ATTR), param, true, null,
+                if (param.getMetaAttribute(DollarParserImpl.NAMED_PARAMETER_META_ATTR) != null) {
+                    newScope.set(param.getMetaAttribute(DollarParserImpl.NAMED_PARAMETER_META_ATTR), param, true, null,
                                  constraintSource, false, false, pure);
                 }
             }

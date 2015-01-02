@@ -17,6 +17,7 @@
 package me.neilellis.dollar.script;
 
 import me.neilellis.dollar.api.DollarException;
+import me.neilellis.dollar.script.api.ParserOptions;
 import org.jetbrains.annotations.NotNull;
 import org.pegdown.ast.*;
 
@@ -192,7 +193,7 @@ public class CodeExtractionVisitor implements Visitor {
     public void visit(@NotNull VerbatimNode node) {
         if ("dollar".equals(node.getType())) {
             try {
-                new DollarParser(new ParserOptions()).parse(node.getText(), false);
+                new DollarParserImpl(new ParserOptions()).parse(node.getText(), false);
             } catch (Exception e) {
                 throw new DollarException(e, node.getText());
             }

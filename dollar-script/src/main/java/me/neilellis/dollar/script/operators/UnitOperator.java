@@ -18,9 +18,9 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.Builtins;
-import me.neilellis.dollar.script.DollarParser;
 import me.neilellis.dollar.script.DollarScriptSupport;
 import me.neilellis.dollar.script.SourceSegmentValue;
+import me.neilellis.dollar.script.api.DollarParser;
 import me.neilellis.dollar.script.api.Scope;
 import org.codehaus.jparsec.Token;
 import org.codehaus.jparsec.functors.Map;

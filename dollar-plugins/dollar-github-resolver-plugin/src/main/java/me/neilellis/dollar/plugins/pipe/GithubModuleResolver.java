@@ -22,7 +22,7 @@ import me.neilellis.dollar.api.collections.ImmutableMap;
 import me.neilellis.dollar.api.script.ModuleResolver;
 import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.deps.DependencyRetriever;
-import me.neilellis.dollar.script.DollarParser;
+import me.neilellis.dollar.script.DollarParserImpl;
 import me.neilellis.dollar.script.api.Scope;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
@@ -109,7 +109,8 @@ public class GithubModuleResolver implements ModuleResolver {
             for (Map.Entry<var, var> entry : paramMap.entrySet()) {
                 newScope.set(entry.getKey().$S(), entry.getValue(), true, null, null, false, false, false);
             }
-            return new DollarParser(((Scope)scope).getDollarParser().options(), classLoader, dir).parse(newScope, content);
+            return new DollarParserImpl(((Scope) scope).getDollarParser().options(), classLoader, dir).parse(newScope,
+                                                                                                             content);
         });
     }
 }

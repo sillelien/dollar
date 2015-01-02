@@ -17,8 +17,8 @@
 package me.neilellis.dollar.docs;
 
 import com.google.common.io.CharStreams;
-import me.neilellis.dollar.script.DollarParser;
-import me.neilellis.dollar.script.ParserOptions;
+import me.neilellis.dollar.script.DollarParserImpl;
+import me.neilellis.dollar.script.api.ParserOptions;
 import org.jetbrains.annotations.NotNull;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
@@ -44,7 +44,7 @@ public class ParseDocs {
         } else {
             toParse = source;
         }
-        new DollarParser(new ParserOptions()).parseMarkdown(toParse);
+        new DollarParserImpl(new ParserOptions()).parseMarkdown(toParse);
         PegDownProcessor pegDownProcessor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
         String result = pegDownProcessor.markdownToHtml(toParse);
         Files.write(new File(outDir, page + ".html").toPath(), result.getBytes());

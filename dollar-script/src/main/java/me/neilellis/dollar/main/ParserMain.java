@@ -19,8 +19,9 @@ package me.neilellis.dollar.main;
 import com.beust.jcommander.JCommander;
 import me.neilellis.dollar.api.Configuration;
 import me.neilellis.dollar.api.DollarStatic;
-import me.neilellis.dollar.script.DollarParser;
-import me.neilellis.dollar.script.ParserOptions;
+import me.neilellis.dollar.script.DollarParserImpl;
+import me.neilellis.dollar.script.api.DollarParser;
+import me.neilellis.dollar.script.api.ParserOptions;
 
 import java.io.File;
 
@@ -32,7 +33,7 @@ public class ParserMain {
         new JCommander(options, args);
         File file = options.getFile();
         DollarStatic.setConfig(new ParserConfiguration(options));
-        DollarParser parser = new DollarParser(options);
+        DollarParser parser = new DollarParserImpl(options);
         try {
             parser.parse(file, false);
             //todo: make the automatic exit optional and a switch in the ParserOptions

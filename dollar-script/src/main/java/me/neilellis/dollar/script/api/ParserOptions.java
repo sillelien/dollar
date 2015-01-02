@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script;
+package me.neilellis.dollar.script.api;
 
 import com.beust.jcommander.Parameter;
 import org.jetbrains.annotations.NotNull;
