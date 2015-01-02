@@ -16,12 +16,12 @@
 
 package me.neilellis.dollar.script.java;
 
-import com.innowhere.relproxy.jproxy.JProxy;
-import com.innowhere.relproxy.jproxy.JProxyConfig;
-import com.innowhere.relproxy.jproxy.JProxyScriptEngineFactory;
 import me.neilellis.dollar.api.DollarStatic;
 import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.relproxy.jproxy.JProxy;
+import me.neilellis.dollar.script.relproxy.jproxy.JProxyConfig;
+import me.neilellis.dollar.script.relproxy.jproxy.JProxyScriptEngineFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
