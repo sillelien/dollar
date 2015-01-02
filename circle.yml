@@ -34,13 +34,13 @@ dependencies:
     - gem install jekyll
     - npm install -g github-changes
   override:
-    - mvn -q dependency:resolve
+    - mvn -q -T1 dependency:resolve
 
 
 test:
   override:
     - sudo ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
-    - "mvn integration-test":
+    - "mvn -T1 integration-test":
         timeout: 600
 
   post:
@@ -64,7 +64,7 @@ deployment:
         - "git tag ${release} || :"
         - git push --tags
         - git push origin master
-        - mvn site:site site:stage  -Dmaven.test.skip=true
+        - mvn -T1 site:site site:stage  -Dmaven.test.skip=true
         - mv target/staging/* $CIRCLE_ARTIFACTS
 
   production:
@@ -76,18 +76,18 @@ deployment:
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
-        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} install deploy site:site site:stage
+        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -T1 install deploy site:site site:stage
         - ./build-docs.sh:
             timeout: 360
         - pack/pack.sh
         - pack/upload.sh ${release} ${CIRCLE_BUILD_NUM}
 #        - mvn scm-publish:publish-scm
+        - mv target/staging/* $CIRCLE_ARTIFACTS
 
 
   development:
       branch: dev
       commands:
-          - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -Dmaven.test.skip install
-          - mvn site:site site:stage  -Dmaven.test.skip=true
+          - mvn -Dgpg.passphrase=${GPG_PASSPHRASE}  install  site:site site:stage
           - mv target/staging/* $CIRCLE_ARTIFACTS
 
