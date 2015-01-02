@@ -54,7 +54,7 @@ public class PureScope extends ScriptScope {
         Variable result = scope.getVariables().get(key);
         if (result != null && !(result.isReadonly() && result.isFixed()) && !result.isPure()) {
             throw new UnsupportedOperationException(
-                    "Cannot access non constant values in a pure expression, put either 'pure' or 'const' as " +
+                    "Cannot access non constant values in a pure expression, putValue either 'pure' or 'const' as " +
                     "appropriate before '" +
                     key +
                     "'");

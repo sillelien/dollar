@@ -30,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -374,8 +375,8 @@ public class DollarStatic {
     @NotNull
     public static JsonObject mapToJson(@NotNull MultiMap<String, String> map) {
         JsonObject jsonObject = new JsonObject();
-        for (Map.Entry<String, String> entry : map.entries()) {
-            jsonObject.putString(entry.getKey(), entry.getValue());
+        for (Map.Entry<String, Collection<String>> entry : map.entries()) {
+            jsonObject.putString(entry.getKey(), entry.getValue().iterator().next());
         }
         return jsonObject;
     }

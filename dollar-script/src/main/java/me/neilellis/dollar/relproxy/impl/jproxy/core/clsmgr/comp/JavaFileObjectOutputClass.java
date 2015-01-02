@@ -29,7 +29,7 @@ public class JavaFileObjectOutputClass extends SimpleJavaFileObject {
 
     /**
      * Byte code created by the compiler will be stored in this ByteArrayOutputStream so that we can later get the byte
-     * array out of it and put it in the memory as an instance of our class.
+     * array out of it and putValue it in the memory as an instance of our class.
      */
     protected final ByteArrayOutputStream bos = new ByteArrayOutputStream();
     protected String binaryName;

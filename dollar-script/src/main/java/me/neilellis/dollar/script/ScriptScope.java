@@ -276,11 +276,11 @@ public class ScriptScope implements Scope {
         Scope scopeForKey = getScopeForKey(key);
         if (scopeForKey == null) {
             if (DollarStatic.getConfig().debugScope()) { log.info("Key " + key + " not found in " + this); }
-            listeners.put(key, listener);
+            listeners.putValue(key, listener);
             return;
         }
         if (DollarStatic.getConfig().debugScope()) { log.info("Listening for " + key + " in " + scopeForKey); }
-        scopeForKey.getListeners().put(key, listener);
+        scopeForKey.getListeners().putValue(key, listener);
     }
 
     @Override public var notify(String variableName) {

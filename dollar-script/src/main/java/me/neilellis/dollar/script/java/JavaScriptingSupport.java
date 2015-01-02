@@ -60,7 +60,7 @@ public class JavaScriptingSupport {
         ScriptEngineManager manager = new ScriptEngineManager();
 //        manager.registerEngineName("j", factory);
 //
-//        manager.getBindings().put("in",in);
+//        manager.getBindings().putValue("in",in);
 //
 //        ScriptEngine engine = manager.getEngineByName("j");
 

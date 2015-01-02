@@ -268,7 +268,7 @@ import java.util.*;
     } else if (value instanceof byte[]) {
       putBinary(fieldName, (byte[]) value);
     } else {
-      throw new DollarException("Cannot put objects of class " + value.getClass() + " in JsonObject");
+        throw new DollarException("Cannot putValue objects of class " + value.getClass() + " in JsonObject");
     }
     return this;
   }
