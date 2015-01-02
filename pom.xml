@@ -580,9 +580,11 @@
                     <artifactId>apache-rat-plugin</artifactId>
                     <version>0.11</version>
                     <configuration>
+                        <ignoreErrors>true</ignoreErrors>
                         <useIdeaDefaultExcludes>true</useIdeaDefaultExcludes>
                         <excludes>
                             <exclude>src/test/**</exclude>
+                            <exclude>src/main/webapp/**</exclude>
                             <exclude>dist/**</exclude>
                             <exclude>dist-skel/**</exclude>
                             <exclude>**/*.markdown</exclude>
