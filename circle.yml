@@ -40,7 +40,7 @@ dependencies:
 test:
   override:
     - sudo ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
-    - "mvn -T1 integration-test":
+    - "mvn -T1 -Drat.skip integration-test":
         timeout: 600
 
   post:
@@ -88,6 +88,4 @@ deployment:
   development:
       branch: dev
       commands:
-          - mvn -Dgpg.passphrase=${GPG_PASSPHRASE}  install  site:site site:stage
-          - mv target/staging/* $CIRCLE_ARTIFACTS
-
+          - echo "dev"
