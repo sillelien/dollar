@@ -26,16 +26,25 @@ public class ParserOptions {
 
     @Parameter(names = "--profile", description = "The configuration profile to use")
     private String profile;
+
     @Parameter(names = "--safe", description = "Provide extra safety from errors")
     private boolean safe;
+
     @Parameter(names = "--usage", description = "Record usage metrics")
     private boolean monitor;
+
+    @Parameter(names = "--server", description = "Run in server mode")
+    private boolean server;
+
     @Parameter(names = "--tolerate-errors", description = "Continue execution after an error")
     private boolean tolerateErrors;
+
     @Parameter(names = "--debug-scope")
     private boolean debugScope;
+
     @Parameter(description = "The file to execute")
     private List<File> files;
+
     private boolean production;
 
     @NotNull public File getFile() {
@@ -43,19 +52,31 @@ public class ParserOptions {
     }
 
     public boolean isDebugScope() {
-        return debugScope;
+        return debugScope && !isProduction();
+    }
+
+    public boolean isProduction() {
+        return profile.equalsIgnoreCase("prod");
+    }
+
+    public boolean isDevelopment() {
+        return profile.equalsIgnoreCase("dev");
     }
 
     public boolean isMonitor() {
         return monitor;
     }
 
-    public boolean isProduction() {
-        return production;
-    }
-
     public boolean isSafe() {
         return safe;
+    }
+
+    public boolean isServer() {
+        return server;
+    }
+
+    public boolean isTest() {
+        return profile.equalsIgnoreCase("test");
     }
 
     public boolean isTolerateErrors() {

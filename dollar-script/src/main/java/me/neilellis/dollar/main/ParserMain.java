@@ -36,8 +36,9 @@ public class ParserMain {
         DollarParser parser = new DollarParserImpl(options);
         try {
             parser.parse(file, false);
-            //todo: make the automatic exit optional and a switch in the ParserOptions
-            System.exit(0);
+            if (!options.isServer()) {
+                System.exit(0);
+            }
         } catch (Throwable t) {
             try {
                 parser.getErrorHandler().handleTopLevel(t);
