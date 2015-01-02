@@ -28,7 +28,7 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
     // compatibility with commons-collection releases 2.0/2.1
     private static final long serialVersionUID = 1943563828307035349L;
     // backed values collection
-    @NotNull private transient Collection values = new Values();
+    @NotNull private transient Collection<V> values = new Values();
 
     /**
      * Constructor.
@@ -68,9 +68,8 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
         // be careful of JDK 1.3 vs 1.4 differences
         super((int) (mapToCopy.size() * 1.4f));
         if (mapToCopy instanceof MultiMap) {
-            for (Object o : mapToCopy.entrySet()) {
-                Entry<K, V> entry = (Entry<K, V>) o;
-                Collection<V> coll = (Collection<V>) entry.getValue();
+            for (Entry<K, Collection<V>> entry : mapToCopy.entrySet()) {
+                Collection<V> coll = entry.getValue();
                 Collection<V> newColl = createCollection(coll);
                 super.put(entry.getKey(), newColl);
             }
@@ -119,10 +118,6 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
             }
         }
         return false;
-    }
-
-    @NotNull @Override public Collection<Collection<V>> values() {
-        return values;
     }
 
     @Override public boolean remove(Object key, Object item) {
@@ -202,6 +197,10 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
         return (results ? value : null);
     }
 
+    @Override @NotNull public Collection<V> allValues() {
+        return values;
+    }
+
     @Override public int size(Object key) {
         Collection coll = getCollection(key);
         return coll.size();
@@ -229,9 +228,9 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
     /**
      * Inner class to view the elements.
      */
-    private class Values extends AbstractCollection {
+    private class Values extends AbstractCollection<V> {
 
-        @NotNull public Iterator iterator() {
+        @NotNull public Iterator<V> iterator() {
             return new ValueIterator();
         }
 
@@ -254,9 +253,9 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
     /**
      * Inner iterator to view the elements.
      */
-    private class ValueIterator implements Iterator {
-        private final Iterator backedIterator;
-        private Iterator tempIterator;
+    private class ValueIterator implements Iterator<V> {
+        private final Iterator<Collection<V>> backedIterator;
+        private Iterator<V> tempIterator;
 
         private ValueIterator() {
             backedIterator = MultiHashMap.super.values().iterator();
@@ -271,13 +270,13 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
                 if (!backedIterator.hasNext()) {
                     return false;
                 }
-                tempIterator = ((Collection) backedIterator.next()).iterator();
+                tempIterator = backedIterator.next().iterator();
             }
             return true;
         }
 
-        public Object next() {
-            if (searchNextIterator() == false) {
+        public V next() {
+            if (!searchNextIterator()) {
                 throw new NoSuchElementException();
             }
             return tempIterator.next();
