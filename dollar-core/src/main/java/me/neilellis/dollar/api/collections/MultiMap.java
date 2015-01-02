@@ -25,6 +25,8 @@ import java.util.Map;
 
 public interface MultiMap<K, V> extends Cloneable, Serializable {
 
+    @NotNull Collection<V> allValues();
+
     /**
      * Clear the map. <p> This clears each collection in the map, and so may be slow.
      */
@@ -131,4 +133,5 @@ public interface MultiMap<K, V> extends Cloneable, Serializable {
      * @return a collection view of the values contained in this map
      */
     @NotNull Collection<Collection<V>> values();
+
 }
