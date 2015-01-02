@@ -87,13 +87,13 @@
     </custom>
     <body>
         <links>
-            <item name="Intro" href="README.html"/>
+            <!--<item name="Intro" href="README.html"/>-->
             <!--<item name="Page 2" href="http://google.com/"/>-->
             <!--<item name="Page 3" href="http://google.com/"/>-->
         </links>
 
         <menu name="dollar">
-            <!--<item name="Introduction" href="index.html"/>-->
+            <item name="Main Website" href="index.html"/>
             <!--<item name="Download" href="download.html"/>-->
             <!--<item name="Release Notes" href="release-notes.html"/>-->
             <!--<item name="General Information" href="about.html"/>-->
