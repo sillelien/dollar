@@ -3,7 +3,7 @@ layout: default
 ---
 
 <!--
-  ~ Copyright (c) 2014 Neil Ellis
+  ~ Copyright (c) 2014-2015 Neil Ellis
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -20,56 +20,63 @@ layout: default
 
 <div class="home">
 
-  <h1>About</h1>
+    <h1>About</h1>
 
-  <div style="width:100%;min-width:440px;display: inline-block;margin-bottom:2em;">
+    <div style="width:100%;min-width:440px;display: inline-block;margin-bottom:2em;">
     <span style="max-width:30%;min-width:100px;display: inline-block;float: right;margin-left:2em">
         <img src="https://s3-us-west-2.amazonaws.com/tilt-donations/donate_now.png"
              data-ct-checkout="dollar.supporting-open-source">
 
     </span>
 
-    <p>DollarScript is a scripting language for the Java VM, best suited to small to medium server-side projects. Please
-      checkout the <a href="script.html">Manual</a> for a full introduction to DollarScript.
-    </p>
-  </div>
-{% highlight bash %}
-  //Fully working persistent chat server
-  server= socketio://127.0.0.1:8092/bulletin?eventType=chatevent
-  lastMessages= db:circular://messages/tmp/messages10.db?size=10
+        <p>DollarScript is a scripting language for the Java VM, best suited to small to medium server-side projects.
+            Please
+            checkout the <a href="script.html">Manual</a> for a full introduction to DollarScript.
+        </p>
+    </div>
+    {% highlight bash %}
+    //Fully working persistent chat server
+    server= socketio://127.0.0.1:8092/bulletin?eventType=chatevent
+    lastMessages= db:circular://messages/tmp/messages10.db?size=10
 
-  message *= server
-  timestampedMessage := (message + {"timestamp":DATE()})
-  timestampedMessage >> lastMessages
+    message *= server
+    timestampedMessage := (message + {"timestamp":DATE()})
+    timestampedMessage >> lastMessages
 
-  ("chatevent" : timestampedMessage) publish server
+    ("chatevent" : timestampedMessage) publish server
 
-  http://127.0.0.1:8091/messages subscribe {
-  {"body":all lastMessages, "headers":{"Access-Control-Allow-Origin":"*"}}
-  }
-{% endhighlight %}
+    http://127.0.0.1:8091/messages subscribe {
+    {"body":all lastMessages, "headers":{"Access-Control-Allow-Origin":"*"}}
+    }
+    {% endhighlight %}
 
-  <p>The Dollar API is the base of the language and is designed for dynamic programming on the JVM, details can be found <a href="api.html">here</a>.</p>
-  <p>The language and API are at an incredibly early stage so don't expect too much, I have released early mainly to get feedback and swap ideas before the language gets too formalized.</p>
-  <p>Oh, and I'm Neil Ellis, the author of both, I lurk on <a href="http://twitter.com/neilellis">Twitter</a> so just @mention me and I'll get back to you.</p>
-  <a href='https://bintray.com/neilellis/dollar/dollar-runtime-osx/_latestVersion'><img src='https://api.bintray.com/packages/neilellis/dollar/dollar-runtime-osx/images/download.svg'></a>
+    <p>The Dollar API is the base of the language and is designed for dynamic programming on the JVM, details can be
+        found <a href="api.html">here</a>.</p>
+
+    <p>The language and API are at an incredibly early stage so don't expect too much, I have released early mainly to
+        get feedback and swap ideas before the language gets too formalized.</p>
+
+    <p>Oh, and I'm Neil Ellis, the author of both, I lurk on <a href="http://twitter.com/neilellis">Twitter</a> so just
+        @mention me and I'll get back to you.</p>
+    <a href='https://bintray.com/neilellis/dollar/dollar-runtime-osx/_latestVersion'><img
+            src='https://api.bintray.com/packages/neilellis/dollar/dollar-runtime-osx/images/download.svg'></a>
 
 
-  <br/>
+    <br/>
+    <hr/>
+    <h1 class="page-heading">News</h1>
+    <ul class="post-list">
+        {% for post in site.posts %}
+        <li>
+            <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
 
-  <h1 class="page-heading">News</h1>
-  <ul class="post-list">
-    {% for post in site.posts %}
-      <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+            <h2>
+                <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+            </h2>
+        </li>
+        {% endfor %}
+    </ul>
 
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-        </h2>
-      </li>
-    {% endfor %}
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
+    <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
 
 </div>

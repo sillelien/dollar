@@ -25,6 +25,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>dollar-simple-learner-plugin</artifactId>
+    <properties>
+        <plugin.name>simple_learner</plugin.name>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>me.neilellis</groupId>

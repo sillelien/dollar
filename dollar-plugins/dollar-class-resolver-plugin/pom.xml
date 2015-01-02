@@ -24,7 +24,9 @@
         <version>0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <properties>
+        <plugin.name>class_resolver</plugin.name>
+    </properties>
     <artifactId>dollar-class-resolver-plugin</artifactId>
     <dependencies>
         <dependency>

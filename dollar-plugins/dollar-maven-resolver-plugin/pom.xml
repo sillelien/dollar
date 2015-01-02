@@ -24,6 +24,9 @@
         <version>0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <plugin.name>maven_resolver</plugin.name>
+    </properties>
 
     <artifactId>dollar-maven-resolver-plugin</artifactId>
     <dependencies>

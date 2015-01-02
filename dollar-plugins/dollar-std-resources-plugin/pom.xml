@@ -24,6 +24,9 @@
         <version>0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <plugin.name>std_uri</plugin.name>
+    </properties>
 
     <artifactId>dollar-std-resources-plugins</artifactId>
     <dependencies>

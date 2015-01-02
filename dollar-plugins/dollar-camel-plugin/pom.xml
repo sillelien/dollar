@@ -25,6 +25,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <properties>
+        <plugin.name>camel_uri</plugin.name>
+    </properties>
     <artifactId>dollar-camel-plugin</artifactId>
     <dependencies>
         <dependency>

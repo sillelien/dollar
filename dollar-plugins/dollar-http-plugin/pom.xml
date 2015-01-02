@@ -25,6 +25,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>dollar-http-plugin</artifactId>
+    <properties>
+        <plugin.name>http_uri</plugin.name>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>me.neilellis</groupId>

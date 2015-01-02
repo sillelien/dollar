@@ -25,6 +25,7 @@ import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.exceptions.DollarScriptException;
 import me.neilellis.dollar.script.exceptions.ErrorReporter;
 import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
+import org.codehaus.jparsec.error.ParserException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -95,6 +96,10 @@ public class ParserErrorHandler {
             System.err.println(t.getMessage());
         }
         if (t instanceof DollarException) {
+            ErrorReporter.report(getClass(), t);
+            System.err.println(t.getMessage());
+        }
+        if (t instanceof ParserException) {
             ErrorReporter.report(getClass(), t);
             System.err.println(t.getMessage());
         }
