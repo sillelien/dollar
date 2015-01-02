@@ -26,7 +26,7 @@
             <googlePlusOne/>
             <ohloh>
                 <projectId>dollar_script</projectId>
-                <widget>factoids</widget>
+                <!--<widget>factoids</widget>-->
             </ohloh>
             <twitter>
                 <user>neilellis</user>

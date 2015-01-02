@@ -243,65 +243,7 @@
                 <artifactId>aether-util</artifactId>
                 <version>1.0.1.v20141111</version>
             </dependency>
-            <!--<dependency>-->
-            <!--<groupId>com.jcabi</groupId>-->
-            <!--<artifactId>jcabi-aether</artifactId>-->
-            <!--<version>0.10.1</version>-->
-            <!--<exclusions>-->
-            <!--<exclusion>-->
-            <!--<groupId>org.eclipse.aether</groupId>-->
-            <!--<artifactId>aether-util</artifactId>-->
-            <!--</exclusion>-->
-            <!--<exclusion>-->
-            <!--<groupId>org.apache.maven</groupId>-->
-            <!--<artifactId>maven-core</artifactId>-->
-            <!--</exclusion>-->
-            <!--<exclusion>-->
-            <!--<groupId>org.codehaus.plexus</groupId>-->
-            <!--<artifactId>plexus-utils</artifactId>-->
-            <!--</exclusion>-->
-            <!--<exclusion>-->
-            <!--<groupId>org.slf4j</groupId>-->
-            <!--<artifactId>slf4j-api</artifactId>-->
-            <!--</exclusion>-->
-            <!--<exclusion>-->
-            <!--<artifactId>commons-lang3</artifactId>-->
-            <!--<groupId>org.apache.commons</groupId>-->
-            <!--</exclusion>-->
-            <!--<exclusion>-->
-            <!--<groupId>com.jcabi</groupId>-->
-            <!--<artifactId>jcabi-log</artifactId>-->
-            <!--</exclusion>-->
-            <!--<exclusion>-->
-            <!--<groupId>com.amazonaws</groupId>-->
-            <!--<artifactId>aws-java-sdk</artifactId>-->
-            <!--</exclusion>-->
-            <!--<exclusion>-->
-            <!--<groupId>org.sonatype.sisu</groupId>-->
-            <!--<artifactId>sisu-inject-plexus</artifactId>-->
-            <!--</exclusion>-->
-            <!--<exclusion>-->
-            <!--<groupId>org.apache.maven.wagon</groupId>-->
-            <!--<artifactId>wagon-provider-api</artifactId>-->
-            <!--</exclusion>-->
-            <!--<exclusion>-->
-            <!--<groupId>org.aspectj</groupId>-->
-            <!--<artifactId>aspectjrt</artifactId>-->
-            <!--</exclusion>-->
-            <!--<exclusion>-->
-            <!--<groupId>org.apache.maven</groupId>-->
-            <!--<artifactId>maven-model</artifactId>-->
-            <!--</exclusion>-->
-            <!--<exclusion>-->
-            <!--<groupId>org.apache.maven</groupId>-->
-            <!--<artifactId>maven-artifact</artifactId>-->
-            <!--</exclusion>-->
-            <!--<exclusion>-->
-            <!--<groupId>org.codehaus.plexus</groupId>-->
-            <!--<artifactId>plexus-classworlds</artifactId>-->
-            <!--</exclusion>-->
-            <!--</exclusions>-->
-            <!--</dependency>-->
+
             <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjrt</artifactId>
@@ -520,24 +462,11 @@
     </dependencyManagement>
 
 
-    <!-- mvn surefire-report:report -->
     <reporting>
         <plugins>
             <plugin>
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>
-                <version>0.11</version>
-                <configuration>
-                    <useIdeaDefaultExcludes>true</useIdeaDefaultExcludes>
-                    <excludes>
-                        <exclude>dist/**</exclude>
-                        <exclude>dist-skel/**</exclude>
-                        <exclude>**/*.markdown</exclude>
-                        <exclude>**/*.md</exclude>
-                        <exclude>**/*.sh</exclude>
-                        <exclude>**/*.yml</exclude>
-                    </excludes>
-                </configuration>
             </plugin>
 
             <plugin>
@@ -545,6 +474,8 @@
                 <artifactId>clirr-maven-plugin</artifactId>
                 <version>2.6.1</version>
             </plugin>
+            <!--Not 1.8 compatible yet-->
+
             <!--<plugin>-->
             <!--<groupId>org.codehaus.mojo</groupId>-->
             <!--<artifactId>cobertura-maven-plugin</artifactId>-->
@@ -570,6 +501,7 @@
                     <aggregate>true</aggregate>
                 </configuration>
             </plugin>
+            <!--Not 1.8 compatible yet-->
             <!--<plugin>-->
             <!--<groupId>org.codehaus.mojo</groupId>-->
             <!--<artifactId>javancss-maven-plugin</artifactId>-->
@@ -642,6 +574,22 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.apache.rat</groupId>
+                    <artifactId>apache-rat-plugin</artifactId>
+                    <version>0.11</version>
+                    <configuration>
+                        <useIdeaDefaultExcludes>true</useIdeaDefaultExcludes>
+                        <excludes>
+                            <exclude>dist/**</exclude>
+                            <exclude>dist-skel/**</exclude>
+                            <exclude>**/*.markdown</exclude>
+                            <exclude>**/*.md</exclude>
+                            <exclude>**/*.sh</exclude>
+                            <exclude>**/*.yml</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>findbugs-maven-plugin</artifactId>
