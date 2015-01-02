@@ -48,6 +48,7 @@ test:
      - mvn com.code-spotter:codespotter-maven-plugin::check  -Dmaven.test.skip=true -pl me.neilellis:dollar-core
 
 deployment:
+
   staging:
       branch: staging
       commands:
@@ -63,6 +64,8 @@ deployment:
         - "git tag ${release} || :"
         - git push --tags
         - git push origin master
+        - mvn site:site site:stage
+        - mv target/staging/* $CIRCLE_ARTIFACTS
 
   production:
     branch: master
@@ -82,3 +85,12 @@ deployment:
         - pack/pack.sh
         - pack/upload.sh ${release} ${CIRCLE_BUILD_NUM}
 #        - mvn scm-publish:publish-scm
+
+
+  development:
+    branch: dev
+    commands:
+        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -Dmaven.test.skip install
+        - mvn site:site site:stage
+        - mv target/staging/* $CIRCLE_ARTIFACTS
+
