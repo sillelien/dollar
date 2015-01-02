@@ -87,7 +87,7 @@ deployment:
 #        - mvn scm-publish:publish-scm
 
 
- development:
+  development:
     branch: dev
     commands:
         - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -Dmaven.test.skip install
