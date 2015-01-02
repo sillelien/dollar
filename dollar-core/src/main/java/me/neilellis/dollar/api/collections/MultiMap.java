@@ -17,7 +17,6 @@
 package me.neilellis.dollar.api.collections;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -66,7 +65,7 @@ public interface MultiMap<K, V> extends Cloneable, Serializable {
      *
      * @since Commons Collections 3.1
      */
-    @Nullable Collection<V> getCollection(K key);
+    @NotNull Collection<V> getCollection(K key);
 
     /**
      * Gets an iterator for the collection mapped to the specified key.

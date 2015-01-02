@@ -46,8 +46,12 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
     }
 
 
-    @Override public var handle(@NotNull Scope scope, @NotNull SourceSegment source, @NotNull AssertionError e) {
-        AssertionError throwable = new AssertionError(e.getMessage() + " at " + source.getSourceMessage(), e);
+    @NotNull @Override
+    public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull AssertionError e) {
+        AssertionError
+                throwable =
+                new AssertionError(
+                        e.getMessage() + " at " + (source == null ? "(unknown source)" : source.getSourceMessage()), e);
         if (!faultTolerant) {
             return scope.handleError(e);
         } else {
@@ -55,18 +59,24 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
         }
     }
 
-    @Override public var handle(@NotNull Scope scope, @NotNull SourceSegment source, @NotNull DollarException e) {
-        DollarParserException
-                throwable =
-                new DollarParserException(e.getMessage() + " at " + source.getSourceMessage(), e);
+    @NotNull @Override
+    public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull DollarException e) {
+
+        final Throwable throwable;
+        if (source != null) {
+            throwable = new DollarParserException(e.getMessage() + " at " + source.getSourceMessage(), e);
+        } else {
+            throwable = e;
+        }
         if ((e instanceof VariableNotFoundException && missingVariables) || failfast) {
-            return scope.handleError(e);
+            return scope.handleError(throwable);
         } else {
             return DollarFactory.failure(throwable);
         }
+
     }
 
-    @Override @NotNull public var handle(Scope scope, @Nullable SourceSegment source, Exception e) {
+    @Override @NotNull public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull Exception e) {
         if (e instanceof LambdaRecursionException) {
             throw new DollarParserException(
                     "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
@@ -86,7 +96,7 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
 
     }
 
-    private Throwable unravel(Throwable e) {
+    private @NotNull Throwable unravel(@NotNull Throwable e) {
         if (e instanceof InvocationTargetException) {
             return e.getCause();
         } else {
@@ -94,7 +104,7 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
         }
     }
 
-    @Override public void handleTopLevel(Throwable t) throws Throwable {
+    @Override public void handleTopLevel(@NotNull Throwable t) throws Throwable {
         if (t instanceof AssertionError) {
             System.err.println(t.getMessage());
         }

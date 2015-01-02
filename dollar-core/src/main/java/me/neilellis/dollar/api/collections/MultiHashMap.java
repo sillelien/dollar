@@ -163,18 +163,6 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
         return cloned;
     }
 
-    @Nullable public V putValue(K key, V value) {
-        // NOTE:: putValue is called during deserialization in JDK < 1.4 !!!!!!
-        //        so we must have a readObject()
-        Collection<V> coll = getCollection(key);
-        if (coll == null) {
-            coll = createCollection(null);
-            super.put(key, coll);
-        }
-        boolean results = coll.add(value);
-        return (results ? value : null);
-    }
-
     @Override public boolean containsValue(Object key, Object value) {
         Collection coll = getCollection(key);
         if (coll == null) {
@@ -187,8 +175,8 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
         return entrySet();
     }
 
-    @Override public Collection<V> getCollection(Object key) {
-        return (Collection) get(key);
+    @NotNull @Override public Collection<V> getCollection(Object key) {
+        return (Collection) getOrDefault(key, Collections.EMPTY_LIST);
     }
 
     @Nullable @Override public Iterator<V> iterator(Object key) {
@@ -222,6 +210,18 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
         } else {
             return coll.addAll(values);
         }
+    }
+
+    @Nullable public V putValue(K key, V value) {
+        // NOTE:: putValue is called during deserialization in JDK < 1.4 !!!!!!
+        //        so we must have a readObject()
+        Collection<V> coll = getCollection(key);
+        if (coll == null) {
+            coll = createCollection(null);
+            super.put(key, coll);
+        }
+        boolean results = coll.add(value);
+        return (results ? value : null);
     }
 
     @Override public int size(Object key) {

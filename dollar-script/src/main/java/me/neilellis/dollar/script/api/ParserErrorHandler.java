@@ -23,11 +23,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface ParserErrorHandler {
-    var handle(@NotNull Scope scope, @NotNull SourceSegment source, @NotNull AssertionError e);
 
-    var handle(@NotNull Scope scope, @NotNull SourceSegment source, @NotNull DollarException e);
+    @NotNull var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull AssertionError e);
 
-    @NotNull var handle(Scope scope, @Nullable SourceSegment source, Exception e);
+    @NotNull var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull DollarException e);
 
-    void handleTopLevel(Throwable t) throws Throwable;
+    @NotNull var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull Exception e);
+
+    void handleTopLevel(@NotNull Throwable t) throws Throwable;
+
 }
