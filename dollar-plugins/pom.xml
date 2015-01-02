@@ -90,6 +90,7 @@
                             <shadedPattern>dollar.plugin.${plugin.name}.r${buildNumber}</shadedPattern>
                             <excludes>
                                 <exclude>org.apache.log4j.**</exclude>
+                                <exclude>org.apache.camel.**</exclude>
                                 <exclude>org.junit.**</exclude>
                                 <exclude>org.w3c.**</exclude>
                                 <exclude>org.xml.**</exclude>

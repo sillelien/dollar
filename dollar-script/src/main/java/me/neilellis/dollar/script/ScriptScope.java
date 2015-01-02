@@ -21,8 +21,10 @@ import com.google.common.collect.Multimap;
 import me.neilellis.dollar.api.DollarException;
 import me.neilellis.dollar.api.DollarStatic;
 import me.neilellis.dollar.api.var;
-import me.neilellis.dollar.script.exceptions.DollarScriptException;
-import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
+import me.neilellis.dollar.script.api.Scope;
+import me.neilellis.dollar.script.api.Variable;
+import me.neilellis.dollar.script.api.exceptions.DollarScriptException;
+import me.neilellis.dollar.script.api.exceptions.VariableNotFoundException;
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.error.ParserException;
 import org.jetbrains.annotations.NotNull;
@@ -118,10 +120,10 @@ public class ScriptScope implements Scope {
             if (result == null) {
                 throw new VariableNotFoundException(key, this);
             } else {
-                return result.value;
+                return result.getValue();
             }
         } else {
-            return result != null ? result.value : $void();
+            return result != null ? result.getValue() : $void();
         }
     }
 
@@ -136,8 +138,8 @@ public class ScriptScope implements Scope {
             scope = this;
         }
         if (DollarStatic.getConfig().debugScope()) { log.info("Getting constraint for " + key + " in " + scope); }
-        if (scope.getVariables().containsKey(key) && scope.getVariables().get(key).constraint != null) {
-            return scope.getVariables().get(key).constraint;
+        if (scope.getVariables().containsKey(key) && scope.getVariables().get(key).getConstraint() != null) {
+            return scope.getVariables().get(key).getConstraint();
         }
         return null;
     }
@@ -169,7 +171,7 @@ public class ScriptScope implements Scope {
         }
         Variable result = scope.getVariables().get(key);
 
-        return result != null ? result.value : $void();
+        return result != null ? result.getValue() : $void();
     }
 
     @Nullable @Override public Scope getScopeForKey(String key) {
@@ -312,23 +314,23 @@ public class ScriptScope implements Scope {
             scope = this;
         }
         if (DollarStatic.getConfig().debugScope()) { log.info("Setting " + key + " in " + scope); }
-        if (scope.getVariables().containsKey(key) && scope.getVariables().get(key).readonly) {
+        if (scope.getVariables().containsKey(key) && scope.getVariables().get(key).isReadonly()) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
         if (scope.getVariables().containsKey(key)) {
             final Variable variable = scope.getVariables().get(key);
-            if (!variable.isVolatile && variable.thread != Thread.currentThread().getId()) {
+            if (!variable.isVolatile() && variable.getThread() != Thread.currentThread().getId()) {
                 handleError(new DollarScriptException("Concurrency Error: Cannot change the variable " +
                                                       key +
                                                       " in a different thread from that which is created in."));
             }
-            if (variable.constraint != null) {
+            if (variable.getConstraint() != null) {
                 if (constraint != null) {
                     handleError(new DollarScriptException(
                             "Cannot change the constraint on a variable, attempted to redeclare for " + key));
                 }
             }
-            variable.value = value;
+            variable.setValue(value);
         } else {
             scope.getVariables()
                  .put(key, new Variable(value, readonly, constraint, constraintSource, isVolatile, fixed, pure));
@@ -369,7 +371,7 @@ public class ScriptScope implements Scope {
         setParameter("it", value);
         System.out.println("SET it=" + value);
         if (oldValue != null) {
-            setParameter("previous", oldValue.value);
+            setParameter("previous", oldValue.getValue());
         }
         final boolean fail = constraint.isFalse();
         setParameter("it", $void());

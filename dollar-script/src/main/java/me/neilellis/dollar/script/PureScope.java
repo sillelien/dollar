@@ -18,8 +18,10 @@ package me.neilellis.dollar.script;
 
 import me.neilellis.dollar.api.DollarStatic;
 import me.neilellis.dollar.api.var;
-import me.neilellis.dollar.script.exceptions.DollarScriptException;
-import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
+import me.neilellis.dollar.script.api.Scope;
+import me.neilellis.dollar.script.api.Variable;
+import me.neilellis.dollar.script.api.exceptions.DollarScriptException;
+import me.neilellis.dollar.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -50,7 +52,7 @@ public class PureScope extends ScriptScope {
             if (DollarStatic.getConfig().debugScope()) { log.info("Found " + key + " in " + scope); }
         }
         Variable result = scope.getVariables().get(key);
-        if (result != null && !(result.readonly && result.fixed) && !result.pure) {
+        if (result != null && !(result.isReadonly() && result.isFixed()) && !result.isPure()) {
             throw new UnsupportedOperationException(
                     "Cannot access non constant values in a pure expression, put either 'pure' or 'const' as " +
                     "appropriate before '" +
@@ -61,10 +63,10 @@ public class PureScope extends ScriptScope {
             if (result == null) {
                 throw new VariableNotFoundException(key, this);
             } else {
-                return result.value;
+                return result.getValue();
             }
         } else {
-            return result != null ? result.value : $void();
+            return result != null ? result.getValue() : $void();
         }
     }
 
@@ -91,24 +93,24 @@ public class PureScope extends ScriptScope {
             scope = this;
         }
         if (DollarStatic.getConfig().debugScope()) { log.info("Setting " + key + " in " + scope); }
-        if (scope != null && scope.getVariables().containsKey(key) && scope.getVariables().get(key).readonly) {
+        if (scope != null && scope.getVariables().containsKey(key) && scope.getVariables().get(key).isReadonly()) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
         final var fixedValue = fixed ? value._fixDeep() : value;
         if (scope.getVariables().containsKey(key)) {
             final Variable variable = scope.getVariables().get(key);
-            if (!variable.isVolatile && variable.thread != Thread.currentThread().getId()) {
+            if (!variable.isVolatile() && variable.getThread() != Thread.currentThread().getId()) {
                 handleError(new DollarScriptException("Concurrency Error: Cannot change the variable " +
                                                       key +
                                                       " in a different thread from that which is created in."));
             }
-            if (variable.constraint != null) {
+            if (variable.getConstraint() != null) {
                 if (constraint != null) {
                     handleError(new DollarScriptException(
                             "Cannot change the constraint on a variable, attempted to redeclare for " + key));
                 }
             }
-            variable.value = fixedValue;
+            variable.setValue(fixedValue);
         } else {
             scope.getVariables()
                  .put(key, new Variable(fixedValue, readonly, constraint, constraintSource, false, fixed, pure));

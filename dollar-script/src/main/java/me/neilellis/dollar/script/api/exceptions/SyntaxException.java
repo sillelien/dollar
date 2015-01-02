@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script.exceptions;
+package me.neilellis.dollar.script.api.exceptions;
 
 import me.neilellis.dollar.api.DollarException;
 
-public class DollarScriptException extends DollarException {
-    public DollarScriptException(Throwable e) {
+class SyntaxException extends DollarException {
+    public SyntaxException(Throwable e) {
         super(e);
     }
 
-    public DollarScriptException(String errorMessage) {
+    public SyntaxException(String errorMessage) {
         super(errorMessage);
-    }
-
-    public DollarScriptException(Throwable t, String s) {
-        super(t, s);
     }
 }

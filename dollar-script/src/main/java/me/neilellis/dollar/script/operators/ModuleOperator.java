@@ -20,7 +20,7 @@ import me.neilellis.dollar.api.DollarStatic;
 import me.neilellis.dollar.api.script.ModuleResolver;
 import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.DollarParser;
-import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.api.Scope;
 import org.codehaus.jparsec.functors.Map;
 
 import java.util.HashMap;

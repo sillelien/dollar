@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script;
+package me.neilellis.dollar.script.api;
 
 import me.neilellis.dollar.api.var;
 import org.jetbrains.annotations.Nullable;
 
-class Variable {
-    final boolean readonly;
-    final var constraint;
-    final long thread;
-    final boolean pure;
-    final boolean fixed;
-    final String constraintSource;
-    boolean isVolatile;
-    var value;
+public class Variable {
+    private final boolean readonly;
+    private final var constraint;
+    private final long thread;
+    private final boolean pure;
+    private final boolean fixed;
+    private final String constraintSource;
+    private boolean isVolatile;
+    private var value;
 
     public Variable(var value, var constraint, String constraintSource) {
 
-        this.value = value;
+        this.setValue(value);
         this.constraint = constraint;
         this.constraintSource = constraintSource;
         this.fixed = false;
@@ -42,19 +42,39 @@ class Variable {
 
     public Variable(var value, boolean readonly, var constraint, String constraintSource, boolean isVolatile,
                     boolean fixed, boolean pure) {
-        this.value = value;
+        this.setValue(value);
         this.readonly = readonly;
         this.constraint = constraint;
         this.constraintSource = constraintSource;
-        this.isVolatile = isVolatile;
+        this.setVolatile(isVolatile);
         this.fixed = fixed;
         this.pure = pure;
         thread = Thread.currentThread().getId();
     }
 
+    public var getConstraint() {
+        return constraint;
+    }
+
+    public String getConstraintSource() {
+        return constraintSource;
+    }
+
+    public long getThread() {
+        return thread;
+    }
+
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return getValue().hashCode();
+    }
+
+    public var getValue() {
+        return value;
+    }
+
+    public void setValue(var value) {
+        this.value = value;
     }
 
     @Override
@@ -64,7 +84,27 @@ class Variable {
 
         Variable variable = (Variable) o;
 
-        return value.equals(variable.value);
+        return getValue().equals(variable.getValue());
 
+    }
+
+    public boolean isFixed() {
+        return fixed;
+    }
+
+    public boolean isPure() {
+        return pure;
+    }
+
+    public boolean isReadonly() {
+        return readonly;
+    }
+
+    public boolean isVolatile() {
+        return isVolatile;
+    }
+
+    public void setVolatile(boolean isVolatile) {
+        this.isVolatile = isVolatile;
     }
 }

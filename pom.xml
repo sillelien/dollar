@@ -698,6 +698,7 @@
                             <shadedPattern>me.neilellis.dollar.r${buildNumber}</shadedPattern>
                             <excludes>
                                 <exclude>me.neilellis.dollar.api.**</exclude>
+                                <exclude>me.neilellis.dollar.script.api.**</exclude>
                                 <exclude>me.neilellis.dollar.main.**</exclude>
                                 <exclude>me.neilellis.dollar.relproxy.**</exclude>
                             </excludes>

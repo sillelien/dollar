@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script;
+package me.neilellis.dollar.script.api.exceptions;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
-public class DollarParserException extends Error {
-    public DollarParserException(Throwable e) {
+import me.neilellis.dollar.api.DollarException;
+
+public class DollarScriptException extends DollarException {
+    public DollarScriptException(Throwable e) {
         super(e);
     }
 
-    public DollarParserException(String errorMessage) {
+    public DollarScriptException(String errorMessage) {
         super(errorMessage);
     }
 
-    public DollarParserException(String message, Throwable cause) {
-        super(message, cause, true, true);
+    public DollarScriptException(Throwable t, String s) {
+        super(t, s);
     }
 }

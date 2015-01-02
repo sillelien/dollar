@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script.exceptions;
+package me.neilellis.dollar.script.api.exceptions;
 
-import me.neilellis.dollar.api.DollarException;
+import me.neilellis.dollar.script.api.Scope;
 
-class SyntaxException extends DollarException {
-    public SyntaxException(Throwable e) {
+public class VariableNotFoundException extends DollarScriptException {
+    private String variable;
+
+    public VariableNotFoundException(Throwable e) {
         super(e);
     }
 
-    public SyntaxException(String errorMessage) {
-        super(errorMessage);
+    public VariableNotFoundException(String variable, Scope scope) {
+        super("Variable not found '" + variable + "' in scope " + scope);
+        this.variable = variable;
     }
 }

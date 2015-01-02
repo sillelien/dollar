@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script.exceptions;
+package me.neilellis.dollar.script.api.exceptions;
 
 import net.kencochrane.raven.Dsn;
 import net.kencochrane.raven.Raven;

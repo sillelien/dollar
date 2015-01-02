@@ -24,6 +24,7 @@ import me.neilellis.dollar.api.script.SourceSegment;
 import me.neilellis.dollar.api.script.TypeLearner;
 import me.neilellis.dollar.api.types.DollarLambda;
 import me.neilellis.dollar.api.var;
+import me.neilellis.dollar.script.api.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

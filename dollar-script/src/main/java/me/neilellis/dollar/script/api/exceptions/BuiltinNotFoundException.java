@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,17 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script.exceptions;
+package me.neilellis.dollar.script.api.exceptions;
 
-import me.neilellis.dollar.script.Scope;
-
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
-public class VariableNotFoundException extends DollarScriptException {
+public class BuiltinNotFoundException extends DollarScriptException {
     private String variable;
 
-    public VariableNotFoundException(Throwable e) {
+    public BuiltinNotFoundException(Throwable e) {
         super(e);
     }
 
-    public VariableNotFoundException(String variable, Scope scope) {
-        super("Variable not found '" + variable + "' in scope " + scope);
+    public BuiltinNotFoundException(String variable) {
+        super("Builtin not found '" + variable + "'");
         this.variable = variable;
     }
 }

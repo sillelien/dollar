@@ -20,7 +20,7 @@ import me.neilellis.dollar.api.time.Scheduler;
 import me.neilellis.dollar.api.types.DollarFactory;
 import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.DollarParser;
-import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.api.Scope;
 import org.codehaus.jparsec.functors.Map;
 
 import static me.neilellis.dollar.api.DollarStatic.$;

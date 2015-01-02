@@ -17,7 +17,7 @@
 package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.api.var;
-import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.api.Scope;
 import org.codehaus.jparsec.functors.Map2;
 
 public class MultiplyOperator {

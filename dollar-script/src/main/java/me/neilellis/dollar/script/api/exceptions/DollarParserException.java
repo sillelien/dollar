@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.script.exceptions;
+package me.neilellis.dollar.script.api.exceptions;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
-public class BuiltinNotFoundException extends DollarScriptException {
-    private String variable;
-
-    public BuiltinNotFoundException(Throwable e) {
+public class DollarParserException extends Error {
+    public DollarParserException(Throwable e) {
         super(e);
     }
 
-    public BuiltinNotFoundException(String variable) {
-        super("Builtin not found '" + variable + "'");
-        this.variable = variable;
+    public DollarParserException(String errorMessage) {
+        super(errorMessage);
+    }
+
+    public DollarParserException(String message, Throwable cause) {
+        super(message, cause, true, true);
     }
 }
