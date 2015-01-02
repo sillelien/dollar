@@ -64,7 +64,7 @@ deployment:
         - "git tag ${release} || :"
         - git push --tags
         - git push origin master
-        - mvn site:site site:stage
+        - mvn site:site site:stage  -Dmaven.test.skip=true
         - mv target/staging/* $CIRCLE_ARTIFACTS
 
   production:
@@ -79,7 +79,7 @@ deployment:
         - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} clean
         - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -Dmaven.test.skip install
         - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -Dmaven.test.skip deploy
-        - mvn site:site site:stage
+        - mvn site:site site:stage  -Dmaven.test.skip=true
         - ./build-docs.sh:
             timeout: 360
         - pack/pack.sh
@@ -91,6 +91,6 @@ deployment:
       branch: dev
       commands:
           - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -Dmaven.test.skip install
-          - mvn site:site site:stage
+          - mvn site:site site:stage  -Dmaven.test.skip=true
           - mv target/staging/* $CIRCLE_ARTIFACTS
 
