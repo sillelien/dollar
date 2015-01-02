@@ -721,6 +721,9 @@
                         <relocation>
                             <pattern>net</pattern>
                             <shadedPattern>dollar.r${buildNumber}</shadedPattern>
+                            <excludes>
+                                <exclude>net.kencochrane.**</exclude>
+                            </excludes>
                         </relocation>
                         <relocation>
                             <pattern>io</pattern>
