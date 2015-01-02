@@ -93,7 +93,7 @@ public interface MultiMap<K, V> extends Map<K, V>, Cloneable, Serializable {
      *
      * @since Commons Collections 3.1
      */
-    Collection getCollection(Object key);
+    Collection<V> getCollection(K key);
 
     /**
      * Gets an iterator for the collection mapped to the specified key.
@@ -104,7 +104,7 @@ public interface MultiMap<K, V> extends Map<K, V>, Cloneable, Serializable {
      *
      * @since Commons Collections 3.1
      */
-    Iterator iterator(Object key);
+    Iterator<V> iterator(Object key);
 
     /**
      * Adds a collection of values to the collection associated with the specified key.
@@ -116,7 +116,7 @@ public interface MultiMap<K, V> extends Map<K, V>, Cloneable, Serializable {
      *
      * @since Commons Collections 3.1
      */
-    boolean putAll(Object key, Collection values);
+    boolean putAll(Object key, Collection<V> values);
 
     /**
      * Gets the size of the collection mapped to the specified key.

@@ -16,7 +16,7 @@
 
 package me.neilellis.dollar.script.api;
 
-import com.google.common.collect.Multimap;
+import me.neilellis.dollar.api.collections.MultiMap;
 import me.neilellis.dollar.api.var;
 
 import java.util.Map;
@@ -39,7 +39,7 @@ public interface Scope {
 
     String getFile();
 
-    Multimap<String, var> getListeners();
+    MultiMap<String, var> getListeners();
 
     var getParameter(String key);
 

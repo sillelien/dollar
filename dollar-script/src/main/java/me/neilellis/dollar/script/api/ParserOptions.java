@@ -24,6 +24,8 @@ import java.util.List;
 
 public class ParserOptions {
 
+    @Parameter(names = "--profile", description = "The configuration profile to use")
+    private String profile;
     @Parameter(names = "--safe", description = "Provide extra safety from errors")
     private boolean safe;
     @Parameter(names = "--usage", description = "Record usage metrics")

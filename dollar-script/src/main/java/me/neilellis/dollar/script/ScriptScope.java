@@ -16,10 +16,10 @@
 
 package me.neilellis.dollar.script;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 import me.neilellis.dollar.api.DollarException;
 import me.neilellis.dollar.api.DollarStatic;
+import me.neilellis.dollar.api.collections.MultiHashMap;
+import me.neilellis.dollar.api.collections.MultiMap;
 import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.api.DollarParser;
 import me.neilellis.dollar.script.api.Scope;
@@ -50,7 +50,7 @@ public class ScriptScope implements Scope {
 
     @NotNull final String id;
     @Nullable private final String source;
-    @NotNull private final Multimap<String, var> listeners = LinkedListMultimap.create();
+    @NotNull private final MultiMap<String, var> listeners = new MultiHashMap();
     @NotNull private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
 
     private final String file;
@@ -157,7 +157,7 @@ public class ScriptScope implements Scope {
         return file;
     }
 
-    @Override public Multimap<String, var> getListeners() {
+    @Override public MultiMap<String, var> getListeners() {
         return listeners;
     }
 
@@ -288,7 +288,7 @@ public class ScriptScope implements Scope {
         if (scopeForKey == null) {
             return $void();
         }
-        scopeForKey.getListeners().get(variableName).forEach(var::$notify);
+        scopeForKey.getListeners().getCollection(variableName).forEach(var::$notify);
         return scopeForKey.get(variableName);
     }
 
@@ -298,7 +298,7 @@ public class ScriptScope implements Scope {
             throw new NullPointerException();
         }
         if (listeners.containsKey(key)) {
-            listeners.get(key).forEach(var::$notify);
+            listeners.getCollection(key).forEach(var::$notify);
         }
     }
 
