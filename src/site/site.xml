@@ -1,3 +1,19 @@
+<!--
+  ~ Copyright (c) 2014-2015 Neil Ellis
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <project name="dollar">
     <skin>
         <groupId>org.apache.maven.skins</groupId>
@@ -6,22 +22,39 @@
     </skin>
     <custom>
         <fluidoSkin>
+            <facebookLike/>
+            <googlePlusOne/>
+            <ohloh>
+                <projectId>dollar_script</projectId>
+                <widget>factoids</widget>
+            </ohloh>
+            <twitter>
+                <user>neilellis</user>
+                <showUser>true</showUser>
+                <showFollowers>true</showFollowers>
+            </twitter>
+            <gitHub>
+                <projectId>neilellis/dollar</projectId>
+                <ribbonOrientation>right</ribbonOrientation>
+                <ribbonColor>grey</ribbonColor>
+            </gitHub>
+            <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
             <topBarEnabled>true</topBarEnabled>
             <topBarIcon>
-                <name>Maven Fluido Skin</name>
-                <alt>Maven Fluido Skin</alt>
-                <src>/images/topbar-logo.png</src>
-                <href>/index.html</href>
+                <name>Dollar</name>
+                <alt>Dollar</alt>
+                <src>/http://neilellis.github.io/dollar/images/logo-32x32.png</src>
+                <href>http://neilellis.github.io/dollar/</href>
             </topBarIcon>
         </fluidoSkin>
         <reflowSkin>
             <theme>bootswatch-flatly</theme>
             <highlightJs>true</highlightJs>
             <brand>
-                <name>Cazcade: Dollar</name>
+                <name>Dollar</name>
                 <href>http://github.com/neilellis/dollar</href>
             </brand>
-            <slogan></slogan>
+            <slogan>Developer's Site</slogan>
             <titleTemplate>%2$s | %1$s</titleTemplate>
             <toc>top</toc>
             <topNav>Download|reports|menu1</topNav>
