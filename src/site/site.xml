@@ -94,6 +94,9 @@
 
         <menu name="dollar">
             <item name="Main Website" href="index.html"/>
+            <item name="Author's Website" href="http://neilellis.me"/>
+            <item name="Source" href="https://github.com/neilellis/dollar"/>
+
             <!--<item name="Download" href="download.html"/>-->
             <!--<item name="Release Notes" href="release-notes.html"/>-->
             <!--<item name="General Information" href="about.html"/>-->
