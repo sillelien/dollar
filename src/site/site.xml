@@ -43,7 +43,7 @@
             <topBarIcon>
                 <name>Dollar</name>
                 <alt>Dollar</alt>
-                <src>/http://neilellis.github.io/dollar/images/logo-32x32.png</src>
+                <src>http://neilellis.github.io/dollar/images/logo-32x32.png</src>
                 <href>http://neilellis.github.io/dollar/</href>
             </topBarIcon>
         </fluidoSkin>

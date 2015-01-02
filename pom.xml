@@ -527,6 +527,16 @@
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>
                 <version>0.11</version>
+                <configuration>
+                    <useIdeaDefaultExcludes>true</useIdeaDefaultExcludes>
+                    <excludes>
+                        <exclude>dist/**</exclude>
+                        <exclude>**/*.markdown</exclude>
+                        <exclude>**/*.md</exclude>
+                        <exclude>**/*.sh</exclude>
+                        <exclude>**/*.yml</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
 
             <plugin>
