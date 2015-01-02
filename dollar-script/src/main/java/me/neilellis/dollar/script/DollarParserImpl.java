@@ -24,6 +24,7 @@ import me.neilellis.dollar.api.plugin.Plugins;
 import me.neilellis.dollar.api.types.DollarFactory;
 import me.neilellis.dollar.api.types.ErrorType;
 import me.neilellis.dollar.script.api.DollarParser;
+import me.neilellis.dollar.script.api.ParserErrorHandler;
 import me.neilellis.dollar.script.api.ParserOptions;
 import me.neilellis.dollar.script.api.Scope;
 import me.neilellis.dollar.script.api.exceptions.DollarScriptFailureException;
@@ -71,7 +72,7 @@ public class DollarParserImpl implements DollarParser {
             return list;
         }
     };
-    private final ParserErrorHandler errorHandler = new ParserErrorHandler();
+    private final ParserErrorHandler errorHandler = new ParserErrorHandlerImpl();
     private final ConcurrentHashMap<String, var> exports = new ConcurrentHashMap<>();
     private final ParserOptions options;
     private String file;

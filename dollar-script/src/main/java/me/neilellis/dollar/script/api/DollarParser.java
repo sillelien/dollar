@@ -17,7 +17,6 @@
 package me.neilellis.dollar.script.api;
 
 import me.neilellis.dollar.api.var;
-import me.neilellis.dollar.script.ParserErrorHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

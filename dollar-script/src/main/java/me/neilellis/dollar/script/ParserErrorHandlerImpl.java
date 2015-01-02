@@ -22,6 +22,7 @@ import me.neilellis.dollar.api.script.SourceSegment;
 import me.neilellis.dollar.api.types.DollarFactory;
 import me.neilellis.dollar.api.types.ErrorType;
 import me.neilellis.dollar.api.var;
+import me.neilellis.dollar.script.api.ParserErrorHandler;
 import me.neilellis.dollar.script.api.Scope;
 import me.neilellis.dollar.script.api.exceptions.DollarParserException;
 import me.neilellis.dollar.script.api.exceptions.DollarScriptException;
@@ -33,19 +34,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class ParserErrorHandler {
+public class ParserErrorHandlerImpl implements ParserErrorHandler {
     private final boolean missingVariables;
     private final boolean failfast;
     private final boolean faultTolerant;
 
-    public ParserErrorHandler() {
+    public ParserErrorHandlerImpl() {
         missingVariables = true;
         failfast = true;
         faultTolerant = false;
     }
 
 
-    public var handle(@NotNull Scope scope, @NotNull SourceSegment source, @NotNull AssertionError e) {
+    @Override public var handle(@NotNull Scope scope, @NotNull SourceSegment source, @NotNull AssertionError e) {
         AssertionError throwable = new AssertionError(e.getMessage() + " at " + source.getSourceMessage(), e);
         if (!faultTolerant) {
             return scope.handleError(e);
@@ -54,7 +55,7 @@ public class ParserErrorHandler {
         }
     }
 
-    public var handle(@NotNull Scope scope, @NotNull SourceSegment source, @NotNull DollarException e) {
+    @Override public var handle(@NotNull Scope scope, @NotNull SourceSegment source, @NotNull DollarException e) {
         DollarParserException
                 throwable =
                 new DollarParserException(e.getMessage() + " at " + source.getSourceMessage(), e);
@@ -65,7 +66,7 @@ public class ParserErrorHandler {
         }
     }
 
-    @NotNull public var handle(Scope scope, @Nullable SourceSegment source, Exception e) {
+    @Override @NotNull public var handle(Scope scope, @Nullable SourceSegment source, Exception e) {
         if (e instanceof LambdaRecursionException) {
             throw new DollarParserException(
                     "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
@@ -93,7 +94,7 @@ public class ParserErrorHandler {
         }
     }
 
-    public void handleTopLevel(Throwable t) throws Throwable {
+    @Override public void handleTopLevel(Throwable t) throws Throwable {
         if (t instanceof AssertionError) {
             System.err.println(t.getMessage());
         }
