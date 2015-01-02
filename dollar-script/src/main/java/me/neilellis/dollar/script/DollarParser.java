@@ -28,7 +28,6 @@ import me.neilellis.dollar.script.api.exceptions.DollarScriptFailureException;
 import me.neilellis.dollar.script.java.JavaScriptingSupport;
 import me.neilellis.dollar.script.operators.*;
 import org.codehaus.jparsec.*;
-import org.codehaus.jparsec.error.ParserException;
 import org.codehaus.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -166,17 +165,6 @@ public class DollarParser {
             Parser<?> parser = buildParser(scope, false);
             List<var> parse = (List<var>) parser.from(TOKENIZER, DollarLexer.IGNORED).parse(source);
             return $(exports);
-        } catch (ParserException e) {
-            //todo: proper error handling
-            if (e.getErrorDetails() != null) {
-                final int index = e.getErrorDetails().getIndex();
-                final int endIndex = (index < source.length() - 20) ? index + 20 : source.length() - 1;
-                if (source.length() > 0 && index > 0 && index < endIndex) {
-                    System.err.println(source.substring(index, endIndex));
-                }
-            }
-            scope.handleError(e);
-            throw e;
         } finally {
             endScope();
         }

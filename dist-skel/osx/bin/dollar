@@ -1,7 +1,7 @@
-#!/bin/sh -eu
-cd $(dirname $0)/.. &> /dev/null
+#!/bin/bash -eu
+cd "$(dirname $0)/.." 2&>1 /dev/null
 export DOLLAR_HOME=$(pwd)
-if [ ! -f ${DOLLAR_HOME}/jdk/jre/bin/java ]
+if [[ ! -e ${DOLLAR_HOME}/jdk ]]
 then
     echo "Downloading a valid Java 1.8 JDK"
     echo
@@ -21,7 +21,7 @@ then
     unzip -q ~/.dollar-cache/zulu-mac.zip -d .
     mv zulu* jdk
 fi
-cd -
+cd -  2&>1 /dev/null
 export JAVA_HOME=${DOLLAR_HOME}/jdk/
 if [ $# -ne 1 ]
 then
