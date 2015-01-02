@@ -50,7 +50,7 @@ public class ScriptScope implements Scope {
 
     @NotNull final String id;
     @Nullable private final String source;
-    @NotNull private final MultiMap<String, var> listeners = new MultiHashMap();
+    @NotNull private final MultiMap<String, var> listeners = new MultiHashMap<>();
     @NotNull private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
 
     private final String file;
@@ -93,7 +93,7 @@ public class ScriptScope implements Scope {
     }
 
     @NotNull @Override
-    public var addErrorHandler(var handler) {
+    public var addErrorHandler(@NotNull var handler) {
         errorHandlers.add(handler);
         return $void();
     }
@@ -104,7 +104,7 @@ public class ScriptScope implements Scope {
         listeners.clear();
     }
 
-    @Override public var get(@NotNull String key, boolean mustFind) {
+    @NotNull @Override public var get(@NotNull String key, boolean mustFind) {
         if (key.matches("[0-9]+")) {
             throw new AssertionError("Cannot get numerical keys, use getParameter");
         }
@@ -133,7 +133,7 @@ public class ScriptScope implements Scope {
         return get(key, false);
     }
 
-    @Nullable @Override public var getConstraint(String key) {
+    @Nullable @Override public var getConstraint(@NotNull String key) {
         Scope scope = getScopeForKey(key);
         if (scope == null) {
             scope = this;
@@ -157,12 +157,12 @@ public class ScriptScope implements Scope {
         return file;
     }
 
-    @Override public MultiMap<String, var> getListeners() {
+    @NotNull @Override public MultiMap<String, var> getListeners() {
         return listeners;
     }
 
     @NotNull @Override
-    public var getParameter(String key) {
+    public var getParameter(@NotNull String key) {
         if (DollarStatic.getConfig().debugScope()) { log.info("Looking up parameter " + key + " in " + this); }
         Scope scope = getScopeForParameters();
         if (scope == null) {
@@ -175,7 +175,7 @@ public class ScriptScope implements Scope {
         return result != null ? result.getValue() : $void();
     }
 
-    @Nullable @Override public Scope getScopeForKey(String key) {
+    @Nullable @Override public Scope getScopeForKey(@NotNull String key) {
         if (variables.containsKey(key)) {
             return this;
         }
@@ -207,7 +207,7 @@ public class ScriptScope implements Scope {
         return variables;
     }
 
-    @Override public var handleError(Throwable t) {
+    @NotNull @Override public var handleError(@NotNull Throwable t) {
         if (errorHandlers.isEmpty()) {
             if (parent == null) {
                 if (t instanceof ParserException) {
@@ -266,7 +266,7 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public void listen(@NotNull String key, var listener) {
+    public void listen(@NotNull String key, @NotNull var listener) {
         if (key.matches("[0-9]+")) {
             if (DollarStatic.getConfig().debugScope()) {
                 log.info("Cannot listen to positional parameter $" + key + " in " + this);
@@ -283,7 +283,7 @@ public class ScriptScope implements Scope {
         scopeForKey.getListeners().putValue(key, listener);
     }
 
-    @Override public var notify(String variableName) {
+    @Nullable @Override public var notify(@NotNull String variableName) {
         final Scope scopeForKey = getScopeForKey(variableName);
         if (scopeForKey == null) {
             return $void();
@@ -293,7 +293,7 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public void notifyScope(String key, @Nullable var value) {
+    public void notifyScope(@NotNull String key, @NotNull var value) {
         if (value == null) {
             throw new NullPointerException();
         }
@@ -302,8 +302,9 @@ public class ScriptScope implements Scope {
         }
     }
 
-    @Override
-    public var set(@NotNull String key, var value, boolean readonly, @Nullable var constraint, String constraintSource,
+    @NotNull @Override
+    public var set(@NotNull String key, @NotNull var value, boolean readonly, @Nullable var constraint,
+                   String constraintSource,
                    boolean isVolatile,
                    boolean fixed,
                    boolean pure) {
@@ -340,7 +341,7 @@ public class ScriptScope implements Scope {
         return value;
     }
 
-    @Override public var setParameter(@NotNull String key, var value) {
+    @NotNull @Override public var setParameter(@NotNull String key, @NotNull var value) {
         if (DollarStatic.getConfig().debugScope()) { log.info("Setting parameter " + key + " in " + this); }
         if (key.matches("[0-9]+") && variables.containsKey(key)) {
             throw new AssertionError("Cannot change the value of positional variables.");

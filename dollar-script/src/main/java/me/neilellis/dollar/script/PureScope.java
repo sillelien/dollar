@@ -40,7 +40,7 @@ public class PureScope extends ScriptScope {
         throw new UnsupportedOperationException("Cannot clear a pure scope");
     }
 
-    @Override public var get(@NotNull String key, boolean mustFind) {
+    @NotNull @Override public var get(@NotNull String key, boolean mustFind) {
         if (key.matches("[0-9]+")) {
             throw new AssertionError("Cannot get numerical keys, use getParameter");
         }
@@ -70,7 +70,7 @@ public class PureScope extends ScriptScope {
         }
     }
 
-    @NotNull @Override public Scope getScopeForParameters() {
+    @Nullable @Override public Scope getScopeForParameters() {
         return this;
     }
 

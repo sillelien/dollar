@@ -29,7 +29,7 @@ public class Variable {
     private boolean isVolatile;
     private var value;
 
-    public Variable(var value, var constraint, String constraintSource) {
+    public Variable(var value, @Nullable var constraint, @Nullable String constraintSource) {
 
         this.setValue(value);
         this.constraint = constraint;
@@ -40,7 +40,7 @@ public class Variable {
         thread = Thread.currentThread().getId();
     }
 
-    public Variable(var value, boolean readonly, var constraint, String constraintSource, boolean isVolatile,
+    public Variable(var value, boolean readonly, @Nullable var constraint, String constraintSource, boolean isVolatile,
                     boolean fixed, boolean pure) {
         this.setValue(value);
         this.readonly = readonly;

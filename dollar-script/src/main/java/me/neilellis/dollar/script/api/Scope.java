@@ -18,56 +18,59 @@ package me.neilellis.dollar.script.api;
 
 import me.neilellis.dollar.api.collections.MultiMap;
 import me.neilellis.dollar.api.var;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 public interface Scope {
 
-    var addErrorHandler(var handler);
+    var addErrorHandler(@NotNull var handler);
 
     void clear();
 
-    var get(String key, boolean mustFind);
+    @NotNull var get(@NotNull String key, boolean mustFind);
 
-    var get(String key);
+    @Nullable var get(@NotNull String key);
 
-    var getConstraint(String key);
+    @Nullable var getConstraint(@NotNull String key);
 
     DollarParser getDollarParser();
 
     void setDollarParser(DollarParser dollarParser);
 
-    String getFile();
+    @Nullable String getFile();
 
-    MultiMap<String, var> getListeners();
+    @NotNull MultiMap<String, var> getListeners();
 
-    var getParameter(String key);
+    @Nullable var getParameter(@NotNull String key);
 
-    Scope getScopeForKey(String key);
+    @Nullable Scope getScopeForKey(@NotNull String key);
 
-    Scope getScopeForParameters();
+    @Nullable Scope getScopeForParameters();
 
-    String getSource();
+    @Nullable String getSource();
 
-    Map<String, Variable> getVariables();
+    @NotNull Map<String, Variable> getVariables();
 
-    var handleError(Throwable t);
+    @NotNull var handleError(@NotNull Throwable t);
 
     boolean has(String key);
 
     boolean hasParameter(String key);
 
-    void listen(String key, var listener);
+    void listen(@NotNull String key, @NotNull var listener);
 
-    var notify(String variableName);
+    @Nullable var notify(@NotNull String variableName);
 
-    void notifyScope(String key, var value);
+    void notifyScope(@NotNull String key, @NotNull var value);
 
-    var set(String key, var value, boolean readonly, var constraint, String constraintSource, boolean isVolatile,
+    @NotNull var set(@NotNull String key, @NotNull var value, boolean readonly, @Nullable var constraint,
+                     String constraintSource, boolean isVolatile,
             boolean fixed, boolean pure);
 
-    var setParameter(String key, var value);
+    @NotNull var setParameter(@NotNull String key, @NotNull var value);
 
-    void setParent(Scope scope);
+    void setParent(@Nullable Scope scope);
 
 }

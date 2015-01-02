@@ -28,7 +28,7 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
     // compatibility with commons-collection releases 2.0/2.1
     private static final long serialVersionUID = 1943563828307035349L;
     // backed values collection
-    @Nullable private transient Collection values = null;
+    @NotNull private transient Collection values = new Values();
 
     /**
      * Constructor.
@@ -87,7 +87,7 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
      *
      * @return the new collection
      */
-    @Nullable protected Collection<V> createCollection(@Nullable Collection<V> coll) {
+    @NotNull protected Collection<V> createCollection(@Nullable Collection<V> coll) {
         if (coll == null) {
             return new ArrayList<>();
         } else {
@@ -111,9 +111,6 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
     @Override public boolean containsValue(Object value) {
         Set pairs = super.entrySet();
 
-        if (pairs == null) {
-            return false;
-        }
         for (Object pair : pairs) {
             Entry keyValuePair = (Entry) pair;
             Collection coll = (Collection) keyValuePair.getValue();
@@ -125,15 +122,11 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
     }
 
     @NotNull @Override public Collection<Collection<V>> values() {
-        Collection vs = values;
-        return (vs != null ? vs : (values = new Values()));
+        return values;
     }
 
     @Override public boolean remove(Object key, Object item) {
         Collection valuesForKey = getCollection(key);
-        if (valuesForKey == null) {
-            return false;
-        }
         valuesForKey.remove(item);
 
         // remove the list if it is now empty
@@ -165,9 +158,6 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
 
     @Override public boolean containsValue(Object key, Object value) {
         Collection coll = getCollection(key);
-        if (coll == null) {
-            return false;
-        }
         return coll.contains(value);
     }
 
@@ -176,22 +166,11 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
     }
 
     @NotNull @Override public Collection<V> getCollection(Object key) {
-        return (Collection) getOrDefault(key, Collections.EMPTY_LIST);
+        return (Collection) getOrDefault(key, new ArrayList<V>());
     }
 
     @Nullable @Override public Iterator<V> iterator(Object key) {
         Collection coll = getCollection(key);
-        if (coll == null) {
-            return new Iterator() {
-                @Override public boolean hasNext() {
-                    return false;
-                }
-
-                @Nullable @Override public Object next() {
-                    return null;
-                }
-            };
-        }
         return coll.iterator();
     }
 
@@ -200,7 +179,7 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
             return false;
         }
         Collection coll = getCollection(key);
-        if (coll == null) {
+        if (coll.size() == 0) {
             coll = createCollection(values);
             if (coll.size() == 0) {
                 return false;
@@ -216,8 +195,7 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
         // NOTE:: putValue is called during deserialization in JDK < 1.4 !!!!!!
         //        so we must have a readObject()
         Collection<V> coll = getCollection(key);
-        if (coll == null) {
-            coll = createCollection(null);
+        if (coll.size() == 0) {
             super.put(key, coll);
         }
         boolean results = coll.add(value);
@@ -226,9 +204,6 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
 
     @Override public int size(Object key) {
         Collection coll = getCollection(key);
-        if (coll == null) {
-            return 0;
-        }
         return coll.size();
     }
 
@@ -287,6 +262,10 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
             backedIterator = MultiHashMap.super.values().iterator();
         }
 
+        public boolean hasNext() {
+            return searchNextIterator();
+        }
+
         private boolean searchNextIterator() {
             while (tempIterator == null || !tempIterator.hasNext()) {
                 if (!backedIterator.hasNext()) {
@@ -295,10 +274,6 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
                 tempIterator = ((Collection) backedIterator.next()).iterator();
             }
             return true;
-        }
-
-        public boolean hasNext() {
-            return searchNextIterator();
         }
 
         public Object next() {
@@ -316,6 +291,5 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
         }
 
     }
-
 
 }
