@@ -21,7 +21,8 @@ import me.neilellis.dollar.api.collections.ImmutableList;
 import me.neilellis.dollar.api.types.DollarFactory;
 import me.neilellis.dollar.api.types.ErrorType;
 import me.neilellis.dollar.api.var;
-import me.neilellis.dollar.script.exceptions.BuiltinNotFoundException;
+import me.neilellis.dollar.script.api.Scope;
+import me.neilellis.dollar.script.api.exceptions.BuiltinNotFoundException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

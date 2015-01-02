@@ -18,10 +18,10 @@ package me.neilellis.dollar.script.java;
 
 import me.neilellis.dollar.api.DollarStatic;
 import me.neilellis.dollar.api.var;
-import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.relproxy.jproxy.JProxy;
-import me.neilellis.dollar.script.relproxy.jproxy.JProxyConfig;
-import me.neilellis.dollar.script.relproxy.jproxy.JProxyScriptEngineFactory;
+import me.neilellis.dollar.relproxy.jproxy.JProxy;
+import me.neilellis.dollar.relproxy.jproxy.JProxyConfig;
+import me.neilellis.dollar.relproxy.jproxy.JProxyScriptEngineFactory;
+import me.neilellis.dollar.script.api.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,7 +60,7 @@ public class JavaScriptingSupport {
         ScriptEngineManager manager = new ScriptEngineManager();
 //        manager.registerEngineName("j", factory);
 //
-//        manager.getBindings().put("in",in);
+//        manager.getBindings().putValue("in",in);
 //
 //        ScriptEngine engine = manager.getEngineByName("j");
 
@@ -71,7 +71,9 @@ public class JavaScriptingSupport {
 
         StringBuilder code = new StringBuilder();
         code.append(" me.neilellis.dollar.api.var in = (me.neilellis.dollar.api.var)context.getAttribute(\"in\",javax.script.ScriptContext.ENGINE_SCOPE); \n");
-        code.append(" me.neilellis.dollar.script.Scope scope = (me.neilellis.dollar.script.ScriptScope)context.getAttribute(\"scope\",javax.script.ScriptContext.ENGINE_SCOPE); \n");
+        code.append(
+                " me.neilellis.dollar.script.api.Scope scope = (me.neilellis.dollar.script.api.Scope)context" +
+                ".getAttribute(\"scope\",javax.script.ScriptContext.ENGINE_SCOPE); \n");
         code.append(" me.neilellis.dollar.api.var out = me.neilellis.dollar.api.DollarStatic.$void();\n");
         code.append(java).append("\nreturn out;\n");
 

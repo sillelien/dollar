@@ -36,8 +36,6 @@
         <module name="dollar-maven-pipe-plugin" />
         <module name="dollar-maven-resolver-plugin" />
         <module name="dollar-metrics-plugin" />
-        <module name="dollar-orientdb-learner-plugin" />
-        <module name="dollar-orientdb-learner-plugin (1)" />
         <module name="dollar-redis-plugin" />
         <module name="dollar-redis-plugin (1)" />
         <module name="dollar-resolver" />

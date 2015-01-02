@@ -18,8 +18,8 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.DollarScriptSupport;
-import me.neilellis.dollar.script.Scope;
 import me.neilellis.dollar.script.UnaryOp;
+import me.neilellis.dollar.script.api.Scope;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

@@ -13,8 +13,6 @@
       <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-mapdb-plugin/dollar-mapdb-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-mapdb-plugin/dollar-mapdb-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-maven-resolver-plugin/dollar-maven-resolver-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-maven-resolver-plugin/dollar-maven-resolver-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-metrics-plugin/dollar-metrics-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-metrics-plugin/dollar-metrics-plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-orientdb-learner-plugin/dollar-orientdb-learner-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-orientdb-learner-plugin/dollar-orientdb-learner-plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-hazelcast-learner-plugin/dollar-orientdb-learner-plugin (1).iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-hazelcast-learner-plugin/dollar-orientdb-learner-plugin (1).iml" />
       <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-plugins.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-plugins.iml" />
       <module fileurl="file://$PROJECT_DIR$/dollar-plugins/dollar-redis-plugin/dollar-redis-plugin.iml" filepath="$PROJECT_DIR$/dollar-plugins/dollar-redis-plugin/dollar-redis-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/dollar-resolver/dollar-resolver.iml" filepath="$PROJECT_DIR$/dollar-resolver/dollar-resolver.iml" />

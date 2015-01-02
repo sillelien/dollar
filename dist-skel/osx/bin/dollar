@@ -1,7 +1,27 @@
-#!/bin/sh -eu
-cd $(dirname $0)/.. &> /dev/null
-DOLLAR_HOME=$(pwd)
-cd -
+#!/bin/bash -eu
+cd "$(dirname $0)/.." 2&>1 /dev/null
+export DOLLAR_HOME=$(pwd)
+if [[ ! -e ${DOLLAR_HOME}/jdk ]]
+then
+    echo "Downloading a valid Java 1.8 JDK"
+    echo
+    echo "Use of the JDK is under the terms of:"
+    echo
+    echo "     http://www.azulsystems.com/products/zulu/terms-of-use"
+    echo "     and http://openjdk.java.net/legal/"
+    echo
+    echo
+    echo "If you do not agree, please delete the contents of"
+    echo "${DOLLAR_HOME} and ${HOME}/.dollar-cache"
+    echo
+    echo "This may take some time, but hey you only need to do it once."
+    echo ""
+    [ -d ~/.dollar-cache ] || mkdir ~/.dollar-cache
+    [ -f ~/.dollar-cache/zulu-mac.zip ] || curl -L http://dl.bintray.com/neilellis/dollar/zulu1.8.0_25-8.4.0.1-macosx.zip  > ~/.dollar-cache/zulu-mac.zip
+    unzip -q ~/.dollar-cache/zulu-mac.zip -d .
+    mv zulu* jdk
+fi
+cd -  2&>1 /dev/null
 export JAVA_HOME=${DOLLAR_HOME}/jdk/
 if [ $# -ne 1 ]
 then
@@ -9,5 +29,4 @@ then
     exit 1
 fi
 
-#echo "This is experimental software, it may work it may not :-)"
-${DOLLAR_HOME}/jdk/jre/bin/java -classpath "${DOLLAR_HOME}/lib/*:${DOLLAR_HOME}/ext:${DOLLAR_HOME}/plugins/*:${HOME}/.dollar/lib" me.neilellis.dollar.script.ParserMain $@
+${DOLLAR_HOME}/jdk/jre/bin/java -classpath "${DOLLAR_HOME}/lib/*:${DOLLAR_HOME}/ext:${DOLLAR_HOME}/plugins/*:${HOME}/.dollar/lib" me.neilellis.dollar.main.ParserMain $@

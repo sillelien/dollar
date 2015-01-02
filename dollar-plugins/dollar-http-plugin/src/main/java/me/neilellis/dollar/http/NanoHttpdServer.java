@@ -1127,7 +1127,7 @@ public abstract class NanoHttpdServer {
         }
 
         /**
-         * Decodes the Multipart Body data and put it into Key/Value pairs.
+         * Decodes the Multipart Body data and putValue it into Key/Value pairs.
          */
         private void decodeMultipartData(@NotNull String boundary, @NotNull ByteBuffer fbuf, @NotNull BufferedReader
                 in, @NotNull Map<String, String> parms,

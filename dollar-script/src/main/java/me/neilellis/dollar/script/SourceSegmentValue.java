@@ -17,6 +17,7 @@
 package me.neilellis.dollar.script;
 
 import me.neilellis.dollar.api.script.SourceSegment;
+import me.neilellis.dollar.script.api.Scope;
 import me.neilellis.dollar.script.util.FNV;
 import org.codehaus.jparsec.Token;
 import org.jetbrains.annotations.NotNull;

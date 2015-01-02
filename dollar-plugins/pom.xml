@@ -39,8 +39,8 @@
         <module>dollar-github-resolver-plugin</module>
         <module>dollar-class-resolver-plugin</module>
         <module>dollar-std-resources-plugin</module>
-        <module>dollar-orientdb-learner-plugin</module>
-        <module>dollar-hazelcast-learner-plugin</module>
+        <!--<module>dollar-orientdb-learner-plugin</module>-->
+        <!--<module>dollar-hazelcast-learner-plugin</module>-->
         <module>dollar-simple-learner-plugin</module>
         <module>dollar-simple-execution-plugin</module>
     </modules>
@@ -50,8 +50,87 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
                 <configuration>
+                    <shadedArtifactAttached>true</shadedArtifactAttached>
                     <shadedClassifierName>plugin</shadedClassifierName>
+
+                    <!--<minimizeJar>true</minimizeJar>-->
+                    <artifactSet>
+                        <excludes>
+                            <exclude>junit:junit</exclude>
+                            <!--<exclude>*:xml-apis</exclude>-->
+                            <!--<exclude>com.thoughtworks.xstream:xstream</exclude>-->
+                            <exclude>log4j:log4j:jar:</exclude>
+                            <exclude>org.slf4j:slf4j-api</exclude>
+                            <exclude>org.slf4j:slf4j-log4j12</exclude>
+                        </excludes>
+                    </artifactSet>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>com.thoughtworks.**</exclude>
+                                <exclude>org.slf4j.**</exclude>
+                                <exclude>org.apache.log4j.**</exclude>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                                <exclude>META-INF/*.INF</exclude>
+                                <!--<exclude>META-INF/license</exclude>-->
+                            </excludes>
+                        </filter>
+                    </filters>
+                    <relocations>
+                        <!--<relocation>-->
+                        <!--<pattern>me.neilellis.dollar</pattern>-->
+                        <!--<shadedPattern>me.neilellis.dollar.plugin.${plugin.name}.r${buildNumber}</shadedPattern>-->
+                        <!--</relocation>-->
+                        <relocation>
+                            <pattern>org</pattern>
+                            <shadedPattern>dollar.plugin.${plugin.name}.r${buildNumber}</shadedPattern>
+                            <excludes>
+                                <exclude>org.apache.log4j.**</exclude>
+                                <exclude>org.apache.camel.**</exclude>
+                                <exclude>org.junit.**</exclude>
+                                <exclude>org.w3c.**</exclude>
+                                <exclude>org.xml.**</exclude>
+                                <exclude>org.xmlpull.**</exclude>
+                                <exclude>org.slf4j.**</exclude>
+                            </excludes>
+                        </relocation>
+                        <relocation>
+                            <pattern>com</pattern>
+                            <excludes>
+                                <exclude>com.sun.**</exclude>
+                                <exclude>com.thoughtworks.**</exclude>
+                            </excludes>
+                            <shadedPattern>dollar.plugin.${plugin.name}.r${buildNumber}</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net</pattern>
+                            <shadedPattern>dollar.plugin.${plugin.name}.r${buildNumber}</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>io</pattern>
+                            <shadedPattern>dollar.plugin.${plugin.name}.r${buildNumber}</shadedPattern>
+                        </relocation>
+                    </relocations>
+                    <transformers>
+                        <!--<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">-->
+                        <!--<manifestEntries>-->
+                        <!--<Plugin-Name>${plugin.name}</Plugin-Name>-->
+                        <!--<Build-Number>${buildNumber}</Build-Number>-->
+                        <!--</manifestEntries>-->
+                        <!--</transformer>-->
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer"/>
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
+                            <addHeader>false</addHeader>
+                        </transformer>
+                    </transformers>
                 </configuration>
                 <executions>
                     <execution>

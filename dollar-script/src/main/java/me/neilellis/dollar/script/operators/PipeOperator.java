@@ -18,9 +18,9 @@ package me.neilellis.dollar.script.operators;
 
 import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.Builtins;
-import me.neilellis.dollar.script.DollarParser;
-import me.neilellis.dollar.script.Scope;
-import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
+import me.neilellis.dollar.script.api.DollarParser;
+import me.neilellis.dollar.script.api.Scope;
+import me.neilellis.dollar.script.api.exceptions.VariableNotFoundException;
 import org.codehaus.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
 

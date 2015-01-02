@@ -675,6 +675,8 @@
                             <exclude>*:xml-apis</exclude>
                             <exclude>org.apache.maven:lib:tests</exclude>
                             <exclude>log4j:log4j:jar:</exclude>
+                            <exclude>org.slf4j:slf4j-api</exclude>
+                            <exclude>org.slf4j:slf4j-log4j12</exclude>
                         </excludes>
                     </artifactSet>
                     <filters>
@@ -696,7 +698,9 @@
                             <shadedPattern>me.neilellis.dollar.r${buildNumber}</shadedPattern>
                             <excludes>
                                 <exclude>me.neilellis.dollar.api.**</exclude>
+                                <exclude>me.neilellis.dollar.script.api.**</exclude>
                                 <exclude>me.neilellis.dollar.main.**</exclude>
+                                <exclude>me.neilellis.dollar.relproxy.**</exclude>
                             </excludes>
                         </relocation>
                         <relocation>
@@ -717,6 +721,9 @@
                         <relocation>
                             <pattern>net</pattern>
                             <shadedPattern>dollar.r${buildNumber}</shadedPattern>
+                            <excludes>
+                                <exclude>net.kencochrane.**</exclude>
+                            </excludes>
                         </relocation>
                         <relocation>
                             <pattern>io</pattern>

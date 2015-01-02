@@ -16,13 +16,16 @@
 
 package me.neilellis.dollar.script;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 import me.neilellis.dollar.api.DollarException;
 import me.neilellis.dollar.api.DollarStatic;
+import me.neilellis.dollar.api.collections.MultiHashMap;
+import me.neilellis.dollar.api.collections.MultiMap;
 import me.neilellis.dollar.api.var;
-import me.neilellis.dollar.script.exceptions.DollarScriptException;
-import me.neilellis.dollar.script.exceptions.VariableNotFoundException;
+import me.neilellis.dollar.script.api.DollarParser;
+import me.neilellis.dollar.script.api.Scope;
+import me.neilellis.dollar.script.api.Variable;
+import me.neilellis.dollar.script.api.exceptions.DollarScriptException;
+import me.neilellis.dollar.script.api.exceptions.VariableNotFoundException;
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.error.ParserException;
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +50,7 @@ public class ScriptScope implements Scope {
 
     @NotNull final String id;
     @Nullable private final String source;
-    @NotNull private final Multimap<String, var> listeners = LinkedListMultimap.create();
+    @NotNull private final MultiMap<String, var> listeners = new MultiHashMap<>();
     @NotNull private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
 
     private final String file;
@@ -90,7 +93,7 @@ public class ScriptScope implements Scope {
     }
 
     @NotNull @Override
-    public var addErrorHandler(var handler) {
+    public var addErrorHandler(@NotNull var handler) {
         errorHandlers.add(handler);
         return $void();
     }
@@ -101,7 +104,7 @@ public class ScriptScope implements Scope {
         listeners.clear();
     }
 
-    @Override public var get(@NotNull String key, boolean mustFind) {
+    @NotNull @Override public var get(@NotNull String key, boolean mustFind) {
         if (key.matches("[0-9]+")) {
             throw new AssertionError("Cannot get numerical keys, use getParameter");
         }
@@ -118,10 +121,10 @@ public class ScriptScope implements Scope {
             if (result == null) {
                 throw new VariableNotFoundException(key, this);
             } else {
-                return result.value;
+                return result.getValue();
             }
         } else {
-            return result != null ? result.value : $void();
+            return result != null ? result.getValue() : $void();
         }
     }
 
@@ -130,14 +133,14 @@ public class ScriptScope implements Scope {
         return get(key, false);
     }
 
-    @Nullable @Override public var getConstraint(String key) {
+    @Nullable @Override public var getConstraint(@NotNull String key) {
         Scope scope = getScopeForKey(key);
         if (scope == null) {
             scope = this;
         }
         if (DollarStatic.getConfig().debugScope()) { log.info("Getting constraint for " + key + " in " + scope); }
-        if (scope.getVariables().containsKey(key) && scope.getVariables().get(key).constraint != null) {
-            return scope.getVariables().get(key).constraint;
+        if (scope.getVariables().containsKey(key) && scope.getVariables().get(key).getConstraint() != null) {
+            return scope.getVariables().get(key).getConstraint();
         }
         return null;
     }
@@ -154,12 +157,12 @@ public class ScriptScope implements Scope {
         return file;
     }
 
-    @Override public Multimap<String, var> getListeners() {
+    @NotNull @Override public MultiMap<String, var> getListeners() {
         return listeners;
     }
 
     @NotNull @Override
-    public var getParameter(String key) {
+    public var getParameter(@NotNull String key) {
         if (DollarStatic.getConfig().debugScope()) { log.info("Looking up parameter " + key + " in " + this); }
         Scope scope = getScopeForParameters();
         if (scope == null) {
@@ -169,10 +172,10 @@ public class ScriptScope implements Scope {
         }
         Variable result = scope.getVariables().get(key);
 
-        return result != null ? result.value : $void();
+        return result != null ? result.getValue() : $void();
     }
 
-    @Nullable @Override public Scope getScopeForKey(String key) {
+    @Nullable @Override public Scope getScopeForKey(@NotNull String key) {
         if (variables.containsKey(key)) {
             return this;
         }
@@ -204,7 +207,7 @@ public class ScriptScope implements Scope {
         return variables;
     }
 
-    @Override public var handleError(Throwable t) {
+    @NotNull @Override public var handleError(@NotNull Throwable t) {
         if (errorHandlers.isEmpty()) {
             if (parent == null) {
                 if (t instanceof ParserException) {
@@ -263,7 +266,7 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public void listen(@NotNull String key, var listener) {
+    public void listen(@NotNull String key, @NotNull var listener) {
         if (key.matches("[0-9]+")) {
             if (DollarStatic.getConfig().debugScope()) {
                 log.info("Cannot listen to positional parameter $" + key + " in " + this);
@@ -273,34 +276,35 @@ public class ScriptScope implements Scope {
         Scope scopeForKey = getScopeForKey(key);
         if (scopeForKey == null) {
             if (DollarStatic.getConfig().debugScope()) { log.info("Key " + key + " not found in " + this); }
-            listeners.put(key, listener);
+            listeners.putValue(key, listener);
             return;
         }
         if (DollarStatic.getConfig().debugScope()) { log.info("Listening for " + key + " in " + scopeForKey); }
-        scopeForKey.getListeners().put(key, listener);
+        scopeForKey.getListeners().putValue(key, listener);
     }
 
-    @Override public var notify(String variableName) {
+    @Nullable @Override public var notify(@NotNull String variableName) {
         final Scope scopeForKey = getScopeForKey(variableName);
         if (scopeForKey == null) {
             return $void();
         }
-        scopeForKey.getListeners().get(variableName).forEach(var::$notify);
+        scopeForKey.getListeners().getCollection(variableName).forEach(var::$notify);
         return scopeForKey.get(variableName);
     }
 
     @Override
-    public void notifyScope(String key, @Nullable var value) {
+    public void notifyScope(@NotNull String key, @NotNull var value) {
         if (value == null) {
             throw new NullPointerException();
         }
         if (listeners.containsKey(key)) {
-            listeners.get(key).forEach(var::$notify);
+            listeners.getCollection(key).forEach(var::$notify);
         }
     }
 
-    @Override
-    public var set(@NotNull String key, var value, boolean readonly, @Nullable var constraint, String constraintSource,
+    @NotNull @Override
+    public var set(@NotNull String key, @NotNull var value, boolean readonly, @Nullable var constraint,
+                   String constraintSource,
                    boolean isVolatile,
                    boolean fixed,
                    boolean pure) {
@@ -312,23 +316,23 @@ public class ScriptScope implements Scope {
             scope = this;
         }
         if (DollarStatic.getConfig().debugScope()) { log.info("Setting " + key + " in " + scope); }
-        if (scope.getVariables().containsKey(key) && scope.getVariables().get(key).readonly) {
+        if (scope.getVariables().containsKey(key) && scope.getVariables().get(key).isReadonly()) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
         if (scope.getVariables().containsKey(key)) {
             final Variable variable = scope.getVariables().get(key);
-            if (!variable.isVolatile && variable.thread != Thread.currentThread().getId()) {
+            if (!variable.isVolatile() && variable.getThread() != Thread.currentThread().getId()) {
                 handleError(new DollarScriptException("Concurrency Error: Cannot change the variable " +
                                                       key +
                                                       " in a different thread from that which is created in."));
             }
-            if (variable.constraint != null) {
+            if (variable.getConstraint() != null) {
                 if (constraint != null) {
                     handleError(new DollarScriptException(
                             "Cannot change the constraint on a variable, attempted to redeclare for " + key));
                 }
             }
-            variable.value = value;
+            variable.setValue(value);
         } else {
             scope.getVariables()
                  .put(key, new Variable(value, readonly, constraint, constraintSource, isVolatile, fixed, pure));
@@ -337,7 +341,7 @@ public class ScriptScope implements Scope {
         return value;
     }
 
-    @Override public var setParameter(@NotNull String key, var value) {
+    @NotNull @Override public var setParameter(@NotNull String key, @NotNull var value) {
         if (DollarStatic.getConfig().debugScope()) { log.info("Setting parameter " + key + " in " + this); }
         if (key.matches("[0-9]+") && variables.containsKey(key)) {
             throw new AssertionError("Cannot change the value of positional variables.");
@@ -369,7 +373,7 @@ public class ScriptScope implements Scope {
         setParameter("it", value);
         System.out.println("SET it=" + value);
         if (oldValue != null) {
-            setParameter("previous", oldValue.value);
+            setParameter("previous", oldValue.getValue());
         }
         final boolean fail = constraint.isFalse();
         setParameter("it", $void());

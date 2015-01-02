@@ -19,8 +19,8 @@ package me.neilellis.dollar.script.operators;
 import me.neilellis.dollar.api.DollarStatic;
 import me.neilellis.dollar.api.script.ModuleResolver;
 import me.neilellis.dollar.api.var;
-import me.neilellis.dollar.script.DollarParser;
-import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.DollarParserImpl;
+import me.neilellis.dollar.script.api.Scope;
 import org.codehaus.jparsec.functors.Map;
 
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class ModuleOperator implements Map<Object[], var> {
         HashMap<String, var> paramMap = new HashMap<>();
         if (params != null) {
             for (var param : params) {
-                paramMap.put(param.getMetaAttribute(DollarParser.NAMED_PARAMETER_META_ATTR), param);
+                paramMap.put(param.getMetaAttribute(DollarParserImpl.NAMED_PARAMETER_META_ATTR), param);
             }
         }
         System.out.println(params);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Neil Ellis
+ * Copyright (c) 2014-2015 Neil Ellis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package me.neilellis.dollar;
 
-import me.neilellis.dollar.script.DollarParser;
-import me.neilellis.dollar.script.ParserOptions;
+import me.neilellis.dollar.script.DollarParserImpl;
+import me.neilellis.dollar.script.api.ParserOptions;
 
 import java.io.IOException;
 
@@ -25,7 +25,8 @@ public class Bulletin {
 
 
     public static void main(String[] args) throws IOException {
-        new DollarParser(new ParserOptions()).parse(Bulletin.class.getResourceAsStream("/bulletin.ds"), "/bulletin.ds",
+        new DollarParserImpl(new ParserOptions()).parse(Bulletin.class.getResourceAsStream("/bulletin.ds"),
+                                                        "/bulletin.ds",
                                                     false);
     }
 }

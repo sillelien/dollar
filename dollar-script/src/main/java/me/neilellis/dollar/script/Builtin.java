@@ -18,7 +18,8 @@ package me.neilellis.dollar.script;
 
 import me.neilellis.dollar.api.types.DollarFactory;
 import me.neilellis.dollar.api.var;
-import me.neilellis.dollar.script.exceptions.DollarScriptException;
+import me.neilellis.dollar.script.api.Scope;
+import me.neilellis.dollar.script.api.exceptions.DollarScriptException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

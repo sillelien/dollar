@@ -19,7 +19,7 @@ package me.neilellis.dollar.script.operators;
 import me.neilellis.dollar.api.script.SourceSegment;
 import me.neilellis.dollar.api.var;
 import me.neilellis.dollar.script.Operator;
-import me.neilellis.dollar.script.Scope;
+import me.neilellis.dollar.script.api.Scope;
 import org.codehaus.jparsec.functors.Binary;
 import org.jetbrains.annotations.NotNull;
 
