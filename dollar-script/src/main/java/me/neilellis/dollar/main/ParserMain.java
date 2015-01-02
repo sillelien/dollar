@@ -38,9 +38,14 @@ public class ParserMain {
             //todo: make the automatic exit optional and a switch in the ParserOptions
             System.exit(0);
         } catch (Throwable t) {
-            parser.getErrorHandler().handleTopLevel(t);
+            try {
+                parser.getErrorHandler().handleTopLevel(t);
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+            System.exit(1);
+
         }
-        System.exit(1);
     }
 
     private static class ParserConfiguration implements Configuration {
