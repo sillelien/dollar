@@ -589,6 +589,7 @@
                             <exclude>**/*.yml</exclude>
                             <exclude>**/*.iml</exclude>
                             <exclude>**/*.html</exclude>
+                            <exclude>key.txt</exclude>
                         </excludes>
                     </configuration>
                 </plugin>
@@ -924,9 +925,9 @@
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
-                    <!--<forkCount>8</forkCount>-->
-                    <!--<reuseForks>true</reuseForks>-->
-                    <!--<argLine>-Xmx1024m</argLine>-->
+                    <forkCount>3</forkCount>
+                    <reuseForks>false</reuseForks>
+                    <argLine>-Xmx512m</argLine>
                     <!--<parallel>methods</parallel>-->
                     <!--<threadCount>10</threadCount>-->
                 </configuration>
