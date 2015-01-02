@@ -48,6 +48,7 @@ test:
      - mvn com.code-spotter:codespotter-maven-plugin::check  -Dmaven.test.skip=true -pl me.neilellis:dollar-core
 
 deployment:
+
   staging:
       branch: staging
       commands:
@@ -90,7 +91,6 @@ deployment:
     branch: dev
     commands:
         - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -Dmaven.test.skip install
-        - mvn site:site site:stage
         - mvn site:site site:stage
         - mv target/staging/* $CIRCLE_ARTIFACTS
 
