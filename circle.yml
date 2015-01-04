@@ -60,9 +60,10 @@ deployment:
         - git clean -fd
         - git checkout master
         - git pull origin master
-        - 'github-changes -o neilellis -r dollar -k ${GITHUB_TOKEN} -v  -n "In Progress: ${next_release}"'
         - git merge staging -m "Auto merge"
-        - git commit -a -m "Change log updates"
+        - 'github-changes -o neilellis -r dollar -k ${GITHUB_TOKEN} -v  -n "In Progress: ${next_release}"'
+        - envsubst < app_template.yml > app.yml
+        - git commit -a -m "Promotion from staging"
         - "git tag ${release} || :"
         - git push --tags
         - git push origin master

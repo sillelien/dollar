@@ -1,0 +1,17 @@
+name: Dollar
+image: ubuntu-14-04-x64
+min_size: 1gb
+config:
+  #cloud-config
+  users:
+    - name: dollar
+      groups: sudo
+      shell: /bin/bash
+      sudo: ['ALL=(ALL) NOPASSWD:ALL']
+  packages:
+    - git
+  runcmd:
+    - curl -L http://dl.bintray.com/neilellis/dollar/dollar-${release}-${CIRCLE_BUILD_NUM}.tgz > dollar.tgz
+    - tar -zxvf dollar.tgz
+    - "echo 'PATH=$$PATH:$HOME/dollar/bin' >> $$HOME/.bashrc"
+
