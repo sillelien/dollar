@@ -32,13 +32,15 @@ dependencies:
     - gem install jekyll
     - npm install -g github-changes
   override:
-    - mvn -q -T4 dependency:resolve
+    - mvn -q -T 2C dependency:resolve
 
 
 test:
   override:
     - sudo ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
-    - "mvn -T1 -Drat.skip  -DgenerateReports=false -Dmaven.javadoc.skip=true integration-test":
+    - "mvn -T 2C -Drat.skip  -DgenerateReports=false -Dmaven.javadoc.skip=true package":
+        timeout: 600
+    - "mvn -T 1C -Drat.skip  -DgenerateReports=false -Dmaven.javadoc.skip=true integration-test":
         timeout: 600
 
   post:
@@ -71,10 +73,10 @@ deployment:
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
-        - mvn -T2 -Dmaven.test.skip=true -Drat.skip=true -Dmaven.javadoc.skip=true -DgenerateReports=false install
+        - mvn -T 1C -Dmaven.test.skip=true -Drat.skip=true -Dmaven.javadoc.skip=true -DgenerateReports=false install
         - pack/pack.sh
         - pack/upload.sh ${release} ${CIRCLE_BUILD_NUM}
-        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -T4 install deploy site:site site:stage
+        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -T 2C deploy site:site site:stage
         - ./build-docs.sh:
             timeout: 360
         - mvn com.code-spotter:codespotter-maven-plugin::check -Drat.skip -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -DgenerateReports=false -pl me.neilellis:dollar-core
