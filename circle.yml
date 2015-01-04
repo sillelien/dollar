@@ -72,10 +72,10 @@ deployment:
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
-        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -T2 -Dmaven.test.skip -Drat.skip install
+        - mvn -T2 -Dmaven.test.skip -Drat.skip install
         - pack/pack.sh
         - pack/upload.sh ${release} ${CIRCLE_BUILD_NUM}
-        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -T1 install deploy site:site site:stage
+        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -T4 install deploy site:site site:stage
         - ./build-docs.sh:
             timeout: 360
 #        - mvn scm-publish:publish-scm
