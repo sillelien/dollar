@@ -32,7 +32,7 @@ dependencies:
     - "[[ $CIRCLE_BRANCH != 'master' ]] || gem install jekyll"
     - "[[ $CIRCLE_BRANCH != 'staging' ]] || npm install -g github-changes"
   override:
-    - mvn -q -T 2C dependency:resolve
+    - mvn -q dependency:resolve
 
 
 test:
