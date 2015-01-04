@@ -43,7 +43,6 @@ test:
 
   post:
 #    - mvn org.pitest:pitest-maven:mutationCoverage -pl me.neilellis:dollar-core
-     - mvn com.code-spotter:codespotter-maven-plugin::check -Drat.skip -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -DgenerateReports=false -pl me.neilellis:dollar-core
 
 deployment:
 
@@ -78,6 +77,8 @@ deployment:
         - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -T4 install deploy site:site site:stage
         - ./build-docs.sh:
             timeout: 360
+        - mvn com.code-spotter:codespotter-maven-plugin::check -Drat.skip -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -DgenerateReports=false -pl me.neilellis:dollar-core
+
 #        - mvn scm-publish:publish-scm
 #        - mv target/staging/* $CIRCLE_ARTIFACTS
 
