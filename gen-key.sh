@@ -1,7 +1,7 @@
 rm -rf ~/.gnupg
 if [[ ! -d ~/.gnupg ]]
 then
-  cat >key.txt <<EOF
+  cat >/tmp/key.txt <<EOF
 %echo Generating a basic OpenPGP key
 Key-Type: DSA
 Key-Length: 1024
@@ -16,5 +16,5 @@ Passphrase: ${GPG_PASSPHRASE}
 %commit
 %echo done
 EOF
-    gpg --batch --gen-key key.txt
+    gpg --batch --gen-key /tmp/key.txt
 fi
