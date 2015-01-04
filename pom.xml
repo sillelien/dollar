@@ -856,10 +856,10 @@
                         <include>**/*Test.java</include>
                     </includes>
                     <forkCount>4</forkCount>
-                    <reuseForks>false</reuseForks>
-                    <argLine>-Xmx512m</argLine>
+                    <reuseForks>true</reuseForks>
+                    <argLine>-Xmx256m</argLine>
                     <parallel>methods</parallel>
-                    <threadCount>4</threadCount>
+                    <threadCount>8</threadCount>
                 </configuration>
                 <dependencies>
                     <dependency>
