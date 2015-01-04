@@ -23,14 +23,18 @@ dependencies:
     - ~/.gnupg
   pre:
 #    - sudo apt-get install -y gpg
-    - "./gen-key.sh ${GPG_PASSPHRASE} &"
+    - "./gen-key.sh ${GPG_PASSPHRASE}":
+        background: true
     - "mkdir -p ~/.codespotter/ || : "
     - echo "${CODE_SPOTTER_KEY}" > ~/.codespotter/.codespotter-key
     - envsubst < settings.xml > ~/.m2/settings.xml
     - echo "login=neilellis" > ~/.github
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
-    - "[[ $CIRCLE_BRANCH != 'master' ]] || gem install jekyll"
-    - "[[ $CIRCLE_BRANCH != 'staging' ]] || npm install -g github-changes"
+    - "[[ $CIRCLE_BRANCH != 'master' ]] || gem install jekyll":
+        background: true
+    - "[[ $CIRCLE_BRANCH != 'staging' ]] || npm install -g github-changes":
+        background: true
+
   override:
     - echo "Skipping maven dependency resolving."
 #    - mvn -q dependency:resolve
