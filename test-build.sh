@@ -7,5 +7,5 @@ cp ./dollar-examples/src/main/resources/test_*.ds  target/build_test
 for file in $(ls target/build_test)
 do
     echo "Testing: " $file
-    ./dist/osx/dollar/bin/dollar target/build_test/${file} || :
+    ./dist/dollar/bin/dollar target/build_test/${file} || :
 done
