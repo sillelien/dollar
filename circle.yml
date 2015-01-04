@@ -30,7 +30,7 @@ dependencies:
     - envsubst < settings.xml > ~/.m2/settings.xml
     - echo "login=neilellis" > ~/.github
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
-    - "[[ $CIRCLE_BRANCH != 'master' ]] || gem install jekyll"
+    - "[[ $CIRCLE_BRANCH != 'master' ]] || gem install jekyll":
         background: true
   - "[[ $CIRCLE_BRANCH != 'staging' ]] || npm install -g github-changes":
         background: true
