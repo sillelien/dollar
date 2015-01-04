@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dollar-core" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dollar-docs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dollar-examples" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dollar-plugins" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dollar-plugins/dollar-class-resolver-plugin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dollar-plugins/dollar-github-resolver-plugin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dollar-plugins/dollar-http-plugin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dollar-plugins/dollar-mapdb-plugin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dollar-plugins/dollar-maven-resolver-plugin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dollar-plugins/dollar-metrics-plugin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dollar-plugins/dollar-redis-plugin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dollar-plugins/dollar-simple-execution-plugin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dollar-plugins/dollar-simple-learner-plugin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dollar-plugins/dollar-socketio-plugin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dollar-plugins/dollar-std-resources-plugin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dollar-resolver" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dollar-script" charset="UTF-8" />
   </component>
 </project>

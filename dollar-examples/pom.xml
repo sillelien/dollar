@@ -26,7 +26,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>dollar-examples</artifactId>
-    <packaging>jar</packaging>
+    <packaging>takari-jar</packaging>
     <name>Dollar Examples</name>
     <description>Examples of Dollar in Action</description>
 
