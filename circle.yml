@@ -38,8 +38,6 @@ dependencies:
 test:
   override:
     - sudo ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
-    - "mvn -T 2C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true package":
-        timeout: 600
     - "mvn -T 1C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true integration-test":
         timeout: 600
 
