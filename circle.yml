@@ -73,7 +73,7 @@ deployment:
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
-        - mvn -T 1C -Dmaven.test.skip=true -Drat.skip=true -Dmaven.javadoc.skip=true -DgenerateReports=false install
+#        - mvn -T 1C -Dmaven.test.skip=true -Drat.skip=true -Dmaven.javadoc.skip=true -DgenerateReports=false install
         - pack/pack.sh
         - pack/upload.sh ${release} ${CIRCLE_BUILD_NUM}
         - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -T 2C deploy site:site site:stage
