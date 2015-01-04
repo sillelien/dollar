@@ -32,7 +32,7 @@ dependencies:
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
     - "[[ $CIRCLE_BRANCH != 'master' ]] || gem install jekyll":
         background: true
-  - "[[ $CIRCLE_BRANCH != 'staging' ]] || npm install -g github-changes":
+    - "[[ $CIRCLE_BRANCH != 'staging' ]] || npm install -g github-changes":
         background: true
 
   override:
