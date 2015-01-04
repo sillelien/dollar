@@ -25,7 +25,6 @@ import java.util.*;
 
 public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements MultiMap<K, V> {
 
-    // compatibility with commons-collection releases 2.0/2.1
     private static final long serialVersionUID = 1943563828307035349L;
     // backed values collection
     @NotNull private transient Collection<V> values = new Values();
@@ -96,6 +95,61 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
 
     //-----------------------------------------------------------------------
 
+    @Override @NotNull public Collection<V> allValues() {
+        return values;
+    }
+
+    @Override public boolean containsValue(Object key, Object value) {
+        Collection coll = getCollection(key);
+        return coll.contains(value);
+    }
+
+    @NotNull @Override public Iterable<? extends Entry<K, Collection<V>>> entries() {
+        return entrySet();
+    }
+
+    @NotNull @Override public Collection<V> getCollection(Object key) {
+        return (Collection) getOrDefault(key, new ArrayList<V>());
+    }
+
+    @Nullable @Override public Iterator<V> iterator(Object key) {
+        Collection coll = getCollection(key);
+        return coll.iterator();
+    }
+
+    @Override public boolean putAll(Object key, @Nullable Collection<V> values) {
+        if (values == null || values.size() == 0) {
+            return false;
+        }
+        Collection coll = getCollection(key);
+        if (coll.size() == 0) {
+            coll = createCollection(values);
+            if (coll.size() == 0) {
+                return false;
+            }
+            super.put((K) key, coll);
+            return true;
+        } else {
+            return coll.addAll(values);
+        }
+    }
+
+    @Nullable public V putValue(K key, V value) {
+        // NOTE:: putValue is called during deserialization in JDK < 1.4 !!!!!!
+        //        so we must have a readObject()
+        Collection<V> coll = getCollection(key);
+        if (coll.size() == 0) {
+            super.put(key, coll);
+        }
+        boolean results = coll.add(value);
+        return (results ? value : null);
+    }
+
+    @Override public int size(Object key) {
+        Collection coll = getCollection(key);
+        return coll.size();
+    }
+
     @Override public void clear() {
         // For gc, clear each list in the map
         Set pairs = super.entrySet();
@@ -149,61 +203,6 @@ public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> implements Mul
             entry.setValue(newColl);
         }
         return cloned;
-    }
-
-    @Override public boolean containsValue(Object key, Object value) {
-        Collection coll = getCollection(key);
-        return coll.contains(value);
-    }
-
-    @NotNull @Override public Iterable<? extends Entry<K, Collection<V>>> entries() {
-        return entrySet();
-    }
-
-    @NotNull @Override public Collection<V> getCollection(Object key) {
-        return (Collection) getOrDefault(key, new ArrayList<V>());
-    }
-
-    @Nullable @Override public Iterator<V> iterator(Object key) {
-        Collection coll = getCollection(key);
-        return coll.iterator();
-    }
-
-    @Override public boolean putAll(Object key, @Nullable Collection<V> values) {
-        if (values == null || values.size() == 0) {
-            return false;
-        }
-        Collection coll = getCollection(key);
-        if (coll.size() == 0) {
-            coll = createCollection(values);
-            if (coll.size() == 0) {
-                return false;
-            }
-            super.put((K) key, coll);
-            return true;
-        } else {
-            return coll.addAll(values);
-        }
-    }
-
-    @Nullable public V putValue(K key, V value) {
-        // NOTE:: putValue is called during deserialization in JDK < 1.4 !!!!!!
-        //        so we must have a readObject()
-        Collection<V> coll = getCollection(key);
-        if (coll.size() == 0) {
-            super.put(key, coll);
-        }
-        boolean results = coll.add(value);
-        return (results ? value : null);
-    }
-
-    @Override @NotNull public Collection<V> allValues() {
-        return values;
-    }
-
-    @Override public int size(Object key) {
-        Collection coll = getCollection(key);
-        return coll.size();
     }
 
     //-----------------------------------------------------------------------
