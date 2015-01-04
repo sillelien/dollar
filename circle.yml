@@ -38,9 +38,9 @@ dependencies:
 test:
   override:
     - sudo ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
-    - "mvn -T 2C -Drat.skip  -DgenerateReports=false -Dmaven.javadoc.skip=true package":
+    - "mvn -T 2C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true package":
         timeout: 600
-    - "mvn -T 1C -Drat.skip  -DgenerateReports=false -Dmaven.javadoc.skip=true integration-test":
+    - "mvn -T 1C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true integration-test":
         timeout: 600
 
   post:
@@ -73,7 +73,7 @@ deployment:
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
-#        - mvn -T 1C -Dmaven.test.skip=true -Drat.skip=true -Dmaven.javadoc.skip=true -DgenerateReports=false install
+        - mvn -T 1C -Dmaven.test.skip=true -Drat.skip=true -Dmaven.javadoc.skip=true -DgenerateReports=false package
         - pack/pack.sh
         - pack/upload.sh ${release} ${CIRCLE_BUILD_NUM}
         - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -T 2C deploy site:site site:stage
