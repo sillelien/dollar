@@ -11,7 +11,5 @@ config:
   packages:
     - git
   runcmd:
-    - curl -L http://dl.bintray.com/neilellis/dollar/dollar-0.1.4-897.tgz > dollar.tgz
-    - tar -zxvf dollar.tgz
-    - "echo 'PATH=$PATH:$HOME/dollar/bin' >> $HOME/.bashrc"
+    - cd /home/dollar && curl -L http://dl.bintray.com/neilellis/dollar/dollar-0.1.4-901.tgz > dollar.tgz &&  tar -zxvf dollar.tgz &&  "echo 'PATH=$PATH:$HOME/dollar/bin' >> /home/dollar/.bashrc"
 
