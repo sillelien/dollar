@@ -23,7 +23,7 @@ dependencies:
     - ~/.gnupg
   pre:
 #    - sudo apt-get install -y gpg
-    - "[[ -d ~/.gnupg ]] || ./gen-key.sh ${GPG_PASSPHRASE}"
+    - "./gen-key.sh ${GPG_PASSPHRASE} &"
     - "mkdir -p ~/.codespotter/ || : "
     - echo "${CODE_SPOTTER_KEY}" > ~/.codespotter/.codespotter-key
     - envsubst < settings.xml > ~/.m2/settings.xml
