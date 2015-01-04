@@ -32,19 +32,18 @@ then
     echo
     echo "This may take some time, but hey you only need to do it once."
     echo ""
+        [ -d ~/.dollar-cache ] || mkdir ~/.dollar-cache
     if [[ $os == "macosx" ]]
     then
         durl=http://dl.bintray.com/neilellis/dollar/zulu1.8.0_25-8.4.0.1-macosx.zip
-        [ -d ~/.dollar-cache ] || mkdir ~/.dollar-cache
         [ -f ~/.dollar-cache/jdk.zip ] || curl -L ${durl}  > ~/.dollar-cache/jdk.zip
         unzip -q ~/.dollar-cache/jdk.zip -d .
     fi
     if [[ $os == "linux" ]]
     then
-       durl=http://dl.bintray.com/neilellis/dollar/zulu1.8.0_25-8.4.0.1-x86lx64.tgz
-        [ -d ~/.dollar-cache ] || mkdir ~/.dollar-cache
+        durl=http://dl.bintray.com/neilellis/dollar/zulu1.8.0_25-8.4.0.1-x86lx64.tgz
         [ -f ~/.dollar-cache/jdk.tgz ] || curl -L ${durl}  > ~/.dollar-cache/jdk.tgz
-        tar -zxvf -q ~/.dollar-cache/jdk.tgz -d .
+        tar -zxvf -q ~/.dollar-cache/jdk.tgz
     fi
     mv zulu* jdk
 fi
