@@ -43,7 +43,7 @@ then
     then
         durl=http://dl.bintray.com/neilellis/dollar/zulu1.8.0_25-8.4.0.1-x86lx64.tgz
         [ -f ~/.dollar-cache/jdk.tgz ] || curl -L ${durl}  > ~/.dollar-cache/jdk.tgz
-        tar -zxvf -q ~/.dollar-cache/jdk.tgz
+        tar -zxvf ~/.dollar-cache/jdk.tgz
     fi
     mv zulu* jdk
 fi
