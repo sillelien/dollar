@@ -3,12 +3,8 @@ cd "$(dirname $0)/.." 2&>1 /dev/null
 export DOLLAR_HOME=$(pwd)
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
        os=linux
-       durl=http://dl.bintray.com/neilellis/dollar/zulu1.8.0_25-8.4.0.1-x86lx64.zip
-       uz=gunzip
 elif [[ "$OSTYPE" == "darwin"* ]]; then
        os=macosx
-       durl=http://dl.bintray.com/neilellis/dollar/zulu1.8.0_25-8.4.0.1-macosx.zip
-       uz=unzip
 elif [[ "$OSTYPE" == "cygwin" ]]; then
        echo "Unsupported operating system $OSTYPE would you consider porting this simple script?" && exit 1
 elif [[ "$OSTYPE" == "msys" ]]; then
@@ -36,9 +32,20 @@ then
     echo
     echo "This may take some time, but hey you only need to do it once."
     echo ""
-    [ -d ~/.dollar-cache ] || mkdir ~/.dollar-cache
-    [ -f ~/.dollar-cache/jdk.zip ] || curl -L ${durl}  > ~/.dollar-cache/jdk.zip
-    ${uz} -q ~/.dollar-cache/jdk.zip -d .
+    if [[ $os == "macosx" ]]
+    then
+        durl=http://dl.bintray.com/neilellis/dollar/zulu1.8.0_25-8.4.0.1-macosx.zip
+        [ -d ~/.dollar-cache ] || mkdir ~/.dollar-cache
+        [ -f ~/.dollar-cache/jdk.zip ] || curl -L ${durl}  > ~/.dollar-cache/jdk.zip
+        unzip -q ~/.dollar-cache/jdk.zip -d .
+    fi
+    if [[ $os == "linux" ]]
+    then
+       durl=http://dl.bintray.com/neilellis/dollar/zulu1.8.0_25-8.4.0.1-x86lx64.tgz
+        [ -d ~/.dollar-cache ] || mkdir ~/.dollar-cache
+        [ -f ~/.dollar-cache/jdk.tgz ] || curl -L ${durl}  > ~/.dollar-cache/jdk.tgz
+        tar -zxvf -q ~/.dollar-cache/jdk.tgz -d .
+    fi
     mv zulu* jdk
 fi
 cd -  2&>1 /dev/null
