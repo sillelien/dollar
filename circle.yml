@@ -38,12 +38,12 @@ dependencies:
 test:
   override:
     - sudo ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
-    - "mvn -T1 -Drat.skip  -DgenerateReports=false integration-test":
+    - "mvn -T1 -Drat.skip  -DgenerateReports=false -Dmaven.javadoc.skip=true integration-test":
         timeout: 600
 
   post:
 #    - mvn org.pitest:pitest-maven:mutationCoverage -pl me.neilellis:dollar-core
-     - mvn com.code-spotter:codespotter-maven-plugin::check -Drat.skip -Dmaven.test.skip=true  -DgenerateReports=false -pl me.neilellis:dollar-core
+     - mvn com.code-spotter:codespotter-maven-plugin::check -Drat.skip -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -DgenerateReports=false -pl me.neilellis:dollar-core
 
 deployment:
 
@@ -72,7 +72,7 @@ deployment:
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
-        - mvn -T2 -Dmaven.test.skip -Drat.skip -DgenerateReports=false install
+        - mvn -T2 -Dmaven.test.skip=true -Drat.skip=true -Dmaven.javadoc.skip=true -DgenerateReports=false install
         - pack/pack.sh
         - pack/upload.sh ${release} ${CIRCLE_BUILD_NUM}
         - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -T4 install deploy site:site site:stage
