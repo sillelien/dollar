@@ -28,6 +28,7 @@
     <properties>
         <plugin.name>redis_uri</plugin.name>
     </properties>
+    <packaging>takari-jar</packaging>
 
     <dependencies>
         <dependency>

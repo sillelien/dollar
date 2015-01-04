@@ -27,6 +27,7 @@
     <properties>
         <plugin.name>scoketio_uri</plugin.name>
     </properties>
+    <packaging>takari-jar</packaging>
 
     <artifactId>dollar-socketio-plugin</artifactId>
     <dependencies>

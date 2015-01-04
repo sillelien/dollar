@@ -27,6 +27,7 @@
     <properties>
         <plugin.name>github_resolver</plugin.name>
     </properties>
+    <packaging>takari-jar</packaging>
 
     <artifactId>dollar-github-resolver-plugin</artifactId>
     <dependencies>

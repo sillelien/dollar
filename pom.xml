@@ -663,7 +663,7 @@
         <plugins>
 
 
-        <!--<plugin>-->
+            <!--<plugin>-->
             <!--<groupId>org.codehaus.mojo</groupId>-->
             <!--<artifactId>license-maven-plugin</artifactId>-->
             <!--<version>1.8</version>-->
@@ -782,13 +782,22 @@
                 The default compiler is javac and is used to compile Java sources. Also note
                 that at present the default source setting and default target setting is
                 1.5, independently of the JDK you run Maven with. -->
+            <!--<plugin>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-compiler-plugin</artifactId>-->
+            <!--<version>2.3.2</version>-->
+            <!--<configuration>-->
+            <!--<source>${jdk.version}</source>-->
+            <!--<target>${jdk.version}</target>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <groupId>io.takari.maven.plugins</groupId>
+                <artifactId>takari-lifecycle-plugin</artifactId>
+                <extensions>true</extensions>
                 <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <!-- This plugin provides the capability to build and sign jars. If the
