@@ -27,14 +27,12 @@ dependencies:
     - "mkdir -p ~/.codespotter/ || : "
     - echo "${CODE_SPOTTER_KEY}" > ~/.codespotter/.codespotter-key
     - envsubst < settings.xml > ~/.m2/settings.xml
-    - "mvn -Dgpg.passphrase=${GPG_PASSPHRASE} clean install -Dmaven.test.skip=true":
-        timeout: 600
     - echo "login=neilellis" > ~/.github
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
     - gem install jekyll
     - npm install -g github-changes
   override:
-    - mvn -q -T1 dependency:resolve
+    - mvn -q -T4 dependency:resolve
 
 
 test:
@@ -45,7 +43,7 @@ test:
 
   post:
 #    - mvn org.pitest:pitest-maven:mutationCoverage -pl me.neilellis:dollar-core
-     - mvn com.code-spotter:codespotter-maven-plugin::check  -Dmaven.test.skip=true -pl me.neilellis:dollar-core
+     - mvn com.code-spotter:codespotter-maven-plugin::check -Drat.skip -Dmaven.test.skip=true -pl me.neilellis:dollar-core
 
 deployment:
 
@@ -64,8 +62,6 @@ deployment:
         - "git tag ${release} || :"
         - git push --tags
         - git push origin master
-        - mvn -T1 site:site site:stage  -Dmaven.test.skip=true
-        - mv target/staging/* $CIRCLE_ARTIFACTS
 
   production:
       branch: master
