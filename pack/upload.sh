@@ -7,4 +7,3 @@ curl -Lo /tmp/bintray-functions j.mp/bintray-functions && . /tmp/bintray-functio
 
 mv ../dist/dollar.tgz ../dist/dollar-${1}-${2}.tgz
 bint-upload-with-version neilellis dollar dollarscript ${1} ../dist/dollar-${1}-${2}.tgz
-bint-upload-with-version neilellis dollar dollarscript ${1} ../dist/dollar-latest.tgz
