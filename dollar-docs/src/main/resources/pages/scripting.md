@@ -18,9 +18,9 @@ The source for this page (minus that header) is [here](scripting.md)
 
 ###Getting Started
 
-NOTE: At present only Mac OS X is officially supported, however since Dollar is entirely based in Java it's trivial to port to other systems.
+NOTE: At present only Mac OS X and 64 Bit Ubuntu Linux is officially supported, however since Dollar is entirely based in Java it's trivial to port to other systems.
 
-First download the Dollar scripting runtime from [ ![Download](https://api.bintray.com/packages/neilellis/dollar/dollar-runtime-osx/images/download.svg) ](https://bintray.com/neilellis/dollar/dollar-runtime-osx/_latestVersion)
+First download the Dollar scripting runtime from [ ![Download](https://api.bintray.com/packages/neilellis/dollar/dollarscript/images/download.svg) ](https://bintray.com/neilellis/dollar/dollarscript/_latestVersion)
 
 Make sure `dollar/bin` is on your PATH.
 

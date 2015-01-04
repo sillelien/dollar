@@ -18,7 +18,7 @@ Install using Maven
 
 We're not on Maven central yet but we are on Bintray:
 
-[ ![Download](https://api.bintray.com/packages/neilellis/maven/dollar/images/download.png) ](https://bintray.com/neilellis/maven/dollar/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/neilellis/dollar/dollarscript/images/download.svg) ](https://bintray.com/neilellis/dollar/dollarscript/_latestVersion)
 
 
 NOTES
