@@ -1,5 +1,5 @@
 #!/bin/bash -eu
-cd "$(dirname $0)/.." 2&>1 /dev/null
+cd "$(dirname $0)/.." &> /dev/null
 export DOLLAR_HOME=$(pwd)
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
        os=linux
@@ -47,7 +47,7 @@ then
     fi
     mv zulu* jdk
 fi
-cd -  2&>1 /dev/null
+cd -  &> /dev/null
 export JAVA_HOME=${DOLLAR_HOME}/jdk/
 if [ $# -ne 1 ]
 then
