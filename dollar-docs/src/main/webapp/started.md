@@ -12,7 +12,7 @@ Dollar is in an experimental state, all the APIs and language are subject to cha
 
 ###Runtime
 
-At this stage I recommend downloading the full DollarScript runtime from bintray [ ![Download](https://api.bintray.com/packages/neilellis/dollar/dollar-runtime-osx/images/download.svg) ](https://bintray.com/neilellis/dollar/dollar-runtime-osx/_latestVersion). This only runs on Mac OS X at present, although it is trivial to port to other platforms. I'm aware the runtime is pretty darn heavy at 100MB - but for now I'd like us all to be using the same JDK and for you all to be able to just download and run. At a later date expect better modularization and more options.
+At this stage I recommend downloading the full DollarScript runtime from bintray [ ![Download](https://api.bintray.com/packages/neilellis/dollar/dollarscript/images/download.svg) ](https://bintray.com/neilellis/dollar/dollarscript/_latestVersion). This only runs on Mac OS X at present, although it is trivial to port to other platforms. I'm aware the runtime is pretty darn heavy at 100MB - but for now I'd like us all to be using the same JDK and for you all to be able to just download and run. At a later date expect better modularization and more options.
 
 When you've downloaded the binary just untar it and put it somewhere useful.
 

@@ -1,6 +1,6 @@
 Build Status: [![Circle CI](https://circleci.com/gh/neilellis/dollar.png?style=badge)](https://circleci.com/gh/neilellis/dollar)
 
-Download [![Download](https://api.bintray.com/packages/neilellis/dollar/dollar-runtime-osx/images/download.svg) ](https://bintray.com/neilellis/dollar/dollar-runtime-osx/_latestVersion)
+Download [ ![Download](https://api.bintray.com/packages/neilellis/dollar/dollarscript/images/download.svg) ](https://bintray.com/neilellis/dollar/dollarscript/_latestVersion)
 
 Chat: [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/neilellis/dollar?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
