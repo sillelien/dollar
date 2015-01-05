@@ -59,7 +59,9 @@ layout: default
 
     <p>And run your own scripts straight from Docker</p>
     {% highlight bash %}
-    docker run -v "$(pwd):/cwd" neilellis/dodo myapp.ds
+    alias dollar='docker run -v "$(pwd):/cwd" neilellis/dodo'
+
+    dollar myapp.ds
     {% endhighlight %}
     <!--<a href="http://178.62.78.93/install?url=https%3A%2F%2Fgithub.com%2Fneilellis%2Fdollar"><img-->
     <!--src="http://178.62.78.93/button.svg"/></a>-->
