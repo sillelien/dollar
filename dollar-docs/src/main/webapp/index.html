@@ -50,6 +50,20 @@ layout: default
     }
     {% endhighlight %}
 
+    <br/>
+
+    <p>Get started even faster with DollarScript using our Docker image</p>
+    {% highlight bash %}
+    docker run neilellis/dodo
+    {% endhighlight %}
+
+    <p>And run your own scripts straight from Docker</p>
+    {% highlight bash %}
+    docker run -v "$(pwd):/cwd" neilellis/dodo myapp.ds
+    {% endhighlight %}
+    <!--<a href="http://178.62.78.93/install?url=https%3A%2F%2Fgithub.com%2Fneilellis%2Fdollar"><img-->
+    <!--src="http://178.62.78.93/button.svg"/></a>-->
+
     <p>The Dollar API is the base of the language and is designed for dynamic programming on the JVM, details can be
         found <a href="api.html">here</a>.</p>
 
@@ -65,10 +79,7 @@ layout: default
 
 
     <br/>
-    <br/>
-    <!--<a href="http://178.62.78.93/install?url=https%3A%2F%2Fgithub.com%2Fneilellis%2Fdollar"><img-->
-    <!--src="http://178.62.78.93/button.svg"/></a>-->
-    <br/>
+
     <br/>
     <hr/>
     <br/>
