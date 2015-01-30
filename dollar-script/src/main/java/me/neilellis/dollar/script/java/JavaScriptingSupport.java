@@ -70,9 +70,11 @@ public class JavaScriptingSupport {
         bindings.put("scope", scope);
 
         StringBuilder code = new StringBuilder();
-        code.append(" me.neilellis.dollar.api.var in = (me.neilellis.dollar.api.var)context.getAttribute(\"in\",javax.script.ScriptContext.ENGINE_SCOPE); \n");
         code.append(
-                " me.neilellis.dollar.script.api.Scope scope = (me.neilellis.dollar.script.api.Scope)context" +
+                "me.neilellis.dollar.api.var in = (me.neilellis.dollar.api.var)context.getAttribute(\"in\",javax" +
+                ".script.ScriptContext.ENGINE_SCOPE); \n");
+        code.append(
+                "me.neilellis.dollar.script.api.Scope scope = (me.neilellis.dollar.script.api.Scope)context" +
                 ".getAttribute(\"scope\",javax.script.ScriptContext.ENGINE_SCOPE); \n");
         code.append(" me.neilellis.dollar.api.var out = me.neilellis.dollar.api.DollarStatic.$void();\n");
         code.append(java).append("\nreturn out;\n");

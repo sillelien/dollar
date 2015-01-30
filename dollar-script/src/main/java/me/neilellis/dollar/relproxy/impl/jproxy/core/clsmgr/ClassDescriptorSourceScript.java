@@ -47,7 +47,7 @@ public class ClassDescriptorSourceScript extends ClassDescriptorSourceUnit {
         boolean completeClass = isCompleteClass(scriptCode);
 
         StringBuilder finalCode = new StringBuilder();
-        finalCode.append("import me.neilellis.dollar.*;\n");
+        finalCode.append("import me.neilellis.dollar.api.*;\n");
 //        finalCode.append("import me.neilellis.dollar.script.lang.*;\n");
         finalCode.append("import static me.neilellis.dollar.api.DollarStatic.*;\n");
         finalCode.append("import java.util.*;\n");

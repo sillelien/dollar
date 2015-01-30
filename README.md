@@ -8,4 +8,6 @@ Waffle Stories: [![Stories in Ready](https://badge.waffle.io/neilellis/dollar.pn
 
 My Stack: [![Stack Share](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](http://stackshare.io/neilellis/dollarscript-stack)
 
+Dependencies: [![Dependency Status](https://www.versioneye.com/user/projects/54ae285534ff3e2204000002/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54ae285534ff3e2204000002)
+
 Please check out http://neilellis.github.io/dollar for latest details on DollarScript.
