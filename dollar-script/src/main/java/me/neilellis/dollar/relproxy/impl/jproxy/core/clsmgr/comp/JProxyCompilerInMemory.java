@@ -129,8 +129,7 @@ public class JProxyCompilerInMemory {
             ClassDescriptorSourceScript sourceFileDescScript = (ClassDescriptorSourceScript) sourceFileDesc;
             LinkedList<JavaFileObject> compilationUnitsList = new LinkedList<>();
             String code = sourceFileDescScript.getSourceCode();
-            compilationUnitsList.add(
-                    new JavaFileObjectInputSourceInMemory(sourceFileDescScript.getClaREADssName(), code,
+            compilationUnitsList.add(new JavaFileObjectInputSourceInMemory(sourceFileDescScript.getClassName(), code,
                                                                            sourceFileDescScript.getEncoding(),
                                                                            sourceFileDescScript.getTimestamp()));
             compilationUnits = compilationUnitsList;
@@ -164,7 +163,6 @@ public class JProxyCompilerInMemory {
         File folderSources = engine.getFolderSources();
         if (folderSources != null) {
             finalCompilationOptions.add("-classpath");
-            finalCompilationOptions.add("-proc:none");
             finalCompilationOptions.add(engine.getFolderSources().getAbsolutePath());
         }
 
