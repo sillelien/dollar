@@ -59,7 +59,7 @@ deployment:
         - git reset HEAD --hard
         - git clean -fd
         - git checkout master
-        - git pull origin master
+        - git pull origin master -m "Auto merge"
         - git merge staging -m "Auto merge"
         - 'github-changes -o neilellis -r dollar -k ${GITHUB_TOKEN} -v  -n "In Progress: ${next_release}"'
         - envsubst '$release:$CIRCLE_BUILD_NUM}' < app_template.yml > app.yml
