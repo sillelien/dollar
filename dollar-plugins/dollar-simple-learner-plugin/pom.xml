@@ -28,7 +28,7 @@
     <properties>
         <plugin.name>simple_learner</plugin.name>
     </properties>
-    <packaging>takari-jar</packaging>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

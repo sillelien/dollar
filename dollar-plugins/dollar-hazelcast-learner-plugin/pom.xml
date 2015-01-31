@@ -28,7 +28,7 @@
     <properties>
         <plugin.name>hazelcast_learner</plugin.name>
     </properties>
-    <packaging>takari-jar</packaging>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

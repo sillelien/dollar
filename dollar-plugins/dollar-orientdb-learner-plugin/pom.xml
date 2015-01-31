@@ -28,7 +28,7 @@
     <properties>
         <plugin.name>orientdb_learner</plugin.name>
     </properties>
-    <packaging>takari-jar</packaging>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

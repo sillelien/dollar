@@ -27,7 +27,7 @@
     <properties>
         <plugin.name>maven_resolver</plugin.name>
     </properties>
-    <packaging>takari-jar</packaging>
+    <packaging>jar</packaging>
 
     <artifactId>dollar-maven-resolver-plugin</artifactId>
     <dependencies>
