@@ -207,7 +207,7 @@ public class DollarMap extends AbstractDollar implements var {
     @NotNull
     @Override
     public <R> R toJavaObject() {
-        return (R) toJsonObject();
+        return (R) varMapToMap();
     }
 
     @NotNull

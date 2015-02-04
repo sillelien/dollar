@@ -290,7 +290,7 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public <R> R toJavaObject() {
-        return (R) jsonArray();
+        return (R) Collections.unmodifiableList(toList().mutable());
     }
 
     @NotNull

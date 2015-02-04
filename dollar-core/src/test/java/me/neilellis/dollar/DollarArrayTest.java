@@ -16,10 +16,11 @@
 
 package me.neilellis.dollar;
 
-import me.neilellis.dollar.api.json.JsonArray;
 import me.neilellis.dollar.api.var;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.List;
 
 import static me.neilellis.dollar.api.DollarStatic.$;
 import static me.neilellis.dollar.api.DollarStatic.$list;
@@ -41,9 +42,9 @@ public class DollarArrayTest {
         assertEquals(list.remove("Dimple"), $list("Neil").$plus($("Charlie")));
         assertEquals(list.remove("Charlie"), $list("Neil").$plus($("Dimple")));
         Object value = list.toJavaObject();
-        assertEquals(JsonArray.class, value.getClass());
+        assertTrue(value instanceof List);
         assertEquals("[ \"Neil\", \"Dimple\", \"Charlie\" ]", list.toString());
-        assertEquals("[ \"Neil\", \"Dimple\", \"Charlie\" ]", value.toString());
+        assertEquals("[Neil, Dimple, Charlie]", value.toString());
         assertTrue(list.$stream(false).anyMatch((i) -> i.equals("Neil")));
     }
 
