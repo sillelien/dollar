@@ -1,6 +1,9 @@
 ## Change Log
 
-### In Progress: 0.1.5 (2015/01/31 03:37 +00:00)
+### In Progress: 0.1.5 (2015/02/04 01:34 +00:00)
+- [dab3f09](https://github.com/neilellis/dollar/commit/dab3f09f2227add9c92ce1f88721e114ccd2370c) Merge remote-tracking branch 'origin/master'
+- [d9d8cbb](https://github.com/neilellis/dollar/commit/d9d8cbbae731c64cb02a0b46684f7a4ea636cda0) Improved the types returned by toJavaObject()
+- [fd10100](https://github.com/neilellis/dollar/commit/fd101003a771050d25496ca159d4391295cdc987) Promotion from staging
 - [d08cb75](https://github.com/neilellis/dollar/commit/d08cb75e5674df257432f3a292ab5ac4d69e0b42) Merge remote-tracking branch 'origin/master'
 - [d9436d2](https://github.com/neilellis/dollar/commit/d9436d295d9682c645dbed6ce95dd3d9851e7181) Docker support on website
 - [c64f9cc](https://github.com/neilellis/dollar/commit/c64f9cc15b95b4bc7a61d05d101144f01c1bcc74) Docker support on website
@@ -35,12 +38,12 @@
 - [93b272d](https://github.com/neilellis/dollar/commit/93b272dc18f659fa8263866caaf1ecc3afef0edc) Change log updates
 - [48a7b1b](https://github.com/neilellis/dollar/commit/48a7b1bf8b01dd13b15bd0d1f7040b4989d31400) Auto merge
 - [1bda1f2](https://github.com/neilellis/dollar/commit/1bda1f242deaac337e555406378f3088f93a790a) Install on DO
-- [ab949ba](https://github.com/neilellis/dollar/commit/ab949bae493a7398e7ed13ae8bc6dc6c13965c15) Change log updates
 - [2ebcde7](https://github.com/neilellis/dollar/commit/2ebcde7ca78f64ec82bdaeb92f3a9fa9a83dc43d) Auto merge
+- [ab949ba](https://github.com/neilellis/dollar/commit/ab949bae493a7398e7ed13ae8bc6dc6c13965c15) Change log updates
 - [ac5569c](https://github.com/neilellis/dollar/commit/ac5569caef4f8d39329e04c534f1e5948aee4be1) Change log updates
 - [64447de](https://github.com/neilellis/dollar/commit/64447de4bf5c9a55592c64abf6cd6a343b0c0ee0) Auto merge
-- [b2e50a1](https://github.com/neilellis/dollar/commit/b2e50a1017aff684ce26c209368e383b0cdb7cb4) Auto merge
 - [d40dd4c](https://github.com/neilellis/dollar/commit/d40dd4ca3042e0644c51e8af46b183ab50864cc6) Change log updates
+- [b2e50a1](https://github.com/neilellis/dollar/commit/b2e50a1017aff684ce26c209368e383b0cdb7cb4) Auto merge
 - [e8da753](https://github.com/neilellis/dollar/commit/e8da753fe182c713120a7ee8ebd781a1d7b0f59e) Install on DO
 - [ef8b419](https://github.com/neilellis/dollar/commit/ef8b41912b61ce9120f087aa25bd86c8798d2f2a) Install on DO
 - [08c73e2](https://github.com/neilellis/dollar/commit/08c73e22d1f5fc4198a59dcbd4ddc97976bf31bb) Install on DO
@@ -52,20 +55,20 @@
 - [c5fdae2](https://github.com/neilellis/dollar/commit/c5fdae21ec830d16a678402f9ace7717a07d7f0a) Linux fixes
 - [fe63c46](https://github.com/neilellis/dollar/commit/fe63c46259cdaad66f05491d51d01550d01f2d7c) Change log updates
 - [5c1f3b0](https://github.com/neilellis/dollar/commit/5c1f3b080fa4dd9476005449e5f1439cf27ae24a) Auto merge
-- [0ed0cc2](https://github.com/neilellis/dollar/commit/0ed0cc2b322b3b637befa4b2bcd5dc14d479d5c6) Auto merge
 - [8b5ae0f](https://github.com/neilellis/dollar/commit/8b5ae0f88283f67d2cf48f0a87e0d524e4132848) Change log updates
+- [0ed0cc2](https://github.com/neilellis/dollar/commit/0ed0cc2b322b3b637befa4b2bcd5dc14d479d5c6) Auto merge
 - [6135e74](https://github.com/neilellis/dollar/commit/6135e74968f065637ad8d338c8d1528f69d90b60) Linux fixes
 - [d2b7b45](https://github.com/neilellis/dollar/commit/d2b7b45c0ed2ee6fccd74d6bc046467b6a021a35) Linux fixes
-- [b11ec9f](https://github.com/neilellis/dollar/commit/b11ec9f1fcb4aea78b5aec3f472711da93f12b68) Change log updates
 - [595dc7a](https://github.com/neilellis/dollar/commit/595dc7abdeded3007d457e89fed2afaf6e3e8ca2) Auto merge
+- [b11ec9f](https://github.com/neilellis/dollar/commit/b11ec9f1fcb4aea78b5aec3f472711da93f12b68) Change log updates
 - [12cee15](https://github.com/neilellis/dollar/commit/12cee1562860191f99aef851910ddc0d5145355e) Linux fixes
 - [a787328](https://github.com/neilellis/dollar/commit/a787328e5ae38ca4d912644f463a010652219d8b) Linux fixes
-- [ccdfc5b](https://github.com/neilellis/dollar/commit/ccdfc5bccd22f5e9d2c15fda597129d79d340d58) Auto merge
 - [5dea56e](https://github.com/neilellis/dollar/commit/5dea56ee4eb28c5a4fbec69fa8e8e695d43fdc45) Change log updates
+- [ccdfc5b](https://github.com/neilellis/dollar/commit/ccdfc5bccd22f5e9d2c15fda597129d79d340d58) Auto merge
 - [b690753](https://github.com/neilellis/dollar/commit/b690753f65cbf64ab28cc6bee8a45bdb145470e0) Linux fixes
 - [6c8b6bb](https://github.com/neilellis/dollar/commit/6c8b6bb3e0910841e3611ac55befaab639ed786a) Linux fixes
-- [e02bde2](https://github.com/neilellis/dollar/commit/e02bde26aea1b42a6361222164203d8c559fc615) Auto merge
 - [2b62591](https://github.com/neilellis/dollar/commit/2b6259124d350148b6b0d1c7536b997751e404ac) Change log updates
+- [e02bde2](https://github.com/neilellis/dollar/commit/e02bde26aea1b42a6361222164203d8c559fc615) Auto merge
 - [6a60857](https://github.com/neilellis/dollar/commit/6a60857e2434306689fea8b6867843312a0d1130) Build speedup
 - [5fb0926](https://github.com/neilellis/dollar/commit/5fb092650a851042b3439bc615c0ba89dafb6b46) Change log updates
 - [3f78369](https://github.com/neilellis/dollar/commit/3f783691b0525081f4d73ab5bec000fe568ae368) Auto merge
@@ -79,8 +82,8 @@
 - [07ad955](https://github.com/neilellis/dollar/commit/07ad955f27bc016ae51db891c7144929c48205f8) Change log updates
 - [360af50](https://github.com/neilellis/dollar/commit/360af50f49d2758dd89ebfee0c3615140a74fe88) Auto merge
 - [6152b5e](https://github.com/neilellis/dollar/commit/6152b5e9f08cfb4a7ca9a0ad22e843626674d60f) Build speedup
-- [a721607](https://github.com/neilellis/dollar/commit/a7216074a769a5fb482e43d63b43618c6046340c) Auto merge
 - [45508b0](https://github.com/neilellis/dollar/commit/45508b0c2909fad365085df0bbe58b60aba121ce) Change log updates
+- [a721607](https://github.com/neilellis/dollar/commit/a7216074a769a5fb482e43d63b43618c6046340c) Auto merge
 - [65e7883](https://github.com/neilellis/dollar/commit/65e788347b059760b1da3fe0593da2bef63d23ba) Change log updates
 - [a5d6c34](https://github.com/neilellis/dollar/commit/a5d6c3465c745760a77883169867405fa0ae3a9f) Auto merge
 - [11af264](https://github.com/neilellis/dollar/commit/11af264064aa92919a908ce041cad1ed6caafe46) Build speedup
@@ -112,15 +115,15 @@
 - [9151300](https://github.com/neilellis/dollar/commit/91513003f684076f9095a847bfacd1deafd621f4) Build speedup
 - [5e70334](https://github.com/neilellis/dollar/commit/5e703347e1ed10ec09ff1417a8f20e41e8ba24bf) Change log updates
 - [1722b8f](https://github.com/neilellis/dollar/commit/1722b8f9eb5dd54d3cfa71cbc0b99afa69692ba6) Auto merge
-- [32b1737](https://github.com/neilellis/dollar/commit/32b1737f6233842c16270df49e30ab1fed3a799d) Change log updates
 - [3d69463](https://github.com/neilellis/dollar/commit/3d6946379eacbda227d35b2524b925e71e1c3962) Auto merge
+- [32b1737](https://github.com/neilellis/dollar/commit/32b1737f6233842c16270df49e30ab1fed3a799d) Change log updates
 - [8955cfb](https://github.com/neilellis/dollar/commit/8955cfbf9e3c2ffa7b6c6af94de735807a9c04c8) Build speedup
 - [c2e116c](https://github.com/neilellis/dollar/commit/c2e116c659eac89183abab08dc2d8f520f1092f1) Build speedup
 - [e4d9141](https://github.com/neilellis/dollar/commit/e4d9141a8473a5c0e1c1c78b38c74b527dc65d09) Build speedup
 - [c312184](https://github.com/neilellis/dollar/commit/c3121849b263cdb38a9918ac45e49b3f55b25749) Change log updates
 - [6091d49](https://github.com/neilellis/dollar/commit/6091d4966f31605fb470ca929e164516b9b8a499) Auto merge
-- [9f61624](https://github.com/neilellis/dollar/commit/9f616249114495f2c3639fd90827a4cccc9659ad) Change log updates
 - [13ddbed](https://github.com/neilellis/dollar/commit/13ddbeda09bf60bb16b82ccc1addc1a50919cb6b) Auto merge
+- [9f61624](https://github.com/neilellis/dollar/commit/9f616249114495f2c3639fd90827a4cccc9659ad) Change log updates
 - [db3dacf](https://github.com/neilellis/dollar/commit/db3dacfb11643b10eea35e26d555bf009d306786) Build speedup
 - [8d695c9](https://github.com/neilellis/dollar/commit/8d695c91e696a4f88a998b9bd804cadb8a80cc88) Build speedup
 - [72239c6](https://github.com/neilellis/dollar/commit/72239c6528613c9e34693831807ed1b022453980) Build speedup
@@ -133,8 +136,8 @@
 - [93ff96e](https://github.com/neilellis/dollar/commit/93ff96e03f7a24fe0d89ce414994e9fda83be86f) Linux support
 - [1208fd4](https://github.com/neilellis/dollar/commit/1208fd4bb3e517702ecbcf254eb4ce56c4feee3b) Change log updates
 - [29f7ee5](https://github.com/neilellis/dollar/commit/29f7ee515928f71c23108a3014aa144ce8c06236) Auto merge
-- [1426f19](https://github.com/neilellis/dollar/commit/1426f192832a891a9bf769f744e82de37c427bed) Change log updates
 - [8e32bd4](https://github.com/neilellis/dollar/commit/8e32bd4ddbbf2f86a81c41e01106ea1d1e26d612) Auto merge
+- [1426f19](https://github.com/neilellis/dollar/commit/1426f192832a891a9bf769f744e82de37c427bed) Change log updates
 - [552a36b](https://github.com/neilellis/dollar/commit/552a36b2d863779a23f585269450c2f4bfb81ba5) Cleanup
 - [10e8e5a](https://github.com/neilellis/dollar/commit/10e8e5aa980430b6582fc5a32e0dc626fecb5487) Cleanup
 - [db08993](https://github.com/neilellis/dollar/commit/db08993bcb82c2b65bf27e73818f5b77e98ebe80) Cleanup
@@ -155,14 +158,14 @@
 - [24c8135](https://github.com/neilellis/dollar/commit/24c8135342d37b02e8a39a9f250246a4c0918ecd) Auto merge
 - [d3b06d8](https://github.com/neilellis/dollar/commit/d3b06d81f8591ff753a50a9bd0f5c6d6429208d4) Change log updates
 - [e41096c](https://github.com/neilellis/dollar/commit/e41096ca5a854b107348c16e5c4e33958010b3bf) Auto merge
-- [947b857](https://github.com/neilellis/dollar/commit/947b8577ecf78aec040258ce8fb9fc3c4e3ba418) Change log updates
 - [4bbebf2](https://github.com/neilellis/dollar/commit/4bbebf2bb50fe91220ec3b77569fc10897e605f2) Auto merge
+- [947b857](https://github.com/neilellis/dollar/commit/947b8577ecf78aec040258ce8fb9fc3c4e3ba418) Change log updates
 - [6272940](https://github.com/neilellis/dollar/commit/62729406c3a4b094c2bbe040ce8fc89b8600fa67) Cleanup
 - [6aa532b](https://github.com/neilellis/dollar/commit/6aa532b7c9b1baf4dd1f8e4077474d3b2f72b2cd) Cleanup
 - [c48f49d](https://github.com/neilellis/dollar/commit/c48f49d7ce2d01ea8535a8cc6b0d8d48fdca0ca5) Cleanup
 - [509e827](https://github.com/neilellis/dollar/commit/509e8270d2c8857827f90b0d22e92dfccee41e2c) Cleanup
-- [9487ff8](https://github.com/neilellis/dollar/commit/9487ff860047a345db9f3834bc742faa0e2d5f0e) Auto merge
 - [4e1db78](https://github.com/neilellis/dollar/commit/4e1db78a8942055a5f0f0c47c694e0d153d16b08) Change log updates
+- [9487ff8](https://github.com/neilellis/dollar/commit/9487ff860047a345db9f3834bc742faa0e2d5f0e) Auto merge
 - [ef6b058](https://github.com/neilellis/dollar/commit/ef6b058c3fd2ccef968eb2a7912edaafa2be2a1e) Cleanup
 - [69da506](https://github.com/neilellis/dollar/commit/69da50683acd7a2982b06d3638ad2c06f893538d) Change log updates
 - [b16c6be](https://github.com/neilellis/dollar/commit/b16c6beca24632803abe88d2d7c03795e362616e) Auto merge
@@ -172,8 +175,8 @@
 - [a21287e](https://github.com/neilellis/dollar/commit/a21287e38dfe1fa64586ce224bfc3459f37ce1b1) Cleanup
 - [74d61ea](https://github.com/neilellis/dollar/commit/74d61eaa6a04be09a0b90e3444148e7e5c1e594a) Change log updates
 - [111b6ae](https://github.com/neilellis/dollar/commit/111b6ae4ca1c0f137527d3abc86dab2bed63acce) Auto merge
-- [3876d72](https://github.com/neilellis/dollar/commit/3876d72f900679a0a64f6c49374a6c82cab178ae) Auto merge
 - [5d5d13d](https://github.com/neilellis/dollar/commit/5d5d13dfdb01d90fe96792910a9d185cf3f8cd33) Change log updates
+- [3876d72](https://github.com/neilellis/dollar/commit/3876d72f900679a0a64f6c49374a6c82cab178ae) Auto merge
 - [9cdbf3c](https://github.com/neilellis/dollar/commit/9cdbf3c414b7613f5a4ee857acb83c7b6db5f142) Cleanup
 - [d6a3ac6](https://github.com/neilellis/dollar/commit/d6a3ac6d79e85953f08f439bdecdbcf178b84c89) Cleanup
 - [4acc275](https://github.com/neilellis/dollar/commit/4acc275714619fa6f314b5e69467a9e2ec9f2d27) Cleanup
@@ -227,16 +230,16 @@
 - [12eefdc](https://github.com/neilellis/dollar/commit/12eefdce4d3b40d022790504fccf4fa7b30eb091) Auto merge
 - [9ff19e7](https://github.com/neilellis/dollar/commit/9ff19e714362887f92b43b115be538c9d58aa7cb) Cleanup
 - [e677adb](https://github.com/neilellis/dollar/commit/e677adba1085882aae045ff1e325d5904623ef5d) Cleanup
-- [da9e794](https://github.com/neilellis/dollar/commit/da9e79452159cd88a8bd4a665a7536412fea39bc) Change log updates
 - [333ec30](https://github.com/neilellis/dollar/commit/333ec301ae78eb4db7fcf53ee315f4c9fac5486f) Auto merge
+- [da9e794](https://github.com/neilellis/dollar/commit/da9e79452159cd88a8bd4a665a7536412fea39bc) Change log updates
 - [3aa603c](https://github.com/neilellis/dollar/commit/3aa603ca18f8547476bfb9ad19113193b9490a88) Cleanup
 - [c709f70](https://github.com/neilellis/dollar/commit/c709f70970da7f254bec7e27bf300b2fb20c99c0) Change log updates
 - [b743c8d](https://github.com/neilellis/dollar/commit/b743c8d278de85a7480201732335f237cf24bfaa) Auto merge
 - [6e58700](https://github.com/neilellis/dollar/commit/6e58700ff8211fe28f38f600f11bb0cb917831cc) Cleanup
 - [e989023](https://github.com/neilellis/dollar/commit/e989023c3172105bb902a306bd59922e3490e597) Cleanup
 - [e500784](https://github.com/neilellis/dollar/commit/e50078454ffde6d22854571b8bf5575e884ca32f) Cleanup
-- [034e301](https://github.com/neilellis/dollar/commit/034e301920959e48187081c420c3331d75380050) Auto merge
 - [e018755](https://github.com/neilellis/dollar/commit/e0187550495d8542f8ddff962c16ea543e19bce0) Change log updates
+- [034e301](https://github.com/neilellis/dollar/commit/034e301920959e48187081c420c3331d75380050) Auto merge
 - [93b34ce](https://github.com/neilellis/dollar/commit/93b34ceb4ca9e6550a5a3004b638e8072cadc5a9) Cleanup
 - [649965b](https://github.com/neilellis/dollar/commit/649965bd4ab08e0d5506495b476c2660e70b7972) Change log updates
 - [90cb58e](https://github.com/neilellis/dollar/commit/90cb58ee0a08a0472c264bdc549913fe8b8a99eb) Auto merge
@@ -255,8 +258,8 @@
 - [aa3357c](https://github.com/neilellis/dollar/commit/aa3357c2e4f31ae34fa24fc0b29dd039e2ef7622) Cleanup
 
 ### 0.1.4 (2014/12/31 06:39 +00:00)
-- [479f5ef](https://github.com/neilellis/dollar/commit/479f5efd105a487ca61e253895f0567040be68c1) Change log updates
 - [5c0d9bf](https://github.com/neilellis/dollar/commit/5c0d9bf2fba9b222807fd51fb95d6b46a28013a6) Auto merge
+- [479f5ef](https://github.com/neilellis/dollar/commit/479f5efd105a487ca61e253895f0567040be68c1) Change log updates
 - [a8f6a9d](https://github.com/neilellis/dollar/commit/a8f6a9d9fb3be801413d0fd7479724667d40c929) Cleanup
 - [a98900f](https://github.com/neilellis/dollar/commit/a98900f91fa69d694c61ebd5d60ecaa26d1ce416) Cleanup
 - [9eb1e2d](https://github.com/neilellis/dollar/commit/9eb1e2d5ab2c084018b6a061a0b7aca5555163bd) Cleanup
@@ -311,8 +314,8 @@
 - [799448b](https://github.com/neilellis/dollar/commit/799448b5677ae0600e629feb2f15124df70beb73) Disqus on website posts
 - [8f579a2](https://github.com/neilellis/dollar/commit/8f579a26dc45e23dea9bf973dfe5f1e6430bd464) Change log updates
 - [fc5ce05](https://github.com/neilellis/dollar/commit/fc5ce05ed55e329e07ce00e6cb3132fbe2f2056e) Auto merge
-- [79a0c58](https://github.com/neilellis/dollar/commit/79a0c581a05727ee519488fe469441c0910fa65f) Auto merge
 - [1f95b72](https://github.com/neilellis/dollar/commit/1f95b72e9a12f419ee8cd42cf472d3a7d4a2990c) Change log updates
+- [79a0c58](https://github.com/neilellis/dollar/commit/79a0c581a05727ee519488fe469441c0910fa65f) Auto merge
 - [1cd268a](https://github.com/neilellis/dollar/commit/1cd268a449d024766096359e0cc0740f930cb32b) Disqus on website posts
 - [b801ba7](https://github.com/neilellis/dollar/commit/b801ba79e41e400727ed5059de887f2177c00df8) Disqus on website posts
 - [a803fe9](https://github.com/neilellis/dollar/commit/a803fe9dc3c9faae6163adf80a6c1870de85e79b) Change log updates
