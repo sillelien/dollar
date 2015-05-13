@@ -267,4 +267,10 @@ public class DollarString extends AbstractDollarSingleValue<String> {
             return null;
         }
     }
+
+    @NotNull
+    @Override
+    public String toJsonString() {
+        return "\""+value+"\"";
+    }
 }

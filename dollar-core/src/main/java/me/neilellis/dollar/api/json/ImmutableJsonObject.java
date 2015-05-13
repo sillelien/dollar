@@ -26,7 +26,7 @@ public class ImmutableJsonObject {
 
   private final JsonObject json;
 
-  public ImmutableJsonObject(JsonObject json) {
+  public ImmutableJsonObject(@Nullable JsonObject json) {
     this.json = json;
   }
 

@@ -20,6 +20,7 @@ import me.neilellis.dollar.api.DollarStatic;
 import me.neilellis.dollar.api.collections.ImmutableList;
 import me.neilellis.dollar.api.collections.ImmutableMap;
 import me.neilellis.dollar.api.json.ImmutableJsonObject;
+import me.neilellis.dollar.api.json.JsonObject;
 import me.neilellis.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -136,7 +137,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
     }
 
     @NotNull public ImmutableJsonObject toJsonObject() {
-        return null;
+        return new ImmutableJsonObject(new JsonObject());
     }
 
     @NotNull
@@ -182,4 +183,10 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar implem
 
     }
 
+
+    @NotNull
+    @Override
+    public String toJsonString() {
+        return String.valueOf((Object)toJavaObject());
+    }
 }

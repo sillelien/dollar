@@ -1,6 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{bootstrap, checkout, flatdoc, jquery, jquery-1.10.1, legacy, moment, script, socket.io, socket.io-1.2.1}" />
-  </component>
-</project>
+<project version="4" />

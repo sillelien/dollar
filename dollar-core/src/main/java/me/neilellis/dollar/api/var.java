@@ -19,7 +19,9 @@ package me.neilellis.dollar.api;
 import me.neilellis.dollar.api.guard.*;
 import me.neilellis.dollar.api.json.ImmutableJsonObject;
 import me.neilellis.dollar.api.json.JsonArray;
+import me.neilellis.dollar.api.json.JsonElement;
 import me.neilellis.dollar.api.json.JsonObject;
+import me.neilellis.dollar.api.json.impl.Json;
 import me.neilellis.dollar.api.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -177,9 +179,10 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
      *
      * @return this as a {@link JsonObject}
      */
-    default @NotNull ImmutableJsonObject toJsonObject() {
+    default @Nullable ImmutableJsonObject toJsonObject() {
         return new ImmutableJsonObject((JsonObject) toJsonType());
     }
+
 
     /**
      * Returns a {@link me.neilellis.dollar.api.json.JsonObject}, JsonArray or primitive type such that it can be
@@ -190,6 +193,19 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
      */
     @Nullable default Object toJsonType() {
         return DollarFactory.toJson(this);
+    }
+    /**
+     * Convert this to a Dollar {@link me.neilellis.dollar.api.json.JsonObject}
+     *
+     * @return this as a {@link JsonObject}
+     */
+    default @NotNull String toJsonString() {
+        ImmutableJsonObject immutableJsonObject = toJsonObject();
+        if(immutableJsonObject != null ) {
+            return immutableJsonObject.toString();
+        } else {
+            throw new DollarException("Cannot convert to JSON string");
+        }
     }
 
 }

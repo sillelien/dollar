@@ -19,6 +19,8 @@ package me.neilellis.dollar.api;
 import me.neilellis.dollar.api.collections.ImmutableList;
 import me.neilellis.dollar.api.collections.ImmutableMap;
 import me.neilellis.dollar.api.guard.*;
+import me.neilellis.dollar.api.json.ImmutableJsonObject;
+import me.neilellis.dollar.api.json.JsonObject;
 import me.neilellis.dollar.api.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -287,5 +289,6 @@ public interface TypeAware {
     default boolean uri() {
         return false;
     }
+
 
 }
