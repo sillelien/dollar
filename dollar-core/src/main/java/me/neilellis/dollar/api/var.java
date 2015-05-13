@@ -180,7 +180,11 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable,
      * @return this as a {@link JsonObject}
      */
     default @Nullable ImmutableJsonObject toJsonObject() {
-        return new ImmutableJsonObject((JsonObject) toJsonType());
+        JsonObject json = (JsonObject) toJsonType();
+        if(json == null) {
+            return null;
+        }
+        return new ImmutableJsonObject(json);
     }
 
 

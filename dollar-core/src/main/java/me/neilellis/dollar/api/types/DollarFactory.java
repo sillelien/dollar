@@ -263,6 +263,7 @@ public class DollarFactory {
                 try {
                     return wrap(new DollarMap(errors, new JsonObject((String) o)));
                 } catch (DecodeException de) {
+                    de.printStackTrace(System.err);
                     return wrap(new DollarString(errors, (String) o));
                 }
             }

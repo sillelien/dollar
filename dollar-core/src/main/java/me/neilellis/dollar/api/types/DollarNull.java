@@ -288,4 +288,10 @@ public class DollarNull extends AbstractDollar implements var {
     public JSONObject toOrgJson() {
         return new JSONObject();
     }
+
+    @NotNull
+    @Override
+    public String toJsonString() {
+        return "null";
+    }
 }

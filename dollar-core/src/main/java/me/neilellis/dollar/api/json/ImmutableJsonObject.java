@@ -24,9 +24,9 @@ import java.util.Set;
 
 public class ImmutableJsonObject {
 
-  private final JsonObject json;
+  private final @NotNull JsonObject json;
 
-  public ImmutableJsonObject(@Nullable JsonObject json) {
+  public ImmutableJsonObject(@NotNull JsonObject json) {
     this.json = json;
   }
 
