@@ -356,6 +356,10 @@ public class DollarStatic {
         return DollarFactory.fromValue(json, ImmutableList.of());
     }
 
+    public static var $json(String json) {return $(new JsonObject(json));}
+
+    public static var $string(String s) {return DollarFactory.fromStringValue(s);}
+
     /**
      * Tracer state tracer.
      *
