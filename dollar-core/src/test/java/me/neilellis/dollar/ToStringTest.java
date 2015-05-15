@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.api;
+package me.neilellis.dollar;
 
+import me.neilellis.dollar.api.Type;
 import org.junit.Test;
 
 import static me.neilellis.dollar.api.DollarStatic.$;

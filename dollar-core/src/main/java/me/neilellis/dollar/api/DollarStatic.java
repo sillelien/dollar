@@ -18,12 +18,12 @@ package me.neilellis.dollar.api;
 
 import me.neilellis.dollar.api.collections.ImmutableList;
 import me.neilellis.dollar.api.collections.MultiMap;
+import me.neilellis.dollar.api.json.DecodeException;
 import me.neilellis.dollar.api.json.JsonArray;
 import me.neilellis.dollar.api.json.JsonObject;
 import me.neilellis.dollar.api.monitor.DollarMonitor;
 import me.neilellis.dollar.api.monitor.SimpleLogStateTracer;
-import me.neilellis.dollar.api.types.DollarFactory;
-import me.neilellis.dollar.api.types.DollarFuture;
+import me.neilellis.dollar.api.types.*;
 import me.neilellis.dollar.api.uri.URI;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -356,7 +356,21 @@ public class DollarStatic {
         return DollarFactory.fromValue(json, ImmutableList.of());
     }
 
-    public static var $json(String json) {return $(new JsonObject(json));}
+    public static var $json(String json) {
+        if (json.matches("^\\s*\\{.*")) {
+            return $(new JsonObject(json));
+        } else if (json.matches("^\\s*\\[.*")) {
+            return $(new JsonArray(json));
+        } else if (json.matches("^\\s*\".*\"")) {
+            return $string(json.substring(1,json.length()-1));
+        } else if (json.matches("^\\s*[0-9+-]+\\s*$")) {
+            return $(Integer.parseInt(json));
+        } else if (json.matches("^\\s*[0-9+-.eE]+\\s*$")) {
+            return $(Double.parseDouble(json));
+        } else {
+          throw new DollarException("Could not parse as json: "+json);
+        }
+    }
 
     public static var $string(String s) {return DollarFactory.fromStringValue(s);}
 
