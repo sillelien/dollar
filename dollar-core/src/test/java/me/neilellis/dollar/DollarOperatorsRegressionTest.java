@@ -102,7 +102,7 @@ public class DollarOperatorsRegressionTest {
     public void diff(String desc, String lhs, String rhs) {
         final String difference = StringUtils.difference(lhs, rhs);
         if (!difference.isEmpty()) {
-            fail("Difference for " + desc + " is " + difference);
+            fail("Difference for " + desc + " is " + difference+"\nCompare previous: "+lhs+"\nWith current "+rhs);
         }
     }
 
