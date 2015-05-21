@@ -259,13 +259,15 @@ public class DollarFactory {
 
             } else if (((String) o).matches("^\\s*\\[.*")) {
                 return wrap(new DollarList(errors, new JsonArray(o.toString())));
-            } else {
+            } else if (((String) o).matches("^\\s*\\{.*")) {
                 try {
                     return wrap(new DollarMap(errors, new JsonObject((String) o)));
                 } catch (DecodeException de) {
                     de.printStackTrace(System.err);
                     return wrap(new DollarString(errors, (String) o));
                 }
+            } else {
+                return wrap(new DollarString(errors, (String) o));
             }
         }
         JsonObject json;
