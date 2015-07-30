@@ -61,7 +61,7 @@ deployment:
         - git checkout master
         - git pull
         - git merge staging -m "Auto merge"
-        - 'github-changes -o neilellis -r dollar -k ${GITHUB_TOKEN} -v  -n "In Progress: ${next_release}"'
+#        - 'github-changes -o neilellis -r dollar -k ${GITHUB_TOKEN} -v  -n "In Progress: ${next_release}"'
         - envsubst '$release:$CIRCLE_BUILD_NUM}' < app_template.yml > app.yml
         - git commit -a -m "Promotion from staging"
         - "git tag ${release} || :"
