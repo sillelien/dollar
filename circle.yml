@@ -12,28 +12,15 @@ general:
     ignore:
       - gh-pages
 
-notify:
-  webhooks:
-    # A list of hook hashes, containing the url field
-    # gitter hook
-    - url: https://webhooks.gitter.im/e/0400df6c845f5a09949d
+
 
 dependencies:
   cache_directories:
     - ~/.gnupg
   pre:
-#    - sudo apt-get install -y gpg
-    - "./gen-key.sh ${GPG_PASSPHRASE}":
-        background: true
-    - "mkdir -p ~/.codespotter/ || : "
-    - echo "${CODE_SPOTTER_KEY}" > ~/.codespotter/.codespotter-key
-    - envsubst < settings.xml > ~/.m2/settings.xml
     - echo "login=neilellis" > ~/.github
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
-    - "[[ $CIRCLE_BRANCH != 'master' ]] || gem install jekyll":
-        background: true
-    - "[[ $CIRCLE_BRANCH != 'staging' ]] || npm install -g github-changes":
-        background: true
+
 
   override:
 #    - echo "Skipping maven dependency resolving."
@@ -80,13 +67,7 @@ deployment:
         - mvn -T 1C -Dmaven.test.skip=true -Drat.skip=true -DskipEnforcer -Dmaven.javadoc.skip=true -DgenerateReports=false package
         - pack/pack.sh
         - pack/upload.sh ${release} ${CIRCLE_BUILD_NUM}
-        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -T 2C deploy site:site site:stage
-        - ./build-docs.sh:
-            timeout: 360
-        - mvn com.code-spotter:codespotter-maven-plugin::check -Drat.skip -DskipEnforcer -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -DgenerateReports=false -pl com.sillelien:dollar-core
-
-#        - mvn scm-publish:publish-scm
-#        - mv target/staging/* $CIRCLE_ARTIFACTS
+        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -T 2C deploy
 
 
   development:
