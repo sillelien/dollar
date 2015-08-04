@@ -20,7 +20,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>dollar-plugins</artifactId>
-        <groupId>me.neilellis</groupId>
+        <groupId>com.sillelien</groupId>
         <version>0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -32,19 +32,19 @@
     <artifactId>dollar-github-resolver-plugin</artifactId>
     <dependencies>
         <dependency>
-            <groupId>me.neilellis</groupId>
+            <groupId>com.sillelien</groupId>
             <artifactId>dollar-core</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>me.neilellis</groupId>
+            <groupId>com.sillelien</groupId>
             <artifactId>dollar-script</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>me.neilellis</groupId>
+            <groupId>com.sillelien</groupId>
             <artifactId>dollar-resolver</artifactId>
             <version>${project.version}</version>
         </dependency>

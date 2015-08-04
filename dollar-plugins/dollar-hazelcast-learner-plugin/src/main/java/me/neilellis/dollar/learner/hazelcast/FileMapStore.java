@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.learner.hazelcast;
+package com.sillelien.dollar.learner.hazelcast;
 
 import com.hazelcast.core.MapLoader;
 import com.hazelcast.core.MapStore;
 import com.thoughtworks.xstream.XStream;
-import me.neilellis.dollar.api.execution.DollarExecutor;
-import me.neilellis.dollar.api.plugin.Plugins;
+import com.sillelien.dollar.api.execution.DollarExecutor;
+import com.sillelien.dollar.api.plugin.Plugins;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

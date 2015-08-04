@@ -675,7 +675,7 @@ java <=> "Hello World"
 
 ```
 
-A whole bunch of imports are done for you automatically (java.util.*, java.math.*) but you will have to fully qualify any thirdparty libs. The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (me.neilellis.dollar.script.api.Scope) object on which you can get and set DollarScript variables.
+A whole bunch of imports are done for you automatically (java.util.*, java.math.*) but you will have to fully qualify any thirdparty libs. The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (com.sillelien.dollar.script.api.Scope) object on which you can get and set DollarScript variables.
 
 Reactive behaviour is supported on the Scope object with the listen and notify methods on variables. You'll need to then built your reactivity around those variables or on the `out` object directly (that's a pretty advanced topic).
 

@@ -13,7 +13,7 @@ jekyll build
 cp -rf $DIR/target/staging/* $DIR/dist/docs/dev
 cp -rf * $DIR/dist/docs
 cd $DIR
-mvn -q install exec:java -e -pl me.neilellis:dollar-docs -Dexec.mainClass="me.neilellis.dollar.docs.ParseDocs" -Dexec.args="./dist/docs"
+mvn -q install exec:java -e -pl com.sillelien:dollar-docs -Dexec.mainClass="com.sillelien.dollar.docs.ParseDocs" -Dexec.args="./dist/docs"
 cd dist/docs
 git add *
 git commit -a -m "Updated docs from build"  || :

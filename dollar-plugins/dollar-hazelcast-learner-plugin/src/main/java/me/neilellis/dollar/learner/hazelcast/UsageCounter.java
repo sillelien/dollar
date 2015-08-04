@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.learner.hazelcast;
+package com.sillelien.dollar.learner.hazelcast;
 
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
-import me.neilellis.dollar.api.Type;
+import com.sillelien.dollar.api.Type;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

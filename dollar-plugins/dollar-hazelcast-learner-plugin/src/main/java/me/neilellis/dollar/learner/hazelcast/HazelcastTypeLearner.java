@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.learner.hazelcast;
+package com.sillelien.dollar.learner.hazelcast;
 
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import me.neilellis.dollar.api.Type;
-import me.neilellis.dollar.api.TypePrediction;
-import me.neilellis.dollar.api.script.SourceSegment;
-import me.neilellis.dollar.api.script.TypeLearner;
-import me.neilellis.dollar.api.types.prediction.CountBasedTypePrediction;
-import me.neilellis.dollar.api.var;
+import com.sillelien.dollar.api.Type;
+import com.sillelien.dollar.api.TypePrediction;
+import com.sillelien.dollar.api.script.SourceSegment;
+import com.sillelien.dollar.api.script.TypeLearner;
+import com.sillelien.dollar.api.types.prediction.CountBasedTypePrediction;
+import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

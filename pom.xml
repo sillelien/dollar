@@ -33,7 +33,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <groupId>me.neilellis</groupId>
+    <groupId>com.sillelien</groupId>
     <artifactId>dollar</artifactId>
     <version>0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -715,14 +715,14 @@
                         <param>commons-io:commons-io:2.4</param>
                         <param>commons-lang:commons-lang:2.6</param>
                         <param>io.dropwizard.metrics:metrics-core:3.1.0</param>
-                        <param>me.neilellis:dollar-camel-plugin:${project.version}</param>
-                        <param>me.neilellis:dollar-core:${project.version}</param>
-                        <param>me.neilellis:dollar-http-plugin:${project.version}</param>
-                        <param>me.neilellis:dollar-metrics-plugin:${project.version}</param>
-                        <param>me.neilellis:dollar-redis-plugin:${project.version}</param>
-                        <param>me.neilellis:dollar-resolver:${project.version}</param>
-                        <param>me.neilellis:dollar-script:${project.version}</param>
-                        <param>me.neilellis:dollar-std-resources-plugin:${project.version}</param>
+                        <param>com.sillelien:dollar-camel-plugin:${project.version}</param>
+                        <param>com.sillelien:dollar-core:${project.version}</param>
+                        <param>com.sillelien:dollar-http-plugin:${project.version}</param>
+                        <param>com.sillelien:dollar-metrics-plugin:${project.version}</param>
+                        <param>com.sillelien:dollar-redis-plugin:${project.version}</param>
+                        <param>com.sillelien:dollar-resolver:${project.version}</param>
+                        <param>com.sillelien:dollar-script:${project.version}</param>
+                        <param>com.sillelien:dollar-std-resources-plugin:${project.version}</param>
                         <param>org.apache.camel:camel-core:${camel.version}</param>
                         <param>org.apache.camel:camel-http:${camel.version}</param>
                         <param>org.apache.camel:camel-parent:${camel.version}</param>

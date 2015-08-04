@@ -55,4 +55,4 @@ then
     exit 1
 fi
 
-${DOLLAR_HOME}/jdk/jre/bin/java -classpath "${DOLLAR_HOME}/lib/*:${DOLLAR_HOME}/ext:${DOLLAR_HOME}/plugins/*:${HOME}/.dollar/lib" me.neilellis.dollar.main.ParserMain $@
+${DOLLAR_HOME}/jdk/jre/bin/java -classpath "${DOLLAR_HOME}/lib/*:${DOLLAR_HOME}/ext:${DOLLAR_HOME}/plugins/*:${HOME}/.dollar/lib" com.sillelien.dollar.main.ParserMain $@

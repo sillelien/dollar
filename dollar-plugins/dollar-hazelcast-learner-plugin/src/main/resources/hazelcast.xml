@@ -22,7 +22,7 @@
                The class should implement at least of these interfaces and
                contain no-argument constructor. Note that the inner classes are not supported.
             -->
-            <class-name>me.neilellis.dollar.learner.hazelcast.FileMapStore</class-name>
+            <class-name>com.sillelien.dollar.learner.hazelcast.FileMapStore</class-name>
             <!--
                Number of seconds to delay to call the MapStore.store(key, value).
                If the value is zero then it is write-through so MapStore.store(key, value)

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package me.neilellis.dollar.learner.orientdb;
+package com.sillelien.dollar.learner.orientdb;
 
 import com.orientechnologies.orient.core.exception.OSchemaException;
 import com.orientechnologies.orient.server.OServer;
@@ -26,12 +26,12 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
-import me.neilellis.dollar.api.Type;
-import me.neilellis.dollar.api.TypePrediction;
-import me.neilellis.dollar.api.script.SourceSegment;
-import me.neilellis.dollar.api.script.TypeLearner;
-import me.neilellis.dollar.api.types.prediction.CountBasedTypePrediction;
-import me.neilellis.dollar.api.var;
+import com.sillelien.dollar.api.Type;
+import com.sillelien.dollar.api.TypePrediction;
+import com.sillelien.dollar.api.script.SourceSegment;
+import com.sillelien.dollar.api.script.TypeLearner;
+import com.sillelien.dollar.api.types.prediction.CountBasedTypePrediction;
+import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

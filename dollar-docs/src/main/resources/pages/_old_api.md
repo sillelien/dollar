@@ -11,7 +11,7 @@ Making Java dynamic and easy to use.
 Install using Maven
 
         <dependency>
-            <groupId>me.neilellis</groupId>
+            <groupId>com.sillelien</groupId>
             <artifactId>dollar-core</artifactId>
             <version>0.0.X</version>
         </dependency>

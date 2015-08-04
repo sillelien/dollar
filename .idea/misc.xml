@@ -59,6 +59,12 @@
       </set>
     </option>
   </component>
+  <component name="PegdownDocletIdea.ProjectConfiguration">
+    <option name="enabled" value="false" />
+    <option name="renderingOptions">
+      <RenderingOptions />
+    </option>
+  </component>
   <component name="PomSorter">
     <option name="defaultSortMode" value="ALPHABETIC" />
     <option name="order">

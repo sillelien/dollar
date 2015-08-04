@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import me.neilellis.dollar.SecondUnit;
-import me.neilellis.dollar.api.Unit;
-import me.neilellis.dollar.api.var;
+import com.sillelien.dollar.SecondUnit;
+import com.sillelien.dollar.api.Unit;
+import com.sillelien.dollar.api.var;
 
 import java.util.Date;
 
