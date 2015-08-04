@@ -76,7 +76,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="dollar-core" />
       </profile>
       <profile default="false" name="Annotation profile for dollar-runtime" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />

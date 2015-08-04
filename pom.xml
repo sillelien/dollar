@@ -74,7 +74,6 @@
     </scm>
 
     <modules>
-        <module>dollar-core</module>
         <module>dollar-resolver</module>
         <module>dollar-script</module>
         <module>dollar-runtime</module>
@@ -84,6 +83,11 @@
     </modules>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.sillelien</groupId>
+                <artifactId>dollar-core</artifactId>
+                <version>0.1.44</version>
+            </dependency>
             <dependency>
                 <groupId>org.json</groupId>
                 <artifactId>json</artifactId>
@@ -716,7 +720,7 @@
                         <param>commons-lang:commons-lang:2.6</param>
                         <param>io.dropwizard.metrics:metrics-core:3.1.0</param>
                         <param>com.sillelien:dollar-camel-plugin:${project.version}</param>
-                        <param>com.sillelien:dollar-core:${project.version}</param>
+                        <param>com.sillelien:dollar-core:0.1.44</param>
                         <param>com.sillelien:dollar-http-plugin:${project.version}</param>
                         <param>com.sillelien:dollar-metrics-plugin:${project.version}</param>
                         <param>com.sillelien:dollar-redis-plugin:${project.version}</param>
