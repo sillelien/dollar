@@ -18,7 +18,7 @@ dependencies:
   pre:
     - echo "login=neilellis" > ~/.github
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
-    - cd ~ && git clone https://github.com/sillelien/build-utils.git && chmod a+x ~/build-utils/*.sh
+    - cd ~ && git clone https://github.com/sillelien/build-utils.git && chmod a+x ~/build-utils.sh
     - mvn package -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true -Dmaven.test.skip
 
 
@@ -40,12 +40,21 @@ deployment:
   staging:
       branch: staging
       commands:
-       
+         - ~/build-utils/promote_from_staging.sh
 
   production:
       branch: master
       commands:
-        - ~/build/utils
+        - git config --global user.email "hello@neilellis.me"
+        - git config --global user.name "Neil Ellis"
+        - mvn versions:set -DnewVersion=${RELEASE}-r${CIRCLE_BUILD_NUM}
+        - mvn versions:resolve-ranges
+        - mvn versions:lock-snapshots
+#        - mvn versions:commit
+        - mvn -T 1C -Dmaven.test.skip=true -Drat.skip=true -DskipEnforcer -Dmaven.javadoc.skip=true -DgenerateReports=false package
+        - pack/pack.sh
+        - pack/upload.sh ${RELEASE} ${CIRCLE_BUILD_NUM}
+        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -T 2C deploy
 
 
   development:
