@@ -20,11 +20,11 @@ dependencies:
   pre:
     - echo "login=neilellis" > ~/.github
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
+    - mvn package Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true -Dmaven.test.skip
 
 
   override:
-#    - echo "Skipping maven dependency resolving."
-    - mvn -q dependency:resolve
+    - echo "Skipping maven dependency resolving."
 
 
 test:
