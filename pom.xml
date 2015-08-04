@@ -75,9 +75,9 @@
 
     <modules>
         <module>dollar-resolver</module>
-        <module>dollar-script</module>
         <module>dollar-runtime</module>
         <module>dollar-plugins</module>
+        <module>dollar-script</module>
         <module>dollar-examples</module>
         <module>dollar-docs</module>
     </modules>
