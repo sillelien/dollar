@@ -124,11 +124,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.3</version>
+                <version>2.4.1</version>
                 <configuration>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                     <shadedClassifierName>mod</shadedClassifierName>
-                    <!--<minimizeJar>true</minimizeJar>-->
+                    <minimizeJar>true</minimizeJar>
                     <artifactSet>
                         <excludes>
                             <exclude>classworlds:classworlds</exclude>
@@ -156,7 +156,7 @@
                     <relocations>
                         <relocation>
                             <pattern>com.sillelien.dollar</pattern>
-                            <shadedPattern>com.sillelien.dollar.r${buildNumber}</shadedPattern>
+                            <shadedPattern>com.sillelien.dollar.v${buildNumber}</shadedPattern>
                             <excludes>
                                 <exclude>com.sillelien.dollar.api.**</exclude>
                                 <exclude>com.sillelien.dollar.script.api.**</exclude>
@@ -166,7 +166,7 @@
                         </relocation>
                         <relocation>
                             <pattern>org</pattern>
-                            <shadedPattern>dollar.r${buildNumber}</shadedPattern>
+                            <shadedPattern>dollar.v${buildNumber}</shadedPattern>
                             <excludes>
                                 <exclude>org.apache.log4j.**</exclude>
                                 <exclude>org.junit.**</exclude>
@@ -177,18 +177,18 @@
                         </relocation>
                         <relocation>
                             <pattern>com</pattern>
-                            <shadedPattern>dollar.r${buildNumber}</shadedPattern>
+                            <shadedPattern>dollar.v${buildNumber}</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>net</pattern>
-                            <shadedPattern>dollar.r${buildNumber}</shadedPattern>
+                            <shadedPattern>dollar.v${buildNumber}</shadedPattern>
                             <excludes>
                                 <exclude>net.kencochrane.**</exclude>
                             </excludes>
                         </relocation>
                         <relocation>
                             <pattern>io</pattern>
-                            <shadedPattern>dollar.r${buildNumber}</shadedPattern>
+                            <shadedPattern>dollar.v${buildNumber}</shadedPattern>
                         </relocation>
                     </relocations>
                     <transformers>

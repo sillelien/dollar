@@ -40,15 +40,18 @@ public class SimpleTypeLearner implements TypeLearner {
 
 
     public static final int MAX_POSSIBLE_RETURN_VALUES = 5;
-    @Nullable private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
+    @Nullable
+    private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
 
     private transient boolean modified;
-    @NotNull private ConcurrentHashMap<String, CountBasedTypePrediction> map = new ConcurrentHashMap<>();
+    @NotNull
+    private ConcurrentHashMap<String, CountBasedTypePrediction> map = new ConcurrentHashMap<>();
 
     public SimpleTypeLearner() {
         File file = new File(System.getProperty("user.home") + "/.dollar/typelearning.xml");
         File backupFile = new File(System.getProperty("user.home") + "/.dollar/typelearning.backup.xml");
         file.getParentFile().mkdirs();
+        assert executor != null;
         executor.scheduleEvery(200, () -> {
             if (modified) {
 
@@ -70,20 +73,31 @@ public class SimpleTypeLearner implements TypeLearner {
             } catch (Exception e) {
                 file.delete();
                 if (backupFile.exists()) {
-                    map = (ConcurrentHashMap<String, CountBasedTypePrediction>) new XStream().fromXML(backupFile);
+                    try {
+                        map = (ConcurrentHashMap<String, CountBasedTypePrediction>) new XStream().fromXML(backupFile);
+                    } catch (Exception e2) {
+                        e2.printStackTrace();
+                    }
                 }
             }
         } else if (backupFile.exists()) {
-            map = (ConcurrentHashMap<String, CountBasedTypePrediction>) new XStream().fromXML(backupFile);
+            try {
+                map = (ConcurrentHashMap<String, CountBasedTypePrediction>) new XStream().fromXML(backupFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
 
-    @NotNull @Override public TypeLearner copy() {
+    @NotNull
+    @Override
+    public TypeLearner copy() {
         return this;
     }
 
-    @Override public void learn(String name, SourceSegment source, @NotNull List<var> inputs, Type type) {
+    @Override
+    public void learn(String name, SourceSegment source, @NotNull List<var> inputs, Type type) {
         final ArrayList<String> perms = TypeLearner.perms(inputs);
         for (String perm : perms) {
             final String key = createKey(name, perm);
@@ -95,7 +109,9 @@ public class SimpleTypeLearner implements TypeLearner {
 
     }
 
-    @Nullable @Override public TypePrediction predict(String name, SourceSegment source, @NotNull List<var> inputs) {
+    @Nullable
+    @Override
+    public TypePrediction predict(String name, SourceSegment source, @NotNull List<var> inputs) {
         final ArrayList<String> perms = TypeLearner.perms(inputs);
         CountBasedTypePrediction prediction = new CountBasedTypePrediction(name);
         try {
@@ -120,13 +136,18 @@ public class SimpleTypeLearner implements TypeLearner {
         }
     }
 
-    @NotNull public String createKey(String name, String perm) {return name + ":" + perm;}
+    @NotNull
+    public String createKey(String name, String perm) {
+        return name + ":" + perm;
+    }
 
-    @Override public void start() {
+    @Override
+    public void start() {
 
     }
 
-    @Override public void stop() {
+    @Override
+    public void stop() {
 
     }
 
