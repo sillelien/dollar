@@ -36,8 +36,8 @@ dependencies:
         background: true
 
   override:
-    - echo "Skipping maven dependency resolving."
-#    - mvn -q dependency:resolve
+#    - echo "Skipping maven dependency resolving."
+    - mvn -q dependency:resolve
 
 
 test:
