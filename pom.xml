@@ -966,30 +966,33 @@
             <!--<version>2.6.1</version>-->
             <!--</plugin>-->
         </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.springframework.build</groupId>
+                <artifactId>aws-maven</artifactId>
+                <version>5.0.0.RELEASE</version>
+            </extension>
+        </extensions>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>aws-release</id>
+            <name>AWS Release Repository</name>
+            <url>s3://sillelien-maven-repo/release</url>
+        </repository>
+        <snapshotRepository>
+            <id>aws-snapshot</id>
+            <name>AWS Snapshot Repository</name>
+            <url>s3://sillelien-maven-repo/snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <repositories>
         <repository>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>bintray.central</id>
-            <name>bintray</name>
-            <url>http://dl.bintray.com/neilellis/maven</url>
+            <id>s3-releases</id>
+            <url>http://sillelien-maven-repo.s3-website-eu-west-1.amazonaws.com/release</url>
         </repository>
     </repositories>
-
-    <distributionManagement>
-        <site>
-            <id>http://neilellis.github.io/dollar</id>
-            <url>scm:git:git@github.com:neilellis/dollar.git</url>
-        </site>
-        <repository>
-            <id>bintray-neilellis-maven-dollar</id>
-            <name>neilellis-maven-dollar</name>
-            <url>https://api.bintray.com/maven/neilellis/maven/dollar</url>
-        </repository>
-    </distributionManagement>
-
 
 </project>
