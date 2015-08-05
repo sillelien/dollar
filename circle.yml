@@ -54,9 +54,7 @@ deployment:
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
         - mvn -T 1C -Dmaven.test.skip=true -Drat.skip=true -DskipEnforcer -Dmaven.javadoc.skip=true -DgenerateReports=false package
-        - pack/pack.sh
-        - pack/upload.sh ${RELEASE} ${CIRCLE_BUILD_NUM}
-        - mvn -Dgpg.passphrase=${GPG_PASSPHRASE} -T 2C deploy
+        - mvn -T 2C deploy
 
 
   development:
