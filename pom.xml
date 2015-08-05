@@ -795,7 +795,7 @@
                                 <!--<message>No Snapshots Allowed!</message>-->
                                 <!--</requireReleaseDeps>-->
                                 <requireMavenVersion>
-                                    <version>[,${maven.version})</version>
+                                    <version>[,${maven.version}]</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
                                     <version>${jdk.version}</version>
