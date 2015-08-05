@@ -182,7 +182,7 @@
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpasyncclient</artifactId>
-                <version>4.0.1</version>
+                <version>4.1</version>
                 <exclusions>
                     <exclusion>
                         <groupId>commons-logging</groupId>
@@ -755,6 +755,31 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.5</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.7</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <version>1.4</version>
                 <executions>
@@ -770,7 +795,7 @@
                                 <!--<message>No Snapshots Allowed!</message>-->
                                 <!--</requireReleaseDeps>-->
                                 <requireMavenVersion>
-                                    <version>${maven.version}</version>
+                                    <version>[,${maven.version})</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
                                     <version>${jdk.version}</version>
@@ -976,15 +1001,21 @@
     </build>
 
     <distributionManagement>
+        <site>
+            <id>http://sillelien.github.io/dollar</id>
+            <url>scm:git:git@github.com:sillelien/dollar.git</url>
+        </site>
         <repository>
             <id>aws-release</id>
             <name>AWS Release Repository</name>
             <url>s3://sillelien-maven-repo/release</url>
+            <layout>default</layout>
         </repository>
         <snapshotRepository>
             <id>aws-snapshot</id>
             <name>AWS Snapshot Repository</name>
             <url>s3://sillelien-maven-repo/snapshot</url>
+            <layout>default</layout>
         </snapshotRepository>
     </distributionManagement>
 
