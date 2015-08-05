@@ -15,7 +15,7 @@ and
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-xxx</artifactId>
-            <version>${RELEASE}</version>
+            <version>0.1.1015</version>
         </dependency>
 ```
 
