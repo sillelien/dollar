@@ -49,7 +49,7 @@ deployment:
       commands:
         - git config --global user.email "hello@neilellis.me"
         - git config --global user.name "Neil Ellis"
-        - mvn versions:set -DnewVersion=${RELEASE}-r${CIRCLE_BUILD_NUM}
+        - mvn versions:set -DnewVersion=$(cat .release)
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
