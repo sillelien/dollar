@@ -28,6 +28,11 @@ public class CodeExtractionVisitor implements Visitor {
     }
 
     @Override
+    public void visit(AnchorLinkNode anchorLinkNode) {
+
+    }
+
+    @Override
     public void visit(AutoLinkNode node) {
 
     }
