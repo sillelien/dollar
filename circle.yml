@@ -21,7 +21,7 @@ dependencies:
     - echo "login=neilellis" > ~/.github
     - echo "password=${GITHUB_PASSWORD}" >> ~/.github
     - cd ~ && git clone https://github.com/sillelien/build-utils.git && chmod a+x ~/build-utils/*.sh
-    - mvn package -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true -Dmaven.test.skip
+    - mvn package -e -q -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true -Dmaven.test.skip
 
 
   override:
@@ -31,7 +31,7 @@ dependencies:
 test:
   override:
     - sudo ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
-    - "mvn -q -T 1C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true integration-test":
+    - "mvn -e -q -T 1C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true integration-test":
         timeout: 600
 
   post:
@@ -53,8 +53,8 @@ deployment:
         - mvn versions:resolve-ranges
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
-        - mvn -T 1C -Dmaven.test.skip=true -Drat.skip=true -DskipEnforcer -Dmaven.javadoc.skip=true -DgenerateReports=false package
-        - mvn -T 1C -Dorg.xml.sax.driver=com.sun.org.apache.xerces.internal.parsers.SAXParser deploy
+        - mvn -T 1C -e -q -Dmaven.test.skip=true -Drat.skip=true -DskipEnforcer -Dmaven.javadoc.skip=true -DgenerateReports=false package
+        - mvn -T 1C -e -q -Dorg.xml.sax.driver=com.sun.org.apache.xerces.internal.parsers.SAXParser deploy
 
 
   development:
