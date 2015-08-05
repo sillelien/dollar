@@ -1,7 +1,7 @@
 machine:
   environment:
     RELEASE: 0.1.${CIRCLE_BUILD_NUM}
-    MAVEN_OPTS: "-Xmx1g -DbuildNumber=${CIRCLE_BUILD_NUM} -Dorg.xml.sax.driver='com.sun.org.apache.xerces.internal.parsers.SAXParser' "
+    MAVEN_OPTS: "-Xmx1g -DbuildNumber=${CIRCLE_BUILD_NUM} "
   java:
     version: oraclejdk8
   services:
@@ -54,7 +54,7 @@ deployment:
         - mvn versions:lock-snapshots
 #        - mvn versions:commit
         - mvn -T 1C -Dmaven.test.skip=true -Drat.skip=true -DskipEnforcer -Dmaven.javadoc.skip=true -DgenerateReports=false package
-        - mvn -T 2C  deploy
+        - mvn -T 2C -Dorg.xml.sax.driver=com.sun.org.apache.xerces.internal.parsers.SAXParser deploy
 
 
   development:
