@@ -668,34 +668,34 @@
         <plugins>
 
 
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>1.8</version>
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>license-maven-plugin</artifactId>-->
+                <!--<version>1.8</version>-->
 
-                <executions>
-                    <execution>
-                        <id>download-licenses</id>
-                        <goals>
-                            <goal>download-licenses</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>add-third-party</id>
-                        <goals>
-                            <goal>aggregate-add-third-party</goal>
-                        </goals>
-                        <configuration>
-                            <licenseMerges>
-                                <licenseMerge>The Apache Software License, Version 2.0|Apache License, Version 2.0
-                                </licenseMerge>
-                                <licenseMerge>The Apache Software License, Version 2.0|Apache Public License 2.0
-                                </licenseMerge>
-                            </licenseMerges>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>download-licenses</id>-->
+                        <!--<goals>-->
+                            <!--<goal>download-licenses</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>add-third-party</id>-->
+                        <!--<goals>-->
+                            <!--<goal>aggregate-add-third-party</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<licenseMerges>-->
+                                <!--<licenseMerge>The Apache Software License, Version 2.0|Apache License, Version 2.0-->
+                                <!--</licenseMerge>-->
+                                <!--<licenseMerge>The Apache Software License, Version 2.0|Apache Public License 2.0-->
+                                <!--</licenseMerge>-->
+                            <!--</licenseMerges>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
             <plugin>
                 <groupId>org.complykit</groupId>
                 <artifactId>license-check-maven-plugin</artifactId>
