@@ -4,6 +4,8 @@ machine:
     MAVEN_OPTS: "-Xmx1g -DbuildNumber=${CIRCLE_BUILD_NUM} "
   java:
     version: oraclejdk8
+  services:
+    - redis
 
 general:
   branches:
