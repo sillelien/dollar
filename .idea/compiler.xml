@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <option name="DEFAULT_COMPILER" value="Javac" />
     <resourceExtensions />
     <wildcardResourcePatterns>
       <entry name="!?*.java" />
@@ -12,36 +11,11 @@
       <entry name="!?*.flex" />
       <entry name="!?*.kt" />
       <entry name="!?*.clj" />
+      <entry name="!?*.aj" />
     </wildcardResourcePatterns>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="false">
         <processorPath useClasspath="true" />
-      </profile>
-      <profile default="false" name="Maven default annotation processors profile" enabled="false">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="dollar-camel-plugin (1)" />
-        <module name="dollar-github-resolver-plugin (1)" />
-        <module name="dollar-hazelcast-learner-plugin" />
-        <module name="dollar-maven-pipe-plugin" />
-        <module name="dollar-redis-plugin (1)" />
-        <module name="dollar-std-resources-plugin" />
-      </profile>
-      <profile default="false" name="Annotation profile for dollar-class-resolver-plugin" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="dollar-class-resolver-plugin" />
-      </profile>
-      <profile default="false" name="Annotation profile for dollar-github-resolver-plugin" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="dollar-github-resolver-plugin" />
       </profile>
       <profile default="false" name="Annotation profile for dollar-simple-learner-plugin" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -50,13 +24,6 @@
         <processorPath useClasspath="true" />
         <module name="dollar-simple-learner-plugin" />
       </profile>
-      <profile default="false" name="Annotation profile for dollar-std-resources-plugins" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="dollar-std-resources-plugins" />
-      </profile>
       <profile default="false" name="Annotation profile for dollar-simple-execution-plugin" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -64,81 +31,19 @@
         <processorPath useClasspath="true" />
         <module name="dollar-simple-execution-plugin" />
       </profile>
-      <profile default="false" name="Annotation profile for dollar-resolver" enabled="true">
+      <profile default="false" name="Annotation profile for dollar-class-resolver-plugin" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="dollar-resolver" />
+        <module name="dollar-class-resolver-plugin" />
       </profile>
-      <profile default="false" name="Annotation profile for dollar-core" enabled="true">
+      <profile default="false" name="Annotation profile for dollar-std-resources-plugins" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-      </profile>
-      <profile default="false" name="Annotation profile for dollar-runtime" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="dollar-runtime" />
-      </profile>
-      <profile default="false" name="Annotation profile for dollar-script" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="dollar-script" />
-      </profile>
-      <profile default="false" name="Annotation profile for dollar-examples" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="dollar-examples" />
-      </profile>
-      <profile default="false" name="Annotation profile for dollar-redis-plugin" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="dollar-redis-plugin" />
-      </profile>
-      <profile default="false" name="Annotation profile for dollar-docs" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="dollar-docs" />
-      </profile>
-      <profile default="false" name="Annotation profile for dollar-camel-plugin" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="dollar-camel-plugin" />
-      </profile>
-      <profile default="false" name="Annotation profile for dollar-metrics-plugin" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="dollar-metrics-plugin" />
-      </profile>
-      <profile default="false" name="Annotation profile for dollar-mapdb-plugin" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="dollar-mapdb-plugin" />
-      </profile>
-      <profile default="false" name="Annotation profile for dollar-socketio-plugin" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="dollar-socketio-plugin" />
+        <module name="dollar-std-resources-plugins" />
       </profile>
       <profile default="false" name="Annotation profile for dollar-maven-resolver-plugin" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -147,6 +52,20 @@
         <processorPath useClasspath="true" />
         <module name="dollar-maven-resolver-plugin" />
       </profile>
+      <profile default="false" name="Annotation profile for dollar-github-resolver-plugin" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="dollar-github-resolver-plugin" />
+      </profile>
+      <profile default="false" name="Annotation profile for dollar-mapdb-plugin" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="dollar-mapdb-plugin" />
+      </profile>
       <profile default="false" name="Annotation profile for dollar-http-plugin" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -154,12 +73,74 @@
         <processorPath useClasspath="true" />
         <module name="dollar-http-plugin" />
       </profile>
+      <profile default="false" name="Annotation profile for dollar-camel-plugin" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="dollar-camel-plugin" />
+      </profile>
+      <profile default="false" name="Annotation profile for dollar-socketio-plugin" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="dollar-socketio-plugin" />
+      </profile>
+      <profile default="false" name="Annotation profile for dollar-redis-plugin" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="dollar-redis-plugin" />
+      </profile>
+      <profile default="false" name="Annotation profile for dollar-metrics-plugin" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="dollar-metrics-plugin" />
+      </profile>
+      <profile default="false" name="Annotation profile for dollar-examples" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="dollar-examples" />
+      </profile>
+      <profile default="false" name="Annotation profile for dollar-docs" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="dollar-docs" />
+      </profile>
+      <profile default="false" name="Annotation profile for dollar-runtime" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="dollar-runtime" />
+      </profile>
+      <profile default="false" name="Annotation profile for dollar-resolver" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="dollar-resolver" />
+      </profile>
+      <profile default="false" name="Annotation profile for dollar-script" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="dollar-script" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="dollar" target="1.8" />
       <module name="dollar-camel-plugin" target="1.8" />
       <module name="dollar-class-resolver-plugin" target="1.8" />
-      <module name="dollar-core" target="1.8" />
       <module name="dollar-docs" target="1.8" />
       <module name="dollar-examples" target="1.8" />
       <module name="dollar-github-resolver-plugin" target="1.8" />
@@ -167,8 +148,6 @@
       <module name="dollar-mapdb-plugin" target="1.8" />
       <module name="dollar-maven-resolver-plugin" target="1.8" />
       <module name="dollar-metrics-plugin" target="1.8" />
-      <module name="dollar-orientdb-learner-plugin" target="1.8" />
-      <module name="dollar-orientdb-learner-plugin (1)" target="1.8" />
       <module name="dollar-plugins" target="1.8" />
       <module name="dollar-redis-plugin" target="1.8" />
       <module name="dollar-resolver" target="1.8" />
@@ -177,7 +156,6 @@
       <module name="dollar-simple-execution-plugin" target="1.8" />
       <module name="dollar-simple-learner-plugin" target="1.8" />
       <module name="dollar-socketio-plugin" target="1.8" />
-      <module name="dollar-std-resources-plugin" target="1.8" />
       <module name="dollar-std-resources-plugins" target="1.8" />
     </bytecodeTargetLevel>
   </component>
