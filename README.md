@@ -4,7 +4,7 @@ The main API dollar-core can be used with:
         <dependency>
             <groupId>com.github.sillelien.dollar</groupId>
             <artifactId>dollar-core</artifactId>
-            <version>${RELEASE}</version>
+            <version>0.1.982</version>
         </dependency>
 ```
 
