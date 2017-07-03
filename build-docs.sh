@@ -4,7 +4,7 @@ DIR=$(pwd)
 [ ! -d dist ] || rm -rf dist
 mkdir dist
 cd dist
-git clone git@github.com:neilellis/dollar.git docs
+git clone https://github.com/dollar-org/dollar docs
 cd docs
 git checkout gh-pages
 cd $DIR/dollar-docs/src/main/webapp/

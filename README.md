@@ -4,7 +4,7 @@ The artifacts included in the Dollar project can be accessed using
     <repositories>
         <repository>
             <id>s3-releases</id>
-            <url>http://sillelien-maven-repo.s3-website-eu-west-1.amazonaws.com/release</url>
+            <url>http://dollar-repo.s3-website-eu-west-1.amazonaws.com/release</url>
         </repository>
     </repositories>
 ```
