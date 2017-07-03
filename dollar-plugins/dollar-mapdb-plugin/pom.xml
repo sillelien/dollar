@@ -45,7 +45,7 @@
         <dependency>
             <groupId>org.mapdb</groupId>
             <artifactId>mapdb</artifactId>
-            <version>1.0.6</version>
+            <version>3.0.4</version>
         </dependency>
     </dependencies>
 
