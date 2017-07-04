@@ -24,8 +24,8 @@
         <jdk.version>1.8</jdk.version>
         <kotlin.version>0.8.11</kotlin.version>
         <camel.version>2.15.2</camel.version>
-        <httpclient.version>4.5</httpclient.version>
-        <jackson.version>2.6.0</jackson.version>
+        <httpclient.version>4.5.3</httpclient.version>
+        <jackson.version>2.6.1</jackson.version>
         <orientdb.version>2.0.13</orientdb.version>
         <maven.version>3.3.9</maven.version>
         <slf4j.version>1.7.12</slf4j.version>
@@ -86,12 +86,19 @@
             <dependency>
                 <groupId>com.sillelien</groupId>
                 <artifactId>dollar-core</artifactId>
-                <version>0.2.114</version>
+                <version>0.2.196</version>
             </dependency>
             <dependency>
-                <groupId>org.json</groupId>
-                <artifactId>json</artifactId>
-                <version>20170516</version>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -347,16 +354,6 @@
                         <groupId>commons-io</groupId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
-                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.jayway.restassured</groupId>
@@ -713,8 +710,8 @@
                         <param>org.sonatype.aether:aether-util:1.13.1</param>
                         <param>org.sonatype.aether:aether:1.13.1</param>
                         <param>commons-logging:commons-logging:1.2</param>
-                        <param>com.fasterxml.jackson.core:jackson-core:2.3.3</param>
-                        <param>com.fasterxml.jackson.core:jackson-databind:2.3.3</param>
+                        <param>com.fasterxml.jackson.core:jackson-core:${jackson.version}</param>
+                        <param>com.fasterxml.jackson.core:jackson-databind:${jackson.version}</param>
                         <param>com.jayway.restassured:rest-assured:2.3.3</param>
                         <param>commons-codec:commons-codec:1.8</param>
                         <param>commons-io:commons-io:2.4</param>
