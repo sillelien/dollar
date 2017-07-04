@@ -156,7 +156,7 @@
                     <relocations>
                         <relocation>
                             <pattern>com.sillelien.dollar</pattern>
-                            <shadedPattern>com.sillelien.dollar.v${buildNumber}</shadedPattern>
+                            <shadedPattern>dollar.v${buildNumber}</shadedPattern>
                             <excludes>
                                 <exclude>com.sillelien.dollar.api.**</exclude>
                                 <exclude>com.sillelien.dollar.script.api.**</exclude>
@@ -166,7 +166,7 @@
                         </relocation>
                         <relocation>
                             <pattern>org</pattern>
-                            <shadedPattern>dollar.v${buildNumber}</shadedPattern>
+                            <shadedPattern>dollar.v${buildNumber}.thirdparty.org</shadedPattern>
                             <excludes>
                                 <exclude>org.apache.log4j.**</exclude>
                                 <exclude>org.junit.**</exclude>
@@ -177,18 +177,18 @@
                         </relocation>
                         <relocation>
                             <pattern>com</pattern>
-                            <shadedPattern>dollar.v${buildNumber}</shadedPattern>
+                            <shadedPattern>dollar.v${buildNumber}.thirdparty.com</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>net</pattern>
-                            <shadedPattern>dollar.v${buildNumber}</shadedPattern>
+                            <shadedPattern>dollar.v${buildNumber}.thirdparty.net</shadedPattern>
                             <excludes>
                                 <exclude>net.kencochrane.**</exclude>
                             </excludes>
                         </relocation>
                         <relocation>
                             <pattern>io</pattern>
-                            <shadedPattern>dollar.v${buildNumber}</shadedPattern>
+                            <shadedPattern>dollar.v${buildNumber}.thirdparty.io</shadedPattern>
                         </relocation>
                     </relocations>
                     <transformers>

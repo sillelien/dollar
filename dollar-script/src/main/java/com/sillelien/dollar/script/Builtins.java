@@ -52,21 +52,21 @@ public class Builtins {
             return $(String.format(message, values.stream().map(var::toJavaObject).toArray()));
         }, true, "FORMAT");
         addJavaStyle(1, 1, (pure, args, scope) -> {
-            return args.get(0).$list().stream().min((o1, o2) -> (int) Math.signum(o1.toDouble() - o2.toDouble())).get();
+            return args.get(0).$list().$stream(false).min((o1, o2) -> (int) Math.signum(o1.toDouble() - o2.toDouble())).get();
         }, true, "MIN");
         addJavaStyle(1, 1, (pure, args, scope) -> {
-            return args.get(0).$list().stream().max((o1, o2) -> (int) Math.signum(o1.toDouble() - o2.toDouble())).get();
+            return args.get(0).$list().$stream(false).max((o1, o2) -> (int) Math.signum(o1.toDouble() - o2.toDouble())).get();
         }, true, "MAX");
         addJavaStyle(1, 1, (pure, args, scope) -> {
-            return $(args.get(0).$list().stream().sorted().collect(Collectors.toList()));
+            return $(args.get(0).$list().$stream(false).sorted().collect(Collectors.toList()));
         }, true, "SORT");
 
         addJavaStyle(1, 1, (pure, args, scope) -> {
-            return $(args.get(0).$list().get(0));
+            return $(args.get(0).$list().toList().get(0));
         }, true, "FIRST");
 
         addJavaStyle(1, 1, (pure, args, scope) -> {
-            ImmutableList<var> list = args.get(0).$list();
+            ImmutableList<var> list = args.get(0).$list().toVarList();
             return $(list.get(list.size() - 1));
         }, true, "LAST");
         addDollarSingleNoScope(false, StateAware::$start, "START");

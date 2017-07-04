@@ -412,7 +412,7 @@ public class DollarParserImpl implements DollarParser {
                         }, scope), "*|*", "each"),
                         MULTIPLY_DIVIDE_PRIORITY)
                 .infixl(op(new BinaryOp("reduce", (lhs, rhs) -> {
-                    return lhs.$list().stream().reduce((x, y) -> {
+                    return lhs.$list().$stream(false).reduce((x, y) -> {
                         return inScope(pure, "reduce", scope, newScope -> {
                             newScope.setParameter("1", x);
                             newScope.setParameter("2", y);
@@ -631,7 +631,9 @@ public class DollarParserImpl implements DollarParser {
         return OP(".").followedBy(OP(".").not())
                       .next(ref.lazy().between(OP("("), OP(")")).or(IDENTIFIER))
                       .token().map(
-                        (Token rhs) -> lhs -> wrapReactive(scope, () -> lhs.$(rhs.value().toString()),
+                        (Token rhs) -> lhs -> wrapReactive(scope, () -> {
+                                    return lhs.$(rhs.value().toString());
+                                },
                                                            new SourceSegmentValue(scope, rhs), "." + rhs.toString(),
                                                            lhs, (var)
                                         rhs.value()

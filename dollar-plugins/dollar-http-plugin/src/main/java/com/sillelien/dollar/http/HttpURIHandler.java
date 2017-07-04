@@ -212,7 +212,7 @@ public class HttpURIHandler implements URIHandler {
                         return out.$("status").$default($(200)).toInteger();
                     }
                         }, body.$mimeType().$S(), body.toStream());
-                out.$("headers").$map().forEach((s, v) -> response.addHeader(s.$S(), v.$S()));
+                out.$("headers").$map().toVarMap().forEach((s, v) -> response.addHeader(s.$S(), v.$S()));
                 return response;
             } catch (Exception e) {
                 e.printStackTrace();

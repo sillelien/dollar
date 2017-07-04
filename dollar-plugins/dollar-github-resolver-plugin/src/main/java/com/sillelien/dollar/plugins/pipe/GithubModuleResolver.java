@@ -99,13 +99,13 @@ public class GithubModuleResolver implements ModuleResolver {
             classLoader =
                     DependencyRetriever.retrieve(module.$("dependencies")
                                                        .$list()
-                                                       .stream()
+                                                       .$stream(false)
                                                        .map(var::toString)
                                                        .collect(Collectors.toList()));
         }
         return (params) -> ((Scope)scope).getDollarParser().inScope(false, "github-module", ((Scope)scope), newScope -> {
 
-            final ImmutableMap<var, var> paramMap = params[0].$map();
+            final ImmutableMap<var, var> paramMap = params[0].$map().toVarMap();
             for (Map.Entry<var, var> entry : paramMap.entrySet()) {
                 newScope.set(entry.getKey().$S(), entry.getValue(), true, null, null, false, false, false);
             }

@@ -130,7 +130,7 @@ public class DollarScriptSupport {
                 } else {
                     throw new VariableNotFoundException(key, scope);
                 }
-        }, source, $(key).$list().mutable(), "get-variable-" + key + "-" + source.getShortHash());
+        }, source, $(key).$list().toVarList().mutable(), "get-variable-" + key + "-" + source.getShortHash());
         scope.listen(key, lambda);
         lambda.setMetaAttribute("variable", key);
         return lambda;
