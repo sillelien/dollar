@@ -19,8 +19,8 @@ package com.sillelien.dollar.script;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import com.sillelien.dollar.script.api.Scope;
-import org.codehaus.jparsec.functors.Map;
-import org.codehaus.jparsec.functors.Unary;
+import org.jparsec.functors.Map;
+import org.jparsec.functors.Unary;
 import org.jetbrains.annotations.Nullable;
 
 public class UnaryOp implements Unary<var>, Operator {

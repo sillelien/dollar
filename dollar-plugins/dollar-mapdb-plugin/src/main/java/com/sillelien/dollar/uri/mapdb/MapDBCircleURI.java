@@ -24,10 +24,12 @@ import com.sillelien.dollar.api.uri.URI;
 import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mapdb.DB;
+import org.mapdb.BTreeMap;
+import org.mapdb.MapModificationListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
@@ -36,29 +38,27 @@ import java.util.concurrent.TimeUnit;
 import static com.sillelien.dollar.api.DollarStatic.$;
 import static com.sillelien.dollar.api.DollarStatic.$void;
 
-public class MapDBCircleURI extends AbstractMapDBURI {
+public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationListener<var, var> {
 
     private static final ConcurrentHashMap<String, Future> subscribers = new ConcurrentHashMap<>();
     @Nullable private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
+    private final BTreeMap<var, var> bTreeMap;
+    private final int size;
+    private final ArrayBlockingQueue<var> queue;
 
 
     public MapDBCircleURI(String scheme, @NotNull URI uri) {
         super(uri, scheme);
-        tx.execute((DB d) -> {
-            if (!d.exists(getHost())) {
-                d.createCircularQueue(getHost(), new VarSerializer(),
-                                      Integer.parseInt(uri.paramWithDefault("size", "100").get(0)));
-            }
-        });
+        bTreeMap = tx.treeMap(getHost(), new VarSerializer(), new VarSerializer()).modificationListener(this).createOrOpen();
+        size= Integer.parseInt(uri.paramWithDefault("size", "100").get(0));
+        queue = new ArrayBlockingQueue<>(size);
     }
 
     @NotNull @Override public var all() {
-        DB d = tx.makeTx();
-        final BlockingQueue<var> queue = getQueue(d);
+        final BlockingQueue<var> queue = getQueue();
         final ArrayList<var> objects = new ArrayList<>();
         queue.drainTo(objects);
         final var result = DollarFactory.fromValue(objects);
-        d.rollback();
         return result;
 
     }
@@ -67,12 +67,11 @@ public class MapDBCircleURI extends AbstractMapDBURI {
         if (value.isVoid()) {
             return $(false);
         }
-        return tx.execute((DB d) -> {
             try {
                 if (!blocking) {
-                    return $(getQueue(d).offer(value._fixDeep()));
+                    return $(getQueue().offer(value._fixDeep()));
                 } else {
-                    getQueue(d).put(value._fixDeep());
+                    getQueue().put(value._fixDeep());
                     return $(true);
                 }
 
@@ -80,18 +79,13 @@ public class MapDBCircleURI extends AbstractMapDBURI {
                 e.printStackTrace();
                 return $(false);
             }
-        });
     }
 
     @Override public var drain() {
-        return tx.execute((DB d) -> {
-            final BlockingQueue<var> queue = getQueue(d);
+            final BlockingQueue<var> queue = getQueue();
             final ArrayList<var> objects = new ArrayList<>();
             queue.drainTo(objects);
-            final var result = DollarFactory.fromValue(objects);
-            d.commit();
-            return result;
-        });
+        return DollarFactory.fromValue(objects);
     }
 
     @NotNull @Override public var get(var key) {
@@ -99,22 +93,20 @@ public class MapDBCircleURI extends AbstractMapDBURI {
     }
 
     @Override public var read(boolean blocking, boolean mutating) {
-        return tx.execute((DB d) -> {
             try {
                 if (blocking && mutating) {
-                    return getQueue(d).take();
+                    return getQueue().take();
                 } else if (blocking) {
-                    return getQueue(d).poll(60, TimeUnit.SECONDS);
+                    return getQueue().poll(60, TimeUnit.SECONDS);
                 } else if (mutating) {
-                    return getQueue(d).poll();
+                    return getQueue().poll();
                 } else {
-                    return getQueue(d).peek();
+                    return getQueue().peek();
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 return $void();
             }
-        });
     }
 
     @NotNull @Override public var remove(var v) {
@@ -122,7 +114,12 @@ public class MapDBCircleURI extends AbstractMapDBURI {
     }
 
     @Override public var removeValue(@NotNull var v) {
-        return tx.execute((DB d) -> DollarFactory.fromValue(getQueue(d).remove(v._unwrap())));
+        var unwrapped = v._unwrap();
+        if(getQueue().remove(unwrapped)) {
+             return unwrapped;
+         } else {
+            return $void();
+        }
     }
 
     @NotNull @Override public var set(var key, var value) {
@@ -130,12 +127,12 @@ public class MapDBCircleURI extends AbstractMapDBURI {
     }
 
     @Override public int size() {
-        return tx.execute((DB d) -> getQueue(d).size());
+        return getQueue().size();
     }
 
     @Override public void subscribe(@NotNull Pipeable consumer, @NotNull String id) throws IOException {
-        final Future schedule = executor.scheduleEvery(1000, () -> tx.execute((DB d) -> {
-            Object o = MapDBCircleURI.this.getQueue(d).poll();
+        final Future schedule = executor.scheduleEvery(1000, () ->{
+            Object o = MapDBCircleURI.this.getQueue().poll();
             if (o != null) {
                 try {
                     consumer.pipe($(o));
@@ -143,7 +140,7 @@ public class MapDBCircleURI extends AbstractMapDBURI {
                     e.printStackTrace();
                 }
             }
-        }));
+        });
         subscribers.put(id, schedule);
     }
 
@@ -151,7 +148,14 @@ public class MapDBCircleURI extends AbstractMapDBURI {
         subscribers.get(subId).cancel(false);
     }
 
-    private BlockingQueue<var> getQueue(@NotNull DB d) {
-        return d.getCircularQueue(getHost());
+    private BlockingQueue<var> getQueue() {
+        return queue;
+    }
+
+    @Override
+    public void modify(@NotNull var key, @Nullable var oldValue, @Nullable var newValue, boolean triggered) {
+        if(newValue != null) {
+            queue.offer(newValue._fixDeep());
+        }
     }
 }

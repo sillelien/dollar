@@ -21,7 +21,7 @@ import com.sillelien.dollar.script.Builtins;
 import com.sillelien.dollar.script.api.DollarParser;
 import com.sillelien.dollar.script.api.Scope;
 import com.sillelien.dollar.script.api.exceptions.VariableNotFoundException;
-import org.codehaus.jparsec.functors.Map;
+import org.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;

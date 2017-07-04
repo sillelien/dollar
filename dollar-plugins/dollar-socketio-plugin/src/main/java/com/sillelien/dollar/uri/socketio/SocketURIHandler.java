@@ -130,7 +130,7 @@ public class SocketURIHandler implements URIHandler {
     @Override
     public void subscribe(Pipeable consumer, @NotNull String id) throws IOException {
         final SocketIOSubscription listener = new SocketIOSubscription(consumer, id, uri);
-        server.addMessageListener(listener);
+        server.addListeners(listener);
         server.addConnectListener(listener);
         server.addDisconnectListener(listener);
         final Map<String, List<String>> query = uri.query();

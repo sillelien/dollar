@@ -20,7 +20,7 @@ import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
 import com.sillelien.dollar.script.api.DollarParser;
 import com.sillelien.dollar.script.api.Scope;
-import org.codehaus.jparsec.functors.Map;
+import org.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

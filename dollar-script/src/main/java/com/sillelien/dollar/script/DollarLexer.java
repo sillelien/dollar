@@ -20,19 +20,19 @@ import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.codehaus.jparsec.*;
-import org.codehaus.jparsec.functors.Map;
-import org.codehaus.jparsec.pattern.CharPredicates;
-import org.codehaus.jparsec.pattern.Pattern;
-import org.codehaus.jparsec.pattern.Patterns;
+import org.jparsec.*;
+import org.jparsec.functors.Map;
+import org.jparsec.pattern.CharPredicates;
+import org.jparsec.pattern.Pattern;
+import org.jparsec.pattern.Patterns;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
-import static org.codehaus.jparsec.Parsers.or;
-import static org.codehaus.jparsec.Parsers.token;
+import static org.jparsec.Parsers.or;
+import static org.jparsec.Parsers.token;
 
 class DollarLexer {
     public static final Terminals

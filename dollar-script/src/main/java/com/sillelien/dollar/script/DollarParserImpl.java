@@ -30,8 +30,8 @@ import com.sillelien.dollar.script.api.Scope;
 import com.sillelien.dollar.script.api.exceptions.DollarScriptFailureException;
 import com.sillelien.dollar.script.java.JavaScriptingSupport;
 import com.sillelien.dollar.script.operators.*;
-import org.codehaus.jparsec.*;
-import org.codehaus.jparsec.functors.Map;
+import org.jparsec.*;
+import org.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pegdown.Extensions;
@@ -55,7 +55,7 @@ import static com.sillelien.dollar.script.DollarLexer.*;
 import static com.sillelien.dollar.script.DollarScriptSupport.getVariable;
 import static com.sillelien.dollar.script.DollarScriptSupport.wrapReactive;
 import static com.sillelien.dollar.script.OperatorPriority.*;
-import static org.codehaus.jparsec.Parsers.*;
+import static org.jparsec.Parsers.*;
 
 public class DollarParserImpl implements DollarParser {
 

@@ -19,7 +19,7 @@ package com.sillelien.dollar.script;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.script.api.Scope;
 import com.sillelien.dollar.script.util.FNV;
-import org.codehaus.jparsec.Token;
+import org.jparsec.Token;
 import org.jetbrains.annotations.NotNull;
 
 public class SourceSegmentValue implements SourceSegment {

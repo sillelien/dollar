@@ -21,7 +21,7 @@ import com.sillelien.dollar.api.script.ModuleResolver;
 import com.sillelien.dollar.api.var;
 import com.sillelien.dollar.script.DollarParserImpl;
 import com.sillelien.dollar.script.api.Scope;
-import org.codehaus.jparsec.functors.Map;
+import org.jparsec.functors.Map;
 
 import java.util.HashMap;
 import java.util.List;

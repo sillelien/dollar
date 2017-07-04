@@ -19,17 +19,17 @@ package com.sillelien.dollar.uri.mapdb;
 import com.sillelien.dollar.api.uri.URI;
 import com.sillelien.dollar.api.uri.URIHandler;
 import org.jetbrains.annotations.NotNull;
+import org.mapdb.DB;
 import org.mapdb.DBMaker;
-import org.mapdb.TxMaker;
 
 import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractMapDBURI implements URIHandler {
-    private static final ConcurrentHashMap<String, TxMaker> txs = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, DB> txs = new ConcurrentHashMap<>();
     protected final String scheme;
     @NotNull protected final URI uri;
-    protected final TxMaker tx;
+    protected final DB tx;
     private final String host;
 
     public AbstractMapDBURI(
@@ -40,11 +40,13 @@ public abstract class AbstractMapDBURI implements URIHandler {
         host = uri.host();
     }
 
-    protected static TxMaker getDB(@NotNull String path) {
+    protected static DB getDB(@NotNull String path) {
 
-        final TxMaker newDb = DBMaker.newFileDB(new File(path))
+        final DB newDb = DBMaker.fileDB(new File(path))
+                                     .executorEnable()
                                      .closeOnJvmShutdown()
-                                     .makeTxMaker();
+                                     .transactionEnable()
+                                     .make();
         txs.putIfAbsent(path, newDb);
         return newDb;
 

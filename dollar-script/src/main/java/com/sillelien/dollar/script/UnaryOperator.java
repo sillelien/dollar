@@ -17,7 +17,7 @@
 package com.sillelien.dollar.script;
 
 import com.sillelien.dollar.api.var;
-import org.codehaus.jparsec.functors.Unary;
+import org.jparsec.functors.Unary;
 import org.jetbrains.annotations.NotNull;
 
 enum UnaryOperator implements Unary<var> {

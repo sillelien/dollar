@@ -17,7 +17,7 @@
 package com.sillelien.dollar.script.operators;
 
 import com.sillelien.dollar.api.var;
-import org.codehaus.jparsec.functors.Map;
+import org.jparsec.functors.Map;
 
 public class FunctionCallOperator implements Map<Object[], var> {
     @Override

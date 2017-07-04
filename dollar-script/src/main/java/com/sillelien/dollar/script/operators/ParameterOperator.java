@@ -24,8 +24,8 @@ import com.sillelien.dollar.script.SourceSegmentValue;
 import com.sillelien.dollar.script.api.DollarParser;
 import com.sillelien.dollar.script.api.Scope;
 import com.sillelien.dollar.script.api.exceptions.DollarScriptException;
-import org.codehaus.jparsec.Token;
-import org.codehaus.jparsec.functors.Map;
+import org.jparsec.Token;
+import org.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -18,7 +18,7 @@ package com.sillelien.dollar.script.operators;
 
 import com.sillelien.dollar.api.var;
 import com.sillelien.dollar.script.api.Scope;
-import org.codehaus.jparsec.functors.Map2;
+import org.jparsec.functors.Map2;
 
 public class MultiplyOperator {
     private final Map2<var, var, var> function;

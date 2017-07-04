@@ -22,37 +22,38 @@ import com.sillelien.dollar.api.types.ErrorType;
 import com.sillelien.dollar.api.uri.URI;
 import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.mapdb.BTreeMap;
-import org.mapdb.Bind;
 import org.mapdb.DB;
+import org.mapdb.MapModificationListener;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 import static com.sillelien.dollar.api.DollarStatic.$void;
 
-public class MapDBMapURI extends AbstractMapDBURI {
+public class MapDBMapURI extends AbstractMapDBURI implements MapModificationListener<var, var> {
 
-    private static final ConcurrentHashMap<String, Bind.MapListener<String, var>>
+    private static final ConcurrentHashMap<String, MapListener<var, var, var>>
             subscribers =
             new ConcurrentHashMap<>();
+    private BTreeMap<var, var> bTreeMap;
 
     public MapDBMapURI(String scheme, URI uri) {
         super(uri, scheme);
-        tx.execute((DB d) -> {
-            if (!d.exists(getHost())) {
-                d.createTreeMap(getHost()).valueSerializer(new VarSerializer());
-            }
-        });
-
+        bTreeMap = tx.treeMap(getHost(), new VarSerializer(), new VarSerializer()).modificationListener(this).createOrOpen();
     }
 
-    @Override public var all() {
-        return tx.execute((DB d) -> DollarFactory.fromValue(getTreeMap(d).snapshot()));
+    @Override
+    public var all() {
+        HashMap<var, var> result = new HashMap<>(bTreeMap);
+        return DollarFactory.fromValue(result);
     }
 
-    @Override public var write(@NotNull var value, boolean blocking, boolean mutating) {
+    @Override
+    public var write(@NotNull var value, boolean blocking, boolean mutating) {
         if (value.pair()) {
             return set($(value.getPairKey()), value.getPairValue());
         } else {
@@ -60,70 +61,82 @@ public class MapDBMapURI extends AbstractMapDBURI {
         }
     }
 
-    @Override public var drain() {
-        return tx.execute((DB d) -> {
-            final BTreeMap<String, var> treeMap = getTreeMap(d);
-            final var result = DollarFactory.fromValue(treeMap.snapshot());
-            treeMap.clear();
-            return result;
-        });
+    @Override
+    public var drain() {
+        HashMap<var, var> result = new HashMap<>(bTreeMap);
+        bTreeMap.clear();
+        tx.commit();
+        return DollarFactory.fromValue(result);
+
     }
 
-    @Override public var get(@NotNull var key) {
-        return tx.execute((DB d) -> DollarFactory.fromValue(getTreeMap(d).get(key._fixDeep())));
+    @Override
+    public var get(@NotNull var key) {
+        return bTreeMap.get(key._fixDeep());
     }
 
-    @NotNull @Override public var read(boolean blocking, boolean mutating) {
+    @NotNull
+    @Override
+    public var read(boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
 
-    @Override public var remove(@NotNull var v) {
-        return tx.execute((DB d) -> DollarFactory.fromValue(getTreeMap(d).remove(v._fixDeep())));
+    @Override
+    public var remove(@NotNull var v) {
+        return bTreeMap.remove(v._fixDeep());
 
     }
 
-    @NotNull @Override public var removeValue(var v) {
+    @NotNull
+    @Override
+    public var removeValue(var v) {
         throw new UnsupportedOperationException();
     }
 
-    @Override public var set(@NotNull var key, @NotNull var value) {
-        final var fixedValue = value._fixDeep();
-        final String keyString = key.$S();
+    @Override
+    public var set(@NotNull var key, @NotNull var value) {
         if (!value.isVoid()) {
-            return tx.execute(
-                    (DB d) -> {
-                        final var putVal = getTreeMap(d).put(keyString, fixedValue);
-                        if (putVal == null) {
-                            return $void();
-                        }
-                        return putVal;
-                    });
+            return bTreeMap.put(key, value._fixDeep());
         } else {
             return $void();
         }
     }
 
-    @Override public int size() {
-        return tx.execute((DB d) -> getTreeMap(d).size());
+    @Override
+    public int size() {
+        return bTreeMap.size();
     }
 
-    @Override public void subscribe(@NotNull Pipeable consumer, @NotNull String id) throws IOException {
-        tx.execute((DB d) -> {
-            final Bind.MapListener<String, var> listener = (key, oldVal, newVal) -> {
+    @Override
+    public void subscribe(@NotNull Pipeable consumer, @NotNull String id) throws IOException {
+
+        subscribers.put(id, new MapListener<var, var, var>() {
+            @Override
+            public void apply(@NotNull var var, @Nullable var oldValue, @Nullable var newValue) {
                 try {
-                    consumer.pipe($(key, newVal));
+                    consumer.pipe($(var, newValue));
                 } catch (Exception e) {
                     DollarFactory.failure(ErrorType.EXCEPTION, e, false);
                 }
-            };
-            getTreeMap(d).modificationListenerAdd(listener);
-            subscribers.put(id, listener);
+            }
         });
+
+
     }
 
-    @Override public void unsubscribe(@NotNull String subId) {
-        tx.execute((DB d) -> getTreeMap(d).modificationListenerRemove(subscribers.get(subId)));
+    @Override
+    public void unsubscribe(@NotNull String subId) {
+       subscribers.remove(subId);
     }
 
-    private BTreeMap<String, var> getTreeMap(@NotNull DB d) {return d.getTreeMap(getHost());}
+    private BTreeMap<var, var> getTreeMap(@NotNull DB d) {
+        return bTreeMap;
+    }
+
+    @Override
+    public void modify(@NotNull var key, @Nullable var oldValue, @Nullable var newValue, boolean triggered) {
+        for (MapListener<var, var, var> listener : subscribers.values()) {
+            listener.apply(key,oldValue,newValue);
+        }
+    }
 }

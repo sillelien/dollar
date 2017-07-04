@@ -21,18 +21,18 @@ import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mapdb.Serializer;
+import org.mapdb.DataInput2;
+import org.mapdb.DataOutput2;
+import org.mapdb.serializer.GroupSerializerObjectArray;
 
-import java.io.DataInput;
-import java.io.DataOutput;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Objects;
 
 import static com.sillelien.dollar.api.DollarStatic.$void;
 
-public class VarSerializer implements Serializer<var>, Serializable {
-    @Override public void serialize(@NotNull DataOutput out, @Nullable var value) throws IOException {
+public class VarSerializer extends GroupSerializerObjectArray<var> implements Serializable {
+    @Override public void serialize(@NotNull DataOutput2 out, @Nullable var value) throws IOException {
         if (value != null && !value.isVoid()) {
             out.writeUTF(value.$type().name());
             out.writeUTF(DollarFactory.serialize(value));
@@ -42,7 +42,7 @@ public class VarSerializer implements Serializer<var>, Serializable {
         }
     }
 
-    @NotNull @Override public var deserialize(@NotNull DataInput in, int available) throws IOException {
+    @NotNull @Override public var deserialize(@NotNull DataInput2 in, int available) throws IOException {
         final Type type = Type.valueOf(in.readUTF());
         if (Objects.equals(type, Type.VOID)) {
             in.readUTF();
@@ -52,6 +52,8 @@ public class VarSerializer implements Serializer<var>, Serializable {
             return DollarFactory.deserialize(s);
         }
     }
+
+
 
     @Override public int fixedSize() {
         return -1;

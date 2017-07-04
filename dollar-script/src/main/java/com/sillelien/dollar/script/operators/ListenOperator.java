@@ -21,7 +21,7 @@ import com.sillelien.dollar.api.var;
 import com.sillelien.dollar.script.DollarScriptSupport;
 import com.sillelien.dollar.script.Operator;
 import com.sillelien.dollar.script.api.Scope;
-import org.codehaus.jparsec.functors.Binary;
+import org.jparsec.functors.Binary;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

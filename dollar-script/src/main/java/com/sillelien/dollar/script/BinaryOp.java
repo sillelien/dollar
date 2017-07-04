@@ -19,8 +19,8 @@ package com.sillelien.dollar.script;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import com.sillelien.dollar.script.api.Scope;
-import org.codehaus.jparsec.functors.Binary;
-import org.codehaus.jparsec.functors.Map2;
+import org.jparsec.functors.Binary;
+import org.jparsec.functors.Map2;
 
 import static com.sillelien.dollar.script.DollarScriptSupport.wrapReactive;
 

@@ -28,7 +28,7 @@ import com.sillelien.dollar.script.api.exceptions.DollarParserException;
 import com.sillelien.dollar.script.api.exceptions.DollarScriptException;
 import com.sillelien.dollar.script.api.exceptions.ErrorReporter;
 import com.sillelien.dollar.script.api.exceptions.VariableNotFoundException;
-import org.codehaus.jparsec.error.ParserException;
+import org.jparsec.error.ParserException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
