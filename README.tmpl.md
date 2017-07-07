@@ -20,8 +20,6 @@ and
 ```
 
 
-Build Status: [![Circle CI](https://circleci.com/gh/sillelien/dollar.png?style=badge)](https://circleci.com/gh/sillelien/dollar)
-
 Dependencies: [![Dependency Status](https://www.versioneye.com/user/projects/54ae285534ff3e2204000002/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54ae285534ff3e2204000002)
 
 Please check out http://sillelien.github.io/dollar for latest details.

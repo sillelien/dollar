@@ -662,6 +662,16 @@
         </pluginManagement>
         <plugins>
 
+            <plugin>
+                <groupId>com.versioneye</groupId>
+                <artifactId>versioneye-maven-plugin</artifactId>
+                <version>3.11.4</version>
+                <configuration>
+                    <apiKey>0c797be864338a3649f0</apiKey>
+                    <organisation>neilellis_orga</organisation>
+                    <team>Owners</team>
+                </configuration>
+            </plugin>
 
             <!--<plugin>-->
                 <!--<groupId>org.codehaus.mojo</groupId>-->
