@@ -16,7 +16,6 @@
 
 package com.sillelien.dollar.learner.simple;
 
-import com.thoughtworks.xstream.XStream;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.TypePrediction;
 import com.sillelien.dollar.api.execution.DollarExecutor;
@@ -26,6 +25,8 @@ import com.sillelien.dollar.api.script.TypeLearner;
 import com.sillelien.dollar.api.types.prediction.AnyTypePrediction;
 import com.sillelien.dollar.api.types.prediction.CountBasedTypePrediction;
 import com.sillelien.dollar.api.var;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,6 +40,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SimpleTypeLearner implements TypeLearner {
 
 
+    static {
+    }
     public static final int MAX_POSSIBLE_RETURN_VALUES = 5;
     @Nullable
     private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
@@ -52,16 +55,18 @@ public class SimpleTypeLearner implements TypeLearner {
         File backupFile = new File(System.getProperty("user.home") + "/.dollar/typelearning.backup.xml");
         file.getParentFile().mkdirs();
         assert executor != null;
+        XStream xStream = new XStream();
+        xStream.addPermission(AnyTypePermission.ANY);
         executor.scheduleEvery(200, () -> {
             if (modified) {
 
                 try (FileOutputStream out = new FileOutputStream(file)) {
-                    new XStream().toXML(map, out);
+                    xStream.toXML(map, out);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 try (FileOutputStream out = new FileOutputStream(backupFile)) {
-                    new XStream().toXML(map, out);
+                    xStream.toXML(map, out);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -69,12 +74,12 @@ public class SimpleTypeLearner implements TypeLearner {
         });
         if (file.exists()) {
             try {
-                map = (ConcurrentHashMap<String, CountBasedTypePrediction>) new XStream().fromXML(file);
+                map = (ConcurrentHashMap<String, CountBasedTypePrediction>) xStream.fromXML(file);
             } catch (Exception e) {
                 file.delete();
                 if (backupFile.exists()) {
                     try {
-                        map = (ConcurrentHashMap<String, CountBasedTypePrediction>) new XStream().fromXML(backupFile);
+                        map = (ConcurrentHashMap<String, CountBasedTypePrediction>) xStream.fromXML(backupFile);
                     } catch (Exception e2) {
                         e2.printStackTrace();
                     }
@@ -82,7 +87,7 @@ public class SimpleTypeLearner implements TypeLearner {
             }
         } else if (backupFile.exists()) {
             try {
-                map = (ConcurrentHashMap<String, CountBasedTypePrediction>) new XStream().fromXML(backupFile);
+                map = (ConcurrentHashMap<String, CountBasedTypePrediction>) xStream.fromXML(backupFile);
             } catch (Exception e) {
                 e.printStackTrace();
             }

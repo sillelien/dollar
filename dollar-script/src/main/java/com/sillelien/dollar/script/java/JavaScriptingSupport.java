@@ -20,13 +20,13 @@ import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.var;
 import com.sillelien.dollar.relproxy.jproxy.JProxy;
 import com.sillelien.dollar.relproxy.jproxy.JProxyConfig;
+import com.sillelien.dollar.relproxy.jproxy.JProxyScriptEngine;
 import com.sillelien.dollar.relproxy.jproxy.JProxyScriptEngineFactory;
 import com.sillelien.dollar.script.api.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.script.Bindings;
-import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.tools.Diagnostic;
@@ -55,7 +55,7 @@ public class JavaScriptingSupport {
                                   .forEach(System.err::println);
                 });
 
-        JProxyScriptEngineFactory factory = JProxyScriptEngineFactory.create(jpConfig);
+        JProxyScriptEngineFactory factory = JProxyScriptEngineFactory.create();
 
         ScriptEngineManager manager = new ScriptEngineManager();
 //        manager.registerEngineName("j", factory);
@@ -64,7 +64,8 @@ public class JavaScriptingSupport {
 //
 //        ScriptEngine engine = manager.getEngineByName("j");
 
-        ScriptEngine scriptEngine = factory.getScriptEngine();
+        JProxyScriptEngine scriptEngine = (JProxyScriptEngine) factory.getScriptEngine();
+        scriptEngine.init(jpConfig);
         Bindings bindings = scriptEngine.createBindings();
         bindings.put("in", in);
         bindings.put("scope", scope);
