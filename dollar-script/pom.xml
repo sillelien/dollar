@@ -46,7 +46,7 @@
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>java-as-script</artifactId>
-            <version>0</version>
+            <version>0.9.97</version>
         </dependency>
         <dependency>
             <groupId>com.sillelien</groupId>
