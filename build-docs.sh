@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/bin/bash -eux
 cd $(dirname $0)
 DIR=$(pwd)
 [ ! -d dist ] || rm -rf dist

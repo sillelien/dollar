@@ -6,7 +6,7 @@
     <servers>
 
         <server>
-            <id>bintray-neilellis-maven-dollar</id>
+            <id>bintray-sillelien-maven</id>
             <username>neilellis</username>
             <password>${BINTRAY_API_KEY}</password>
         </server>
