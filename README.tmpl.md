@@ -1,17 +1,21 @@
 The artifacts included in the Dollar project can be accessed using
 
-```
+```xml
     <repositories>
         <repository>
-            <id>s3-releases</id>
-            <url>http://dollar-repo.s3-website-eu-west-1.amazonaws.com/release</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-sillelien-maven</id>
+            <name>bintray</name>
+            <url>http://dl.bintray.com/sillelien/maven</url>
         </repository>
     </repositories>
-```
+```  
 
 and
 
-```
+```xml
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-xxx</artifactId>
