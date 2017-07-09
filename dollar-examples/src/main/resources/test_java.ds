@@ -7,3 +7,5 @@ out=scope.get("variableA");
 `
 
 javaTest <=> "Hello World"
+
+@@ "Java Executed OK"
