@@ -15,12 +15,10 @@ and
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-xxx</artifactId>
-            <version>${RELEASE}</version>
+            <version>0.3.1037</version>
         </dependency>
 ```
 
-
-Build Status: [![Circle CI](https://circleci.com/gh/sillelien/dollar.png?style=badge)](https://circleci.com/gh/sillelien/dollar)
 
 Dependencies: [![Dependency Status](https://www.versioneye.com/user/projects/54ae285534ff3e2204000002/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54ae285534ff3e2204000002)
 
