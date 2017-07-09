@@ -161,7 +161,7 @@
                                 <exclude>com.sillelien.dollar.api.**</exclude>
                                 <exclude>com.sillelien.dollar.script.api.**</exclude>
                                 <exclude>com.sillelien.dollar.main.**</exclude>
-                                <exclude>com.sillelien.dollar.relproxy.**</exclude>
+                                <exclude>com.sillelien.jas.**</exclude>
                             </excludes>
                         </relocation>
                         <relocation>

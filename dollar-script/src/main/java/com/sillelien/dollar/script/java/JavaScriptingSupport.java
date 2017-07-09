@@ -18,10 +18,10 @@ package com.sillelien.dollar.script.java;
 
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.var;
-import com.sillelien.dollar.relproxy.jproxy.JProxy;
-import com.sillelien.dollar.relproxy.jproxy.JProxyConfig;
-import com.sillelien.dollar.relproxy.jproxy.JProxyScriptEngine;
-import com.sillelien.dollar.relproxy.jproxy.JProxyScriptEngineFactory;
+import com.sillelien.jas.jproxy.JProxy;
+import com.sillelien.jas.jproxy.JProxyConfig;
+import com.sillelien.jas.jproxy.JProxyScriptEngine;
+import com.sillelien.jas.jproxy.JProxyScriptEngineFactory;
 import com.sillelien.dollar.script.api.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
