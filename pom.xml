@@ -91,7 +91,7 @@
             <dependency>
                 <groupId>com.sillelien</groupId>
                 <artifactId>java-as-script</artifactId>
-                <version>0.9.97</version>
+                <version>0.9.118</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
