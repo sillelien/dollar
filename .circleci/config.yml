@@ -25,7 +25,6 @@ jobs:
         - run:
             name: dependencies
             command: |
-              cd ~ && git clone https://github.com/sillelien/build-utils.git && chmod a+x ~/build-utils/*.sh && cd -
               ~/build-utils/maven_make_deps.sh
 
         - save_cache:
@@ -52,7 +51,6 @@ jobs:
         - deploy:
             command: |
               if [ "${CIRCLE_BRANCH}" == "staging" ]; then
-                      sudo apt-get -y install gettext-base
                       ~/build-utils/promote_from_staging.sh
               fi
               if [ "${CIRCLE_BRANCH}" == "master" ]; then
