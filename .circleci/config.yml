@@ -35,7 +35,7 @@ jobs:
         - run:
             name: test
             command: |
-                 mvn -q -T 1C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true install
+                 mvn -q -T 1C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true install site
                  ./build-docs.sh
                  ./pack/pack.sh
             no_output_timeout: 600
@@ -48,7 +48,7 @@ jobs:
 #        - run:
 #            name: pack
 #            command: |
-#                
+#
 
         - deploy:
             command: |
