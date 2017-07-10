@@ -1,3 +1,5 @@
+[ ![Binary Distribution](https://api.bintray.com/packages/sillelien/binary/dollar/images/download.svg) ](https://bintray.com/sillelien/binary/dollar/_latestVersion)
+
 The artifacts included in the Dollar project can be accessed using
 
 ```xml
