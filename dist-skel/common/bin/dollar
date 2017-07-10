@@ -35,13 +35,13 @@ then
         [ -d ~/.dollar-cache ] || mkdir ~/.dollar-cache
     if [[ $os == "macosx" ]]
     then
-        durl=http://dl.bintray.com/neilellis/dollar/zulu1.8.0_25-8.4.0.1-macosx.zip
+        durl=http://cdn.azul.com/zulu/bin/zulu8.21.0.1-jdk8.0.131-macosx_x64.zip
         [ -f ~/.dollar-cache/jdk.zip ] || curl -L ${durl}  > ~/.dollar-cache/jdk.zip
         unzip -q ~/.dollar-cache/jdk.zip -d .
     fi
     if [[ $os == "linux" ]]
     then
-        durl=http://dl.bintray.com/neilellis/dollar/zulu1.8.0_25-8.4.0.1-x86lx64.tgz
+        durl=http://cdn.azul.com/zulu/bin/zulu8.21.0.1-jdk8.0.131-linux_x64.tar.gz
         [ -f ~/.dollar-cache/jdk.tgz ] || curl -L ${durl}  > ~/.dollar-cache/jdk.tgz
         tar -zxvf ~/.dollar-cache/jdk.tgz
     fi
