@@ -1,0 +1,53 @@
+jobs:
+    build:
+      docker:
+        - image: circleci/openjdk:8-jdk-browsers
+        - image: redis:3-alpine
+
+      environment:
+        MAJOR_VERSION: 0.3
+        MAVEN_OPTS: "-Xmx1g -DbuildNumber=${CIRCLE_BUILD_NUM} -Dorg.xml.sax.driver='com.sun.org.apache.xerces.internal.parsers.SAXParser' "
+        TZ: "/usr/share/zoneinfo/Europe/London"
+
+      working_directory: ~/dollar
+
+      branches:
+        ignore:
+          - gh-pages
+
+      steps:
+
+        - checkout
+
+        - restore_cache:
+            key: dependency-cache
+
+        - run:
+            name: dependencies
+            command: |
+              mvn -v
+              cp settings.xml ~/.m2/settings.xml
+              cd ~ && git clone https://github.com/sillelien/build-utils.git && chmod a+x ~/build-utils/*.sh && cd -
+              [[ ${CIRCLE_BRANCH} != 'master' ]] || ( mvn versions:set -DnewVersion=$(cat .release) && mvn versions:resolve-ranges && mvn versions:lock-snapshots )
+               mvn install -e -q -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true -Dmaven.test.skip
+
+        - save_cache:
+            key: dependency-cache
+            paths:
+                - ~/.gnupg
+                - ~/.m2
+        - run:
+            name: test
+            command: |
+                 mvn -q -T 1C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true integration-test
+            no_output_timeout: 600
+
+        - deploy:
+            command: |
+              if [ "${CIRCLE_BRANCH}" == "staging" ]; then
+                      sudo apt-get -y install gettext-base
+                      ~/build-utils/promote_from_staging.sh
+              fi
+              if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                      ~/build-utils/maven_deploy.sh
+              fi
