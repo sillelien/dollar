@@ -57,4 +57,5 @@ jobs:
               fi
               if [ "${CIRCLE_BRANCH}" == "master" ]; then
                       ~/build-utils/maven_deploy.sh
+                      ./pack/upload.sh
               fi
