@@ -1,7 +1,7 @@
 jobs:
     build:
       docker:
-        - image: circleci/openjdk:8-jdk-browsers
+        - image: sillelien/circleci-dollar-build-image
         - image: redis:3-alpine
 
       environment:
