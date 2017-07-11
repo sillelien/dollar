@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/bin/bash -eux
 cd $(dirname $0)
 export BINTRAY_USER=neilellis
 export BINTRAY_KEY=${BINTRAY_API_KEY}
