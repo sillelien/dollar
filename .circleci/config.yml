@@ -81,7 +81,7 @@ jobs:
         - checkout
 
         - attach_workspace:
-            at: ~/dist
+            at: dist
 
         - restore_cache:
             key: dependency-cache
