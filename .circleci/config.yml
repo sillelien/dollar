@@ -41,10 +41,10 @@ jobs:
                  mvn -q -T 1C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true install
             no_output_timeout: 600
 
-#        - persist_to_workspace:
-#            root: dollar
-#            paths:
-#              - target
+        - persist_to_workspace:
+            root: dist
+            paths:
+              - .
 
     promote:
       <<: *defaults
@@ -52,18 +52,16 @@ jobs:
       steps:
         - checkout
 
-#        - attach_workspace:
-#            at: dollar/target
 #
-        - restore_cache:
-            key: dependency-cache
+#        - restore_cache:
+#            key: dependency-cache
 
         - run:
             name: promote
             command: |
                 ~/build-utils/promote_from_staging.sh
 
-    deploy:
+   maven-deploy:
       <<: *defaults
 
       steps:
@@ -76,13 +74,28 @@ jobs:
         - run:
             name: test
             command: |
-              if [ "${CIRCLE_BRANCH}" == "master" ]; then
                 ~/build-utils/maven_deploy.sh
+
+
+   create-dist:
+      <<: *defaults
+
+      steps:
+
+        - checkout
+
+        - attach_workspace:
+            at: ~/dollar/dist
+
+        - restore_cache:
+            key: dependency-cache
+
+        - run:
+            name: test
+            command: |
                 ./build-docs.sh
                 ./pack/pack.sh
                 ./pack/upload.sh
-              fi
-
 workflows:
   version: 2
   build-test-and-deploy:
@@ -94,9 +107,15 @@ workflows:
           filters:
             branches:
               only: staging
-      - deploy:
+      - maven-deploy:
           requires:
             - build
+          filters:
+            branches:
+              only: master
+      - create-dist:
+          requires:
+            - maven-deploy
           filters:
             branches:
               only: master
