@@ -41,11 +41,21 @@ jobs:
                  mvn -q -T 1C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true install
             no_output_timeout: 600
 
-        - promote:
+   promote:
+      <<: *defaults
+
+      steps:
+
+        - checkout
+
+        - restore_cache:
+            key: dependency-cache
+
+        - run:
+            name: promote
             command: |
-              if [ "${CIRCLE_BRANCH}" == "staging" ]; then
                 ~/build-utils/promote_from_staging.sh
-              fi
+
     deploy:
       <<: *defaults
 
@@ -71,6 +81,15 @@ workflows:
   build-test-and-deploy:
     jobs:
       - build
+      - promote:
+          requires:
+            - build
+          filters:
+            branches:
+              only: staging
       - deploy:
           requires:
             - build
+          filters:
+            branches:
+              only: master
