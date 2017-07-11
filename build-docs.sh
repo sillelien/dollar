@@ -1,6 +1,7 @@
 #!/bin/bash -eux
 cd $(dirname $0)
 DIR=$(pwd)
+mvn versions:set -DnewVersion=$(cat .release)
 [ ! -d dist ] || rm -rf dist
 mkdir dist
 cd dist
