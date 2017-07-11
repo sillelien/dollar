@@ -36,8 +36,6 @@ jobs:
             name: test
             command: |
                  mvn -q -T 1C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true install
-                 ./build-docs.sh
-                 ./pack/pack.sh
             no_output_timeout: 600
 
 #        - run:
@@ -53,9 +51,11 @@ jobs:
         - deploy:
             command: |
               if [ "${CIRCLE_BRANCH}" == "staging" ]; then
-                      ~/build-utils/promote_from_staging.sh
+                ~/build-utils/promote_from_staging.sh
               fi
               if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                      ~/build-utils/maven_deploy.sh
-                      ./pack/upload.sh
+                ~/build-utils/maven_deploy.sh
+                ./build-docs.sh
+                ./pack/pack.sh
+                ./pack/upload.sh
               fi
