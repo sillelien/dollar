@@ -41,10 +41,6 @@ jobs:
                  mvn -q -T 1C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true install
             no_output_timeout: 600
 
-        - persist_to_workspace:
-            root: dist
-            paths:
-              - .
 
     promote:
       <<: *defaults
@@ -61,7 +57,7 @@ jobs:
             command: |
                 ~/build-utils/promote_from_staging.sh
 
-   maven-deploy:
+    maven-deploy:
       <<: *defaults
 
       steps:
@@ -77,7 +73,7 @@ jobs:
                 ~/build-utils/maven_deploy.sh
 
 
-   create-dist:
+    docs:
       <<: *defaults
 
       steps:
@@ -94,8 +90,31 @@ jobs:
             name: test
             command: |
                 ./build-docs.sh
+
+        - persist_to_workspace:
+            root: dist
+            paths:
+              - docs
+
+    dist:
+      <<: *defaults
+
+      steps:
+
+        - checkout
+
+        - attach_workspace:
+            at: ~/dist
+
+        - restore_cache:
+            key: dependency-cache
+
+        - run:
+            name: test
+            command: |
                 ./pack/pack.sh
                 ./pack/upload.sh
+
 workflows:
   version: 2
   build-test-and-deploy:
@@ -113,9 +132,15 @@ workflows:
           filters:
             branches:
               only: master
-      - create-dist:
+      - docs:
           requires:
-            - maven-deploy
+            - build
+          filters:
+            branches:
+              only: master
+      - dist:
+          requires:
+            - docs
           filters:
             branches:
               only: master
