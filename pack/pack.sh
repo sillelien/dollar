@@ -19,10 +19,16 @@ cp -r ../dist-skel/common/* ${dist}
 cp ../LICENSE ../README.md ${dist}
 mkdir ${dist}/lib
 cp ${jar} ${dist}/lib
-cp -f ~/.m2/repository/org/slf4j/slf4j-api/1.7.7/slf4j-api-1.7.7.jar ${dist}/lib
-cp -f ~/.m2/repository/org/slf4j/slf4j-log4j12/1.7.7/slf4j-log4j12-1.7.7.jar ${dist}/lib
-cp -f ~/.m2/repository/log4j/log4j/1.2.17/log4j-1.2.17.jar ${dist}/lib
-cp -f ~/.m2/repository/com/thoughtworks/xstream/xstream/1.4.7/xstream-1.4.7.jar  ${dist}/lib
+
+SLF4J_VERSION=1.7.12
+LOG4J_VERSION=1.2.17
+XSTREAM_VERSION=1.4.8
+
+cp -f ~/.m2/repository/org/slf4j/slf4j-api/${SLF4J_VERSION}/slf4j-api-${SLF4J_VERSION}.jar ${dist}/lib
+cp -f ~/.m2/repository/org/slf4j/slf4j-log4j12/${SLF4J_VERSION}/slf4j-log4j12-${SLF4J_VERSION}.jar ${dist}/lib
+cp -f ~/.m2/repository/log4j/log4j/${LOG4J_VERSION}/log4j-${LOG4J_VERSION}.jar ${dist}/lib
+cp -f ~/.m2/repository/com/thoughtworks/xstream/xstream/${XSTREAM_VERSION}/xstream-${XSTREAM_VERSION}.jar  ${dist}/lib
+
 cd ${dist}
 cd ..
 tar -zcvf dollar.tgz dollar

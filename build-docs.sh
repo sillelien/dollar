@@ -14,7 +14,7 @@ cp -rf * $DIR/dist/docs || :
 cd $DIR
 mvn  -Dmaven.test.skip -DskipDeploy -DstagingDirectory=$DIR/dist/docs/dev site:site site:stage
 sleep 60
-mvn -q install exec:java -e -pl com.sillelien:dollar-docs -Dexec.mainClass="com.sillelien.dollar.docs.ParseDocs" -Dexec.args="./dist/docs"
+mvn -q -Dmaven.test.skip install exec:java -e -pl com.sillelien:dollar-docs -Dexec.mainClass="com.sillelien.dollar.docs.ParseDocs" -Dexec.args="./dist/docs"
 cd dist/docs
 git add *
 git commit -a -m "Updated docs from build"  || :
