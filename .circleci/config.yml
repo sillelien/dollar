@@ -33,7 +33,6 @@ jobs:
         - save_cache:
             key: dependency-cache
             paths:
-                - ~/.gnupg
                 - ~/.m2
         - run:
             name: test
@@ -68,9 +67,15 @@ jobs:
             key: dependency-cache
 
         - run:
-            name: test
+            name: site
             command: |
                 ~/build-utils/maven_deploy.sh
+
+
+        - save_cache:
+            key: dependency-cache
+            paths:
+                - ~/.m2
 
 
     docs:
@@ -80,14 +85,11 @@ jobs:
 
         - checkout
 
-        - attach_workspace:
-            at: dist
-
         - restore_cache:
             key: dependency-cache
 
         - run:
-            name: test
+            name: build-bdocs
             command: |
                 ./build-docs.sh
 
@@ -95,6 +97,12 @@ jobs:
             root: dist
             paths:
               - docs
+
+        - save_cache:
+            key: dependency-cache
+            paths:
+                - ~/.m2
+
 
     dist:
       <<: *defaults
@@ -110,10 +118,15 @@ jobs:
             key: dependency-cache
 
         - run:
-            name: test
+            name: pack-and-upload
             command: |
                 ./pack/pack.sh
                 ./pack/upload.sh
+
+        - save_cache:
+            key: dependency-cache
+            paths:
+                - ~/.m2
 
 workflows:
   version: 2
