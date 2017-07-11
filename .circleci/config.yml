@@ -85,7 +85,7 @@ jobs:
         - checkout
 
         - attach_workspace:
-            at: ~/dollar/dist
+            at: ~/dist
 
         - restore_cache:
             key: dependency-cache
