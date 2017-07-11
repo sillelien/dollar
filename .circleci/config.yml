@@ -1,19 +1,22 @@
+defaults: &defaults
+  working_directory: /tmp
+  docker:
+    - image: sillelien/circleci-dollar-build-image
+    - image: redis:3-alpine
+
+  environment:
+    MAJOR_VERSION: 0.3
+    MAVEN_OPTS: "-Xmx1g -DbuildNumber=${CIRCLE_BUILD_NUM} -Dorg.xml.sax.driver='com.sun.org.apache.xerces.internal.parsers.SAXParser' "
+    TZ: "/usr/share/zoneinfo/Europe/London"
+  branches:
+    ignore:
+      - gh-pages
+
+
+version: 2
 jobs:
     build:
-      docker:
-        - image: sillelien/circleci-dollar-build-image
-        - image: redis:3-alpine
-
-      environment:
-        MAJOR_VERSION: 0.3
-        MAVEN_OPTS: "-Xmx1g -DbuildNumber=${CIRCLE_BUILD_NUM} -Dorg.xml.sax.driver='com.sun.org.apache.xerces.internal.parsers.SAXParser' "
-        TZ: "/usr/share/zoneinfo/Europe/London"
-
-      working_directory: ~/dollar
-
-      branches:
-        ignore:
-          - gh-pages
+      <<: *defaults
 
       steps:
 
@@ -38,24 +41,36 @@ jobs:
                  mvn -q -T 1C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true install
             no_output_timeout: 600
 
-#        - run:
-#            name: build-docs
-#            command: |
-#
-#
-#        - run:
-#            name: pack
-#            command: |
-#
-
-        - deploy:
+        - promote:
             command: |
               if [ "${CIRCLE_BRANCH}" == "staging" ]; then
                 ~/build-utils/promote_from_staging.sh
               fi
+    deploy:
+      <<: *defaults
+
+      steps:
+
+        - checkout
+
+        - restore_cache:
+            key: dependency-cache
+
+        - run:
+            name: test
+            command: |
               if [ "${CIRCLE_BRANCH}" == "master" ]; then
                 ~/build-utils/maven_deploy.sh
                 ./build-docs.sh
                 ./pack/pack.sh
                 ./pack/upload.sh
               fi
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
