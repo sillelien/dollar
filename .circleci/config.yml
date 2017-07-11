@@ -43,6 +43,7 @@ jobs:
 
         - persist_to_workspace:
             root: dollar
+            paths: /
 
    promote:
       <<: *defaults
