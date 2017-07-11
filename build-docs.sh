@@ -8,7 +8,7 @@ git clone https://github.com/sillelien/dollar docs
 cd docs
 git checkout gh-pages
 jekyll build --source $DIR/dollar-docs/src/main/webapp/ --destination .
-cp -rf * $DIR/dist/docs
+cp -rf * $DIR/dist/docs || :
 [ -d $DIR/dist/docs/dev ] || mkdir -p $DIR/dist/docs/dev
 cd $DIR
 mvn  -Dmaven.test.skip -DskipDeploy -DstagingDirectory=$DIR/dist/docs/dev site:site site:stage
