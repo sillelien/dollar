@@ -43,16 +43,18 @@ jobs:
 
         - persist_to_workspace:
             root: dollar
-            paths: /
+            paths: 
+              - target
 
     promote:
       <<: *defaults
 
       steps:
+        - checkout
 
-        - attach_workspace:
-            at: dollar
-
+#        - attach_workspace:
+#            at: dollar/target
+#
         - restore_cache:
             key: dependency-cache
 
