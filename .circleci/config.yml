@@ -57,7 +57,7 @@ jobs:
             command: |
                 ~/build-utils/promote_from_staging.sh
 
-    maven-deploy:
+    maven-site:
       <<: *defaults
 
       steps:
@@ -126,21 +126,18 @@ workflows:
           filters:
             branches:
               only: staging
-      - maven-deploy:
-          requires:
-            - build
+      - maven-site:
           filters:
             branches:
               only: master
       - docs:
-          requires:
-            - build
           filters:
             branches:
               only: master
       - dist:
           requires:
             - docs
+            - maven-site
           filters:
             branches:
               only: master
