@@ -45,7 +45,7 @@ jobs:
             root: dollar
             paths: /
 
-   promote:
+    promote:
       <<: *defaults
 
       steps:
