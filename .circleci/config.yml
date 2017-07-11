@@ -1,5 +1,5 @@
 defaults: &defaults
-  working_directory: /tmp
+  working_directory: ~/dollar
   docker:
     - image: sillelien/circleci-dollar-build-image
     - image: redis:3-alpine
@@ -43,7 +43,7 @@ jobs:
 
         - persist_to_workspace:
             root: dollar
-            paths: 
+            paths:
               - target
 
     promote:
