@@ -41,12 +41,16 @@ jobs:
                  mvn -q -T 1C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true install
             no_output_timeout: 600
 
+        - persist_to_workspace:
+            root: dollar
+
    promote:
       <<: *defaults
 
       steps:
 
-        - checkout
+       - attach_workspace:
+            at: dollar
 
         - restore_cache:
             key: dependency-cache
