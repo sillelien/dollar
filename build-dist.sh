@@ -2,7 +2,8 @@
 cd $(dirname $0)
 PROJECT=$(pwd)
 
-[ -d dist ] && rm -rf dist || :
+mvn -q -Dmaven.test.skip install
+
 DIST=dist/dollar
 
 [ -d ${DIST}/plugins ] || mkdir -p ${DIST}/plugins

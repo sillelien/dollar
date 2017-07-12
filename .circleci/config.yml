@@ -112,7 +112,7 @@ jobs:
         - run:
             name: build-dist
             command: |
-                ./pack/pack.sh
+                ./build-dist.sh
 
         - run:
             name: test-dist
@@ -122,7 +122,7 @@ jobs:
         - run:
             name: upload-dist
             command: |
-                ./pack/upload.sh
+                ./deploy-dist.sh
 
         - save_cache:
             key: dependency-cache
