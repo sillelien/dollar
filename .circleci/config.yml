@@ -86,9 +86,9 @@ jobs:
                 ./build-docs.sh
 
         - persist_to_workspace:
-            root: dist
+            root: .
             paths:
-              - docs
+              - dist/docs
 
         - save_cache:
             key: dependency-cache
@@ -104,7 +104,7 @@ jobs:
         - checkout
 
         - attach_workspace:
-            at: ~/dist
+            at: dist/docs
 
         - restore_cache:
             key: dependency-cache
@@ -121,9 +121,9 @@ jobs:
                 - ~/.m2
 
         - persist_to_workspace:
-            root: dist
+            root: .
             paths:
-              - dollar
+              - dist/dollar
 
     docker:
       <<: *defaults
@@ -133,7 +133,7 @@ jobs:
         - checkout
 
         - attach_workspace:
-            at: ~/dist
+            at: dist/dollar
 
         - run:
             name: build-and-deploy
