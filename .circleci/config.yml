@@ -41,22 +41,28 @@ jobs:
             no_output_timeout: 600
 
 
+    set-version:
+      <<: *defaults
+
+      steps:
+        - checkout
+        - run:
+            name: promote
+            command: |
+              mvn versions:set -DnewVersion=$(cat .release)
+              mvn versions:resolve-ranges
+              mvn versions:lock-snapshots
+
     promote:
       <<: *defaults
 
       steps:
         - checkout
-
-#
-#        - restore_cache:
-#            key: dependency-cache
-
         - run:
             name: promote
-            command: |
-                ~/build-utils/promote_from_staging.sh
+            command: ~/build-utils/promote_from_staging.sh
 
-    maven-site:
+    maven-deploy:
       <<: *defaults
 
       steps:
@@ -70,7 +76,6 @@ jobs:
             name: site
             command: |
                 ~/build-utils/maven_deploy.sh
-
 
         - save_cache:
             key: dependency-cache
@@ -162,20 +167,29 @@ workflows:
           filters:
             branches:
               only: staging
-      - maven-site:
+      - set-version:
+          filters:
+            branches:
+              only: master
+      - maven-deploy:
+          requires:
+            - set-version
+            - build
           filters:
             branches:
               only: master
       - docs:
           requires:
+            - set-version
             - build
           filters:
             branches:
               only: master
       - dist:
           requires:
+            - set-version
+            - build
             - docs
-            - maven-site
           filters:
             branches:
               only: master
