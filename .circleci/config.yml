@@ -36,22 +36,9 @@ jobs:
                 - ~/.m2
         - run:
             name: test
-            command: |
-                 mvn -q -T 1C -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true install
+            command: ./build.sh
+
             no_output_timeout: 600
-
-
-    set-version:
-      <<: *defaults
-
-      steps:
-        - checkout
-        - run:
-            name: promote
-            command: |
-              mvn versions:set -DnewVersion=$(cat .release)
-              mvn versions:resolve-ranges
-              mvn versions:lock-snapshots
 
     promote:
       <<: *defaults
@@ -75,7 +62,7 @@ jobs:
         - run:
             name: site
             command: |
-                ~/build-utils/maven_deploy.sh
+                ./deploy-maven.sh
 
         - save_cache:
             key: dependency-cache
@@ -167,13 +154,8 @@ workflows:
           filters:
             branches:
               only: staging
-      - set-version:
-          filters:
-            branches:
-              only: master
       - maven-deploy:
           requires:
-            - set-version
             - build
           filters:
             branches:
@@ -187,7 +169,6 @@ workflows:
               only: master
       - dist:
           requires:
-            - set-version
             - build
             - docs
           filters:
