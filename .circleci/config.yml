@@ -142,11 +142,12 @@ jobs:
             at: dist/dollar
 
         - run:
-            name: build-and-deploy
-            command: |
-                ./build-docker.sh
-                ./deploy-docker.sh
+            name: build
+            command:  ./build-docker.sh
 
+        - run:
+            name: deploy
+            command:  ./deploy-docker.sh
 
 
 workflows:
