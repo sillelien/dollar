@@ -162,11 +162,7 @@ workflows:
               only: master
       - docs:
           requires:
-            - set-version
             - build
-          filters:
-            branches:
-              only: master
       - dist:
           requires:
             - build
