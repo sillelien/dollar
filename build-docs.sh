@@ -12,9 +12,9 @@ jekyll build --source $DIR/dollar-docs/src/main/webapp/ --destination .
 cp -rf * $DIR/dist/docs || :
 [ -d $DIR/dist/docs/dev ] || mkdir -p $DIR/dist/docs/dev
 cd $DIR
-mvn  -q -Dmaven.test.skip -DskipDeploy -DstagingDirectory=$DIR/dist/docs/dev/ site:site site:stage
-sleep 60
 mvn -q -Dmaven.test.skip install
+mvn -q -Dmaven.test.skip -DskipDeploy -DstagingDirectory=$DIR/dist/docs/dev/ site:site site:stage
+sleep 60
 mvn -q exec:java -e -pl com.sillelien:dollar-docs -Dexec.mainClass="com.sillelien.dollar.docs.ParseDocs" -Dexec.args="./dist/docs"
 cd dist/docs
 git add *
