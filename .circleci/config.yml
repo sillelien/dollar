@@ -27,8 +27,7 @@ jobs:
 
         - run:
             name: dependencies
-            command: |
-              ~/build-utils/maven_make_deps.sh
+            command: ~/build-utils/maven_make_deps.sh
 
         - save_cache:
             key: dependency-cache
@@ -60,9 +59,8 @@ jobs:
             key: dependency-cache
 
         - run:
-            name: site
-            command: |
-                ./deploy-maven.sh
+            name: deploy
+            command: ./deploy-maven.sh
 
         - save_cache:
             key: dependency-cache
@@ -82,8 +80,7 @@ jobs:
 
         - run:
             name: build-bdocs
-            command: |
-                ./build-docs.sh
+            command: ./build-docs.sh
 
         - persist_to_workspace:
             root: .
@@ -155,9 +152,7 @@ workflows:
   build-test-and-deploy:
     jobs:
       - build
-      - docs:
-          requires:
-            - build
+      - docs
       - maven-deploy:
           requires:
             - build
