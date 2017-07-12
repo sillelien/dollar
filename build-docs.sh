@@ -1,6 +1,9 @@
 #!/bin/bash -eux
 cd $(dirname $0)
 DIR=$(pwd)
+echo "login=neilellis" > ~/.github
+echo "password=${GITHUB_PASSWORD}" >> ~/.github
+
 mvn versions:set -DnewVersion=$(cat .release)
 [ ! -d dist ] || rm -rf dist
 mkdir dist
@@ -15,8 +18,6 @@ cd $DIR
 mvn -q  install
 mvn -q -Dmaven.test.skip -DskipDeploy -DstagingDirectory=$DIR/dist/docs/dev/ site:site site:stage
 sleep 60
-echo "login=neilellis" > ~/.github
-echo "password=${GITHUB_PASSWORD}" >> ~/.github
 mvn  exec:java -e -pl com.sillelien:dollar-docs -Dexec.mainClass="com.sillelien.dollar.docs.ParseDocs" -Dexec.args="./dist/docs"
 cd dist/docs
 git add *
