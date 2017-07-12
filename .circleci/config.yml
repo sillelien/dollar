@@ -111,18 +111,15 @@ jobs:
 
         - run:
             name: build-dist
-            command: |
-                ./build-dist.sh
+            command: ./build-dist.sh
 
         - run:
             name: test-dist
-            command: |
-                ./test-dist.sh
+            command: ./test-dist.sh
 
         - run:
             name: upload-dist
-            command: |
-                ./deploy-dist.sh
+            command: ./deploy-dist.sh
 
         - save_cache:
             key: dependency-cache
