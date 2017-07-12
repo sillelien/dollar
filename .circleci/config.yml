@@ -167,6 +167,8 @@ workflows:
             branches:
               only: master
       - docs:
+          requires:
+            - build
           filters:
             branches:
               only: master
