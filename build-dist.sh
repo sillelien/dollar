@@ -2,6 +2,8 @@
 cd $(dirname $0)
 PROJECT=$(pwd)
 
+./set-version.sh
+
 mvn -q -Dmaven.test.skip install
 
 DIST=dist/dollar

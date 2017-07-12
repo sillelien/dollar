@@ -1,6 +1,7 @@
 #!/bin/bash -eu
 cd "$(dirname $0)/.." &> /dev/null
 export DOLLAR_HOME=$(pwd)
+export PATH=$PATH:${DOLLAR_HOME}/jdk/jre/bin
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
        os=linux
 elif [[ "$OSTYPE" == "darwin"* ]]; then
@@ -17,7 +18,7 @@ else
        echo "Unsupported operating system $OSTYPE would you consider porting this simple script?" && exit 1
 fi
 
-if [[ ! -e ${DOLLAR_HOME}/jdk ]]
+if ! javac -version
 then
     echo "Downloading a valid Java 1.8 JDK for OS type: ${os}"
     echo
@@ -54,5 +55,6 @@ then
     echo "Usage: dollar <filename>.ds"
     exit 1
 fi
-
-${DOLLAR_HOME}/jdk/jre/bin/java -classpath "${DOLLAR_HOME}/lib/*:${DOLLAR_HOME}/ext:${DOLLAR_HOME}/plugins/*:${HOME}/.dollar/lib" com.sillelien.dollar.main.ParserMain $@
+java -version
+ls ${DOLLAR_HOME}/lib/*
+java -classpath "${DOLLAR_HOME}/lib/*:${DOLLAR_HOME}/ext:${DOLLAR_HOME}/plugins/*:${HOME}/.dollar/lib" com.sillelien.dollar.main.ParserMain $@
