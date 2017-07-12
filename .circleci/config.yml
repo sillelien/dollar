@@ -110,9 +110,18 @@ jobs:
             key: dependency-cache
 
         - run:
-            name: pack-and-upload
+            name: build-dist
             command: |
                 ./pack/pack.sh
+
+        - run:
+            name: test-dist
+            command: |
+                ./test-dist.sh
+
+        - run:
+            name: upload-dist
+            command: |
                 ./pack/upload.sh
 
         - save_cache:
