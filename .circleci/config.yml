@@ -80,6 +80,8 @@ jobs:
             name: build-docs
             command: |
               set -x
+              git config --global user.email "hello@neilellis.me"
+              git config --global user.name "Neil Ellis"
               cd /srv/jekyll
               git clone https://github.com/sillelien/dollar project
               cd project
