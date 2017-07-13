@@ -226,7 +226,7 @@ workflows:
 
       - docs:
           requires:
-            - dev-docs
+            - devdocs
 
       - maven-deploy:
           requires:
