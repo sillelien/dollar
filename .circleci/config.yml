@@ -75,6 +75,7 @@ jobs:
 
       steps:
 
+        - checkout
         - run:
             name: build-docs
             command: |
