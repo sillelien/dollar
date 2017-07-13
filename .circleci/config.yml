@@ -89,8 +89,10 @@ jobs:
               git checkout gh-pages
               ls /root/dollar/project/dollar-docs/src/main/webapp/
               jekyll build --source $DIR/project/dollar-docs/src/main/webapp/ --destination $DIR/dist/docs
-              cp -rf * $DIR/dist/docs || :
-
+              git add *
+              git commit -a -m "Updated docs from build"  || :
+              git push || :
+              cd
 
         - persist_to_workspace:
             root: .
