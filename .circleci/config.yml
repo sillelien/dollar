@@ -90,7 +90,7 @@ jobs:
               cd docs
               git checkout gh-pages
               ls ~/project/dollar-docs/src/main/webapp/
-              jekyll build --source ~/project/dollar-docs/src/main/webapp/ --destination ~/dist/docs
+              sudo jekyll build --source ~/project/dollar-docs/src/main/webapp/ --destination ~/dist/docs
               git add *
               git commit -a -m "Updated docs from build"  || :
               git push || :
