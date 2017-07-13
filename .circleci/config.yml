@@ -251,7 +251,7 @@ workflows:
           filters:
             branches:
               only: master
-              
+
       - docker:
           requires:
             - dist
