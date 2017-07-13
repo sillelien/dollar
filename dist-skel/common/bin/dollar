@@ -20,7 +20,7 @@ else
        echo "Unsupported operating system $OSTYPE would you consider porting this simple script?" && exit 1
 fi
 
-if ! javac -version
+if ! javac -version &> /dev/null
 then
     echo "Downloading a valid Java 1.8 JDK for OS type: ${os}"
     echo

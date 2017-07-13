@@ -16,29 +16,23 @@
 
 package com.sillelien.dollar.script.api.exceptions;
 
-import net.kencochrane.raven.Raven;
-import net.kencochrane.raven.RavenFactory;
-import net.kencochrane.raven.dsn.Dsn;
-import net.kencochrane.raven.event.Event;
-import net.kencochrane.raven.event.EventBuilder;
-import net.kencochrane.raven.event.interfaces.ExceptionInterface;
 import org.jetbrains.annotations.NotNull;
 
 public class ErrorReporter {
     public static void report(@NotNull Class<?> clazz, @NotNull Throwable t) {
-        String
-                rawDsn =
-                "https://fd22364656ca4cf0af0de76aeb394876:34c481215db2487fae8308665be2c106@app.getsentry.com/34485";
-        Raven raven = RavenFactory.ravenInstance(new Dsn(rawDsn));
-
-        // record a simple message
-        EventBuilder eventBuilder = new EventBuilder()
-                .setMessage(t.getMessage())
-                .setLevel(Event.Level.ERROR)
-                .setLogger(clazz.getName())
-                .addSentryInterface(new ExceptionInterface(t));
-
-        raven.runBuilderHelpers(eventBuilder);
-        raven.sendEvent(eventBuilder.build());
+//        String
+//                rawDsn =
+//                "https://fd22364656ca4cf0af0de76aeb394876:34c481215db2487fae8308665be2c106@app.getsentry.com/34485";
+//        Raven raven = RavenFactory.ravenInstance(new Dsn(rawDsn));
+//
+//        // record a simple message
+//        EventBuilder eventBuilder = new EventBuilder()
+//                .setMessage(t.getMessage())
+//                .setLevel(Event.Level.ERROR)
+//                .setLogger(clazz.getName())
+//                .addSentryInterface(new ExceptionInterface(t));
+//
+//        raven.runBuilderHelpers(eventBuilder);
+//        raven.sendEvent(eventBuilder.build());
     }
 }
