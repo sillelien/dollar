@@ -30,8 +30,8 @@ import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.jetbrains.annotations.NotNull;
-import org.kohsuke.github.GHRepository;
-import org.kohsuke.github.GitHub;
+import com.sillelien.github.GHRepository;
+import com.sillelien.github.GitHub;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
