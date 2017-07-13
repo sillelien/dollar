@@ -75,11 +75,6 @@ jobs:
 
       steps:
 
-        - checkout
-
-        - restore_cache:
-            key: dependency-cache
-
         - run:
             name: build-bdocs
             command: ./build-docs.sh
