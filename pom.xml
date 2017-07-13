@@ -340,9 +340,12 @@
             </dependency>
 
             <dependency>
-                <groupId>org.kohsuke</groupId>
-                <artifactId>github-api</artifactId>
-                <version>1.86</version>
+
+                    <groupId>com.sellelien</groupId>
+                    <artifactId>github-api</artifactId>
+                    <version>0.1.17</version>
+
+
                 <exclusions>
                     <exclusion>
                         <artifactId>commons-codec</artifactId>

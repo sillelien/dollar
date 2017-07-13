@@ -48,7 +48,7 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.kohsuke</groupId>
+            <groupId>com.sillelien</groupId>
             <artifactId>github-api</artifactId>
         </dependency>
         <dependency>

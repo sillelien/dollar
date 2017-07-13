@@ -180,7 +180,6 @@
                                 <exclude>org.w3c.**</exclude>
                                 <exclude>org.xml.**</exclude>
                                 <exclude>org.slf4j.**</exclude>
-                                <exclude>org.jvnet.hudson.**</exclude>
                             </excludes>
                         </relocation>
                         <relocation>
