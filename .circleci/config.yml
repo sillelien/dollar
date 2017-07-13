@@ -151,8 +151,8 @@ jobs:
               cd dist
               git clone https://github.com/sillelien/dollar docs
               cd docs
-              cp -rf $HOME/dollar/dist/devdocs dev
               git checkout gh-pages
+              cp -rf $HOME/dollar/dist/devdocs dev
               jekyll build --source /srv/jekyll/project/dollar-docs/src/main/webapp/ --destination /srv/jekyll/dist/docs
               git add *
               git commit -a -m "Updated docs from build"  || :
