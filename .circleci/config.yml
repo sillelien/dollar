@@ -70,6 +70,8 @@ jobs:
 
     docs:
       <<: *defaults
+      docker:
+        - image: jekyll/builder
 
       steps:
 
@@ -86,11 +88,6 @@ jobs:
             root: .
             paths:
               - dist/docs
-
-        - save_cache:
-            key: dependency-cache
-            paths:
-                - ~/.m2
 
 
     dist:
