@@ -221,7 +221,7 @@ workflows:
   build-test-and-deploy:
     jobs:
       - build
-      
+
       - dev-docs
 
       - docs:
@@ -235,6 +235,7 @@ workflows:
           filters:
             branches:
               only: master
+
       - promote:
           requires:
             - build
@@ -242,6 +243,7 @@ workflows:
           filters:
             branches:
               only: staging
+
       - dist:
           requires:
             - build
@@ -249,6 +251,7 @@ workflows:
           filters:
             branches:
               only: master
+              
       - docker:
           requires:
             - dist
