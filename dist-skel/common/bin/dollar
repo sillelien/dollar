@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/bin/bash -eux
 cd "$(dirname $0)/.." &> /dev/null
 export DOLLAR_HOME=$(pwd)
 export PATH=$PATH:${DOLLAR_HOME}/jdk/jre/bin
