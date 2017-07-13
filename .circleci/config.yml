@@ -78,9 +78,12 @@ jobs:
         - run:
             name: build-docs
             command: |
+              set -x
               cd
               git clone https://github.com/sillelien/dollar project
+              cd project
               git checkout $CIRCLE_BRANCH
+              cd ..
               mkdir -p dist
               cd dist
               git clone https://github.com/sillelien/dollar docs
