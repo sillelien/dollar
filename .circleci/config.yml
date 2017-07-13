@@ -78,8 +78,7 @@ jobs:
         - run:
             name: build-docs
             command: |
-              cd $(dirname $0)
-              DIR=$(pwd)
+              cd
               git clone https://github.com/sillelien/dollar project
               git checkout $CIRCLE_BRANCH
               mkdir -p dist
@@ -87,8 +86,8 @@ jobs:
               git clone https://github.com/sillelien/dollar docs
               cd docs
               git checkout gh-pages
-              ls /root/dollar/project/dollar-docs/src/main/webapp/
-              jekyll build --source $DIR/project/dollar-docs/src/main/webapp/ --destination $DIR/dist/docs
+              ls ~/project/dollar-docs/src/main/webapp/
+              jekyll build --source ~/project/dollar-docs/src/main/webapp/ --destination ~/dist/docs
               git add *
               git commit -a -m "Updated docs from build"  || :
               git push || :
