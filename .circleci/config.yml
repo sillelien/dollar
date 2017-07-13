@@ -104,6 +104,61 @@ jobs:
               - dist/docs
 
 
+    dev-docs:
+      <<: *defaults
+
+      steps:
+
+        - checkout
+
+        - restore_cache:
+            key: dependency-cache
+
+        - run:
+            name: build-docs
+            command: mkdir -p dist/devdocs && mvn -q -Dmaven.test.skip -DskipDeploy -DstagingDirectory=./dist/devdocs/ install site:site site:stage
+
+        - persist_to_workspace:
+            root: .
+            paths:
+              - dist/devdocs
+
+
+
+    docs:
+      <<: *defaults
+      docker:
+        - image: jekyll/builder
+
+      steps:
+        - checkout
+
+        - attach_workspace:
+            at: dist/devdocs
+
+        - run:
+            name: build-docs
+            command: |
+              set -x
+              git config --global user.email "hello@neilellis.me"
+              git config --global user.name "Neil Ellis"
+              cd /srv/jekyll
+              git clone https://github.com/sillelien/dollar project
+              cd project
+              git checkout $CIRCLE_BRANCH
+              cd ..
+              mkdir -p dist
+              cd dist
+              git clone https://github.com/sillelien/dollar docs
+              cd docs
+              cp -rf $HOME/dollar/dist/devdocs dev
+              git checkout gh-pages
+              jekyll build --source /srv/jekyll/project/dollar-docs/src/main/webapp/ --destination /srv/jekyll/dist/docs
+              git add *
+              git commit -a -m "Updated docs from build"  || :
+              git push || :
+              cd /srv/jekyll
+
     dist:
       <<: *defaults
 
@@ -149,6 +204,9 @@ jobs:
         - attach_workspace:
             at: dist/dollar
 
+        - attach_workspace:
+            at: dist/devdocs
+
         - run:
             name: build
             command:  ./build-docker.sh
@@ -163,7 +221,11 @@ workflows:
   build-test-and-deploy:
     jobs:
       - build
+      - dev-docs
       - docs
+        requires:
+          - dev-docs
+
       - maven-deploy:
           requires:
             - build
