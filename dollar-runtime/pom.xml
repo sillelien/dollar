@@ -42,6 +42,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.sillelien</groupId>
+            <artifactId>dollar-simple-execution-plugin</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <artifactId>dollar-std-resources-plugins</artifactId>
             <groupId>com.sillelien</groupId>
             <version>${project.version}</version>
@@ -128,7 +134,8 @@
                 <configuration>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                     <shadedClassifierName>mod</shadedClassifierName>
-                    <minimizeJar>true</minimizeJar>
+                    <!--DO NOT SET TO TRUE!-->
+                    <minimizeJar>false</minimizeJar>
                     <artifactSet>
                         <excludes>
                             <exclude>classworlds:classworlds</exclude>
@@ -178,6 +185,9 @@
                         <relocation>
                             <pattern>com</pattern>
                             <shadedPattern>dollar.v${buildNumber}.thirdparty.com</shadedPattern>
+                            <excludes>
+                                <exclude>com.sillelien.**</exclude>
+                            </excludes>
                         </relocation>
                         <relocation>
                             <pattern>net</pattern>

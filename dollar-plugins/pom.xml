@@ -101,16 +101,17 @@
                             <excludes>
                                 <exclude>com.sun.**</exclude>
                                 <exclude>com.thoughtworks.**</exclude>
+                                <exclude>com.sillelien.dollar.**</exclude>
                             </excludes>
-                            <shadedPattern>dollar.plugin.${plugin.name}.r${buildNumber}</shadedPattern>
+                            <shadedPattern>dollar.plugin.${plugin.name}.v${buildNumber}.com</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>net</pattern>
-                            <shadedPattern>dollar.plugin.${plugin.name}.r${buildNumber}</shadedPattern>
+                            <shadedPattern>dollar.plugin.${plugin.name}.v${buildNumber}.net</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>io</pattern>
-                            <shadedPattern>dollar.plugin.${plugin.name}.r${buildNumber}</shadedPattern>
+                            <shadedPattern>dollar.plugin.${plugin.name}.v${buildNumber}.io</shadedPattern>
                         </relocation>
                     </relocations>
                     <transformers>

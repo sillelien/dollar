@@ -1,7 +1,9 @@
-#!/bin/bash -eux
+#!/bin/bash
+set -eu
 cd "$(dirname $0)/.." &> /dev/null
 export DOLLAR_HOME=$(pwd)
 export PATH=$PATH:${DOLLAR_HOME}/jdk/jre/bin
+export DOLLAR_VERSION=$(cat RELEASE)
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
        os=linux
 elif [[ "$OSTYPE" == "darwin"* ]]; then
@@ -52,9 +54,8 @@ cd -  &> /dev/null
 export JAVA_HOME=${DOLLAR_HOME}/jdk/
 if [ $# -ne 1 ]
 then
+    echo "Dollar v${DOLLAR_VERSION}"
     echo "Usage: dollar <filename>.ds"
     exit 1
 fi
-java -version
-ls ${DOLLAR_HOME}/lib/*
 java -classpath "${DOLLAR_HOME}/lib/*:${DOLLAR_HOME}/ext:${DOLLAR_HOME}/plugins/*:${HOME}/.dollar/lib" com.sillelien.dollar.main.ParserMain $@
