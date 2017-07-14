@@ -126,6 +126,10 @@ jobs:
             paths:
               - dist/devdocs
 
+        - save_cache:
+            key: dependency-cache
+            paths:
+                - ~/.m2
 
 
     docs:
@@ -171,6 +175,9 @@ jobs:
 
         - attach_workspace:
             at: dist/docs
+
+        - attach_workspace:
+            at: dist/devdocs
 
         - restore_cache:
             key: dependency-cache
