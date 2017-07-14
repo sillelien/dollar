@@ -55,6 +55,15 @@ public class GithubModuleResolver implements ModuleResolver {
         return "github";
     }
 
+    private void delete(File toDelete) {
+        if (toDelete.isDirectory()) {
+            for (File file : toDelete.listFiles()) {
+                delete(file);
+            }
+        }
+        toDelete.delete();
+    }
+
     @NotNull
     @Override
     public <T> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope) throws Exception {
@@ -67,11 +76,16 @@ public class GithubModuleResolver implements ModuleResolver {
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
 
         final File dir = new File(BASE_PATH + "/" + githubUser + "/" + githubRepo[1] + "/" + branch);
+        if(dir.exists()) {
+            delete(dir);
+        }
         dir.mkdirs();
 
         final File gitDir = new File(dir, ".git");
 
         if (gitDir.exists()) {
+
+            System.err.println("Repo already exists");
 
             Repository localRepo = builder.setGitDir(gitDir).readEnvironment().findGitDir().build();
             Git git = new Git(localRepo);
@@ -82,11 +96,12 @@ public class GithubModuleResolver implements ModuleResolver {
 
             // Repository localRepo = builder.setGitDir(dir).readEnvironment().findGitDir().build();
             // Git git = new Git(localRepo);
+            System.err.println("Cloning repo");
 
             Git.cloneRepository()
                     .setBranch(branch)
                     .setBare(false)
-                    .setCloneAllBranches(false)
+//                    .setCloneAllBranches(false)
                     .setDirectory(dir)
                     .setURI("https://github.com/" + githubRepo[0] + "/" + githubRepo[1])
                     .call();
