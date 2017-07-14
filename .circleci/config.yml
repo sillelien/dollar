@@ -188,7 +188,10 @@ jobs:
 
         - run:
             name: test-dist
-            command: ./test-dist.sh
+            command: |
+              git config --global --unset url."ssh://git@github.com".insteadOf "https://github.com" || true
+              ./test-dist.sh
+              git config --global url."ssh://git@github.com".insteadOf "https://github.com" || true
 
         - run:
             name: upload-dist
