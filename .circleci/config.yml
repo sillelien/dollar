@@ -230,13 +230,27 @@ workflows:
   version: 2
   build-test-and-deploy:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
 
-      - devdocs
+      - devdocs:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+                - dev
 
       - docs:
           requires:
             - devdocs
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+                - dev
 
       - maven-deploy:
           requires:

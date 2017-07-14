@@ -73,13 +73,14 @@ public class GithubModuleResolver implements ModuleResolver {
             PullCommand pull = git.pull();
             pull.call();
         } else {
-            Repository localRepo = builder.setGitDir(dir).readEnvironment().findGitDir().build();
-            Git git = new Git(localRepo);
+//            Repository localRepo = builder.setGitDir(dir).readEnvironment().findGitDir().build();
+//            Git git = new Git(localRepo);
             CloneCommand clone = Git.cloneRepository();
             clone.setBranch(branch);
             clone.setBare(false);
             clone.setCloneAllBranches(false);
-            clone.setDirectory(dir).setURI(repository.getGitTransportUrl());
+            clone.setDirectory(dir);
+            clone.setURI("https://github.com/"+githubUser+"/"+repository);
 //        UsernamePasswordCredentialsProvider user = new UsernamePasswordCredentialsProvider(login, password);
 //        clone.setCredentialsProvider(user);
             clone.call();
