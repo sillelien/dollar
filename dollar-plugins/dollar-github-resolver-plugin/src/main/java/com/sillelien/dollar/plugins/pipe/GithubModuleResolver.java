@@ -88,7 +88,7 @@ public class GithubModuleResolver implements ModuleResolver {
                     .setBare(false)
                     .setCloneAllBranches(false)
                     .setDirectory(dir)
-                    .setURI("https://github.com/" + githubUser + "/" + repository)
+                    .setURI("https://github.com/" + githubRepo[0] + "/" + githubRepo[1])
                     .call();
 
             // UsernamePasswordCredentialsProvider user = new UsernamePasswordCredentialsProvider(login, password);
