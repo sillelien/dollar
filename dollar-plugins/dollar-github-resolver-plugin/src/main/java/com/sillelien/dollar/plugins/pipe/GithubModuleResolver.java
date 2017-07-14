@@ -24,14 +24,13 @@ import com.sillelien.dollar.api.var;
 import com.sillelien.dollar.deps.DependencyRetriever;
 import com.sillelien.dollar.script.DollarParserImpl;
 import com.sillelien.dollar.script.api.Scope;
-import org.eclipse.jgit.api.CloneCommand;
+import com.sillelien.github.GHRepository;
+import com.sillelien.github.GitHub;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.jetbrains.annotations.NotNull;
-import com.sillelien.github.GHRepository;
-import com.sillelien.github.GitHub;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,17 +43,20 @@ public class GithubModuleResolver implements ModuleResolver {
     private static final Logger logger = LoggerFactory.getLogger(GithubModuleResolver.class);
     private static final String BASE_PATH = System.getProperty("user.home") + "/.dollar/repo";
 
-    @NotNull @Override
+    @NotNull
+    @Override
     public ModuleResolver copy() {
         return this;
     }
 
-    @NotNull @Override
+    @NotNull
+    @Override
     public String getScheme() {
         return "github";
     }
 
-    @NotNull @Override
+    @NotNull
+    @Override
     public <T> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope) throws Exception {
         logger.debug(uriWithoutScheme);
         String[] githubRepo = uriWithoutScheme.split(":");
@@ -63,55 +65,68 @@ public class GithubModuleResolver implements ModuleResolver {
         GHRepository repository = github.getUser(githubUser).getRepository(githubRepo[1]);
         final String branch = githubRepo[2].length() > 0 ? githubRepo[2] : "master";
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
+
         final File dir = new File(BASE_PATH + "/" + githubUser + "/" + githubRepo[1] + "/" + branch);
         dir.mkdirs();
 
         final File gitDir = new File(dir, ".git");
+
         if (gitDir.exists()) {
+
             Repository localRepo = builder.setGitDir(gitDir).readEnvironment().findGitDir().build();
             Git git = new Git(localRepo);
             PullCommand pull = git.pull();
             pull.call();
+
         } else {
-//            Repository localRepo = builder.setGitDir(dir).readEnvironment().findGitDir().build();
-//            Git git = new Git(localRepo);
-            CloneCommand clone = Git.cloneRepository();
-            clone.setBranch(branch);
-            clone.setBare(false);
-            clone.setCloneAllBranches(false);
-            clone.setDirectory(dir);
-            clone.setURI("https://github.com/"+githubUser+"/"+repository);
-//        UsernamePasswordCredentialsProvider user = new UsernamePasswordCredentialsProvider(login, password);
-//        clone.setCredentialsProvider(user);
-            clone.call();
+
+            // Repository localRepo = builder.setGitDir(dir).readEnvironment().findGitDir().build();
+            // Git git = new Git(localRepo);
+
+            Git.cloneRepository()
+                    .setBranch(branch)
+                    .setBare(false)
+                    .setCloneAllBranches(false)
+                    .setDirectory(dir)
+                    .setURI("https://github.com/" + githubUser + "/" + repository)
+                    .call();
+
+            // UsernamePasswordCredentialsProvider user = new UsernamePasswordCredentialsProvider(login, password);
+            // clone.setCredentialsProvider(user);
         }
+
         final ClassLoader classLoader;
-        String content;
-        File mainFile;
+        final String content;
+        final File mainFile;
+
         if (githubRepo.length == 4) {
+
             classLoader = getClass().getClassLoader();
             mainFile = new File(dir, githubRepo[3]);
             content = new String(Files.readAllBytes(mainFile.toPath()));
+
         } else {
+
             final File moduleFile = new File(dir, "module.json");
-            var module = DollarStatic.$(new String(Files.readAllBytes(moduleFile.toPath())));
+            final var module = DollarStatic.$(new String(Files.readAllBytes(moduleFile.toPath())));
             mainFile = new File(dir, module.$("main").$S());
             content = new String(Files.readAllBytes(mainFile.toPath()));
             classLoader =
                     DependencyRetriever.retrieve(module.$("dependencies")
-                                                       .$list()
-                                                       .$stream(false)
-                                                       .map(var::toString)
-                                                       .collect(Collectors.toList()));
+                            .$list()
+                            .$stream(false)
+                            .map(var::toString)
+                            .collect(Collectors.toList()));
+
         }
-        return (params) -> ((Scope)scope).getDollarParser().inScope(false, "github-module", ((Scope)scope), newScope -> {
+        return (params) -> ((Scope) scope).getDollarParser().inScope(false, "github-module", ((Scope) scope), newScope -> {
 
             final ImmutableMap<var, var> paramMap = params[0].$map().toVarMap();
             for (Map.Entry<var, var> entry : paramMap.entrySet()) {
                 newScope.set(entry.getKey().$S(), entry.getValue(), true, null, null, false, false, false);
             }
             return new DollarParserImpl(((Scope) scope).getDollarParser().options(), classLoader, dir).parse(newScope,
-                                                                                                             content);
+                    content);
         });
     }
 }

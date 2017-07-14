@@ -124,8 +124,8 @@ public class ParserTest {
 
     @Test
     public void testModules() throws Exception {
-        new DollarParserImpl(options).parse(getClass().getResourceAsStream("/test_modules.ds"), "/test_modules.ds",
-                                        parallel);
+        new DollarParserImpl(options)
+                .parse(getClass().getResourceAsStream("/test_modules.ds"), "/test_modules.ds", parallel);
     }
 
     @Test
