@@ -166,8 +166,10 @@
                             <shadedPattern>dollar.v${buildNumber}</shadedPattern>
                             <excludes>
                                 <exclude>com.sillelien.dollar.api.**</exclude>
+                                <exclude>com.sillelien.dollar.api.var*</exclude>
                                 <exclude>com.sillelien.dollar.script.api.**</exclude>
                                 <exclude>com.sillelien.dollar.main.**</exclude>
+                                <exclude>com.sillelien.dollar.main.java</exclude>
                                 <exclude>com.sillelien.jas.**</exclude>
                             </excludes>
                         </relocation>
