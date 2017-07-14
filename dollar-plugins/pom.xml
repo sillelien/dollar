@@ -102,6 +102,7 @@
                                 <exclude>com.sun.**</exclude>
                                 <exclude>com.thoughtworks.**</exclude>
                                 <exclude>com.sillelien.dollar.**</exclude>
+                                <exclude>com.sillelien.dollar.api.**</exclude>
                             </excludes>
                             <shadedPattern>dollar.plugin.${plugin.name}.v${buildNumber}.com</shadedPattern>
                         </relocation>
