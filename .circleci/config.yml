@@ -131,7 +131,7 @@ jobs:
     docs:
       <<: *defaults
       docker:
-        - image: jekyll/builder
+        - image: sillelien/circleci-jekyll-build-image
 
       steps:
         - checkout
