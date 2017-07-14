@@ -1,5 +1,5 @@
 FROM openjdk:8-jdk-windowsservercore
-COPY dist/dollar /app
+COPY dollar /app
 VOLUME /build
 WORKDIR /build
 ENTRYPOINT ["/app/bin/dollar"]
