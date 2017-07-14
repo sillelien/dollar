@@ -72,12 +72,12 @@ public class JavaScriptingSupport {
 
         StringBuilder code = new StringBuilder();
         code.append(
-                "com.sillelien.dollar.api.var in = (com.sillelien.dollar.api.var)context.getAttribute(\"in\",javax" +
+                " /* in statement */ com.sillelien.dollar.api.var in = (com.sillelien.dollar.api.var)context.getAttribute(\"in\",javax" +
                 ".script.ScriptContext.ENGINE_SCOPE); \n");
         code.append(
-                "com.sillelien.dollar.script.api.Scope scope = (com.sillelien.dollar.script.api.Scope)context" +
+                " /* scope statement */ com.sillelien.dollar.script.api.Scope scope = (com.sillelien.dollar.script.api.Scope)context" +
                 ".getAttribute(\"scope\",javax.script.ScriptContext.ENGINE_SCOPE); \n");
-        code.append(" com.sillelien.dollar.api.var out = com.sillelien.dollar.api.DollarStatic.$void();\n");
+        code.append(" /* out statement */ com.sillelien.dollar.api.var out = com.sillelien.dollar.api.DollarStatic.$void();\n");
         code.append(java).append("\nreturn out;\n");
 
 
