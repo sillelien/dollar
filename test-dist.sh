@@ -1,6 +1,8 @@
 #!/bin/bash -eux
 cd $(dirname $0)
 DIR=$(pwd)
+echo "login=neilellis" > ~/.github
+echo "password=${GITHUB_PASSWORD}" >> ~/.github
 
 find $DIR/dist/dollar/
 [ -d target/build_test ] || mkdir target/build_test
