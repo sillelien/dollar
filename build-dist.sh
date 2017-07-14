@@ -7,7 +7,9 @@ PROJECT=$(pwd)
 mvn -q -Dmaven.test.skip -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true  install
 
 DIST=dist/dollar
-rm -r ${DIST}/*
+if [[ -n $(ls $DIST) ]]; then
+    rm -r ${DIST}/*
+fi
 
 [ -d ${DIST}/plugins ] || mkdir -p ${DIST}/plugins
 RUNTIME_JAR=$(ls ${PROJECT}/dollar-runtime/target/dollar-runtime*-mod.jar)
