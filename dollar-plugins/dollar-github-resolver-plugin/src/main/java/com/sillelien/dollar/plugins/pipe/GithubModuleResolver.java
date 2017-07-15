@@ -92,7 +92,8 @@ public class GithubModuleResolver implements ModuleResolver {
         dir.mkdirs();
 
 
-        File lockFile = new File(dir, ".lock");
+        File lockFile = new File(dir, ".dollar-module-lock");
+
         if (!lockFile.exists()) {
             Files.createFile(lockFile.toPath());
         }
@@ -119,21 +120,14 @@ public class GithubModuleResolver implements ModuleResolver {
 
                 } else {
 
-                    // Repository localRepo = builder.setGitDir(dir).readEnvironment().findGitDir().build();
-                    // Git git = new Git(localRepo);
-//            System.err.println("Cloning repo to " + dir);
-//            new Exception().printStackTrace(System.err);
-
                     Git.cloneRepository()
                             .setBranch(branch)
                             .setBare(false)
-//                    .setCloneAllBranches(false)
+                            .setCloneAllBranches(false)
                             .setDirectory(dir)
                             .setURI("https://github.com/" + githubRepo[0] + "/" + githubRepo[1])
                             .call();
 
-                    // UsernamePasswordCredentialsProvider user = new UsernamePasswordCredentialsProvider(login, password);
-                    // clone.setCredentialsProvider(user);
                 }
 
                 lock.release();
