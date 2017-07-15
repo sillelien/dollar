@@ -1,8 +1,7 @@
 #!/bin/bash -eux
 cd $(dirname $0)
 DIR=$(pwd)
-echo "login=neilellis" > ~/.github
-echo "password=${GITHUB_PASSWORD}" >> ~/.github
+./create-github-file.sh
 ./set-version.sh
 mkdir -p dist
 cd dist

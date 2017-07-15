@@ -4,8 +4,8 @@ DIR=$(pwd)
 cd -
 mvn -v
 mkdir -p ~/.m2/
-echo "login=neilellis" > ~/.github
-echo "password=${GITHUB_PASSWORD}" >> ~/.github
+
+./create-github-file.sh
 
 cp $DIR/settings.xml ~/.m2/settings.xml
 $DIR/set-version.sh

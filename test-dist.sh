@@ -2,10 +2,7 @@
 cd $(dirname $0)
 DIR=$(pwd)
 
-if [[ -n ${CI:-} ]] ; then
-    echo "login=neilellis" > ~/.github
-    echo "password=${GITHUB_PASSWORD}" >> ~/.github
-fi
+./create-github-file.sh
 
 [ -d target/build_test ] || mkdir target/build_test
 cp $DIR/dollar-examples/src/main/resources/test_*.ds  target/build_test
