@@ -19,6 +19,7 @@ package com.sillelien.dollar.plugins.pipe;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.sillelien.dollar.api.DollarException;
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.collections.ImmutableMap;
@@ -40,17 +41,28 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.channels.OverlappingFileLockException;
 import java.nio.file.Files;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class GithubModuleResolver implements ModuleResolver {
+    @NotNull
     private static final Logger logger = LoggerFactory.getLogger(GithubModuleResolver.class);
+    @NotNull
     private static final String BASE_PATH = System.getProperty("user.home") + "/.dollar/repo";
+    @NotNull
     private static LoadingCache<String, Future<File>> repos;
 
 
+    @NotNull
     private static ExecutorService executor;
 
     static {
@@ -68,6 +80,7 @@ public class GithubModuleResolver implements ModuleResolver {
 
     @NotNull
     private static File getFile(@NotNull String uriWithoutScheme) throws IOException, GitAPIException {
+
         String[] githubRepo = uriWithoutScheme.split(":");
         GitHub github = GitHub.connect();
         final String githubUser = githubRepo[0];
@@ -78,41 +91,69 @@ public class GithubModuleResolver implements ModuleResolver {
         final File dir = new File(BASE_PATH + "/" + githubUser + "/" + githubRepo[1] + "/" + branch);
         dir.mkdirs();
 
-        final File gitDir = new File(dir, ".git");
 
-        if (gitDir.exists()) {
+        File lockFile = new File(dir, ".lock");
+        if (!lockFile.exists()) {
+            Files.createFile(lockFile.toPath());
+        }
 
-//            System.err.println("Repo already exists");
+        try {
+            // Get a file channel for the file
+            FileChannel channel = new RandomAccessFile(lockFile, "rw").getChannel();
 
-            Repository localRepo = builder
-                    .setGitDir(gitDir)
-                    .readEnvironment()
-                    .findGitDir()
-                    .build();
 
-            Git git = new Git(localRepo);
-            PullCommand pull = git.pull();
-            pull.call();
+            try (FileLock lock = channel.lock()) {
 
-        } else {
 
-            // Repository localRepo = builder.setGitDir(dir).readEnvironment().findGitDir().build();
-            // Git git = new Git(localRepo);
+                final File gitDir = new File(dir, ".git");
+                if (gitDir.exists()) {
+                    Repository localRepo = builder
+                            .setGitDir(gitDir)
+                            .readEnvironment()
+                            .findGitDir()
+                            .build();
+
+                    Git git = new Git(localRepo);
+                    PullCommand pull = git.pull();
+                    pull.call();
+
+                } else {
+
+                    // Repository localRepo = builder.setGitDir(dir).readEnvironment().findGitDir().build();
+                    // Git git = new Git(localRepo);
 //            System.err.println("Cloning repo to " + dir);
 //            new Exception().printStackTrace(System.err);
 
-            Git.cloneRepository()
-                    .setBranch(branch)
-                    .setBare(false)
+                    Git.cloneRepository()
+                            .setBranch(branch)
+                            .setBare(false)
 //                    .setCloneAllBranches(false)
-                    .setDirectory(dir)
-                    .setURI("https://github.com/" + githubRepo[0] + "/" + githubRepo[1])
-                    .call();
+                            .setDirectory(dir)
+                            .setURI("https://github.com/" + githubRepo[0] + "/" + githubRepo[1])
+                            .call();
 
-            // UsernamePasswordCredentialsProvider user = new UsernamePasswordCredentialsProvider(login, password);
-            // clone.setCredentialsProvider(user);
+                    // UsernamePasswordCredentialsProvider user = new UsernamePasswordCredentialsProvider(login, password);
+                    // clone.setCredentialsProvider(user);
+                }
+
+                lock.release();
+            }
+
+        } catch (OverlappingFileLockException e) {
+            throw new DollarException("Attempted to update a module that is currently locked");
         }
+
+
         return dir;
+    }
+
+    private static void delete(File toDelete) {
+        if (toDelete.isDirectory()) {
+            for (File file : toDelete.listFiles()) {
+                delete(file);
+            }
+        }
+        toDelete.delete();
     }
 
     @NotNull
@@ -134,7 +175,7 @@ public class GithubModuleResolver implements ModuleResolver {
 
 
         Future<File> futureDir = repos.get(uriWithoutScheme);
-        File dir= futureDir.get();
+        File dir = futureDir.get();
 
         String[] githubRepo = uriWithoutScheme.split(":");
 //        GitHub github = GitHub.connect();
@@ -175,14 +216,5 @@ public class GithubModuleResolver implements ModuleResolver {
             return new DollarParserImpl(((Scope) scope).getDollarParser().options(), classLoader, dir).parse(newScope,
                     content);
         });
-    }
-
-    private static void delete(File toDelete) {
-        if (toDelete.isDirectory()) {
-            for (File file : toDelete.listFiles()) {
-                delete(file);
-            }
-        }
-        toDelete.delete();
     }
 }
