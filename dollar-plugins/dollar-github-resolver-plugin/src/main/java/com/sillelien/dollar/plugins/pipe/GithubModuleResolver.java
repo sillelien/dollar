@@ -57,10 +57,10 @@ public class GithubModuleResolver implements ModuleResolver {
         executor = Executors.newSingleThreadExecutor();
         repos = CacheBuilder.newBuilder()
                 .maximumSize(10000)
-                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .expireAfterWrite(1, TimeUnit.MINUTES)
 //                .removalListener((RemovalListener<String, File>) notification -> delete(notification.getValue()))
                 .build(new CacheLoader<String, Future<File>>() {
-                    public Future<File> load(String key) throws IOException, GitAPIException {
+                    public Future<File> load(@NotNull String key) throws IOException, GitAPIException {
                         return executor.submit(() -> getFile(key));
                     }
                 });
