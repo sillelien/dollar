@@ -16,6 +16,9 @@
 
 package com.sillelien.dollar.plugins.pipe;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.collections.ImmutableMap;
@@ -28,6 +31,7 @@ import com.sillelien.github.GHRepository;
 import com.sillelien.github.GitHub;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -35,13 +39,78 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class GithubModuleResolver implements ModuleResolver {
     private static final Logger logger = LoggerFactory.getLogger(GithubModuleResolver.class);
     private static final String BASE_PATH = System.getProperty("user.home") + "/.dollar/repo";
+    private static LoadingCache<String, File> repos;
+
+    static {
+        repos = CacheBuilder.newBuilder()
+                .maximumSize(10000)
+                .expireAfterWrite(10, TimeUnit.MINUTES)
+//                .removalListener((RemovalListener<String, File>) notification -> delete(notification.getValue()))
+                .build(
+                        new CacheLoader<String, File>() {
+                            public File load(String key) throws IOException, GitAPIException {
+                                return getFile(key);
+                            }
+                        });
+    }
+
+    @NotNull
+    private static File getFile(@NotNull String uriWithoutScheme) throws IOException, GitAPIException {
+        String[] githubRepo = uriWithoutScheme.split(":");
+        GitHub github = GitHub.connect();
+        final String githubUser = githubRepo[0];
+        final GHRepository repository = github.getUser(githubUser).getRepository(githubRepo[1]);
+        final String branch = githubRepo[2].length() > 0 ? githubRepo[2] : "master";
+        FileRepositoryBuilder builder = new FileRepositoryBuilder();
+
+        final File dir = new File(BASE_PATH + "/" + githubUser + "/" + githubRepo[1] + "/" + branch);
+        dir.mkdirs();
+
+        final File gitDir = new File(dir, ".git");
+
+        if (gitDir.exists()) {
+
+//            System.err.println("Repo already exists");
+
+            Repository localRepo = builder
+                    .setGitDir(gitDir)
+                    .readEnvironment()
+                    .findGitDir()
+                    .build();
+
+            Git git = new Git(localRepo);
+            PullCommand pull = git.pull();
+            pull.call();
+
+        } else {
+
+            // Repository localRepo = builder.setGitDir(dir).readEnvironment().findGitDir().build();
+            // Git git = new Git(localRepo);
+//            System.err.println("Cloning repo to " + dir);
+//            new Exception().printStackTrace(System.err);
+
+            Git.cloneRepository()
+                    .setBranch(branch)
+                    .setBare(false)
+//                    .setCloneAllBranches(false)
+                    .setDirectory(dir)
+                    .setURI("https://github.com/" + githubRepo[0] + "/" + githubRepo[1])
+                    .call();
+
+            // UsernamePasswordCredentialsProvider user = new UsernamePasswordCredentialsProvider(login, password);
+            // clone.setCredentialsProvider(user);
+        }
+        return dir;
+    }
 
     @NotNull
     @Override
@@ -55,60 +124,19 @@ public class GithubModuleResolver implements ModuleResolver {
         return "github";
     }
 
-    private void delete(File toDelete) {
-        if (toDelete.isDirectory()) {
-            for (File file : toDelete.listFiles()) {
-                delete(file);
-            }
-        }
-        toDelete.delete();
-    }
-
     @NotNull
     @Override
     public <T> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope) throws Exception {
         logger.debug(uriWithoutScheme);
+
+
+        File dir = repos.get(uriWithoutScheme);
+
         String[] githubRepo = uriWithoutScheme.split(":");
         GitHub github = GitHub.connect();
         final String githubUser = githubRepo[0];
         GHRepository repository = github.getUser(githubUser).getRepository(githubRepo[1]);
         final String branch = githubRepo[2].length() > 0 ? githubRepo[2] : "master";
-        FileRepositoryBuilder builder = new FileRepositoryBuilder();
-
-        final File dir = new File(BASE_PATH + "/" + githubUser + "/" + githubRepo[1] + "/" + branch);
-        if(dir.exists()) {
-            delete(dir);
-        }
-        dir.mkdirs();
-
-        final File gitDir = new File(dir, ".git");
-
-        if (gitDir.exists()) {
-
-            System.err.println("Repo already exists");
-
-            Repository localRepo = builder.setGitDir(gitDir).readEnvironment().findGitDir().build();
-            Git git = new Git(localRepo);
-            PullCommand pull = git.pull();
-            pull.call();
-
-        } else {
-
-            // Repository localRepo = builder.setGitDir(dir).readEnvironment().findGitDir().build();
-            // Git git = new Git(localRepo);
-            System.err.println("Cloning repo");
-
-            Git.cloneRepository()
-                    .setBranch(branch)
-                    .setBare(false)
-//                    .setCloneAllBranches(false)
-                    .setDirectory(dir)
-                    .setURI("https://github.com/" + githubRepo[0] + "/" + githubRepo[1])
-                    .call();
-
-            // UsernamePasswordCredentialsProvider user = new UsernamePasswordCredentialsProvider(login, password);
-            // clone.setCredentialsProvider(user);
-        }
 
         final ClassLoader classLoader;
         final String content;
@@ -143,5 +171,14 @@ public class GithubModuleResolver implements ModuleResolver {
             return new DollarParserImpl(((Scope) scope).getDollarParser().options(), classLoader, dir).parse(newScope,
                     content);
         });
+    }
+
+    private static void delete(File toDelete) {
+        if (toDelete.isDirectory()) {
+            for (File file : toDelete.listFiles()) {
+                delete(file);
+            }
+        }
+        toDelete.delete();
     }
 }

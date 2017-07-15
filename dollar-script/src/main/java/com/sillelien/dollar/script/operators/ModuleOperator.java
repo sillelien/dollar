@@ -29,9 +29,12 @@ import java.util.List;
 public class ModuleOperator implements Map<Object[], var> {
     private final Scope scope;
 
-    public ModuleOperator(Scope scope) {this.scope = scope;}
+    public ModuleOperator(Scope scope) {
+        this.scope = scope;
+    }
 
-    @Override public var map(Object[] objects) {
+    @Override
+    public var map(Object[] objects) {
 
         String moduleName = ((var) objects[1]).$S();
         String[] parts = moduleName.split(":", 2);
@@ -49,10 +52,11 @@ public class ModuleOperator implements Map<Object[], var> {
         try {
 
             return ModuleResolver.resolveModule(parts[0])
-                                 .resolve(parts[1],
-                                          scope.getDollarParser()
-                                               .currentScope())
-                                 .pipe(DollarStatic.$(paramMap));
+                    .resolve(parts[1],
+                            scope.getDollarParser()
+                                    .currentScope())
+                    .pipe(DollarStatic.$(paramMap))
+                    ._fix(true);
 
         } catch (Exception e) {
             return DollarStatic.logAndRethrow(e);
