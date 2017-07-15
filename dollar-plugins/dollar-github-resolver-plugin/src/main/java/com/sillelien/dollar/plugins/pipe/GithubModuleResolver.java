@@ -92,7 +92,7 @@ public class GithubModuleResolver implements ModuleResolver {
         dir.mkdirs();
 
 
-        File lockFile = new File(dir, ".dollar-module-lock");
+        File lockFile = new File(dir+ ".lock");
 
         if (!lockFile.exists()) {
             Files.createFile(lockFile.toPath());
@@ -108,6 +108,7 @@ public class GithubModuleResolver implements ModuleResolver {
 
                 final File gitDir = new File(dir, ".git");
                 if (gitDir.exists()) {
+
                     Repository localRepo = builder
                             .setGitDir(gitDir)
                             .readEnvironment()
