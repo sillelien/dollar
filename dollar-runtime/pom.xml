@@ -36,6 +36,13 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -188,6 +195,8 @@
                             <pattern>com</pattern>
                             <shadedPattern>dollar.v${buildNumber}.thirdparty.com</shadedPattern>
                             <excludes>
+                                <!--We don't mess with Guava, it is a required dependency across all components.-->
+                                <exclude>com.google.common.**</exclude>
                                 <exclude>com.sillelien.dollar.api.**</exclude>
                                 <exclude>com.sillelien.dollar.api.var</exclude>
                                 <exclude>com.sillelien.dollar.script.api.**</exclude>
