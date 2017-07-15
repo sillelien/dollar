@@ -204,6 +204,7 @@
                                 <exclude>com.sillelien.dollar.main.**</exclude>
                                 <exclude>com.sillelien.dollar.main.java.**</exclude>
                                 <exclude>com.sillelien.jas.**</exclude>
+                                <exclude>com.google.common.**</exclude>
                             </excludes>
                         </relocation>
                         <relocation>
