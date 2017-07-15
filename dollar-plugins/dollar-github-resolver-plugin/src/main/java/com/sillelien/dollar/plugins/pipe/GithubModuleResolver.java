@@ -57,7 +57,7 @@ public class GithubModuleResolver implements ModuleResolver {
     @NotNull
     private static final Logger logger = LoggerFactory.getLogger(GithubModuleResolver.class);
     @NotNull
-    private static final String BASE_PATH = System.getProperty("user.home") + "/.dollar/repo";
+    private static final String BASE_PATH = System.getProperty("user.home") + "/.dollar/modules/github";
     @NotNull
     private static LoadingCache<String, Future<File>> repos;
 
