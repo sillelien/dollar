@@ -56,8 +56,10 @@ import java.util.stream.Collectors;
 public class GithubModuleResolver implements ModuleResolver {
     @NotNull
     private static final Logger logger = LoggerFactory.getLogger(GithubModuleResolver.class);
+
     @NotNull
     private static final String BASE_PATH = System.getProperty("user.home") + "/.dollar/modules/github";
+
     @NotNull
     private static LoadingCache<String, Future<File>> repos;
 
@@ -92,7 +94,7 @@ public class GithubModuleResolver implements ModuleResolver {
         dir.mkdirs();
 
 
-        File lockFile = new File(dir+ ".lock");
+        File lockFile = new File(dir.getPath()+ ".lock");
 
         if (!lockFile.exists()) {
             Files.createFile(lockFile.toPath());
@@ -124,7 +126,7 @@ public class GithubModuleResolver implements ModuleResolver {
                     Git.cloneRepository()
                             .setBranch(branch)
                             .setBare(false)
-                            .setCloneAllBranches(false)
+//                            .setCloneAllBranches(false)
                             .setDirectory(dir)
                             .setURI("https://github.com/" + githubRepo[0] + "/" + githubRepo[1])
                             .call();
