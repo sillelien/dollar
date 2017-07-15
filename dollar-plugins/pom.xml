@@ -57,8 +57,9 @@
                     <artifactSet>
                         <excludes>
                             <exclude>junit:junit</exclude>
-                            <!--<exclude>*:xml-apis</exclude>-->
-                            <!--<exclude>com.thoughtworks.xstream:xstream</exclude>-->
+                            <!--We don't mess with Guava, it is a required dependency across all components.-->
+                            <exclude>com.google.guava:guava</exclude>
+                            <exclude>com.thoughtworks.xstream:xstream</exclude>
                             <exclude>log4j:log4j:jar:</exclude>
                             <exclude>org.slf4j:slf4j-api</exclude>
                             <exclude>org.slf4j:slf4j-log4j12</exclude>
@@ -74,6 +75,8 @@
                                 <exclude>META-INF/*.SF</exclude>
                                 <exclude>META-INF/*.RSA</exclude>
                                 <exclude>META-INF/*.INF</exclude>
+                                <exclude>com.google.common.**</exclude>
+
                                 <!--<exclude>META-INF/license</exclude>-->
                             </excludes>
                         </filter>

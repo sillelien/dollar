@@ -145,6 +145,8 @@
                     <minimizeJar>false</minimizeJar>
                     <artifactSet>
                         <excludes>
+                            <!--We don't mess with Guava, it is a required dependency across all components.-->
+                            <exclude>com.google.guava:guava</exclude>
                             <exclude>classworlds:classworlds</exclude>
                             <exclude>junit:junit</exclude>
                             <exclude>*:xml-apis</exclude>
@@ -164,6 +166,7 @@
                                 <exclude>META-INF/*.RSA</exclude>
                                 <exclude>META-INF/*.INF</exclude>
                                 <exclude>META-INF/license</exclude>
+                                <exclude>com.google.common.**</exclude>
                             </excludes>
                         </filter>
                     </filters>
@@ -174,7 +177,7 @@
                             <excludes>
                                 <exclude>com.sillelien.dollar.api.**</exclude>
                                 <exclude>com.sillelien.dollar.api.var</exclude>
-                                <exclude>com.sillelien.dollar.script.api.**</exclude>
+                                <exclude>com.sillelien.dollar.script.**</exclude>
                                 <exclude>com.sillelien.dollar.main.**</exclude>
                                 <exclude>com.sillelien.dollar.main.java.**</exclude>
                                 <exclude>com.sillelien.jas.**</exclude>
@@ -195,11 +198,9 @@
                             <pattern>com</pattern>
                             <shadedPattern>dollar.v${buildNumber}.thirdparty.com</shadedPattern>
                             <excludes>
-                                <!--We don't mess with Guava, it is a required dependency across all components.-->
-                                <exclude>com.google.common.**</exclude>
                                 <exclude>com.sillelien.dollar.api.**</exclude>
                                 <exclude>com.sillelien.dollar.api.var</exclude>
-                                <exclude>com.sillelien.dollar.script.api.**</exclude>
+                                <exclude>com.sillelien.dollar.script.**</exclude>
                                 <exclude>com.sillelien.dollar.main.**</exclude>
                                 <exclude>com.sillelien.dollar.main.java.**</exclude>
                                 <exclude>com.sillelien.jas.**</exclude>
