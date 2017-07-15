@@ -42,25 +42,28 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 public class GithubModuleResolver implements ModuleResolver {
     private static final Logger logger = LoggerFactory.getLogger(GithubModuleResolver.class);
     private static final String BASE_PATH = System.getProperty("user.home") + "/.dollar/repo";
-    private static LoadingCache<String, File> repos;
+    private static LoadingCache<String, Future<File>> repos;
+
+
+    private static ExecutorService executor;
 
     static {
+        executor = Executors.newSingleThreadExecutor();
         repos = CacheBuilder.newBuilder()
                 .maximumSize(10000)
                 .expireAfterWrite(10, TimeUnit.MINUTES)
 //                .removalListener((RemovalListener<String, File>) notification -> delete(notification.getValue()))
-                .build(
-                        new CacheLoader<String, File>() {
-                            public File load(String key) throws IOException, GitAPIException {
-                                return getFile(key);
-                            }
-                        });
+                .build(new CacheLoader<String, Future<File>>() {
+                    public Future<File> load(String key) throws IOException, GitAPIException {
+                        return executor.submit(() -> getFile(key));
+                    }
+                });
     }
 
     @NotNull
@@ -130,13 +133,14 @@ public class GithubModuleResolver implements ModuleResolver {
         logger.debug(uriWithoutScheme);
 
 
-        File dir = repos.get(uriWithoutScheme);
+        Future<File> futureDir = repos.get(uriWithoutScheme);
+        File dir= futureDir.get();
 
         String[] githubRepo = uriWithoutScheme.split(":");
-        GitHub github = GitHub.connect();
-        final String githubUser = githubRepo[0];
-        GHRepository repository = github.getUser(githubUser).getRepository(githubRepo[1]);
-        final String branch = githubRepo[2].length() > 0 ? githubRepo[2] : "master";
+//        GitHub github = GitHub.connect();
+//        final String githubUser = githubRepo[0];
+//        GHRepository repository = github.getUser(githubUser).getRepository(githubRepo[1]);
+//        final String branch = githubRepo[2].length() > 0 ? githubRepo[2] : "master";
 
         final ClassLoader classLoader;
         final String content;
