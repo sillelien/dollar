@@ -46,9 +46,9 @@ import java.nio.channels.FileLock;
 import java.nio.channels.OverlappingFileLockException;
 import java.nio.file.Files;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -60,7 +60,7 @@ public class GithubModuleResolver implements ModuleResolver {
     private static final String BASE_PATH = System.getProperty("user.home") + "/.dollar/modules/github";
 
     @NotNull
-    private static final LoadingCache<String, Future<File>> repos;
+    private static final LoadingCache<String, File> repos;
 
 
     @NotNull
@@ -72,11 +72,14 @@ public class GithubModuleResolver implements ModuleResolver {
                 .maximumSize(10000)
                 .expireAfterWrite(1, TimeUnit.MINUTES)
 //                .removalListener((RemovalListener<String, File>) notification -> delete(notification.getValue()))
-                .build(new CacheLoader<String, Future<File>>() {
+                .build(new CacheLoader<String, File>() {
                     @NotNull
-                    public Future<File> load(@NotNull String key) throws IOException, GitAPIException {
-                        return executor.submit(() -> getFile(key));
+                    public File load(@NotNull String key) throws IOException, GitAPIException, ExecutionException, InterruptedException {
+
+                            return executor.submit(() -> getFile(key)).get();
+
                     }
+
                 });
     }
 
@@ -177,7 +180,7 @@ public class GithubModuleResolver implements ModuleResolver {
     @Override
     public <T> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope) throws Exception {
         log.debug(uriWithoutScheme);
-        File dir = repos.get(uriWithoutScheme).get();
+        File dir = repos.get(uriWithoutScheme);
 
         String[] githubRepo = uriWithoutScheme.split(":");
 
