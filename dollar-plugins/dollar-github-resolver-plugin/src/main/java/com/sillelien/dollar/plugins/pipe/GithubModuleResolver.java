@@ -100,7 +100,7 @@ public class GithubModuleResolver implements ModuleResolver {
         File lockFile = new File(dir.getPath() + ".lock");
 
         if (!lockFile.exists()) {
-            log.debug("Lockfile does not exist for module {}", uriWithoutScheme);
+            log.debug("Lock file does not exist for module {}", uriWithoutScheme);
             Files.createFile(lockFile.toPath());
         }
 
@@ -143,6 +143,7 @@ public class GithubModuleResolver implements ModuleResolver {
                 }
 
                 lock.release();
+                delete(lockFile);
                 log.info("Lock file {} released", lockFile);
             }
 
