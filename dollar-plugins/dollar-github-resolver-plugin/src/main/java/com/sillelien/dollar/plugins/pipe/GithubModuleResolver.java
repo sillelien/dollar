@@ -61,11 +61,11 @@ public class GithubModuleResolver implements ModuleResolver {
     private static final String BASE_PATH = System.getProperty("user.home") + "/.dollar/modules/github";
 
     @NotNull
-    private static LoadingCache<String, Future<File>> repos;
+    private static  final LoadingCache<String, Future<File>> repos;
 
 
     @NotNull
-    private static ExecutorService executor;
+    private static final ExecutorService executor;
 
     static {
         executor = Executors.newSingleThreadExecutor();
@@ -74,6 +74,7 @@ public class GithubModuleResolver implements ModuleResolver {
                 .expireAfterWrite(1, TimeUnit.MINUTES)
 //                .removalListener((RemovalListener<String, File>) notification -> delete(notification.getValue()))
                 .build(new CacheLoader<String, Future<File>>() {
+                    @NotNull
                     public Future<File> load(@NotNull String key) throws IOException, GitAPIException {
                         return executor.submit(() -> getFile(key));
                     }
@@ -81,7 +82,7 @@ public class GithubModuleResolver implements ModuleResolver {
     }
 
     @NotNull
-    private static File getFile(@NotNull String uriWithoutScheme) throws IOException, GitAPIException {
+    private synchronized static File getFile(@NotNull String uriWithoutScheme) throws IOException, GitAPIException {
 
         String[] githubRepo = uriWithoutScheme.split(":");
         GitHub github = GitHub.connect();
