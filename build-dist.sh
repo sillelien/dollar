@@ -4,7 +4,7 @@ PROJECT=$(pwd)
 
 ./set-version.sh
 
-mvn -q -Dmaven.test.skip -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true  clean install
+mvn -q -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true  clean install
 
 DIST=dist/dollar
 if [[ -n $(ls $DIST) ]]; then
