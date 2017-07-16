@@ -33,6 +33,7 @@ SLF4J_VERSION=1.7.12
 LOG4J_VERSION=1.2.17
 XSTREAM_VERSION=1.4.8
 GUAVA_VERSION=22.0
+
 cp -f ~/.m2/repository/org/slf4j/slf4j-api/${SLF4J_VERSION}/slf4j-api-${SLF4J_VERSION}.jar ${DIST}/lib
 cp -f ~/.m2/repository/org/slf4j/slf4j-log4j12/${SLF4J_VERSION}/slf4j-log4j12-${SLF4J_VERSION}.jar ${DIST}/lib
 cp -f ~/.m2/repository/log4j/log4j/${LOG4J_VERSION}/log4j-${LOG4J_VERSION}.jar ${DIST}/lib
