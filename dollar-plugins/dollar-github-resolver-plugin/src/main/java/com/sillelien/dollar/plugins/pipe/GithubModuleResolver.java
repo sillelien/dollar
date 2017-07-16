@@ -104,18 +104,16 @@ public class GithubModuleResolver implements ModuleResolver {
             Files.createFile(lockFile.toPath());
         }
 
-        try {
-            // Get a file channel for the file
-            FileChannel channel = new RandomAccessFile(lockFile, "rw").getChannel();
+        try (FileChannel channel = new RandomAccessFile(lockFile, "rw").getChannel()){
 
-            log.info("Attempting to get lock file {}", lockFile);
-            
+            log.debug("Attempting to get lock file {}", lockFile);
+
             try (FileLock lock = channel.lock()) {
 
                 final File gitDir = new File(dir, ".git");
 
                 if (gitDir.exists()) {
-                    log.info(".git file {} exists so pulling", gitDir);
+                    log.debug(".git file {} exists so pulling", gitDir);
 
                     Repository localRepo = builder
                             .setGitDir(gitDir)
@@ -126,7 +124,7 @@ public class GithubModuleResolver implements ModuleResolver {
                     new Git(localRepo).pull().call();
 
                 } else {
-                    log.info(".git file {} does not exist so cloning", gitDir);
+                    log.debug(".git file {} does not exist so cloning", gitDir);
 
                     Git.cloneRepository()
                             .setBranch(branch)
@@ -139,13 +137,14 @@ public class GithubModuleResolver implements ModuleResolver {
                 }
 
                 lock.release();
-                delete(lockFile);
-                log.info("Lock file {} released", lockFile);
+                log.debug("Lock file {} released", lockFile);
             }
 
         } catch (OverlappingFileLockException e) {
             log.error(e.getMessage(), e);
             throw new DollarException("Attempted to update a module that is currently locked");
+        } finally {
+            delete(lockFile);
         }
 
 
