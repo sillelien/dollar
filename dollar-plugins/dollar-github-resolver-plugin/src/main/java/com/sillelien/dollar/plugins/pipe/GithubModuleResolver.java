@@ -26,6 +26,7 @@ import com.sillelien.dollar.api.collections.ImmutableMap;
 import com.sillelien.dollar.api.script.ModuleResolver;
 import com.sillelien.dollar.api.var;
 import com.sillelien.dollar.deps.DependencyRetriever;
+import com.sillelien.dollar.script.util.FileUtil;
 import com.sillelien.dollar.script.DollarParserImpl;
 import com.sillelien.dollar.script.api.Scope;
 import com.sillelien.github.GHRepository;
@@ -57,7 +58,7 @@ public class GithubModuleResolver implements ModuleResolver {
     private static final Logger log = LoggerFactory.getLogger(GithubModuleResolver.class);
 
     @NotNull
-    private static final String BASE_PATH = System.getProperty("user.home") + "/.dollar/modules/github";
+    private static final String BASE_PATH = FileUtil.TMP_PATH+"/modules/github";
 
     @NotNull
     private static final LoadingCache<String, File> repos;
@@ -81,6 +82,8 @@ public class GithubModuleResolver implements ModuleResolver {
                     }
 
                 });
+
+
     }
 
     @NotNull
@@ -144,21 +147,13 @@ public class GithubModuleResolver implements ModuleResolver {
             log.error(e.getMessage(), e);
             throw new DollarException("Attempted to update a module that is currently locked");
         } finally {
-            delete(lockFile);
+            FileUtil.delete(lockFile);
         }
 
 
         return dir;
     }
 
-    private static void delete(File toDelete) {
-        if (toDelete.isDirectory()) {
-            for (File file : toDelete.listFiles()) {
-                delete(file);
-            }
-        }
-        toDelete.delete();
-    }
 
     @NotNull
     @Override
