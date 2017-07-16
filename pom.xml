@@ -26,14 +26,10 @@
     </parent>
 
     <properties>
-        <jdk.version>1.8</jdk.version>
-        <kotlin.version>0.8.11</kotlin.version>
-        <camel.version>2.15.2</camel.version>
         <httpclient.version>4.5.3</httpclient.version>
         <jackson.version>2.6.1</jackson.version>
         <orientdb.version>2.0.13</orientdb.version>
         <maven.version>3.3.9</maven.version>
-        <slf4j.version>1.7.12</slf4j.version>
         <buildNumber>0</buildNumber>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
