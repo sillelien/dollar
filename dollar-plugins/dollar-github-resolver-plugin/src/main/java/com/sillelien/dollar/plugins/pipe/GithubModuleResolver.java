@@ -31,7 +31,6 @@ import com.sillelien.dollar.script.api.Scope;
 import com.sillelien.github.GHRepository;
 import com.sillelien.github.GitHub;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
@@ -55,13 +54,13 @@ import java.util.stream.Collectors;
 
 public class GithubModuleResolver implements ModuleResolver {
     @NotNull
-    private static final Logger logger = LoggerFactory.getLogger(GithubModuleResolver.class);
+    private static final Logger log = LoggerFactory.getLogger(GithubModuleResolver.class);
 
     @NotNull
     private static final String BASE_PATH = System.getProperty("user.home") + "/.dollar/modules/github";
 
     @NotNull
-    private static  final LoadingCache<String, Future<File>> repos;
+    private static final LoadingCache<String, Future<File>> repos;
 
 
     @NotNull
@@ -95,9 +94,10 @@ public class GithubModuleResolver implements ModuleResolver {
         dir.mkdirs();
 
 
-        File lockFile = new File(dir.getPath()+ ".lock");
+        File lockFile = new File(dir.getPath() + ".lock");
 
         if (!lockFile.exists()) {
+            log.debug("Lockfile does not exist for module {}", uriWithoutScheme);
             Files.createFile(lockFile.toPath());
         }
 
@@ -105,12 +105,18 @@ public class GithubModuleResolver implements ModuleResolver {
             // Get a file channel for the file
             FileChannel channel = new RandomAccessFile(lockFile, "rw").getChannel();
 
+            log.info("Attempting to get lock file {}", lockFile);
+
+            if (channel.tryLock() == null) {
+                log.info("Another JVM is holding the lock file {}", lockFile);
+            }
 
             try (FileLock lock = channel.lock()) {
 
-
                 final File gitDir = new File(dir, ".git");
+
                 if (gitDir.exists()) {
+                    log.info(".git file {} exists so pulling", gitDir);
 
                     Repository localRepo = builder
                             .setGitDir(gitDir)
@@ -118,11 +124,10 @@ public class GithubModuleResolver implements ModuleResolver {
                             .findGitDir()
                             .build();
 
-                    Git git = new Git(localRepo);
-                    PullCommand pull = git.pull();
-                    pull.call();
+                    new Git(localRepo).pull().call();
 
                 } else {
+                    log.info(".git file {} does not exist so cloning", gitDir);
 
                     Git.cloneRepository()
                             .setBranch(branch)
@@ -135,9 +140,11 @@ public class GithubModuleResolver implements ModuleResolver {
                 }
 
                 lock.release();
+                log.info("Lock file {} released", lockFile);
             }
 
         } catch (OverlappingFileLockException e) {
+            log.error(e.getMessage(), e);
             throw new DollarException("Attempted to update a module that is currently locked");
         }
 
@@ -169,17 +176,10 @@ public class GithubModuleResolver implements ModuleResolver {
     @NotNull
     @Override
     public <T> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope) throws Exception {
-        logger.debug(uriWithoutScheme);
-
-
-        Future<File> futureDir = repos.get(uriWithoutScheme);
-        File dir = futureDir.get();
+        log.debug(uriWithoutScheme);
+        File dir = repos.get(uriWithoutScheme).get();
 
         String[] githubRepo = uriWithoutScheme.split(":");
-//        GitHub github = GitHub.connect();
-//        final String githubUser = githubRepo[0];
-//        GHRepository repository = github.getUser(githubUser).getRepository(githubRepo[1]);
-//        final String branch = githubRepo[2].length() > 0 ? githubRepo[2] : "master";
 
         final ClassLoader classLoader;
         final String content;
