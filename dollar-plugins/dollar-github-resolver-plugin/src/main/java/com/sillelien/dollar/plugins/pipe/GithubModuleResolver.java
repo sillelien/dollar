@@ -109,11 +109,7 @@ public class GithubModuleResolver implements ModuleResolver {
             FileChannel channel = new RandomAccessFile(lockFile, "rw").getChannel();
 
             log.info("Attempting to get lock file {}", lockFile);
-
-            if (channel.tryLock() == null) {
-                log.info("Another JVM is holding the lock file {}", lockFile);
-            }
-
+            
             try (FileLock lock = channel.lock()) {
 
                 final File gitDir = new File(dir, ".git");
