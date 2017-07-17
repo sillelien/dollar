@@ -28,10 +28,10 @@ import com.sillelien.dollar.api.var;
 import com.sillelien.dollar.script.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mapdb.DB;
-import org.mapdb.DBMaker;
-import org.mapdb.HTreeMap;
-import org.mapdb.Serializer;
+import dollar.internal.mapdb.DB;
+import dollar.internal.mapdb.DBMaker;
+import dollar.internal.mapdb.HTreeMap;
+import dollar.internal.mapdb.Serializer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public class SimpleTypeLearner implements TypeLearner {
 
     @Override
     public void start() {
-        db = DBMaker.fileDB(new File(FileUtil.getRuntimeDir("typelearnerdb"), "typelearner.db")).fileMmapEnable().make();
+        db = DBMaker.fileDB(new File(FileUtil.getRuntimeDir("types"), "typelearner.db")).fileMmapEnable().make();
     }
 
     @Override

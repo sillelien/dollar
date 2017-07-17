@@ -19,8 +19,8 @@ package com.sillelien.dollar.uri.mapdb;
 import com.sillelien.dollar.api.uri.URI;
 import com.sillelien.dollar.api.uri.URIHandler;
 import org.jetbrains.annotations.NotNull;
-import org.mapdb.DB;
-import org.mapdb.DBMaker;
+import dollar.internal.mapdb.DB;
+import dollar.internal.mapdb.DBMaker;
 
 import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;

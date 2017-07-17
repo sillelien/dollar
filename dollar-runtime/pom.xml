@@ -147,7 +147,7 @@
                             <exclude>log4j:log4j:jar:</exclude>
                             <exclude>org.slf4j:slf4j-api</exclude>
                             <exclude>org.slf4j:slf4j-log4j12</exclude>
-                            <exclude>org.mapdb:mapdb</exclude>
+                            <exclude>con.sillelien:dollar-mapdb</exclude>
                         </excludes>
                     </artifactSet>
                     <filters>
@@ -161,6 +161,7 @@
                                 <exclude>META-INF/*.INF</exclude>
                                 <exclude>META-INF/license</exclude>
                                 <exclude>com.google.common.**</exclude>
+                                <exclude>dollar.internal.**</exclude>
                             </excludes>
                         </filter>
                     </filters>

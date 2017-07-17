@@ -21,9 +21,9 @@ import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mapdb.DataInput2;
-import org.mapdb.DataOutput2;
-import org.mapdb.serializer.GroupSerializerObjectArray;
+import dollar.internal.mapdb.DataInput2;
+import dollar.internal.mapdb.DataOutput2;
+import dollar.internal.mapdb.serializer.GroupSerializerObjectArray;
 
 import java.io.IOException;
 import java.io.Serializable;

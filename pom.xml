@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.sillelien</groupId>
         <artifactId>dollar-parent</artifactId>
-        <version>0.3.13</version>
+        <version>0.3.15</version>
     </parent>
 
     <properties>
@@ -76,6 +76,7 @@
     </scm>
 
     <modules>
+        <module>dollar-mapdb</module>
         <module>dollar-resolver</module>
         <module>dollar-runtime</module>
         <module>dollar-plugins</module>

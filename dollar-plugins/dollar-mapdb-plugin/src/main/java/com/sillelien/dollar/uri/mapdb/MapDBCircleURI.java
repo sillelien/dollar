@@ -24,8 +24,8 @@ import com.sillelien.dollar.api.uri.URI;
 import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mapdb.BTreeMap;
-import org.mapdb.MapModificationListener;
+import dollar.internal.mapdb.BTreeMap;
+import dollar.internal.mapdb.MapModificationListener;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -13,15 +13,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.sillelien</groupId>
-            <artifactId>dollar-script</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-
-        </dependency>
-        <dependency>
             <groupId>org.mapdb</groupId>
             <artifactId>mapdb</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
     </dependencies>
@@ -33,8 +27,6 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.4.1</version>
                 <configuration>
-                    <shadedArtifactAttached>true</shadedArtifactAttached>
-                    <shadedClassifierName>shaded</shadedClassifierName>
                     <!--DO NOT SET TO TRUE!-->
                     <minimizeJar>false</minimizeJar>
                     <artifactSet>
@@ -64,20 +56,22 @@
                         </filter>
                     </filters>
                     <relocations>
-
                         <relocation>
-                            <pattern>*</pattern>
+                            <pattern>org.mapdb</pattern>
                             <shadedPattern>dollar.internal.mapdb</shadedPattern>
-                            <excludes>
-                                <exclude>org.apache.log4j.**</exclude>
-                                <exclude>org.junit.**</exclude>
-                                <exclude>org.w3c.**</exclude>
-                                <exclude>org.xml.**</exclude>
-                                <exclude>org.slf4j.**</exclude>
-                                <exclude>org.mapdb</exclude>
-                            </excludes>
                         </relocation>
-
+                        <relocation>
+                            <pattern>org.eclipse</pattern>
+                            <shadedPattern>dollar.internal.mapdb.eclipse</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.jetbrains</pattern>
+                            <shadedPattern>dollar.internal.mapdb.jetbrains</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net.jpountz</pattern>
+                            <shadedPattern>dollar.internal.mapdb.jpountz</shadedPattern>
+                        </relocation>
                     </relocations>
                     <transformers>
                         <transformer
