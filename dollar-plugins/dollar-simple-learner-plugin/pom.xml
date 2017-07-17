@@ -36,11 +36,12 @@
             <artifactId>dollar-script</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
-        </dependency>
 
+        </dependency>
         <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>xstream</artifactId>
+            <groupId>com.sillelien</groupId>
+            <artifactId>dollar-mapdb</artifactId>
+            <classifier>shaded</classifier>
         </dependency>
 
     </dependencies>

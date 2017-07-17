@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>dollar</artifactId>
+        <groupId>com.sillelien</groupId>
+        <version>0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>dollar-mapdb</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.sillelien</groupId>
+            <artifactId>dollar-script</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+
+        </dependency>
+        <dependency>
+            <groupId>org.mapdb</groupId>
+            <artifactId>mapdb</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                    <shadedClassifierName>shaded</shadedClassifierName>
+                    <!--DO NOT SET TO TRUE!-->
+                    <minimizeJar>false</minimizeJar>
+                    <artifactSet>
+                        <excludes>
+                            <exclude>com.google.guava:guava</exclude>
+                            <exclude>classworlds:classworlds</exclude>
+                            <exclude>junit:junit</exclude>
+                            <exclude>*:xml-apis</exclude>
+                            <exclude>org.apache.maven:lib:tests</exclude>
+                            <exclude>log4j:log4j:jar:</exclude>
+                            <exclude>org.slf4j:slf4j-api</exclude>
+                            <exclude>org.slf4j:slf4j-log4j12</exclude>
+                        </excludes>
+                    </artifactSet>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>org.slf4j.**</exclude>
+                                <exclude>org.apache.log4j.**</exclude>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                                <exclude>META-INF/*.INF</exclude>
+                                <exclude>META-INF/license</exclude>
+                                <exclude>com.google.common.**</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                    <relocations>
+
+                        <relocation>
+                            <pattern>*</pattern>
+                            <shadedPattern>dollar.internal.mapdb</shadedPattern>
+                            <excludes>
+                                <exclude>org.apache.log4j.**</exclude>
+                                <exclude>org.junit.**</exclude>
+                                <exclude>org.w3c.**</exclude>
+                                <exclude>org.xml.**</exclude>
+                                <exclude>org.slf4j.**</exclude>
+                                <exclude>org.mapdb</exclude>
+                            </excludes>
+                        </relocation>
+
+                    </relocations>
+                    <transformers>
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer"/>
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
+                            <addHeader>false</addHeader>
+                        </transformer>
+                    </transformers>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
