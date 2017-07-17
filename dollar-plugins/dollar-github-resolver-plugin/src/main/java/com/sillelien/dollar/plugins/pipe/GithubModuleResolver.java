@@ -89,6 +89,7 @@ public class GithubModuleResolver implements ModuleResolver {
 
     @NotNull
     private synchronized static File getFile(@NotNull String uriWithoutScheme) throws IOException, GitAPIException {
+        log.debug("GithubModuleResolver.getFile("+uriWithoutScheme+")");
 
         String[] githubRepo = uriWithoutScheme.split(":");
         GitHub github = GitHub.connect();
@@ -143,8 +144,8 @@ public class GithubModuleResolver implements ModuleResolver {
                 lock.release();
                 log.debug("Lock file {} released", lockFile);
             } catch (JGitInternalException ie) {
-                log.error(ie.getMessage() + ": in dir " + dir, ie);
-                throw new DollarException(ie, ie.getMessage() + ": in dir " + dir);
+                log.error(ie.getMessage() + " in dir " + dir, ie);
+                throw new DollarException(ie, ie.getMessage() + " in dir " + dir);
             }
 
         } catch (OverlappingFileLockException e) {
