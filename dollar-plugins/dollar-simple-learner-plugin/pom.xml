@@ -41,7 +41,7 @@
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-mapdb</artifactId>
-            <version>${project.version}</version>
+            <version>LATEST</version>
         </dependency>
 
     </dependencies>
