@@ -54,17 +54,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static com.sillelien.dollar.script.util.FileUtil.delete;
+
 public class GithubModuleResolver implements ModuleResolver {
+    public static final int GRACEPERIOD = 10 * 1000;
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(GithubModuleResolver.class);
-
-    @NotNull
-    private static final String BASE_PATH = FileUtil.TMP_PATH + "/modules/github";
-
     @NotNull
     private static final LoadingCache<String, File> repos;
-
-
     @NotNull
     private static final ExecutorService executor;
 
@@ -72,7 +69,7 @@ public class GithubModuleResolver implements ModuleResolver {
         executor = Executors.newSingleThreadExecutor();
         repos = CacheBuilder.newBuilder()
                 .maximumSize(10000)
-                .expireAfterWrite(1, TimeUnit.MINUTES)
+                .expireAfterWrite(5, TimeUnit.MINUTES)
 //                .removalListener((RemovalListener<String, File>) notification -> delete(notification.getValue()))
                 .build(new CacheLoader<String, File>() {
                     @NotNull
@@ -88,8 +85,8 @@ public class GithubModuleResolver implements ModuleResolver {
     }
 
     @NotNull
-    private synchronized static File getFile(@NotNull String uriWithoutScheme) throws IOException, GitAPIException {
-        log.debug("GithubModuleResolver.getFile("+uriWithoutScheme+")");
+    private synchronized static File getFile(@NotNull String uriWithoutScheme) throws IOException, GitAPIException, InterruptedException {
+        log.debug("GithubModuleResolver.getFile(" + uriWithoutScheme + ")");
 
         String[] githubRepo = uriWithoutScheme.split(":");
         GitHub github = GitHub.connect();
@@ -98,27 +95,31 @@ public class GithubModuleResolver implements ModuleResolver {
         final String branch = githubRepo[2].length() > 0 ? githubRepo[2] : "master";
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
 
-        final File dir = new File(BASE_PATH + "/" + githubUser + "/" + githubRepo[1] + "/" + branch);
+        final File dir = new File((FileUtil.SHARED_RUNTIME_PATH + "/modules/github") + "/" + githubUser + "/" + githubRepo[1] + "/" + branch);
+        final File lockFile = new File((FileUtil.SHARED_RUNTIME_PATH + "/modules/github") + "/." + githubUser + "." + githubRepo[1] + "." + branch + ".clone.lock");
         dir.mkdirs();
+        final File gitDir = new File(dir, ".git");
 
+        Repository repoCloneCheck = builder
+                .setGitDir(gitDir)
+                .readEnvironment()
+                .findGitDir()
+                .build();
 
-        File lockFile = new File(dir.getPath() + ".lock");
+        if (lockFile.exists() || repoCloneCheck.getRef(branch) != null) {
+            log.debug("Lock file exists or branch ready.");
+            //Git is annoyingly asynchronous so we wait to make sure the initial clone operation has completely finished
+            if(lockFile.exists()) {
+                log.debug("Lock file still exists so starting grace period before any operation");
+                Thread.sleep(GRACEPERIOD);
+            } else {
+                Files.createFile(lockFile.toPath());
+            }
+            try (FileChannel channel = new RandomAccessFile(lockFile, "rw").getChannel()) {
 
-        if (!lockFile.exists()) {
-            log.debug("Lock file does not exist for module {}", uriWithoutScheme);
-            Files.createFile(lockFile.toPath());
-        }
+                log.debug("Attempting to get lock file {}", lockFile);
 
-        try (FileChannel channel = new RandomAccessFile(lockFile, "rw").getChannel()) {
-
-            log.debug("Attempting to get lock file {}", lockFile);
-
-            try (FileLock lock = channel.lock()) {
-
-                final File gitDir = new File(dir, ".git");
-
-                if (gitDir.exists()) {
-                    log.debug(".git file {} exists so pulling", gitDir);
+                try (FileLock lock = channel.lock()) {
 
                     Repository localRepo = builder
                             .setGitDir(gitDir)
@@ -127,32 +128,48 @@ public class GithubModuleResolver implements ModuleResolver {
                             .build();
 
                     new Git(localRepo).pull().call();
+                    lock.release();
 
-                } else {
-                    log.debug(".git file {} does not exist so cloning", gitDir);
-
-                    Git.cloneRepository()
-                            .setBranch(branch)
-                            .setBare(false)
-//                            .setCloneAllBranches(false)
-                            .setDirectory(dir)
-                            .setURI("https://github.com/" + githubRepo[0] + "/" + githubRepo[1])
-                            .call();
-
+                    log.debug("Lock file {} released", lockFile);
+                } catch (JGitInternalException ie) {
+                    log.error(ie.getMessage() + " in dir " + dir, ie);
+                    throw new DollarException(ie, ie.getMessage() + " in dir " + dir);
+                } finally {
+                    delete(lockFile);
                 }
+            } catch (OverlappingFileLockException e) {
+                log.error(e.getMessage(), e);
+                throw new DollarException("Attempted to update a module that is currently locked");
+            }
+        } else {
+            Files.createFile(lockFile.toPath());
+            log.debug("Lock file does not exist for module {}", uriWithoutScheme);
+            String uri = "https://github.com/" + githubRepo[0] + "/" + githubRepo[1];
+            log.debug(".git file {} does not exist so cloning from {}", gitDir, uri);
+            log.debug("Cleaning first");
+            delete(dir);
+            dir.mkdirs();
+            log.debug("Cloning now");
+            Git.cloneRepository()
+                    .setBranch(branch)
+                    .setBare(false)
+                    .setCloneAllBranches(false)
+                    .setDirectory(dir)
+                    .setURI(uri)
+                    .call();
 
-                lock.release();
-                log.debug("Lock file {} released", lockFile);
-            } catch (JGitInternalException ie) {
-                log.error(ie.getMessage() + " in dir " + dir, ie);
-                throw new DollarException(ie, ie.getMessage() + " in dir " + dir);
+            repoCloneCheck = builder
+                    .setGitDir(gitDir)
+                    .readEnvironment()
+                    .findGitDir()
+                    .build();
+
+            while (repoCloneCheck.getRef(branch) == null) {
+                System.err.println("Waiting ...");
+                Thread.sleep(1000);
             }
 
-        } catch (OverlappingFileLockException e) {
-            log.error(e.getMessage(), e);
-            throw new DollarException("Attempted to update a module that is currently locked");
-        } finally {
-            FileUtil.delete(lockFile);
+
         }
 
 
