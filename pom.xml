@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.sillelien</groupId>
         <artifactId>dollar-parent</artifactId>
-        <version>0.3.11</version>
+        <version>0.3.13</version>
     </parent>
 
     <properties>
@@ -301,11 +301,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>

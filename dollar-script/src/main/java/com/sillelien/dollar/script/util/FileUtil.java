@@ -40,7 +40,9 @@ public final class FileUtil {
         toDelete.delete();
     }
 
-    public static String getRuntimeDir(String dir) {
-        return SHARED_RUNTIME_PATH+"/"+dir;
+    public static File getRuntimeDir(String dirName) {
+        File dir = new File(SHARED_RUNTIME_PATH, dirName);
+        dir.mkdirs();
+        return dir;
     }
 }
