@@ -142,12 +142,14 @@ public class GithubModuleResolver implements ModuleResolver {
                 throw new DollarException("Attempted to update a module that is currently locked");
             }
         } else {
+            log.debug("Lock file does not exist for module {} and it is not cloned, so we can assume initial state", uriWithoutScheme);
             Files.createFile(lockFile.toPath());
-            log.debug("Lock file does not exist for module {}", uriWithoutScheme);
+            log.debug("Lock file created");
             String uri = "https://github.com/" + githubRepo[0] + "/" + githubRepo[1];
-            log.debug(".git file {} does not exist so cloning from {}", gitDir, uri);
-            log.debug("Cleaning first");
+            log.debug("Cloning from {}", uri);
+            log.debug("Cleaning directory first");
             delete(dir);
+            log.debug("Recreating dir");
             dir.mkdirs();
             log.debug("Cloning now");
             Git.cloneRepository()
@@ -165,7 +167,7 @@ public class GithubModuleResolver implements ModuleResolver {
                     .build();
 
             while (repoCloneCheck.getRef(branch) == null) {
-                System.err.println("Waiting ...");
+                log.debug("Waiting for branch {}",branch);
                 Thread.sleep(1000);
             }
 
