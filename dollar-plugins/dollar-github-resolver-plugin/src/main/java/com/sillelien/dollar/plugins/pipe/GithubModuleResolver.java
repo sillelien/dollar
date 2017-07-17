@@ -26,13 +26,14 @@ import com.sillelien.dollar.api.collections.ImmutableMap;
 import com.sillelien.dollar.api.script.ModuleResolver;
 import com.sillelien.dollar.api.var;
 import com.sillelien.dollar.deps.DependencyRetriever;
-import com.sillelien.dollar.script.util.FileUtil;
 import com.sillelien.dollar.script.DollarParserImpl;
 import com.sillelien.dollar.script.api.Scope;
+import com.sillelien.dollar.script.util.FileUtil;
 import com.sillelien.github.GHRepository;
 import com.sillelien.github.GitHub;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +59,7 @@ public class GithubModuleResolver implements ModuleResolver {
     private static final Logger log = LoggerFactory.getLogger(GithubModuleResolver.class);
 
     @NotNull
-    private static final String BASE_PATH = FileUtil.TMP_PATH+"/modules/github";
+    private static final String BASE_PATH = FileUtil.TMP_PATH + "/modules/github";
 
     @NotNull
     private static final LoadingCache<String, File> repos;
@@ -77,7 +78,7 @@ public class GithubModuleResolver implements ModuleResolver {
                     @NotNull
                     public File load(@NotNull String key) throws IOException, GitAPIException, ExecutionException, InterruptedException {
 
-                            return executor.submit(() -> getFile(key)).get();
+                        return executor.submit(() -> getFile(key)).get();
 
                     }
 
@@ -107,7 +108,7 @@ public class GithubModuleResolver implements ModuleResolver {
             Files.createFile(lockFile.toPath());
         }
 
-        try (FileChannel channel = new RandomAccessFile(lockFile, "rw").getChannel()){
+        try (FileChannel channel = new RandomAccessFile(lockFile, "rw").getChannel()) {
 
             log.debug("Attempting to get lock file {}", lockFile);
 
@@ -141,6 +142,9 @@ public class GithubModuleResolver implements ModuleResolver {
 
                 lock.release();
                 log.debug("Lock file {} released", lockFile);
+            } catch (JGitInternalException ie) {
+                log.error(ie.getMessage() + ": in dir " + dir, ie);
+                throw new DollarException(ie, ie.getMessage() + ": in dir " + dir);
             }
 
         } catch (OverlappingFileLockException e) {
