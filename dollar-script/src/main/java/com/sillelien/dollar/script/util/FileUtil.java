@@ -7,22 +7,24 @@ import java.util.UUID;
 
 
 @SuppressWarnings("WeakerAccess")
-public class FileUtil {
+public final class FileUtil {
     @NotNull
     public static final UUID JVM_ID = UUID.randomUUID();
 
     @NotNull
     public static final String RUNTIME_TMP_PATH = System.getProperty("java.io.tmpdir") + "/dollar/runtime/" + JVM_ID;
-
-    @NotNull
-    public static final String THREAD_TMP_PATH = System.getProperty("java.io.tmpdir") + "/dollar/runtime/" + JVM_ID + "/" + Thread.currentThread().getId();
-
     @NotNull
     public static final String SHARED_RUNTIME_PATH = System.getProperty("user.home") + "/.dollar/runtime/";
 
     static {
         new File(RUNTIME_TMP_PATH).mkdirs();
+        new File(SHARED_RUNTIME_PATH).mkdirs();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> delete(new File(RUNTIME_TMP_PATH))));
+    }
+
+    @NotNull
+    public static String threadTempPath() {
+        return System.getProperty("java.io.tmpdir") + "/dollar/runtime/" + JVM_ID + "/" + Thread.currentThread().getId();
     }
 
     public static void delete(@NotNull File toDelete) {
@@ -38,4 +40,7 @@ public class FileUtil {
         toDelete.delete();
     }
 
+    public static String getRuntimeDir(String dir) {
+        return SHARED_RUNTIME_PATH+"/"+dir;
+    }
 }

@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class SimpleTypeLearner implements TypeLearner {
 
@@ -148,7 +149,8 @@ public class SimpleTypeLearner implements TypeLearner {
 
     @Override
     public void start() {
-
+        DB db = DBMaker.fileDB("file.db").make();
+       map = db.hashMap("map").createOrOpen();
     }
 
     @Override

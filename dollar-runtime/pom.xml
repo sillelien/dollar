@@ -147,6 +147,7 @@
                             <exclude>log4j:log4j:jar:</exclude>
                             <exclude>org.slf4j:slf4j-api</exclude>
                             <exclude>org.slf4j:slf4j-log4j12</exclude>
+                            <exclude>org.mapdb:mapdb</exclude>
                         </excludes>
                     </artifactSet>
                     <filters>
@@ -185,6 +186,7 @@
                                 <exclude>org.w3c.**</exclude>
                                 <exclude>org.xml.**</exclude>
                                 <exclude>org.slf4j.**</exclude>
+                                <exclude>org.mapdb</exclude>
                             </excludes>
                         </relocation>
                         <relocation>
