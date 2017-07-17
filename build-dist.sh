@@ -3,6 +3,7 @@ cd $(dirname $0)
 PROJECT=$(pwd)
 
 ./set-version.sh
+./create-github-file.sh
 
 mvn -q -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true  clean install
 

@@ -1,7 +1,10 @@
 #!/bin/bash -eux
 cd $(dirname $0)
 DIR=$(pwd)
+
 ./create-github-file.sh
+./set-version.sh
+
 git clone https://github.com/sillelien/dollar project
 git checkout $CIRCLE_BRANCH
 mkdir -p dist
