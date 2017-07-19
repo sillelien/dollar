@@ -23,6 +23,10 @@ jobs:
             key: dependency-cache
 
         - run:
+            name: init
+            command: ~/build-init.sh
+
+        - run:
             name: dependencies
             command: ~/build-utils/maven_make_deps.sh
 
@@ -41,6 +45,11 @@ jobs:
 
       steps:
         - checkout
+
+        - run:
+            name: init
+            command: ~/build-init.sh
+
         - run:
             name: promote
             command: ~/build-utils/promote_from_staging.sh
@@ -54,6 +63,10 @@ jobs:
 
         - restore_cache:
             key: dependency-cache
+
+        - run:
+            name: init
+            command: ~/build-init.sh
 
         - run:
             name: deploy
@@ -109,6 +122,10 @@ jobs:
 
         - restore_cache:
             key: dependency-cache
+
+        - run:
+            name: init
+            command: ~/build-init.sh
 
         - run:
             name: build-docs
@@ -177,6 +194,10 @@ jobs:
 
         - restore_cache:
             key: dependency-cache
+
+        - run:
+            name: init
+            command: ~/build-init.sh
 
         - run:
             name: prep
