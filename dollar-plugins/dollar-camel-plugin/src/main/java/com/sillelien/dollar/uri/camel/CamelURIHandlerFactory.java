@@ -23,12 +23,17 @@ import com.sillelien.dollar.api.uri.URI;
 import com.sillelien.dollar.api.uri.URIHandler;
 import com.sillelien.dollar.api.uri.URIHandlerFactory;
 import com.sillelien.dollar.api.var;
-import org.apache.camel.*;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.impl.DefaultCamelContext;
+import dollar.internal.camel.CamelContext;
+import dollar.internal.camel.CamelExecutionException;
+import dollar.internal.camel.ConsumerTemplate;
+import dollar.internal.camel.ExchangePattern;
+import dollar.internal.camel.ProducerTemplate;
+import dollar.internal.camel.builder.RouteBuilder;
+import dollar.internal.camel.impl.DefaultCamelContext;
 import org.jetbrains.annotations.NotNull;
 
 import static com.sillelien.dollar.api.DollarStatic.$void;
+
 
 public class CamelURIHandlerFactory implements URIHandlerFactory {
 

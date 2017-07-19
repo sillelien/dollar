@@ -20,9 +20,9 @@ import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.uri.URI;
 import com.sillelien.dollar.api.uri.URIHandler;
 import com.sillelien.dollar.api.var;
-import org.apache.camel.CamelContext;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.impl.DefaultCamelContext;
+import dollar.internal.camel.CamelContext;
+import dollar.internal.camel.builder.RouteBuilder;
+import dollar.internal.camel.impl.DefaultCamelContext;
 import org.junit.Test;
 
 import java.util.UUID;

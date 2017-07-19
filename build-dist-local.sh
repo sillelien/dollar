@@ -1,6 +1,6 @@
 #!/bin/bash -eu
 cd $(dirname $0)
-redis-server /usr/local/etc/redis.conf &
+( redis-server /usr/local/etc/redis.conf || : ) &
 REDIS_PID=$!
 ./build-dist.sh
 ./test-dist.sh
