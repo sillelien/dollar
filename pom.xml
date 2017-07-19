@@ -76,7 +76,6 @@
     </scm>
 
     <modules>
-        <module>dollar-mapdb</module>
         <module>dollar-resolver</module>
         <module>dollar-runtime</module>
         <module>dollar-plugins</module>
