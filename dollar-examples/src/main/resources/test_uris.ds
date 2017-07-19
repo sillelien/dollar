@@ -1,3 +1,4 @@
+//TODO: This needs to use direct HTTP not via camel
 /*
 marinaVideos = << camel:http://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
 
@@ -6,7 +7,7 @@ firstUrl= marinaVideos.results[0]
 
 videoUrls= marinaVideos.results each { $1.trackViewUrl }
 .: COUNT(videoUrls) != 0
-*/
+
 
 volatile a=0
 volatile b=0
@@ -33,5 +34,5 @@ SLEEP(1 Sec)
 &a <=> 4
 &b <=> 5
 
-
-
+*/
+@@ "TODO: This needs to use direct HTTP not via camel, so skipping until re-written"
