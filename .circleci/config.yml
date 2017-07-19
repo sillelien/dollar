@@ -179,6 +179,12 @@ jobs:
             key: dependency-cache
 
         - run:
+            name: prep
+            command: |
+            ~/build-utils/set-version.sh
+            ~/build-utils/create-github-file.sh
+
+        - run:
             name: build-dist
             command: ./build-dist.sh
 
