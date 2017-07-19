@@ -660,6 +660,7 @@ marinaVideos = << https://itunes.apple.com/search?term=Marina+And+The+Diamonds&e
 
 In this example we've requested a single value (using `<<`) from a uri and assigned the value to `marinaVideos` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `trackViewUrl`. The each operator returns a list of the results and that is what is passed to standard out.
 
+****TODO: camel is being deprecated as it is too large a dependency
 
 ##Using Java
 

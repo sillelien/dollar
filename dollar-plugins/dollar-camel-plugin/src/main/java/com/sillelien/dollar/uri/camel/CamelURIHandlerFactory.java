@@ -34,7 +34,8 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.sillelien.dollar.api.DollarStatic.$void;
 
-
+// TODO: The camel plugin will be removed as it is too bulky
+@Deprecated()
 public class CamelURIHandlerFactory implements URIHandlerFactory {
 
     private final DefaultCamelContext context = new DefaultCamelContext();
