@@ -186,8 +186,8 @@ public class ParserTest {
     }
 
     @Test
-    public void testURIs() {
-//        new DollarParser().parse(getClass().getResourceAsStream("/test_uris.ds"), parallel);
+    public void testURIs() throws IOException {
+        new DollarParserImpl(options).parse(getClass().getResourceAsStream("/test_uris.ds"), "/test_uris.ds", parallel);
     }
 
     @Test
