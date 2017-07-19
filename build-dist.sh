@@ -31,12 +31,15 @@ SLF4J_VERSION=1.7.12
 LOG4J_VERSION=1.2.17
 XSTREAM_VERSION=1.4.8
 GUAVA_VERSION=22.0
-
+MAPDB_VERSION=0.1.6
+CAMEL_VERSION=0.1.6
 cp -f ~/.m2/repository/org/slf4j/slf4j-api/${SLF4J_VERSION}/slf4j-api-${SLF4J_VERSION}.jar ${DIST}/lib
 cp -f ~/.m2/repository/org/slf4j/slf4j-log4j12/${SLF4J_VERSION}/slf4j-log4j12-${SLF4J_VERSION}.jar ${DIST}/lib
 cp -f ~/.m2/repository/log4j/log4j/${LOG4J_VERSION}/log4j-${LOG4J_VERSION}.jar ${DIST}/lib
 cp -f ~/.m2/repository/com/google/guava/guava/${GUAVA_VERSION}/guava-${GUAVA_VERSION}.jar ${DIST}/lib
-cp -f ~/.m2/repository/com/sillelien/dollar-mapdb/LATEST/dollar-mapdb-LATEST.jar ${DIST}/lib/dollar-mapdb.jar
+cp -f ~/.m2/repository/com/sillelien/dollar-mapdb/${MAPDB_VERSION}/dollar-mapdb-${MAPDB_VERSION}.jar ${DIST}/lib/dollar-mapdb.jar
+cp -f ~/.m2/repository/com/sillelien/dollar-camel/${CAMEL_VERSION}/dollar-camel-${CAMEL_VERSION}.jar ${DIST}/lib/dollar-camel.jar
+
 cp ${PROJECT}/.release ${DIST}/RELEASE
 cd ${DIST}
 cd ..

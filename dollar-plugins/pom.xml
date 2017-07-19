@@ -63,6 +63,7 @@
                             <exclude>org.slf4j:slf4j-api</exclude>
                             <exclude>org.slf4j:slf4j-log4j12</exclude>
                             <exclude>com.sillelien:dollar-mapdb</exclude>
+                            <exclude>com.sillelien:dollar-camel</exclude>
 
                         </excludes>
                     </artifactSet>
