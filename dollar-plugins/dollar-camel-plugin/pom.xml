@@ -39,7 +39,7 @@
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-camel</artifactId>
-            <version>0-SNAPSHOT</version>
+            <version>0.1.12</version>
         </dependency>
 
 
