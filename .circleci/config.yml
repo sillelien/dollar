@@ -181,8 +181,8 @@ jobs:
         - run:
             name: prep
             command: |
-            ~/build-utils/set-version.sh
-            ~/build-utils/create-github-file.sh
+              ~/build-utils/set-version.sh
+              ~/build-utils/create-github-file.sh
 
         - run:
             name: build-dist
