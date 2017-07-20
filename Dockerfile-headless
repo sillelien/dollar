@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-windowsservercore
+FROM openjdk:8-jdk
 COPY dollar /app
 VOLUME /build
 WORKDIR /build
