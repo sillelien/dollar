@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set-eux
+set -eux
 cd $(dirname $0)
 DIR=$(pwd)
 git config --global user.email "hello@neilellis.me"
