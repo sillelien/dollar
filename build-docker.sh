@@ -4,6 +4,8 @@ cd $(dirname $0)
 PROJECT=$(pwd)
 RELEASE=$(cat .release)
 cd dist
-docker build -f ${PROJECT}/Dockerfile-windows -t  sillelien-docker-docker.bintray.io/dollarscript-windows:${RELEASE:-dev} .
-docker build -f ${PROJECT}/Dockerfile-headless -t  sillelien-docker-docker.bintray.io/dollarscript-headless:${RELEASE:-dev} .
+cp ${PROJECT}/Dockerfile-windows .
+cp ${PROJECT}/Dockerfile-headless .
+docker build -f Dockerfile-windows -t sillelien-docker-docker.bintray.io/dollarscript-windows:${RELEASE:-dev} .
+docker build -f Dockerfile-headless -t sillelien-docker-docker.bintray.io/dollarscript-headless:${RELEASE:-dev} .
 
