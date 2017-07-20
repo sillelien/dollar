@@ -1,6 +1,6 @@
 [ ![Binary Distribution](https://api.bintray.com/packages/sillelien/binary/dollar/images/download.svg) ](https://bintray.com/sillelien/binary/dollar/_latestVersion)
 
-Headless (no GUI) Release: [ ![Download](https://api.bintray.com/packages/sillelien/docker/dollarscript/images/download.svg) ](https://bintray.com/sillelien/docker/dollarscript/_latestVersion)
+Headless Docker Image [ ![Download](https://api.bintray.com/packages/sillelien/docker/dollarscript-headless/images/download.svg) ](https://bintray.com/sillelien/docker/dollarscript-headless/_latestVersion)
 
 ```bash
 alias dollar="docker run sillelien/dollarscript:headless-${RELEASE}"
