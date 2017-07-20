@@ -236,7 +236,7 @@ jobs:
       steps:
 
         - checkout
-        
+
         - setup_remote_docker
 
         - attach_workspace:
