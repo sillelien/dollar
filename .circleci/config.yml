@@ -253,6 +253,18 @@ jobs:
             name: deploy
             command:  ./deploy-docker.sh
 
+    finish:
+      <<: *defaults
+
+      steps:
+
+        - checkout
+
+        - run:
+            name: finish
+            command:  /home/circleci/build-utils/finish-deploy.sh
+
+
 
 workflows:
   version: 2
@@ -307,6 +319,13 @@ workflows:
       - docker:
           requires:
             - dist
+          filters:
+            branches:
+              only: master
+
+      - finish:
+          requires:
+            - docker
           filters:
             branches:
               only: master
