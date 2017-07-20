@@ -1,16 +1,10 @@
 [ ![Binary Distribution](https://api.bintray.com/packages/sillelien/binary/dollar/images/download.svg) ](https://bintray.com/sillelien/binary/dollar/_latestVersion)
 
-Headless (no GUI) Release: [ ![Download](https://api.bintray.com/packages/sillelien/docker/dollarscript/images/download.svg) ](https://bintray.com/sillelien/docker/dollarscript-headless/_latestVersion)
+Headless (no GUI) Release: [ ![Download](https://api.bintray.com/packages/sillelien/docker/dollarscript/images/download.svg) ](https://bintray.com/sillelien/docker/dollarscript/_latestVersion)
 
 ```bash
-alias ds="docker run sillelien-docker-docker.bintray.io/dollarscript-headless:${RELEASE}"
+alias dollar="docker run sillelien/dollarscript:headless-${RELEASE}"
  ```
- 
-Windows Compatible (GUI) Release: [ ![Download](https://api.bintray.com/packages/sillelien/docker/dollarscript/images/download.svg) ](https://bintray.com/sillelien/docker/dollarscript-windows/_latestVersion)
-
-```bat
-    docker run sillelien-docker-docker.bintray.io/dollarscript-windows:${RELEASE} <args>
-```
 
 The artifacts used to build the Dollar project can be accessed using
 
