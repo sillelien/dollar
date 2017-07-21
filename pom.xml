@@ -26,12 +26,6 @@
     </parent>
 
     <properties>
-        <httpclient.version>4.5.3</httpclient.version>
-        <jackson.version>2.6.1</jackson.version>
-        <orientdb.version>2.0.13</orientdb.version>
-        <maven.version>3.3.9</maven.version>
-        <buildNumber>0</buildNumber>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <artifactId>dollar</artifactId>
@@ -96,6 +90,25 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.sillelien</groupId>
+                <artifactId>dollar-core</artifactId>
+                <version>0.3.242</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sillelien</groupId>
+                <artifactId>java-as-script</artifactId>
+                <version>0.9.124</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sillelien</groupId>
+                <artifactId>dollar-mapdb</artifactId>
+                <version>0.1.6</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 
     <reporting>
