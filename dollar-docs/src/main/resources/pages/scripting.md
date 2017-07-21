@@ -651,7 +651,7 @@ URIs are first class citizen's in DollarScript. They refer to a an arbitrary res
 
 ```dollar
 posts = << https://jsonplaceholder.typicode.com/posts 
-titles = posts each { $1.posts }
+titles = posts each { $1.title }
 @@ titles
 ```
 
