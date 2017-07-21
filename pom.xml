@@ -303,6 +303,10 @@
                 </property>
             </activation>
             <distributionManagement>
+                <site>
+                    <id>http://sillelien.github.io/dollar</id>
+                    <url>scm:git:git@github.com:sillelien/dollar.git</url>
+                </site>
                 <repository>
                     <id>dollar-s3-release-repo</id>
                     <name>Release Repository for Dollar</name>
