@@ -2,7 +2,7 @@
 cd $(dirname $0)
 PROJECT=$(pwd)
 
-${PROJECT}/build.sh
+mvn -q -e -T 1C -Dmaven.test.skip -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true clean install
 
 DIST=dist/dollar
 if [[ -n $(ls $DIST) ]]; then
