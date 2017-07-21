@@ -1,5 +1,5 @@
 
-[ ![Binary Distribution](download.png)](https://bintray.com/sillelien/binary/download_file?file_path=dollar-0.3.2230.tgz)
+[ ![Binary Distribution](download.png)](https://bintray.com/sillelien/binary/download_file?file_path=dollar-0.3.2246.tgz)
 
 # Dollar
 
@@ -25,10 +25,10 @@ Below is a fully functional persistent chat server in Dollar:
 
 # Install
 
-Download the [distribution](https://bintray.com/sillelien/binary/download_file?file_path=dollar-0.3.2230.tgz) then
+Download the [distribution](https://bintray.com/sillelien/binary/download_file?file_path=dollar-0.3.2246.tgz) then
 
 ```bash
-    tar -zxvf dollar-0.3.2230.tgz
+    tar -zxvf dollar-0.3.2246.tgz
     ./dollar/bin/dollar <filename>.ds
 ```
 
@@ -38,7 +38,7 @@ Documentation is at [http://sillelien.github.io/dollar](http://sillelien.github.
 
 # Bintray
 
-The bintray page for the distribution binary is here: [ ![Download](https://api.bintray.com/packages/sillelien/binary/dollar/images/download.svg?version=0.3.2230) ](https://bintray.com/sillelien/binary/dollar/0.3.2230/link)
+The bintray page for the distribution binary is here: [ ![Download](https://api.bintray.com/packages/sillelien/binary/dollar/images/download.svg?version=0.3.2246) ](https://bintray.com/sillelien/binary/dollar/0.3.2246/link)
 
 
 # Maven
@@ -64,7 +64,7 @@ and
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-xxx</artifactId>
-            <version>0.3.2230</version>
+            <version>0.3.2246</version>
         </dependency>
 ```
 
