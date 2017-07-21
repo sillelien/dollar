@@ -49,12 +49,6 @@
         </dependency>
         <dependency>
             <groupId>com.sillelien</groupId>
-            <artifactId>dollar-camel-plugin</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.sillelien</groupId>
             <artifactId>dollar-redis-plugin</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
