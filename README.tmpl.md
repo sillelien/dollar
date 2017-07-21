@@ -79,5 +79,5 @@ Dependencies: [![Dependency Status](https://www.versioneye.com/user/projects/54a
 Headless Docker Image: [ ![Download](https://api.bintray.com/packages/sillelien/docker/dollarscript-headless/images/download.svg) ](https://bintray.com/sillelien/docker/dollarscript-headless/_latestVersion)
 
 ```bash
-alias dollar="docker run sillelien/dollarscript-headless:${MAJOR_VERSION}"
+alias dollar="docker run -it sillelien/dollarscript-headless:${MAJOR_VERSION} -v /build:$(pwd)"
  ```

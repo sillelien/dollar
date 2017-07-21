@@ -2,11 +2,12 @@
 cd $(dirname $0)
 DIR=$(pwd)
 alias dollar="docker run -it sillelien/dollarscript-headless:${MAJOR_VERSION} -v /build:$(pwd)"
-[ -d target/build_test ] || mkdir target/build_test
-cp $DIR/dollar-examples/src/main/resources/test_*.ds  target/build_test
-for file in $(ls target/build_test)
+[ -d /tmp/docker_test ] || mkdir /tmp/docker_test
+cp $DIR/dollar-examples/src/main/resources/test_*.ds  /tmp/docker_test
+cd /tmp/docker_test
+for file in $(ls)
 do
     echo "Testing: " $file
-    dollar target/build_test/${file}
+    dollar ${file}
 done
 
