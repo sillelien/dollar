@@ -149,6 +149,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <reports>
+                            <report>aggregate</report>
+                            <report>test-aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -157,6 +166,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-changes-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>changes-report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
