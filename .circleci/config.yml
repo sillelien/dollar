@@ -78,39 +78,39 @@ jobs:
                 - ~/.m2
 
 
-    docs:
-      <<: *defaults
-      docker:
-        - image: jekyll/builder
-
-      steps:
-
-        - checkout
-        - run:
-            name: build-docs
-            command: |
-              git config --global user.email "hello@neilellis.me"
-              git config --global user.name "Neil Ellis"
-              cd /srv/jekyll
-              git clone https://github.com/sillelien/dollar project
-              cd project
-              git checkout $CIRCLE_BRANCH
-              cd ..
-              mkdir -p dist
-              cd dist
-              git clone https://github.com/sillelien/dollar docs
-              cd docs
-              git checkout gh-pages
-              jekyll build --source /srv/jekyll/project/dollar-docs/src/main/webapp/ --destination /srv/jekyll/dist/docs
-              git add *
-              git commit -a -m "Updated docs from build"  || :
-              git push || :
-              cd /srv/jekyll
-
-        - persist_to_workspace:
-            root: .
-            paths:
-              - dist/docs
+#    docs:
+#      <<: *defaults
+#      docker:
+#        - image: jekyll/builder
+#
+#      steps:
+#
+#        - checkout
+#        - run:
+#            name: build-docs
+#            command: |
+#              git config --global user.email "hello@neilellis.me"
+#              git config --global user.name "Neil Ellis"
+#              cd /srv/jekyll
+#              git clone https://github.com/sillelien/dollar project
+#              cd project
+#              git checkout $CIRCLE_BRANCH
+#              cd ..
+#              mkdir -p dist
+#              cd dist
+#              git clone https://github.com/sillelien/dollar docs
+#              cd docs
+#              git checkout gh-pages
+#              jekyll build --source /srv/jekyll/project/dollar-docs/src/main/webapp/ --destination /srv/jekyll/dist/docs
+#              git add *
+#              git commit -a -m "Updated docs from build"  || :
+#              git push || :
+#              cd /srv/jekyll
+#
+#        - persist_to_workspace:
+#            root: .
+#            paths:
+#              - dist/docs
 
 
     devdocs:
@@ -209,6 +209,11 @@ jobs:
             name: build-dist
             command: ./build-dist.sh
 
+        - persist_to_workspace:
+            root: /home/circle/dollar
+            paths:
+              - dist
+
         - run:
             name: test-dist
             command: |
@@ -225,10 +230,7 @@ jobs:
             paths:
                 - ~/.m2
 
-        - persist_to_workspace:
-            root: .
-            paths:
-              - dist/dollar
+
 
     docker:
       <<: *defaults
@@ -237,13 +239,18 @@ jobs:
 
         - checkout
 
+        - run:
+            name: init
+            command: /home/circleci/.build-init.sh
+
+        - run:
+            name: init-dist-dir
+            command: mkdir dist
+
+        - attach_workspace:
+            at: dist
+
         - setup_remote_docker
-
-        - attach_workspace:
-            at: dist/dollar
-
-        - attach_workspace:
-            at: dist/devdocs
 
         - run:
             name: build
@@ -330,6 +337,11 @@ workflows:
       - finish:
           requires:
             - docker
+            - dist
+            - docs
+            - build
+            - devdocs
+            - maven-deploy
           filters:
             branches:
               only: master
