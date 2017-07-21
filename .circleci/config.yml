@@ -210,7 +210,7 @@ jobs:
             command: ./build-dist.sh
 
         - persist_to_workspace:
-            root: /home/circle/dollar
+            root: /home/circleci/dollar
             paths:
               - dist
 
