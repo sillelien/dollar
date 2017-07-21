@@ -2,6 +2,8 @@
 set -eux
 cd $(dirname $0)
 PROJECT=$(pwd)
+ls -l $PROJECT/dist/dollar
+
 RELEASE=$(cat .release)
 cd dist
 cp ${PROJECT}/Dockerfile-windows .
