@@ -31,7 +31,6 @@
     <modules>
         <module>dollar-redis-plugin</module>
         <module>dollar-metrics-plugin</module>
-        <module>dollar-camel-plugin</module>
         <module>dollar-socketio-plugin</module>
         <module>dollar-mapdb-plugin</module>
         <module>dollar-http-plugin</module>
