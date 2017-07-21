@@ -1,5 +1,6 @@
 FROM openjdk:8-jdk
-COPY dollar /app
+COPY dollar/ /app/
+RUN chmod 755 /app/bin/dollar
 VOLUME /build
 WORKDIR /build
 ENTRYPOINT ["/app/bin/dollar"]
