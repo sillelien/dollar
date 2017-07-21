@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.sillelien</groupId>
         <artifactId>dollar-parent</artifactId>
-        <version>0.3.46</version>
+        <version>0.3.48</version>
     </parent>
 
     <artifactId>dollar</artifactId>
@@ -282,6 +282,7 @@
     </build>
 
 
+
     <profiles>
         <profile>
             <id>s3</id>
@@ -303,6 +304,35 @@
                     <url>s3://dollar-repo/snapshot</url>
                 </snapshotRepository>
             </distributionManagement>
+
+
+
+            <repositories>
+                <repository>
+                    <id>dollar-s3-release-repo</id>
+                    <name>S3 Release Repository for component1</name>
+                    <url>s3://dollar-repo/release</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>dollar-s3-snapshot-repo</id>
+                    <name>Component1-s3-snapshot-repo</name>
+                    <url>s3://dollar-repo/snapshot</url>
+                    <releases>
+                        <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+
+
         </profile>
         <profile>
             <id>bintray</id>
@@ -317,6 +347,18 @@
                     <url>https://api.bintray.com/maven/sillelien/maven/${project.artifactId}/;publish=1</url>
                 </repository>
             </distributionManagement>
+
+
+            <repositories>
+                <repository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>bintray-sillelien-maven</id>
+                    <name>bintray</name>
+                    <url>http://dl.bintray.com/sillelien/maven</url>
+                </repository>
+            </repositories>
 
         </profile>
     </profiles>
