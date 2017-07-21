@@ -1,5 +1,5 @@
 
-[ ![Binary Distribution](download.png)](https://bintray.com/sillelien/binary/download_file?file_path=dollar-0.3.2325.tgz)
+[ ![Binary Distribution](download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.2392.tgz)
 
 # Dollar
 
@@ -25,10 +25,10 @@ Below is a fully functional persistent chat server in Dollar:
 
 # Install
 
-Download the [distribution](https://bintray.com/sillelien/binary/download_file?file_path=dollar-0.3.2325.tgz) then
+Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.2392.tgz) then
 
 ```bash
-    tar -zxvf dollar-0.3.2325.tgz
+    tar -zxvf dollar-0.3.2392.tgz
     ./dollar/bin/dollar <filename>.ds
 ```
 
@@ -36,27 +36,37 @@ Download the [distribution](https://bintray.com/sillelien/binary/download_file?f
 
 Documentation is at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar).
 
-# Bintray
-
-The bintray page for the distribution binary is here: [ ![Download](https://api.bintray.com/packages/sillelien/binary/dollar/images/download.svg?version=0.3.2325) ](https://bintray.com/sillelien/binary/dollar/0.3.2325/link)
-
 
 # Maven
 
 The artifacts used to build the Dollar project can be accessed using
 
 ```xml
-    <repositories>
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>bintray-sillelien-maven</id>
-            <name>bintray</name>
-            <url>http://dl.bintray.com/sillelien/maven</url>
-        </repository>
-    </repositories>
-```  
+            <repositories>
+                <repository>
+                    <id>dollar-s3-release-repo</id>
+                    <name>S3 Release Repository for component1</name>
+                    <url>s3://dollar-repo/release</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>dollar-s3-snapshot-repo</id>
+                    <name>Component1-s3-snapshot-repo</name>
+                    <url>s3://dollar-repo/snapshot</url>
+                    <releases>
+                        <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+```
 
 and
 
@@ -64,7 +74,7 @@ and
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-xxx</artifactId>
-            <version>0.3.2325</version>
+            <version>0.3.2392</version>
         </dependency>
 ```
 
@@ -74,9 +84,6 @@ Dependencies: [![Dependency Status](https://www.versioneye.com/user/projects/54a
 
 
 # Docker
-
-
-Headless Docker Image: [ ![Download](https://api.bintray.com/packages/sillelien/docker/dollarscript-headless/images/download.svg) ](https://bintray.com/sillelien/docker/dollarscript-headless/_latestVersion)
 
 ```bash
 docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pwd):/build -it sillelien/dollarscript-headless:${MAJOR_VERSION}  <filename>.ds
