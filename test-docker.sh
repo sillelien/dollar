@@ -8,6 +8,6 @@ cd /tmp/docker_test
 for file in $(ls)
 do
     echo "Testing: " $file
-    docker run -it sillelien/dollarscript-headless:${MAJOR_VERSION} -v /build:$(pwd) ${file}
+    docker run -v $(pwd):/build -it sillelien/dollarscript-headless:${MAJOR_VERSION}  ${file}
 done
 
