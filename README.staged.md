@@ -1,5 +1,5 @@
 
-[ ![Binary Distribution](download.png)](https://bintray.com/sillelien/binary/download_file?file_path=dollar-0.3.2141.tgz)
+[ ![Binary Distribution](download.png)](https://bintray.com/sillelien/binary/download_file?file_path=dollar-0.3.2155.tgz)
 
 Distribution:[ ![Binary Distribution](https://api.bintray.com/packages/sillelien/binary/dollar/images/download.svg) ](https://bintray.com/sillelien/binary/dollar/_latestVersion)
 
@@ -30,7 +30,7 @@ and
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-xxx</artifactId>
-            <version>0.3.2141</version>
+            <version>0.3.2155</version>
         </dependency>
 ```
 
