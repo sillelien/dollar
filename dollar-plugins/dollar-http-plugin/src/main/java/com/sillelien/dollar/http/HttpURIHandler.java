@@ -88,7 +88,8 @@ public class HttpURIHandler implements URIHandler {
     public var read(boolean blocking, boolean mutating) {
         try {
             return DollarFactory.fromStream(SerializedType.JSON, Unirest.get(uri.toString())
-                                                                        .asJson().getRawBody());
+                    .header("Accept","application/json")
+                    .asJson().getRawBody());
         } catch (UnirestException e) {
             return DollarStatic.handleError(e, null);
         } catch (IOException e) {

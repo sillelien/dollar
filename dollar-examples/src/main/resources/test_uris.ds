@@ -1,12 +1,13 @@
-//TODO: This needs to use direct HTTP not via camel
-/*
-marinaVideos = << camel:http://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
 
-@@ marinaVideos
-firstUrl= marinaVideos.results[0]
+posts = << https://jsonplaceholder.typicode.com/posts
 
-videoUrls= marinaVideos.results each { $1.trackViewUrl }
-.: COUNT(videoUrls) != 0
+firstPost= posts[0]
+@@ firstPost
+
+titles= posts each { $1.title }
+.: COUNT(titles) != 0
+
+@@titles
 
 
 volatile a=0
@@ -23,16 +24,3 @@ every 100 Millis until ($1 == 5) {
     b= b + 1;
     @@ "Goodbye " + b;
 }
-
-search="Unikitty"
-dynamicURI=  ("camel:http://google.com?q=" + search) as uri
-
-w = << camel:weather://w ; @@ "The weather in " + w.name + " is '" + w.weather[0].description+"'"
-
-SLEEP(1 Sec)
-
-&a <=> 4
-&b <=> 5
-
-*/
-@@ "TODO: This needs to use direct HTTP not via camel, so skipping until re-written"
