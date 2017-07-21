@@ -97,7 +97,7 @@
             <dependency>
                 <groupId>com.sillelien</groupId>
                 <artifactId>dollar-mapdb</artifactId>
-                <version>0.1.6</version>
+                <version>0.1.24</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
