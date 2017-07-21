@@ -250,6 +250,10 @@ jobs:
             command:  ./build-docker.sh
 
         - run:
+            name: test
+            command:  ./test-docker.sh
+
+        - run:
             name: deploy
             command:  ./deploy-docker.sh
 
