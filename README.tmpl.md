@@ -6,7 +6,7 @@ Distribution:[ ![Binary Distribution](https://api.bintray.com/packages/sillelien
 Headless Docker Image: [ ![Download](https://api.bintray.com/packages/sillelien/docker/dollarscript-headless/images/download.svg) ](https://bintray.com/sillelien/docker/dollarscript-headless/_latestVersion)
 
 ```bash
-alias dollar="docker run sillelien/dollarscript-headless:${RELEASE}"
+alias dollar="docker run sillelien/dollarscript-headless:${MAJOR_VERSION}"
  ```
 
 The artifacts used to build the Dollar project can be accessed using
