@@ -20,7 +20,7 @@ jobs:
         - checkout
 
         - restore_cache:
-            key: dependency-cache
+            key: build-dependency-cache
 
         - run:
             name: init
@@ -31,7 +31,7 @@ jobs:
             command: ~/build-utils/maven_make_deps.sh
 
         - save_cache:
-            key: dependency-cache
+            key: build-dependency-cache
             paths:
                 - ~/.m2
         - run:
@@ -62,7 +62,7 @@ jobs:
         - checkout
 
         - restore_cache:
-            key: dependency-cache
+            key: deploy-dependency-cache
 
         - run:
             name: init
@@ -73,7 +73,7 @@ jobs:
             command: ./deploy-maven.sh
 
         - save_cache:
-            key: dependency-cache
+            key: deploy-dependency-cache
             paths:
                 - ~/.m2
 
@@ -121,7 +121,7 @@ jobs:
         - checkout
 
         - restore_cache:
-            key: dependency-cache
+            key: devdocs-dependency-cache
 
         - run:
             name: init
@@ -140,7 +140,7 @@ jobs:
               - dist/devdocs
 
         - save_cache:
-            key: dependency-cache
+            key: devdocs-dependency-cache
             paths:
                 - ~/.m2
 
@@ -193,7 +193,7 @@ jobs:
             at: dist/devdocs
 
         - restore_cache:
-            key: dependency-cache
+            key: dist-dependency-cache
 
         - run:
             name: init
@@ -222,11 +222,11 @@ jobs:
               git config --global url."ssh://git@github.com".insteadOf "https://github.com" || true
 
         - run:
-            name: upload-dist
+            name: deploy-dist
             command: ./deploy-dist.sh
 
         - save_cache:
-            key: dependency-cache
+            key: dist-dependency-cache
             paths:
                 - ~/.m2
 
