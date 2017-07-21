@@ -1,8 +1,3 @@
 #!/bin/bash -eu
-cd $(dirname $0)
-redis-server /usr/local/etc/redis.conf &
-REDIS_PID=$!
-mvn clean install
-./build-docs.sh
-kill -2 ${REDIS_PID}
-./pack/pack.sh
+GITHUB_PASSWORD=$(cat ~/.github | tail -1 | cut -d= -f2)
+circleci build -e $GITHUB_PASSWORD
