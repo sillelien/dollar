@@ -22,11 +22,8 @@
     <parent>
         <groupId>com.sillelien</groupId>
         <artifactId>dollar-parent</artifactId>
-        <version>0.3.17</version>
+        <version>0.3.25</version>
     </parent>
-
-    <properties>
-    </properties>
 
     <artifactId>dollar</artifactId>
     <version>0-SNAPSHOT</version>
