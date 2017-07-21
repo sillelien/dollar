@@ -245,7 +245,7 @@ jobs:
 
         - run:
             name: init-dist-dir
-            command: mkdir dist
+            command: mkdir -p dist
 
         - attach_workspace:
             at: dist
