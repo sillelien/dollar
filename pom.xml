@@ -99,6 +99,11 @@
                 <artifactId>dollar-mapdb</artifactId>
                 <version>0.1.24</version>
             </dependency>
+            <dependency>
+                <groupId>com.sillelien</groupId>
+                <artifactId>dollar-camel</artifactId>
+                <version>0.1.36</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

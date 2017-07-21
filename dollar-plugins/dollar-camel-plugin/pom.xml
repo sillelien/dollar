@@ -39,7 +39,6 @@
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-camel</artifactId>
-            <version>0.1.20</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
