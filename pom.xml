@@ -74,11 +74,6 @@
         <module>dollar-docs</module>
     </modules>
 
-    <prerequisites>
-        <maven>3.3</maven>
-    </prerequisites>
-
-
     <dependencies>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -86,6 +81,7 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -307,7 +303,7 @@
                     <url>s3://dollar-repo/release</url>
                 </repository>
                 <snapshotRepository>
-                    <id>Component1-s3-snapshot-repo</id>
+                    <id>dollar-s3-snapshot-repo</id>
                     <name>Snapshot Repository for Dollar</name>
                     <url>s3://dollar-repo/snapshot</url>
                 </snapshotRepository>
