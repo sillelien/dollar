@@ -650,15 +650,12 @@ Yep you can use named parameters, then refer to the values by the names passed i
 URIs are first class citizen's in DollarScript. They refer to a an arbitrary resource, usually remote, that can be accessed using the specified protocol and location. Static URIs can be referred to directly without quotation marks, dynamic URIs can be built by casting to a uri using the `as` operator.
 
 ```dollar
-search="Unikitty"
-
-dynamicURI= ("http://google.com?q="+search) as uri
-
-marinaVideos = << https://itunes.apple.com/search?term=Marina+And+The+Diamonds&entity=musicVideo
-@@ marinaVideos.results each { $1.trackViewUrl }
+posts = << https://jsonplaceholder.typicode.com/posts 
+titles = posts each { $1.posts }
+@@ titles
 ```
 
-In this example we've requested a single value (using `<<`) from a uri and assigned the value to `marinaVideos` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `trackViewUrl`. The each operator returns a list of the results and that is what is passed to standard out.
+In this example we've requested a single value (using `<<`) from a uri and assigned the value to `posts` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `title`. The each operator returns a list of the results and that is what is passed to standard out.
 
 
 ##Using Java
