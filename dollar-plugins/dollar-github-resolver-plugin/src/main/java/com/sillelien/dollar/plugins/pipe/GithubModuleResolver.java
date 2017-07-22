@@ -155,7 +155,7 @@ public class GithubModuleResolver implements ModuleResolver {
             Git.cloneRepository()
                     .setBranch(branch)
                     .setBare(false)
-                    .setCloneAllBranches(false)
+                    .setCloneAllBranches(true)
                     .setDirectory(dir)
                     .setURI(uri)
                     .call();
