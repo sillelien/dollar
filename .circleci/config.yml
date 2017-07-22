@@ -22,7 +22,7 @@ jobs:
         - restore_cache:
             keys:
               - m2-{{ .Branch }}-{{ checksum pom.xml }}
-              - m2- # used if checksum fails
+              - m2
 
         - run:
             name: init
@@ -33,16 +33,16 @@ jobs:
             command: ~/build-utils/maven_make_deps.sh
 
         - save_cache:
-            keys:
-              - m2-{{ .Branch }}-{{ checksum pom.xml }}
-              - m2- # used if checksum fails
+            key: m2-{{ .Branch }}-{{ checksum pom.xml }}
             paths:
-                - ~/.m2
+              - ~/.m2
+
         - run:
             name: test
             command: ./build.sh
 
             no_output_timeout: 600
+
 
     promote:
       <<: *defaults
@@ -58,6 +58,7 @@ jobs:
             name: promote
             command: ~/build-utils/promote_from_staging.sh
 
+
     maven-deploy:
       <<: *defaults
 
@@ -68,7 +69,7 @@ jobs:
         - restore_cache:
             keys:
               - m2-{{ .Branch }}-{{ checksum pom.xml }}
-              - m2- # used if checksum fails
+              - m2
 
         - run:
             name: init
@@ -79,9 +80,7 @@ jobs:
             command: ./deploy-maven.sh
 
         - save_cache:
-            keys:
-              - m2-{{ .Branch }}-{{ checksum pom.xml }}
-              - m2- # used if checksum fails
+            key: m2-{{ .Branch }}-{{ checksum pom.xml }}
             paths:
                 - ~/.m2
 
@@ -131,7 +130,7 @@ jobs:
         - restore_cache:
             keys:
               - m2-{{ .Branch }}-{{ checksum pom.xml }}
-              - m2- # used if checksum fails
+              - m2
 
         - run:
             name: init
@@ -150,9 +149,7 @@ jobs:
               - dist/devdocs
 
         - save_cache:
-            keys:
-              - m2-{{ .Branch }}-{{ checksum pom.xml }}
-              - m2- # used if checksum fails
+            key: m2-{{ .Branch }}-{{ checksum pom.xml }}
             paths:
                 - ~/.m2
 
@@ -206,8 +203,8 @@ jobs:
 
         - restore_cache:
             keys:
-              - m2-{{ .Branch }}-{{ checksum pom.xml }}
-              - m2- # used if checksum fails
+                - m2-{{ .Branch }}-{{ checksum pom.xml }}
+                - m2
 
         - run:
             name: init
@@ -235,9 +232,7 @@ jobs:
             command: ./deploy-dist.sh
 
         - save_cache:
-            keys:
-              - m2-{{ .Branch }}-{{ checksum pom.xml }}
-              - m2- # used if checksum fails
+            key: m2-{{ .Branch }}-{{ checksum pom.xml }}
             paths:
                 - ~/.m2
 
