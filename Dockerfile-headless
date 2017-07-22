@@ -1,4 +1,5 @@
 FROM openjdk:8-jdk
+RUN apt-get update && apt-get install git
 COPY dollar/ /app/
 RUN chmod 755 /app/bin/dollar
 VOLUME /build
