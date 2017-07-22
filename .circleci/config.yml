@@ -21,7 +21,7 @@ jobs:
 
         - restore_cache:
             keys:
-              - m2-{{ checksum pom.xml }}
+              - m2-{{ .Branch }}-{{ checksum pom.xml }}
               - m2- # used if checksum fails
 
         - run:
@@ -34,7 +34,7 @@ jobs:
 
         - save_cache:
             keys:
-              - m2-{{ checksum pom.xml }}
+              - m2-{{ .Branch }}-{{ checksum pom.xml }}
               - m2- # used if checksum fails
             paths:
                 - ~/.m2
@@ -67,7 +67,7 @@ jobs:
 
         - restore_cache:
             keys:
-              - m2-{{ checksum pom.xml }}
+              - m2-{{ .Branch }}-{{ checksum pom.xml }}
               - m2- # used if checksum fails
 
         - run:
@@ -80,7 +80,7 @@ jobs:
 
         - save_cache:
             keys:
-              - m2-{{ checksum pom.xml }}
+              - m2-{{ .Branch }}-{{ checksum pom.xml }}
               - m2- # used if checksum fails
             paths:
                 - ~/.m2
@@ -130,7 +130,7 @@ jobs:
 
         - restore_cache:
             keys:
-              - m2-{{ checksum pom.xml }}
+              - m2-{{ .Branch }}-{{ checksum pom.xml }}
               - m2- # used if checksum fails
 
         - run:
@@ -151,7 +151,7 @@ jobs:
 
         - save_cache:
             keys:
-              - m2-{{ checksum pom.xml }}
+              - m2-{{ .Branch }}-{{ checksum pom.xml }}
               - m2- # used if checksum fails
             paths:
                 - ~/.m2
@@ -206,7 +206,7 @@ jobs:
 
         - restore_cache:
             keys:
-              - m2-{{ checksum pom.xml }}
+              - m2-{{ .Branch }}-{{ checksum pom.xml }}
               - m2- # used if checksum fails
 
         - run:
@@ -236,7 +236,7 @@ jobs:
 
         - save_cache:
             keys:
-              - m2-{{ checksum pom.xml }}
+              - m2-{{ .Branch }}-{{ checksum pom.xml }}
               - m2- # used if checksum fails
             paths:
                 - ~/.m2
