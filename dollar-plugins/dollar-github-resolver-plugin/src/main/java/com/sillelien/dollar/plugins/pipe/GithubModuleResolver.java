@@ -29,12 +29,8 @@ import com.sillelien.dollar.deps.DependencyRetriever;
 import com.sillelien.dollar.script.DollarParserImpl;
 import com.sillelien.dollar.script.api.Scope;
 import com.sillelien.dollar.script.util.FileUtil;
-import com.sillelien.github.GHRepository;
-import com.sillelien.github.GitHub;
-import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
-import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -85,31 +81,24 @@ public class GithubModuleResolver implements ModuleResolver {
     }
 
     @NotNull
-    private synchronized static File getFile(@NotNull String uriWithoutScheme) throws IOException, GitAPIException, InterruptedException {
+    private static File getFile(@NotNull String uriWithoutScheme) throws IOException, GitAPIException, InterruptedException {
         log.debug("GithubModuleResolver.getFile(" + uriWithoutScheme + ")");
 
         String[] githubRepo = uriWithoutScheme.split(":");
-        GitHub github = GitHub.connect();
         final String githubUser = githubRepo[0];
-        final GHRepository repository = github.getUser(githubUser).getRepository(githubRepo[1]);
         final String branch = githubRepo[2].length() > 0 ? githubRepo[2] : "master";
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
 
         final File dir = new File((FileUtil.SHARED_RUNTIME_PATH + "/modules/github") + "/" + githubUser + "/" + githubRepo[1] + "/" + branch);
+        final String url = "https://github.com/" + githubRepo[0] + "/" + githubRepo[1] + ".git";
         final File lockFile = new File((FileUtil.SHARED_RUNTIME_PATH + "/modules/github") + "/." + githubUser + "." + githubRepo[1] + "." + branch + ".clone.lock");
         dir.mkdirs();
-        final File gitDir = new File(dir, ".git");
 
-        Repository repoCloneCheck = builder
-                .setGitDir(gitDir)
-                .readEnvironment()
-                .findGitDir()
-                .build();
 
-        if (lockFile.exists() || repoCloneCheck.getRef(branch) != null) {
+        if (lockFile.exists()) {
             log.debug("Lock file exists or branch ready.");
             //Git is annoyingly asynchronous so we wait to make sure the initial clone operation has completely finished
-            if(lockFile.exists()) {
+            if (lockFile.exists()) {
                 log.debug("Lock file still exists so starting grace period before any operation");
                 Thread.sleep(GRACEPERIOD);
             } else {
@@ -118,18 +107,9 @@ public class GithubModuleResolver implements ModuleResolver {
             try (FileChannel channel = new RandomAccessFile(lockFile, "rw").getChannel()) {
 
                 log.debug("Attempting to get lock file {}", lockFile);
-
                 try (FileLock lock = channel.lock()) {
-
-                    Repository localRepo = builder
-                            .setGitDir(gitDir)
-                            .readEnvironment()
-                            .findGitDir()
-                            .build();
-
-                    new Git(localRepo).pull().call();
+                    GitUtil.pull(dir);
                     lock.release();
-
                     log.debug("Lock file {} released", lockFile);
                 } catch (JGitInternalException ie) {
                     log.error(ie.getMessage() + " in dir " + dir, ie);
@@ -137,6 +117,7 @@ public class GithubModuleResolver implements ModuleResolver {
                 } finally {
                     delete(lockFile);
                 }
+
             } catch (OverlappingFileLockException e) {
                 log.error(e.getMessage(), e);
                 throw new DollarException("Attempted to update a module that is currently locked");
@@ -144,33 +125,17 @@ public class GithubModuleResolver implements ModuleResolver {
         } else {
             log.debug("Lock file does not exist for module {} and it is not cloned, so we can assume initial state", uriWithoutScheme);
             Files.createFile(lockFile.toPath());
-            log.debug("Lock file created");
-            String uri = "https://github.com/" + githubRepo[0] + "/" + githubRepo[1];
-            log.debug("Cloning from {}", uri);
-            log.debug("Cleaning directory first");
             delete(dir);
             log.debug("Recreating dir");
             dir.mkdirs();
-            log.debug("Cloning now");
-            Git.cloneRepository()
-                    .setBranch(branch)
-                    .setBare(false)
-                    .setCloneAllBranches(true)
-                    .setDirectory(dir)
-                    .setURI(uri)
-                    .call();
 
-            repoCloneCheck = builder
-                    .setGitDir(gitDir)
-                    .readEnvironment()
-                    .findGitDir()
-                    .build();
-
-            while (repoCloneCheck.getRef(branch) == null) {
-                log.debug("Waiting for branch {}",branch);
-                Thread.sleep(1000);
+            try (FileChannel channel = new RandomAccessFile(lockFile, "rw").getChannel()) {
+                try (FileLock lock = channel.lock()) {
+                    GitUtil.clone(dir, url);
+                    GitUtil.checkout(dir, branch);
+                    lock.release();
+                }
             }
-
 
         }
 
