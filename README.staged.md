@@ -1,5 +1,5 @@
 
-[ ![Binary Distribution](download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.2483.tgz)
+[ ![Binary Distribution](download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.2498.tgz)
 
 # Dollar
 
@@ -25,10 +25,10 @@ Below is a fully functional persistent chat server in Dollar:
 
 # Install
 
-Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.2483.tgz) then
+Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.2498.tgz) then
 
 ```bash
-    tar -zxvf dollar-0.3.2483.tgz
+    tar -zxvf dollar-0.3.2498.tgz
     ./dollar/bin/dollar <filename>.ds
 ```
 
@@ -74,7 +74,7 @@ and
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-xxx</artifactId>
-            <version>0.3.2483</version>
+            <version>0.3.2498</version>
         </dependency>
 ```
 
