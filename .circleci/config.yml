@@ -129,6 +129,7 @@ jobs:
 
         - restore_cache:
             keys:
+              - m2-devdocs-{{ .Branch }}-{{ checksum "pom.xml" }}
               - m2-{{ .Branch }}-{{ checksum "pom.xml" }}
               - m2
 
@@ -149,7 +150,7 @@ jobs:
               - dist
 
         - save_cache:
-            key: m2-{{ .Branch }}-{{ checksum "pom.xml" }}
+            key: m2-devdocs-{{ .Branch }}-{{ checksum "pom.xml" }}
             paths:
                 - ~/.m2
 
@@ -200,6 +201,8 @@ jobs:
 
         - restore_cache:
             keys:
+                - m2-dist-{{ .Branch }}-{{ checksum "pom.xml" }}
+                - m2-devdocs-{{ .Branch }}-{{ checksum "pom.xml" }}
                 - m2-{{ .Branch }}-{{ checksum "pom.xml" }}
                 - m2
 
@@ -229,7 +232,7 @@ jobs:
             command: ./deploy-dist.sh
 
         - save_cache:
-            key: m2-{{ .Branch }}-{{ checksum "pom.xml" }}
+            key: m2-dist-{{ .Branch }}-{{ checksum "pom.xml" }}
             paths:
                 - ~/.m2
 
