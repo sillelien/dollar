@@ -150,7 +150,7 @@ jobs:
         - persist_to_workspace:
             root: .
             paths:
-              - dist
+              - dist/devdocs
 
         - save_cache:
             key: m2-devdocs-{{ .Branch }}-{{ checksum "pom.xml" }}
@@ -171,7 +171,7 @@ jobs:
         - checkout
 
         - attach_workspace:
-            at: dist
+            at: dist/devdocs
 
         - run:
             name: build-docs
@@ -204,7 +204,7 @@ jobs:
         - checkout
 
         - attach_workspace:
-            at: dist
+            at: dist/devdocs
 
         - restore_cache:
             keys:
