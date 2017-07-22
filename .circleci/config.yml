@@ -20,7 +20,9 @@ jobs:
         - checkout
 
         - restore_cache:
-            key: build-dependency-cache
+            keys:
+              - m2-{{ checksum pom.xml }}
+              - m2- # used if checksum fails
 
         - run:
             name: init
@@ -31,7 +33,9 @@ jobs:
             command: ~/build-utils/maven_make_deps.sh
 
         - save_cache:
-            key: build-dependency-cache
+            keys:
+              - m2-{{ checksum pom.xml }}
+              - m2- # used if checksum fails
             paths:
                 - ~/.m2
         - run:
@@ -62,7 +66,9 @@ jobs:
         - checkout
 
         - restore_cache:
-            key: deploy-dependency-cache
+            keys:
+              - m2-{{ checksum pom.xml }}
+              - m2- # used if checksum fails
 
         - run:
             name: init
@@ -73,7 +79,9 @@ jobs:
             command: ./deploy-maven.sh
 
         - save_cache:
-            key: deploy-dependency-cache
+            keys:
+              - m2-{{ checksum pom.xml }}
+              - m2- # used if checksum fails
             paths:
                 - ~/.m2
 
@@ -121,7 +129,9 @@ jobs:
         - checkout
 
         - restore_cache:
-            key: devdocs-dependency-cache
+            keys:
+              - m2-{{ checksum pom.xml }}
+              - m2- # used if checksum fails
 
         - run:
             name: init
@@ -140,7 +150,9 @@ jobs:
               - dist/devdocs
 
         - save_cache:
-            key: devdocs-dependency-cache
+            keys:
+              - m2-{{ checksum pom.xml }}
+              - m2- # used if checksum fails
             paths:
                 - ~/.m2
 
@@ -193,7 +205,9 @@ jobs:
             at: dist/devdocs
 
         - restore_cache:
-            key: dist-dependency-cache
+            keys:
+              - m2-{{ checksum pom.xml }}
+              - m2- # used if checksum fails
 
         - run:
             name: init
@@ -209,11 +223,6 @@ jobs:
             name: build-dist
             command: ./build-dist.sh
 
-        - persist_to_workspace:
-            root: /home/circleci/dollar
-            paths:
-              - dist
-
         - run:
             name: test-dist
             command: |
@@ -226,9 +235,16 @@ jobs:
             command: ./deploy-dist.sh
 
         - save_cache:
-            key: dist-dependency-cache
+            keys:
+              - m2-{{ checksum pom.xml }}
+              - m2- # used if checksum fails
             paths:
                 - ~/.m2
+
+        - persist_to_workspace:
+            root: /home/circleci/dollar
+            paths:
+              - dist
 
 
 
