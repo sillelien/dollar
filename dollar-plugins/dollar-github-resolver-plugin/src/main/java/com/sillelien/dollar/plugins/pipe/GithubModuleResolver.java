@@ -29,9 +29,6 @@ import com.sillelien.dollar.deps.DependencyRetriever;
 import com.sillelien.dollar.script.DollarParserImpl;
 import com.sillelien.dollar.script.api.Scope;
 import com.sillelien.dollar.script.util.FileUtil;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.JGitInternalException;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +66,7 @@ public class GithubModuleResolver implements ModuleResolver {
 //                .removalListener((RemovalListener<String, File>) notification -> delete(notification.getValue()))
                 .build(new CacheLoader<String, File>() {
                     @NotNull
-                    public File load(@NotNull String key) throws IOException, GitAPIException, ExecutionException, InterruptedException {
+                    public File load(@NotNull String key) throws IOException, ExecutionException, InterruptedException {
 
                         return executor.submit(() -> getFile(key)).get();
 
@@ -81,13 +78,12 @@ public class GithubModuleResolver implements ModuleResolver {
     }
 
     @NotNull
-    private static File getFile(@NotNull String uriWithoutScheme) throws IOException, GitAPIException, InterruptedException {
+    private static File getFile(@NotNull String uriWithoutScheme) throws IOException, InterruptedException {
         log.debug("GithubModuleResolver.getFile(" + uriWithoutScheme + ")");
 
         String[] githubRepo = uriWithoutScheme.split(":");
         final String githubUser = githubRepo[0];
         final String branch = githubRepo[2].length() > 0 ? githubRepo[2] : "master";
-        FileRepositoryBuilder builder = new FileRepositoryBuilder();
 
         final File dir = new File((FileUtil.SHARED_RUNTIME_PATH + "/modules/github") + "/" + githubUser + "/" + githubRepo[1] + "/" + branch);
         final String url = "https://github.com/" + githubRepo[0] + "/" + githubRepo[1] + ".git";
@@ -111,9 +107,6 @@ public class GithubModuleResolver implements ModuleResolver {
                     GitUtil.pull(dir);
                     lock.release();
                     log.debug("Lock file {} released", lockFile);
-                } catch (JGitInternalException ie) {
-                    log.error(ie.getMessage() + " in dir " + dir, ie);
-                    throw new DollarException(ie, ie.getMessage() + " in dir " + dir);
                 } finally {
                     delete(lockFile);
                 }

@@ -88,7 +88,7 @@
                         <!--</relocation>-->
                         <relocation>
                             <pattern>org</pattern>
-                            <shadedPattern>dollar.plugin.${plugin.name}.r${buildNumber}.org</shadedPattern>
+                            <shadedPattern>dollar.plugin.${plugin.name}.v${buildNumber}.org</shadedPattern>
                             <excludes>
                                 <exclude>org.apache.log4j.**</exclude>
                                 <exclude>org.apache.camel.**</exclude>

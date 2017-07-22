@@ -47,14 +47,6 @@
             <artifactId>dollar-resolver</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.sillelien</groupId>
-            <artifactId>github-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jgit</groupId>
-            <artifactId>org.eclipse.jgit</artifactId>
-        </dependency>
     </dependencies>
 
     <repositories>
