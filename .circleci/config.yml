@@ -68,7 +68,9 @@ jobs:
 
         - restore_cache:
             keys:
+              - m2-deploy-{{ .Branch }}-{{ checksum "pom.xml" }}
               - m2-{{ .Branch }}-{{ checksum "pom.xml" }}
+              - m2-{{ .Branch }}
               - m2
 
         - run:
@@ -80,7 +82,7 @@ jobs:
             command: ./deploy-maven.sh
 
         - save_cache:
-            key: m2-{{ .Branch }}-{{ checksum "pom.xml" }}
+            key: m2-deploy{{ .Branch }}-{{ checksum "pom.xml" }}
             paths:
                 - ~/.m2
 
@@ -131,6 +133,7 @@ jobs:
             keys:
               - m2-devdocs-{{ .Branch }}-{{ checksum "pom.xml" }}
               - m2-{{ .Branch }}-{{ checksum "pom.xml" }}
+              - m2-{{ .Branch }}
               - m2
 
         - run:
@@ -154,6 +157,10 @@ jobs:
             paths:
                 - ~/.m2
 
+        - save_cache:
+            key: m2-{{ .Branch }}
+            paths:
+                - ~/.m2
 
     docs:
       <<: *defaults
@@ -204,6 +211,7 @@ jobs:
                 - m2-dist-{{ .Branch }}-{{ checksum "pom.xml" }}
                 - m2-devdocs-{{ .Branch }}-{{ checksum "pom.xml" }}
                 - m2-{{ .Branch }}-{{ checksum "pom.xml" }}
+                - m2-{{ .Branch }}
                 - m2
 
         - run:
