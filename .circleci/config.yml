@@ -281,7 +281,7 @@ jobs:
 
         - run:
             name: test
-            command:  ./test-docker.sh || :
+            command:  "./test-docker.sh || :"
 
         - run:
             name: deploy
