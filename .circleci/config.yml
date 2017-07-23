@@ -192,7 +192,7 @@ jobs:
               cp -rf $HOME/dollar/dist/devdocs dev
               jekyll build --source /srv/jekyll/project/dollar-docs/src/main/webapp/ --destination /srv/jekyll/dist/docs
               git add *
-              git commit -a -m "Updated docs from build [ci-skip]"  || :
+              git commit -a -m "Updated docs from build [ci skip]"  || :
               git push || :
               cd /srv/jekyll
 
