@@ -245,7 +245,7 @@ jobs:
                 - ~/.m2
 
         - persist_to_workspace:
-            root: /home/circleci/dollar
+            root: .
             paths:
               - dist
 
@@ -270,6 +270,10 @@ jobs:
             at: dist
 
         - setup_remote_docker
+
+        - run:
+            name: build-dist
+            command: ./build-dist.sh
 
         - run:
             name: build
