@@ -10,6 +10,6 @@ cd .tmp.docker_test
 for file in $(ls | grep -v redis)
 do
     echo "Testing: " $file
-    docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pwd):/build -it sillelien/dollarscript-headless:${RELEASE:-dev}  /build/${file}
+    docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pwd):/build/ -it sillelien/dollarscript-headless:${RELEASE:-dev}  /build/${file}
 done
 
