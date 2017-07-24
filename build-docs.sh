@@ -12,6 +12,10 @@ cd dist
 git clone https://github.com/sillelien/dollar docs
 cd docs
 git checkout gh-pages
+
 ls /root/dollar/project/dollar-docs/src/main/webapp/
-jekyll build --source $DIR/project/dollar-docs/src/main/webapp/ --destination $DIR/dist/docs
+envsubst < $DIR/project/dollar-docs/src/main/webapp/_env.yml > $DIR/project/dollar-docs/src/main/webapp/env.yml
+
+jekyll build --source $DIR/project/dollar-docs/src/main/webapp/ --destination $DIR/dist/docs --config $DIR/project/dollar-docs/src/main/webapp/_config.yml,$DIR/project/dollar-docs/src/main/webapp/env.yml
+
 cp -rf * $DIR/dist/docs || :

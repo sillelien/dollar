@@ -3,6 +3,22 @@ layout: default
 ---
 
 <!--
+  ~    Copyright (c) 2014-2017 Neil Ellis
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~          http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<!--
   ~ Copyright (c) 2014-2015 Neil Ellis
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,15 +39,9 @@ layout: default
     <h1>About</h1>
 
     <div style="width:100%;min-width:440px;display: inline-block;margin-bottom:2em;">
-    <span style="max-width:30%;min-width:100px;display: inline-block;float: right;margin-left:2em">
-        <img src="https://s3-us-west-2.amazonaws.com/tilt-donations/donate_now.png"
-             data-ct-checkout="dollar.supporting-open-source">
-
-    </span>
 
         <p>DollarScript is a scripting language for the Java VM, best suited to small to medium server-side projects.
-            Please
-            checkout the <a href="script.html">Manual</a> for a full introduction to DollarScript.
+            Please checkout the <a href="script.html">Manual</a> for a full introduction to DollarScript.
         </p>
     </div>
     {% highlight bash %}
@@ -52,19 +62,7 @@ layout: default
 
     <br/>
 
-    <p>Get started even faster with DollarScript using our Docker image</p>
-    {% highlight bash %}
-    docker run neilellis/dodo
-    {% endhighlight %}
-
-    <p>And run your own scripts straight from Docker</p>
-    {% highlight bash %}
-    alias dollar='docker run -v "$(pwd):/cwd" neilellis/dodo'
-
-    dollar myapp.ds
-    {% endhighlight %}
-    <!--<a href="http://178.62.78.93/install?url=https%3A%2F%2Fgithub.com%2Fneilellis%2Fdollar"><img-->
-    <!--src="http://178.62.78.93/button.svg"/></a>-->
+    <p>Get started with DollarScript by downloading the <a href="http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-{{site.release}}.tgz">distribution</a>.
 
     <p>The Dollar API is the base of the language and is designed for dynamic programming on the JVM, details can be
         found <a href="api.html">here</a>.</p>
@@ -75,10 +73,6 @@ layout: default
     <p>Oh, and I'm Neil Ellis, the author of both, I lurk on <a href="http://twitter.com/neilellis">Twitter</a> so just
         @mention me and I'll get back to you.</p>
     <br/>
-
-    <a href='https://bintray.com/neilellis/dollar/dollarscript/_latestVersion'><img
-        src='https://api.bintray.com/packages/neilellis/dollar/dollarscript/images/download.svg'></a>
-
 
     <br/>
 
