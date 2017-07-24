@@ -1,4 +1,15 @@
-The artifacts included in the Dollar project can be accessed using
+
+[ ![Binary Distribution](download.png) ](https://bintray.com/sillelien/binary/download_file?file_path=dollar-0.3.2095.tgz)
+
+Latest Distribution:[ ![Binary Distribution](https://api.bintray.com/packages/sillelien/binary/dollar/images/download.svg) ](https://bintray.com/sillelien/binary/dollar/_latestVersion)
+
+Headless Docker Image: [ ![Download](https://api.bintray.com/packages/sillelien/docker/dollarscript-headless/images/download.svg) ](https://bintray.com/sillelien/docker/dollarscript-headless/_latestVersion)
+
+```bash
+alias dollar="docker run sillelien/dollarscript-headless:0.3.2095"
+ ```
+
+The artifacts used to build the Dollar project can be accessed using
 
 ```xml
     <repositories>
@@ -19,7 +30,7 @@ and
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-xxx</artifactId>
-            <version>0.3.1040</version>
+            <version>0.3.2095</version>
         </dependency>
 ```
 
