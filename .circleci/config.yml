@@ -268,18 +268,10 @@ jobs:
             name: init
             command: /home/circleci/.build-init.sh
 
-        - run:
-            name: init-dist-dir
-            command: mkdir -p dist
-
         - attach_workspace:
             at: dist
 
         - setup_remote_docker
-
-        - run:
-            name: build-dist
-            command: ./build-dist.sh
 
         - run:
             name: build
