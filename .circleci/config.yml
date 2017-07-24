@@ -190,6 +190,8 @@ jobs:
               cd docs
               git checkout gh-pages
               cp -rf $HOME/dollar/dist/devdocs dev
+              envsubst < $HOME/dollar/dollar-docs/src/main/webapp/_env.yml > $HOME/dollar/dollar-docs/src/main/webapp/env.yml
+              tail -n +2 $HOME/dollar/dollar-docs/src/main/resources/pages/scripting.md  > $HOME/dollar/dollar-docs/src/main/webapp/scripting.md
               jekyll build --source /srv/jekyll/project/dollar-docs/src/main/webapp/ --destination /srv/jekyll/dist/docs
               git add *
               git commit -a -m "Updated docs from build [ci skip]"  || :
