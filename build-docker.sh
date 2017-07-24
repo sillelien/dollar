@@ -10,9 +10,7 @@ cd $PROJECT/dist
 curl http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-${RELEASE}.tgz > dollar.tgz
 tar -zxvf dollar.tgz
 ls -l dollar
-cd -
 
-cd dist
 cp ${PROJECT}/Dockerfile-windows .
 cp ${PROJECT}/Dockerfile-headless .
 
