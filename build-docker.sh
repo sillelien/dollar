@@ -5,9 +5,10 @@ PROJECT=$(pwd)
 RELEASE=$(cat .release)
 
 mkdir -p $PROJECT/dist/
-curl http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-${RELEASE}.tgz > $PROJECT/dist/dollar.tgz
+
 cd $PROJECT/dist
-tar -zxvf $PROJECT/dist/dollar.tgz
+curl http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-${RELEASE}.tgz > dollar.tgz
+tar -zxvf dollar.tgz
 ls -l dollar
 cd -
 
