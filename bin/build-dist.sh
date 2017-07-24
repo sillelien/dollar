@@ -1,5 +1,5 @@
 #!/bin/bash -eux
-cd $(dirname $0)
+cd $(dirname $0) && cd ..
 PROJECT=$(pwd)
 
 mvn -q -e -T 1C -Dmaven.test.skip -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true install

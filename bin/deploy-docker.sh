@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 set -eux
-cd $(dirname $0)
-DIR=$(pwd)
+cd $(dirname $0) && cd ..
+PROJECT=$(pwd)
 RELEASE=$(cat .release)
 
 #Bintray

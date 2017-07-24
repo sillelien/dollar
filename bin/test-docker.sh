@@ -1,10 +1,9 @@
 #!/bin/bash -eux
-cd $(dirname $0)
-DIR=$(pwd)
+cd $(dirname $0) && cd ..
+PROJECT=$(pwd)
 RELEASE=$(cat .release)
-
 [ -d .tmp.docker_test ] || mkdir .tmp.docker_test
-cp $DIR/dollar-examples/src/main/resources/test_*.ds  .tmp.docker_test
+cp $PROJECT/dollar-examples/src/main/resources/test_*.ds  .tmp.docker_test
 cd .tmp.docker_test
 
 for file in $(ls | grep -v redis)

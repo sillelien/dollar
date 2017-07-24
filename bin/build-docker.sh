@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -eux
-cd $(dirname $0)
+cd $(dirname $0) && cd ..
 PROJECT=$(pwd)
 RELEASE=$(cat .release)
 

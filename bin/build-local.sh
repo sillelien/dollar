@@ -1,4 +1,6 @@
 #!/bin/bash -eu
+cd $(dirname $0) && cd ..
+PROJECT=$(pwd)
 GITHUB_PASSWORD=$(cat ~/.github | tail -1 | cut -d= -f2)
 circleci build -e GITHUB_PASSWORD=$GITHUB_PASSWORD \
                -e GIT_EMAIL=hello@neilellis.me \

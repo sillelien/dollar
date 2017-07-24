@@ -1,5 +1,6 @@
 #!/bin/bash -eux
-cd $(dirname $0)
+cd $(dirname $0) && cd ..
+PROJECT=$(pwd)
 export BINTRAY_USER=neilellis
 export BINTRAY_KEY=${BINTRAY_API_KEY}
 VERSION=$(cat .release)
