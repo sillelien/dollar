@@ -146,7 +146,7 @@ jobs:
             name: build-docs
             command: |
               mkdir -p dist/devdocs
-              ./set-version.sh
+              bin/set-version.sh
               mvn -q -Dmaven.test.skip -DskipDeploy -DstagingDirectory=dist/devdocs/ install site:site site:stage
 
         - persist_to_workspace:
