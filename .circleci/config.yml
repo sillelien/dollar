@@ -43,6 +43,8 @@ jobs:
 
             no_output_timeout: 600
 
+        - store_test_results:
+            path: target/surefire-reports
 
     promote:
       <<: *defaults
@@ -288,6 +290,10 @@ jobs:
         - run:
             name: deploy
             command:  ./deploy-docker.sh
+
+        - store_artifacts:
+            path: dist/dollar-${VERSION}.tgz
+
 
     finish:
       <<: *defaults
