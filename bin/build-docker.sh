@@ -11,8 +11,8 @@ curl http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-${RELEAS
 tar -zxvf dollar.tgz
 ls -l dollar
 
-cp ${PROJECT}/Dockerfile-windows .
-cp ${PROJECT}/Dockerfile-headless .
+cp ${PROJECT}/docker/Dockerfile-windows .
+cp ${PROJECT}/docker/Dockerfile-headless .
 
 #Headless
 docker build -f Dockerfile-headless -t sillelien-docker-docker.bintray.io/dollarscript-headless:${RELEASE:-dev} .
