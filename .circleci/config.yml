@@ -150,9 +150,9 @@ jobs:
               mvn -q -Dmaven.test.skip -DskipDeploy -DstagingDirectory=dist/devdocs/ install site:site site:stage
 
         - persist_to_workspace:
-            root: .
+            root: /home/circleci/dollar/dist
             paths:
-              - dist
+              - devdocs
 
         - save_cache:
             key: m2-devdocs-{{ .Branch }}-{{ checksum "pom.xml" }}
@@ -212,7 +212,7 @@ jobs:
         - checkout
 
         - attach_workspace:
-            at: dist
+            at: /home/circleci/dollar/dist
 
         - restore_cache:
             keys:
@@ -253,9 +253,9 @@ jobs:
                 - ~/.m2
 
         - persist_to_workspace:
-            root: .
+            root: /home/circleci/dollar/dist
             paths:
-              - dist
+              - dollar
 
 
     docker:
@@ -270,7 +270,7 @@ jobs:
             command: /home/circleci/.build-init.sh
 
         - attach_workspace:
-            at: dist
+            at: /home/circleci/dollar/dist
 
         - setup_remote_docker
 
