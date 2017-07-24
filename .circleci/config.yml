@@ -164,6 +164,10 @@ jobs:
             paths:
                 - ~/.m2
 
+        - store_test_results:
+            path: dollar-docs/target/surefire-reports
+
+
     docs:
       <<: *defaults
       docker:
@@ -252,9 +256,6 @@ jobs:
             root: .
             paths:
               - dist
-
-        - store_artifacts:
-            path: dist/dollar-${VERSION}.tgz
 
 
     docker:
