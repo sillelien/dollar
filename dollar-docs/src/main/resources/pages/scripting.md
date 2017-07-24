@@ -20,7 +20,7 @@ The source for this page (minus that header) is [here](scripting.md)
 
 NOTE: At present only Mac OS X and 64 Bit Ubuntu Linux is officially supported, however since Dollar is entirely based in Java it's trivial to port to other systems.
 
-First download the Dollar scripting runtime from [ ![Download](https://api.bintray.com/packages/neilellis/dollar/dollarscript/images/download.svg) ](https://bintray.com/neilellis/dollar/dollarscript/_latestVersion)
+First download the Dollar scripting runtime from [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-{{site.release}}.tgz)
 
 Make sure `dollar/bin` is on your PATH.
 
@@ -39,9 +39,9 @@ testParams := ($2 + " " + $1)
 ##Understanding the Basics
 
 
-DollarScript has it's own peculiarities, mostly these exists to help with it's major function - data/API centric Internet applications. So it's important to understand the basic concepts before getting started.
+DollarScript has it's own peculiarities, mostly these exists to help with it's major target: serverside integration projects. So it's important to understand the basic concepts before getting started.
 
-###Functional Programming
+###Functional Programming and the 'pure' operator
 
 Support for functional programming is included in DollarScript, this will be widened as the language is developed. For now it is provided by the `pure` operator. This signals that an expression or declaration is a pure expression or function.
 
@@ -62,8 +62,9 @@ Note some builtin functions are not themselves pure and will trigger parser erro
 
 ###Reactive Programming
 
-DollarScript expressions are by default *lazy*, this is really important to understand otherwise you may get some surprises. This lazy evaluation is combined with a simple event system to make DollarScript a [reactive programming language](http://en.wikipedia.org/wiki/Reactive_programming) by default.
+DollarScript expressions are by default *lazy*, this is really important to understand otherwise you may get some surprises. This lazy evaluation is combined with a simple event system to make DollarScript a [reactive programming language](http://en.wikipedia.org/wiki/Reactive_programming) by default. 
 
+The simplest way to understand reactive programming is to imagine you are using a spreadsheet. When you say a cell has the value SUM(A1:A4) that value will *react* to changes in any of the cells from A1 to A4. Dollarscript works the same way by default, however you can also *fix* values when you want to write procedural code. 
 
 Let's see some of that behaviour in action:
 
@@ -142,7 +143,7 @@ b=2
 
 ###Assignment
 
-Obviously the declarative/reactive behavior is fantastic for templating, eventing, creating lambda style expressions etc. however a lot of the time we want to simply assign a value and perform a single action on that value.
+Obviously the declarative/reactive behavior is fantastic for templating, eventing, creating lambda style expressions etc. however there are times when we want to simply assign a value and perform a single action on that value.
 
 ```dollar
 
@@ -726,14 +727,9 @@ Let's start by breaking down the module URI. Okay our first part says it's the G
 
 The source for the module can be found here: https://github.com/neilellis/dollar-example-module
 
-You will need to have the following file '~/.github' and it should have contents that look like:
+You will need to have the `git` command on your path and to have access to the repository using `git clone`.
 
-```
-login=neilellis
-password=whatsupdoc
-```
-
-The GitHub resolver will checkout the specified repository and store it under `~/.dollar/repo/<username>/<repo-name>/<branch>` all further interaction with the module will then be done from the checked out version. If you already have a version checked out a git pull will be done to update the branch.
+The GitHub resolver will checkout the specified repository and store it under `~/.dollar/runtime/modules/github/<username>/<repo-name>/<branch>` all further interaction with the module will then be done from the checked out version. If you already have a version checked out a git pull will be done to update the branch.
 
 ```dollar
 hello := module "github:neilellis:dollar-example-module:0.1.0:branch.ds"
@@ -744,6 +740,8 @@ hello := module "github:neilellis:dollar-example-module:0.1.0:branch.ds"
 ###Writing Modules
 
 Modules consist of a file called module.json with the name of the main script for the module and an optional array of Maven style java dependencies. And then one or more DollarScript files.
+
+//TODO: change module.json to module.ds
 
 ```
 {
