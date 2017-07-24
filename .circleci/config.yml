@@ -182,7 +182,7 @@ jobs:
         - run:
             name: build-docs
             command: |
-              set -x
+              set -ex
               git config --global user.email "hello@neilellis.me"
               git config --global user.name "Neil Ellis"
               cd /srv/jekyll
@@ -195,9 +195,9 @@ jobs:
               git clone https://github.com/sillelien/dollar docs
               cd docs
               git checkout gh-pages
-              cp -rf $HOME/dollar/dist/devdocs dev
-              echo "release: $(cat.release)" > $HOME/dollar/dollar-docs/src/main/webapp/env.yml
-              tail -n +2 $HOME/dollar/dollar-docs/src/main/resources/pages/scripting.md  > $HOME/dollar/dollar-docs/src/main/webapp/scripting.md
+              cp -rf $HOME/dist/devdocs dev
+              echo "release: $(cat.release)" > /srv/jekyll/project/dollar-docs/src/main/webapp/env.yml
+              tail -n +2 /srv/jekyll/project/dollar-docs/src/main/resources/pages/scripting.md  > /srv/jekyll/project/dollar-docs/src/main/webapp/scripting.md
               jekyll build --source /srv/jekyll/project/dollar-docs/src/main/webapp/ --destination /srv/jekyll/dist/docs
               git add *
               git commit -a -m "Updated docs from build [ci skip]"  || :
