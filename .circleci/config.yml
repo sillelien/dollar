@@ -295,6 +295,10 @@ jobs:
         - checkout
 
         - run:
+            name: init
+            command: /home/circleci/.build-init.sh
+
+        - run:
             name: finish
             command:  /home/circleci/build-utils/finish-deploy.sh
 
