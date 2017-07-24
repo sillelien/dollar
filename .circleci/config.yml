@@ -330,9 +330,8 @@ workflows:
             - maven-deploy
           filters:
             branches:
-              ignore:
-                - gh-pages
-                - dev
+              only:
+                - master
 
       - maven-deploy:
           requires:
