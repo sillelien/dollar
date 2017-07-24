@@ -326,6 +326,8 @@ workflows:
       - docs:
           requires:
             - devdocs
+            - dist
+            - maven-deploy
           filters:
             branches:
               ignore:
@@ -335,7 +337,7 @@ workflows:
       - maven-deploy:
           requires:
             - build
-            - docs
+            - devdocs
           filters:
             branches:
               only: master
@@ -343,7 +345,7 @@ workflows:
       - promote:
           requires:
             - build
-            - docs
+            - devdocs
           filters:
             branches:
               only: staging
@@ -351,7 +353,6 @@ workflows:
       - dist:
           requires:
             - build
-            - docs
           filters:
             branches:
               only: master
