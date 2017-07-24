@@ -40,11 +40,11 @@ jobs:
         - run:
             name: test
             command: ./build.sh
-
             no_output_timeout: 600
 
         - store_test_results:
-            path: target/surefire-reports
+            path: dollar-examples/target/surefire-reports
+
 
     promote:
       <<: *defaults
@@ -253,6 +253,8 @@ jobs:
             paths:
               - dist
 
+        - store_artifacts:
+            path: dist/dollar-${VERSION}.tgz
 
 
     docker:
@@ -291,8 +293,6 @@ jobs:
             name: deploy
             command:  ./deploy-docker.sh
 
-        - store_artifacts:
-            path: dist/dollar-${VERSION}.tgz
 
 
     finish:
