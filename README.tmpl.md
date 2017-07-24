@@ -27,6 +27,8 @@ Below is a fully functional persistent chat server in Dollar:
     }
 ```
 
+Learn more at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar).
+
 # Install
 
 Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-${RELEASE}.tgz) then
