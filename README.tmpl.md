@@ -1,6 +1,10 @@
 
 [ ![Binary Distribution](download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-${RELEASE}.tgz)
 
+[![GitHub Issues](https://img.shields.io/github/issues/silleien/dollar.svg)](https://github.com/sillelien/dollar/issues) 
+[![Join the chat at https://gitter.im/sillelien/dollar](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sillelien/dollar?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+
 # Dollar
 
 Dollar is an integration centric, reactive dynamic programming language which runs on the JVM. It is currently in development.  It is being designed for the needs of serverside non-web based development, such as integration, messaging etc.
@@ -36,6 +40,7 @@ Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.c
 
 Documentation is at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar).
 
+Q&A: [![GitQ](https://gitq.com/badge.svg)](https://gitq.com/sillelien/dollaar)
 
 # Maven
 
@@ -89,3 +94,4 @@ There is a docker image, but it is in it's infancy so better to work with the  [
 ```bash
 docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pwd):/build -it sillelien/dollarscript-headless:${MAJOR_VERSION}  <filename>.ds
  ```
+$BLURB
