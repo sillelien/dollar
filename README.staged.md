@@ -1,5 +1,5 @@
 
-[ ![Binary Distribution](download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.2921.tgz)
+[ ![Binary Distribution](download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.2925.tgz)
 
 [![GitHub Issues](https://img.shields.io/github/issues/silleien/dollar.svg)](https://github.com/sillelien/dollar/issues) 
 [![Join the chat at https://gitter.im/sillelien/dollar](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sillelien/dollar?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -27,12 +27,14 @@ Below is a fully functional persistent chat server in Dollar:
     }
 ```
 
+Learn more at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar).
+
 # Install
 
-Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.2921.tgz) then
+Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.2925.tgz) then
 
 ```bash
-    tar -zxvf dollar-0.3.2921.tgz
+    tar -zxvf dollar-0.3.2925.tgz
     ./dollar/bin/dollar <filename>.ds
 ```
 
@@ -79,7 +81,7 @@ and
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-xxx</artifactId>
-            <version>0.3.2921</version>
+            <version>0.3.2925</version>
         </dependency>
 ```
 
@@ -90,7 +92,7 @@ Dependencies: [![Dependency Status](https://www.versioneye.com/user/projects/54a
 
 # Docker
 
-There is a docker image, but it is in it's infancy so better to work with the  [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.2921.tgz) for now.
+There is a docker image, but it is in it's infancy so better to work with the  [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.2925.tgz) for now.
 ```bash
 docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pwd):/build -it sillelien/dollarscript-headless:${MAJOR_VERSION}  <filename>.ds
  ```
