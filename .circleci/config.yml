@@ -6,6 +6,7 @@ defaults: &defaults
 
   environment:
     MAJOR_VERSION: 0.3
+    NEXT_MAJOR_VERSION: 0.4
     MAVEN_OPTS: "-Xmx1g -DbuildNumber=${CIRCLE_BUILD_NUM}"
     TZ: "/usr/share/zoneinfo/Europe/London"
 
