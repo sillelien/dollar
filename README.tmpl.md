@@ -6,11 +6,11 @@
 [![GitQ](https://gitq.com/badge.svg)](https://gitq.com/sillelien/dollar)
 [![Dependency Status](https://www.versioneye.com/user/projects/54ae285534ff3e2204000002/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54ae285534ff3e2204000002)
 
-# Dollar
+![Dollarscript](assets/gh-title-dollarscript.png)
 
-Dollar is an integration centric, reactive dynamic programming language which runs on the JVM. It is currently in development.  It is being designed for the needs of serverside non-web based development, such as integration, messaging etc.
+Dollar$cript is an integration centric, reactive dynamic programming language which runs on the JVM. It is currently in development.  It is being designed for the needs of serverside non-web based development, such as integration, messaging etc.
 
-Below is a fully functional persistent chat server in Dollar:
+Below is a fully functional persistent chat server in dollar$cript:
 
 ```dollar
     //Fully working persistent chat server
@@ -30,7 +30,8 @@ Below is a fully functional persistent chat server in Dollar:
 
 Learn more at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar).
 
-# Install
+![Install](assets/gh-title-install.png)
+
 
 Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-${RELEASE}.tgz) then
 
@@ -39,14 +40,14 @@ Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.c
     ./dollar/bin/dollar <filename>.ds
 ```
 
-# Docs
+![Docs](assets/gh-title-docs.png)
 
 Documentation is at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar).
 
 Q&A: https://gitq.com/sillelien/dollar
  
 
-# Maven
+![Maven](assets/gh-title-maven.png)
 
 The artifacts used to build the Dollar project can be accessed using
 
@@ -77,7 +78,7 @@ The artifacts used to build the Dollar project can be accessed using
             </repositories>
 ```
 
-and
+and 
 
 ```xml
         <dependency>
@@ -92,7 +93,7 @@ Dependencies: [![Dependency Status](https://www.versioneye.com/user/projects/54a
 
 
 
-# Docker
+![Docker](assets/gh-title-docker.png)
 
 There is a docker image, but it is in it's infancy so better to work with the  [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-${RELEASE}.tgz) for now.
 ```bash
