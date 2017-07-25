@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.4](https://github.com/sillelien/dollar/tree/0.4) (2017-07-25)
+## [0.3.2988](https://github.com/sillelien/dollar/tree/0.3.2988) (2017-07-25)
 **Closed issues:**
 
 - Line URI Handler [\#8](https://github.com/sillelien/dollar/issues/8)
