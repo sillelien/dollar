@@ -22,6 +22,7 @@ jobs:
 
         - restore_cache:
             keys:
+              - m2-build-{{ .Branch }}-{{ checksum "pom.xml" }}
               - m2-{{ .Branch }}-{{ checksum "pom.xml" }}
               - m2-{{ .Branch }}
               - m2
@@ -35,7 +36,7 @@ jobs:
             command: ~/build-utils/maven_make_deps.sh
 
         - save_cache:
-            key: m2-{{ .Branch }}-{{ checksum "pom.xml" }}
+            key: m2-build-{{ .Branch }}-{{ checksum "pom.xml" }}
             paths:
               - ~/.m2
 
@@ -90,20 +91,6 @@ jobs:
             paths:
                 - ~/.m2
 
-        - save_cache:
-            key: m2-{{ .Branch }}-{{ checksum "pom.xml" }}
-            paths:
-                - ~/.m2
-
-        - save_cache:
-            key: m2-{{ .Branch }}
-            paths:
-                - ~/.m2
-
-        - save_cache:
-            key: m2
-            paths:
-                - ~/.m2
 
 #    docs:
 #      <<: *defaults
@@ -172,6 +159,11 @@ jobs:
 
         - save_cache:
             key: m2-devdocs-{{ .Branch }}-{{ checksum "pom.xml" }}
+            paths:
+                - ~/.m2
+
+        - save_cache:
+            key: m2-{{ .Branch }}-{{ checksum "pom.xml" }}
             paths:
                 - ~/.m2
 
@@ -268,7 +260,17 @@ jobs:
                 - ~/.m2
 
         - save_cache:
-            key: m2-dist-{{ .Branch }}
+            key: m2-{{ .Branch }}-{{ checksum "pom.xml" }}
+            paths:
+                - ~/.m2
+
+        - save_cache:
+            key: m2-{{ .Branch }}
+            paths:
+                - ~/.m2
+
+        - save_cache:
+            key: m2
             paths:
                 - ~/.m2
 
