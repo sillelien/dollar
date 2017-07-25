@@ -1,16 +1,27 @@
 
 [ ![Binary Distribution](download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-${RELEASE}.tgz)
 
-[![GitHub Issues](https://img.shields.io/github/issues/silleien/dollar.svg)](https://github.com/sillelien/dollar/issues) 
-[![Join the chat at https://gitter.im/sillelien/dollar](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sillelien/dollar?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![GitQ](https://gitq.com/badge.svg)](https://gitq.com/sillelien/dollar)
+[![GitHub License](https://img.shields.io/github/license/sillelien/dollar.svg)](https://raw.githubusercontent.com/sillelien/dollar/master/LICENSE) 
+[![GitHub Issues](https://img.shields.io/github/issues/sillelien/dollar.svg)](https://github.com/sillelien/dollar/issues)
+[![GitHub Release](https://img.shields.io/github/release/sillelien/dollar.svg)](https://github.com/sillelien/dollar)
 [![Dependency Status](https://www.versioneye.com/user/projects/54ae285534ff3e2204000002/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54ae285534ff3e2204000002)
 
-![Dollarscript](assets/gh-title-dollarscript.png)
+[![Join the chat at https://gitter.im/sillelien/dollar](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sillelien/dollar?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![GitQ](https://gitq.com/badge.svg)](https://gitq.com/sillelien/dollar)
 
-Dollar$cript is an integration centric, reactive dynamic programming language which runs on the JVM. It is currently in development.  It is being designed for the needs of serverside non-web based development, such as integration, messaging etc.
 
-Below is a fully functional persistent chat server in dollar$cript:
+
+
+![dollar](assets/gh-title-dollar.png)
+
+Dollar is an integration centric, reactive dynamic programming language which runs on the JVM. It is a language built on top of the [dollar-core](https://github.com/sillelien/dollar-core) library which helps to provide a consistent view of multiple dynamic data types. 
+
+It is being designed for the needs of serverside non-web based development, such as integration, messaging etc. It is also an internet centric language where JSON and URIs are first class citizens.
+
+
+**The language is currently in early but active development.**
+
+Below is a fully functional persistent chat server in dollar:
 
 ```dollar
     //Fully working persistent chat server
@@ -99,4 +110,10 @@ There is a docker image, but it is in it's infancy so better to work with the  [
 ```bash
 docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pwd):/build -it sillelien/dollarscript-headless:${MAJOR_VERSION}  <filename>.ds
  ```
+ 
+ [![Docker Registry](https://img.shields.io/docker/pulls/sillelien/dollarscript-headless.svg)](https://registry.hub.docker.com/u/sillelien/dollarscript-headless)
+ 
+ [![Image Layers](https://badge.imagelayers.io/sillelien/dollarscript-headless.svg)](https://imagelayers.io/?images=sillelien/dollarscript-headless:${MAJOR_VERSION} 'Get your own badge on imagelayers.io') 
+
+
 $BLURB
