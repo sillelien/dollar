@@ -31,19 +31,16 @@ jobs:
             name: init
             command: /home/circleci/.build-init.sh
 
-        - run:
-            name: dependencies
-            command: ~/build-utils/maven_make_deps.sh
-
-        - save_cache:
-            key: m2-build-{{ .Branch }}-{{ checksum "pom.xml" }}
-            paths:
-              - ~/.m2
 
         - run:
             name: test
             command: bin/build.sh
             no_output_timeout: 600
+
+        - save_cache:
+            key: m2-build-{{ .Branch }}-{{ checksum "pom.xml" }}
+            paths:
+              - ~/.m2
 
         - store_test_results:
             path: dollar-examples/target/surefire-reports
