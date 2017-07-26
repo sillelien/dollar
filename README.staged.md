@@ -1,5 +1,5 @@
 
-[ ![Binary Distribution](download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.2996.tgz)
+[ ![Binary Distribution](download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3022.tgz)
 
 [![GitHub License](https://img.shields.io/github/license/sillelien/dollar.svg)](https://raw.githubusercontent.com/sillelien/dollar/master/LICENSE) 
 [![GitHub Issues](https://img.shields.io/github/issues/sillelien/dollar.svg)](https://github.com/sillelien/dollar/issues)
@@ -16,7 +16,7 @@
 
 Dollar is an integration centric, reactive dynamic programming language which runs on the JVM. It is a language built on top of the [dollar-core](https://github.com/sillelien/dollar-core) library which helps to provide a consistent view of multiple dynamic data types. 
 
-It is being designed for the needs of serverside non-web based development, such as integration, messaging etc. It is also an internet centric language where JSON and URIs are first class citizens.
+It is being designed for the needs of server-side development such as integration, messaging etc. It is also an internet centric language where JSON and URIs are first class citizens.
 
 
 **The language is currently in early but active development.**
@@ -44,10 +44,15 @@ Learn more at [http://sillelien.github.io/dollar](http://sillelien.github.io/dol
 ![Install](assets/gh-title-install.png)
 
 
-Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.2996.tgz) then
+Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3022.tgz) then run the following in your shell:
 
 ```bash
-    tar -zxvf dollar-0.3.2996.tgz
+    tar -zxvf dollar-0.3.3022.tgz
+```
+
+To use dollar:
+
+```bash
     ./dollar/bin/dollar <filename>.ds
 ```
 
@@ -95,7 +100,7 @@ and
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-xxx</artifactId>
-            <version>0.3.2996</version>
+            <version>0.3.3022</version>
         </dependency>
 ```
 
@@ -106,14 +111,14 @@ Dependencies: [![Dependency Status](https://www.versioneye.com/user/projects/54a
 
 ![Docker](assets/gh-title-docker.png)
 
-There is a docker image, but it is in it's infancy so better to work with the  [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.2996.tgz) for now.
+There is a docker image, but it is in it's infancy so better to work with the  [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3022.tgz) for now.
 ```bash
-docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pwd):/build -it sillelien/dollarscript-headless:${MAJOR_VERSION}  <filename>.ds
+docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pwd):/build -it sillelien/dollarscript-headless:0.3  <filename>.ds
  ```
  
  [![Docker Registry](https://img.shields.io/docker/pulls/sillelien/dollarscript-headless.svg)](https://registry.hub.docker.com/u/sillelien/dollarscript-headless)
  
- [![Image Layers](https://badge.imagelayers.io/sillelien/dollarscript-headless.svg)](https://imagelayers.io/?images=sillelien/dollarscript-headless:${MAJOR_VERSION} 'Get your own badge on imagelayers.io') 
+ [![Image Layers](https://badge.imagelayers.io/sillelien/dollarscript-headless.svg)](https://imagelayers.io/?images=sillelien/dollarscript-headless:0.3 'Get your own badge on imagelayers.io') 
 
 
 -------
