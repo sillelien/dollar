@@ -41,8 +41,9 @@ public class ParserTest {
     public static final CircleCiParallelRule className = new CircleCiParallelRule();
 
     @NotNull
-    private static final String[] files = {"bulletin.ds",
-            "example.ds",
+    private static final String[] files = {
+//            "bulletin.ds",
+//            "example.ds",
             "test1.ds",
             "test3.ds",
             "test_arrays.ds",
@@ -79,15 +80,15 @@ public class ParserTest {
 
     }
 
-     public Stream<String> fileNames() {
+     public static Stream<String> fileNames() {
         return Stream.of(files);
     }
 
     @ParameterizedTest
-    @MethodSource("fileNames")
+    @MethodSource(names = "fileNames")
     public void testScript(@NotNull String filename) throws Exception {
         System.out.println("Testing " + filename);
-        new DollarParserImpl(options).parse(getClass().getResourceAsStream(filename), filename, parallel);
+        new DollarParserImpl(options).parse(getClass().getResourceAsStream("/"+filename), filename, parallel);
     }
 
     @Test
