@@ -16,7 +16,7 @@
 
 Dollar is an integration centric, reactive dynamic programming language which runs on the JVM. It is a language built on top of the [dollar-core](https://github.com/sillelien/dollar-core) library which helps to provide a consistent view of multiple dynamic data types. 
 
-It is being designed for the needs of serverside non-web based development, such as integration, messaging etc. It is also an internet centric language where JSON and URIs are first class citizens.
+It is being designed for the needs of server-side development such as integration, messaging etc. It is also an internet centric language where JSON and URIs are first class citizens.
 
 
 **The language is currently in early but active development.**
@@ -44,10 +44,15 @@ Learn more at [http://sillelien.github.io/dollar](http://sillelien.github.io/dol
 ![Install](assets/gh-title-install.png)
 
 
-Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-${RELEASE}.tgz) then
+Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-${RELEASE}.tgz) then run the following in your shell:
 
 ```bash
     tar -zxvf dollar-${RELEASE}.tgz
+```
+
+To use dollar:
+
+```bash
     ./dollar/bin/dollar <filename>.ds
 ```
 
