@@ -28,6 +28,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -65,7 +66,9 @@ public class ParserTest {
             "test_redis.ds",
             "test_strings.ds",
             "test_uris.ds",
-            "test_variables.ds"};
+            "test_variables.ds"
+    };
+
     @NotNull
     private final ParserOptions options = new ParserOptions();
     private boolean parallel;
@@ -99,13 +102,13 @@ public class ParserTest {
 
 
     @Test
+    @ValueSource()
     @Ignore("Regression test")
     public void testOperators() throws Exception {
         DollarStatic.getConfig().failFast(false);
         final List<String>
                 operatorTestFiles =
-                Arrays.asList("divide.all.ds", "plus.all.ds", "plus.minimal.ds", "divide.minimal.ds",
-                        "minus.minimal.ds", "minus.small.ds");
+                Arrays.asList();
         for (String operatorTestFile : operatorTestFiles) {
             System.out.println(operatorTestFile);
             new DollarParserImpl(options).parse(
