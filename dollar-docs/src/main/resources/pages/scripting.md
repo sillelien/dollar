@@ -688,6 +688,19 @@ Reactive behaviour is supported on the Scope object with the listen and notify m
 
 DollarScript support the basic numerical operators +,-,/,*,% as well as #
 
+```dollar
+
+ 1 + 1 <=> 2
+ 3 -2 <=> 1
+ 2 * 2 <=> 4
+ 5 / 4 <=> 1
+ 5 % 4 <=> 1
+ 5.0 /4 <=> 1.25
+ # [1,2,3] <=> 3
+ # 10 <=> 1
+
+```
+
 ###Logical Operators
 
 DollarScript support the basic logical operators &&,||,! as well as the truthy operator `~`

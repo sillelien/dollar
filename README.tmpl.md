@@ -79,18 +79,7 @@ The artifacts used to build the Dollar project can be accessed using
                     <snapshots>
                         <enabled>false</enabled>
                     </snapshots>
-                </repository>
-                <repository>
-                    <id>dollar-s3-snapshot-repo</id>
-                    <name>Component1-s3-snapshot-repo</name>
-                    <url>s3://dollar-repo/snapshot</url>
-                    <releases>
-                        <enabled>false</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </repository>
+                </repository>            
             </repositories>
 ```
 
