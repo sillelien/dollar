@@ -27,7 +27,6 @@ import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
@@ -43,30 +42,6 @@ public class ParserTest {
 
     @NotNull
     private static final String[] files = {
-//            "bulletin.ds",
-//            "example.ds",
-            "test1.ds",
-            "test3.ds",
-            "test_arrays.ds",
-            "test_builtins.ds",
-            "test_casting.ds",
-            "test_concurrency.ds",
-            "test_control_flow.ds",
-            "test_date.ds",
-            "test_fix.ds",
-            "test_iteration.ds",
-            "test_java.ds",
-            "test_logic.ds",
-            "test_modules.ds",
-            "test_numeric.ds",
-            "test_parameters.ds",
-            "test_pure.ds",
-            "test_ranges.ds",
-            "test_reactive.ds",
-            "test_redis.ds",
-            "test_strings.ds",
-            "test_uris.ds",
-            "test_variables.ds"
     };
 
     @NotNull
@@ -88,7 +63,12 @@ public class ParserTest {
     }
 
     @ParameterizedTest
-    @MethodSource(names = "fileNames")
+    @ValueSource(
+//            "bulletin.ds",
+//            "example.ds",
+            strings = {"test1.ds",
+            "test3.ds", "test_arrays.ds", "test_builtins.ds", "test_casting.ds", "test_concurrency.ds", "test_control_flow.ds", "test_date.ds", "test_fix.ds", "test_iteration.ds", "test_java.ds", "test_logic.ds", "test_modules.ds", "test_numeric.ds", "test_parameters.ds", "test_pure.ds", "test_ranges.ds", "test_reactive.ds", "test_redis.ds", "test_strings.ds", "test_uris.ds", "test_variables.ds"})
+
     public void testScript(@NotNull String filename) throws Exception {
         System.out.println("Testing " + filename);
         new DollarParserImpl(options).parse(getClass().getResourceAsStream("/"+filename), filename, parallel);
