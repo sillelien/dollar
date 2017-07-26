@@ -118,7 +118,5 @@ docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pw
  
  [![Docker Registry](https://img.shields.io/docker/pulls/sillelien/dollarscript-headless.svg)](https://registry.hub.docker.com/u/sillelien/dollarscript-headless)
  
- [![Image Layers](https://badge.imagelayers.io/sillelien/dollarscript-headless.svg)](https://imagelayers.io/?images=sillelien/dollarscript-headless:${MAJOR_VERSION} 'Get your own badge on imagelayers.io') 
-
 
 $BLURB
