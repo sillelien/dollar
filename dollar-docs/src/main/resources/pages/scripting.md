@@ -26,7 +26,7 @@ Make sure `dollar/bin` is on your PATH.
 
 Run `dollar <filename>` to execute a Dollar script.
 
-Here is an example of what DollarScript looks like
+Here is an example of what Dollar looks like
 
 ```dollar
 
@@ -39,11 +39,11 @@ testParams := ($2 + " " + $1)
 ##Understanding the Basics
 
 
-DollarScript has it's own peculiarities, mostly these exists to help with it's major target: serverside integration projects. So it's important to understand the basic concepts before getting started.
+Dollar has it's own peculiarities, mostly these exists to help with it's major target: serverside integration projects. So it's important to understand the basic concepts before getting started.
 
 ###Functional Programming and the 'pure' operator
 
-Support for functional programming is included in DollarScript, this will be widened as the language is developed. For now it is provided by the `pure` operator. This signals that an expression or declaration is a pure expression or function.
+Support for functional programming is included in Dollar, this will be widened as the language is developed. For now it is provided by the `pure` operator. This signals that an expression or declaration is a pure expression or function.
 
 In this example we're declaring reverse to be an expression that reverses two values from a supplied array. Because we declare it as `pure` the expression supplied must also be `pure`. To understand what a pure function is please see http://en.wikipedia.org/wiki/Pure_function. Basically it prohibits the reading of external state or the setting of external state. We next swap `[2,1]` within a newly created pure expression, which is subsequently assigned to a. If reverse had not been declared pure it would not be allowed within the pure expression.
 
@@ -62,7 +62,7 @@ Note some builtin functions are not themselves pure and will trigger parser erro
 
 ###Reactive Programming
 
-DollarScript expressions are by default *lazy*, this is really important to understand otherwise you may get some surprises. This lazy evaluation is combined with a simple event system to make DollarScript a [reactive programming language](http://en.wikipedia.org/wiki/Reactive_programming) by default. 
+Dollar expressions are by default *lazy*, this is really important to understand otherwise you may get some surprises. This lazy evaluation is combined with a simple event system to make Dollar a [reactive programming language](http://en.wikipedia.org/wiki/Reactive_programming) by default. 
 
 The simplest way to understand reactive programming is to imagine you are using a spreadsheet. When you say a cell has the value SUM(A1:A4) that value will *react* to changes in any of the cells from A1 to A4. Dollarscript works the same way by default, however you can also *fix* values when you want to write procedural code. 
 
@@ -79,7 +79,13 @@ variableA := 2
 
 In the above example we are declaring (using the declarative operator `:=`) that variableA is current the value 1, we then declare that variableB is the *same as* variableA. So when we change variableA to 2 we also change variableB to 2.
 
-The assertion operator `.:` will throw an assertion error if the value following is either non boolean or not true.
+Before we go any further let's clarify `:=` vs `=`, I have chosen to follow the logic [described here](https://math.stackexchange.com/questions/1838678/confused-about-notation-versus-plain-old) so that the `:=` operator is a definition (and by it's nature reactive) and `=` is an assignment ( not reactive and has a fix depth of 1 - more on that later).
+
+This means that `a := b + 1` translates to **a is defined as b + 1** so a is behaving reactively, changes to b cause a change in the value of a. It also means that `a = b + 1` simply assigns `b + 1` to the variable a, changes to b do not cause changes to a. 
+
+**TL;DR `=` behaves like it's Java equivalent, `:=` doesnt't**
+
+> The assertion operator `.:` will throw an assertion error if the value following is either non boolean or not true.
 
 
 Now let's throw in the causes operator :
@@ -122,7 +128,7 @@ a=4, b=2
 
 Yep, you can write reactive expressions based on collections or arbitrary expressions. When any component changes the right hand side is re-evaluated (the actual value that changed is passed in as $1).
 
-But it's even simpler than that, many of DollarScripts operators are reactive themselves. That means they understand changes to their values. Take `@@` (or `print`) as an example:
+But it's even simpler than that, many of Dollars operators are reactive themselves. That means they understand changes to their values. Take `@@` (or `print`) as an example:
 
 ```dollar
 b=1
@@ -173,6 +179,8 @@ variableA = 2
 
 The assignment operator `=` has a 'fix' depth of 1. This means that any expression will be evaluated, but no maps or line blocks will be. It is also not reactive. A fix depth of 2 causes all expressions to be evaluated and evaluates one depth of maps or line blocks.
 
+The assert equals operator `<=>` will compare two values and throw an exception if they are not the same ` a <=> b` is the same as `.: a == b`**
+
 ```dollar
 
 lamdaVar = {$1 + 10}
@@ -180,22 +188,19 @@ lamdaVar(5) <=> 15
 
 ```
 
-The assert equals operator `<=>` will compare two values and throw an exception if they are not the same.
-
-
-It's important to note that all values in DollarScript are immutable - that means if you wish to change the value of a variable you *must* __reassign__ a new value to the variable. For example `v++` would return the value of `v+1` it does not increment v. If however you want to assign a constant value, one that is both immutable and cannot be reassigned, just use the `const` modifier at the variable assignment (this does not make sense for declarations, so is only available on assignments).
+> It's important to note that all values in Dollar are immutable - that means if you wish to change the value of a variable you *must* __reassign__ a new value to the variable. For example `v++` would return the value of `v+1` it does not increment v. If however you want to assign a constant value, one that is both immutable and cannot be reassigned, just use the `const` modifier at the variable assignment (this does not make sense for declarations, so is only available on assignments).
 
 ```dollar
 const MEDIUM = 23
 // MEDIUM= 4 would now produce an error
 ```
 
-So `:=` supports the full reactive behaviour of Dollar, i.e. it is a declaration not a value assignment, and `=` is used to nail down a particular value or reduce the reactive behaviour. Later we'll come across the fix operator `&` which instructs DollarScript to fix a value completely . More on that later.
+So `:=` supports the full reactive behaviour of Dollar, i.e. it is a declaration not a value assignment, and `=` is used to nail down a particular value or reduce the reactive behaviour. Later we'll come across the fix operator `&` which instructs Dollar to fix a value completely . More on that later.
 
 ###Blocks
 
 ####Line Block
-DollarScript supports several block types, the first is the 'line block' a line block lies between `{` and `}` and is separated by either newlines or `;` characters.
+Dollar supports several block types, the first is the 'line block' a line block lies between `{` and `}` and is separated by either newlines or `;` characters.
 
 ```dollar
 
@@ -284,7 +289,7 @@ pair2 := "second" : "World";
 
 ###Lists
 
-DollarScript's lists are pretty similar to JavaScript arrays. They are defined using the `[1,2,3]` style syntax and accessed using the `x[y]` subscript syntax.
+Dollar's lists are pretty similar to JavaScript arrays. They are defined using the `[1,2,3]` style syntax and accessed using the `x[y]` subscript syntax.
 
 ```dollar
 .: [1,2,3] + 4 == [1,2,3,4];
@@ -297,7 +302,7 @@ DollarScript's lists are pretty similar to JavaScript arrays. They are defined u
 
 ```
 
-*Note we're using the assert equals or `<=>` operator here, this is a combination of `.:` and `==` that will cause an error if the two values are not equal.*
+> Note we're using the assert equals or `<=>` operator here, this is a combination of `.:` and `==` that will cause an error if the two values are not equal.
 
 You can count the size of the list using the size operator `#`.
 
@@ -305,7 +310,7 @@ You can count the size of the list using the size operator `#`.
 #[1,2,3,4] <=> 4
 ```
 
-DollarScript maps are also associative arrays (like JavaScript) allowing you to request members from them using the list subscript syntax
+Dollar maps are also associative arrays (like JavaScript) allowing you to request members from them using the list subscript syntax
 
 ```dollar
 {"key1":1,"key2":2} ["key"+1] <=> 1
@@ -318,7 +323,7 @@ As you can see from the example you can request a key/value pair (or Tuple if yo
 
 ###Ranges
 
-DollarScript (at present) supports numerical and character ranges
+Dollar (at present) supports numerical and character ranges
 
 ```dollar
 
@@ -338,16 +343,33 @@ a=1/0
 .: errorHappened
 ```
 
+###Error Handling
+
+Logging is done by the `print`,`debug` and `err` keywords and the `@@`,`!!` and `??` operators.
+
+| Keyword  | Operator |
+| -------- | -------- |
+| `print`  | `@@`     |
+| `debug`  | `!!`     |
+| `err`    | `??`     |
+
+
+```dollar
+@@ "I'm a stdout message"
+!! "I'm a debug message"
+?? "I'm an error message"
+```
+
 ##Type System
 ###Intro
-Although DollarScript is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, INTEGER,DECIMAL, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
+Although Dollar is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, INTEGER,DECIMAL, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
 
 ```dollar
 .: "Hello World" is String
 .: ["Hello World"] is List
 ```
 
-###Date
+###DATE
 
 Dollar supports a decimal date system where each day is 1.0. This means it's possible to add and remove days from a date using simple arithmetic.
 
@@ -374,7 +396,7 @@ Valid values are those from `java.time.temporal.ChronoField`
 NANO_OF_SECOND, NANO_OF_DAY, MICRO_OF_SECOND, MICRO_OF_DAY, MILLI_OF_SECOND, MILLI_OF_DAY, SECOND_OF_MINUTE, SECOND_OF_DAY, MINUTE_OF_HOUR, MINUTE_OF_DAY, HOUR_OF_AMPM, CLOCK_HOUR_OF_AMPM, HOUR_OF_DAY, CLOCK_HOUR_OF_DAY, AMPM_OF_DAY, DAY_OF_WEEK, ALIGNED_DAY_OF_WEEK_IN_MONTH, ALIGNED_DAY_OF_WEEK_IN_YEAR, DAY_OF_MONTH, DAY_OF_YEAR, EPOCH_DAY, ALIGNED_WEEK_OF_MONTH, ALIGNED_WEEK_OF_YEAR, MONTH_OF_YEAR, PROLEPTIC_MONTH, YEAR_OF_ERA, YEAR, ERA, INSTANT_SECONDS, OFFSET_SECONDS
 ```
 
-As you can see we can do date arithmetic, but thanks to another DollarScript feature anything that can be specified as xxx(i) can also be written i xxx (where i is an integer or decimal and xxx is an identifier). So we can add days hours and seconds to the date.
+As you can see we can do date arithmetic, but thanks to another Dollar feature anything that can be specified as xxx(i) can also be written i xxx (where i is an integer or decimal and xxx is an identifier). So we can add days hours and seconds to the date.
 
 ```dollar
 @@ DATE() + 1 Day
@@ -389,10 +411,20 @@ fortnight := ($1 * 14)
 
 @@ DATE() + 1 fortnight
 ```
+### STRING
+### INTEGER
+### DECIMAL
+### LIST
+### MAP
+### URI
+### VOID
+### NULL
+### RANGE
+### BOOLEAN
 
-###Constraints
+### Constraints
 
-Although there are no compile type constraints in DollarScript a runtime type system can be built using constraints. Constraints are declared at the time of variable assignment or declaration. A constraint once declared on a variable cannot be changed. The constraint is placed before the variable name at the time of declaration in parenthesis.
+Although there are no compile type constraints in Dollar a runtime type system can be built using constraints. Constraints are declared at the time of variable assignment or declaration. A constraint once declared on a variable cannot be changed. The constraint is placed before the variable name at the time of declaration in parenthesis.
 
 ```dollar
 (it < 100) a = 50
@@ -404,7 +436,7 @@ b=7
 
 The special variables `it` - the current value and `previous` - the previous value, will be available for the constraint.
 
-To build a simple type system simply declare (using `:=`) your type as a boolean expression.
+To build a simple runtime type system simply declare (using `:=`) your type as a boolean expression.
 
 ```dollar
 
@@ -422,15 +454,17 @@ myColor="apple"
 
 ```
 
-Of course since the use of `(it is XXXX)` is very common DollarScript provides a specific runtime type constraint that can be added in conjunction with other constraints. Simply prefix the assignment or decleration with `<XXXX>` where XXXX is the runtime type.
+Of course since the use of `(it is XXXX)` is very common Dollar provides a specific runtime type constraint that can be added in conjunction with other constraints. Simply prefix the assignment or decleration with `<XXXX>` where XXXX is the runtime type.
 
 
 ```dollar
 <string> (#it > 5) s="String value"
 ```
 
+It is intended that the predictive type system, will be in time combined with runtime types to help spot bugs at compile time.
+
 ### Type Coercion
-DollarScript also supports type coercion, this is done using the `as` operator followed by the type to coerce to.
+Dollar also supports type coercion, this is done using the `as` operator followed by the type to coerce to.
 
 
 ```dollar
@@ -479,11 +513,11 @@ true as VOID <=> void
 
 ##Imperative Control Flow
 
-With imperative control flow, the control flow operations are only triggered when the block they are contained within is evaluated. I.e. they behave like control flow in imperative languages. So start with these if you're just learning DollarScript.
+With imperative control flow, the control flow operations are only triggered when the block they are contained within is evaluated. I.e. they behave like control flow in imperative languages. So start with these if you're just learning Dollar.
 
 ###If
 
-DollarScript supports the usual imperative control flow but, unlike some languages, everything is an operator. This is the general rule of DollarScript, everything has a value. DollarScript does not have the concept of statements and expressions, just expressions. This means that you can use control flow in an expression.
+Dollar supports the usual imperative control flow but, unlike some languages, everything is an operator. This is the general rule of Dollar, everything has a value. Dollar does not have the concept of statements and expressions, just expressions. This means that you can use control flow in an expression.
 
 ```dollar
 
@@ -535,7 +569,7 @@ a <=> 10
 
 ###Causes
 
-DollarScript as previously mentioned is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
+Dollar as previously mentioned is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
 
 Let's start with the simplest reactive control flow operator, the '?->' or 'causes' operator.
 
@@ -615,7 +649,7 @@ e=11; e=12; e=13; e=14; e=15; e=16
 
 ##Parameters &amp; Functions
 
-In most programming languages you have the concept of functions and parameters, i.e. you can parametrized blocks of code. In DollarScript you can parameterize *anything*. For example let's just take a simple expression that adds two strings together, in reverse order, and pass in two parameters.
+In most programming languages you have the concept of functions and parameters, i.e. you can parametrized blocks of code. In Dollar you can parameterize *anything*. For example let's just take a simple expression that adds two strings together, in reverse order, and pass in two parameters.
 
 ```dollar
 ($2 + " " + $1)("Hello", "World") <=> "World Hello"
@@ -648,7 +682,7 @@ Yep you can use named parameters, then refer to the values by the names passed i
 
 ##Resources &amp; URIs
 
-URIs are first class citizen's in DollarScript. They refer to a an arbitrary resource, usually remote, that can be accessed using the specified protocol and location. Static URIs can be referred to directly without quotation marks, dynamic URIs can be built by casting to a uri using the `as` operator.
+URIs are first class citizen's in Dollar. They refer to a an arbitrary resource, usually remote, that can be accessed using the specified protocol and location. Static URIs can be referred to directly without quotation marks, dynamic URIs can be built by casting to a uri using the `as` operator.
 
 ```dollar
 posts = << https://jsonplaceholder.typicode.com/posts 
@@ -661,7 +695,7 @@ In this example we've requested a single value (using `<<`) from a uri and assig
 
 ##Using Java
 
-Hopefully you'll find DollarScript a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of Java. To do so, just surround the Java in backticks.
+Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of Java. To do so, just surround the Java in backticks.
 
 ```dollar
 
@@ -673,7 +707,7 @@ java <=> "Hello World"
 
 ```
 
-A whole bunch of imports are done for you automatically (java.util.*, java.math.*) but you will have to fully qualify any thirdparty libs. The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (com.sillelien.dollar.script.api.Scope) object on which you can get and set DollarScript variables.
+A whole bunch of imports are done for you automatically (java.util.*, java.math.*) but you will have to fully qualify any thirdparty libs. The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (com.sillelien.dollar.script.api.Scope) object on which you can get and set Dollar variables.
 
 Reactive behaviour is supported on the Scope object with the listen and notify methods on variables. You'll need to then built your reactivity around those variables or on the `out` object directly (that's a pretty advanced topic).
 
@@ -686,7 +720,9 @@ Reactive behaviour is supported on the Scope object with the listen and notify m
 
 ###Numerical Operators
 
-DollarScript support the basic numerical operators +,-,/,*,% as well as #
+Dollar support the basic numerical operators +,-,/,*,%,++,-- as well as #
+
+**Remember ++ and -- do not change a variable's value they are a shorthand for a+1 and a-1 not a=a+1 or a=a-1**
 
 ```dollar
 
@@ -698,13 +734,48 @@ DollarScript support the basic numerical operators +,-,/,*,% as well as #
  5.0 /4 <=> 1.25
  # [1,2,3] <=> 3
  # 10 <=> 1
+ 10++ <=> 11
+ 10-- <=> 9
 
+```
+
+And similar to Java Dollar coerces types as required:
+
+```dollar
+.: (1 - 1.0) is DECIMAL
+.: (1.0 - 1.0) is DECIMAL
+.: (1.0 - 1) is DECIMAL
+.: (1 - 1) is INTEGER
+
+.: (1 + 1.0) is DECIMAL
+.: (1.0 + 1.0) is DECIMAL
+.: (1.0 + 1) is DECIMAL
+.: (1 + 1) is INTEGER
+
+.: 1 / 1 is INTEGER
+.: 1 / 1.0 is DECIMAL
+.: 2.0 / 1 is DECIMAL
+.: 2.0 / 1.0 is DECIMAL
+
+.: 1 * 1 is INTEGER
+.: 1 * 1.0 is DECIMAL
+.: 2.0 * 1 is DECIMAL
+.: 2.0 * 1.0 is DECIMAL
+
+
+.: 1 % 1 is INTEGER
+.: 1 % 1.0 is DECIMAL
+.: 2.0 % 1 is DECIMAL
+.: 2.0 % 1.0 is DECIMAL
+.: ABS(1) is INTEGER
+.: ABS(1.0) is DECIMAL
 ```
 
 ###Logical Operators
 
-DollarScript support the basic logical operators &&,||,! as well as the truthy operator `~`
+Dollar support the basic logical operators &&,||,! as well as the truthy operator `~` and the default operator `|`.
 
+#### Truthy
 The truthy operator converts any value to a boolean by applying the rule that: void is false, 0 is false, "" is false, empty list is false, empty map is false - all else is true.
 
 ```dollar
@@ -719,6 +790,60 @@ The truthy operator converts any value to a boolean by applying the rule that: v
 .:  ~ {"a" : 1}
 .: ! ~ void
 
+void | "Hello" <=> "Hello"
+1 | "Hello" <=> 1
+
+```
+#### Boolean Operators
+
+The shortcut operators `||` and `&&` work the same as in Java. As do the comparison operators `>`,`<` etc. They also have keyword alternatives such as `and` or `or`.
+
+| Keyword              | Operator | Java Equivalent           |
+| --------             | -------- | ---------                 |
+| `and`                | `&&`     | `&&`                      |
+| `or`                 | `ǀǀ`     | `ǀǀ`                      |
+| `equal`              | `==`     | `.equals()`               |
+| `not-equal`          | `!=`     | `! .equals()`             |
+| `less-than`          | `<`      | `lhs.compareTo(rhs) < 0`  |
+| `greater-than`       | `>`      | `lhs.compareTo(rhs) > 0`  |
+| `less-than-equal`    | `<=`     | `lhs.compareTo(rhs) <= 0` |
+| `greater-than-equal` | `>=`     | `lhs.compareTo(rhs) >= 0` |
+
+
+Examples:
+
+```dollar
+true && true <=> true
+true && false <=> false
+false && true <=> false
+false && false <=> false
+
+
+true || true <=> true
+true || false <=> true
+false || true <=> true
+false || false <=> false
+
+.: 1 < 2
+.: 3 > 2
+.: 1 <= 1
+.: 1 <= 2
+.: 1 > 0
+.: 1 >= 1
+.: 2 >= 1
+.: 1 == 1
+.: "Hello" == "Hello"
+.: "abc" < "abd"
+```
+
+#### Default Operator
+
+The default operator '|' (keyword `default`) returns the left hand side if it is not `VOID` otherwise it returns the right hand side. 
+
+```dollar
+void | "Hello" <=> "Hello"
+1 | "Hello" <=> 1
+void default 2 <=> 2
 ```
 
 
@@ -752,7 +877,7 @@ hello := module "github:neilellis:dollar-example-module:0.1.0:branch.ds"
 ###Module Locators
 ###Writing Modules
 
-Modules consist of a file called module.json with the name of the main script for the module and an optional array of Maven style java dependencies. And then one or more DollarScript files.
+Modules consist of a file called module.json with the name of the main script for the module and an optional array of Maven style java dependencies. And then one or more Dollar files.
 
 //TODO: change module.json to module.ds
 
@@ -763,7 +888,7 @@ Modules consist of a file called module.json with the name of the main script fo
 }
 ```
 
-The DollarScript files should use the export modifier on assignments that it wishes to make available to client applications and it can refer to variables that don't exist, in which case values for those variables will need to be passed as parameters to the module declaration in the client application.
+The Dollar files should use the export modifier on assignments that it wishes to make available to client applications and it can refer to variables that don't exist, in which case values for those variables will need to be passed as parameters to the module declaration in the client application.
 
 
 ```dollar
