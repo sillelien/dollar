@@ -144,10 +144,7 @@ jobs:
 
         - run:
             name: build-docs
-            command: |
-              mkdir -p dist/devdocs
-              bin/set-version.sh
-              mvn -q -Dmaven.test.skip -DskipDeploy -DstagingDirectory=dist/devdocs/ install site:site site:stage
+            command: bin/build-devdocs.sh
 
         - persist_to_workspace:
             root: /home/circleci/dollar/dist
@@ -230,11 +227,6 @@ jobs:
             name: init
             command: /home/circleci/.build-init.sh
 
-        - run:
-            name: prep
-            command: |
-              ~/build-utils/set-version.sh
-              ~/build-utils/create-github-file.sh
 
         - run:
             name: build-dist

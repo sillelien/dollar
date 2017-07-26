@@ -2,6 +2,9 @@
 cd $(dirname $0) && cd ..
 PROJECT=$(pwd)
 
+./bin/set-version.sh
+./bin/create-github-file.sh
+
 mvn -q -e -T 1C -Dmaven.test.skip -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true install
 
 DIST=dist/dollar
