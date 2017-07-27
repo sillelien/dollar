@@ -17,8 +17,8 @@
 package com.sillelien.dollar.docs;
 
 import com.google.common.io.CharStreams;
-import com.sillelien.dollar.script.DollarParserImpl;
-import com.sillelien.dollar.script.api.ParserOptions;
+import dollar.internal.runtime.script.DollarParserImpl;
+import dollar.internal.runtime.script.api.ParserOptions;
 import org.jetbrains.annotations.NotNull;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;

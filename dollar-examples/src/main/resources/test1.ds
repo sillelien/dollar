@@ -33,4 +33,4 @@ d= void | 2;
 @@ [a, b, c] ;
 
 
-//@@ {"test" : 1, "test2" : 2} | 'mvn:com.sillelien.dollar.script.TestPipe:com.sillelien:dollar-script:0-SNAPSHOT'
+//@@ {"test" : 1, "test2" : 2} | 'mvn:dollar.internal.runtime.script.TestPipe:com.sillelien:dollar-script:0-SNAPSHOT'

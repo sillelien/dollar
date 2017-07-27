@@ -709,11 +709,11 @@ java <=> "Hello World"
 
 A whole bunch of imports are done for you automatically (see below) but you will have to fully qualify any thirdparty libs.
  
-> imports `dollar.lang.*``com.sillelien.dollar.script.api.*` `com.sillelien.dollar.api.*` `java.io.*` `java.math.*` `java.net.*` `java.nio.file.*` `java.util.*` `java.util.concurrent.*` `java.util.function.*` `java.util.prefs.*` `java.util.regex.*` `java.util.stream.*`
+> imports `dollar.lang.*``dollar.internal.runtime.script.api.*` `com.sillelien.dollar.api.*` `java.io.*` `java.math.*` `java.net.*` `java.nio.file.*` `java.util.*` `java.util.concurrent.*` `java.util.function.*` `java.util.prefs.*` `java.util.regex.*` `java.util.stream.*`
  
- > static imports `com.sillelien.dollar.api.DollarStatic.*` `com.sillelien.dollar.script.java.JavaScriptingStaticImports.*`
+ > static imports `com.sillelien.dollar.api.DollarStatic.*` `dollar.internal.runtime.script.java.JavaScriptingStaticImports.*`
 
-The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (com.sillelien.dollar.script.api.Scope) object on which you can get and set Dollar variables.
+The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (dollar.internal.runtime.script.api.Scope) object on which you can get and set Dollar variables.
 
 Reactive behaviour is supported on the Scope object with the `listen` and `notify` methods on variables. You'll need to then built your reactivity around those variables or on the `out` object directly (that's a pretty advanced topic).
 

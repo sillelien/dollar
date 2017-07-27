@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2014-2015 Neil Ellis
+  ~    Copyright (c) 2014-2017 Neil Ellis
   ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
   ~
-  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~          http://www.apache.org/licenses/LICENSE-2.0
   ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
   -->
 
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -136,6 +136,10 @@
                             <exclude>com.google.guava:guava</exclude>
                             <exclude>classworlds:classworlds</exclude>
                             <exclude>junit:junit</exclude>
+                            <exclude>org.junit.platform:*:jar:</exclude>
+                            <exclude>org.junit.jupiter:*:jar:</exclude>
+                            <exclude>org.junit.vintage:*:jar:</exclude>
+                            <exclude>org.slf4j:slf4j-api</exclude>
                             <exclude>*:xml-apis</exclude>
                             <exclude>org.apache.maven:lib:tests</exclude>
                             <exclude>log4j:log4j:jar:</exclude>
@@ -155,58 +159,84 @@
                                 <exclude>META-INF/*.INF</exclude>
                                 <exclude>META-INF/license</exclude>
                                 <exclude>com.google.common.**</exclude>
-                                <exclude>dollar.internal.**</exclude>
                             </excludes>
                         </filter>
                     </filters>
                     <relocations>
                         <relocation>
-                            <pattern>com.sillelien.dollar</pattern>
-                            <shadedPattern>dollar.v${buildNumber}</shadedPattern>
-                            <excludes>
-                                <exclude>com.sillelien.dollar.api.**</exclude>
-                                <exclude>com.sillelien.dollar.api.var</exclude>
-                                <exclude>com.sillelien.dollar.script.**</exclude>
-                                <exclude>com.sillelien.dollar.main.**</exclude>
-                                <exclude>com.sillelien.dollar.main.java.**</exclude>
-                                <exclude>com.sillelien.jas.**</exclude>
-                            </excludes>
-                        </relocation>
-                        <relocation>
-                            <pattern>org</pattern>
-                            <shadedPattern>dollar.v${buildNumber}.thirdparty.org</shadedPattern>
+                            <pattern>org.apache</pattern>
+                            <shadedPattern>dollar.internal.apache</shadedPattern>
                             <excludes>
                                 <exclude>org.apache.log4j.**</exclude>
-                                <exclude>org.junit.**</exclude>
-                                <exclude>org.w3c.**</exclude>
-                                <exclude>org.xml.**</exclude>
-                                <exclude>org.slf4j.**</exclude>
-                                <exclude>org.mapdb</exclude>
                             </excludes>
                         </relocation>
                         <relocation>
-                            <pattern>com</pattern>
-                            <shadedPattern>dollar.v${buildNumber}.thirdparty.com</shadedPattern>
-                            <excludes>
-                                <exclude>com.sillelien.dollar.api.**</exclude>
-                                <exclude>com.sillelien.dollar.api.var</exclude>
-                                <exclude>com.sillelien.dollar.script.**</exclude>
-                                <exclude>com.sillelien.dollar.main.**</exclude>
-                                <exclude>com.sillelien.dollar.main.java.**</exclude>
-                                <exclude>com.sillelien.jas.**</exclude>
-                                <exclude>com.google.common.**</exclude>
-                            </excludes>
+                            <pattern>com.mashape.unirest</pattern>
+                            <shadedPattern>dollar.internal.unirest</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>net</pattern>
-                            <shadedPattern>dollar.v${buildNumber}.thirdparty.net</shadedPattern>
-                            <excludes>
-                                <exclude>net.kencochrane.**</exclude>
-                            </excludes>
+                            <pattern>com.github.oxo42.stateless4j</pattern>
+                            <shadedPattern>dollar.internal.stateless4j</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>io</pattern>
-                            <shadedPattern>dollar.v${buildNumber}.thirdparty.io</shadedPattern>
+                            <pattern>com.thoughtworks.xstream</pattern>
+                            <shadedPattern>dollar.internal.xstream</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.fasterxml.jackson</pattern>
+                            <shadedPattern>dollar.internal.jackson</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.beust.jcommander</pattern>
+                            <shadedPattern>dollar.internal.jcommander</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.jparsec</pattern>
+                            <shadedPattern>dollar.internal.jparsec</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.pegdown</pattern>
+                            <shadedPattern>dollar.internal.pegdown</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.sonatype.aether</pattern>
+                            <shadedPattern>dollar.internal.aether</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>io.dropwizard.metrics</pattern>
+                            <shadedPattern>dollar.internal.jackson</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.google.j2objc</pattern>
+                            <shadedPattern>dollar.internal.j2objc</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.google.errorprone</pattern>
+                            <shadedPattern>dollar.internal.errorprone</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.objectweb.asm</pattern>
+                            <shadedPattern>dollar.internal.asm</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.parboiled</pattern>
+                            <shadedPattern>dollar.internal.parboiled</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net.sf.cglib</pattern>
+                            <shadedPattern>dollar.internal.cglib</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.yaml.snakeyaml</pattern>
+                            <shadedPattern>dollar.internal.snakeyaml</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.intellij.lang.annotations</pattern>
+                            <shadedPattern>dollar.internal.intellij.annotations</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.jetbrains.annotations</pattern>
+                            <shadedPattern>dollar.internal.intellij.annotations</shadedPattern>
                         </relocation>
                     </relocations>
                     <transformers>
