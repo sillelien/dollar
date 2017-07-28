@@ -151,6 +151,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
             return scope.getDollarParser().inScope(pure, "assignment-constraint", scope, newScope -> {
                 final var rhsFixed = rhs._fix(1, false);
                 if (useConstraint != null) {
+                    rhs._constrain(useConstraint,constraintSource);
                     newScope.setParameter("it", rhsFixed);
                     newScope.setParameter("previous", scope.get(varName));
                     if (useConstraint.isFalse()) {
