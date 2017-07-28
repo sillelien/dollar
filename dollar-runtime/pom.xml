@@ -174,10 +174,10 @@
                             <pattern>com.mashape.unirest</pattern>
                             <shadedPattern>dollar.internal.unirest</shadedPattern>
                         </relocation>
-                        <relocation>
-                            <pattern>com.github.oxo42.stateless4j</pattern>
-                            <shadedPattern>dollar.internal.stateless4j</shadedPattern>
-                        </relocation>
+                        <!--<relocation>-->
+                            <!--<pattern>com.github.oxo42.stateless4j</pattern>-->
+                            <!--<shadedPattern>dollar.internal.stateless4j</shadedPattern>-->
+                        <!--</relocation>-->
                         <relocation>
                             <pattern>com.thoughtworks.xstream</pattern>
                             <shadedPattern>dollar.internal.xstream</shadedPattern>
@@ -204,7 +204,7 @@
                         </relocation>
                         <relocation>
                             <pattern>io.dropwizard.metrics</pattern>
-                            <shadedPattern>dollar.internal.jackson</shadedPattern>
+                            <shadedPattern>dollar.internal.metrics</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.google.j2objc</pattern>

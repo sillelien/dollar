@@ -279,7 +279,7 @@ class DollarLexer {
                 case "void":
                     return $void();
                 case "null":
-                    return $null(Type.ANY);
+                    return $null(Type._ANY);
                 default:
                     return $(i);
             }
@@ -303,7 +303,7 @@ class DollarLexer {
                             case "no":
                                 return DollarFactory.FALSE;
                             case "null":
-                                return DollarFactory.newNull(Type.ANY);
+                                return DollarFactory.newNull(Type._ANY);
                             case "infinity":
                                 return DollarFactory.INFINITY;
                             case "void":

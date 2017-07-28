@@ -33,11 +33,14 @@ import java.util.List;
 import java.util.Objects;
 
 public class DollarSource extends DollarLambda {
-    @Nullable public static final TypeLearner typeLearner = Plugins.sharedInstance(TypeLearner.class);
-    @Nullable private final Scope scope;
+    @Nullable
+    public static final TypeLearner typeLearner = Plugins.sharedInstance(TypeLearner.class);
+    @Nullable
+    private final Scope scope;
     private final SourceSegment source;
     private List<var> inputs;
-    @Nullable private String operation;
+    @Nullable
+    private String operation;
     private volatile TypePrediction prediction;
 
     public DollarSource(Pipeable lambda, @Nullable Scope scope, SourceSegment source, List<var> inputs,
@@ -68,10 +71,15 @@ public class DollarSource extends DollarLambda {
         this.source = source;
     }
 
-    @Nullable @Override public Object invoke(Object proxy, @NotNull Method method, Object[] args) throws Throwable {
+    @Nullable
+    @Override
+    public Object invoke(Object proxy, @NotNull Method method, Object[] args) throws Throwable {
         try {
             if (Objects.equals(method.getName(), "_source")) {
                 return source;
+            }
+            if (Objects.equals(method.getName(), "_constrain")) {
+                return _constrain((var)proxy, (var)args[0], String.valueOf(args[1]));
             }
             if (Objects.equals(method.getName(), "_predictType")) {
                 if (this.prediction == null) {

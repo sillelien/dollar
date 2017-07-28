@@ -25,12 +25,13 @@ import dollar.internal.runtime.script.SourceSegmentValue;
 import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarParserException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
-import org.jparsec.Token;
-import org.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jparsec.Token;
+import org.jparsec.functors.Map;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
@@ -44,7 +45,8 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
         this.pure = pure;
     }
 
-    @Nullable public Map<? super var, ? extends var> map(@NotNull Token token) {
+    @Nullable
+    public Map<? super var, ? extends var> map(@NotNull Token token) {
         Type type;
         Object[] objects = (Object[]) token.value();
         var constraint;
@@ -59,8 +61,8 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
             type = Type.valueOf(objects[2].toString().toUpperCase());
             constraint = DollarScriptSupport.wrapLambda(source, scope, i -> {
                 return $(scope.getDollarParser().currentScope().getParameter("it")
-                              .is(type) &&
-                         (objects[3] == null || ((var) objects[3]).isTrue()));
+                        .is(type) &&
+                        (objects[3] == null || ((var) objects[3]).isTrue()));
             }, Arrays.asList(), "constraint");
         } else {
             type = null;
@@ -74,8 +76,8 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
         isVolatile = mutability != null && mutability.toString().equals("volatile");
         if (((var) objects[4]).getMetaAttribute("__builtin") != null) {
             throw new DollarParserException("The variable '" +
-                                            objects[4] +
-                                            "' cannot be assigned as this name is the name of a builtin function.");
+                    objects[4] +
+                    "' cannot be assigned as this name is the name of a builtin function.");
         }
         final String varName = objects[4].toString();
 
@@ -87,13 +89,13 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                     final Double probability = prediction.probability(type);
                     if (probability < 0.5 && !prediction.empty()) {
                         System.err.println("Type assertion may fail, expected " +
-                                           type +
-                                           " most likely type is " +
-                                           prediction.probableType() +
-                                           " (" +
-                                           (int) (prediction.probability(prediction.probableType()) * 100) +
-                                           "%) at " +
-                                           source.getSourceMessage());
+                                type +
+                                " most likely type is " +
+                                prediction.probableType() +
+                                " (" +
+                                (int) (prediction.probability(prediction.probableType()) * 100) +
+                                "%) at " +
+                                source.getSourceMessage());
                     }
                 }
 
@@ -110,22 +112,27 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                         scope.set(varName, $void(), false, null, constraintSource, isVolatile, false, pure);
                         Callable<var> callable = () -> $($(rhs.$listen(
                                 i -> scope.set(varName, fix(i[0], false), false,
-                                               useConstraint, constraintSource, isVolatile, false, pure))));
-                        return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(rhs),
-                                                            "listen-assign");
+                                        useConstraint, constraintSource, isVolatile, false, pure))));
+                        return DollarScriptSupport.toLambda(scope, callable, source, constrain(rhs, constraint, constraintSource),
+                                "listen-assign");
 
                     } else if (operator.equals("*=")) {
                         scope.set(varName, $void(), false, null, constraintSource, true, true, pure);
                         Callable<var> callable = () -> $(rhs.$subscribe(
                                 i -> scope.set(varName, fix(i[0], false), false,
-                                               useConstraint, constraintSource, true, false, pure)));
-                        return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(rhs),
-                                                            "subscribe-assign");
+                                        useConstraint, constraintSource, true, false, pure)));
+                        return DollarScriptSupport.toLambda(scope, callable, source, constrain(rhs, constraint, constraintSource),
+                                "subscribe-assign");
                     }
                 }
                 return assign(rhs, objects, constraint, constant, isVolatile, source, constraintSource);
             }
         };
+    }
+
+    @NotNull
+    private List<var> constrain(@NotNull var rhs, var constraint, String source) {
+        return Arrays.asList(rhs._constrain(constraint, source));
     }
 
     private var assign(@NotNull var rhs, Object[] objects, @Nullable var constraint, boolean constant,
@@ -157,9 +164,9 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                     scope.getDollarParser().export(varName, rhsFixed);
                 }
                 return scope.set(varName, rhsFixed, constant,
-                                 constraint, constraintSource, isVolatile, constant, pure);
+                        constraint, constraintSource, isVolatile, constant, pure);
             });
         };
-        return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(rhs), "assignment");
+        return DollarScriptSupport.toLambda(scope, callable, source, constrain(rhs, constraint, constraintSource), "assignment");
     }
 }

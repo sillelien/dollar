@@ -36,7 +36,12 @@ public class DollarParserTest {
 
     @Test
     public void test() throws Exception {
-        new DollarParserImpl(new ParserOptions()).parse(getClass().getResourceAsStream("/test1.ds"), "/test1.ds",
-                                                        false);
+        try {
+            new DollarParserImpl(new ParserOptions()).parse(getClass().getResourceAsStream("/test1.ds"), "/test1.ds",
+                                                            false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

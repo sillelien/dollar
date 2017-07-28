@@ -39,7 +39,12 @@ public class DocTest {
 
     @Test
     public void testDocs() throws Exception {
-        new DollarParserImpl(new ParserOptions()).parseMarkdown(
-                CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/pages/scripting.md"))));
+        try {
+            new DollarParserImpl(new ParserOptions()).parseMarkdown(
+                    CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/pages/scripting.md"))));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

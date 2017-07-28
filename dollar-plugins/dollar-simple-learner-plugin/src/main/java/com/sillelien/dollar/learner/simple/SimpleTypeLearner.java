@@ -22,20 +22,22 @@ import com.sillelien.dollar.api.execution.DollarExecutor;
 import com.sillelien.dollar.api.plugin.Plugins;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.script.TypeLearner;
-import com.sillelien.dollar.api.types.prediction.AnyTypePrediction;
 import com.sillelien.dollar.api.types.prediction.CountBasedTypePrediction;
 import com.sillelien.dollar.api.var;
-import dollar.internal.runtime.script.util.FileUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import dollar.internal.mapdb.DB;
 import dollar.internal.mapdb.DBMaker;
 import dollar.internal.mapdb.HTreeMap;
 import dollar.internal.mapdb.Serializer;
+import dollar.internal.runtime.script.util.FileUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SimpleTypeLearner implements TypeLearner {
 
@@ -87,7 +89,30 @@ public class SimpleTypeLearner implements TypeLearner {
                 String typeStr = type.toString();
                 prediction.addCount(Type.valueOf(typeStr), tally.getOrDefault(typeStr,0L));
                 if (prediction.types().size() > MAX_POSSIBLE_RETURN_VALUES) {
-                    return new AnyTypePrediction();
+                    return new TypePrediction() {
+                        @Override
+                        public boolean empty() {
+                            return false;
+                        }
+
+                        @NotNull
+                        @Override
+                        public Double probability(Type type) {
+                            return 1.0;
+                        }
+
+                        @Nullable
+                        @Override
+                        public Type probableType() {
+                            return Type._ANY;
+                        }
+
+                        @NotNull
+                        @Override
+                        public Set<Type> types() {
+                            return new HashSet<>(Arrays.asList(Type._ANY));
+                        }
+                    };
                 }
             }
         }

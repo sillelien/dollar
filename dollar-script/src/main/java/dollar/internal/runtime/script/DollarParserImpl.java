@@ -761,12 +761,13 @@ public class DollarParserImpl implements DollarParser {
     private Parser<Map<? super var, ? extends var>> assignmentOperator(final Scope scope,
                                                                        @NotNull Parser.Reference<var> ref,
                                                                        boolean pure) {
-        return array(KEYWORD("export").optional(), or(KEYWORD("const"), KEYWORD("volatile")).optional(),
+        return array(KEYWORD("export").optional(),
+                or(KEYWORD("const"), KEYWORD("volatile")).optional(),
                 IDENTIFIER.between(OP("<"), OP(">")).optional(),
                 ref.lazy().between(OP("("), OP(")")).optional(),
-                OP("$").next(ref.lazy().between(OP("("), OP(")")))
-                        .or(IDENTIFIER).or(BUILTIN),
-                or(OP("="), OP("?="), OP("*="))).token().map(new AssignmentOperator(scope, false, pure));
+                OP("$").next(ref.lazy().between(OP("("), OP(")"))).or(IDENTIFIER).or(BUILTIN),
+                or(OP("="), OP("?="), OP("*="))
+        ).token().map(new AssignmentOperator(scope, false, pure));
     }
 
     private Parser<Map<? super var, ? extends var>> declarationOperator(final Scope scope,
