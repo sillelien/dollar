@@ -19,8 +19,8 @@ package dollar.internal.runtime.script;
 import com.sillelien.dollar.api.script.SourceSegment;
 import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.util.FNV;
-import org.jparsec.Token;
 import org.jetbrains.annotations.NotNull;
+import org.jparsec.Token;
 
 public class SourceSegmentValue implements SourceSegment {
     private final Scope scope;
@@ -47,48 +47,60 @@ public class SourceSegmentValue implements SourceSegment {
         this.shortHash = new FNV().fnv1_32(source.getBytes()).toString(36);
     }
 
-    @Override public String getCompleteSource() {
+    @Override
+    public String getCompleteSource() {
         return source;
     }
 
-    @Override public int getLength() {
+    @Override
+    public int getLength() {
         return length;
     }
 
-    @Override public String getShortHash() {
+    @Override
+    public String getShortHash() {
         return shortHash;
     }
 
-    @Override public String getSourceFile() {
+    @Override
+    public String getSourceFile() {
         return sourceFile;
     }
 
-    @NotNull @Override public String getSourceMessage() {
+    @NotNull
+    @Override
+    public String getSourceMessage() {
         int index = getStart();
         int length = getLength();
         if (index < 0 || length < 0) {
             return "<unknown location>";
         }
         String theSource = scope.getSource();
-        int end = theSource.indexOf('\n', index + length);
-        int start = index > 10 ? index - 10 : 0;
+        String[] lines = theSource.substring(0, index).split("\n");
+        int line = lines.length;
+        int column = index == 0 ? 0 : (theSource.charAt(index - 1) == '\n' ? 0 : lines[lines.length - 1].length());
+        int end = index + length >= theSource.length() ? theSource.length() - 1 : theSource.indexOf('\n', index + length);
+        int start = index - column;
         String
                 highlightedSource =
-                "... " +
-                theSource.substring(start, index) +
-                " \u261E " +
-                theSource.substring(index, index + length) +
-                " \u261C " +
-                theSource.substring(index + length, end) +
-                " ..." + " in " + getSourceFile();
-        return highlightedSource.replaceAll("\n", "\\\\n");
+                "\n    " +
+                        theSource.substring(start, index).replaceAll("\n", "\n    ") +
+                        " → " +
+                        theSource.substring(index, index + length) +
+                        " ← " +
+                        theSource.substring(index + length, end).replaceAll("\n", "\n    ") +
+                        "\n\n" + "see " + getSourceFile() + "(" + line + ":" + column + ")\n";
+        return highlightedSource;
     }
 
-    @NotNull @Override public String getSourceSegment() {
+    @NotNull
+    @Override
+    public String getSourceSegment() {
         return scope.getSource().substring(start, start + length);
     }
 
-    @Override public int getStart() {
+    @Override
+    public int getStart() {
         return start; //TODO
     }
 }

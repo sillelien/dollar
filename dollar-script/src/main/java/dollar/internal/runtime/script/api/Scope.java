@@ -35,6 +35,8 @@ public interface Scope {
 
     @Nullable var getConstraint(@NotNull String key);
 
+    String getConstraintSource(@NotNull String key);
+
     DollarParser getDollarParser();
 
     void setDollarParser(DollarParser dollarParser);

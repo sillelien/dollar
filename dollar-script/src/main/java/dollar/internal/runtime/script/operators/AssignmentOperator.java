@@ -31,7 +31,7 @@ import org.jparsec.Token;
 import org.jparsec.functors.Map;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
@@ -100,28 +100,30 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                 }
 
                 final String operator = objects[5].toString();
-
                 if (operator.equals("?=") || operator.equals("*=")) {
+                    final String useSource;
                     var useConstraint;
                     if (constraint != null) {
                         useConstraint = constraint;
+                        useSource= constraintSource;
                     } else {
                         useConstraint = scope.getConstraint(varName);
+                        useSource = scope.getConstraintSource(varName);
                     }
                     if (operator.equals("?=")) {
-                        scope.set(varName, $void(), false, null, constraintSource, isVolatile, false, pure);
+                        scope.set(varName, $void(), false, null, useSource, isVolatile, false, pure);
                         Callable<var> callable = () -> $($(rhs.$listen(
                                 i -> scope.set(varName, fix(i[0], false), false,
-                                        useConstraint, constraintSource, isVolatile, false, pure))));
-                        return DollarScriptSupport.toLambda(scope, callable, source, constrain(rhs, constraint, constraintSource),
+                                        useConstraint, useSource, isVolatile, false, pure))));
+                        return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(constrain(scope, rhs, constraint, useSource)),
                                 "listen-assign");
 
                     } else if (operator.equals("*=")) {
-                        scope.set(varName, $void(), false, null, constraintSource, true, true, pure);
+                        scope.set(varName, $void(), false, null, useSource, true, true, pure);
                         Callable<var> callable = () -> $(rhs.$subscribe(
                                 i -> scope.set(varName, fix(i[0], false), false,
-                                        useConstraint, constraintSource, true, false, pure)));
-                        return DollarScriptSupport.toLambda(scope, callable, source, constrain(rhs, constraint, constraintSource),
+                                        useConstraint, useSource, true, false, pure)));
+                        return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(constrain(scope, rhs, constraint, useSource)),
                                 "subscribe-assign");
                     }
                 }
@@ -131,8 +133,22 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
     }
 
     @NotNull
-    private List<var> constrain(@NotNull var rhs, var constraint, String source) {
-        return Arrays.asList(rhs._constrain(constraint, source));
+    private static var constrain(Scope scope, @NotNull var rhs, var constraint, String source) {
+//        System.err.println("(" + source + ") " + rhs.$type().constraint());
+        validateConstraint(scope, rhs, source);
+        return rhs._constrain(constraint, source);
+    }
+
+    private static void validateConstraint(Scope scope, @NotNull var rhs, String source) {
+        if (!Objects.equals(rhs.$type().constraint(), source)) {
+            if (!rhs.$type().constraint().isEmpty()) {
+                scope.handleError( new DollarScriptException("Trying to assign an invalid constrained variable " + rhs.$type().constraint() + " vs " + source,rhs));
+            }
+        } else {
+            if (!rhs.$type().constraint().isEmpty()) {
+//                System.err.println("Fingerprint: " + rhs.$type().constraint());
+            }
+        }
     }
 
     private var assign(@NotNull var rhs, Object[] objects, @Nullable var constraint, boolean constant,
@@ -141,33 +157,42 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                        String constraintSource) {
 
         final String varName = objects[4].toString();
-        Callable<var> callable = () -> {
-            var useConstraint;
-            if (constraint != null) {
-                useConstraint = constraint;
-            } else {
-                useConstraint = scope.getConstraint(varName);
-            }
-            return scope.getDollarParser().inScope(pure, "assignment-constraint", scope, newScope -> {
-                final var rhsFixed = rhs._fix(1, false);
-                if (useConstraint != null) {
-                    rhs._constrain(useConstraint,constraintSource);
-                    newScope.setParameter("it", rhsFixed);
-                    newScope.setParameter("previous", scope.get(varName));
-                    if (useConstraint.isFalse()) {
+        final var useConstraint;
+        final String useSource;
+        if (constraint != null) {
+            useConstraint = constraint;
+            useSource = constraintSource;
+        } else {
+            useConstraint = scope.getConstraint(varName);
+            useSource = scope.getConstraintSource(varName);
+        }
+        Callable<var> callable = new Callable<var>() {
+            @Override
+            public var call() throws Exception {
+
+                return scope.getDollarParser().inScope(pure, "assignment-constraint", scope, newScope -> {
+                    final var rhsFixed = rhs._fix(1, false);
+
+                    if (useConstraint != null) {
+                        newScope.setParameter("it", rhsFixed);
+                        newScope.setParameter("previous", scope.get(varName));
+                        if (useConstraint.isFalse()) {
 //                        System.out.println(rhsFixed.toDollarScript());
 //                        System.out.println(useConstraint.isFalse());
-                        newScope.handleError(new DollarScriptException(
-                                "Constraint failed for variable " + varName + ""));
+                            newScope.handleError(new DollarScriptException(
+                                    "Constraint failed for variable " + varName + ""));
+                        }
                     }
-                }
-                if (objects[0] != null) {
-                    scope.getDollarParser().export(varName, rhsFixed);
-                }
-                return scope.set(varName, rhsFixed, constant,
-                        constraint, constraintSource, isVolatile, constant, pure);
-            });
+                    if (objects[0] != null) {
+                        scope.getDollarParser().export(varName, rhsFixed);
+                    }
+                    return scope.set(varName, rhsFixed, constant,
+                            constraint, useSource, isVolatile, constant, pure);
+                });
+            }
         };
-        return DollarScriptSupport.toLambda(scope, callable, source, constrain(rhs, constraint, constraintSource), "assignment");
+         return scope.getDollarParser().inScope(pure, "constraint-validation", scope, newScope -> {
+             return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(constrain(newScope, rhs, constraint, useSource)), "assignment");
+        });
     }
 }

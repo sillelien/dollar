@@ -22,6 +22,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 public class DollarParserTest {
 
     @Before
@@ -40,8 +42,9 @@ public class DollarParserTest {
             new DollarParserImpl(new ParserOptions()).parse(getClass().getResourceAsStream("/test1.ds"), "/test1.ds",
                                                             false);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+            System.err.println(e.getCause().getMessage());
+            fail(e);
+//            throw e;
         }
     }
 }

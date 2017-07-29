@@ -28,9 +28,9 @@ import dollar.internal.runtime.script.api.exceptions.DollarParserException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.ErrorReporter;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
-import org.jparsec.error.ParserException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jparsec.error.ParserException;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -46,7 +46,8 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
     }
 
 
-    @NotNull @Override
+    @NotNull
+    @Override
     public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull AssertionError e) {
         AssertionError
                 throwable =
@@ -59,7 +60,8 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
         }
     }
 
-    @NotNull @Override
+    @NotNull
+    @Override
     public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull DollarException e) {
 
         final Throwable throwable;
@@ -76,13 +78,15 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
 
     }
 
-    @Override @NotNull public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull Exception e) {
+    @Override
+    @NotNull
+    public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull Exception e) {
         if (e instanceof LambdaRecursionException) {
             throw new DollarParserException(
                     "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
-                    "expressions. The simplest way to solve this is to use the 'fix' operator or the '=' operator to " +
-                    "reduce the amount of lazy evaluation. The error occured at " +
-                    source);
+                            "expressions. The simplest way to solve this is to use the 'fix' operator or the '=' operator to " +
+                            "reduce the amount of lazy evaluation. The error occured at " +
+                            source);
         }
 
         if (e instanceof DollarException && source != null) {
@@ -96,7 +100,8 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
 
     }
 
-    private @NotNull Throwable unravel(@NotNull Throwable e) {
+    private @NotNull
+    Throwable unravel(@NotNull Throwable e) {
         if (e instanceof InvocationTargetException) {
             return e.getCause();
         } else {
@@ -104,7 +109,8 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
         }
     }
 
-    @Override public void handleTopLevel(@NotNull Throwable t) throws Throwable {
+    @Override
+    public void handleTopLevel(@NotNull Throwable t) throws Throwable {
         if (t instanceof AssertionError) {
             System.err.println(t.getMessage());
         }
@@ -113,13 +119,19 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
             System.err.println(t.getMessage());
         }
         if (t instanceof ParserException) {
-            ErrorReporter.report(getClass(), t);
-            System.err.println(t.getMessage());
+//            ErrorReporter.report(getClass(), t);
+            if (t.getCause() instanceof DollarScriptException) {
+                System.err.println(t.getCause().getMessage());
+            } else {
+                System.err.println(t.getMessage());
+            }
         }
         if (t instanceof DollarScriptException) {
             ErrorReporter.report(getClass(), t);
             System.err.println(t.getMessage());
-        } else { throw t; }
+        } else {
+            throw t;
+        }
     }
 
     private void log(@NotNull Throwable e) {

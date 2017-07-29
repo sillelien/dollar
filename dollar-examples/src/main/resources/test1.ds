@@ -47,5 +47,10 @@ greaterThan2 := (it > 2);
 
 (greaterThan3) y = 25;
 (greaterThan2) z = 25;
-x=y;
-x=z;
+//z=0;
+if(false) {
+    error { @@ "Error"}
+    x= y;
+    x= z;
+    x= 50;
+}

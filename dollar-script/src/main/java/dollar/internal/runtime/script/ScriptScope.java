@@ -145,6 +145,19 @@ public class ScriptScope implements Scope {
         return null;
     }
 
+    @Nullable @Override
+    public String getConstraintSource(@NotNull String key) {
+        Scope scope = getScopeForKey(key);
+        if (scope == null) {
+            scope = this;
+        }
+        if (DollarStatic.getConfig().debugScope()) { log.info("Getting constraint for " + key + " in " + scope); }
+        if (scope.getVariables().containsKey(key) && scope.getVariables().get(key).getConstraintSource() != null) {
+            return scope.getVariables().get(key).getConstraintSource();
+        }
+        return null;
+    }
+
     @Nullable @Override public DollarParser getDollarParser() {
         return dollarParser;
     }

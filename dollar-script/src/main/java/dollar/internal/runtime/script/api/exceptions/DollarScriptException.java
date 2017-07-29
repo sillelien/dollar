@@ -17,6 +17,7 @@
 package dollar.internal.runtime.script.api.exceptions;
 
 import com.sillelien.dollar.api.DollarException;
+import com.sillelien.dollar.api.var;
 
 public class DollarScriptException extends DollarException {
     public DollarScriptException(Throwable e) {
@@ -29,5 +30,9 @@ public class DollarScriptException extends DollarException {
 
     public DollarScriptException(Throwable t, String s) {
         super(t, s);
+    }
+
+    public DollarScriptException(String s, var rhs) {
+        super(s+":\n"+rhs._source().getSourceMessage());
     }
 }
