@@ -24,7 +24,7 @@ import com.sillelien.dollar.api.types.ErrorType;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.ParserErrorHandler;
 import dollar.internal.runtime.script.api.Scope;
-import dollar.internal.runtime.script.api.exceptions.DollarParserException;
+import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.ErrorReporter;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
@@ -66,7 +66,7 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
 
         final Throwable throwable;
         if (source != null) {
-            throwable = new DollarParserException(e.getMessage() + " at " + source.getSourceMessage(), e);
+            throwable = new DollarParserError(e.getMessage() + " at " + source.getSourceMessage(), e);
         } else {
             throwable = e;
         }
@@ -82,7 +82,7 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
     @NotNull
     public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull Exception e) {
         if (e instanceof LambdaRecursionException) {
-            throw new DollarParserException(
+            throw new DollarParserError(
                     "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
                             "expressions. The simplest way to solve this is to use the 'fix' operator or the '=' operator to " +
                             "reduce the amount of lazy evaluation. The error occured at " +

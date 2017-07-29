@@ -16,16 +16,21 @@
 
 package dollar.internal.runtime.script.api.exceptions;
 
-public class DollarParserException extends Error {
-    public DollarParserException(Throwable e) {
+import com.sillelien.dollar.api.var;
+
+public class DollarParserError extends Error {
+    public DollarParserError(Throwable e) {
         super(e);
     }
 
-    public DollarParserException(String errorMessage) {
+    public DollarParserError(String errorMessage) {
         super(errorMessage);
     }
 
-    public DollarParserException(String message, Throwable cause) {
+    public DollarParserError(String message, Throwable cause) {
         super(message, cause, true, true);
+    }
+    public DollarParserError(String s, var rhs) {
+        super(s+":\n"+rhs._source().getSourceMessage());
     }
 }

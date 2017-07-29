@@ -23,7 +23,6 @@ import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.SourceSegmentValue;
 import dollar.internal.runtime.script.api.Scope;
-import dollar.internal.runtime.script.api.exceptions.DollarParserException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -75,7 +74,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
         constant = mutability != null && mutability.toString().equals("const");
         isVolatile = mutability != null && mutability.toString().equals("volatile");
         if (((var) objects[4]).getMetaAttribute("__builtin") != null) {
-            throw new DollarParserException("The variable '" +
+            throw new DollarScriptException("The variable '" +
                     objects[4] +
                     "' cannot be assigned as this name is the name of a builtin function.");
         }

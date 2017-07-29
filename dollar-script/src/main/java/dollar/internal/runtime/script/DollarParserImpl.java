@@ -200,7 +200,7 @@ public class DollarParserImpl implements DollarParser {
             return parseMarkdown(file);
         } else {
             String source = new String(Files.readAllBytes(file.toPath()));
-            return parse(new ScriptScope(this, source, file.getName()), source);
+            return parse(new ScriptScope(this, source, file.getAbsolutePath()), source);
         }
 
     }
@@ -225,7 +225,7 @@ public class DollarParserImpl implements DollarParser {
     public var parse(@NotNull Scope scope, @NotNull File file, boolean parallel) throws IOException {
         String source = new String(Files.readAllBytes(file.toPath()));
         this.file = file.getAbsolutePath();
-        return parse(new ScriptScope(scope, file.getName(), source, file.getName()), source);
+        return parse(new ScriptScope(scope, file.getAbsolutePath(), source, file.getName()), source);
     }
 
     @Override
