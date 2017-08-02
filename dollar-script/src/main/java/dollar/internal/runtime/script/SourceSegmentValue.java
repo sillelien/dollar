@@ -17,7 +17,7 @@
 package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.script.SourceSegment;
-import dollar.internal.runtime.script.api.Scope;
+import com.sillelien.dollar.api.Scope;
 import dollar.internal.runtime.script.util.FNV;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -29,14 +29,6 @@ public class SourceSegmentValue implements SourceSegment {
     private final String source;
     private final int start;
     private String shortHash;
-
-    public SourceSegmentValue(Scope scope, String sourceFile, String source, int start, int length) {
-        this.scope = scope;
-        this.sourceFile = sourceFile;
-        this.length = length;
-        this.source = source;
-        this.start = start;
-    }
 
     public SourceSegmentValue(@NotNull Scope scope, @NotNull Token t) {
         this.scope = scope;
@@ -75,20 +67,23 @@ public class SourceSegmentValue implements SourceSegment {
         if (index < 0 || length < 0) {
             return "<unknown location>";
         }
-        String theSource = scope.getSource();
-        String[] lines = theSource.substring(0, index).split("\n");
+        ;
+        if (index + length > source.length()) {
+            throw new AssertionError("Index="+index+" Length="+length+" SourceLength="+source.length()+" Source='"+source+"'");
+        }
+        String[] lines = source.substring(0, index).split("\n");
         int line = lines.length;
-        int column = index == 0 ? 0 : (theSource.charAt(index - 1) == '\n' ? 0 : lines[lines.length - 1].length());
-        int end = index + length >= theSource.length() ? theSource.length() - 1 : theSource.indexOf('\n', index + length);
+        int column = index == 0 ? 0 : (source.charAt(index - 1) == '\n' ? 0 : lines[lines.length - 1].length());
+        int end = index + length >= source.length() ? source.length() - 1 : source.indexOf('\n', index + length);
         int start = index - column;
         String
                 highlightedSource =
                 "\n    " +
-                        theSource.substring(start, index).replaceAll("\n", "\n    ") +
+                        source.substring(start, index).replaceAll("\n", "\n    ") +
                         " → " +
-                        theSource.substring(index, index + length) +
+                        source.substring(index, index + length) +
                         " ← " +
-                        theSource.substring(index + length, end).replaceAll("\n", "\n    ") +
+                        source.substring(index + length, end).replaceAll("\n", "\n    ") +
                         "\n\n" + "see " + getSourceFile() + "(" + line + ":" + column + ")\n";
         return highlightedSource;
     }

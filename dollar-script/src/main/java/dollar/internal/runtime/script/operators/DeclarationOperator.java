@@ -20,24 +20,25 @@ import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SourceSegmentValue;
-import dollar.internal.runtime.script.api.Scope;
+import com.sillelien.dollar.api.Scope;
+import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
-import org.jparsec.Token;
-import org.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jparsec.Token;
+import org.jparsec.functors.Map;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 import static com.sillelien.dollar.api.DollarStatic.$void;
+import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class DeclarationOperator implements Map<Token, Map<? super var, ? extends var>> {
-    private final Scope scope;
     private final boolean pure;
+    private DollarParser parser;
 
-    public DeclarationOperator(Scope scope, boolean pure) {
-        this.scope = scope;
+    public DeclarationOperator(boolean pure, DollarParser parser) {
         this.pure = pure;
+        this.parser = parser;
     }
 
     @Nullable public Map<? super var, ? extends var> map(@NotNull Token token) {
@@ -48,6 +49,8 @@ public class DeclarationOperator implements Map<Token, Map<? super var, ? extend
         } else {
             constraintSource = null;
         }
+        Scope scope = currentScope();
+
         return new Map<var, var>() {
             @NotNull public var map(var v) {
                 var value;
@@ -61,11 +64,11 @@ public class DeclarationOperator implements Map<Token, Map<? super var, ? extend
                 var constraint;
                 if (objects[1] != null) {
                     constraint =
-                            DollarScriptSupport.wrapLambda(new SourceSegmentValue(scope, token), scope, i -> {
+                            DollarScriptSupport.wrapLambda(token, i -> {
                                 final Type type = Type.valueOf(objects[1].toString().toUpperCase());
                                 var it = scope.getParameter("it");
                                 return $(it.is(type));
-                            }, null, null);
+                            }, null, null, parser);
                 } else {
                     constraint = null;
                 }
@@ -80,7 +83,7 @@ public class DeclarationOperator implements Map<Token, Map<? super var, ? extend
                 }
                 value.$listen(i -> scope.notify(variableName));
                 if (objects[0] != null) {
-                    scope.getDollarParser().export(variableName, value);
+                    parser.export(variableName, value);
                 }
                 return $void();
             }

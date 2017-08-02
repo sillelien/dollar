@@ -20,21 +20,21 @@ import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.UnaryOp;
-import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 
 public class SimpleReadOperator extends UnaryOp {
 
 
-    public SimpleReadOperator(Scope scope) {
-        super("simple-read", scope, null);
+    public SimpleReadOperator(DollarParser parser) {
+        super("simple-read",  null, parser);
     }
 
 
     @Override
     public var map(@NotNull var from) {
-        return DollarScriptSupport.wrapReactive(scope, () -> DollarFactory.fromURI(from).$read(), source, operation,
-                                                from);
+        return DollarScriptSupport.wrapReactive( () -> DollarFactory.fromURI(from).$read(), source, operation,
+                                                from, parser);
     }
 
 }

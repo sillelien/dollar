@@ -18,11 +18,10 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SourceSegmentValue;
-import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.DollarParser;
+import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;
@@ -30,9 +29,12 @@ import java.util.concurrent.Callable;
 import static com.sillelien.dollar.api.DollarStatic.$;
 
 public class IfOperator implements Map<Token, Map<var, var>> {
-    private final Scope scope;
 
-    public IfOperator(Scope scope) {this.scope = scope;}
+    private DollarParser parser;
+
+    public IfOperator(DollarParser parser) {
+        this.parser = parser;
+    }
 
     @Override public Map<var, var> map(@NotNull Token token) {
         var lhs = (var) token.value();
@@ -45,9 +47,9 @@ public class IfOperator implements Map<Token, Map<var, var>> {
                     return $(false);
                 }
             };
-            return DollarScriptSupport.toLambda(scope, callable, new SourceSegmentValue(scope, token),
+            return DollarScriptSupport.toLambda( callable, token,
                                                 Arrays.asList(lhs, rhs),
-                                                "if");
+                                                "if", parser);
         };
     }
 }

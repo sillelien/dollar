@@ -19,29 +19,32 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.SourceSegmentValue;
-import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
+import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
-import org.jetbrains.annotations.NotNull;
 
 import static com.sillelien.dollar.api.DollarStatic.$void;
 
 public class AssertOperator implements Map<Token, var> {
-    private final Scope scope;
 
-    public AssertOperator(Scope scope) {this.scope = scope;}
+    private DollarParser parser;
+
+    public AssertOperator(DollarParser parser) {
+        this.parser = parser;
+    }
 
     @Override public var map(@NotNull Token token) {
-        final SourceSegmentValue source = new SourceSegmentValue(scope, token);
+        final SourceSegmentValue source = new SourceSegmentValue(DollarScriptSupport.currentScope(), token);
         Object[] objects = (Object[]) token.value();
-        return DollarScriptSupport.wrapReactive(scope, () -> {
+        return DollarScriptSupport.wrapReactive( () -> {
             if (((var) objects[1]).isTrue()) { return $void(); } else {
                 throw new DollarScriptException("Assertion failed: " +
                                                 (objects[0] != null ? objects[0] : "") +
                                                 " : " +
                                                 source.getSourceMessage());
             }
-        }, source, "assert", (var) objects[1]);
+        }, token, "assert", (var) objects[1], parser);
     }
 }

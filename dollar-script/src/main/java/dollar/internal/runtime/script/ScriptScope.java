@@ -22,17 +22,18 @@ import com.sillelien.dollar.api.collections.MultiHashMap;
 import com.sillelien.dollar.api.collections.MultiMap;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.Scope;
+import com.sillelien.dollar.api.Scope;
 import dollar.internal.runtime.script.api.Variable;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
-import org.jparsec.Parser;
-import org.jparsec.error.ParserException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jparsec.Parser;
+import org.jparsec.error.ParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -56,15 +57,15 @@ public class ScriptScope implements Scope {
     private final String file;
     @Nullable Scope parent;
     private Parser<var> parser;
-    @Nullable private DollarParser dollarParser;
+
     private boolean parameterScope;
 
 
     public ScriptScope(String name) {
         this.parent = null;
-        this.source = "<unknown>";
-        this.file = "<unknown file>";
-        this.dollarParser = null;
+        this.source = null;
+        this.file = null;
+
         id = String.valueOf(name + ":" + counter.incrementAndGet());
     }
 
@@ -72,18 +73,17 @@ public class ScriptScope implements Scope {
         this.parent = parent;
         this.file = file;
         if (source == null) {
-            this.source = "<unknown>";
+            throw new NullPointerException();
         } else {
             this.source = source;
 
         }
-        this.dollarParser = parent.getDollarParser();
+
         id = String.valueOf(name + ":" + counter.incrementAndGet());
     }
 
     public ScriptScope(@Nullable DollarParser dollarParser, @Nullable String source, String file) {
         this.source = source;
-        this.dollarParser = dollarParser;
         this.file = file;
         id = String.valueOf("(top):" + counter.incrementAndGet());
     }
@@ -115,7 +115,7 @@ public class ScriptScope implements Scope {
         } else {
             if (DollarStatic.getConfig().debugScope()) { log.info("Found " + key + " in " + scope); }
         }
-        Variable result = scope.getVariables().get(key);
+        Variable result = (Variable) scope.getVariables().get(key);
 
         if (mustFind) {
             if (result == null) {
@@ -139,8 +139,8 @@ public class ScriptScope implements Scope {
             scope = this;
         }
         if (DollarStatic.getConfig().debugScope()) { log.info("Getting constraint for " + key + " in " + scope); }
-        if (scope.getVariables().containsKey(key) && scope.getVariables().get(key).getConstraint() != null) {
-            return scope.getVariables().get(key).getConstraint();
+        if (scope.getVariables().containsKey(key) && ((Variable)scope.getVariables().get(key)).getConstraint() != null) {
+            return ((Variable)scope.getVariables().get(key)).getConstraint();
         }
         return null;
     }
@@ -152,19 +152,12 @@ public class ScriptScope implements Scope {
             scope = this;
         }
         if (DollarStatic.getConfig().debugScope()) { log.info("Getting constraint for " + key + " in " + scope); }
-        if (scope.getVariables().containsKey(key) && scope.getVariables().get(key).getConstraintSource() != null) {
-            return scope.getVariables().get(key).getConstraintSource();
+        if (scope.getVariables().containsKey(key) && ((Variable)scope.getVariables().get(key)).getConstraintSource() != null) {
+            return ((Variable)scope.getVariables().get(key)).getConstraintSource();
         }
         return null;
     }
 
-    @Nullable @Override public DollarParser getDollarParser() {
-        return dollarParser;
-    }
-
-    @Override public void setDollarParser(@Nullable DollarParser dollarParser) {
-        this.dollarParser = dollarParser;
-    }
 
     @Override public String getFile() {
         return file;
@@ -183,7 +176,7 @@ public class ScriptScope implements Scope {
         } else {
             if (DollarStatic.getConfig().debugScope()) { log.info("Found " + key + " in " + scope); }
         }
-        Variable result = scope.getVariables().get(key);
+        Variable result = ((Variable)scope.getVariables().get(key));
 
         return result != null ? result.getValue() : $void();
     }
@@ -259,7 +252,7 @@ public class ScriptScope implements Scope {
             log.info("Checking for " + key + " in " + scope);
         }
 
-        Variable val = scope.getVariables().get(key);
+        Variable val = ((Variable)scope.getVariables().get(key));
         return val != null;
 
     }
@@ -273,7 +266,7 @@ public class ScriptScope implements Scope {
         } else {
             if (DollarStatic.getConfig().debugScope()) { log.info("Found " + key + " in " + scope); }
         }
-        Variable result = scope.getVariables().get(key);
+        Variable result = ((Variable)scope.getVariables().get(key));
 
         return result != null;
     }
@@ -311,7 +304,7 @@ public class ScriptScope implements Scope {
             throw new NullPointerException();
         }
         if (listeners.containsKey(key)) {
-            listeners.getCollection(key).forEach(var::$notify);
+            new ArrayList<>( listeners.getCollection(key)).forEach(var::$notify);
         }
     }
 
@@ -329,11 +322,11 @@ public class ScriptScope implements Scope {
             scope = this;
         }
         if (DollarStatic.getConfig().debugScope()) { log.info("Setting " + key + " in " + scope); }
-        if (scope.getVariables().containsKey(key) && scope.getVariables().get(key).isReadonly()) {
+        if (scope.getVariables().containsKey(key) && ((Variable)scope.getVariables().get(key)).isReadonly()) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
         if (scope.getVariables().containsKey(key)) {
-            final Variable variable = scope.getVariables().get(key);
+            final Variable variable = ((Variable)scope.getVariables().get(key));
             if (!variable.isVolatile() && variable.getThread() != Thread.currentThread().getId()) {
                 handleError(new DollarScriptException("Concurrency Error: Cannot change the variable " +
                                                       key +

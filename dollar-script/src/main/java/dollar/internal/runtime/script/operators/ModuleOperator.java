@@ -20,17 +20,21 @@ import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.script.ModuleResolver;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarParserImpl;
-import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.DollarParser;
 import org.jparsec.functors.Map;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class ModuleOperator implements Map<Object[], var> {
-    private final Scope scope;
+import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
-    public ModuleOperator(Scope scope) {
-        this.scope = scope;
+public class ModuleOperator implements Map<Object[], var> {
+
+    private DollarParser parser;
+
+    public ModuleOperator(DollarParser parser) {
+
+        this.parser = parser;
     }
 
     @Override
@@ -52,9 +56,7 @@ public class ModuleOperator implements Map<Object[], var> {
         try {
 
             return ModuleResolver.resolveModule(parts[0])
-                    .resolve(parts[1],
-                            scope.getDollarParser()
-                                    .currentScope())
+                    .resolve(parts[1], currentScope(),parser)
                     .pipe(DollarStatic.$(paramMap))
                     ._fix(true);
 

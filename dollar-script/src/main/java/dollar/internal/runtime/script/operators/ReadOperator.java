@@ -18,31 +18,32 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SourceSegmentValue;
-import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.DollarParser;
+import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 public class ReadOperator implements Map<Token, Map<? super var, ? extends var>> {
-    private final Scope scope;
 
-    public ReadOperator(Scope scope) {this.scope = scope;}
+    private DollarParser parser;
 
-    @NotNull @Override
+    public ReadOperator(DollarParser parser) {
+        this.parser = parser;
+    }
+
+    @NotNull
+    @Override
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
         return new Map<var, var>() {
             @Override
             public var map(@NotNull var rhs) {
                 Callable<var> callable = () -> rhs.$read(objects[1] != null,
-                                                         objects[2] != null);
-                return DollarScriptSupport.toLambda(scope, callable, new SourceSegmentValue(scope, token),
-                                                    Arrays.asList(rhs),
-                                                    "read:" + objects[1] + ":" + objects[2]);
+                        objects[2] != null);
+                return DollarScriptSupport.toLambda(callable, token, Arrays.asList(rhs), "read:" + objects[1] + ":" + objects[2], parser);
             }
         };
     }

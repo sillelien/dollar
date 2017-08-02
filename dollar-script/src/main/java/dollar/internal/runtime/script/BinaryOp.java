@@ -18,7 +18,7 @@ package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
-import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.DollarParser;
 import org.jparsec.functors.Binary;
 import org.jparsec.functors.Map2;
 
@@ -27,23 +27,23 @@ import static dollar.internal.runtime.script.DollarScriptSupport.wrapReactive;
 public class BinaryOp implements Binary<var>, Operator {
     private final boolean immediate;
     private final Map2<var, var, var> function;
-    private final Scope scope;
     private final String operation;
     private SourceSegment source;
+    private DollarParser parser;
 
 
-    public BinaryOp(String operation, Map2<var, var, var> function, Scope scope) {
+    public BinaryOp(DollarParser parser, String operation, Map2<var, var, var> function) {
+        this.parser = parser;
         this.operation = operation;
         this.function = function;
-        this.scope = scope;
         this.immediate = false;
     }
 
-    public BinaryOp(boolean immediate, Map2<var, var, var> function, Scope scope, String operation) {
+    public BinaryOp(boolean immediate, Map2<var, var, var> function, String operation, DollarParser parser) {
         this.immediate = immediate;
         this.function = function;
-        this.scope = scope;
         this.operation = operation;
+        this.parser = parser;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class BinaryOp implements Binary<var>, Operator {
             return function.map(lhs, rhs);
         }
         //Lazy evaluation
-        return wrapReactive(scope, () -> function.map(lhs, rhs), source, operation, lhs, rhs);
+        return wrapReactive( () -> function.map(lhs, rhs), source, operation, lhs, rhs, parser);
     }
 
     @Override

@@ -18,40 +18,36 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SourceSegmentValue;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.Scope;
+import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
+import static dollar.internal.runtime.script.DollarScriptSupport.inScope;
 
 public class WhileOperator implements Map<Token, Map<? super var, ? extends var>> {
-    private final Scope scope;
     private final DollarParser parser;
     private final boolean pure;
 
-    public WhileOperator(DollarParser dollarParser, Scope scope, boolean pure) {
+    public WhileOperator(DollarParser dollarParser, boolean pure) {
         this.parser = dollarParser;
-        this.scope = scope;
         this.pure = pure;
     }
 
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         var lhs = (var) token.value();
         return rhs -> {
-            Callable<var> callable = () -> parser.inScope(pure, "while", scope, newScope -> {
-                        while (lhs.isTrue()) {
-                            rhs._fixDeep();
-                        }
-                        return $(false);
-                    });
-            return DollarScriptSupport.toLambda(scope, callable, new SourceSegmentValue(scope, token),
-                                                Arrays.asList(lhs, rhs), "while");
+            Callable<var> callable = () -> inScope(pure, "while", newScope -> {
+                while (lhs.isTrue()) {
+                    rhs._fixDeep();
+                }
+                return $(false);
+            });
+            return DollarScriptSupport.toLambda(callable, token, Arrays.asList(lhs, rhs), "while", parser);
         };
     }
 }

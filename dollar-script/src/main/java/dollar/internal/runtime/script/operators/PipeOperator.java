@@ -18,37 +18,34 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
+import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
-import org.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
+import org.jparsec.functors.Map;
 
 import java.util.Collections;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 
 public class PipeOperator implements Map<var, Map<? super var, ? extends var>> {
-    private final Scope scope;
     private final DollarParser dollarParser;
     private final boolean pure;
 
-    public PipeOperator(DollarParser dollarParser, Scope scope, boolean pure) {
+    public PipeOperator(DollarParser dollarParser, boolean pure) {
         this.dollarParser = dollarParser;
-        this.scope = scope;
         this.pure = pure;
     }
 
     @Override public Map<? super var, ? extends var> map(@NotNull var rhs) {
-        return lhs -> dollarParser.inScope(pure, "pipe", scope, newScope -> {
+        return lhs -> DollarScriptSupport.inScope(pure, "pipe", newScope -> {
             var lhsFix = lhs._fix(false);
             newScope.setParameter("1", lhsFix);
             Object rhsVal = rhs.toJavaObject();
             if ((rhsVal instanceof String)) {
                 String rhsStr = rhsVal.toString();
                 if (rhs.getMetaAttribute("__builtin") != null) {
-                    return Builtins.execute(rhsStr, Collections.singletonList(lhsFix),
-                                            newScope, pure);
+                    return Builtins.execute(rhsStr, Collections.singletonList(lhsFix), pure);
                 } else if (newScope.has(rhsStr)) {
                     return newScope.get(rhsVal.toString())._fix(2, false);
                 } else {

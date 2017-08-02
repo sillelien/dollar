@@ -18,8 +18,7 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SourceSegmentValue;
-import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.DollarParser;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
 
@@ -29,23 +28,22 @@ import java.util.concurrent.Callable;
 import static com.sillelien.dollar.api.DollarStatic.$void;
 
 public class VariableUsageOperator implements Map<Token, Map<? super var, ? extends var>> {
-    private final Scope scope;
     private final boolean pure;
+    private DollarParser parser;
 
-    public VariableUsageOperator(Scope scope, boolean pure) {
-        this.scope = scope;
+    public VariableUsageOperator(boolean pure, DollarParser parser) {
         this.pure = pure;
+        this.parser = parser;
     }
 
     @Override public Map<? super var, ? extends var> map(Token token) {
 
-        final SourceSegmentValue source = new SourceSegmentValue(scope, token);
         return rhs -> {
             Callable<var> callable = () -> {
-                return DollarScriptSupport.getVariable(pure, scope, rhs.toString(), false, $void(), source);
+                return DollarScriptSupport.getVariable(pure, rhs.toString(), false, $void(), token, parser);
             };
-            return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(rhs),
-                                                "variable-usage--" + rhs._source().getSourceSegment());
+            return DollarScriptSupport.toLambda(callable, token, Arrays.asList(rhs),
+                                                "variable-usage--" + rhs._source().getSourceSegment(), parser);
         };
     }
 }

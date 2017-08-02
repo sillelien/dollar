@@ -14,19 +14,12 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script.api.exceptions;
+package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.Scope;
 
-public class VariableNotFoundException extends DollarScriptException {
-    private String variable;
-
-    public VariableNotFoundException(Throwable e) {
-        super(e);
-    }
-
-    public VariableNotFoundException(String variable, Scope scope) {
-        super("Variable not found '" + variable + "' in scope " + scope);
-        this.variable = variable;
+public class BlockScope extends ScriptScope {
+    public BlockScope(Scope scope) {
+        super(scope,scope.getFile(),scope.getSource(),"block-scope");
     }
 }

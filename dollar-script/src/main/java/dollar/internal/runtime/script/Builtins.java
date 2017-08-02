@@ -21,7 +21,6 @@ import com.sillelien.dollar.api.collections.ImmutableList;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.types.ErrorType;
 import com.sillelien.dollar.api.var;
-import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.BuiltinNotFoundException;
 import org.jetbrains.annotations.NotNull;
 
@@ -114,12 +113,12 @@ public class Builtins {
         //todo: this will be used to provide the additional dollar-game library
     }
 
-    @NotNull public static var execute(String name, List<var> parameters, Scope scope, boolean pure) {
+    @NotNull public static var execute(String name, List<var> parameters, boolean pure) {
         final Builtin<var> builtin = map.get(name);
         if (builtin == null) {
             throw new BuiltinNotFoundException(name);
         }
-        return builtin.execute(pure, parameters, scope);
+        return builtin.execute(pure, parameters, DollarScriptSupport.currentScope());
     }
 
     public static boolean exists(String name) {

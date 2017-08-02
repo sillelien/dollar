@@ -18,11 +18,10 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SourceSegmentValue;
-import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.DollarParser;
+import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -30,20 +29,21 @@ import static com.sillelien.dollar.api.DollarStatic.$;
 import static com.sillelien.dollar.api.DollarStatic.$void;
 
 public class WhenOperator implements Map<Token, var> {
-    private final Scope scope;
 
-    public WhenOperator(Scope scope) {this.scope = scope;}
+    private DollarParser parser;
 
-    @Override public var map(@NotNull Token token) {
+    public WhenOperator(DollarParser parser) {
+        this.parser = parser;
+    }
+
+    @Override
+    public var map(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
         var lhs = (var) objects[0];
         var rhs = (var) objects[1];
-        var
-                lambda =
-                DollarScriptSupport.wrapLambda(new SourceSegmentValue(scope, token), scope,
-                                               i -> lhs.isTrue() ? $((Object) rhs.toJavaObject()) : $void(),
-                                               Arrays.asList(lhs, rhs),
-                                               "when");
+        var lambda = DollarScriptSupport.wrapLambda(token, i -> lhs.isTrue() ? $((Object) rhs.toJavaObject()) : $void(),
+                Arrays.asList(lhs, rhs),
+                "when", parser);
         lhs.$listen(i -> {
 //            lambda.$notify();
             if (lhs.isTrue()) {

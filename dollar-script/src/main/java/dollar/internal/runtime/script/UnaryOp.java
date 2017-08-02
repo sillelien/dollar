@@ -18,37 +18,30 @@ package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
-import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.DollarParser;
 import org.jparsec.functors.Map;
 import org.jparsec.functors.Unary;
-import org.jetbrains.annotations.Nullable;
 
 public class UnaryOp implements Unary<var>, Operator {
     protected final String operation;
     private final boolean immediate;
-    @Nullable protected Scope scope;
     protected SourceSegment source;
     private Map<var, var> function;
+    protected DollarParser parser;
 
 
-    public UnaryOp(String operation, @Nullable Scope scope, Map<var, var> function) {
+    public UnaryOp(String operation, Map<var, var> function, DollarParser parser) {
         this.operation = operation;
-        if (scope == null) {
-            throw new NullPointerException();
-        }
-        this.scope = scope;
         this.function = function;
+        this.parser = parser;
         this.immediate = false;
     }
 
-    public UnaryOp(@Nullable Scope scope, boolean immediate, Map<var, var> function, String operation) {
+    public UnaryOp(boolean immediate, Map<var, var> function, String operation, DollarParser parser) {
         this.operation = operation;
-        if (scope == null) {
-            throw new NullPointerException();
-        }
         this.immediate = immediate;
         this.function = function;
-        this.scope = scope;
+        this.parser = parser;
     }
 
     @Override
@@ -59,7 +52,7 @@ public class UnaryOp implements Unary<var>, Operator {
         }
 
         //Lazy evaluation
-        final var lambda = DollarScriptSupport.wrapReactive(scope, () -> function.map(from), source, operation, from);
+        final var lambda = DollarScriptSupport.wrapReactive( () -> function.map(from), source, operation, from, parser);
         return lambda;
 
     }

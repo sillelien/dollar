@@ -16,32 +16,37 @@
 
 package dollar.internal.runtime.script.operators;
 
+import com.sillelien.dollar.api.Scope;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.UnaryOp;
-import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
+import static dollar.internal.runtime.script.DollarScriptSupport.scopes;
+
 public class VariableOperator extends UnaryOp {
 
 
-    public VariableOperator(Scope scope) {
-        super("variable-operator", scope, null);
+    public VariableOperator(Scope scope,DollarParser parser) {
+        super("variable-operator",null, parser);
     }
 
 
     @Override
     public var map(@NotNull var from) {
+        Scope scope = currentScope();
 
-        var lambda = DollarScriptSupport.wrapReactive(scope, () -> {
+        var lambda = DollarScriptSupport.wrapReactive( () -> {
             String key = from.$S();
             boolean numeric = from.number();
 
-            List<Scope> scopes = new ArrayList<>(scope.getDollarParser().scopes());
+            List<Scope> scopes = new ArrayList<>(scopes());
             Collections.reverse(scopes);
             for (Scope scriptScope : scopes) {
                 if (numeric) {
@@ -59,7 +64,7 @@ public class VariableOperator extends UnaryOp {
                 return scope.getParameter(key);
             }
             return scope.get(key);
-        }, source, operation, from);
+        }, source, operation, from, parser);
         scope.listen(from.$S(), lambda);
         lambda.setMetaAttribute("variable", from.$S());
         return lambda;

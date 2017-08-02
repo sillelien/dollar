@@ -20,28 +20,26 @@ import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
 import dollar.internal.runtime.script.DollarParserImpl;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SourceSegmentValue;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.Scope;
+import com.sillelien.dollar.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
-import org.jparsec.Token;
-import org.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jparsec.Token;
+import org.jparsec.functors.Map;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
+import static dollar.internal.runtime.script.DollarScriptSupport.inScope;
 
 public class ParameterOperator implements Map<Token, Map<? super var, ? extends var>> {
-    private final Scope scope;
     private final DollarParser dollarParser;
     private final boolean pure;
 
-    public ParameterOperator(DollarParser dollarParser, Scope scope, boolean pure) {
+    public ParameterOperator(DollarParser dollarParser, boolean pure) {
         this.dollarParser = dollarParser;
-        this.scope = scope;
         this.pure = pure;
     }
 
@@ -57,12 +55,12 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
             }
 
             String constraintSource = null;
-            Callable<var> callable = () -> dollarParser.inScope(pure, "parameter", scope,
+            Callable<var> callable = () -> inScope(pure, "parameter",
                                                                 new Function(rhs, lhs, token,
                                                                              constraintSource));
             var lambda =
-                    DollarScriptSupport.toLambda(scope, callable, new SourceSegmentValue(scope, token), rhs,
-                                                 "parameter");
+                    DollarScriptSupport.toLambda(callable, token, rhs,
+                                                 "parameter", dollarParser);
             //reactive links
             lhs.$listen(i -> lambda.$notify());
             for (var param : rhs) {
@@ -114,9 +112,9 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                 //if not then
                 // assume
                 // it's a variable.
-                if (Builtins.exists(lhsString)) { result = Builtins.execute(lhsString, rhs, newScope, pure); } else {
+                if (Builtins.exists(lhsString)) { result = Builtins.execute(lhsString, rhs, pure); } else {
                     final var valueUnfixed = DollarScriptSupport.getVariable(
-                            pure, newScope, lhsString, false, null, new SourceSegmentValue(scope, token));
+                            pure, lhsString, false, null, token, dollarParser);
                     result = valueUnfixed._fix(2, false);
                 }
             }

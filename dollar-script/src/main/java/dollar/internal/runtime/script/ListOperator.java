@@ -19,34 +19,29 @@ package dollar.internal.runtime.script;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.Scope;
+import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 class ListOperator implements Map<Token, var> {
-    private final Scope scope;
     private final DollarParser dollarParser;
     private final boolean pure;
 
-    public ListOperator(DollarParser dollarParser, Scope scope, boolean pure) {
-        this.dollarParser = dollarParser;
-        this.scope = scope;
+    public ListOperator(DollarParser parser, boolean pure) {
+        this.dollarParser = parser;
         this.pure = pure;
     }
 
-    @Override public var map(@NotNull Token t) {
+    @Override
+    public var map(@NotNull Token t) {
         List<var> o = (List<var>) t.value();
-        final var lambda = DollarScriptSupport.wrapLambda(new SourceSegmentValue(scope, t), scope,
-                                                          parallel -> dollarParser.inScope(pure, "list", scope,
-                                                                                           newScope -> {
-                                                                                               Scope scope2 = newScope;
-                                                                                               return DollarFactory
-                                                                                                       .fromValue(
-                                                                                                               o);
-                                                                                           }), o, "list");
+        final var lambda = DollarScriptSupport.wrapLambda(t,
+                parallel -> DollarScriptSupport.inScope(pure, "list",
+                        newScope -> {
+                            return DollarFactory.fromValue(o);
+                        }), o, "list", dollarParser);
         for (var v : o) {
             v.$listen(i -> lambda.$notify());
         }

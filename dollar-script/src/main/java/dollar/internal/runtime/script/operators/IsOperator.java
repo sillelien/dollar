@@ -19,30 +19,34 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SourceSegmentValue;
-import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.DollarParser;
+import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 
 public class IsOperator implements Map<Token, Map<? super var, ? extends var>> {
-    private final Scope scope;
 
-    public IsOperator(Scope scope) {this.scope = scope;}
+    private DollarParser parser;
 
-    @NotNull @Override public Map<? super var, ? extends var> map(@NotNull Token token) {
+    public IsOperator(DollarParser parser) {
+        this.parser = parser;
+    }
+
+    @NotNull
+    @Override
+    public Map<? super var, ? extends var> map(@NotNull Token token) {
         List<var> rhs = (List<var>) token.value();
-        return lhs -> DollarScriptSupport.wrapReactive(scope, () -> {
+        return lhs -> DollarScriptSupport.wrapReactive(() -> {
             for (var value : rhs) {
                 if (lhs.is(Type.valueOf(value.toString()))) {
                     return $(true);
                 }
             }
             return $(false);
-        }, new SourceSegmentValue(scope, token), "is " + rhs, lhs);
+        }, token, "is " + rhs, lhs, parser);
     }
 }

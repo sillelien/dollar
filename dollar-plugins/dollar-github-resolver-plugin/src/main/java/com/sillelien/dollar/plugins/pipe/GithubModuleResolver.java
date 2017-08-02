@@ -22,12 +22,15 @@ import com.google.common.cache.LoadingCache;
 import com.sillelien.dollar.api.DollarException;
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.Pipeable;
+import com.sillelien.dollar.api.Scope;
 import com.sillelien.dollar.api.collections.ImmutableMap;
 import com.sillelien.dollar.api.script.ModuleResolver;
 import com.sillelien.dollar.api.var;
 import com.sillelien.dollar.deps.DependencyRetriever;
 import dollar.internal.runtime.script.DollarParserImpl;
-import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.ScriptScope;
+import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -151,7 +154,7 @@ public class GithubModuleResolver implements ModuleResolver {
 
     @NotNull
     @Override
-    public <T> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope) throws Exception {
+    public <T,P> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope, P parser) throws Exception {
         log.debug(uriWithoutScheme);
         File dir = repos.get(uriWithoutScheme);
 
@@ -181,14 +184,14 @@ public class GithubModuleResolver implements ModuleResolver {
                             .collect(Collectors.toList()));
 
         }
-        return (params) -> ((Scope) scope).getDollarParser().inScope(false, "github-module", ((Scope) scope), newScope -> {
+        return (params) -> DollarScriptSupport.inScope(false, "github-module", newScope -> {
 
             final ImmutableMap<var, var> paramMap = params[0].$map().toVarMap();
             for (Map.Entry<var, var> entry : paramMap.entrySet()) {
                 newScope.set(entry.getKey().$S(), entry.getValue(), true, null, null, false, false, false);
             }
-            return new DollarParserImpl(((Scope) scope).getDollarParser().options(), classLoader, dir).parse(newScope,
-                    content);
+            return new DollarParserImpl(((DollarParser)parser).options(), classLoader, dir).parse(
+                    new ScriptScope((Scope)scope,  mainFile.getAbsolutePath(),content,"github-module-scope"), content);
         });
     }
 }

@@ -18,7 +18,6 @@ package dollar.internal.runtime.script.java;
 
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.var;
-import dollar.internal.runtime.script.api.Scope;
 import com.sillelien.jas.jproxy.JProxy;
 import com.sillelien.jas.jproxy.JProxyConfig;
 import com.sillelien.jas.jproxy.JProxyScriptEngine;
@@ -36,12 +35,13 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
+import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 /**
  */
 public class JavaScriptingSupport {
 
-    @Nullable public static var compile(@NotNull var in, String java, @NotNull Scope scope) {
+    @Nullable public static var compile(@NotNull var in, String java) {
         JProxyConfig jpConfig = JProxy.createJProxyConfig();
         jpConfig.setEnabled(true)
                 .setRelProxyOnReloadListener((objOld, objNew, proxy, method, args) -> {
@@ -73,7 +73,7 @@ public class JavaScriptingSupport {
         scriptEngine.init(jpConfig);
         Bindings bindings = scriptEngine.createBindings();
         bindings.put("in", in);
-        bindings.put("scope", scope);
+        bindings.put("scope", currentScope());
 
         StringBuilder code = new StringBuilder();
         code.append(" /* in statement */ var in = (var)context.getAttribute(\"in\",javax.script.ScriptContext.ENGINE_SCOPE); \n");

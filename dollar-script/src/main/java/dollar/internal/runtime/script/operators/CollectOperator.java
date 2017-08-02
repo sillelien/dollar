@@ -18,8 +18,9 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
+import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.Scope;
+import com.sillelien.dollar.api.Scope;
 import org.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,13 +29,11 @@ import java.util.ArrayList;
 import static com.sillelien.dollar.api.DollarStatic.*;
 
 public class CollectOperator implements Map<Object[], var> {
-    private final Scope scope;
     private final DollarParser dollarParser;
     private final boolean pure;
 
-    public CollectOperator(DollarParser dollarParser, Scope scope, boolean pure) {
+    public CollectOperator(DollarParser dollarParser, boolean pure) {
         this.dollarParser = dollarParser;
-        this.scope = scope;
         this.pure = pure;
     }
 
@@ -42,11 +41,12 @@ public class CollectOperator implements Map<Object[], var> {
         ((var) objects[0]).$listen(new Pipeable() {
             private final int[] count = new int[]{-1};
             private final ArrayList<var> collected = new ArrayList<>();
+            final Scope scope= DollarScriptSupport.currentScope();
 
             @Override public var pipe(var... in) throws Exception {
                 var value = fix((var) objects[0], false);
                 count[0]++;
-                return dollarParser.inScope(pure, "collect", scope, newScope -> {
+                return DollarScriptSupport.inScope(pure, "collect", newScope -> {
                     newScope.setParameter("count", $(count[0]));
                     newScope.setParameter("it", value);
                     //noinspection StatementWithEmptyBody

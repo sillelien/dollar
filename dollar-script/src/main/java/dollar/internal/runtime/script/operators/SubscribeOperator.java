@@ -19,36 +19,38 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.Operator;
-import dollar.internal.runtime.script.api.Scope;
-import org.jparsec.functors.Binary;
+import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
+import org.jparsec.Token;
+import org.jparsec.functors.Binary;
 
 import static com.sillelien.dollar.api.DollarStatic.fix;
-import static dollar.internal.runtime.script.DollarScriptSupport.wrapReactive;
+import static dollar.internal.runtime.script.DollarScriptSupport.*;
 
 public class SubscribeOperator implements Binary<var>, Operator {
-    private final Scope scope;
     private final boolean pure;
+    private Token token;
     private SourceSegment source;
+    private DollarParser parser;
 
 
-    public SubscribeOperator(Scope scope, boolean pure) {
-        this.scope = scope;
+    public SubscribeOperator(boolean pure, DollarParser parser) {
         this.pure = pure;
+        this.parser = parser;
     }
 
 
     @Override
     public var map(@NotNull var lhs, var rhs) {
 
-        return wrapReactive(scope, () -> lhs.$subscribe(
-                                    i -> scope.getDollarParser().inScope(pure, "subscribe", scope, newScope -> {
+        return wrapReactive(() -> lhs.$subscribe(
+                                    i -> inScope(pure, "subscribe", newScope -> {
                                         final var it = fix(i[0], false);
-                                        scope.getDollarParser().currentScope().setParameter("1", it);
-                                        scope.getDollarParser().currentScope().setParameter("it", it);
+                                        currentScope().setParameter("1", it);
+                                        currentScope().setParameter("it", it);
                                         return fix(rhs, false);
-                                    })), source, "subscribe", lhs, rhs
-        );
+                                    })), source, "subscribe", lhs, rhs,
+                parser);
 
     }
 

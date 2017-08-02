@@ -713,7 +713,7 @@ A whole bunch of imports are done for you automatically (see below) but you will
  
  > static imports `com.sillelien.dollar.api.DollarStatic.*` `dollar.internal.runtime.script.java.JavaScriptingStaticImports.*`
 
-The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (dollar.internal.runtime.script.api.Scope) object on which you can get and set Dollar variables.
+The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (com.sillelien.dollar.api.Scope) object on which you can get and set Dollar variables.
 
 Reactive behaviour is supported on the Scope object with the `listen` and `notify` methods on variables. You'll need to then built your reactivity around those variables or on the `out` object directly (that's a pretty advanced topic).
 

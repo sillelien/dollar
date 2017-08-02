@@ -19,12 +19,10 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SourceSegmentValue;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.Scope;
+import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,39 +31,37 @@ import java.util.stream.Stream;
 import static com.sillelien.dollar.api.DollarStatic.$;
 
 public class MapOperator implements Map<Token, var> {
-    private final Scope scope;
     private final DollarParser dollarParser;
     private final boolean pure;
 
-    public MapOperator(DollarParser dollarParser, Scope scope, boolean pure) {
+    public MapOperator(DollarParser dollarParser, boolean pure) {
         this.dollarParser = dollarParser;
-        this.scope = scope;
         this.pure = pure;
     }
 
-    @Override public var map(@NotNull Token t) {
+    @Override
+    public var map(@NotNull Token t) {
         List<var> o = (List<var>) t.value();
         final var
                 lambda =
-                DollarScriptSupport.wrapLambda(new SourceSegmentValue(scope, t), scope,
-                                               i -> dollarParser.inScope(pure, "map", scope, newScope -> {
-                                                   if (o.size() == 1) {
-                                                       return DollarFactory.blockCollection(o);
-                                                   }
-                                                   var parallel = i[0];
-                                                   Stream<var> stream;
-                                                   if (parallel.isTrue()) {
-                                                       stream = o.stream().parallel();
-                                                   } else {
-                                                       stream = o.stream();
-                                                   }
-                                                   //Not really a map if only one entry unless it's a pair, in fact
-                                                   // it's really a block.
-                                                   return $(stream.map(v -> v._fix(parallel.isTrue()))
-                                                                  .collect(Collectors.toConcurrentMap(
-                                                                          v -> v.pair() ? v.getPairKey() : v.$S(),
-                                                                          v -> v.pair() ? v.getPairValue() : v)));
-                                               }), o, "map");
+                DollarScriptSupport.wrapLambda(t, i -> DollarScriptSupport.inScope(pure, "map", newScope -> {
+                    if (o.size() == 1) {
+                        return DollarFactory.blockCollection(o);
+                    }
+                    var parallel = i[0];
+                    Stream<var> stream;
+                    if (parallel.isTrue()) {
+                        stream = o.stream().parallel();
+                    } else {
+                        stream = o.stream();
+                    }
+                    //Not really a map if only one entry unless it's a pair, in fact
+                    // it's really a block.
+                    return $(stream.map(v -> v._fix(parallel.isTrue()))
+                            .collect(Collectors.toConcurrentMap(
+                                    v -> v.pair() ? v.getPairKey() : v.$S(),
+                                    v -> v.pair() ? v.getPairValue() : v)));
+                }), o, "map", dollarParser);
         for (var value : o) {
             value.$listen(i -> lambda.$notify());
         }

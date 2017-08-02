@@ -19,25 +19,28 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SourceSegmentValue;
-import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.DollarParser;
+import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
-import org.jetbrains.annotations.NotNull;
 
 public class CastOperator implements Map<Token, Map<? super var, ? extends var>> {
-    private final Scope scope;
 
-    public CastOperator(Scope scope) {this.scope = scope;}
+    private DollarParser parser;
 
-    @NotNull @Override public Map<? super var, ? extends var> map(@NotNull Token token) {
+    public CastOperator(DollarParser parser) {
+        this.parser = parser;
+    }
+
+    @NotNull
+    @Override
+    public Map<? super var, ? extends var> map(@NotNull Token token) {
         var rhs = (var) token.value();
-        return lhs -> DollarScriptSupport.wrapReactive(scope,
-                                                       () -> lhs.$as(Type
-                                                                             .valueOf(
-                                                                                     rhs.toString()
-                                                                                        .toUpperCase())),
-                                                       new SourceSegmentValue(scope, token), "as", lhs
-        );
+        return lhs -> DollarScriptSupport.wrapReactive(
+                () -> lhs.$as(Type
+                        .valueOf(
+                                rhs.toString()
+                                        .toUpperCase())),
+                token, "as", lhs, parser);
     }
 }

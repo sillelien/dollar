@@ -20,9 +20,9 @@ import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.Operator;
-import dollar.internal.runtime.script.api.Scope;
-import org.jparsec.functors.Binary;
+import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
+import org.jparsec.functors.Binary;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;
@@ -30,27 +30,27 @@ import java.util.concurrent.Callable;
 import static com.sillelien.dollar.api.DollarStatic.$;
 
 public class ListenOperator implements Binary<var>, Operator {
-    private final Scope scope;
     private final boolean pure;
     private SourceSegment source;
+    private DollarParser parser;
 
 
-    public ListenOperator(Scope scope, boolean pure) {
-        this.scope = scope;
+    public ListenOperator(boolean pure, DollarParser parser) {
         this.pure = pure;
+        this.parser = parser;
     }
 
 
     @Override
     public var map(@NotNull var lhs, @NotNull var rhs) {
         Callable<var> callable = () -> {
-            return $(lhs.$listen(i -> scope.getDollarParser().inScope(pure, "listen", scope, newScope -> {
+            return $(lhs.$listen(i -> DollarScriptSupport.inScope(pure, "listen", newScope -> {
                 newScope.setParameter("1", i[0]);
                 //todo: change to read
                 return rhs._fixDeep(false);
             })));
         };
-        return DollarScriptSupport.toLambda(scope, callable, source, Arrays.asList(lhs, rhs), "listen");
+        return DollarScriptSupport.toLambda( DollarScriptSupport.currentScope(), callable, source, Arrays.asList(lhs, rhs), "listen", parser);
     }
 
     @Override public void setSource(SourceSegment source) {

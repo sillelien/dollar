@@ -23,7 +23,7 @@ import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.types.ErrorType;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.ParserErrorHandler;
-import dollar.internal.runtime.script.api.Scope;
+import com.sillelien.dollar.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.ErrorReporter;

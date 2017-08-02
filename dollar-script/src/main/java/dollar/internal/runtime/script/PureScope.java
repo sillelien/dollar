@@ -18,7 +18,7 @@ package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.var;
-import dollar.internal.runtime.script.api.Scope;
+import com.sillelien.dollar.api.Scope;
 import dollar.internal.runtime.script.api.Variable;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
@@ -51,7 +51,7 @@ public class PureScope extends ScriptScope {
         } else {
             if (DollarStatic.getConfig().debugScope()) { log.info("Found " + key + " in " + scope); }
         }
-        Variable result = scope.getVariables().get(key);
+        Variable result = (Variable) scope.getVariables().get(key);
         if (result != null && !(result.isReadonly() && result.isFixed()) && !result.isPure()) {
             throw new UnsupportedOperationException(
                     "Cannot access non constant values in a pure expression, putValue either 'pure' or 'const' as " +
@@ -93,12 +93,12 @@ public class PureScope extends ScriptScope {
             scope = this;
         }
         if (DollarStatic.getConfig().debugScope()) { log.info("Setting " + key + " in " + scope); }
-        if (scope != null && scope.getVariables().containsKey(key) && scope.getVariables().get(key).isReadonly()) {
+        if (scope != null && scope.getVariables().containsKey(key) && ((Variable)scope.getVariables().get(key)).isReadonly()) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
         final var fixedValue = fixed ? value._fixDeep() : value;
         if (scope.getVariables().containsKey(key)) {
-            final Variable variable = scope.getVariables().get(key);
+            final Variable variable = ((Variable)scope.getVariables().get(key));
             if (!variable.isVolatile() && variable.getThread() != Thread.currentThread().getId()) {
                 handleError(new DollarScriptException("Concurrency Error: Cannot change the variable " +
                                                       key +

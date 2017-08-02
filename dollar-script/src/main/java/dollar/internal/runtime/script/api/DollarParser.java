@@ -16,36 +16,30 @@
 
 package dollar.internal.runtime.script.api;
 
+import com.sillelien.dollar.api.Scope;
 import com.sillelien.dollar.api.var;
+import dollar.internal.runtime.script.ScriptScope;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.function.Function;
 
 public interface DollarParser {
 
-    @NotNull Scope currentScope();
 
     void export(@NotNull String name, @NotNull var export);
 
     @NotNull ParserErrorHandler getErrorHandler();
 
-    <T> T inScope(boolean pure, String scopeName,
-                  @NotNull Scope currentScope,
-                  @NotNull Function<Scope, T> r);
-
     ParserOptions options();
 
-    @NotNull var parse(@NotNull File file, boolean parallel) throws IOException;
 
-    @NotNull var parse(@NotNull Scope scope, @NotNull String source);
+    @NotNull var parse(ScriptScope scriptScope, @NotNull String source);
 
-    @NotNull var parse(@NotNull Scope scope, @NotNull File file, boolean parallel) throws IOException;
+    @NotNull var parse( @NotNull File file, boolean parallel) throws IOException;
 
-    @NotNull var parse(@NotNull Scope scope, InputStream in, boolean parallel) throws IOException;
+    @NotNull var parse(InputStream in, boolean parallel, Scope scope) throws IOException;
 
     @NotNull var parse(InputStream in, String file, boolean parallel) throws IOException;
 
@@ -53,5 +47,4 @@ public interface DollarParser {
 
     @NotNull var parseMarkdown(@NotNull String source);
 
-    List<Scope> scopes();
 }

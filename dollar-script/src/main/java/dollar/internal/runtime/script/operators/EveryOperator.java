@@ -20,20 +20,18 @@ import com.sillelien.dollar.api.time.Scheduler;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.Scope;
 import org.jparsec.functors.Map;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 import static com.sillelien.dollar.api.DollarStatic.$void;
+import static dollar.internal.runtime.script.DollarScriptSupport.inScope;
 
 public class EveryOperator implements Map<Object[], var> {
-    private final Scope scope;
     private final DollarParser dollarParser;
     private final boolean pure;
 
-    public EveryOperator(DollarParser dollarParser, Scope scope, boolean pure) {
+    public EveryOperator(DollarParser dollarParser, boolean pure) {
         this.dollarParser = dollarParser;
-        this.scope = scope;
         this.pure = pure;
     }
 
@@ -42,7 +40,7 @@ public class EveryOperator implements Map<Object[], var> {
         Scheduler.schedule(i -> {
             count[0]++; // William Gibson
 //                System.out.println("COUNT "+count[0]);
-            return dollarParser.inScope(pure, "every", scope, newScope -> {
+            return inScope(pure, "every", newScope -> {
                 try {
 //                    System.err.println(newScope);
                     newScope.setParameter("1", $(count[0]));

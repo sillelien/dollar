@@ -18,33 +18,34 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SourceSegmentValue;
-import dollar.internal.runtime.script.api.Scope;
-import org.jparsec.Token;
-import org.jparsec.functors.Map;
+import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jparsec.Token;
+import org.jparsec.functors.Map;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 public class SubscriptOperator implements Map<Token, Map<? super var, ? extends var>> {
-    private final Scope scope;
 
-    public SubscriptOperator(Scope scope) {this.scope = scope;}
+    private DollarParser parser;
+
+    public SubscriptOperator(DollarParser parser) {
+        this.parser = parser;
+    }
 
     @Nullable @Override public Map<? super var, ? extends var> map(@NotNull Token token) {
         Object[] rhs = (Object[]) token.value();
-        final SourceSegmentValue source = new SourceSegmentValue(scope, token);
         return lhs -> {
             if (rhs[1] == null) {
-                return DollarScriptSupport.wrapReactive(scope, () -> lhs.$get(
-                        ((var) rhs[0])), source, "subscript", lhs, (var) rhs[0]);
+                return DollarScriptSupport.wrapReactive(() -> lhs.$get(
+                        ((var) rhs[0])), token, "subscript", lhs, (var) rhs[0], parser);
             } else {
                 Callable<var> callable = () -> lhs.$set((var) rhs[0], rhs[1]);
-                return DollarScriptSupport.toLambda(scope, callable, source,
+                return DollarScriptSupport.toLambda(callable, token,
                                                     Arrays.asList(lhs, (var) rhs[0], (var) rhs[1]),
-                                                    "subscript-assignment");
+                                                    "subscript-assignment", parser);
             }
         };
     }

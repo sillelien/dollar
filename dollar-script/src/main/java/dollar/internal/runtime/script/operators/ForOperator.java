@@ -18,23 +18,20 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SourceSegmentValue;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.Scope;
+import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
-import org.jetbrains.annotations.NotNull;
 
 import static com.sillelien.dollar.api.DollarStatic.fix;
+import static dollar.internal.runtime.script.DollarScriptSupport.inScope;
 
 public class ForOperator implements Map<Token, Map<? super var, ? extends var>> {
-    private final Scope scope;
     private final DollarParser dollarParser;
     private final boolean pure;
 
-    public ForOperator(DollarParser dollarParser, Scope scope, boolean pure) {
+    public ForOperator(DollarParser dollarParser, boolean pure) {
         this.dollarParser = dollarParser;
-        this.scope = scope;
         this.pure = pure;
     }
 
@@ -42,8 +39,8 @@ public class ForOperator implements Map<Token, Map<? super var, ? extends var>> 
         Object[] objects = (Object[]) token.value();
         String constraintSource = null;
         return rhs -> {
-            return DollarScriptSupport.wrapReactive(scope, () -> {
-                return dollarParser.inScope(pure, "for", scope, newScope -> {
+            return DollarScriptSupport.wrapReactive( () -> {
+                return inScope(pure, "for", newScope -> {
                     return ((var) objects[3]).$each(i -> {
                         newScope.set(objects[1].toString(), fix(i[0], false), false, null, constraintSource, false,
                                      false,
@@ -51,7 +48,7 @@ public class ForOperator implements Map<Token, Map<? super var, ? extends var>> 
                         return rhs._fixDeep(false);
                     });
                 });
-            }, new SourceSegmentValue(scope, token), "for", rhs);
+            }, token, "for", rhs, dollarParser);
         };
     }
 }
