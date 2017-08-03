@@ -1,4 +1,4 @@
-revrse := [$1[1],$1[0]]
+def revrse [$1[1],$1[0]]
 
 revrse([2,1]) <=> [1,2]
 
@@ -8,9 +8,10 @@ revrse([2,1]) <=> [1,2]
 fix ([2,1] -> revrse) -> revrse <=> [2,1]
 
 
-testParams := ($2 + " " + $1)
+def testParams {$2 + " " + $1}
+
 testParams ("Hello", "World") <=> "World Hello"
 
-testParams2 := (last + " " + first)
+def testParams2 {last + " " + first}
 testParams2(first="Hello", last="World") <=> "World Hello"
 

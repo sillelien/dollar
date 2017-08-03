@@ -1,18 +1,18 @@
 
 const a=9
-b= pure ( a + 1)
+var b= pure ( a + 1)
 b<=>10
 @@b
 
 //pure failure := DATE()
 
 //gotcha - this assigns z to 1 in a pure scope and returns
-pure z= 1;
+pure const z= 1;
 
-pure reverse := [$1[1],$1[0]]
+pure def reverse [$1[1],$1[0]]
 reverse([2,1]) <=> [1,2]
 
-c= pure {
+const c= pure {
     [2,1] -> reverse <=> [1,2]
 }
 
@@ -22,8 +22,8 @@ c= pure {
 fix ([2,1] -> reverse) -> reverse <=> [2,1]
 
 
-testParams := pure($2 + " " + $1)
+const testParams := pure($2 + " " + $1)
 testParams ("Hello", "World") <=> "World Hello"
 
-pure testParams2 := (last + " " + first)
+pure const testParams2 := {last + " " + first}
 testParams2(first="Hello", last="World") <=> "World Hello"

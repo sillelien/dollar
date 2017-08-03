@@ -49,7 +49,7 @@ false || !false <=> true
 .:  ~ { "a" : 1}
 .: ! ~ void
 
-e=0
+var e=0
 
 if (e == 1) {e=2} else {e=3}
 

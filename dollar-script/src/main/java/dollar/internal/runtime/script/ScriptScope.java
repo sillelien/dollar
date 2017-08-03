@@ -368,6 +368,14 @@ public class ScriptScope implements Scope {
         return parent;
     }
 
+    @Override
+    public boolean hasParent(Scope scope) {
+        if(getParent() == null) {
+            return false;
+        }
+        return getParent().equals(scope) || getParent().hasParent(scope);
+    }
+
     public Parser<var> getParser() {
         return parser;
     }

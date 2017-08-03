@@ -17,7 +17,7 @@
 
 @@ DATE()['DAY_OF_YEAR']=1
 
-Fortnight := ($1 * 14)
+def Fortnight {$1 * 14}
 
 @@ DATE() + 1 Day
 @@ DATE() + 1 Hour

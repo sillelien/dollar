@@ -70,20 +70,26 @@ public class DollarSource extends DollarLambda {
 
     private void setScopes(List<var> inputs) {
         meta.put("scope", scope);
+        meta.put("children", inputs);
+
         for (var input : inputs) {
-            if (input.getMetaObject("scope") == null) {
-                input.setMetaObject("scope", scope);
-            } else if (input.getMetaObject("scope") != scope) {
-                if (scope.getParent() != null && scope.getParent().equals((Scope) input.getMetaObject("scope"))) {
-                    System.err.println("Correcting scope " + input.getMetaObject("scope") + " to parent " + scope);
-                    input.setMetaObject("scope", scope);
-                } else {
-                    System.err.println("Setting parent of " + input.getMetaObject("scope") + " to " + scope);
-                    ((Scope) input.getMetaObject("scope")).setParent(scope);
-                }
-            }
-            input.setMetaObject("parentScope", scope);
+            correctScope(input);
         }
+    }
+
+    private void correctScope(var input) {
+        if (input.getMetaObject("scope") == null) {
+            input.setMetaObject("scope", scope);
+        } else if (input.getMetaObject("scope") != scope) {
+            if (scope.getParent() != null && scope.hasParent((Scope) input.getMetaObject("scope"))) {
+                System.err.println("Correcting scope " + input.getMetaObject("scope") + " to parent " + scope);
+                input.setMetaObject("scope", scope);
+            } else {
+                System.err.println("Setting parent scope of " + input.getMetaObject("scope") + " to " + scope);
+                ((Scope) input.getMetaObject("scope")).setParent(scope);
+            }
+        }
+        input.setMetaObject("parentScope", scope);
     }
 
     @Nullable
@@ -122,6 +128,9 @@ public class DollarSource extends DollarLambda {
                 });
             } else {
                 result = super.invoke(proxy, method, args);
+            }
+            if(result instanceof var) {
+                    correctScope((var) result);
             }
             if (method.getName().startsWith("_fixDeep")) {
                 typeLearner.learn(operation, source, inputs, ((var) result).$type());

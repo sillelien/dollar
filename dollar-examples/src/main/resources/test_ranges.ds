@@ -20,7 +20,7 @@ COUNT(1..5) <=> 5
 .: 1..5 is RANGE
 
 //Iterate over a range
-y=0
+var y=0
 for x in 1..5 {
     y= y++
 }

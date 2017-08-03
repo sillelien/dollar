@@ -4,7 +4,7 @@
 def lamdaReturn {
         var a= 10;
         a= a + 5;
-        {@@ $1; @@ a; $1 + a}
+        { @@ $1; @@ a; $1 + a }
 }
 
 //Execute function and pipe 5 to the returned lambda

@@ -214,7 +214,7 @@ public class DollarScriptSupport {
 
         var lambda[] = new var[1];
         lambda[0] = createNode(() -> {
-            Scope scope = currentScope();
+            Scope scope = (Scope) lambda[0].getMetaObject("scope");
             scope.listen(key, lambda[0]);
             log.debug("LOOKUP " + key + " " + scope + " " + currentScope());
             if (numeric) {
