@@ -43,7 +43,7 @@ public class ReadOperator implements Map<Token, Map<? super var, ? extends var>>
             public var map(@NotNull var rhs) {
                 Callable<var> callable = () -> rhs.$read(objects[1] != null,
                         objects[2] != null);
-                return DollarScriptSupport.toLambda(callable, token, Arrays.asList(rhs), "read:" + objects[1] + ":" + objects[2], parser);
+                return DollarScriptSupport.createNode(callable, token, Arrays.asList(rhs), "read:" + objects[1] + ":" + objects[2], parser);
             }
         };
     }

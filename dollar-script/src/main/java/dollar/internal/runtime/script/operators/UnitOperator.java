@@ -53,7 +53,7 @@ public class UnitOperator implements Map<Token, var> {
                 return fix(variable, false);
             }
         });
-        return DollarScriptSupport.toLambda(callable, token, Arrays.asList((var) objects[0], (var) objects[1]),
+        return DollarScriptSupport.createNode(callable, token, Arrays.asList((var) objects[0], (var) objects[1]),
                                             "unit", parser);
     }
 }

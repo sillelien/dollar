@@ -59,7 +59,7 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                                                                 new Function(rhs, lhs, token,
                                                                              constraintSource));
             var lambda =
-                    DollarScriptSupport.toLambda(callable, token, rhs,
+                    DollarScriptSupport.createNode(callable, token, rhs,
                                                  "parameter", dollarParser);
             //reactive links
             lhs.$listen(i -> lambda.$notify());

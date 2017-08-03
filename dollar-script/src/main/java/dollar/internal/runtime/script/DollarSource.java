@@ -44,52 +44,54 @@ public class DollarSource extends DollarLambda {
 
     private final SourceSegment source;
     @Nullable
-    private  Scope scope;
+    private Scope scope;
     private List<var> inputs;
     @Nullable
     private String operation;
     private volatile TypePrediction prediction;
     private DollarParser parser;
 
-    public DollarSource(Pipeable lambda, @Nullable Scope scope, SourceSegment source, List<var> inputs,
+    public DollarSource(Pipeable lambda, @Nullable Scope scope, SourceSegment source, @NotNull List<var> inputs,
                         @Nullable String operation, DollarParser parser) {
-        super(vars ->  lambda.pipe(vars));
+        super(vars -> lambda.pipe(vars));
         this.scope = scope;
         this.parser = parser;
         if (operation == null) {
             throw new NullPointerException();
         }
-
+        if (inputs == null) {
+            throw new NullPointerException();
+        }
         this.inputs = inputs;
         this.operation = operation;
-        setScopes(inputs);
         this.source = source;
+        setScopes(inputs);
     }
 
     private void setScopes(List<var> inputs) {
+        meta.put("scope", scope);
         for (var input : inputs) {
-            if(input.getMetaObject("scope") == null) {
-                input.setMetaObject("scope",scope);
+            if (input.getMetaObject("scope") == null) {
+                input.setMetaObject("scope", scope);
+            } else if (input.getMetaObject("scope") != scope) {
+                if (scope.getParent() != null && scope.getParent().equals((Scope) input.getMetaObject("scope"))) {
+                    System.err.println("Correcting scope " + input.getMetaObject("scope") + " to parent " + scope);
+                    input.setMetaObject("scope", scope);
+                } else {
+                    System.err.println("Setting parent of " + input.getMetaObject("scope") + " to " + scope);
+                    ((Scope) input.getMetaObject("scope")).setParent(scope);
+                }
             }
+            input.setMetaObject("parentScope", scope);
         }
-    }
-
-    public DollarSource(Pipeable lambda, @Nullable Scope scope, SourceSegment source, boolean fixable, List<var> inputs,
-                        @Nullable String operation, DollarParser parser) {
-        super(vars ->  lambda.pipe(vars), fixable);
-        this.inputs = inputs;
-        this.operation = operation;
-        this.source = source;
-        this.parser = parser;
-        setScopes(inputs);
     }
 
     @Nullable
     @Override
     public Object invoke(Object proxy, @NotNull Method method, Object[] args) throws Throwable {
         Scope useScope = (Scope) meta.get("scope");
-        if(useScope == null) {
-            useScope= this.scope;
+        if (useScope == null) {
+            useScope = this.scope;
         }
         try {
             if (Objects.equals(method.getName(), "_source")) {
@@ -107,7 +109,8 @@ public class DollarSource extends DollarLambda {
             }
             final Object result;
             if (method.getName().startsWith("_fix")) {
-                log.debug("FIXING SCOPE TO "+useScope+" for "+source.getSourceMessage());
+                log.debug("FIXING SCOPE TO " + useScope + " for " + source.getSourceMessage());
+                log.debug("meta.scope=  " + meta.get("scope"));
 //                new Exception().printStackTrace(System.err);
                 result = DollarScriptSupport.inScope(useScope, newScope -> {
                     try {
@@ -118,17 +121,20 @@ public class DollarSource extends DollarLambda {
                     }
                 });
             } else {
-                result= super.invoke(proxy, method, args);
+                result = super.invoke(proxy, method, args);
             }
             if (method.getName().startsWith("_fixDeep")) {
                 typeLearner.learn(operation, source, inputs, ((var) result).$type());
             }
             return result;
         } catch (AssertionError e) {
+            log.warn(e.getMessage(), e);
             return parser.getErrorHandler().handle(useScope, source, e);
         } catch (DollarException e) {
+            log.warn(e.getMessage(), e);
             return parser.getErrorHandler().handle(useScope, source, e);
         } catch (Exception e) {
+            log.warn(e.getMessage(), e);
             return parser.getErrorHandler().handle(useScope, source, e);
         }
     }

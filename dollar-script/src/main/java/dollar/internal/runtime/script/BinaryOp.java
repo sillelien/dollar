@@ -22,7 +22,7 @@ import dollar.internal.runtime.script.api.DollarParser;
 import org.jparsec.functors.Binary;
 import org.jparsec.functors.Map2;
 
-import static dollar.internal.runtime.script.DollarScriptSupport.wrapReactive;
+import static dollar.internal.runtime.script.DollarScriptSupport.createReactiveNode;
 
 public class BinaryOp implements Binary<var>, Operator {
     private final boolean immediate;
@@ -52,7 +52,7 @@ public class BinaryOp implements Binary<var>, Operator {
             return function.map(lhs, rhs);
         }
         //Lazy evaluation
-        return wrapReactive( () -> function.map(lhs, rhs), source, operation, lhs, rhs, parser);
+        return createReactiveNode( () -> function.map(lhs, rhs), source, operation, lhs, rhs, parser);
     }
 
     @Override

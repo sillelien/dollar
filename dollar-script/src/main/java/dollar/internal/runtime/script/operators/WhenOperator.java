@@ -41,7 +41,7 @@ public class WhenOperator implements Map<Token, var> {
         Object[] objects = (Object[]) token.value();
         var lhs = (var) objects[0];
         var rhs = (var) objects[1];
-        var lambda = DollarScriptSupport.wrapLambda(token, i -> lhs.isTrue() ? $((Object) rhs.toJavaObject()) : $void(),
+        var lambda = DollarScriptSupport.createNode(token, i -> lhs.isTrue() ? $((Object) rhs.toJavaObject()) : $void(),
                 Arrays.asList(lhs, rhs),
                 "when", parser);
         lhs.$listen(i -> {

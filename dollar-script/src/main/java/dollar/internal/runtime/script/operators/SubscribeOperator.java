@@ -43,7 +43,7 @@ public class SubscribeOperator implements Binary<var>, Operator {
     @Override
     public var map(@NotNull var lhs, var rhs) {
 
-        return wrapReactive(() -> lhs.$subscribe(
+        return createReactiveNode(() -> lhs.$subscribe(
                                     i -> inScope(pure, "subscribe", newScope -> {
                                         final var it = fix(i[0], false);
                                         currentScope().setParameter("1", it);

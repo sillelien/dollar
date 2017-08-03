@@ -69,7 +69,7 @@ public class ParserTest {
 //            "bulletin.ds",
 //            "example.ds",
             strings = {"test_scopes.ds","test1.ds",
-            "test3.ds", "test_arrays.ds", "test_builtins.ds", "test_casting.ds", "test_concurrency.ds", "test_control_flow.ds", "test_date.ds", "test_fix.ds", "test_iteration.ds", "test_java.ds", "test_logic.ds", "test_modules.ds", "test_numeric.ds", "test_parameters.ds", "test_pure.ds", "test_ranges.ds", "test_reactive.ds", "test_redis.ds", "test_strings.ds", "test_uris.ds", "test_variables.ds"})
+            "test3.ds", "test_arrays.ds", "test_builtins.ds", "test_casting.ds",  "test_date.ds", "test_fix.ds", "test_iteration.ds", "test_java.ds", "test_logic.ds", "test_modules.ds", "test_numeric.ds", "test_parameters.ds", "test_pure.ds", "test_ranges.ds", "test_reactive.ds", "test_redis.ds", "test_strings.ds", "test_uris.ds", "test_variables.ds", "test_concurrency.ds","test_control_flow.ds"})
 
     public void testScript(@NotNull String filename) throws Exception {
         System.out.println("Testing " + filename);

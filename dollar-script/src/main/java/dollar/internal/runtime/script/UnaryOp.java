@@ -52,7 +52,7 @@ public class UnaryOp implements Unary<var>, Operator {
         }
 
         //Lazy evaluation
-        final var lambda = DollarScriptSupport.wrapReactive( () -> function.map(from), source, operation, from, parser);
+        final var lambda = DollarScriptSupport.createReactiveNode( () -> function.map(from), source, operation, from, parser);
         return lambda;
 
     }

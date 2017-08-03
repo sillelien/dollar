@@ -47,7 +47,7 @@ public class WhileOperator implements Map<Token, Map<? super var, ? extends var>
                 }
                 return $(false);
             });
-            return DollarScriptSupport.toLambda(callable, token, Arrays.asList(lhs, rhs), "while", parser);
+            return DollarScriptSupport.createNode(callable, token, Arrays.asList(lhs, rhs), "while", parser);
         };
     }
 }

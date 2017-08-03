@@ -39,11 +39,11 @@ public class SubscriptOperator implements Map<Token, Map<? super var, ? extends 
         Object[] rhs = (Object[]) token.value();
         return lhs -> {
             if (rhs[1] == null) {
-                return DollarScriptSupport.wrapReactive(() -> lhs.$get(
+                return DollarScriptSupport.createReactiveNode(() -> lhs.$get(
                         ((var) rhs[0])), token, "subscript", lhs, (var) rhs[0], parser);
             } else {
                 Callable<var> callable = () -> lhs.$set((var) rhs[0], rhs[1]);
-                return DollarScriptSupport.toLambda(callable, token,
+                return DollarScriptSupport.createNode(callable, token,
                                                     Arrays.asList(lhs, (var) rhs[0], (var) rhs[1]),
                                                     "subscript-assignment", parser);
             }

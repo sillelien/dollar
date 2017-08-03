@@ -16,12 +16,12 @@
 
 package dollar.internal.runtime.script.operators;
 
+import com.sillelien.dollar.api.Scope;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.TypePrediction;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.SourceSegmentValue;
-import com.sillelien.dollar.api.Scope;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +30,6 @@ import org.jparsec.Token;
 import org.jparsec.functors.Map;
 
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.concurrent.Callable;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
@@ -59,7 +58,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
         }
         if (objects[2] != null) {
             type = Type.valueOf(objects[2].toString().toUpperCase());
-            constraint = DollarScriptSupport.wrapLambda(token, i -> {
+            constraint = DollarScriptSupport.createNode(token, i -> {
                 return $(currentScope().getParameter("it")
                         .is(type) &&
                         (objects[3] == null || ((var) objects[3]).isTrue()));
@@ -72,6 +71,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
         boolean constant;
         boolean isVolatile;
         final Object mutability = objects[1];
+        boolean decleration = mutability != null;
         constant = mutability != null && mutability.toString().equals("const");
         isVolatile = mutability != null && mutability.toString().equals("volatile");
         if (((var) objects[4]).getMetaAttribute("__builtin") != null) {
@@ -84,7 +84,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
         return new Map<var, var>() {
 
             public var map(@NotNull var rhs) {
-                Scope scope= currentScope();
+                Scope scope = currentScope();
                 final TypePrediction prediction = rhs._predictType();
                 if (type != null && prediction != null) {
                     final Double probability = prediction.probability(type);
@@ -96,7 +96,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                                 " (" +
                                 (int) (prediction.probability(prediction.probableType()) * 100) +
                                 "%) at " +
-                                new SourceSegmentValue(currentScope(),token).getSourceMessage());
+                                new SourceSegmentValue(currentScope(), token).getSourceMessage());
                     }
                 }
 
@@ -106,7 +106,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                     var useConstraint;
                     if (constraint != null) {
                         useConstraint = constraint;
-                        useSource= constraintSource;
+                        useSource = constraintSource;
                     } else {
                         useConstraint = scope.getConstraint(varName);
                         useSource = scope.getConstraintSource(varName);
@@ -114,46 +114,27 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                     if (operator.equals("?=")) {
                         scope.set(varName, $void(), false, null, useSource, isVolatile, false, pure);
                         Callable<var> callable = () -> $($(rhs.$listen(
-                                i -> scope.set(varName, fix(i[0], false), false,
-                                        useConstraint, useSource, isVolatile, false, pure))));
-                        return DollarScriptSupport.toLambda(callable, token, Arrays.asList(constrain(scope, rhs, constraint, useSource)),
+                                i -> DollarScriptSupport.setVariable(scope, varName, fix(i[0], false), false,
+                                        useConstraint, useSource, isVolatile, false, pure, decleration, token, parser))));
+                        return DollarScriptSupport.createNode(callable, token, Arrays.asList(DollarScriptSupport.constrain(scope, rhs, constraint, useSource)),
                                 "listen-assign", parser);
 
                     } else if (operator.equals("*=")) {
                         scope.set(varName, $void(), false, null, useSource, true, true, pure);
                         Callable<var> callable = () -> $(rhs.$subscribe(
-                                i -> scope.set(varName, fix(i[0], false), false,
-                                        useConstraint, useSource, true, false, pure)));
-                        return DollarScriptSupport.toLambda(callable, token, Arrays.asList(constrain(scope, rhs, constraint, useSource)),
+                                i -> DollarScriptSupport.setVariable(scope, varName, fix(i[0], false), false,
+                                        useConstraint, useSource, true, false, pure, decleration, token, parser)));
+                        return DollarScriptSupport.createNode(callable, token, Arrays.asList(DollarScriptSupport.constrain(scope, rhs, constraint, useSource)),
                                 "subscribe-assign", parser);
                     }
                 }
-                return assign(rhs, objects, constraint, constant, isVolatile, constraintSource, scope, token);
+                return assign(rhs, objects, constraint, constant, isVolatile, constraintSource, scope, token, decleration);
             }
         };
     }
 
-    @NotNull
-    private static var constrain(Scope scope, @NotNull var rhs, var constraint, String source) {
-//        System.err.println("(" + source + ") " + rhs.$type().constraint());
-        validateConstraint(scope, rhs, source);
-        return rhs._constrain(constraint, source);
-    }
-
-    private static void validateConstraint(Scope scope, @NotNull var rhs, String source) {
-        if (!Objects.equals(rhs._constraintFingerprint(), source)) {
-            if (rhs._constraintFingerprint() != null && !rhs._constraintFingerprint().isEmpty()) {
-                scope.handleError( new DollarScriptException("Trying to assign an invalid constrained variable " + rhs._constraintFingerprint() + " vs " + source,rhs));
-            }
-        } else {
-            if (rhs._constraintFingerprint() != null && !rhs._constraintFingerprint().isEmpty()) {
-//                System.err.println("Fingerprint: " + rhs.$type().constraint());
-            }
-        }
-    }
-
     private var assign(@NotNull var rhs, Object[] objects, @Nullable var constraint, boolean constant,
-                       boolean isVolatile, String constraintSource, Scope scope, Token token) {
+                       boolean isVolatile, String constraintSource, Scope scope, Token token, boolean decleration) {
 
         final String varName = objects[4].toString();
         final var useConstraint;
@@ -169,7 +150,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
             @Override
             public var call() throws Exception {
 
-                Scope currentScope= currentScope();
+                Scope currentScope = currentScope();
                 return inScope(pure, "assignment-constraint", newScope -> {
                     final var rhsFixed = rhs._fix(1, false);
 
@@ -186,11 +167,11 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                     if (objects[0] != null) {
                         parser.export(varName, rhsFixed);
                     }
-                    return currentScope.set(varName, rhsFixed, constant,
-                            constraint, useSource, isVolatile, constant, pure);
+                    return DollarScriptSupport.setVariable(currentScope,varName, rhsFixed, constant,
+                            constraint, useSource, isVolatile, constant, pure, decleration, token, parser);
                 });
             }
         };
-             return DollarScriptSupport.toLambda(callable, token, Arrays.asList(constrain(scope, rhs, constraint, useSource)), "assignment", parser);
+        return DollarScriptSupport.createNode(callable, token, Arrays.asList(DollarScriptSupport.constrain(scope, rhs, constraint, useSource)), "assignment", parser);
     }
 }

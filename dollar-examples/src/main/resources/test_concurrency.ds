@@ -1,11 +1,11 @@
 
-testArray := [ TIME(), {SLEEP(2 Secs);TIME();}, TIME() ];
+def testArray [ TIME(), {SLEEP(2 Secs);TIME();}, TIME() ];
 
 
-a= serial testArray;
+var a= serial testArray;
 
 
-b= parallel testArray;
+var b= parallel testArray;
 
 @@ a
 @@ b
@@ -18,7 +18,7 @@ b= parallel testArray;
 sleepTime := {@@ "Background Sleeping";SLEEP(4 Secs); @@ "Background Finished Sleeping";TIME()}
 
 //Any future reference to c will block until c has completed evaluation
-c= fork sleepTime
+const c= fork sleepTime
 
 SLEEP (1 Sec)
 
@@ -28,7 +28,7 @@ SLEEP (2 Secs)
 
 @@ "Main thread finished sleeping ..."
 
-d= TIME()
+const d= TIME()
 
 @@ c
 @@ d

@@ -44,7 +44,7 @@ public class MapOperator implements Map<Token, var> {
         List<var> o = (List<var>) t.value();
         final var
                 lambda =
-                DollarScriptSupport.wrapLambda(t, i -> DollarScriptSupport.inScope(pure, "map", newScope -> {
+                DollarScriptSupport.createNode(t, i -> DollarScriptSupport.inScope(pure, "map", newScope -> {
                     if (o.size() == 1) {
                         return DollarFactory.blockCollection(o);
                     }

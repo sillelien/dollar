@@ -50,7 +50,7 @@ public class ListenOperator implements Binary<var>, Operator {
                 return rhs._fixDeep(false);
             })));
         };
-        return DollarScriptSupport.toLambda( DollarScriptSupport.currentScope(), callable, source, Arrays.asList(lhs, rhs), "listen", parser);
+        return DollarScriptSupport.createNode( DollarScriptSupport.currentScope(), callable, source, Arrays.asList(lhs, rhs), "listen", parser);
     }
 
     @Override public void setSource(SourceSegment source) {

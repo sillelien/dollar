@@ -40,7 +40,7 @@ public class IsOperator implements Map<Token, Map<? super var, ? extends var>> {
     @Override
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         List<var> rhs = (List<var>) token.value();
-        return lhs -> DollarScriptSupport.wrapReactive(() -> {
+        return lhs -> DollarScriptSupport.createReactiveNode(() -> {
             for (var value : rhs) {
                 if (lhs.is(Type.valueOf(value.toString()))) {
                     return $(true);

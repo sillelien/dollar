@@ -214,6 +214,7 @@ public class ScriptScope implements Scope {
     }
 
     @NotNull @Override public var handleError(@NotNull Throwable t) {
+        log.warn(t.getMessage(),t);
         if (errorHandlers.isEmpty()) {
             if (parent == null) {
                 if (t instanceof ParserException) {
@@ -362,6 +363,11 @@ public class ScriptScope implements Scope {
         this.parent = scope;
     }
 
+    @Override
+    public Scope getParent() {
+        return parent;
+    }
+
     public Parser<var> getParser() {
         return parser;
     }
@@ -386,5 +392,6 @@ public class ScriptScope implements Scope {
         setParameter("previous", $void());
         return fail;
     }
+
 
 }

@@ -19,14 +19,14 @@
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
     <appender class="org.apache.log4j.ConsoleAppender" name="stdout">
-        <param value="INFO" name="Threshold"/>
+        <param value="DEBUG" name="Threshold"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param value="%d{HH:mm:ss} %c{1}: %m%n" name="ConversionPattern"/>
         </layout>
     </appender>
 
     <root>
-        <level value="INFO"/>
+        <level value="DEBUG"/>
         <appender-ref ref="stdout"/>
     </root>
 </log4j:configuration>

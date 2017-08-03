@@ -44,8 +44,8 @@ class DollarLexer {
                                 "all", "import", "reduce", "truthy", "is", "else", "const", "in", "true", "false",
                                 "yes", "no", "void", "error", "to", "from", "size", "as",
                                 "while", "collect", "module", "include", "export", "with", "parallel", "serial",
-                                "fork", "null", "volatile", "read", "write", "block", "mutate", "pure", "variant",
-                                "variance", "pluripotent", "vary", "varies", "infinity");
+                                "fork", "null", "volatile", "read", "write", "block", "mutate", "pure","impure", "variant",
+                                "variance", "pluripotent", "vary", "varies", "infinity","var","readonly","def");
     public static final Terminals
             OPERATORS =
             Terminals.operators("|", ">>", "<<", "->", "=>", ".:", "<=", ">=", "<-", "(", ")", "--", "++", ".", ":",

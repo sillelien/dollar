@@ -33,7 +33,7 @@ public class SimpleReadOperator extends UnaryOp {
 
     @Override
     public var map(@NotNull var from) {
-        return DollarScriptSupport.wrapReactive( () -> DollarFactory.fromURI(from).$read(), source, operation,
+        return DollarScriptSupport.createReactiveNode( () -> DollarFactory.fromURI(from).$read(), source, operation,
                                                 from, parser);
     }
 

@@ -47,11 +47,12 @@ public class BlockOperator implements Map<Token, var> {
     public var map(@NotNull Token token) {
         log.debug("BLOCK EXE START");
         List<var> l = (List<var>) token.value();
-        return DollarScriptSupport.inScope(pure, "block", newScope -> DollarScriptSupport.wrapLambda(token, parallel -> {
-                    log.debug("BLOCK EXE LAMBDA START "+currentScope());
+        return DollarScriptSupport.inScope(pure, "block", newScope -> DollarScriptSupport.createNode(token, parallel -> {
+                    log.debug("BLOCK EXE LAMBDA START " + currentScope());
                     try {
                         if (l.size() > 0) {
-                            return DollarFactory.blockCollection(l);
+                            var collection = DollarFactory.blockCollection(l);
+                            return collection;
 //                        return $(l);
                         } else {
                             return $void();
@@ -60,7 +61,6 @@ public class BlockOperator implements Map<Token, var> {
                         log.debug("BLOCK EXE LAMBDA END");
 
                     }
-                },
-                l, "block", dollarParser));
+                }, l, "block", dollarParser));
     }
 }

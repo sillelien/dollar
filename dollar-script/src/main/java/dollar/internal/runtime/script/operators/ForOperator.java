@@ -39,7 +39,7 @@ public class ForOperator implements Map<Token, Map<? super var, ? extends var>> 
         Object[] objects = (Object[]) token.value();
         String constraintSource = null;
         return rhs -> {
-            return DollarScriptSupport.wrapReactive( () -> {
+            return DollarScriptSupport.createReactiveNode( () -> {
                 return inScope(pure, "for", newScope -> {
                     return ((var) objects[3]).$each(i -> {
                         newScope.set(objects[1].toString(), fix(i[0], false), false, null, constraintSource, false,

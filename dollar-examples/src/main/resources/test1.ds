@@ -1,23 +1,23 @@
-f={1;2;3;4}
+const f={1;2;3;4}
 @@ f
 
-multiline={
+const multiline={
 "Hello "
 "World"
 }
-c={ "test2": 1}
+const c={ "test2": 1}
 
 @@ multiline
 @@ c
 @@ c.test2
 
-a="Hello";
-b="World";
+var a="Hello";
+const b="World";
 
 @@ a;
 
 a="Goodbye";
-d= void | 2;
+const d= void | 2;
 
 //Assert d == 2
 
@@ -32,21 +32,21 @@ d= void | 2;
 
 @@ [a, b, c] ;
 
-colorEnum := ( it in ["red","green","blue"] )
-
+def colorEnum { it in ["red","green","blue"] }
 
 //Use it as a constraint
-(colorEnum) myColor= "green"
+var (colorEnum) myColor= "green"
 
 //@@ {"test" : 1, "test2" : 2} | 'mvn:dollar.internal.runtime.script.TestPipe:com.sillelien:dollar-script:0-SNAPSHOT'
 
-greaterThan3 := (it > 3);
-greaterThan2 := (it > 2);
+def greaterThan3 {it > 3};
+def greaterThan2 {it > 2};
 
-(greaterThan3) x = 5;
+var (greaterThan3) x = 5;
 
-(greaterThan3) y = 25;
-(greaterThan2) z = 25;
+var (greaterThan3) y = 25;
+var (greaterThan2) z = 25;
+
 //z=0;
 if(false) {
     error { @@ "Error"}
