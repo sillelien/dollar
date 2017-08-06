@@ -30,7 +30,9 @@ Here is an example of what Dollar looks like
 
 ```dollar
 
-def testParams ($2 + " " + $1)
+def testParams {$2 + " " + $1}
+
+@@ testParams ("Hello", "World") 
 
 .: testParams ("Hello", "World") == "World Hello"
 
@@ -340,6 +342,51 @@ Dollar (at present) supports numerical and character ranges
 (1..3)[1] <=>2
 
 ```
+
+
+### Understanding Scopes
+
+Dollar makes extensive use of scope [closure](https://en.wikipedia.org/wiki/Closure_(computer_programming)). Any form of delayed execution has closure over it's parent scope. Let's start with a simple example:
+
+```dollar
+var outer=10;
+def func {
+    outer;
+}
+func() <=> 10;
+```
+
+In the above example `func` is a block collection which returns `outer`. It has access to `outer` because at the time of decleration outer is in it's parent scope.
+
+```dollar
+
+def func {
+    var inner=10;
+    {$1+inner}
+}
+
+func()(10) <=> 20;
+```
+
+So all of that looks fairly familiar, but remember anything with delayed execution has scope closure so
+
+```dollar
+var outer=10;
+1 <=> 2
+
+const scopedArray := [$1,outer,{var inner=20;inner}]
+
+.: scopedArray(5)[0]  == 4;
+
+scopedArray(5)[0] <=> 4;
+scopedArray(5)[1] <=> 10;
+scopedArray(5)[2]() <=> 20;
+
+
+```
+
+
+In the above example we now return an anonymous block collection from func which we then paramterize with the value `10`. When `func` is executed it returns the paramterized block, which we then call with `10` and which adds the value `inner` to the parameter (`$1`) - naturally the result is 20.
 
 ###Error Handling
 

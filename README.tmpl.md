@@ -110,5 +110,12 @@ docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pw
  
  [![Docker Registry](https://img.shields.io/docker/pulls/sillelien/dollarscript-headless.svg)](https://registry.hub.docker.com/u/sillelien/dollarscript-headless)
  
+ 
+## Research & Background Reading
+
+http://www.drdobbs.com/architecture-and-design/so-you-want-to-write-your-own-language/240165488
+
+https://www.youtube.com/watch?v=Sg4U4r_AgJU
+
 
 $BLURB

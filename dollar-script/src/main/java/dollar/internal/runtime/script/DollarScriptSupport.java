@@ -453,19 +453,19 @@ public class DollarScriptSupport {
     }
 
     @NotNull
-    public static var constrain(Scope scope, @NotNull var rhs, var constraint, String source) {
+    public static var constrain(Scope scope, @NotNull var value, var constraint, String source) {
 //        System.err.println("(" + source + ") " + rhs.$type().constraint());
-        if (!Objects.equals(rhs._constraintFingerprint(), source)) {
-            if (rhs._constraintFingerprint() != null && !rhs._constraintFingerprint().isEmpty()) {
+        if (!Objects.equals(value._constraintFingerprint(), source)) {
+            if (value._constraintFingerprint() != null && !value._constraintFingerprint().isEmpty()) {
                 scope.handleError(new DollarScriptException(
-                                                                   "Trying to assign an invalid constrained variable " + rhs._constraintFingerprint() + " vs " + source,
-                                                                   rhs));
+                                                                   "Trying to assign an invalid constrained variable " + value._constraintFingerprint() + " vs " + source,
+                                                                   value));
             }
         } else {
-            if (rhs._constraintFingerprint() != null && !rhs._constraintFingerprint().isEmpty()) {
+            if (value._constraintFingerprint() != null && !value._constraintFingerprint().isEmpty()) {
 //                System.err.println("Fingerprint: " + rhs.$type().constraint());
             }
         }
-        return rhs._constrain(constraint, source);
+        return value._constrain(constraint, source);
     }
 }

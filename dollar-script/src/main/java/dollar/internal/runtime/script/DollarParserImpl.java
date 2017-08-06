@@ -161,6 +161,7 @@ public class DollarParserImpl implements DollarParser {
             DollarStatic.context().setClassLoader(classLoader);
             Parser<?> parser = buildParser(false, scope);
             var parse = (var) parser.from(TOKENIZER, DollarLexer.IGNORED).parse(source);
+            parse._fixDeep(false);
             return $(exports);
         });
 
@@ -239,9 +240,9 @@ public class DollarParserImpl implements DollarParser {
         Parser<var> parser = (TERMINATOR_SYMBOL.optional()).next(or(expression, block).followedBy(
                 TERMINATOR_SYMBOL).many1()).map(v -> {
             log.debug("Ended Parse Phase");
-            var resultVar = $(v);
+            var resultVar = DollarFactory.blockCollection(v);
             log.debug("Starting Runtime Phase");
-            var fixedResult = resultVar._fix(1, false);
+            var fixedResult = resultVar._fix(false);
             log.debug("Ended Runtime Phase");
             return fixedResult;
         });
@@ -869,7 +870,7 @@ public class DollarParserImpl implements DollarParser {
                         ),
                         array(KEYWORD("export").optional(),
                               IDENTIFIER.between(OP("<"), OP(">")).optional(), KEYWORD("def"),
-                              IDENTIFIER, ref.lazy(), expression(null, true))
+                              IDENTIFIER, expression(null, true))
                 )
         ).token().map(
                 new DefinitionOperator(true, this)).map(

@@ -19,7 +19,46 @@ package dollar.internal.runtime.script;
 import com.sillelien.dollar.api.DollarException;
 import dollar.internal.runtime.script.api.ParserOptions;
 import org.jetbrains.annotations.NotNull;
-import org.pegdown.ast.*;
+import org.pegdown.ast.AbbreviationNode;
+import org.pegdown.ast.AnchorLinkNode;
+import org.pegdown.ast.AutoLinkNode;
+import org.pegdown.ast.BlockQuoteNode;
+import org.pegdown.ast.BulletListNode;
+import org.pegdown.ast.CodeNode;
+import org.pegdown.ast.DefinitionListNode;
+import org.pegdown.ast.DefinitionNode;
+import org.pegdown.ast.DefinitionTermNode;
+import org.pegdown.ast.ExpImageNode;
+import org.pegdown.ast.ExpLinkNode;
+import org.pegdown.ast.HeaderNode;
+import org.pegdown.ast.HtmlBlockNode;
+import org.pegdown.ast.InlineHtmlNode;
+import org.pegdown.ast.ListItemNode;
+import org.pegdown.ast.MailLinkNode;
+import org.pegdown.ast.Node;
+import org.pegdown.ast.OrderedListNode;
+import org.pegdown.ast.ParaNode;
+import org.pegdown.ast.QuotedNode;
+import org.pegdown.ast.RefImageNode;
+import org.pegdown.ast.RefLinkNode;
+import org.pegdown.ast.ReferenceNode;
+import org.pegdown.ast.RootNode;
+import org.pegdown.ast.SimpleNode;
+import org.pegdown.ast.SpecialTextNode;
+import org.pegdown.ast.StrikeNode;
+import org.pegdown.ast.StrongEmphSuperNode;
+import org.pegdown.ast.SuperNode;
+import org.pegdown.ast.TableBodyNode;
+import org.pegdown.ast.TableCaptionNode;
+import org.pegdown.ast.TableCellNode;
+import org.pegdown.ast.TableColumnNode;
+import org.pegdown.ast.TableHeaderNode;
+import org.pegdown.ast.TableNode;
+import org.pegdown.ast.TableRowNode;
+import org.pegdown.ast.TextNode;
+import org.pegdown.ast.VerbatimNode;
+import org.pegdown.ast.Visitor;
+import org.pegdown.ast.WikiLinkNode;
 
 public class CodeExtractionVisitor implements Visitor {
     @Override
@@ -198,7 +237,8 @@ public class CodeExtractionVisitor implements Visitor {
     public void visit(@NotNull VerbatimNode node) {
         if ("dollar".equals(node.getType())) {
             try {
-                new DollarParserImpl(new ParserOptions()).parse(node.getText(), false);
+                new DollarParserImpl(new ParserOptions()).parse(
+                        new ScriptScope(node.getText(), "(markdown)", true), node.getText());
             } catch (Exception e) {
                 throw new DollarException(e, node.getText());
             }
