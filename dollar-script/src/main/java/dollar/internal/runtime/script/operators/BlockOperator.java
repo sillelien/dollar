@@ -19,6 +19,7 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.ScriptScope;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -33,7 +34,8 @@ import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class BlockOperator implements Map<Token, var> {
 
-    @NotNull private static final Logger log = LoggerFactory.getLogger("BlockOperator");
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger("BlockOperator");
 
     private final DollarParser dollarParser;
     private final boolean pure;
@@ -45,22 +47,22 @@ public class BlockOperator implements Map<Token, var> {
 
     @Override
     public var map(@NotNull Token token) {
-        log.debug("BLOCK EXE START");
         List<var> l = (List<var>) token.value();
-        return DollarScriptSupport.inScope(pure, "block", newScope -> DollarScriptSupport.createNode(token, parallel -> {
-                    log.debug("BLOCK EXE LAMBDA START " + currentScope());
-                    try {
-                        if (l.size() > 0) {
-                            var collection = DollarFactory.blockCollection(l);
-                            return collection;
-//                        return $(l);
-                        } else {
-                            return $void();
-                        }
-                    } finally {
-                        log.debug("BLOCK EXE LAMBDA END");
+        return DollarScriptSupport.createNode("block", dollarParser, token,
+                                              new ScriptScope(DollarScriptSupport.currentScope(), "block-compile", false),
+                                              l, parallel -> {
+            log.debug("BLOCK EXE LAMBDA START " + currentScope());
+            try {
+                if (l.size() > 0) {
+                    var collection = DollarFactory.blockCollection(l);
+                    return collection;
+                } else {
+                    return $void();
+                }
+            } finally {
+                log.debug("BLOCK EXE LAMBDA END");
 
-                    }
-                }, l, "block", dollarParser));
+            }
+        });
     }
 }

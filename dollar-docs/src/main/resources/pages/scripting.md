@@ -30,7 +30,7 @@ Here is an example of what Dollar looks like
 
 ```dollar
 
-testParams := ($2 + " " + $1)
+def testParams ($2 + " " + $1)
 
 .: testParams ("Hello", "World") == "World Hello"
 
@@ -48,7 +48,7 @@ Support for functional programming is included in Dollar, this will be widened a
 In this example we're declaring reverse to be an expression that reverses two values from a supplied array. Because we declare it as `pure` the expression supplied must also be `pure`. To understand what a pure function is please see http://en.wikipedia.org/wiki/Pure_function. Basically it prohibits the reading of external state or the setting of external state. We next swap `[2,1]` within a newly created pure expression, which is subsequently assigned to a. If reverse had not been declared pure it would not be allowed within the pure expression.
 
  ```dollar
- pure reverse := [$1[1],$1[0]]
+ pure def reverse [$1[1],$1[0]]
 
  a= pure {
      reverse([2,1])
@@ -70,9 +70,9 @@ Let's see some of that behaviour in action:
 
 ```dollar
 
-variableA := 1
-variableB := variableA
-variableA := 2
+var variableA = 1
+const variableB := variableA
+variableA = 2
 
 .: variableB == 2
 ```
@@ -83,7 +83,16 @@ Before we go any further let's clarify `:=` vs `=`, I have chosen to follow the 
 
 This means that `a := b + 1` translates to **a is defined as b + 1** so a is behaving reactively, changes to b cause a change in the value of a. It also means that `a = b + 1` simply assigns `b + 1` to the variable a, changes to b do not cause changes to a. 
 
-**TL;DR `=` behaves like it's Java equivalent, `:=` doesnt't**
+At this point it's time to introduce a what is arguably a cleaner and easier to understand short hand for 'const reactiveVar := {...}` the short hand is 'def reactiveVar {...}' such as:
+
+```dollar
+    def myFunction { @@ "Hello World"}
+```
+
+The `def` keyword implies `const` and it also does not allow dynamic variable names (more on that later). A rule of thumb is if you'd like to have something act like a function use `def`.
+
+
+**TL;DR `=` behaves like it's Java equivalent, `:=` doesnt't and use `def` to create functions.**
 
 > The assertion operator `.:` will throw an assertion error if the value following is either non boolean or not true.
 
@@ -92,7 +101,7 @@ Now let's throw in the causes operator :
 
 ```dollar
 
-a=1
+var a=1
 a causes { @@ $1 }
 a=2
 a=3
@@ -110,8 +119,8 @@ That simple piece of code will simply output each change made to the variable a,
 
 ```dollar
 
-b=1
-a=1
+var b=1
+var a=1
 a + b + 1 causes { @@ "a=" + a + ", b=" + b}
 a=2
 a=3
@@ -131,7 +140,7 @@ Yep, you can write reactive expressions based on collections or arbitrary expres
 But it's even simpler than that, many of Dollars operators are reactive themselves. That means they understand changes to their values. Take `@@` (or `print`) as an example:
 
 ```dollar
-b=1
+var b=1
 @@b
 b=2
 ```
@@ -139,7 +148,7 @@ b=2
 Outputs 1 then 2 because @@ heard the change to b and re output the new value. Often this is what you want, however if you don't just add the fix operator `&` before the value. That will stop reactive behaviour.
 
 ```dollar
-b=1
+var b=1
 @@ &b
 b=2
 ```
@@ -153,9 +162,9 @@ Obviously the declarative/reactive behavior is fantastic for templating, eventin
 
 ```dollar
 
-variableA = 1
-variableB = variableA
-variableA = 2
+var variableA = 1
+var variableB = variableA
+var variableA = 2
 
 .: variableB == 1
 ```
@@ -165,10 +174,10 @@ So as you can see when we use the `=` assignment operator we assign the *value* 
 
 ```dollar
 
-variableA = 1
-variableB = variableA
-variableC = (variableA +1 )
-variableD := (variableA + 1)
+var variableA = 1
+var variableB = variableA
+var variableC = (variableA +1 )
+const variableD := (variableA + 1)
 variableA = 2
 
 .: variableB == 1
@@ -183,7 +192,7 @@ The assert equals operator `<=>` will compare two values and throw an exception 
 
 ```dollar
 
-lamdaVar = {$1 + 10}
+def lamdaVar  {$1 + 10}
 lamdaVar(5) <=> 15
 
 ```
@@ -204,14 +213,14 @@ Dollar supports several block types, the first is the 'line block' a line block 
 
 ```dollar
 
-myBlock := {
+var myBlock = {
     "Hello "
     "World"
 }
 
 myBlock <=> "World"
 
-myBlock2 := {1;2}
+myBlock2 = {1;2}
 
 myBlock2 <=> 2
 
@@ -225,14 +234,14 @@ Next we have the list block, the list block preserves all the values each part i
 
 ```dollar
 
-list := [
+var list = [
     "Hello "
     "World"
 ]
 
 list <=> ["Hello ","World"]
 
-list2 := [1,2]
+list2 = [1,2]
 
 list2 <=> [1,2]
 
@@ -244,14 +253,14 @@ Finally we have the map block, when an map block is evaluated the result is the 
 
 ```dollar
 
-mapBlock := {
+var mapBlock = {
     "Hello",
     "World"
 }
 
 mapBlock <=> {"Hello":"Hello", "World":"World"}
 
-mapBlock2 := { 1, 2}
+mapBlock2 = { 1, 2}
 
 mapBlock2 <=> {"1":1,"2":2}
 
@@ -262,7 +271,7 @@ Map blocks are combined with the pair `:` operator to become useful and create m
 
 ```dollar
 
-mapBlock := {
+var mapBlock = {
     "first":"Hello ",
    "second":"World"
 }
@@ -279,8 +288,8 @@ The stdout operator `@@` is used to send a value to stdout in it's serialized (J
 
 ```dollar
 
-pair1 := "first" : "Hello ";
-pair2 := "second" : "World";
+var pair1 = "first" : "Hello ";
+var pair2 = "second" : "World";
 
 .: pair1 + pair2 == {"first":"Hello ","second":"World"}
 
@@ -337,9 +346,9 @@ Dollar (at present) supports numerical and character ranges
 Error handling couldn't be simpler. Define an error expression using the error keyword, the expression supplied will be evaluated on an error occurring within any sub scope of the scope in which it is defined. The special variables `msg` and `type` will be assigned values.
 
 ```dollar
-errorHappened= false
+var errorHappened= false
 error { @@ msg; errorHappened= true }
-a=1/0
+var a=1/0
 .: errorHappened
 ```
 
@@ -407,7 +416,7 @@ As you can see we can do date arithmetic, but thanks to another Dollar feature a
 Those values are built in, but we can easily define them ourselves.
 
 ```dollar
-fortnight := ($1 * 14)
+def fortnight ($1 * 14)
 
 @@ DATE() + 1 fortnight
 ```
@@ -427,11 +436,11 @@ fortnight := ($1 * 14)
 Although there are no compile type constraints in Dollar a runtime type system can be built using constraints. Constraints are declared at the time of variable assignment or declaration. A constraint once declared on a variable cannot be changed. The constraint is placed before the variable name at the time of declaration in parenthesis.
 
 ```dollar
-(it < 100) a = 50
-(it > previous || previous is Void) b = 5
+var (it < 100) a = 50
+var (it > previous || previous is Void) b = 5
 b=6
 b=7
-( it is String) s="String value"
+var ( it is String) s="String value"
 ```
 
 The special variables `it` - the current value and `previous` - the previous value, will be available for the constraint.
@@ -441,16 +450,16 @@ To build a simple runtime type system simply declare (using `:=`) your type as a
 ```dollar
 
 //define a pseudo-type
-colorEnum := ( it in ["red","green","blue"] )
+def colorEnum ( it in ["red","green","blue"] )
 
 
 //Use it as a constraint
-(colorEnum) myColor= "green"
+var (colorEnum) myColor= "green"
 
 error { @@ msg }
 
 //This fails
-myColor="apple"
+var myColor="apple"
 
 ```
 
@@ -458,7 +467,7 @@ Of course since the use of `(it is XXXX)` is very common Dollar provides a speci
 
 
 ```dollar
-<string> (#it > 5) s="String value"
+var <string> (#it > 5) s="String value"
 ```
 
 It is intended that the predictive type system, will be in time combined with runtime types to help spot bugs at compile time.
@@ -468,7 +477,7 @@ Dollar also supports type coercion, this is done using the `as` operator followe
 
 
 ```dollar
-<string> s= 1 as string
+var <string> s= 1 as string
 s <=> "1"
 ```
 
@@ -521,8 +530,8 @@ Dollar supports the usual imperative control flow but, unlike some languages, ev
 
 ```dollar
 
-a=1
-b= if a==1 2 else 3
+var a=1
+var b= if a==1 2 else 3
 b <=> 2
 
 ```
@@ -535,9 +544,9 @@ The combined effect of these two operators is to provide the usual if/else/else 
 
 ```dollar
 
-a=5
+var a=5
 //Parenthesis added for clarity, not required.
-b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
+var b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 .: b == "more than two"
 
 ```
@@ -555,7 +564,7 @@ for i in 1..10 {
 ###While
 
 ```dollar
-a= 1
+var a= 1
 while a < 10 {
  a= a+1
 }
@@ -574,7 +583,7 @@ Dollar as previously mentioned is a reactive programming language, that means th
 Let's start with the simplest reactive control flow operator, the '?->' or 'causes' operator.
 
 ```dollar
-a=1; b=1
+var a=1; var b=1
 
 a ?-> (b= a)
 
@@ -599,8 +608,8 @@ Next we have the 'when' operator which can be specified as a statement, usually 
 
 ```dollar
 
-c=1
-d=1
+var c=1
+var d=1
 
 //When c is greater than 3 assign it's value to d
 c > 3 ? (d= c)
@@ -615,7 +624,7 @@ This is similar to the previous example except that we have to set a value great
 
 ```dollar
 //Note alternative syntax is when <condition> <expression>
-c=1
+var c=1
 when c > 3 { @@ c}
 ```
 
@@ -626,7 +635,7 @@ The `collect` operator listens for changes in the supplied expression adding all
 
 ```dollar
 
-e=void
+var e=void
 
 //Length is greater than or equal to 4 unless void
 (#it >= 4 || it is VOID) collectedValues=void
@@ -662,7 +671,7 @@ Now if we take this further we can use the declaration operator `:=` to say that
 
 ```dollar
 
-testParams := ($2 + " " + $1)
+const testParams := ($2 + " " + $1)
 testParams ("Hello", "World") <=> "World Hello"
 
 ```
@@ -673,7 +682,7 @@ Yep we built a function just by naming an expression. You can name anything and 
 What about named parameters, that would be nice.
 
 ```dollar
-testParams := (last + " " + first)
+const testParams := (last + " " + first)
 testParams(first="Hello", last="World") <=> "World Hello"
 ```
 
@@ -685,8 +694,8 @@ Yep you can use named parameters, then refer to the values by the names passed i
 URIs are first class citizen's in Dollar. They refer to a an arbitrary resource, usually remote, that can be accessed using the specified protocol and location. Static URIs can be referred to directly without quotation marks, dynamic URIs can be built by casting to a uri using the `as` operator.
 
 ```dollar
-posts = << https://jsonplaceholder.typicode.com/posts 
-titles = posts each { $1.title }
+var posts = << https://jsonplaceholder.typicode.com/posts 
+var titles = posts each { $1.title }
 @@ titles
 ```
 
@@ -699,9 +708,9 @@ Hopefully you'll find Dollar a useful and productive language, but there will be
 
 ```dollar
 
-variableA="Hello World"
+var variableA="Hello World"
 
-java = `out=scope.get("variableA");`
+var java = `out=scope.get("variableA");`
 
 java <=> "Hello World"
 
@@ -862,8 +871,8 @@ void default 2 <=> 2
 Modules can be imported using the `module` keyword and a string representing in URI format the location of the module. At present the standard format is the Github locator so we're going to look at that first.
 
 ```dollar
-chat:= module "github:neilellis:dollar-example-module::chat.ds" (channel="test")
-sub= chat.server()
+const chat:= module "github:neilellis:dollar-example-module::chat.ds" (channel="test")
+var sub= chat.server()
 chat.stop()
 ```
 
@@ -876,7 +885,7 @@ You will need to have the `git` command on your path and to have access to the r
 The GitHub resolver will checkout the specified repository and store it under `~/.dollar/runtime/modules/github/<username>/<repo-name>/<branch>` all further interaction with the module will then be done from the checked out version. If you already have a version checked out a git pull will be done to update the branch.
 
 ```dollar
-hello := module "github:neilellis:dollar-example-module:0.1.0:branch.ds"
+const hello := module "github:neilellis:dollar-example-module:0.1.0:branch.ds"
 @@ hello
 ```
 
@@ -898,19 +907,19 @@ The Dollar files should use the export modifier on assignments that it wishes to
 
 
 ```dollar
-redis= ("redis://localhost:6379/" + ${channel | "test"}) as URI
-www= (("http:get://127.0.0.1:8111/" + ${channel | "test"}) as URI)
+var redis= ("redis://localhost:6379/" + ${channel | "test"}) as URI
+var www= (("http:get://127.0.0.1:8111/" + ${channel | "test"}) as URI)
 
-export server := {
+export def server  {
            www subscribe {
             $1.params >> redis
             { body :  all redis }
         }
     };
 
-export stop := {stop(www);stop(redis); @@ [state(www),state(redis)]}
+export def stop {stop(www);stop(redis); @@ [state(www),state(redis)]}
 
-export state:= [state(www),state(redis)]
+export def state [state(www),state(redis)]
 ```
 
 
@@ -929,9 +938,9 @@ The parallel operator `|:|` or `parallel` causes the right hand side expression 
 
 ```dollar
 
-testList := [ TIME(), {SLEEP(1 Sec); TIME();}, TIME() ];
-a= |..| testList;
-b= |:| testList;
+const testList := [ TIME(), {SLEEP(1 Sec); TIME();}, TIME() ];
+var a= |..| testList;
+var b= |:| testList;
 //Test different execution orders
 .: a[2] >= a[1]
 .: b[2] < b[1]
@@ -944,14 +953,14 @@ As you can see the order of evaluation of lists and maps **but not line blocks**
 The fork operator `-<` or `fork` will cause an expression to be evaluated in the background and any reference to the forked expression will block until a value is ready.
 
 ```dollar
-sleepTime := {@@ "Background Sleeping";SLEEP(4 Sec); @@ "Background Finished Sleeping";TIME()}
+const sleepTime := {@@ "Background Sleeping";SLEEP(4 Sec); @@ "Background Finished Sleeping";TIME()}
 //Any future reference to c will block until c has completed evaluation
-c= fork sleepTime
+var c= fork sleepTime
 SLEEP(1 Sec)
 @@ "Main thread sleeping ..."
 SLEEP(2 Secs)
 @@ "Main thread finished sleeping ..."
-d= TIME()
+var d= TIME()
 .: c > d
 ```
 

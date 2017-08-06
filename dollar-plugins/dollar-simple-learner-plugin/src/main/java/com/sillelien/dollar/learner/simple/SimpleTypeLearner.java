@@ -128,7 +128,7 @@ public class SimpleTypeLearner implements TypeLearner {
 
     @Override
     public void start() {
-        db = DBMaker.fileDB(new File(FileUtil.getRuntimeDir("types"), "typelearner.db")).fileMmapEnable().make();
+        db = DBMaker.fileDB(new File(FileUtil.getTempDir("types"), "typelearner.db")).fileMmapEnable().make();
     }
 
     @Override

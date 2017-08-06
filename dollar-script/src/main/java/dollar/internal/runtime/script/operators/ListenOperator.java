@@ -16,44 +16,49 @@
 
 package dollar.internal.runtime.script.operators;
 
+import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.Operator;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jparsec.functors.Binary;
 
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 
 public class ListenOperator implements Binary<var>, Operator {
     private final boolean pure;
+    @Nullable
     private SourceSegment source;
+    @NotNull
     private DollarParser parser;
 
 
-    public ListenOperator(boolean pure, DollarParser parser) {
+    public ListenOperator(boolean pure, @NotNull DollarParser parser) {
         this.pure = pure;
         this.parser = parser;
     }
 
 
+    @NotNull
     @Override
     public var map(@NotNull var lhs, @NotNull var rhs) {
-        Callable<var> callable = () -> {
-            return $(lhs.$listen(i -> DollarScriptSupport.inScope(pure, "listen", newScope -> {
+        Pipeable callable = args -> {
+            return $(lhs.$listen(i -> DollarScriptSupport.inScope(false, pure, "listen", newScope -> {
                 newScope.setParameter("1", i[0]);
                 //todo: change to read
                 return rhs._fixDeep(false);
             })));
         };
-        return DollarScriptSupport.createNode( DollarScriptSupport.currentScope(), callable, source, Arrays.asList(lhs, rhs), "listen", parser);
+        return DollarScriptSupport.createNode("listen", parser, DollarScriptSupport.currentScope(),
+                                              source, Arrays.asList(lhs, rhs), callable);
     }
 
-    @Override public void setSource(SourceSegment source) {
+    @Override public void setSource(@NotNull SourceSegment source) {
         this.source = source;
     }
 }

@@ -26,9 +26,10 @@ import org.jparsec.functors.Map;
 
 public class CastOperator implements Map<Token, Map<? super var, ? extends var>> {
 
+    @NotNull
     private DollarParser parser;
 
-    public CastOperator(DollarParser parser) {
+    public CastOperator(@NotNull DollarParser parser) {
         this.parser = parser;
     }
 
@@ -37,10 +38,8 @@ public class CastOperator implements Map<Token, Map<? super var, ? extends var>>
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         var rhs = (var) token.value();
         return lhs -> DollarScriptSupport.createReactiveNode(
-                () -> lhs.$as(Type
-                        .valueOf(
-                                rhs.toString()
-                                        .toUpperCase())),
-                token, "as", lhs, parser);
+                "as", parser, token, lhs,
+                args -> lhs.$as(Type.valueOf(rhs.toString().toUpperCase()))
+        );
     }
 }

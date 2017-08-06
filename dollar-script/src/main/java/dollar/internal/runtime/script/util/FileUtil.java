@@ -61,4 +61,10 @@ public final class FileUtil {
         dir.mkdirs();
         return dir;
     }
+
+    public static File getTempDir(String dirName) {
+        File dir = new File(RUNTIME_TMP_PATH, dirName);
+        dir.mkdirs();
+        return dir;
+    }
 }

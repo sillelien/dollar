@@ -1,16 +1,22 @@
 
-/// Pipe Testing - complicated scenarios
+//This function returns a lambda
+def lamdaReturn1 {
+        var a= 10;
+        a= a + 5;
+        { @@ $1; @@ a; $1 + 2 * a }
+}
+(5 -> lamdaReturn1()) <=> 35
 
-def lamdaReturn {
+def lamdaReturn2 {
         var a= 10;
         a= a + 5;
         { @@ $1; @@ a; $1 + a }
 }
 
 //Execute function and pipe 5 to the returned lambda
-(5 -> lamdaReturn()) <=> 20
+(5 -> lamdaReturn2()) <=> 20
 //Pipe 5 to the function then execute the lambda with 10 as a parameter
-(5 -> lamdaReturn)(10) <=> 25
+(5 -> lamdaReturn2)(10) <=> 25
 
 
 //If and lambdas, note := does not fix

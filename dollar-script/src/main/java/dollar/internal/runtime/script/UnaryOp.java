@@ -47,12 +47,13 @@ public class UnaryOp implements Unary<var>, Operator {
     @Override
     public var map(var from) {
 
-        if (immediate) {
-            return function.map(from);
-        }
+//        if (immediate) {
+//            return function.map(from);
+//        }
 
         //Lazy evaluation
-        final var lambda = DollarScriptSupport.createReactiveNode( () -> function.map(from), source, operation, from, parser);
+        final var lambda = DollarScriptSupport.createReactiveNode(operation, source, parser, from,
+                                                                  args -> function.map(from));
         return lambda;
 
     }

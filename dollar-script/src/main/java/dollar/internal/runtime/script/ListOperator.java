@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script;
 
+import com.sillelien.dollar.api.collections.ImmutableList;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
@@ -37,11 +38,7 @@ class ListOperator implements Map<Token, var> {
     @Override
     public var map(@NotNull Token t) {
         List<var> o = (List<var>) t.value();
-        final var lambda = DollarScriptSupport.createNode(t,
-                parallel -> DollarScriptSupport.inScope(pure, "list",
-                        newScope -> {
-                            return DollarFactory.fromValue(o);
-                        }), o, "list", dollarParser);
+        final var lambda = DollarScriptSupport.createNode(t, vars -> DollarFactory.fromList(new ImmutableList<>(o)), o, "list", dollarParser);
         for (var v : o) {
             v.$listen(i -> lambda.$notify());
         }

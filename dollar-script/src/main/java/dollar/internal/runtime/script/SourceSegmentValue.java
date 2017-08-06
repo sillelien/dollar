@@ -18,16 +18,22 @@ package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.Scope;
+import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.util.FNV;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
 
 public class SourceSegmentValue implements SourceSegment {
+    @NotNull
     private final Scope scope;
+    @Nullable
     private final String sourceFile;
     private final int length;
+    @NotNull
     private final String source;
     private final int start;
+    @NotNull
     private String shortHash;
 
     public SourceSegmentValue(@NotNull Scope scope, @NotNull Token t) {
@@ -35,6 +41,9 @@ public class SourceSegmentValue implements SourceSegment {
         this.sourceFile = scope.getFile();
         this.length = t.length();
         this.start = t.index();
+        if(scope.getSource() == null) {
+            throw new DollarParserError("Cannot create a SourceSegmentValue from a scope with no source: "+scope);
+        }
         this.source = scope.getSource();
         this.shortHash = new FNV().fnv1_32(source.getBytes()).toString(36);
     }
@@ -85,6 +94,33 @@ public class SourceSegmentValue implements SourceSegment {
                         " ← " +
                         source.substring(index + length, end).replaceAll("\n", "\n    ") +
                         "\n\n" + "see " + getSourceFile() + "(" + line + ":" + column + ")\n";
+        return highlightedSource;
+    }
+
+    @NotNull
+    @Override
+    public String getShortSourceMessage() {
+        int index = getStart();
+        int length = getLength();
+        if (index < 0 || length < 0) {
+            return "<unknown location>";
+        }
+        ;
+        if (index + length > source.length()) {
+            throw new AssertionError("Index="+index+" Length="+length+" SourceLength="+source.length()+" Source='"+source+"'");
+        }
+        String[] lines = source.substring(0, index).split("\n");
+        int line = lines.length;
+        int column = index == 0 ? 0 : (source.charAt(index - 1) == '\n' ? 0 : lines[lines.length - 1].length());
+        int end = index + length >= source.length() ? source.length() - 1 : source.indexOf('\n', index + length);
+        int start = index - column;
+        String
+                highlightedSource =
+                " " +
+                        source.substring(start, index).replaceAll("\n+", " ") +
+                        " → " + source.substring(index, index + length) + " ← " +
+                        source.substring(index + length, end).replaceAll("\n+", " ") +
+                        " " + getSourceFile() + "(" + line + ":" + column + ")";
         return highlightedSource;
     }
 

@@ -40,7 +40,7 @@ public class EveryOperator implements Map<Object[], var> {
         Scheduler.schedule(i -> {
             count[0]++; // William Gibson
 //                System.out.println("COUNT "+count[0]);
-            return inScope(pure, "every", newScope -> {
+            return inScope(false, pure, "every", newScope -> {
                 try {
 //                    System.err.println(newScope);
                     newScope.setParameter("1", $(count[0]));

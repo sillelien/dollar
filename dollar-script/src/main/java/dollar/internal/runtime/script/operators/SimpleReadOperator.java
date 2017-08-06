@@ -26,15 +26,17 @@ import org.jetbrains.annotations.NotNull;
 public class SimpleReadOperator extends UnaryOp {
 
 
-    public SimpleReadOperator(DollarParser parser) {
-        super("simple-read",  null, parser);
+    public SimpleReadOperator(@NotNull DollarParser parser) {
+        super("simple-read", null, parser);
     }
 
 
+    @NotNull
     @Override
     public var map(@NotNull var from) {
-        return DollarScriptSupport.createReactiveNode( () -> DollarFactory.fromURI(from).$read(), source, operation,
-                                                from, parser);
+        return DollarScriptSupport.createReactiveNode(operation, source, parser, from,
+                                                      args -> DollarFactory.fromURI(from).$read()
+        );
     }
 
 }

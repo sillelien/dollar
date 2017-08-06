@@ -14,17 +14,10 @@
  *    limitations under the License.
  */
 
-package com.sillelien.dollar;
+package dollar.internal.runtime.script;
 
-import dollar.internal.runtime.script.DollarParserImpl;
-import dollar.internal.runtime.script.api.ParserOptions;
+import com.sillelien.dollar.api.Scope;
 
-public class ExampleApp {
-
-
-    public static void main(String[] args) throws Exception {
-        new DollarParserImpl(new ParserOptions()).parse(ExampleApp.class.getResourceAsStream("/example.ds"),
-                                                        "/example.ds",
-                                                    false);
-    }
+public interface ScopeExecutable<T> {
+     T execute(Scope scope) throws Exception;
 }

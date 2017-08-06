@@ -39,10 +39,11 @@ public class WriteOperator implements Map<Token, Map<? super var, ? extends var>
             @Override
             public var map(@NotNull var rhs) {
                 return DollarScriptSupport.createReactiveNode(
-                        () -> rhs.$write((var) objects[1],
-                                objects[2] != null,
-                                objects[3] != null
-                        ), token, "write:" + objects[2] + ":" + objects[3], (var) objects[1], rhs, parser);
+                        "write:" + objects[2] + ":" + objects[3], parser, token, (var) objects[1],
+                        rhs, args -> rhs.$write((var) objects[1],
+                                              objects[2] != null,
+                                              objects[3] != null
+                        ));
             }
         };
     }

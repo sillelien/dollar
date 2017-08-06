@@ -20,6 +20,6 @@ import com.sillelien.dollar.api.Scope;
 
 public class BlockScope extends ScriptScope {
     public BlockScope(Scope scope) {
-        super(scope,scope.getFile(),scope.getSource(),"block-scope");
+        super(scope,scope.getFile(),scope.getSource(),"block-scope", false);
     }
 }

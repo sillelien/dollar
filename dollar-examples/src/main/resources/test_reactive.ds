@@ -4,12 +4,10 @@
 // lambda style expression
 @@ "*****"
 
-var lamval=0;
-
 lamval causes { @@ "->"+lamval; }
 
-lamval=1
-const  lambda2 := lamval
+var lamval=1
+const lambda2 := lamval
 
 
 const lambda := ( ( lamval )  + lamval )
@@ -17,7 +15,7 @@ const notlambda = ( ( lamval )  + lamval )
 
 lamval= 7
 
-var lamval2= 23
+lamval2= 23
 
 //The simplest possible lambda (serves no purpose!)
 .: 1 == 1
@@ -37,10 +35,10 @@ var lamval2= 23
 
 
 //Now we test levels of indirection
-delayName := ("lamval" + lamval)
+def delayName { ("lamval" + lamval)}
 @@ "*****"
-lamval=5
-lamval5=13
+var lamval=5
+var lamval5=13
 
 //Did you follow that crazyness :-) Don't do this at home!
 
@@ -78,7 +76,7 @@ lamval = "fred"
 @@ ([1,2,3] -> function)
 ([1,2,3] -> function) <=>  [ 5, "fred", [1, 2, 3] ]
 
-const removeWorld := ($1 - "World")
+def removeWorld ($1 - "World")
 
 @@ ["Hello", "World"] -> removeWorld
 
@@ -88,7 +86,7 @@ const removeWorld := ($1 - "World")
 
 ($2 + " " + $1)("Hello", "World") <=> "World Hello"
 
-const testParams := ($2 + " " + $1)
+def testParams ($2 + " " + $1)
 (testParams) ("Hello", "World") <=> "World Hello"
 
 //short-form of parameterized variable (function call style)
@@ -214,9 +212,9 @@ i <=> 6
 
 var sub= (j *= random:dummy)
 @@j
-const colors= ["red","green","blue"]
+def colors ["red","green","blue"]
 @@j * #colors
-var k := colors[j * #colors]
+const k := colors[j * #colors]
 @@k
 volatile updatedK=false
 k ?-> {updatedK=true}

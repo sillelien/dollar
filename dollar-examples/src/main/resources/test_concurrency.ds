@@ -15,7 +15,7 @@ var b= parallel testArray;
 .: b[2] < b[1]
 .: a[2] >= a[1]
 
-sleepTime := {@@ "Background Sleeping";SLEEP(4 Secs); @@ "Background Finished Sleeping";TIME()}
+def sleepTime {@@ "Background Sleeping";SLEEP(4 Secs); @@ "Background Finished Sleeping";TIME()}
 
 //Any future reference to c will block until c has completed evaluation
 const c= fork sleepTime

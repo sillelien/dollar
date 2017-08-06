@@ -18,8 +18,11 @@ Dollar is an integration centric, reactive dynamic programming language which ru
 
 It is being designed for the needs of server-side development such as integration, messaging etc. It is also an internet centric language where JSON and URIs are first class citizens.
 
-
 **The language is currently in early but active development.**
+
+I'm also working full-time on this, if you wish to support efforts drop me some money at [https://www.paypal.me/neilellis](https://www.paypal.me/neilellis) every little helps!
+
+**Thanks!**
 
 Below is a fully functional persistent chat server in dollar:
 

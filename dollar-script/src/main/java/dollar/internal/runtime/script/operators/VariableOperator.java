@@ -33,16 +33,17 @@ import static dollar.internal.runtime.script.DollarScriptSupport.scopes;
 public class VariableOperator extends UnaryOp {
 
 
-    public VariableOperator(Scope scope,DollarParser parser) {
+    public VariableOperator(@NotNull Scope scope, @NotNull DollarParser parser) {
         super("variable-operator",null, parser);
     }
 
 
+    @NotNull
     @Override
     public var map(@NotNull var from) {
         Scope scope = currentScope();
 
-        var lambda = DollarScriptSupport.createReactiveNode( () -> {
+        var lambda = DollarScriptSupport.createReactiveNode(operation, source, parser, from, args -> {
             String key = from.$S();
             boolean numeric = from.number();
 
@@ -64,7 +65,7 @@ public class VariableOperator extends UnaryOp {
                 return scope.getParameter(key);
             }
             return scope.get(key);
-        }, source, operation, from, parser);
+        });
         scope.listen(from.$S(), lambda);
         lambda.setMetaAttribute("variable", from.$S());
         return lambda;

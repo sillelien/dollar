@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script.operators;
 
+import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.api.DollarParser;
@@ -24,7 +25,6 @@ import org.jparsec.Token;
 import org.jparsec.functors.Map;
 
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 
 public class ReadOperator implements Map<Token, Map<? super var, ? extends var>> {
 
@@ -41,9 +41,9 @@ public class ReadOperator implements Map<Token, Map<? super var, ? extends var>>
         return new Map<var, var>() {
             @Override
             public var map(@NotNull var rhs) {
-                Callable<var> callable = () -> rhs.$read(objects[1] != null,
-                        objects[2] != null);
-                return DollarScriptSupport.createNode(callable, token, Arrays.asList(rhs), "read:" + objects[1] + ":" + objects[2], parser);
+                Pipeable callable = i -> rhs.$read(objects[1] != null, objects[2] != null);
+                return DollarScriptSupport.createNode("read:" + objects[1] + ":" + objects[2],
+                                                      parser, token, Arrays.asList(rhs), callable);
             }
         };
     }

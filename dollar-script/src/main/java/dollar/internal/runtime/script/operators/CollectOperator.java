@@ -46,7 +46,7 @@ public class CollectOperator implements Map<Object[], var> {
             @Override public var pipe(var... in) throws Exception {
                 var value = fix((var) objects[0], false);
                 count[0]++;
-                return DollarScriptSupport.inScope(pure, "collect", newScope -> {
+                return DollarScriptSupport.inScope(false, pure, "collect", newScope -> {
                     newScope.setParameter("count", $(count[0]));
                     newScope.setParameter("it", value);
                     //noinspection StatementWithEmptyBody

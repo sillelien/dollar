@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script.operators;
 
+import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.api.DollarParser;
@@ -24,7 +25,6 @@ import org.jparsec.Token;
 import org.jparsec.functors.Map;
 
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 import static dollar.internal.runtime.script.DollarScriptSupport.inScope;
@@ -41,13 +41,14 @@ public class WhileOperator implements Map<Token, Map<? super var, ? extends var>
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         var lhs = (var) token.value();
         return rhs -> {
-            Callable<var> callable = () -> inScope(pure, "while", newScope -> {
+            Pipeable callable = i -> inScope(false, pure, "while", newScope -> {
                 while (lhs.isTrue()) {
                     rhs._fixDeep();
                 }
                 return $(false);
             });
-            return DollarScriptSupport.createNode(callable, token, Arrays.asList(lhs, rhs), "while", parser);
+            return DollarScriptSupport.createNode("while", parser, token, Arrays.asList(lhs, rhs),
+                                                  callable);
         };
     }
 }

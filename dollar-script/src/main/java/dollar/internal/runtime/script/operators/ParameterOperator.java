@@ -16,12 +16,13 @@
 
 package dollar.internal.runtime.script.operators;
 
+import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
 import dollar.internal.runtime.script.DollarParserImpl;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.ScriptScope;
 import dollar.internal.runtime.script.api.DollarParser;
-import com.sillelien.dollar.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,38 +30,40 @@ import org.jparsec.Token;
 import org.jparsec.functors.Map;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
-import static dollar.internal.runtime.script.DollarScriptSupport.inScope;
+import static dollar.internal.runtime.script.DollarScriptSupport.createNode;
+import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class ParameterOperator implements Map<Token, Map<? super var, ? extends var>> {
+    @NotNull
     private final DollarParser dollarParser;
     private final boolean pure;
 
-    public ParameterOperator(DollarParser dollarParser, boolean pure) {
+    public ParameterOperator(@NotNull DollarParser dollarParser, boolean pure) {
         this.dollarParser = dollarParser;
         this.pure = pure;
     }
 
-    @Nullable @Override public Map<? super var, ? extends var> map(@NotNull Token token) {
+    @Nullable
+    @Override
+    public Map<? super var, ? extends var> map(@NotNull Token token) {
         List<var> rhs = (List<var>) token.value();
         return lhs -> {
             if (!lhs.dynamic()) {
                 String lhsString = lhs.toString();
                 if (pure && Builtins.exists(lhsString) && !Builtins.isPure(lhsString)) {
                     throw new DollarScriptException(
-                            "Cannot call the impure function '" + lhsString + "' in a pure expression.");
+                                                           "Cannot call the impure function '" + lhsString + "' in a pure expression.");
                 }
             }
 
             String constraintSource = null;
-            Callable<var> callable = () -> inScope(pure, "parameter",
-                                                                new Function(rhs, lhs, token,
-                                                                             constraintSource));
-            var lambda =
-                    DollarScriptSupport.createNode(callable, token, rhs,
-                                                 "parameter", dollarParser);
+            var lambda = createNode("parameter", dollarParser, token,
+                                    new ScriptScope(currentScope(),"parameter", false),
+                                    rhs,
+                                    new Function(rhs, lhs, token, constraintSource)
+            );
             //reactive links
             lhs.$listen(i -> lambda.$notify());
             for (var param : rhs) {
@@ -70,39 +73,50 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
         };
     }
 
-    private class Function implements java.util.function.Function<Scope, var> {
+    private class Function implements Pipeable {
+        @NotNull
         private final List<var> rhs;
+        @NotNull
         private final var lhs;
+        @NotNull
         private final Token token;
+        @Nullable
         private final String constraintSource;
 
-        public Function(List<var> rhs, var lhs, Token token, String constraintSource) {
+        public Function(@NotNull List<var> rhs,
+                        @NotNull var lhs,
+                        @NotNull Token token,
+                        @Nullable String constraintSource) {
             this.rhs = rhs;
             this.lhs = lhs;
             this.token = token;
             this.constraintSource = constraintSource;
         }
 
+        @NotNull
         @Override
-        public var apply(
-                @NotNull Scope newScope) {
+        public var pipe(var... args) {
             //Add the special $*
             // value for all the
             // parameters
-            newScope.setParameter(
+            currentScope().setParameter(
                     "*",
                     $(rhs));
             int count = 0;
             for (var param : rhs) {
-                newScope.setParameter(String.valueOf(++count), param);
+                currentScope().setParameter(String.valueOf(++count), param);
                 //If the parameter is a named parameter then use the name (set as metadata on the value).
                 if (param.getMetaAttribute(DollarParserImpl.NAMED_PARAMETER_META_ATTR) != null) {
-                    newScope.set(param.getMetaAttribute(DollarParserImpl.NAMED_PARAMETER_META_ATTR), param, true, null,
-                                 constraintSource, false, false, pure);
+                    currentScope().set(
+                            param.getMetaAttribute(DollarParserImpl.NAMED_PARAMETER_META_ATTR),
+                            param, true, null,
+                            constraintSource, false, false, pure);
                 }
             }
             var result;
-            if (lhs.dynamic()) { result = lhs._fix(2, false); } else {
+            if (lhs.dynamic()) {
+                result = lhs._fix(2, false);
+            } else {
                 String lhsString = lhs.toString();
                 //The lhs is a
                 // string, so
@@ -112,7 +126,9 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                 //if not then
                 // assume
                 // it's a variable.
-                if (Builtins.exists(lhsString)) { result = Builtins.execute(lhsString, rhs, pure); } else {
+                if (Builtins.exists(lhsString)) {
+                    result = Builtins.execute(lhsString, rhs, pure);
+                } else {
                     final var valueUnfixed = DollarScriptSupport.getVariable(
                             pure, lhsString, false, null, token, dollarParser);
                     result = valueUnfixed._fix(2, false);

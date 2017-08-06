@@ -21,7 +21,7 @@ import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.Operator;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
-import org.jparsec.Token;
+import org.jetbrains.annotations.Nullable;
 import org.jparsec.functors.Binary;
 
 import static com.sillelien.dollar.api.DollarStatic.fix;
@@ -29,33 +29,35 @@ import static dollar.internal.runtime.script.DollarScriptSupport.*;
 
 public class SubscribeOperator implements Binary<var>, Operator {
     private final boolean pure;
-    private Token token;
+    @Nullable
     private SourceSegment source;
     private DollarParser parser;
 
 
-    public SubscribeOperator(boolean pure, DollarParser parser) {
+    public SubscribeOperator(boolean pure, @NotNull DollarParser parser) {
         this.pure = pure;
         this.parser = parser;
     }
 
 
+    @NotNull
     @Override
-    public var map(@NotNull var lhs, var rhs) {
+    public var map(@NotNull var lhs, @NotNull var rhs) {
 
-        return createReactiveNode(() -> lhs.$subscribe(
-                                    i -> inScope(pure, "subscribe", newScope -> {
-                                        final var it = fix(i[0], false);
-                                        currentScope().setParameter("1", it);
-                                        currentScope().setParameter("it", it);
-                                        return fix(rhs, false);
-                                    })), source, "subscribe", lhs, rhs,
-                parser);
+        assert source != null;
+        return createReactiveNode("subscribe", parser, source, lhs, rhs, args -> lhs.$subscribe(
+                i -> inScope(false, pure, "subscribe", newScope -> {
+                    final var it = fix(i[0], false);
+                    currentScope().setParameter("1", it);
+                    currentScope().setParameter("it", it);
+                    return fix(rhs, false);
+                }))
+        );
 
     }
 
     @Override
-    public void setSource(SourceSegment source) {
+    public void setSource(@NotNull SourceSegment source) {
         this.source = source;
     }
 }

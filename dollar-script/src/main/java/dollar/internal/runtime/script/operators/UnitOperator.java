@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script.operators;
 
+import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
 import dollar.internal.runtime.script.DollarScriptSupport;
@@ -25,7 +26,6 @@ import org.jparsec.Token;
 import org.jparsec.functors.Map;
 
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 
 import static com.sillelien.dollar.api.DollarStatic.$void;
 import static com.sillelien.dollar.api.DollarStatic.fix;
@@ -43,7 +43,7 @@ public class UnitOperator implements Map<Token, var> {
 
     @Override public var map(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
-        Callable<var> callable = () -> inScope(pure, "unit", newScope -> {
+        Pipeable callable = i -> inScope(false, pure, "unit", newScope -> {
             if (Builtins.exists(objects[1].toString())) {
                 return Builtins.execute(objects[1].toString(), Arrays.asList((var) objects[0]), pure);
             } else {
@@ -53,7 +53,9 @@ public class UnitOperator implements Map<Token, var> {
                 return fix(variable, false);
             }
         });
-        return DollarScriptSupport.createNode(callable, token, Arrays.asList((var) objects[0], (var) objects[1]),
-                                            "unit", parser);
+        return DollarScriptSupport.createNode("unit", parser, token,
+                                              Arrays.asList((var) objects[0], (var) objects[1]),
+                                              callable
+        );
     }
 }

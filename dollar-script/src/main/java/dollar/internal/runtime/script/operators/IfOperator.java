@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script.operators;
 
+import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.api.DollarParser;
@@ -24,7 +25,6 @@ import org.jparsec.Token;
 import org.jparsec.functors.Map;
 
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 
@@ -39,7 +39,7 @@ public class IfOperator implements Map<Token, Map<var, var>> {
     @Override public Map<var, var> map(@NotNull Token token) {
         var lhs = (var) token.value();
         return rhs -> {
-            Callable<var> callable = () -> {
+            Pipeable callable = i -> {
                 final var lhsFix = lhs._fixDeep();
                 if (lhsFix.isBoolean() && lhsFix.isTrue()) {
                     return rhs._fix(2, false);
@@ -47,9 +47,9 @@ public class IfOperator implements Map<Token, Map<var, var>> {
                     return $(false);
                 }
             };
-            return DollarScriptSupport.createNode( callable, token,
-                                                Arrays.asList(lhs, rhs),
-                                                "if", parser);
+            return DollarScriptSupport.createNode("if", parser, token, Arrays.asList(lhs, rhs),
+                                                  callable
+            );
         };
     }
 }

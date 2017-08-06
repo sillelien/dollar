@@ -17,11 +17,27 @@
 package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
-import org.jparsec.functors.Map;
+import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.api.DollarParser;
+import org.jetbrains.annotations.NotNull;
+import org.jparsec.Token;
 
-public class FunctionCallOperator implements Map<Object[], var> {
+import java.util.Collections;
+import java.util.function.Function;
+
+public class FunctionCallOperator implements Function<Token, var> {
+
+    @NotNull
+    private DollarParser parser;
+
+    public FunctionCallOperator(@NotNull DollarParser parser) {this.parser = parser;}
+
+    @NotNull
     @Override
-    public var map(Object[] objects) {
-        return ((Map<? super var, ? extends var>) objects[1]).map(((var) objects[0])._fix(2, false));
+    public var apply(@NotNull Token token) {
+        Object[] objects = (Object[]) token.value();
+        return DollarScriptSupport.createNode("function-call", parser, token,
+                                              Collections.singletonList((var) objects[0]),
+                                              args -> args[0]._fix(2, false));
     }
 }

@@ -44,8 +44,10 @@ public class MapOperator implements Map<Token, var> {
         List<var> o = (List<var>) t.value();
         final var
                 lambda =
-                DollarScriptSupport.createNode(t, i -> DollarScriptSupport.inScope(pure, "map", newScope -> {
+                DollarScriptSupport.inScope(false, pure, "(map-compile)", newScope -> DollarScriptSupport.createNode(t, i -> {
                     if (o.size() == 1) {
+                        System.out.println("BLOCK-MAP");
+//                        new Exception().printStackTrace();
                         return DollarFactory.blockCollection(o);
                     }
                     var parallel = i[0];
@@ -61,7 +63,7 @@ public class MapOperator implements Map<Token, var> {
                             .collect(Collectors.toConcurrentMap(
                                     v -> v.pair() ? v.getPairKey() : v.$S(),
                                     v -> v.pair() ? v.getPairValue() : v)));
-                }), o, "map", dollarParser);
+                }, o, "map", dollarParser));
         for (var value : o) {
             value.$listen(i -> lambda.$notify());
         }

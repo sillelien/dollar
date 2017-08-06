@@ -30,9 +30,10 @@ import static com.sillelien.dollar.api.DollarStatic.$;
 
 public class IsOperator implements Map<Token, Map<? super var, ? extends var>> {
 
+    @NotNull
     private DollarParser parser;
 
-    public IsOperator(DollarParser parser) {
+    public IsOperator(@NotNull DollarParser parser) {
         this.parser = parser;
     }
 
@@ -40,13 +41,14 @@ public class IsOperator implements Map<Token, Map<? super var, ? extends var>> {
     @Override
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         List<var> rhs = (List<var>) token.value();
-        return lhs -> DollarScriptSupport.createReactiveNode(() -> {
+        return lhs -> DollarScriptSupport.createReactiveNode("is " + rhs, parser, token, lhs, args
+                                                                                                      -> {
             for (var value : rhs) {
                 if (lhs.is(Type.valueOf(value.toString()))) {
                     return $(true);
                 }
             }
             return $(false);
-        }, token, "is " + rhs, lhs, parser);
+        });
     }
 }

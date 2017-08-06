@@ -16,8 +16,8 @@
 
 package dollar.internal.runtime.script.operators;
 
+import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
-import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +25,9 @@ import org.jparsec.Token;
 import org.jparsec.functors.Map;
 
 import java.util.Arrays;
-import java.util.concurrent.Callable;
+
+import static dollar.internal.runtime.script.DollarScriptSupport.createNode;
+import static dollar.internal.runtime.script.DollarScriptSupport.createReactiveNode;
 
 public class SubscriptOperator implements Map<Token, Map<? super var, ? extends var>> {
 
@@ -35,17 +37,19 @@ public class SubscriptOperator implements Map<Token, Map<? super var, ? extends 
         this.parser = parser;
     }
 
-    @Nullable @Override public Map<? super var, ? extends var> map(@NotNull Token token) {
+    @Nullable
+    @Override
+    public Map<? super var, ? extends var> map(@NotNull Token token) {
         Object[] rhs = (Object[]) token.value();
         return lhs -> {
             if (rhs[1] == null) {
-                return DollarScriptSupport.createReactiveNode(() -> lhs.$get(
-                        ((var) rhs[0])), token, "subscript", lhs, (var) rhs[0], parser);
+                return createReactiveNode("subscript", parser, token, lhs,
+                                          (var) rhs[0], args -> lhs.$get(((var) rhs[0])));
             } else {
-                Callable<var> callable = () -> lhs.$set((var) rhs[0], rhs[1]);
-                return DollarScriptSupport.createNode(callable, token,
-                                                    Arrays.asList(lhs, (var) rhs[0], (var) rhs[1]),
-                                                    "subscript-assignment", parser);
+                Pipeable pipeable = i -> lhs.$set((var) rhs[0], rhs[1]);
+                return createNode("subscript-assignment", parser, token,
+                                  Arrays.asList(lhs, (var) rhs[0], (var) rhs[1]),
+                                  pipeable);
             }
         };
     }

@@ -33,7 +33,7 @@ public class PureScope extends ScriptScope {
     private static final Logger log = LoggerFactory.getLogger(ScriptScope.class);
 
     public PureScope(@NotNull Scope parent, String source, String name, @Nullable String file) {
-        super(parent, file != null ? file : parent.getFile(), source, name);
+        super(parent, file != null ? file : parent.getFile(), source, name, false);
     }
 
     @Override public void clear() {

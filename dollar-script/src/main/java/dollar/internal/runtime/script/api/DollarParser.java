@@ -35,15 +35,15 @@ public interface DollarParser {
     ParserOptions options();
 
 
-    @NotNull var parse(ScriptScope scriptScope, @NotNull String source);
+    @NotNull var parse(ScriptScope scriptScope, @NotNull String source) throws Exception;
 
-    @NotNull var parse( @NotNull File file, boolean parallel) throws IOException;
+    @NotNull var parse( @NotNull File file, boolean parallel) throws Exception;
 
-    @NotNull var parse(InputStream in, boolean parallel, Scope scope) throws IOException;
+    @NotNull var parse(InputStream in, boolean parallel, Scope scope) throws Exception;
 
-    @NotNull var parse(InputStream in, String file, boolean parallel) throws IOException;
+    @NotNull var parse(InputStream in, String file, boolean parallel) throws Exception;
 
-    @NotNull var parse(@NotNull String source, boolean parallel) throws IOException;
+    @NotNull var parse(@NotNull String source, boolean parallel) throws Exception;
 
     @NotNull var parseMarkdown(@NotNull String source);
 

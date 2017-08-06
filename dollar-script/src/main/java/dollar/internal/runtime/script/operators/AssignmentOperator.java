@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script.operators;
 
+import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.Scope;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.TypePrediction;
@@ -30,7 +31,6 @@ import org.jparsec.Token;
 import org.jparsec.functors.Map;
 
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
@@ -113,19 +113,23 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                     }
                     if (operator.equals("?=")) {
                         scope.set(varName, $void(), false, null, useSource, isVolatile, false, pure);
-                        Callable<var> callable = () -> $($(rhs.$listen(
+                        Pipeable pipeable = c -> $($(rhs.$listen(
                                 i -> DollarScriptSupport.setVariable(scope, varName, fix(i[0], false), false,
                                         useConstraint, useSource, isVolatile, false, pure, decleration, token, parser))));
-                        return DollarScriptSupport.createNode(callable, token, Arrays.asList(DollarScriptSupport.constrain(scope, rhs, constraint, useSource)),
-                                "listen-assign", parser);
+                        return DollarScriptSupport.createNode("listen-assign", parser, token,
+                                                              Arrays.asList(DollarScriptSupport.constrain(scope, rhs, constraint, useSource)),
+                                                              pipeable
+                        );
 
                     } else if (operator.equals("*=")) {
                         scope.set(varName, $void(), false, null, useSource, true, true, pure);
-                        Callable<var> callable = () -> $(rhs.$subscribe(
+                        Pipeable pipeable = c -> $(rhs.$subscribe(
                                 i -> DollarScriptSupport.setVariable(scope, varName, fix(i[0], false), false,
                                         useConstraint, useSource, true, false, pure, decleration, token, parser)));
-                        return DollarScriptSupport.createNode(callable, token, Arrays.asList(DollarScriptSupport.constrain(scope, rhs, constraint, useSource)),
-                                "subscribe-assign", parser);
+                        return DollarScriptSupport.createNode("subscribe-assign", parser, token,
+                                                              Arrays.asList(DollarScriptSupport.constrain(scope, rhs, constraint, useSource)),
+                                                              pipeable
+                        );
                     }
                 }
                 return assign(rhs, objects, constraint, constant, isVolatile, constraintSource, scope, token, decleration);
@@ -146,15 +150,15 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
             useConstraint = scope.getConstraint(varName);
             useSource = scope.getConstraintSource(varName);
         }
-        Callable<var> callable = new Callable<var>() {
+        Pipeable callable = new Pipeable() {
             @Override
-            public var call() throws Exception {
+            public var pipe(var ...args) throws Exception {
 
                 Scope currentScope = currentScope();
-                return inScope(pure, "assignment-constraint", newScope -> {
-                    final var rhsFixed = rhs._fix(1, false);
+                final var rhsFixed = rhs._fix(1, false);
 
-                    if (useConstraint != null) {
+                if (useConstraint != null) {
+                    inScope(true, pure, "assignment-constraint", newScope -> {
                         newScope.setParameter("it", rhsFixed);
                         newScope.setParameter("previous", scope.get(varName));
                         if (useConstraint.isFalse()) {
@@ -163,15 +167,19 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                             newScope.handleError(new DollarScriptException(
                                     "Constraint failed for variable " + varName + ""));
                         }
-                    }
-                    if (objects[0] != null) {
-                        parser.export(varName, rhsFixed);
-                    }
-                    return DollarScriptSupport.setVariable(currentScope,varName, rhsFixed, constant,
-                            constraint, useSource, isVolatile, constant, pure, decleration, token, parser);
-                });
+                        return null;
+                    });
+                }
+                if (objects[0] != null) {
+                    parser.export(varName, rhsFixed);
+                }
+                return DollarScriptSupport.setVariable(currentScope, varName, rhsFixed, constant,
+                        constraint, useSource, isVolatile, constant, pure, decleration, token, parser);
+
             }
         };
-        return DollarScriptSupport.createNode(callable, token, Arrays.asList(DollarScriptSupport.constrain(scope, rhs, constraint, useSource)), "assignment", parser);
+        return DollarScriptSupport.createNode("assignment", parser, token,
+                                              Arrays.asList(DollarScriptSupport.constrain(scope, rhs, constraint, useSource)),
+                                              callable);
     }
 }

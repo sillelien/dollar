@@ -28,10 +28,9 @@ import org.jparsec.functors.Map;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
-import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
+import static dollar.internal.runtime.script.DollarScriptSupport.*;
 
 public class DefinitionOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final boolean pure;
@@ -83,21 +82,29 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
                 var constraint;
                 String constraintSource;
                 if (typeConstraintObj != null) {
-                    constraint =
-                            DollarScriptSupport.createNode(token, i -> {
-                                final Type type = Type.valueOf(typeConstraintObj.toString().toUpperCase());
-                                var it = scope.getParameter("it");
-                                return $(it.is(type));
-                            }, new ArrayList<>(), "definition", parser);
-                    constraintSource= typeConstraintObj.toString().toUpperCase();
+                    constraint = DollarScriptSupport.createNode(token, i -> {
+                        final Type type = Type.valueOf(
+                                typeConstraintObj.toString().toUpperCase());
+                        var it = scope.getParameter("it");
+                        return $(it.is(type));
+                    }, new ArrayList<>(), "definition", parser);
+                    constraintSource = typeConstraintObj.toString().toUpperCase();
                 } else {
                     constraint = null;
-                    constraintSource= null;
+                    constraintSource = null;
                 }
                 final String variableName = variableNameObj.toString();
-                Callable action = () -> DollarScriptSupport.setVariable(scope, variableName, value, true, constraint, constraintSource, false, false, pure, true, token, parser);
 
-                var node = DollarScriptSupport.createNode(action, token, Arrays.asList(DollarScriptSupport.constrain(scope, value, constraint, constraintSource)), "assignment", parser);
+                var node = DollarScriptSupport.createNode(
+                        "assignment", parser, token, Arrays.asList(
+                                constrain(scope, value, constraint, constraintSource)),
+                        args -> setVariableDefinition(scope, parser, token, pure, true,
+                                                      variableName,
+                                                      value,
+                                                      constraint,
+                                                      constraintSource
+                        )
+                );
 
                 node.$listen(i -> scope.notify(variableName));
                 if (exportObj != null && exportObj.equals("export")) {

@@ -184,14 +184,14 @@ public class GithubModuleResolver implements ModuleResolver {
                             .collect(Collectors.toList()));
 
         }
-        return (params) -> DollarScriptSupport.inScope(false, "github-module", newScope -> {
+        return (params) -> DollarScriptSupport.inScope(false, false, "github-module", newScope -> {
 
             final ImmutableMap<var, var> paramMap = params[0].$map().toVarMap();
             for (Map.Entry<var, var> entry : paramMap.entrySet()) {
                 newScope.set(entry.getKey().$S(), entry.getValue(), true, null, null, false, false, false);
             }
             return new DollarParserImpl(((DollarParser)parser).options(), classLoader, dir).parse(
-                    new ScriptScope((Scope)scope,  mainFile.getAbsolutePath(),content,"github-module-scope"), content);
+                    new ScriptScope((Scope)scope,  mainFile.getAbsolutePath(),content,"github-module-scope", false), content);
         });
     }
 }

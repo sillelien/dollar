@@ -19,12 +19,10 @@ package com.sillelien.dollar;
 import dollar.internal.runtime.script.DollarParserImpl;
 import dollar.internal.runtime.script.api.ParserOptions;
 
-import java.io.IOException;
-
 public class Bulletin {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         new DollarParserImpl(new ParserOptions()).parse(Bulletin.class.getResourceAsStream("/bulletin.ds"),
                                                         "/bulletin.ds",
                                                     false);

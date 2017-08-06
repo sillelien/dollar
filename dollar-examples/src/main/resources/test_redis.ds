@@ -1,13 +1,13 @@
 #!/usr/bin/env dollar
 
 
-redis := "redis://localhost:6379/test" as uri
+def redis "redis://localhost:6379/test" as uri
 write ("Hello World " + DATE()) to redis
 
 @@ all redis
 
 
-a := {
+def a {
     2
     @@ DATE()
     5

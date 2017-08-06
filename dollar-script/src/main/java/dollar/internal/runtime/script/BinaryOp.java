@@ -19,6 +19,7 @@ package dollar.internal.runtime.script;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
+import org.jetbrains.annotations.NotNull;
 import org.jparsec.functors.Binary;
 import org.jparsec.functors.Map2;
 
@@ -26,37 +27,48 @@ import static dollar.internal.runtime.script.DollarScriptSupport.createReactiveN
 
 public class BinaryOp implements Binary<var>, Operator {
     private final boolean immediate;
+    @NotNull
     private final Map2<var, var, var> function;
+    @NotNull
     private final String operation;
+    @NotNull
     private SourceSegment source;
+    @NotNull
     private DollarParser parser;
 
 
-    public BinaryOp(DollarParser parser, String operation, Map2<var, var, var> function) {
+    public BinaryOp(@NotNull DollarParser parser,
+                    @NotNull String operation,
+                    @NotNull Map2<var, var, var> function) {
         this.parser = parser;
         this.operation = operation;
         this.function = function;
         this.immediate = false;
     }
 
-    public BinaryOp(boolean immediate, Map2<var, var, var> function, String operation, DollarParser parser) {
+    public BinaryOp(boolean immediate,
+                    @NotNull Map2<var, var, var> function,
+                    @NotNull String operation,
+                    @NotNull DollarParser parser) {
         this.immediate = immediate;
         this.function = function;
         this.operation = operation;
         this.parser = parser;
     }
 
+    @NotNull
     @Override
-    public var map(var lhs, var rhs) {
-        if (immediate) {
-            return function.map(lhs, rhs);
-        }
+    public var map(@NotNull var lhs, @NotNull var rhs) {
+//        if (immediate) {
+//            return function.map(lhs, rhs);
+//        }
         //Lazy evaluation
-        return createReactiveNode( () -> function.map(lhs, rhs), source, operation, lhs, rhs, parser);
+        return createReactiveNode(operation, parser, source, lhs, rhs,
+                                  args -> function.map(lhs, rhs));
     }
 
     @Override
-    public void setSource(SourceSegment source) {
+    public void setSource(@NotNull SourceSegment source) {
         this.source = source;
     }
 }
