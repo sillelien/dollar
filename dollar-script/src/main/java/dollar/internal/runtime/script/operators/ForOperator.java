@@ -41,7 +41,7 @@ public class ForOperator implements Map<Token, Map<? super var, ? extends var>> 
         return rhs -> {
             return DollarScriptSupport.createReactiveNode("for", dollarParser, token, rhs, args
                                                                                                    -> {
-                return inScope(false, pure, "for", newScope -> {
+                return DollarScriptSupport.inSubScope(false, pure, "for", newScope -> {
                     return ((var) objects[3]).$each(i -> {
                         newScope.set(objects[1].toString(),
                                      fix(i[0], false),

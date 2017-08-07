@@ -48,13 +48,13 @@ public class ListenOperator implements Binary<var>, Operator {
     @Override
     public var map(@NotNull var lhs, @NotNull var rhs) {
         Pipeable callable = args -> {
-            return $(lhs.$listen(i -> DollarScriptSupport.inScope(false, pure, "listen", newScope -> {
+            return $(lhs.$listen(i -> DollarScriptSupport.inSubScope(false, pure, "listen", newScope -> {
                 newScope.setParameter("1", i[0]);
                 //todo: change to read
                 return rhs._fixDeep(false);
             })));
         };
-        return DollarScriptSupport.createNode("listen", parser, DollarScriptSupport.currentScope(),
+        return DollarScriptSupport.createNode("listen", parser,
                                               source, Arrays.asList(lhs, rhs), callable);
     }
 

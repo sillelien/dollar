@@ -41,7 +41,7 @@ public class WhileOperator implements Map<Token, Map<? super var, ? extends var>
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         var lhs = (var) token.value();
         return rhs -> {
-            Pipeable callable = i -> inScope(false, pure, "while", newScope -> {
+            Pipeable callable = i -> DollarScriptSupport.inSubScope(false, pure, "while", newScope -> {
                 while (lhs.isTrue()) {
                     rhs._fixDeep();
                 }

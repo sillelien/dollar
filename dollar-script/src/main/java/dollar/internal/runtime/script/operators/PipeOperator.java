@@ -21,22 +21,26 @@ import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.function.Function;
 
-import static com.sillelien.dollar.api.DollarStatic.$;
-import static dollar.internal.runtime.script.DollarScriptSupport.inScope;
+import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
+import static dollar.internal.runtime.script.DollarScriptSupport.inSubScope;
 import static java.util.Collections.singletonList;
 
 public class PipeOperator implements Function<Token, Map<var, var>> {
 
     @NotNull
+    private static final Logger log = LoggerFactory.getLogger("PipeOperator");
+    @NotNull
     private final DollarParser parser;
     private final boolean pure;
+
 
     public PipeOperator(@NotNull DollarParser parser, boolean pure) {
 
@@ -47,39 +51,43 @@ public class PipeOperator implements Function<Token, Map<var, var>> {
 
     @Override
     public Map<var, var> apply(@NotNull Token token) {
-        var lhs = (var) token.value();
-        return new Map<var, var>() {
-            @NotNull
-            @Override
-            public var map(@NotNull var rhs) {
-                Pipeable pipe = i -> inScope(true, pure, "pipe",
-                                             newScope -> {
-                                                 var lhsFix = lhs._fix(false);
-                                                 newScope.setParameter("1", lhsFix);
-                                                 Object rhsVal = rhs.toJavaObject();
-                                                 if ((rhsVal instanceof String)) {
-                                                     String rhsStr = rhsVal.toString();
-                                                     if (rhs.getMetaAttribute(
-                                                             "__builtin") != null) {
-                                                         return Builtins.execute(rhsStr,
-                                                                                 singletonList(
-                                                                                         lhsFix),
-                                                                                 pure);
-                                                     } else if (newScope.has(rhsStr)) {
-                                                         return newScope.get(
-                                                                 rhsVal.toString())._fix(2, false);
-                                                     } else {
-                                                         throw new VariableNotFoundException(rhsStr,
-                                                                                             newScope);
-                                                     }
-                                                 } else {
-                                                     return $(rhsVal);
-                                                 }
-                                             });
-                return DollarScriptSupport.createReactiveNode("pipe",
-                                                              parser, token, rhs,
-                                                              pipe);
-            }
+        var rhs = (var) token.value();
+        return lhs -> {
+            Pipeable pipe = i -> {
+                return inSubScope(false, pure, "pipe-runtime",
+                                  runtimeScope -> {
+                                      currentScope().setParameter("1", lhs);
+                                      var rhsVal = rhs._fix(false);
+                                      if (!"function-call".equals(
+                                              rhs.getMetaAttribute("operation"))) {
+                                          String rhsStr = rhsVal.toString();
+                                          log.debug("OPERATION: " + rhsStr);
+                                          if (rhs.getMetaAttribute(
+                                                  "__builtin") != null) {
+                                              return Builtins.execute(rhsStr,
+                                                                      singletonList(lhs), pure);
+                                          } else {
+                                              var var = DollarScriptSupport.getVariable
+                                                                                    (pure,
+                                                                                     rhsStr,
+                                                                                     false,
+                                                                                     null,
+                                                                                     token,
+                                                                                     parser)._fix(
+                                                      1, false);
+                                              return var;
+                                          }
+                                      } else {
+                                          return rhsVal;
+                                      }
+
+                                  });
+            };
+            return inSubScope(false, pure, "pipe-compile",
+                              args -> DollarScriptSupport.createReactiveNode(
+                                      "pipe",
+                                      parser, token, rhs,
+                                      pipe));
         };
     }
 }

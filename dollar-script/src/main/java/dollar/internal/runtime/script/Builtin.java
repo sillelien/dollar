@@ -18,7 +18,6 @@ package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
-import com.sillelien.dollar.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import org.jetbrains.annotations.NotNull;
 

@@ -17,11 +17,11 @@
 package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.Pipeable;
-import com.sillelien.dollar.api.Scope;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.TypePrediction;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.Scope;
 import dollar.internal.runtime.script.SourceSegmentValue;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
@@ -29,14 +29,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
-import static dollar.internal.runtime.script.DollarScriptSupport.inScope;
 
 public class AssignmentOperator implements Map<Token, Map<? super var, ? extends var>> {
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger("AssignmentOperator");
     private final boolean pure;
     private DollarParser parser;
 
@@ -45,7 +48,66 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
         this.parser = parser;
     }
 
-    @Nullable
+    private var assign(@NotNull var rhs,
+                       Object[] objects,
+                       @Nullable var constraint,
+                       boolean constant,
+                       boolean isVolatile,
+                       String constraintSource,
+                       Scope scope,
+                       Token token,
+                       boolean decleration) {
+
+        final String varName = objects[4].toString();
+        final var useConstraint;
+        final String useSource;
+        if (constraint != null) {
+            useConstraint = constraint;
+            useSource = constraintSource;
+        } else {
+            useConstraint = scope.getConstraint(varName);
+            useSource = scope.getConstraintSource(varName);
+        }
+        Pipeable callable = new Pipeable() {
+            @Override
+            public var pipe(var... args) throws Exception {
+
+                Scope currentScope = currentScope();
+                final var rhsFixed = rhs._fix(1, false);
+
+                if (useConstraint != null) {
+                    DollarScriptSupport.inSubScope(true, pure, "assignment-constraint", newScope -> {
+                        newScope.setParameter("it", rhsFixed);
+                        newScope.setParameter("previous", scope.get(varName));
+                        if (useConstraint.isFalse()) {
+//                        System.out.println(rhsFixed.toDollarScript());
+//                        System.out.println(useConstraint.isFalse());
+                            newScope.handleError(new DollarScriptException(
+                                                                                  "Constraint failed for variable " + varName + ""));
+                        }
+                        return null;
+                    });
+                }
+                if (objects[0] != null) {
+                    parser.export(varName, rhsFixed);
+                }
+                DollarScriptSupport.setVariable(currentScope, varName, rhsFixed, constant,
+                                                constraint, useSource, isVolatile, constant, pure,
+                                                decleration, token, parser);
+                return $void();
+
+            }
+        };
+        var node = DollarScriptSupport.createNode("assignment", parser, token,
+                                                  Arrays.asList(
+                                                          DollarScriptSupport.constrain(scope,
+                                                                                        rhs,
+                                                                                        constraint,
+                                                                                        useSource)),
+                                                  callable);
+        node.$listen(i -> scope.notify(varName));
+        return node;
+    }    @Nullable
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         Type type;
         Object[] objects = (Object[]) token.value();
@@ -60,8 +122,8 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
             type = Type.valueOf(objects[2].toString().toUpperCase());
             constraint = DollarScriptSupport.createNode(token, i -> {
                 return $(currentScope().getParameter("it")
-                        .is(type) &&
-                        (objects[3] == null || ((var) objects[3]).isTrue()));
+                                 .is(type) &&
+                                 (objects[3] == null || ((var) objects[3]).isTrue()));
             }, Arrays.asList(), "constraint", parser);
         } else {
             type = null;
@@ -76,8 +138,8 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
         isVolatile = mutability != null && mutability.toString().equals("volatile");
         if (((var) objects[4]).getMetaAttribute("__builtin") != null) {
             throw new DollarScriptException("The variable '" +
-                    objects[4] +
-                    "' cannot be assigned as this name is the name of a builtin function.");
+                                                    objects[4] +
+                                                    "' cannot be assigned as this name is the name of a builtin function.");
         }
         final String varName = objects[4].toString();
 
@@ -89,14 +151,16 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                 if (type != null && prediction != null) {
                     final Double probability = prediction.probability(type);
                     if (probability < 0.5 && !prediction.empty()) {
-                        System.err.println("Type assertion may fail, expected " +
-                                type +
-                                " most likely type is " +
-                                prediction.probableType() +
-                                " (" +
-                                (int) (prediction.probability(prediction.probableType()) * 100) +
-                                "%) at " +
-                                new SourceSegmentValue(currentScope(), token).getSourceMessage());
+                        log.warn("Type assertion may fail, expected " +
+                                         type +
+                                         " most likely type is " +
+                                         prediction.probableType() +
+                                         " (" +
+                                         (int) (prediction.probability(
+                                                 prediction.probableType()) * 100) +
+                                         "%) at " +
+                                         new SourceSegmentValue(currentScope(),
+                                                                token).getSourceMessage());
                     }
                 }
 
@@ -112,74 +176,46 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                         useSource = scope.getConstraintSource(varName);
                     }
                     if (operator.equals("?=")) {
-                        scope.set(varName, $void(), false, null, useSource, isVolatile, false, pure);
+                        scope.set(varName, $void(), false, null, useSource, isVolatile, false,
+                                  pure);
                         Pipeable pipeable = c -> $($(rhs.$listen(
-                                i -> DollarScriptSupport.setVariable(scope, varName, fix(i[0], false), false,
-                                        useConstraint, useSource, isVolatile, false, pure, decleration, token, parser))));
+                                i -> DollarScriptSupport.setVariable(scope, varName,
+                                                                     fix(i[0], false), false,
+                                                                     useConstraint, useSource,
+                                                                     isVolatile, false, pure,
+                                                                     decleration, token, parser))));
                         return DollarScriptSupport.createNode("listen-assign", parser, token,
-                                                              Arrays.asList(DollarScriptSupport.constrain(scope, rhs, constraint, useSource)),
+                                                              Arrays.asList(
+                                                                      DollarScriptSupport.constrain(
+                                                                              scope, rhs,
+                                                                              constraint,
+                                                                              useSource)),
                                                               pipeable
                         );
 
                     } else if (operator.equals("*=")) {
                         scope.set(varName, $void(), false, null, useSource, true, true, pure);
                         Pipeable pipeable = c -> $(rhs.$subscribe(
-                                i -> DollarScriptSupport.setVariable(scope, varName, fix(i[0], false), false,
-                                        useConstraint, useSource, true, false, pure, decleration, token, parser)));
+                                i -> DollarScriptSupport.setVariable(scope, varName,
+                                                                     fix(i[0], false), false,
+                                                                     useConstraint, useSource, true,
+                                                                     false, pure, decleration,
+                                                                     token, parser)));
                         return DollarScriptSupport.createNode("subscribe-assign", parser, token,
-                                                              Arrays.asList(DollarScriptSupport.constrain(scope, rhs, constraint, useSource)),
+                                                              Arrays.asList(
+                                                                      DollarScriptSupport.constrain(
+                                                                              scope, rhs,
+                                                                              constraint,
+                                                                              useSource)),
                                                               pipeable
                         );
                     }
                 }
-                return assign(rhs, objects, constraint, constant, isVolatile, constraintSource, scope, token, decleration);
+                return assign(rhs, objects, constraint, constant, isVolatile, constraintSource,
+                              scope, token, decleration);
             }
         };
     }
 
-    private var assign(@NotNull var rhs, Object[] objects, @Nullable var constraint, boolean constant,
-                       boolean isVolatile, String constraintSource, Scope scope, Token token, boolean decleration) {
 
-        final String varName = objects[4].toString();
-        final var useConstraint;
-        final String useSource;
-        if (constraint != null) {
-            useConstraint = constraint;
-            useSource = constraintSource;
-        } else {
-            useConstraint = scope.getConstraint(varName);
-            useSource = scope.getConstraintSource(varName);
-        }
-        Pipeable callable = new Pipeable() {
-            @Override
-            public var pipe(var ...args) throws Exception {
-
-                Scope currentScope = currentScope();
-                final var rhsFixed = rhs._fix(1, false);
-
-                if (useConstraint != null) {
-                    inScope(true, pure, "assignment-constraint", newScope -> {
-                        newScope.setParameter("it", rhsFixed);
-                        newScope.setParameter("previous", scope.get(varName));
-                        if (useConstraint.isFalse()) {
-//                        System.out.println(rhsFixed.toDollarScript());
-//                        System.out.println(useConstraint.isFalse());
-                            newScope.handleError(new DollarScriptException(
-                                    "Constraint failed for variable " + varName + ""));
-                        }
-                        return null;
-                    });
-                }
-                if (objects[0] != null) {
-                    parser.export(varName, rhsFixed);
-                }
-                return DollarScriptSupport.setVariable(currentScope, varName, rhsFixed, constant,
-                        constraint, useSource, isVolatile, constant, pure, decleration, token, parser);
-
-            }
-        };
-        return DollarScriptSupport.createNode("assignment", parser, token,
-                                              Arrays.asList(DollarScriptSupport.constrain(scope, rhs, constraint, useSource)),
-                                              callable);
-    }
 }

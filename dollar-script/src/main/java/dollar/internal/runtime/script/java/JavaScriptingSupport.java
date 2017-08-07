@@ -24,6 +24,8 @@ import com.sillelien.jas.jproxy.JProxyScriptEngine;
 import com.sillelien.jas.jproxy.JProxyScriptEngineFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngineManager;
@@ -41,6 +43,9 @@ import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
  */
 public class JavaScriptingSupport {
 
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger("JavaScriptingSupport");
+
     @Nullable public static var compile(@NotNull var in, String java) {
         JProxyConfig jpConfig = JProxy.createJProxyConfig();
         jpConfig.setEnabled(true)
@@ -57,7 +62,7 @@ public class JavaScriptingSupport {
                     List<Diagnostic<? extends JavaFileObject>> diagnosticList = diagnostics.getDiagnostics();
                     diagnosticList.stream()
                                   .filter(diagnostic -> diagnostic.getKind().equals(Diagnostic.Kind.ERROR))
-                                  .forEach(System.err::println);
+                                  .forEach(i->log.debug(i.toString()));
                 });
 
         JProxyScriptEngineFactory factory = JProxyScriptEngineFactory.create();

@@ -16,10 +16,8 @@
 
 package dollar.internal.runtime.script.operators;
 
-import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.ScriptScope;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -48,21 +46,24 @@ public class BlockOperator implements Map<Token, var> {
     @Override
     public var map(@NotNull Token token) {
         List<var> l = (List<var>) token.value();
-        return DollarScriptSupport.createNode("block", dollarParser, token,
-                                              new ScriptScope(DollarScriptSupport.currentScope(), "block-compile", false),
-                                              l, parallel -> {
-            log.debug("BLOCK EXE LAMBDA START " + currentScope());
-            try {
-                if (l.size() > 0) {
-                    var collection = DollarFactory.blockCollection(l);
-                    return collection;
-                } else {
-                    return $void();
-                }
-            } finally {
-                log.debug("BLOCK EXE LAMBDA END");
+         return DollarScriptSupport.inSubScope(false, pure, "block-compile", compileScope -> DollarScriptSupport.createNode("block", dollarParser, token, l, parallel ->{
 
-            }
-        });
+                        log.debug("BLOCK EXE LAMBDA START " + currentScope());
+                        try {
+                            if (l.size() > 0) {
+                                for (int i = 0; i < l.size() - 1; i++) {
+                                    l.get(i)._fixDeep(false);
+                                }
+                                return l.get(l.size() - 1);
+                            } else {
+                                return $void();
+                            }
+                        } finally {
+                            log.debug("BLOCK EXE LAMBDA END");
+
+                        }
+
+
+                }));
     }
 }

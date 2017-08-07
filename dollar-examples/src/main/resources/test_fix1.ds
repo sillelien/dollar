@@ -1,0 +1,13 @@
+
+//This function returns a lambda
+def lambdaReturn {
+        var a= 10;
+        a= a + 5;
+        a <=> 15;
+        { @@ $1; @@ a; $1 + 2 * a }
+}
+
+lambdaReturn()(5) <=> 35
+
+@@ "OKAY!"
+(5 -> lambdaReturn) <=> 35

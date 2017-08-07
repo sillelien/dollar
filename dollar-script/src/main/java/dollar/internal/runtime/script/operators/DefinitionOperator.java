@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script.operators;
 
-import com.sillelien.dollar.api.Scope;
+import dollar.internal.runtime.script.Scope;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
+import static com.sillelien.dollar.api.DollarStatic.$void;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 
 public class DefinitionOperator implements Map<Token, Map<? super var, ? extends var>> {
@@ -98,12 +99,15 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
                 var node = DollarScriptSupport.createNode(
                         "assignment", parser, token, Arrays.asList(
                                 constrain(scope, value, constraint, constraintSource)),
-                        args -> setVariableDefinition(scope, parser, token, pure, true,
-                                                      variableName,
-                                                      value,
-                                                      constraint,
-                                                      constraintSource
-                        )
+                        args -> {
+                            setVariableDefinition(currentScope(), parser, token, pure, true,
+                                                         variableName,
+                                                         value,
+                                                         constraint,
+                                                         constraintSource
+                            );
+                            return $void();
+                        }
                 );
 
                 node.$listen(i -> scope.notify(variableName));

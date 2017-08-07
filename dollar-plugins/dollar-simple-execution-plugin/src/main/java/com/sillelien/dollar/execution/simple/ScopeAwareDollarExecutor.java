@@ -16,7 +16,7 @@
 
 package com.sillelien.dollar.execution.simple;
 
-import com.sillelien.dollar.api.Scope;
+import dollar.internal.runtime.script.Scope;
 import com.sillelien.dollar.api.execution.DollarExecutor;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import org.jetbrains.annotations.NotNull;

@@ -28,6 +28,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -40,6 +42,10 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
     private final DollarParser dollarParser;
     private final boolean pure;
 
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger("ParameterOperator");
+
+
     public ParameterOperator(@NotNull DollarParser dollarParser, boolean pure) {
         this.dollarParser = dollarParser;
         this.pure = pure;
@@ -50,19 +56,34 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         List<var> rhs = (List<var>) token.value();
         return lhs -> {
-            if (!lhs.dynamic()) {
+            boolean functionName;
+            boolean builtin;
+            log.debug(lhs.getMetaAttribute("operation"));
+            if ("function-name".equals(lhs.getMetaAttribute("operation"))) {
                 String lhsString = lhs.toString();
+                log.debug("BUILTIN?: "+lhsString);
+                if(Builtins.exists(lhsString)) {
+                    log.debug("BUILTIN: "+lhsString);
+                    builtin= true;
+                } else {
+                    builtin= false;
+                }
                 if (pure && Builtins.exists(lhsString) && !Builtins.isPure(lhsString)) {
                     throw new DollarScriptException(
                                                            "Cannot call the impure function '" + lhsString + "' in a pure expression.");
                 }
+                functionName= true;
+            } else {
+                functionName= false;
+                builtin= false;
             }
 
             String constraintSource = null;
             var lambda = createNode("parameter", dollarParser, token,
                                     new ScriptScope(currentScope(),"parameter", false),
                                     rhs,
-                                    new Function(rhs, lhs, token, constraintSource)
+                                    new Function(rhs, lhs, token, constraintSource, functionName,
+                                                 builtin)
             );
             //reactive links
             lhs.$listen(i -> lambda.$notify());
@@ -82,15 +103,19 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
         private final Token token;
         @Nullable
         private final String constraintSource;
+        private boolean functionName;
+        private boolean builtin;
 
         public Function(@NotNull List<var> rhs,
                         @NotNull var lhs,
                         @NotNull Token token,
-                        @Nullable String constraintSource) {
+                        @Nullable String constraintSource, boolean functionName, boolean builtin) {
             this.rhs = rhs;
             this.lhs = lhs;
             this.token = token;
             this.constraintSource = constraintSource;
+            this.functionName = functionName;
+            this.builtin = builtin;
         }
 
         @NotNull
@@ -114,8 +139,8 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                 }
             }
             var result;
-            if (lhs.dynamic()) {
-                result = lhs._fix(2, false);
+            if (!functionName) {
+                result = lhs._fix(1, false);
             } else {
                 String lhsString = lhs.toString();
                 //The lhs is a
@@ -126,12 +151,12 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                 //if not then
                 // assume
                 // it's a variable.
-                if (Builtins.exists(lhsString)) {
+                if (builtin) {
                     result = Builtins.execute(lhsString, rhs, pure);
                 } else {
                     final var valueUnfixed = DollarScriptSupport.getVariable(
                             pure, lhsString, false, null, token, dollarParser);
-                    result = valueUnfixed._fix(2, false);
+                    result = valueUnfixed._fix(1, false);
                 }
             }
 

@@ -43,7 +43,7 @@ public class UnitOperator implements Map<Token, var> {
 
     @Override public var map(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
-        Pipeable callable = i -> inScope(false, pure, "unit", newScope -> {
+        Pipeable callable = i -> DollarScriptSupport.inSubScope(false, pure, "unit", newScope -> {
             if (Builtins.exists(objects[1].toString())) {
                 return Builtins.execute(objects[1].toString(), Arrays.asList((var) objects[0]), pure);
             } else {

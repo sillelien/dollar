@@ -18,7 +18,7 @@ package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.var;
-import com.sillelien.dollar.api.Scope;
+import dollar.internal.runtime.script.Scope;
 import dollar.internal.runtime.script.api.Variable;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;

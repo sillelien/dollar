@@ -22,7 +22,7 @@ import com.google.common.cache.LoadingCache;
 import com.sillelien.dollar.api.DollarException;
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.Pipeable;
-import com.sillelien.dollar.api.Scope;
+import dollar.internal.runtime.script.Scope;
 import com.sillelien.dollar.api.collections.ImmutableMap;
 import com.sillelien.dollar.api.script.ModuleResolver;
 import com.sillelien.dollar.api.var;
@@ -184,7 +184,7 @@ public class GithubModuleResolver implements ModuleResolver {
                             .collect(Collectors.toList()));
 
         }
-        return (params) -> DollarScriptSupport.inScope(false, false, "github-module", newScope -> {
+        return (params) -> DollarScriptSupport.inSubScope(false, false, "github-module", newScope -> {
 
             final ImmutableMap<var, var> paramMap = params[0].$map().toVarMap();
             for (Map.Entry<var, var> entry : paramMap.entrySet()) {

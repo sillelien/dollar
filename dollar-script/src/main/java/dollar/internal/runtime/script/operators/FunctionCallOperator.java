@@ -16,17 +16,22 @@
 
 package dollar.internal.runtime.script.operators;
 
+import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.function.Function;
 
 public class FunctionCallOperator implements Function<Token, var> {
 
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger("FunctionCallOperator");
     @NotNull
     private DollarParser parser;
 
@@ -36,8 +41,15 @@ public class FunctionCallOperator implements Function<Token, var> {
     @Override
     public var apply(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
-        return DollarScriptSupport.createNode("function-call", parser, token,
-                                              Collections.singletonList((var) objects[0]),
-                                              args -> args[0]._fix(2, false));
+        log.debug("objects[0]="+objects[0]);
+        var node = DollarScriptSupport.createNode("function-name", parser, token,
+                                                  Collections.singletonList((var) objects[0]),
+                                                  new Pipeable() {
+                                                      @Override
+                                                      public var pipe(var... args) throws Exception {
+                                                          return (var) objects[0];
+                                                      }
+                                                  });
+        return node;
     }
 }

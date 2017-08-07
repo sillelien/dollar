@@ -46,7 +46,7 @@ public class SubscribeOperator implements Binary<var>, Operator {
 
         assert source != null;
         return createReactiveNode("subscribe", parser, source, lhs, rhs, args -> lhs.$subscribe(
-                i -> inScope(false, pure, "subscribe", newScope -> {
+                i -> inSubScope(false, pure, "subscribe", newScope -> {
                     final var it = fix(i[0], false);
                     currentScope().setParameter("1", it);
                     currentScope().setParameter("it", it);

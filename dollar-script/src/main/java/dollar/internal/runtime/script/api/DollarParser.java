@@ -16,13 +16,12 @@
 
 package dollar.internal.runtime.script.api;
 
-import com.sillelien.dollar.api.Scope;
 import com.sillelien.dollar.api.var;
+import dollar.internal.runtime.script.Scope;
 import dollar.internal.runtime.script.ScriptScope;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 
 public interface DollarParser {

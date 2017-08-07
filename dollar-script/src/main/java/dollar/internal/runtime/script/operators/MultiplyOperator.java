@@ -17,7 +17,7 @@
 package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
-import com.sillelien.dollar.api.Scope;
+import dollar.internal.runtime.script.Scope;
 import org.jparsec.functors.Map2;
 
 public class MultiplyOperator {

@@ -20,7 +20,6 @@ import com.sillelien.dollar.api.DollarException;
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.MetadataAware;
 import com.sillelien.dollar.api.Pipeable;
-import com.sillelien.dollar.api.Scope;
 import com.sillelien.dollar.api.TypePrediction;
 import com.sillelien.dollar.api.VarInternal;
 import com.sillelien.dollar.api.plugin.Plugins;
@@ -49,7 +48,8 @@ public class DollarSource extends DollarLambda {
     private static final Logger log = LoggerFactory.getLogger("DollarSource");
 
 
-    private static final List<String> nonScopeOperations = Arrays.asList("$listen", "$notify", "dynamic", "_constrain");
+    private static final List<String> nonScopeOperations = Arrays.asList("$listen", "$notify",
+                                                                         "dynamic", "_constrain");
     private final SourceSegment source;
     private List<var> inputs;
     @Nullable
@@ -57,8 +57,12 @@ public class DollarSource extends DollarLambda {
     private volatile TypePrediction prediction;
     private DollarParser parser;
 
-    public DollarSource(Pipeable lambda, @Nullable Scope scope, SourceSegment source, @NotNull List<var> inputs,
-                        @Nullable String operation, DollarParser parser) {
+    public DollarSource(Pipeable lambda,
+                        @Nullable Scope scope,
+                        SourceSegment source,
+                        @NotNull List<var> inputs,
+                        @Nullable String operation,
+                        DollarParser parser) {
         super(vars -> lambda.pipe(vars));
         this.parser = parser;
         if (operation == null) {
@@ -70,9 +74,15 @@ public class DollarSource extends DollarLambda {
         this.inputs = inputs;
         this.operation = operation;
         this.source = source;
+        this.meta.put("operation", operation);
+//        if(scope == null) {
+//            this.meta.put("scope", currentScope());
+//        }
         if (scope != null) {
             this.meta.put("scope", scope);
+
         }
+//        setScopes(inputs);
 
     }
 
@@ -84,12 +94,14 @@ public class DollarSource extends DollarLambda {
                     log.info("Correcting scope " + inputScope + " to parent " + scope);
                 }
                 inputScope.setParent(scope);
-
-
-
             } else {
                 if (scope.hasParent(inputScope)) {
-                    throw new DollarParserError("Child has parent's scope " + source.getSourceMessage());
+                    throw new DollarParserError(input.getMetaAttribute(
+                            "operation") + ": Child has " +
+                                                        "parent's" +
+                                                        " scope " +
+                                                        source
+                                                                .getSourceMessage() + " offending scope was " + inputScope + " which is a parent of " + scope);
                 } else {
                     if (!inputScope.isRoot()) {
                         log.info("Setting parent scope of " + inputScope + " to " + scope);
@@ -122,6 +134,9 @@ public class DollarSource extends DollarLambda {
 
     private void correctScope(@NotNull var input) {
         Scope scope = getScope();
+        if (scope == null) {
+            scope = currentScope();
+        }
         if (input.getMetaObject("scope") != scope) {
             correctParentScope(scope, input);
         }
@@ -173,7 +188,9 @@ public class DollarSource extends DollarLambda {
                 }
                 return this.prediction;
             }
-
+            if (method.getName().startsWith("_fixDeep")) {
+//                Thread.dumpStack();
+            }
             final Object result;
 //            if (method.getName().startsWith("_fix")) {
 //                log.debug("Fixing "+operation);
@@ -184,13 +201,16 @@ public class DollarSource extends DollarLambda {
 //
 //            }
             //Some operations do not require a valid scope
-            if (( !method.getName().startsWith("_fix") && (nonScopeOperations.contains(method.getName()) || method.getDeclaringClass().equals(MetadataAware.class) || method.getDeclaringClass().equals(VarInternal.class)))) {
+            if ((!method.getName().startsWith("_fix") && (nonScopeOperations.contains(
+                    method.getName()) || method.getDeclaringClass().equals(
+                    MetadataAware.class) || method.getDeclaringClass().equals(
+                    VarInternal.class)))) {
                 //This method does not require a valid scope for execution
                 try {
                     if (DollarStatic.getConfig().debugScope()) {
 //                        log.debug("EXE (ignored): " + method);
                     }
-                    return super.invoke(proxy, method, args);
+                    result = super.invoke(proxy, method, args);
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                     throw new DollarException(throwable);
@@ -199,13 +219,15 @@ public class DollarSource extends DollarLambda {
                 //This method does require a scope
                 Scope useScope = getScope();
                 if (useScope == null) {
-                  useScope= currentScope();
-                    meta.put("scope",currentScope());
+                    useScope = currentScope();
+                } else {
+                    useScope = useScope.copy();
                 }
 //                setScopes(inputs);
                 result = DollarScriptSupport.inScope(true, useScope, newScope -> {
                     if (DollarStatic.getConfig().debugScope()) {
-                        log.info("EXE: " + method.getName() + " for " + source.getShortSourceMessage());
+                        log.info(
+                                "EXE: " + method.getName() + " for " + source.getShortSourceMessage());
                     }
                     try {
                         return super.invoke(proxy, method, args);
@@ -214,11 +236,14 @@ public class DollarSource extends DollarLambda {
                         throw new DollarException(throwable);
                     }
                 });
+                if (result instanceof var) {
+                    if (((var) result).getMetaObject("scope") == null) {
+                        log.debug("ATTACHING MISSING SCOPE FOR RESULT, SCOPE is " + useScope);
+                        ((var) result).setMetaObject("scope", useScope);
+                    }
+                }
             }
-//            if (result instanceof var) {
-//                //We make sure the result has valid scope information
-//                correctScope((var) result);
-//            }
+
             if (method.getName().startsWith("_fixDeep")) {
                 typeLearner.learn(operation, source, inputs, ((var) result).$type());
             }

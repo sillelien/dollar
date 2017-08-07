@@ -20,7 +20,7 @@ import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.api.DollarParser;
-import com.sillelien.dollar.api.Scope;
+import dollar.internal.runtime.script.Scope;
 import org.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,7 +46,7 @@ public class CollectOperator implements Map<Object[], var> {
             @Override public var pipe(var... in) throws Exception {
                 var value = fix((var) objects[0], false);
                 count[0]++;
-                return DollarScriptSupport.inScope(false, pure, "collect", newScope -> {
+                return DollarScriptSupport.inSubScope(false, pure, "collect", newScope -> {
                     newScope.setParameter("count", $(count[0]));
                     newScope.setParameter("it", value);
                     //noinspection StatementWithEmptyBody

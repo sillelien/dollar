@@ -20,7 +20,6 @@ import com.google.common.io.ByteStreams;
 import com.sillelien.dollar.api.ControlFlowAware;
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.NumericAware;
-import com.sillelien.dollar.api.Scope;
 import com.sillelien.dollar.api.URIAware;
 import com.sillelien.dollar.api.collections.Range;
 import com.sillelien.dollar.api.execution.DollarExecutor;
@@ -161,7 +160,7 @@ public class DollarParserImpl implements DollarParser {
             DollarStatic.context().setClassLoader(classLoader);
             Parser<?> parser = buildParser(false, scope);
             var parse = (var) parser.from(TOKENIZER, DollarLexer.IGNORED).parse(source);
-            parse._fixDeep(false);
+//            parse._fixDeep(false);
             return $(exports);
         });
 
@@ -237,12 +236,16 @@ public class DollarParserImpl implements DollarParser {
         Parser.Reference<var> ref = Parser.newReference();
         Parser<var> block = block(ref.lazy(), pure).between(OP_NL("{"), NL_OP("}"));
         Parser<var> expression = expression(null, pure);
-        Parser<var> parser = (TERMINATOR_SYMBOL.optional()).next(or(expression, block).followedBy(
-                TERMINATOR_SYMBOL).many1()).map(v -> {
+        Parser<var> parser = (TERMINATOR_SYMBOL.optional()).next(or(expression).followedBy(
+                TERMINATOR_SYMBOL).many1()).map(l -> {
             log.debug("Ended Parse Phase");
-            var resultVar = DollarFactory.blockCollection(v);
             log.debug("Starting Runtime Phase");
-            var fixedResult = resultVar._fix(false);
+            for (int i = 0; i < l.size() - 1; i++) {
+                var fixed = l.get(i)._fixDeep(false);
+                System.err.println(fixed);
+            }
+            var resultVar = l.get(l.size() - 1);
+            var fixedResult = resultVar._fixDeep(false);
             log.debug("Ended Runtime Phase");
             return fixedResult;
         });
@@ -257,18 +260,9 @@ public class DollarParserImpl implements DollarParser {
         //block when the block is evaluated, but it will trigger execution of the rest.
         //This gives it functionality like a conventional function in imperative languages
         Parser<var>
-                or = DollarScriptSupport.inScope(false, pure, "block", newScope ->
-                                                                               (
-                                                                                       or(parentParser,
-                                                                                          parentParser.between(
-                                                                                                  OP_NL("{"),
-                                                                                                  NL_OP("}")))
-                                                                               ).sepBy1(
-                                                                                       SEMICOLON_TERMINATOR).followedBy(
-                                                                                       SEMICOLON_TERMINATOR.optional())
-                                                                                       .map(var -> var).token().map(
-                                                                                       new BlockOperator(this,
-                                                                                                         pure)));
+                or = (or(parentParser, parentParser.between(OP_NL("{"), NL_OP("}"))))
+                             .sepBy1(SEMICOLON_TERMINATOR).followedBy(SEMICOLON_TERMINATOR.optional())
+                             .map(var -> var).token().map(new BlockOperator(this, pure));
         ref.set(or);
         return or;
     }
@@ -462,7 +456,7 @@ public class DollarParserImpl implements DollarParser {
                                                       "error"), LINE_PREFIX_PRIORITY)
                                            .postfix(isOperator(), EQUIVALENCE_PRIORITY)
                                            .infixl(op(new BinaryOp(this, "each", (lhs, rhs) -> {
-                                                       return lhs.$each(i -> inScope(false, pure, "each",
+                                                       return lhs.$each(i -> inSubScope(false, pure, "each",
                                                                                      newScope -> {
                                                                                          newScope.setParameter(
                                                                                                  "1", i[0]);
@@ -474,7 +468,7 @@ public class DollarParserImpl implements DollarParser {
                                            .infixl(op(new BinaryOp(this, "reduce", (lhs, rhs) -> {
                                                return lhs.$list().$stream(false).reduce((x, y) -> {
                                                    try {
-                                                       return (var) inScope(false, pure, "reduce",
+                                                       return (var) inSubScope(false, pure, "reduce",
                                                                             newScope -> {
                                                                                 newScope.setParameter(
                                                                                         "1", x);
@@ -523,7 +517,8 @@ public class DollarParserImpl implements DollarParser {
                                            .postfix(subscriptOperator(ref), MEMBER_PRIORITY)
                                            .postfix(parameterOperator(ref, pure), MEMBER_PRIORITY)
                                            .prefix(op(
-                                                   new UnaryOp(false, v -> v._fixDeep(false), "fix",
+                                                   new UnaryOp(true, v -> v._fixDeep(false),
+                                                               "fix",
                                                                this), "&", "fix"), 1000)
                                            .postfix(castOperator(), UNARY_PRIORITY)
                                            .prefix(variableUsageOperator(pure), 1000)
@@ -666,8 +661,7 @@ public class DollarParserImpl implements DollarParser {
     }
 
     private Parser<var> functionCall(@NotNull Parser.Reference<var> ref, boolean pure) {
-        return array(IDENTIFIER.or(BUILTIN).followedBy(OP("(").peek()), parameterOperator(ref,
-                                                                                          pure))
+        return array(IDENTIFIER.or(BUILTIN).followedBy(OP("(").peek()))
                        .token().map(new FunctionCallOperator(this));
     }
 
@@ -721,7 +715,11 @@ public class DollarParserImpl implements DollarParser {
     private Parser<Map<? super var, ? extends var>> pipeOperator(@NotNull Parser.Reference<var> ref,
                                                                  boolean pure) {
         return (OP("->").optional(null)).next(
-                Parsers.longest(BUILTIN, IDENTIFIER, functionCall(ref, pure),
+                Parsers.longest(BUILTIN, IDENTIFIER, functionCall(ref, pure).postfix
+                                                                                     (parameterOperator(
+                                                                                             ref,
+                                                                                             pure)
+                                                                                     ),
                                 ref.lazy().between(OP("("), OP(")"))))
                        .token().map(new PipeOperator(this, pure));
     }

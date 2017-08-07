@@ -17,13 +17,13 @@
 package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.DollarException;
+import dollar.internal.runtime.script.Scope;
 import com.sillelien.dollar.api.exceptions.LambdaRecursionException;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.types.ErrorType;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.ParserErrorHandler;
-import com.sillelien.dollar.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.ErrorReporter;
@@ -31,6 +31,8 @@ import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.error.ParserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -38,6 +40,8 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
     private final boolean missingVariables;
     private final boolean failfast;
     private final boolean faultTolerant;
+
+    private static final Logger log = LoggerFactory.getLogger("ParserErrorHandlerImpl");
 
     public ParserErrorHandlerImpl() {
         missingVariables = true;
@@ -112,23 +116,23 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
     @Override
     public void handleTopLevel(@NotNull Throwable t) throws Throwable {
         if (t instanceof AssertionError) {
-            System.err.println(t.getMessage());
+            log.error(t.getMessage(),t);
         }
         if (t instanceof DollarException) {
             ErrorReporter.report(getClass(), t);
-            System.err.println(t.getMessage());
+            log.error(t.getMessage(),t);
         }
         if (t instanceof ParserException) {
 //            ErrorReporter.report(getClass(), t);
             if (t.getCause() instanceof DollarScriptException) {
-                System.err.println(t.getCause().getMessage());
+                log.error(t.getCause().getMessage(),t);
             } else {
-                System.err.println(t.getMessage());
+                log.error(t.getMessage(),t);
             }
         }
         if (t instanceof DollarScriptException) {
             ErrorReporter.report(getClass(), t);
-            System.err.println(t.getMessage());
+            log.error(t.getMessage(),t);
         } else {
             throw t;
         }

@@ -18,7 +18,6 @@ package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.Pipeable;
-import com.sillelien.dollar.api.Scope;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
@@ -108,7 +107,7 @@ public class DollarScriptSupport {
                                          @NotNull var lhs,
                                          @NotNull Pipeable callable) {
 
-        final var lambda = createNode(operation, parser, currentScope(), source,
+        final var lambda = createNode(operation, parser,  source,
                                       Collections.singletonList(lhs),
                                       callable
         );
@@ -120,14 +119,14 @@ public class DollarScriptSupport {
     @NotNull
     public static var createNode(@NotNull String operation,
                                  @NotNull DollarParser parser,
-                                 @Nullable Scope scope,
+
                                  @NotNull SourceSegment source,
                                  @NotNull List<var> inputs,
                                  @NotNull Pipeable callable) {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
-                new DollarSource(i -> callable.pipe(), scope, source, inputs, operation, parser)));
+                new DollarSource(i -> callable.pipe(), null, source, inputs, operation, parser)));
     }
 
     @NotNull
@@ -169,7 +168,7 @@ public class DollarScriptSupport {
                                          @NotNull var lhs,
                                          @NotNull var rhs,
                                          @NotNull Pipeable callable) {
-        final var lambda = createNode(operation, parser, null, source, Arrays.asList(lhs, rhs),
+        final var lambda = createNode(operation, parser,  source, Arrays.asList(lhs, rhs),
                                       callable
         );
 
@@ -184,7 +183,7 @@ public class DollarScriptSupport {
                                          Token token,
                                          @NotNull var lhs,
                                          @NotNull var rhs, @NotNull Pipeable callable) {
-        final var lambda = createNode(operation, parser, null,
+        final var lambda = createNode(operation, parser,
                                       new SourceSegmentValue(currentScope(), token),
                                       Arrays.asList(lhs, rhs), callable
         );
@@ -216,8 +215,8 @@ public class DollarScriptSupport {
     }
 
     @SuppressWarnings("ThrowFromFinallyBlock")
-    public static <T> T inScope(boolean runtime, boolean pure, @NotNull String scopeName,
-                                @NotNull ScopeExecutable<T> r) {
+    public static <T> T inSubScope(boolean runtime, boolean pure, @NotNull String scopeName,
+                                   @NotNull ScopeExecutable<T> r) {
         return inScope(runtime,
                        new ScriptScope(DollarScriptSupport.currentScope(), scopeName, false),
                        pure,
@@ -257,19 +256,25 @@ public class DollarScriptSupport {
             if (poppedScope2 != parent) {
                 throw new IllegalStateException("Popped wrong scope");
             }
+            poppedScope2.destroy();
         }
     }
 
+    public static <T> T inClonedScope(boolean runtime,
+                                @NotNull Scope scope,
+                                @NotNull ScopeExecutable<T> r) {
+        return inScope(runtime,scope.copy(),r);
+    }
 
-    @SuppressWarnings("ThrowFromFinallyBlock")
+
+
+        @SuppressWarnings("ThrowFromFinallyBlock")
     public static <T> T inScope(boolean runtime,
                                 @NotNull Scope scope,
                                 @NotNull ScopeExecutable<T> r) {
 
         boolean addedDynamicScope = scopes.get().size() > 0;
-        if (addedDynamicScope) {
-            addScope(runtime, currentScope());
-        }
+
         addScope(runtime, scope);
         try {
             return r.execute(scope);
@@ -280,12 +285,7 @@ public class DollarScriptSupport {
             if (poppedScope != scope) {
                 throw new IllegalStateException("Popped wrong scope");
             }
-            if (addedDynamicScope) {
-                final Scope poppedScope2 = endScope(runtime);
-                if (poppedScope2 != currentScope()) {
-                    throw new IllegalStateException("Popped wrong scope");
-                }
-            }
+
         }
     }
 
@@ -302,6 +302,9 @@ public class DollarScriptSupport {
         lambda[0] = createNode("get-variable-" + key + "-" + source.getShortHash(), parser, token,
                                $(key).$list().toVarList().mutable(), (i) -> {
                     Scope scope = (Scope) lambda[0].getMetaObject("scope");
+                    if(scope == null) {
+                        scope= currentScope();
+                    }
                     scope.listen(key, lambda[0]);
                     log.debug(
                             "LOOKUP " + key + " " + scope + " in " + scopes.get().size() + " scopes ");
@@ -393,63 +396,78 @@ public class DollarScriptSupport {
 
         SourceSegment source = new SourceSegmentValue(scope, token);
         boolean numeric = key.matches("^\\d+$");
-        var lambda[] = new var[1];
-        lambda[0] = createNode("get-variable-" + key + "-" + source.getShortHash(), parser, token,
-                               $(key).$list().toVarList().mutable(), i -> {
-                    scope.listen(key, lambda[0]);
-                    if (scope.has(key)) {
-                        log.debug("SETTING " + key + " " + scope + " " + currentScope());
-                        return scope.get(key);
-                    }
-                    try {
-                        List<Scope> scopes = new ArrayList<>(DollarScriptSupport.scopes.get());
-                        Collections.reverse(scopes);
-                        for (Scope scriptScope : scopes) {
-                            if (!(scriptScope instanceof PureScope) && pure) {
-                                log.debug("Skipping " + scriptScope);
-                            }
 
-                            if (scriptScope.has(key)) {
-                                if (decleration) {
-                                    throw new DollarScriptException("Variable " + key + " already defined",
-                                                                    value);
-                                } else {
-                                    log.debug(
-                                            "SETTING " + key + " " + scope + " " + currentScope());
-                                    return scriptScope.set(key,
-                                                           value,
-                                                           readonly,
-                                                           useConstraint,
-                                                           useSource,
-                                                           isVolatile,
-                                                           fixed,
-                                                           pure);
-                                }
-                            }
 
-                        }
-                    } catch (AssertionError e) {
-                        return parser.getErrorHandler().handle(scope, null, e);
-                    } catch (DollarScriptException e) {
-                        return parser.getErrorHandler().handle(scope, null, e);
-                    } catch (Exception e) {
-                        return parser.getErrorHandler().handle(scope, null, e);
-                    }
-                    if (numeric) {
-                        return scope.getParameter(key);
-                    }
-
-                    if (decleration) {
-                        return scope.set(key, value, readonly, useConstraint, useSource, isVolatile,
-                                         fixed,
-                                         pure);
-                    } else {
-                        throw new VariableNotFoundException(key, scope);
-                    }
+        if (scope.has(key)) {
+            return updateVariable(scope, key, value, readonly, useConstraint, useSource,
+                                  isVolatile, fixed, pure,
+                                  decleration);
+        }
+//        if (decleration) {
+//            scope.listen(key, value);
+//        }
+        try {
+            List<Scope> scopes = new ArrayList<>(DollarScriptSupport.scopes.get());
+            Collections.reverse(scopes);
+            for (Scope scriptScope : scopes) {
+                if (!(scriptScope instanceof PureScope) && pure) {
+                    log.debug("Skipping " + scriptScope);
                 }
-        );
-        lambda[0].setMetaAttribute("variable", key);
-        return lambda[0];
+
+                if (scriptScope.has(key)) {
+                    return updateVariable(scriptScope, key, value, readonly, useConstraint, useSource,
+                                          isVolatile, fixed, pure,
+                                          decleration );
+                }
+
+            }
+        } catch (AssertionError e) {
+            return parser.getErrorHandler().handle(scope, null, e);
+        } catch (DollarScriptException e) {
+            return parser.getErrorHandler().handle(scope, null, e);
+        } catch (Exception e) {
+            return parser.getErrorHandler().handle(scope, null, e);
+        }
+        if (numeric) {
+            return scope.getParameter(key);
+        }
+
+        if (decleration) {
+            log.debug("SETTING " + key + " " + scope + " " + currentScope());
+            return scope.set(key, value, readonly, useConstraint, useSource, isVolatile,
+                             fixed,
+                             pure);
+        } else {
+            throw new VariableNotFoundException(key, scope);
+        }
+
+
+    }
+
+    private static var updateVariable(@NotNull Scope scope,
+                                      @NotNull String key,
+                                      @NotNull var value,
+                                      boolean readonly,
+                                      @Nullable var useConstraint,
+                                      @Nullable String useSource,
+                                      boolean isVolatile,
+                                      boolean fixed,
+                                      boolean pure, boolean decleration) {
+        log.debug("UPDATING " + key + " " + scope + " " + scope);
+
+        if (decleration) {
+            throw new DollarScriptException("Variable " + key + " already defined in "+scope);
+        } else {
+
+            return scope.set(key,
+                                   value,
+                                   readonly,
+                                   useConstraint,
+                                   useSource,
+                                   isVolatile,
+                                   fixed,
+                                   pure);
+        }
     }
 
     @NotNull
