@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script.api.exceptions;
 
-import dollar.internal.runtime.script.Scope;
+import dollar.internal.runtime.script.api.Scope;
 
 public class VariableNotFoundException extends DollarScriptException {
     private String variable;

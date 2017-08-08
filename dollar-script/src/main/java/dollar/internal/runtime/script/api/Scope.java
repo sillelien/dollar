@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.api;
 
 import com.sillelien.dollar.api.collections.MultiMap;
 import com.sillelien.dollar.api.var;

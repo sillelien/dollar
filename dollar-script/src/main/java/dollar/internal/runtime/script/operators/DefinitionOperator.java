@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script.operators;
 
-import dollar.internal.runtime.script.Scope;
+import dollar.internal.runtime.script.api.Scope;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
@@ -54,16 +54,15 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
         Scope scope = currentScope();
 
         final Object exportObj;
-        final Object typeConstraintObj;
 
         exportObj = objects[0];
-        typeConstraintObj = objects[1];
 
         return new Map<var, var>() {
             @NotNull
             public var map(var v) {
                 var value;
                 Object variableNameObj;
+                final Object typeConstraintObj;
                 if (objects[2] != null && objects[2].toString().equals("def")) {
                     variableNameObj = objects[3];
                     if (objects.length == 5) {
@@ -71,14 +70,17 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
                     } else {
                         value = (var) v;
                     }
+                    typeConstraintObj = objects[1];
 
                 } else {
-                    variableNameObj = objects[2];
-                    if (objects.length == 5) {
-                        value = (var) objects[4];
+                    variableNameObj = objects[3];
+                    if (objects.length == 6) {
+                        value = (var) objects[5];
                     } else {
                         value = (var) v;
                     }
+                    typeConstraintObj = objects[2];
+
                 }
                 var constraint;
                 String constraintSource;
@@ -106,14 +108,14 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
                                                          constraint,
                                                          constraintSource
                             );
+                            if (exportObj != null && exportObj.toString().equals("export")) {
+                                parser.export(variableName, value);
+                            }
                             return $void();
                         }
                 );
 
                 node.$listen(i -> scope.notify(variableName));
-                if (exportObj != null && exportObj.equals("export")) {
-                    parser.export(variableName, node);
-                }
                 return node;
             }
         };

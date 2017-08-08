@@ -47,9 +47,9 @@ public class BinaryOp implements Binary<var>, Operator {
     }
 
     public BinaryOp(boolean immediate,
-                    @NotNull Map2<var, var, var> function,
                     @NotNull String operation,
-                    @NotNull DollarParser parser) {
+                    @NotNull DollarParser parser,
+                    @NotNull Map2<var, var, var> function) {
         this.immediate = immediate;
         this.function = function;
         this.operation = operation;

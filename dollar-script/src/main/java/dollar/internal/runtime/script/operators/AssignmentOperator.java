@@ -21,7 +21,7 @@ import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.TypePrediction;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.Scope;
+import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.SourceSegmentValue;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;

@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script;
 
-import dollar.internal.runtime.script.Scope;
+import dollar.internal.runtime.script.api.Scope;
 
 public interface ScopeExecutable<T> {
      T execute(Scope scope) throws Exception;

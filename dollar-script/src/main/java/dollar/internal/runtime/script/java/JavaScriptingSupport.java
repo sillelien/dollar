@@ -86,7 +86,7 @@ public class JavaScriptingSupport {
         code.append(" /* out statement */ var out = $void();\n");
         code.append(java).append(" /* return statement */ \nreturn out;\n");
 
-
+        System.err.println(code);
         var result = null;
         try {
             result = $(scriptEngine.eval(code.toString(), bindings));

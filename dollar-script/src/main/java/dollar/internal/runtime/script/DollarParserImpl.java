@@ -30,6 +30,7 @@ import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.ParserErrorHandler;
 import dollar.internal.runtime.script.api.ParserOptions;
+import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptFailureException;
 import dollar.internal.runtime.script.java.JavaScriptingSupport;
@@ -134,6 +135,9 @@ public class DollarParserImpl implements DollarParser {
 
     @Override
     public void export(@NotNull String name, @NotNull var export) {
+        System.err.println("Exporting " + name);
+        Thread.dumpStack();
+        export.setMetaObject("scope", currentScope());
         exports.put(name, export);
     }
 
@@ -261,7 +265,8 @@ public class DollarParserImpl implements DollarParser {
         //This gives it functionality like a conventional function in imperative languages
         Parser<var>
                 or = (or(parentParser, parentParser.between(OP_NL("{"), NL_OP("}"))))
-                             .sepBy1(SEMICOLON_TERMINATOR).followedBy(SEMICOLON_TERMINATOR.optional())
+                             .sepBy1(SEMICOLON_TERMINATOR).followedBy(
+                        SEMICOLON_TERMINATOR.optional())
                              .map(var -> var).token().map(new BlockOperator(this, pure));
         ref.set(or);
         return or;
@@ -412,22 +417,10 @@ public class DollarParserImpl implements DollarParser {
                                                                    (lhs, rhs) -> $(lhs.$S(), rhs)),
                                                       ":"), 30)
 
-                                           .infixl(op(new BinaryOp(this, "assert-equal",
-                                                                   (lhs, rhs) -> {
-
-                                                                       final var lhsFix = lhs._fixDeep(
-                                                                               true);
-                                                                       final var rhsFix = rhs._fixDeep(
-                                                                               true);
-                                                                       if (lhsFix.equals(rhsFix)) {
-                                                                           return $(true);
-                                                                       } else {
-                                                                           throw new DollarScriptFailureException(ErrorType.ASSERTION,
-                                                                                                                  lhsFix.toDollarScript() +
-                                                                                                                          " != " +
-                                                                                                                          rhsFix.toDollarScript());
-                                                                       }
-                                                                   }), "<=>"), LINE_PREFIX_PRIORITY)
+                                           .infixl(assertEqualsOp(false, "<=>"),
+                                                   LINE_PREFIX_PRIORITY)
+                                           .infixl(assertEqualsOp(true, "<->"),
+                                                   LINE_PREFIX_PRIORITY)
                                            .prefix(op(
                                                    new UnaryOp("truthy", i -> $(i.truthy()), this),
                                                    "~", "truthy"), UNARY_PRIORITY)
@@ -457,26 +450,28 @@ public class DollarParserImpl implements DollarParser {
                                            .postfix(isOperator(), EQUIVALENCE_PRIORITY)
                                            .infixl(op(new BinaryOp(this, "each", (lhs, rhs) -> {
                                                        return lhs.$each(i -> inSubScope(false, pure, "each",
-                                                                                     newScope -> {
-                                                                                         newScope.setParameter(
-                                                                                                 "1", i[0]);
-                                                                                         return rhs._fixDeep(
-                                                                                                 false);
-                                                                                     }));
+                                                                                        newScope -> {
+                                                                                            newScope.setParameter(
+                                                                                                    "1",
+                                                                                                    i[0]);
+                                                                                            return rhs._fixDeep(
+                                                                                                    false);
+                                                                                        }));
                                                    }), "*|*", "each"),
                                                    MULTIPLY_DIVIDE_PRIORITY)
                                            .infixl(op(new BinaryOp(this, "reduce", (lhs, rhs) -> {
                                                return lhs.$list().$stream(false).reduce((x, y) -> {
                                                    try {
-                                                       return (var) inSubScope(false, pure, "reduce",
-                                                                            newScope -> {
-                                                                                newScope.setParameter(
-                                                                                        "1", x);
-                                                                                newScope.setParameter(
-                                                                                        "2", y);
-                                                                                return rhs._fixDeep(
-                                                                                        false);
-                                                                            });
+                                                       return (var) inSubScope(false, pure,
+                                                                               "reduce",
+                                                                               newScope -> {
+                                                                                   newScope.setParameter(
+                                                                                           "1", x);
+                                                                                   newScope.setParameter(
+                                                                                           "2", y);
+                                                                                   return rhs._fixDeep(
+                                                                                           false);
+                                                                               });
                                                    } catch (Exception e) {
                                                        throw new DollarScriptException(e);
                                                    }
@@ -587,6 +582,25 @@ public class DollarParserImpl implements DollarParser {
 
     }
 
+    @NotNull
+    private Parser<BinaryOp> assertEqualsOp(boolean immediate, String opStr) {
+        return op(new BinaryOp(immediate, "assert-equal", this, (lhs, rhs) -> {
+
+            final var lhsFix = lhs._fixDeep(
+                    true);
+            final var rhsFix = rhs._fixDeep(
+                    true);
+            if (lhsFix.equals(rhsFix)) {
+                return $(true);
+            } else {
+                throw new DollarScriptFailureException(ErrorType.ASSERTION,
+                                                       lhsFix.toDollarScript() +
+                                                               " != " +
+                                                               rhsFix.toDollarScript());
+            }
+        }), opStr);
+    }
+
     private Parser<var> unitValue(boolean pure) {
         return array(DECIMAL_LITERAL.or(INTEGER_LITERAL), BUILTIN).token().map(
                 new UnitOperator(this, pure));
@@ -619,10 +633,8 @@ public class DollarParserImpl implements DollarParser {
                     return result;
                 }).sepBy(OP(",")).between(OP("("), OP(")")));
 
-        Parser<Object[]> sequence = array(KEYWORD("module"), STRING_LITERAL.or(URL),
-                                          parameters.optional());
-
-        return sequence.map(new ModuleOperator(this));
+        return array(KEYWORD("module"), STRING_LITERAL.or(URL),
+                     parameters.optional()).token().map(new ModuleOperator(this));
 
     }
 
@@ -687,11 +699,14 @@ public class DollarParserImpl implements DollarParser {
             public String toString() {
                 return "java";
             }
-        }).map(new Map<String, var>() {
-            @Nullable
+        }).token().map(new Function<Token, var>() {
             @Override
-            public var map(String s) {
-                return JavaScriptingSupport.compile($void(), s);
+            public var apply(Token token) {
+                return DollarScriptSupport.createNode("java", DollarParserImpl.this, token,
+                                                      Arrays.asList($void()),
+                                                      in -> JavaScriptingSupport.compile($void(),
+                                                                                         (String) token
+                                                                                                          .value()));
             }
         });
     }
@@ -844,7 +859,8 @@ public class DollarParserImpl implements DollarParser {
         return
                 or(
                         array(
-                                or(KEYWORD("export"), KEYWORD("const")),
+                                KEYWORD("export").optional(null),
+                                or(KEYWORD("const")).optional(null),
                                 IDENTIFIER.between(OP("<"), OP(">")).optional(),
                                 OP("$").next(ref.lazy().between(OP("("), OP(")"))).or(IDENTIFIER),
                                 OP(":=")
@@ -861,10 +877,12 @@ public class DollarParserImpl implements DollarParser {
 
         return KEYWORD("pure").next(
                 or(
-                        array(KEYWORD("export").optional(),
-                              IDENTIFIER.between(OP("<"), OP(">")).optional(),
-                              OP("$").next(ref.lazy().between(OP("("), OP(")"))).or(IDENTIFIER),
-                              OP(":="), expression(null, true)
+                        array(
+                                KEYWORD("export").optional(null),
+                                or(KEYWORD("const")).optional(null),
+                                IDENTIFIER.between(OP("<"), OP(">")).optional(),
+                                OP("$").next(ref.lazy().between(OP("("), OP(")"))).or(IDENTIFIER),
+                                OP(":="), expression(null, true)
                         ),
                         array(KEYWORD("export").optional(),
                               IDENTIFIER.between(OP("<"), OP(">")).optional(), KEYWORD("def"),

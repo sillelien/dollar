@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script.operators;
 
-import dollar.internal.runtime.script.Scope;
+import dollar.internal.runtime.script.api.Scope;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.UnaryOp;

@@ -20,7 +20,7 @@ import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.Scope;
+import dollar.internal.runtime.script.api.Scope;
 import org.jparsec.functors.Map;
 import org.jetbrains.annotations.NotNull;
 

@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script;
 
-import dollar.internal.runtime.script.Scope;
+import dollar.internal.runtime.script.api.Scope;
 
 public class BlockScope extends ScriptScope {
     public BlockScope(Scope scope) {

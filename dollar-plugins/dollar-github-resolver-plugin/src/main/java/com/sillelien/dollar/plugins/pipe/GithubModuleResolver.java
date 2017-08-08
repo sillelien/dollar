@@ -22,7 +22,7 @@ import com.google.common.cache.LoadingCache;
 import com.sillelien.dollar.api.DollarException;
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.Pipeable;
-import dollar.internal.runtime.script.Scope;
+import dollar.internal.runtime.script.api.Scope;
 import com.sillelien.dollar.api.collections.ImmutableMap;
 import com.sillelien.dollar.api.script.ModuleResolver;
 import com.sillelien.dollar.api.var;

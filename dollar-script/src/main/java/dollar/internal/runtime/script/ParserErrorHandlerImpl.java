@@ -17,7 +17,7 @@
 package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.DollarException;
-import dollar.internal.runtime.script.Scope;
+import dollar.internal.runtime.script.api.Scope;
 import com.sillelien.dollar.api.exceptions.LambdaRecursionException;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.types.DollarFactory;

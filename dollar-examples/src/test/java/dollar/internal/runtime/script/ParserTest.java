@@ -80,8 +80,8 @@ public class ParserTest {
 
     public void singleScriptTest() throws Exception {
         try {
-            new DollarParserImpl(options).parse(getClass().getResourceAsStream("/test_fix2.ds"),
-                                                "/test_fix2.ds",
+            new DollarParserImpl(options).parse(getClass().getResourceAsStream("/test_parameters.ds"),
+                                                "/test_parameters.ds",
                                                 parallel);
         } catch (Exception e) {
             e.printStackTrace();

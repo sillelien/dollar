@@ -21,6 +21,7 @@ import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.collections.MultiHashMap;
 import com.sillelien.dollar.api.collections.MultiMap;
 import com.sillelien.dollar.api.var;
+import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.Variable;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;

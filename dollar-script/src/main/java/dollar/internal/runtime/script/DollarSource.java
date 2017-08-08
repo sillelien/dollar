@@ -28,6 +28,7 @@ import com.sillelien.dollar.api.script.TypeLearner;
 import com.sillelien.dollar.api.types.DollarLambda;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
