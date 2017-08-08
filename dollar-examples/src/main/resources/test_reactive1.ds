@@ -1,0 +1,83 @@
+
+// = (assignment) normally forces immediate evaluation of the RHS
+// however := is the lambda assignment and does not, thus creating a
+// lambda style expression
+@@ "*****"
+
+
+
+var lamval=1
+lamval causes { @@ "->"+lamval; }
+
+const lambda2 := lamval
+
+
+const lambda := ( ( lamval )  + lamval )
+const notlambda = ( ( lamval )  + lamval )
+
+lamval= 7
+
+var lamval2= 23
+
+//The simplest possible lambda (serves no purpose!)
+.: 1 == 1
+
+.: 1 == fix 1
+
+.: & 1 == 1
+
+@@ "*****"
+//Since the lambda shares the scope of when it was declared this should be 14 not 2
+.: &lambda == 14
+.: &notlambda == 2
+
+//And this is the single lamval syntax from earlier
+&lambda2 <=> 7
+
+
+
+//Now we test levels of indirection
+def delayName { ("lamval" + lamval)}
+@@ "*****"
+lamval=5
+var lamval5=13
+
+//Did you follow that crazyness :-) Don't do this at home!
+
+@@ "*****"
+@@ "lamval"
+
+@@ "lamval" + 1
+
+@@ lamval + 1
+
+@@ lamval
+
+@@ $("lamval" + lamval)
+
+@@ $('lamval' + lamval)
+
+
+//Lambda variable resolution @@! - notice the two levels of indirection here - yeah edge case :-)
+&$(${delayName}) <=> 13
+
+
+def removeWorld ($1 - "World")
+
+@@ ["Hello", "World"] -> removeWorld
+
+(["Hello", "World"] -> removeWorld) <=> ["Hello"]
+(["Goodbye", "World"] -> removeWorld) <=> ["Goodbye"]
+
+
+($2 + " " + $1)("Hello", "World") <=> "World Hello"
+
+def testParams ($2 + " " + $1)
+(testParams) ("Hello", "World") <=> "World Hello"
+
+//short-form of parameterized variable (function call style)
+testParams("Hello", "World") <=> "World Hello"
+
+
+
+

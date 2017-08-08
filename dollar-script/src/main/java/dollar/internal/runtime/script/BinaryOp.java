@@ -16,12 +16,15 @@
 
 package dollar.internal.runtime.script;
 
+import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.functors.Binary;
 import org.jparsec.functors.Map2;
+
+import java.util.Arrays;
 
 import static dollar.internal.runtime.script.DollarScriptSupport.createReactiveNode;
 
@@ -59,9 +62,20 @@ public class BinaryOp implements Binary<var>, Operator {
     @NotNull
     @Override
     public var map(@NotNull var lhs, @NotNull var rhs) {
-//        if (immediate) {
-//            return function.map(lhs, rhs);
-//        }
+        if (immediate) {
+            final var lambda = DollarScriptSupport.createNode(operation, parser,
+                                                              source,
+                                                              Arrays.asList(lhs, rhs),
+                                                              new Pipeable() {
+                                                                  @Override
+                                                                  public var pipe(var... vars) throws Exception {
+                                                                      return function.map(lhs,rhs);
+                                                                  }
+                                                              }
+            );
+            return lambda;
+
+        }
         //Lazy evaluation
         return createReactiveNode(operation, parser, source, lhs, rhs,
                                   args -> function.map(lhs, rhs));

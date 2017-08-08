@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script.api;
 
+import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.collections.MultiMap;
 import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +44,7 @@ public interface Scope {
 
     @Nullable String getFile();
 
-    @NotNull MultiMap<String, var> getListeners();
+    @NotNull MultiMap<String, Pipeable> getListeners();
 
     @Nullable var getParameter(@NotNull String key);
 
@@ -62,6 +63,8 @@ public interface Scope {
     boolean hasParameter(@NotNull String key);
 
     void listen(@NotNull String key, @NotNull var listener);
+
+    void listen(@NotNull String key, @NotNull Pipeable listener);
 
     @Nullable var notify(@NotNull String variableName);
 

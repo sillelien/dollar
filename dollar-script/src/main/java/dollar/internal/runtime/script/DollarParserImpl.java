@@ -586,10 +586,8 @@ public class DollarParserImpl implements DollarParser {
     private Parser<BinaryOp> assertEqualsOp(boolean immediate, String opStr) {
         return op(new BinaryOp(immediate, "assert-equal", this, (lhs, rhs) -> {
 
-            final var lhsFix = lhs._fixDeep(
-                    true);
-            final var rhsFix = rhs._fixDeep(
-                    true);
+            final var lhsFix = lhs._fixDeep(false);
+            final var rhsFix = rhs._fixDeep(false);
             if (lhsFix.equals(rhsFix)) {
                 return $(true);
             } else {
@@ -647,13 +645,14 @@ public class DollarParserImpl implements DollarParser {
     }
 
     private Parser<var> collectStatement(Parser<var> expression, boolean pure) {
-        Parser<Object[]> sequence = KEYWORD_NL("collect")
-                                            .next(array(expression, KEYWORD("until").next(
-                                                    expression).optional(),
-                                                        KEYWORD("unless").next(
-                                                                expression).optional(),
-                                                        expression));
-        return sequence.map(new CollectOperator(this, pure));
+        Parser<Object[]> parser = KEYWORD_NL("collect")
+                                        .next(
+                                                array(expression,
+                                                      KEYWORD("until").next(expression).optional(),
+                                                      KEYWORD("unless").next(expression).optional(),
+                                                      expression)
+                                        );
+        return parser.token().map(new CollectOperator(this, pure));
     }
 
     private Parser<var> whenStatement(Parser<var> expression, boolean pure) {
@@ -823,7 +822,7 @@ public class DollarParserImpl implements DollarParser {
 
     private Parser<Map<? super var, ? extends var>> variableUsageOperator(boolean pure) {
         return or(OP("$").followedBy(OP("(").peek()).token()
-                          .map(new VariableUsageOperator(pure, this)),
+                          .map(new VariableUsageOperator(pure, this, false)),
                   OP("$").followedBy(INTEGER_LITERAL.peek()).token().map(
                           (Token lhs) -> {
                               return new Map<var, var>() {

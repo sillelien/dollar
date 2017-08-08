@@ -30,17 +30,20 @@ import static com.sillelien.dollar.api.DollarStatic.$void;
 public class VariableUsageOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final boolean pure;
     private DollarParser parser;
+    private boolean numeric;
 
-    public VariableUsageOperator(boolean pure, DollarParser parser) {
+    public VariableUsageOperator(boolean pure, DollarParser parser, boolean numeric) {
         this.pure = pure;
         this.parser = parser;
+        this.numeric = numeric;
     }
 
     @Override public Map<? super var, ? extends var> map(Token token) {
 
         return rhs -> {
 
-            Pipeable callable = i -> DollarScriptSupport.getVariable(pure, rhs.toString(), false, $void(), token, parser);
+            Pipeable callable = i -> DollarScriptSupport.getVariable(pure, rhs.toString(),
+                                                                     numeric, $void(), token, parser);
 
             return DollarScriptSupport.createNode(
                     "variable-usage--" + rhs._source().getSourceSegment(), parser, token,

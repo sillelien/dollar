@@ -16,11 +16,13 @@
 
 package com.sillelien.dollar.execution.simple;
 
-import dollar.internal.runtime.script.api.Scope;
 import com.sillelien.dollar.api.execution.DollarExecutor;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.api.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -36,6 +38,8 @@ import static java.lang.Runtime.getRuntime;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
 public class ScopeAwareDollarExecutor implements DollarExecutor {
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger("ScopeAwareDollarExecutor");
 
     @Nullable
     private ForkJoinPool forkJoinPool;
@@ -83,13 +87,15 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
     @Override
     public <T> Future<T> executeInBackground(@NotNull Callable<T> callable) {
         assert backgroundExecutor != null;
+        log.debug("Background Execution");
         return backgroundExecutor.submit(wrap(callable));
     }
 
     @NotNull
     @Override
     public <T> Future<T> executeNow(@NotNull Callable<T> callable) {
-        final FutureTask<T> tFutureTask = new FutureTask<>(wrap(callable));
+        log.debug("Immediate Execution");
+        final FutureTask<T> tFutureTask = new FutureTask<>(callable);
         tFutureTask.run();
         return tFutureTask;
     }
@@ -127,6 +133,8 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
     @Override
     public <T> Future<T> submit(@NotNull Callable<T> callable) {
         assert forkJoinPool != null;
+        log.debug("Forking");
+        Thread.dumpStack();
         return forkJoinPool.submit(wrap(callable));
     }
 

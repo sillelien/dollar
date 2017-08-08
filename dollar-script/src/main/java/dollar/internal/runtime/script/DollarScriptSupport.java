@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 
@@ -250,6 +251,7 @@ public class DollarScriptSupport {
             throw new DollarScriptException(e);
         } finally {
             Scope poppedScope = endScope(runtime);
+//            poppedScope.destroy();
             if (poppedScope != newScope) {
                 throw new IllegalStateException("Popped wrong scope");
             }
@@ -257,7 +259,6 @@ public class DollarScriptSupport {
             if (poppedScope2 != parent) {
                 throw new IllegalStateException("Popped wrong scope");
             }
-            poppedScope2.destroy();
         }
     }
 
@@ -300,13 +301,12 @@ public class DollarScriptSupport {
         SourceSegment source = new SourceSegmentValue(currentScope(), token);
 
         var lambda[] = new var[1];
-        lambda[0] = createNode("get-variable-" + key + "-" + source.getShortHash(), parser, token,
+        lambda[0] = createNode("get-variable-" + key + "-" + UUID.randomUUID(), parser, token,
                                $(key).$list().toVarList().mutable(), (i) -> {
                     Scope scope = (Scope) lambda[0].getMetaObject("scope");
                     if(scope == null) {
                         scope= currentScope();
                     }
-                    scope.listen(key, lambda[0]);
                     log.debug(
                             "LOOKUP " + key + " " + scope + " in " + scopes.get().size() + " scopes ");
                     if (numeric) {
@@ -315,6 +315,7 @@ public class DollarScriptSupport {
                         }
                     } else {
                         if (scope.has(key)) {
+                            scope.getScopeForKey(key).listen(key, lambda[0]);
                             return scope.get(key);
                         }
                     }
@@ -331,6 +332,7 @@ public class DollarScriptSupport {
                                 }
                             } else {
                                 if (scriptScope.has(key)) {
+                                    scriptScope.getScopeForKey(key).listen(key, lambda[0]);
                                     return scriptScope.get(key);
                                 }
                             }
@@ -355,6 +357,54 @@ public class DollarScriptSupport {
         );
         lambda[0].setMetaAttribute("variable", key);
         return lambda[0];
+
+    }
+
+
+    @Nullable
+    public static Scope getScopeForVar(boolean pure,
+                                       @NotNull String key,
+                                       boolean numeric,
+                                       Scope initialScope) {
+//       if(pure && !(scope instanceof  PureScope)) {
+//           throw new IllegalStateException("Attempting to get a pure variable in an impure scope");
+//
+
+                    if(initialScope == null) {
+                        initialScope = currentScope();
+                    }
+                    log.debug(
+                            "LOOKUP " + key + " " + initialScope + " in " + scopes.get().size() + " scopes ");
+                    if (numeric) {
+                        if (initialScope.hasParameter(key)) {
+                            return initialScope;
+                        }
+                    } else {
+                        if (initialScope.has(key)) {
+                            return initialScope;
+                        }
+                    }
+
+                        List<Scope> scopes = new ArrayList<>(DollarScriptSupport.scopes.get());
+                        Collections.reverse(scopes);
+                        for (Scope scriptScope : scopes) {
+                            if (!(scriptScope instanceof PureScope) && pure) {
+                                log.debug("Skipping " + scriptScope);
+                            }
+                            if (numeric) {
+                                if (scriptScope.hasParameter(key)) {
+                                    return scriptScope;
+                                }
+                            } else {
+                                if (scriptScope.has(key)) {
+
+                                    return scriptScope;
+                                }
+                            }
+                        }
+
+                    return null;
+
 
     }
 
@@ -454,7 +504,7 @@ public class DollarScriptSupport {
                                       boolean isVolatile,
                                       boolean fixed,
                                       boolean pure, boolean decleration) {
-        log.debug("UPDATING " + key + " " + scope + " " + scope);
+        log.debug("UPDATING " + key + " " + scope);
 
         if (decleration) {
             throw new DollarScriptException("Variable " + key + " already defined in "+scope);

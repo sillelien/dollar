@@ -1,9 +1,22 @@
 [1,2,3][1] <-> 2
+
+def first [$1[0]]
+first([3,1]) <-> [3]
+
+def second [$1[1]]
+second([3,1]) <-> [1]
+
+const array=[2,1]
+def revrse1 [array[1],array[0]]
+revrse1([2,1]) <-> [1,2]
+
+
+
 def revrse [$1[1],$1[0]]
 
 revrse([2,1]) <-> [1,2]
 
-[2,1] -> revrse <-> [1,2]
+([2,1] -> revrse) <-> [1,2]
 
 //You must use the fix operator here to avoid an infinitely recursive expression.
 fix ([2,1] -> revrse) -> revrse <-> [2,1]
@@ -13,6 +26,6 @@ def testParams {$2 + " " + $1}
 
 testParams ("Hello", "World") <-> "World Hello"
 
-def testParams2 {last + " " + first}
-testParams2(first="Hello", last="World") <-> "World Hello"
+def testParams2 {end + " " + begin}
+testParams2(begin="Hello", end="World") <-> "World Hello"
 

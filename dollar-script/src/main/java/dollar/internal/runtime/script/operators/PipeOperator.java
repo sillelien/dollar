@@ -58,8 +58,7 @@ public class PipeOperator implements Function<Token, Map<var, var>> {
                                   runtimeScope -> {
                                       currentScope().setParameter("1", lhs);
                                       var rhsVal = rhs._fix(false);
-                                      if (!"function-call".equals(
-                                              rhs.getMetaAttribute("operation"))) {
+                                      if (!"function-call".equals(rhs.getMetaAttribute("operation"))) {
                                           String rhsStr = rhsVal.toString();
                                           log.debug("OPERATION: " + rhsStr);
                                           if (rhs.getMetaAttribute(
@@ -67,17 +66,20 @@ public class PipeOperator implements Function<Token, Map<var, var>> {
                                               return Builtins.execute(rhsStr,
                                                                       singletonList(lhs), pure);
                                           } else {
+                                              //fixed to level 2 as we are executing the function
+                                              // in this scope
                                               var var = DollarScriptSupport.getVariable
                                                                                     (pure,
                                                                                      rhsStr,
                                                                                      false,
                                                                                      null,
                                                                                      token,
-                                                                                     parser)._fix(
-                                                      1, false);
+                                                                                     parser)
+                                                                ._fix(2, false);
                                               return var;
                                           }
                                       } else {
+                                          log.debug("PIPED TO FUNCTION");
                                           return rhsVal;
                                       }
 

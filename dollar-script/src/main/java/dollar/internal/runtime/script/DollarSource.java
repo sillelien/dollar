@@ -49,7 +49,7 @@ public class DollarSource extends DollarLambda {
     private static final Logger log = LoggerFactory.getLogger("DollarSource");
 
 
-    private static final List<String> nonScopeOperations = Arrays.asList("$listen", "$notify",
+    private static final List<String> nonScopeOperations = Arrays.asList(
                                                                          "dynamic", "_constrain");
     private final SourceSegment source;
     private List<var> inputs;
@@ -223,12 +223,15 @@ public class DollarSource extends DollarLambda {
                     useScope = currentScope();
                 } else {
                     useScope = useScope.copy();
+                    if(!useScope.isRoot()) {
+                        useScope.setParent(currentScope());
+                    }
                 }
 //                setScopes(inputs);
                 result = DollarScriptSupport.inScope(true, useScope, newScope -> {
                     if (DollarStatic.getConfig().debugScope()) {
                         log.info(
-                                "EXE: " + method.getName() + " for " + source.getShortSourceMessage());
+                                "EXE: "+operation+ " "+ method.getName() + " for " + source.getShortSourceMessage());
                     }
                     try {
                         return super.invoke(proxy, method, args);

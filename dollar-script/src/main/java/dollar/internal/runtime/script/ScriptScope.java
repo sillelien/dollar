@@ -18,6 +18,7 @@ package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.DollarException;
 import com.sillelien.dollar.api.DollarStatic;
+import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.collections.MultiHashMap;
 import com.sillelien.dollar.api.collections.MultiMap;
 import com.sillelien.dollar.api.var;
@@ -57,7 +58,7 @@ public class ScriptScope implements Scope {
     @NotNull
     final String id;
     @NotNull
-    private final MultiMap<String, var> listeners = new MultiHashMap<>();
+    private final MultiMap<String, Pipeable> listeners = new MultiHashMap<>();
     @NotNull
     private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
     private final boolean root;
@@ -128,7 +129,7 @@ public class ScriptScope implements Scope {
                        boolean parameterScope,
                        ConcurrentHashMap<String, Variable> variables,
                        List<var> errorHandlers,
-                       MultiMap<String, var> listeners,
+                       MultiMap<String, Pipeable> listeners,
                        String source,
                        Parser<var> parser, boolean root) {
         this.parent = parent;
@@ -137,7 +138,7 @@ public class ScriptScope implements Scope {
         this.parameterScope = parameterScope;
         this.variables.putAll(variables);
         this.errorHandlers.addAll(errorHandlers);
-        for (Map.Entry<String, Collection<var>> entry : listeners.entries()) {
+        for (Map.Entry<String, Collection<Pipeable>> entry : listeners.entries()) {
             this.listeners.putAll(entry.getKey(), entry.getValue());
         }
         this.source = source;
@@ -254,7 +255,7 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public MultiMap<String, var> getListeners() {
+    public MultiMap<String, Pipeable> getListeners() {
         return listeners;
     }
 
@@ -400,7 +401,18 @@ public class ScriptScope implements Scope {
     @Override
     public void listen(@NotNull String key, @NotNull var listener) {
         checkDestroyed();
+        listen(key, in -> {
+                   log.debug("Notifying " + listener._source().getSourceMessage());
+                   listener.$notify();
+                   return null;
+               }
+        );
 
+    }
+
+    @Override
+    public void listen(@NotNull String key, @NotNull Pipeable listener) {
+        checkDestroyed();
         if (key.matches("[0-9]+")) {
             if (DollarStatic.getConfig().debugScope()) {
                 log.info("Cannot listen to positional parameter $" + key + " in " + this);
@@ -415,23 +427,23 @@ public class ScriptScope implements Scope {
             listeners.putValue(key, listener);
             return;
         }
+
         if (DollarStatic.getConfig().debugScope()) {
-            log.info("Listening for " + key + " in " + scopeForKey);
+            log.info(
+                    "Listening for " + key + " in " + scopeForKey);
         }
+
         scopeForKey.getListeners().putValue(key, listener);
+        log.debug("Listener size now " + scopeForKey.getListeners().getCollection(key).size());
     }
 
     @Nullable
     @Override
     public var notify(@NotNull String variableName) {
         checkDestroyed();
-
-        final Scope scopeForKey = getScopeForKey(variableName);
-        if (scopeForKey == null) {
-            return $void();
-        }
-        scopeForKey.getListeners().getCollection(variableName).forEach(var::$notify);
-        return scopeForKey.get(variableName);
+        var value = get(variableName);
+        notifyScope((variableName), value);
+        return value;
     }
 
     @Override
@@ -441,8 +453,22 @@ public class ScriptScope implements Scope {
         if (value == null) {
             throw new NullPointerException();
         }
+        log.debug("Scope " + this + " notified for " + key);
         if (listeners.containsKey(key)) {
-            new ArrayList<>(listeners.getCollection(key)).forEach(var::$notify);
+            log.debug("Scope " + this + " notified for " + key + " with " + listeners.getCollection(
+                    key)
+                                                                                    .size() + " listeners");
+            new ArrayList<>(listeners.getCollection(key)).forEach(
+                    pipe -> {
+                        try {
+                            pipe.pipe($(key), value);
+                        } catch (Exception e) {
+                            log.error(e.getMessage(),e);
+                            throw new DollarScriptException(e);
+                        }
+                    });
+        } else {
+            log.debug("Scope " + this + " notified for " + key + " NO LISTENERS");
         }
     }
 
@@ -465,9 +491,7 @@ public class ScriptScope implements Scope {
         if (scope == null) {
             scope = this;
         }
-        if (DollarStatic.getConfig().debugScope()) {
-            log.info("Setting " + key + " in " + scope);
-        }
+
         if (scope.getVariables().containsKey(key) && ((Variable) scope.getVariables().get(
                 key)).isReadonly()) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
@@ -486,8 +510,14 @@ public class ScriptScope implements Scope {
                                                                  "Cannot change the constraint on a variable, attempted to redeclare for " + key));
                 }
             }
+            if (DollarStatic.getConfig().debugScope()) {
+                log.info("Setting " + key + " in " + scope);
+            }
             variable.setValue(value);
         } else {
+            if (DollarStatic.getConfig().debugScope()) {
+                log.info("Adding " + key + " in " + scope);
+            }
             scope.getVariables()
                     .put(key,
                          new Variable(value, readonly, constraint, constraintSource, isVolatile,
@@ -522,38 +552,19 @@ public class ScriptScope implements Scope {
 
     public Parser<var> getParser() {
         return parser;
-    }    @Override
-    public Scope getParent() {
-        return parent;
     }
 
     public void setParser(Parser<var> parser) {
         this.parser = parser;
     }    @Override
-    public void setParent(@Nullable Scope scope) {
-        checkDestroyed();
-
-        if (this.isRoot()) {
-            throw new UnsupportedOperationException("Cannot set the parent scope of a root scope, attempted to set " + scope);
-        }
-        this.parent = scope;
-        this.source = scope.getSource();
-        this.file = scope.getFile();
-
+    public Scope getParent() {
+        return parent;
     }
 
     @Nullable
     @Override
     public String toString() {
         return id + "->" + parent;
-    }    @Override
-    public boolean hasParent(Scope scope) {
-        checkDestroyed();
-
-        if (getParent() == null) {
-            return false;
-        }
-        return getParent().equals(scope) || getParent().hasParent(scope);
     }
 
     private boolean checkConstraint(var value,
@@ -571,6 +582,33 @@ public class ScriptScope implements Scope {
         setParameter("previous", $void());
         return fail;
     }    @Override
+    public void setParent(@Nullable Scope scope) {
+        checkDestroyed();
+
+        if (this.isRoot()) {
+            throw new UnsupportedOperationException("Cannot set the parent scope of a root scope, attempted to set " + scope);
+        }
+        this.parent = scope;
+        this.source = scope.getSource();
+        this.file = scope.getFile();
+
+    }
+
+
+
+    @Override
+    public boolean hasParent(Scope scope) {
+        checkDestroyed();
+
+        if (getParent() == null) {
+            return false;
+        }
+        return getParent().equals(scope) || getParent().hasParent(scope);
+    }
+
+
+
+    @Override
     public boolean isRoot() {
         return root;
     }
@@ -579,7 +617,7 @@ public class ScriptScope implements Scope {
     public Scope copy() {
         checkDestroyed();
 
-        return new ScriptScope(this.parent, "*"+this.id, this.file, this.parameterScope,
+        return new ScriptScope(this.parent, "*" + this.id, this.file, this.parameterScope,
                                this
                                        .variables,
                                this.errorHandlers, this.listeners, this.source, this.parser,
@@ -588,17 +626,9 @@ public class ScriptScope implements Scope {
 
     @Override
     public void destroy() {
+        clear();
         this.destroyed = true;
     }
-
-
-
-
-
-
-
-
-
 
 
 }

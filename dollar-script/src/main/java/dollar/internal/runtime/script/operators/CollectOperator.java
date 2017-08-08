@@ -17,56 +17,105 @@
 package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.Pipeable;
+import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.Scope;
-import org.jparsec.functors.Map;
+import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
+import org.jparsec.Token;
+import org.jparsec.functors.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-import static com.sillelien.dollar.api.DollarStatic.*;
+import static com.sillelien.dollar.api.DollarStatic.$;
+import static com.sillelien.dollar.api.DollarStatic.$void;
+import static dollar.internal.runtime.script.DollarScriptSupport.*;
 
-public class CollectOperator implements Map<Object[], var> {
-    private final DollarParser dollarParser;
+public class CollectOperator implements Map<Token, var> {
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger("CollectOperator");
+    @NotNull
+    private final DollarParser parser;
     private final boolean pure;
 
-    public CollectOperator(DollarParser dollarParser, boolean pure) {
-        this.dollarParser = dollarParser;
+    public CollectOperator(@NotNull DollarParser dollarParser, boolean pure) {
+        this.parser = dollarParser;
         this.pure = pure;
     }
 
-    @NotNull @Override public var map(Object[] objects) {
-        ((var) objects[0]).$listen(new Pipeable() {
-            private final int[] count = new int[]{-1};
-            private final ArrayList<var> collected = new ArrayList<>();
-            final Scope scope= DollarScriptSupport.currentScope();
+    @NotNull
+    @Override
 
-            @Override public var pipe(var... in) throws Exception {
-                var value = fix((var) objects[0], false);
-                count[0]++;
-                return DollarScriptSupport.inSubScope(false, pure, "collect", newScope -> {
-                    newScope.setParameter("count", $(count[0]));
-                    newScope.setParameter("it", value);
-                    //noinspection StatementWithEmptyBody
-                    if (objects[2] instanceof var && ((var) objects[2]).isTrue()) {
-                        //skip
-                    } else {
-                        collected.add(value);
-                    }
-                    var returnValue = $void();
-                    newScope.setParameter("collected", $(collected));
-                    final boolean endValue = objects[1] instanceof var && ((var) objects[1]).isTrue();
-                    if (endValue) {
-                        collected.clear();
-                        count[0] = -1;
-                        returnValue = ((var) objects[3])._fixDeep();
-                    }
-                    return returnValue;
-                });
-            }
-        });
-        return $void();
+    public var map(@NotNull Token token) {
+        Object[] objects = (Object[]) token.value();
+        var variable = (var) objects[0];
+        Object until = objects[1];
+        Object unless = objects[2];
+        Object loop = objects[3];
+        log.debug("Listening to " + variable.getMetaObject("operation"));
+        log.debug("Listening to " + variable._source().getSourceMessage());
+        String varName = variable.getMetaAttribute("variable");
+
+
+        return createNode("collect", parser, token, Collections.<var>singletonList(variable),
+                          (var... in) -> {
+                              Scope scopeForVar = DollarScriptSupport.getScopeForVar(pure, varName,
+                                                                                     false, null);
+                              if (scopeForVar == null) {
+                                  throw new VariableNotFoundException(varName, currentScope());
+                              }
+
+
+                              scopeForVar.listen(varName, new Pipeable() {
+                                  @NotNull
+                                  final int[] count = new int[]{-1};
+                                  @NotNull
+                                  final ArrayList<var> collected = new ArrayList<>();
+
+                                  @NotNull
+                                  @Override
+                                  public var pipe(var... in2) throws Exception {
+                                      var value = in2[1]._fixDeep();
+                                      count[0]++;
+                                      log.debug("Count is " + count[0] + " value is " + value);
+                                      inSubScope(true, pure, "collect-body",
+                                                 ns -> {
+                                                     ns.setParameter("count", $(count[0]));
+                                                     ns.setParameter("it", value);
+                                                     //noinspection StatementWithEmptyBody
+                                                     if (unless instanceof var && ((var) unless).isTrue()) {
+                                                         log.debug("Skipping " + value);
+                                                     } else {
+                                                         log.debug("Adding " + value);
+                                                         collected.add(value);
+                                                     }
+                                                     var returnValue = $void();
+                                                     ns.setParameter("collected", DollarFactory.fromList(collected));
+                                                     log.debug("Collected " + DollarFactory.fromList(collected));
+                                                     final boolean endValue = until instanceof var && ((var) until).isTrue();
+                                                     if (endValue) {
+                                                         returnValue = ((var) loop)._fixDeep();
+                                                         collected.clear();
+                                                         count[0] = -1;
+                                                         log.debug("Return value  " + returnValue);
+                                                     }
+                                                     return returnValue;
+                                                 });
+                                      return $void();
+
+                                  }
+                              });
+                              return $void();
+
+                          });
+
+
     }
+
+
 }

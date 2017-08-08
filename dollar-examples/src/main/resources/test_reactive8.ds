@@ -1,0 +1,17 @@
+///////////////////////////////////////////////////////////////////////////////
+
+// Subscription assignment
+
+
+var sub= (j *= random:dummy)
+@@j
+def colors ["red","green","blue"]
+@@j * #colors
+const k := colors[j * #colors]
+@@k
+sub.unsub();
+
+
+
+
+
