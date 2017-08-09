@@ -35,7 +35,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,7 +53,7 @@ public class DollarSource extends DollarLambda {
 
     @NotNull
     private static final List<String> nonScopeOperations = Arrays.asList(
-                                                                         "dynamic", "_constrain");
+            "dynamic", "_constrain");
     @NotNull
     private final SourceSegment source;
     @NotNull
@@ -122,38 +124,51 @@ public class DollarSource extends DollarLambda {
                 try {
                     result = super.invoke(proxy, method, args);
                 } catch (Throwable throwable) {
-                    log.debug(throwable.getMessage(),throwable);
+                    log.debug(throwable.getMessage(), throwable);
                     throw new DollarException(throwable);
                 }
             } else {
                 //This method does require a scope
                 Scope useScope;
-                if(newScope) {
-                    useScope= new ScriptScope(currentScope(),operation , false);
-                } else {
-                    useScope = currentScope();
-                }
 
-                result = DollarScriptSupport.inScope(true, useScope, newScope -> {
-                    if (DollarStatic.getConfig().debugScope()) {
-                        log.info(
-                                "EXE: "+operation+ " "+ method.getName() + " for " + source.getShortSourceMessage());
-                    }
-                    try {
-                        return super.invoke(proxy, method, args);
-                    } catch (Throwable throwable) {
-                        log.debug(throwable.getMessage(),throwable);
-                        throw new DollarException(throwable);
-                    }
-                });
-
-                if (result instanceof var) {
-                    if (((var) result).getMetaObject("scope") == null) {
-                        log.debug("ATTACHING MISSING SCOPE FOR RESULT, SCOPE is " + useScope);
-                        ((var) result).setMetaObject("scope", useScope);
+                Object attachedScopes = meta.get("scopes");
+                if (attachedScopes != null) {
+                    List<Scope> scopes = new ArrayList<>((List<Scope>) attachedScopes);
+                    for (Scope scope : scopes) {
+                        DollarScriptSupport.pushScope(scope);
                     }
                 }
+                try {
+                    if (newScope) {
+                        useScope = new ScriptScope(currentScope(), operation, false);
+                    } else {
+                        useScope = currentScope();
+                    }
+
+                    result = DollarScriptSupport.inScope(true, useScope, newScope -> {
+                        if (DollarStatic.getConfig().debugScope()) {
+                            log.info(
+                                    "EXE: " + operation + " " + method.getName() + " for " + source.getShortSourceMessage());
+                        }
+                        try {
+                            return super.invoke(proxy, method, args);
+                        } catch (Throwable throwable) {
+                            log.debug(throwable.getMessage(), throwable);
+                            throw new DollarException(throwable);
+                        }
+                    });
+                } finally {
+                    if (attachedScopes != null) {
+                        List<Scope> scopes = new ArrayList<Scope>((List<Scope>) attachedScopes);
+                        Collections.reverse(scopes);
+                        for (Scope scope : scopes) {
+                            DollarScriptSupport.popScope(scope);
+                        }
+                    }
+                }
+
             }
+
 
             if (method.getName().startsWith("_fixDeep") && result != null && result instanceof var) {
                 typeLearner.learn(operation, source, inputs, ((var) result).$type());

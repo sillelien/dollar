@@ -80,6 +80,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -136,8 +137,7 @@ public class DollarParserImpl implements DollarParser {
     @Override
     public void export(@NotNull String name, @NotNull var export) {
         System.err.println("Exporting " + name);
-        Thread.dumpStack();
-        export.setMetaObject("scope", currentScope());
+        export.setMetaObject("scopes", new ArrayList<Scope>(DollarScriptSupport.scopes()));
         exports.put(name, export);
     }
 
@@ -165,7 +165,7 @@ public class DollarParserImpl implements DollarParser {
             Parser<?> parser = buildParser(false, scope);
             var parse = (var) parser.from(TOKENIZER, DollarLexer.IGNORED).parse(source);
 //            parse._fixDeep(false);
-            newScope.destroy();
+//            newScope.destroy();
             return $(exports);
         });
 

@@ -16,11 +16,11 @@
 
 package dollar.internal.runtime.script.operators;
 
-import dollar.internal.runtime.script.api.Scope;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.api.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
@@ -87,12 +87,12 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
                 if (typeConstraintObj != null) {
                     constraint = DollarScriptSupport.createNode(true, "definition-constraint", token, new ArrayList<>(),
                                                                 parser, i
-                                                                                                                                     -> {
-                        final Type type = Type.valueOf(
-                                typeConstraintObj.toString().toUpperCase());
-                        var it = scope.getParameter("it");
-                        return $(it.is(type));
-                    });
+                                                                                -> {
+                                final Type type = Type.valueOf(
+                                        typeConstraintObj.toString().toUpperCase());
+                                var it = scope.getParameter("it");
+                                return $(it.is(type));
+                            });
                     constraintSource = typeConstraintObj.toString().toUpperCase();
                 } else {
                     constraint = null;
@@ -105,13 +105,14 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
                                 constrain(scope, value, constraint, constraintSource)),
                         args -> {
                             setVariableDefinition(currentScope(), parser, token, pure, true,
-                                                         variableName,
-                                                         value,
-                                                         constraint,
-                                                         constraintSource
+                                                  variableName,
+                                                  value,
+                                                  constraint,
+                                                  constraintSource
                             );
                             if (exportObj != null && exportObj.toString().equals("export")) {
-                                parser.export(variableName, value);
+                                parser.export(variableName, DollarScriptSupport.createNode(
+                                        false, "assignment", parser, token, Arrays.asList(value), exportArgs -> value));
                             }
                             return $void();
                         }

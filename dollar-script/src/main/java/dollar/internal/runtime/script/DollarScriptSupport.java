@@ -537,4 +537,14 @@ public class DollarScriptSupport {
                        + text       // the text to output
                        + "\u001b[m"; // Prefix + Suffix to reset color
     }
+
+    public static void pushScope(Scope scope) {
+        addScope(true,scope);
+    }
+    public static void popScope(Scope scope) {
+        Scope poppedScope = endScope(true);
+        if(!poppedScope.equals(scope)) {
+            throw new AssertionError("Popped scope does not equal expected scope");
+        }
+    }
 }
