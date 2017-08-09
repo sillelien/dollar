@@ -46,7 +46,7 @@ public class VariableUsageOperator implements Map<Token, Map<? super var, ? exte
                                                                      numeric, $void(), token, parser);
 
             return DollarScriptSupport.createNode(
-                    "variable-usage--" + rhs._source().getSourceSegment(), parser, token,
+                    false, "variable-usage--" + rhs._source().getSourceSegment(), parser, token,
                     Arrays.asList(rhs), callable
             );
         };

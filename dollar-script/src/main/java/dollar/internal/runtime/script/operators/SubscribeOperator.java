@@ -25,7 +25,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jparsec.functors.Binary;
 
 import static com.sillelien.dollar.api.DollarStatic.fix;
-import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.DollarScriptSupport.createReactiveNode;
+import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class SubscribeOperator implements Binary<var>, Operator {
     private final boolean pure;
@@ -45,13 +46,14 @@ public class SubscribeOperator implements Binary<var>, Operator {
     public var map(@NotNull var lhs, @NotNull var rhs) {
 
         assert source != null;
-        return createReactiveNode("subscribe", parser, source, lhs, rhs, args -> lhs.$subscribe(
-                i -> inSubScope(false, pure, "subscribe", newScope -> {
-                    final var it = fix(i[0], false);
-                    currentScope().setParameter("1", it);
-                    currentScope().setParameter("it", it);
-                    return fix(rhs, false);
-                }))
+        return createReactiveNode(true, "subscribe", parser, source, lhs, rhs,
+                                  args -> lhs.$subscribe(
+                                          i -> {
+                                              final var it = fix(i[0], false);
+                                              currentScope().setParameter("1", it);
+                                              currentScope().setParameter("it", it);
+                                              return fix(rhs, false);
+                                          })
         );
 
     }

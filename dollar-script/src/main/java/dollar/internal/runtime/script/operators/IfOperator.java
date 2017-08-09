@@ -47,7 +47,7 @@ public class IfOperator implements Map<Token, Map<var, var>> {
                     return $(false);
                 }
             };
-            return DollarScriptSupport.createNode("if", parser, token, Arrays.asList(lhs, rhs),
+            return DollarScriptSupport.createNode(false, "if", parser, token, Arrays.asList(lhs, rhs),
                                                   callable
             );
         };

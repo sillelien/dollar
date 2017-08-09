@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 import static dollar.internal.runtime.script.DollarScriptSupport.scopes;
@@ -43,7 +44,7 @@ public class VariableOperator extends UnaryOp {
     public var map(@NotNull var from) {
         Scope scope = currentScope();
 
-        var lambda = DollarScriptSupport.createReactiveNode(operation, source, parser, from, args -> {
+        var lambda = DollarScriptSupport.createReactiveNode(false, operation, source, parser, from, args -> {
             String key = from.$S();
             boolean numeric = from.number();
 
@@ -66,7 +67,7 @@ public class VariableOperator extends UnaryOp {
             }
             return scope.get(key);
         });
-        scope.listen(from.$S(), lambda);
+        scope.listen(from.$S(), UUID.randomUUID().toString(),lambda);
         lambda.setMetaAttribute("variable", from.$S());
         return lambda;
 

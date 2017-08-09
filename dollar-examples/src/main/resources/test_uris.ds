@@ -1,9 +1,9 @@
-posts = << https://jsonplaceholder.typicode.com/posts
+const posts = << https://jsonplaceholder.typicode.com/posts
 
-firstPost= posts[0]
+const firstPost= posts[0]
 @@ firstPost
 
-titles= posts each { $1.title }
+const titles= posts each { $1.title }
 .: COUNT(titles) != 0
 
 @@titles

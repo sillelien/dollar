@@ -16,7 +16,6 @@
 
 package dollar.internal.runtime.script.operators;
 
-import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
 import dollar.internal.runtime.script.DollarScriptSupport;
@@ -29,8 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.function.Function;
 
-import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
-import static dollar.internal.runtime.script.DollarScriptSupport.inSubScope;
+import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static java.util.Collections.singletonList;
 
 public class PipeOperator implements Function<Token, Map<var, var>> {
@@ -52,44 +50,31 @@ public class PipeOperator implements Function<Token, Map<var, var>> {
     @Override
     public Map<var, var> apply(@NotNull Token token) {
         var rhs = (var) token.value();
-        return lhs -> {
-            Pipeable pipe = i -> {
-                return inSubScope(false, pure, "pipe-runtime",
-                                  runtimeScope -> {
-                                      currentScope().setParameter("1", lhs);
-                                      var rhsVal = rhs._fix(false);
-                                      if (!"function-call".equals(rhs.getMetaAttribute("operation"))) {
-                                          String rhsStr = rhsVal.toString();
-                                          log.debug("OPERATION: " + rhsStr);
-                                          if (rhs.getMetaAttribute(
-                                                  "__builtin") != null) {
-                                              return Builtins.execute(rhsStr,
-                                                                      singletonList(lhs), pure);
+        return lhs -> createReactiveNode(
+                true, "pipe", parser, token, rhs, i -> {
+                    return inSubScope(false, pure, "pipe-runtime",
+                                      runtimeScope -> {
+                                          currentScope().setParameter("1", lhs);
+                                          var rhsVal = rhs._fix(false);
+                                          if (!"function-call".equals(rhs.getMetaAttribute("operation"))) {
+                                              String rhsStr = rhsVal.toString();
+                                              log.debug("OPERATION: " + rhsStr);
+                                              if (rhs.getMetaAttribute(
+                                                      "__builtin") != null) {
+                                                  return Builtins.execute(rhsStr,
+                                                                          singletonList(lhs), pure);
+                                              } else {
+                                                  //fixed to level 2 as we are executing the function
+                                                  // in this scope
+                                                  return DollarScriptSupport.getVariable(pure, rhsStr, false, null, token,
+                                                                                         parser)._fix(2, false);
+                                              }
                                           } else {
-                                              //fixed to level 2 as we are executing the function
-                                              // in this scope
-                                              var var = DollarScriptSupport.getVariable
-                                                                                    (pure,
-                                                                                     rhsStr,
-                                                                                     false,
-                                                                                     null,
-                                                                                     token,
-                                                                                     parser)
-                                                                ._fix(2, false);
-                                              return var;
+                                              log.debug("PIPED TO FUNCTION");
+                                              return rhsVal;
                                           }
-                                      } else {
-                                          log.debug("PIPED TO FUNCTION");
-                                          return rhsVal;
-                                      }
 
-                                  });
-            };
-            return inSubScope(false, pure, "pipe-compile",
-                              args -> DollarScriptSupport.createReactiveNode(
-                                      "pipe",
-                                      parser, token, rhs,
-                                      pipe));
-        };
+                                      });
+                });
     }
 }

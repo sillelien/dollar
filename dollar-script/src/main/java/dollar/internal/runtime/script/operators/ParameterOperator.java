@@ -79,7 +79,7 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
             }
 
             String constraintSource = null;
-            var lambda = createNode("parameter", dollarParser, token,
+            var lambda = createNode(true, "parameter", dollarParser, token,
                                     new ScriptScope(currentScope(),"parameter", false),
                                     rhs,
                                     new Function(rhs, lhs, token, constraintSource, functionName,

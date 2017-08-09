@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 import static dollar.internal.runtime.script.DollarScriptSupport.createNode;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
@@ -54,7 +55,8 @@ public class ListenOperator implements Binary<var>, Operator {
     @NotNull
     @Override
     public var map(@NotNull var lhs, @NotNull var rhs) {
-        return createNode("listen", parser, source, Arrays.asList(lhs, rhs), in -> {
+        String id = UUID.randomUUID().toString();
+        return createNode(true, "listen-"+ id, parser, source, Arrays.asList(lhs, rhs), in -> {
             log.debug("Listening to " + lhs.getMetaObject("operation"));
             log.debug("Listening to " + lhs._source().getSourceMessage());
             String lhsFix = lhs.getMetaAttribute("variable");
@@ -64,7 +66,7 @@ public class ListenOperator implements Binary<var>, Operator {
                 throw new VariableNotFoundException(lhsFix.toString(),currentScope());
             }
             scopeForVar
-                           .listen(lhsFix.toString(), rhs);
+                           .listen(lhsFix.toString(), id, rhs);
             return lhs;
         });
     }

@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.UUID;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 import static com.sillelien.dollar.api.DollarStatic.$void;
@@ -62,7 +63,8 @@ public class CollectOperator implements Map<Token, var> {
         String varName = variable.getMetaAttribute("variable");
 
 
-        return createNode("collect", parser, token, Collections.<var>singletonList(variable),
+        String id = UUID.randomUUID().toString();
+        return createNode(true, "collect", parser, token, Collections.<var>singletonList(variable),
                           (var... in) -> {
                               Scope scopeForVar = DollarScriptSupport.getScopeForVar(pure, varName,
                                                                                      false, null);
@@ -71,7 +73,7 @@ public class CollectOperator implements Map<Token, var> {
                               }
 
 
-                              scopeForVar.listen(varName, new Pipeable() {
+                              scopeForVar.listen(varName, id, new Pipeable() {
                                   @NotNull
                                   final int[] count = new int[]{-1};
                                   @NotNull

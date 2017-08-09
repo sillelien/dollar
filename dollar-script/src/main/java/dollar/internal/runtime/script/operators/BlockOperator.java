@@ -17,7 +17,6 @@
 package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
-import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -28,17 +27,18 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import static com.sillelien.dollar.api.DollarStatic.$void;
-import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
+import static dollar.internal.runtime.script.DollarScriptSupport.createNode;
 
 public class BlockOperator implements Map<Token, var> {
 
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("BlockOperator");
 
+    @NotNull
     private final DollarParser dollarParser;
     private final boolean pure;
 
-    public BlockOperator(DollarParser dollarParser, boolean pure) {
+    public BlockOperator(@NotNull DollarParser dollarParser, boolean pure) {
         this.dollarParser = dollarParser;
         this.pure = pure;
     }
@@ -46,24 +46,18 @@ public class BlockOperator implements Map<Token, var> {
     @Override
     public var map(@NotNull Token token) {
         List<var> l = (List<var>) token.value();
-         return DollarScriptSupport.inSubScope(false, pure, "block-compile", compileScope -> DollarScriptSupport.createNode("block", dollarParser, token, l, parallel ->{
-
-                        log.debug("BLOCK EXE LAMBDA START " + currentScope());
-                        try {
-                            if (l.size() > 0) {
-                                for (int i = 0; i < l.size() - 1; i++) {
-                                    l.get(i)._fixDeep(false);
-                                }
-                                return l.get(l.size() - 1);
-                            } else {
-                                return $void();
-                            }
-                        } finally {
-                            log.debug("BLOCK EXE LAMBDA END");
-
-                        }
+        return createNode(true, "block", dollarParser, token, l, parallel -> {
+            if (l.size() > 0) {
+                for (int i = 0; i < l.size() - 1; i++) {
+                    l.get(i)._fixDeep(false);
+                }
+                return l.get(l.size() - 1);
+            } else {
+                return $void();
+            }
 
 
-                }));
+        });
     }
+
 }

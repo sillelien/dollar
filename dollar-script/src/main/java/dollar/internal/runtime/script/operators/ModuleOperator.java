@@ -18,7 +18,6 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.script.ModuleResolver;
-import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarParserImpl;
 import dollar.internal.runtime.script.DollarScriptSupport;
@@ -32,8 +31,6 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
@@ -56,7 +53,7 @@ public class ModuleOperator implements Map<Token, var> {
     public var map(@NotNull Token token) {
 
         Object[] objects= (Object[]) token.value();
-        return DollarScriptSupport.createNode("module", parser, token, Collections.emptyList(),
+        return DollarScriptSupport.createNode(false, "module", parser, token, Collections.emptyList(),
                                               in->{
                                                   String moduleName = ((var) objects[1]).$S();
                                                   String[] parts = moduleName.split(":", 2);

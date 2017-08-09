@@ -35,8 +35,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
-import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
-import static dollar.internal.runtime.script.DollarScriptSupport.setVariable;
+import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static java.util.Collections.singletonList;
 
 public class AssignmentOperator implements Map<Token, Map<? super var, ? extends var>> {
     @NotNull
@@ -96,20 +96,20 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                     parser.export(varName, rhsFixed);
                 }
                 setVariable(currentScope, varName, rhsFixed, constant,
-                                                constraint, useSource, isVolatile, constant, pure,
-                                                decleration, token, parser);
+                            constraint, useSource, isVolatile, constant, pure,
+                            decleration, token, parser);
                 return $void();
 
             }
         };
-        var node = DollarScriptSupport.createNode("assignment", parser, token,
-                                                  Arrays.asList(
-                                                          DollarScriptSupport.constrain(scope,
-                                                                                        rhs,
-                                                                                        constraint,
-                                                                                        useSource)),
-                                                  callable);
-        node.$listen(i -> scope.notify(varName));
+        var node = createNode(false, "assignment", parser, token,
+                              Arrays.asList(
+                                      constrain(scope,
+                                                rhs,
+                                                constraint,
+                                                useSource)),
+                              callable);
+    //        node.$listen(i -> scope.notify(varName));
         return node;
     }
 
@@ -126,11 +126,11 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
         }
         if (objects[2] != null) {
             type = Type.valueOf(objects[2].toString().toUpperCase());
-            constraint = DollarScriptSupport.createNode(token, i -> {
+            constraint = createNode(true, "constraint", token, Arrays.asList(), parser, i -> {
                 return $(currentScope().getParameter("it")
                                  .is(type) &&
                                  (objects[3] == null || ((var) objects[3]).isTrue()));
-            }, Arrays.asList(), "constraint", parser);
+            });
         } else {
             type = null;
             constraint = (var) objects[3];
@@ -184,48 +184,34 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                     if (operator.equals("?=")) {
                         scope.set(varName, rhs, false, null, useSource, isVolatile, false,
                                   pure);
-                        System.err.println("DYNAMIC: "+rhs.dynamic());
-                        Pipeable pipeable = c -> rhs.$listen(
-                                new Pipeable() {
-                                    @Override
-                                    public var pipe(var... i) throws Exception {
-                                        var value = i[0]._fixDeep();
-                                        setVariable(scope, varName,
-                                                                        value,
-                                                                        false,
-                                                                        useConstraint,
-                                                                        useSource,
-                                                                        isVolatile, false,
-                                                                        pure,
-                                                                        decleration, token,
-                                                                        parser);
-                                        return value;
-                                    }
-                                });
-                        return DollarScriptSupport.createNode("listen-assign", parser, token,
-                                                              Arrays.asList(
-                                                                      DollarScriptSupport.constrain(
-                                                                              scope, rhs,
-                                                                              constraint,
-                                                                              useSource)),
-                                                              pipeable
+                        System.err.println("DYNAMIC: " + rhs.dynamic());
+
+                        return createNode(false, "listen-assign", parser, token,
+                                          singletonList(constrain(scope, rhs, constraint, useSource)),
+                                          c -> rhs.$listen(
+                                                  args -> {
+                                                      var value = args[0]._fixDeep();
+                                                      setVariable(scope, varName, value, false, useConstraint, useSource,
+                                                                  isVolatile, false, pure, decleration, token, parser);
+                                                      return value;
+                                                  })
                         );
 
                     } else if (operator.equals("*=")) {
                         scope.set(varName, $void(), false, null, useSource, true, true, pure);
                         Pipeable pipeable = c -> $(rhs.$subscribe(
                                 i -> setVariable(scope, varName,
-                                                                     fix(i[0], false), false,
-                                                                     useConstraint, useSource, true,
-                                                                     false, pure, decleration,
-                                                                     token, parser)));
-                        return DollarScriptSupport.createNode("subscribe-assign", parser, token,
-                                                              Arrays.asList(
-                                                                      DollarScriptSupport.constrain(
-                                                                              scope, rhs,
-                                                                              constraint,
-                                                                              useSource)),
-                                                              pipeable
+                                                 fix(i[0], false), false,
+                                                 useConstraint, useSource, true,
+                                                 false, pure, decleration,
+                                                 token, parser)));
+                        return createNode(false, "subscribe-assign", parser, token,
+                                          Arrays.asList(
+                                                  constrain(
+                                                          scope, rhs,
+                                                          constraint,
+                                                          useSource)),
+                                          pipeable
                         );
                     }
                 }

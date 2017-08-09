@@ -3,7 +3,7 @@
 def lambdaReturn {
         var a= 10;
         a= a + 5;
-        a <=> 15;
+        a <-> 15;
         { @@ $1; @@ a; $1 + 2 * a }
 }
 

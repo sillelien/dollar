@@ -165,6 +165,7 @@ public class DollarParserImpl implements DollarParser {
             Parser<?> parser = buildParser(false, scope);
             var parse = (var) parser.from(TOKENIZER, DollarLexer.IGNORED).parse(source);
 //            parse._fixDeep(false);
+            newScope.destroy();
             return $(exports);
         });
 
@@ -297,7 +298,7 @@ public class DollarParserImpl implements DollarParser {
                                       public var map(@NotNull Token token) {
                                           final var v = (var) token.value();
                                           return createReactiveNode(
-                                                  v.toHumanString(), DollarParserImpl.this, token,
+                                                  false, v.toHumanString(), DollarParserImpl.this, token,
                                                   v,
                                                   args -> Builtins.execute(v.toHumanString(), Arrays
                                                                                                       .asList(),
@@ -342,7 +343,7 @@ public class DollarParserImpl implements DollarParser {
                                       public var map(@NotNull Token token) {
                                           final var v = (var) token.value();
                                           return createReactiveNode(
-                                                  v.toHumanString(), DollarParserImpl.this, token,
+                                                  false, v.toHumanString(), DollarParserImpl.this, token,
                                                   v,
                                                   args -> Builtins.execute(v.toHumanString(),
                                                                            emptyList(), pure)
@@ -392,7 +393,7 @@ public class DollarParserImpl implements DollarParser {
                                                    EQUIVALENCE_PRIORITY)
                                            .infixl(op(new BinaryOp(this, "multiply", (lhs, rhs) -> {
                                                final var lhsFix = lhs._fix(false);
-                                               if (lhsFix.collection()) {
+                                               if (Arrays.asList("block","map","list").contains(lhs.getMetaAttribute("operation"))) {
                                                    var newValue = lhsFix._fixDeep(false);
                                                    Long max = rhs.toLong();
                                                    for (int i = 1; i < max; i++) {
@@ -646,12 +647,12 @@ public class DollarParserImpl implements DollarParser {
 
     private Parser<var> collectStatement(Parser<var> expression, boolean pure) {
         Parser<Object[]> parser = KEYWORD_NL("collect")
-                                        .next(
-                                                array(expression,
-                                                      KEYWORD("until").next(expression).optional(),
-                                                      KEYWORD("unless").next(expression).optional(),
-                                                      expression)
-                                        );
+                                          .next(
+                                                  array(expression,
+                                                        KEYWORD("until").next(expression).optional(),
+                                                        KEYWORD("unless").next(expression).optional(),
+                                                        expression)
+                                          );
         return parser.token().map(new CollectOperator(this, pure));
     }
 
@@ -668,7 +669,7 @@ public class DollarParserImpl implements DollarParser {
                                                         KEYWORD("unless").next(
                                                                 expression).optional(),
                                                         expression));
-        return sequence.map(new EveryOperator(this, pure));
+        return sequence.token().map(new EveryOperator(this, pure));
     }
 
     private Parser<var> functionCall(@NotNull Parser.Reference<var> ref, boolean pure) {
@@ -701,7 +702,7 @@ public class DollarParserImpl implements DollarParser {
         }).token().map(new Function<Token, var>() {
             @Override
             public var apply(Token token) {
-                return DollarScriptSupport.createNode("java", DollarParserImpl.this, token,
+                return DollarScriptSupport.createNode(false, "java", DollarParserImpl.this, token,
                                                       Arrays.asList($void()),
                                                       in -> JavaScriptingSupport.compile($void(),
                                                                                          (String) token
@@ -773,7 +774,7 @@ public class DollarParserImpl implements DollarParser {
                             @Override
                             public var map(var lhs) {
                                 return createReactiveNode(
-                                        "." + rhs.toString(), DollarParserImpl.this, rhs, lhs,
+                                        false, "." + rhs.toString(), DollarParserImpl.this, rhs, lhs,
                                         (var) rhs.value(), args -> lhs.$(rhs.value().toString())
                                 );
                             }

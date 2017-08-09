@@ -54,7 +54,7 @@ public class UnaryOp implements Unary<var>, Operator {
     public var map(var from) {
 
         if (immediate) {
-            final var lambda = DollarScriptSupport.createNode(operation, parser,
+            final var lambda = DollarScriptSupport.createNode(false, operation, parser,
                                                               source,
                                                               Collections.singletonList(from),
                                                               new Pipeable() {
@@ -69,7 +69,7 @@ public class UnaryOp implements Unary<var>, Operator {
         }
 
         //Lazy evaluation
-        final var lambda = DollarScriptSupport.createReactiveNode(operation, source, parser, from,
+        final var lambda = DollarScriptSupport.createReactiveNode(false, operation, source, parser, from,
                                                                   args -> function.map(from));
         return lambda;
 

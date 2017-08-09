@@ -24,7 +24,7 @@ import org.jparsec.Token;
 import org.jparsec.functors.Map;
 
 import static com.sillelien.dollar.api.DollarStatic.fix;
-import static dollar.internal.runtime.script.DollarScriptSupport.inScope;
+import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class ForOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final DollarParser dollarParser;
@@ -39,18 +39,15 @@ public class ForOperator implements Map<Token, Map<? super var, ? extends var>> 
         Object[] objects = (Object[]) token.value();
         String constraintSource = null;
         return rhs -> {
-            return DollarScriptSupport.createReactiveNode("for", dollarParser, token, rhs, args
-                                                                                                   -> {
-                return DollarScriptSupport.inSubScope(false, pure, "for", newScope -> {
-                    return ((var) objects[3]).$each(i -> {
-                        newScope.set(objects[1].toString(),
-                                     fix(i[0], false),
-                                     false, null,
-                                     constraintSource, false,
-                                     false,
-                                     pure);
-                        return rhs._fixDeep(false);
-                    });
+            return DollarScriptSupport.createReactiveNode(true, "for", dollarParser, token, rhs, args -> {
+                return ((var) objects[3]).$each(i -> {
+                    currentScope().set(objects[1].toString(),
+                                       fix(i[0], false),
+                                       false, null,
+                                       constraintSource, false,
+                                       false,
+                                       pure);
+                    return rhs._fixDeep(false);
                 });
             });
         };

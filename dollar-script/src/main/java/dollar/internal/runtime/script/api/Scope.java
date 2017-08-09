@@ -26,6 +26,11 @@ import java.util.Map;
 
 public interface Scope {
 
+    interface Listener extends Pipeable {
+        @NotNull
+        String getId();
+    }
+
     @NotNull
     var addErrorHandler(@NotNull var handler);
 
@@ -44,7 +49,7 @@ public interface Scope {
 
     @Nullable String getFile();
 
-    @NotNull MultiMap<String, Pipeable> getListeners();
+    @NotNull MultiMap<String, Listener> getListeners();
 
     @Nullable var getParameter(@NotNull String key);
 
@@ -62,9 +67,9 @@ public interface Scope {
 
     boolean hasParameter(@NotNull String key);
 
-    void listen(@NotNull String key, @NotNull var listener);
+    void listen(@NotNull String key, @NotNull String id, @NotNull var listener);
 
-    void listen(@NotNull String key, @NotNull Pipeable listener);
+    void listen(@NotNull String key, @NotNull String id, @NotNull Pipeable listener);
 
     @Nullable var notify(@NotNull String variableName);
 
@@ -85,6 +90,7 @@ public interface Scope {
 
     boolean isRoot();
 
+    @NotNull
     Scope copy();
 
 

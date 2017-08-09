@@ -43,6 +43,8 @@ import static com.sillelien.dollar.api.DollarStatic.$;
 public class DollarScriptSupport {
 
     @NotNull
+    public static final String ANSI_CYAN = "36";
+    @NotNull
     private static final Logger log = LoggerFactory.getLogger(DollarScriptSupport.class);
     @NotNull
     private static final ThreadLocal<List<Scope>> scopes = new ThreadLocal<List<Scope>>() {
@@ -54,7 +56,6 @@ public class DollarScriptSupport {
             return list;
         }
     };
-
 
     @NotNull
     public static List<Scope> scopes() {
@@ -92,24 +93,24 @@ public class DollarScriptSupport {
     }
 
     @NotNull
-    public static var createReactiveNode(@NotNull String operation,
+    public static var createReactiveNode(boolean newScope, @NotNull String operation,
                                          @NotNull DollarParser parser,
                                          @NotNull Token token,
                                          @NotNull var lhs, @NotNull Pipeable callable) {
 
-        return createReactiveNode(operation, new SourceSegmentValue(currentScope(), token), parser,
+        return createReactiveNode(newScope, operation, new SourceSegmentValue(currentScope(), token), parser,
                                   lhs, callable
         );
     }
 
     @NotNull
-    public static var createReactiveNode(@NotNull String operation,
+    public static var createReactiveNode(boolean newScope, @NotNull String operation,
                                          @NotNull SourceSegment source,
                                          @NotNull DollarParser parser,
                                          @NotNull var lhs,
                                          @NotNull Pipeable callable) {
 
-        final var lambda = createNode(operation, parser,  source,
+        final var lambda = createNode(newScope, operation, parser, source,
                                       Collections.singletonList(lhs),
                                       callable
         );
@@ -119,7 +120,7 @@ public class DollarScriptSupport {
 
 
     @NotNull
-    public static var createNode(@NotNull String operation,
+    public static var createNode(boolean newScope, @NotNull String operation,
                                  @NotNull DollarParser parser,
 
                                  @NotNull SourceSegment source,
@@ -128,11 +129,11 @@ public class DollarScriptSupport {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
-                new DollarSource(i -> callable.pipe(), null, source, inputs, operation, parser)));
+                new DollarSource(i -> callable.pipe(), source, inputs, operation, parser, newScope, createId(operation))));
     }
 
     @NotNull
-    public static var createNode(@NotNull String operation,
+    public static var createNode(boolean newScope, @NotNull String operation,
                                  @NotNull DollarParser parser,
                                  @NotNull Token token,
                                  @NotNull List<var> inputs,
@@ -141,16 +142,15 @@ public class DollarScriptSupport {
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
                 new DollarSource(callable,
-                                 null,
                                  new SourceSegmentValue(currentScope(), token),
                                  inputs,
                                  operation,
-                                 parser)));
+                                 parser, newScope, createId(operation))));
     }
 
 
     @NotNull
-    public static var createNode(@NotNull String operation,
+    public static var createNode(boolean newScope, @NotNull String operation,
                                  @NotNull DollarParser parser,
                                  @NotNull Token token,
                                  @NotNull Scope scope,
@@ -159,18 +159,18 @@ public class DollarScriptSupport {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
-                new DollarSource(callable, scope, new SourceSegmentValue(scope, token), inputs,
-                                 operation, parser)));
+                new DollarSource(callable, new SourceSegmentValue(scope, token), inputs,
+                                 operation, parser, newScope, createId(operation))));
     }
 
     @NotNull
-    public static var createReactiveNode(@NotNull String operation,
+    public static var createReactiveNode(boolean newScope, @NotNull String operation,
                                          @NotNull DollarParser parser,
                                          @NotNull SourceSegment source,
                                          @NotNull var lhs,
                                          @NotNull var rhs,
                                          @NotNull Pipeable callable) {
-        final var lambda = createNode(operation, parser,  source, Arrays.asList(lhs, rhs),
+        final var lambda = createNode(newScope, operation, parser, source, Arrays.asList(lhs, rhs),
                                       callable
         );
 
@@ -180,12 +180,12 @@ public class DollarScriptSupport {
     }
 
     @NotNull
-    public static var createReactiveNode(String operation,
+    public static var createReactiveNode(boolean newScope, String operation,
                                          DollarParser parser,
                                          Token token,
                                          @NotNull var lhs,
                                          @NotNull var rhs, @NotNull Pipeable callable) {
-        final var lambda = createNode(operation, parser,
+        final var lambda = createNode(newScope, operation, parser,
                                       new SourceSegmentValue(currentScope(), token),
                                       Arrays.asList(lhs, rhs), callable
         );
@@ -197,17 +197,19 @@ public class DollarScriptSupport {
 
 
     @NotNull
-    public static var createNode(@NotNull Token token,
-                                 @NotNull Pipeable pipeable,
-                                 @NotNull List<var> inputs,
-                                 @NotNull String operation,
-                                 @NotNull DollarParser parser) {
+    public static var createNode(boolean newScope, @NotNull String operation, @NotNull Token token,
+                                 @NotNull List<var> inputs, @NotNull DollarParser parser, @NotNull Pipeable pipeable) {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
-                new DollarSource(pipeable::pipe, null,
+                new DollarSource(pipeable::pipe,
                                  new SourceSegmentValue(currentScope(), token), inputs, operation,
-                                 parser)));
+                                 parser, newScope, createId(operation))));
+    }
+
+    @NotNull
+    private static String createId(@NotNull String operation) {
+        return operation + "-" + UUID.randomUUID().toString();
     }
 
 
@@ -219,11 +221,7 @@ public class DollarScriptSupport {
     @SuppressWarnings("ThrowFromFinallyBlock")
     public static <T> T inSubScope(boolean runtime, boolean pure, @NotNull String scopeName,
                                    @NotNull ScopeExecutable<T> r) {
-        return inScope(runtime,
-                       new ScriptScope(DollarScriptSupport.currentScope(), scopeName, false),
-                       pure,
-                       scopeName,
-                       r);
+        return inScope(runtime, new ScriptScope(DollarScriptSupport.currentScope(), scopeName, false), r);
     }
 
 
@@ -262,15 +260,8 @@ public class DollarScriptSupport {
         }
     }
 
-    public static <T> T inClonedScope(boolean runtime,
-                                @NotNull Scope scope,
-                                @NotNull ScopeExecutable<T> r) {
-        return inScope(runtime,scope.copy(),r);
-    }
 
-
-
-        @SuppressWarnings("ThrowFromFinallyBlock")
+    @SuppressWarnings("ThrowFromFinallyBlock")
     public static <T> T inScope(boolean runtime,
                                 @NotNull Scope scope,
                                 @NotNull ScopeExecutable<T> r) {
@@ -301,21 +292,20 @@ public class DollarScriptSupport {
         SourceSegment source = new SourceSegmentValue(currentScope(), token);
 
         var lambda[] = new var[1];
-        lambda[0] = createNode("get-variable-" + key + "-" + UUID.randomUUID(), parser, token,
+        UUID id = UUID.randomUUID();
+        lambda[0] = createNode(false, "get-variable-" + key + "-" + id, parser, token,
                                $(key).$list().toVarList().mutable(), (i) -> {
-                    Scope scope = (Scope) lambda[0].getMetaObject("scope");
-                    if(scope == null) {
-                        scope= currentScope();
-                    }
+                    Scope scope = currentScope();
+
                     log.debug(
-                            "LOOKUP " + key + " " + scope + " in " + scopes.get().size() + " scopes ");
+                            ansiColor("LOOKUP " + key, ANSI_CYAN) + " " + scope + " in " + scopes.get().size() + " scopes ");
                     if (numeric) {
                         if (scope.hasParameter(key)) {
                             return scope.getParameter(key);
                         }
                     } else {
                         if (scope.has(key)) {
-                            scope.getScopeForKey(key).listen(key, lambda[0]);
+                            scope.getScopeForKey(key).listen(key, id.toString(), lambda[0]);
                             return scope.get(key);
                         }
                     }
@@ -332,7 +322,7 @@ public class DollarScriptSupport {
                                 }
                             } else {
                                 if (scriptScope.has(key)) {
-                                    scriptScope.getScopeForKey(key).listen(key, lambda[0]);
+                                    scriptScope.getScopeForKey(key).listen(key, id.toString(), lambda[0]);
                                     return scriptScope.get(key);
                                 }
                             }
@@ -370,40 +360,40 @@ public class DollarScriptSupport {
 //           throw new IllegalStateException("Attempting to get a pure variable in an impure scope");
 //
 
-                    if(initialScope == null) {
-                        initialScope = currentScope();
-                    }
-                    log.debug(
-                            "LOOKUP " + key + " " + initialScope + " in " + scopes.get().size() + " scopes ");
-                    if (numeric) {
-                        if (initialScope.hasParameter(key)) {
-                            return initialScope;
-                        }
-                    } else {
-                        if (initialScope.has(key)) {
-                            return initialScope;
-                        }
-                    }
+        if (initialScope == null) {
+            initialScope = currentScope();
+        }
+        log.debug(
+                ansiColor("LOOKUP " + key, ANSI_CYAN) + " " + initialScope + " in " + scopes.get().size() + " scopes ");
+        if (numeric) {
+            if (initialScope.hasParameter(key)) {
+                return initialScope;
+            }
+        } else {
+            if (initialScope.has(key)) {
+                return initialScope;
+            }
+        }
 
-                        List<Scope> scopes = new ArrayList<>(DollarScriptSupport.scopes.get());
-                        Collections.reverse(scopes);
-                        for (Scope scriptScope : scopes) {
-                            if (!(scriptScope instanceof PureScope) && pure) {
-                                log.debug("Skipping " + scriptScope);
-                            }
-                            if (numeric) {
-                                if (scriptScope.hasParameter(key)) {
-                                    return scriptScope;
-                                }
-                            } else {
-                                if (scriptScope.has(key)) {
+        List<Scope> scopes = new ArrayList<>(DollarScriptSupport.scopes.get());
+        Collections.reverse(scopes);
+        for (Scope scriptScope : scopes) {
+            if (!(scriptScope instanceof PureScope) && pure) {
+                log.debug("Skipping " + scriptScope);
+            }
+            if (numeric) {
+                if (scriptScope.hasParameter(key)) {
+                    return scriptScope;
+                }
+            } else {
+                if (scriptScope.has(key)) {
 
-                                    return scriptScope;
-                                }
-                            }
-                        }
+                    return scriptScope;
+                }
+            }
+        }
 
-                    return null;
+        return null;
 
 
     }
@@ -468,7 +458,7 @@ public class DollarScriptSupport {
                 if (scriptScope.has(key)) {
                     return updateVariable(scriptScope, key, value, readonly, useConstraint, useSource,
                                           isVolatile, fixed, pure,
-                                          decleration );
+                                          decleration);
                 }
 
             }
@@ -484,7 +474,7 @@ public class DollarScriptSupport {
         }
 
         if (decleration) {
-            log.debug("SETTING " + key + " " + scope + " " + currentScope());
+            log.debug(ansiColor("SETTING  " + key, ANSI_CYAN) + " " + scope + " " + scope);
             return scope.set(key, value, readonly, useConstraint, useSource, isVolatile,
                              fixed,
                              pure);
@@ -504,20 +494,20 @@ public class DollarScriptSupport {
                                       boolean isVolatile,
                                       boolean fixed,
                                       boolean pure, boolean decleration) {
-        log.debug("UPDATING " + key + " " + scope);
+        log.debug(ansiColor("UPDATING ", ANSI_CYAN) + key + " " + scope);
 
         if (decleration) {
-            throw new DollarScriptException("Variable " + key + " already defined in "+scope);
+            throw new DollarScriptException("Variable " + key + " already defined in " + scope);
         } else {
 
             return scope.set(key,
-                                   value,
-                                   readonly,
-                                   useConstraint,
-                                   useSource,
-                                   isVolatile,
-                                   fixed,
-                                   pure);
+                             value,
+                             readonly,
+                             useConstraint,
+                             useSource,
+                             isVolatile,
+                             fixed,
+                             pure);
         }
     }
 
@@ -536,5 +526,15 @@ public class DollarScriptSupport {
             }
         }
         return value._constrain(constraint, source);
+    }
+
+    public static String ansiColor(String text, String color) {
+        return "\u001b["  // Prefix
+                       + "0"        // Brightness
+                       + ";"        // Separator
+                       + color       // Red foreground
+                       + "m"        // Suffix
+                       + text       // the text to output
+                       + "\u001b[m"; // Prefix + Suffix to reset color
     }
 }

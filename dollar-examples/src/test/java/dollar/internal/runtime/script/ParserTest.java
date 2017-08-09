@@ -69,7 +69,7 @@ public class ParserTest {
 //            "bulletin.ds",
 //            "example.ds",
             strings = {"test_scopes.ds","test1.ds",
-            "test3.ds", "test_arrays.ds", "test_builtins.ds", "test_casting.ds",  "test_date.ds", "test_fix1.ds","test_fix2.ds","test_fix3.ds", "test_iteration.ds", "test_java.ds", "test_logic.ds", "test_modules.ds", "test_numeric.ds", "test_parameters.ds", "test_pure.ds", "test_ranges.ds", "test_reactive1.ds", "test_reactive2.ds", "test_reactive3.ds", "test_reactive4.ds","test_reactive5.ds","test_reactive6.ds","test_reactive7.ds","test_reactive8.ds","test_redis.ds", "test_strings.ds", "test_uris.ds", "test_variables.ds", "test_concurrency.ds","test_control_flow.ds"})
+            "test_arrays.ds", "test_builtins.ds", "test_casting.ds",  "test_date.ds", "test_fix1.ds","test_fix2.ds","test_fix3.ds", "test_iteration.ds", "test_java.ds", "test_logic.ds", "test_numeric.ds", "test_parameters.ds", "test_pure.ds", "test_ranges.ds", "test_reactive1.ds", "test_reactive2.ds", "test_reactive3.ds", "test_reactive4.ds","test_reactive5.ds","test_reactive6.ds","test_reactive7.ds","test_reactive8.ds","test_redis.ds", "test_strings.ds", "test_uris.ds", "test_variables.ds", "test_concurrency.ds","test_control_flow.ds","test_modules.ds","test3.ds"})
 
     public void testScript(@NotNull String filename) throws Exception {
         System.out.println("Testing " + filename);
@@ -80,8 +80,8 @@ public class ParserTest {
 
     public void singleScriptTest() throws Exception {
         try {
-            new DollarParserImpl(options).parse(getClass().getResourceAsStream("/test_reactive1.ds"),
-                                                "/test_reactive1.ds",
+            new DollarParserImpl(options).parse(getClass().getResourceAsStream("/test_fix1.ds"),
+                                                "/test_fix1.ds",
                                                 parallel);
         } catch (Exception e) {
             e.printStackTrace();

@@ -42,7 +42,7 @@ public class FunctionCallOperator implements Function<Token, var> {
     public var apply(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
         log.debug("objects[0]="+objects[0]);
-        var node = DollarScriptSupport.createNode("function-name", parser, token,
+        var node = DollarScriptSupport.createNode(false, "function-name", parser, token,
                                                   Collections.singletonList((var) objects[0]),
                                                   new Pipeable() {
                                                       @Override
