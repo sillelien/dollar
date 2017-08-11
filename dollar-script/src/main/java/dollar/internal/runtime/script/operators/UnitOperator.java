@@ -18,6 +18,7 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -41,7 +42,7 @@ public class UnitOperator implements Map<Token, var> {
     @Override
     public var map(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
-        return createNode(true, false, "unit", parser, token,
+        return createNode("unit", SourceNodeOptions.NEW_SCOPE, parser, token,
                           Arrays.asList((var) objects[0], (var) objects[1]), i -> {
                     if (Builtins.exists(objects[1].toString())) {
                         return Builtins.execute(objects[1].toString(), Arrays.asList((var) objects[0]), pure);

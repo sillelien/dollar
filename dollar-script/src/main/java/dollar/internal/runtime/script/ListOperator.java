@@ -38,7 +38,7 @@ class ListOperator implements Map<Token, var> {
     @Override
     public var map(@NotNull Token t) {
         List<var> o = (List<var>) t.value();
-        final var lambda = DollarScriptSupport.createNode(true, true, "list", t, o, dollarParser,
+        final var lambda = DollarScriptSupport.createNode("list", SourceNodeOptions.SCOPE_WITH_CLOSURE, t, o, dollarParser,
                                                           vars -> DollarFactory.fromList(new ImmutableList<>(o))
         );
         for (var v : o) {

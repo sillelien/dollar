@@ -21,6 +21,7 @@ import com.sillelien.dollar.api.script.ModuleResolver;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarParserImpl;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -53,7 +54,7 @@ public class ModuleOperator implements Map<Token, var> {
     public var map(@NotNull Token token) {
 
         Object[] objects= (Object[]) token.value();
-        return DollarScriptSupport.createNode(true, false, "module", parser, token, Collections.emptyList(),
+        return DollarScriptSupport.createNode("module", SourceNodeOptions.NEW_SCOPE, parser, token, Collections.emptyList(),
                                               in->{
                                                   String moduleName = ((var) objects[1]).$S();
                                                   String[] parts = moduleName.split(":", 2);

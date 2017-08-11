@@ -21,7 +21,7 @@ import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
 import dollar.internal.runtime.script.DollarParserImpl;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.ScriptScope;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import org.jetbrains.annotations.NotNull;
@@ -39,11 +39,10 @@ import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class ParameterOperator implements Map<Token, Map<? super var, ? extends var>> {
     @NotNull
+    private static final Logger log = LoggerFactory.getLogger("ParameterOperator");
+    @NotNull
     private final DollarParser dollarParser;
     private final boolean pure;
-
-    @NotNull
-    private static final Logger log = LoggerFactory.getLogger("ParameterOperator");
 
 
     public ParameterOperator(@NotNull DollarParser dollarParser, boolean pure) {
@@ -61,29 +60,26 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
             log.debug(lhs.getMetaAttribute("operation"));
             if ("function-name".equals(lhs.getMetaAttribute("operation"))) {
                 String lhsString = lhs.toString();
-                log.debug("BUILTIN?: "+lhsString);
-                if(Builtins.exists(lhsString)) {
-                    log.debug("BUILTIN: "+lhsString);
-                    builtin= true;
+                log.debug("BUILTIN?: " + lhsString);
+                if (Builtins.exists(lhsString)) {
+                    log.debug("BUILTIN: " + lhsString);
+                    builtin = true;
                 } else {
-                    builtin= false;
+                    builtin = false;
                 }
                 if (pure && Builtins.exists(lhsString) && !Builtins.isPure(lhsString)) {
                     throw new DollarScriptException(
                                                            "Cannot call the impure function '" + lhsString + "' in a pure expression.");
                 }
-                functionName= true;
+                functionName = true;
             } else {
-                functionName= false;
-                builtin= false;
+                functionName = false;
+                builtin = false;
             }
 
             String constraintSource = null;
-            var lambda = createNode(true, true, "parameter", dollarParser, token,
-                                    new ScriptScope(currentScope(),"parameter", false),
-                                    rhs,
-                                    new Function(rhs, lhs, token, constraintSource, functionName,
-                                                 builtin)
+            var lambda = createNode("parameter", SourceNodeOptions.SCOPE_WITH_CLOSURE, dollarParser, token, rhs,
+                                    new Function(rhs, lhs, token, constraintSource, functionName, builtin)
             );
             //reactive links
             lhs.$listen(i -> lambda.$notify());

@@ -19,6 +19,7 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -51,7 +52,7 @@ public class PipeOperator implements Function<Token, Map<var, var>> {
     public Map<var, var> apply(@NotNull Token token) {
         var rhs = (var) token.value();
         return lhs -> createReactiveNode(
-                true, false, "pipe", parser, token, rhs, i -> {
+                "pipe", SourceNodeOptions.NEW_SCOPE, parser, token, rhs, i -> {
                     return inSubScope(false, pure, "pipe-runtime",
                                       runtimeScope -> {
                                           currentScope().setParameter("1", lhs);

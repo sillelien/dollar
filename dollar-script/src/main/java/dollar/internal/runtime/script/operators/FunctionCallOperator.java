@@ -19,6 +19,7 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -42,7 +43,7 @@ public class FunctionCallOperator implements Function<Token, var> {
     public var apply(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
         log.debug("objects[0]="+objects[0]);
-        var node = DollarScriptSupport.createNode(false, false,"function-name", parser, token,
+        var node = DollarScriptSupport.createNode("function-name", SourceNodeOptions.NO_SCOPE, parser, token,
                                                   Collections.singletonList((var) objects[0]),
                                                   new Pipeable() {
                                                       @Override

@@ -19,6 +19,7 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -47,7 +48,7 @@ public class IfOperator implements Map<Token, Map<var, var>> {
                     return $(false);
                 }
             };
-            return DollarScriptSupport.createNode(false, false, "if", parser, token, Arrays.asList(lhs, rhs),
+            return DollarScriptSupport.createNode("if", SourceNodeOptions.NO_SCOPE, parser, token, Arrays.asList(lhs, rhs),
                                                   callable);
         };
     }

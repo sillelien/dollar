@@ -18,6 +18,7 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,11 +44,11 @@ public class SubscriptOperator implements Map<Token, Map<? super var, ? extends 
         Object[] rhs = (Object[]) token.value();
         return lhs -> {
             if (rhs[1] == null) {
-                return createReactiveNode(false, false, "subscript", parser, token, lhs,
+                return createReactiveNode("subscript", SourceNodeOptions.NO_SCOPE, parser, token, lhs,
                                           (var) rhs[0], args -> lhs.$get(((var) rhs[0])));
             } else {
                 Pipeable pipeable = i -> lhs.$set((var) rhs[0], rhs[1]);
-                return createNode(false,false, "subscript-assignment", parser, token,
+                return createNode("subscript-assignment", SourceNodeOptions.NO_SCOPE, parser, token,
                                   Arrays.asList(lhs, (var) rhs[0], (var) rhs[1]),
                                   pipeable);
             }

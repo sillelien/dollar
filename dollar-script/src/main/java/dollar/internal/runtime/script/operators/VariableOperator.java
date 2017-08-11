@@ -16,11 +16,12 @@
 
 package dollar.internal.runtime.script.operators;
 
-import dollar.internal.runtime.script.api.Scope;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.UnaryOp;
 import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.api.Scope;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class VariableOperator extends UnaryOp {
     public var map(@NotNull var from) {
         Scope scope = currentScope();
 
-        var lambda = DollarScriptSupport.createReactiveNode(false, false, operation, source, parser, from, args -> {
+        var lambda = DollarScriptSupport.createReactiveNode(operation, SourceNodeOptions.NO_SCOPE, source, parser, from, args -> {
             String key = from.$S();
             boolean numeric = from.number();
 

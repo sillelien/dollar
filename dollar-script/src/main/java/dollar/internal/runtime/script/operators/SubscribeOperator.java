@@ -19,6 +19,7 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.Operator;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,7 +47,7 @@ public class SubscribeOperator implements Binary<var>, Operator {
     public var map(@NotNull var lhs, @NotNull var rhs) {
 
         assert source != null;
-        return createReactiveNode(true, false, "subscribe", parser, source, lhs, rhs,
+        return createReactiveNode("subscribe", SourceNodeOptions.NEW_SCOPE, parser, source, lhs, rhs,
                                   args -> lhs.$subscribe(
                                           i -> {
                                               final var it = fix(i[0], false);

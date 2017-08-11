@@ -22,6 +22,7 @@ import com.sillelien.dollar.api.time.Scheduler;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.Scope;
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +49,7 @@ public class EveryOperator implements Map<Token, var> {
     public var map(Token token) {
         final int[] count = new int[]{-1};
         Object[] objects = (Object[]) token.value();
-        return createReactiveNode(true, false, "every", dollarParser, token, (var) objects[3], args -> {
+        return createReactiveNode("every", SourceNodeOptions.NEW_SCOPE, dollarParser, token, (var) objects[3], args -> {
             Scope scope= currentScope();
             Scheduler.schedule(i -> {
                 count[0]++; // William Gibson

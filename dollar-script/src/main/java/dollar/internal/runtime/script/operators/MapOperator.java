@@ -19,6 +19,7 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -44,8 +45,7 @@ public class MapOperator implements Map<Token, var> {
         List<var> o = (List<var>) t.value();
         final var
                 lambda =
-               DollarScriptSupport.createNode(true, true, "map", t, o, dollarParser, i
-                                                                                                                                      -> {
+                DollarScriptSupport.createNode("map", SourceNodeOptions.SCOPE_WITH_CLOSURE, t, o, dollarParser, i -> {
                     if (o.size() == 1) {
                         System.out.println("BLOCK-MAP");
 //                        new Exception().printStackTrace();

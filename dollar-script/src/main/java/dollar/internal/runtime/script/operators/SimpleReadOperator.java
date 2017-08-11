@@ -19,6 +19,7 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.UnaryOp;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +35,7 @@ public class SimpleReadOperator extends UnaryOp {
     @NotNull
     @Override
     public var map(@NotNull var from) {
-        return DollarScriptSupport.createReactiveNode(false, false, operation, source, parser, from,
+        return DollarScriptSupport.createReactiveNode(operation, SourceNodeOptions.NO_SCOPE, source, parser, from,
                                                       args -> DollarFactory.fromURI(from).$read()
         );
     }

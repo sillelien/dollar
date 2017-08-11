@@ -19,6 +19,7 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -41,7 +42,7 @@ public class IsOperator implements Map<Token, Map<? super var, ? extends var>> {
     @Override
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         List<var> rhs = (List<var>) token.value();
-        return lhs -> DollarScriptSupport.createReactiveNode(false, false, "is " + rhs, parser, token, lhs, args
+        return lhs -> DollarScriptSupport.createReactiveNode("is " + rhs, SourceNodeOptions.NO_SCOPE, parser, token, lhs, args
                                                                                                       -> {
             for (var value : rhs) {
                 if (lhs.is(Type.valueOf(value.toString()))) {

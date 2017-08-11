@@ -63,7 +63,7 @@ public class BinaryOp implements Binary<var>, Operator {
     @Override
     public var map(@NotNull var lhs, @NotNull var rhs) {
         if (immediate) {
-            final var lambda = DollarScriptSupport.createNode(false, false,operation, parser,
+            final var lambda = DollarScriptSupport.createNode(operation, SourceNodeOptions.NO_SCOPE, parser,
                                                               source,
                                                               Arrays.asList(lhs, rhs),
                                                               new Pipeable() {
@@ -76,7 +76,7 @@ public class BinaryOp implements Binary<var>, Operator {
 
         }
         //Lazy evaluation
-        return createReactiveNode(false, false, operation, parser, source, lhs, rhs,
+        return createReactiveNode(operation, SourceNodeOptions.NO_SCOPE, parser, source, lhs, rhs,
                                   args -> function.map(lhs, rhs));
     }
 

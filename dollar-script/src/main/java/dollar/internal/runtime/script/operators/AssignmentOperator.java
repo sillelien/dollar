@@ -21,6 +21,7 @@ import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.TypePrediction;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.SourceSegmentValue;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.Scope;
@@ -101,7 +102,9 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
 
             }
         };
-        var node = createNode(false, false, "assignment", parser, token, Arrays.asList(constrain(scope, rhs, constraint, constraintSource)),
+        var node = createNode("assignment", SourceNodeOptions.NO_SCOPE, parser, token,
+                              Arrays.asList(constrain(scope, rhs, constraint,
+                                                      constraintSource)),
                               callable);
         //        node.$listen(i -> scope.notify(varName));
         return node;
@@ -120,7 +123,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
         }
         if (objects[2] != null) {
             type = Type.valueOf(objects[2].toString().toUpperCase());
-            constraint = createNode(true, false, "constraint", token, Arrays.asList(), parser, i -> {
+            constraint = createNode("constraint", SourceNodeOptions.NEW_SCOPE, token, Arrays.asList(), parser, i -> {
                 return $(currentScope().getParameter("it").is(type) && (objects[3] == null || ((var) objects[3]).isTrue()));
             });
         } else {
@@ -178,7 +181,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                                   pure);
                         System.err.println("DYNAMIC: " + rhs.dynamic());
 
-                        return createNode(false, false, "listen-assign", parser, token,
+                        return createNode("listen-assign", SourceNodeOptions.NO_SCOPE, parser, token,
                                           singletonList(constrain(scope, rhs, constraint, useSource)),
                                           c -> rhs.$listen(
                                                   args -> {
@@ -197,7 +200,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                                                  useConstraint, useSource, true,
                                                  false, pure, decleration,
                                                  token, parser)));
-                        return createNode(false, false, "subscribe-assign", parser, token,
+                        return createNode("subscribe-assign", SourceNodeOptions.NO_SCOPE, parser, token,
                                           Arrays.asList(
                                                   constrain(
                                                           scope, rhs,

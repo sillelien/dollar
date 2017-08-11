@@ -17,6 +17,7 @@
 package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -39,7 +40,7 @@ public class WhileOperator implements Map<Token, Map<? super var, ? extends var>
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         var lhs = (var) token.value();
         return rhs -> {
-            return createNode(true, false, "while", parser, token, Arrays.asList(lhs, rhs),
+            return createNode("while", SourceNodeOptions.NEW_SCOPE, parser, token, Arrays.asList(lhs, rhs),
                               i -> {
                                   while (lhs.isTrue()) {
                                       rhs._fixDeep();

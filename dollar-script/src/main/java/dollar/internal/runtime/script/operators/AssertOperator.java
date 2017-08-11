@@ -18,6 +18,7 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.SourceSegmentValue;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
@@ -38,7 +39,7 @@ public class AssertOperator implements Map<Token, var> {
     @Override public var map(@NotNull Token token) {
         final SourceSegmentValue source = new SourceSegmentValue(DollarScriptSupport.currentScope(), token);
         Object[] objects = (Object[]) token.value();
-        return DollarScriptSupport.createReactiveNode(false, false, "assert", parser, token, (var) objects[1],
+        return DollarScriptSupport.createReactiveNode("assert", SourceNodeOptions.NO_SCOPE, parser, token, (var) objects[1],
                                                       args -> {
             if (((var) objects[1]).isTrue()) { return $void(); } else {
                 throw new DollarScriptException("Assertion failed: " +

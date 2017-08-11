@@ -19,6 +19,7 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -38,7 +39,7 @@ public class CastOperator implements Map<Token, Map<? super var, ? extends var>>
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         var rhs = (var) token.value();
         return lhs -> DollarScriptSupport.createReactiveNode(
-                false, false, "as", parser, token, lhs,
+                "as", SourceNodeOptions.NO_SCOPE, parser, token, lhs,
                 args -> lhs.$as(Type.valueOf(rhs.toString().toUpperCase()))
         );
     }

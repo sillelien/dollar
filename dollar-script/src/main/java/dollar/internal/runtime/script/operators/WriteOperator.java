@@ -18,6 +18,7 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -36,7 +37,7 @@ public class WriteOperator implements Map<Token, Map<? super var, ? extends var>
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
         return (Map<var, var>) rhs -> DollarScriptSupport.createReactiveNode(
-                false, false, "write:" + objects[2] + ":" + objects[3], parser, token, (var) objects[1],
+                "write:" + objects[2] + ":" + objects[3], SourceNodeOptions.NO_SCOPE, parser, token, (var) objects[1],
                 rhs, args -> rhs.$write((var) objects[1],
                                         objects[2] != null,
                                         objects[3] != null

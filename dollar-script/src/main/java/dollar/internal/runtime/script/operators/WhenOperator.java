@@ -18,6 +18,7 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -41,7 +42,8 @@ public class WhenOperator implements Map<Token, var> {
         Object[] objects = (Object[]) token.value();
         var lhs = (var) objects[0];
         var rhs = (var) objects[1];
-        var lambda = DollarScriptSupport.createNode(true, false, "when", token, Arrays.asList(lhs, rhs), parser, i -> lhs.isTrue() ? $((Object) rhs.toJavaObject()) : $void()
+        var lambda = DollarScriptSupport.createNode("when", SourceNodeOptions.NEW_SCOPE, token, Arrays.asList(lhs, rhs), parser,
+                                                    i -> lhs.isTrue() ? $((Object) rhs.toJavaObject()) : $void()
         );
         lhs.$listen(i -> {
 //            lambda.$notify();

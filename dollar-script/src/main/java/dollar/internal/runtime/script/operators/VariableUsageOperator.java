@@ -19,6 +19,7 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
@@ -38,16 +39,16 @@ public class VariableUsageOperator implements Map<Token, Map<? super var, ? exte
         this.numeric = numeric;
     }
 
-    @Override public Map<? super var, ? extends var> map(Token token) {
+    @Override
+    public Map<? super var, ? extends var> map(Token token) {
 
         return rhs -> {
 
             Pipeable callable = i -> DollarScriptSupport.getVariable(pure, rhs.toString(),
                                                                      numeric, $void(), token, parser);
 
-            return DollarScriptSupport.createNode(
-                    false, false,"variable-usage--" + rhs._source().getSourceSegment(), parser, token,
-                    Arrays.asList(rhs), callable);
+            return DollarScriptSupport.createNode("variable-usage--" + rhs._source().getSourceSegment(),
+                                                  SourceNodeOptions.NO_SCOPE, parser, token, Arrays.asList(rhs), callable);
         };
     }
 }

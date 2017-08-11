@@ -298,7 +298,7 @@ public class DollarParserImpl implements DollarParser {
                                       public var map(@NotNull Token token) {
                                           final var v = (var) token.value();
                                           return createReactiveNode(
-                                                  false, false, v.toHumanString(), DollarParserImpl.this, token,
+                                                  v.toHumanString(), SourceNodeOptions.NO_SCOPE, DollarParserImpl.this, token,
                                                   v,
                                                   args -> Builtins.execute(v.toHumanString(), Arrays
                                                                                                       .asList(),
@@ -343,7 +343,7 @@ public class DollarParserImpl implements DollarParser {
                                       public var map(@NotNull Token token) {
                                           final var v = (var) token.value();
                                           return createReactiveNode(
-                                                  false, false, v.toHumanString(), DollarParserImpl.this, token,
+                                                  v.toHumanString(), SourceNodeOptions.NO_SCOPE, DollarParserImpl.this, token,
                                                   v,
                                                   args -> Builtins.execute(v.toHumanString(),
                                                                            emptyList(), pure)
@@ -463,8 +463,8 @@ public class DollarParserImpl implements DollarParser {
                                            .infixl(op(new BinaryOp(this, "reduce", (lhs, rhs) -> {
                                                return lhs.$list().$stream(false).reduce((x, y) -> {
                                                    try {
-                                                       return (var) inSubScope(false, pure,
-                                                                               "reduce",
+                                                       return inSubScope(false, pure,
+                                                                         "reduce",
                                                                                newScope -> {
                                                                                    newScope.setParameter(
                                                                                            "1", x);
@@ -702,7 +702,7 @@ public class DollarParserImpl implements DollarParser {
         }).token().map(new Function<Token, var>() {
             @Override
             public var apply(Token token) {
-                return DollarScriptSupport.createNode(false, false, "java", DollarParserImpl.this, token,
+                return DollarScriptSupport.createNode("java", SourceNodeOptions.NO_SCOPE, DollarParserImpl.this, token,
                                                       Arrays.asList($void()),
                                                       in -> JavaScriptingSupport.compile($void(),
                                                                                          (String) token
@@ -774,7 +774,7 @@ public class DollarParserImpl implements DollarParser {
                             @Override
                             public var map(var lhs) {
                                 return createReactiveNode(
-                                        false, false, "." + rhs.toString(), DollarParserImpl.this, rhs, lhs,
+                                        "." + rhs.toString(), SourceNodeOptions.NO_SCOPE, DollarParserImpl.this, rhs, lhs,
                                         (var) rhs.value(), args -> lhs.$(rhs.value().toString())
                                 );
                             }

@@ -47,7 +47,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.sillelien.dollar.api.DollarStatic.$void;
+import static com.sillelien.dollar.api.DollarStatic.$;
 import static dollar.internal.runtime.script.DollarScriptSupport.createNode;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
@@ -98,37 +98,44 @@ public class DollarSource implements java.lang.reflect.InvocationHandler {
     private boolean scopeClosure;
     @NotNull
     private String id;
+    private boolean parallel;
 
     public DollarSource(@NotNull Pipeable lambda,
                         @NotNull SourceSegment source,
                         @NotNull List<var> inputs,
                         @NotNull String operation,
-                        @NotNull DollarParser parser, boolean newScope, boolean scopeClosure, @NotNull String id) {
+                        @NotNull DollarParser parser,
+                        @NotNull SourceNodeOptions sourceNodeOptions,
+                        @NotNull String id) {
+        this.parallel = sourceNodeOptions.isParallel();
 
 
-        if (scopeClosure) {
-            List<Scope> attachedScopes = new ArrayList<>(DollarScriptSupport.scopes());
-            this.lambda = vars -> createNode(false, false, operation+"-closure", parser, source, inputs, vars2 -> {
-                for (Scope scope : attachedScopes) {
-                    DollarScriptSupport.pushScope(scope);
-                }
-                try {
-                    return lambda.pipe(vars2);
-                } finally {
-                    Collections.reverse(attachedScopes);
-                    for (Scope scope : attachedScopes) {
-                        DollarScriptSupport.popScope(scope);
-                    }
+        if (sourceNodeOptions.isScopeClosure()) {
+            this.lambda = vars -> {
+                List<Scope> attachedScopes = new ArrayList<>(DollarScriptSupport.scopes());
+                return createNode(operation + "-closure", new SourceNodeOptions(false, false, sourceNodeOptions.isParallel()),
+                                  parser, source, inputs, vars2 -> {
+                            for (Scope scope : attachedScopes) {
+                                DollarScriptSupport.pushScope(scope);
+                            }
+                            try {
+                                return lambda.pipe(vars);
+                            } finally {
+                                Collections.reverse(attachedScopes);
+                                for (Scope scope : attachedScopes) {
+                                    DollarScriptSupport.popScope(scope);
+                                }
 
-                }
+                            }
 
-            });
+                        });
+            };
         } else {
             this.lambda = lambda;
         }
         this.parser = parser;
-        this.newScope = newScope;
-        this.scopeClosure = scopeClosure;
+        this.newScope = sourceNodeOptions.isNewScope();
+        this.scopeClosure = sourceNodeOptions.isScopeClosure();
         this.id = id;
         if (operation == null) {
             throw new NullPointerException();
@@ -278,7 +285,7 @@ public class DollarSource implements java.lang.reflect.InvocationHandler {
             } else if (method.getName().equals("_fixDeep")) {
 
                 if (args == null || args.length == 0) {
-                    return lambda.pipe(DollarFactory.fromValue(false))._fixDeep();
+                    return lambda.pipe(DollarFactory.fromValue(parallel))._fixDeep();
                 } else {
                     return lambda.pipe(DollarFactory.fromValue(args[0]))._fixDeep((Boolean) args[0]);
                 }
@@ -305,7 +312,7 @@ public class DollarSource implements java.lang.reflect.InvocationHandler {
                     listenerId = String.valueOf(args[1]);
                 }
                 listeners.put(listenerId, (Pipeable) args[0]);
-                return DollarStatic.$(listenerId);
+                return $(listenerId);
             } else if (method.getName().equals("$notify")) {
                 if (notifyStack.get().contains(this)) {
                     //throw new IllegalStateException("Recursive notify loop detected");
@@ -360,5 +367,5 @@ public class DollarSource implements java.lang.reflect.InvocationHandler {
     }
 
     @NotNull
-    public var execute() throws Exception {return executor.executeNow(() -> lambda.pipe($void())).get();}
+    public var execute() throws Exception {return executor.executeNow(() -> lambda.pipe($(parallel))).get();}
 }

@@ -21,6 +21,7 @@ import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.Operator;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
@@ -57,7 +58,7 @@ public class ListenOperator implements Binary<var>, Operator {
     @Override
     public var map(@NotNull var lhs, @NotNull var rhs) {
         String id = UUID.randomUUID().toString();
-        return createNode(true, false, "listen-"+ id, parser, source, Arrays.asList(lhs, rhs), in -> {
+        return createNode("listen-" + id, SourceNodeOptions.NEW_SCOPE, parser, source, Arrays.asList(lhs, rhs), in -> {
             log.debug("Listening to " + lhs.getMetaObject("operation"));
             log.debug("Listening to " + lhs._source().getSourceMessage());
             String lhsFix = lhs.getMetaAttribute("variable");

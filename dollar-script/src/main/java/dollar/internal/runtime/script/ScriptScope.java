@@ -547,7 +547,7 @@ public class ScriptScope implements Scope {
             log.info("Setting parameter " + key + " in " + this);
         }
         if (key.matches("[0-9]+") && variables.containsKey(key)) {
-            throw new AssertionError("Cannot change the value of positional variables.");
+            throw new DollarScriptException("Cannot change the value of positional variable $" + key + " in scope " + this);
         }
         this.parameterScope = true;
         variables.put(key, new Variable(value, null, null));

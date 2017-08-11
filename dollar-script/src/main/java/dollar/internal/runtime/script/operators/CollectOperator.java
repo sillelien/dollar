@@ -20,6 +20,7 @@ import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
@@ -64,7 +65,7 @@ public class CollectOperator implements Map<Token, var> {
 
 
         String id = UUID.randomUUID().toString();
-        return createNode(true, false, "collect", parser, token, Collections.<var>singletonList(variable),
+        return createNode("collect", SourceNodeOptions.NEW_SCOPE, parser, token, Collections.singletonList(variable),
                           (var... in) -> {
                               Scope scopeForVar = DollarScriptSupport.getScopeForVar(pure, varName,
                                                                                      false, null);
