@@ -134,7 +134,6 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
     public <T> Future<T> submit(@NotNull Callable<T> callable) {
         assert forkJoinPool != null;
         log.debug("Forking");
-        Thread.dumpStack();
         return forkJoinPool.submit(wrap(callable));
     }
 

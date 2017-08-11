@@ -18,8 +18,8 @@ package dollar.internal.runtime.script;
 
 import com.google.common.io.CharStreams;
 import com.sillelien.dollar.api.DollarStatic;
-import dollar.internal.runtime.script.api.ParserOptions;
 import com.sillelien.dollar.test.CircleCiParallelRule;
+import dollar.internal.runtime.script.api.ParserOptions;
 import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
@@ -98,7 +98,7 @@ public class ParserTest {
         try {
             new DollarParserImpl(options).parse(getClass().getResourceAsStream("/" + filename), filename, parallel);
             fail("Expected exception");
-        } catch (Exception e) {
+        } catch (Throwable e) {
 
         } finally {
 

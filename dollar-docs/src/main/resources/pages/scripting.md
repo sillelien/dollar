@@ -682,7 +682,7 @@ The `collect` operator listens for changes in the supplied expression adding all
 var e=void
 
 //Length is greater than or equal to 4 unless void
-(#it >= 4 || it is VOID) collectedValues=void
+var (#it >= 4 || it is VOID) collectedValues=void
 
 //count starts at 0 so this means five to collect (except if it contains the value 10)
 collect e until count == 4 unless it == 10{
