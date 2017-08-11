@@ -39,7 +39,7 @@ public class ReadOperator implements Map<Token, Map<? super var, ? extends var>>
     @Override
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
-        return (Map<var, var>) rhs -> createNode(false, "read:" + objects[1] + ":" + objects[2],
+        return (Map<var, var>) rhs -> createNode(false, false, "read:" + objects[1] + ":" + objects[2],
                                                  parser, token, Arrays.asList((var) objects[1], (var) objects[2], rhs),
                                                  i -> rhs.$read(objects[1] != null, objects[2] != null));
     }

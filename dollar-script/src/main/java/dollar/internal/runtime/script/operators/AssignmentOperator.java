@@ -60,34 +60,33 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                        boolean decleration) {
 
         final String varName = objects[4].toString();
-        final var useConstraint;
-        final String useSource;
-        if (constraint != null) {
-            useConstraint = constraint;
-            useSource = constraintSource;
-        } else {
-            useConstraint = scope.getConstraint(varName);
-            useSource = scope.getConstraintSource(varName);
-        }
+
         Pipeable callable = new Pipeable() {
             @Override
             public var pipe(var... args) throws Exception {
 
                 Scope currentScope = currentScope();
+                final var useConstraint;
+                final String useSource;
+                Scope varScope = DollarScriptSupport.getScopeForVar(pure, varName, false, currentScope());
+                if (constraint != null || varScope == null) {
+                    useConstraint = constraint;
+                    useSource = constraintSource;
+                } else {
+                    useConstraint = varScope.getConstraint(varName);
+                    useSource = varScope.getConstraintSource(varName);
+                }
                 final var rhsFixed = rhs._fix(1, false);
 
                 if (useConstraint != null) {
                     DollarScriptSupport.inSubScope(true, pure, "assignment-constraint",
                                                    newScope -> {
                                                        newScope.setParameter("it", rhsFixed);
-                                                       newScope.setParameter("previous",
-                                                                             scope.get(varName));
+                                                       newScope.setParameter("previous", newScope.get(varName));
                                                        if (useConstraint.isFalse()) {
 //                        System.out.println(rhsFixed.toDollarScript());
 //                        System.out.println(useConstraint.isFalse());
-                                                           newScope.handleError(
-                                                                   new DollarScriptException(
-                                                                                                    "Constraint failed for variable " + varName + ""));
+                                                           currentScope.handleError(new DollarScriptException("Constraint failed for variable " + varName + ""));
                                                        }
                                                        return null;
                                                    });
@@ -102,14 +101,9 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
 
             }
         };
-        var node = createNode(false, "assignment", parser, token,
-                              Arrays.asList(
-                                      constrain(scope,
-                                                rhs,
-                                                constraint,
-                                                useSource)),
+        var node = createNode(false, false, "assignment", parser, token, Arrays.asList(constrain(scope, rhs, constraint, constraintSource)),
                               callable);
-    //        node.$listen(i -> scope.notify(varName));
+        //        node.$listen(i -> scope.notify(varName));
         return node;
     }
 
@@ -126,10 +120,8 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
         }
         if (objects[2] != null) {
             type = Type.valueOf(objects[2].toString().toUpperCase());
-            constraint = createNode(true, "constraint", token, Arrays.asList(), parser, i -> {
-                return $(currentScope().getParameter("it")
-                                 .is(type) &&
-                                 (objects[3] == null || ((var) objects[3]).isTrue()));
+            constraint = createNode(true, false, "constraint", token, Arrays.asList(), parser, i -> {
+                return $(currentScope().getParameter("it").is(type) && (objects[3] == null || ((var) objects[3]).isTrue()));
             });
         } else {
             type = null;
@@ -186,7 +178,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                                   pure);
                         System.err.println("DYNAMIC: " + rhs.dynamic());
 
-                        return createNode(false, "listen-assign", parser, token,
+                        return createNode(false, false, "listen-assign", parser, token,
                                           singletonList(constrain(scope, rhs, constraint, useSource)),
                                           c -> rhs.$listen(
                                                   args -> {
@@ -205,14 +197,13 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
                                                  useConstraint, useSource, true,
                                                  false, pure, decleration,
                                                  token, parser)));
-                        return createNode(false, "subscribe-assign", parser, token,
+                        return createNode(false, false, "subscribe-assign", parser, token,
                                           Arrays.asList(
                                                   constrain(
                                                           scope, rhs,
                                                           constraint,
                                                           useSource)),
-                                          pipeable
-                        );
+                                          pipeable);
                     }
                 }
                 return assign(rhs, objects, constraint, constant, isVolatile, constraintSource,

@@ -38,7 +38,7 @@ public class CastOperator implements Map<Token, Map<? super var, ? extends var>>
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         var rhs = (var) token.value();
         return lhs -> DollarScriptSupport.createReactiveNode(
-                false, "as", parser, token, lhs,
+                false, false, "as", parser, token, lhs,
                 args -> lhs.$as(Type.valueOf(rhs.toString().toUpperCase()))
         );
     }

@@ -298,7 +298,7 @@ public class DollarParserImpl implements DollarParser {
                                       public var map(@NotNull Token token) {
                                           final var v = (var) token.value();
                                           return createReactiveNode(
-                                                  false, v.toHumanString(), DollarParserImpl.this, token,
+                                                  false, false, v.toHumanString(), DollarParserImpl.this, token,
                                                   v,
                                                   args -> Builtins.execute(v.toHumanString(), Arrays
                                                                                                       .asList(),
@@ -343,7 +343,7 @@ public class DollarParserImpl implements DollarParser {
                                       public var map(@NotNull Token token) {
                                           final var v = (var) token.value();
                                           return createReactiveNode(
-                                                  false, v.toHumanString(), DollarParserImpl.this, token,
+                                                  false, false, v.toHumanString(), DollarParserImpl.this, token,
                                                   v,
                                                   args -> Builtins.execute(v.toHumanString(),
                                                                            emptyList(), pure)
@@ -702,7 +702,7 @@ public class DollarParserImpl implements DollarParser {
         }).token().map(new Function<Token, var>() {
             @Override
             public var apply(Token token) {
-                return DollarScriptSupport.createNode(false, "java", DollarParserImpl.this, token,
+                return DollarScriptSupport.createNode(false, false, "java", DollarParserImpl.this, token,
                                                       Arrays.asList($void()),
                                                       in -> JavaScriptingSupport.compile($void(),
                                                                                          (String) token
@@ -774,7 +774,7 @@ public class DollarParserImpl implements DollarParser {
                             @Override
                             public var map(var lhs) {
                                 return createReactiveNode(
-                                        false, "." + rhs.toString(), DollarParserImpl.this, rhs, lhs,
+                                        false, false, "." + rhs.toString(), DollarParserImpl.this, rhs, lhs,
                                         (var) rhs.value(), args -> lhs.$(rhs.value().toString())
                                 );
                             }

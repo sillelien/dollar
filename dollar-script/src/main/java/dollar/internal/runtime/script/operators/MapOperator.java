@@ -44,7 +44,7 @@ public class MapOperator implements Map<Token, var> {
         List<var> o = (List<var>) t.value();
         final var
                 lambda =
-               DollarScriptSupport.createNode(true, "map", t, o, dollarParser, i
+               DollarScriptSupport.createNode(true, true, "map", t, o, dollarParser, i
                                                                                                                                       -> {
                     if (o.size() == 1) {
                         System.out.println("BLOCK-MAP");

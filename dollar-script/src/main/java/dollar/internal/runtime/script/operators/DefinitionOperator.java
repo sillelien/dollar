@@ -85,7 +85,7 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
                 var constraint;
                 String constraintSource;
                 if (typeConstraintObj != null) {
-                    constraint = DollarScriptSupport.createNode(true, "definition-constraint", token, new ArrayList<>(),
+                    constraint = DollarScriptSupport.createNode(true, false, "definition-constraint", token, new ArrayList<>(),
                                                                 parser, i
                                                                                 -> {
                                 final Type type = Type.valueOf(
@@ -101,7 +101,7 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
                 final String variableName = variableNameObj.toString();
 
                 var node = DollarScriptSupport.createNode(
-                        false, "assignment", parser, token, Arrays.asList(
+                        false, false, "assignment", parser, token, Arrays.asList(
                                 constrain(scope, value, constraint, constraintSource)),
                         args -> {
                             setVariableDefinition(currentScope(), parser, token, pure, true,
@@ -112,7 +112,7 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
                             );
                             if (exportObj != null && exportObj.toString().equals("export")) {
                                 parser.export(variableName, DollarScriptSupport.createNode(
-                                        false, "assignment", parser, token, Arrays.asList(value), exportArgs -> value));
+                                        false, false, "assignment", parser, token, Arrays.asList(value), exportArgs -> value));
                             }
                             return $void();
                         }

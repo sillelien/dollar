@@ -56,7 +56,7 @@ public class ListenOperator implements Binary<var>, Operator {
     @Override
     public var map(@NotNull var lhs, @NotNull var rhs) {
         String id = UUID.randomUUID().toString();
-        return createNode(true, "listen-"+ id, parser, source, Arrays.asList(lhs, rhs), in -> {
+        return createNode(true, false, "listen-"+ id, parser, source, Arrays.asList(lhs, rhs), in -> {
             log.debug("Listening to " + lhs.getMetaObject("operation"));
             log.debug("Listening to " + lhs._source().getSourceMessage());
             String lhsFix = lhs.getMetaAttribute("variable");

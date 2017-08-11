@@ -46,7 +46,7 @@ public class SubscribeOperator implements Binary<var>, Operator {
     public var map(@NotNull var lhs, @NotNull var rhs) {
 
         assert source != null;
-        return createReactiveNode(true, "subscribe", parser, source, lhs, rhs,
+        return createReactiveNode(true, false, "subscribe", parser, source, lhs, rhs,
                                   args -> lhs.$subscribe(
                                           i -> {
                                               final var it = fix(i[0], false);

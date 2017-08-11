@@ -79,7 +79,7 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
             }
 
             String constraintSource = null;
-            var lambda = createNode(true, "parameter", dollarParser, token,
+            var lambda = createNode(true, true, "parameter", dollarParser, token,
                                     new ScriptScope(currentScope(),"parameter", false),
                                     rhs,
                                     new Function(rhs, lhs, token, constraintSource, functionName,
@@ -140,7 +140,7 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
             }
             var result;
             if (!functionName) {
-                result = lhs._fix(1, false);
+                result = lhs._fix(2, false);
             } else {
                 String lhsString = lhs.toString();
                 //The lhs is a
@@ -156,7 +156,7 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                 } else {
                     final var valueUnfixed = DollarScriptSupport.getVariable(
                             pure, lhsString, false, null, token, dollarParser);
-                    result = valueUnfixed._fix(1, false);
+                    result = valueUnfixed._fix(2, false);
                 }
             }
 

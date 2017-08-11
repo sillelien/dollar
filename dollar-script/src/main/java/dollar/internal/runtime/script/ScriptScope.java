@@ -521,8 +521,7 @@ public class ScriptScope implements Scope {
             }
             if (variable.getConstraint() != null) {
                 if (constraint != null) {
-                    handleError(new DollarScriptException(
-                                                                 "Cannot change the constraint on a variable, attempted to redeclare for " + key));
+                    handleError(new DollarScriptException("Cannot change the constraint on a variable, attempted to redeclare for " + key));
                 }
             }
             if (getConfig().debugScope()) {
@@ -533,10 +532,7 @@ public class ScriptScope implements Scope {
             if (getConfig().debugScope()) {
                 log.info("Adding " + key + " in " + scope);
             }
-            scope.getVariables()
-                    .put(key,
-                         new Variable(value, readonly, constraint, constraintSource, isVolatile,
-                                      fixed, pure));
+            scope.getVariables().put(key, new Variable(value, readonly, constraint, constraintSource, isVolatile, fixed, pure));
         }
         scope.notifyScope(key, value);
         return value;

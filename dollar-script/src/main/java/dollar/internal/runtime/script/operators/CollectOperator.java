@@ -64,7 +64,7 @@ public class CollectOperator implements Map<Token, var> {
 
 
         String id = UUID.randomUUID().toString();
-        return createNode(true, "collect", parser, token, Collections.<var>singletonList(variable),
+        return createNode(true, false, "collect", parser, token, Collections.<var>singletonList(variable),
                           (var... in) -> {
                               Scope scopeForVar = DollarScriptSupport.getScopeForVar(pure, varName,
                                                                                      false, null);

@@ -36,9 +36,9 @@ var (string) d="test"
 var <string> f="testing"
 
 
-(previous != it || previous is VOID) e = 1
+var (previous != it || previous is VOID) e = 1
 @@e
-var e=2
+e=2
 e=3
 
 var errorOccured= false
@@ -50,16 +50,11 @@ var errorOccured= false
 }
 
 
-.: errorOccured
+.: &errorOccured
 
 //Dynamically named variable
 var $("a"+"b")=2
 ab <=> 2
-
-
-
-var f= ${fred|10}
-@@ f
 
 
 

@@ -44,7 +44,7 @@ public class VariableOperator extends UnaryOp {
     public var map(@NotNull var from) {
         Scope scope = currentScope();
 
-        var lambda = DollarScriptSupport.createReactiveNode(false, operation, source, parser, from, args -> {
+        var lambda = DollarScriptSupport.createReactiveNode(false, false, operation, source, parser, from, args -> {
             String key = from.$S();
             boolean numeric = from.number();
 
