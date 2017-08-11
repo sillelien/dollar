@@ -1,0 +1,7 @@
+var outer=10;
+
+const scopedArray := [$1,outer,{var inner=20;inner}]
+
+scopedArray(5)[0] <=> 5;
+scopedArray(5)[1] <=> 10;
+scopedArray(5)[2]() <=> 20;

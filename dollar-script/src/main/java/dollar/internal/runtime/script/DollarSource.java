@@ -48,6 +48,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.sillelien.dollar.api.DollarStatic.$void;
+import static dollar.internal.runtime.script.DollarScriptSupport.createNode;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class DollarSource implements java.lang.reflect.InvocationHandler {
@@ -104,7 +105,27 @@ public class DollarSource implements java.lang.reflect.InvocationHandler {
                         @NotNull String operation,
                         @NotNull DollarParser parser, boolean newScope, boolean scopeClosure, @NotNull String id) {
 
-        this.lambda = lambda;
+
+        if (scopeClosure) {
+            List<Scope> attachedScopes = new ArrayList<>(DollarScriptSupport.scopes());
+            this.lambda = vars -> createNode(false, false, operation+"-closure", parser, source, inputs, vars2 -> {
+                for (Scope scope : attachedScopes) {
+                    DollarScriptSupport.pushScope(scope);
+                }
+                try {
+                    return lambda.pipe(vars2);
+                } finally {
+                    Collections.reverse(attachedScopes);
+                    for (Scope scope : attachedScopes) {
+                        DollarScriptSupport.popScope(scope);
+                    }
+
+                }
+
+            });
+        } else {
+            this.lambda = lambda;
+        }
         this.parser = parser;
         this.newScope = newScope;
         this.scopeClosure = scopeClosure;
@@ -247,20 +268,20 @@ public class DollarSource implements java.lang.reflect.InvocationHandler {
 //                return lambda.pipe(in)._unwrap();
             } else if (method.getName().equals("_fix")) {
 
-                    if (args.length == 1) {
-                        return lambda.pipe(DollarFactory.fromValue(args[0]))._fix((Boolean) args[0]);
-                    } else {
-                        return lambda.pipe(DollarFactory.fromValue(args[1]))._fix((int) args[0], (Boolean) args[1]);
+                if (args.length == 1) {
+                    return lambda.pipe(DollarFactory.fromValue(args[0]))._fix((Boolean) args[0]);
+                } else {
+                    return lambda.pipe(DollarFactory.fromValue(args[1]))._fix((int) args[0], (Boolean) args[1]);
 
-                    }
+                }
 
             } else if (method.getName().equals("_fixDeep")) {
 
-                    if (args == null || args.length == 0) {
-                        return lambda.pipe(DollarFactory.fromValue(false))._fixDeep();
-                    } else {
-                        return lambda.pipe(DollarFactory.fromValue(args[0]))._fixDeep((Boolean) args[0]);
-                    }
+                if (args == null || args.length == 0) {
+                    return lambda.pipe(DollarFactory.fromValue(false))._fixDeep();
+                } else {
+                    return lambda.pipe(DollarFactory.fromValue(args[0]))._fixDeep((Boolean) args[0]);
+                }
 
 
             } else if (method.getName().equals("_constraintFingerprint")) {

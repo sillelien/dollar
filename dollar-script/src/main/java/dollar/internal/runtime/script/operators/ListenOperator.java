@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script.operators;
 
+import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
@@ -60,14 +61,23 @@ public class ListenOperator implements Binary<var>, Operator {
             log.debug("Listening to " + lhs.getMetaObject("operation"));
             log.debug("Listening to " + lhs._source().getSourceMessage());
             String lhsFix = lhs.getMetaAttribute("variable");
-            Scope scopeForVar = DollarScriptSupport.getScopeForVar(pure, lhsFix.toString(), false,
-                                                                   null);
-            if(scopeForVar == null) {
-                throw new VariableNotFoundException(lhsFix.toString(),currentScope());
+            if(lhsFix == null) {
+//                throw new DollarScriptException("The left hand side of the listen expression is not a variable",lhs);
+                return lhs.$listen(new Pipeable() {
+                    @Override
+                    public var pipe(var... vars) throws Exception {
+                        return rhs._fix(1,false);
+                    }
+                });
+            } else {
+                Scope scopeForVar = DollarScriptSupport.getScopeForVar(pure, lhsFix.toString(), false,
+                                                                       null);
+                if (scopeForVar == null) {
+                    throw new VariableNotFoundException(lhsFix.toString(), currentScope());
+                }
+                scopeForVar.listen(lhsFix.toString(), id, rhs);
+                return lhs;
             }
-            scopeForVar
-                           .listen(lhsFix.toString(), id, rhs);
-            return lhs;
         });
     }
 

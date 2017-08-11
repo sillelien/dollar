@@ -53,10 +53,7 @@ public class BlockOperator implements Map<Token, var> {
         return createNode(true, false, "block", dollarParser, token, l, in1 -> {
             List<Scope> attachedScopes = new ArrayList<>(DollarScriptSupport.scopes());
             return createNode(false, true, "block-closure", dollarParser, token, l, in2 -> {
-                for (Scope scope : attachedScopes) {
-                    DollarScriptSupport.pushScope(scope);
-                }
-                try {
+
                     if (l.size() > 0) {
                         for (int i = 0; i < l.size() - 1; i++) {
                             l.get(i)._fixDeep(false);
@@ -65,13 +62,7 @@ public class BlockOperator implements Map<Token, var> {
                     } else {
                         return $void();
                     }
-                } finally {
-                        Collections.reverse(attachedScopes);
-                        for (Scope scope : attachedScopes) {
-                            DollarScriptSupport.popScope(scope);
-                        }
 
-                }
 
 
             });

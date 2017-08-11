@@ -166,7 +166,7 @@ Obviously the declarative/reactive behavior is fantastic for templating, eventin
 
 var variableA = 1
 var variableB = variableA
-var variableA = 2
+variableA = 2
 
 .: variableB == 1
 ```
@@ -222,7 +222,7 @@ var myBlock = {
 
 myBlock <=> "World"
 
-myBlock2 = {1;2}
+const myBlock2 = {1;2}
 
 myBlock2 <=> 2
 
@@ -243,7 +243,7 @@ var list = [
 
 list <=> ["Hello ","World"]
 
-list2 = [1,2]
+const list2 = [1,2]
 
 list2 <=> [1,2]
 
@@ -262,7 +262,7 @@ var mapBlock = {
 
 mapBlock <=> {"Hello":"Hello", "World":"World"}
 
-mapBlock2 = { 1, 2}
+const mapBlock2 = { 1, 2}
 
 mapBlock2 <=> {"1":1,"2":2}
 
@@ -372,13 +372,10 @@ So all of that looks fairly familiar, but remember anything with delayed executi
 
 ```dollar
 var outer=10;
-1 <=> 2
 
 const scopedArray := [$1,outer,{var inner=20;inner}]
 
-.: scopedArray(5)[0]  == 4;
-
-scopedArray(5)[0] <=> 4;
+scopedArray(5)[0] <=> 5;
 scopedArray(5)[1] <=> 10;
 scopedArray(5)[2]() <=> 20;
 
