@@ -1,5 +1,5 @@
 
-[ ![Binary Distribution](assets/download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3200.tgz)
+[ ![Binary Distribution](assets/download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3218.tgz)
 
 [![GitHub License](https://img.shields.io/github/license/sillelien/dollar.svg)](https://raw.githubusercontent.com/sillelien/dollar/master/LICENSE) 
 [![GitHub Issues](https://img.shields.io/github/issues/sillelien/dollar.svg)](https://github.com/sillelien/dollar/issues)
@@ -29,18 +29,31 @@ Below is a fully functional persistent chat server in dollar:
 
 ```dollar
     //Fully working persistent chat server
-    var server= socketio://127.0.0.1:8092/bulletin?eventType=chatevent
-    var lastMessages= db:circular://messages/tmp/messages10.db?size=10
+  server= socketio://127.0.0.1:8092/bulletin?eventType=chatevent
+  lastMessages= db:circular://messages/tmp/messages10.db?size=10
+  
+  message *= server
+  timestampedMessage := (message + {"timestamp":DATE()})
+  timestampedMessage >> lastMessages
+  
+  ("chatevent" : timestampedMessage) publish server
+  
+  http://127.0.0.1:8091/messages subscribe {
+      {"body":all lastMessages, "headers":{"Access-Control-Allow-Origin":"*"}}
+  }
+  
+  //User management 
+  
+  users= db:map://users/tmp/users10.db
+  
+  when (~message.userName) {
+      users[message.userName]={"msg":message}
+  }
+  
+  http://127.0.0.1:8091/users subscribe {
+      {"body" : all users}
+  }
 
-    var message *= server
-    const timestampedMessage := (message + {"timestamp":DATE()})
-    timestampedMessage >> lastMessages
-
-    ("chatevent" : timestampedMessage) publish server
-
-    http://127.0.0.1:8091/messages subscribe {
-        {"body":all lastMessages, "headers":{"Access-Control-Allow-Origin":"*"}}
-    }
 ```
 
 Learn more at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar).
@@ -48,10 +61,10 @@ Learn more at [http://sillelien.github.io/dollar](http://sillelien.github.io/dol
 ![Install](assets/gh-title-install.png)
 
 
-Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3200.tgz) then run the following in your shell:
+Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3218.tgz) then run the following in your shell:
 
 ```bash
-    tar -zxvf dollar-0.3.3200.tgz
+    tar -zxvf dollar-0.3.3218.tgz
 ```
 
 To use dollar:
@@ -93,7 +106,7 @@ and
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-xxx</artifactId>
-            <version>0.3.3200</version>
+            <version>0.3.3218</version>
         </dependency>
 ```
 
@@ -104,7 +117,7 @@ Dependencies: [![Dependency Status](https://www.versioneye.com/user/projects/54a
 
 ![Docker](assets/gh-title-docker.png)
 
-There is a docker image, but it is in it's infancy so better to work with the  [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3200.tgz) for now.
+There is a docker image, but it is in it's infancy so better to work with the  [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3218.tgz) for now.
 ```bash
 docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pwd):/build -it sillelien/dollarscript-headless:0.3  <filename>.ds
  ```
