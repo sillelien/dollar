@@ -29,18 +29,31 @@ Below is a fully functional persistent chat server in dollar:
 
 ```dollar
     //Fully working persistent chat server
-    var server= socketio://127.0.0.1:8092/bulletin?eventType=chatevent
-    var lastMessages= db:circular://messages/tmp/messages10.db?size=10
+  server= socketio://127.0.0.1:8092/bulletin?eventType=chatevent
+  lastMessages= db:circular://messages/tmp/messages10.db?size=10
+  
+  message *= server
+  timestampedMessage := (message + {"timestamp":DATE()})
+  timestampedMessage >> lastMessages
+  
+  ("chatevent" : timestampedMessage) publish server
+  
+  http://127.0.0.1:8091/messages subscribe {
+      {"body":all lastMessages, "headers":{"Access-Control-Allow-Origin":"*"}}
+  }
+  
+  //User management 
+  
+  users= db:map://users/tmp/users10.db
+  
+  when (~message.userName) {
+      users[message.userName]={"msg":message}
+  }
+  
+  http://127.0.0.1:8091/users subscribe {
+      {"body" : all users}
+  }
 
-    var message *= server
-    const timestampedMessage := (message + {"timestamp":DATE()})
-    timestampedMessage >> lastMessages
-
-    ("chatevent" : timestampedMessage) publish server
-
-    http://127.0.0.1:8091/messages subscribe {
-        {"body":all lastMessages, "headers":{"Access-Control-Allow-Origin":"*"}}
-    }
 ```
 
 Learn more at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar).
