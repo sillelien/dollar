@@ -344,9 +344,9 @@ Dollar (at present) supports numerical and character ranges
 ```
 
 
-### Understanding Scopes
+### Scopes & Closure
 
-Dollar makes extensive use of scope [closure](https://en.wikipedia.org/wiki/Closure_(computer_programming)). Any form of delayed execution has closure over it's parent scope. Let's start with a simple example:
+Dollar makes extensive use of code blocks with scope [closure](https://en.wikipedia.org/wiki/Closure_(computer_programming)). Blocks, lists and maps all have scope closure - I suggest reading [this article by Martin Fowler](https://martinfowler.com/bliki/Lambda.html) if you're unfamiliar with closures. Let's start with a simple example:
 
 ```dollar
 var outer=10;
@@ -356,7 +356,7 @@ def func {
 func() <=> 10;
 ```
 
-In the above example `func` is a block collection which returns `outer`. It has access to `outer` because at the time of decleration outer is in it's parent scope.
+In the above example `func` is a block collection which returns `outer`. It has access to `outer` because at the time of decleration outer is in it's parent's lexical scope.
 
 ```dollar
 
@@ -368,7 +368,9 @@ def func {
 func()(10) <=> 20;
 ```
 
-So all of that looks fairly familiar, but remember anything with delayed execution has scope closure so
+In the above example we now return an anonymous block collection from func which we then paramterize with the value `10`. When `func` is executed it returns the paramterized block, which we then call with `10` and which adds the value `inner` to the parameter (`$1`) - naturally the result is 20.
+
+So all of that looks fairly familiar if you've ever used JavaScript, but remember all of Dollar's collections have scope closure so the following is valid:
 
 ```dollar
 var outer=10;
@@ -379,11 +381,19 @@ scopedArray(5)[0] <=> 5;
 scopedArray(5)[1] <=> 10;
 scopedArray(5)[2]() <=> 20;
 
-
 ```
 
+In this example the list has lexical scope closure and when we parameterize it using `(5)` we can pass in the positional parameter `($1)` for when it is evaluated.
 
-In the above example we now return an anonymous block collection from func which we then paramterize with the value `10`. When `func` is executed it returns the paramterized block, which we then call with `10` and which adds the value `inner` to the parameter (`$1`) - naturally the result is 20.
+#### Understanding Scopes A Little Deeper
+
+Each parse time scope boundary (_blocks, lists, maps, constraints, parameters etc._) is marked as such during the initial parse of the script. When executed each of these will create a runtime scope. Each runtime boundary will create a hierachy of scopes with the previous being the parent.
+
+
+Where an executable element with scope closure (such as _lists, blocks and maps_) is executed  **all** current scopes are saved and attached to that element. So when the element is subsequently executed it retains it's original lexical closure (as described [here](https://en.wikipedia.org/wiki/Closure_(computer_programming)#Implementation_and_theory)).
+
+>Please look at the `SourceNodeOptions` class for the three types of scoped nodes, they are `NO_SCOPE` which has no effect on the current scope, `NEW_SCOPE` which creates a new scope but does not have closure and `SCOPE_WITH_CLOSURE` which creates a new scope with lexical closure.
+
 
 ###Error Handling
 
@@ -624,12 +634,12 @@ a <=> 10
 
 Dollar as previously mentioned is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
 
-Let's start with the simplest reactive control flow operator, the '?->' or 'causes' operator.
+Let's start with the simplest reactive control flow operator, the '=>' or 'causes' operator.
 
 ```dollar
 var a=1; var b=1
 
-a ?-> (b= a)
+a => (b= a)
 
 &a <=> 1 ; &b <=> 1
 
@@ -849,8 +859,8 @@ The truthy operator converts any value to a boolean by applying the rule that: v
 .:  ~ {"a" : 1}
 .: ! ~ void
 
-void | "Hello" <=> "Hello"
-1 | "Hello" <=> 1
+void :- "Hello" <=> "Hello"
+1 :- "Hello" <=> 1
 
 ```
 #### Boolean Operators
@@ -897,11 +907,11 @@ false || false <=> false
 
 #### Default Operator
 
-The default operator '|' (keyword `default`) returns the left hand side if it is not `VOID` otherwise it returns the right hand side. 
+The default operator ':-' (keyword `default`) returns the left hand side if it is not `VOID` otherwise it returns the right hand side.
 
 ```dollar
-void | "Hello" <=> "Hello"
-1 | "Hello" <=> 1
+void :- "Hello" <=> "Hello"
+1 :- "Hello" <=> 1
 void default 2 <=> 2
 ```
 
@@ -951,8 +961,8 @@ The Dollar files should use the export modifier on assignments that it wishes to
 
 
 ```dollar
-var redis= ("redis://localhost:6379/" + ${channel | "test"}) as URI
-var www= (("http:get://127.0.0.1:8111/" + ${channel | "test"}) as URI)
+var redis= ("redis://localhost:6379/" + ${channel :- "test"}) as URI
+var www= (("http:get://127.0.0.1:8111/" + ${channel :- "test"}) as URI)
 
 export def server  {
            www subscribe {

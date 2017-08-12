@@ -64,10 +64,10 @@ var lamval5=13
 
 def removeWorld ($1 - "World")
 
-@@ ["Hello", "World"] -> removeWorld
+@@ ["Hello", "World"]|removeWorld
 
-(["Hello", "World"] -> removeWorld) <=> ["Hello"]
-(["Goodbye", "World"] -> removeWorld) <=> ["Goodbye"]
+(["Hello", "World"]|removeWorld) <=> ["Hello"]
+(["Goodbye", "World"]|removeWorld) <=> ["Goodbye"]
 
 
 ($2 + " " + $1)("Hello", "World") <=> "World Hello"

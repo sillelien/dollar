@@ -10,4 +10,4 @@ def lambdaReturn {
 lambdaReturn()(5) <=> 35
 
 @@ "OKAY!"
-(5 -> lambdaReturn) <=> 35
+(5|lambdaReturn) <=> 35

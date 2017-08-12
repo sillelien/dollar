@@ -16,10 +16,10 @@ def revrse [$1[1],$1[0]]
 
 revrse([2,1]) <-> [1,2]
 
-([2,1] -> revrse) <-> [1,2]
+([2,1]|revrse) <-> [1,2]
 
 //You must use the fix operator here to avoid an infinitely recursive expression.
-fix ([2,1] -> revrse) -> revrse <-> [2,1]
+fix ([2,1]|revrse)|revrse <-> [2,1]
 
 
 def testParams {$2 + " " + $1}

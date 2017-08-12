@@ -5,6 +5,6 @@ def lamdaReturn {
 }
 
 //Execute function and pipe 5 to the returned lambda
-(5 -> lamdaReturn) <=> 20
+(5|lamdaReturn) <=> 20
 //Pipe 5 to the function then execute the lambda with 10 as a parameter
-//(3 -> lamdaReturn)(7) <=> 17
+//(3|lamdaReturn)(7) <=> 17

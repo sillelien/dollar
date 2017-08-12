@@ -17,7 +17,7 @@ const b="World";
 @@ a;
 
 a="Goodbye";
-const d= void | 2;
+const d= void :- 2;
 
 //Assert d == 2
 

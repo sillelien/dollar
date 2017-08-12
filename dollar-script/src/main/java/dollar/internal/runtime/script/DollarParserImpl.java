@@ -123,7 +123,7 @@ public class DollarParserImpl implements DollarParser {
 
     private Parser<var> dollarIdentifier(@NotNull Parser.Reference ref, boolean pure) {
         return OP("$").next(
-                array(Terminals.Identifier.PARSER, OP("|").next(ref.lazy()).optional()).between(
+                array(Terminals.Identifier.PARSER, OP(":-").next(ref.lazy()).optional()).between(
                         OP("{"),
                         OP("}"))).token().map(
                 t -> {
@@ -136,7 +136,7 @@ public class DollarParserImpl implements DollarParser {
 
     @Override
     public void export(@NotNull String name, @NotNull var export) {
-        System.err.println("Exporting " + name);
+//        System.err.println("Exporting " + name);
         export.setMetaObject("scopes", new ArrayList<Scope>(DollarScriptSupport.scopes()));
         exports.put(name, export);
     }
@@ -247,7 +247,7 @@ public class DollarParserImpl implements DollarParser {
             log.debug("Starting Runtime Phase");
             for (int i = 0; i < l.size() - 1; i++) {
                 var fixed = l.get(i)._fixDeep(false);
-                System.err.println(fixed);
+//                System.err.println(fixed);
             }
             var resultVar = l.get(l.size() - 1);
             var fixedResult = resultVar._fixDeep(false);
@@ -393,7 +393,8 @@ public class DollarParserImpl implements DollarParser {
                                                    EQUIVALENCE_PRIORITY)
                                            .infixl(op(new BinaryOp(this, "multiply", (lhs, rhs) -> {
                                                final var lhsFix = lhs._fix(false);
-                                               if (Arrays.asList("block","map","list").contains(lhs.getMetaAttribute("operation"))) {
+                                               if (Arrays.asList("block", "map", "list").contains(
+                                                       lhs.getMetaAttribute("operation"))) {
                                                    var newValue = lhsFix._fixDeep(false);
                                                    Long max = rhs.toLong();
                                                    for (int i = 1; i < max; i++) {
@@ -458,39 +459,37 @@ public class DollarParserImpl implements DollarParser {
                                                                                             return rhs._fixDeep(
                                                                                                     false);
                                                                                         }));
-                                                   }), "*|*", "each"),
+                                                   }), "=>>", "each"),
                                                    MULTIPLY_DIVIDE_PRIORITY)
                                            .infixl(op(new BinaryOp(this, "reduce", (lhs, rhs) -> {
                                                return lhs.$list().$stream(false).reduce((x, y) -> {
                                                    try {
                                                        return inSubScope(false, pure,
                                                                          "reduce",
-                                                                               newScope -> {
-                                                                                   newScope.setParameter(
-                                                                                           "1", x);
-                                                                                   newScope.setParameter(
-                                                                                           "2", y);
-                                                                                   return rhs._fixDeep(
-                                                                                           false);
-                                                                               });
+                                                                         newScope -> {
+                                                                             newScope.setParameter(
+                                                                                     "1", x);
+                                                                             newScope.setParameter(
+                                                                                     "2", y);
+                                                                             return rhs._fixDeep(
+                                                                                     false);
+                                                                         });
                                                    } catch (Exception e) {
                                                        throw new DollarScriptException(e);
                                                    }
                                                }).get();
-                                           }), "*|", "reduce"), MULTIPLY_DIVIDE_PRIORITY)
-                                           .infixl(op(new ListenOperator(pure, this), "?->",
+                                           }), ">>=", "reduce"), MULTIPLY_DIVIDE_PRIORITY)
+                                           .infixl(op(new ListenOperator(pure, this), "=>",
                                                       "causes"), CONTROL_FLOW_PRIORITY)
                                            .infixl(op(new BinaryOp(this, "listen",
                                                                    (lhs, rhs) -> lhs.isTrue() ? fix(
                                                                            rhs, false) : $void()),
                                                       "?"),
                                                    CONTROL_FLOW_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "choose",
-                                                                   ControlFlowAware::$choose), "?*",
-                                                      "choose"),
+                                           .infixl(op(new BinaryOp(this, "choose", ControlFlowAware::$choose), "?*", "choose"),
                                                    CONTROL_FLOW_PRIORITY)
                                            .infixl(op(new BinaryOp(this, "default", var::$default),
-                                                      "|", "default"), CONTROL_FLOW_PRIORITY)
+                                                      ":-", "default"), MEMBER_PRIORITY)
                                            .postfix(memberOperator(ref), MEMBER_PRIORITY)
                                            .prefix(op(new UnaryOp("not", v -> $(!v.isTrue()), this),
                                                       "!", "not"), UNARY_PRIORITY)
@@ -538,19 +537,19 @@ public class DollarParserImpl implements DollarParser {
                             }, "err", this), "??", "err"), LINE_PREFIX_PRIORITY)
                             .prefix(writeOperator(ref), OUTPUT_PRIORITY)
                             .prefix(readOperator(), OUTPUT_PRIORITY)
-                            .prefix(op(new UnaryOp("stop", var::$stop, this), "(!)"),
+                            .prefix(op(new UnaryOp("stop", var::$stop, this), "<|"),
                                     SIGNAL_PRIORITY)
-                            .prefix(op(new UnaryOp("start", var::$start, this), "(>)"),
+                            .prefix(op(new UnaryOp("start", var::$start, this), "|>"),
                                     SIGNAL_PRIORITY)
-                            .prefix(op(new UnaryOp("pause", var::$pause, this), "(=)"),
+                            .prefix(op(new UnaryOp("pause", var::$pause, this), "||>"),
                                     SIGNAL_PRIORITY)
-                            .prefix(op(new UnaryOp("unpause", var::$unpause, this), "(~)"),
+                            .prefix(op(new UnaryOp("unpause", var::$unpause, this), "<||"),
                                     SIGNAL_PRIORITY)
-                            .prefix(op(new UnaryOp("destroy", var::$destroy, this), "(-)"),
+                            .prefix(op(new UnaryOp("destroy", var::$destroy, this), "<|||"),
                                     SIGNAL_PRIORITY)
-                            .prefix(op(new UnaryOp("create", var::$create, this), "(+)"),
+                            .prefix(op(new UnaryOp("create", var::$create, this), "|||>"),
                                     SIGNAL_PRIORITY)
-                            .prefix(op(new UnaryOp("state", var::$state, this), "(?)"),
+                            .prefix(op(new UnaryOp("state", var::$state, this), "<|>"),
                                     SIGNAL_PRIORITY)
                             .prefix(op(new UnaryOp("fork", v -> DollarFactory.fromFuture(
                                     executor.executeInBackground(() -> fix(v, false))), this), "-<",
@@ -565,7 +564,7 @@ public class DollarParserImpl implements DollarParser {
                                                     (lhs, rhs) -> rhs.$write(lhs)), ">>"),
                                     OUTPUT_PRIORITY)
                             .prefix(op(new SimpleReadOperator(this), "<<"), OUTPUT_PRIORITY)
-                            .prefix(op(new UnaryOp("drain", URIAware::$drain, this), "<--",
+                            .prefix(op(new UnaryOp("drain", URIAware::$drain, this), "<-<",
                                        "drain"), OUTPUT_PRIORITY)
                             .prefix(op(new UnaryOp("all", URIAware::$all, this), "<@", "all"),
                                     OUTPUT_PRIORITY);
@@ -729,7 +728,7 @@ public class DollarParserImpl implements DollarParser {
 
     private Parser<Map<? super var, ? extends var>> pipeOperator(@NotNull Parser.Reference<var> ref,
                                                                  boolean pure) {
-        return (OP("->").optional(null)).next(
+        return (OP("|").optional(null)).next(
                 Parsers.longest(BUILTIN, IDENTIFIER, functionCall(ref, pure).postfix
                                                                                      (parameterOperator(
                                                                                              ref,

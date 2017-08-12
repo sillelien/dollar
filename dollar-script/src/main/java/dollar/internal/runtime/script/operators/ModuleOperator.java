@@ -68,7 +68,7 @@ public class ModuleOperator implements Map<Token, var> {
                                                           paramMap.put(param.getMetaAttribute(DollarParserImpl.NAMED_PARAMETER_META_ATTR), param);
                                                       }
                                                   }
-                                                  System.out.println(params);
+//                                                  System.out.println(params);
                                                   try {
 
                                                       return ModuleResolver.resolveModule(parts[0])

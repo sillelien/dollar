@@ -133,7 +133,7 @@ Webserver
 
 Create a webserver at http://localhost:4567/headers and return the request headers as a JSON string.
 
-        GET("/headers", (context) -> context.headers());
+        GET("/headers", (context)|context.headers());
 
 Characteristics
 ===============

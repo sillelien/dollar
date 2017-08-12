@@ -51,7 +51,7 @@ import static com.sillelien.dollar.api.DollarStatic.$;
 import static dollar.internal.runtime.script.DollarScriptSupport.createNode;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
-public class DollarSource implements java.lang.reflect.InvocationHandler {
+public class SourceNode implements java.lang.reflect.InvocationHandler {
     @NotNull
     public static final TypeLearner typeLearner = Plugins.sharedInstance(TypeLearner.class);
     public static final String RETURN_SCOPE = "return-scope";
@@ -64,49 +64,58 @@ public class DollarSource implements java.lang.reflect.InvocationHandler {
     private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
     private static final int MAX_STACK_DEPTH = 100;
     @NotNull
-    private static final ThreadLocal<List<DollarSource>> notifyStack = new ThreadLocal<List<DollarSource>>() {
+    private static final ThreadLocal<List<SourceNode>> notifyStack = new ThreadLocal<List<SourceNode>>() {
         @NotNull
         @Override
-        protected List<DollarSource> initialValue() {
+        protected List<SourceNode> initialValue() {
             return new ArrayList<>();
         }
     };
     @NotNull
-    private static final ThreadLocal<List<DollarSource>> stack = new ThreadLocal<List<DollarSource>>() {
+    private static final ThreadLocal<List<SourceNode>> stack = new ThreadLocal<List<SourceNode>>() {
         @NotNull
         @Override
-        protected List<DollarSource> initialValue() {
+        protected List<SourceNode> initialValue() {
             return new ArrayList<>();
         }
     };
     @NotNull
-    protected final ConcurrentHashMap<Object, Object> meta = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Object, Object> meta = new ConcurrentHashMap<>();
     @NotNull
-    protected final Pipeable lambda;
+
+    private final Pipeable lambda;
     @NotNull
     private final SourceSegment source;
 
+    @NotNull
     private final ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
+
     @NotNull
     private List<var> inputs;
+
     @Nullable
     private String operation;
+
+    @Nullable
     private volatile TypePrediction prediction;
+
     @NotNull
     private DollarParser parser;
+
     private boolean newScope;
+
     private boolean scopeClosure;
     @NotNull
     private String id;
     private boolean parallel;
 
-    public DollarSource(@NotNull Pipeable lambda,
-                        @NotNull SourceSegment source,
-                        @NotNull List<var> inputs,
-                        @NotNull String operation,
-                        @NotNull DollarParser parser,
-                        @NotNull SourceNodeOptions sourceNodeOptions,
-                        @NotNull String id) {
+    public SourceNode(@NotNull Pipeable lambda,
+                      @NotNull SourceSegment source,
+                      @NotNull List<var> inputs,
+                      @NotNull String operation,
+                      @NotNull DollarParser parser,
+                      @NotNull SourceNodeOptions sourceNodeOptions,
+                      @NotNull String id) {
         this.parallel = sourceNodeOptions.isParallel();
 
 

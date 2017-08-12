@@ -134,8 +134,8 @@ public class DollarScriptSupport {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
-                new DollarSource(i -> callable.pipe(), source, inputs, operation, parser,
-                                 sourceNodeOptions, createId(operation))));
+                new SourceNode(i -> callable.pipe(), source, inputs, operation, parser,
+                               sourceNodeOptions, createId(operation))));
     }
 
     @NotNull
@@ -148,11 +148,11 @@ public class DollarScriptSupport {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
-                new DollarSource(callable,
-                                 new SourceSegmentValue(currentScope(), token),
-                                 inputs,
-                                 operation,
-                                 parser, sourceNodeOptions, createId(operation))));
+                new SourceNode(callable,
+                               new SourceSegmentValue(currentScope(), token),
+                               inputs,
+                               operation,
+                               parser, sourceNodeOptions, createId(operation))));
     }
 
 
@@ -167,8 +167,8 @@ public class DollarScriptSupport {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
-                new DollarSource(callable, new SourceSegmentValue(scope, token), inputs,
-                                 operation, parser, sourceNodeOptions, createId(operation))));
+                new SourceNode(callable, new SourceSegmentValue(scope, token), inputs,
+                               operation, parser, sourceNodeOptions, createId(operation))));
     }
 
     @NotNull
@@ -214,9 +214,9 @@ public class DollarScriptSupport {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
-                new DollarSource(pipeable::pipe,
-                                 new SourceSegmentValue(currentScope(), token), inputs, operation,
-                                 parser, sourceNodeOptions, createId(operation))));
+                new SourceNode(pipeable::pipe,
+                               new SourceSegmentValue(currentScope(), token), inputs, operation,
+                               parser, sourceNodeOptions, createId(operation))));
     }
 
     @NotNull

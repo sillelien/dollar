@@ -13,13 +13,13 @@ pure def reverse [$1[1],$1[0]]
 reverse([2,1]) <=> [1,2]
 
 const c= pure {
-    [2,1] -> reverse <=> [1,2]
+    [2,1]|reverse <=> [1,2]
 }
 
-[2,1] -> reverse <=> [1,2]
+[2,1]|reverse <=> [1,2]
 
 //You must use the fix operator here to avoid an infinitely recursive expression.
-fix ([2,1] -> reverse) -> reverse <=> [2,1]
+fix ([2,1]|reverse)|reverse <=> [2,1]
 
 
 const testParams := pure($2 + " " + $1)

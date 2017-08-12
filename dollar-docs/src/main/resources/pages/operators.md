@@ -61,7 +61,7 @@ $>      + file out
 50 - control flow
 ?       + if
 ->      + causes
-?->     + choose
+=>     + choose
 ?:      + default
 
 

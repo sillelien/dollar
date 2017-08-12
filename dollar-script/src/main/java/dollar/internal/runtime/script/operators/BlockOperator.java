@@ -44,22 +44,24 @@ public class BlockOperator implements Map<Token, var> {
         this.pure = pure;
     }
 
+    public static var TO_BLOCK(List<var> l) {
+        if (l.size() > 0) {
+            for (int i = 0; i < l.size() - 1; i++) {
+                l.get(i)._fixDeep(false);
+            }
+            return l.get(l.size() - 1);
+        } else {
+            return $void();
+        }
+    }
+
     @Override
     public var map(@NotNull Token token) {
         List<var> l = (List<var>) token.value();
         return createNode("block", SCOPE_WITH_CLOSURE, dollarParser, token, l, parallel -> {
 
 
-                    if (l.size() > 0) {
-                        for (int i = 0; i < l.size() - 1; i++) {
-                            l.get(i)._fixDeep(false);
-                        }
-                        return l.get(l.size() - 1);
-                    } else {
-                        return $void();
-                    }
-
-
+            return TO_BLOCK(l);
 
 
         });

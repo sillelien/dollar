@@ -47,7 +47,7 @@ public class MapOperator implements Map<Token, var> {
                 lambda =
                 DollarScriptSupport.createNode("map", SourceNodeOptions.SCOPE_WITH_CLOSURE, t, o, dollarParser, i -> {
                     if (o.size() == 1) {
-                        System.out.println("BLOCK-MAP");
+//                        System.out.println("BLOCK-MAP");
 //                        new Exception().printStackTrace();
                         return DollarFactory.blockCollection(o);
                     }

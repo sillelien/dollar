@@ -1,0 +1,7 @@
+var outer=10;
+
+const scopedMap := {"one":$1,"outer":outer,"inner":{var inner=20;inner}}
+
+scopedMap(5).one <=> 5;
+scopedMap(5).outer <=> 10;
+scopedMap(5).inner() <=> 20;
