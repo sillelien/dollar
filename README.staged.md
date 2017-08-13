@@ -1,5 +1,5 @@
 
-[ ![Binary Distribution](assets/download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3218.tgz)
+[ ![Binary Distribution](assets/download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3239.tgz)
 
 [![GitHub License](https://img.shields.io/github/license/sillelien/dollar.svg)](https://raw.githubusercontent.com/sillelien/dollar/master/LICENSE) 
 [![GitHub Issues](https://img.shields.io/github/issues/sillelien/dollar.svg)](https://github.com/sillelien/dollar/issues)
@@ -61,10 +61,10 @@ Learn more at [http://sillelien.github.io/dollar](http://sillelien.github.io/dol
 ![Install](assets/gh-title-install.png)
 
 
-Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3218.tgz) then run the following in your shell:
+Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3239.tgz) then run the following in your shell:
 
 ```bash
-    tar -zxvf dollar-0.3.3218.tgz
+    tar -zxvf dollar-0.3.3239.tgz
 ```
 
 To use dollar:
@@ -106,7 +106,7 @@ and
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-xxx</artifactId>
-            <version>0.3.3218</version>
+            <version>0.3.3239</version>
         </dependency>
 ```
 
@@ -117,7 +117,7 @@ Dependencies: [![Dependency Status](https://www.versioneye.com/user/projects/54a
 
 ![Docker](assets/gh-title-docker.png)
 
-There is a docker image, but it is in it's infancy so better to work with the  [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3218.tgz) for now.
+There is a docker image, but it is in it's infancy so better to work with the  [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3239.tgz) for now.
 ```bash
 docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pwd):/build -it sillelien/dollarscript-headless:0.3  <filename>.ds
  ```
@@ -126,11 +126,19 @@ docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pw
  
  
 ## Research & Background Reading
+### Language Design
 
 http://www.drdobbs.com/architecture-and-design/so-you-want-to-write-your-own-language/240165488
 
 https://www.youtube.com/watch?v=Sg4U4r_AgJU
 
+### Lambdas and Scope Closure
+
+https://martinfowler.com/bliki/Lambda.html
+
+### Font Ligatures
+
+https://github.com/tonsky/FiraCode
 
 -------
 
