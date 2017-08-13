@@ -20,6 +20,7 @@ import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.parser.OpDef;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.functors.Binary;
 import org.jparsec.functors.Map2;
@@ -33,7 +34,7 @@ public class BinaryOp implements Binary<var>, Operator {
     @NotNull
     private final Map2<var, var, var> function;
     @NotNull
-    private final OperatorDefinition operation;
+    private final OpDef operation;
     @NotNull
     private SourceSegment source;
     @NotNull
@@ -41,7 +42,7 @@ public class BinaryOp implements Binary<var>, Operator {
 
 
     public BinaryOp(@NotNull DollarParser parser,
-                    @NotNull OperatorDefinition operation,
+                    @NotNull OpDef operation,
                     @NotNull Map2<var, var, var> function) {
         this.parser = parser;
         this.operation = operation;
@@ -50,7 +51,7 @@ public class BinaryOp implements Binary<var>, Operator {
     }
 
     public BinaryOp(boolean immediate,
-                    @NotNull OperatorDefinition operation,
+                    @NotNull OpDef operation,
                     @NotNull DollarParser parser,
                     @NotNull Map2<var, var, var> function) {
         this.immediate = immediate;

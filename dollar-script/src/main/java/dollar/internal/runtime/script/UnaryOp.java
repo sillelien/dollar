@@ -20,20 +20,21 @@ import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.parser.OpDef;
 import org.jparsec.functors.Map;
 import org.jparsec.functors.Unary;
 
 import java.util.Collections;
 
 public class UnaryOp implements Unary<var>, Operator {
-    protected final OperatorDefinition operation;
+    protected final OpDef operation;
     private final boolean immediate;
     protected SourceSegment source;
     protected DollarParser parser;
     private Map<var, var> function;
 
 
-    public UnaryOp(DollarParser parser, OperatorDefinition operation, Map<var, var> function) {
+    public UnaryOp(DollarParser parser, OpDef operation, Map<var, var> function) {
         this.operation = operation;
         this.function = function;
         this.parser = parser;
@@ -42,7 +43,7 @@ public class UnaryOp implements Unary<var>, Operator {
 
     public UnaryOp(boolean immediate,
                    Map<var, var> function,
-                   OperatorDefinition operation,
+                   OpDef operation,
                    DollarParser parser) {
         this.operation = operation;
         this.immediate = immediate;

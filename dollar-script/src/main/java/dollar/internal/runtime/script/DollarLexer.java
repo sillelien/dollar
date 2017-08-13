@@ -19,6 +19,8 @@ package dollar.internal.runtime.script;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
+import dollar.internal.runtime.script.parser.OpDef;
+import dollar.internal.runtime.script.parser.Symbols;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,8 +37,11 @@ import org.jparsec.pattern.Pattern;
 import org.jparsec.pattern.Patterns;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
+import static dollar.internal.runtime.script.parser.Symbols.*;
 import static org.jparsec.Parsers.or;
 import static org.jparsec.Parsers.token;
 
@@ -78,22 +83,21 @@ class DollarLexer {
     @NotNull
     static final Terminals OPERATORS = Terminals.operators(Symbols.SYMBOL_STRINGS);
     @NotNull
-    static final Parser<var> IDENTIFIER_KEYWORD = identifierKeyword();
+    static final Parser<?> TERMINATOR_SYMBOL = or(OP(NEWLINE), OP(SEMI_COLON)).many1();
+    @NotNull
+    static final Parser<?> COMMA_TERMINATOR = Parsers.sequence(OP(COMMA), OP(NEWLINE).many());
+    @NotNull
+    static final Parser<?> COMMA_OR_NEWLINE_TERMINATOR = or(OP(COMMA), OP(NEWLINE)).many1();
+    @NotNull
+    static final Parser<?>
+            SEMICOLON_TERMINATOR =
+            or(OP(SEMI_COLON).followedBy(OP(NEWLINE).many()), OP(NEWLINE).many1());
     @NotNull
     private static final Terminals
             KEYWORDS =
             Terminals.operators(Symbols.KEYWORDS);
-
     @NotNull
-    static final Parser<?> TERMINATOR_SYMBOL = or(OP("\n"), OP(";")).many1();
-    @NotNull
-    static final Parser<?> COMMA_TERMINATOR = Parsers.sequence(OP(","), OP("\n").many());
-    @NotNull
-    static final Parser<?> COMMA_OR_NEWLINE_TERMINATOR = or(OP(","), OP("\n")).many1();
-    @NotNull
-    static final Parser<?>
-            SEMICOLON_TERMINATOR =
-            or(OP(";").followedBy(OP("\n").many()), OP("\n").many1());
+    static final Parser<var> IDENTIFIER_KEYWORD = identifierKeyword();
     @NotNull
     private static final Map<String, Tokens.Fragment> BACKTICK_QUOTE_STRING = new Map<String, Tokens.Fragment>() {
         public Tokens.Fragment map(@NotNull String text) {
@@ -220,8 +224,14 @@ class DollarLexer {
     }
 
 
-    static Parser<?> OP(@NotNull String name, @NotNull String keyword) {
-        return OPERATORS.token(name).or(KEYWORDS.token(keyword));
+    static Parser<?> OP(@NotNull OpDef op) {
+        if (op.symbol() == null) {
+            return KEYWORDS.token(op.keyword());
+        }
+        if (op.keyword() == null) {
+            return OPERATORS.token(op.symbol());
+        }
+        return OPERATORS.token(op.symbol()).or(KEYWORDS.token(op.keyword()));
     }
 
 // --Commented out by Inspection START (04/12/14 18:27):
@@ -230,21 +240,21 @@ class DollarLexer {
 //    }
 // --Commented out by Inspection STOP (04/12/14 18:27)
 
-    static Parser<?> OP_NL(String... names) {
-        return OPERATORS.token(names).followedBy(OP("\n").many());
+    static Parser<?> OP_NL(HasSymbol... names) {
+        return OPERATORS.token(symbolsToString(names)).followedBy(OP(NEWLINE).many());
     }
 
     @NotNull
-    static Parser<?> OP(@NotNull String name) {
-        return OPERATORS.token(name);
+    static Parser<?> OP(@NotNull HasSymbol symbol) {
+        return OPERATORS.token(symbolsToString(symbol));
     }
 
-    static Parser<?> KEYWORD_NL(String... names) {
-        return KEYWORDS.token(names).followedBy(OP("\n").many());
+    static Parser<?> KEYWORD_NL(HasKeyword... names) {
+        return KEYWORDS.token(keywordsToString(names)).followedBy(OP(NEWLINE).many());
     }
 
-    static Parser<?> NL_OP(String... names) {
-        return OP("\n").many().followedBy(OPERATORS.token(names));
+    static Parser<?> NL_OP(HasSymbol... names) {
+        return OP(NEWLINE).many().followedBy(OPERATORS.token(symbolsToString(names)));
     }
 
     public static Parser<String> identifierTokenizer() {
@@ -309,8 +319,8 @@ class DollarLexer {
 
 
     private static Parser<var> identifierKeyword() {
-        return or(KEYWORD("true"), KEYWORD("false"), KEYWORD("yes"), KEYWORD("no"), KEYWORD("null"), KEYWORD("void"),
-                  KEYWORD("infinity"))
+        return or(KEYWORD(TRUE), KEYWORD(FALSE), KEYWORD(YES), KEYWORD(NO), KEYWORD(NULL), KEYWORD(VOID),
+                  KEYWORD(INFINITY))
                        .map(new Map<Object, var>() {
                            @NotNull
                            @Override
@@ -338,8 +348,18 @@ class DollarLexer {
     }
 
     @NotNull
-    static Parser<?> KEYWORD(String... names) {
-        return KEYWORDS.token(names);
+    static Parser<?> KEYWORD(HasKeyword... names) {
+        return KEYWORDS.token(keywordsToString(names));
+    }
+
+    @NotNull
+    private static String[] keywordsToString(HasKeyword... names) {
+        return Arrays.stream(names).map(HasKeyword::keyword).collect(Collectors.toList()).toArray(new String[names.length]);
+    }
+
+    @NotNull
+    private static String[] symbolsToString(HasSymbol... names) {
+        return Arrays.stream(names).map(HasSymbol::symbol).collect(Collectors.toList()).toArray(new String[names.length]);
     }
 
     public static class TokenTagMap implements TokenMap<String> {

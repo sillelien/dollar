@@ -32,8 +32,8 @@ import static com.sillelien.dollar.api.DollarStatic.*;
 import static com.sillelien.dollar.api.types.DollarFactory.fromValue;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 import static dollar.internal.runtime.script.DollarScriptSupport.inSubScope;
-import static dollar.internal.runtime.script.Symbols.EACH;
-import static dollar.internal.runtime.script.Symbols.REDUCE;
+import static dollar.internal.runtime.script.parser.Symbols.EACH;
+import static dollar.internal.runtime.script.parser.Symbols.REDUCE;
 
 public class Func {
     @NotNull
@@ -213,5 +213,9 @@ public class Func {
     @NotNull
     public static var listenFunc(var lhs, var rhs) {
         return lhs.isTrue() ? fix(rhs, false) : $void();
+    }
+
+    public static var readFunc(var from) {
+        return DollarFactory.fromURI(from).$read();
     }
 }

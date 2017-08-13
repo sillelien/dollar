@@ -36,7 +36,7 @@ import java.util.UUID;
 
 import static dollar.internal.runtime.script.DollarScriptSupport.createNode;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
-import static dollar.internal.runtime.script.Symbols.CAUSES;
+import static dollar.internal.runtime.script.parser.Symbols.CAUSES;
 
 public class CausesOperator implements Binary<var>, Operator {
     @NotNull

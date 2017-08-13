@@ -14,15 +14,17 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.parser;
 
-public class SymbolDefinition implements HasSymbol {
-    private String symbol;
+import dollar.internal.runtime.script.HasKeyword;
 
-    public SymbolDefinition(String symbol) {this.symbol = symbol;}
+public class KeywordDef implements HasKeyword {
+    private String keyword;
+
+    public KeywordDef(String keyword) {this.keyword = keyword;}
 
     @Override
-    public String symbol() {
-        return symbol;
+    public String keyword() {
+        return keyword;
     }
 }

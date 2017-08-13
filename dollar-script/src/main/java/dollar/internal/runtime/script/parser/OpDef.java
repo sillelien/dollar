@@ -14,12 +14,14 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.parser;
 
+import dollar.internal.runtime.script.HasKeyword;
+import dollar.internal.runtime.script.HasSymbol;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class OperatorDefinition implements HasSymbol, HasKeyword {
+public class OpDef implements HasSymbol, HasKeyword {
     @NotNull
     private String symbol;
     @Nullable
@@ -29,10 +31,10 @@ public class OperatorDefinition implements HasSymbol, HasKeyword {
     @Nullable
     private String description;
 
-    public OperatorDefinition(@NotNull String symbol,
-                              @Nullable String keyword,
-                              @Nullable String name,
-                              @Nullable String description) {
+    public OpDef(@NotNull String symbol,
+                 @Nullable String keyword,
+                 @Nullable String name,
+                 @Nullable String description) {
 
         this.symbol = symbol;
         this.keyword = keyword;
@@ -55,7 +57,7 @@ public class OperatorDefinition implements HasSymbol, HasKeyword {
         return description;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public String symbol() {
         return symbol;

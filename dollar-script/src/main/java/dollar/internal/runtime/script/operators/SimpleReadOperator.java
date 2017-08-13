@@ -24,7 +24,7 @@ import dollar.internal.runtime.script.UnaryOp;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 
-import static dollar.internal.runtime.script.Symbols.READ;
+import static dollar.internal.runtime.script.parser.Symbols.READ;
 
 public class SimpleReadOperator extends UnaryOp {
 
