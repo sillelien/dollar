@@ -24,18 +24,20 @@ import dollar.internal.runtime.script.UnaryOp;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 
+import static dollar.internal.runtime.script.Symbols.READ;
+
 public class SimpleReadOperator extends UnaryOp {
 
 
     public SimpleReadOperator(@NotNull DollarParser parser) {
-        super("simple-read", null, parser);
+        super(parser, READ, null);
     }
 
 
     @NotNull
     @Override
     public var map(@NotNull var from) {
-        return DollarScriptSupport.createReactiveNode(operation, SourceNodeOptions.NO_SCOPE, source, parser, from,
+        return DollarScriptSupport.createReactiveNode(operation.name(), SourceNodeOptions.NO_SCOPE, source, parser, from,
                                                       args -> DollarFactory.fromURI(from).$read()
         );
     }

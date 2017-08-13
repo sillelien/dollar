@@ -927,7 +927,7 @@ Modules can be imported using the `module` keyword and a string representing in 
 ```dollar
 const chat:= module "github:neilellis:dollar-example-module::chat.ds" (channel="test")
 var sub= chat.server()
-chat.stop()
+chat.stop_()
 ```
 
 Let's start by breaking down the module URI. Okay our first part says it's the GitHub scheme and so the GitHub module locator will be used. Next we say the repository belongs to neilellis and the repository is called dollar-example-module. The next part is the optional branch indicator - here we are using the master, so we just leave that empty. Finally we can optionally supply the name of a single script we want to import. If we don't provide that then the main script from the modules 'module.json' file will be used.
@@ -971,9 +971,9 @@ export def server  {
         }
     };
 
-export def stop {stop(www);stop(redis); @@ [state(www),state(redis)]}
+export def stop_ {STOP(www);STOP(redis); @@ [STATE(www),STATE(redis)]}
 
-export def state [state(www),state(redis)]
+export def state_ [STATE(www),STATE(redis)]
 ```
 
 

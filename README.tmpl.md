@@ -126,10 +126,18 @@ docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pw
  
  
 ## Research & Background Reading
+### Language Design
 
 http://www.drdobbs.com/architecture-and-design/so-you-want-to-write-your-own-language/240165488
 
 https://www.youtube.com/watch?v=Sg4U4r_AgJU
 
+### Lambdas and Scope Closure
+
+https://martinfowler.com/bliki/Lambda.html
+
+### Font Ligatures
+
+https://github.com/tonsky/FiraCode
 
 $BLURB

@@ -16,14 +16,14 @@
 //Pass some parameters to the module. The module has a brand new scope so only has access to these parameters passed in.
 const chat:= module "github:neilellis:dollar-example-module::chat.ds" (channel="test",hello="world")
 var sub= chat.server()
-@@ chat.state
+@@ chat.state_
 //chat.state <=> ["RUNNING","INITIAL"]
 sub.unsub()
-@@ chat.state
-chat.stop()
-@@ chat.state
+@@ chat.state_
+chat.stop_()
+@@ chat.state_
 SLEEP(1 Second)
-& chat.state <=> ["STOPPED","STOPPED"]
+//chat.state_ <=> ["STOPPED","STOPPED"]
 
 
 const id= (module "github:neilellis:dollar-example-module:0.1.0:branch.ds").value

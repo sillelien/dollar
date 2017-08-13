@@ -21,38 +21,34 @@ import com.sillelien.dollar.api.ControlFlowAware;
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.NumericAware;
 import com.sillelien.dollar.api.URIAware;
-import com.sillelien.dollar.api.collections.Range;
+import com.sillelien.dollar.api.VarInternal;
 import com.sillelien.dollar.api.execution.DollarExecutor;
 import com.sillelien.dollar.api.plugin.Plugins;
-import com.sillelien.dollar.api.types.DollarFactory;
-import com.sillelien.dollar.api.types.ErrorType;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.ParserErrorHandler;
 import dollar.internal.runtime.script.api.ParserOptions;
 import dollar.internal.runtime.script.api.Scope;
-import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
-import dollar.internal.runtime.script.api.exceptions.DollarScriptFailureException;
 import dollar.internal.runtime.script.java.JavaScriptingSupport;
 import dollar.internal.runtime.script.operators.AssertOperator;
 import dollar.internal.runtime.script.operators.AssignmentOperator;
 import dollar.internal.runtime.script.operators.BlockOperator;
 import dollar.internal.runtime.script.operators.CastOperator;
+import dollar.internal.runtime.script.operators.CausesOperator;
 import dollar.internal.runtime.script.operators.CollectOperator;
 import dollar.internal.runtime.script.operators.DefinitionOperator;
 import dollar.internal.runtime.script.operators.EveryOperator;
 import dollar.internal.runtime.script.operators.ForOperator;
+import dollar.internal.runtime.script.operators.Func;
 import dollar.internal.runtime.script.operators.FunctionCallOperator;
 import dollar.internal.runtime.script.operators.IfOperator;
 import dollar.internal.runtime.script.operators.IsOperator;
-import dollar.internal.runtime.script.operators.ListenOperator;
 import dollar.internal.runtime.script.operators.MapOperator;
 import dollar.internal.runtime.script.operators.ModuleOperator;
 import dollar.internal.runtime.script.operators.ParameterOperator;
 import dollar.internal.runtime.script.operators.PipeOperator;
 import dollar.internal.runtime.script.operators.ReadOperator;
 import dollar.internal.runtime.script.operators.SimpleReadOperator;
-import dollar.internal.runtime.script.operators.SubscribeOperator;
 import dollar.internal.runtime.script.operators.SubscriptOperator;
 import dollar.internal.runtime.script.operators.UnitOperator;
 import dollar.internal.runtime.script.operators.VariableUsageOperator;
@@ -86,22 +82,23 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-import static com.sillelien.dollar.api.DollarStatic.*;
-import static com.sillelien.dollar.api.types.DollarFactory.fromValue;
+import static com.sillelien.dollar.api.DollarStatic.$;
+import static com.sillelien.dollar.api.DollarStatic.$void;
 import static dollar.internal.runtime.script.DollarLexer.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.OperatorPriority.*;
+import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
+import static dollar.internal.runtime.script.Symbols.*;
 import static java.util.Collections.emptyList;
 import static org.jparsec.Parsers.*;
 
 public class DollarParserImpl implements DollarParser {
     public static final String NAMED_PARAMETER_META_ATTR = "__named_parameter";
-
+    @Nullable
+    public static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
     //Lexer
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("DollarParser");
-    @Nullable
-    private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
     private final ClassLoader classLoader;
     private final ParserErrorHandler errorHandler = new ParserErrorHandlerImpl();
     private final ConcurrentHashMap<String, var> exports = new ConcurrentHashMap<>();
@@ -284,9 +281,7 @@ public class DollarParserImpl implements DollarParser {
                            .between(OP("("), OP(")"))
                            .or(or(unitValue(pure), list(ref.lazy(), pure), map(ref.lazy(), pure),
                                   pureDeclarationOperator(ref, pure),
-                                  KEYWORD("pure").next(
-                                          expression(null,
-                                                     true)),
+                                  KEYWORD("pure").next(expression(null, true)),
                                   moduleStatement(ref), assertOperator(ref, pure),
                                   collectStatement(ref.lazy(), pure),
                                   whenStatement(ref.lazy(), pure), everyStatement(ref.lazy(), pure),
@@ -294,28 +289,8 @@ public class DollarParserImpl implements DollarParser {
                                   java(), URL, DECIMAL_LITERAL, INTEGER_LITERAL,
                                   STRING_LITERAL,
                                   dollarIdentifier(ref, pure), IDENTIFIER_KEYWORD,
-                                  BUILTIN.token().map(new Map<Token, var>() {
-                                      public var map(@NotNull Token token) {
-                                          final var v = (var) token.value();
-                                          return createReactiveNode(
-                                                  v.toHumanString(), SourceNodeOptions.NO_SCOPE, DollarParserImpl.this, token,
-                                                  v,
-                                                  args -> Builtins.execute(v.toHumanString(), Arrays
-                                                                                                      .asList(),
-                                                                           pure)
-                                          );
-                                      }
-                                  }),
-                                  identifier().followedBy(OP("(").not().peek()).token().map(
-                                          new Map<Token, var>() {
-                                              public var map(@NotNull Token token) {
-//                                    log.debug("GET (parsing) " + currentScope());
-//                                    new Throwable().printStackTrace(System.err);
-                                                  return getVariable(pure, token.value().toString(),
-                                                                     false, null, token,
-                                                                     DollarParserImpl.this);
-                                              }
-                                          })))
+                                  builtin(pure),
+                                  variableRef(pure)))
                            .or(block(ref.lazy(), pure).between(OP_NL("{"), NL_OP("}")));
         } else {
             main = ref.lazy()
@@ -331,272 +306,118 @@ public class DollarParserImpl implements DollarParser {
                                   INTEGER_LITERAL,
                                   STRING_LITERAL,
                                   IDENTIFIER_KEYWORD,
-                                  identifier().followedBy(OP("(").not().peek()).token().map(
-                                          new Map<Token, var>() {
-                                              public var map(@NotNull Token token) {
-                                                  return getVariable(pure, token.value().toString(),
-                                                                     false, null,
-                                                                     token, DollarParserImpl.this);
-                                              }
-                                          }),
-                                  BUILTIN.token().map(new Map<Token, var>() {
-                                      public var map(@NotNull Token token) {
-                                          final var v = (var) token.value();
-                                          return createReactiveNode(
-                                                  v.toHumanString(), SourceNodeOptions.NO_SCOPE, DollarParserImpl.this, token,
-                                                  v,
-                                                  args -> Builtins.execute(v.toHumanString(),
-                                                                           emptyList(), pure)
-                                          );
-                                      }
-                                  })))
+                                  variableRef(pure),
+                                  builtin(pure)))
                            .or(block(ref.lazy(), pure).between(OP_NL("{"), NL_OP("}")));
         }
 
-        OperatorTable<var> table = new OperatorTable<var>()
-                                           .infixl(op(new BinaryOp(this, "not-equal",
-                                                                   (lhs, rhs) -> $(
-                                                                           !lhs.equals(rhs))),
-                                                      "!="),
-                                                   EQUIVALENCE_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "equal", (lhs, rhs) -> $(
-                                                   lhs.equals(rhs))), "=="), EQUIVALENCE_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "and", (lhs, rhs) -> $(
-                                                   lhs.isTrue() && rhs.isTrue())), "&&", "and"),
-                                                   LOGICAL_AND_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "or", (lhs, rhs) -> $(
-                                                   lhs.isTrue() || rhs.isTrue())), "||", "or"),
-                                                   LOGICAL_OR_PRIORITY)
-                                           .postfix(pipeOperator(ref, pure), PIPE_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "range",
-                                                                   (lhs, rhs) -> fromValue(
-                                                                           new Range(lhs, rhs))),
-                                                      ".."),
-                                                   RANGE_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "less-than",
-                                                                   (lhs, rhs) -> $(
-                                                                           lhs.compareTo(rhs) < 0)),
-                                                      "<"),
-                                                   COMPARISON_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "greater-than",
-                                                                   (lhs, rhs) -> $(
-                                                                           lhs.compareTo(rhs) > 0)),
-                                                      ">"),
-                                                   EQUIVALENCE_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "less-than-equal",
-                                                                   (lhs, rhs) -> $(lhs.compareTo(
-                                                                           rhs) <= 0)), "<="),
-                                                   EQUIVALENCE_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "greater-than-equal",
-                                                                   (lhs, rhs) -> $(lhs.compareTo(
-                                                                           rhs) >= 0)), ">="),
-                                                   EQUIVALENCE_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "multiply", (lhs, rhs) -> {
-                                               final var lhsFix = lhs._fix(false);
-                                               if (Arrays.asList("block", "map", "list").contains(
-                                                       lhs.getMetaAttribute("operation"))) {
-                                                   var newValue = lhsFix._fixDeep(false);
-                                                   Long max = rhs.toLong();
-                                                   for (int i = 1; i < max; i++) {
-                                                       newValue = newValue.$plus(lhs._fixDeep());
-                                                   }
-                                                   return newValue;
-                                               } else {
-                                                   return lhsFix.$multiply(rhs);
-                                               }
-                                           }), "*"), MULTIPLY_DIVIDE_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "divide",
-                                                                   NumericAware::$divide), "/"),
-                                                   MULTIPLY_DIVIDE_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "modulus",
-                                                                   NumericAware::$modulus), "%"),
-                                                   MULTIPLY_DIVIDE_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "plus", var::$plus), "+"),
-                                                   PLUS_MINUS_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "minus", var::$minus),
-                                                      "-"), PLUS_MINUS_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "pair",
-                                                                   (lhs, rhs) -> $(lhs.$S(), rhs)),
-                                                      ":"), 30)
-
-                                           .infixl(assertEqualsOp(false, "<=>"),
-                                                   LINE_PREFIX_PRIORITY)
-                                           .infixl(assertEqualsOp(true, "<->"),
-                                                   LINE_PREFIX_PRIORITY)
-                                           .prefix(op(
-                                                   new UnaryOp("truthy", i -> $(i.truthy()), this),
-                                                   "~", "truthy"), UNARY_PRIORITY)
-                                           .prefix(op(new UnaryOp("size", var::$size, this), "#",
-                                                      "size"), UNARY_PRIORITY)
-                                           .infixl(op(new BinaryOp(
-                                                                          this, "else",
-                                                                          (lhs, rhs) -> {
-                                                                              final var fixLhs = lhs._fixDeep();
-                                                                              if (fixLhs.isBoolean() && fixLhs.isFalse()) {
-                                                                                  return rhs._fix(2,
-                                                                                                  false);
-                                                                              } else {
-                                                                                  return fixLhs;
-                                                                              }
-                                                                          }), "-:", "else"),
-                                                   IF_PRIORITY)
-                                           .prefix(ifOperator(ref), IF_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "in",
-                                                                   (lhs, rhs) -> rhs.$contains(
-                                                                           lhs)), "€", "in"),
-                                                   IN_PRIORITY)
-                                           .prefix(op(new UnaryOp("error",
-                                                                  v -> currentScope().addErrorHandler(
-                                                                          v), this), "!?#*!",
-                                                      "error"), LINE_PREFIX_PRIORITY)
-                                           .postfix(isOperator(), EQUIVALENCE_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "each", (lhs, rhs) -> {
-                                                       return lhs.$each(i -> inSubScope(false, pure, "each",
-                                                                                        newScope -> {
-                                                                                            newScope.setParameter(
-                                                                                                    "1",
-                                                                                                    i[0]);
-                                                                                            return rhs._fixDeep(
-                                                                                                    false);
-                                                                                        }));
-                                                   }), "=>>", "each"),
-                                                   MULTIPLY_DIVIDE_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "reduce", (lhs, rhs) -> {
-                                               return lhs.$list().$stream(false).reduce((x, y) -> {
-                                                   try {
-                                                       return inSubScope(false, pure,
-                                                                         "reduce",
-                                                                         newScope -> {
-                                                                             newScope.setParameter(
-                                                                                     "1", x);
-                                                                             newScope.setParameter(
-                                                                                     "2", y);
-                                                                             return rhs._fixDeep(
-                                                                                     false);
-                                                                         });
-                                                   } catch (Exception e) {
-                                                       throw new DollarScriptException(e);
-                                                   }
-                                               }).get();
-                                           }), ">>=", "reduce"), MULTIPLY_DIVIDE_PRIORITY)
-                                           .infixl(op(new ListenOperator(pure, this), "=>",
-                                                      "causes"), CONTROL_FLOW_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "listen",
-                                                                   (lhs, rhs) -> lhs.isTrue() ? fix(
-                                                                           rhs, false) : $void()),
-                                                      "?"),
-                                                   CONTROL_FLOW_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "choose", ControlFlowAware::$choose), "?*", "choose"),
-                                                   CONTROL_FLOW_PRIORITY)
-                                           .infixl(op(new BinaryOp(this, "default", var::$default),
-                                                      ":-", "default"), MEMBER_PRIORITY)
-                                           .postfix(memberOperator(ref), MEMBER_PRIORITY)
-                                           .prefix(op(new UnaryOp("not", v -> $(!v.isTrue()), this),
-                                                      "!", "not"), UNARY_PRIORITY)
-                                           .postfix(op(new UnaryOp("dec", var::$dec, this), "--"),
-                                                    INC_DEC_PRIORITY)
-                                           .postfix(op(new UnaryOp("inc", var::$inc, this), "++"),
-                                                    INC_DEC_PRIORITY)
-                                           .prefix(op(new UnaryOp("negate", var::$negate, this),
-                                                      "-"), UNARY_PRIORITY)
-                                           .prefix(op(new UnaryOp(true, v -> v._fixDeep(true),
-                                                                  "parallel", this), "|:|",
-                                                      "parallel"),
-                                                   SIGNAL_PRIORITY)
-                                           .prefix(op(new UnaryOp(true, v -> v._fixDeep(false),
-                                                                  "serial", this), "|..|",
-                                                      "serial"),
-                                                   SIGNAL_PRIORITY)
-                                           .prefix(forOperator(ref, pure), UNARY_PRIORITY)
-                                           .prefix(whileOperator(ref, pure), UNARY_PRIORITY)
-                                           .postfix(subscriptOperator(ref), MEMBER_PRIORITY)
-                                           .postfix(parameterOperator(ref, pure), MEMBER_PRIORITY)
-                                           .prefix(op(
-                                                   new UnaryOp(true, v -> v._fixDeep(false),
-                                                               "fix",
-                                                               this), "&", "fix"), 1000)
-                                           .postfix(castOperator(), UNARY_PRIORITY)
-                                           .prefix(variableUsageOperator(pure), 1000)
-                                           .prefix(assignmentOperator(ref, pure),
-                                                   ASSIGNMENT_PRIORITY)
-                                           .prefix(definitionOperator(ref, pure),
-                                                   ASSIGNMENT_PRIORITY);
+        OperatorTable<var> table = new OperatorTable<var>();
+        table = table.infixl(op(INEQUALITY_OPERATOR, new BinaryOp(this, INEQUALITY_OPERATOR, Func::inequality)), EQ_PRIORITY)
+                        .infixl(op(EQUALITY, new BinaryOp(this, EQUALITY, Func::equality)), EQ_PRIORITY)
+                        .infixl(op(AND, new BinaryOp(this, AND, Func::and)), AND_PRIORITY)
+                        .infixl(op(OR, new BinaryOp(this, OR, Func::orFunc)), LOGICAL_OR_PRIORITY)
+                        .postfix(pipeOperator(ref, pure), PIPE_PRIORITY)
+                        .infixl(op(RANGE, new BinaryOp(this, RANGE, Func::range)), RANGE_PRIORITY)
+                        .infixl(op(LT, new BinaryOp(this, LT, Func::lt)), COMP_PRIORITY)
+                        .infixl(op(GT, new BinaryOp(this, GT, Func::gt)), EQ_PRIORITY)
+                        .infixl(op(LT_EQUALS, new BinaryOp(this, LT_EQUALS, Func::lte)), EQ_PRIORITY)
+                        .infixl(op(GT_EQUALS, new BinaryOp(this, GT_EQUALS, Func::gte)), EQ_PRIORITY)
+                        .infixl(op(MULTIPLY, new BinaryOp(this, MULTIPLY, Func::multiply)), MULTIPLY_DIVIDE_PRIORITY)
+                        .infixl(op(DIVIDE, new BinaryOp(this, DIVIDE, NumericAware::$divide)), MULTIPLY_DIVIDE_PRIORITY)
+                        .infixl(op(MOD, new BinaryOp(this, MOD, NumericAware::$modulus)), MULTIPLY_DIVIDE_PRIORITY)
+                        .infixl(op(PLUS, new BinaryOp(this, PLUS, var::$plus)), PLUS_MINUS_PRIORITY)
+                        .infixl(op(NEGATE, new BinaryOp(this, NEGATE, var::$minus)), PLUS_MINUS_PRIORITY)
+                        .infixl(op(PAIR, new BinaryOp(this, PAIR, Func::pair)), 30)
+                        .infixl(op(ASSERT_EQ_REACT, new BinaryOp(false, ASSERT_EQ_REACT, this, Func::assertEquals)),
+                                LINE_PREFIX_PRIORITY)
+                        .infixl(op(ASSERT_EQ_UNREACT, new BinaryOp(true, ASSERT_EQ_UNREACT, this, Func::assertEquals)),
+                                LINE_PREFIX_PRIORITY)
+                        .prefix(op(TRUTHY, new UnaryOp(this, TRUTHY, Func::truthy)), UNARY_PRIORITY)
+                        .prefix(op(SIZE, new UnaryOp(this, SIZE, var::$size)), UNARY_PRIORITY)
+                        .infixl(op(ELSE, new BinaryOp(this, ELSE, Func::elseFunc)), IF_PRIORITY)
+                        .prefix(ifOperator(ref), IF_PRIORITY)
+                        .infixl(op(IN, new BinaryOp(this, IN, (lhs, rhs) -> rhs.$contains(lhs))), IN_PRIORITY)
+                        .prefix(op(ERROR, new UnaryOp(this, ERROR, Func::error)), LINE_PREFIX_PRIORITY)
+                        .postfix(isOperator(), EQ_PRIORITY)
+                        .infixl(op(EACH, new BinaryOp(this, EACH, (lhs, rhs) -> Func.each(pure, lhs, rhs))),
+                                MULTIPLY_DIVIDE_PRIORITY)
+                        .infixl(op(REDUCE, new BinaryOp(this, REDUCE, (lhs, rhs) -> Func.reduce(pure, lhs, rhs))),
+                                MULTIPLY_DIVIDE_PRIORITY)
+                        .infixl(op(CAUSES, new CausesOperator(pure, this)), CONTROL_FLOW_PRIORITY)
+                        .infixl(op(LISTEN, new BinaryOp(this, LISTEN, Func::listenFunc)), CONTROL_FLOW_PRIORITY)
+                        .infixl(op(CHOOSE, new BinaryOp(this, CHOOSE, ControlFlowAware::$choose)), CONTROL_FLOW_PRIORITY)
+                        .infixl(op(DEFAULT, new BinaryOp(this, DEFAULT, var::$default)), MEMBER_PRIORITY)
+                        .postfix(memberOperator(ref), MEMBER_PRIORITY)
+                        .prefix(op(NOT, new UnaryOp(this, NOT, Func::notFunc)), UNARY_PRIORITY)
+                        .postfix(op(DEC, new UnaryOp(this, DEC, var::$dec)), INC_DEC_PRIORITY)
+                        .postfix(op(INC, new UnaryOp(this, INC, var::$inc)), INC_DEC_PRIORITY)
+                        .prefix(op(NEGATE, new UnaryOp(this, NEGATE, var::$negate)), UNARY_PRIORITY)
+                        .prefix(op(PARALLEL, new UnaryOp(true, Func::parallelFunc, PARALLEL, this)), SIGNAL_PRIORITY)
+                        .prefix(unaryOp(), SIGNAL_PRIORITY)
+                        .prefix(forOperator(ref, pure), UNARY_PRIORITY)
+                        .prefix(whileOperator(ref, pure), UNARY_PRIORITY)
+                        .postfix(subscriptOperator(ref), MEMBER_PRIORITY)
+                        .postfix(parameterOperator(ref, pure), MEMBER_PRIORITY)
+                        .prefix(op(FIX, new UnaryOp(true, VarInternal::_fixDeep, FIX, this)), 1000)
+                        .postfix(castOperator(), UNARY_PRIORITY)
+                        .prefix(variableUsageOperator(pure), 1000)
+                        .prefix(assignmentOperator(ref, pure), ASSIGNMENT_PRIORITY)
+                        .prefix(definitionOperator(ref, pure), ASSIGNMENT_PRIORITY);
 
         if (!pure) {
-            table = table.prefix(op(new UnaryOp(false, i -> {
-                i.out();
-                return $void();
-            }, "print", this), "@@", "print"), LINE_PREFIX_PRIORITY)
-                            .prefix(op(new UnaryOp(false, i -> {
-                                i.debug();
-                                return $void();
-                            }, "debug", this), "!!", "debug"), LINE_PREFIX_PRIORITY)
-                            .prefix(op(new UnaryOp(false, i -> {
-                                i.err();
-                                return $void();
-                            }, "err", this), "??", "err"), LINE_PREFIX_PRIORITY)
+            table = table.prefix(op(PRINT, new UnaryOp(false, Func::outFunc, PRINT, this)), LINE_PREFIX_PRIORITY)
+                            .prefix(op(DEBUG, new UnaryOp(false, Func::debugFunc, DEBUG, this)), LINE_PREFIX_PRIORITY)
+                            .prefix(op(ERR, new UnaryOp(false, Func::errFunc, ERR, this)), LINE_PREFIX_PRIORITY)
                             .prefix(writeOperator(ref), OUTPUT_PRIORITY)
                             .prefix(readOperator(), OUTPUT_PRIORITY)
-                            .prefix(op(new UnaryOp("stop", var::$stop, this), "<|"),
-                                    SIGNAL_PRIORITY)
-                            .prefix(op(new UnaryOp("start", var::$start, this), "|>"),
-                                    SIGNAL_PRIORITY)
-                            .prefix(op(new UnaryOp("pause", var::$pause, this), "||>"),
-                                    SIGNAL_PRIORITY)
-                            .prefix(op(new UnaryOp("unpause", var::$unpause, this), "<||"),
-                                    SIGNAL_PRIORITY)
-                            .prefix(op(new UnaryOp("destroy", var::$destroy, this), "<|||"),
-                                    SIGNAL_PRIORITY)
-                            .prefix(op(new UnaryOp("create", var::$create, this), "|||>"),
-                                    SIGNAL_PRIORITY)
-                            .prefix(op(new UnaryOp("state", var::$state, this), "<|>"),
-                                    SIGNAL_PRIORITY)
-                            .prefix(op(new UnaryOp("fork", v -> DollarFactory.fromFuture(
-                                    executor.executeInBackground(() -> fix(v, false))), this), "-<",
-                                       "fork"),
-                                    SIGNAL_PRIORITY)
-                            .infixl(op(new BinaryOp(this, "fork", (lhs, rhs) -> rhs.$publish(lhs)),
-                                       "*>",
-                                       "publish"), OUTPUT_PRIORITY)
-                            .infixl(op(new SubscribeOperator(pure, this), "<*", "subscribe"),
+                            .prefix(op(STOP, new UnaryOp(this, STOP, var::$stop)), SIGNAL_PRIORITY)
+                            .prefix(op(START, new UnaryOp(this, START, var::$start)), SIGNAL_PRIORITY)
+                            .prefix(op(PAUSE, new UnaryOp(this, PAUSE, var::$pause)), SIGNAL_PRIORITY)
+                            .prefix(op(UNPAUSE, new UnaryOp(this, UNPAUSE, var::$unpause)), SIGNAL_PRIORITY)
+                            .prefix(op(DESTROY, new UnaryOp(this, DESTROY, var::$destroy)), SIGNAL_PRIORITY)
+                            .prefix(op(CREATE, new UnaryOp(this, CREATE, var::$create)), SIGNAL_PRIORITY)
+                            .prefix(op(STATE, new UnaryOp(this, STATE, var::$state)), SIGNAL_PRIORITY)
+                            .prefix(op(FORK, new UnaryOp(this, FORK, Func::fork)), SIGNAL_PRIORITY)
+                            .infixl(op(PUBLISH, new BinaryOp(this, PUBLISH, Func::publishFunc)), OUTPUT_PRIORITY)
+                            .infixl(op(SUBSCRIBE, new BinaryOp(this, SUBSCRIBE, (lhs, rhs) -> Func.subscribeFunc(pure, lhs, rhs))),
                                     OUTPUT_PRIORITY)
-                            .infixl(op(new BinaryOp(this, "write-simple",
-                                                    (lhs, rhs) -> rhs.$write(lhs)), ">>"),
-                                    OUTPUT_PRIORITY)
-                            .prefix(op(new SimpleReadOperator(this), "<<"), OUTPUT_PRIORITY)
-                            .prefix(op(new UnaryOp("drain", URIAware::$drain, this), "<-<",
-                                       "drain"), OUTPUT_PRIORITY)
-                            .prefix(op(new UnaryOp("all", URIAware::$all, this), "<@", "all"),
-                                    OUTPUT_PRIORITY);
+                            .infixl(op(WRITE, new BinaryOp(this, WRITE, Func::writeFunc)), OUTPUT_PRIORITY)
+                            .prefix(op(READ, new SimpleReadOperator(this)), OUTPUT_PRIORITY)
+                            .prefix(op(DRAIN, new UnaryOp(this, DRAIN, URIAware::$drain)), OUTPUT_PRIORITY)
+                            .prefix(op(ALL, new UnaryOp(this, ALL, URIAware::$all)), OUTPUT_PRIORITY);
 
         }
         Parser<var> parser = table.build(main);
-
-        ref.set(parser.map(new Function<var, var>() {
-            @Override
-            public var apply(var var) {
-                return var;
-            }
-        }));
+        ref.set(parser);
         return parser;
 
     }
 
     @NotNull
-    private Parser<BinaryOp> assertEqualsOp(boolean immediate, String opStr) {
-        return op(new BinaryOp(immediate, "assert-equal", this, (lhs, rhs) -> {
+    private Parser<var> builtin(@NotNull boolean pure) {
+        return BUILTIN.token().map((Map<Token, var>) token -> {
+            final var v = (var) token.value();
+            return createReactiveNode(v.toHumanString(), NO_SCOPE, DollarParserImpl.this, token, v,
+                                      args -> Builtins.execute(v.toHumanString(), emptyList(), pure)
+            );
+        });
+    }
 
-            final var lhsFix = lhs._fixDeep(false);
-            final var rhsFix = rhs._fixDeep(false);
-            if (lhsFix.equals(rhsFix)) {
-                return $(true);
-            } else {
-                throw new DollarScriptFailureException(ErrorType.ASSERTION,
-                                                       lhsFix.toDollarScript() +
-                                                               " != " +
-                                                               rhsFix.toDollarScript());
-            }
-        }), opStr);
+    @NotNull
+    private Parser<var> variableRef(@NotNull boolean pure) {
+        return identifier().followedBy(OP("(").not().peek()).token().map(
+                new Map<Token, var>() {
+                    public var map(@NotNull Token token) {
+                        return getVariable(pure, token.value().toString(),
+                                           false, null,
+                                           token, DollarParserImpl.this);
+                    }
+                });
+    }
+
+    @NotNull
+    private Parser<UnaryOp> unaryOp() {
+        return op(SERIAL, new UnaryOp(true, v -> v._fixDeep(false), SERIAL, this));
     }
 
     private Parser<var> unitValue(boolean pure) {
@@ -701,7 +522,7 @@ public class DollarParserImpl implements DollarParser {
         }).token().map(new Function<Token, var>() {
             @Override
             public var apply(Token token) {
-                return DollarScriptSupport.createNode("java", SourceNodeOptions.NO_SCOPE, DollarParserImpl.this, token,
+                return DollarScriptSupport.createNode("java", NO_SCOPE, DollarParserImpl.this, token,
                                                       Arrays.asList($void()),
                                                       in -> JavaScriptingSupport.compile($void(),
                                                                                          (String) token
@@ -710,11 +531,10 @@ public class DollarParserImpl implements DollarParser {
         });
     }
 
-    private <T> Parser<T> op(T value, String name) {
-        return op(value, name, null);
-    }
 
-    private <T> Parser<T> op(T value, String name, @Nullable String keyword) {
+    private <T> Parser<T> op(OperatorDefinition def, T value) {
+        String name = def.symbol();
+        String keyword = def.keyword();
         Parser<?> parser;
         if (keyword == null) {
             parser = OP(name);
@@ -725,6 +545,18 @@ public class DollarParserImpl implements DollarParser {
         return parser.token().map(new SourceMapper<>(value));
 
     }
+
+//    private <T> Parser<T> op(T value, String name, @Nullable String keyword) {
+//        Parser<?> parser;
+//        if (keyword == null) {
+//            parser = OP(name);
+//        } else {
+//            parser = OP(name, keyword);
+//
+//        }
+//        return parser.token().map(new SourceMapper<>(value));
+//
+//    }
 
     private Parser<Map<? super var, ? extends var>> pipeOperator(@NotNull Parser.Reference<var> ref,
                                                                  boolean pure) {
@@ -773,7 +605,7 @@ public class DollarParserImpl implements DollarParser {
                             @Override
                             public var map(var lhs) {
                                 return createReactiveNode(
-                                        "." + rhs.toString(), SourceNodeOptions.NO_SCOPE, DollarParserImpl.this, rhs, lhs,
+                                        "." + rhs.toString(), NO_SCOPE, DollarParserImpl.this, rhs, lhs,
                                         (var) rhs.value(), args -> lhs.$(rhs.value().toString())
                                 );
                             }

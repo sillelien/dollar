@@ -36,10 +36,11 @@ import java.util.UUID;
 
 import static dollar.internal.runtime.script.DollarScriptSupport.createNode;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
+import static dollar.internal.runtime.script.Symbols.CAUSES;
 
-public class ListenOperator implements Binary<var>, Operator {
+public class CausesOperator implements Binary<var>, Operator {
     @NotNull
-    private static final Logger log = LoggerFactory.getLogger("ListenOperator");
+    private static final Logger log = LoggerFactory.getLogger("CausesOperator");
 
     private final boolean pure;
     @Nullable
@@ -48,7 +49,7 @@ public class ListenOperator implements Binary<var>, Operator {
     private DollarParser parser;
 
 
-    public ListenOperator(boolean pure, @NotNull DollarParser parser) {
+    public CausesOperator(boolean pure, @NotNull DollarParser parser) {
         this.pure = pure;
         this.parser = parser;
     }
@@ -58,7 +59,7 @@ public class ListenOperator implements Binary<var>, Operator {
     @Override
     public var map(@NotNull var lhs, @NotNull var rhs) {
         String id = UUID.randomUUID().toString();
-        return createNode("listen-" + id, SourceNodeOptions.NEW_SCOPE, parser, source, Arrays.asList(lhs, rhs), in -> {
+        return createNode(CAUSES.name(), SourceNodeOptions.NEW_SCOPE, parser, source, Arrays.asList(lhs, rhs), in -> {
             log.debug("Listening to " + lhs.getMetaObject("operation"));
             log.debug("Listening to " + lhs._source().getSourceMessage());
             String lhsFix = lhs.getMetaAttribute("variable");

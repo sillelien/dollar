@@ -33,7 +33,7 @@ public class BinaryOp implements Binary<var>, Operator {
     @NotNull
     private final Map2<var, var, var> function;
     @NotNull
-    private final String operation;
+    private final OperatorDefinition operation;
     @NotNull
     private SourceSegment source;
     @NotNull
@@ -41,7 +41,7 @@ public class BinaryOp implements Binary<var>, Operator {
 
 
     public BinaryOp(@NotNull DollarParser parser,
-                    @NotNull String operation,
+                    @NotNull OperatorDefinition operation,
                     @NotNull Map2<var, var, var> function) {
         this.parser = parser;
         this.operation = operation;
@@ -50,7 +50,7 @@ public class BinaryOp implements Binary<var>, Operator {
     }
 
     public BinaryOp(boolean immediate,
-                    @NotNull String operation,
+                    @NotNull OperatorDefinition operation,
                     @NotNull DollarParser parser,
                     @NotNull Map2<var, var, var> function) {
         this.immediate = immediate;
@@ -63,7 +63,7 @@ public class BinaryOp implements Binary<var>, Operator {
     @Override
     public var map(@NotNull var lhs, @NotNull var rhs) {
         if (immediate) {
-            final var lambda = DollarScriptSupport.createNode(operation, SourceNodeOptions.NO_SCOPE, parser,
+            final var lambda = DollarScriptSupport.createNode(operation.name(), SourceNodeOptions.NO_SCOPE, parser,
                                                               source,
                                                               Arrays.asList(lhs, rhs),
                                                               new Pipeable() {
@@ -76,7 +76,7 @@ public class BinaryOp implements Binary<var>, Operator {
 
         }
         //Lazy evaluation
-        return createReactiveNode(operation, SourceNodeOptions.NO_SCOPE, parser, source, lhs, rhs,
+        return createReactiveNode(operation.name(), SourceNodeOptions.NO_SCOPE, parser, source, lhs, rhs,
                                   args -> function.map(lhs, rhs));
     }
 

@@ -27,8 +27,8 @@ public interface OperatorPriority {
     int IN_PRIORITY = 400;
     int LINE_PREFIX_PRIORITY = 0;
     int PIPE_PRIORITY = 150;
-    int EQUIVALENCE_PRIORITY = 100;
-    int COMPARISON_PRIORITY = 150;
+    int EQ_PRIORITY = 100;
+    int COMP_PRIORITY = 150;
     int PLUS_MINUS_PRIORITY = 200;
     int OUTPUT_PRIORITY = 50;
     int IF_PRIORITY = 20;
@@ -36,7 +36,7 @@ public interface OperatorPriority {
     int CONTROL_FLOW_PRIORITY = 50;
     int MULTIPLY_DIVIDE_PRIORITY = 300;
     int RANGE_PRIORITY = 600;
-    int LOGICAL_AND_PRIORITY = 70;
+    int AND_PRIORITY = 70;
     int LOGICAL_OR_PRIORITY = 60;
     int SIGNAL_PRIORITY = 20;
 

@@ -26,14 +26,14 @@ import org.jparsec.functors.Unary;
 import java.util.Collections;
 
 public class UnaryOp implements Unary<var>, Operator {
-    protected final String operation;
+    protected final OperatorDefinition operation;
     private final boolean immediate;
     protected SourceSegment source;
     protected DollarParser parser;
     private Map<var, var> function;
 
 
-    public UnaryOp(String operation, Map<var, var> function, DollarParser parser) {
+    public UnaryOp(DollarParser parser, OperatorDefinition operation, Map<var, var> function) {
         this.operation = operation;
         this.function = function;
         this.parser = parser;
@@ -42,7 +42,7 @@ public class UnaryOp implements Unary<var>, Operator {
 
     public UnaryOp(boolean immediate,
                    Map<var, var> function,
-                   String operation,
+                   OperatorDefinition operation,
                    DollarParser parser) {
         this.operation = operation;
         this.immediate = immediate;
@@ -54,7 +54,7 @@ public class UnaryOp implements Unary<var>, Operator {
     public var map(var from) {
 
         if (immediate) {
-            final var lambda = DollarScriptSupport.createNode(operation, SourceNodeOptions.NO_SCOPE, parser,
+            final var lambda = DollarScriptSupport.createNode(operation.name(), SourceNodeOptions.NO_SCOPE, parser,
                                                               source,
                                                               Collections.singletonList(from),
                                                               new Pipeable() {
@@ -68,7 +68,8 @@ public class UnaryOp implements Unary<var>, Operator {
         }
 
         //Lazy evaluation
-        final var lambda = DollarScriptSupport.createReactiveNode(operation, SourceNodeOptions.NO_SCOPE, source, parser, from,
+        final var lambda = DollarScriptSupport.createReactiveNode(operation.name(), SourceNodeOptions.NO_SCOPE, source, parser,
+                                                                  from,
                                                                   args -> function.map(from));
         return lambda;
 

@@ -76,30 +76,14 @@ class DollarLexer {
     @NotNull
     static final Parser<var> URL = token(new TokenTagMap("uri")).map(DollarFactory::fromURI);
     @NotNull
-    private static final Terminals
-            KEYWORDS =
-            Terminals.operators("out", "err", "debug", "fix", "causes", "when", "if", "then", "for", "each", "fail",
-                                "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default",
-                                "debug", "error", "filter", "every", "until", "unless", "and", "or",
-                                "dispatch", "send", "publish", "subscribe", "emit", "drain",
-                                "all", "import", "reduce", "truthy", "is", "else", "const", "in", "true", "false",
-                                "yes", "no", "void", "error", "to", "from", "size", "as",
-                                "while", "collect", "module", "include", "export", "with", "parallel", "serial",
-                                "fork", "null", "volatile", "read", "write", "block", "mutate", "pure", "impure", "variant",
-                                "variance", "pluripotent", "vary", "varies", "infinity", "var", "readonly", "def");
+    static final Terminals OPERATORS = Terminals.operators(Symbols.SYMBOL_STRINGS);
     @NotNull
     static final Parser<var> IDENTIFIER_KEYWORD = identifierKeyword();
     @NotNull
     private static final Terminals
-            OPERATORS =
-            Terminals.operators("|", ">>", "<<", "->", "=>", ".:", "<=", ">=", "<-", "(", ")", "--", "++", ".", ":",
-                                "<", ">", "?", "?:", "!", "!!", ">&", "{", "}", ",", "$", "=", ";", "[", "]", "??",
-                                "!!", "*>", "==", "!=", "+", "-", "\n", ":=", "&", "&=", "@", "+>", "<+", "*>",
-                                "<*", ">>=", "|*", "=>>", "|>", "<|", "&>", "<&", "?>", "<?", "<-<", ">->",
-                                "=>", "<=>", "<->", "<$", "-_-", ":=", ":-",
-                                "::", "/", "%", "*", "&&", "||", "<=<", "<++", "\u2357", "~", "?$?", "-:", "..", "?..?",
-                                "€", "@@", "<@", "@>", "#", "!?#*!", "?*", "<|", "|>", "||>", "<||", "<|||", "|||>",
-                                "<|>", "=>", "|:|", "|..|", "-<", "?=", "*=");
+            KEYWORDS =
+            Terminals.operators(Symbols.KEYWORDS);
+
     @NotNull
     static final Parser<?> TERMINATOR_SYMBOL = or(OP("\n"), OP(";")).many1();
     @NotNull
