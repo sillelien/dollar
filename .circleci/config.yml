@@ -212,7 +212,7 @@ jobs:
               tail -n +2 /srv/jekyll/project/dollar-docs/src/main/resources/pages/scripting.md  > /srv/jekyll/project/dollar-docs/src/main/webapp/scripting.md
               cp -rf /root/workspace/gendocs/* /srv/jekyll/project/dollar-docs/src/main/webapp/_includes/
               jekyll build --source /srv/jekyll/project/dollar-docs/src/main/webapp/ --destination /srv/jekyll/workspace/docs
-              git add * _includes/*
+              git add *
               git commit -a -m "Updated docs from build [ci skip]"  || :
               git push || :
               cd /srv/jekyll
