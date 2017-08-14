@@ -45,14 +45,14 @@ jobs:
         - store_test_results:
             path: dollar-examples/target/surefire-reports
 
-        - run:
-            name: dist-files
-            command: mkdir -p /home/circleci/workspace/ && cp -rf /home/circleci/dollar/dist /home/circleci/workspace/
-
-        - persist_to_workspace:
-            root: /home/circleci/workspace
-            paths:
-              - dist
+#        - run:
+#            name: dist-files
+#            command: mkdir -p /home/circleci/workspace/ && cp -rf /home/circleci/dollar/dist /home/circleci/workspace/
+#
+#        - persist_to_workspace:
+#            root: /home/circleci/workspace
+#            paths:
+#              - dist
 
     promote:
       <<: *defaults
