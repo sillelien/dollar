@@ -375,6 +375,7 @@ workflows:
       - dist:
           requires:
             - build
+            - devdocs
           filters:
             branches:
               only: master
