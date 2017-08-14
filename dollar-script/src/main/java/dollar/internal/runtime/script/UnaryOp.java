@@ -20,6 +20,7 @@ import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.parser.OpDef;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.functors.Map;
@@ -40,6 +41,12 @@ public class UnaryOp implements Unary<var>, Operator {
         this.function = function;
         this.parser = parser;
         this.immediate = false;
+        if (operation.isReactive() == this.immediate) {
+            throw new DollarParserError("The operation " + operation.name() + " is marked as " + (operation.isReactive()
+                                                                                                          ? "reactive" : "unreactive") + " " +
+                                                "yet this operator is set to be " + (this.immediate
+                                                                                             ? "unreactive" : "reactive"));
+        }
     }
 
     public UnaryOp(boolean immediate,
@@ -50,6 +57,12 @@ public class UnaryOp implements Unary<var>, Operator {
         this.immediate = immediate;
         this.function = function;
         this.parser = parser;
+        if (operation.isReactive() == this.immediate) {
+            throw new DollarParserError("The operation " + operation.name() + " is marked as " + (operation.isReactive()
+                                                                                                          ? "reactive" : "unreactive") + " " +
+                                                "yet this operator is set to be " + (this.immediate
+                                                                                             ? "unreactive" : "reactive"));
+        }
     }
 
     @NotNull

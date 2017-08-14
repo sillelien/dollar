@@ -154,50 +154,71 @@ public class Symbols {
                                                    false, true, "<expression> '*'|'multiply'");
 
     @NotNull
-    public static final OpDef DIVIDE = new OpDef("/", "divide", "divide", "divide", false, true, null);
+    public static final OpDef DIVIDE = new OpDef("/", "divide", "divide",
+                                                 "Divides one value by another.", false, true,
+                                                 null);
 
     @NotNull
-    public static final OpDef START = new OpDef("|>", "start", "start", "start", false, false, null);
+    public static final OpDef START = new OpDef("|>", "start", "start",
+                                                "Starts a service described typically by a URI.",
+                                                true, true,
+                                                "('|>'|'start') <expression>");
 
     @NotNull
-    public static final OpDef STOP = new OpDef("<|", "stop", "stop", "stop", false, false, null);
+    public static final OpDef STOP = new OpDef("<|", "stop", "stop",
+                                               "Stops a service described typically by a URI.", false,
+                                               true,
+                                               "('<|'|'stop') <expression>");
 
     @NotNull
-    public static final OpDef PLUS = new OpDef("+", "plus", "plus", "plus", false, true, null);
+    public static final OpDef PLUS = new OpDef("+", "plus", "plus",
+                                               "Appends or adds two values.", false, true,
+                                               "<expression> ('+'|'plus') <expression>");
 
     @NotNull
-    public static final OpDef NEGATE = new OpDef("-", "negate", "negate", "negate", false, true, null);
+    public static final OpDef NEGATE = new OpDef("-", "negate", "negate",
+                                                 "Negates a value.", false, true, "('-'|'negate') <expression>");
+
 
     @NotNull
-    public static final SymbolDef NEWLINE = new SymbolDef("\n", false);
+    public static final OpDef PAUSE = new OpDef("||>", "pause", "pause",
+                                                "Pauses a service described typically by a URI.",
+                                                false, true,
+                                                "('||>'|'pause') <expression>");
 
     @NotNull
-    public static final OpDef PAUSE = new OpDef("||>", "pause", "pause", "pause", false, false, null);
+    public static final OpDef UNPAUSE = new OpDef("<||", "unpause", "unpause",
+                                                  "Un-pauses a service described typically by a URI.", false, true,
+                                                  "('<||'|'unpause') <expression>");
 
     @NotNull
-    public static final OpDef UNPAUSE = new OpDef("<||", "unpause", "unpause", "unpause", false, false, null);
+    public static final OpDef DESTROY = new OpDef("<|||", "destroy", "destroy",
+                                                  "destroy", false, true,
+                                                  "('<|||'|'destroy') <expression>");
 
     @NotNull
-    public static final OpDef DESTROY = new OpDef("<|||", "destroy", "destroy", "destroy", false, false, null);
+    public static final OpDef CREATE = new OpDef("|||>", "create", "create",
+                                                 "Creates a service described typically by a URI.", false, true,
+                                                 "('|||>'|'create') <expression>");
 
     @NotNull
-    public static final OpDef CREATE = new OpDef("|||>", "create", "create", "create", false, false, null);
+    public static final OpDef STATE = new OpDef("<|>", "state", "state",
+                                                "Returns the state of a service described typically by a URI.", false, true,
+                                                "('<|>'|'state') <expression>");
 
     @NotNull
-    public static final OpDef STATE = new OpDef("<|>", "state", "state", "state", false, false, null);
-
-    @NotNull
-    public static final OpDef DEFAULT = new OpDef(":-", "default", "default", "default", false, true, null);
+    public static final OpDef DEFAULT = new OpDef(":-", "default", "default",
+                                                  "default", false, true, null);
 
     @NotNull
     public static final OpDef PRINT = new OpDef("@@", "print", "print", "print", false, true, null);
 
     @NotNull
-    public static final OpDef PARALLEL = new OpDef("|:|", "parallel", "parallel", "parallel", false, true, null);
+    public static final OpDef PARALLEL = new OpDef("|:|", "parallel", "parallel", "parallel", false, false, null);
 
     @NotNull
     public static final OpDef SERIAL = new OpDef("|..|", "serial", "serial",
-                                                 "serial", false, true, null);
+                                                 "serial", false, false, null);
     @NotNull
     public static final OpDef FORK = new OpDef("-<", "fork", "fork", "fork", false, true, null);
 
@@ -227,7 +248,7 @@ public class Symbols {
     @NotNull
     public static final OpDef ASSERT_EQ_UNREACT = new OpDef("<->", "assert-equals",
                                                             "assert-equals",
-                                                            "assert-equals", false, true, null);
+                                                            "assert-equals", false, false, null);
     @NotNull
     public static final OpDef EACH = new OpDef("=>>", "each", "each", "each", false, true, null);
 
@@ -375,6 +396,8 @@ public class Symbols {
     @NotNull
     public static final SymbolDef COMMA = new SymbolDef(",", false);
 
+    @NotNull
+    public static final SymbolDef NEWLINE = new SymbolDef("\n", false);
 
     @NotNull
     public static final SymbolDef LEFT_BRACE = new SymbolDef("{", false);
