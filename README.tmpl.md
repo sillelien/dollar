@@ -9,9 +9,9 @@
 
 [![Join the chat at https://gitter.im/sillelien/dollar](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sillelien/dollar?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GitQ](https://gitq.com/badge.svg)](https://gitq.com/sillelien/dollar)
+[![Patreon](https://img.shields.io/badge/back_on-patreon-red.svg)](https://www.patreon.com/neilellis)
 
-
-
+Full documentation at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar) and the manual is at [http://sillelien.github.io/dollar/script.html](http://sillelien.github.io/dollar/script.html)
 
 ![dollar](assets/gh-title-dollar.png)
 
@@ -21,7 +21,9 @@ It is being designed for the needs of server-side development such as integratio
 
 **The language is currently in early but active development.**
 
-I'm also working full-time on this, if you wish to support efforts drop me some money at [https://www.paypal.me/neilellis](https://www.paypal.me/neilellis) every little helps!
+I'm also working full-time on this, if you wish to support efforts back me on [Patreon](https://www.patreon.com/neilellis):
+
+[![Patreon](https://img.shields.io/badge/back_on-patreon-red.svg)](https://www.patreon.com/neilellis)
 
 **Thanks!**
 

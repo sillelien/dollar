@@ -23,6 +23,7 @@ import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
@@ -342,8 +343,8 @@ public class DollarScriptSupport {
                                 }
                             }
                         }
-                    } catch (AssertionError e) {
-                        return parser.getErrorHandler().handle(scope, null, e);
+                    } catch (DollarAssertionException e) {
+                        throw e;
                     } catch (DollarScriptException e) {
                         return parser.getErrorHandler().handle(scope, null, e);
                     } catch (Exception e) {
@@ -474,7 +475,7 @@ public class DollarScriptSupport {
                 }
 
             }
-        } catch (AssertionError e) {
+        } catch (DollarAssertionException e) {
             return parser.getErrorHandler().handle(scope, null, e);
         } catch (DollarScriptException e) {
             return parser.getErrorHandler().handle(scope, null, e);
@@ -557,7 +558,7 @@ public class DollarScriptSupport {
     public static void popScope(Scope scope) {
         Scope poppedScope = endScope(true);
         if (!poppedScope.equals(scope)) {
-            throw new AssertionError("Popped scope does not equal expected scope");
+            throw new DollarAssertionException("Popped scope does not equal expected scope");
         }
     }
 

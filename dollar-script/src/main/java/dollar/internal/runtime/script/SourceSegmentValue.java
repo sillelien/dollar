@@ -18,6 +18,7 @@ package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.script.SourceSegment;
 import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.util.FNV;
 import org.jetbrains.annotations.NotNull;
@@ -80,7 +81,7 @@ public class SourceSegmentValue implements SourceSegment {
             return "<unknown location>";
         }
         if (index + length > source.length()) {
-            throw new AssertionError("Index="+index+" Length="+length+" SourceLength="+source.length()+" Source='"+source+"'");
+            throw new DollarParserError("Index=" + index + " Length=" + length + " SourceLength=" + source.length() + " Source='" + source + "'");
         }
         String[] lines = source.substring(0, index).split("\n");
         int line = lines.length;
@@ -108,7 +109,7 @@ public class SourceSegmentValue implements SourceSegment {
             return "<unknown location>";
         }
         if (index + length > source.length()) {
-            throw new AssertionError("Index="+index+" Length="+length+" SourceLength="+source.length()+" Source='"+source+"'");
+            throw new DollarAssertionException("Index=" + index + " Length=" + length + " SourceLength=" + source.length() + " Source='" + source + "'");
         }
         String[] lines = source.substring(0, index).split("\n");
         int line = lines.length;

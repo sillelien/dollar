@@ -14,26 +14,26 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script.api;
+package dollar.internal.runtime.script.api.exceptions;
 
 import com.sillelien.dollar.api.DollarException;
-import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
-import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
+public class DollarAssertionException extends DollarException {
+    public DollarAssertionException(Throwable e) {
+        super(e);
+    }
 
-public interface ParserErrorHandler {
+    public DollarAssertionException(String errorMessage) {
+        super(errorMessage);
+    }
 
-    @NotNull
-    var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull DollarAssertionException e);
+    public DollarAssertionException(Throwable t, String s) {
+        super(t, s);
+    }
 
-    @NotNull var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull DollarException e);
-
-    @NotNull var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull Exception e);
-
-    <T extends Throwable> void handleTopLevel(@NotNull T t, String name, File file) throws T;
-
+    public DollarAssertionException(@NotNull String s, @NotNull var rhs) {
+        super(s + ":\n" + rhs._source().getSourceMessage());
+    }
 }

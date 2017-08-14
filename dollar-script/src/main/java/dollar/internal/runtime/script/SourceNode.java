@@ -32,6 +32,7 @@ import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -245,9 +246,9 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 typeLearner.learn(operation, source, inputs, ((var) result).$type());
             }
             return result;
-        } catch (AssertionError e) {
+        } catch (DollarAssertionException e) {
             log.warn(e.getMessage(), e);
-            return parser.getErrorHandler().handle(currentScope(), source, e);
+            throw e;
         } catch (DollarException e) {
             log.warn(e.getMessage(), e);
             return parser.getErrorHandler().handle(currentScope(), source, e);

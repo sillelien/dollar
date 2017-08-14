@@ -23,6 +23,7 @@ import com.sillelien.dollar.api.collections.MultiMap;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.Variable;
+import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
@@ -179,7 +180,7 @@ public class ScriptScope implements Scope {
     public var get(@NotNull String key, boolean mustFind) {
         checkDestroyed();
         if (key.matches("[0-9]+")) {
-            throw new AssertionError("Cannot get numerical keys, use getParameter");
+            throw new DollarAssertionException("Cannot get numerical keys, use getParameter");
         }
         if (getConfig().debugScope()) {
             log.info("Looking up " + key + " in " + this);
@@ -501,7 +502,7 @@ public class ScriptScope implements Scope {
         checkDestroyed();
 
         if (key.matches("[0-9]+")) {
-            throw new AssertionError("Cannot set numerical keys, use setParameter");
+            throw new DollarAssertionException("Cannot set numerical keys, use setParameter");
         }
         Scope scope = getScopeForKey(key);
         if (scope == null) {

@@ -24,6 +24,7 @@ import com.sillelien.dollar.api.types.ErrorType;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.ParserErrorHandler;
 import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.ErrorReporter;
@@ -55,15 +56,12 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
 
     @NotNull
     @Override
-    public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull AssertionError e) {
-        AssertionError
-                throwable =
-                new AssertionError(
-                                          e.getMessage() + " at " + (source == null ? "(unknown source)" : source.getSourceMessage()), e);
+    public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull DollarAssertionException e) {
+
         if (!faultTolerant) {
             return scope.handleError(e);
         } else {
-            return DollarFactory.failure(throwable);
+            return DollarFactory.failure(e);
         }
     }
 
@@ -118,8 +116,9 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
 
     @Override
     public void handleTopLevel(@NotNull Throwable t, String name, File file) throws Throwable {
-        if (t instanceof AssertionError) {
-            log.error(t.getMessage(), t);
+        if (t instanceof DollarAssertionException) {
+            System.out.println("An assertion failed");
+
         }
         if (t instanceof DollarException) {
             ErrorReporter.report(getClass(), t);

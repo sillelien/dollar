@@ -20,6 +20,7 @@ import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.Variable;
+import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +43,7 @@ public class PureScope extends ScriptScope {
 
     @NotNull @Override public var get(@NotNull String key, boolean mustFind) {
         if (key.matches("[0-9]+")) {
-            throw new AssertionError("Cannot get numerical keys, use getParameter");
+            throw new DollarScriptException("Cannot get numerical keys, use getParameter");
         }
         if (DollarStatic.getConfig().debugScope()) { log.info("Looking up " + key + " in " + this); }
         Scope scope = getScopeForKey(key);
@@ -83,7 +84,7 @@ public class PureScope extends ScriptScope {
             throw new UnsupportedOperationException("Cannot have volatile variables in a pure expression");
         }
         if (key.matches("[0-9]+")) {
-            throw new AssertionError("Cannot set numerical keys, use setParameter");
+            throw new DollarAssertionException("Cannot set numerical keys, use setParameter");
         }
         Scope scope = getScopeForKey(key);
         if (scope != null && scope != this) {
