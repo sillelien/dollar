@@ -44,7 +44,8 @@ cp -f ~/.m2/repository/com/sillelien/dollar-mapdb/${MAPDB_VERSION}/dollar-mapdb-
 
 cp ${PROJECT}/.release ${DIST}/RELEASE
 cd ${DIST}
-cd ..
+mkdir -p ../dist
+cd ../dist
 tar -zcvf dollar.tgz dollar
 
 
