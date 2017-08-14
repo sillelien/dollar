@@ -64,6 +64,7 @@ import org.jparsec.Terminals;
 import org.jparsec.Token;
 import org.jparsec.TokenMap;
 import org.jparsec.Tokens;
+import org.jparsec.error.ParserException;
 import org.jparsec.functors.Map;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
@@ -161,7 +162,14 @@ public class DollarParserImpl implements DollarParser {
         return DollarScriptSupport.inScope(false, scope, newScope -> {
             DollarStatic.context().setClassLoader(classLoader);
             Parser<?> parser = buildParser(false, scope);
-            var parse = (var) parser.from(TOKENIZER, DollarLexer.IGNORED).parse(source);
+            try {
+                var parse = (var) parser.from(TOKENIZER, DollarLexer.IGNORED).parse(source);
+            } catch (ParserException e) {
+                getErrorHandler().handleTopLevel(e, null, file != null ? new File(file) : null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+            }
 //            parse._fixDeep(false);
 //            newScope.destroy();
             return $(exports);
@@ -356,7 +364,7 @@ public class DollarParserImpl implements DollarParser {
                         .postfix(op(INC, new UnaryOp(this, INC, var::$inc)), INC_DEC_PRIORITY)
                         .prefix(op(NEGATE, new UnaryOp(this, NEGATE, var::$negate)), UNARY_PRIORITY)
                         .prefix(op(PARALLEL, new UnaryOp(true, Func::parallelFunc, PARALLEL, this)), SIGNAL_PRIORITY)
-                        .prefix(unaryOperator(), SIGNAL_PRIORITY)
+                        .prefix(op(SERIAL, new UnaryOp(true, v -> v._fixDeep(false), SERIAL, this)), SIGNAL_PRIORITY)
                         .prefix(forOperator(ref, pure), UNARY_PRIORITY)
                         .prefix(whileOperator(ref, pure), UNARY_PRIORITY)
                         .postfix(subscriptOperator(ref), MEMBER_PRIORITY)
@@ -417,11 +425,6 @@ public class DollarParserImpl implements DollarParser {
                                            token, DollarParserImpl.this);
                     }
                 });
-    }
-
-    @NotNull
-    private Parser<UnaryOp> unaryOperator() {
-        return op(SERIAL, new UnaryOp(true, v -> v._fixDeep(false), SERIAL, this));
     }
 
     private Parser<var> unitValue(boolean pure) {
@@ -667,16 +670,16 @@ public class DollarParserImpl implements DollarParser {
                   OP(DOLLAR).followedBy(INTEGER_LITERAL.peek())
                           .token()
                           .map(
-                          (Token lhs) -> {
-                              return new Map<var, var>() {
-                                  @Nullable
-                                  @Override
-                                  public var map(@NotNull var rhs) {
-                                      return getVariable(pure, rhs.toString(), true, null, lhs,
-                                                         DollarParserImpl.this);
-                                  }
-                              };
-                          }));
+                                  (Token lhs) -> {
+                                      return new Map<var, var>() {
+                                          @Nullable
+                                          @Override
+                                          public var map(@NotNull var rhs) {
+                                              return getVariable(pure, rhs.toString(), true, null, lhs,
+                                                                 DollarParserImpl.this);
+                                          }
+                                      };
+                                  }));
     }
 
     private Parser<Map<? super var, ? extends var>> castOperator() {

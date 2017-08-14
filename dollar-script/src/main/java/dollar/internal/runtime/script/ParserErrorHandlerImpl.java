@@ -17,25 +17,28 @@
 package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.DollarException;
-import dollar.internal.runtime.script.api.Scope;
 import com.sillelien.dollar.api.exceptions.LambdaRecursionException;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.types.ErrorType;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.ParserErrorHandler;
+import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.ErrorReporter;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jparsec.error.Location;
 import org.jparsec.error.ParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
+@SuppressWarnings("UseOfSystemOutOrSystemErr")
 public class ParserErrorHandlerImpl implements ParserErrorHandler {
     private final boolean missingVariables;
     private final boolean failfast;
@@ -56,7 +59,7 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
         AssertionError
                 throwable =
                 new AssertionError(
-                        e.getMessage() + " at " + (source == null ? "(unknown source)" : source.getSourceMessage()), e);
+                                          e.getMessage() + " at " + (source == null ? "(unknown source)" : source.getSourceMessage()), e);
         if (!faultTolerant) {
             return scope.handleError(e);
         } else {
@@ -87,10 +90,10 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
     public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull Exception e) {
         if (e instanceof LambdaRecursionException) {
             throw new DollarParserError(
-                    "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
-                            "expressions. The simplest way to solve this is to use the 'fix' operator or the '=' operator to " +
-                            "reduce the amount of lazy evaluation. The error occured at " +
-                            source);
+                                               "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
+                                                       "expressions. The simplest way to solve this is to use the 'fix' operator or the '=' operator to " +
+                                                       "reduce the amount of lazy evaluation. The error occured at " +
+                                                       source);
         }
 
         if (e instanceof DollarException && source != null) {
@@ -114,25 +117,39 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
     }
 
     @Override
-    public void handleTopLevel(@NotNull Throwable t) throws Throwable {
+    public void handleTopLevel(@NotNull Throwable t, String name, File file) throws Throwable {
         if (t instanceof AssertionError) {
-            log.error(t.getMessage(),t);
+            log.error(t.getMessage(), t);
         }
         if (t instanceof DollarException) {
             ErrorReporter.report(getClass(), t);
-            log.error(t.getMessage(),t);
+            log.error(t.getMessage(), t);
         }
         if (t instanceof ParserException) {
-//            ErrorReporter.report(getClass(), t);
-            if (t.getCause() instanceof DollarScriptException) {
-                log.error(t.getCause().getMessage(),t);
+            Location location = ((ParserException) t).getLocation();
+            System.out.println();
+            if (file != null) {
+                System.out.print("A parser (syntax) error occurred while parsing " + file + ":" + location.line);
             } else {
-                log.error(t.getMessage(),t);
+                if (name != null) {
+                    System.out.print("A parser (syntax) error occurred while parsing " + name);
+                } else {
+                    System.out.print("Problem parsing this script");
+                }
             }
+            System.out.println(
+                    " the error occurred on line " + location.line + " column " + location.column + " near '" + ((ParserException) t).getErrorDetails().getEncountered() + "'.");
+            System.out.println();
+            if (t.getCause() instanceof DollarScriptException) {
+                log.debug(t.getCause().getMessage(), t);
+            } else {
+                log.debug(t.getMessage(), t);
+            }
+            System.exit(1);
         }
         if (t instanceof DollarScriptException) {
             ErrorReporter.report(getClass(), t);
-            log.error(t.getMessage(),t);
+            log.error(t.getMessage(), t);
         } else {
             throw t;
         }

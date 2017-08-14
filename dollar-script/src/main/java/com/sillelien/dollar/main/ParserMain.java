@@ -22,10 +22,16 @@ import com.sillelien.dollar.api.DollarStatic;
 import dollar.internal.runtime.script.DollarParserImpl;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.ParserOptions;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
 public class ParserMain {
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger("ParserMain");
+
 
     public static void main(String[] args) throws Throwable {
 
@@ -41,9 +47,10 @@ public class ParserMain {
             }
         } catch (Throwable t) {
             try {
-                parser.getErrorHandler().handleTopLevel(t);
+                parser.getErrorHandler().handleTopLevel(t, file.getName(), file);
             } catch (Throwable throwable) {
-                throwable.printStackTrace();
+                log.error(throwable.getMessage(), throwable);
+                System.exit(1);
             }
             System.exit(1);
 

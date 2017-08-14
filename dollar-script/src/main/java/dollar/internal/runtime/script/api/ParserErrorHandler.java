@@ -22,6 +22,8 @@ import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+
 public interface ParserErrorHandler {
 
     @NotNull var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull AssertionError e);
@@ -30,6 +32,6 @@ public interface ParserErrorHandler {
 
     @NotNull var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull Exception e);
 
-    void handleTopLevel(@NotNull Throwable t) throws Throwable;
+    <T extends Throwable> void handleTopLevel(@NotNull T t, String name, File file) throws T;
 
 }
