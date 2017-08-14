@@ -210,8 +210,7 @@ jobs:
               mkdir -p /srv/jekyll/project/dollar-docs/src/main/webapp/_includes/
               cp -rf /root/workspace/gendocs/* /srv/jekyll/project/dollar-docs/src/main/webapp/_includes/
               echo "release: $(cat /srv/jekyll/project/.release)" > /srv/jekyll/project/dollar-docs/src/main/webapp/env.yml
-              tail -n +2 /srv/jekyll/project/dollar-docs/src/main/resources/pages/scripting.md  >
-              /srv/jekyll/project/dollar-docs/src/main/webapp/scripting.md
+              tail -n +2 /srv/jekyll/project/dollar-docs/src/main/resources/pages/scripting.md  > /srv/jekyll/project/dollar-docs/src/main/webapp/scripting.md
               jekyll build --source /srv/jekyll/project/dollar-docs/src/main/webapp/ --destination /srv/jekyll/dist/docs
               git add *
               git commit -a -m "Updated docs from build [ci skip]"  || :
