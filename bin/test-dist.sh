@@ -6,6 +6,6 @@ cp $PROJECT/dollar-examples/src/main/resources/test_*.ds  target/build_test
 for file in $(ls target/build_test)
 do
     echo "Testing: " $file
-    $PROJECT/dist/dollar/bin/dollar target/build_test/${file}
+    $HOME/workspace/dist/dollar/bin/dollar target/build_test/${file}
 done
 

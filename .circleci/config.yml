@@ -280,6 +280,7 @@ jobs:
             paths:
               - dist
               - devdocs
+              - artifacts
 
 
     docker:
