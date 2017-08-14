@@ -12,7 +12,7 @@ lamval causes { @@ "->"+lamval; }
 const lambda2 := lamval
 
 
-const lambda := ( ( lamval )  + lamval )
+const lambda3 := ( ( lamval )  + lamval )
 const notlambda = ( ( lamval )  + lamval )
 
 lamval= 7
@@ -28,7 +28,7 @@ var lamval2= 23
 
 @@ "*****"
 //Since the lambda shares the scope of when it was declared this should be 14 not 2
-.: &lambda == 14
+.: &lambda3 == 14
 .: &notlambda == 2
 
 //And this is the single lamval syntax from earlier

@@ -457,7 +457,7 @@ public class Symbols {
                     YES,
                     NO,
                     NULL,
-                    new KeywordDef("pluripotent"),
+
                     VOID,
                     INFINITY,
                     PURE,
@@ -484,7 +484,32 @@ public class Symbols {
                     TO,
                     FROM,
 
+                    //Reserved Keywords
+                    new KeywordDef("pluripotent"),
+                    new KeywordDef("readonly"),
+                    new KeywordDef("join"),
+                    new KeywordDef("fail"),
+                    new KeywordDef("switch"),
+                    new KeywordDef("dollar"),
+                    new KeywordDef("filter"),
+                    new KeywordDef("dispatch"),
+                    new KeywordDef("send"),
+                    new KeywordDef("emit"),
+                    new KeywordDef("import"),
+                    new KeywordDef("include"),
+                    new KeywordDef("impure"),
+                    new KeywordDef("variant"),
+                    new KeywordDef("vary"),
+                    new KeywordDef("varies"),
+                    new KeywordDef("lambda"),
+                    new KeywordDef("closure"),
+                    new KeywordDef("scope"),
+                    new KeywordDef("dump"),
+                    new KeywordDef("trace"),
+                    new KeywordDef("measure"),
+                    new KeywordDef("unit"),
 
+                    //Reserved Operators
                     RESERVED_OPERATOR_1,
                     RESERVED_OPERATOR_2,
                     RESERVED_OPERATOR_3,
@@ -537,17 +562,5 @@ public class Symbols {
         }
     }
 
-
-    /* RESERVE ALL OF THESE
-    "out", "err", "debug", "fix", "causes", "when", "if", "then", "for", "each", "fail",
-                                "assert", "switch", "choose", "not", "dollar", "fork", "join", "print", "default",
-                                "debug", "error", "filter", "every", "until", "unless", "and", "or",
-                                "dispatch", "send", "publish", "subscribe", "emit", "drain",
-                                "all", "import", "reduce", "truthy", "is", "else", "const", "in", "true", "false",
-                                "yes", "no", "void", "error", "to", "from", "size", "as",
-                                "while", "collect", "module", "include", "export", "with", "parallel", "serial",
-                                "fork", "null", "volatile", "read", "write", "block", "mutate", "pure", "impure", "variant",
-                                "variance", "pluripotent", "vary", "varies", "infinity", "var", "readonly", "def"
-     */
 
 }
