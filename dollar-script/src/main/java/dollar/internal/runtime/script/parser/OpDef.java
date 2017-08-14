@@ -44,7 +44,9 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                  @Nullable String keyword,
                  @Nullable String name,
                  @Language("md")
-                 @Nullable String description, boolean reserved, boolean reactive, String bnf) {
+                 @Nullable String description,
+                 boolean reserved,
+                 boolean reactive, String bnf) {
 
         this.symbol = symbol;
         this.keyword = keyword;

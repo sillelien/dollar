@@ -110,7 +110,10 @@ public class Symbols {
 
 
     @NotNull
-    public static final OpDef MEMBER = new OpDef(".", null, "member", "member", false, true, null);
+    public static final OpDef MEMBER = new OpDef(".", null, "member",
+                                                 "The membership or `.` operator accesses the member of a map by it's key.", false,
+                                                 true,
+                                                 null);
 
     @NotNull
     public static final OpDef LT = new OpDef("<", "less-than", "less-than",
@@ -124,40 +127,40 @@ public class Symbols {
                                                      " any Dollar data type, including strings, ranges, lists etc.", false, true,
                                              null);
     @NotNull
-    public static final OpDef NOT = new OpDef("!", "not", "not", "not", false, true, null);
+    public static final OpDef NOT = new OpDef("!", "not", "not", "Returns the negation of the right-hand-side expression.", false,
+                                              true, "('!'|'not') <expression>");
 
     @NotNull
-    public static final SymbolDef LEFT_BRACE = new SymbolDef("{", false);
+    public static final OpDef OR = new OpDef("||", "or", "or", "Returns the logical 'or' of two expressions, e.g. `a || b`. " +
+                                                                       "Just like in Java it will shortcut, so that if the " +
+                                                                       "left-hand-side is true the right-hand-side is never " +
+                                                                       "evaluated.",
+                                             false,
+                                             true, "<expression> ('||'|'or') <expression>");
 
     @NotNull
-    public static final SymbolDef RIGHT_BRACE = new SymbolDef("}", false);
+    public static final OpDef AND = new OpDef("&&", "and", "and",
+                                              "Returns the logical 'and' of two expressions, e.g. `a && b`. Just like in Java it will shortcut, " +
+                                                      "so that if the left-hand-side is true the right-hand-side is never evaluated.",
+                                              false, true, "<expression> ('&&'|'and') <expression>");
 
     @NotNull
-    public static final SymbolDef SEMI_COLON = new SymbolDef(";", false);
-
-    @NotNull
-    public static final SymbolDef LEFT_BRACKET = new SymbolDef("[", false);
-
-    @NotNull
-    public static final SymbolDef RIGHT_BRACKET = new SymbolDef("]", false);
-
-    @NotNull
-    public static final OpDef OR = new OpDef("||", "or", "or", "or", false, true, null);
-
-    @NotNull
-    public static final OpDef AND = new OpDef("&&", "and", "and", "and", false, true, null);
-
-    @NotNull
-    public static final OpDef MULTIPLY = new OpDef("*", "multiply", "multiply", "multiply", false, true, null);
+    public static final OpDef MULTIPLY = new OpDef("*", "multiply", "multiply",
+                                                   "Returns the product of two values. If the left-hand-side is scalar (non " +
+                                                           "collection) then a straightforward multiplication will take place. If" +
+                                                           " the left-hand-side is a collection and it is multiplied by `n`, e.g." +
+                                                           " `{a=a+1} * 3` it will be added (`+`) to itself `n` times i.e. " +
+                                                           "`{a=a+1} + {a=a+1} + {a=a+1}`.",
+                                                   false, true, "<expression> '*'|'multiply'");
 
     @NotNull
     public static final OpDef DIVIDE = new OpDef("/", "divide", "divide", "divide", false, true, null);
 
     @NotNull
-    public static final OpDef START = new OpDef("|>", "start", "start", "start", false, true, null);
+    public static final OpDef START = new OpDef("|>", "start", "start", "start", false, false, null);
 
     @NotNull
-    public static final OpDef STOP = new OpDef("<|", "stop", "stop", "stop", false, true, null);
+    public static final OpDef STOP = new OpDef("<|", "stop", "stop", "stop", false, false, null);
 
     @NotNull
     public static final OpDef PLUS = new OpDef("+", "plus", "plus", "plus", false, true, null);
@@ -169,19 +172,19 @@ public class Symbols {
     public static final SymbolDef NEWLINE = new SymbolDef("\n", false);
 
     @NotNull
-    public static final OpDef PAUSE = new OpDef("||>", "pause", "pause", "pause", false, true, null);
+    public static final OpDef PAUSE = new OpDef("||>", "pause", "pause", "pause", false, false, null);
 
     @NotNull
-    public static final OpDef UNPAUSE = new OpDef("<||", "unpause", "unpause", "unpause", false, true, null);
+    public static final OpDef UNPAUSE = new OpDef("<||", "unpause", "unpause", "unpause", false, false, null);
 
     @NotNull
-    public static final OpDef DESTROY = new OpDef("<|||", "destroy", "destroy", "destroy", false, true, null);
+    public static final OpDef DESTROY = new OpDef("<|||", "destroy", "destroy", "destroy", false, false, null);
 
     @NotNull
-    public static final OpDef CREATE = new OpDef("|||>", "create", "create", "create", false, true, null);
+    public static final OpDef CREATE = new OpDef("|||>", "create", "create", "create", false, false, null);
 
     @NotNull
-    public static final OpDef STATE = new OpDef("<|>", "state", "state", "state", false, true, null);
+    public static final OpDef STATE = new OpDef("<|>", "state", "state", "state", false, false, null);
 
     @NotNull
     public static final OpDef DEFAULT = new OpDef(":-", "default", "default", "default", false, true, null);
@@ -371,6 +374,23 @@ public class Symbols {
 
     @NotNull
     public static final SymbolDef COMMA = new SymbolDef(",", false);
+
+
+    @NotNull
+    public static final SymbolDef LEFT_BRACE = new SymbolDef("{", false);
+
+    @NotNull
+    public static final SymbolDef RIGHT_BRACE = new SymbolDef("}", false);
+
+    @NotNull
+    public static final SymbolDef SEMI_COLON = new SymbolDef(";", false);
+
+    @NotNull
+    public static final SymbolDef LEFT_BRACKET = new SymbolDef("[", false);
+
+    @NotNull
+    public static final SymbolDef RIGHT_BRACKET = new SymbolDef("]", false);
+
 
     @NotNull
     public static final KeywordDef TRUE = new KeywordDef("true", false, null);
