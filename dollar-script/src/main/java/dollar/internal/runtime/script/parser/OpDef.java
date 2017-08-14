@@ -35,18 +35,24 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     private String description;
 
     private boolean reserved;
+    private boolean reactive;
+
+    @Nullable
+    private String bnf;
 
     public OpDef(@NotNull String symbol,
                  @Nullable String keyword,
                  @Nullable String name,
                  @Language("md")
-                 @Nullable String description, boolean reserved) {
+                 @Nullable String description, boolean reserved, boolean reactive, String bnf) {
 
         this.symbol = symbol;
         this.keyword = keyword;
         this.name = name;
         this.description = description;
         this.reserved = reserved;
+        this.reactive = reactive;
+        this.bnf = bnf;
     }
 
     @Nullable
@@ -120,5 +126,9 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         OpDef opDef = (OpDef) o;
         return Objects.equals(symbol, opDef.symbol) &&
                        Objects.equals(keyword, opDef.keyword);
+    }
+
+    public boolean isReactive() {
+        return reactive;
     }
 }
