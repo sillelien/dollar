@@ -1028,6 +1028,3 @@ In the example the value of c is greater than d because the value of c is evalua
 TODO
 
 ## Appendix A - Symbols
-
-{% capture symbols_include %}{% include symbols.md %}{% endcapture %}
-{{ symbols_include | markdownify }}
