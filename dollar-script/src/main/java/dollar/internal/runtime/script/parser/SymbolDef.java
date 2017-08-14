@@ -16,15 +16,55 @@
 
 package dollar.internal.runtime.script.parser;
 
+import dollar.internal.runtime.script.HasKeyword;
 import dollar.internal.runtime.script.HasSymbol;
+import org.jetbrains.annotations.NotNull;
 
-public class SymbolDef implements HasSymbol {
+import java.util.Objects;
+
+public class SymbolDef implements HasSymbol, Comparable<Object> {
+    @NotNull
     private String symbol;
+    private boolean reserved;
 
-    public SymbolDef(String symbol) {this.symbol = symbol;}
+    public SymbolDef(@NotNull String symbol, boolean reserved) {
+        this.symbol = symbol;
+        this.reserved = reserved;
+    }
 
     @Override
     public String symbol() {
         return symbol;
+    }
+
+    @Override
+    public int compareTo(@NotNull Object o) {
+        if (this.equals(o)) {
+            return 0;
+        }
+        if (o instanceof HasSymbol) {
+            return symbol.compareTo(String.valueOf(((HasSymbol) o).symbol()));
+        }
+        if (o instanceof HasKeyword) {
+            return symbol.compareTo(String.valueOf(((HasKeyword) o).keyword()));
+        }
+        return symbol.compareTo(String.valueOf(o));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(symbol);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SymbolDef symbolDef = (SymbolDef) o;
+        return Objects.equals(symbol, symbolDef.symbol);
+    }
+
+    public boolean isReserved() {
+        return reserved;
     }
 }

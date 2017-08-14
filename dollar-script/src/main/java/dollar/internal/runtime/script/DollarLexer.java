@@ -95,7 +95,7 @@ class DollarLexer {
     @NotNull
     private static final Terminals
             KEYWORDS =
-            Terminals.operators(Symbols.KEYWORDS);
+            Terminals.operators(Symbols.KEYWORD_STRINGS);
     @NotNull
     static final Parser<var> IDENTIFIER_KEYWORD = identifierKeyword();
     @NotNull
