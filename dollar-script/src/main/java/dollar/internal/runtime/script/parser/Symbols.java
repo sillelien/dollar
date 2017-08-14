@@ -34,22 +34,22 @@ public class Symbols {
                                                                 "form `funcA() | funcB` where the first expression is evaluated " +
                                                                 "and then the result is passed to the second function and can be " +
                                                                 "chained such as `funcA() | funcB | funcC`.",
-                                                        false, true, null);
+                                                        false, true, null, null);
     @NotNull
     public static final OpDef WRITE = new OpDef(">>", null, "write-simple",
                                                 "Performs a simple write to another data item, mostly used to write to a URI. ",
-                                                false, true, null);
+                                                false, true, null, null);
     @NotNull
     public static final OpDef READ = new OpDef("<<", null, "read-simple",
                                                "Performs a simple read from another data item, typically this is used with a URI" +
-                                                       ".", false, true, null);
+                                                       ".", false, true, null, null);
     @NotNull
     public static final OpDef CAUSES = new OpDef("=>", "causes", "causes",
                                                  "The causes operator is used to link a reactive expression to an imperative action. " +
                                                          "The left-hand-side is any expression and the right hand-side is any " +
                                                          "expression that will be evaluated when the left-hand-side is updated " +
                                                          "such as `a+b => {@@ a; @@ b}`.",
-                                                 false, true, null);
+                                                 false, true, null, null);
 
     @NotNull
     public static final OpDef ASSERT = new OpDef(".:", "assert", "assert",
@@ -60,17 +60,17 @@ public class Symbols {
                                                          "as `.: &a > 10` which means that when this statement is evaluated the " +
                                                          "value of a is compared with 10 - if __at this point__ it is not greater" +
                                                          " than 10 then the assertion will fail. ",
-                                                 false, true, null);
+                                                 false, true, null, null);
     @NotNull
     public static final OpDef LT_EQUALS = new OpDef("<=", null, "less-than-equal",
                                                     "The standard `<=` operator, it uses Comparable#compareTo and will work with" +
                                                             " any Dollar data type, including strings, ranges, lists etc.",
-                                                    false, true, null);
+                                                    false, true, null, null);
     @NotNull
     public static final OpDef GT_EQUALS = new OpDef(">=", null, "greater-than-equal", "The standard `>=` operator, it uses " +
                                                                                               "Comparable#compareTo and will work with" +
                                                                                               " any Dollar data type, including strings, ranges, lists etc.",
-                                                    false, true, null);
+                                                    false, true, null, null);
 
     @NotNull
     public static final SymbolDef LEFT_PAREN = new SymbolDef("(", false);
@@ -83,12 +83,12 @@ public class Symbols {
                                               "Returns the right-hand-side decremented. Note the right-hand-side is not changed " +
                                                       "so `--a` does not not decrement `a`, it __returns__ `a` **decremented**",
                                               false,
-                                              true, "('--'|'dec') <expression>");
+                                              true, "('--'|'dec') <expression>", null);
 
     @NotNull
     public static final OpDef INC = new OpDef("++", "inc", "increment",
                                               "Returns the right-hand-side incremented. Note the right-hand-side is not changed so `--a` does not not decrement `a`, it __returns__ `a` **incremented**",
-                                              false, true, "('++'|'inc') <expression>");
+                                              false, true, "('++'|'inc') <expression>", null);
 
     @NotNull
     public static final OpDef DEFINITION = new OpDef(":=", null,
@@ -101,34 +101,35 @@ public class Symbols {
                                                              "variables.",
                                                      false,
                                                      true,
-                                                     " [export] [const] <variable-name> ':=' <expression> OR def <variable-name> <expression");
+                                                     " [export] [const] <variable-name> ':=' <expression> OR def <variable-name> <expression",
+                                                     null);
     @NotNull
     public static final OpDef FIX = new OpDef("&", "fix", "fix",
                                               "Converts a reactive expression into a fixed value. It fixes the value at the point the fix operator is executed. No reactive events will be passed from the right-hand-side expression.",
                                               false,
-                                              false, "('&' | '--') fix <expression>");
+                                              false, "('&' | '--') fix <expression>", null);
 
 
     @NotNull
     public static final OpDef MEMBER = new OpDef(".", null, "member",
                                                  "The membership or `.` operator accesses the member of a map by it's key.", false,
                                                  true,
-                                                 null);
+                                                 null, null);
 
     @NotNull
     public static final OpDef LT = new OpDef("<", "less-than", "less-than",
                                              "The standard `<` operator, it uses Comparable#compareTo and will work with" +
                                                      " any Dollar data type, including strings, ranges, lists etc.", false, true,
-                                             null);
+                                             null, null);
 
     @NotNull
     public static final OpDef GT = new OpDef(">", "greater-than", "greater-than",
                                              "The standard `>` operator, it uses Comparable#compareTo and will work with" +
                                                      " any Dollar data type, including strings, ranges, lists etc.", false, true,
-                                             null);
+                                             null, null);
     @NotNull
     public static final OpDef NOT = new OpDef("!", "not", "not", "Returns the negation of the right-hand-side expression.", false,
-                                              true, "('!'|'not') <expression>");
+                                              true, "('!'|'not') <expression>", null);
 
     @NotNull
     public static final OpDef OR = new OpDef("||", "or", "or", "Returns the logical 'or' of two expressions, e.g. `a || b`. " +
@@ -136,13 +137,13 @@ public class Symbols {
                                                                        "left-hand-side is true the right-hand-side is never " +
                                                                        "evaluated.",
                                              false,
-                                             true, "<expression> ('||'|'or') <expression>");
+                                             true, "<expression> ('||'|'or') <expression>", null);
 
     @NotNull
     public static final OpDef AND = new OpDef("&&", "and", "and",
                                               "Returns the logical 'and' of two expressions, e.g. `a && b`. Just like in Java it will shortcut, " +
                                                       "so that if the left-hand-side is true the right-hand-side is never evaluated.",
-                                              false, true, "<expression> ('&&'|'and') <expression>");
+                                              false, true, "<expression> ('&&'|'and') <expression>", null);
 
     @NotNull
     public static final OpDef MULTIPLY = new OpDef("*", "multiply", "multiply",
@@ -151,121 +152,121 @@ public class Symbols {
                                                            " the left-hand-side is a collection and it is multiplied by `n`, e.g." +
                                                            " `{a=a+1} * 3` it will be added (`+`) to itself `n` times i.e. " +
                                                            "`{a=a+1} + {a=a+1} + {a=a+1}`.",
-                                                   false, true, "<expression> '*'|'multiply'");
+                                                   false, true, "<expression> '*'|'multiply'", null);
 
     @NotNull
     public static final OpDef DIVIDE = new OpDef("/", "divide", "divide",
                                                  "Divides one value by another.", false, true,
-                                                 null);
+                                                 null, null);
 
     @NotNull
     public static final OpDef START = new OpDef("|>", "start", "start",
                                                 "Starts a service described typically by a URI.",
                                                 true, true,
-                                                "('|>'|'start') <expression>");
+                                                "('|>'|'start') <expression>", null);
 
     @NotNull
     public static final OpDef STOP = new OpDef("<|", "stop", "stop",
                                                "Stops a service described typically by a URI.", false,
                                                true,
-                                               "('<|'|'stop') <expression>");
+                                               "('<|'|'stop') <expression>", null);
 
     @NotNull
     public static final OpDef PLUS = new OpDef("+", "plus", "plus",
                                                "Appends or adds two values.", false, true,
-                                               "<expression> ('+'|'plus') <expression>");
+                                               "<expression> ('+'|'plus') <expression>", null);
 
     @NotNull
     public static final OpDef NEGATE = new OpDef("-", "negate", "negate",
-                                                 "Negates a value.", false, true, "('-'|'negate') <expression>");
+                                                 "Negates a value.", false, true, "('-'|'negate') <expression>", null);
 
 
     @NotNull
     public static final OpDef PAUSE = new OpDef("||>", "pause", "pause",
                                                 "Pauses a service described typically by a URI.",
                                                 false, true,
-                                                "('||>'|'pause') <expression>");
+                                                "('||>'|'pause') <expression>", null);
 
     @NotNull
     public static final OpDef UNPAUSE = new OpDef("<||", "unpause", "unpause",
                                                   "Un-pauses a service described typically by a URI.", false, true,
-                                                  "('<||'|'unpause') <expression>");
+                                                  "('<||'|'unpause') <expression>", null);
 
     @NotNull
     public static final OpDef DESTROY = new OpDef("<|||", "destroy", "destroy",
                                                   "destroy", false, true,
-                                                  "('<|||'|'destroy') <expression>");
+                                                  "('<|||'|'destroy') <expression>", null);
 
     @NotNull
     public static final OpDef CREATE = new OpDef("|||>", "create", "create",
                                                  "Creates a service described typically by a URI.", false, true,
-                                                 "('|||>'|'create') <expression>");
+                                                 "('|||>'|'create') <expression>", null);
 
     @NotNull
     public static final OpDef STATE = new OpDef("<|>", "state", "state",
                                                 "Returns the state of a service described typically by a URI.", false, true,
-                                                "('<|>'|'state') <expression>");
+                                                "('<|>'|'state') <expression>", null);
 
     @NotNull
     public static final OpDef DEFAULT = new OpDef(":-", "default", "default",
-                                                  "default", false, true, null);
+                                                  "default", false, true, null, null);
 
     @NotNull
-    public static final OpDef PRINT = new OpDef("@@", "print", "print", "print", false, true, null);
+    public static final OpDef PRINT = new OpDef("@@", "print", "print", "print", false, true, null, null);
 
     @NotNull
-    public static final OpDef PARALLEL = new OpDef("|:|", "parallel", "parallel", "parallel", false, false, null);
+    public static final OpDef PARALLEL = new OpDef("|:|", "parallel", "parallel", "parallel", false, false, null, null);
 
     @NotNull
     public static final OpDef SERIAL = new OpDef("|..|", "serial", "serial",
-                                                 "serial", false, false, null);
+                                                 "serial", false, false, null, null);
     @NotNull
-    public static final OpDef FORK = new OpDef("-<", "fork", "fork", "fork", false, true, null);
+    public static final OpDef FORK = new OpDef("-<", "fork", "fork", "fork", false, true, null, null);
 
     @NotNull
-    public static final OpDef RANGE = new OpDef("..", "range", "range", "range", false, true, null);
+    public static final OpDef RANGE = new OpDef("..", "range", "range", "range", false, true, null, null);
 
     @NotNull
-    public static final OpDef ERROR = new OpDef("!?#*!", "error", "error", "error", false, true, null);
+    public static final OpDef ERROR = new OpDef("!?#*!", "error", "error", "error", false, true, null, null);
 
     @NotNull
-    public static final OpDef SIZE = new OpDef("#", "size", "size", "size", false, true, null);
+    public static final OpDef SIZE = new OpDef("#", "size", "size", "size", false, true, null, null);
 
     @NotNull
-    public static final OpDef MOD = new OpDef("%", "mod", "modulus", "modulus", false, true, null);
+    public static final OpDef MOD = new OpDef("%", "mod", "modulus", "modulus", false, true, null, null);
 
     @NotNull
-    public static final OpDef ERR = new OpDef("??", "err", "err", "err", false, true, null);
+    public static final OpDef ERR = new OpDef("??", "err", "err", "err", false, true, null, null);
 
     @NotNull
-    public static final OpDef DEBUG = new OpDef("!!", "debug", "debug", "debug", false, true, null);
+    public static final OpDef DEBUG = new OpDef("!!", "debug", "debug", "debug", false, true, null, null);
 
     @NotNull
     public static final OpDef ASSERT_EQ_REACT = new OpDef("<=>",
                                                           "assert-equals-reactive",
                                                           "assert-equals-reactive",
-                                                          "assert-equals", false, true, null);
+                                                          "assert-equals", false, true, null, null);
     @NotNull
     public static final OpDef ASSERT_EQ_UNREACT = new OpDef("<->", "assert-equals",
                                                             "assert-equals",
-                                                            "assert-equals", false, false, null);
+                                                            "assert-equals", false, false, null, null);
     @NotNull
-    public static final OpDef EACH = new OpDef("=>>", "each", "each", "each", false, true, null);
+    public static final OpDef EACH = new OpDef("=>>", "each", "each", "each", false, true, null, null);
 
     @NotNull
-    public static final OpDef PUBLISH = new OpDef("*>", "publish", "publish", "publish", false, true, null);
+    public static final OpDef PUBLISH = new OpDef("*>", "publish", "publish", "publish", false, true, null, null);
 
     @NotNull
-    public static final OpDef SUBSCRIBE = new OpDef("<*", "subscribe", "subscribe", "subscribe", false, true, null);
+    public static final OpDef SUBSCRIBE = new OpDef("<*", "subscribe", "subscribe", "subscribe", false, true, null, null);
 
     @NotNull
-    public static final OpDef EQUALITY = new OpDef("==", "equal", "equal", "equal", false, true, null);
+    public static final OpDef EQUALITY = new OpDef("==", "equal", "equal", "equal", false, true, null, null);
 
     @NotNull
     public static final OpDef INEQUALITY_OPERATOR = new OpDef("!=", "not-equal", "not-equal",
-                                                              "not-equal", false, true, null);
+                                                              "not-equal", false, true, null, null);
     @NotNull
-    public static final OpDef ASSIGNMENT = new OpDef("=", null, "assign", "assign", false, true, null);
+    public static final OpDef ASSIGNMENT = new OpDef("=", null, "assign", "assign", false, true, null, null);
 
     @NotNull
     public static final SymbolDef DOLLAR = new SymbolDef("$", false);
@@ -273,120 +274,120 @@ public class Symbols {
     @NotNull
     public static final OpDef SUBSCRIBE_ASSIGN = new OpDef("*=", "subscribe-assign",
                                                            "subscribe-assign",
-                                                           "subscribe-assign", false, true, null);
+                                                           "subscribe-assign", false, true, null, null);
     @NotNull
     public static final OpDef LISTEN_ASSIGN = new OpDef("?=", null, "listen-assign",
-                                                        "listen-assign", false, true, null);
+                                                        "listen-assign", false, true, null, null);
 
     @NotNull
-    public static final OpDef IN = new OpDef("€", "in", "in", "in", false, true, null);
+    public static final OpDef IN = new OpDef("€", "in", "in", "in", false, true, null, null);
 
     @NotNull
-    public static final OpDef DRAIN = new OpDef("<-<", "drain", "drain", "drain", false, true, null);
+    public static final OpDef DRAIN = new OpDef("<-<", "drain", "drain", "drain", false, true, null, null);
 
 
     @NotNull
-    public static final OpDef PAIR = new OpDef(":", "pair", "pair", "pair", false, true, null);
+    public static final OpDef PAIR = new OpDef(":", "pair", "pair", "pair", false, true, null, null);
 
     @NotNull
-    public static final OpDef IF_OPERATOR = new OpDef("???", "if", "if", "if", false, true, null);
+    public static final OpDef IF_OPERATOR = new OpDef("???", "if", "if", "if", false, true, null, null);
 
     @NotNull
-    public static final OpDef LISTEN = new OpDef("?", "listen", "listen", "listen", false, true, null);
+    public static final OpDef LISTEN = new OpDef("?", "listen", "listen", "listen", false, true, null, null);
 
     @NotNull
-    public static final OpDef REDUCE = new OpDef(">>=", "reduce", "reduce", "reduce", false, true, null);
+    public static final OpDef REDUCE = new OpDef(">>=", "reduce", "reduce", "reduce", false, true, null, null);
 
     @NotNull
-    public static final OpDef CHOOSE = new OpDef("?*", "choose", "choose", "choose", false, true, null);
+    public static final OpDef CHOOSE = new OpDef("?*", "choose", "choose", "choose", false, true, null, null);
 
     @NotNull
-    public static final OpDef ALL = new OpDef("<@", "all", "all", "all", false, true, null);
+    public static final OpDef ALL = new OpDef("<@", "all", "all", "all", false, true, null, null);
 
     @NotNull
-    public static final OpDef ELSE = new OpDef("-:", "else", "else", "else", false, true, null);
+    public static final OpDef ELSE = new OpDef("-:", "else", "else", "else", false, true, null, null);
 
     @NotNull
-    public static final OpDef TRUTHY = new OpDef("~", "thruthy", "thruthy", "thruthy", false, true, null);
+    public static final OpDef TRUTHY = new OpDef("~", "thruthy", "thruthy", "thruthy", false, true, null, null);
 
     @NotNull
     public static final OpDef RESERVED_OPERATOR_1 = new OpDef("...", null, null,
-                                                              null, true, true, null);
+                                                              null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_2 = new OpDef("->", null, null,
-                                                              null, true, true, null);
+                                                              null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_3 = new OpDef("<-", null, null,
-                                                              null, true, true, null);
+                                                              null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_4 = new OpDef("?:", null, null,
-                                                              null, true, true, null);
+                                                              null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_5 = new OpDef("@", null, null,
-                                                              null, true, true, null);
+                                                              null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_6 = new OpDef("::", null, null,
-                                                              null, true, true, null);
+                                                              null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_7 = new OpDef("&=", null, null,
-                                                              null, true, true, null);
+                                                              null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_8 = new OpDef("+>", null, null,
-                                                              null, true, true, null);
+                                                              null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_9 = new OpDef("<+", null, null,
-                                                              null, true, true, null);
+                                                              null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_10 = new OpDef("|*", null, null,
-                                                               null, true, true, null);
+                                                               null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_11 = new OpDef("&>", null, null,
-                                                               null, true, true, null);
+                                                               null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_12 = new OpDef("<&", null, null,
-                                                               null, true, true, null);
+                                                               null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_13 = new OpDef("?>", null, null,
-                                                               null, true, true, null);
+                                                               null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_14 = new OpDef("<?", null, null,
-                                                               null, true, true, null);
+                                                               null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_15 = new OpDef(">->", null,
                                                                null,
-                                                               null, true, true, null);
+                                                               null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_16 = new OpDef("@>", null, null,
-                                                               null, true, true, null);
+                                                               null, true, true, null, null);
 
     @NotNull
     public static final OpDef RESERVED_OPERATOR_17 = new OpDef("?..?", null,
                                                                null,
-                                                               null, true, true, null);
+                                                               null, true, true, null, null);
 
 
     @NotNull
     public static final OpDef RESERVED_OPERATOR_18 = new OpDef("?$?", null,
                                                                null,
-                                                               null, true, true, null);
+                                                               null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_19 = new OpDef("<$", null, null,
-                                                               null, true, true, null);
+                                                               null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_20 = new OpDef("<=<", null,
                                                                null,
-                                                               null, true, true, null);
+                                                               null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_21 = new OpDef("<++", null,
                                                                null,
-                                                               null, true, true, null);
+                                                               null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_22 = new OpDef("-_-", null,
                                                                null,
-                                                               null, true, true, null);
+                                                               null, true, true, null, null);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_23 = new OpDef(">&", null, null,
-                                                               null, true, true, null);
+                                                               null, true, true, null, null);
     @NotNull
     public static final List<String> SYMBOL_STRINGS;
 

@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
-    @NotNull
+    @Nullable
     private String symbol;
     @Nullable
     private String keyword;
@@ -33,6 +33,8 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     private String name;
     @Nullable
     private String description;
+    @Nullable
+    private String example;
 
     private boolean reserved;
     private boolean reactive;
@@ -46,7 +48,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                  @Language("md")
                  @Nullable String description,
                  boolean reserved,
-                 boolean reactive, String bnf) {
+                 boolean reactive, String bnf, @Nullable String example) {
 
         this.symbol = symbol;
         this.keyword = keyword;
@@ -55,6 +57,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         this.reserved = reserved;
         this.reactive = reactive;
         this.bnf = bnf;
+        this.example = example;
     }
 
     @Nullable
@@ -83,38 +86,42 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         if (this.equals(o)) {
             return 0;
         }
-        if (o instanceof HasSymbol && symbol != null) {
-            return symbol.compareTo(String.valueOf(((HasSymbol) o).symbol()));
+        if (o instanceof OpDef && keyword != null) {
+            return keyword.compareTo(String.valueOf(((OpDef) o).keyword()));
         }
-        if (o instanceof HasKeyword && keyword != null) {
-            return keyword.compareTo(String.valueOf(((HasKeyword) o).keyword()));
+        if (o instanceof OpDef && symbol != null) {
+            return name.compareTo(String.valueOf(((OpDef) o).name()));
         }
 
-        return symbol.compareTo(String.valueOf(o));
+        return name.compareTo(String.valueOf(o));
     }
 
     public boolean isReserved() {
         return reserved;
     }
 
+    @NotNull
     public String asMarkdown() {
         StringBuilder stringBuilder = new StringBuilder();
-        if (this.keyword != null) {
+        if (this.symbol == null) {
             stringBuilder.append("### ").append(keyword);
-        } else {
-            stringBuilder.append("### ").append(name);
-        }
-        if (symbol != null) {
             stringBuilder.append(" or ").append(symbol).append("\n\n");
         } else {
-            stringBuilder.append("\n\n");
-
+            if (keyword != null) {
+                stringBuilder.append("### ").append(keyword);
+                stringBuilder.append(" or ").append(symbol).append("\n\n");
+            } else {
+                stringBuilder.append("### ").append(symbol).append(" (").append(name).append(")").append("\n\n");
+            }
         }
         if (bnf != null) {
             stringBuilder.append("```bnf\n").append(bnf).append("\n```\n\n");
         }
         if (description != null) {
             stringBuilder.append(description).append("\n\n");
+        }
+        if (example != null) {
+            stringBuilder.append("```dollar\n").append(example).append("\n```\n\n");
         }
         return stringBuilder.toString();
     }
