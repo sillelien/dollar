@@ -105,13 +105,16 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
             stringBuilder.append("### ").append(name);
         }
         if (symbol != null) {
-            stringBuilder.append(" (").append(symbol).append(")\n\n");
+            stringBuilder.append(" or ").append(symbol).append("\n\n");
         } else {
             stringBuilder.append("\n\n");
 
         }
+        if (bnf != null) {
+            stringBuilder.append("```bnf\n").append(bnf).append("\n```\n\n");
+        }
         if (description != null) {
-            stringBuilder.append(description).append("\n\n\n");
+            stringBuilder.append(description).append("\n\n");
         }
         return stringBuilder.toString();
     }

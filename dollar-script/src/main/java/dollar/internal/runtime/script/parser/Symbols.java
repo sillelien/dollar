@@ -667,18 +667,39 @@ public class Symbols {
 
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
     public static void main(@NotNull String[] args) {
-        for (Comparable token : tokens) {
-            if (token instanceof KeywordDef) {
-                if (!((KeywordDef) token).isReserved()) {
-                    System.out.println(((KeywordDef) token).asMarkdown());
-                }
-            }
-            if (token instanceof OpDef) {
-                if (!((OpDef) token).isReserved()) {
-                    System.out.println(((OpDef) token).asMarkdown());
-                }
-            }
+        System.out.println("## Appendix A - Operators");
+        for (OpDef operator : OPERATORS) {
+            System.out.println(operator.asMarkdown());
         }
+        System.out.println("## Appendix B - Keywords");
+        for (KeywordDef keyword : KEYWORDS) {
+            System.out.println(keyword.asMarkdown());
+        }
+        System.out.println("## Appendix C - Reserved Keywords, Operators and Symbols");
+        System.out.println("### Keywords\n");
+        System.out.println("The following keywords are reserved:\n");
+        System.out.println("> " + tokens.stream().filter(i -> i instanceof KeywordDef && ((KeywordDef) i).isReserved()).map(
+                i -> ((KeywordDef) i).keyword()).sorted().collect(Collectors.joining(", ")));
+        System.out.println();
+
+        System.out.println("### Operators\n");
+        System.out.println("The following operator symbols are reserved:\n");
+        System.out.println("> " + tokens.stream().filter(
+                i -> i instanceof OpDef && ((OpDef) i).keyword() != null && ((OpDef) i).isReserved()).map(
+                i -> ((OpDef) i).keyword()).sorted().collect(Collectors.joining(", ")));
+        System.out.println();
+        System.out.println("The following operator keywords are reserved:\n");
+        System.out.println("> " + tokens.stream().filter(
+                i -> i instanceof OpDef && ((OpDef) i).symbol() != null && ((OpDef) i).isReserved()).map(
+                i -> ((OpDef) i).symbol()).sorted().collect(Collectors.joining(", ")));
+        System.out.println();
+        System.out.println("### Symbols\n");
+        System.out.println("The following general symbols are reserved:\n");
+        System.out.println("> " + tokens.stream().filter(i -> i instanceof SymbolDef && ((SymbolDef) i).isReserved()).map(
+                i -> ((SymbolDef) i).symbol()).sorted().collect(Collectors.joining(", ")));
+        System.out.println();
+
+
     }
 
 
