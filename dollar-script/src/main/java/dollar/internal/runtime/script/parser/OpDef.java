@@ -18,6 +18,7 @@ package dollar.internal.runtime.script.parser;
 
 import dollar.internal.runtime.script.HasKeyword;
 import dollar.internal.runtime.script.HasSymbol;
+import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +39,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     public OpDef(@NotNull String symbol,
                  @Nullable String keyword,
                  @Nullable String name,
+                 @Language("md")
                  @Nullable String description, boolean reserved) {
 
         this.symbol = symbol;

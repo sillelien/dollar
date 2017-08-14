@@ -29,15 +29,27 @@ import static java.util.Arrays.asList;
 public class Symbols {
 
     @NotNull
-    public static final OpDef PIPE_OPERATOR = new OpDef("|", "pipe", "pipe", "Pipe operator", false);
+    public static final OpDef PIPE_OPERATOR = new OpDef("|", "pipe", "pipe",
+                                                        "The Pipe operator exists to improve method chaining and is used in the " +
+                                                                "form `funcA() | funcB` where the first expression is evaluated " +
+                                                                "and then the result is passed to the second function and can be " +
+                                                                "chained such as `funcA() | funcB | funcC`.",
+                                                        false);
     @NotNull
     public static final OpDef WRITE = new OpDef(">>", null, "write-simple",
-                                                "write-simple", false);
+                                                "Performs a simple write to another data item, mostly used to write to a URI. ",
+                                                false);
     @NotNull
     public static final OpDef READ = new OpDef("<<", null, "read-simple",
-                                               "read-simple", false);
+                                               "Performs a simple read from another data item, typically this is used with a URI" +
+                                                       ".", false);
     @NotNull
-    public static final OpDef CAUSES = new OpDef("=>", "causes", "causes", "causes", false);
+    public static final OpDef CAUSES = new OpDef("=>", "causes", "causes",
+                                                 "The causes operator is used to link a reactive expression to an imperative action. " +
+                                                         "The left-hand-side is any expression and the right hand-side is any " +
+                                                         "expression that will be evaluated when the left-hand-side is updated " +
+                                                         "such as `a+b => {@@ a; @@ b}`.",
+                                                 false);
 
     @NotNull
     public static final OpDef ASSERT = new OpDef(".:", "assert", "assert", "assert", false);
