@@ -18,6 +18,7 @@ package com.sillelien.dollar.plugins.pipe;
 
 import com.google.common.io.CharStreams;
 import com.sillelien.dollar.api.DollarException;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class GitUtil {
         }
     }
 
-    public static void clone(File dir, String url) throws IOException, InterruptedException {
+    public static void clone(@NotNull File dir, String url) throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder("git", "clone", url, dir.getAbsolutePath());
         pb.directory(dir);
         Process p = pb.start();

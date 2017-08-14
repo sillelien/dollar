@@ -37,6 +37,7 @@ public class IfOperator implements Map<Token, Map<var, var>> {
         this.parser = parser;
     }
 
+    @NotNull
     @Override public Map<var, var> map(@NotNull Token token) {
         var lhs = (var) token.value();
         return rhs -> {

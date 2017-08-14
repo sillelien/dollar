@@ -25,6 +25,7 @@ import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.Scope;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
@@ -45,8 +46,9 @@ public class EveryOperator implements Map<Token, var> {
         this.pure = pure;
     }
 
+    @NotNull
     @Override
-    public var map(Token token) {
+    public var map(@NotNull Token token) {
         final int[] count = new int[]{-1};
         Object[] objects = (Object[]) token.value();
         return createReactiveNode("every", SourceNodeOptions.NEW_SCOPE, dollarParser, token, (var) objects[3], args -> {

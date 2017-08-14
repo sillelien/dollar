@@ -259,7 +259,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
     @Nullable
 
-    public Object invokeMain(@Nullable Object proxy, @NotNull Method method, Object[] args) throws Throwable {
+    public Object invokeMain(@Nullable Object proxy, @NotNull Method method, @Nullable Object[] args) throws Throwable {
         if (stack.get().size() > MAX_STACK_DEPTH) {
             throw new LambdaRecursionException(stack.get().size());
 

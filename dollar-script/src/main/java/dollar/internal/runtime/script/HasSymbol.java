@@ -16,6 +16,9 @@
 
 package dollar.internal.runtime.script;
 
+import org.jetbrains.annotations.Nullable;
+
 public interface HasSymbol {
+    @Nullable
     String symbol();
 }

@@ -21,6 +21,8 @@ import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
 import org.jparsec.functors.Map;
 
@@ -39,8 +41,9 @@ public class VariableUsageOperator implements Map<Token, Map<? super var, ? exte
         this.numeric = numeric;
     }
 
+    @Nullable
     @Override
-    public Map<? super var, ? extends var> map(Token token) {
+    public Map<? super var, ? extends var> map(@NotNull Token token) {
 
         return rhs -> {
 

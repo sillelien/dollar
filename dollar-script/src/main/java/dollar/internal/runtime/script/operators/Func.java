@@ -37,7 +37,7 @@ import static dollar.internal.runtime.script.parser.Symbols.REDUCE;
 
 public class Func {
     @NotNull
-    public static var reduce(@NotNull boolean pure, var lhs, var rhs) {
+    public static var reduce(@NotNull boolean pure, @NotNull var lhs, @NotNull var rhs) {
         return lhs.$list().$stream(false).reduce((x, y) -> {
             try {
                 return inSubScope(false, pure, REDUCE.name(), newScope -> {
@@ -51,7 +51,7 @@ public class Func {
         }).get();
     }
 
-    public static var each(@NotNull boolean pure, var lhs, var rhs) {
+    public static var each(@NotNull boolean pure, @NotNull var lhs, @NotNull var rhs) {
         return lhs.$each(i -> inSubScope(false, pure, EACH.name(),
                                          newScope -> {
                                              newScope.setParameter(
@@ -62,7 +62,7 @@ public class Func {
                                          }));
     }
 
-    public static var elseFunc(var lhs, var rhs) {
+    public static var elseFunc(@NotNull var lhs, @NotNull var rhs) {
         final var fixLhs = lhs._fixDeep();
         if (fixLhs.isBoolean() && fixLhs.isFalse()) {
             return rhs._fix(2,
@@ -72,7 +72,7 @@ public class Func {
         }
     }
 
-    public static var multiply(var lhs, var rhs) {
+    public static var multiply(@NotNull var lhs, @NotNull var rhs) {
         final var lhsFix = lhs._fix(false);
         if (Arrays.asList("block", "map", "list").contains(
                 lhs.getMetaAttribute("operation"))) {
@@ -88,36 +88,36 @@ public class Func {
     }
 
     @NotNull
-    public static var error(var v) {
+    public static var error(@NotNull var v) {
         return currentScope().addErrorHandler(v);
     }
 
     @NotNull
-    public static var truthy(var i) {
+    public static var truthy(@NotNull var i) {
         return $(i.truthy());
     }
 
-    public static var pair(var lhs, var rhs) {
+    public static var pair(@NotNull var lhs, var rhs) {
         return $(lhs.$S(), rhs);
     }
 
     @NotNull
-    public static var gte(var lhs, var rhs) {
+    public static var gte(@NotNull var lhs, @NotNull var rhs) {
         return $(lhs.compareTo(rhs) >= 0);
     }
 
     @NotNull
-    public static var lte(var lhs, var rhs) {
+    public static var lte(@NotNull var lhs, @NotNull var rhs) {
         return $(lhs.compareTo(rhs) <= 0);
     }
 
     @NotNull
-    public static var gt(var lhs, var rhs) {
+    public static var gt(@NotNull var lhs, @NotNull var rhs) {
         return $(lhs.compareTo(rhs) > 0);
     }
 
     @NotNull
-    public static var lt(var lhs, var rhs) {
+    public static var lt(@NotNull var lhs, @NotNull var rhs) {
         return $(lhs.compareTo(rhs) < 0);
     }
 
@@ -127,30 +127,30 @@ public class Func {
     }
 
     @NotNull
-    public static var orFunc(var lhs, var rhs) {
+    public static var orFunc(@NotNull var lhs, @NotNull var rhs) {
         return $(lhs.isTrue() || rhs.isTrue());
     }
 
     @NotNull
-    public static var and(var lhs, var rhs) {
+    public static var and(@NotNull var lhs, @NotNull var rhs) {
         return $(lhs.isTrue() && rhs.isTrue());
     }
 
-    public static var equality(var lhs, var rhs) {
+    public static var equality(@NotNull var lhs, var rhs) {
         return $(lhs.equals(rhs));
     }
 
     @NotNull
-    public static var inequality(var lhs, var rhs) {
+    public static var inequality(@NotNull var lhs, var rhs) {
         return $(!lhs.equals(rhs));
     }
 
     @NotNull
-    public static var notFunc(var v) {
+    public static var notFunc(@NotNull var v) {
         return $(!v.isTrue());
     }
 
-    public static var parallelFunc(var v) {
+    public static var parallelFunc(@NotNull var v) {
         return v._fixDeep(true);
     }
 
@@ -160,7 +160,7 @@ public class Func {
                 DollarParserImpl.executor.executeInBackground(() -> fix(v, false)));
     }
 
-    public static var subscribeFunc(@NotNull boolean pure, var lhs, var rhs) {
+    public static var subscribeFunc(@NotNull boolean pure, @NotNull var lhs, var rhs) {
         return lhs.$subscribe(
                 i -> DollarScriptSupport.inSubScope(true, pure, "subscribe-param", newScope -> {
                     final var it = fix(i[0], false);
@@ -170,34 +170,34 @@ public class Func {
                 }));
     }
 
-    public static var writeFunc(var lhs, var rhs) {
+    public static var writeFunc(var lhs, @NotNull var rhs) {
         return rhs.$write(lhs);
     }
 
-    public static var publishFunc(var lhs, var rhs) {
+    public static var publishFunc(var lhs, @NotNull var rhs) {
         return rhs.$publish(lhs);
     }
 
     @NotNull
-    public static var errFunc(var i) {
+    public static var errFunc(@NotNull var i) {
         i.err();
         return $void();
     }
 
     @NotNull
-    public static var debugFunc(var i) {
+    public static var debugFunc(@NotNull var i) {
         i.debug();
         return $void();
     }
 
     @NotNull
-    public static var outFunc(var i) {
+    public static var outFunc(@NotNull var i) {
         i.out();
         return $void();
     }
 
     @NotNull
-    public static var assertEquals(var lhs2, var rhs2) {
+    public static var assertEquals(@NotNull var lhs2, @NotNull var rhs2) {
         final var lhsFix1 = lhs2._fixDeep(false);
         final var rhsFix1 = rhs2._fixDeep(false);
         if (lhsFix1.equals(rhsFix1)) {
@@ -211,11 +211,11 @@ public class Func {
     }
 
     @NotNull
-    public static var listenFunc(var lhs, var rhs) {
+    public static var listenFunc(@NotNull var lhs, var rhs) {
         return lhs.isTrue() ? fix(rhs, false) : $void();
     }
 
-    public static var readFunc(var from) {
+    public static var readFunc(@NotNull var from) {
         return DollarFactory.fromURI(from).$read();
     }
 }

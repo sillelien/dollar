@@ -37,6 +37,7 @@ public class WhenOperator implements Map<Token, var> {
         this.parser = parser;
     }
 
+    @NotNull
     @Override
     public var map(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();

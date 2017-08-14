@@ -22,7 +22,6 @@ import com.google.common.cache.LoadingCache;
 import com.sillelien.dollar.api.DollarException;
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.Pipeable;
-import dollar.internal.runtime.script.api.Scope;
 import com.sillelien.dollar.api.collections.ImmutableMap;
 import com.sillelien.dollar.api.script.ModuleResolver;
 import com.sillelien.dollar.api.var;
@@ -31,6 +30,7 @@ import dollar.internal.runtime.script.DollarParserImpl;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.ScriptScope;
 import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -154,7 +154,7 @@ public class GithubModuleResolver implements ModuleResolver {
 
     @NotNull
     @Override
-    public <T,P> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope, P parser) throws Exception {
+    public <T, P> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope, @NotNull P parser) throws Exception {
         log.debug(uriWithoutScheme);
         File dir = repos.get(uriWithoutScheme);
 

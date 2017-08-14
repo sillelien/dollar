@@ -65,7 +65,7 @@ public class SimpleTypeLearner implements TypeLearner {
     }
 
     @Override
-    public void learn(String name, SourceSegment source, @NotNull List<var> inputs, Type type) {
+    public void learn(String name, SourceSegment source, @NotNull List<var> inputs, @NotNull Type type) {
         final ArrayList<String> perms = TypeLearner.perms(inputs);
         for (String perm : perms) {
             HTreeMap<String, Long> usageCounters = getMap(name, perm);

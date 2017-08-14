@@ -50,14 +50,15 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
         this.parser = parser;
     }
 
+    @NotNull
     private var assign(@NotNull var rhs,
                        Object[] objects,
                        @Nullable var constraint,
                        boolean constant,
                        boolean isVolatile,
                        String constraintSource,
-                       Scope scope,
-                       Token token,
+                       @NotNull Scope scope,
+                       @NotNull Token token,
                        boolean decleration) {
 
         final String varName = objects[4].toString();
@@ -146,6 +147,7 @@ public class AssignmentOperator implements Map<Token, Map<? super var, ? extends
 
         return new Map<var, var>() {
 
+            @NotNull
             public var map(@NotNull var rhs) {
                 Scope scope = currentScope();
                 final TypePrediction prediction = rhs._predictType();

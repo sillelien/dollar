@@ -37,6 +37,7 @@ public class WhileOperator implements Map<Token, Map<? super var, ? extends var>
         this.pure = pure;
     }
 
+    @NotNull
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         var lhs = (var) token.value();
         return rhs -> {

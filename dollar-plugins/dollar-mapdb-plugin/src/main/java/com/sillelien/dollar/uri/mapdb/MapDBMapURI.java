@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2014-2015 Neil Ellis
+ *    Copyright (c) 2014-2017 Neil Ellis
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
  */
 
 package com.sillelien.dollar.uri.mapdb;
@@ -21,11 +21,11 @@ import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.types.ErrorType;
 import com.sillelien.dollar.api.uri.URI;
 import com.sillelien.dollar.api.var;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import dollar.internal.mapdb.BTreeMap;
 import dollar.internal.mapdb.DB;
 import dollar.internal.mapdb.MapModificationListener;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -41,11 +41,12 @@ public class MapDBMapURI extends AbstractMapDBURI implements MapModificationList
             new ConcurrentHashMap<>();
     private BTreeMap<var, var> bTreeMap;
 
-    public MapDBMapURI(String scheme, URI uri) {
+    public MapDBMapURI(@NotNull String scheme, @NotNull URI uri) {
         super(uri, scheme);
         bTreeMap = tx.treeMap(getHost(), new VarSerializer(), new VarSerializer()).modificationListener(this).createOrOpen();
     }
 
+    @NotNull
     @Override
     public var all() {
         HashMap<var, var> result = new HashMap<>(bTreeMap);
@@ -61,6 +62,7 @@ public class MapDBMapURI extends AbstractMapDBURI implements MapModificationList
         }
     }
 
+    @NotNull
     @Override
     public var drain() {
         HashMap<var, var> result = new HashMap<>(bTreeMap);

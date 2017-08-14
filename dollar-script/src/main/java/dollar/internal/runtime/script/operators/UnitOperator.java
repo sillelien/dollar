@@ -39,6 +39,7 @@ public class UnitOperator implements Map<Token, var> {
         this.pure = pure;
     }
 
+    @NotNull
     @Override
     public var map(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();

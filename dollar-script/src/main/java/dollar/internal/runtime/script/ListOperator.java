@@ -35,6 +35,7 @@ class ListOperator implements Map<Token, var> {
         this.pure = pure;
     }
 
+    @NotNull
     @Override
     public var map(@NotNull Token t) {
         List<var> o = (List<var>) t.value();

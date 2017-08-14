@@ -21,10 +21,12 @@ import org.jetbrains.annotations.Nullable;
 
 public class Variable {
     private final boolean readonly;
+    @Nullable
     private final var constraint;
     private final long thread;
     private final boolean pure;
     private final boolean fixed;
+    @Nullable
     private final String constraintSource;
     private boolean isVolatile;
     private var value;
@@ -52,10 +54,12 @@ public class Variable {
         thread = Thread.currentThread().getId();
     }
 
+    @Nullable
     public var getConstraint() {
         return constraint;
     }
 
+    @Nullable
     public String getConstraintSource() {
         return constraintSource;
     }

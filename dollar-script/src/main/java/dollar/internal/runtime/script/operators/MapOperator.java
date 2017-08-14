@@ -40,6 +40,7 @@ public class MapOperator implements Map<Token, var> {
         this.pure = pure;
     }
 
+    @NotNull
     @Override
     public var map(@NotNull Token t) {
         List<var> o = (List<var>) t.value();
@@ -61,9 +62,9 @@ public class MapOperator implements Map<Token, var> {
                     //Not really a map if only one entry unless it's a pair, in fact
                     // it's really a block.
                     return $(stream.map(v -> v._fix(parallel.isTrue()))
-                            .collect(Collectors.toConcurrentMap(
-                                    v -> v.pair() ? v.getPairKey() : v.$S(),
-                                    v -> v.pair() ? v.getPairValue() : v)));
+                                     .collect(Collectors.toConcurrentMap(
+                                             v -> v.pair() ? v.getPairKey() : v.$S(),
+                                             v -> v.pair() ? v.getPairValue() : v)));
                 });
         for (var value : o) {
             value.$listen(i -> lambda.$notify());

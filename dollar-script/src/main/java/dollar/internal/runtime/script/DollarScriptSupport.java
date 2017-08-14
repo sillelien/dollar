@@ -230,6 +230,7 @@ public class DollarScriptSupport {
         return scopes.get().get(scopes.get().size() - 1);
     }
 
+    @Nullable
     @SuppressWarnings("ThrowFromFinallyBlock")
     public static <T> T inSubScope(boolean runtime, boolean pure, @NotNull String scopeName,
                                    @NotNull ScopeExecutable<T> r) {
@@ -237,8 +238,9 @@ public class DollarScriptSupport {
     }
 
 
+    @Nullable
     public static <T> T inScope(boolean runtime,
-                                Scope parent,
+                                @NotNull Scope parent,
                                 boolean pure,
                                 @NotNull String scopeName,
                                 @NotNull ScopeExecutable<T> r) {
@@ -273,6 +275,7 @@ public class DollarScriptSupport {
     }
 
 
+    @Nullable
     @SuppressWarnings("ThrowFromFinallyBlock")
     public static <T> T inScope(boolean runtime,
                                 @NotNull Scope scope,
@@ -297,7 +300,7 @@ public class DollarScriptSupport {
     @Nullable
     public static var getVariable(boolean pure, @NotNull String key, boolean numeric,
                                   @Nullable var defaultValue,
-                                  @NotNull Token token, DollarParser parser) {
+                                  @NotNull Token token, @NotNull DollarParser parser) {
 //       if(pure && !(scope instanceof  PureScope)) {
 //           throw new IllegalStateException("Attempting to get a pure variable in an impure scope");
 //       }
@@ -367,7 +370,7 @@ public class DollarScriptSupport {
     public static Scope getScopeForVar(boolean pure,
                                        @NotNull String key,
                                        boolean numeric,
-                                       Scope initialScope) {
+                                       @Nullable Scope initialScope) {
 
         if (initialScope == null) {
             initialScope = currentScope();
@@ -521,7 +524,7 @@ public class DollarScriptSupport {
     }
 
     @NotNull
-    public static var constrain(Scope scope, @NotNull var value, var constraint, String source) {
+    public static var constrain(@NotNull Scope scope, @NotNull var value, var constraint, String source) {
 //        System.err.println("(" + source + ") " + rhs.$type().constraint());
         if (!Objects.equals(value._constraintFingerprint(), source)) {
             if (value._constraintFingerprint() != null && !value._constraintFingerprint().isEmpty()) {
@@ -547,7 +550,7 @@ public class DollarScriptSupport {
                        + "\u001b[m"; // Prefix + Suffix to reset color
     }
 
-    public static void pushScope(Scope scope) {
+    public static void pushScope(@NotNull Scope scope) {
         addScope(true, scope);
     }
 

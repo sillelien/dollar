@@ -36,17 +36,18 @@ public class AssertOperator implements Map<Token, var> {
         this.parser = parser;
     }
 
+    @NotNull
     @Override public var map(@NotNull Token token) {
         final SourceSegmentValue source = new SourceSegmentValue(DollarScriptSupport.currentScope(), token);
         Object[] objects = (Object[]) token.value();
         return DollarScriptSupport.createReactiveNode("assert", SourceNodeOptions.NO_SCOPE, parser, token, (var) objects[1],
                                                       args -> {
-            if (((var) objects[1]).isTrue()) { return $void(); } else {
-                throw new DollarScriptException("Assertion failed: " +
-                                                (objects[0] != null ? objects[0] : "") +
-                                                " : " +
-                                                source.getSourceMessage());
-            }
-        });
+                                                          if (((var) objects[1]).isTrue()) { return $void(); } else {
+                                                              throw new DollarScriptException("Assertion failed: " +
+                                                                                                      (objects[0] != null ? objects[0] : "") +
+                                                                                                      " : " +
+                                                                                                      source.getSourceMessage());
+                                                          }
+                                                      });
     }
 }

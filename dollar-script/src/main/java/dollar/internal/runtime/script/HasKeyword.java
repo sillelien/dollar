@@ -16,7 +16,10 @@
 
 package dollar.internal.runtime.script;
 
+import org.jetbrains.annotations.Nullable;
+
 public interface HasKeyword {
+    @Nullable
     String keyword();
 
 }

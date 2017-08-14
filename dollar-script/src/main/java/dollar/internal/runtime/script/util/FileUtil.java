@@ -56,13 +56,15 @@ public final class FileUtil {
         toDelete.delete();
     }
 
-    public static File getRuntimeDir(String dirName) {
+    @NotNull
+    public static File getRuntimeDir(@NotNull String dirName) {
         File dir = new File(SHARED_RUNTIME_PATH, dirName);
         dir.mkdirs();
         return dir;
     }
 
-    public static File getTempDir(String dirName) {
+    @NotNull
+    public static File getTempDir(@NotNull String dirName) {
         File dir = new File(RUNTIME_TMP_PATH, dirName);
         dir.mkdirs();
         return dir;

@@ -17,7 +17,9 @@
 package dollar.internal.runtime.script;
 
 import dollar.internal.runtime.script.api.Scope;
+import org.jetbrains.annotations.NotNull;
 
 public interface ScopeExecutable<T> {
+     @NotNull
      T execute(Scope scope) throws Exception;
 }

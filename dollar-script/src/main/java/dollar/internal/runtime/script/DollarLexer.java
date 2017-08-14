@@ -353,12 +353,12 @@ class DollarLexer {
     }
 
     @NotNull
-    private static String[] keywordsToString(HasKeyword... names) {
+    private static String[] keywordsToString(@NotNull HasKeyword... names) {
         return Arrays.stream(names).map(HasKeyword::keyword).collect(Collectors.toList()).toArray(new String[names.length]);
     }
 
     @NotNull
-    private static String[] symbolsToString(HasSymbol... names) {
+    private static String[] symbolsToString(@NotNull HasSymbol... names) {
         return Arrays.stream(names).map(HasSymbol::symbol).collect(Collectors.toList()).toArray(new String[names.length]);
     }
 

@@ -65,6 +65,7 @@ public class ScriptScope implements Scope {
     Scope parent;
     @Nullable
     private String source;
+    @Nullable
     private String file;
     private Parser<var> parser;
 
@@ -115,7 +116,7 @@ public class ScriptScope implements Scope {
         id = String.valueOf(name + ":" + counter.incrementAndGet());
     }
 
-    public ScriptScope(@Nullable String source, File file, boolean root) {
+    public ScriptScope(@Nullable String source, @NotNull File file, boolean root) {
         this.source = source;
         this.file = file.getAbsolutePath();
         this.root = root;
@@ -123,12 +124,12 @@ public class ScriptScope implements Scope {
     }
 
     public ScriptScope(Scope parent,
-                       String id,
+                       @NotNull String id,
                        String file,
                        boolean parameterScope,
-                       ConcurrentHashMap<String, Variable> variables,
-                       List<var> errorHandlers,
-                       MultiMap<String, Listener> listeners,
+                       @NotNull ConcurrentHashMap<String, Variable> variables,
+                       @NotNull List<var> errorHandlers,
+                       @NotNull MultiMap<String, Listener> listeners,
                        String source,
                        Parser<var> parser, boolean root) {
         this.parent = parent;
@@ -575,7 +576,7 @@ public class ScriptScope implements Scope {
         return id + "->" + parent;
     }
 
-    private boolean checkConstraint(var value,
+    private boolean checkConstraint(@NotNull var value,
                                     @Nullable Variable oldValue,
                                     @NotNull var constraint) {
         checkDestroyed();

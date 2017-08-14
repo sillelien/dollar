@@ -36,6 +36,7 @@ public class ForOperator implements Map<Token, Map<? super var, ? extends var>> 
         this.pure = pure;
     }
 
+    @NotNull
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
         String constraintSource = null;

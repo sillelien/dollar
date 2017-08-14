@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2014-2015 Neil Ellis
+ *    Copyright (c) 2014-2017 Neil Ellis
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
  */
 
 package com.sillelien.dollar.uri.mapdb;
@@ -22,10 +22,10 @@ import com.sillelien.dollar.api.plugin.Plugins;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.uri.URI;
 import com.sillelien.dollar.api.var;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import dollar.internal.mapdb.BTreeMap;
 import dollar.internal.mapdb.MapModificationListener;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,10 +44,11 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
     @Nullable private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
     private final BTreeMap<var, var> bTreeMap;
     private final int size;
+    @NotNull
     private final ArrayBlockingQueue<var> queue;
 
 
-    public MapDBCircleURI(String scheme, @NotNull URI uri) {
+    public MapDBCircleURI(@NotNull String scheme, @NotNull URI uri) {
         super(uri, scheme);
         bTreeMap = tx.treeMap(getHost(), new VarSerializer(), new VarSerializer()).modificationListener(this).createOrOpen();
         size= Integer.parseInt(uri.paramWithDefault("size", "100").get(0));
@@ -63,28 +64,30 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
 
     }
 
+    @NotNull
     @Override public var write(@NotNull var value, boolean blocking, boolean mutating) {
         if (value.isVoid()) {
             return $(false);
         }
-            try {
-                if (!blocking) {
-                    return $(getQueue().offer(value._fixDeep()));
-                } else {
-                    getQueue().put(value._fixDeep());
-                    return $(true);
-                }
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                return $(false);
+        try {
+            if (!blocking) {
+                return $(getQueue().offer(value._fixDeep()));
+            } else {
+                getQueue().put(value._fixDeep());
+                return $(true);
             }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return $(false);
+        }
     }
 
+    @NotNull
     @Override public var drain() {
-            final BlockingQueue<var> queue = getQueue();
-            final ArrayList<var> objects = new ArrayList<>();
-            queue.drainTo(objects);
+        final BlockingQueue<var> queue = getQueue();
+        final ArrayList<var> objects = new ArrayList<>();
+        queue.drainTo(objects);
         return DollarFactory.fromValue(objects);
     }
 
@@ -113,11 +116,12 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override public var removeValue(@NotNull var v) {
         var unwrapped = v._unwrap();
         if(getQueue().remove(unwrapped)) {
-             return unwrapped;
-         } else {
+            return unwrapped;
+        } else {
             return $void();
         }
     }
@@ -148,6 +152,7 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
         subscribers.get(subId).cancel(false);
     }
 
+    @NotNull
     private BlockingQueue<var> getQueue() {
         return queue;
     }

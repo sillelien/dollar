@@ -185,7 +185,7 @@ public class DollarParserImpl implements DollarParser {
 
     @Override
     @NotNull
-    public var parse(@NotNull InputStream in, boolean parallel, Scope scope) throws Exception {
+    public var parse(@NotNull InputStream in, boolean parallel, @NotNull Scope scope) throws Exception {
         String source = new String(ByteStreams.toByteArray(in));
         return parse(new ScriptScope(scope, "(stream)", source, "(stream-scope)", true), source);
     }
@@ -226,7 +226,7 @@ public class DollarParserImpl implements DollarParser {
     }
 
 
-    private Parser<?> buildParser(@NotNull boolean pure, Scope scope) throws Exception {
+    private Parser<?> buildParser(@NotNull boolean pure, @NotNull Scope scope) throws Exception {
         topLevelParser = script(scope, pure);
         return topLevelParser;
     }
@@ -288,7 +288,7 @@ public class DollarParserImpl implements DollarParser {
                                   moduleStatement(ref), assertOperator(ref, pure),
                                   collectStatement(ref.lazy(), pure),
                                   whenStatement(ref.lazy(), pure), everyStatement(ref.lazy(), pure),
-                                  functionCall(ref, pure),
+                                  functionCall(),
                                   java(), URL, DECIMAL_LITERAL, INTEGER_LITERAL,
                                   STRING_LITERAL,
                                   dollarIdentifier(ref, pure), IDENTIFIER_KEYWORD,
@@ -304,7 +304,7 @@ public class DollarParserImpl implements DollarParser {
                                   assertOperator(ref, pure),
                                   collectStatement(ref.lazy(), pure),
                                   whenStatement(ref.lazy(), pure),
-                                  functionCall(ref, pure),
+                                  functionCall(),
                                   DECIMAL_LITERAL,
                                   INTEGER_LITERAL,
                                   STRING_LITERAL,
@@ -356,7 +356,7 @@ public class DollarParserImpl implements DollarParser {
                         .postfix(op(INC, new UnaryOp(this, INC, var::$inc)), INC_DEC_PRIORITY)
                         .prefix(op(NEGATE, new UnaryOp(this, NEGATE, var::$negate)), UNARY_PRIORITY)
                         .prefix(op(PARALLEL, new UnaryOp(true, Func::parallelFunc, PARALLEL, this)), SIGNAL_PRIORITY)
-                        .prefix(unaryOp(), SIGNAL_PRIORITY)
+                        .prefix(unaryOperator(), SIGNAL_PRIORITY)
                         .prefix(forOperator(ref, pure), UNARY_PRIORITY)
                         .prefix(whileOperator(ref, pure), UNARY_PRIORITY)
                         .postfix(subscriptOperator(ref), MEMBER_PRIORITY)
@@ -410,6 +410,7 @@ public class DollarParserImpl implements DollarParser {
     private Parser<var> variableRef(@NotNull boolean pure) {
         return identifier().followedBy(OP(LEFT_PAREN).not().peek()).token().map(
                 new Map<Token, var>() {
+                    @Nullable
                     public var map(@NotNull Token token) {
                         return getVariable(pure, token.value().toString(),
                                            false, null,
@@ -419,7 +420,7 @@ public class DollarParserImpl implements DollarParser {
     }
 
     @NotNull
-    private Parser<UnaryOp> unaryOp() {
+    private Parser<UnaryOp> unaryOperator() {
         return op(SERIAL, new UnaryOp(true, v -> v._fixDeep(false), SERIAL, this));
     }
 
@@ -437,12 +438,10 @@ public class DollarParserImpl implements DollarParser {
     }
 
     private Parser<var> map(@NotNull Parser<var> expression, boolean pure) {
-        Parser<List<var>>
-                sequence =
-                OP_NL(LEFT_BRACE).next(expression.sepBy(COMMA_TERMINATOR))
-                        .followedBy(COMMA_TERMINATOR.optional())
-                        .followedBy(NL_OP(RIGHT_BRACE));
-        return sequence.token().map(new MapOperator(this, pure));
+        return OP_NL(LEFT_BRACE).next(expression.sepBy(COMMA_TERMINATOR))
+                       .followedBy(COMMA_TERMINATOR.optional())
+                       .followedBy(NL_OP(RIGHT_BRACE)).token()
+                       .map(new MapOperator(this, pure));
     }
 
     private Parser<var> moduleStatement(@NotNull Parser.Reference<var> ref) {
@@ -461,43 +460,47 @@ public class DollarParserImpl implements DollarParser {
     }
 
     private Parser<var> assertOperator(@NotNull Parser.Reference<var> ref, boolean pure) {
-        return OP(ASSERT).next(
-                or(array(STRING_LITERAL.followedBy(OP(PAIR)), ref.lazy()),
-                   array(OP(PAIR).optional(), ref.lazy()))
-                        .token()
-                        .map(new AssertOperator(this)));
+        return OP(ASSERT).next(or(array(STRING_LITERAL.followedBy(OP(PAIR)), ref.lazy()),
+                                  array(OP(PAIR).optional(), ref.lazy()))
+                                       .token()
+                                       .map(new AssertOperator(this)));
     }
 
     private Parser<var> collectStatement(Parser<var> expression, boolean pure) {
-        Parser<Object[]> parser = KEYWORD_NL(COLLECT)
-                                          .next(
-                                                  array(expression,
-                                                        KEYWORD(UNTIL).next(expression).optional(),
-                                                        KEYWORD(UNLESS).next(expression).optional(),
-                                                        expression)
-                                          );
-        return parser.token().map(new CollectOperator(this, pure));
+        return KEYWORD_NL(COLLECT)
+                       .next(
+                               array(expression,
+                                     KEYWORD(UNTIL).next(expression).optional(),
+                                     KEYWORD(UNLESS).next(expression).optional(),
+                                     expression)
+                       )
+                       .token()
+                       .map(new CollectOperator(this, pure));
     }
 
     private Parser<var> whenStatement(Parser<var> expression, boolean pure) {
-        Parser<Object[]> sequence = KEYWORD_NL(WHEN).next(array(expression, expression));
-        return sequence.token().map(new WhenOperator(this));
+        return KEYWORD_NL(WHEN)
+                       .next(array(expression, expression))
+                       .token()
+                       .map(new WhenOperator(this));
     }
 
     private Parser<var> everyStatement(Parser<var> expression, boolean pure) {
-        Parser<Object[]> sequence = KEYWORD_NL(EVERY)
-                                            .next(array(unitValue(pure),
-                                                        KEYWORD(UNTIL).next(
-                                                                expression).optional(),
-                                                        KEYWORD(UNLESS).next(
-                                                                expression).optional(),
-                                                        expression));
-        return sequence.token().map(new EveryOperator(this, pure));
+        return KEYWORD_NL(EVERY)
+                       .next(array(unitValue(pure),
+                                   KEYWORD(UNTIL).next(
+                                           expression).optional(null),
+                                   KEYWORD(UNLESS).next(
+                                           expression).optional(null),
+                                   expression))
+                       .token()
+                       .map(new EveryOperator(this, pure));
     }
 
-    private Parser<var> functionCall(@NotNull Parser.Reference<var> ref, boolean pure) {
+    private Parser<var> functionCall() {
         return array(IDENTIFIER.or(BUILTIN).followedBy(OP(LEFT_PAREN).peek()))
-                       .token().map(new FunctionCallOperator(this));
+                       .token()
+                       .map(new FunctionCallOperator(this));
     }
 
     final Parser<var> java() {
@@ -523,8 +526,9 @@ public class DollarParserImpl implements DollarParser {
                 return "java";
             }
         }).token().map(new Function<Token, var>() {
+            @NotNull
             @Override
-            public var apply(Token token) {
+            public var apply(@NotNull Token token) {
                 return DollarScriptSupport.createNode("java", NO_SCOPE, DollarParserImpl.this, token,
                                                       Arrays.asList($void()),
                                                       in -> JavaScriptingSupport.compile($void(),
@@ -535,7 +539,7 @@ public class DollarParserImpl implements DollarParser {
     }
 
 
-    private <T> Parser<T> op(OpDef def, T value) {
+    private <T> Parser<T> op(@NotNull OpDef def, @NotNull T value) {
         return OP(def).token().map(new SourceMapper<>(value));
 
     }
@@ -555,7 +559,7 @@ public class DollarParserImpl implements DollarParser {
     private Parser<Map<? super var, ? extends var>> pipeOperator(@NotNull Parser.Reference<var> ref,
                                                                  boolean pure) {
         return (OP(PIPE_OPERATOR).optional(null)).next(
-                Parsers.longest(BUILTIN, IDENTIFIER, functionCall(ref, pure).postfix(parameterOperator(ref, pure)),
+                Parsers.longest(BUILTIN, IDENTIFIER, functionCall().postfix(parameterOperator(ref, pure)),
                                 ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))))
                        .token().map(new PipeOperator(this, pure));
     }
@@ -570,15 +574,23 @@ public class DollarParserImpl implements DollarParser {
 
     private Parser<Map<? super var, ? extends var>> readOperator() {
         return array(KEYWORD(READ_KEYWORD), KEYWORD(BLOCK).optional(), KEYWORD(MUTATE).optional()).followedBy(
-                KEYWORD(FROM).optional()).token().map(new ReadOperator(this));
+                KEYWORD(FROM).optional())
+                       .token()
+                       .map(new ReadOperator(this));
     }
 
     private Parser<Map<var, var>> ifOperator(@NotNull Parser.Reference<var> ref) {
-        return KEYWORD_NL(IF_OPERATOR).next(ref.lazy()).token().map(new IfOperator(this));
+        return KEYWORD_NL(IF_OPERATOR)
+                       .next(ref.lazy())
+                       .token()
+                       .map(new IfOperator(this));
     }
 
     private Parser<Map<? super var, ? extends var>> isOperator() {
-        return KEYWORD(IS).next(IDENTIFIER.sepBy(OP(COMMA))).token().map(new IsOperator(this));
+        return KEYWORD(IS)
+                       .next(IDENTIFIER.sepBy(OP(COMMA)))
+                       .token()
+                       .map(new IsOperator(this));
     }
 
     private Parser<Map<? super var, ? extends var>> memberOperator(@NotNull Parser.Reference<var> ref) {
@@ -586,13 +598,15 @@ public class DollarParserImpl implements DollarParser {
                        .next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN)).or(IDENTIFIER))
                        .token().map(new Function<Token, Map<? super var, ? extends var>>() {
 
+                    @NotNull
                     @Override
-                    public Map<? super var, ? extends var> apply(Token rhs) {
+                    public Map<? super var, ? extends var> apply(@NotNull Token rhs) {
 
                         return new Map<var, var>() {
 
+                            @NotNull
                             @Override
-                            public var map(var lhs) {
+                            public var map(@NotNull var lhs) {
                                 return createReactiveNode(
                                         "." + rhs.toString(), NO_SCOPE, DollarParserImpl.this, rhs, lhs,
                                         (var) rhs.value(), args -> lhs.$(rhs.value().toString())
@@ -604,16 +618,23 @@ public class DollarParserImpl implements DollarParser {
     }
 
     private Parser<Map<? super var, ? extends var>> forOperator(final @NotNull Parser.Reference<var> ref, boolean pure) {
-        return array(KEYWORD(FOR), IDENTIFIER, KEYWORD(IN), ref.lazy()).token().map(new ForOperator(this, pure));
+        return array(KEYWORD(FOR), IDENTIFIER, KEYWORD(IN), ref.lazy())
+                       .token()
+                       .map(new ForOperator(this, pure));
     }
 
     private Parser<Map<? super var, ? extends var>> whileOperator(final @NotNull Parser.Reference<var> ref, boolean pure) {
-        return KEYWORD(WHILE).next(ref.lazy()).token().map(new WhileOperator(this, pure));
+        return KEYWORD(WHILE)
+                       .next(ref.lazy())
+                       .token()
+                       .map(new WhileOperator(this, pure));
     }
 
     private Parser<Map<? super var, ? extends var>> subscriptOperator(@NotNull Parser.Reference<var> ref) {
         return OP(LEFT_BRACKET)
-                       .next(array(ref.lazy().followedBy(OP(RIGHT_BRACKET)), OP(ASSIGNMENT).next(ref.lazy()).optional()))
+                       .next(array(
+                               ref.lazy().followedBy(OP(RIGHT_BRACKET)), OP(ASSIGNMENT).next(ref.lazy()).optional()
+                       ))
                        .token()
                        .map(new SubscriptOperator(this));
     }
@@ -640,13 +661,17 @@ public class DollarParserImpl implements DollarParser {
     }
 
     private Parser<Map<? super var, ? extends var>> variableUsageOperator(boolean pure) {
-        return or(OP(DOLLAR).followedBy(OP(LEFT_PAREN).peek()).token()
+        return or(OP(DOLLAR).followedBy(OP(LEFT_PAREN).peek())
+                          .token()
                           .map(new VariableUsageOperator(pure, this, false)),
-                  OP(DOLLAR).followedBy(INTEGER_LITERAL.peek()).token().map(
+                  OP(DOLLAR).followedBy(INTEGER_LITERAL.peek())
+                          .token()
+                          .map(
                           (Token lhs) -> {
                               return new Map<var, var>() {
+                                  @Nullable
                                   @Override
-                                  public var map(var rhs) {
+                                  public var map(@NotNull var rhs) {
                                       return getVariable(pure, rhs.toString(), true, null, lhs,
                                                          DollarParserImpl.this);
                                   }
@@ -670,9 +695,7 @@ public class DollarParserImpl implements DollarParser {
         ).token().map(new AssignmentOperator(false, pure, this));
     }
 
-    private Parser<Map<? super var, ? extends var>> definitionOperator(
-                                                                              @NotNull Parser.Reference<var> ref,
-                                                                              boolean pure) {
+    private Parser<Map<? super var, ? extends var>> definitionOperator(@NotNull Parser.Reference<var> ref, boolean pure) {
 
         return
                 or(
@@ -715,15 +738,17 @@ public class DollarParserImpl implements DollarParser {
     }
 
     private class SourceMapper<T> implements Map<Token, T> {
+        @NotNull
         private final T value;
 
 
-        SourceMapper(T value) {
+        SourceMapper(@NotNull T value) {
             this.value = value;
         }
 
+        @NotNull
         @Override
-        public T map(Token token) {
+        public T map(@NotNull Token token) {
             if (value instanceof Operator) {
                 ((Operator) value).setSource(new SourceSegmentValue(currentScope(), token));
             }

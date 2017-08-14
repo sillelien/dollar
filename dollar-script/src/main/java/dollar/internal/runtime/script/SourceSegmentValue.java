@@ -48,6 +48,7 @@ public class SourceSegmentValue implements SourceSegment {
         this.shortHash = new FNV().fnv1_32(source.getBytes()).toString(36);
     }
 
+    @NotNull
     @Override
     public String getCompleteSource() {
         return source;
@@ -58,11 +59,13 @@ public class SourceSegmentValue implements SourceSegment {
         return length;
     }
 
+    @NotNull
     @Override
     public String getShortHash() {
         return shortHash;
     }
 
+    @Nullable
     @Override
     public String getSourceFile() {
         return sourceFile;
@@ -76,7 +79,6 @@ public class SourceSegmentValue implements SourceSegment {
         if (index < 0 || length < 0) {
             return "<unknown location>";
         }
-        ;
         if (index + length > source.length()) {
             throw new AssertionError("Index="+index+" Length="+length+" SourceLength="+source.length()+" Source='"+source+"'");
         }
@@ -105,7 +107,6 @@ public class SourceSegmentValue implements SourceSegment {
         if (index < 0 || length < 0) {
             return "<unknown location>";
         }
-        ;
         if (index + length > source.length()) {
             throw new AssertionError("Index="+index+" Length="+length+" SourceLength="+source.length()+" Source='"+source+"'");
         }

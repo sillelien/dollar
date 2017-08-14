@@ -46,6 +46,7 @@ public class FunctionCallOperator implements Function<Token, var> {
         var node = DollarScriptSupport.createNode("function-name", SourceNodeOptions.NO_SCOPE, parser, token,
                                                   Collections.singletonList((var) objects[0]),
                                                   new Pipeable() {
+                                                      @NotNull
                                                       @Override
                                                       public var pipe(var... args) throws Exception {
                                                           return (var) objects[0];

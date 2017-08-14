@@ -17,9 +17,10 @@
 package dollar.internal.runtime.script;
 
 import dollar.internal.runtime.script.api.Scope;
+import org.jetbrains.annotations.NotNull;
 
 public class BlockScope extends ScriptScope {
-    public BlockScope(Scope scope) {
+    public BlockScope(@NotNull Scope scope) {
         super(scope,scope.getFile(),scope.getSource(),"block-scope", false);
     }
 }

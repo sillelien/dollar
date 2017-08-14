@@ -21,6 +21,7 @@ import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.parser.OpDef;
+import org.jetbrains.annotations.NotNull;
 import org.jparsec.functors.Map;
 import org.jparsec.functors.Unary;
 
@@ -51,8 +52,9 @@ public class UnaryOp implements Unary<var>, Operator {
         this.parser = parser;
     }
 
+    @NotNull
     @Override
-    public var map(var from) {
+    public var map(@NotNull var from) {
 
         if (immediate) {
             final var lambda = DollarScriptSupport.createNode(operation.name(), SourceNodeOptions.NO_SCOPE, parser,

@@ -30,6 +30,7 @@ public interface DollarParser {
 
     @NotNull ParserErrorHandler getErrorHandler();
 
+    @NotNull
     ParserOptions options();
 
 

@@ -48,6 +48,7 @@ public class PipeOperator implements Function<Token, Map<var, var>> {
     }
 
 
+    @NotNull
     @Override
     public Map<var, var> apply(@NotNull Token token) {
         var rhs = (var) token.value();
