@@ -7,7 +7,7 @@ PROJECT=$(pwd)
 
 mvn -q -e -T 1C -Dmaven.test.skip -Drat.skip -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true install
 
-DIST=$HOME/workspace/dist
+DIST=$HOME/workspace/dollar/
 if [[ -n $(ls $DIST) ]]; then
     rm -r ${DIST}/*
 fi
