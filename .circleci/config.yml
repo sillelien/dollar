@@ -45,6 +45,14 @@ jobs:
         - store_test_results:
             path: dollar-examples/target/surefire-reports
 
+        - run:
+            name: dist-files
+            command: mkdir -p /home/circleci/workspace/ && cp -rf /home/circleci/dollar/dist /home/circleci/workspace/
+
+        - persist_to_workspace:
+            root: /home/circleci/workspace
+            paths:
+              - dist
 
     promote:
       <<: *defaults
@@ -180,7 +188,7 @@ jobs:
         - checkout
 
         - attach_workspace:
-            at: /root/dist
+            at: /root/workspace
 
         - run:
             name: build-docs
@@ -193,14 +201,14 @@ jobs:
               cd project
               git checkout $CIRCLE_BRANCH
               cd ..
-              mkdir -p dist
-              cd dist
+              mkdir -p workspace
+              cd workspace
               git clone https://github.com/sillelien/dollar docs
               cd docs
               git checkout gh-pages
-              cp -rf /root/dist/devdocs dev
+              cp -rf /root/workspace/devdocs dev
               mkdir -p /srv/jekyll/project/dollar-docs/src/main/webapp/_includes/
-              cp -rf /root/dist/gendocs/* /srv/jekyll/project/dollar-docs/src/main/webapp/_includes/
+              cp -rf /root/workspace/gendocs/* /srv/jekyll/project/dollar-docs/src/main/webapp/_includes/
               echo "release: $(cat.release)" > /srv/jekyll/project/dollar-docs/src/main/webapp/env.yml
               tail -n +2 /srv/jekyll/project/dollar-docs/src/main/resources/pages/scripting.md  >
               /srv/jekyll/project/dollar-docs/src/main/webapp/scripting.md
@@ -218,7 +226,7 @@ jobs:
         - checkout
 
         - attach_workspace:
-            at: /home/circleci/dollar/dist
+            at: /home/circleci/workspace
 
         - restore_cache:
             keys:
@@ -268,9 +276,10 @@ jobs:
                 - ~/.m2
 
         - persist_to_workspace:
-            root: /home/circleci/dollar/dist
+            root: /home/circleci/workspace
             paths:
-              - dollar
+              - dist
+              - devdocs
 
 
     docker:
@@ -285,7 +294,7 @@ jobs:
             command: /home/circleci/.build-init.sh
 
         - attach_workspace:
-            at: /home/circleci/dollar/dist
+            at: /home/circleci/workspace
 
         - setup_remote_docker
 

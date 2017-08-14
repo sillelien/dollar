@@ -395,7 +395,7 @@ Where an executable element with scope closure (such as _lists, blocks and maps_
 >Please look at the `SourceNodeOptions` class for the three types of scoped nodes, they are `NO_SCOPE` which has no effect on the current scope, `NEW_SCOPE` which creates a new scope but does not have closure and `SCOPE_WITH_CLOSURE` which creates a new scope with lexical closure.
 
 
-###Error Handling
+### Error Handling
 
 Error handling couldn't be simpler. Define an error expression using the error keyword, the expression supplied will be evaluated on an error occurring within any sub scope of the scope in which it is defined. The special variables `msg` and `type` will be assigned values.
 
@@ -406,7 +406,7 @@ var a=1/0
 .: errorHappened
 ```
 
-###Error Handling
+### Logging
 
 Logging is done by the `print`,`debug` and `err` keywords and the `@@`,`!!` and `??` operators.
 
@@ -423,8 +423,8 @@ Logging is done by the `print`,`debug` and `err` keywords and the `@@`,`!!` and 
 ?? "I'm an error message"
 ```
 
-##Type System
-###Intro
+## Type System
+### Intro
 Although Dollar is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, INTEGER,DECIMAL, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
 
 ```dollar
@@ -845,7 +845,7 @@ And similar to Java Dollar coerces types as required:
 Dollar support the basic logical operators &&,||,! as well as the truthy operator `~` and the default operator `|`.
 
 #### Truthy
-The truthy operator converts any value to a boolean by applying the rule that: void is false, 0 is false, "" is false, empty list is false, empty map is false - all else is true.
+The truthy operator `~` converts any value to a boolean by applying the rule that: void is false, 0 is false, "" is false, empty list is false, empty map is false - all else is true.
 
 ```dollar
 
@@ -1025,7 +1025,9 @@ In the example the value of c is greater than d because the value of c is evalua
 
 ##Advanced Topics
 
-# Appendix A - Symbols
+TODO
+
+## Appendix A - Symbols
 
 {% capture symbols_include %}{% include symbols.md %}{% endcapture %}
 {{ symbols_include | markdownify }}

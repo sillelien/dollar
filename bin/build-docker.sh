@@ -4,9 +4,9 @@ cd $(dirname $0) && cd ..
 PROJECT=$(pwd)
 RELEASE=$(cat .release)
 
-mkdir -p $PROJECT/dist/
+mkdir -p $HOME/workspace/docker
 
-cd $PROJECT/dist
+cd $HOME/workspace/docker
 curl http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-${RELEASE}.tgz > dollar.tgz
 tar -zxvf dollar.tgz
 ls -l dollar
