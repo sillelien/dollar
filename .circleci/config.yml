@@ -150,6 +150,7 @@ jobs:
             root: /home/circleci/dollar/dist
             paths:
               - devdocs
+              - gendocs
 
         - save_cache:
             key: m2-devdocs-{{ .Branch }}-{{ checksum "pom.xml" }}

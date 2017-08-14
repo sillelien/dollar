@@ -381,6 +381,12 @@ public class Symbols {
     @NotNull
     public static final KeywordDef FROM = new KeywordDef("from", false, null);
     @NotNull
+    public static final List<KeywordDef> KEYWORDS;
+    @NotNull
+    public static final List<SymbolDef> SYMBOLS;
+    @NotNull
+    public static final List<OpDef> OPERATORS;
+    @NotNull
     private static final List<? extends Comparable> tokens =
             asList(
                     //                   new OpDef("\u2357"),
@@ -540,11 +546,6 @@ public class Symbols {
                     RESERVED_OPERATOR_23
 
             );
-    @NotNull
-    private static final List<KeywordDef> KEYWORDS;
-    @NotNull
-    private static final List<SymbolDef> SYMBOLS;
-    private static List<? extends Comparable> OPERATORS;
 
     static {
 
