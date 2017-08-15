@@ -208,10 +208,9 @@ jobs:
               git clone https://github.com/sillelien/dollar docs
               cd docs
               git checkout gh-pages
-              cp -rf /root/workspace/devdocs dev
-              mkdir -p _includes
-              echo "release: $(cat /srv/jekyll/project/.release)" > /srv/jekyll/project/dollar-docs/src/main/webapp/env.yml
               rm -rf /srv/jekyll/dist/docs/*
+              cp -rf /root/workspace/devdocs dev
+              echo "release: $(cat /srv/jekyll/project/.release)" > /srv/jekyll/project/dollar-docs/src/main/webapp/env.yml
               cp -rf  /srv/jekyll/project/dollar-docs/src/main/webapp/* /srv/jekyll/dist/docs
               tail -n +2 /srv/jekyll/project/dollar-docs/src/main/resources/pages/scripting.md > manual.md
               cat  /root/workspace/gendocs/symbols.md >> manual.md
