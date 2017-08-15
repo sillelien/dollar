@@ -6,5 +6,13 @@ export RELEASE=dev
 ls $PROJECT/dollar-docs/src/main/webapp/
 
 envsubst < $PROJECT/dollar-docs/src/main/webapp/_env.yml > $PROJECT/dollar-docs/src/main/webapp/env.yml
-tail -n +2 $PROJECT/dollar-docs/src/main/resources/pages/scripting.md  > $PROJECT/dollar-docs/src/main/webapp/scripting.md
-jekyll serve --source $PROJECT/dollar-docs/src/main/webapp/ --config $PROJECT/dollar-docs/src/main/webapp/_config.yml,$PROJECT/dollar-docs/src/main/webapp/env.yml
+echo "---">  $PROJECT/dollar-docs/src/main/webapp/_pages/manual.md
+echo "layout: splash" >> $PROJECT/dollar-docs/src/main/webapp/_pages/manual.md
+echo "title:  \"Dollar Scripting Language Manual\"" >> $PROJECT/dollar-docs/src/main/webapp/_pages/manual.md
+echo "permalink: /manual/" >> $PROJECT/dollar-docs/src/main/webapp/_pages/manual.md
+echo "---" >> $PROJECT/dollar-docs/src/main/webapp/_pages/manual.md
+
+tail -n +2 $PROJECT/dollar-docs/src/main/resources/pages/manual.md  >> $PROJECT/dollar-docs/src/main/webapp/_pages/manual.md
+mvn -q  -e -Dexec.mainClass="dollar.internal.runtime.script.parser.Symbols" install exec:java >> $PROJECT/dollar-docs/src/main/webapp/_pages/manual.md || :
+cd $PROJECT/dollar-docs/src/main/webapp/
+bundle exec jekyll serve --config _config.yml,env.yml

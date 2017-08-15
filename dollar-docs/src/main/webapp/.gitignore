@@ -1,4 +1,4 @@
 _site
 .sass-cache
 env.yml
-scripting.md
+Gemfile.lock

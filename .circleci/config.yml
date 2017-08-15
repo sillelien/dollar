@@ -209,10 +209,15 @@ jobs:
               cd docs
               git checkout gh-pages
               rm -rf /srv/jekyll/dist/docs/*
+              cp -rf  /srv/jekyll/project/dollar-docs/src/main/webapp/* /srv/jekyll/dist/docs
               cp -rf /root/workspace/devdocs dev
               echo "release: $(cat /srv/jekyll/project/.release)" > /srv/jekyll/project/dollar-docs/src/main/webapp/env.yml
-              cp -rf  /srv/jekyll/project/dollar-docs/src/main/webapp/* /srv/jekyll/dist/docs
-              tail -n +2 /srv/jekyll/project/dollar-docs/src/main/resources/pages/scripting.md > manual.md
+              echo "---">  _pages/manual.md
+              echo "layout: splash" >>_pages/manual.md
+              echo "title:  \"Dollar Scripting Language Manual\"" >> _pages/manual.md
+              echo "permalink: /manual/" >> _pages/manual.md
+              echo "---" >>_pages/manual.md
+              tail -n +2 /srv/jekyll/project/dollar-docs/src/main/resources/pages/manual.md >> _pages/manual.md
               cat  /root/workspace/gendocs/symbols.md >> manual.md
               git add *
               git commit -a -m "Updated docs from build [ci skip]"  || :

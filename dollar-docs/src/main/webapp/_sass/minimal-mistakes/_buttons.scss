@@ -1,0 +1,168 @@
+/*!
+ *    Copyright (c) 2014-2017 Neil Ellis
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+
+/*
+   Default button
+   ========================================================================== */
+
+.btn {
+    /* default button */
+    background-color: $primary-color;
+    border: 0 !important;
+    border-radius: $border-radius;
+    color: #FFFFFF !important;
+    cursor: pointer;
+    display: inline-block;
+    font-family: $sans-serif;
+    font-size: $type-size-6;
+    font-weight: bold;
+    margin-bottom: 0.25em;
+    padding: 0.5em 1em;
+    text-align: center;
+    text-decoration: none;
+
+    &:hover {
+        background-color: mix(white, #000000, 20%);
+    }
+
+    .icon {
+        margin-right: 0.5em;
+    }
+
+    .icon + .hidden {
+        margin-left: -0.5em; /* override for hidden text*/
+    }
+
+    /* fills width of parent container */
+
+    &--block {
+        display: block;
+        width: 100%;
+
+        + .btn--block {
+            margin-top: 0.25em;
+        }
+    }
+
+    /* for dark backgrounds */
+
+    &--inverse {
+        background-color: #FFFFFF;
+        border: 1px solid $light-gray !important; /* override*/
+        color: $gray !important;
+
+        &:hover {
+            border-color: $gray;
+            color: #FFFFFF !important;
+        }
+    }
+
+    /* light outline */
+
+    &--light-outline {
+        background-color: transparent;
+        border: 1px solid #FFFFFF !important; /* override*/
+    }
+
+    /* information */
+
+    &--info {
+        background-color: $info-color;
+
+        &:hover {
+            background-color: mix(#000000, $info-color, 20%);
+        }
+    }
+
+    /* warning */
+
+    &--warning {
+        background-color: $warning-color;
+
+        &:hover {
+            background-color: mix(#000000, $warning-color, 20%);
+        }
+    }
+
+    /* success */
+
+    &--success {
+        background-color: $success-color;
+
+        &:hover {
+            background-color: mix(#000000, $success-color, 20%);
+        }
+    }
+
+    /* danger */
+
+    &--danger {
+        background-color: $danger-color;
+
+        &:hover {
+            background-color: mix(#000000, $danger-color, 20%);
+        }
+    }
+
+    /* disabled */
+
+    &--disabled {
+        box-shadow: none;
+        cursor: not-allowed;
+        filter: alpha(opacity=65);
+        opacity: 0.65;
+        pointer-events: none;
+    }
+
+    /* social buttons */
+
+    $social: (facebook, $facebook-color),
+            (twitter, $twitter-color),
+            (google-plus, $google-plus-color),
+            (linkedin, $linkedin-color);
+
+    @each $socialnetwork, $color in $social {
+        &--#{$socialnetwork} {
+            background-color: $color;
+
+            &:hover {
+                background-color: mix(#000000, $color, 20%);
+            }
+        }
+    }
+
+    /* extra large button */
+
+    &--x-large {
+        font-size: $type-size-4;
+    }
+
+    /* large button */
+
+    &--large {
+        font-size: $type-size-5;
+    }
+
+    /* small button */
+
+    &--small {
+        font-size: $type-size-7;
+    }
+}

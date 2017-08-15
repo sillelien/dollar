@@ -41,7 +41,7 @@ public class DocTest {
     public void testDocs() throws Exception {
         try {
             new DollarParserImpl(new ParserOptions()).parseMarkdown(
-                    CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/pages/scripting.md"))));
+                    CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/pages/manual.md"))));
         } catch (Exception e) {
             e.printStackTrace();
             throw e;

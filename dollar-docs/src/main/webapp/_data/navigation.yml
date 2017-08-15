@@ -1,0 +1,19 @@
+# main links
+main:
+  - title: "Source"
+    url: http://github.com/sillelien/dollar
+  - title: "License"
+    url: http://www.apache.org/licenses/LICENSE-2.0
+  - title: "Developers"
+    url: http://sillelien.github.io/dollar/dev/
+  - title: "Manual"
+    url: /manual/
+
+  # - title: "About"
+  #   url: https://mmistakes.github.io/minimal-mistakes/about/
+  # - title: "Sample Posts"
+  #   url: /year-archive/
+  # - title: "Sample Collections"
+  #   url: /collection-archive/
+  # - title: "Sitemap"
+  #   url: /sitemap/

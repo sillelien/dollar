@@ -1,5 +1,4 @@
 ---
-layout: post
 title:  "Supporting functional programming, the 'pure' operator"
 date:   2014-12-08 23:59:00
 categories: dollar functional pure

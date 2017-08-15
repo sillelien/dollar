@@ -1,0 +1,280 @@
+/*!
+ *    Copyright (c) 2014-2017 Neil Ellis
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+/* ==========================================================================
+   SIDEBAR
+   ========================================================================== */
+
+/*
+   Default
+   ========================================================================== */
+
+.sidebar {
+    @include clearfix();
+    margin-bottom: 1em;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+
+    @include breakpoint(max-width $large) {
+        /* fix z-index order of follow links */
+        position: relative;
+        z-index: 10;
+    }
+
+    @include breakpoint($large) {
+        float: left;
+        opacity: 0.75;
+        transition: opacity 0.2s ease-in-out;
+        -webkit-transition: opacity 0.2s ease-in-out;
+        width: calc(#{$right-sidebar-width-narrow} - 1em);
+
+        &:hover {
+            opacity: 1;
+        }
+
+        &.sticky {
+            height: calc(100vh - 90px - 2em); // viewport height - approx. masthead height - main content top margin
+            /* calculate height of nav list */
+            overflow-y: auto;
+        }
+    }
+
+    @include breakpoint($x-large) {
+        width: calc(#{$right-sidebar-width} - 1em);
+    }
+
+    h2, h3, h4, h5, h6 {
+        font-family: $sans-serif-narrow;
+        margin-bottom: 0;
+    }
+
+    p, li {
+        font-family: $sans-serif;
+        font-size: $type-size-6;
+        line-height: 1.5;
+    }
+
+    img {
+        width: 100%;
+    }
+}
+
+.sidebar__right {
+    margin-bottom: 1em;
+
+    @include breakpoint($large) {
+        margin-right: -1 * $right-sidebar-width-narrow;
+        padding-left: 1em;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: $right-sidebar-width-narrow;
+        z-index: 10;
+    }
+
+    @include breakpoint($x-large) {
+        margin-right: -1 * $right-sidebar-width;
+        width: $right-sidebar-width;
+    }
+}
+
+.splash .sidebar__right {
+
+    @include breakpoint($large) {
+        float: right;
+        margin-right: 0;
+        position: relative;
+    }
+
+    @include breakpoint($x-large) {
+        margin-right: 0;
+    }
+}
+
+/*
+   Author profile and links
+   ========================================================================== */
+
+.author__avatar {
+    display: table-cell;
+    height: 36px;
+    vertical-align: top;
+    width: 36px;
+
+    @include breakpoint($large) {
+        display: block;
+        height: auto;
+        width: auto;
+    }
+
+    img {
+        border-radius: 50%;
+        max-width: 110px;
+
+        @include breakpoint($large) {
+            border: 1px solid $border-color;
+            padding: 5px;
+        }
+    }
+}
+
+.author__content {
+    display: table-cell;
+    line-height: 1;
+    padding-left: 15px;
+    padding-right: 25px;
+    vertical-align: top;
+
+    @include breakpoint($large) {
+        display: block;
+        padding-left: 0;
+        padding-right: 0;
+        width: 100%;
+    }
+}
+
+.author__name {
+    margin: 0;
+
+    @include breakpoint($large) {
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+}
+
+.sidebar .author__name {
+    font-family: $sans-serif;
+    font-size: $type-size-5;
+}
+
+.author__bio {
+    margin: 0;
+
+    @include breakpoint($large) {
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
+}
+
+.author__urls-wrapper {
+    cursor: pointer;
+    display: table-cell;
+    font-family: $sans-serif;
+    position: relative;
+    position: relative;
+    vertical-align: middle;
+    z-index: 10;
+
+    li:last-child {
+        a {
+            margin-bottom: 0;
+        }
+    }
+
+    @include breakpoint($large) {
+        display: block;
+    }
+
+    button {
+        margin-bottom: 0;
+
+        @include breakpoint($large) {
+            display: none;
+        }
+    }
+}
+
+.author__urls {
+    background: #FFFFFF;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    box-shadow: 0 2px 4px 0 rgba(#000, 0.16), 0 2px 10px 0 rgba(#000, 0.12);
+    cursor: default;
+    display: none;
+    list-style-type: none;
+    margin-top: 15px;
+    padding: 10px;
+    position: absolute;
+    right: 0;
+    z-index: -1;
+
+    &.is--visible {
+        display: block;
+    }
+
+    @include breakpoint($large) {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        display: block;
+        margin: 0;
+        padding: 0;
+        position: relative;
+    }
+
+    &:before {
+        border-color: $border-color transparent;
+        border-style: solid;
+        border-width: 0 10px 10px;
+        content: "";
+        display: block;
+        left: calc(50% - 10px);
+        position: absolute;
+        top: -11px;
+        width: 0;
+        z-index: 0;
+
+        @include breakpoint($large) {
+            display: none;
+        }
+    }
+
+    &:after {
+        border-color: #FFFFFF transparent;
+        border-style: solid;
+        border-width: 0 10px 10px;
+        content: "";
+        display: block;
+        left: calc(50% - 10px);
+        position: absolute;
+        top: -10px;
+        width: 0;
+        z-index: 1;
+
+        @include breakpoint($large) {
+            display: none;
+        }
+    }
+
+    li {
+        white-space: nowrap;
+    }
+
+    a {
+        color: inherit;
+        display: block;
+        font-size: $type-size-5;
+        margin-bottom: 5px;
+        padding-bottom: 2px;
+        padding-right: 5px;
+        padding-top: 2px;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

@@ -1,5 +1,4 @@
 ---
-layout: post
 comments: true
 title:  "A heuristic statistical approach to a type system for a dynamic language"
 date:   2014-12-22 11:23:00

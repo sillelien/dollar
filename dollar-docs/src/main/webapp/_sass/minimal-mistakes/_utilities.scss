@@ -1,0 +1,527 @@
+/*!
+ *    Copyright (c) 2014-2017 Neil Ellis
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+/* ==========================================================================
+   UTILITY CLASSES
+   ========================================================================== */
+
+/*
+   Visibility
+   ========================================================================== */
+
+/* http://www.456bereastreet.com/archive/200711/screen_readers_sometimes_ignore_displaynone/ */
+
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+
+/* for preloading images */
+
+.load {
+    display: none;
+}
+
+.transparent {
+    opacity: 0;
+}
+
+/* https://developer.yahoo.com/blogs/ydn/clip-hidden-content-better-accessibility-53456.html */
+
+.visually-hidden,
+.screen-reader-text,
+.screen-reader-text span,
+.screen-reader-shortcut {
+    border: 0 !important;
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 1px !important;
+    overflow: hidden;
+    position: absolute !important;
+    width: 1px !important;
+}
+
+body:hover .visually-hidden a,
+body:hover .visually-hidden input,
+body:hover .visually-hidden button {
+    display: none !important;
+}
+
+/* screen readers */
+
+.screen-reader-text:focus,
+.screen-reader-shortcut:focus {
+    background: #FFFFFF;
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, .6);
+    clip: auto !important;
+    display: block;
+    font-size: 1em;
+    font-weight: bold;
+    height: auto !important;
+    padding: 15px 23px 14px;
+    text-decoration: none;
+    width: auto !important;
+    z-index: 100000;
+}
+
+/*
+   Skip links
+   ========================================================================== */
+
+.skip-link {
+    font-family: $sans-serif;
+    margin: 0;
+    position: fixed;
+    white-space: nowrap;
+    z-index: 20;
+}
+
+.skip-link li {
+    height: 0;
+    list-style: none;
+    width: 0;
+}
+
+/*
+   Type
+   ========================================================================== */
+
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.text-nowrap {
+    white-space: nowrap;
+}
+
+/*
+   Alignment
+   ========================================================================== */
+
+/* clearfix */
+
+.cf {
+    clear: both;
+}
+
+.wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+/*
+   Images
+   ========================================================================== */
+
+/* image align left */
+
+.align-left {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    @include breakpoint($small) {
+        float: left;
+        margin-right: 1em;
+    }
+}
+
+/* image align right */
+
+.align-right {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    @include breakpoint($small) {
+        float: right;
+        margin-left: 1em;
+    }
+}
+
+/* image align center */
+
+.align-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* file page content container */
+
+.full {
+    @include breakpoint($large) {
+        margin-right: -1 * span(2.5 of 12) !important;
+    }
+}
+
+/*
+   Icons
+   ========================================================================== */
+
+.icon {
+    display: inline-block;
+    height: 1.1em;
+    line-height: 1;
+    position: relative;
+    top: -0.1em;
+    vertical-align: middle;
+    width: 1em;
+    fill: currentColor;
+}
+
+/* social icons*/
+
+.social-icons {
+    .fa {
+        color: #000000;
+    }
+
+    .fa-behance,
+    .fa-behance-square {
+        color: $behance-color;
+    }
+
+    .fa-bitbucket,
+    .fa-bitbucket-square {
+        color: $bitbucket-color;
+    }
+
+    .fa-dribbble {
+        color: $dribbble-color;
+    }
+
+    .fa-facebook,
+    .fa-facebook-square {
+        color: $facebook-color;
+    }
+
+    .fa-flickr {
+        color: $flickr-color;
+    }
+
+    .fa-foursquare {
+        color: $foursquare-color;
+    }
+
+    .fa-github,
+    .fa-github-alt,
+    .fa-github-square {
+        color: $github-color;
+    }
+
+    .fa-google-plus,
+    .fa-google-plus-square {
+        color: $google-plus-color;
+    }
+
+    .fa-instagram {
+        color: $instagram-color;
+    }
+
+    .fa-lastfm,
+    .fa-lastfm-square {
+        color: $lastfm-color;
+    }
+
+    .fa-linkedin,
+    .fa-linkedin-square {
+        color: $linkedin-color;
+    }
+
+    .fa-pinterest,
+    .fa-pinterest-p,
+    .fa-pinterest-square {
+        color: $pinterest-color;
+    }
+
+    .fa-rss,
+    .fa-rss-square {
+        color: $rss-color;
+    }
+
+    .fa-soundcloud {
+        color: $soundcloud-color;
+    }
+
+    .fa-stack-exchange,
+    .fa-stack-overflow {
+        color: $stackoverflow-color;
+    }
+
+    .fa-tumblr,
+    .fa-tumblr-square {
+        color: $tumblr-color;
+    }
+
+    .fa-twitter,
+    .fa-twitter-square {
+        color: $twitter-color;
+    }
+
+    .fa-vimeo,
+    .fa-vimeo-square {
+        color: $vimeo-color;
+    }
+
+    .fa-vine {
+        color: $vine-color;
+    }
+
+    .fa-youtube,
+    .fa-youtube-square,
+    .fa-youtube-play {
+        color: $youtube-color;
+    }
+
+    .fa-xing,
+    .fa-xing-square {
+        color: $xing-color;
+    }
+}
+
+/*
+   Navicons
+   ========================================================================== */
+
+.navicon {
+    background: #FFFFFF;
+    height: $navicon-height;
+    margin: auto;
+    position: relative;
+    transition: 0.3s;
+    -webkit-transition: 0.3s;
+    width: $navicon-width;
+
+    &:before,
+    &:after {
+        background: #FFFFFF;
+        content: "";
+        height: $navicon-height;
+        left: 0;
+        position: absolute;
+        transition: 0.3s;
+        -webkit-transition: 0.3s;
+        width: $navicon-width;
+    }
+
+    &:before {
+        top: (-2 * $navicon-height);
+    }
+
+    &:after {
+        bottom: (-2 * $navicon-height);
+    }
+}
+
+.close .navicon {
+    /* hide the middle line*/
+    background: transparent;
+
+    /* overlay the lines by setting both their top values to 0*/
+    &:before, &:after {
+        top: 0;
+        transform-origin: 50% 50%;
+        -ms-transform-origin: 50% 50%;
+        -webkit-transform-origin: 50% 50%;
+        width: $navicon-width;
+    }
+
+    /* rotate the lines to form the x shape*/
+    &:before {
+        transform: rotate3d(0, 0, 1, 45deg);
+        -webkit-transform: rotate3d(0, 0, 1, 45deg);
+    }
+    &:after {
+        transform: rotate3d(0, 0, 1, -45deg);
+        -webkit-transform: rotate3d(0, 0, 1, -45deg);
+    }
+}
+
+/*
+   Sticky, fixed to top content
+   ========================================================================== */
+
+.sticky {
+    @include breakpoint($large) {
+        @include clearfix();
+        position: -webkit-sticky;
+        position: sticky;
+        top: 2em;
+
+        > * {
+            display: block;
+        }
+    }
+}
+
+/*
+   Wells
+   ========================================================================== */
+
+.well {
+    background-color: #F5F5F5;
+    border: 1px solid #E3E3E3;
+    border-radius: $border-radius;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    min-height: 20px;
+    padding: 19px;
+}
+
+/*
+   Modals
+   ========================================================================== */
+
+.show-modal {
+    overflow: hidden;
+    position: relative;
+
+    &:before {
+        background-color: rgba(255, 255, 255, 0.85);
+        content: "";
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 999;
+    }
+
+    .modal {
+        display: block;
+    }
+}
+
+.modal {
+    background: #FFFFFF;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    display: none;
+    left: 50%;
+    margin-left: -150px;
+    margin-top: -150px;
+    min-height: 0;
+    position: fixed;
+    top: 50%;
+    width: 300px;
+    z-index: 9999;
+
+    &__title {
+        margin: 0;
+        padding: 0.5em 1em;
+    }
+
+    &__supporting-text {
+        padding: 0 1em 0.5em 1em;
+    }
+
+    &__actions {
+        border-top: 1px solid $border-color;
+        padding: 0.5em 1em;
+    }
+}
+
+/*
+   Footnotes
+   ========================================================================== */
+
+.footnote {
+    color: mix(#FFFFFF, $gray, 25%);
+    text-decoration: none;
+}
+
+.footnotes {
+    color: mix(#FFFFFF, $gray, 25%);
+
+    ol, li, p {
+        font-size: $type-size-6;
+        margin-bottom: 0;
+    }
+}
+
+a.reversefootnote {
+    color: $gray;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+/*
+   Required
+   ========================================================================== */
+
+.required {
+    color: $danger-color;
+    font-weight: bold;
+}
+
+/*
+   Google Custom Search Engine
+   ========================================================================== */
+
+.gsc-control-cse {
+
+    table, tr, td {
+        border: 0; /* remove table borders widget */
+    }
+}
+
+/*
+   Responsive Video Embed
+   ========================================================================== */
+
+.responsive-video-container {
+    height: 0;
+    margin-bottom: 1em;
+    max-width: 100%;
+    overflow: hidden;
+    padding-bottom: 56.25%;
+    position: relative;
+
+    iframe,
+    object,
+    embed {
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+}
+
+// full screen video fixes
+:-webkit-full-screen-ancestor {
+    .masthead,
+    .page__footer {
+        position: static;
+    }
+}

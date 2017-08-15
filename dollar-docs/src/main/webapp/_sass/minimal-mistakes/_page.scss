@@ -1,0 +1,446 @@
+/*!
+ *    Copyright (c) 2014-2017 Neil Ellis
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+/* ==========================================================================
+   SINGLE PAGE/POST
+   ========================================================================== */
+
+#main {
+    @include clearfix;
+    animation: $intro-transition;
+    -webkit-animation: $intro-transition;
+    animation-delay: 0.35s;
+    -webkit-animation-delay: 0.35s;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2em;
+    max-width: 100%;
+    padding-left: 1em;
+    padding-right: 1em;
+
+    @include breakpoint($x-large) {
+        max-width: $x-large;
+    }
+}
+
+.page {
+
+    @include breakpoint($large) {
+        float: right;
+        padding-right: $right-sidebar-width-narrow;
+        width: calc(100% - #{$right-sidebar-width-narrow});
+    }
+
+    @include breakpoint($x-large) {
+        padding-right: $right-sidebar-width;
+        width: calc(100% - #{$right-sidebar-width});
+    }
+
+    .page__inner-wrap {
+        clear: both;
+        float: left;
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+
+        .page__content,
+        .page__meta,
+        .page__share {
+            clear: both;
+            float: left;
+            margin-left: 0;
+            margin-right: 0;
+            position: relative;
+            width: 100%;
+        }
+    }
+}
+
+.page__title {
+    line-height: 1;
+    margin-top: 0;
+
+    & + .page__meta {
+        margin-top: -0.5em;
+    }
+}
+
+.page__lead {
+    font-family: $global-font-family;
+    font-size: $type-size-4;
+}
+
+.page__content {
+
+    h2 {
+        border-bottom: 1px solid $border-color;
+        padding-bottom: 0.5em;
+    }
+
+    p, li, dl {
+        font-size: 1em;
+    }
+
+    /* paragraph indents */
+    p {
+        margin: 0 0 $indent-var;
+
+        /* sibling indentation*/
+        @if $paragraph-indent == true {
+            & + p {
+                text-indent: $indent-var;
+                margin-top: -($indent-var);
+            }
+        }
+    }
+
+    a {
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+
+            img {
+                box-shadow: 0 0 10px rgba(#000, 0.25);
+            }
+        }
+    }
+
+    dt {
+        font-family: $sans-serif;
+        font-weight: bold;
+        margin-top: 1em;
+    }
+
+    dd {
+        font-family: $sans-serif;
+        font-size: $type-size-6;
+        margin-left: 1em;
+    }
+
+    .small {
+        font-size: $type-size-6;
+    }
+
+    /* blockquote citations */
+    blockquote + .small {
+        margin-top: -1.5em;
+        padding-left: 1.25rem;
+    }
+}
+
+.page__hero {
+    animation: $intro-transition;
+    -webkit-animation: $intro-transition;
+    @include clearfix;
+    animation-delay: 0.25s;
+    -webkit-animation-delay: 0.25s;
+    margin-bottom: 2em;
+    position: relative;
+
+    &--overlay {
+        animation: $intro-transition;
+        -webkit-animation: $intro-transition;
+        animation-delay: 0.25s;
+        @include clearfix;
+        -webkit-animation-delay: 0.25s;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        margin-bottom: 2em;
+        padding: 3em 0;
+        position: relative;
+
+        a {
+            color: #FFFFFF;
+        }
+
+        .wrapper {
+            padding-left: 1em;
+            padding-right: 1em;
+
+            @include breakpoint($x-large) {
+                max-width: $x-large;
+            }
+        }
+
+        .page__title,
+        .page__meta,
+        .page__lead,
+        .btn {
+            color: #FFFFFF;
+            text-shadow: 1px 1px 4px rgba(#000, 0.5);
+        }
+
+        .page__lead {
+            max-width: $medium;
+        }
+
+        .page__title {
+            font-size: $type-size-2;
+
+            @include breakpoint($small) {
+                font-size: $type-size-1;
+            }
+        }
+    }
+}
+
+.page__hero-image {
+    height: auto;
+    -ms-interpolation-mode: bicubic;
+    width: 100%;
+}
+
+.page__hero-caption {
+    background: #000000;
+    border-radius: $border-radius 0 0 0;
+    bottom: 0;
+    color: #FFFFFF;
+    font-family: $caption-font-family;
+    font-size: $type-size-7;
+    margin: 0 auto;
+    opacity: 0.5;
+    padding: 2px 5px;
+    position: absolute;
+    right: 0;
+    text-align: right;
+    z-index: 5;
+
+    @include breakpoint($large) {
+        padding: 5px 10px;
+    }
+
+    a {
+        color: #FFFFFF;
+        text-decoration: none;
+    }
+}
+
+/*
+   Social sharing
+   ========================================================================== */
+
+.page__share {
+    border-top: 1px solid $border-color;
+    margin-top: 2em;
+    padding-top: 1em;
+
+    @include breakpoint(max-width $small) {
+        .btn span {
+            border: 0;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+    }
+}
+
+.page__share-title {
+    font-size: $type-size-6;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+/*
+   Page meta
+   ========================================================================== */
+
+.page__meta {
+    color: mix(#FFFFFF, $gray, 25%);
+    font-family: $sans-serif;
+    font-size: $type-size-6;
+    margin-top: 2em;
+
+    p {
+        margin: 0;
+    }
+
+    a {
+        color: inherit;
+    }
+}
+
+.page__meta-title {
+    font-size: $type-size-6;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+/*
+   Page taxonomy
+   ========================================================================== */
+
+.page__taxonomy {
+    .sep {
+        display: none;
+    }
+
+    strong {
+        margin-right: 10px;
+    }
+}
+
+.page__taxonomy-item {
+    border: 1px solid $light-gray;
+    border-radius: $border-radius;
+    display: inline-block;
+    margin-bottom: 8px;
+    margin-right: 5px;
+    padding: 5px 10px;
+    text-decoration: none;
+
+    &:hover {
+        color: $link-color-hover;
+        text-decoration: none;
+    }
+}
+
+/*
+   Comments
+   ========================================================================== */
+
+.page__comments {
+    clear: both;
+    float: left;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+}
+
+.page__comments-title {
+    border-top: 1px solid $border-color;
+    font-size: $type-size-6;
+    margin-bottom: 10px;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    text-transform: uppercase;
+}
+
+.page__comments-form {
+    background: $lighter-gray;
+    padding: 1em;
+    transition: $global-transition;
+    -webkit-transition: $global-transition;
+
+    &.disabled {
+        input,
+        button,
+        textarea,
+        label {
+            box-shadow: none;
+            cursor: not-allowed;
+            filter: alpha(opacity=65);
+            opacity: 0.65;
+            pointer-events: none;
+        }
+    }
+}
+
+.comment {
+    @include clearfix();
+    margin: 1em 0;
+
+    &:not(:last-child) {
+        border-bottom: 1px solid $border-color;
+    }
+}
+
+.comment__avatar-wrapper {
+    float: left;
+    height: 60px;
+    width: 60px;
+
+    @include breakpoint($large) {
+        height: 100px;
+        width: 100px;
+    }
+}
+
+.comment__avatar {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+
+    @include breakpoint($large) {
+        border: 1px solid $border-color;
+        height: 80px;
+        padding: 5px;
+        width: 80px;
+    }
+}
+
+.comment__content-wrapper {
+    float: right;
+    width: calc(100% - 60px);
+
+    @include breakpoint($large) {
+        width: calc(100% - 100px);
+    }
+}
+
+.comment__author {
+    margin: 0;
+
+    a {
+        text-decoration: none;
+    }
+}
+
+.comment__date {
+    @extend .page__meta;
+    margin: 0;
+
+    a {
+        text-decoration: none;
+    }
+}
+
+/*
+   Related
+   ========================================================================== */
+
+.page__related {
+    @include clearfix();
+    border-top: 1px solid $border-color;
+    float: left;
+    margin-top: 2em;
+    padding-top: 1em;
+
+    @include breakpoint($large) {
+        float: right;
+        width: calc(100% - #{$right-sidebar-width-narrow});
+    }
+
+    @include breakpoint($x-large) {
+        width: calc(100% - #{$right-sidebar-width});
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+}
+
+.page__related-title {
+    font-size: $type-size-6;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}

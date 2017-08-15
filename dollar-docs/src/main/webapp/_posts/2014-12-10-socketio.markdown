@@ -1,5 +1,4 @@
 ---
-layout: post
 title:  "Reactive chat server in 3 lines, explained"
 date:   2014-12-10 12:23:00
 categories: dollar socketio examples

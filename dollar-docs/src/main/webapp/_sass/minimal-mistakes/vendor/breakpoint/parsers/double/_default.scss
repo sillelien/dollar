@@ -1,0 +1,37 @@
+/*!
+ *    Copyright (c) 2014-2017 Neil Ellis
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+@function breakpoint-parse-double-default($first, $second) {
+    $feature: '';
+    $value: '';
+
+    @if type-of($first) == 'string' {
+        $feature: $first;
+        $value: $second;
+    } @else {
+        $feature: $second;
+        $value: $first;
+    }
+
+    // Set Context
+    $context-setter: private-breakpoint-set-context($feature, $value);
+
+    @if (breakpoint-get('to ems') == true) {
+        $value: breakpoint-to-base-em($value);
+    }
+
+    @return '(#{$feature}: #{$value})'
+}
