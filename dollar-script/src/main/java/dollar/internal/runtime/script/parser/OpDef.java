@@ -38,11 +38,12 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
 
     private boolean reserved;
     private boolean reactive;
+    private int priority;
 
     @Nullable
     private String bnf;
 
-    public OpDef(@NotNull String symbol,
+    public OpDef(@Nullable String symbol,
                  @Nullable String keyword,
                  @Nullable String name,
                  @Language("md")
@@ -50,7 +51,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                  boolean reserved,
                  boolean reactive,
                  @Nullable String bnf,
-                 @Nullable String example) {
+                 @Nullable String example, int priority) {
 
         this.symbol = symbol;
         this.keyword = keyword;
@@ -60,6 +61,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         this.reactive = reactive;
         this.bnf = bnf;
         this.example = example;
+        this.priority = priority;
     }
 
     @Nullable
@@ -144,5 +146,9 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
 
     public boolean isReactive() {
         return reactive;
+    }
+
+    public int priority() {
+        return priority;
     }
 }

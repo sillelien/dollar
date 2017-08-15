@@ -20,8 +20,10 @@ package dollar.internal.runtime.script;
  * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
  */
 public interface OperatorPriority {
+    int FIX_PRIORITY = 1000;
     int MEMBER_PRIORITY = 500;
     int ASSIGNMENT_PRIORITY = 10;
+    int PAIR_PRIORITY = 30;
     int UNARY_PRIORITY = 400;
     int INC_DEC_PRIORITY = 400;
     int IN_PRIORITY = 400;
