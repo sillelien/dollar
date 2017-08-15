@@ -178,6 +178,8 @@ jobs:
         - store_test_results:
             path: dollar-docs/target/surefire-reports
 
+        - store_artifacts:
+            path: /home/circleci/workspace/gendocs/
 
     docs:
       <<: *defaults
@@ -281,6 +283,8 @@ jobs:
               - devdocs
               - artifacts
 
+        - store_artifacts:
+            path: /home/circleci/workspace/artifacts/
 
     docker:
       <<: *defaults
