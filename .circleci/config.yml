@@ -218,7 +218,8 @@ jobs:
               git commit -a -m "Updated docs from build [ci skip]"  || :
               git push || :
               cd /srv/jekyll
-
+        - store_artifacts:
+            path: /srv/jekyll/dist/docs
     dist:
       <<: *defaults
 
