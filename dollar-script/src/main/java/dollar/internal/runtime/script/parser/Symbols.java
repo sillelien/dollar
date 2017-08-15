@@ -142,8 +142,10 @@ public class Symbols {
     @NotNull
     public static final OpDef AND = new OpDef("&&", "and", "and",
                                               "Returns the logical 'and' of two expressions, e.g. `a && b`. Just like in Java it will shortcut, " +
-                                                      "so that if the left-hand-side is true the right-hand-side is never evaluated.",
-                                              false, true, "<expression> ('&&'|'and') <expression>", null);
+                                                      "so that if the left-hand-side is false the right-hand-side is never " +
+                                                      "evaluated.",
+                                              false, true,
+                                              "<expression> ('&&'|'and') <expression>", null);
 
     @NotNull
     public static final OpDef MULTIPLY = new OpDef("*", "multiply", "multiply",
@@ -152,7 +154,8 @@ public class Symbols {
                                                            " the left-hand-side is a collection and it is multiplied by `n`, e.g." +
                                                            " `{a=a+1} * 3` it will be added (`+`) to itself `n` times i.e. " +
                                                            "`{a=a+1} + {a=a+1} + {a=a+1}`.",
-                                                   false, true, "<expression> '*'|'multiply'", null);
+                                                   false, true,
+                                                   "<expression> '*'|'multiply'", null);
 
     @NotNull
     public static final OpDef DIVIDE = new OpDef("/", "divide", "divide",
@@ -178,7 +181,8 @@ public class Symbols {
 
     @NotNull
     public static final OpDef NEGATE = new OpDef("-", "negate", "negate",
-                                                 "Negates a value.", false, true, "('-'|'negate') <expression>", null);
+                                                 "Negates a value.", false, true,
+                                                 "('-'|'negate') <expression>", null);
 
 
     @NotNull
@@ -251,7 +255,8 @@ public class Symbols {
     @NotNull
     public static final OpDef ERROR = new OpDef("?->", "error", "error",
                                                 "The right-hand-side is executed if an error occurs in the current scope.",
-                                                false, true, "('?->'|'error') <expression>",
+                                                false, true,
+                                                "('?->'|'error') <expression>",
                                                 null);
 
     @NotNull
@@ -309,9 +314,6 @@ public class Symbols {
     public static final OpDef ASSIGNMENT = new OpDef("=", null, "assign", "assign", false, true, null, null);
 
     @NotNull
-    public static final SymbolDef DOLLAR = new SymbolDef("$", false);
-
-    @NotNull
     public static final OpDef SUBSCRIBE_ASSIGN = new OpDef("*=", "subscribe-assign",
                                                            "subscribe-assign",
                                                            "subscribe-assign", false, true, null, null);
@@ -348,7 +350,12 @@ public class Symbols {
     public static final OpDef ELSE = new OpDef("-:", "else", "else", "else", false, true, null, null);
 
     @NotNull
-    public static final OpDef TRUTHY = new OpDef("~", "thruthy", "thruthy", "thruthy", false, true, null, null);
+    public static final OpDef TRUTHY = new OpDef("~", "truthy", "truthy",
+                                                 "The truthy operator `~` converts any value to a boolean by applying the rule that: void is false, 0 is false, \"\" is false, empty list is false, empty map is false - all else is true.",
+                                                 false,
+                                                 true,
+                                                 "('~'|'truthy') <expression>",
+                                                 ".: ~ [1,2,3]\n.: ! ~ []\n.: ~ \"anything\"\n.: ! ~ \"\"\n.: ~ 1\n.: ! ~ 0\n.: ! ~ {void}\n.:  ~ {\"a\" : 1}\n.: ! ~ void");
 
     @NotNull
     public static final OpDef RESERVED_OPERATOR_1 = new OpDef("...", null, null,
@@ -434,6 +441,10 @@ public class Symbols {
     @NotNull
     public static final List<String> KEYWORD_STRINGS;
 
+
+    @NotNull
+    public static final SymbolDef DOLLAR = new SymbolDef("$", false);
+
     @NotNull
     public static final SymbolDef COMMA = new SymbolDef(",", false);
 
@@ -457,67 +468,70 @@ public class Symbols {
 
 
     @NotNull
-    public static final KeywordDef TRUE = new KeywordDef("true", false, null);
+    public static final KeywordDef TRUE = new KeywordDef("true", false, "Boolean true.", null);
 
     @NotNull
-    public static final KeywordDef FALSE = new KeywordDef("false", false, null);
+    public static final KeywordDef FALSE = new KeywordDef("false", false, "Boolean false.", null);
 
     @NotNull
-    public static final KeywordDef YES = new KeywordDef("yes", false, null);
+    public static final KeywordDef YES = new KeywordDef("yes", false, "Boolean true.", null);
     @NotNull
-    public static final KeywordDef NO = new KeywordDef("no", false, null);
+    public static final KeywordDef NO = new KeywordDef("no", false, "Boolean false.", null);
     @NotNull
-    public static final KeywordDef NULL = new KeywordDef("null", false, null);
+    public static final KeywordDef NULL = new KeywordDef("null", false, "A NULL value of ANY type.", null);
     @NotNull
-    public static final KeywordDef VOID = new KeywordDef("void", false, null);
+    public static final KeywordDef VOID = new KeywordDef("void", false, "A VOID value.", null);
     @NotNull
-    public static final KeywordDef INFINITY = new KeywordDef("infinity", false, null);
+    public static final KeywordDef INFINITY = new KeywordDef("infinity", false, null, null);
     @NotNull
-    public static final KeywordDef PURE = new KeywordDef("pure", false, null);
+    public static final KeywordDef PURE = new KeywordDef("pure", false, "The start of a pure expression.", "pure <expression>");
     @NotNull
-    public static final KeywordDef EXPORT = new KeywordDef("export", false, null);
+    public static final KeywordDef EXPORT = new KeywordDef("export", false, "Export a variable at the point of definition.", null);
     @NotNull
-    public static final KeywordDef CONST = new KeywordDef("const", false, null);
+    public static final KeywordDef CONST = new KeywordDef("const", false,
+                                                          "Mark a variable definition as a constant, i.e. readonly.", null);
     @NotNull
-    public static final KeywordDef VAR = new KeywordDef("var", false, null);
+    public static final KeywordDef VAR = new KeywordDef("var", false, "Marks a variable as variable i.e. not readonly.", null);
     @NotNull
-    public static final KeywordDef VOLATILE = new KeywordDef("volatile", false, null);
+    public static final KeywordDef VOLATILE = new KeywordDef("volatile", false,
+                                                             "Marks a variable as volatile, i.e. it can be accessed by multiple threads.",
+                                                             null);
     @NotNull
-    public static final KeywordDef COLLECT = new KeywordDef("collect", false, null);
+    public static final KeywordDef COLLECT = new KeywordDef("collect", false, null, null);
     @NotNull
-    public static final KeywordDef UNTIL = new KeywordDef("until", false, null);
+    public static final KeywordDef UNTIL = new KeywordDef("until", false, null, null);
     @NotNull
-    public static final KeywordDef UNLESS = new KeywordDef("unless", false, null);
+    public static final KeywordDef UNLESS = new KeywordDef("unless", false, null, null);
     @NotNull
-    public static final KeywordDef WHEN = new KeywordDef("when", false, null);
+    public static final KeywordDef WHEN = new KeywordDef("when", false, null, null);
     @NotNull
-    public static final KeywordDef IS = new KeywordDef("is", false, null);
+    public static final KeywordDef IS = new KeywordDef("is", false, null, null);
     @NotNull
-    public static final KeywordDef FOR = new KeywordDef("for", false, null);
+    public static final KeywordDef FOR = new KeywordDef("for", false, null, null);
     @NotNull
-    public static final KeywordDef WHILE = new KeywordDef("while", false, null);
+    public static final KeywordDef WHILE = new KeywordDef("while", false, null, null);
     @NotNull
-    public static final KeywordDef AS = new KeywordDef("as", false, null);
+    public static final KeywordDef AS = new KeywordDef("as", false, null, null);
     @NotNull
-    public static final KeywordDef DEF = new KeywordDef("def", false, null);
+    public static final KeywordDef DEF = new KeywordDef("def", false, null, null);
     @NotNull
-    public static final KeywordDef WITH = new KeywordDef("with", false, null);
+    public static final KeywordDef WITH = new KeywordDef("with", false, null, null);
     @NotNull
-    public static final KeywordDef MODULE = new KeywordDef("module", false, null);
+    public static final KeywordDef MODULE = new KeywordDef("module", false, null, null);
     @NotNull
-    public static final KeywordDef EVERY = new KeywordDef("every", false, null);
+    public static final KeywordDef EVERY = new KeywordDef("every", false, null, null);
     @NotNull
-    public static final KeywordDef READ_KEYWORD = new KeywordDef("read", false, null);
+    public static final KeywordDef READ_KEYWORD = new KeywordDef("read", false, null, null);
     @NotNull
-    public static final KeywordDef WRITE_KEYWORD = new KeywordDef("write", false, null);
+    public static final KeywordDef WRITE_KEYWORD = new KeywordDef("write", false, null, null);
     @NotNull
-    public static final KeywordDef BLOCK = new KeywordDef("block", false, null);
+    public static final KeywordDef BLOCK = new KeywordDef("block", false, null, null);
     @NotNull
-    public static final KeywordDef MUTATE = new KeywordDef("mutate", false, null);
+    public static final KeywordDef MUTATE = new KeywordDef("mutate", false, null, null);
     @NotNull
-    public static final KeywordDef TO = new KeywordDef("to", false, null);
+    public static final KeywordDef TO = new KeywordDef("to", false, null, null);
     @NotNull
-    public static final KeywordDef FROM = new KeywordDef("from", false, null);
+    public static final KeywordDef FROM = new KeywordDef("from", false, null, null);
     @NotNull
     public static final List<KeywordDef> KEYWORDS;
     @NotNull
@@ -630,33 +644,33 @@ public class Symbols {
                     FROM,
 
                     //Reserved Keywords
-                    new KeywordDef("pluripotent", true, null),
-                    new KeywordDef("readonly", true, null),
-                    new KeywordDef("join", true, null),
-                    new KeywordDef("fail", true, null),
-                    new KeywordDef("switch", true, null),
-                    new KeywordDef("dollar", true, null),
-                    new KeywordDef("filter", true, null),
-                    new KeywordDef("dispatch", true, null),
-                    new KeywordDef("send", true, null),
-                    new KeywordDef("emit", true, null),
-                    new KeywordDef("import", true, null),
-                    new KeywordDef("include", true, null),
-                    new KeywordDef("impure", true, null),
-                    new KeywordDef("variant", true, null),
-                    new KeywordDef("vary", true, null),
-                    new KeywordDef("varies", true, null),
-                    new KeywordDef("lambda", true, null),
-                    new KeywordDef("closure", true, null),
-                    new KeywordDef("scope", true, null),
-                    new KeywordDef("dump", true, null),
-                    new KeywordDef("trace", true, null),
-                    new KeywordDef("measure", true, null),
-                    new KeywordDef("unit", true, null),
-                    new KeywordDef("wait", true, null),
-                    new KeywordDef("await", true, null),
-                    new KeywordDef("save", true, null),
-                    new KeywordDef("load", true, null),
+                    new KeywordDef("pluripotent", true, null, null),
+                    new KeywordDef("readonly", true, null, null),
+                    new KeywordDef("join", true, null, null),
+                    new KeywordDef("fail", true, null, null),
+                    new KeywordDef("switch", true, null, null),
+                    new KeywordDef("dollar", true, null, null),
+                    new KeywordDef("filter", true, null, null),
+                    new KeywordDef("dispatch", true, null, null),
+                    new KeywordDef("send", true, null, null),
+                    new KeywordDef("emit", true, null, null),
+                    new KeywordDef("import", true, null, null),
+                    new KeywordDef("include", true, null, null),
+                    new KeywordDef("impure", true, null, null),
+                    new KeywordDef("variant", true, null, null),
+                    new KeywordDef("vary", true, null, null),
+                    new KeywordDef("varies", true, null, null),
+                    new KeywordDef("lambda", true, null, null),
+                    new KeywordDef("closure", true, null, null),
+                    new KeywordDef("scope", true, null, null),
+                    new KeywordDef("dump", true, null, null),
+                    new KeywordDef("trace", true, null, null),
+                    new KeywordDef("measure", true, null, null),
+                    new KeywordDef("unit", true, null, null),
+                    new KeywordDef("wait", true, null, null),
+                    new KeywordDef("await", true, null, null),
+                    new KeywordDef("save", true, null, null),
+                    new KeywordDef("load", true, null, null),
 
                     //Reserved Operators
                     RESERVED_OPERATOR_1,
@@ -729,7 +743,7 @@ public class Symbols {
                 i -> i instanceof OpDef && ((OpDef) i).keyword() != null && ((OpDef) i).isReserved()).map(
                 i -> ((OpDef) i).keyword()).sorted().collect(Collectors.joining(", ")));
         System.out.println();
-        System.out.println("The following operator keywords are reserved:\n");
+        System.out.println("The following operator symbols are reserved:\n");
         System.out.println("> " + tokens.stream().filter(
                 i -> i instanceof OpDef && ((OpDef) i).symbol() != null && ((OpDef) i).isReserved()).map(
                 i -> ((OpDef) i).symbol()).sorted().collect(Collectors.joining(", ")));

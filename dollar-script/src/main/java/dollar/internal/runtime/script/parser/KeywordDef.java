@@ -18,6 +18,7 @@ package dollar.internal.runtime.script.parser;
 
 import dollar.internal.runtime.script.HasKeyword;
 import dollar.internal.runtime.script.HasSymbol;
+import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,11 +30,13 @@ public class KeywordDef implements HasKeyword, Comparable<Object> {
     private boolean reserved;
     @Nullable
     private String description;
+    private String bnf;
 
-    public KeywordDef(@NotNull String keyword, boolean reserved, @Nullable String description) {
+    public KeywordDef(@NotNull String keyword, boolean reserved, @Language("md") @Nullable String description, String bnf) {
         this.keyword = keyword;
         this.reserved = reserved;
         this.description = description;
+        this.bnf = bnf;
     }
 
     @Override
