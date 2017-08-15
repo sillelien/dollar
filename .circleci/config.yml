@@ -212,8 +212,8 @@ jobs:
               mkdir -p _includes
               echo "release: $(cat /srv/jekyll/project/.release)" > /srv/jekyll/project/dollar-docs/src/main/webapp/env.yml
               jekyll build --source /srv/jekyll/project/dollar-docs/src/main/webapp/ --destination /srv/jekyll/dist/docs
-              tail -n +2 /srv/jekyll/project/dollar-docs/src/main/resources/pages/scripting.md  > /srv/jekyll/dist/docs/manual.md
-              cat  /root/workspace/gendocs/symbols.md >> /srv/jekyll/dist/docs/manual.md
+              tail -n +2 /srv/jekyll/project/dollar-docs/src/main/resources/pages/scripting.md > manual.md
+              cat  /root/workspace/gendocs/symbols.md >> manual.md
               git add *
               git commit -a -m "Updated docs from build [ci skip]"  || :
               git push || :
