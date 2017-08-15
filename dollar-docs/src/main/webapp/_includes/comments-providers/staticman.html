@@ -1,63 +1,42 @@
 {% if site.repository and site.staticman.branch %}
-<!--
-  ~    Copyright (c) 2014-2017 Neil Ellis
-  ~
-  ~    Licensed under the Apache License, Version 2.0 (the "License");
-  ~    you may not use this file except in compliance with the License.
-  ~    You may obtain a copy of the License at
-  ~
-  ~          http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~    Unless required by applicable law or agreed to in writing, software
-  ~    distributed under the License is distributed on an "AS IS" BASIS,
-  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~    See the License for the specific language governing permissions and
-  ~    limitations under the License.
-  -->
-
-<script>
+  <script>
     (function ($) {
-        var $comments = $('.js-comments');
+    var $comments = $('.js-comments');
 
-        $('#new_comment').submit(function () {
-            var form = this;
+    $('#new_comment').submit(function () {
+      var form = this;
 
-            $(form).addClass('disabled');
-            $('#comment-form-submit').html(
-                '<i class="fa fa-spinner fa-spin fa-fw"></i> {{ site.data.ui-text[site.locale].loading_label | default: "Loading..." }}');
+      $(form).addClass('disabled');
+      $('#comment-form-submit').html('<i class="fa fa-spinner fa-spin fa-fw"></i> {{ site.data.ui-text[site.locale].loading_label | default: "Loading..." }}');
 
-            $.ajax({
-                       type:        $(this).attr('method'),
-                       url:         $(this).attr('action'),
-                       data:        $(this).serialize(),
-                       contentType: 'application/x-www-form-urlencoded',
-                       success:     function (data) {
-                           $('#comment-form-submit').html(
-                               '{{ site.data.ui-text[site.locale].comment_btn_submitted | default: "Submitted" }}');
-                           $('.page__comments-form .js-notice').removeClass('notice--danger');
-                           $('.page__comments-form .js-notice').addClass('notice--success');
-                           showAlert(
-                               '{{ site.data.ui-text[site.locale].comment_success_msg | default: "Thanks for your comment! It will show on the site once it has been approved." }}');
-                       },
-                       error:       function (err) {
-                           console.log(err);
-                           $('#comment-form-submit').html(
-                               '{{ site.data.ui-text[site.locale].comment_btn_submit  | default: "Submit Comment" }}');
-                           $('.page__comments-form .js-notice').removeClass('notice--success');
-                           $('.page__comments-form .js-notice').addClass('notice--danger');
-                           showAlert(
-                               '{{ site.data.ui-text[site.locale].comment_error_msg | default: "Sorry, there was an error with your submission. Please make sure all required fields have been completed and try again." }}');
-                           $(form).removeClass('disabled');
-                       }
-                   });
-
-            return false;
-        });
-
-        function showAlert(message) {
-            $('.page__comments-form .js-notice').removeClass('hidden');
-            $('.page__comments-form .js-notice-text').html(message);
+      $.ajax({
+        type: $(this).attr('method'),
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+          $('#comment-form-submit').html('{{ site.data.ui-text[site.locale].comment_btn_submitted | default: "Submitted" }}');
+          $('.page__comments-form .js-notice').removeClass('notice--danger');
+          $('.page__comments-form .js-notice').addClass('notice--success');
+          showAlert('{{ site.data.ui-text[site.locale].comment_success_msg | default: "Thanks for your comment! It will show on the site once it has been approved." }}');
+        },
+        error: function (err) {
+          console.log(err);
+          $('#comment-form-submit').html('{{ site.data.ui-text[site.locale].comment_btn_submit  | default: "Submit Comment" }}');
+          $('.page__comments-form .js-notice').removeClass('notice--success');
+          $('.page__comments-form .js-notice').addClass('notice--danger');
+          showAlert('{{ site.data.ui-text[site.locale].comment_error_msg | default: "Sorry, there was an error with your submission. Please make sure all required fields have been completed and try again." }}');
+          $(form).removeClass('disabled');
         }
-    })(jQuery);
-</script>
+      });
+
+      return false;
+    });
+
+    function showAlert(message) {
+      $('.page__comments-form .js-notice').removeClass('hidden');
+      $('.page__comments-form .js-notice-text').html(message);
+    }
+  })(jQuery);
+  </script>
 {% endif %}

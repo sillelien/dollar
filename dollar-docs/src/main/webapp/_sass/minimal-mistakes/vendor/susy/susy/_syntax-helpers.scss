@@ -1,19 +1,3 @@
-/*!
- *    Copyright (c) 2014-2017 Neil Ellis
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *          http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
-
 /// Syntax Utilities for Extending Susy
 /// ===================================
 /// There are many steps involved
@@ -67,6 +51,8 @@
 ///     }
 ///   }
 
+
+
 // Compile
 // -------
 /// Susy's syntax layer has various moving parts,
@@ -115,24 +101,26 @@
 ///     /* #{$key}: #{$value}, */
 ///   }
 @function susy-compile(
-    $short,
-    $config: null,
-    $context-only: false
+  $short,
+  $config: null,
+  $context-only: false
 ) {
-    // Get and normalize config
-    $config: if($config, susy-settings($config), susy-settings());
-    $normal-config: susy-normalize($config);
+  // Get and normalize config
+  $config: if($config, susy-settings($config), susy-settings());
+  $normal-config: susy-normalize($config);
 
-    // Parse and normalize shorthand
-    @if (type-of($short) != 'map') and (length($short) > 0) {
-        $short: susy-parse($short, $context-only);
-    }
+  // Parse and normalize shorthand
+  @if (type-of($short) != 'map') and (length($short) > 0) {
+    $short: susy-parse($short, $context-only);
+  }
 
-    $normal-short: susy-normalize($short, $normal-config);
+  $normal-short: susy-normalize($short, $normal-config);
 
-    // Merge and return
-    @return map-merge($normal-config, $normal-short);
+  // Merge and return
+  @return map-merge($normal-config, $normal-short);
 }
+
+
 
 // Call
 // ----
@@ -173,31 +161,31 @@
 ///     width: su-call('su-span', $grid-data);
 ///   }
 @function su-call(
-    $name,
-    $config
+  $name,
+  $config
 ) {
-    $grid-function-args: (
-            'su-span': ('span', 'columns', 'gutters', 'spread', 'container-spread', 'location'),
-            'su-gutter': ('columns', 'gutters', 'container-spread'),
-            'su-slice': ('span', 'columns', 'location'),
-    );
+  $grid-function-args: (
+    'su-span': ('span', 'columns', 'gutters', 'spread', 'container-spread', 'location'),
+    'su-gutter': ('columns', 'gutters', 'container-spread'),
+    'su-slice': ('span', 'columns', 'location'),
+  );
 
-    $args: map-get($grid-function-args, $name);
+  $args: map-get($grid-function-args, $name);
 
-    @if not $args {
-        $options: 'Try one of these: #{map-keys($grid-function-args)}';
-        @return _susy-error(
-                        '#{$name} is not a public Su function. #{$options}',
-                        'su-call');
-    }
+  @if not $args {
+    $options: 'Try one of these: #{map-keys($grid-function-args)}';
+    @return _susy-error(
+      '#{$name} is not a public Su function. #{$options}',
+      'su-call');
+  }
 
-    $call: if(function-exists('get-function'), get-function($name), $name);
-    $output: ();
+  $call: if(function-exists('get-function'), get-function($name), $name);
+  $output: ();
 
-    @each $arg in $args {
-        $value: map-get($config, $arg);
-        $output: if($value, map-merge($output, ($arg: $value)), $output);
-    }
+  @each $arg in $args {
+    $value: map-get($config, $arg);
+    $output: if($value, map-merge($output, ($arg: $value)), $output);
+  }
 
-    @return call($call, $output...);
+  @return call($call, $output...);
 }

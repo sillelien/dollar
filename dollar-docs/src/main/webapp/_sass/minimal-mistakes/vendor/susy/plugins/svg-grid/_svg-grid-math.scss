@@ -1,21 +1,7 @@
-/*!
- *    Copyright (c) 2014-2017 Neil Ellis
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *          http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
-
 // SVG Grid Math
 // =============
+
+
 
 // SVG Column Position
 // -------------------
@@ -33,17 +19,19 @@
 ///   Horizontal position of svg column rectangle,
 ///   as distance from the grid edge
 @function _susy-svg-column-position(
-    $column,
-    $grid
+  $column,
+  $grid
 ) {
-    $x: $column - 1;
+  $x: $column - 1;
 
-    @if ($x > 0) {
-        $x: susy-span(first $x wide, $grid);
-    }
+  @if ($x > 0) {
+    $x: susy-span(first $x wide, $grid);
+  }
 
-    @return $x;
+  @return $x;
 }
+
+
 
 // SVG Offset
 // ----------
@@ -59,21 +47,21 @@
 ///   Expected distance from container edge to first column,
 ///   based on spread values and gutter-widths
 @function _susy-svg-offset(
-    $grid
+  $grid
 ) {
-    $columns: su-valid-columns(map-get($grid, 'columns'));
-    $gutters: su-valid-gutters(map-get($grid, 'gutters'));
-    $container: su-valid-spread(map-get($grid, 'container-spread')) + 1;
+  $columns: su-valid-columns(map-get($grid, 'columns'));
+  $gutters: su-valid-gutters(map-get($grid, 'gutters'));
+  $container: su-valid-spread(map-get($grid, 'container-spread')) + 1;
 
-    @if ($container == 0) {
-        @return null;
-    }
+  @if ($container == 0) {
+    @return null;
+  }
 
-    $gutter: su-call('su-gutter', $grid);
+  $gutter: su-call('su-gutter', $grid);
 
-    @if (type-of($gutter) == 'string') {
-        @return 'calc(#{$container} * #{$gutter} / 2)';
-    }
+  @if (type-of($gutter) == 'string') {
+    @return 'calc(#{$container} * #{$gutter} / 2)';
+  }
 
-    @return $container * $gutter / 2;
+  @return $container * $gutter / 2;
 }

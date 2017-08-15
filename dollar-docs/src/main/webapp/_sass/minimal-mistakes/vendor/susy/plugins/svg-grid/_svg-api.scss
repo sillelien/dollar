@@ -1,23 +1,9 @@
-/*!
- *    Copyright (c) 2014-2017 Neil Ellis
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *          http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
-
 /// Plugin: SVG Grid Image
 /// ======================
 /// @group plugin_svg-grid
 /// @see susy-svg-grid
+
+
 
 /// ## Overview
 /// If you want to generate svg-backgrounds
@@ -53,6 +39,8 @@
 ///     background: susy-svg-grid() no-repeat scroll;
 ///   }
 
+
+
 // SVG Grid
 // --------
 /// Return inline svg-data in  to display the grid.
@@ -76,51 +64,51 @@
 ///     background: susy-svg-grid() no-repeat scroll;
 ///   }
 @function susy-svg-grid(
-    $grid: $susy,
-    $colors: null,
-    $offset: null
+  $grid: $susy,
+  $colors: null,
+  $offset: null
 ) {
-    // Grid parsing & normalizing
-    $grid: susy-compile($grid, $context-only: true);
+  // Grid parsing & normalizing
+  $grid: susy-compile($grid, $context-only: true);
 
-    // Color and gradient handling
-    $gradient: '';
+  // Color and gradient handling
+  $gradient: '';
 
-    @if (not $colors) {
-        $colors: susy-get('svg-grid-colors');
-    }
+  @if (not $colors) {
+    $colors: susy-get('svg-grid-colors');
+  }
 
-    @if length($colors) > 1 {
-        $gradient: _susy-svg-gradient($colors);
-        $colors: 'url(%23susy-svg-gradient)';
-    } @else {
-        $colors: _susy-svg-color($colors);
-    }
+  @if length($colors) > 1 {
+    $gradient: _susy-svg-gradient($colors);
+    $colors: 'url(%23susy-svg-gradient)';
+  } @else {
+    $colors: _susy-svg-color($colors);
+  }
 
-    // Get a default image-width
-    $span: (
-            'span': map-get($grid, 'columns'),
-            'spread': map-get($grid, 'container-spread'),
-    );
-    $span: map-merge($grid, $span);
-    $image-width: su-call('su-span', $span);
-    $image-width: if((type-of($image-width) == 'number'), $image-width, 100%);
+  // Get a default image-width
+  $span: (
+    'span': map-get($grid, 'columns'),
+    'spread': map-get($grid, 'container-spread'),
+  );
+  $span: map-merge($grid, $span);
+  $image-width: su-call('su-span', $span);
+  $image-width: if((type-of($image-width) == 'number'), $image-width, 100%);
 
-    // SVG construction
-    $columns: map-get($grid, 'columns');
-    $offset: $offset or _susy-svg-offset($grid);
+  // SVG construction
+  $columns: map-get($grid, 'columns');
+  $offset: $offset or _susy-svg-offset($grid);
 
-    $attrs: 'fill="#{$colors}" width="#{$image-width}"';
-    $svg: 'data:image/svg+xml,';
-    $svg: $svg + '%3Csvg xmlns="http://www.w3.org/2000/svg" #{$attrs} %3E';
-    $svg: $svg + $gradient;
+  $attrs: 'fill="#{$colors}" width="#{$image-width}"';
+  $svg: 'data:image/svg+xml,';
+  $svg: $svg + '%3Csvg xmlns="http://www.w3.org/2000/svg" #{$attrs} %3E';
+  $svg: $svg + $gradient;
 
-    @for $column from 1 through length($columns) {
-        $width: susy-span(1 narrow at $column, $grid);
-        $x: _susy-svg-column-position($column, $grid);
+  @for $column from 1 through length($columns) {
+    $width: susy-span(1 narrow at $column, $grid);
+    $x: _susy-svg-column-position($column, $grid);
 
-        $svg: $svg + _susy-svg-rect($x, $width, $offset);
-    }
+    $svg: $svg + _susy-svg-rect($x, $width, $offset);
+  }
 
-    @return url('#{$svg}%3C/svg%3E');
+  @return url('#{$svg}%3C/svg%3E');
 }

@@ -1,57 +1,41 @@
-/*!
- *    Copyright (c) 2014-2017 Neil Ellis
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *          http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
-
 /* ==========================================================================
    Forms
    ========================================================================== */
 
 form {
+  margin: 0 0 5px 0;
+
+  fieldset {
+    margin-bottom: 5px;
+    padding: 0;
+    border-width: 0;
+  }
+
+  legend {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px * 2;
+    *margin-left: -7px;
+    padding: 0;
+    color: $text-color;
+    border: 0;
+    border-bottom: 1px solid mix(#fff, #000, 80%);
+    white-space: normal;
+  }
+
+  p {
+    margin-bottom: 5px / 2;
+  }
+
+  ul {
+    list-style-type: none;
     margin: 0 0 5px 0;
+    padding: 0;
+  }
 
-    fieldset {
-        border-width: 0;
-        margin-bottom: 5px;
-        padding: 0;
-    }
-
-    legend {
-        border: 0;
-        border-bottom: 1px solid mix(#FFFFFF, #000000, 80%);
-        color: $text-color;
-        display: block;
-        margin-bottom: 5px * 2;
-        *margin-left: -7px;
-        padding: 0;
-        white-space: normal;
-        width: 100%;
-    }
-
-    p {
-        margin-bottom: 5px / 2;
-    }
-
-    ul {
-        list-style-type: none;
-        margin: 0 0 5px 0;
-        padding: 0;
-    }
-
-    br {
-        display: none;
-    }
+  br {
+    display: none;
+  }
 }
 
 label,
@@ -59,162 +43,162 @@ input,
 button,
 select,
 textarea {
-    vertical-align: baseline;
-    *vertical-align: middle;
+  vertical-align: baseline;
+  *vertical-align: middle;
 }
 
 input,
 button,
 select,
 textarea {
-    box-sizing: border-box;
-    font-family: $sans-serif;
+  box-sizing: border-box;
+  font-family: $sans-serif;
 }
 
 label {
-    color: $text-color;
-    cursor: pointer;
+  display: block;
+  margin-bottom: 0.25em;
+  color: $text-color;
+  cursor: pointer;
+
+  small {
+    font-size: $type-size-6;
+  }
+
+  input,
+  textarea,
+  select {
     display: block;
-    margin-bottom: 0.25em;
-
-    small {
-        font-size: $type-size-6;
-    }
-
-    input,
-    textarea,
-    select {
-        display: block;
-    }
+  }
 }
 
 input,
 textarea,
 select {
-    background-color: #FFFFFF;
-    border: 1px solid mix(#FFFFFF, #000000, 80%);
-    border-radius: $border-radius;
-    box-shadow: $box-shadow;
-    color: $text-color;
-    display: inline-block;
-    margin-bottom: 0.5em;
-    padding: 0.25em;
-    width: 100%;
+  display: inline-block;
+  width: 100%;
+  padding: 0.25em;
+  margin-bottom: 0.5em;
+  color: $text-color;
+  background-color: #fff;
+  border: 1px solid mix(#fff, #000, 80%);
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
 
-    &:hover {
-        border-color: mix(#FFFFFF, $primary-color, 50%);
-    }
+  &:hover {
+    border-color: mix(#fff, $primary-color, 50%);
+  }
 }
 
 .input-mini {
-    width: 60px;
+  width: 60px;
 }
 
 .input-small {
-    width: 90px;
+  width: 90px;
 }
 
 input[type="image"],
 input[type="checkbox"],
 input[type="radio"] {
-    border: 0 \9
-;
-    border-radius: 0;
-    cursor: pointer;
-    height: auto;
-    line-height: normal;
-    margin: 3px 0;
-    *margin-top: 0;
-    padding: 0;
-    width: auto;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 3px 0;
+  *margin-top: 0;
+  line-height: normal;
+  cursor: pointer;
+  border-radius: 0;
+  border: 0 \9;
 }
 
 input[type="checkbox"],
 input[type="radio"] {
-    box-sizing: border-box;
-    *height: 13px;
-    padding: 0;
-    *width: 13px;
+  box-sizing: border-box;
+  padding: 0;
+  *width: 13px;
+  *height: 13px;
 }
 
 input[type="image"] {
-    border: 0;
-    box-shadow: none;
+  border: 0;
+  box-shadow: none;
 }
 
 input[type="file"] {
-    background-color: transparent;
-    background-color: initial;
-    border: initial;
-    box-shadow: none;
-    line-height: initial;
-    padding: initial;
-    width: auto;
+  width: auto;
+  padding: initial;
+  line-height: initial;
+  border: initial;
+  background-color: transparent;
+  background-color: initial;
+  box-shadow: none;
 }
 
 input[type="button"],
 input[type="reset"],
 input[type="submit"] {
-    cursor: pointer;
-    height: auto;
-    *overflow: visible;
-    width: auto;
+  width: auto;
+  height: auto;
+  cursor: pointer;
+  *overflow: visible;
 }
 
 select,
 input[type="file"] {
-    *margin-top: 4px;
+  *margin-top: 4px;
 }
 
 select {
-    background-color: #FFFFFF;
-    width: auto;
+  width: auto;
+  background-color: #fff;
 }
 
 select[multiple],
 select[size] {
-    height: auto;
+  height: auto;
 }
 
 textarea {
-    height: auto;
-    overflow: auto;
-    resize: vertical;
-    vertical-align: top;
+  resize: vertical;
+  height: auto;
+  overflow: auto;
+  vertical-align: top;
 }
 
 input[type="hidden"] {
-    display: none;
+  display: none;
 }
 
 .form {
-    position: relative;
+  position: relative;
 }
 
 .radio,
 .checkbox {
-    font-weight: normal;
-    padding-left: 18px;
+  padding-left: 18px;
+  font-weight: normal;
 }
 
 .radio input[type="radio"],
 .checkbox input[type="checkbox"] {
-    float: left;
-    margin-left: -18px;
+  float: left;
+  margin-left: -18px;
 }
 
 .radio.inline,
 .checkbox.inline {
-    display: inline-block;
-    margin-bottom: 0;
-    padding-top: 5px;
-    vertical-align: middle;
+  display: inline-block;
+  padding-top: 5px;
+  margin-bottom: 0;
+  vertical-align: middle;
 }
 
 .radio.inline + .radio.inline,
 .checkbox.inline + .checkbox.inline {
-    margin-left: 10px;
+  margin-left: 10px;
 }
+
 
 /*
    Disabled state
@@ -226,9 +210,10 @@ textarea[disabled],
 input[readonly],
 select[readonly],
 textarea[readonly] {
-    cursor: not-allowed;
-    opacity: 0.5;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
+
 
 /*
    Focus & active state
@@ -236,18 +221,18 @@ textarea[readonly] {
 
 input:focus,
 textarea:focus {
-    border-color: $primary-color;
-    outline: 0;
-    outline: thin dotted \9
-;
+  border-color: $primary-color;
+  outline: 0;
+  outline: thin dotted \9;
 }
 
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus,
 select:focus {
-    box-shadow: none;
+  box-shadow: none;
 }
+
 
 /*
    Help text
@@ -255,20 +240,21 @@ select:focus {
 
 .help-block,
 .help-inline {
-    color: $info-color;
+  color: $info-color;
 }
 
 .help-block {
-    display: block;
-    line-height: 1em;
-    margin-bottom: 1em;
+  display: block;
+  margin-bottom: 1em;
+  line-height: 1em;
 }
 
 .help-inline {
-    display: inline-block;
-    padding-left: 5px;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 5px;
 }
+
 
 /*
    .form-inline
@@ -277,28 +263,28 @@ select:focus {
 .form-inline input,
 .form-inline textarea,
 .form-inline select {
-    display: inline-block;
-    margin-bottom: 0;
+  display: inline-block;
+  margin-bottom: 0;
 }
 
 .form-inline label {
-    display: inline-block;
+  display: inline-block;
 }
 
 .form-inline .radio,
 .form-inline .checkbox,
 .form-inline .radio {
-    margin-bottom: 0;
-    padding-left: 0;
-    vertical-align: middle;
+  padding-left: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
 }
 
 .form-inline .radio input[type="radio"],
 .form-inline .checkbox input[type="checkbox"] {
-    float: left;
-    margin-left: 0;
-    margin-right: 3px;
-}
+  float: left;
+  margin-left: 0;
+  margin-right: 3px; }
+
 
 /*
    .form-search
@@ -307,96 +293,99 @@ select:focus {
 .form-search input,
 .form-search textarea,
 .form-search select {
-    display: inline-block;
-    margin-bottom: 0;
+  display: inline-block;
+  margin-bottom: 0;
 }
 
 .form-search .search-query {
-    border-radius: 14px;
-    margin-bottom: 0;
-    padding-left: 14px;
-    padding-right: 14px;
+  padding-left: 14px;
+  padding-right: 14px;
+  margin-bottom: 0;
+  border-radius: 14px;
 }
 
 .form-search label {
-    display: inline-block;
+  display: inline-block;
 }
 
 .form-search .radio,
 .form-search .checkbox,
 .form-inline .radio {
-    margin-bottom: 0;
-    padding-left: 0;
-    vertical-align: middle;
+  padding-left: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
 }
 
 .form-search .radio input[type="radio"],
 .form-search .checkbox input[type="checkbox"] {
-    float: left;
-    margin-left: 0;
-    margin-right: 3px;
+  float: left;
+  margin-left: 0;
+  margin-right: 3px;
 }
+
 
 /*
    .form--loading
    ========================================================================== */
 
 .form--loading:before {
-    content: '';
+  content: '';
 }
 
 .form--loading .form__spinner {
-    display: block;
+  display: block;
 }
 
 .form:before {
-    background-color: rgba(255, 255, 255, 0.7);
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 10;
 }
 
 .form__spinner {
-    display: none;
-    left: 50%;
-    position: absolute;
-    top: 50%;
-    z-index: 11;
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 11;
 }
+
+
 
 /*
    Google search form
    ========================================================================== */
 
 #goog-fixurl {
-    ul {
-        list-style: none;
-        margin-left: 0;
-        padding-left: 0;
-        li {
-            list-style-type: none;
-        }
+  ul {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+    li {
+      list-style-type: none;
     }
+  }
 }
 
 #goog-wm-qt {
-    background-color: #FFFFFF;
-    border-color: lighten(#000000, 50);
-    border-radius: $border-radius;
-    border-style: solid !important;
-    border-width: 2px !important;
-    color: #000000;
-    display: inline-block;
-    font-size: $type-size-6;
-    margin-bottom: 20px;
-    margin-right: 10px;
-    padding: 8px 20px;
-    width: auto;
+  width: auto;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  padding: 8px 20px;
+  display: inline-block;
+  font-size: $type-size-6;
+  background-color: #fff;
+  color: #000;
+  border-width: 2px !important;
+  border-style: solid !important;
+  border-color: lighten(#000,50);
+  border-radius: $border-radius;
 }
 
 #goog-wm-sb {
-    @extend .btn;
+  @extend .btn;
 }

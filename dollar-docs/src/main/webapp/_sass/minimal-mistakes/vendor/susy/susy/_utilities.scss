@@ -1,23 +1,9 @@
-/*!
- *    Copyright (c) 2014-2017 Neil Ellis
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *          http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
-
 // Sass Utilities
 // ==============
 // - Susy Error Output Override [variable]
 // - Susy Error [function]
+
+
 
 // Susy Error Output Override
 // --------------------------
@@ -25,6 +11,8 @@
 /// @group x-utility
 /// @access private
 $_susy-error-output-override: false !default;
+
+
 
 // Susy Error
 // ----------
@@ -44,16 +32,17 @@ $_susy-error-output-override: false !default;
 ///   Combined error with source and message
 /// @throws When `$override == true`
 @function _susy-error(
-    $message,
-    $source,
-    $override: $_susy-error-output-override
+  $message,
+  $source,
+  $override: $_susy-error-output-override
 ) {
-    @if $override {
-        @return 'ERROR [#{$source}] #{$message}';
-    }
+  @if $override {
+    @return 'ERROR [#{$source}] #{$message}';
+  }
 
-    @error '[#{$source}] #{$message}';
+  @error '[#{$source}] #{$message}';
 }
+
 
 // Su Is Comparable
 // ----------------
@@ -70,28 +59,29 @@ $_susy-error-output-override: false !default;
 ///   The type of span (fluid or static) when units match,
 ///   or `false` for mismatched units
 @function _su-is-comparable(
-    $lengths...
+  $lengths...
 ) {
-    $first: nth($lengths, 1);
+  $first: nth($lengths, 1);
 
-    @if (length($lengths) == 1) {
-        @return if(unitless($first), 'fluid', 'static');
-    }
-
-    @for $i from 2 through length($lengths) {
-        $comp: nth($lengths, $i);
-
-        $fail: not comparable($first, $comp);
-        $fail: $fail or (unitless($first) and not unitless($comp));
-        $fail: $fail or (unitless($comp) and not unitless($first));
-
-        @if $fail {
-            @return false;
-        }
-    }
-
+  @if (length($lengths) == 1) {
     @return if(unitless($first), 'fluid', 'static');
+  }
+
+  @for $i from 2 through length($lengths) {
+    $comp: nth($lengths, $i);
+
+    $fail: not comparable($first, $comp);
+    $fail: $fail or (unitless($first) and not unitless($comp));
+    $fail: $fail or (unitless($comp) and not unitless($first));
+
+    @if $fail {
+      @return false;
+    }
+  }
+
+  @return if(unitless($first), 'fluid', 'static');
 }
+
 
 // Su Map Add Units
 // ----------------
@@ -119,22 +109,23 @@ $_susy-error-output-override: false !default;
 ///     /* #{$units}: #{$value} */
 ///   }
 @function _su-map-add-units(
-    $map,
-    $value
+  $map,
+  $value
 ) {
-    $unit: $value * 0;
-    $has: map-get($map, $unit) or 0;
+  $unit: $value * 0;
+  $has: map-get($map, $unit) or 0;
 
-    @if ($has == 0) {
-        @each $try, $could in $map {
-            $match: comparable($try, $value);
-            $unit: if($match, $try, $unit);
-            $has: if($match, $could, $has);
-        }
+  @if ($has == 0) {
+    @each $try, $could in $map {
+      $match: comparable($try, $value);
+      $unit: if($match, $try, $unit);
+      $has: if($match, $could, $has);
     }
+  }
 
-    @return map-merge($map, ($unit: $has + $value));
+  @return map-merge($map, ($unit: $has + $value));
 }
+
 
 // Susy Flatten
 // ------------
@@ -152,25 +143,25 @@ $_susy-error-output-override: false !default;
 ///   $list: 120px (30em 30em) 120px;
 ///   /* #{_susy-flatten($list)} */
 @function _susy-flatten(
-    $list
+  $list
 ) {
-    $flat: ();
+  $flat: ();
 
-    // Don't iterate over maps
-    @if (type-of($list) == 'map') {
-        @return $list;
+  // Don't iterate over maps
+  @if (type-of($list) == 'map') {
+    @return $list;
+  }
+
+  // Iterate over lists (or single items)
+  @each $item in $list {
+    @if (type-of($item) == 'list') {
+      $item: _susy-flatten($item);
+      $flat: join($flat, $item);
+    } @else {
+      $flat: append($flat, $item);
     }
+  }
 
-    // Iterate over lists (or single items)
-    @each $item in $list {
-        @if (type-of($item) == 'list') {
-            $item: _susy-flatten($item);
-            $flat: join($flat, $item);
-        } @else {
-            $flat: append($flat, $item);
-        }
-    }
-
-    // Return flattened list
-    @return $flat;
+  // Return flattened list
+  @return $flat;
 }

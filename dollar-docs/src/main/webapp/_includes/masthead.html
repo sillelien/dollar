@@ -15,27 +15,25 @@
   -->
 
 <div class="masthead">
-    <div class="masthead__inner-wrap">
-        <div class="masthead__menu">
-            <nav id="site-nav" class="greedy-nav">
-                <a class="site-title" href="{{ '/' | absolute_url }}">{{ site.title }}</a>
-                <ul class="visible-links">
-                    {% for link in site.data.navigation.main %}
-                    {% if link.url contains 'http' %}
-                    {% assign domain = '' %}
-                    {% else %}
-                    {% assign domain = site.url | append: site.baseurl %}
-                    {% endif %}
-                    <li class="masthead__menu-item"><a href="{{ domain }}{{ link.url }}">{{ link.title }}</a></li>
-                    {% endfor %}
-                </ul>
-                <button>
-                    <div class="navicon"></div>
-                </button>
-                <ul class="hidden-links hidden"></ul>
-            </nav>
-        </div>
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="{{ '/' | absolute_url }}">{{ site.title }}</a>
+        <ul class="visible-links">
+          {% for link in site.data.navigation.main %}
+            {% if link.url contains 'http' %}
+              {% assign domain = '' %}
+            {% else %}
+              {% assign domain = site.url | append: site.baseurl %}
+            {% endif %}
+            <li class="masthead__menu-item"><a href="{{ domain }}{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
+        <button><div class="navicon"></div></button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
     </div>
+  </div>
 </div>
 <a href="https://github.com/sillelien/dollar"><img style="position: absolute; z-index: 200000; top: 0; right: 0; border: 0;"
                                                    src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"

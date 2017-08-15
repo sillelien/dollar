@@ -1,53 +1,37 @@
-/*!
- *    Copyright (c) 2014-2017 Neil Ellis
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *          http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
-
 /* ==========================================================================
    TABLES
    ========================================================================== */
 
 table {
-    border-collapse: collapse;
-    font-family: $global-font-family;
-    font-size: $type-size-6;
-    margin-bottom: 1em;
-    width: 100%;
+  margin-bottom: 1em;
+  width: 100%;
+  font-family: $global-font-family;
+  font-size: $type-size-6;
+  border-collapse: collapse;
 
-    & + table {
-        margin-top: 1em;
-    }
+  & + table {
+    margin-top: 1em;
+  }
 }
 
 thead {
-    background-color: $lighter-gray;
-    border-bottom: 2px solid $light-gray;
+  background-color: $lighter-gray;
+  border-bottom: 2px solid $light-gray;
 }
 
 th {
-    font-weight: bold;
-    padding: 0.5em;
-    text-align: left;
+  padding: 0.5em;
+  font-weight: bold;
+  text-align: left;
 }
 
 td {
-    border-bottom: 1px solid $light-gray;
-    padding: 0.5em;
+  padding: 0.5em;
+  border-bottom: 1px solid $light-gray;
 }
 
 tr,
 td,
 th {
-    vertical-align: middle;
+  vertical-align: middle;
 }

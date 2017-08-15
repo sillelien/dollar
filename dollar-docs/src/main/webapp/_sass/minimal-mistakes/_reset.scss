@@ -1,65 +1,45 @@
-/*!
- *    Copyright (c) 2014-2017 Neil Ellis
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *          http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
-
 /* ==========================================================================
    STYLE RESETS
    ========================================================================== */
 
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html {
-    /* apply a natural box layout model to all elements */
-    background-color: $background-color;
-    box-sizing: border-box;
-    font-size: 16px;
+  /* apply a natural box layout model to all elements */
+  box-sizing: border-box;
+  background-color: $background-color;
+  font-size: 16px;
 
-    @include breakpoint($medium) {
-        font-size: 18px;
-    }
+  @include breakpoint($medium) {
+    font-size: 18px;
+  }
 
-    @include breakpoint($large) {
-        font-size: 20px;
-    }
+  @include breakpoint($large) {
+    font-size: 20px;
+  }
 
-    @include breakpoint($x-large) {
-        font-size: 22px;
-    }
+  @include breakpoint($x-large) {
+    font-size: 22px;
+  }
 
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
 }
 
 /* Remove margin */
 
-body {
-    margin: 0;
-}
+body { margin: 0; }
 
 /* Selected elements */
 
 ::-moz-selection {
-    background: #000000;
-    color: #FFFFFF;
+  color: #fff;
+  background: #000;
 }
 
 ::selection {
-    background: #000000;
-    color: #FFFFFF;
+  color: #fff;
+  background: #000;
 }
 
 /* Display HTML5 elements in IE6-9 and FF3 */
@@ -75,7 +55,7 @@ hgroup,
 main,
 nav,
 section {
-    display: block;
+  display: block;
 }
 
 /* Display block in IE6-9 and FF3 */
@@ -83,71 +63,70 @@ section {
 audio,
 canvas,
 video {
-    display: inline-block;
-    *display: inline;
-    *zoom: 1;
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
 }
 
 /* Prevents modern browsers from displaying 'audio' without controls */
 
 audio:not([controls]) {
-    display: none;
+  display: none;
 }
 
 a {
-    color: $link-color;
+  color: $link-color;
 }
 
 /* Apply focus state */
 
 a:focus {
-    @extend %tab-focus;
+  @extend %tab-focus;
 }
 
 /* Remove outline from links */
 
 a:hover,
 a:active {
-    outline: 0;
+  outline: 0;
 }
 
 /* Prevent sub and sup affecting line-height in all browsers */
 
 sub,
 sup {
-    font-size: 75%;
-    line-height: 0;
-    position: relative;
-    vertical-align: baseline;
+  position: relative;
+  font-size: 75%;
+  line-height: 0;
+  vertical-align: baseline;
 }
 
 sup {
-    top: -0.5em;
+  top: -0.5em;
 }
 
 sub {
-    bottom: -0.25em;
+  bottom: -0.25em;
 }
 
 /* img border in anchor's and image quality */
 
 img {
-    /* Responsive images (ensure images don't scale beyond their parents) */
-    border: 0;
-    height: auto; /* part 2: Scale the height according to the width, otherwise you get stretching*/
-    -ms-interpolation-mode: bicubic;
+  /* Responsive images (ensure images don't scale beyond their parents) */
+  max-width: 100%; /* part 1: Set a maximum relative to the parent*/
+  width: auto\9; /* IE7-8 need help adjusting responsive images*/
+  height: auto; /* part 2: Scale the height according to the width, otherwise you get stretching*/
 
-    max-width: 100%; /* part 1: Set a maximum relative to the parent*/
-    vertical-align: middle;
-    width: auto \9
-; /* IE7-8 need help adjusting responsive images*/
+  vertical-align: middle;
+  border: 0;
+  -ms-interpolation-mode: bicubic;
 }
 
 /* Prevent max-width from affecting Google Maps */
 
 #map_canvas img,
 .google-maps img {
-    max-width: none;
+  max-width: none;
 }
 
 /* Consistent form font size in all browsers, margin changes, misc */
@@ -156,29 +135,29 @@ button,
 input,
 select,
 textarea {
-    font-size: 100%;
-    margin: 0;
-    vertical-align: middle;
+  margin: 0;
+  font-size: 100%;
+  vertical-align: middle;
 }
 
 button,
 input {
-    line-height: normal; /* FF3/4 have !important on line-height in UA stylesheet*/
-    *overflow: visible; /* inner spacing ie IE6/7*/
+  *overflow: visible; /* inner spacing ie IE6/7*/
+  line-height: normal; /* FF3/4 have !important on line-height in UA stylesheet*/
 }
 
 button::-moz-focus-inner,
 input::-moz-focus-inner { /* inner padding and border oddities in FF3/4*/
-    border: 0;
-    padding: 0;
+  padding: 0;
+  border: 0;
 }
 
 button,
 html input[type="button"], // avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio` and `video` controls
 input[type="reset"],
 input[type="submit"] {
-    cursor: pointer; /* improves usability and consistency of cursor style between image-type `input` and others*/
     -webkit-appearance: button; /* corrects inability to style clickable `input` types in iOS*/
+    cursor: pointer; /* improves usability and consistency of cursor style between image-type `input` and others*/
 }
 
 label,
@@ -193,16 +172,16 @@ input[type="checkbox"] {
 }
 
 input[type="search"] { /* Appearance in Safari/Chrome*/
-    box-sizing: content-box;
-    -webkit-appearance: textfield;
+  box-sizing: content-box;
+  -webkit-appearance: textfield;
 }
 
 input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button {
-    -webkit-appearance: none; /* inner-padding issues in Chrome OSX, Safari 5*/
+  -webkit-appearance: none; /* inner-padding issues in Chrome OSX, Safari 5*/
 }
 
 textarea {
-    overflow: auto; /* remove vertical scrollbar in IE6-9*/
-    vertical-align: top; /* readability and alignment cross-browser*/
+  overflow: auto; /* remove vertical scrollbar in IE6-9*/
+  vertical-align: top; /* readability and alignment cross-browser*/
 }

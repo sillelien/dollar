@@ -1,41 +1,22 @@
-<!--
-  ~    Copyright (c) 2014-2017 Neil Ellis
-  ~
-  ~    Licensed under the Apache License, Version 2.0 (the "License");
-  ~    you may not use this file except in compliance with the License.
-  ~    You may obtain a copy of the License at
-  ~
-  ~          http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~    Unless required by applicable law or agreed to in writing, software
-  ~    distributed under the License is distributed on an "AS IS" BASIS,
-  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~    See the License for the specific language governing permissions and
-  ~    limitations under the License.
-  -->
-
-<article id="comment{{ include.index }}" class="js-comment comment" itemprop="comment" itemscope
-         itemtype="http://schema.org/Comment">
-    <div class="comment__avatar-wrapper">
-        <img class="comment__avatar" src="https://www.gravatar.com/avatar/{{ include.email }}?d=mm&s=80">
-    </div>
-    <div class="comment__content-wrapper">
-        <h3 class="comment__author" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            {% unless include.url == blank %}
-            <span itemprop="name"><a rel="external nofollow" itemprop="url" href="{{ include.url }}">{{ include.name }}</a></span>
-            {% else %}
-            <span itemprop="name">{{ include.name }}</span>
-            {% endunless %}
-        </h3>
-        <p class="comment__date">
-            {% if include.date %}
-            {% if include.index %}<a href="#comment{{ include.index }}" itemprop="url">{% endif %}
-            <time datetime="{{ include.date | date_to_xmlschema }}" itemprop="datePublished">{{ include.date | date: "%B %d, %Y at
-                %I:%M %p" }}
-            </time>
-            {% if include.index %}</a>{% endif %}
-            {% endif %}
-        </p>
-        <div itemprop="text">{{ include.message | markdownify }}</div>
-    </div>
+<article id="comment{{ include.index }}" class="js-comment comment" itemprop="comment" itemscope itemtype="http://schema.org/Comment">
+  <div class="comment__avatar-wrapper">
+    <img class="comment__avatar" src="https://www.gravatar.com/avatar/{{ include.email }}?d=mm&s=80">
+  </div>
+  <div class="comment__content-wrapper">
+    <h3 class="comment__author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+      {% unless include.url == blank %}
+        <span itemprop="name"><a rel="external nofollow" itemprop="url" href="{{ include.url }}">{{ include.name }}</a></span>
+      {% else %}
+        <span itemprop="name">{{ include.name }}</span>
+      {% endunless %}
+    </h3>
+    <p class="comment__date">
+      {% if include.date %}
+        {% if include.index %}<a href="#comment{{ include.index }}" itemprop="url">{% endif %}
+        <time datetime="{{ include.date | date_to_xmlschema }}" itemprop="datePublished">{{ include.date | date: "%B %d, %Y at %I:%M %p" }}</time>
+        {% if include.index %}</a>{% endif %}
+      {% endif %}
+    </p>
+    <div itemprop="text">{{ include.message | markdownify }}</div>
+  </div>
 </article>

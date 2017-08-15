@@ -3,11 +3,12 @@
  * Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
  * Licensed under MIT (https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt)
 */
+
 /* Variables */
 @import "minimal-mistakes/variables";
+
 /* Mixins and functions */
 @import "minimal-mistakes/vendor/breakpoint/breakpoint";
-
 @include breakpoint-set("to ems", true);
 @import "minimal-mistakes/vendor/font-awesome/font-awesome";
 @import "minimal-mistakes/vendor/magnific-popup/magnific-popup"; // Magnific Popup
