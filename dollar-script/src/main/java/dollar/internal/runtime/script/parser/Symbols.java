@@ -678,13 +678,13 @@ public class Symbols {
         }
         System.out.println("## Appendix C - Reserved Keywords, Operators and Symbols");
         System.out.println("### Keywords\n");
-        System.out.println("The following keywords are reserved:\n");
+        System.out.println("The following operator symbols are reserved:\n");
         System.out.println("> " + tokens.stream().filter(i -> i instanceof KeywordDef && ((KeywordDef) i).isReserved()).map(
                 i -> ((KeywordDef) i).keyword()).sorted().collect(Collectors.joining(", ")));
         System.out.println();
 
         System.out.println("### Operators\n");
-        System.out.println("The following operator symbols are reserved:\n");
+        System.out.println("The following operator keywords are reserved:\n");
         System.out.println("> " + tokens.stream().filter(
                 i -> i instanceof OpDef && ((OpDef) i).keyword() != null && ((OpDef) i).isReserved()).map(
                 i -> ((OpDef) i).keyword()).sorted().collect(Collectors.joining(", ")));
