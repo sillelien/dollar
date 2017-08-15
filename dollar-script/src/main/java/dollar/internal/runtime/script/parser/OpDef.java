@@ -62,6 +62,9 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         this.bnf = bnf;
         this.example = example;
         this.priority = priority;
+        if (!reserved && priority == 0) {
+            throw new AssertionError("Priority must be > 0");
+        }
     }
 
     @Nullable

@@ -64,7 +64,7 @@ public class Symbols {
                                                          "as `.: &a > 10` which means that when this statement is evaluated the " +
                                                          "value of a is compared with 10 - if __at this point__ it is not greater" +
                                                          " than 10 then the assertion will fail. ",
-                                                 false, true, null, null, 0);
+                                                 false, true, null, null, LINE_PREFIX_PRIORITY);
     @NotNull
     public static final OpDef LT_EQUALS = new OpDef("<=", null, "less-than-equal",
                                                     "The standard `<=` operator, it uses Comparable#compareTo and will work with" +
@@ -87,12 +87,12 @@ public class Symbols {
                                               "Returns the right-hand-side decremented. Note the right-hand-side is not changed " +
                                                       "so `--a` does not not decrement `a`, it __returns__ `a` **decremented**",
                                               false,
-                                              true, "('--'|'dec') <expression>", null, 0);
+                                              true, "('--'|'dec') <expression>", null, INC_DEC_PRIORITY);
 
     @NotNull
     public static final OpDef INC = new OpDef("++", "inc", "increment",
                                               "Returns the right-hand-side incremented. Note the right-hand-side is not changed so `--a` does not not decrement `a`, it __returns__ `a` **incremented**",
-                                              false, true, "('++'|'inc') <expression>", null, 0);
+                                              false, true, "('++'|'inc') <expression>", null, INC_DEC_PRIORITY);
 
     @NotNull
     public static final OpDef DEFINITION = new OpDef(":=", null,
@@ -272,7 +272,7 @@ public class Symbols {
     public static final OpDef MOD = new OpDef("%", "mod", "modulus",
                                               "Returns the remainder (modulus) of the division of the left-hand-side by the " +
                                                       "right-hand-side.", false, true,
-                                              "<expression> ('%'|'mod') <expression>", null, EQ_PRIORITY);
+                                              "<expression> ('%'|'mod') <expression>", null, MULTIPLY_DIVIDE_PRIORITY);
 
     @NotNull
     public static final OpDef ERR = new OpDef("??", "err", "err",

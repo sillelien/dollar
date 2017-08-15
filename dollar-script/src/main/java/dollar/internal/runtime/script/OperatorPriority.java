@@ -27,7 +27,7 @@ public interface OperatorPriority {
     int UNARY_PRIORITY = 400;
     int INC_DEC_PRIORITY = 400;
     int IN_PRIORITY = 400;
-    int LINE_PREFIX_PRIORITY = 0;
+    int LINE_PREFIX_PRIORITY = 1;
     int PIPE_PRIORITY = 150;
     int EQ_PRIORITY = 100;
     int COMP_PRIORITY = 150;
