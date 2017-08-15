@@ -114,7 +114,7 @@ public class Symbols {
     public static final OpDef MEMBER = new OpDef(".", null, "member",
                                                  "The membership or `.` operator accesses the member of a map by it's key.", false,
                                                  true,
-                                                 null, null);
+                                                 "<expression<", null);
 
     @NotNull
     public static final OpDef LT = new OpDef("<", "less-than", "less-than",
@@ -209,47 +209,87 @@ public class Symbols {
 
     @NotNull
     public static final OpDef DEFAULT = new OpDef(":-", "default", "default",
-                                                  "default", false, true, null, null);
+                                                  "If the left-hand-side is VOID this returns the right-hand-side, otherwise " +
+                                                          "returns the left-hand-side.",
+                                                  false,
+                                                  true,
+                                                  "<expression> (':-'|'default') <expression>",
+                                                  null);
 
     @NotNull
-    public static final OpDef PRINT = new OpDef("@@", "print", "print", "print", false, true, null, null);
+    public static final OpDef PRINT = new OpDef("@@", "print", "print",
+                                                "Sends the right-hand-side expression to stdout.", false, true,
+                                                "('@@'|'print') <expression>", null);
 
     @NotNull
-    public static final OpDef PARALLEL = new OpDef("|:|", "parallel", "parallel", "parallel", false, false, null, null);
+    public static final OpDef PARALLEL = new OpDef("|:|", "parallel", "parallel",
+                                                   "Causes the right-hand-side expression to be evaluated in parallel, most " +
+                                                           "useful in conjunction with list blocks.",
+                                                   false, false,
+                                                   "('|:|'|'parallel') <expression>", null);
 
     @NotNull
     public static final OpDef SERIAL = new OpDef("|..|", "serial", "serial",
-                                                 "serial", false, false, null, null);
+                                                 "Causes the right-hand-side expression to be evaluated in serial, most useful " +
+                                                         "in conjunction with list blocks.",
+                                                 false, false,
+                                                 "('|..|'|'serial') <expression>", null);
     @NotNull
-    public static final OpDef FORK = new OpDef("-<", "fork", "fork", "fork", false, true, null, null);
+    public static final OpDef FORK = new OpDef("-<", "fork", "fork",
+                                               "Executes the right-hand-side in a seperate thread returning a 'future'. Any attempt to make use of the returned value from this operator will block until that thread finishes.",
+                                               false,
+                                               true,
+                                               ("('-<'|'fork') <expression>"), null);
 
     @NotNull
-    public static final OpDef RANGE = new OpDef("..", "range", "range", "range", false, true, null, null);
+    public static final OpDef RANGE = new OpDef("..", "range", "range",
+                                                "Creates a RANGE between the two values specified.",
+                                                false, true,
+                                                "<expression> '..' <expression>",
+                                                null);
 
     @NotNull
-    public static final OpDef ERROR = new OpDef("!?#*!", "error", "error", "error", false, true, null, null);
+    public static final OpDef ERROR = new OpDef("?->", "error", "error",
+                                                "The right-hand-side is executed if an error occurs in the current scope.",
+                                                false, true, "('?->'|'error') <expression>",
+                                                null);
 
     @NotNull
-    public static final OpDef SIZE = new OpDef("#", "size", "size", "size", false, true, null, null);
+    public static final OpDef SIZE = new OpDef("#", "size", "size",
+                                               "Returns the size of non-scalar types or the length of a string.", false, true,
+                                               "('#'|'size') <expression>", null);
 
     @NotNull
-    public static final OpDef MOD = new OpDef("%", "mod", "modulus", "modulus", false, true, null, null);
+    public static final OpDef MOD = new OpDef("%", "mod", "modulus",
+                                              "Returns the remainder (modulus) of the division of the left-hand-side by the " +
+                                                      "right-hand-side.", false, true,
+                                              "<expression> ('%'|'mod') <expression>", null);
 
     @NotNull
-    public static final OpDef ERR = new OpDef("??", "err", "err", "err", false, true, null, null);
+    public static final OpDef ERR = new OpDef("??", "err", "err",
+                                              "Sends the result of the right-hand-side to `stderr`.", false,
+                                              true,
+                                              "('??'|'err') <expression>", null);
 
     @NotNull
-    public static final OpDef DEBUG = new OpDef("!!", "debug", "debug", "debug", false, true, null, null);
+    public static final OpDef DEBUG = new OpDef("!!", "debug", "debug",
+                                                "Sends the result of the right-hand-side to the debug log.",
+                                                false, true,
+                                                "('!!'|'debug') <expression>", null);
 
     @NotNull
     public static final OpDef ASSERT_EQ_REACT = new OpDef("<=>",
+                                                          null,
                                                           "assert-equals-reactive",
-                                                          "assert-equals-reactive",
-                                                          "assert-equals", false, true, null, null);
+                                                          "Asserts that the left-hand-side is **always** equal to the right-hand-side.",
+                                                          false, true,
+                                                          "<expression> '<=>' <expression>", null);
     @NotNull
     public static final OpDef ASSERT_EQ_UNREACT = new OpDef("<->", "assert-equals",
                                                             "assert-equals",
-                                                            "assert-equals", false, false, null, null);
+                                                            "Asserts that at the point of execution that the left-hand-side is equal to the right-hand-side.",
+                                                            false, false,
+                                                            "<expression> <-> <expression>", null);
     @NotNull
     public static final OpDef EACH = new OpDef("=>>", "each", "each", "each", false, true, null, null);
 
