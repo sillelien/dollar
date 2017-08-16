@@ -1032,12 +1032,12 @@ In the example the value of c is greater than d because the value of c is evalua
 TODO
 
 ## Appendix A - Operators
-### all or <@
+### all or `<@`
 
 all
 
 
-### and or &&
+### and or `&&`
 
 ```
 <expression> ('&&'|'and') <expression>
@@ -1046,12 +1046,12 @@ all
 Returns the logical 'and' of two expressions, e.g. `a && b`. Just like in Java it will shortcut, so that if the left-hand-side is false the right-hand-side is never evaluated.
 
 
-### assert or .:
+### assert or `.:`
 
 The assertion opeartor is used to assert that an expression holds true. It is a reactive operator such that it is evaluated when the right-hand-side expression changes. so `.: a > 10` is asserting that a is **always** greater than 10. To avoid reactive behaviour use the fix operator such as `.: &a > 10` which means that when this statement is evaluated the value of a is compared with 10 - if __at this point__ it is not greater than 10 then the assertion will fail. 
 
 
-### assert-equals or <->
+### assert-equals or `<->`
 
 ```
 <expression> <-> <expression>
@@ -1060,17 +1060,17 @@ The assertion opeartor is used to assert that an expression holds true. It is a 
 Asserts that at the point of execution that the left-hand-side is equal to the right-hand-side.
 
 
-### causes or =>
+### causes or `=>`
 
 The causes operator is used to link a reactive expression to an imperative action. The left-hand-side is any expression and the right hand-side is any expression that will be evaluated when the left-hand-side is updated such as `a+b => {@@ a; @@ b}`.
 
 
-### choose or ?*
+### choose or `?*`
 
 choose
 
 
-### create or |||>
+### create or `|||>`
 
 ```
 ('|||>'|'create') <expression>
@@ -1079,7 +1079,7 @@ choose
 Creates a service described typically by a URI.
 
 
-### debug or !!
+### debug or `!!`
 
 ```
 ('!!'|'debug') <expression>
@@ -1088,7 +1088,7 @@ Creates a service described typically by a URI.
 Sends the result of the right-hand-side to the debug log.
 
 
-### dec or --
+### dec or `--`
 
 ```
 ('--'|'dec') <expression>
@@ -1097,7 +1097,7 @@ Sends the result of the right-hand-side to the debug log.
 Returns the right-hand-side decremented. Note the right-hand-side is not changed so `--a` does not not decrement `a`, it __returns__ `a` **decremented**
 
 
-### default or :-
+### default or `:-`
 
 ```
 <expression> (':-'|'default') <expression>
@@ -1106,7 +1106,7 @@ Returns the right-hand-side decremented. Note the right-hand-side is not changed
 If the left-hand-side is VOID this returns the right-hand-side, otherwise returns the left-hand-side.
 
 
-### destroy or <|||
+### destroy or `<|||`
 
 ```
 ('<|||'|'destroy') <expression>
@@ -1115,32 +1115,32 @@ If the left-hand-side is VOID this returns the right-hand-side, otherwise return
 destroy
 
 
-### divide or /
+### divide or `/`
 
 Divides one value by another.
 
 
-### drain or <-<
+### drain or `<-<`
 
 drain
 
 
-### each or =>>
+### each or `=>>`
 
 each
 
 
-### else or -:
+### else or `-:`
 
 else
 
 
-### equal or ==
+### equal or `==`
 
 equal
 
 
-### err or ??
+### err or `??`
 
 ```
 ('??'|'err') <expression>
@@ -1149,7 +1149,7 @@ equal
 Sends the result of the right-hand-side to `stderr`.
 
 
-### error or ?->
+### error or `?->`
 
 ```
 ('?->'|'error') <expression>
@@ -1158,7 +1158,7 @@ Sends the result of the right-hand-side to `stderr`.
 The right-hand-side is executed if an error occurs in the current scope.
 
 
-### fix or &
+### fix or `&`
 
 ```
 ('&' | '--') fix <expression>
@@ -1167,17 +1167,17 @@ The right-hand-side is executed if an error occurs in the current scope.
 Converts a reactive expression into a fixed value. It fixes the value at the point the fix operator is executed. No reactive events will be passed from the right-hand-side expression.
 
 
-### for or null
+### for or `null`
 
 for operator
 
 
-### null or null
+### null or `null`
 
 cast operator
 
 
-### fork or -<
+### fork or `-<`
 
 ```
 ('-<'|'fork') <expression>
@@ -1186,17 +1186,17 @@ cast operator
 Executes the right-hand-side in a seperate thread returning a 'future'. Any attempt to make use of the returned value from this operator will block until that thread finishes.
 
 
-### greater-than or >
+### greater-than or `>`
 
 The standard `>` operator, it uses Comparable#compareTo and will work with any Dollar data type, including strings, ranges, lists etc.
 
 
-### listen or ?
+### listen or `?`
 
 listen
 
 
-### mod or %
+### mod or `%`
 
 ```
 <expression> ('%'|'mod') <expression>
@@ -1205,7 +1205,7 @@ listen
 Returns the remainder (modulus) of the division of the left-hand-side by the right-hand-side.
 
 
-### multiply or *
+### multiply or `*`
 
 ```
 <expression> '*'|'multiply'
@@ -1214,7 +1214,7 @@ Returns the remainder (modulus) of the division of the left-hand-side by the rig
 Returns the product of two values. If the left-hand-side is scalar (non collection) then a straightforward multiplication will take place. If the left-hand-side is a collection and it is multiplied by `n`, e.g. `{a=a+1} * 3` it will be added (`+`) to itself `n` times i.e. `{a=a+1} + {a=a+1} + {a=a+1}`.
 
 
-### negate or -
+### negate or `-`
 
 ```
 ('-'|'negate') <expression>
@@ -1223,7 +1223,7 @@ Returns the product of two values. If the left-hand-side is scalar (non collecti
 Negates a value.
 
 
-### not or !
+### not or `!`
 
 ```
 ('!'|'not') <expression>
@@ -1232,7 +1232,7 @@ Negates a value.
 Returns the negation of the right-hand-side expression.
 
 
-### <=> (assert-equals-reactive)
+### `<=>` (assert-equals-reactive)
 
 ```
 <expression> '<=>' <expression>
@@ -1241,17 +1241,17 @@ Returns the negation of the right-hand-side expression.
 Asserts that the left-hand-side is **always** equal to the right-hand-side.
 
 
-### if or ???
+### if or `???`
 
 if
 
 
-### in or €
+### in or `€`
 
 in
 
 
-### inc or ++
+### inc or `++`
 
 ```
 ('++'|'inc') <expression>
@@ -1260,12 +1260,12 @@ in
 Returns the right-hand-side incremented. Note the right-hand-side is not changed so `--a` does not not decrement `a`, it __returns__ `a` **incremented**
 
 
-### less-than or <
+### less-than or `<`
 
 The standard `<` operator, it uses Comparable#compareTo and will work with any Dollar data type, including strings, ranges, lists etc.
 
 
-### . (member)
+### `.` (member)
 
 ```
 <expression<
@@ -1274,17 +1274,17 @@ The standard `<` operator, it uses Comparable#compareTo and will work with any D
 The membership or `.` operator accesses the member of a map by it's key.
 
 
-### not-equal or !=
+### not-equal or `!=`
 
 not-equal
 
 
-### = (assign)
+### `=` (assign)
 
 assign
 
 
-### := (declaration)
+### `:=` (declaration)
 
 ```
  [export] [const] <variable-name> ':=' <expression> OR def <variable-name> <expression
@@ -1293,22 +1293,22 @@ assign
 Declares a variable to have a value, this is declarative and reactive such that saying `const a := b + 1` means that `a` always equals `b+1` no matter the value of b. The shorthand `def` is the same as `const <variable-name> :=` so `def a {b+1}` is the same as `const a := b + 1` but is syntactically better when declaring function like variables.
 
 
-### >= (greater-than-equal)
+### `>=` (greater-than-equal)
 
 The standard `>=` operator, it uses Comparable#compareTo and will work with any Dollar data type, including strings, ranges, lists etc.
 
 
-### <= (less-than-equal)
+### `<=` (less-than-equal)
 
 The standard `<=` operator, it uses Comparable#compareTo and will work with any Dollar data type, including strings, ranges, lists etc.
 
 
-### ?= (listen-assign)
+### `?=` (listen-assign)
 
 listen-assign
 
 
-### or or ||
+### or or `||`
 
 ```
 <expression> ('||'|'or') <expression>
@@ -1317,12 +1317,12 @@ listen-assign
 Returns the logical 'or' of two expressions, e.g. `a || b`. Just like in Java it will shortcut, so that if the left-hand-side is true the right-hand-side is never evaluated.
 
 
-### pair or :
+### pair or `:`
 
 pair
 
 
-### parallel or |:|
+### parallel or `|:|`
 
 ```
 ('|:|'|'parallel') <expression>
@@ -1331,7 +1331,7 @@ pair
 Causes the right-hand-side expression to be evaluated in parallel, most useful in conjunction with list blocks.
 
 
-### pause or ||>
+### pause or `||>`
 
 ```
 ('||>'|'pause') <expression>
@@ -1340,12 +1340,12 @@ Causes the right-hand-side expression to be evaluated in parallel, most useful i
 Pauses a service described typically by a URI.
 
 
-### pipe or |
+### pipe or `|`
 
 The Pipe operator exists to improve method chaining and is used in the form `funcA() | funcB` where the first expression is evaluated and then the result is passed to the second function and can be chained such as `funcA() | funcB | funcC`.
 
 
-### plus or +
+### plus or `+`
 
 ```
 <expression> ('+'|'plus') <expression>
@@ -1354,7 +1354,7 @@ The Pipe operator exists to improve method chaining and is used in the form `fun
 Appends or adds two values.
 
 
-### print or @@
+### print or `@@`
 
 ```
 ('@@'|'print') <expression>
@@ -1363,12 +1363,12 @@ Appends or adds two values.
 Sends the right-hand-side expression to stdout.
 
 
-### publish or *>
+### publish or `*>`
 
 publish
 
 
-### range or ..
+### range or `..`
 
 ```
 <expression> '..' <expression>
@@ -1377,22 +1377,22 @@ publish
 Creates a RANGE between the two values specified.
 
 
-### << (read-simple)
+### `<<` (read-simple)
 
 Performs a simple read from another data item, typically this is used with a URI.
 
 
-### read or null
+### read or `null`
 
 read operator
 
 
-### reduce or >>=
+### reduce or `>>=`
 
 reduce
 
 
-### serial or |..|
+### serial or `|..|`
 
 ```
 ('|..|'|'serial') <expression>
@@ -1401,7 +1401,7 @@ reduce
 Causes the right-hand-side expression to be evaluated in serial, most useful in conjunction with list blocks.
 
 
-### stop or <|
+### stop or `<|`
 
 ```
 ('<|'|'stop') <expression>
@@ -1410,17 +1410,17 @@ Causes the right-hand-side expression to be evaluated in serial, most useful in 
 Stops a service described typically by a URI.
 
 
-### *= (subscribe-assign)
+### `*=` (subscribe-assign)
 
 subscribe-assign
 
 
-### subscribe or <*
+### subscribe or `<*`
 
 subscribe
 
 
-### truthy or ~
+### truthy or `~`
 
 ```
 ('~'|'truthy') <expression>
@@ -1428,7 +1428,7 @@ subscribe
 
 The truthy operator `~` converts any value to a boolean by applying the rule that: void is false, 0 is false, "" is false, empty list is false, empty map is false - all else is true.
 
-```dollar
+```
 .: ~ [1,2,3]
 .: ! ~ []
 .: ~ "anything"
@@ -1441,7 +1441,7 @@ The truthy operator `~` converts any value to a boolean by applying the rule tha
 ```
 
 
-### unpause or <||
+### unpause or `<||`
 
 ```
 ('<||'|'unpause') <expression>
@@ -1450,27 +1450,27 @@ The truthy operator `~` converts any value to a boolean by applying the rule tha
 Un-pauses a service described typically by a URI.
 
 
-### >> (write-simple)
+### `>>` (write-simple)
 
 Performs a simple write to another data item, mostly used to write to a URI. 
 
 
-### while or null
+### while or `null`
 
 while operator
 
 
-### null or null
+### null or `null`
 
 subscript operator
 
 
-### null or null
+### null or `null`
 
 parameter operator
 
 
-### size or #
+### size or `#`
 
 ```
 ('#'|'size') <expression>
@@ -1479,7 +1479,7 @@ parameter operator
 Returns the size of non-scalar types or the length of a string.
 
 
-### state or <|>
+### state or `<|>`
 
 ```
 ('<|>'|'state') <expression>
@@ -1488,7 +1488,7 @@ Returns the size of non-scalar types or the length of a string.
 Returns the state of a service described typically by a URI.
 
 
-### write or null
+### write or `null`
 
 write operator
 
