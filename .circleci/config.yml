@@ -232,7 +232,7 @@ jobs:
       steps:
 
         - attach_workspace:
-          at: /srv/jekyll/workspace
+            at: /srv/jekyll/workspace
 
         - run:
             name: build-docs
