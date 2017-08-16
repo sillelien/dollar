@@ -181,6 +181,7 @@ jobs:
         - store_artifacts:
             path: /home/circleci/workspace/gendocs/
 
+
     docs:
       <<: *defaults
 
@@ -214,6 +215,36 @@ jobs:
 
         - store_artifacts:
             path: /home/circleci/dollar/docs
+
+
+  docs-preflight:
+    <<: *defaults
+
+    docker:
+        - image: sillelien/circleci-jekyll-build-image
+
+    - attach_workspace:
+        at: /root/workspace
+
+      - checkout
+
+      - run:
+          name: build-docs
+          command: |
+            set -ex
+            git config --global user.email "hello@neilellis.me"
+            git config --global user.name "Neil Ellis"
+            cd /srv/jekyll
+            git clone https://github.com/sillelien/dollar project
+            cd project
+            git checkout $CIRCLE_BRANCH
+            cd docs
+            jekyll build
+
+      - store_artifacts:
+          path: /srv/jekyll/project/docs/_site
+
+
 
     dist:
       <<: *defaults
@@ -356,6 +387,14 @@ workflows:
               only:
                 - master
 
+    - docs-preflight:
+          requires:
+            - docs
+          filters:
+            branches:
+              only:
+                - master
+
       - maven-deploy:
           requires:
             - build
@@ -395,6 +434,7 @@ workflows:
             - build
             - devdocs
             - maven-deploy
+            - docs-preflight
           filters:
             branches:
               only: master
