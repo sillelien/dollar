@@ -202,7 +202,7 @@ jobs:
               rm -rf dev || :
               cp -rf /home/circleci/workspace/devdocs dev
               git add dev
-              echo "release: $(cat  ../.release)" >> config.yml
+              echo "release: $(cat  ../.release)" > _data/env.yml
               echo "---" >  _pages/manual.md
               echo "layout: single" >>_pages/manual.md
               echo "title:  \"Dollar Scripting Language Manual\"" >> _pages/manual.md
