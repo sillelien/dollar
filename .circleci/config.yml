@@ -217,32 +217,32 @@ jobs:
             path: /home/circleci/dollar/docs
 
 
-  docs-preflight:
-    <<: *defaults
+    docs-preflight:
+      <<: *defaults
 
-    docker:
-        - image: sillelien/circleci-jekyll-build-image
+      docker:
+          - image: sillelien/circleci-jekyll-build-image
 
-    - attach_workspace:
-        at: /root/workspace
+      - attach_workspace:
+          at: /root/workspace
 
-      - checkout
+        - checkout
 
-      - run:
-          name: build-docs
-          command: |
-            set -ex
-            git config --global user.email "hello@neilellis.me"
-            git config --global user.name "Neil Ellis"
-            cd /srv/jekyll
-            git clone https://github.com/sillelien/dollar project
-            cd project
-            git checkout $CIRCLE_BRANCH
-            cd docs
-            jekyll build
+        - run:
+            name: build-docs
+            command: |
+              set -ex
+              git config --global user.email "hello@neilellis.me"
+              git config --global user.name "Neil Ellis"
+              cd /srv/jekyll
+              git clone https://github.com/sillelien/dollar project
+              cd project
+              git checkout $CIRCLE_BRANCH
+              cd docs
+              jekyll build
 
-      - store_artifacts:
-          path: /srv/jekyll/project/docs/_site
+        - store_artifacts:
+            path: /srv/jekyll/project/docs/_site
 
 
 
