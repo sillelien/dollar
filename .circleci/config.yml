@@ -203,8 +203,9 @@ jobs:
               cd project
               git checkout $CIRCLE_BRANCH
               cd docs
-              rm -rf dev
+              rm -rf dev || :
               cp -rf /root/workspace/devdocs dev
+              git add dev
               echo "release: $(cat /srv/jekyll/project/.release)" > env.yml
               echo "---">  _pages/manual.md
               echo "layout: splash" >>_pages/manual.md
@@ -213,7 +214,6 @@ jobs:
               echo "---" >>_pages/manual.md
               tail -n +2 /srv/jekyll/project/dollar-docs/src/main/resources/pages/manual.md >> _pages/manual.md
               cat  /root/workspace/gendocs/symbols.md >> manual.md
-              git add *
               git commit -a -m "Updated docs from build [ci skip]"  || :
               git push || :
               cd /srv/jekyll
