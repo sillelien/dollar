@@ -11,8 +11,8 @@ title                    : "Dollar"
 title_separator          : "-"
 name                     : "Neil Ellis"
 description              : "An amazing website."
-url                      : https://sillelien.github.io/dollar
-baseurl                  : # the subpath of your site, e.g. "/blog"
+url                      : https://sillelien.github.io
+baseurl                  : /dollar
 repository               : sillelien/dollar
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 # breadcrumbs            : false # true, false (default)
