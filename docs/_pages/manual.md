@@ -4,9 +4,9 @@ title:  "Dollar Scripting Language Manual"
 permalink: /manual/
 ---
 
-##Introduction
+## Introduction
 
-###Executable Documentation
+### Executable Documentation
 
 Everything in this documentation is executed as part of the build process, so all the examples are guaranteed to run with the latest master branch of Dollar.
 
@@ -20,7 +20,7 @@ So it can be executed directly from a Unix command line.
 
 The source for this page (minus that header) is [here](manual.md)
 
-###Getting Started
+### Getting Started
 
 NOTE: At present only Mac OS X and 64 Bit Ubuntu Linux is officially supported, however since Dollar is entirely based in Java it's trivial to port to other systems.
 
@@ -42,12 +42,12 @@ def testParams {$2 + " " + $1}
 
 ```
 
-##Understanding the Basics
+## Understanding the Basics
 
 
 Dollar has it's own peculiarities, mostly these exists to help with it's major target: serverside integration projects. So it's important to understand the basic concepts before getting started.
 
-###Functional Programming and the 'pure' operator
+### Functional Programming and the 'pure' operator
 
 Support for functional programming is included in Dollar, this will be widened as the language is developed. For now it is provided by the `pure` operator. This signals that an expression or declaration is a pure expression or function.
 
@@ -66,7 +66,7 @@ Note some builtin functions are not themselves pure and will trigger parser erro
 
 
 
-###Reactive Programming
+### Reactive Programming
 
 Dollar expressions are by default *lazy*, this is really important to understand otherwise you may get some surprises. This lazy evaluation is combined with a simple event system to make Dollar a [reactive programming language](http://en.wikipedia.org/wiki/Reactive_programming) by default. 
 
@@ -162,7 +162,7 @@ b=2
 
 
 
-###Assignment
+### Assignment
 
 Obviously the declarative/reactive behavior is fantastic for templating, eventing, creating lambda style expressions etc. however there are times when we want to simply assign a value and perform a single action on that value.
 
@@ -212,9 +212,9 @@ const MEDIUM = 23
 
 So `:=` supports the full reactive behaviour of Dollar, i.e. it is a declaration not a value assignment, and `=` is used to nail down a particular value or reduce the reactive behaviour. Later we'll come across the fix operator `&` which instructs Dollar to fix a value completely . More on that later.
 
-###Blocks
+### Blocks
 
-####Line Block
+#### Line Block
 Dollar supports several block types, the first is the 'line block' a line block lies between `{` and `}` and is separated by either newlines or `;` characters.
 
 ```dollar
@@ -234,7 +234,7 @@ myBlock2 <=> 2
 
 When a line block is evaluated the result is the value of the last entry. For advanced users note that all lines will be evaluated, the value is just ignored. A line block behaves a lot like a function in an imperative language.
 
-####List Block
+#### List Block
 
 Next we have the list block, the list block preserves all the values each part is seperated by either a `,` or a newline but is delimited by `[` and `]`.
 
@@ -253,7 +253,7 @@ list2 <=> [1,2]
 
 ```
 
-####Map Block
+#### Map Block
 
 Finally we have the map block, when an map block is evaluated the result is the aggregation  of the parts from top to bottom into a map. The map block starts and finishes with the `{` `}` braces, however each part is seperated by a `,` not a `;` or *newline* . The default behaviour of a map block is virtually useless, it takes the string value and makes it the key and keeps the original value as the value to be paired with that key.
 
@@ -302,7 +302,7 @@ var pair2 = "second" : "World";
 ```
 
 
-###Lists
+### Lists
 
 Dollar's lists are pretty similar to JavaScript arrays. They are defined using the `[1,2,3]` style syntax and accessed using the `x[y]` subscript syntax.
 
@@ -336,7 +336,7 @@ Dollar maps are also associative arrays (like JavaScript) allowing you to reques
 As you can see from the example you can request a key/value pair (or Tuple if you like) by it's position using a numeric subscript. Or you can treat it as an associative array and request an entry by specifying the key name. Any expression can be used as a subscript, numerical values will be used as indexes, otherwise the string value will be used as a key.
 
 
-###Ranges
+### Ranges
 
 Dollar (at present) supports numerical and character ranges
 
@@ -394,7 +394,7 @@ In this example the list has lexical scope closure and when we parameterize it u
 Each parse time scope boundary (_blocks, lists, maps, constraints, parameters etc._) is marked as such during the initial parse of the script. When executed each of these will create a runtime scope. Each runtime boundary will create a hierachy of scopes with the previous being the parent.
 
 
-Where an executable element with scope closure (such as _lists, blocks and maps_) is executed  **all** current scopes are saved and attached to that element. So when the element is subsequently executed it retains it's original lexical closure (as described [here](https://en.wikipedia.org/wiki/Closure_(computer_programming)#Implementation_and_theory)).
+Where an executable element with scope closure (such as _lists, blocks and maps_) is executed  **all** current scopes are saved and attached to that element. So when the element is subsequently executed it retains it's original lexical closure (as described [here](https://en.wikipedia.org/wiki/Closure_(computer_programming)# Implementation_and_theory)).
 
 >Please look at the `SourceNodeOptions` class for the three types of scoped nodes, they are `NO_SCOPE` which has no effect on the current scope, `NEW_SCOPE` which creates a new scope but does not have closure and `SCOPE_WITH_CLOSURE` which creates a new scope with lexical closure.
 
@@ -436,7 +436,7 @@ Although Dollar is typeless at compile time, it does support basic runtime typin
 .: ["Hello World"] is List
 ```
 
-###DATE
+### DATE
 
 Dollar supports a decimal date system where each day is 1.0. This means it's possible to add and remove days from a date using simple arithmetic.
 
@@ -578,11 +578,11 @@ true as VOID <=> void
 ```
 
 
-##Imperative Control Flow
+## Imperative Control Flow
 
 With imperative control flow, the control flow operations are only triggered when the block they are contained within is evaluated. I.e. they behave like control flow in imperative languages. So start with these if you're just learning Dollar.
 
-###If
+### If
 
 Dollar supports the usual imperative control flow but, unlike some languages, everything is an operator. This is the general rule of Dollar, everything has a value. Dollar does not have the concept of statements and expressions, just expressions. This means that you can use control flow in an expression.
 
@@ -609,7 +609,7 @@ var b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 
 ```
 
-###For
+### For
 
 ```dollar
 
@@ -619,7 +619,7 @@ for i in 1..10 {
 
 ```
 
-###While
+### While
 
 ```dollar
 var a= 1
@@ -632,9 +632,9 @@ a <=> 10
 
 
 
-##Reactive Control Flow
+## Reactive Control Flow
 
-###Causes
+### Causes
 
 Dollar as previously mentioned is a reactive programming language, that means that changes to one part of your program can automatically affect another. Consider this a 'push' model instead of the usual 'pull' model.
 
@@ -659,7 +659,7 @@ We then do the same with b to see if it is 1.
 
 Next we assign a new value of 2 to `a`. This will immediately (within the same thread) trigger the reactive `->` operator which is triggered by changes to `a`. The trigger assigns the value of `a` to `b`, so `b` is now the same as `a`. The assertions at the end confirm this.
 
-###When
+### When
 
 Next we have the 'when' operator which can be specified as a statement, usually for longer pieces of code. Or as the `?` operator, for concise code.
 
@@ -686,7 +686,7 @@ var c=1
 when c > 3 { @@ c}
 ```
 
-###Collect
+### Collect
 
 
 The `collect` operator listens for changes in the supplied expression adding all the values to a list until the `until` clause is triggered. It then evaluates the second expression with the values `it` for the current value, `count` for the number of messages **received** since last emission and `collected` for the collected values. The whole operator itself emits `void` unless the collection operation is triggered in which case it emits the collection itself. Values can be skipped with an `unless` clause. Skipped messages increase the count value, so use `#collected` if you want the number of collected values.
@@ -714,7 +714,7 @@ e=11; e=12; e=13; e=14; e=15; e=16
 
 ```
 
-##Parameters &amp; Functions
+## Parameters &amp; Functions
 
 In most programming languages you have the concept of functions and parameters, i.e. you can parametrized blocks of code. In Dollar you can parameterize *anything*. For example let's just take a simple expression that adds two strings together, in reverse order, and pass in two parameters.
 
@@ -747,7 +747,7 @@ testParams(first="Hello", last="World") <=> "World Hello"
 Yep you can use named parameters, then refer to the values by the names passed in.
 
 
-##Resources &amp; URIs
+## Resources &amp; URIs
 
 URIs are first class citizen's in Dollar. They refer to a an arbitrary resource, usually remote, that can be accessed using the specified protocol and location. Static URIs can be referred to directly without quotation marks, dynamic URIs can be built by casting to a uri using the `as` operator.
 
@@ -760,7 +760,7 @@ var titles = posts each { $1.title }
 In this example we've requested a single value (using `<<`) from a uri and assigned the value to `posts` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `title`. The each operator returns a list of the results and that is what is passed to standard out.
 
 
-##Using Java
+## Using Java
 
 Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of Java. To do so, just surround the Java in backticks.
 
@@ -785,13 +785,13 @@ The return type will be of type `var` and is stored in the variable `out`. The J
 Reactive behaviour is supported on the Scope object with the `listen` and `notify` methods on variables. You'll need to then built your reactivity around those variables or on the `out` object directly (that's a pretty advanced topic).
 
 
-##Operators
+## Operators
 
-###Iterative Operators
+### Iterative Operators
 
-###Comparison Operators
+### Comparison Operators
 
-###Numerical Operators
+### Numerical Operators
 
 Dollar support the basic numerical operators +,-,/,*,%,++,-- as well as #
 
@@ -844,7 +844,7 @@ And similar to Java Dollar coerces types as required:
 .: ABS(1.0) is DECIMAL
 ```
 
-###Logical Operators
+### Logical Operators
 
 Dollar support the basic logical operators &&,||,! as well as the truthy operator `~` and the default operator `|`.
 
@@ -920,11 +920,11 @@ void default 2 <=> 2
 ```
 
 
-###Pipe Operators
-###Remaining Operators
-##Imports &amp; Modules
-###Import
-###Modules
+### Pipe Operators
+### Remaining Operators
+## Imports &amp; Modules
+### Import
+### Modules
 
 Modules can be imported using the `module` keyword and a string representing in URI format the location of the module. At present the standard format is the Github locator so we're going to look at that first.
 
@@ -947,8 +947,8 @@ const hello := module "github:neilellis:dollar-example-module:0.1.0:branch.ds"
 @@ hello
 ```
 
-###Module Locators
-###Writing Modules
+### Module Locators
+### Writing Modules
 
 Modules consist of a file called module.json with the name of the main script for the module and an optional array of Maven style java dependencies. And then one or more Dollar files.
 
@@ -981,9 +981,9 @@ export def state_ [STATE(www),STATE(redis)]
 ```
 
 
-##Builtin Functions
+## Builtin Functions
 
-##Concurrency & Threads
+## Concurrency & Threads
 
 Notes:
 
@@ -991,7 +991,7 @@ All types are immutable, including collections.
 You cannot reassign a variable from a different thread, so they are readonly from other threads.
 
 
-###Parallel &amp; Serial Operators
+### Parallel &amp; Serial Operators
 The parallel operator `|:|` or `parallel` causes the right hand side expression to be evaluated in parallel, it's partner the serial operator `|..|` or `serial` forces serial evaluation even if the current expression is being evaluated in parallel.
 
 ```dollar
@@ -1006,7 +1006,7 @@ var b= |:| testList;
 
 As you can see the order of evaluation of lists and maps **but not line blocks** is affected by the use of parallel evaluation.
 
-###Fork
+### Fork
 
 The fork operator `-<` or `fork` will cause an expression to be evaluated in the background and any reference to the forked expression will block until a value is ready.
 
@@ -1027,46 +1027,7 @@ In the example the value of c is greater than d because the value of c is evalua
 
 
 
-##Advanced Topics
+## Advanced Topics
 
 TODO
 
-[ERROR] Failed to execute goal org.codehaus.mojo:exec-maven-plugin:1.5.0:java (default-cli) on project dollar: An exception occured while executing the Java class. dollar.internal.runtime.script.parser.Symbols -> [Help 1]
-org.apache.maven.lifecycle.LifecycleExecutionException: Failed to execute goal org.codehaus.mojo:exec-maven-plugin:1.5.0:java (default-cli) on project dollar: An exception occured while executing the Java class. dollar.internal.runtime.script.parser.Symbols
-	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:213)
-	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:154)
-	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:146)
-	at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:117)
-	at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:81)
-	at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build(SingleThreadedBuilder.java:51)
-	at org.apache.maven.lifecycle.internal.LifecycleStarter.execute(LifecycleStarter.java:128)
-	at org.apache.maven.DefaultMaven.doExecute(DefaultMaven.java:309)
-	at org.apache.maven.DefaultMaven.doExecute(DefaultMaven.java:194)
-	at org.apache.maven.DefaultMaven.execute(DefaultMaven.java:107)
-	at org.apache.maven.cli.MavenCli.execute(MavenCli.java:993)
-	at org.apache.maven.cli.MavenCli.doMain(MavenCli.java:345)
-	at org.apache.maven.cli.MavenCli.main(MavenCli.java:191)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:497)
-	at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced(Launcher.java:289)
-	at org.codehaus.plexus.classworlds.launcher.Launcher.launch(Launcher.java:229)
-	at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode(Launcher.java:415)
-	at org.codehaus.plexus.classworlds.launcher.Launcher.main(Launcher.java:356)
-Caused by: org.apache.maven.plugin.MojoExecutionException: An exception occured while executing the Java class. dollar.internal.runtime.script.parser.Symbols
-	at org.codehaus.mojo.exec.ExecJavaMojo.execute(ExecJavaMojo.java:345)
-	at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo(DefaultBuildPluginManager.java:134)
-	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:208)
-	... 20 more
-Caused by: java.lang.ClassNotFoundException: dollar.internal.runtime.script.parser.Symbols
-	at java.net.URLClassLoader.findClass(URLClassLoader.java:381)
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
-	at org.codehaus.mojo.exec.ExecJavaMojo$1.run(ExecJavaMojo.java:281)
-	at java.lang.Thread.run(Thread.java:745)
-[ERROR] 
-[ERROR] Re-run Maven using the -X switch to enable full debug logging.
-[ERROR] 
-[ERROR] For more information about the errors and possible solutions, please read the following articles:
-[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
