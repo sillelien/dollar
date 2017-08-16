@@ -211,7 +211,6 @@ jobs:
               cat  /home/circleci/workspace/gendocs/symbols.md >> _pages/manual.md
               git commit -a -m "Updated docs from build [ci skip]"  || :
               git push || :
-              cd /srv/jekyll
 
         - store_artifacts:
             path: /home/circleci/dollar/docs
