@@ -211,7 +211,7 @@ jobs:
               tail -n +2 /home/circleci/dollar/dollar-docs/src/main/resources/pages/manual.md | sed -E "s/\`\`\`dollar/\`\`\`/" >> _pages/manual.md
               cat  /home/circleci/workspace/gendocs/symbols.md >> _pages/manual.md
               git commit -a -m "Updated docs from build [ci skip]"  || :
-              git push || :
+              git push 
               cd ..
               cp -rf docs /home/circleci/workspace/docs
 
