@@ -116,9 +116,9 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         } else {
             if (keyword != null) {
                 stringBuilder.append("### ").append(keyword);
-                stringBuilder.append(" or ").append(symbol).append("\n\n");
+                stringBuilder.append(" or `").append(symbol).append("`\n\n");
             } else {
-                stringBuilder.append("### ").append(symbol).append(" (").append(name).append(")").append("\n\n");
+                stringBuilder.append("### `").append(symbol).append("` (").append(name).append(")").append("\n\n");
             }
         }
         if (bnf != null) {
@@ -128,7 +128,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
             stringBuilder.append(description).append("\n\n");
         }
         if (example != null) {
-            stringBuilder.append("```dollar\n").append(example).append("\n```\n\n");
+            stringBuilder.append("```\n").append(example).append("\n```\n\n");
         }
         return stringBuilder.toString();
     }
