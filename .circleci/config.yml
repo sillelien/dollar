@@ -243,7 +243,7 @@ jobs:
               bundle install
               sudo chmod -R 777 /srv/jekyll/workspace/docs/
               mkdir -p /srv/jekyll/workspace/docs-built/
-              bundle exec jekyll build --source /srv/jekyll/workspace/docs/ --destination /srv/jekyll/workspace/docs-built/
+              sudo bundle exec jekyll build --source /srv/jekyll/workspace/docs/ --destination /srv/jekyll/workspace/docs-built/
 
         - store_artifacts:
             path: /srv/jekyll/workspace/docs-built/
