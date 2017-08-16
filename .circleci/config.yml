@@ -221,9 +221,11 @@ jobs:
       <<: *defaults
 
       docker:
-          - image: sillelien/circleci-jekyll-build-image
+        - image: sillelien/circleci-jekyll-build-image
 
-      - attach_workspace:
+      steps:
+
+        - attach_workspace:
           at: /root/workspace
 
         - checkout
@@ -387,7 +389,7 @@ workflows:
               only:
                 - master
 
-    - docs-preflight:
+      - docs-preflight:
           requires:
             - docs
           filters:
