@@ -240,7 +240,7 @@ jobs:
               set -ex
               cd /srv/jekyll/workspace/docs
               ls -l
-              jekyll build
+              bundle exec jekyll build
 
         - store_artifacts:
             path: /srv/jekyll/workspace/docs/_site
