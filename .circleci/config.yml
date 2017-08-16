@@ -201,9 +201,9 @@ jobs:
               rm -rf dev || :
               cp -rf /home/circleci/workspace/devdocs dev
               git add dev
-              echo "release: $(cat /srv/jekyll/project/.release)" >> config.yml
+              echo "release: $(../.release)" >> config.yml
               echo "---" >  _pages/manual.md
-              echo "layout: splash" >>_pages/manual.md
+              echo "layout: single" >>_pages/manual.md
               echo "title:  \"Dollar Scripting Language Manual\"" >> _pages/manual.md
               echo "permalink: /manual/" >> _pages/manual.md
               echo "---" >>_pages/manual.md

@@ -7,8 +7,8 @@ ls $PROJECT/docs/
 
 envsubst < $PROJECT/docs/_env.yml > $PROJECT/docs/env.yml
 echo "---">  $PROJECT/docs/_pages/manual.md
-echo "layout: splash" >> $PROJECT/docs/_pages/manual.md
-echo "title:  \"Dollar Scripting Language Manual\"" >> $PROJECT/docs/_pages/manual.md
+echo "layout: single" >> $PROJECT/docs/_pages/manual.md
+echo "title: \"Dollar Scripting Language Manual\"" >> $PROJECT/docs/_pages/manual.md
 echo "permalink: /manual/" >> $PROJECT/docs/_pages/manual.md
 echo "---" >> $PROJECT/docs/_pages/manual.md
 
