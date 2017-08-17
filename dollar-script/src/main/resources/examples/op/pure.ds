@@ -1,0 +1,5 @@
+pure def reverse [$1[1],$1[0]]
+
+a= pure {
+ reverse([2,1])
+}

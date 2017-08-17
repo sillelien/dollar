@@ -95,12 +95,12 @@ public class Symbols {
                                                  null, MEMBER_PRIORITY);
 
     @NotNull
-    public static final OpDef LT = new OpDef(BINARY, "<", "less-than", "less-than",
+    public static final OpDef LT = new OpDef(BINARY, "<", null, "less-than",
                                              false, true,
                                              null, COMP_PRIORITY);
 
     @NotNull
-    public static final OpDef GT = new OpDef(BINARY, ">", "greater-than", "greater-than",
+    public static final OpDef GT = new OpDef(BINARY, ">", null, "greater-than",
                                              false, true,
                                              null, COMP_PRIORITY);
     @NotNull
@@ -320,7 +320,7 @@ public class Symbols {
                                                  UNARY_PRIORITY);
 
     @NotNull
-    public static final OpDef CAST = new OpDef(POSTFIX, null, null, "cast", false, true, null,
+    public static final OpDef CAST = new OpDef(POSTFIX, null, null, "cast", false, true, "<expression> 'as' <type>",
                                                UNARY_PRIORITY);
 
     @NotNull
@@ -356,6 +356,12 @@ public class Symbols {
     public static final OpDef READ_OP = new OpDef(PREFIX, null, "read", "read",
                                                   false, true,
                                                   "'read' ['block'] ['mutate'] ['from'] <expression>",
+                                                  OUTPUT_PRIORITY);
+
+    @NotNull
+    public static final OpDef PURE_OP = new OpDef(PREFIX, null, "pure", "pure",
+                                                  false, true,
+                                                  null,
                                                   OUTPUT_PRIORITY);
 
 
@@ -613,6 +619,7 @@ public class Symbols {
                     UNPAUSE,
                     WRITE_SIMPLE,
                     WHEN_OP,
+                    PURE_OP,
                     COMMA,
                     TRUE,
                     FALSE,
@@ -797,9 +804,14 @@ public class Symbols {
             }
         });
         for (OpDef operator : sortedOps) {
-            System.out.printf("|%-30s|%-15s| %-9s|%-10s|%n", operator.name(), operator.keyword() != null ? ("`" + operator.keyword()
-                                                                                                                    + "`")
-                                                                                      : " ",
+            System.out.printf("|%-30s|%-15s| %-9s|%-10s|%n", "[" + operator.name() + "](#op-" + operator.name() + ")", operator
+                                                                                                                               .keyword()
+                                                                                                                               !=
+                                                                                                                               null ? ("`"
+                                                                                                                                               + operator
+                                                                                                                                                         .keyword()
+                                                                                                                                               + "`")
+                                                                                                                               : " ",
                               operator.symbol() != null ? ("`" + operator.symbol() + "`") : " ", operator.type().humanName());
         }
     }

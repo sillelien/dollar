@@ -1035,7 +1035,7 @@ In the example the value of c is greater than d because the value of c is evalua
 TODO
 
 ## Appendix A - Operators
-### `all` or `<@`
+### `all` or `<@`      {#op-all}
 
 **`('<@'|'all') <expression>`**{: style="font-size: 60%"}
 
@@ -1046,7 +1046,7 @@ all
 ```
 ```
 
-### `and` or `&&`
+### `and` or `&&`      {#op-and}
 
 **`<expression> ('&&'|'and') <expression>`**{: style="font-size: 60%"}
 
@@ -1061,7 +1061,7 @@ false && true <=> false
 false && false <=> false
 ```
 
-### `assert` or `.:`
+### `assert` or `.:`      {#op-assert}
 
 **`('.:'|'assert') <expression>`**{: style="font-size: 60%"}
 
@@ -1076,7 +1076,7 @@ The assertion opeartor is used to assert that an expression holds true. It is a 
 .: 1 <= 2
 ```
 
-### `assert-equals` or `<->`
+### `assert-equals` or `<->`      {#op-assert-equals}
 
 **`<expression> ('<->'|'assert-equals') <expression>`**{: style="font-size: 60%"}
 
@@ -1088,7 +1088,7 @@ Asserts that at the point of execution that the left-hand-side is equal to the r
  1 + 1 <-> 2
 ```
 
-### `<=>` (assert-equals-reactive)
+### `<=>` (assert-equals-reactive)      {#op-assert-equals-reactive}
 
 **`<expression> '<=>' <expression>`**{: style="font-size: 60%"}
 
@@ -1101,7 +1101,7 @@ def lamdaVar  {$1 + 10}
 lamdaVar(5) <=> 15
 ```
 
-### `=` (assign)
+### `=` (assign)      {#op-assign}
 
 
 
@@ -1115,9 +1115,9 @@ a=3
 a=4
 ```
 
-### cast
+### cast      {#op-cast}
 
-**`<expression> `**{: style="font-size: 60%"}
+**`<expression> 'as' <type>`**{: style="font-size: 60%"}
 
 
 
@@ -1160,7 +1160,7 @@ true as VOID <=> void
 {"a":1,"b":2} as VOID <=> void
 ```
 
-### `causes` or `=>`
+### `causes` or `=>`      {#op-causes}
 
 **`<expression> ('=>'|'causes') <expression>`**{: style="font-size: 60%"}
 
@@ -1178,7 +1178,7 @@ a => (b= a)
 a=2 ; &a <=> 2 ; &b <=> 2
 ```
 
-### `choose` or `?*`
+### `choose` or `?*`      {#op-choose}
 
 **`<expression> ('?*'|'choose') <expression>`**{: style="font-size: 60%"}
 
@@ -1190,7 +1190,7 @@ choose
 
 ```
 
-### `create` or `|||>`
+### `create` or `|||>`      {#op-create}
 
 **`('|||>'|'create') <expression>`**{: style="font-size: 60%"}
 
@@ -1201,7 +1201,7 @@ Creates a service described typically by a URI.
 ```
 ```
 
-### `debug` or `!!`
+### `debug` or `!!`      {#op-debug}
 
 **`('!!'|'debug') <expression>`**{: style="font-size: 60%"}
 
@@ -1213,7 +1213,7 @@ Sends the result of the right-hand-side to the debug log.
 !! "I'm a debug message"
 ```
 
-### `:=` (declaration)
+### `:=` (declaration)      {#op-declaration}
 
 **`( [export] [const] <variable-name> ':=' <expression>) | ( def <variable-name> <expression )`**{: style="font-size: 60%"}
 
@@ -1229,7 +1229,7 @@ variableA = 2
 .: variableB == 2
 ```
 
-### `dec` or `--`
+### `dec` or `--`      {#op-decrement}
 
 **`('--'|'dec') <expression>`**{: style="font-size: 60%"}
 
@@ -1244,7 +1244,7 @@ unchanged++;
 unchanged <-> 1;
 ```
 
-### `default` or `:-`
+### `default` or `:-`      {#op-default}
 
 **`<expression> (':-'|'default') <expression>`**{: style="font-size: 60%"}
 
@@ -1257,7 +1257,7 @@ void :- "Hello" <=> "Hello"
 1 :- "Hello" <=> 1
 ```
 
-### `destroy` or `<|||`
+### `destroy` or `<|||`      {#op-destroy}
 
 **`('<|||'|'destroy') <expression>`**{: style="font-size: 60%"}
 
@@ -1268,7 +1268,7 @@ destroy
 ```
 ```
 
-### `divide` or `/`
+### `divide` or `/`      {#op-divide}
 
 **`<expression> ('/'|'divide') <expression>`**{: style="font-size: 60%"}
 
@@ -1286,7 +1286,7 @@ Divides one value by another.
  .: 2.0 / 1.0 is DECIMAL
 ```
 
-### `drain` or `<-<`
+### `drain` or `<-<`      {#op-drain}
 
 **`('<-<'|'drain') <expression>`**{: style="font-size: 60%"}
 
@@ -1298,7 +1298,7 @@ Drain an expression, using a URI of all it's data. This is a complete destructiv
 ```
 ```
 
-### `each` or `=>>`
+### `each` or `=>>`      {#op-each}
 
 **`<expression> ('=>>'|'each') <expression>`**{: style="font-size: 60%"}
 
@@ -1313,7 +1313,7 @@ var titles = posts each { $1.title }
 @@ titles
 ```
 
-### `else` or `-:`
+### `else` or `-:`      {#op-else}
 
 **`<expression> ('-:'|'else') <expression>`**{: style="font-size: 60%"}
 
@@ -1329,7 +1329,7 @@ var b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 .: b == "more than two"
 ```
 
-### `equal` or `==`
+### `equal` or `==`      {#op-equal}
 
 **`<expression> ('=='|'equal') <expression>`**{: style="font-size: 60%"}
 
@@ -1343,7 +1343,7 @@ Compares two values to see if they are equal. Works with all types and maps to t
 .: "Hello" == "Hello"
 ```
 
-### `err` or `??`
+### `err` or `??`      {#op-err}
 
 **`('??'|'err') <expression>`**{: style="font-size: 60%"}
 
@@ -1355,7 +1355,7 @@ Sends the result of the right-hand-side to `stderr`.
 ?? "What happened"
 ```
 
-### `error` or `?->`
+### `error` or `?->`      {#op-error}
 
 **`('?->'|'error') <expression>`**{: style="font-size: 60%"}
 
@@ -1370,7 +1370,7 @@ var a=1/0
 .: errorHappened
 ```
 
-### `fix` or `&`
+### `fix` or `&`      {#op-fix}
 
 **`('&'|'fix') <expression>`**{: style="font-size: 60%"}
 
@@ -1386,7 +1386,7 @@ var reactiveValue= 1
 reactiveValue= 2
 ```
 
-### `for`
+### `for`      {#op-for}
 
 **`for <variable-name> <iterable-expression> <expression>`**{: style="font-size: 60%"}
 
@@ -1401,7 +1401,7 @@ for i in 1..10 {
 }
 ```
 
-### `fork` or `-<`
+### `fork` or `-<`      {#op-fork}
 
 **`('-<'|'fork') <expression>`**{: style="font-size: 60%"}
 
@@ -1421,9 +1421,9 @@ var d= TIME()
 .: c > d
 ```
 
-### `greater-than` or `>`
+### `>` (greater-than)      {#op-greater-than}
 
-**`<expression> ('>'|'greater-than') <expression>`**{: style="font-size: 60%"}
+**`<expression> '>' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -1433,7 +1433,7 @@ The standard `>` operator, it uses Comparable#compareTo and will work with any D
 .: 3 > 2
 ```
 
-### `>=` (greater-than-equal)
+### `>=` (greater-than-equal)      {#op-greater-than-equal}
 
 **`<expression> '>=' <expression>`**{: style="font-size: 60%"}
 
@@ -1447,7 +1447,7 @@ The standard `>=` operator, it uses Comparable#compareTo and will work with any 
 .: ! (2>=3)
 ```
 
-### `if` or `???`
+### `if` or `???`      {#op-if}
 
 **`<expression> ('???'|'if') <expression>`**{: style="font-size: 60%"}
 
@@ -1478,7 +1478,7 @@ var b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 .: b == "more than two"
 ```
 
-### `in` or `€`
+### `in` or `€`      {#op-in}
 
 **`<expression> ('€'|'in') <expression>`**{: style="font-size: 60%"}
 
@@ -1492,7 +1492,7 @@ Returns true if the left-hand-side expression is contained in the right-hand-sid
 .: ! (1 in ["red","blue","green"] )
 ```
 
-### `inc` or `++`
+### `inc` or `++`      {#op-increment}
 
 **`('++'|'inc') <expression>`**{: style="font-size: 60%"}
 
@@ -1507,9 +1507,9 @@ unchanged--;
 unchanged <-> 1;
 ```
 
-### `less-than` or `<`
+### `<` (less-than)      {#op-less-than}
 
-**`<expression> ('<'|'less-than') <expression>`**{: style="font-size: 60%"}
+**`<expression> '<' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -1520,7 +1520,7 @@ The standard `<` operator, it uses Comparable#compareTo and will work with any D
 .: "a" < "b"
 ```
 
-### `<=` (less-than-equal)
+### `<=` (less-than-equal)      {#op-less-than-equal}
 
 **`<expression> '<=' <expression>`**{: style="font-size: 60%"}
 
@@ -1535,7 +1535,7 @@ The standard `<=` operator, it uses Comparable#compareTo and will work with any 
 .: "a" <= "a"
 ```
 
-### `?=` (listen-assign)
+### `?=` (listen-assign)      {#op-listen-assign}
 
 
 
@@ -1544,7 +1544,7 @@ listen-assign
 ```
 ```
 
-### `.` (member)
+### `.` (member)      {#op-member}
 
 **`<expression> '.' <expression>`**{: style="font-size: 60%"}
 
@@ -1558,7 +1558,7 @@ The membership or `.` operator accesses the member of a map by it's key.
 {"key1":1,"key2":2}[1].key2 <=> 2
 ```
 
-### `minus` or `-`
+### `minus` or `-`      {#op-minus}
 
 **`<expression> ('-'|'minus') <expression>`**{: style="font-size: 60%"}
 
@@ -1570,7 +1570,7 @@ Deducts a value from another value
 2 - 1 <=> 1
 ```
 
-### `mod` or `%`
+### `mod` or `%`      {#op-modulus}
 
 **`<expression> ('%'|'mod') <expression>`**{: style="font-size: 60%"}
 
@@ -1586,7 +1586,7 @@ Returns the remainder (modulus) of the division of the left-hand-side by the rig
 .: 2.0 % 1.0 is DECIMAL
 ```
 
-### `multiply` or `*`
+### `multiply` or `*`      {#op-multiply}
 
 **`<expression> ('*'|'multiply') <expression>`**{: style="font-size: 60%"}
 
@@ -1604,7 +1604,7 @@ Returns the product of two values. If the left-hand-side is scalar (non collecti
 
 ```
 
-### `negate` or `-`
+### `negate` or `-`      {#op-negate}
 
 **`('-'|'negate') <expression>`**{: style="font-size: 60%"}
 
@@ -1616,7 +1616,7 @@ Negates a value.
  .: -1 < 0
 ```
 
-### `not` or `!`
+### `not` or `!`      {#op-not}
 
 **`('!'|'not') <expression>`**{: style="font-size: 60%"}
 
@@ -1630,7 +1630,7 @@ not( true ) <=> false
 !true <=> false
 ```
 
-### `not-equal` or `!=`
+### `not-equal` or `!=`      {#op-not-equal}
 
 **`<expression> ('!='|'not-equal') <expression>`**{: style="font-size: 60%"}
 
@@ -1643,7 +1643,7 @@ Returns true if the two expression are not equal.
 .: 1 != 2
 ```
 
-### `or` or `||`
+### `or` or `||`      {#op-or}
 
 **`<expression> ('||'|'or') <expression>`**{: style="font-size: 60%"}
 
@@ -1657,7 +1657,7 @@ true || false <=> true
 false || false <=> false
 ```
 
-### `pair` or `:`
+### `pair` or `:`      {#op-pair}
 
 **`<expression> (':'|'pair') <expression>`**{: style="font-size: 60%"}
 
@@ -1673,7 +1673,7 @@ var pair2 = "second" : "World";
 .: pair1 + pair2 == {"first":"Hello ","second":"World"}
 ```
 
-### `parallel` or `|:|`
+### `parallel` or `|:|`      {#op-parallel}
 
 **`('|:|'|'parallel') <expression>`**{: style="font-size: 60%"}
 
@@ -1691,7 +1691,7 @@ var b= |:| testList;
 .: b[2] < b[1]
 ```
 
-### parameter
+### parameter      {#op-parameter}
 
 **`( <expression> | <builtin-name> | <function-name> ) '(' ( <expression> | <name> '=' <expression> )* ')'`**{: style="font-size: 60%"}
 
@@ -1740,7 +1740,7 @@ def func($2 + " " + $1)
 func ("Hello", "World") <=> "World Hello"
 ```
 
-### `pause` or `||>`
+### `pause` or `||>`      {#op-pause}
 
 **`('||>'|'pause') <expression>`**{: style="font-size: 60%"}
 
@@ -1751,7 +1751,7 @@ Pauses a service described typically by a URI.
 ```
 ```
 
-### `pipe` or `|`
+### `pipe` or `|`      {#op-pipe}
 
 **`<expression> ('|'|'pipe') <expression>`**{: style="font-size: 60%"}
 
@@ -1773,7 +1773,7 @@ def funcB {
 10 | funcA | funcB <=> 10
 ```
 
-### `plus` or `+`
+### `plus` or `+`      {#op-plus}
 
 **`<expression> ('+'|'plus') <expression>`**{: style="font-size: 60%"}
 
@@ -1798,7 +1798,7 @@ var pair2 = "second" : "World";
 .: (1 + 1) is INTEGER
 ```
 
-### `print` or `@@`
+### `print` or `@@`      {#op-print}
 
 **`('@@'|'print') <expression>`**{: style="font-size: 60%"}
 
@@ -1811,7 +1811,7 @@ Sends the right-hand-side expression to stdout.
 print "World"
 ```
 
-### `publish` or `*>`
+### `publish` or `*>`      {#op-publish}
 
 **`<expression> ('*>'|'publish') <expression>`**{: style="font-size: 60%"}
 
@@ -1822,7 +1822,30 @@ publish
 ```
 ```
 
-### `range` or `..`
+### `pure`      {#op-pure}
+
+**`'pure' <expression>`**{: style="font-size: 60%"}
+
+
+
+
+Support for some aspects of functional programming are included in Dollar. Primarily the idea of pure expressions using the `pure` operator. This signals that an expression or declaration is a pure expression or declaration.
+
+In the example we're declaring reverse to be an expression that reverses two values from a supplied array. Because we declare it as `pure` the expression supplied must also be `pure`. To understand what a pure function is please see [http://en.wikipedia.org/wiki/Pure_function](http://en.wikipedia.org/wiki/Pure_function). Basically it prohibits the reading of external state or the setting of external state. We next swap `[2,1]` within a newly created pure expression, which is subsequently assigned to a. If reverse had not been declared pure it would not be allowed within the pure expression.
+
+
+Note some builtin functions are not themselves pure and will trigger parser errors if you attempt to use them in a pure expression. Take DATE() for example which supplies an external state (the computers clock).
+
+
+```
+pure def reverse [$1[1],$1[0]]
+
+a= pure {
+ reverse([2,1])
+}
+```
+
+### `range` or `..`      {#op-range}
 
 **`<expression> ('..'|'range') <expression>`**{: style="font-size: 60%"}
 
@@ -1835,7 +1858,7 @@ Creates a RANGE between the two values specified.
 (1..3)[1] <=>2
 ```
 
-### `read`
+### `read`      {#op-read}
 
 **`'read' ['block'] ['mutate'] ['from'] <expression>`**{: style="font-size: 60%"}
 
@@ -1846,7 +1869,7 @@ The read operator is used to read data from an expression typically a URI. It ha
 ```
 ```
 
-### `<<` (read-simple)
+### `<<` (read-simple)      {#op-read-simple}
 
 **`'<<' <expression>`**{: style="font-size: 60%"}
 
@@ -1857,7 +1880,7 @@ Performs a simple read from another data item, typically this is used with a URI
 ```
 ```
 
-### `reduce` or `>>=`
+### `reduce` or `>>=`      {#op-reduce}
 
 **`<expression> ('>>='|'reduce') <expression>`**{: style="font-size: 60%"}
 
@@ -1868,7 +1891,7 @@ reduce
 ```
 ```
 
-### `serial` or `|..|`
+### `serial` or `|..|`      {#op-serial}
 
 **`('|..|'|'serial') <expression>`**{: style="font-size: 60%"}
 
@@ -1879,7 +1902,7 @@ Causes the right-hand-side expression to be evaluated in serial, most useful in 
 ```
 ```
 
-### `size` or `#`
+### `size` or `#`      {#op-size}
 
 **`('#'|'size') <expression>`**{: style="font-size: 60%"}
 
@@ -1890,7 +1913,7 @@ Returns the size of non-scalar types or the length of a string.
 ```
 ```
 
-### `start` or `|>`
+### `start` or `|>`      {#op-start}
 
 **`('|>'|'start') <expression>`**{: style="font-size: 60%"}
 
@@ -1901,7 +1924,7 @@ Starts a service described typically by a URI.
 ```
 ```
 
-### `state` or `<|>`
+### `state` or `<|>`      {#op-state}
 
 **`('<|>'|'state') <expression>`**{: style="font-size: 60%"}
 
@@ -1912,7 +1935,7 @@ Returns the state of a service described typically by a URI.
 ```
 ```
 
-### `stop` or `<|`
+### `stop` or `<|`      {#op-stop}
 
 **`('<|'|'stop') <expression>`**{: style="font-size: 60%"}
 
@@ -1923,7 +1946,7 @@ Stops a service described typically by a URI.
 ```
 ```
 
-### `subscribe` or `<*`
+### `subscribe` or `<*`      {#op-subscribe}
 
 **`<expression> ('<*'|'subscribe') <expression>`**{: style="font-size: 60%"}
 
@@ -1934,7 +1957,7 @@ subscribe
 ```
 ```
 
-### `*=` (subscribe-assign)
+### `*=` (subscribe-assign)      {#op-subscribe-assign}
 
 
 
@@ -1943,7 +1966,7 @@ subscribe-assign
 ```
 ```
 
-### subscript
+### subscript      {#op-subscript}
 
 **`( <expression> '[' <index-expression>|<key-expression> ']' ) | ( <expression> '.' (<index-expression>|<key-expression>) )`**{: style="font-size: 60%"}
 
@@ -1957,7 +1980,7 @@ subscript operator
 {"key1":1,"key2":2}[1].key2 <=> 2
 ```
 
-### `truthy` or `~`
+### `truthy` or `~`      {#op-truthy}
 
 **`('~'|'truthy') <expression>`**{: style="font-size: 60%"}
 
@@ -1968,7 +1991,7 @@ The truthy operator `~` converts any value to a boolean by applying the rule tha
 ```
 ```
 
-### `unpause` or `<||`
+### `unpause` or `<||`      {#op-unpause}
 
 **`('<||'|'unpause') <expression>`**{: style="font-size: 60%"}
 
@@ -1979,7 +2002,7 @@ Un-pauses a service described typically by a URI.
 ```
 ```
 
-### `when` or `?`
+### `when` or `?`      {#op-when}
 
 **`<expression> ('?'|'when') <expression>`**{: style="font-size: 60%"}
 
@@ -2002,7 +2025,7 @@ c=5 ; &c <=> 5 ; &d <=> 5
 when c > 3 { @@ c}
 ```
 
-### `while`
+### `while`      {#op-while}
 
 **`while <condition> <expression>`**{: style="font-size: 60%"}
 
@@ -2013,7 +2036,7 @@ while operator
 ```
 ```
 
-### `write`
+### `write`      {#op-write}
 
 **`'write' ['block'] ['mutate'] ['to'] <expression>`**{: style="font-size: 60%"}
 
@@ -2024,7 +2047,7 @@ The write operator is used to write data to an expression typically a URI. It ha
 ```
 ```
 
-### `>>` (write-simple)
+### `>>` (write-simple)      {#op-write-simple}
 
 **`<expression> '>>' <expression>`**{: style="font-size: 60%"}
 
@@ -2188,70 +2211,71 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 
 |Name                          |Keyword        |Operator  |Type      |
 |-------                       |-------        |-------   |-------   |
-|fix                           |`fix`          | `&`      |prefix    |
-|range                         |`range`        | `..`     |binary    |
-|default                       |`default`      | `:-`     |binary    |
-|member                        |               | `.`      |binary    |
-|parameter                     |               |          |postfix   |
-|subscript                     |               |          |postfix   |
-|cast                          |               |          |postfix   |
-|decrement                     |`dec`          | `--`     |prefix    |
-|for                           |`for`          |          |control   |
-|in                            |`in`           | `€`      |binary    |
-|increment                     |`inc`          | `++`     |prefix    |
-|not                           |`not`          | `!`      |prefix    |
-|size                          |`size`         | `#`      |prefix    |
-|truthy                        |`truthy`       | `~`      |prefix    |
-|while                         |`while`        |          |control   |
-|divide                        |`divide`       | `/`      |binary    |
-|each                          |`each`         | `=>>`    |binary    |
-|modulus                       |`mod`          | `%`      |binary    |
-|multiply                      |`multiply`     | `*`      |binary    |
-|reduce                        |`reduce`       | `>>=`    |binary    |
-|minus                         |`minus`        | `-`      |binary    |
-|negate                        |`negate`       | `-`      |prefix    |
-|plus                          |`plus`         | `+`      |binary    |
-|greater-than                  |`greater-than` | `>`      |binary    |
-|less-than                     |`less-than`    | `<`      |binary    |
-|pipe                          |`pipe`         | `|`      |binary    |
-|equal                         |`equal`        | `==`     |binary    |
-|greater-than-equal            |               | `>=`     |binary    |
-|less-than-equal               |               | `<=`     |binary    |
-|not-equal                     |`not-equal`    | `!=`     |binary    |
-|and                           |`and`          | `&&`     |binary    |
-|or                            |`or`           | `||`     |binary    |
-|all                           |`all`          | `<@`     |prefix    |
-|causes                        |`causes`       | `=>`     |binary    |
-|choose                        |`choose`       | `?*`     |binary    |
-|drain                         |`drain`        | `<-<`    |prefix    |
-|publish                       |`publish`      | `*>`     |binary    |
-|read                          |`read`         |          |prefix    |
-|read-simple                   |               | `<<`     |prefix    |
-|subscribe                     |`subscribe`    | `<*`     |binary    |
-|when                          |`when`         | `?`      |binary    |
-|write                         |`write`        |          |control   |
-|write-simple                  |               | `>>`     |binary    |
-|pair                          |`pair`         | `:`      |binary    |
-|create                        |`create`       | `|||>`   |prefix    |
-|destroy                       |`destroy`      | `<|||`   |prefix    |
-|else                          |`else`         | `-:`     |binary    |
-|fork                          |`fork`         | `-<`     |prefix    |
-|if                            |`if`           | `???`    |binary    |
-|parallel                      |`parallel`     | `|:|`    |prefix    |
-|pause                         |`pause`        | `||>`    |prefix    |
-|serial                        |`serial`       | `|..|`   |prefix    |
-|start                         |`start`        | `|>`     |prefix    |
-|state                         |`state`        | `<|>`    |prefix    |
-|stop                          |`stop`         | `<|`     |prefix    |
-|unpause                       |`unpause`      | `<||`    |prefix    |
-|assign                        |               | `=`      |assignment|
-|declaration                   |               | `:=`     |assignment|
-|listen-assign                 |               | `?=`     |assignment|
-|subscribe-assign              |               | `*=`     |assignment|
-|assert                        |`assert`       | `.:`     |prefix    |
-|assert-equals                 |`assert-equals`| `<->`    |binary    |
-|assert-equals-reactive        |               | `<=>`    |binary    |
-|debug                         |`debug`        | `!!`     |prefix    |
-|err                           |`err`          | `??`     |prefix    |
-|error                         |`error`        | `?->`    |prefix    |
-|print                         |`print`        | `@@`     |prefix    |
+|[fix](#op-fix)                |`fix`          | `&`      |prefix    |
+|[range](#op-range)            |`range`        | `..`     |binary    |
+|[default](#op-default)        |`default`      | `:-`     |binary    |
+|[member](#op-member)          |               | `.`      |binary    |
+|[parameter](#op-parameter)    |               |          |postfix   |
+|[subscript](#op-subscript)    |               |          |postfix   |
+|[cast](#op-cast)              |               |          |postfix   |
+|[decrement](#op-decrement)    |`dec`          | `--`     |prefix    |
+|[for](#op-for)                |`for`          |          |control   |
+|[in](#op-in)                  |`in`           | `€`      |binary    |
+|[increment](#op-increment)    |`inc`          | `++`     |prefix    |
+|[not](#op-not)                |`not`          | `!`      |prefix    |
+|[size](#op-size)              |`size`         | `#`      |prefix    |
+|[truthy](#op-truthy)          |`truthy`       | `~`      |prefix    |
+|[while](#op-while)            |`while`        |          |control   |
+|[divide](#op-divide)          |`divide`       | `/`      |binary    |
+|[each](#op-each)              |`each`         | `=>>`    |binary    |
+|[modulus](#op-modulus)        |`mod`          | `%`      |binary    |
+|[multiply](#op-multiply)      |`multiply`     | `*`      |binary    |
+|[reduce](#op-reduce)          |`reduce`       | `>>=`    |binary    |
+|[minus](#op-minus)            |`minus`        | `-`      |binary    |
+|[negate](#op-negate)          |`negate`       | `-`      |prefix    |
+|[plus](#op-plus)              |`plus`         | `+`      |binary    |
+|[greater-than](#op-greater-than)|               | `>`      |binary    |
+|[less-than](#op-less-than)    |               | `<`      |binary    |
+|[pipe](#op-pipe)              |`pipe`         | `|`      |binary    |
+|[equal](#op-equal)            |`equal`        | `==`     |binary    |
+|[greater-than-equal](#op-greater-than-equal)|               | `>=`     |binary    |
+|[less-than-equal](#op-less-than-equal)|               | `<=`     |binary    |
+|[not-equal](#op-not-equal)    |`not-equal`    | `!=`     |binary    |
+|[and](#op-and)                |`and`          | `&&`     |binary    |
+|[or](#op-or)                  |`or`           | `||`     |binary    |
+|[all](#op-all)                |`all`          | `<@`     |prefix    |
+|[causes](#op-causes)          |`causes`       | `=>`     |binary    |
+|[choose](#op-choose)          |`choose`       | `?*`     |binary    |
+|[drain](#op-drain)            |`drain`        | `<-<`    |prefix    |
+|[publish](#op-publish)        |`publish`      | `*>`     |binary    |
+|[pure](#op-pure)              |`pure`         |          |prefix    |
+|[read](#op-read)              |`read`         |          |prefix    |
+|[read-simple](#op-read-simple)|               | `<<`     |prefix    |
+|[subscribe](#op-subscribe)    |`subscribe`    | `<*`     |binary    |
+|[when](#op-when)              |`when`         | `?`      |binary    |
+|[write](#op-write)            |`write`        |          |control   |
+|[write-simple](#op-write-simple)|               | `>>`     |binary    |
+|[pair](#op-pair)              |`pair`         | `:`      |binary    |
+|[create](#op-create)          |`create`       | `|||>`   |prefix    |
+|[destroy](#op-destroy)        |`destroy`      | `<|||`   |prefix    |
+|[else](#op-else)              |`else`         | `-:`     |binary    |
+|[fork](#op-fork)              |`fork`         | `-<`     |prefix    |
+|[if](#op-if)                  |`if`           | `???`    |binary    |
+|[parallel](#op-parallel)      |`parallel`     | `|:|`    |prefix    |
+|[pause](#op-pause)            |`pause`        | `||>`    |prefix    |
+|[serial](#op-serial)          |`serial`       | `|..|`   |prefix    |
+|[start](#op-start)            |`start`        | `|>`     |prefix    |
+|[state](#op-state)            |`state`        | `<|>`    |prefix    |
+|[stop](#op-stop)              |`stop`         | `<|`     |prefix    |
+|[unpause](#op-unpause)        |`unpause`      | `<||`    |prefix    |
+|[assign](#op-assign)          |               | `=`      |assignment|
+|[declaration](#op-declaration)|               | `:=`     |assignment|
+|[listen-assign](#op-listen-assign)|               | `?=`     |assignment|
+|[subscribe-assign](#op-subscribe-assign)|               | `*=`     |assignment|
+|[assert](#op-assert)          |`assert`       | `.:`     |prefix    |
+|[assert-equals](#op-assert-equals)|`assert-equals`| `<->`    |binary    |
+|[assert-equals-reactive](#op-assert-equals-reactive)|               | `<=>`    |binary    |
+|[debug](#op-debug)            |`debug`        | `!!`     |prefix    |
+|[err](#op-err)                |`err`          | `??`     |prefix    |
+|[error](#op-error)            |`error`        | `?->`    |prefix    |
+|[print](#op-print)            |`print`        | `@@`     |prefix    |
