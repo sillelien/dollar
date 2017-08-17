@@ -1,5 +1,47 @@
 # Change Log
 
+## [0.3.3976](https://github.com/sillelien/dollar/tree/0.3.3976) (2017-08-17)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.3958...0.3.3976)
+
+## [0.3.3958](https://github.com/sillelien/dollar/tree/0.3.3958) (2017-08-17)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.3957...0.3.3958)
+
+## [0.3.3957](https://github.com/sillelien/dollar/tree/0.3.3957) (2017-08-17)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.3939...0.3.3957)
+
+## [0.3.3939](https://github.com/sillelien/dollar/tree/0.3.3939) (2017-08-17)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.3936...0.3.3939)
+
+## [0.3.3936](https://github.com/sillelien/dollar/tree/0.3.3936) (2017-08-17)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.3922...0.3.3936)
+
+## [0.3.3922](https://github.com/sillelien/dollar/tree/0.3.3922) (2017-08-16)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.3910...0.3.3922)
+
+## [0.3.3910](https://github.com/sillelien/dollar/tree/0.3.3910) (2017-08-16)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.3898...0.3.3910)
+
+## [0.3.3898](https://github.com/sillelien/dollar/tree/0.3.3898) (2017-08-16)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.3880...0.3.3898)
+
+## [0.3.3880](https://github.com/sillelien/dollar/tree/0.3.3880) (2017-08-16)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.3873...0.3.3880)
+
+## [0.3.3873](https://github.com/sillelien/dollar/tree/0.3.3873) (2017-08-16)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.3870...0.3.3873)
+
+## [0.3.3870](https://github.com/sillelien/dollar/tree/0.3.3870) (2017-08-16)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.3856...0.3.3870)
+
+## [0.3.3856](https://github.com/sillelien/dollar/tree/0.3.3856) (2017-08-16)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.3831...0.3.3856)
+
+## [0.3.3831](https://github.com/sillelien/dollar/tree/0.3.3831) (2017-08-16)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.3821...0.3.3831)
+
+## [0.3.3821](https://github.com/sillelien/dollar/tree/0.3.3821) (2017-08-16)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.3807...0.3.3821)
+
 ## [0.3.3807](https://github.com/sillelien/dollar/tree/0.3.3807) (2017-08-16)
 [Full Changelog](https://github.com/sillelien/dollar/compare/0.3.3799...0.3.3807)
 
