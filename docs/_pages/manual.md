@@ -1895,6 +1895,18 @@ Un-pauses a service described typically by a URI.
 
 
 ```
+var c=1
+var d=1
+
+//When c is greater than 3 assign it's value to d
+c > 3 ? (d= c)
+
+&c <=> 1; &d <=> 1
+c=2; &c <=> 2; &d <=> 1
+c=5 ; &c <=> 5 ; &d <=> 5
+
+//Note alternative syntax is when <condition> <expression>
+when c > 3 { @@ c}
 ```
 
 ### `while`
