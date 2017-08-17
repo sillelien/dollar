@@ -813,14 +813,14 @@ public class Symbols {
                 i -> ((OpDef) i).keyword()).sorted().collect(Collectors.joining(", ")));
         System.out.println();
         System.out.println("The following operator symbols are reserved:\n");
-        System.out.println("> " + tokens.stream().filter(
+        System.out.println("> `" + tokens.stream().filter(
                 i -> i instanceof OpDef && ((OpDef) i).symbol() != null && ((OpDef) i).isReserved()).map(
-                i -> ((OpDef) i).symbol()).sorted().collect(Collectors.joining(", ")));
+                i -> ((OpDef) i).symbol()).sorted().collect(Collectors.joining(", "))+" `");
         System.out.println();
         System.out.println("### Symbols\n");
         System.out.println("The following general symbols are reserved:\n");
         System.out.println("> `" + tokens.stream().filter(i -> i instanceof SymbolDef && ((SymbolDef) i).isReserved()).map(
-                i -> ((SymbolDef) i).symbol()).sorted().collect(Collectors.joining(", "))+"`");
+                i -> ((SymbolDef) i).symbol()).sorted().collect(Collectors.joining(", "))+" `");
         System.out.println();
         System.out.println("## Appendix D - Operator Precedence");
 

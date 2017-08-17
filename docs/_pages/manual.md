@@ -1645,13 +1645,13 @@ The following operator keywords are reserved:
 
 The following operator symbols are reserved:
 
-> &=, &>, +>, ->, -_-, ..., ::, <$, <&, <+, <++, <-, <=<, <?, >&, >->, ?$?, ?..?, ?:, ?>, @, @>, |*
+> `&=, &>, +>, ->, -_-, ..., ::, <$, <&, <+, <++, <-, <=<, <?, >&, >->, ?$?, ?..?, ?:, ?>, @, @>, |* `
 
 ### Symbols
 
 The following general symbols are reserved:
 
-> ``
+> ` `
 
 ## Appendix D - Operator Precedence
 

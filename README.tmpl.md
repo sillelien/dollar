@@ -11,7 +11,7 @@
 [![GitQ](https://gitq.com/badge.svg)](https://gitq.com/sillelien/dollar)
 [![Patreon](https://img.shields.io/badge/back_on-patreon-red.svg)](https://www.patreon.com/neilellis)
 
-Full documentation at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar) and the manual is at [http://sillelien.github.io/dollar/script.html](http://sillelien.github.io/dollar/script.html)
+Full documentation at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar) and the manual is at [http://sillelien.github.io/dollar/manual/](http://sillelien.github.io/dollar/manual/)
 
 ![dollar](assets/gh-title-dollar.png)
 
