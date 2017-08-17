@@ -5,3 +5,65 @@
 @charset "utf-8";
 
 @import "minimal-mistakes";
+
+
+.sidebar {
+    @include clearfix();
+    margin-bottom: 1em;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+
+    @include breakpoint(max-width $large) {
+        /* fix z-index order of follow links */
+        position: relative;
+        z-index: 10;
+    }
+
+    @include breakpoint($large) {
+        float: left;
+        width: 500px;
+        opacity: 1;
+        font-size:14pt;
+
+        &:hover {
+            opacity: 1;
+        }
+
+        &.sticky {
+            position: fixed;
+            z-index: 1000000;
+            overflow-y: auto;
+            left: 0px;
+            top:102px;
+            font-size:14pt;
+            /* calculate height of nav list */
+            height: calc(100vh - 102px - 2em); // viewport height - approx. masthead height - main content top margin
+        }
+    }
+}
+
+
+
+.toc__menu {
+    font-size: 14px;
+
+    a {
+        color: #333;
+        font-size: 14px;
+        font-weight: bold;
+        border-bottom: 1px solid #ddd;
+
+        &:hover {
+            color: #000;
+            background: $lighter-gray;
+        }
+    }
+
+}
+
+.masthead {
+    position: fixed;
+    left:0;right:0;
+    top:0;
+    background:white;
+}
