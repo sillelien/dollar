@@ -1,0 +1,7 @@
+2 * 5 <=> 10
+
+.: 1 * 1 is INTEGER
+.: 1 * 1.0 is DECIMAL
+.: 2.0 * 1 is DECIMAL
+.: 2.0 * 1.0 is DECIMAL
+

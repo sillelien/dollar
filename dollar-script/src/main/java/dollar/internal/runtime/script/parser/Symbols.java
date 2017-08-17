@@ -335,7 +335,8 @@ public class Symbols {
 
     @NotNull
     public static final OpDef SUBSCRIPT_OP = new OpDef(POSTFIX, null, null, "subscript", false, true,
-                                                       "<expression> '[' <index>|<key> ']'",
+                                                       "( <expression> '[' <index-expression>|<key-expression> ']' ) | " +
+                                                               "( <expression> '.' (<index-expression>|<key-expression>) )",
                                                        MEMBER_PRIORITY);
 
     @NotNull

@@ -32,6 +32,7 @@ import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.error.Location;
+import org.jparsec.error.ParseErrorDetails;
 import org.jparsec.error.ParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,6 +127,7 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
         }
         if (t instanceof ParserException) {
             Location location = ((ParserException) t).getLocation();
+            ParseErrorDetails errorDetails = ((ParserException) t).getErrorDetails();
             System.out.println();
             if (file != null) {
                 System.out.print("A parser (syntax) error occurred while parsing " + file + ":" + location.line);
@@ -136,14 +138,22 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
                     System.out.print("Problem parsing this script");
                 }
             }
-            System.out.println(
-                    " the error occurred on line " + location.line + " column " + location.column + " near '" + ((ParserException) t).getErrorDetails().getEncountered() + "'.");
+            if (location != null) {
+                if (errorDetails != null) {
+                    System.out.println(
+                            " the error occurred on line " + location.line + " column " + location.column + " near '" + errorDetails.getEncountered() + "'.");
+                } else {
+                    System.out.println(
+                            " the error occurred on line " + location.line + " column " + location.column);
+                }
+            }
             System.out.println();
             if (t.getCause() instanceof DollarScriptException) {
                 log.debug(t.getCause().getMessage(), t);
             } else {
                 log.debug(t.getMessage(), t);
             }
+            t.printStackTrace(System.err);
             System.exit(1);
         }
         if (t instanceof DollarScriptException) {

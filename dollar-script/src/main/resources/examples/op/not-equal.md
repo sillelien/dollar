@@ -1,1 +1,1 @@
-Testing 1 2 3
+Returns true if the two expression are not equal.

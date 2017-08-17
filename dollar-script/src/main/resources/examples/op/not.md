@@ -1,1 +1,1 @@
-Returns the negation of the right-hand-side expression.
+Returns the logical negation of the right-hand-side expression.

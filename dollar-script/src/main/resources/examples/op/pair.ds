@@ -1,0 +1,4 @@
+var pair1 = "first" : "Hello ";
+var pair2 = "second" : "World";
+
+.: pair1 + pair2 == {"first":"Hello ","second":"World"}

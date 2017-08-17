@@ -1,0 +1,11 @@
+def funcA {
+    $1 + 10
+}
+
+
+def funcB {
+    $1 - 10
+}
+
+10 | funcA | funcA <=> 30
+10 | funcA | funcB <=> 10

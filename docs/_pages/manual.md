@@ -1553,6 +1553,9 @@ listen-assign
 The membership or `.` operator accesses the member of a map by it's key.
 
 ```
+{"key1":1,"key2":2} ["key"+1] <=> 1
+{"key1":1,"key2":2}.key2 <=> 2
+{"key1":1,"key2":2}[1].key2 <=> 2
 ```
 
 ### `minus` or `-`
@@ -1564,6 +1567,7 @@ The membership or `.` operator accesses the member of a map by it's key.
 Deducts a value from another value
 
 ```
+2 - 1 <=> 1
 ```
 
 ### `mod` or `%`
@@ -1575,6 +1579,11 @@ Deducts a value from another value
 Returns the remainder (modulus) of the division of the left-hand-side by the right-hand-side.
 
 ```
+5 % 4 <=> 1
+.: 1 % 1 is INTEGER
+.: 1 % 1.0 is DECIMAL
+.: 2.0 % 1 is DECIMAL
+.: 2.0 % 1.0 is DECIMAL
 ```
 
 ### `multiply` or `*`
@@ -1586,6 +1595,13 @@ Returns the remainder (modulus) of the division of the left-hand-side by the rig
 Returns the product of two values. If the left-hand-side is scalar (non collection) then a straightforward multiplication will take place. If the left-hand-side is a collection and it is multiplied by `n`, e.g. `{a=a+1} * 3` it will be added (`+`) to itself `n` times i.e. `{a=a+1} + {a=a+1} + {a=a+1}`.
 
 ```
+2 * 5 <=> 10
+
+.: 1 * 1 is INTEGER
+.: 1 * 1.0 is DECIMAL
+.: 2.0 * 1 is DECIMAL
+.: 2.0 * 1.0 is DECIMAL
+
 ```
 
 ### `negate` or `-`
@@ -1597,6 +1613,7 @@ Returns the product of two values. If the left-hand-side is scalar (non collecti
 Negates a value.
 
 ```
+ .: -1 < 0
 ```
 
 ### `not` or `!`
@@ -1605,9 +1622,12 @@ Negates a value.
 
 
 
-Returns the negation of the right-hand-side expression.
+Returns the logical negation of the right-hand-side expression.
+
 
 ```
+not( true ) <=> false
+!true <=> false
 ```
 
 ### `not-equal` or `!=`
@@ -1616,9 +1636,11 @@ Returns the negation of the right-hand-side expression.
 
 
 
-Testing 1 2 3
+Returns true if the two expression are not equal.
+
 
 ```
+.: 1 != 2
 ```
 
 ### `or` or `||`
@@ -1630,6 +1652,9 @@ Testing 1 2 3
 Returns the logical 'or' of two expressions, e.g. `a || b`. Just like in Java it will shortcut, so that if the left-hand-side is true the right-hand-side is never evaluated.
 
 ```
+true or false <=> true
+true || false <=> true
+false || false <=> false
 ```
 
 ### `pair` or `:`
@@ -1638,9 +1663,14 @@ Returns the logical 'or' of two expressions, e.g. `a || b`. Just like in Java it
 
 
 
-pair
+Creates a pair (or tuple of 2 values) of values with a key and a value.
+
 
 ```
+var pair1 = "first" : "Hello ";
+var pair2 = "second" : "World";
+
+.: pair1 + pair2 == {"first":"Hello ","second":"World"}
 ```
 
 ### `parallel` or `|:|`
@@ -1652,6 +1682,13 @@ pair
 Causes the right-hand-side expression to be evaluated in parallel, most useful in conjunction with list blocks.
 
 ```
+const testList := [ TIME(), {SLEEP(1 Sec); TIME();}, TIME() ];
+var a= |..| testList;
+var b= |:| testList;
+
+//Test different execution orders
+.: a[2] >= a[1]
+.: b[2] < b[1]
 ```
 
 ### parameter
@@ -1660,9 +1697,47 @@ Causes the right-hand-side expression to be evaluated in parallel, most useful i
 
 
 
-parameter operator
+
+In most programming languages you have the concept of functions and parameters, i.e. you can parametrized blocks of code. In Dollar you can parameterize *anything*. For example let's just take a simple expression that adds two strings together, in reverse order, and pass in two parameters.
+
+```dollar
+($2 + " " + $1)("Hello", "World") <=> "World Hello"
 
 ```
+
+The naming of positional parameters is the same as in shell scripts.
+
+By combining with the `def` decleration we create functions, such as:
+
+```dollar
+
+def testParams($2 + " " + $1)
+testParams ("Hello", "World") <=> "World Hello"
+
+```
+Yep we built a function just by naming an expression. You can name anything and parametrise it - including maps, lists, blocks and plain old expressions.
+
+
+Named parameters are also supported. 
+
+
+
+
+```
+($2 + " " + $1)("Hello", "World") <=> "World Hello"
+
+var outer=10;
+const scopedArray := [$1,outer,{var inner=20;inner}]
+
+scopedArray(5)[0] <=> 5;
+scopedArray(5)[1] <=> 10;
+scopedArray(5)[2]() <=> 20;
+
+const testParams := (last + " " + first)
+testParams(first="Hello", last="World") <=> "World Hello"
+
+def func($2 + " " + $1)
+func ("Hello", "World") <=> "World Hello"
 ```
 
 ### `pause` or `||>`
@@ -1685,6 +1760,17 @@ Pauses a service described typically by a URI.
 The Pipe operator exists to improve method chaining and is used in the form `funcA() | funcB` where the first expression is evaluated and then the result is passed to the second function and can be chained such as `funcA() | funcB | funcC`.
 
 ```
+def funcA {
+    $1 + 10
+}
+
+
+def funcB {
+    $1 - 10
+}
+
+10 | funcA | funcA <=> 30
+10 | funcA | funcB <=> 10
 ```
 
 ### `plus` or `+`
@@ -1721,6 +1807,8 @@ var pair2 = "second" : "World";
 Sends the right-hand-side expression to stdout.
 
 ```
+@@ "Hello"
+print "World"
 ```
 
 ### `publish` or `*>`
@@ -1857,13 +1945,16 @@ subscribe-assign
 
 ### subscript
 
-**`<expression> '[' <index>|<key> ']'`**{: style="font-size: 60%"}
+**`( <expression> '[' <index-expression>|<key-expression> ']' ) | ( <expression> '.' (<index-expression>|<key-expression>) )`**{: style="font-size: 60%"}
 
 
 
 subscript operator
 
 ```
+{"key1":1,"key2":2} ["key"+1] <=> 1
+{"key1":1,"key2":2}.key2 <=> 2
+{"key1":1,"key2":2}[1].key2 <=> 2
 ```
 
 ### `truthy` or `~`
@@ -1897,6 +1988,18 @@ Un-pauses a service described typically by a URI.
 
 
 ```
+var c=1
+var d=1
+
+//When c is greater than 3 assign it's value to d
+c > 3 ? (d= c)
+
+&c <=> 1; &d <=> 1
+c=2; &c <=> 2; &d <=> 1
+c=5 ; &c <=> 5 ; &d <=> 5
+
+//Note alternative syntax is when <condition> <expression>
+when c > 3 { @@ c}
 ```
 
 ### `while`
