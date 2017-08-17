@@ -1,9 +1,11 @@
 ---
 layout: single
-title:  "Dollar Scripting Language Manual"
+title: "Dollar Scripting Language Manual"
 permalink: /manual/
 ---
+
 {% include toc %}
+
 
 ## Introduction
 
@@ -33,7 +35,7 @@ Run `dollar <filename>` to execute a Dollar script.
 
 Here is an example of what Dollar looks like
 
-```
+```dollar
 
 def testParams {$2 + " " + $1}
 
@@ -54,7 +56,7 @@ Support for functional programming is included in Dollar, this will be widened a
 
 In this example we're declaring reverse to be an expression that reverses two values from a supplied array. Because we declare it as `pure` the expression supplied must also be `pure`. To understand what a pure function is please see http://en.wikipedia.org/wiki/Pure_function. Basically it prohibits the reading of external state or the setting of external state. We next swap `[2,1]` within a newly created pure expression, which is subsequently assigned to a. If reverse had not been declared pure it would not be allowed within the pure expression.
 
- ```
+ ```dollar
  pure def reverse [$1[1],$1[0]]
 
  a= pure {
@@ -75,7 +77,7 @@ The simplest way to understand reactive programming is to imagine you are using 
 
 Let's see some of that behaviour in action:
 
-```
+```dollar
 
 var variableA = 1
 const variableB := variableA
@@ -92,7 +94,7 @@ This means that `a := b + 1` translates to **a is defined as b + 1** so a is beh
 
 At this point it's time to introduce a what is arguably a cleaner and easier to understand short hand for 'const reactiveVar := {...}` the short hand is 'def reactiveVar {...}' such as:
 
-```
+```dollar
     def myFunction { @@ "Hello World"}
 ```
 
@@ -106,7 +108,7 @@ The `def` keyword implies `const` and it also does not allow dynamic variable na
 
 Now let's throw in the causes operator :
 
-```
+```dollar
 
 var a=1
 a causes { @@ $1 }
@@ -124,7 +126,7 @@ a=4
 
 That simple piece of code will simply output each change made to the variable a, but wait a minute what about ...
 
-```
+```dollar
 
 var b=1
 var a=1
@@ -146,7 +148,7 @@ Yep, you can write reactive expressions based on collections or arbitrary expres
 
 But it's even simpler than that, many of Dollars operators are reactive themselves. That means they understand changes to their values. Take `@@` (or `print`) as an example:
 
-```
+```dollar
 var b=1
 @@b
 b=2
@@ -154,7 +156,7 @@ b=2
 
 Outputs 1 then 2 because @@ heard the change to b and re output the new value. Often this is what you want, however if you don't just add the fix operator `&` before the value. That will stop reactive behaviour.
 
-```
+```dollar
 var b=1
 @@ &b
 b=2
@@ -167,7 +169,7 @@ b=2
 
 Obviously the declarative/reactive behavior is fantastic for templating, eventing, creating lambda style expressions etc. however there are times when we want to simply assign a value and perform a single action on that value.
 
-```
+```dollar
 
 var variableA = 1
 var variableB = variableA
@@ -179,7 +181,7 @@ variableA = 2
 So as you can see when we use the `=` assignment operator we assign the *value* of the right hand side to the variable. Watch what happens when we use expressions.
 
 
-```
+```dollar
 
 var variableA = 1
 var variableB = variableA
@@ -197,7 +199,7 @@ The assignment operator `=` has a 'fix' depth of 1. This means that any expressi
 
 The assert equals operator `<=>` will compare two values and throw an exception if they are not the same ` a <=> b` is the same as `.: a == b`**
 
-```
+```dollar
 
 def lamdaVar  {$1 + 10}
 lamdaVar(5) <=> 15
@@ -206,7 +208,7 @@ lamdaVar(5) <=> 15
 
 > It's important to note that all values in Dollar are immutable - that means if you wish to change the value of a variable you *must* __reassign__ a new value to the variable. For example `v++` would return the value of `v+1` it does not increment v. If however you want to assign a constant value, one that is both immutable and cannot be reassigned, just use the `const` modifier at the variable assignment (this does not make sense for declarations, so is only available on assignments).
 
-```
+```dollar
 const MEDIUM = 23
 // MEDIUM= 4 would now produce an error
 ```
@@ -218,7 +220,7 @@ So `:=` supports the full reactive behaviour of Dollar, i.e. it is a declaration
 #### Line Block
 Dollar supports several block types, the first is the 'line block' a line block lies between `{` and `}` and is separated by either newlines or `;` characters.
 
-```
+```dollar
 
 var myBlock = {
     "Hello "
@@ -239,7 +241,7 @@ When a line block is evaluated the result is the value of the last entry. For ad
 
 Next we have the list block, the list block preserves all the values each part is seperated by either a `,` or a newline but is delimited by `[` and `]`.
 
-```
+```dollar
 
 var list = [
     "Hello "
@@ -258,7 +260,7 @@ list2 <=> [1,2]
 
 Finally we have the map block, when an map block is evaluated the result is the aggregation  of the parts from top to bottom into a map. The map block starts and finishes with the `{` `}` braces, however each part is seperated by a `,` not a `;` or *newline* . The default behaviour of a map block is virtually useless, it takes the string value and makes it the key and keeps the original value as the value to be paired with that key.
 
-```
+```dollar
 
 var mapBlock = {
     "Hello",
@@ -276,7 +278,7 @@ mapBlock2 <=> {"1":1,"2":2}
 Map blocks are combined with the pair `:` operator to become useful and create maps/JSON like this:
 
 
-```
+```dollar
 
 var mapBlock = {
     "first":"Hello ",
@@ -293,7 +295,7 @@ A map block with one entry that is not a pair is assumed to be a *Line Block*.
 
 The stdout operator `@@` is used to send a value to stdout in it's serialized (JSON) format, so the result of the above would be to output `{"first":"Hello ","second":"World"}` a JSON object created using JSON like syntax. Maps can also be created by joining pairs.
 
-```
+```dollar
 
 var pair1 = "first" : "Hello ";
 var pair2 = "second" : "World";
@@ -307,7 +309,7 @@ var pair2 = "second" : "World";
 
 Dollar's lists are pretty similar to JavaScript arrays. They are defined using the `[1,2,3]` style syntax and accessed using the `x[y]` subscript syntax.
 
-```
+```dollar
 .: [1,2,3] + 4 == [1,2,3,4];
 .: [1,2,3,4] - 4 == [1,2,3];
 .: [] + 1 == [1] ;
@@ -322,13 +324,13 @@ Dollar's lists are pretty similar to JavaScript arrays. They are defined using t
 
 You can count the size of the list using the size operator `#`.
 
-```
+```dollar
 #[1,2,3,4] <=> 4
 ```
 
 Dollar maps are also associative arrays (like JavaScript) allowing you to request members from them using the list subscript syntax
 
-```
+```dollar
 {"key1":1,"key2":2} ["key"+1] <=> 1
 {"key1":1,"key2":2} [1] <=> {"key2":2}
 {"key1":1,"key2":2} [1]["key2"] <=> 2
@@ -341,7 +343,7 @@ As you can see from the example you can request a key/value pair (or Tuple if yo
 
 Dollar (at present) supports numerical and character ranges
 
-```
+```dollar
 
 #("a".."c") <=> 3
 (1..3)[1] <=>2
@@ -353,7 +355,7 @@ Dollar (at present) supports numerical and character ranges
 
 Dollar makes extensive use of code blocks with scope [closure](https://en.wikipedia.org/wiki/Closure_(computer_programming)). Blocks, lists and maps all have scope closure - I suggest reading [this article by Martin Fowler](https://martinfowler.com/bliki/Lambda.html) if you're unfamiliar with closures. Let's start with a simple example:
 
-```
+```dollar
 var outer=10;
 def func {
     outer;
@@ -363,7 +365,7 @@ func() <=> 10;
 
 In the above example `func` is a block collection which returns `outer`. It has access to `outer` because at the time of decleration outer is in it's parent's lexical scope.
 
-```
+```dollar
 
 def func {
     var inner=10;
@@ -377,7 +379,7 @@ In the above example we now return an anonymous block collection from func which
 
 So all of that looks fairly familiar if you've ever used JavaScript, but remember all of Dollar's collections have scope closure so the following is valid:
 
-```
+```dollar
 var outer=10;
 
 const scopedArray := [$1,outer,{var inner=20;inner}]
@@ -404,7 +406,7 @@ Where an executable element with scope closure (such as _lists, blocks and maps_
 
 Error handling couldn't be simpler. Define an error expression using the error keyword, the expression supplied will be evaluated on an error occurring within any sub scope of the scope in which it is defined. The special variables `msg` and `type` will be assigned values.
 
-```
+```dollar
 var errorHappened= false
 error { @@ msg; errorHappened= true }
 var a=1/0
@@ -422,7 +424,7 @@ Logging is done by the `print`,`debug` and `err` keywords and the `@@`,`!!` and 
 | `err`    | `??`     |
 
 
-```
+```dollar
 @@ "I'm a stdout message"
 !! "I'm a debug message"
 ?? "I'm an error message"
@@ -432,7 +434,7 @@ Logging is done by the `print`,`debug` and `err` keywords and the `@@`,`!!` and 
 ### Intro
 Although Dollar is typeless at compile time, it does support basic runtime typing. At present this includes: STRING, INTEGER,DECIMAL, LIST, MAP, URI, VOID, RANGE, BOOLEAN. The value for a type can be checked using the `is` operator:
 
-```
+```dollar
 .: "Hello World" is String
 .: ["Hello World"] is List
 ```
@@ -441,7 +443,7 @@ Although Dollar is typeless at compile time, it does support basic runtime typin
 
 Dollar supports a decimal date system where each day is 1.0. This means it's possible to add and remove days from a date using simple arithmetic.
 
-```
+```dollar
 @@ DATE()
 @@ DATE() + 1
 @@ DATE() - 1
@@ -452,7 +454,7 @@ Dollar supports a decimal date system where each day is 1.0. This means it's pos
 
 Components of the date can be accessed using the subscript operators:
 
-```
+```dollar
 @@ DATE().DAY_OF_WEEK
 
 @@ DATE()['DAY_OF_YEAR']=1
@@ -466,7 +468,7 @@ NANO_OF_SECOND, NANO_OF_DAY, MICRO_OF_SECOND, MICRO_OF_DAY, MILLI_OF_SECOND, MIL
 
 As you can see we can do date arithmetic, but thanks to another Dollar feature anything that can be specified as xxx(i) can also be written i xxx (where i is an integer or decimal and xxx is an identifier). So we can add days hours and seconds to the date.
 
-```
+```dollar
 @@ DATE() + 1 Day
 @@ DATE() + 1 Hour
 @@ DATE() + 1 Sec
@@ -474,7 +476,7 @@ As you can see we can do date arithmetic, but thanks to another Dollar feature a
 
 Those values are built in, but we can easily define them ourselves.
 
-```
+```dollar
 def fortnight ($1 * 14)
 
 @@ DATE() + 1 fortnight
@@ -494,7 +496,7 @@ def fortnight ($1 * 14)
 
 Although there are no compile type constraints in Dollar a runtime type system can be built using constraints. Constraints are declared at the time of variable assignment or declaration. A constraint once declared on a variable cannot be changed. The constraint is placed before the variable name at the time of declaration in parenthesis.
 
-```
+```dollar
 var (it < 100) a = 50
 var (it > previous || previous is Void) b = 5
 b=6
@@ -506,7 +508,7 @@ The special variables `it` - the current value and `previous` - the previous val
 
 To build a simple runtime type system simply declare (using `:=`) your type as a boolean expression.
 
-```
+```dollar
 
 //define a pseudo-type
 def colorEnum ( it in ["red","green","blue"] )
@@ -525,7 +527,7 @@ var myColor="apple"
 Of course since the use of `(it is XXXX)` is very common Dollar provides a specific runtime type constraint that can be added in conjunction with other constraints. Simply prefix the assignment or decleration with `<XXXX>` where XXXX is the runtime type.
 
 
-```
+```dollar
 var <string> (#it > 5) s="String value"
 ```
 
@@ -535,14 +537,14 @@ It is intended that the predictive type system, will be in time combined with ru
 Dollar also supports type coercion, this is done using the `as` operator followed by the type to coerce to.
 
 
-```
+```dollar
 var <string> s= 1 as string
 s <=> "1"
 ```
 
 A few more examples follow.
 
-```
+```dollar
 1 as string <=> "1"
 1 as boolean <=> true
 1 as list <=> [1]
@@ -587,7 +589,7 @@ With imperative control flow, the control flow operations are only triggered whe
 
 Dollar supports the usual imperative control flow but, unlike some languages, everything is an operator. This is the general rule of Dollar, everything has a value. Dollar does not have the concept of statements and expressions, just expressions. This means that you can use control flow in an expression.
 
-```
+```dollar
 
 var a=1
 var b= if a==1 2 else 3
@@ -601,7 +603,7 @@ The `else` operator is a binary operator which evaluates the left-hand-side (usu
 
 The combined effect of these two operators is to provide the usual if/else/else if/ control flow
 
-```
+```dollar
 
 var a=5
 //Parenthesis added for clarity, not required.
@@ -612,7 +614,7 @@ var b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 
 ### For
 
-```
+```dollar
 
 for i in 1..10 {
     @@ i
@@ -622,7 +624,7 @@ for i in 1..10 {
 
 ### While
 
-```
+```dollar
 var a= 1
 while a < 10 {
  a= a+1
@@ -641,7 +643,7 @@ Dollar as previously mentioned is a reactive programming language, that means th
 
 Let's start with the simplest reactive control flow operator, the '=>' or 'causes' operator.
 
-```
+```dollar
 var a=1; var b=1
 
 a => (b= a)
@@ -665,7 +667,7 @@ Next we assign a new value of 2 to `a`. This will immediately (within the same t
 Next we have the 'when' operator which can be specified as a statement, usually for longer pieces of code. Or as the `?` operator, for concise code.
 
 
-```
+```dollar
 
 var c=1
 var d=1
@@ -681,7 +683,7 @@ c=5 ; &c <=> 5 ; &d <=> 5
 
 This is similar to the previous example except that we have to set a value greater than 3 for the action to be taken.
 
-```
+```dollar
 //Note alternative syntax is when <condition> <expression>
 var c=1
 when c > 3 { @@ c}
@@ -692,7 +694,7 @@ when c > 3 { @@ c}
 
 The `collect` operator listens for changes in the supplied expression adding all the values to a list until the `until` clause is triggered. It then evaluates the second expression with the values `it` for the current value, `count` for the number of messages **received** since last emission and `collected` for the collected values. The whole operator itself emits `void` unless the collection operation is triggered in which case it emits the collection itself. Values can be skipped with an `unless` clause. Skipped messages increase the count value, so use `#collected` if you want the number of collected values.
 
-```
+```dollar
 
 var e=void
 
@@ -719,7 +721,7 @@ e=11; e=12; e=13; e=14; e=15; e=16
 
 In most programming languages you have the concept of functions and parameters, i.e. you can parametrized blocks of code. In Dollar you can parameterize *anything*. For example let's just take a simple expression that adds two strings together, in reverse order, and pass in two parameters.
 
-```
+```dollar
 ($2 + " " + $1)("Hello", "World") <=> "World Hello"
 
 ```
@@ -728,7 +730,7 @@ The naming of positional parameters is the same as in shell scripts.
 
 Now if we take this further we can use the declaration operator `:=` to say that a variable is equal to the expression we wish to parameterise, like so:
 
-```
+```dollar
 
 const testParams := ($2 + " " + $1)
 testParams ("Hello", "World") <=> "World Hello"
@@ -740,7 +742,7 @@ Yep we built a function just by naming an expression. You can name anything and 
 
 What about named parameters, that would be nice.
 
-```
+```dollar
 const testParams := (last + " " + first)
 testParams(first="Hello", last="World") <=> "World Hello"
 ```
@@ -752,7 +754,7 @@ Yep you can use named parameters, then refer to the values by the names passed i
 
 URIs are first class citizen's in Dollar. They refer to a an arbitrary resource, usually remote, that can be accessed using the specified protocol and location. Static URIs can be referred to directly without quotation marks, dynamic URIs can be built by casting to a uri using the `as` operator.
 
-```
+```dollar
 var posts = << https://jsonplaceholder.typicode.com/posts 
 var titles = posts each { $1.title }
 @@ titles
@@ -765,7 +767,7 @@ In this example we've requested a single value (using `<<`) from a uri and assig
 
 Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of Java. To do so, just surround the Java in backticks.
 
-```
+```dollar
 
 var variableA="Hello World"
 
@@ -798,7 +800,7 @@ Dollar support the basic numerical operators +,-,/,*,%,++,-- as well as #
 
 **Remember ++ and -- do not change a variable's value they are a shorthand for a+1 and a-1 not a=a+1 or a=a-1**
 
-```
+```dollar
 
  1 + 1 <=> 2
  3 -2 <=> 1
@@ -815,7 +817,7 @@ Dollar support the basic numerical operators +,-,/,*,%,++,-- as well as #
 
 And similar to Java Dollar coerces types as required:
 
-```
+```dollar
 .: (1 - 1.0) is DECIMAL
 .: (1.0 - 1.0) is DECIMAL
 .: (1.0 - 1) is DECIMAL
@@ -852,7 +854,7 @@ Dollar support the basic logical operators &&,||,! as well as the truthy operato
 #### Truthy
 The truthy operator `~` converts any value to a boolean by applying the rule that: void is false, 0 is false, "" is false, empty list is false, empty map is false - all else is true.
 
-```
+```dollar
 
 .: ~ [1,2,3]
 .: ! ~ []
@@ -886,7 +888,7 @@ The shortcut operators `||` and `&&` work the same as in Java. As do the compari
 
 Examples:
 
-```
+```dollar
 true && true <=> true
 true && false <=> false
 false && true <=> false
@@ -914,7 +916,7 @@ false || false <=> false
 
 The default operator ':-' (keyword `default`) returns the left hand side if it is not `VOID` otherwise it returns the right hand side.
 
-```
+```dollar
 void :- "Hello" <=> "Hello"
 1 :- "Hello" <=> 1
 void default 2 <=> 2
@@ -929,7 +931,7 @@ void default 2 <=> 2
 
 Modules can be imported using the `module` keyword and a string representing in URI format the location of the module. At present the standard format is the Github locator so we're going to look at that first.
 
-```
+```dollar
 const chat:= module "github:neilellis:dollar-example-module::chat.ds" (channel="test")
 var sub= chat.server()
 chat.stop_()
@@ -943,7 +945,7 @@ You will need to have the `git` command on your path and to have access to the r
 
 The GitHub resolver will checkout the specified repository and store it under `~/.dollar/runtime/modules/github/<username>/<repo-name>/<branch>` all further interaction with the module will then be done from the checked out version. If you already have a version checked out a git pull will be done to update the branch.
 
-```
+```dollar
 const hello := module "github:neilellis:dollar-example-module:0.1.0:branch.ds"
 @@ hello
 ```
@@ -965,7 +967,7 @@ Modules consist of a file called module.json with the name of the main script fo
 The Dollar files should use the export modifier on assignments that it wishes to make available to client applications and it can refer to variables that don't exist, in which case values for those variables will need to be passed as parameters to the module declaration in the client application.
 
 
-```
+```dollar
 var redis= ("redis://localhost:6379/" + ${channel :- "test"}) as URI
 var www= (("http:get://127.0.0.1:8111/" + ${channel :- "test"}) as URI)
 
@@ -995,7 +997,7 @@ You cannot reassign a variable from a different thread, so they are readonly fro
 ### Parallel &amp; Serial Operators
 The parallel operator `|:|` or `parallel` causes the right hand side expression to be evaluated in parallel, it's partner the serial operator `|..|` or `serial` forces serial evaluation even if the current expression is being evaluated in parallel.
 
-```
+```dollar
 
 const testList := [ TIME(), {SLEEP(1 Sec); TIME();}, TIME() ];
 var a= |..| testList;
@@ -1011,7 +1013,7 @@ As you can see the order of evaluation of lists and maps **but not line blocks**
 
 The fork operator `-<` or `fork` will cause an expression to be evaluated in the background and any reference to the forked expression will block until a value is ready.
 
-```
+```dollar
 const sleepTime := {@@ "Background Sleeping";SLEEP(4 Sec); @@ "Background Finished Sleeping";TIME()}
 //Any future reference to c will block until c has completed evaluation
 var c= fork sleepTime
@@ -1033,249 +1035,252 @@ In the example the value of c is greater than d because the value of c is evalua
 TODO
 
 ## Appendix A - Operators
-### all or `<@`
+### `all` or `<@`
+
+**`('<@'|'all') <expression>`**{: style="font-size: 60%"}
 
 all
 
 
-### and or `&&`
+### `and` or `&&`
 
-```
-<expression> ('&&'|'and') <expression>
-```
+**`<expression> ('&&'|'and') <expression>`**{: style="font-size: 60%"}
 
 Returns the logical 'and' of two expressions, e.g. `a && b`. Just like in Java it will shortcut, so that if the left-hand-side is false the right-hand-side is never evaluated.
 
 
-### assert or `.:`
+### `assert` or `.:`
+
+**`('.:'|'assert') <expression>`**{: style="font-size: 60%"}
 
 The assertion opeartor is used to assert that an expression holds true. It is a reactive operator such that it is evaluated when the right-hand-side expression changes. so `.: a > 10` is asserting that a is **always** greater than 10. To avoid reactive behaviour use the fix operator such as `.: &a > 10` which means that when this statement is evaluated the value of a is compared with 10 - if __at this point__ it is not greater than 10 then the assertion will fail. 
 
 
-### assert-equals or `<->`
+### `assert-equals` or `<->`
 
-```
-<expression> <-> <expression>
-```
+**`<expression> ('<->'|'assert-equals') <expression>`**{: style="font-size: 60%"}
 
 Asserts that at the point of execution that the left-hand-side is equal to the right-hand-side.
 
 
-### causes or `=>`
+### `causes` or `=>`
+
+**`<expression> ('=>'|'causes') <expression>`**{: style="font-size: 60%"}
 
 The causes operator is used to link a reactive expression to an imperative action. The left-hand-side is any expression and the right hand-side is any expression that will be evaluated when the left-hand-side is updated such as `a+b => {@@ a; @@ b}`.
 
 
-### choose or `?*`
+### `choose` or `?*`
+
+**`<expression> ('?*'|'choose') <expression>`**{: style="font-size: 60%"}
 
 choose
 
 
-### create or `|||>`
+### `create` or `|||>`
 
-```
-('|||>'|'create') <expression>
-```
+**`('|||>'|'create') <expression>`**{: style="font-size: 60%"}
 
 Creates a service described typically by a URI.
 
 
-### debug or `!!`
+### `debug` or `!!`
 
-```
-('!!'|'debug') <expression>
-```
+**`('!!'|'debug') <expression>`**{: style="font-size: 60%"}
 
 Sends the result of the right-hand-side to the debug log.
 
 
-### dec or `--`
+### `dec` or `--`
 
-```
-('--'|'dec') <expression>
-```
+**`('--'|'dec') <expression>`**{: style="font-size: 60%"}
 
 Returns the right-hand-side decremented. Note the right-hand-side is not changed so `--a` does not not decrement `a`, it __returns__ `a` **decremented**
 
 
-### default or `:-`
+### `default` or `:-`
 
-```
-<expression> (':-'|'default') <expression>
-```
+**`<expression> (':-'|'default') <expression>`**{: style="font-size: 60%"}
 
 If the left-hand-side is VOID this returns the right-hand-side, otherwise returns the left-hand-side.
 
 
-### destroy or `<|||`
+### `destroy` or `<|||`
 
-```
-('<|||'|'destroy') <expression>
-```
+**`('<|||'|'destroy') <expression>`**{: style="font-size: 60%"}
 
 destroy
 
 
-### divide or `/`
+### `divide` or `/`
+
+**`<expression> ('/'|'divide') <expression>`**{: style="font-size: 60%"}
 
 Divides one value by another.
 
 
-### drain or `<-<`
+### `drain` or `<-<`
+
+**`('<-<'|'drain') <expression>`**{: style="font-size: 60%"}
 
 drain
 
 
-### each or `=>>`
+### `each` or `=>>`
+
+**`<expression> ('=>>'|'each') <expression>`**{: style="font-size: 60%"}
 
 each
 
 
-### else or `-:`
+### `else` or `-:`
+
+**`<expression> ('-:'|'else') <expression>`**{: style="font-size: 60%"}
 
 else
 
 
-### equal or `==`
+### `equal` or `==`
+
+**`<expression> ('=='|'equal') <expression>`**{: style="font-size: 60%"}
 
 equal
 
 
-### err or `??`
+### `err` or `??`
 
-```
-('??'|'err') <expression>
-```
+**`('??'|'err') <expression>`**{: style="font-size: 60%"}
 
 Sends the result of the right-hand-side to `stderr`.
 
 
-### error or `?->`
+### `error` or `?->`
 
-```
-('?->'|'error') <expression>
-```
+**`('?->'|'error') <expression>`**{: style="font-size: 60%"}
 
 The right-hand-side is executed if an error occurs in the current scope.
 
 
-### fix or `&`
+### `fix` or `&`
 
-```
-('&' | '--') fix <expression>
-```
+**`('&'|'fix') <expression>`**{: style="font-size: 60%"}
 
 Converts a reactive expression into a fixed value. It fixes the value at the point the fix operator is executed. No reactive events will be passed from the right-hand-side expression.
 
 
-### for or `null`
+### `for`
 
 for operator
 
 
-### null or `null`
+### cast
+
+**`<expression> `**{: style="font-size: 60%"}
 
 cast operator
 
 
-### fork or `-<`
+### `fork` or `-<`
 
-```
-('-<'|'fork') <expression>
-```
+**`('-<'|'fork') <expression>`**{: style="font-size: 60%"}
 
 Executes the right-hand-side in a seperate thread returning a 'future'. Any attempt to make use of the returned value from this operator will block until that thread finishes.
 
 
-### greater-than or `>`
+### `greater-than` or `>`
+
+**`<expression> ('>'|'greater-than') <expression>`**{: style="font-size: 60%"}
 
 The standard `>` operator, it uses Comparable#compareTo and will work with any Dollar data type, including strings, ranges, lists etc.
 
 
-### listen or `?`
+### `listen` or `?`
+
+**`<expression> ('?'|'listen') <expression>`**{: style="font-size: 60%"}
 
 listen
 
 
-### mod or `%`
+### `minus` or `-`
 
-```
-<expression> ('%'|'mod') <expression>
-```
+**`<expression> ('-'|'minus') <expression>`**{: style="font-size: 60%"}
+
+Deducts a value from another value
+
+
+### `mod` or `%`
+
+**`<expression> ('%'|'mod') <expression>`**{: style="font-size: 60%"}
 
 Returns the remainder (modulus) of the division of the left-hand-side by the right-hand-side.
 
 
-### multiply or `*`
+### `multiply` or `*`
 
-```
-<expression> '*'|'multiply'
-```
+**`<expression> ('*'|'multiply') <expression>`**{: style="font-size: 60%"}
 
 Returns the product of two values. If the left-hand-side is scalar (non collection) then a straightforward multiplication will take place. If the left-hand-side is a collection and it is multiplied by `n`, e.g. `{a=a+1} * 3` it will be added (`+`) to itself `n` times i.e. `{a=a+1} + {a=a+1} + {a=a+1}`.
 
 
-### negate or `-`
+### `negate` or `-`
 
-```
-('-'|'negate') <expression>
-```
+**`('-'|'negate') <expression>`**{: style="font-size: 60%"}
 
 Negates a value.
 
 
-### not or `!`
+### `not` or `!`
 
-```
-('!'|'not') <expression>
-```
+**`('!'|'not') <expression>`**{: style="font-size: 60%"}
 
 Returns the negation of the right-hand-side expression.
 
 
 ### `<=>` (assert-equals-reactive)
 
-```
-<expression> '<=>' <expression>
-```
+**`<expression> '<=>' <expression>`**{: style="font-size: 60%"}
 
 Asserts that the left-hand-side is **always** equal to the right-hand-side.
 
 
-### if or `???`
+### `if` or `???`
+
+**`<expression> ('???'|'if') <expression>`**{: style="font-size: 60%"}
 
 if
 
 
-### in or `€`
+### `in` or `€`
+
+**`<expression> ('€'|'in') <expression>`**{: style="font-size: 60%"}
 
 in
 
 
-### inc or `++`
+### `inc` or `++`
 
-```
-('++'|'inc') <expression>
-```
+**`('++'|'inc') <expression>`**{: style="font-size: 60%"}
 
 Returns the right-hand-side incremented. Note the right-hand-side is not changed so `--a` does not not decrement `a`, it __returns__ `a` **incremented**
 
 
-### less-than or `<`
+### `less-than` or `<`
+
+**`<expression> ('<'|'less-than') <expression>`**{: style="font-size: 60%"}
 
 The standard `<` operator, it uses Comparable#compareTo and will work with any Dollar data type, including strings, ranges, lists etc.
 
 
 ### `.` (member)
 
-```
-<expression<
-```
+**`<expression> '.' <expression>`**{: style="font-size: 60%"}
 
 The membership or `.` operator accesses the member of a map by it's key.
 
 
-### not-equal or `!=`
+### `not-equal` or `!=`
+
+**`<expression> ('!='|'not-equal') <expression>`**{: style="font-size: 60%"}
 
 not-equal
 
@@ -1287,19 +1292,21 @@ assign
 
 ### `:=` (declaration)
 
-```
- [export] [const] <variable-name> ':=' <expression> OR def <variable-name> <expression
-```
+**`( [export] [const] <variable-name> ':=' <expression>) | ( def <variable-name> <expression )`**{: style="font-size: 60%"}
 
 Declares a variable to have a value, this is declarative and reactive such that saying `const a := b + 1` means that `a` always equals `b+1` no matter the value of b. The shorthand `def` is the same as `const <variable-name> :=` so `def a {b+1}` is the same as `const a := b + 1` but is syntactically better when declaring function like variables.
 
 
 ### `>=` (greater-than-equal)
 
+**`<expression> '>=' <expression>`**{: style="font-size: 60%"}
+
 The standard `>=` operator, it uses Comparable#compareTo and will work with any Dollar data type, including strings, ranges, lists etc.
 
 
 ### `<=` (less-than-equal)
+
+**`<expression> '<=' <expression>`**{: style="font-size: 60%"}
 
 The standard `<=` operator, it uses Comparable#compareTo and will work with any Dollar data type, including strings, ranges, lists etc.
 
@@ -1309,104 +1316,107 @@ The standard `<=` operator, it uses Comparable#compareTo and will work with any 
 listen-assign
 
 
-### or or `||`
+### `or` or `||`
 
-```
-<expression> ('||'|'or') <expression>
-```
+**`<expression> ('||'|'or') <expression>`**{: style="font-size: 60%"}
 
 Returns the logical 'or' of two expressions, e.g. `a || b`. Just like in Java it will shortcut, so that if the left-hand-side is true the right-hand-side is never evaluated.
 
 
-### pair or `:`
+### `pair` or `:`
+
+**`<expression> (':'|'pair') <expression>`**{: style="font-size: 60%"}
 
 pair
 
 
-### parallel or `|:|`
+### `parallel` or `|:|`
 
-```
-('|:|'|'parallel') <expression>
-```
+**`('|:|'|'parallel') <expression>`**{: style="font-size: 60%"}
 
 Causes the right-hand-side expression to be evaluated in parallel, most useful in conjunction with list blocks.
 
 
-### pause or `||>`
+### `pause` or `||>`
 
-```
-('||>'|'pause') <expression>
-```
+**`('||>'|'pause') <expression>`**{: style="font-size: 60%"}
 
 Pauses a service described typically by a URI.
 
 
-### pipe or `|`
+### `pipe` or `|`
+
+**`<expression> ('|'|'pipe') <expression>`**{: style="font-size: 60%"}
 
 The Pipe operator exists to improve method chaining and is used in the form `funcA() | funcB` where the first expression is evaluated and then the result is passed to the second function and can be chained such as `funcA() | funcB | funcC`.
 
 
-### plus or `+`
+### `plus` or `+`
 
-```
-<expression> ('+'|'plus') <expression>
-```
+**`<expression> ('+'|'plus') <expression>`**{: style="font-size: 60%"}
 
 Appends or adds two values.
 
 
-### print or `@@`
+### `print` or `@@`
 
-```
-('@@'|'print') <expression>
-```
+**`('@@'|'print') <expression>`**{: style="font-size: 60%"}
 
 Sends the right-hand-side expression to stdout.
 
 
-### publish or `*>`
+### `publish` or `*>`
+
+**`<expression> ('*>'|'publish') <expression>`**{: style="font-size: 60%"}
 
 publish
 
 
-### range or `..`
+### `range` or `..`
 
-```
-<expression> '..' <expression>
-```
+**`<expression> ('..'|'range') <expression>`**{: style="font-size: 60%"}
 
 Creates a RANGE between the two values specified.
 
 
 ### `<<` (read-simple)
 
+**`'<<' <expression>`**{: style="font-size: 60%"}
+
 Performs a simple read from another data item, typically this is used with a URI.
 
 
-### read or `null`
+### `read`
+
+**`'read' <expression>`**{: style="font-size: 60%"}
 
 read operator
 
 
-### reduce or `>>=`
+### `reduce` or `>>=`
+
+**`<expression> ('>>='|'reduce') <expression>`**{: style="font-size: 60%"}
 
 reduce
 
 
-### serial or `|..|`
+### `start` or `|>`
 
-```
-('|..|'|'serial') <expression>
-```
+**`('|>'|'start') <expression>`**{: style="font-size: 60%"}
 
-Causes the right-hand-side expression to be evaluated in serial, most useful in conjunction with list blocks.
+Starts a service described typically by a URI.
 
 
-### stop or `<|`
+### `state` or `<|>`
 
-```
-('<|'|'stop') <expression>
-```
+**`('<|>'|'state') <expression>`**{: style="font-size: 60%"}
+
+Returns the state of a service described typically by a URI.
+
+
+### `stop` or `<|`
+
+**`('<|'|'stop') <expression>`**{: style="font-size: 60%"}
 
 Stops a service described typically by a URI.
 
@@ -1416,16 +1426,16 @@ Stops a service described typically by a URI.
 subscribe-assign
 
 
-### subscribe or `<*`
+### `subscribe` or `<*`
+
+**`<expression> ('<*'|'subscribe') <expression>`**{: style="font-size: 60%"}
 
 subscribe
 
 
-### truthy or `~`
+### `truthy` or `~`
 
-```
-('~'|'truthy') <expression>
-```
+**`('~'|'truthy') <expression>`**{: style="font-size: 60%"}
 
 The truthy operator `~` converts any value to a boolean by applying the rule that: void is false, 0 is false, "" is false, empty list is false, empty map is false - all else is true.
 
@@ -1442,54 +1452,56 @@ The truthy operator `~` converts any value to a boolean by applying the rule tha
 ```
 
 
-### unpause or `<||`
+### `unpause` or `<||`
 
-```
-('<||'|'unpause') <expression>
-```
+**`('<||'|'unpause') <expression>`**{: style="font-size: 60%"}
 
 Un-pauses a service described typically by a URI.
 
 
 ### `>>` (write-simple)
 
+**`<expression> '>>' <expression>`**{: style="font-size: 60%"}
+
 Performs a simple write to another data item, mostly used to write to a URI. 
 
 
-### while or `null`
+### `while`
+
+**`while <condition> <expression>`**{: style="font-size: 60%"}
 
 while operator
 
 
-### null or `null`
+### subscript
+
+**`<expression> '[' <index>|<key> ']'`**{: style="font-size: 60%"}
 
 subscript operator
 
 
-### null or `null`
+### parameter
+
+**`( <expression> | <builtin-name> | <function-name> ) '(' ( <expression> | <name> '=' <expression> )* ')'`**{: style="font-size: 60%"}
 
 parameter operator
 
 
-### size or `#`
+### `serial` or `|..|`
 
-```
-('#'|'size') <expression>
-```
+**`('|..|'|'serial') <expression>`**{: style="font-size: 60%"}
+
+Causes the right-hand-side expression to be evaluated in serial, most useful in conjunction with list blocks.
+
+
+### `size` or `#`
+
+**`('#'|'size') <expression>`**{: style="font-size: 60%"}
 
 Returns the size of non-scalar types or the length of a string.
 
 
-### state or `<|>`
-
-```
-('<|>'|'state') <expression>
-```
-
-Returns the state of a service described typically by a URI.
-
-
-### write or `null`
+### `write`
 
 write operator
 
@@ -1621,7 +1633,7 @@ Boolean true.
 ## Appendix C - Reserved Keywords, Operators and Symbols
 ### Keywords
 
-The following operator symbols are reserved:
+The following keywords are reserved:
 
 > await, closure, dispatch, dollar, dump, emit, fail, filter, import, impure, include, join, lambda, load, measure, pluripotent, readonly, save, scope, send, switch, trace, unit, variant, varies, vary, wait
 
@@ -1629,86 +1641,88 @@ The following operator symbols are reserved:
 
 The following operator keywords are reserved:
 
-> start
+> 
 
 The following operator symbols are reserved:
 
-> &=, &>, +>, ->, -_-, ..., ::, <$, <&, <+, <++, <-, <=<, <?, >&, >->, ?$?, ?..?, ?:, ?>, @, @>, |*, |>
+> `&=, &>, +>, ->, -_-, ..., ::, <$, <&, <+, <++, <-, <=<, <?, >&, >->, ?$?, ?..?, ?:, ?>, @, @>, |* `
 
 ### Symbols
 
 The following general symbols are reserved:
 
-> 
+> ` `
 
 ## Appendix D - Operator Precedence
 
 All operators by precedence, highest precedence ([associativity](https://en.wikipedia.org/wiki/Operator_associativity)) first.
 
-|Name                          |Keyword        |Operator  |
-|-------                       |-------        |-------   |
-|fix                           |fix            | `&`      |
-|range                         |range          | `..`     |
-|default                       |default        | `:-`     |
-|member                        |               | `.`      |
-|subscript                     |               |          |
-|parameter                     |               |          |
-|decrement                     |dec            | `--`     |
-|for                           |for            |          |
-|cast                          |               |          |
-|not                           |not            | `!`      |
-|in                            |in             | `€`      |
-|increment                     |inc            | `++`     |
-|truthy                        |truthy         | `~`      |
-|while                         |while          |          |
-|size                          |size           | `#`      |
-|divide                        |divide         | `/`      |
-|each                          |each           | `=>>`    |
-|modulus                       |mod            | `%`      |
-|multiply                      |multiply       | `*`      |
-|reduce                        |reduce         | `>>=`    |
-|negate                        |negate         | `-`      |
-|plus                          |plus           | `+`      |
-|greater-than                  |greater-than   | `>`      |
-|less-than                     |less-than      | `<`      |
-|pipe                          |pipe           | `|`      |
-|equal                         |equal          | `==`     |
-|not-equal                     |not-equal      | `!=`     |
-|greater-than-equal            |               | `>=`     |
-|less-than-equal               |               | `<=`     |
-|and                           |and            | `&&`     |
-|or                            |or             | `||`     |
-|all                           |all            | `<@`     |
-|causes                        |causes         | `=>`     |
-|choose                        |choose         | `?*`     |
-|drain                         |drain          | `<-<`    |
-|listen                        |listen         | `?`      |
-|publish                       |publish        | `*>`     |
-|read-simple                   |               | `<<`     |
-|read                          |read           |          |
-|subscribe                     |subscribe      | `<*`     |
-|write-simple                  |               | `>>`     |
-|write                         |write          |          |
-|pair                          |pair           | `:`      |
-|create                        |create         | `|||>`   |
-|destroy                       |destroy        | `<|||`   |
-|else                          |else           | `-:`     |
-|fork                          |fork           | `-<`     |
-|if                            |if             | `???`    |
-|parallel                      |parallel       | `|:|`    |
-|pause                         |pause          | `||>`    |
-|serial                        |serial         | `|..|`   |
-|stop                          |stop           | `<|`     |
-|unpause                       |unpause        | `<||`    |
-|state                         |state          | `<|>`    |
-|assign                        |               | `=`      |
-|declaration                   |               | `:=`     |
-|listen-assign                 |               | `?=`     |
-|subscribe-assign              |               | `*=`     |
-|assert                        |assert         | `.:`     |
-|assert-equals                 |assert-equals  | `<->`    |
-|debug                         |debug          | `!!`     |
-|err                           |err            | `??`     |
-|error                         |error          | `?->`    |
-|assert-equals-reactive        |               | `<=>`    |
-|print                         |print          | `@@`     |
+|Name                          |Keyword        |Operator  |Type      |
+|-------                       |-------        |-------   |-------   |
+|fix                           |`fix`          | `&`      |prefix    |
+|range                         |`range`        | `..`     |binary    |
+|default                       |`default`      | `:-`     |binary    |
+|member                        |               | `.`      |binary    |
+|subscript                     |               |          |postfix   |
+|parameter                     |               |          |postfix   |
+|decrement                     |`dec`          | `--`     |prefix    |
+|for                           |`for`          |          |control   |
+|cast                          |               |          |postfix   |
+|not                           |`not`          | `!`      |prefix    |
+|in                            |`in`           | `€`      |binary    |
+|increment                     |`inc`          | `++`     |prefix    |
+|truthy                        |`truthy`       | `~`      |prefix    |
+|while                         |`while`        |          |control   |
+|size                          |`size`         | `#`      |prefix    |
+|divide                        |`divide`       | `/`      |binary    |
+|each                          |`each`         | `=>>`    |binary    |
+|modulus                       |`mod`          | `%`      |binary    |
+|multiply                      |`multiply`     | `*`      |binary    |
+|reduce                        |`reduce`       | `>>=`    |binary    |
+|minus                         |`minus`        | `-`      |binary    |
+|negate                        |`negate`       | `-`      |prefix    |
+|plus                          |`plus`         | `+`      |binary    |
+|greater-than                  |`greater-than` | `>`      |binary    |
+|less-than                     |`less-than`    | `<`      |binary    |
+|pipe                          |`pipe`         | `|`      |binary    |
+|equal                         |`equal`        | `==`     |binary    |
+|not-equal                     |`not-equal`    | `!=`     |binary    |
+|greater-than-equal            |               | `>=`     |binary    |
+|less-than-equal               |               | `<=`     |binary    |
+|and                           |`and`          | `&&`     |binary    |
+|or                            |`or`           | `||`     |binary    |
+|all                           |`all`          | `<@`     |prefix    |
+|causes                        |`causes`       | `=>`     |binary    |
+|choose                        |`choose`       | `?*`     |binary    |
+|drain                         |`drain`        | `<-<`    |prefix    |
+|listen                        |`listen`       | `?`      |binary    |
+|publish                       |`publish`      | `*>`     |binary    |
+|read-simple                   |               | `<<`     |prefix    |
+|read                          |`read`         |          |prefix    |
+|subscribe                     |`subscribe`    | `<*`     |binary    |
+|write-simple                  |               | `>>`     |binary    |
+|write                         |`write`        |          |control   |
+|pair                          |`pair`         | `:`      |binary    |
+|create                        |`create`       | `|||>`   |prefix    |
+|destroy                       |`destroy`      | `<|||`   |prefix    |
+|else                          |`else`         | `-:`     |binary    |
+|fork                          |`fork`         | `-<`     |prefix    |
+|if                            |`if`           | `???`    |binary    |
+|parallel                      |`parallel`     | `|:|`    |prefix    |
+|pause                         |`pause`        | `||>`    |prefix    |
+|start                         |`start`        | `|>`     |prefix    |
+|state                         |`state`        | `<|>`    |prefix    |
+|stop                          |`stop`         | `<|`     |prefix    |
+|unpause                       |`unpause`      | `<||`    |prefix    |
+|serial                        |`serial`       | `|..|`   |prefix    |
+|assign                        |               | `=`      |assignment|
+|declaration                   |               | `:=`     |assignment|
+|listen-assign                 |               | `?=`     |assignment|
+|subscribe-assign              |               | `*=`     |assignment|
+|assert                        |`assert`       | `.:`     |prefix    |
+|assert-equals                 |`assert-equals`| `<->`    |binary    |
+|debug                         |`debug`        | `!!`     |prefix    |
+|err                           |`err`          | `??`     |prefix    |
+|error                         |`error`        | `?->`    |prefix    |
+|assert-equals-reactive        |               | `<=>`    |binary    |
+|print                         |`print`        | `@@`     |prefix    |
