@@ -1,5 +1,5 @@
 
-[ ![Binary Distribution](assets/download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3976.tgz)
+[ ![Binary Distribution](assets/download.png)](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.4060.tgz)
 
 [![GitHub License](https://img.shields.io/github/license/sillelien/dollar.svg)](https://raw.githubusercontent.com/sillelien/dollar/master/LICENSE) 
 [![GitHub Issues](https://img.shields.io/github/issues/sillelien/dollar.svg)](https://github.com/sillelien/dollar/issues)
@@ -11,7 +11,7 @@
 [![GitQ](https://gitq.com/badge.svg)](https://gitq.com/sillelien/dollar)
 [![Patreon](https://img.shields.io/badge/back_on-patreon-red.svg)](https://www.patreon.com/neilellis)
 
-Full documentation at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar) and the manual is at [http://sillelien.github.io/dollar/script.html](http://sillelien.github.io/dollar/script.html)
+Full documentation at [http://sillelien.github.io/dollar](http://sillelien.github.io/dollar) and the manual is at [http://sillelien.github.io/dollar/manual/](http://sillelien.github.io/dollar/manual/)
 
 ![dollar](assets/gh-title-dollar.png)
 
@@ -63,10 +63,10 @@ Learn more at [http://sillelien.github.io/dollar](http://sillelien.github.io/dol
 ![Install](assets/gh-title-install.png)
 
 
-Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3976.tgz) then run the following in your shell:
+Download the [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.4060.tgz) then run the following in your shell:
 
 ```bash
-    tar -zxvf dollar-0.3.3976.tgz
+    tar -zxvf dollar-0.3.4060.tgz
 ```
 
 To use dollar:
@@ -108,7 +108,7 @@ and
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-xxx</artifactId>
-            <version>0.3.3976</version>
+            <version>0.3.4060</version>
         </dependency>
 ```
 
@@ -119,7 +119,7 @@ Dependencies: [![Dependency Status](https://www.versioneye.com/user/projects/54a
 
 ![Docker](assets/gh-title-docker.png)
 
-There is a docker image, but it is in it's infancy so better to work with the  [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.3976.tgz) for now.
+There is a docker image, but it is in it's infancy so better to work with the  [distribution](http://dollarscript.s3-website-eu-west-1.amazonaws.com/dist/dollar-0.3.4060.tgz) for now.
 ```bash
 docker run -v $HOME/.github:/root/.github -v $HOME/.dollar:/root/.dollar -v $(pwd):/build -it sillelien/dollarscript-headless:0.3  <filename>.ds
  ```
