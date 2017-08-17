@@ -228,8 +228,8 @@ jobs:
       <<: *defaults
 
       docker:
-        - image: sillelien/circleci-dollar-build-image
-        - image: sillelien/circleci-jekyll-build-image
+#        - image: sillelien/circleci-dollar-build-image
+        - image: circleci/ruby:2.4.1-node
 
       steps:
 
