@@ -16,12 +16,15 @@
 
 package dollar.internal.runtime.script.parser;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.CharStreams;
 import dollar.internal.runtime.script.HasKeyword;
 import dollar.internal.runtime.script.HasSymbol;
-import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Objects;
 
 public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
@@ -31,38 +34,31 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     private String keyword;
     @Nullable
     private String name;
-    @Nullable
-    private String description;
-    @Nullable
-    private String example;
 
     private boolean reserved;
     private boolean reactive;
     private int priority;
+    @NotNull
     private OpDefType type;
 
     @Nullable
     private String bnf;
 
-    public OpDef(OpDefType type, @Nullable String symbol,
+    public OpDef(@NotNull OpDefType type, @Nullable String symbol,
                  @Nullable String keyword,
                  @Nullable String name,
-                 @Language("md")
-                 @Nullable String description,
                  boolean reserved,
                  boolean reactive,
                  @Nullable String bnf,
-                 @Nullable String example, int priority) {
+                 int priority) {
         this.type = type;
 
         this.symbol = symbol;
         this.keyword = keyword;
         this.name = name;
-        this.description = description;
         this.reserved = reserved;
         this.reactive = reactive;
         this.bnf = bnf;
-        this.example = example;
         this.priority = priority;
         if (!reserved && priority == 0) {
             throw new AssertionError("Priority must be > 0");
@@ -79,10 +75,6 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         return name;
     }
 
-    @Nullable
-    public String description() {
-        return description;
-    }
 
     @Nullable
     @Override
@@ -98,7 +90,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         if (o instanceof OpDef && keyword != null) {
             return keyword.compareTo(String.valueOf(((OpDef) o).keyword()));
         }
-        if (o instanceof OpDef && symbol != null) {
+        if (o instanceof OpDef && name != null) {
             return name.compareTo(String.valueOf(((OpDef) o).name()));
         }
 
@@ -109,11 +101,12 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         return reserved;
     }
 
+    @SuppressWarnings("UseOfSystemOutOrSystemErr")
     @NotNull
     public String asMarkdown() {
         StringBuilder stringBuilder = new StringBuilder();
         if (this.symbol == null) {
-            if(this.keyword != null) {
+            if (this.keyword != null) {
                 stringBuilder.append("### `").append(keyword).append("`\n\n");
             } else {
                 stringBuilder.append("### ").append(name).append("\n\n");
@@ -134,18 +127,43 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                 bnf = "<expression> " + bnfSymbol() + "";
             }
             if (type == OpDefType.BINARY) {
-                bnf = "<expression> " + bnfSymbol()+ " <expression>";
+                bnf = "<expression> " + bnfSymbol() + " <expression>";
             }
         }
         if (bnf != null) {
             stringBuilder.append("**`").append(bnf).append("`**{: style=\"font-size: 60%\"}\n\n");
         }
-        if (description != null) {
-            stringBuilder.append(description).append("\n\n");
+        try {
+            String filename = "/examples/op/" + this.name + ".md";
+            InputStream resourceAsStream = getClass().getResourceAsStream(filename);
+            if (resourceAsStream != null) {
+                stringBuilder.append("\n\n");
+                stringBuilder.append(
+                        CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream(filename), Charsets.UTF_8)));
+                stringBuilder.append("\n\n");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            throw new AssertionError(e);
         }
-        if (example != null) {
-            stringBuilder.append("```\n").append(example).append("\n```\n\n");
+
+        try {
+            String filename = "/examples/op/" + this.name + ".ds";
+            InputStream resourceAsStream = getClass().getResourceAsStream(filename);
+            if (resourceAsStream != null) {
+
+                stringBuilder.append("```\n");
+                stringBuilder.append(CharStreams.toString(
+                        new InputStreamReader(getClass().getResourceAsStream(filename), Charsets.UTF_8)));
+
+                stringBuilder.append("```\n");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            throw new AssertionError(e);
         }
+
+
         return stringBuilder.toString();
     }
 

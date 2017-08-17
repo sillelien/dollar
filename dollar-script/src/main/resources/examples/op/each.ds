@@ -1,0 +1,3 @@
+var posts = << https://jsonplaceholder.typicode.com/posts
+var titles = posts each { $1.title }
+@@ titles

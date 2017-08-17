@@ -190,7 +190,7 @@ variableA = 2
 
 The assignment operator `=` has a 'fix' depth of 1. This means that any expression will be evaluated, but no maps or line blocks will be. It is also not reactive. A fix depth of 2 causes all expressions to be evaluated and evaluates one depth of maps or line blocks.
 
-The assert equals operator `<=>` will compare two values and throw an exception if they are not the same ` a <=> b` is the same as `.: a == b`**
+The assert equals operator `<=>` will compare two values and throw an exception if they are ever not the same ` a <=> b` is the same as `.: a == b`**
 
 ```dollar
 

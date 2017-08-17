@@ -1,0 +1,1 @@
+Divides one value by another.

@@ -1,0 +1,1 @@
+Negates a value.

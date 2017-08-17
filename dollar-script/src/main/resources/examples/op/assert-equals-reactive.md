@@ -1,0 +1,1 @@
+Asserts that the left-hand-side is **always** equal to the right-hand-side.

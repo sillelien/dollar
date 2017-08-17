@@ -1,0 +1,1 @@
+Creates a service described typically by a URI.

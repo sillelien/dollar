@@ -1,0 +1,1 @@
+If the left-hand-side is VOID this returns the right-hand-side, otherwise returns the left-hand-side.

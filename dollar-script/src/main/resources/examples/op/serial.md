@@ -1,0 +1,1 @@
+Causes the right-hand-side expression to be evaluated in serial, most useful in conjunction with list blocks.

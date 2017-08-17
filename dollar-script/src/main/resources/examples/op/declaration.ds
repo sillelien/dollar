@@ -1,0 +1,5 @@
+var variableA = 1
+const variableB := variableA
+variableA = 2
+
+.: variableB == 2

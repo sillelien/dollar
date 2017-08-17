@@ -1,0 +1,2 @@
+.: "red" in ["red","blue","green"]
+.: ! (1 in ["red","blue","green"] )

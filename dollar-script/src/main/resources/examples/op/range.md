@@ -1,0 +1,1 @@
+Creates a RANGE between the two values specified.

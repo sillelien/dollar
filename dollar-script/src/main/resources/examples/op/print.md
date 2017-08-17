@@ -1,0 +1,1 @@
+Sends the right-hand-side expression to stdout.

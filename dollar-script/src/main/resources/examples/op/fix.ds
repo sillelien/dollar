@@ -1,0 +1,5 @@
+var reactiveValue= 1
+// The following line would fail if we used .: reactiveValue == 1
+// when the 'reactiveValue= 2' statement executes
+.: &reactiveValue == 1
+reactiveValue= 2

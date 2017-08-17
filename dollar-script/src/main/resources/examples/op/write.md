@@ -1,0 +1,1 @@
+The write operator is used to write data to an expression typically a URI. It has options to write-and-block (`block`) as well as write-and-destroy (`mutate`). Note that the `to` keyword is just syntax sugar and can be omitted. 

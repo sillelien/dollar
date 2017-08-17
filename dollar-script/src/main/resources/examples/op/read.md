@@ -1,0 +1,1 @@
+The read operator is used to read data from an expression typically a URI. It has options to read-and-block (`block`) as well as read-and-destroy (`mutate`). Note that the `from` keyword is just syntax sugar and can be omitted. 

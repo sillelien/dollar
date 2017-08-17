@@ -1,0 +1,1 @@
+Returns the state of a service described typically by a URI.

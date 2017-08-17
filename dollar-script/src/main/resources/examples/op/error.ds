@@ -1,0 +1,4 @@
+var errorHappened= false
+error { @@ msg; errorHappened= true }
+var a=1/0
+.: errorHappened

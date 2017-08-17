@@ -20,6 +20,7 @@ import com.google.common.io.CharStreams;
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.test.CircleCiParallelRule;
 import dollar.internal.runtime.script.api.ParserOptions;
+import dollar.internal.runtime.script.parser.Symbols;
 import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
@@ -27,12 +28,16 @@ import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.fail;
@@ -50,6 +55,33 @@ public class ParserTest {
     private final ParserOptions options = new ParserOptions();
     private boolean parallel;
 
+    public static Stream<String> fileNames() {
+        return Stream.of(files);
+    }
+
+    public static List<String> operatorList() {
+        return Symbols.OPERATORS.stream().map(i -> {
+            String file = "/examples/op/" + i.name() + ".ds";
+            InputStream resourceAsStream = ParserTest.class.getResourceAsStream(file);
+            if (resourceAsStream != null) {
+                try {
+                    if (CharStreams.toString(new InputStreamReader(resourceAsStream)).matches("\\s*")) {
+                        return null;
+                    } else {
+                        return file;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace(System.err);
+                    return null;
+                }
+            } else {
+                return null;
+            }
+
+
+        }).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+
     @Before
     public void setUp() throws Exception {
 
@@ -60,20 +92,16 @@ public class ParserTest {
 
     }
 
-     public static Stream<String> fileNames() {
-        return Stream.of(files);
-    }
-
     @ParameterizedTest
     @ValueSource(
 //            "bulletin.ds",
 //            "example.ds",
             strings = {"test_block_closure.ds", "test_list_closure.ds", "test_map_closure.ds", "test_scopes.ds", "test1.ds",
-            "test_arrays.ds", "test_builtins.ds", "test_casting.ds",  "test_date.ds", "test_fix1.ds","test_fix2.ds","test_fix3.ds", "test_iteration.ds", "test_java.ds", "test_logic.ds", "test_numeric.ds", "test_parameters.ds", "test_pure.ds", "test_ranges.ds", "test_reactive1.ds", "test_reactive2.ds", "test_reactive3.ds", "test_reactive4.ds","test_reactive5.ds","test_reactive6.ds","test_reactive7.ds","test_reactive8.ds","test_redis.ds", "test_strings.ds", "test_uris.ds", "test_variables.ds", "test_concurrency.ds","test_control_flow.ds","test_modules.ds","test3.ds"})
+                              "test_arrays.ds", "test_builtins.ds", "test_casting.ds", "test_date.ds", "test_fix1.ds", "test_fix2.ds", "test_fix3.ds", "test_iteration.ds", "test_java.ds", "test_logic.ds", "test_numeric.ds", "test_parameters.ds", "test_pure.ds", "test_ranges.ds", "test_reactive1.ds", "test_reactive2.ds", "test_reactive3.ds", "test_reactive4.ds", "test_reactive5.ds", "test_reactive6.ds", "test_reactive7.ds", "test_reactive8.ds", "test_redis.ds", "test_strings.ds", "test_uris.ds", "test_variables.ds", "test_concurrency.ds", "test_control_flow.ds", "test_modules.ds", "test3.ds"})
 
     public void testScript(@NotNull String filename) throws Exception {
         System.out.println("Testing " + filename);
-        new DollarParserImpl(options).parse(getClass().getResourceAsStream("/"+filename), filename, parallel);
+        new DollarParserImpl(options).parse(getClass().getResourceAsStream("/" + filename), filename, parallel);
     }
 
     @Test
@@ -105,6 +133,19 @@ public class ParserTest {
         }
     }
 
+    @ParameterizedTest
+    @MethodSource("operatorList")
+    public void operators(@NotNull String file) {
+
+        InputStream resourceAsStream = getClass().getResourceAsStream(file);
+        try {
+            new DollarParserImpl(new ParserOptions()).parse(resourceAsStream, file, false);
+            resourceAsStream.close();
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+
 
     @Test
     public void testMarkdown1() throws IOException {
@@ -114,7 +155,6 @@ public class ParserTest {
 
 
     @Test
-    @ValueSource()
     @Ignore("Regression test")
     public void testOperators() throws Exception {
         DollarStatic.getConfig().failFast(false);

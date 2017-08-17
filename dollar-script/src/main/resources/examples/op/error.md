@@ -1,0 +1,1 @@
+The right-hand-side is executed if an error occurs in the current scope.

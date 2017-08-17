@@ -1,0 +1,1 @@
+Performs a simple read from another data item, typically this is used with a URI.

@@ -1,0 +1,1 @@
+Deducts a value from another value

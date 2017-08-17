@@ -1,0 +1,14 @@
+var pair1 = "first" : "Hello ";
+var pair2 = "second" : "World";
+.: pair1 + pair2 == {"first":"Hello ","second":"World"}
+
+.: [1,2,3] + 4 == [1,2,3,4];
+.: [1,2,3,4] - 4 == [1,2,3];
+.: [] + 1 == [1] ;
+.: [1] + [1] == [1,1];
+.: [1] + 1 == [1,1];
+
+.: (1 + 1.0) is DECIMAL
+.: (1.0 + 1.0) is DECIMAL
+.: (1.0 + 1) is DECIMAL
+.: (1 + 1) is INTEGER

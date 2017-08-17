@@ -1,0 +1,1 @@
+Returns the size of non-scalar types or the length of a string.

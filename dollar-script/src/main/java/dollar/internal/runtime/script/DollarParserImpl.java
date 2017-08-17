@@ -356,7 +356,7 @@ public class DollarParserImpl implements DollarParser {
                         .infixl(op(REDUCE, new BinaryOp(this, REDUCE, (lhs, rhs) -> Func.reduce(pure, lhs, rhs))),
                                 REDUCE.priority())
                         .infixl(op(CAUSES, new CausesOperator(pure, this)), CAUSES.priority())
-                        .infixl(op(LISTEN, new BinaryOp(this, LISTEN, Func::listenFunc)), LISTEN.priority())
+                        .infixl(op(WHEN_OP, new BinaryOp(this, WHEN_OP, Func::listenFunc)), WHEN_OP.priority())
                         .infixl(op(CHOOSE, new BinaryOp(this, CHOOSE, ControlFlowAware::$choose)), CHOOSE.priority())
                         .infixl(op(DEFAULT, new BinaryOp(this, DEFAULT, var::$default)), DEFAULT.priority())
                         .postfix(memberOperator(ref), MEMBER.priority())

@@ -1,0 +1,4 @@
+var a=5
+//Parenthesis added for clarity, not required.
+var b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
+.: b == "more than two"
