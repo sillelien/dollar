@@ -97,7 +97,7 @@
         <ul class="breadcrumb">
         <li id="publishDate">Last Published: 2017-08-17<span class="divider">|</span>
 </li>
-          <li id="projectVersion">Version: 0.3.3976</li>
+          <li id="projectVersion">Version: 0.3.4036</li>
         </ul>
       </div>
       <div class="row-fluid">
@@ -154,7 +154,7 @@
 *****************************************************
 Summary
 -------
-Generated at: 2017-08-17T10:58:08+00:00
+Generated at: 2017-08-17T17:07:26+00:00
 
 Notes: 2
 Binaries: 612
@@ -1463,12 +1463,12 @@ ENTRYPOINT [&quot;/app/bin/dollar&quot;]
 =====================================================
 == File: .release
 =====================================================
-0.3.3976
+0.3.4036
 
 =====================================================
 == File: .release.details
 =====================================================
-0.3.3976 3976 f5c572187759902dde599c538b742daff289cc14 victorious-costermonger-from-rhossili
+0.3.4036 4036 ded9ad3d086be35f40a44266109cdffd824f144b bright-howdy-from-ballinphonta
 
 =====================================================
 == File: docs/minimal-mistakes-jekyll.gemspec
@@ -7262,13 +7262,11 @@ left:t.left-n.left-pe.css(r,&quot;marginLeft&quot;,!0)}}},offsetParent:function(
 == File: docs/assets/css/main.scss
 =====================================================
 ---
-# Only the main Sass file needs front matter (the dashes are enough)
 ---
 
 @charset &quot;utf-8&quot;;
 
 @import &quot;minimal-mistakes&quot;;
-
 
 .sidebar {
     @include clearfix();
@@ -7286,7 +7284,7 @@ left:t.left-n.left-pe.css(r,&quot;marginLeft&quot;,!0)}}},offsetParent:function(
         float: left;
         width: 400px;
         opacity: 1;
-        font-size:14pt;
+        font-size: 14pt;
 
         &amp;:hover {
             opacity: 1;
@@ -7297,20 +7295,22 @@ left:t.left-n.left-pe.css(r,&quot;marginLeft&quot;,!0)}}},offsetParent:function(
             z-index: 1000000;
             overflow-y: auto;
             left: 0px;
-            top:102px;
-            font-size:14pt;
+            top: 102px;
+            font-size: 14pt;
             /* calculate height of nav list */
             height: calc(100vh - 102px - 2em); // viewport height - approx. masthead height - main content top margin
         }
     }
 }
 
-
-
 .toc__menu {
     font-size: 14px;
 
     a {
+        color: #333333;
+        font-size: 14px;
+        font-weight: bold;
+        border-bottom: 1px solid #DDDDDD;
 
 =====================================================
 == File: docs/banner.js
