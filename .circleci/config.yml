@@ -228,26 +228,27 @@ jobs:
       <<: *defaults
 
       docker:
+        - image: sillelien/circleci-dollar-build-image
         - image: sillelien/circleci-jekyll-build-image
 
       steps:
 
         - attach_workspace:
-            at: /srv/jekyll/workspace
+            at: /home/circleci/workspace
 
         - run:
             name: build-docs
             command: |
               set -ex
-              cd /srv/jekyll/workspace/docs
+              cd /home/circleci/workspace/docs
               ls -l
+              id
               bundle install
-              sudo chmod -R 777 /srv/jekyll/workspace/docs/
-              mkdir -p /srv/jekyll/workspace/docs-built/
-              sudo bundle exec jekyll build --source /srv/jekyll/workspace/docs/ --destination /srv/jekyll/workspace/docs-built/
+              mkdir -p /home/circleci/workspace/docs-built/
+              bundle exec jekyll build --source /srv/jekyll/workspace/docs/ --destination /srv/jekyll/workspace/docs-built/
 
         - store_artifacts:
-            path: /srv/jekyll/workspace/docs-built/
+            path: /home/circleci/workspace/docs-built/
 
 
 
