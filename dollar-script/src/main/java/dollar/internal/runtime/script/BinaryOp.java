@@ -22,6 +22,7 @@ import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.parser.OpDef;
+import dollar.internal.runtime.script.parser.OpDefType;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.functors.Binary;
 import org.jparsec.functors.Map2;
@@ -49,11 +50,15 @@ public class BinaryOp implements Binary<var>, Operator {
         this.operation = operation;
         this.function = function;
         this.immediate = false;
-        if (operation.isReactive() == this.immediate) {
-            throw new DollarParserError("The operation " + operation.name() + " is marked as " + (operation.isReactive()
+        if (operation.reactive() == this.immediate) {
+            throw new DollarParserError("The operation " + operation.name() + " is marked as " + (operation.reactive()
                                                                                                           ? "reactive" : "unreactive") + " " +
                                                 "yet this operator is set to be " + (this.immediate
                                                                                              ? "unreactive" : "reactive"));
+        }
+        if(operation.type() != OpDefType.BINARY) {
+            throw new DollarParserError("The operator "+operation.name()+" is defined as not BINARY but used in a binary " +
+                                                "operator.");
         }
     }
 
@@ -65,11 +70,15 @@ public class BinaryOp implements Binary<var>, Operator {
         this.function = function;
         this.operation = operation;
         this.parser = parser;
-        if (operation.isReactive() == this.immediate) {
-            throw new DollarParserError("The operation " + operation.name() + " is marked as " + (operation.isReactive()
+        if (operation.reactive() == this.immediate) {
+            throw new DollarParserError("The operation " + operation.name() + " is marked as " + (operation.reactive()
                                                                                                           ? "reactive" : "unreactive") + " " +
                                                 "yet this operator is set to be " + (this.immediate
                                                                                              ? "unreactive" : "reactive"));
+        }
+        if(operation.type() != OpDefType.BINARY) {
+            throw new DollarParserError("The operator "+operation.name()+" is defined as not BINARY but used in a binary " +
+                                                "operator.");
         }
     }
 

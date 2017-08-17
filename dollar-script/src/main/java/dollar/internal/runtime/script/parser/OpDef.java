@@ -39,11 +39,12 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     private boolean reserved;
     private boolean reactive;
     private int priority;
+    private OpDefType type;
 
     @Nullable
     private String bnf;
 
-    public OpDef(@Nullable String symbol,
+    public OpDef(OpDefType type, @Nullable String symbol,
                  @Nullable String keyword,
                  @Nullable String name,
                  @Language("md")
@@ -52,6 +53,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                  boolean reactive,
                  @Nullable String bnf,
                  @Nullable String example, int priority) {
+        this.type = type;
 
         this.symbol = symbol;
         this.keyword = keyword;
@@ -111,18 +113,32 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     public String asMarkdown() {
         StringBuilder stringBuilder = new StringBuilder();
         if (this.symbol == null) {
-            stringBuilder.append("### ").append(keyword);
-            stringBuilder.append(" or `").append(symbol).append("`\n\n");
+            if(this.keyword != null) {
+                stringBuilder.append("### `").append(keyword).append("`\n\n");
+            } else {
+                stringBuilder.append("### ").append(name).append("\n\n");
+            }
         } else {
             if (keyword != null) {
-                stringBuilder.append("### ").append(keyword);
-                stringBuilder.append(" or `").append(symbol).append("`\n\n");
+                stringBuilder.append("### `").append(keyword);
+                stringBuilder.append("` or `").append(symbol).append("`\n\n");
             } else {
                 stringBuilder.append("### `").append(symbol).append("` (").append(name).append(")").append("\n\n");
             }
         }
+        if (bnf == null) {
+            if (type == OpDefType.PREFIX) {
+                bnf = "" + bnfSymbol() + " <expression>";
+            }
+            if (type == OpDefType.POSTFIX) {
+                bnf = "<expression> " + bnfSymbol() + "";
+            }
+            if (type == OpDefType.BINARY) {
+                bnf = "<expression> " + bnfSymbol()+ " <expression>";
+            }
+        }
         if (bnf != null) {
-            stringBuilder.append("```\n").append(bnf).append("\n```\n\n");
+            stringBuilder.append("**`").append(bnf).append("`**{: style=\"font-size: 60%\"}\n\n");
         }
         if (description != null) {
             stringBuilder.append(description).append("\n\n");
@@ -131,6 +147,21 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
             stringBuilder.append("```\n").append(example).append("\n```\n\n");
         }
         return stringBuilder.toString();
+    }
+
+    @NotNull
+    private String bnfSymbol() {
+        if (symbol != null && keyword != null) {
+            return "('" + symbol + "'|" + "'" + keyword + "')";
+        }
+        if (symbol == null && keyword != null) {
+            return "'" + keyword + "'";
+        }
+        if (symbol != null) {
+            return "'" + symbol + "'";
+        }
+        return "";
+
     }
 
     @Override
@@ -147,11 +178,15 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                        Objects.equals(keyword, opDef.keyword);
     }
 
-    public boolean isReactive() {
+    public boolean reactive() {
         return reactive;
     }
 
     public int priority() {
         return priority;
+    }
+
+    public OpDefType type() {
+        return type;
     }
 }

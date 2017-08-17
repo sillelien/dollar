@@ -1034,42 +1034,695 @@ In the example the value of c is greater than d because the value of c is evalua
 
 TODO
 
-[ERROR] Failed to execute goal org.codehaus.mojo:exec-maven-plugin:1.5.0:java (default-cli) on project dollar: An exception occured while executing the Java class. dollar.internal.runtime.script.parser.Symbols -> [Help 1]
-org.apache.maven.lifecycle.LifecycleExecutionException: Failed to execute goal org.codehaus.mojo:exec-maven-plugin:1.5.0:java (default-cli) on project dollar: An exception occured while executing the Java class. dollar.internal.runtime.script.parser.Symbols
-	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:213)
-	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:154)
-	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:146)
-	at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:117)
-	at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:81)
-	at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build(SingleThreadedBuilder.java:51)
-	at org.apache.maven.lifecycle.internal.LifecycleStarter.execute(LifecycleStarter.java:128)
-	at org.apache.maven.DefaultMaven.doExecute(DefaultMaven.java:309)
-	at org.apache.maven.DefaultMaven.doExecute(DefaultMaven.java:194)
-	at org.apache.maven.DefaultMaven.execute(DefaultMaven.java:107)
-	at org.apache.maven.cli.MavenCli.execute(MavenCli.java:993)
-	at org.apache.maven.cli.MavenCli.doMain(MavenCli.java:345)
-	at org.apache.maven.cli.MavenCli.main(MavenCli.java:191)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:497)
-	at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced(Launcher.java:289)
-	at org.codehaus.plexus.classworlds.launcher.Launcher.launch(Launcher.java:229)
-	at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode(Launcher.java:415)
-	at org.codehaus.plexus.classworlds.launcher.Launcher.main(Launcher.java:356)
-Caused by: org.apache.maven.plugin.MojoExecutionException: An exception occured while executing the Java class. dollar.internal.runtime.script.parser.Symbols
-	at org.codehaus.mojo.exec.ExecJavaMojo.execute(ExecJavaMojo.java:345)
-	at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo(DefaultBuildPluginManager.java:134)
-	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:208)
-	... 20 more
-Caused by: java.lang.ClassNotFoundException: dollar.internal.runtime.script.parser.Symbols
-	at java.net.URLClassLoader.findClass(URLClassLoader.java:381)
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
-	at org.codehaus.mojo.exec.ExecJavaMojo$1.run(ExecJavaMojo.java:281)
-	at java.lang.Thread.run(Thread.java:745)
-[ERROR] 
-[ERROR] Re-run Maven using the -X switch to enable full debug logging.
-[ERROR] 
-[ERROR] For more information about the errors and possible solutions, please read the following articles:
-[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
+## Appendix A - Operators
+### `all` or `<@`
+
+**`('<@'|'all') <expression>`**{: style="font-size: 60%"}
+
+all
+
+
+### `and` or `&&`
+
+**`<expression> ('&&'|'and') <expression>`**{: style="font-size: 60%"}
+
+Returns the logical 'and' of two expressions, e.g. `a && b`. Just like in Java it will shortcut, so that if the left-hand-side is false the right-hand-side is never evaluated.
+
+
+### `assert` or `.:`
+
+**`('.:'|'assert') <expression>`**{: style="font-size: 60%"}
+
+The assertion opeartor is used to assert that an expression holds true. It is a reactive operator such that it is evaluated when the right-hand-side expression changes. so `.: a > 10` is asserting that a is **always** greater than 10. To avoid reactive behaviour use the fix operator such as `.: &a > 10` which means that when this statement is evaluated the value of a is compared with 10 - if __at this point__ it is not greater than 10 then the assertion will fail. 
+
+
+### `assert-equals` or `<->`
+
+**`<expression> ('<->'|'assert-equals') <expression>`**{: style="font-size: 60%"}
+
+Asserts that at the point of execution that the left-hand-side is equal to the right-hand-side.
+
+
+### `causes` or `=>`
+
+**`<expression> ('=>'|'causes') <expression>`**{: style="font-size: 60%"}
+
+The causes operator is used to link a reactive expression to an imperative action. The left-hand-side is any expression and the right hand-side is any expression that will be evaluated when the left-hand-side is updated such as `a+b => {@@ a; @@ b}`.
+
+
+### `choose` or `?*`
+
+**`<expression> ('?*'|'choose') <expression>`**{: style="font-size: 60%"}
+
+choose
+
+
+### `create` or `|||>`
+
+**`('|||>'|'create') <expression>`**{: style="font-size: 60%"}
+
+Creates a service described typically by a URI.
+
+
+### `debug` or `!!`
+
+**`('!!'|'debug') <expression>`**{: style="font-size: 60%"}
+
+Sends the result of the right-hand-side to the debug log.
+
+
+### `dec` or `--`
+
+**`('--'|'dec') <expression>`**{: style="font-size: 60%"}
+
+Returns the right-hand-side decremented. Note the right-hand-side is not changed so `--a` does not not decrement `a`, it __returns__ `a` **decremented**
+
+
+### `default` or `:-`
+
+**`<expression> (':-'|'default') <expression>`**{: style="font-size: 60%"}
+
+If the left-hand-side is VOID this returns the right-hand-side, otherwise returns the left-hand-side.
+
+
+### `destroy` or `<|||`
+
+**`('<|||'|'destroy') <expression>`**{: style="font-size: 60%"}
+
+destroy
+
+
+### `divide` or `/`
+
+**`<expression> ('/'|'divide') <expression>`**{: style="font-size: 60%"}
+
+Divides one value by another.
+
+
+### `drain` or `<-<`
+
+**`('<-<'|'drain') <expression>`**{: style="font-size: 60%"}
+
+drain
+
+
+### `each` or `=>>`
+
+**`<expression> ('=>>'|'each') <expression>`**{: style="font-size: 60%"}
+
+each
+
+
+### `else` or `-:`
+
+**`<expression> ('-:'|'else') <expression>`**{: style="font-size: 60%"}
+
+else
+
+
+### `equal` or `==`
+
+**`<expression> ('=='|'equal') <expression>`**{: style="font-size: 60%"}
+
+equal
+
+
+### `err` or `??`
+
+**`('??'|'err') <expression>`**{: style="font-size: 60%"}
+
+Sends the result of the right-hand-side to `stderr`.
+
+
+### `error` or `?->`
+
+**`('?->'|'error') <expression>`**{: style="font-size: 60%"}
+
+The right-hand-side is executed if an error occurs in the current scope.
+
+
+### `fix` or `&`
+
+**`('&'|'fix') <expression>`**{: style="font-size: 60%"}
+
+Converts a reactive expression into a fixed value. It fixes the value at the point the fix operator is executed. No reactive events will be passed from the right-hand-side expression.
+
+
+### `for`
+
+for operator
+
+
+### cast
+
+**`<expression> `**{: style="font-size: 60%"}
+
+cast operator
+
+
+### `fork` or `-<`
+
+**`('-<'|'fork') <expression>`**{: style="font-size: 60%"}
+
+Executes the right-hand-side in a seperate thread returning a 'future'. Any attempt to make use of the returned value from this operator will block until that thread finishes.
+
+
+### `greater-than` or `>`
+
+**`<expression> ('>'|'greater-than') <expression>`**{: style="font-size: 60%"}
+
+The standard `>` operator, it uses Comparable#compareTo and will work with any Dollar data type, including strings, ranges, lists etc.
+
+
+### `listen` or `?`
+
+**`<expression> ('?'|'listen') <expression>`**{: style="font-size: 60%"}
+
+listen
+
+
+### `minus` or `-`
+
+**`<expression> ('-'|'minus') <expression>`**{: style="font-size: 60%"}
+
+Deducts a value from another value
+
+
+### `mod` or `%`
+
+**`<expression> ('%'|'mod') <expression>`**{: style="font-size: 60%"}
+
+Returns the remainder (modulus) of the division of the left-hand-side by the right-hand-side.
+
+
+### `multiply` or `*`
+
+**`<expression> ('*'|'multiply') <expression>`**{: style="font-size: 60%"}
+
+Returns the product of two values. If the left-hand-side is scalar (non collection) then a straightforward multiplication will take place. If the left-hand-side is a collection and it is multiplied by `n`, e.g. `{a=a+1} * 3` it will be added (`+`) to itself `n` times i.e. `{a=a+1} + {a=a+1} + {a=a+1}`.
+
+
+### `negate` or `-`
+
+**`('-'|'negate') <expression>`**{: style="font-size: 60%"}
+
+Negates a value.
+
+
+### `not` or `!`
+
+**`('!'|'not') <expression>`**{: style="font-size: 60%"}
+
+Returns the negation of the right-hand-side expression.
+
+
+### `<=>` (assert-equals-reactive)
+
+**`<expression> '<=>' <expression>`**{: style="font-size: 60%"}
+
+Asserts that the left-hand-side is **always** equal to the right-hand-side.
+
+
+### `if` or `???`
+
+**`<expression> ('???'|'if') <expression>`**{: style="font-size: 60%"}
+
+if
+
+
+### `in` or `€`
+
+**`<expression> ('€'|'in') <expression>`**{: style="font-size: 60%"}
+
+in
+
+
+### `inc` or `++`
+
+**`('++'|'inc') <expression>`**{: style="font-size: 60%"}
+
+Returns the right-hand-side incremented. Note the right-hand-side is not changed so `--a` does not not decrement `a`, it __returns__ `a` **incremented**
+
+
+### `less-than` or `<`
+
+**`<expression> ('<'|'less-than') <expression>`**{: style="font-size: 60%"}
+
+The standard `<` operator, it uses Comparable#compareTo and will work with any Dollar data type, including strings, ranges, lists etc.
+
+
+### `.` (member)
+
+**`<expression> '.' <expression>`**{: style="font-size: 60%"}
+
+The membership or `.` operator accesses the member of a map by it's key.
+
+
+### `not-equal` or `!=`
+
+**`<expression> ('!='|'not-equal') <expression>`**{: style="font-size: 60%"}
+
+not-equal
+
+
+### `=` (assign)
+
+assign
+
+
+### `:=` (declaration)
+
+**`( [export] [const] <variable-name> ':=' <expression>) | ( def <variable-name> <expression )`**{: style="font-size: 60%"}
+
+Declares a variable to have a value, this is declarative and reactive such that saying `const a := b + 1` means that `a` always equals `b+1` no matter the value of b. The shorthand `def` is the same as `const <variable-name> :=` so `def a {b+1}` is the same as `const a := b + 1` but is syntactically better when declaring function like variables.
+
+
+### `>=` (greater-than-equal)
+
+**`<expression> '>=' <expression>`**{: style="font-size: 60%"}
+
+The standard `>=` operator, it uses Comparable#compareTo and will work with any Dollar data type, including strings, ranges, lists etc.
+
+
+### `<=` (less-than-equal)
+
+**`<expression> '<=' <expression>`**{: style="font-size: 60%"}
+
+The standard `<=` operator, it uses Comparable#compareTo and will work with any Dollar data type, including strings, ranges, lists etc.
+
+
+### `?=` (listen-assign)
+
+listen-assign
+
+
+### `or` or `||`
+
+**`<expression> ('||'|'or') <expression>`**{: style="font-size: 60%"}
+
+Returns the logical 'or' of two expressions, e.g. `a || b`. Just like in Java it will shortcut, so that if the left-hand-side is true the right-hand-side is never evaluated.
+
+
+### `pair` or `:`
+
+**`<expression> (':'|'pair') <expression>`**{: style="font-size: 60%"}
+
+pair
+
+
+### `parallel` or `|:|`
+
+**`('|:|'|'parallel') <expression>`**{: style="font-size: 60%"}
+
+Causes the right-hand-side expression to be evaluated in parallel, most useful in conjunction with list blocks.
+
+
+### `pause` or `||>`
+
+**`('||>'|'pause') <expression>`**{: style="font-size: 60%"}
+
+Pauses a service described typically by a URI.
+
+
+### `pipe` or `|`
+
+**`<expression> ('|'|'pipe') <expression>`**{: style="font-size: 60%"}
+
+The Pipe operator exists to improve method chaining and is used in the form `funcA() | funcB` where the first expression is evaluated and then the result is passed to the second function and can be chained such as `funcA() | funcB | funcC`.
+
+
+### `plus` or `+`
+
+**`<expression> ('+'|'plus') <expression>`**{: style="font-size: 60%"}
+
+Appends or adds two values.
+
+
+### `print` or `@@`
+
+**`('@@'|'print') <expression>`**{: style="font-size: 60%"}
+
+Sends the right-hand-side expression to stdout.
+
+
+### `publish` or `*>`
+
+**`<expression> ('*>'|'publish') <expression>`**{: style="font-size: 60%"}
+
+publish
+
+
+### `range` or `..`
+
+**`<expression> ('..'|'range') <expression>`**{: style="font-size: 60%"}
+
+Creates a RANGE between the two values specified.
+
+
+### `<<` (read-simple)
+
+**`'<<' <expression>`**{: style="font-size: 60%"}
+
+Performs a simple read from another data item, typically this is used with a URI.
+
+
+### `read`
+
+**`'read' <expression>`**{: style="font-size: 60%"}
+
+read operator
+
+
+### `reduce` or `>>=`
+
+**`<expression> ('>>='|'reduce') <expression>`**{: style="font-size: 60%"}
+
+reduce
+
+
+### `start` or `|>`
+
+**`('|>'|'start') <expression>`**{: style="font-size: 60%"}
+
+Starts a service described typically by a URI.
+
+
+### `state` or `<|>`
+
+**`('<|>'|'state') <expression>`**{: style="font-size: 60%"}
+
+Returns the state of a service described typically by a URI.
+
+
+### `stop` or `<|`
+
+**`('<|'|'stop') <expression>`**{: style="font-size: 60%"}
+
+Stops a service described typically by a URI.
+
+
+### `*=` (subscribe-assign)
+
+subscribe-assign
+
+
+### `subscribe` or `<*`
+
+**`<expression> ('<*'|'subscribe') <expression>`**{: style="font-size: 60%"}
+
+subscribe
+
+
+### `truthy` or `~`
+
+**`('~'|'truthy') <expression>`**{: style="font-size: 60%"}
+
+The truthy operator `~` converts any value to a boolean by applying the rule that: void is false, 0 is false, "" is false, empty list is false, empty map is false - all else is true.
+
+```
+.: ~ [1,2,3]
+.: ! ~ []
+.: ~ "anything"
+.: ! ~ ""
+.: ~ 1
+.: ! ~ 0
+.: ! ~ {void}
+.:  ~ {"a" : 1}
+.: ! ~ void
+```
+
+
+### `unpause` or `<||`
+
+**`('<||'|'unpause') <expression>`**{: style="font-size: 60%"}
+
+Un-pauses a service described typically by a URI.
+
+
+### `>>` (write-simple)
+
+**`<expression> '>>' <expression>`**{: style="font-size: 60%"}
+
+Performs a simple write to another data item, mostly used to write to a URI. 
+
+
+### `while`
+
+**`while <condition> <expression>`**{: style="font-size: 60%"}
+
+while operator
+
+
+### subscript
+
+**`<expression> '[' <index>|<key> ']'`**{: style="font-size: 60%"}
+
+subscript operator
+
+
+### parameter
+
+**`( <expression> | <builtin-name> | <function-name> ) '(' ( <expression> | <name> '=' <expression> )* ')'`**{: style="font-size: 60%"}
+
+parameter operator
+
+
+### `serial` or `|..|`
+
+**`('|..|'|'serial') <expression>`**{: style="font-size: 60%"}
+
+Causes the right-hand-side expression to be evaluated in serial, most useful in conjunction with list blocks.
+
+
+### `size` or `#`
+
+**`('#'|'size') <expression>`**{: style="font-size: 60%"}
+
+Returns the size of non-scalar types or the length of a string.
+
+
+### `write`
+
+write operator
+
+
+## Appendix B - Keywords
+### as
+
+
+### block
+
+
+### collect
+
+
+### const
+
+Mark a variable definition as a constant, i.e. readonly.
+
+
+
+### def
+
+
+### every
+
+
+### export
+
+Export a variable at the point of definition.
+
+
+
+### false
+
+Boolean false.
+
+
+
+### for
+
+
+### from
+
+
+### infinity
+
+
+### is
+
+
+### module
+
+
+### mutate
+
+
+### no
+
+Boolean false.
+
+
+
+### null
+
+A NULL value of ANY type.
+
+
+
+### pure
+
+The start of a pure expression.
+
+
+
+### read
+
+
+### to
+
+
+### true
+
+Boolean true.
+
+
+
+### unless
+
+
+### until
+
+
+### var
+
+Marks a variable as variable i.e. not readonly.
+
+
+
+### void
+
+A VOID value.
+
+
+
+### volatile
+
+Marks a variable as volatile, i.e. it can be accessed by multiple threads.
+
+
+
+### when
+
+
+### while
+
+
+### with
+
+
+### write
+
+
+### yes
+
+Boolean true.
+
+
+
+## Appendix C - Reserved Keywords, Operators and Symbols
+### Keywords
+
+The following keywords are reserved:
+
+> await, closure, dispatch, dollar, dump, emit, fail, filter, import, impure, include, join, lambda, load, measure, pluripotent, readonly, save, scope, send, switch, trace, unit, variant, varies, vary, wait
+
+### Operators
+
+The following operator keywords are reserved:
+
+> 
+
+The following operator symbols are reserved:
+
+> &=, &>, +>, ->, -_-, ..., ::, <$, <&, <+, <++, <-, <=<, <?, >&, >->, ?$?, ?..?, ?:, ?>, @, @>, |*
+
+### Symbols
+
+The following general symbols are reserved:
+
+> ``
+
+## Appendix D - Operator Precedence
+
+All operators by precedence, highest precedence ([associativity](https://en.wikipedia.org/wiki/Operator_associativity)) first.
+
+|Name                          |Keyword        |Operator  |Type      |
+|-------                       |-------        |-------   |-------   |
+|fix                           |`fix`          | `&`      |prefix    |
+|range                         |`range`        | `..`     |binary    |
+|default                       |`default`      | `:-`     |binary    |
+|member                        |               | `.`      |binary    |
+|subscript                     |               |          |postfix   |
+|parameter                     |               |          |postfix   |
+|decrement                     |`dec`          | `--`     |prefix    |
+|for                           |`for`          |          |control   |
+|cast                          |               |          |postfix   |
+|not                           |`not`          | `!`      |prefix    |
+|in                            |`in`           | `€`      |binary    |
+|increment                     |`inc`          | `++`     |prefix    |
+|truthy                        |`truthy`       | `~`      |prefix    |
+|while                         |`while`        |          |control   |
+|size                          |`size`         | `#`      |prefix    |
+|divide                        |`divide`       | `/`      |binary    |
+|each                          |`each`         | `=>>`    |binary    |
+|modulus                       |`mod`          | `%`      |binary    |
+|multiply                      |`multiply`     | `*`      |binary    |
+|reduce                        |`reduce`       | `>>=`    |binary    |
+|minus                         |`minus`        | `-`      |binary    |
+|negate                        |`negate`       | `-`      |prefix    |
+|plus                          |`plus`         | `+`      |binary    |
+|greater-than                  |`greater-than` | `>`      |binary    |
+|less-than                     |`less-than`    | `<`      |binary    |
+|pipe                          |`pipe`         | `|`      |binary    |
+|equal                         |`equal`        | `==`     |binary    |
+|not-equal                     |`not-equal`    | `!=`     |binary    |
+|greater-than-equal            |               | `>=`     |binary    |
+|less-than-equal               |               | `<=`     |binary    |
+|and                           |`and`          | `&&`     |binary    |
+|or                            |`or`           | `||`     |binary    |
+|all                           |`all`          | `<@`     |prefix    |
+|causes                        |`causes`       | `=>`     |binary    |
+|choose                        |`choose`       | `?*`     |binary    |
+|drain                         |`drain`        | `<-<`    |prefix    |
+|listen                        |`listen`       | `?`      |binary    |
+|publish                       |`publish`      | `*>`     |binary    |
+|read-simple                   |               | `<<`     |prefix    |
+|read                          |`read`         |          |prefix    |
+|subscribe                     |`subscribe`    | `<*`     |binary    |
+|write-simple                  |               | `>>`     |binary    |
+|write                         |`write`        |          |control   |
+|pair                          |`pair`         | `:`      |binary    |
+|create                        |`create`       | `|||>`   |prefix    |
+|destroy                       |`destroy`      | `<|||`   |prefix    |
+|else                          |`else`         | `-:`     |binary    |
+|fork                          |`fork`         | `-<`     |prefix    |
+|if                            |`if`           | `???`    |binary    |
+|parallel                      |`parallel`     | `|:|`    |prefix    |
+|pause                         |`pause`        | `||>`    |prefix    |
+|start                         |`start`        | `|>`     |prefix    |
+|state                         |`state`        | `<|>`    |prefix    |
+|stop                          |`stop`         | `<|`     |prefix    |
+|unpause                       |`unpause`      | `<||`    |prefix    |
+|serial                        |`serial`       | `|..|`   |prefix    |
+|assign                        |               | `=`      |assignment|
+|declaration                   |               | `:=`     |assignment|
+|listen-assign                 |               | `?=`     |assignment|
+|subscribe-assign              |               | `*=`     |assignment|
+|assert                        |`assert`       | `.:`     |prefix    |
+|assert-equals                 |`assert-equals`| `<->`    |binary    |
+|debug                         |`debug`        | `!!`     |prefix    |
+|err                           |`err`          | `??`     |prefix    |
+|error                         |`error`        | `?->`    |prefix    |
+|assert-equals-reactive        |               | `<=>`    |binary    |
+|print                         |`print`        | `@@`     |prefix    |

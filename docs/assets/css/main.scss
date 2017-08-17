@@ -67,3 +67,36 @@
     top:0;
     background:white;
 }
+
+.page {
+
+    @include breakpoint($large) {
+        float: right;
+        width: calc(100% - 400px);
+        padding-right: 0px
+    }
+
+    @include breakpoint($x-large) {
+        width: calc(100% - 400px);
+        padding-right: 0;
+    }
+
+    .page__inner-wrap {
+        float: left;
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+        clear: both;
+
+        .page__content,
+        .page__meta,
+        .page__share {
+            position: relative;
+            float: left;
+            margin-left: 0;
+            margin-right: 0;
+            width: 100%;
+            clear: both;
+        }
+    }
+}

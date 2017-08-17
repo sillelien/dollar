@@ -22,6 +22,7 @@ import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.parser.OpDef;
+import dollar.internal.runtime.script.parser.OpDefType;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.functors.Map;
 import org.jparsec.functors.Unary;
@@ -41,11 +42,15 @@ public class UnaryOp implements Unary<var>, Operator {
         this.function = function;
         this.parser = parser;
         this.immediate = false;
-        if (operation.isReactive() == this.immediate) {
-            throw new DollarParserError("The operation " + operation.name() + " is marked as " + (operation.isReactive()
+        if (operation.reactive() == this.immediate) {
+            throw new DollarParserError("The operation " + operation.name() + " is marked as " + (operation.reactive()
                                                                                                           ? "reactive" : "unreactive") + " " +
                                                 "yet this operator is set to be " + (this.immediate
                                                                                              ? "unreactive" : "reactive"));
+        }
+        if(operation.type() != OpDefType.PREFIX && operation.type() != OpDefType.POSTFIX) {
+            throw new DollarParserError("The operator "+operation.name()+" is not defined as a unary type but used in a unary " +
+                                                "operator.");
         }
     }
 
@@ -57,11 +62,15 @@ public class UnaryOp implements Unary<var>, Operator {
         this.immediate = immediate;
         this.function = function;
         this.parser = parser;
-        if (operation.isReactive() == this.immediate) {
-            throw new DollarParserError("The operation " + operation.name() + " is marked as " + (operation.isReactive()
+        if (operation.reactive() == this.immediate) {
+            throw new DollarParserError("The operation " + operation.name() + " is marked as " + (operation.reactive()
                                                                                                           ? "reactive" : "unreactive") + " " +
                                                 "yet this operator is set to be " + (this.immediate
                                                                                              ? "unreactive" : "reactive"));
+        }
+        if(operation.type() != OpDefType.PREFIX && operation.type() != OpDefType.POSTFIX) {
+            throw new DollarParserError("The operator "+operation.name()+" is not defined as a unary type but used in a unary " +
+                                                "operator.");
         }
     }
 

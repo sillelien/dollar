@@ -338,7 +338,7 @@ public class DollarParserImpl implements DollarParser {
                         .infixl(op(DIVIDE, new BinaryOp(this, DIVIDE, NumericAware::$divide)), DIVIDE.priority())
                         .infixl(op(MOD, new BinaryOp(this, MOD, NumericAware::$modulus)), MOD.priority())
                         .infixl(op(PLUS, new BinaryOp(this, PLUS, var::$plus)), PLUS.priority())
-                        .infixl(op(NEGATE, new BinaryOp(this, NEGATE, var::$minus)), NEGATE.priority())
+                        .infixl(op(MINUS, new BinaryOp(this, MINUS, var::$minus)), MINUS.priority())
                         .infixl(op(PAIR, new BinaryOp(this, PAIR, Func::pair)), PAIR.priority())
                         .infixl(op(ASSERT_EQ_REACT, new BinaryOp(false, ASSERT_EQ_REACT, this, Func::assertEquals)),
                                 ASSERT_EQ_REACT.priority())
