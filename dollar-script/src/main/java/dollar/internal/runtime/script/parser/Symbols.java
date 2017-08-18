@@ -539,12 +539,134 @@ public class Symbols {
     public static final KeywordDef TO = new KeywordDef("to", false, null, null);
     @NotNull
     public static final KeywordDef FROM = new KeywordDef("from", false, null, null);
+
+    @NotNull
+    public static final KeywordDef ABSTRACT = new KeywordDef("abstract", true, null, null);
+    @NotNull
+    public static final KeywordDef BREAK = new KeywordDef("break", true, null, null);
+    @NotNull
+    public static final KeywordDef CASE = new KeywordDef("case", true, null, null);
+    @NotNull
+    public static final KeywordDef CATCH = new KeywordDef("catch", true, null, null);
+    @NotNull
+    public static final KeywordDef CLASS = new KeywordDef("class", true, null, null);
+    @NotNull
+    public static final KeywordDef CONTINUE = new KeywordDef("continue", true, null, null);
+    @NotNull
+    public static final KeywordDef DO = new KeywordDef("do", true, null, null);
+    @NotNull
+    public static final KeywordDef ENUM = new KeywordDef("enum", true, null, null);
+    @NotNull
+    public static final KeywordDef EXTENDS = new KeywordDef("extends", true, null, null);
+    @NotNull
+    public static final KeywordDef FINAL = new KeywordDef("final", true, null, null);
+    @NotNull
+    public static final KeywordDef FINALLY = new KeywordDef("finally", true, null, null);
+    @NotNull
+    public static final KeywordDef FLOAT = new KeywordDef("float", true, null, null);
+    @NotNull
+    public static final KeywordDef GOTO = new KeywordDef("goto", true, null, null);
+    @NotNull
+    public static final KeywordDef IMPLEMENTS = new KeywordDef("implements", true, null, null);
+    @NotNull
+    public static final KeywordDef IMPORT = new KeywordDef("import", true, null, null);
+    @NotNull
+    public static final KeywordDef INSTANCEOF = new KeywordDef("instanceof", true, null, null);
+    @NotNull
+    public static final KeywordDef INTERFACE = new KeywordDef("interface", true, null, null);
+    @NotNull
+    public static final KeywordDef NATIVE = new KeywordDef("native", true, null, null);
+    @NotNull
+    public static final KeywordDef NEW = new KeywordDef("new", true, null, null);
+    @NotNull
+    public static final KeywordDef PACKAGE = new KeywordDef("package", true, null, null);
+    @NotNull
+    public static final KeywordDef PRIVATE = new KeywordDef("private", true, null, null);
+    @NotNull
+    public static final KeywordDef PROTECTED = new KeywordDef("protected", true, null, null);
+    @NotNull
+    public static final KeywordDef PUBLIC = new KeywordDef("public", true, null, null);
+    @NotNull
+    public static final KeywordDef RETURN = new KeywordDef("return", true, null, null);
+    @NotNull
+    public static final KeywordDef SHORT = new KeywordDef("short", true, null, null);
+    @NotNull
+    public static final KeywordDef STATIC = new KeywordDef("static", true, null, null);
+    @NotNull
+    public static final KeywordDef SUPER = new KeywordDef("super", true, null, null);
+    @NotNull
+    public static final KeywordDef SWITCH = new KeywordDef("switch", true, null, null);
+    @NotNull
+    public static final KeywordDef SYNCHRONIZED = new KeywordDef("synchronized", true, null, null);
+    @NotNull
+    public static final KeywordDef THIS = new KeywordDef("this", true, null, null);
+    @NotNull
+    public static final KeywordDef THROW = new KeywordDef("throw", true, null, null);
+    @NotNull
+    public static final KeywordDef THROWS = new KeywordDef("throws", true, null, null);
+    @NotNull
+    public static final KeywordDef TRANSIENT = new KeywordDef("transient", true, null, null);
+    @NotNull
+    public static final KeywordDef TRY = new KeywordDef("try", true, null, null);
+
     @NotNull
     public static final List<KeywordDef> KEYWORDS;
     @NotNull
     public static final List<SymbolDef> SYMBOLS;
     @NotNull
     public static final List<OpDef> OPERATORS;
+    @NotNull
+    public static final KeywordDef PLURIPOTENT = new KeywordDef("pluripotent", true, null, null);
+    @NotNull
+    public static final KeywordDef READONLY = new KeywordDef("readonly", true, null, null);
+    @NotNull
+    public static final KeywordDef JOIN = new KeywordDef("join", true, null, null);
+    @NotNull
+    public static final KeywordDef FAIL = new KeywordDef("fail", true, null, null);
+    @NotNull
+    public static final KeywordDef SWITCH1 = new KeywordDef("switch", true, null, null);
+    @NotNull
+    public static final KeywordDef DOLLAR1 = new KeywordDef("dollar", true, null, null);
+    @NotNull
+    public static final KeywordDef FILTER = new KeywordDef("filter", true, null, null);
+    @NotNull
+    public static final KeywordDef DISPATCH = new KeywordDef("dispatch", true, null, null);
+    @NotNull
+    public static final KeywordDef SEND = new KeywordDef("send", true, null, null);
+    @NotNull
+    public static final KeywordDef EMIT = new KeywordDef("emit", true, null, null);
+    @NotNull
+    public static final KeywordDef INCLUDE = new KeywordDef("include", true, null, null);
+    @NotNull
+    public static final KeywordDef IMPURE = new KeywordDef("impure", true, null, null);
+    @NotNull
+    public static final KeywordDef VARIANT = new KeywordDef("variant", true, null, null);
+    @NotNull
+    public static final KeywordDef VARY = new KeywordDef("vary", true, null, null);
+    @NotNull
+    public static final KeywordDef VARIES = new KeywordDef("varies", true, null, null);
+    @NotNull
+    public static final KeywordDef LAMBDA = new KeywordDef("lambda", true, null, null);
+    @NotNull
+    public static final KeywordDef CLOSURE = new KeywordDef("closure", true, null, null);
+    @NotNull
+    public static final KeywordDef SCOPE = new KeywordDef("scope", true, null, null);
+    @NotNull
+    public static final KeywordDef DUMP = new KeywordDef("dump", true, null, null);
+    @NotNull
+    public static final KeywordDef TRACE = new KeywordDef("trace", true, null, null);
+    @NotNull
+    public static final KeywordDef MEASURE = new KeywordDef("measure", true, null, null);
+    @NotNull
+    public static final KeywordDef UNIT = new KeywordDef("unit", true, null, null);
+    @NotNull
+    public static final KeywordDef WAIT = new KeywordDef("wait", true, null, null);
+    @NotNull
+    public static final KeywordDef AWAIT = new KeywordDef("await", true, null, null);
+    @NotNull
+    public static final KeywordDef SAVE = new KeywordDef("save", true, null, null);
+    @NotNull
+    public static final KeywordDef LOAD = new KeywordDef("load", true, null, null);
     @NotNull
     private static final List<? extends Comparable> tokens =
             asList(
@@ -661,34 +783,66 @@ public class Symbols {
                     READ_OP,
 
                     //Reserved Keywords
-                    new KeywordDef("pluripotent", true, null, null),
-                    new KeywordDef("readonly", true, null, null),
-                    new KeywordDef("join", true, null, null),
-                    new KeywordDef("fail", true, null, null),
-                    new KeywordDef("switch", true, null, null),
-                    new KeywordDef("dollar", true, null, null),
-                    new KeywordDef("filter", true, null, null),
-                    new KeywordDef("dispatch", true, null, null),
-                    new KeywordDef("send", true, null, null),
-                    new KeywordDef("emit", true, null, null),
-                    new KeywordDef("import", true, null, null),
-                    new KeywordDef("include", true, null, null),
-                    new KeywordDef("impure", true, null, null),
-                    new KeywordDef("variant", true, null, null),
-                    new KeywordDef("vary", true, null, null),
-                    new KeywordDef("varies", true, null, null),
-                    new KeywordDef("lambda", true, null, null),
-                    new KeywordDef("closure", true, null, null),
-                    new KeywordDef("scope", true, null, null),
-                    new KeywordDef("dump", true, null, null),
-                    new KeywordDef("trace", true, null, null),
-                    new KeywordDef("measure", true, null, null),
-                    new KeywordDef("unit", true, null, null),
-                    new KeywordDef("wait", true, null, null),
-                    new KeywordDef("await", true, null, null),
-                    new KeywordDef("save", true, null, null),
-                    new KeywordDef("load", true, null, null),
-
+                    ABSTRACT,
+                    AWAIT,
+                    BREAK,
+                    CASE,
+                    CATCH,
+                    CLASS,
+                    CLOSURE,
+                    CONTINUE,
+                    DISPATCH,
+                    DO,
+                    DUMP,
+                    EMIT,
+                    ENUM,
+                    EXTENDS,
+                    FAIL,
+                    FILTER,
+                    FINAL,
+                    FINALLY,
+                    FLOAT,
+                    GOTO,
+                    IMPLEMENTS,
+                    IMPORT,
+                    IMPURE,
+                    INCLUDE,
+                    INSTANCEOF,
+                    INTERFACE,
+                    JOIN,
+                    LAMBDA,
+                    LOAD,
+                    MEASURE,
+                    NATIVE,
+                    NEW,
+                    PACKAGE,
+                    PLURIPOTENT,
+                    PRIVATE,
+                    PROTECTED,
+                    PUBLIC,
+                    READONLY,
+                    RETURN,
+                    SAVE,
+                    SCOPE,
+                    SEND,
+                    SHORT,
+                    STATIC,
+                    SUPER,
+                    SWITCH,
+                    SYNCHRONIZED,
+                    THIS,
+                    THROW,
+                    THROWS,
+                    TRACE,
+                    TRANSIENT,
+                    TRY,
+                    UNIT,
+                    VARIANT,
+                    VARIES,
+                    VARY,
+                    WAIT,
+//                    DOLLAR1,
+                    
                     //Reserved Operators
                     RESERVED_OPERATOR_1,
                     RESERVED_OPERATOR_2,
@@ -798,7 +952,7 @@ public class Symbols {
         ArrayList<OpDef> sortedOps = new ArrayList<>(OPERATORS);
         sortedOps.sort(new Comparator<OpDef>() {
             @Override
-            public int compare(OpDef o1, OpDef o2) {
+            public int compare(@NotNull OpDef o1, @NotNull OpDef o2) {
                 return o2.priority() - o1.priority();
             }
         });
