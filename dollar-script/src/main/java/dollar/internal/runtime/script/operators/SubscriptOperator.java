@@ -28,13 +28,13 @@ import org.jparsec.functors.Map;
 import java.util.Arrays;
 
 import static dollar.internal.runtime.script.DollarScriptSupport.createNode;
-import static dollar.internal.runtime.script.DollarScriptSupport.createReactiveNode;
+import static dollar.internal.runtime.script.DollarScriptSupport.reactiveNode;
 
 public class SubscriptOperator implements Map<Token, Map<? super var, ? extends var>> {
 
     private DollarParser parser;
 
-    public SubscriptOperator(DollarParser parser) {
+    public SubscriptOperator(DollarParser parser, boolean pure) {
         this.parser = parser;
     }
 
@@ -44,8 +44,8 @@ public class SubscriptOperator implements Map<Token, Map<? super var, ? extends 
         Object[] rhs = (Object[]) token.value();
         return lhs -> {
             if (rhs[1] == null) {
-                return createReactiveNode("subscript", SourceNodeOptions.NO_SCOPE, parser, token, lhs,
-                                          (var) rhs[0], args -> lhs.$get(((var) rhs[0])));
+                return reactiveNode("subscript", SourceNodeOptions.NO_SCOPE, parser, token, lhs,
+                                    (var) rhs[0], args -> lhs.$get(((var) rhs[0])));
             } else {
                 Pipeable pipeable = i -> lhs.$set((var) rhs[0], rhs[1]);
                 return createNode("subscript-assignment", SourceNodeOptions.NO_SCOPE, parser, token,

@@ -94,26 +94,26 @@ public class DollarScriptSupport {
     }
 
     @NotNull
-    public static var createReactiveNode(@NotNull String operation,
-                                         @NotNull SourceNodeOptions sourceNodeOptions,
-                                         @NotNull DollarParser parser,
-                                         @NotNull Token token,
-                                         @NotNull var lhs,
-                                         @NotNull Pipeable callable) {
+    public static var reactiveNode(@NotNull String operation,
+                                   @NotNull SourceNodeOptions sourceNodeOptions,
+                                   @NotNull DollarParser parser,
+                                   @NotNull Token token,
+                                   @NotNull var lhs,
+                                   @NotNull Pipeable callable) {
 
-        return createReactiveNode(operation, sourceNodeOptions,
-                                  new SourceSegmentValue(currentScope(), token), parser,
-                                  lhs, callable
+        return reactiveNode(operation, sourceNodeOptions,
+                            new SourceSegmentValue(currentScope(), token), parser,
+                            lhs, callable
         );
     }
 
     @NotNull
-    public static var createReactiveNode(@NotNull String operation,
-                                         @NotNull SourceNodeOptions sourceNodeOptions,
-                                         @NotNull SourceSegment source,
-                                         @NotNull DollarParser parser,
-                                         @NotNull var lhs,
-                                         @NotNull Pipeable callable) {
+    public static var reactiveNode(@NotNull String operation,
+                                   @NotNull SourceNodeOptions sourceNodeOptions,
+                                   @NotNull SourceSegment source,
+                                   @NotNull DollarParser parser,
+                                   @NotNull var lhs,
+                                   @NotNull Pipeable callable) {
 
         final var lambda = createNode(operation,
                                       sourceNodeOptions, parser, source,
@@ -173,13 +173,13 @@ public class DollarScriptSupport {
     }
 
     @NotNull
-    public static var createReactiveNode(@NotNull String operation,
-                                         @NotNull SourceNodeOptions sourceNodeOptions,
-                                         @NotNull DollarParser parser,
-                                         @NotNull SourceSegment source,
-                                         @NotNull var lhs,
-                                         @NotNull var rhs,
-                                         @NotNull Pipeable callable) {
+    public static var reactiveNode(@NotNull String operation,
+                                   @NotNull SourceNodeOptions sourceNodeOptions,
+                                   @NotNull DollarParser parser,
+                                   @NotNull SourceSegment source,
+                                   @NotNull var lhs,
+                                   @NotNull var rhs,
+                                   @NotNull Pipeable callable) {
         final var lambda = createNode(operation, sourceNodeOptions, parser, source, Arrays.asList(lhs, rhs),
                                       callable
         );
@@ -190,11 +190,11 @@ public class DollarScriptSupport {
     }
 
     @NotNull
-    public static var createReactiveNode(@NotNull String operation,
-                                         @NotNull SourceNodeOptions sourceNodeOptions, @NotNull DollarParser parser,
-                                         @NotNull Token token,
-                                         @NotNull var lhs,
-                                         @NotNull var rhs, @NotNull Pipeable callable) {
+    public static var reactiveNode(@NotNull String operation,
+                                   @NotNull SourceNodeOptions sourceNodeOptions, @NotNull DollarParser parser,
+                                   @NotNull Token token,
+                                   @NotNull var lhs,
+                                   @NotNull var rhs, @NotNull Pipeable callable) {
         final var lambda = createNode(operation, sourceNodeOptions, parser,
                                       new SourceSegmentValue(currentScope(), token),
                                       Arrays.asList(lhs, rhs), callable
@@ -222,7 +222,7 @@ public class DollarScriptSupport {
 
     @NotNull
     private static String createId(@NotNull String operation) {
-        return operation + "-" + UUID.randomUUID().toString();
+        return operation + "-" + UUID.randomUUID();
     }
 
 

@@ -32,7 +32,6 @@ import org.jparsec.functors.Map;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 import static com.sillelien.dollar.api.DollarStatic.$void;
-import static dollar.internal.runtime.script.DollarScriptSupport.createReactiveNode;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class EveryOperator implements Map<Token, var> {
@@ -49,33 +48,34 @@ public class EveryOperator implements Map<Token, var> {
     @NotNull
     @Override
     public var map(@NotNull Token token) {
-        final int[] count = new int[]{-1};
+        final int[] count = {-1};
         Object[] objects = (Object[]) token.value();
-        return createReactiveNode("every", SourceNodeOptions.NEW_SCOPE, dollarParser, token, (var) objects[3], args -> {
-            Scope scope= currentScope();
-            Scheduler.schedule(i -> {
-                count[0]++; // William Gibson
+        return DollarScriptSupport.reactiveNode("every", SourceNodeOptions.NEW_SCOPE, dollarParser, token, (var) objects[3],
+                                                args -> {
+                                                    Scope scope = currentScope();
+                                                    Scheduler.schedule(i -> {
+                                                        count[0]++; // William Gibson
 //                System.out.println("COUNT "+count[0]);
-                return DollarScriptSupport.inScope(true, scope, newScope -> {
-                    try {
+                                                        return DollarScriptSupport.inScope(true, scope, newScope -> {
+                                                            try {
 //                    System.err.println(newScope);
-                        newScope.setParameter("1", $(count[0]));
-                        if (objects[1] instanceof var && ((var) objects[1]).isTrue()) {
-                            Scheduler.cancel(i[0].$S());
-                            return i[0];
-                        } else if (objects[2] instanceof var && ((var) objects[2]).isTrue()) {
-                            return $void();
-                        } else {
-                            return ((var) objects[3])._fixDeep();
-                        }
-                    } catch (Exception e) {
-                        return DollarFactory.failure(e);
-                    }
+                                                                newScope.setParameter("1", $(count[0]));
+                                                                if (objects[1] instanceof var && ((var) objects[1]).isTrue()) {
+                                                                    Scheduler.cancel(i[0].$S());
+                                                                    return i[0];
+                                                                } else if (objects[2] instanceof var && ((var) objects[2]).isTrue()) {
+                                                                    return $void();
+                                                                } else {
+                                                                    return ((var) objects[3])._fixDeep();
+                                                                }
+                                                            } catch (Exception e) {
+                                                                return DollarFactory.failure(e);
+                                                            }
 
-                });
-            }, ((long) (((var) objects[0]).toDouble() * 24.0 * 60.0 * 60.0 * 1000.0)));
-            return $void();
-        });
+                                                        });
+                                                    }, ((long) (((var) objects[0]).toDouble() * 24.0 * 60.0 * 60.0 * 1000.0)));
+                                                    return $void();
+                                                });
 
     }
 }

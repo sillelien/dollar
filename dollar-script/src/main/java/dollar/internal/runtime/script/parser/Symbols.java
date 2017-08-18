@@ -38,26 +38,26 @@ public class Symbols {
 
     @NotNull
     public static final OpDef PIPE_OPERATOR = new OpDef(BINARY, "|", "pipe", "pipe",
-                                                        false, true, null, PIPE_PRIORITY);
+                                                        false, true, null, PIPE_PRIORITY, true);
     @NotNull
     public static final OpDef WRITE_SIMPLE = new OpDef(BINARY, ">>", null, "write-simple",
-                                                       false, true, null, OUTPUT_PRIORITY);
+                                                       false, true, null, OUTPUT_PRIORITY, false);
     @NotNull
     public static final OpDef READ_SIMPLE = new OpDef(PREFIX, "<<", null, "read-simple",
-                                                      false, true, null, OUTPUT_PRIORITY);
+                                                      false, true, null, OUTPUT_PRIORITY, false);
     @NotNull
     public static final OpDef CAUSES = new OpDef(BINARY, "=>", "causes", "causes",
-                                                 false, true, null, CONTROL_FLOW_PRIORITY);
+                                                 false, true, null, CONTROL_FLOW_PRIORITY, true);
 
     @NotNull
     public static final OpDef ASSERT = new OpDef(PREFIX, ".:", "assert", "assert",
-                                                 false, true, null, LINE_PREFIX_PRIORITY);
+                                                 false, true, null, LINE_PREFIX_PRIORITY, true);
     @NotNull
     public static final OpDef LT_EQUALS = new OpDef(BINARY, "<=", null, "less-than-equal",
-                                                    false, true, null, EQ_PRIORITY);
+                                                    false, true, null, EQ_PRIORITY, true);
     @NotNull
     public static final OpDef GT_EQUALS = new OpDef(BINARY, ">=", null, "greater-than-equal",
-                                                    false, true, null, EQ_PRIORITY);
+                                                    false, true, null, EQ_PRIORITY, true);
 
     @NotNull
     public static final SymbolDef LEFT_PAREN = new SymbolDef("(", false);
@@ -68,11 +68,11 @@ public class Symbols {
     @NotNull
     public static final OpDef DEC = new OpDef(PREFIX, "--", "dec", "decrement",
                                               false,
-                                              true, null, INC_DEC_PRIORITY);
+                                              true, null, INC_DEC_PRIORITY, true);
 
     @NotNull
     public static final OpDef INC = new OpDef(PREFIX, "++", "inc", "increment",
-                                              false, true, null, INC_DEC_PRIORITY);
+                                              false, true, null, INC_DEC_PRIORITY, true);
 
     @NotNull
     public static final OpDef DEFINITION = new OpDef(OpDefType.ASSIGNMENT, ":=", null,
@@ -81,368 +81,367 @@ public class Symbols {
                                                      true,
                                                      "( [export] [const] <variable-name> ':=' <expression>) | ( def " +
                                                              "<variable-name> <expression )",
-                                                     ASSIGNMENT_PRIORITY);
+                                                     ASSIGNMENT_PRIORITY, true);
     @NotNull
     public static final OpDef FIX = new OpDef(PREFIX, "&", "fix", "fix",
                                               false,
-                                              false, null, FIX_PRIORITY);
+                                              false, null, FIX_PRIORITY, true);
 
 
     @NotNull
     public static final OpDef MEMBER = new OpDef(BINARY, ".", null, "member",
                                                  false,
                                                  true,
-                                                 null, MEMBER_PRIORITY);
+                                                 null, MEMBER_PRIORITY, true);
 
     @NotNull
     public static final OpDef LT = new OpDef(BINARY, "<", null, "less-than",
                                              false, true,
-                                             null, COMP_PRIORITY);
+                                             null, COMP_PRIORITY, true);
 
     @NotNull
     public static final OpDef GT = new OpDef(BINARY, ">", null, "greater-than",
                                              false, true,
-                                             null, COMP_PRIORITY);
+                                             null, COMP_PRIORITY, true);
     @NotNull
     public static final OpDef NOT = new OpDef(PREFIX, "!", "not", "not", false,
-                                              true, null, UNARY_PRIORITY);
+                                              true, null, UNARY_PRIORITY, true);
 
     @NotNull
     public static final OpDef OR = new OpDef(BINARY, "||", "or", "or",
                                              false,
                                              true, null,
-                                             OperatorPriority.LOGICAL_OR_PRIORITY);
+                                             OperatorPriority.LOGICAL_OR_PRIORITY, true);
 
     @NotNull
     public static final OpDef AND = new OpDef(BINARY, "&&", "and", "and",
                                               false, true,
-                                              null, OperatorPriority.AND_PRIORITY);
+                                              null, OperatorPriority.AND_PRIORITY, true);
 
     @NotNull
     public static final OpDef MULTIPLY = new OpDef(BINARY, "*", "multiply", "multiply",
                                                    false, true,
-                                                   null, MULTIPLY_DIVIDE_PRIORITY);
+                                                   null, MULTIPLY_DIVIDE_PRIORITY, true);
 
     @NotNull
     public static final OpDef DIVIDE = new OpDef(BINARY, "/", "divide", "divide",
                                                  false, true,
-                                                 null, MULTIPLY_DIVIDE_PRIORITY);
+                                                 null, MULTIPLY_DIVIDE_PRIORITY, true);
     @NotNull
     public static final OpDef NEGATE = new OpDef(PREFIX, "-", "negate", "negate",
                                                  false, true,
-                                                 null, PLUS_MINUS_PRIORITY);
+                                                 null, PLUS_MINUS_PRIORITY, true);
 
     @NotNull
     public static final OpDef MINUS = new OpDef(BINARY, "-", "minus", "minus",
                                                 false, true,
-                                                null, PLUS_MINUS_PRIORITY);
+                                                null, PLUS_MINUS_PRIORITY, true);
 
 
     @NotNull
     public static final OpDef START = new OpDef(PREFIX, "|>", "start", "start",
                                                 false, true,
-                                                "('|>'|'start') <expression>", SIGNAL_PRIORITY);
+                                                "('|>'|'start') <expression>", SIGNAL_PRIORITY, true);
 
     @NotNull
     public static final OpDef STOP = new OpDef(PREFIX, "<|", "stop", "stop",
                                                false, true,
-                                               null, SIGNAL_PRIORITY);
+                                               null, SIGNAL_PRIORITY, false);
 
     @NotNull
     public static final OpDef PAUSE = new OpDef(PREFIX, "||>", "pause", "pause",
                                                 false, true,
-                                                null, SIGNAL_PRIORITY);
+                                                null, SIGNAL_PRIORITY, false);
 
     @NotNull
     public static final OpDef UNPAUSE = new OpDef(PREFIX, "<||", "unpause", "unpause",
                                                   false, true,
-                                                  null, SIGNAL_PRIORITY);
+                                                  null, SIGNAL_PRIORITY, false);
 
     @NotNull
     public static final OpDef DESTROY = new OpDef(PREFIX, "<|||", "destroy", "destroy",
                                                   false, true,
-                                                  null, SIGNAL_PRIORITY);
+                                                  null, SIGNAL_PRIORITY, false);
 
     @NotNull
     public static final OpDef CREATE = new OpDef(PREFIX, "|||>", "create", "create",
                                                  false, true,
-                                                 null, SIGNAL_PRIORITY);
+                                                 null, SIGNAL_PRIORITY, false);
 
     @NotNull
     public static final OpDef STATE = new OpDef(PREFIX, "<|>", "state", "state",
                                                 false, true,
-                                                null, SIGNAL_PRIORITY);
+                                                null, SIGNAL_PRIORITY, false);
 
     @NotNull
     public static final OpDef PLUS = new OpDef(BINARY, "+", "plus", "plus",
                                                false, true,
-                                               null, PLUS_MINUS_PRIORITY);
+                                               null, PLUS_MINUS_PRIORITY, true);
 
     @NotNull
     public static final OpDef DEFAULT = new OpDef(BINARY, ":-", "default", "default",
                                                   false,
                                                   true,
                                                   null,
-                                                  MEMBER_PRIORITY);
+                                                  MEMBER_PRIORITY, true);
 
     @NotNull
     public static final OpDef PRINT = new OpDef(PREFIX, "@@", "print", "print",
                                                 false, true,
-                                                null, LINE_PREFIX_PRIORITY);
+                                                null, LINE_PREFIX_PRIORITY, false);
 
     @NotNull
     public static final OpDef PARALLEL = new OpDef(PREFIX, "|:|", "parallel", "parallel",
                                                    false, false,
-                                                   null, SIGNAL_PRIORITY);
+                                                   null, SIGNAL_PRIORITY, true);
 
     @NotNull
     public static final OpDef SERIAL = new OpDef(PREFIX, "|..|", "serial", "serial",
                                                  false, false,
-                                                 null, SIGNAL_PRIORITY);
+                                                 null, SIGNAL_PRIORITY, true);
     @NotNull
     public static final OpDef FORK = new OpDef(PREFIX, "-<", "fork", "fork",
                                                false,
                                                true,
-                                               null, SIGNAL_PRIORITY);
+                                               null, SIGNAL_PRIORITY, false);
 
     @NotNull
     public static final OpDef RANGE = new OpDef(BINARY, "..", "range", "range",
                                                 false, true,
                                                 null,
-                                                OperatorPriority.RANGE_PRIORITY);
+                                                OperatorPriority.RANGE_PRIORITY, true);
 
     @NotNull
     public static final OpDef ERROR = new OpDef(PREFIX, "?->", "error", "error",
                                                 false, true,
                                                 null,
-                                                LINE_PREFIX_PRIORITY);
+                                                LINE_PREFIX_PRIORITY, true);
 
     @NotNull
     public static final OpDef SIZE = new OpDef(PREFIX, "#", "size", "size",
                                                false, true,
-                                               null, UNARY_PRIORITY);
+                                               null, UNARY_PRIORITY, true);
 
     @NotNull
     public static final OpDef MOD = new OpDef(BINARY, "%", "mod", "modulus",
                                               false, true,
-                                              null, MULTIPLY_DIVIDE_PRIORITY);
+                                              null, MULTIPLY_DIVIDE_PRIORITY, true);
 
     @NotNull
     public static final OpDef ERR = new OpDef(PREFIX, "??", "err", "err",
                                               false,
                                               true,
-                                              null, LINE_PREFIX_PRIORITY);
+                                              null, LINE_PREFIX_PRIORITY, false);
 
     @NotNull
     public static final OpDef DEBUG = new OpDef(PREFIX, "!!", "debug", "debug",
                                                 false, true,
-                                                null, LINE_PREFIX_PRIORITY);
+                                                null, LINE_PREFIX_PRIORITY, false);
 
     @NotNull
     public static final OpDef ASSERT_EQ_REACT = new OpDef(BINARY, "<=>",
                                                           null,
                                                           "assert-equals-reactive",
                                                           false, true,
-                                                          null, LINE_PREFIX_PRIORITY);
+                                                          null, LINE_PREFIX_PRIORITY, true);
     @NotNull
     public static final OpDef ASSERT_EQ_UNREACT = new OpDef(BINARY, "<->", "assert-equals",
                                                             "assert-equals",
                                                             false, false,
-                                                            null, LINE_PREFIX_PRIORITY);
+                                                            null, LINE_PREFIX_PRIORITY, true);
     @NotNull
     public static final OpDef EACH = new OpDef(BINARY, "=>>", "each", "each", false, true, null,
-                                               MULTIPLY_DIVIDE_PRIORITY);
+                                               MULTIPLY_DIVIDE_PRIORITY, true);
 
     @NotNull
     public static final OpDef PUBLISH = new OpDef(BINARY, "*>", "publish", "publish", false, true, null,
-                                                  OUTPUT_PRIORITY);
+                                                  OUTPUT_PRIORITY, false);
 
     @NotNull
     public static final OpDef SUBSCRIBE = new OpDef(BINARY, "<*", "subscribe", "subscribe", false, true, null,
-                                                    OUTPUT_PRIORITY);
+                                                    OUTPUT_PRIORITY, false);
 
     @NotNull
-    public static final OpDef EQUALITY = new OpDef(BINARY, "==", "equal", "equal", false, true, null, EQ_PRIORITY);
+    public static final OpDef EQUALITY = new OpDef(BINARY, "==", "equal", "equal", false, true, null, EQ_PRIORITY, true);
 
     @NotNull
     public static final OpDef INEQUALITY_OPERATOR = new OpDef(BINARY, "!=", "not-equal", "not-equal",
                                                               false, true, null,
-                                                              EQ_PRIORITY);
+                                                              EQ_PRIORITY, true);
     @NotNull
     public static final OpDef ASSIGNMENT = new OpDef(OpDefType.ASSIGNMENT, "=", null, "assign", false, true, null,
-                                                     ASSIGNMENT_PRIORITY);
+                                                     ASSIGNMENT_PRIORITY, true);
 
     @NotNull
     public static final OpDef SUBSCRIBE_ASSIGN = new OpDef(OpDefType.ASSIGNMENT, "*=", null,
                                                            "subscribe-assign",
-                                                           false, true, null, ASSIGNMENT_PRIORITY);
+                                                           false, true, null, ASSIGNMENT_PRIORITY, true);
     @NotNull
     public static final OpDef LISTEN_ASSIGN = new OpDef(OpDefType.ASSIGNMENT, "?=", null, "listen-assign",
-                                                        false, true, null, ASSIGNMENT_PRIORITY);
+                                                        false, true, null, ASSIGNMENT_PRIORITY, true);
 
     @NotNull
-    public static final OpDef IN = new OpDef(BINARY, "€", "in", "in", false, true, null, IN_PRIORITY);
+    public static final OpDef IN = new OpDef(BINARY, "€", "in", "in", false, true, null, IN_PRIORITY, true);
 
     @NotNull
-    public static final OpDef DRAIN = new OpDef(PREFIX, "<-<", "drain", "drain", false, true, null,
-                                                OUTPUT_PRIORITY);
+    public static final OpDef DRAIN = new OpDef(PREFIX, "<-<", "drain", "drain", false, true, null, OUTPUT_PRIORITY, false);
 
 
     @NotNull
-    public static final OpDef PAIR = new OpDef(BINARY, ":", "pair", "pair", false, true, null, PAIR_PRIORITY);
+    public static final OpDef PAIR = new OpDef(BINARY, ":", "pair", "pair", false, true, null, PAIR_PRIORITY, true);
 
     @NotNull
-    public static final OpDef IF_OPERATOR = new OpDef(BINARY, "???", "if", "if", false, true, null, IF_PRIORITY);
+    public static final OpDef IF_OPERATOR = new OpDef(BINARY, "???", "if", "if", false, true, null, IF_PRIORITY, true);
 
     @NotNull
     public static final OpDef WHEN_OP = new OpDef(BINARY, "?", "when", "when", false, true, null,
-                                                  CONTROL_FLOW_PRIORITY);
+                                                  CONTROL_FLOW_PRIORITY, true);
 
     @NotNull
     public static final OpDef REDUCE = new OpDef(BINARY, ">>=", "reduce", "reduce", false, true, null,
-                                                 MULTIPLY_DIVIDE_PRIORITY);
+                                                 MULTIPLY_DIVIDE_PRIORITY, true);
 
     @NotNull
     public static final OpDef CHOOSE = new OpDef(BINARY, "?*", "choose", "choose", false, true, null,
-                                                 CONTROL_FLOW_PRIORITY);
+                                                 CONTROL_FLOW_PRIORITY, true);
 
     @NotNull
-    public static final OpDef ALL = new OpDef(PREFIX, "<@", "all", "all", false, true, null, OUTPUT_PRIORITY);
+    public static final OpDef ALL = new OpDef(PREFIX, "<@", "all", "all", false, true, null, OUTPUT_PRIORITY, false);
 
     @NotNull
-    public static final OpDef ELSE = new OpDef(BINARY, "-:", "else", "else", false, true, null, IF_PRIORITY);
+    public static final OpDef ELSE = new OpDef(BINARY, "-:", "else", "else", false, true, null, IF_PRIORITY, true);
 
     @NotNull
     public static final OpDef TRUTHY = new OpDef(PREFIX, "~", "truthy", "truthy",
                                                  false,
                                                  true,
                                                  null,
-                                                 UNARY_PRIORITY);
+                                                 UNARY_PRIORITY, true);
 
     @NotNull
     public static final OpDef CAST = new OpDef(POSTFIX, null, null, "cast", false, true, "<expression> 'as' <type>",
-                                               UNARY_PRIORITY);
+                                               UNARY_PRIORITY, true);
 
     @NotNull
     public static final OpDef FOR_OP = new OpDef(CONTROL_FLOW, null, "for", "for", false, true,
                                                  "for <variable-name> <iterable-expression> <expression>",
-                                                 UNARY_PRIORITY);
+                                                 UNARY_PRIORITY, true);
 
     @NotNull
     public static final OpDef WHILE_OP = new OpDef(CONTROL_FLOW, null, "while", "while", false, true,
                                                    "while <condition> <expression>",
-                                                   UNARY_PRIORITY);
+                                                   UNARY_PRIORITY, true);
 
     @NotNull
     public static final OpDef SUBSCRIPT_OP = new OpDef(POSTFIX, null, null, "subscript", false, true,
                                                        "( <expression> '[' <index-expression>|<key-expression> ']' ) | " +
                                                                "( <expression> '.' (<index-expression>|<key-expression>) )",
-                                                       MEMBER_PRIORITY);
+                                                       MEMBER_PRIORITY, true);
 
     @NotNull
     public static final OpDef PARAM_OP = new OpDef(POSTFIX, null, null, "parameter", false, true,
                                                    "( <expression> | <builtin-name> | <function-name> ) '(' " +
                                                            "( <expression> | <name> '=' <expression> )* ')'",
-                                                   MEMBER_PRIORITY);
+                                                   MEMBER_PRIORITY, true);
 
     @NotNull
     public static final OpDef WRITE_OP = new OpDef(CONTROL_FLOW, null, "write", "write",
                                                    false, true,
                                                    "'write' ['block'] ['mutate'] ['to'] <expression>",
-                                                   OUTPUT_PRIORITY);
+                                                   OUTPUT_PRIORITY, false);
 
 
     @NotNull
     public static final OpDef READ_OP = new OpDef(PREFIX, null, "read", "read",
                                                   false, true,
                                                   "'read' ['block'] ['mutate'] ['from'] <expression>",
-                                                  OUTPUT_PRIORITY);
+                                                  OUTPUT_PRIORITY, false);
 
     @NotNull
     public static final OpDef PURE_OP = new OpDef(PREFIX, null, "pure", "pure",
                                                   false, true,
                                                   null,
-                                                  OUTPUT_PRIORITY);
+                                                  OUTPUT_PRIORITY, true);
 
 
     @NotNull
     public static final OpDef RESERVED_OPERATOR_1 = new OpDef(RESERVED, "...", null, null,
-                                                              true, true, null, 0);
+                                                              true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_2 = new OpDef(RESERVED, "->", null, null,
-                                                              true, true, null, 0);
+                                                              true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_3 = new OpDef(RESERVED, "<-", null, null,
-                                                              true, true, null, 0);
+                                                              true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_4 = new OpDef(RESERVED, "?:", null, null,
-                                                              true, true, null, 0);
+                                                              true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_5 = new OpDef(RESERVED, "@", null, null,
-                                                              true, true, null, 0);
+                                                              true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_6 = new OpDef(RESERVED, "::", null, null,
-                                                              true, true, null, 0);
+                                                              true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_7 = new OpDef(RESERVED, "&=", null, null,
-                                                              true, true, null, 0);
+                                                              true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_8 = new OpDef(RESERVED, "+>", null, null,
-                                                              true, true, null, 0);
+                                                              true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_9 = new OpDef(RESERVED, "<+", null, null,
-                                                              true, true, null, 0);
+                                                              true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_10 = new OpDef(RESERVED, "|*", null, null,
-                                                               true, true, null, 0);
+                                                               true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_11 = new OpDef(RESERVED, "&>", null, null,
-                                                               true, true, null, 0);
+                                                               true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_12 = new OpDef(RESERVED, "<&", null, null,
-                                                               true, true, null, 0);
+                                                               true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_13 = new OpDef(RESERVED, "?>", null, null,
-                                                               true, true, null, 0);
+                                                               true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_14 = new OpDef(RESERVED, "<?", null, null,
-                                                               true, true, null, 0);
+                                                               true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_15 = new OpDef(RESERVED, ">->", null,
                                                                null,
-                                                               true, true, null, 0);
+                                                               true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_16 = new OpDef(RESERVED, "@>", null, null,
-                                                               true, true, null, 0);
+                                                               true, true, null, 0, true);
 
     @NotNull
     public static final OpDef RESERVED_OPERATOR_17 = new OpDef(RESERVED, "?..?", null,
                                                                null,
-                                                               true, true, null, 0);
+                                                               true, true, null, 0, true);
 
 
     @NotNull
     public static final OpDef RESERVED_OPERATOR_18 = new OpDef(RESERVED, "?$?", null,
                                                                null,
-                                                               true, true, null, 0);
+                                                               true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_19 = new OpDef(RESERVED, "<$", null, null,
-                                                               true, true, null, 0);
+                                                               true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_20 = new OpDef(RESERVED, "<=<", null,
                                                                null,
-                                                               true, true, null, 0);
+                                                               true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_21 = new OpDef(RESERVED, "<++", null,
                                                                null,
-                                                               true, true, null, 0);
+                                                               true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_22 = new OpDef(RESERVED, "-_-", null,
                                                                null,
-                                                               true, true, null, 0);
+                                                               true, true, null, 0, true);
     @NotNull
     public static final OpDef RESERVED_OPERATOR_23 = new OpDef(RESERVED, ">&", null, null,
-                                                               true, true, null, 0);
+                                                               true, true, null, 0, true);
     @NotNull
     public static final List<String> SYMBOL_STRINGS;
 

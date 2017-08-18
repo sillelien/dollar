@@ -43,6 +43,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
 
     @Nullable
     private String bnf;
+    private boolean pure;
 
     public OpDef(@NotNull OpDefType type, @Nullable String symbol,
                  @Nullable String keyword,
@@ -50,7 +51,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                  boolean reserved,
                  boolean reactive,
                  @Nullable String bnf,
-                 int priority) {
+                 int priority, boolean pure) {
         this.type = type;
 
         this.symbol = symbol;
@@ -60,6 +61,8 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         this.reactive = reactive;
         this.bnf = bnf;
         this.priority = priority;
+        this.pure = pure;
+
         if (!reserved && priority == 0) {
             throw new AssertionError("Priority must be > 0");
         }
@@ -84,7 +87,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
 
     @Override
     public int compareTo(@NotNull Object o) {
-        if (this.equals(o)) {
+        if (equals(o)) {
             return 0;
         }
         if (o instanceof OpDef && keyword != null) {
@@ -105,8 +108,8 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     @NotNull
     public String asMarkdown() {
         StringBuilder stringBuilder = new StringBuilder();
-        if (this.symbol == null) {
-            if (this.keyword != null) {
+        if (symbol == null) {
+            if (keyword != null) {
                 stringBuilder.append("### `").append(keyword).append("`");
             } else {
                 stringBuilder.append("### ").append(name);
@@ -118,7 +121,18 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                 stringBuilder.append("### `").append(symbol).append("` (").append(name).append(")");
             }
         }
-        stringBuilder.append("      {#op-" + name + "}").append("\n\n");
+        stringBuilder.append("      {#op-" + name + "}").append("\n");
+        if (reactive) {
+            stringBuilder.append("![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg)");
+        } else {
+            stringBuilder.append("![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg)");
+        }
+        if (pure) {
+            stringBuilder.append(" ![pure](https://img.shields.io/badge/function-pure-green.svg)");
+        } else {
+            stringBuilder.append(" ![impure](https://img.shields.io/badge/function-impure-blue.svg)");
+        }
+        stringBuilder.append("\n\n");
         if (bnf == null) {
             if (type == OpDefType.PREFIX) {
                 bnf = "" + bnfSymbol() + " <expression>";
@@ -134,7 +148,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
             stringBuilder.append("**`").append(bnf).append("`**{: style=\"font-size: 60%\"}\n\n");
         }
         try {
-            String filename = "/examples/op/" + this.name + ".md";
+            String filename = "/examples/op/" + name + ".md";
             InputStream resourceAsStream = getClass().getResourceAsStream(filename);
             if (resourceAsStream != null) {
                 stringBuilder.append("\n\n");
@@ -148,7 +162,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         }
 
         try {
-            String filename = "/examples/op/" + this.name + ".ds";
+            String filename = "/examples/op/" + name + ".ds";
             InputStream resourceAsStream = getClass().getResourceAsStream(filename);
             if (resourceAsStream != null) {
 
@@ -163,6 +177,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
             throw new AssertionError(e);
         }
 
+        stringBuilder.append("\n___\n");
 
         return stringBuilder.toString();
     }
@@ -206,5 +221,9 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
 
     public OpDefType type() {
         return type;
+    }
+
+    public boolean pure() {
+        return pure;
     }
 }

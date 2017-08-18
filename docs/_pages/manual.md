@@ -1036,6 +1036,7 @@ TODO
 
 ## Appendix A - Operators
 ### `all` or `<@`      {#op-all}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`('<@'|'all') <expression>`**{: style="font-size: 60%"}
 
@@ -1046,7 +1047,10 @@ all
 ```
 ```
 
+___
+
 ### `and` or `&&`      {#op-and}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('&&'|'and') <expression>`**{: style="font-size: 60%"}
 
@@ -1061,7 +1065,10 @@ false && true <=> false
 false && false <=> false
 ```
 
+___
+
 ### `assert` or `.:`      {#op-assert}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`('.:'|'assert') <expression>`**{: style="font-size: 60%"}
 
@@ -1076,7 +1083,10 @@ The assertion opeartor is used to assert that an expression holds true. It is a 
 .: 1 <= 2
 ```
 
+___
+
 ### `assert-equals` or `<->`      {#op-assert-equals}
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('<->'|'assert-equals') <expression>`**{: style="font-size: 60%"}
 
@@ -1088,7 +1098,10 @@ Asserts that at the point of execution that the left-hand-side is equal to the r
  1 + 1 <-> 2
 ```
 
+___
+
 ### `<=>` (assert-equals-reactive)      {#op-assert-equals-reactive}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> '<=>' <expression>`**{: style="font-size: 60%"}
 
@@ -1101,7 +1114,10 @@ def lamdaVar  {$1 + 10}
 lamdaVar(5) <=> 15
 ```
 
+___
+
 ### `=` (assign)      {#op-assign}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 
 
@@ -1115,7 +1131,10 @@ a=3
 a=4
 ```
 
+___
+
 ### cast      {#op-cast}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> 'as' <type>`**{: style="font-size: 60%"}
 
@@ -1160,7 +1179,10 @@ true as VOID <=> void
 {"a":1,"b":2} as VOID <=> void
 ```
 
+___
+
 ### `causes` or `=>`      {#op-causes}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('=>'|'causes') <expression>`**{: style="font-size: 60%"}
 
@@ -1178,7 +1200,10 @@ a => (b= a)
 a=2 ; &a <=> 2 ; &b <=> 2
 ```
 
+___
+
 ### `choose` or `?*`      {#op-choose}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('?*'|'choose') <expression>`**{: style="font-size: 60%"}
 
@@ -1190,7 +1215,10 @@ choose
 
 ```
 
+___
+
 ### `create` or `|||>`      {#op-create}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`('|||>'|'create') <expression>`**{: style="font-size: 60%"}
 
@@ -1201,7 +1229,10 @@ Creates a service described typically by a URI.
 ```
 ```
 
+___
+
 ### `debug` or `!!`      {#op-debug}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`('!!'|'debug') <expression>`**{: style="font-size: 60%"}
 
@@ -1213,7 +1244,10 @@ Sends the result of the right-hand-side to the debug log.
 !! "I'm a debug message"
 ```
 
+___
+
 ### `:=` (declaration)      {#op-declaration}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`( [export] [const] <variable-name> ':=' <expression>) | ( def <variable-name> <expression )`**{: style="font-size: 60%"}
 
@@ -1229,7 +1263,10 @@ variableA = 2
 .: variableB == 2
 ```
 
+___
+
 ### `dec` or `--`      {#op-decrement}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`('--'|'dec') <expression>`**{: style="font-size: 60%"}
 
@@ -1244,7 +1281,10 @@ unchanged++;
 unchanged <-> 1;
 ```
 
+___
+
 ### `default` or `:-`      {#op-default}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> (':-'|'default') <expression>`**{: style="font-size: 60%"}
 
@@ -1257,7 +1297,10 @@ void :- "Hello" <=> "Hello"
 1 :- "Hello" <=> 1
 ```
 
+___
+
 ### `destroy` or `<|||`      {#op-destroy}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`('<|||'|'destroy') <expression>`**{: style="font-size: 60%"}
 
@@ -1268,7 +1311,10 @@ destroy
 ```
 ```
 
+___
+
 ### `divide` or `/`      {#op-divide}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('/'|'divide') <expression>`**{: style="font-size: 60%"}
 
@@ -1286,7 +1332,10 @@ Divides one value by another.
  .: 2.0 / 1.0 is DECIMAL
 ```
 
+___
+
 ### `drain` or `<-<`      {#op-drain}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`('<-<'|'drain') <expression>`**{: style="font-size: 60%"}
 
@@ -1298,7 +1347,10 @@ Drain an expression, using a URI of all it's data. This is a complete destructiv
 ```
 ```
 
+___
+
 ### `each` or `=>>`      {#op-each}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('=>>'|'each') <expression>`**{: style="font-size: 60%"}
 
@@ -1313,7 +1365,10 @@ var titles = posts each { $1.title }
 @@ titles
 ```
 
+___
+
 ### `else` or `-:`      {#op-else}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('-:'|'else') <expression>`**{: style="font-size: 60%"}
 
@@ -1329,7 +1384,10 @@ var b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 .: b == "more than two"
 ```
 
+___
+
 ### `equal` or `==`      {#op-equal}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('=='|'equal') <expression>`**{: style="font-size: 60%"}
 
@@ -1343,7 +1401,10 @@ Compares two values to see if they are equal. Works with all types and maps to t
 .: "Hello" == "Hello"
 ```
 
+___
+
 ### `err` or `??`      {#op-err}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`('??'|'err') <expression>`**{: style="font-size: 60%"}
 
@@ -1355,7 +1416,10 @@ Sends the result of the right-hand-side to `stderr`.
 ?? "What happened"
 ```
 
+___
+
 ### `error` or `?->`      {#op-error}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`('?->'|'error') <expression>`**{: style="font-size: 60%"}
 
@@ -1370,7 +1434,10 @@ var a=1/0
 .: errorHappened
 ```
 
+___
+
 ### `fix` or `&`      {#op-fix}
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`('&'|'fix') <expression>`**{: style="font-size: 60%"}
 
@@ -1386,7 +1453,10 @@ var reactiveValue= 1
 reactiveValue= 2
 ```
 
+___
+
 ### `for`      {#op-for}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`for <variable-name> <iterable-expression> <expression>`**{: style="font-size: 60%"}
 
@@ -1401,7 +1471,10 @@ for i in 1..10 {
 }
 ```
 
+___
+
 ### `fork` or `-<`      {#op-fork}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`('-<'|'fork') <expression>`**{: style="font-size: 60%"}
 
@@ -1421,7 +1494,10 @@ var d= TIME()
 .: c > d
 ```
 
+___
+
 ### `>` (greater-than)      {#op-greater-than}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> '>' <expression>`**{: style="font-size: 60%"}
 
@@ -1433,7 +1509,10 @@ The standard `>` operator, it uses Comparable#compareTo and will work with any D
 .: 3 > 2
 ```
 
+___
+
 ### `>=` (greater-than-equal)      {#op-greater-than-equal}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> '>=' <expression>`**{: style="font-size: 60%"}
 
@@ -1447,7 +1526,10 @@ The standard `>=` operator, it uses Comparable#compareTo and will work with any 
 .: ! (2>=3)
 ```
 
+___
+
 ### `if` or `???`      {#op-if}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('???'|'if') <expression>`**{: style="font-size: 60%"}
 
@@ -1478,7 +1560,10 @@ var b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 .: b == "more than two"
 ```
 
+___
+
 ### `in` or `€`      {#op-in}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('€'|'in') <expression>`**{: style="font-size: 60%"}
 
@@ -1492,7 +1577,10 @@ Returns true if the left-hand-side expression is contained in the right-hand-sid
 .: ! (1 in ["red","blue","green"] )
 ```
 
+___
+
 ### `inc` or `++`      {#op-increment}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`('++'|'inc') <expression>`**{: style="font-size: 60%"}
 
@@ -1507,7 +1595,10 @@ unchanged--;
 unchanged <-> 1;
 ```
 
+___
+
 ### `<` (less-than)      {#op-less-than}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> '<' <expression>`**{: style="font-size: 60%"}
 
@@ -1520,7 +1611,10 @@ The standard `<` operator, it uses Comparable#compareTo and will work with any D
 .: "a" < "b"
 ```
 
+___
+
 ### `<=` (less-than-equal)      {#op-less-than-equal}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> '<=' <expression>`**{: style="font-size: 60%"}
 
@@ -1535,7 +1629,10 @@ The standard `<=` operator, it uses Comparable#compareTo and will work with any 
 .: "a" <= "a"
 ```
 
+___
+
 ### `?=` (listen-assign)      {#op-listen-assign}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 
 
@@ -1544,7 +1641,10 @@ listen-assign
 ```
 ```
 
+___
+
 ### `.` (member)      {#op-member}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> '.' <expression>`**{: style="font-size: 60%"}
 
@@ -1558,7 +1658,10 @@ The membership or `.` operator accesses the member of a map by it's key.
 {"key1":1,"key2":2}[1].key2 <=> 2
 ```
 
+___
+
 ### `minus` or `-`      {#op-minus}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('-'|'minus') <expression>`**{: style="font-size: 60%"}
 
@@ -1570,7 +1673,10 @@ Deducts a value from another value
 2 - 1 <=> 1
 ```
 
+___
+
 ### `mod` or `%`      {#op-modulus}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('%'|'mod') <expression>`**{: style="font-size: 60%"}
 
@@ -1586,7 +1692,10 @@ Returns the remainder (modulus) of the division of the left-hand-side by the rig
 .: 2.0 % 1.0 is DECIMAL
 ```
 
+___
+
 ### `multiply` or `*`      {#op-multiply}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('*'|'multiply') <expression>`**{: style="font-size: 60%"}
 
@@ -1604,7 +1713,10 @@ Returns the product of two values. If the left-hand-side is scalar (non collecti
 
 ```
 
+___
+
 ### `negate` or `-`      {#op-negate}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`('-'|'negate') <expression>`**{: style="font-size: 60%"}
 
@@ -1616,7 +1728,10 @@ Negates a value.
  .: -1 < 0
 ```
 
+___
+
 ### `not` or `!`      {#op-not}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`('!'|'not') <expression>`**{: style="font-size: 60%"}
 
@@ -1630,7 +1745,10 @@ not( true ) <=> false
 !true <=> false
 ```
 
+___
+
 ### `not-equal` or `!=`      {#op-not-equal}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('!='|'not-equal') <expression>`**{: style="font-size: 60%"}
 
@@ -1643,7 +1761,10 @@ Returns true if the two expression are not equal.
 .: 1 != 2
 ```
 
+___
+
 ### `or` or `||`      {#op-or}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('||'|'or') <expression>`**{: style="font-size: 60%"}
 
@@ -1657,7 +1778,10 @@ true || false <=> true
 false || false <=> false
 ```
 
+___
+
 ### `pair` or `:`      {#op-pair}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> (':'|'pair') <expression>`**{: style="font-size: 60%"}
 
@@ -1673,7 +1797,10 @@ var pair2 = "second" : "World";
 .: pair1 + pair2 == {"first":"Hello ","second":"World"}
 ```
 
+___
+
 ### `parallel` or `|:|`      {#op-parallel}
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`('|:|'|'parallel') <expression>`**{: style="font-size: 60%"}
 
@@ -1691,7 +1818,10 @@ var b= |:| testList;
 .: b[2] < b[1]
 ```
 
+___
+
 ### parameter      {#op-parameter}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`( <expression> | <builtin-name> | <function-name> ) '(' ( <expression> | <name> '=' <expression> )* ')'`**{: style="font-size: 60%"}
 
@@ -1740,7 +1870,10 @@ def func($2 + " " + $1)
 func ("Hello", "World") <=> "World Hello"
 ```
 
+___
+
 ### `pause` or `||>`      {#op-pause}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`('||>'|'pause') <expression>`**{: style="font-size: 60%"}
 
@@ -1751,7 +1884,10 @@ Pauses a service described typically by a URI.
 ```
 ```
 
+___
+
 ### `pipe` or `|`      {#op-pipe}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('|'|'pipe') <expression>`**{: style="font-size: 60%"}
 
@@ -1773,7 +1909,10 @@ def funcB {
 10 | funcA | funcB <=> 10
 ```
 
+___
+
 ### `plus` or `+`      {#op-plus}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('+'|'plus') <expression>`**{: style="font-size: 60%"}
 
@@ -1798,7 +1937,10 @@ var pair2 = "second" : "World";
 .: (1 + 1) is INTEGER
 ```
 
+___
+
 ### `print` or `@@`      {#op-print}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`('@@'|'print') <expression>`**{: style="font-size: 60%"}
 
@@ -1811,7 +1953,10 @@ Sends the right-hand-side expression to stdout.
 print "World"
 ```
 
+___
+
 ### `publish` or `*>`      {#op-publish}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`<expression> ('*>'|'publish') <expression>`**{: style="font-size: 60%"}
 
@@ -1822,7 +1967,10 @@ publish
 ```
 ```
 
+___
+
 ### `pure`      {#op-pure}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`'pure' <expression>`**{: style="font-size: 60%"}
 
@@ -1840,12 +1988,15 @@ Note some builtin functions are not themselves pure and will trigger parser erro
 ```
 pure def reverse [$1[1],$1[0]]
 
-a= pure {
+var a= pure {
  reverse([2,1])
 }
 ```
 
+___
+
 ### `range` or `..`      {#op-range}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('..'|'range') <expression>`**{: style="font-size: 60%"}
 
@@ -1858,7 +2009,10 @@ Creates a RANGE between the two values specified.
 (1..3)[1] <=>2
 ```
 
+___
+
 ### `read`      {#op-read}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`'read' ['block'] ['mutate'] ['from'] <expression>`**{: style="font-size: 60%"}
 
@@ -1869,7 +2023,10 @@ The read operator is used to read data from an expression typically a URI. It ha
 ```
 ```
 
+___
+
 ### `<<` (read-simple)      {#op-read-simple}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`'<<' <expression>`**{: style="font-size: 60%"}
 
@@ -1880,7 +2037,10 @@ Performs a simple read from another data item, typically this is used with a URI
 ```
 ```
 
+___
+
 ### `reduce` or `>>=`      {#op-reduce}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('>>='|'reduce') <expression>`**{: style="font-size: 60%"}
 
@@ -1891,7 +2051,10 @@ reduce
 ```
 ```
 
+___
+
 ### `serial` or `|..|`      {#op-serial}
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`('|..|'|'serial') <expression>`**{: style="font-size: 60%"}
 
@@ -1902,7 +2065,10 @@ Causes the right-hand-side expression to be evaluated in serial, most useful in 
 ```
 ```
 
+___
+
 ### `size` or `#`      {#op-size}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`('#'|'size') <expression>`**{: style="font-size: 60%"}
 
@@ -1913,7 +2079,10 @@ Returns the size of non-scalar types or the length of a string.
 ```
 ```
 
+___
+
 ### `start` or `|>`      {#op-start}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`('|>'|'start') <expression>`**{: style="font-size: 60%"}
 
@@ -1924,7 +2093,10 @@ Starts a service described typically by a URI.
 ```
 ```
 
+___
+
 ### `state` or `<|>`      {#op-state}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`('<|>'|'state') <expression>`**{: style="font-size: 60%"}
 
@@ -1935,7 +2107,10 @@ Returns the state of a service described typically by a URI.
 ```
 ```
 
+___
+
 ### `stop` or `<|`      {#op-stop}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`('<|'|'stop') <expression>`**{: style="font-size: 60%"}
 
@@ -1946,7 +2121,10 @@ Stops a service described typically by a URI.
 ```
 ```
 
+___
+
 ### `subscribe` or `<*`      {#op-subscribe}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`<expression> ('<*'|'subscribe') <expression>`**{: style="font-size: 60%"}
 
@@ -1957,7 +2135,10 @@ subscribe
 ```
 ```
 
+___
+
 ### `*=` (subscribe-assign)      {#op-subscribe-assign}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 
 
@@ -1966,7 +2147,10 @@ subscribe-assign
 ```
 ```
 
+___
+
 ### subscript      {#op-subscript}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`( <expression> '[' <index-expression>|<key-expression> ']' ) | ( <expression> '.' (<index-expression>|<key-expression>) )`**{: style="font-size: 60%"}
 
@@ -1980,7 +2164,10 @@ subscript operator
 {"key1":1,"key2":2}[1].key2 <=> 2
 ```
 
+___
+
 ### `truthy` or `~`      {#op-truthy}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`('~'|'truthy') <expression>`**{: style="font-size: 60%"}
 
@@ -1991,7 +2178,10 @@ The truthy operator `~` converts any value to a boolean by applying the rule tha
 ```
 ```
 
+___
+
 ### `unpause` or `<||`      {#op-unpause}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`('<||'|'unpause') <expression>`**{: style="font-size: 60%"}
 
@@ -2002,7 +2192,10 @@ Un-pauses a service described typically by a URI.
 ```
 ```
 
+___
+
 ### `when` or `?`      {#op-when}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> ('?'|'when') <expression>`**{: style="font-size: 60%"}
 
@@ -2025,7 +2218,10 @@ c=5 ; &c <=> 5 ; &d <=> 5
 when c > 3 { @@ c}
 ```
 
+___
+
 ### `while`      {#op-while}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`while <condition> <expression>`**{: style="font-size: 60%"}
 
@@ -2036,7 +2232,10 @@ while operator
 ```
 ```
 
+___
+
 ### `write`      {#op-write}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`'write' ['block'] ['mutate'] ['to'] <expression>`**{: style="font-size: 60%"}
 
@@ -2047,7 +2246,10 @@ The write operator is used to write data to an expression typically a URI. It ha
 ```
 ```
 
+___
+
 ### `>>` (write-simple)      {#op-write-simple}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
 **`<expression> '>>' <expression>`**{: style="font-size: 60%"}
 
@@ -2057,6 +2259,8 @@ Performs a simple write to another data item, mostly used to write to a URI.
 
 ```
 ```
+
+___
 
 ## Appendix B - Keywords
 ### as

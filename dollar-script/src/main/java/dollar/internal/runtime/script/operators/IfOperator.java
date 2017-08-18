@@ -33,12 +33,13 @@ public class IfOperator implements Map<Token, Map<var, var>> {
 
     private DollarParser parser;
 
-    public IfOperator(DollarParser parser) {
+    public IfOperator(DollarParser parser, boolean pure) {
         this.parser = parser;
     }
 
     @NotNull
-    @Override public Map<var, var> map(@NotNull Token token) {
+    @Override
+    public Map<var, var> map(@NotNull Token token) {
         var lhs = (var) token.value();
         return rhs -> {
             Pipeable callable = i -> {

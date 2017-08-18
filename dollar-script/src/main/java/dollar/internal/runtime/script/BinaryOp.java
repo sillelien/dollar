@@ -25,61 +25,60 @@ import dollar.internal.runtime.script.parser.OpDef;
 import dollar.internal.runtime.script.parser.OpDefType;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.functors.Binary;
-import org.jparsec.functors.Map2;
 
 import java.util.Arrays;
-
-import static dollar.internal.runtime.script.DollarScriptSupport.createReactiveNode;
+import java.util.function.BiFunction;
 
 public class BinaryOp implements Binary<var>, Operator {
     private final boolean immediate;
     @NotNull
-    private final Map2<var, var, var> function;
+    private final BiFunction<var, var, var> function;
     @NotNull
     private final OpDef operation;
     @NotNull
     private SourceSegment source;
     @NotNull
     private DollarParser parser;
+    private boolean pure;
 
 
     public BinaryOp(@NotNull DollarParser parser,
                     @NotNull OpDef operation,
-                    @NotNull Map2<var, var, var> function) {
+                    @NotNull BiFunction<var, var, var> function, boolean pure) {
         this.parser = parser;
         this.operation = operation;
         this.function = function;
-        this.immediate = false;
-        if (operation.reactive() == this.immediate) {
+        this.pure = pure;
+        immediate = false;
+        validate(operation);
+    }
+
+    public void validate(@NotNull OpDef operation) {
+        if (operation.reactive() == immediate) {
             throw new DollarParserError("The operation " + operation.name() + " is marked as " + (operation.reactive()
                                                                                                           ? "reactive" : "unreactive") + " " +
-                                                "yet this operator is set to be " + (this.immediate
+                                                "yet this operator is set to be " + (immediate
                                                                                              ? "unreactive" : "reactive"));
         }
-        if(operation.type() != OpDefType.BINARY) {
-            throw new DollarParserError("The operator "+operation.name()+" is defined as not BINARY but used in a binary " +
+        if (operation.type() != OpDefType.BINARY) {
+            throw new DollarParserError("The operator " + operation.name() + " is defined as not BINARY but used in a binary " +
                                                 "operator.");
+        }
+        if (pure && !operation.pure()) {
+            throw new AssertionError("The operation " + operation.name() + " is marked as " + (operation.pure() ? "pure" : "impure") + " yet this operator is set to be " + (pure ? "pure" : "impure"));
         }
     }
 
     public BinaryOp(boolean immediate,
                     @NotNull OpDef operation,
                     @NotNull DollarParser parser,
-                    @NotNull Map2<var, var, var> function) {
+                    @NotNull BiFunction<var, var, var> function, boolean pure) {
         this.immediate = immediate;
         this.function = function;
         this.operation = operation;
         this.parser = parser;
-        if (operation.reactive() == this.immediate) {
-            throw new DollarParserError("The operation " + operation.name() + " is marked as " + (operation.reactive()
-                                                                                                          ? "reactive" : "unreactive") + " " +
-                                                "yet this operator is set to be " + (this.immediate
-                                                                                             ? "unreactive" : "reactive"));
-        }
-        if(operation.type() != OpDefType.BINARY) {
-            throw new DollarParserError("The operator "+operation.name()+" is defined as not BINARY but used in a binary " +
-                                                "operator.");
-        }
+        this.pure = pure;
+        validate(operation);
     }
 
     @NotNull
@@ -92,15 +91,15 @@ public class BinaryOp implements Binary<var>, Operator {
                                                               new Pipeable() {
                                                                   @Override
                                                                   public var pipe(var... vars) throws Exception {
-                                                                      return function.map(lhs,rhs);
+                                                                      return function.apply(lhs, rhs);
                                                                   }
                                                               });
             return lambda;
 
         }
         //Lazy evaluation
-        return createReactiveNode(operation.name(), SourceNodeOptions.NO_SCOPE, parser, source, lhs, rhs,
-                                  args -> function.map(lhs, rhs));
+        return DollarScriptSupport.reactiveNode(operation.name(), SourceNodeOptions.NO_SCOPE, parser, source, lhs, rhs,
+                                                args -> function.apply(lhs, rhs));
     }
 
     @Override

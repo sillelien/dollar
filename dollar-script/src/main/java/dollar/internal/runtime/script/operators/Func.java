@@ -74,7 +74,7 @@ public class Func {
 
     public static var multiply(@NotNull var lhs, @NotNull var rhs) {
         final var lhsFix = lhs._fix(false);
-        if (Arrays.asList("block", "map", "list").contains(
+        if (Arrays.asList("block", "inFunc", "list").contains(
                 lhs.getMetaAttribute("operation"))) {
             var newValue = lhsFix._fixDeep(false);
             Long max = rhs.toLong();
@@ -160,9 +160,9 @@ public class Func {
                 DollarParserImpl.executor.executeInBackground(() -> fix(v, false)));
     }
 
-    public static var subscribeFunc(@NotNull boolean pure, @NotNull var lhs, var rhs) {
+    public static var subscribeFunc(@NotNull var lhs, var rhs) {
         return lhs.$subscribe(
-                i -> DollarScriptSupport.inSubScope(true, pure, "subscribe-param", newScope -> {
+                i -> DollarScriptSupport.inSubScope(true, false, "subscribe-param", newScope -> {
                     final var it = fix(i[0], false);
                     currentScope().setParameter("1", it);
                     currentScope().setParameter("it", it);
@@ -218,4 +218,8 @@ public class Func {
     public static var readFunc(@NotNull var from) {
         return DollarFactory.fromURI(from).$read();
     }
+
+    public static var inFunc(var lhs1, var rhs1) {return rhs1.$contains(lhs1);}
+
+    public static var serialFunc(var v) {return v._fixDeep(false);}
 }

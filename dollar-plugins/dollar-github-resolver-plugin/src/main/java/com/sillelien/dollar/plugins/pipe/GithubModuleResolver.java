@@ -64,18 +64,18 @@ public class GithubModuleResolver implements ModuleResolver {
     static {
         executor = Executors.newSingleThreadExecutor();
         repos = CacheBuilder.newBuilder()
-                .maximumSize(10000)
-                .expireAfterWrite(5, TimeUnit.MINUTES)
+                        .maximumSize(10000)
+                        .expireAfterWrite(5, TimeUnit.MINUTES)
 //                .removalListener((RemovalListener<String, File>) notification -> delete(notification.getValue()))
-                .build(new CacheLoader<String, File>() {
-                    @NotNull
-                    public File load(@NotNull String key) throws IOException, ExecutionException, InterruptedException {
+                        .build(new CacheLoader<String, File>() {
+                            @NotNull
+                            public File load(@NotNull String key) throws IOException, ExecutionException, InterruptedException {
 
-                        return executor.submit(() -> getFile(key)).get();
+                                return executor.submit(() -> getFile(key)).get();
 
-                    }
+                            }
 
-                });
+                        });
 
 
     }
@@ -119,7 +119,8 @@ public class GithubModuleResolver implements ModuleResolver {
                 throw new DollarException("Attempted to update a module that is currently locked");
             }
         } else {
-            log.debug("Lock file does not exist for module {} and it is not cloned, so we can assume initial state", uriWithoutScheme);
+            log.debug("Lock file does not exist for module {} and it is not cloned, so we can assume initial state",
+                      uriWithoutScheme);
             Files.createFile(lockFile.toPath());
             delete(dir);
             log.debug("Recreating dir");
@@ -178,10 +179,10 @@ public class GithubModuleResolver implements ModuleResolver {
             content = new String(Files.readAllBytes(mainFile.toPath()));
             classLoader =
                     DependencyRetriever.retrieve(module.$("dependencies")
-                            .$list()
-                            .$stream(false)
-                            .map(var::toString)
-                            .collect(Collectors.toList()));
+                                                         .$list()
+                                                         .$stream(false)
+                                                         .map(var::toString)
+                                                         .collect(Collectors.toList()));
 
         }
         return (params) -> DollarScriptSupport.inSubScope(false, false, "github-module", newScope -> {
@@ -190,8 +191,8 @@ public class GithubModuleResolver implements ModuleResolver {
             for (Map.Entry<var, var> entry : paramMap.entrySet()) {
                 newScope.set(entry.getKey().$S(), entry.getValue(), true, null, null, false, false, false);
             }
-            return new DollarParserImpl(((DollarParser)parser).options(), classLoader, dir).parse(
-                    new ScriptScope((Scope)scope,  mainFile.getAbsolutePath(),content,"github-module-scope", false), content);
+            return new DollarParserImpl(((DollarParser) parser).options(), classLoader).parse(
+                    new ScriptScope((Scope) scope, mainFile.getAbsolutePath(), content, "github-module-scope", false), content);
         });
     }
 }

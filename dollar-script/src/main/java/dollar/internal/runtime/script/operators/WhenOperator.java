@@ -32,9 +32,11 @@ import static com.sillelien.dollar.api.DollarStatic.$void;
 public class WhenOperator implements Map<Token, var> {
 
     private DollarParser parser;
+    private boolean pure;
 
-    public WhenOperator(DollarParser parser) {
+    public WhenOperator(DollarParser parser, boolean pure) {
         this.parser = parser;
+        this.pure = pure;
     }
 
     @NotNull

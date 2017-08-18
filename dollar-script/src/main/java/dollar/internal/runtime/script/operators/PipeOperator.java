@@ -52,7 +52,7 @@ public class PipeOperator implements Function<Token, Map<var, var>> {
     @Override
     public Map<var, var> apply(@NotNull Token token) {
         var rhs = (var) token.value();
-        return lhs -> createReactiveNode(
+        return lhs -> reactiveNode(
                 "pipe", SourceNodeOptions.NEW_SCOPE, parser, token, rhs, i -> {
                     return inSubScope(false, pure, "pipe-runtime",
                                       runtimeScope -> {

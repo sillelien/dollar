@@ -58,17 +58,17 @@ public class CausesOperator implements Binary<var>, Operator {
     @NotNull
     @Override
     public var map(@NotNull var lhs, @NotNull var rhs) {
-        String id = UUID.randomUUID().toString();
         return createNode(CAUSES.name(), SourceNodeOptions.NEW_SCOPE, parser, source, Arrays.asList(lhs, rhs), in -> {
+            String id = UUID.randomUUID().toString();
             log.debug("Listening to " + lhs.getMetaObject("operation"));
             log.debug("Listening to " + lhs._source().getSourceMessage());
             String lhsFix = lhs.getMetaAttribute("variable");
-            if(lhsFix == null) {
+            if (lhsFix == null) {
 //                throw new DollarScriptException("The left hand side of the listen expression is not a variable",lhs);
                 return lhs.$listen(new Pipeable() {
                     @Override
                     public var pipe(var... vars) throws Exception {
-                        return rhs._fix(1,false);
+                        return rhs._fix(1, false);
                     }
                 });
             } else {

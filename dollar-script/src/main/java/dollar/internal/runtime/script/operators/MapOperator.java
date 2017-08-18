@@ -46,7 +46,7 @@ public class MapOperator implements Map<Token, var> {
         List<var> o = (List<var>) t.value();
         final var
                 lambda =
-                DollarScriptSupport.createNode("map", SourceNodeOptions.SCOPE_WITH_CLOSURE, t, o, dollarParser, i -> {
+                DollarScriptSupport.createNode("inFunc", SourceNodeOptions.SCOPE_WITH_CLOSURE, t, o, dollarParser, i -> {
                     if (o.size() == 1) {
 //                        System.out.println("BLOCK-MAP");
 //                        new Exception().printStackTrace();
@@ -59,7 +59,7 @@ public class MapOperator implements Map<Token, var> {
                     } else {
                         stream = o.stream();
                     }
-                    //Not really a map if only one entry unless it's a pair, in fact
+                    //Not really a inFunc if only one entry unless it's a pair, in fact
                     // it's really a block.
                     return $(stream.map(v -> v._fix(parallel.isTrue()))
                                      .collect(Collectors.toConcurrentMap(

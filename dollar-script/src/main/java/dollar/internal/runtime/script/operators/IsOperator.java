@@ -34,7 +34,7 @@ public class IsOperator implements Map<Token, Map<? super var, ? extends var>> {
     @NotNull
     private DollarParser parser;
 
-    public IsOperator(@NotNull DollarParser parser) {
+    public IsOperator(@NotNull DollarParser parser, boolean pure) {
         this.parser = parser;
     }
 
@@ -42,8 +42,8 @@ public class IsOperator implements Map<Token, Map<? super var, ? extends var>> {
     @Override
     public Map<? super var, ? extends var> map(@NotNull Token token) {
         List<var> rhs = (List<var>) token.value();
-        return lhs -> DollarScriptSupport.createReactiveNode("is " + rhs, SourceNodeOptions.NO_SCOPE, parser, token, lhs, args
-                                                                                                      -> {
+        return lhs -> DollarScriptSupport.reactiveNode("is " + rhs, SourceNodeOptions.NO_SCOPE, parser, token, lhs, args
+                                                                                                                            -> {
             for (var value : rhs) {
                 if (lhs.is(Type.valueOf(value.toString()))) {
                     return $(true);
