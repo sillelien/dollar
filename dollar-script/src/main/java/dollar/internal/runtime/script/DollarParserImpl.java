@@ -141,7 +141,6 @@ public class DollarParserImpl implements DollarParser {
 
     @Override
     public void export(@NotNull String name, @NotNull var export) {
-//        System.err.println("Exporting " + name);
         export.setMetaObject("scopes", new ArrayList<>(DollarScriptSupport.scopes()));
         exports.put(name, export);
     }
@@ -171,8 +170,6 @@ public class DollarParserImpl implements DollarParser {
                 getErrorHandler().handleTopLevel(e, null, (file != null) ? new File(file) : null);
 
             }
-//            parse._fixDeep(false);
-//            newScope.destroy();
             return $(exports);
         });
         if (v != null) {
@@ -249,14 +246,14 @@ public class DollarParserImpl implements DollarParser {
 //        Parser<var> block = block(ref.lazy(), false).between(OP_NL(LEFT_BRACE), NL_OP(RIGHT_BRACE));
         Parser<var> expression = expression(false);
         Parser<var> parser = (TERMINATOR_SYMBOL.optional(null)).next(expression.followedBy(
-                TERMINATOR_SYMBOL).many1()).map(l -> {
+                TERMINATOR_SYMBOL).many1()).map(expressions -> {
             log.debug("Ended Parse Phase");
             log.debug("Starting Runtime Phase");
-            for (int i = 0; i < (l.size() - 1); i++) {
-                l.get(i)._fixDeep(false);
+            for (int i = 0; i < (expressions.size() - 1); i++) {
+                expressions.get(i)._fixDeep(false);
 //              System.err.println(fixed);
             }
-            var resultVar = l.get(l.size() - 1);
+            var resultVar = expressions.get(expressions.size() - 1);
             var fixedResult = resultVar._fixDeep(false);
             log.debug("Ended Runtime Phase");
             return fixedResult;
@@ -330,6 +327,15 @@ public class DollarParserImpl implements DollarParser {
         }
 
         OperatorTable<var> table = new OperatorTable<>();
+
+        table = infixl(pure, table, PLUS, var::$plus);
+        table = infixl(pure, table, MINUS, var::$minus);
+        table = infixl(pure, table, CHOOSE, ControlFlowAware::$choose);
+        table = infixl(pure, table, DEFAULT, var::$default);
+        table = infixl(pure, table, DIVIDE, NumericAware::$divide);
+        table = infixl(pure, table, MOD, NumericAware::$modulus);
+
+
         table = infixl(pure, table, INEQUALITY_OPERATOR, Func::inequality);
         table = infixl(pure, table, EQUALITY, Func::equality);
         table = infixl(pure, table, AND, Func::and);
@@ -340,18 +346,13 @@ public class DollarParserImpl implements DollarParser {
         table = infixl(pure, table, LT_EQUALS, Func::lte);
         table = infixl(pure, table, GT_EQUALS, Func::gte);
         table = infixl(pure, table, MULTIPLY, Func::multiply);
-        table = infixl(pure, table, DIVIDE, NumericAware::$divide);
-        table = infixl(pure, table, MOD, NumericAware::$modulus);
-        table = infixl(pure, table, PLUS, var::$plus);
-        table = infixl(pure, table, MINUS, var::$minus);
         table = infixl(pure, table, PAIR, Func::pair);
         table = infixl(pure, table, ELSE, Func::elseFunc);
         table = infixl(pure, table, IN, Func::inFunc);
+        table = infixl(pure, table, WHEN_OP, Func::listenFunc);
+
         table = infixl(pure, table, EACH, (lhs, rhs) -> Func.each(pure, lhs, rhs));
         table = infixl(pure, table, REDUCE, (lhs, rhs) -> Func.reduce(pure, lhs, rhs));
-        table = infixl(pure, table, WHEN_OP, Func::listenFunc);
-        table = infixl(pure, table, CHOOSE, ControlFlowAware::$choose);
-        table = infixl(pure, table, DEFAULT, var::$default);
 
         table = infixlReactive(pure, table, ASSERT_EQ_REACT, Func::assertEquals);
         table = infixlUnReactive(pure, table, ASSERT_EQ_UNREACT, Func::assertEquals);
@@ -361,10 +362,11 @@ public class DollarParserImpl implements DollarParser {
         table = postfix(pure, table, INC, var::$inc);
 
         table = prefix(pure, table, NEGATE, var::$negate);
+        table = prefix(pure, table, SIZE, var::$size);
+
         table = prefix(pure, table, NOT, Func::notFunc);
         table = prefix(pure, table, ERROR, Func::error);
         table = prefix(pure, table, TRUTHY, Func::truthy);
-        table = prefix(pure, table, SIZE, var::$size);
 
 
         table = prefixUnReactive(pure, table, FIX, VarInternal::_fixDeep);
@@ -379,13 +381,14 @@ public class DollarParserImpl implements DollarParser {
         table = table.postfix(isOperator(pure), EQ_PRIORITY);
         table = table.postfix(memberOperator(ref), MEMBER.priority());
         table = table.postfix(subscriptOperator(ref, pure), SUBSCRIPT_OP.priority());
-        table = table.postfix(parameterOperator(ref, pure), PARAM_OP.priority());
         table = table.postfix(castOperator(pure), CAST.priority());
+        table = table.postfix(parameterOperator(ref, pure), PARAM_OP.priority());
 
         table = table.prefix(ifOperator(ref, pure), IF_OPERATOR.priority());
         table = table.prefix(forOperator(ref, pure), FOR_OP.priority());
         table = table.prefix(whileOperator(ref, pure), WHILE_OP.priority());
         table = table.prefix(variableUsageOperator(pure), 1000);
+
         table = table.prefix(assignmentOperator(ref, pure), ASSIGNMENT.priority());
         table = table.prefix(definitionOperator(ref, pure), DEFINITION.priority());
 
@@ -397,9 +400,6 @@ public class DollarParserImpl implements DollarParser {
 
             table = prefix(false, table, DRAIN, URIAware::$drain);
             table = prefix(false, table, ALL, URIAware::$all);
-            table = prefix(false, table, PRINT, Func::outFunc);
-            table = prefix(false, table, DEBUG, Func::debugFunc);
-            table = prefix(false, table, ERR, Func::errFunc);
             table = prefix(false, table, STOP, var::$stop);
             table = prefix(false, table, START, var::$start);
             table = prefix(false, table, PAUSE, var::$pause);
@@ -407,6 +407,10 @@ public class DollarParserImpl implements DollarParser {
             table = prefix(false, table, DESTROY, var::$destroy);
             table = prefix(false, table, CREATE, var::$create);
             table = prefix(false, table, STATE, var::$state);
+
+            table = prefix(false, table, PRINT, Func::outFunc);
+            table = prefix(false, table, DEBUG, Func::debugFunc);
+            table = prefix(false, table, ERR, Func::errFunc);
             table = prefix(false, table, FORK, Func::fork);
 
             table = table.prefix(writeOperator(ref), WRITE_OP.priority());
