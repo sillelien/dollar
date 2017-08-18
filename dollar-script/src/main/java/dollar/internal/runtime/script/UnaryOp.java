@@ -33,9 +33,9 @@ public class UnaryOp implements Unary<var>, Operator {
     private final boolean immediate;
     protected SourceSegment source;
     protected DollarParser parser;
-    private Function<var, var> function;
+    private final Function<var, var> function;
 
-    private boolean pure;
+    private final boolean pure;
 
     public UnaryOp(DollarParser parser, OpDef operation, Function<var, var> function, boolean pure) {
         this.operation = operation;
@@ -79,21 +79,21 @@ public class UnaryOp implements Unary<var>, Operator {
     public var map(@NotNull var from) {
 
         if (immediate) {
-            final var lambda = DollarScriptSupport.createNode(operation.name(), SourceNodeOptions.NO_SCOPE, parser,
-                                                              source,
-                                                              Collections.singletonList(from),
-                                                              new Pipeable() {
-                                                                  @Override
-                                                                  public var pipe(var... vars) throws Exception {
-                                                                      return function.apply(from);
-                                                                  }
-                                                              });
+            final var lambda = DollarScriptSupport.node(operation.name(), pure, SourceNodeOptions.NO_SCOPE, parser,
+                                                        source,
+                                                        Collections.singletonList(from),
+                                                        new Pipeable() {
+                                                            @Override
+                                                            public var pipe(var... vars) throws Exception {
+                                                                return function.apply(from);
+                                                            }
+                                                        });
             return lambda;
 
         }
 
         //Lazy evaluation
-        final var lambda = DollarScriptSupport.reactiveNode(operation.name(), SourceNodeOptions.NO_SCOPE, source, parser,
+        final var lambda = DollarScriptSupport.reactiveNode(operation.name(), pure, SourceNodeOptions.NO_SCOPE, source, parser,
                                                             from,
                                                             args -> function.apply(from));
         return lambda;

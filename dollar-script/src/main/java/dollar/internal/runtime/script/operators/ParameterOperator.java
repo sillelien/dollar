@@ -34,7 +34,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
-import static dollar.internal.runtime.script.DollarScriptSupport.createNode;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class ParameterOperator implements Map<Token, Map<? super var, ? extends var>> {
@@ -78,8 +77,8 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
             }
 
             String constraintSource = null;
-            var lambda = createNode("parameter", SourceNodeOptions.SCOPE_WITH_CLOSURE, dollarParser, token, rhs,
-                                    new Function(rhs, lhs, token, constraintSource, functionName, builtin)
+            var lambda = DollarScriptSupport.node("parameter", pure, SourceNodeOptions.SCOPE_WITH_CLOSURE, dollarParser, token, rhs,
+                                                  new Function(rhs, lhs, token, constraintSource, functionName, builtin)
             );
             //reactive links
             lhs.$listen(i -> lambda.$notify());
@@ -99,8 +98,8 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
         private final Token token;
         @Nullable
         private final String constraintSource;
-        private boolean functionName;
-        private boolean builtin;
+        private final boolean functionName;
+        private final boolean builtin;
 
         public Function(@NotNull List<var> rhs,
                         @NotNull var lhs,
@@ -150,7 +149,7 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                 if (builtin) {
                     result = Builtins.execute(lhsString, rhs, pure);
                 } else {
-                    final var valueUnfixed = DollarScriptSupport.getVariable(
+                    final var valueUnfixed = DollarScriptSupport.variableNode(
                             pure, lhsString, false, null, token, dollarParser);
                     result = valueUnfixed._fix(2, false);
                 }

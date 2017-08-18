@@ -16,14 +16,11 @@
 
 package dollar.internal.runtime.script.parser;
 
-import com.google.common.io.Files;
 import dollar.internal.runtime.script.HasKeyword;
 import dollar.internal.runtime.script.HasSymbol;
 import dollar.internal.runtime.script.OperatorPriority;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -34,7 +31,9 @@ import static dollar.internal.runtime.script.OperatorPriority.*;
 import static dollar.internal.runtime.script.parser.OpDefType.*;
 import static java.util.Arrays.asList;
 
-public class Symbols {
+@SuppressWarnings({"UtilityClassCanBeEnum", "UtilityClassCanBeSingleton"})
+public final class Symbols {
+
 
     @NotNull
     public static final OpDef PIPE_OPERATOR = new OpDef(BINARY, "|", "pipe", "pipe",
@@ -356,130 +355,30 @@ public class Symbols {
                                                   false, true,
                                                   "'read' ['block'] ['mutate'] ['from'] <expression>",
                                                   OUTPUT_PRIORITY, false);
-
-    @NotNull
-    public static final OpDef PURE_OP = new OpDef(PREFIX, null, "pure", "pure",
-                                                  false, true,
-                                                  null,
-                                                  OUTPUT_PRIORITY, true);
-
-
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_1 = new OpDef(RESERVED, "...", null, null,
-                                                              true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_2 = new OpDef(RESERVED, "->", null, null,
-                                                              true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_3 = new OpDef(RESERVED, "<-", null, null,
-                                                              true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_4 = new OpDef(RESERVED, "?:", null, null,
-                                                              true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_5 = new OpDef(RESERVED, "@", null, null,
-                                                              true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_6 = new OpDef(RESERVED, "::", null, null,
-                                                              true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_7 = new OpDef(RESERVED, "&=", null, null,
-                                                              true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_8 = new OpDef(RESERVED, "+>", null, null,
-                                                              true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_9 = new OpDef(RESERVED, "<+", null, null,
-                                                              true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_10 = new OpDef(RESERVED, "|*", null, null,
-                                                               true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_11 = new OpDef(RESERVED, "&>", null, null,
-                                                               true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_12 = new OpDef(RESERVED, "<&", null, null,
-                                                               true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_13 = new OpDef(RESERVED, "?>", null, null,
-                                                               true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_14 = new OpDef(RESERVED, "<?", null, null,
-                                                               true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_15 = new OpDef(RESERVED, ">->", null,
-                                                               null,
-                                                               true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_16 = new OpDef(RESERVED, "@>", null, null,
-                                                               true, true, null, 0, true);
-
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_17 = new OpDef(RESERVED, "?..?", null,
-                                                               null,
-                                                               true, true, null, 0, true);
-
-
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_18 = new OpDef(RESERVED, "?$?", null,
-                                                               null,
-                                                               true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_19 = new OpDef(RESERVED, "<$", null, null,
-                                                               true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_20 = new OpDef(RESERVED, "<=<", null,
-                                                               null,
-                                                               true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_21 = new OpDef(RESERVED, "<++", null,
-                                                               null,
-                                                               true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_22 = new OpDef(RESERVED, "-_-", null,
-                                                               null,
-                                                               true, true, null, 0, true);
-    @NotNull
-    public static final OpDef RESERVED_OPERATOR_23 = new OpDef(RESERVED, ">&", null, null,
-                                                               true, true, null, 0, true);
     @NotNull
     public static final List<String> SYMBOL_STRINGS;
-
     @NotNull
     public static final List<String> KEYWORD_STRINGS;
-
-
     @NotNull
     public static final SymbolDef DOLLAR = new SymbolDef("$", false);
-
     @NotNull
     public static final SymbolDef COMMA = new SymbolDef(",", false);
-
     @NotNull
     public static final SymbolDef NEWLINE = new SymbolDef("\n", false);
-
     @NotNull
     public static final SymbolDef LEFT_BRACE = new SymbolDef("{", false);
-
     @NotNull
     public static final SymbolDef RIGHT_BRACE = new SymbolDef("}", false);
-
     @NotNull
     public static final SymbolDef SEMI_COLON = new SymbolDef(";", false);
-
     @NotNull
     public static final SymbolDef LEFT_BRACKET = new SymbolDef("[", false);
-
     @NotNull
     public static final SymbolDef RIGHT_BRACKET = new SymbolDef("]", false);
-
-
     @NotNull
     public static final KeywordDef TRUE = new KeywordDef("true", false, "Boolean true.", null);
-
     @NotNull
     public static final KeywordDef FALSE = new KeywordDef("false", false, "Boolean false.", null);
-
     @NotNull
     public static final KeywordDef YES = new KeywordDef("yes", false, "Boolean true.", null);
     @NotNull
@@ -500,9 +399,10 @@ public class Symbols {
     @NotNull
     public static final KeywordDef VAR = new KeywordDef("var", false, "Marks a variable as variable i.e. not readonly.", null);
     @NotNull
-    public static final KeywordDef VOLATILE = new KeywordDef("volatile", false,
-                                                             "Marks a variable as volatile, i.e. it can be accessed by multiple threads.",
-                                                             null);
+    public static final KeywordDef
+            VOLATILE = new KeywordDef("volatile", false,
+                                      "Marks a variable as volatile, i.e. it can be accessed by multiple threads.",
+                                      null);
     @NotNull
     public static final KeywordDef COLLECT = new KeywordDef("collect", false, null, null);
     @NotNull
@@ -539,138 +439,213 @@ public class Symbols {
     public static final KeywordDef TO = new KeywordDef("to", false, null, null);
     @NotNull
     public static final KeywordDef FROM = new KeywordDef("from", false, null, null);
-
-    @NotNull
-    public static final KeywordDef ABSTRACT = new KeywordDef("abstract", true, null, null);
-    @NotNull
-    public static final KeywordDef BREAK = new KeywordDef("break", true, null, null);
-    @NotNull
-    public static final KeywordDef CASE = new KeywordDef("case", true, null, null);
-    @NotNull
-    public static final KeywordDef CATCH = new KeywordDef("catch", true, null, null);
-    @NotNull
-    public static final KeywordDef CLASS = new KeywordDef("class", true, null, null);
-    @NotNull
-    public static final KeywordDef CONTINUE = new KeywordDef("continue", true, null, null);
-    @NotNull
-    public static final KeywordDef DO = new KeywordDef("do", true, null, null);
-    @NotNull
-    public static final KeywordDef ENUM = new KeywordDef("enum", true, null, null);
-    @NotNull
-    public static final KeywordDef EXTENDS = new KeywordDef("extends", true, null, null);
-    @NotNull
-    public static final KeywordDef FINAL = new KeywordDef("final", true, null, null);
-    @NotNull
-    public static final KeywordDef FINALLY = new KeywordDef("finally", true, null, null);
-    @NotNull
-    public static final KeywordDef FLOAT = new KeywordDef("float", true, null, null);
-    @NotNull
-    public static final KeywordDef GOTO = new KeywordDef("goto", true, null, null);
-    @NotNull
-    public static final KeywordDef IMPLEMENTS = new KeywordDef("implements", true, null, null);
-    @NotNull
-    public static final KeywordDef IMPORT = new KeywordDef("import", true, null, null);
-    @NotNull
-    public static final KeywordDef INSTANCEOF = new KeywordDef("instanceof", true, null, null);
-    @NotNull
-    public static final KeywordDef INTERFACE = new KeywordDef("interface", true, null, null);
-    @NotNull
-    public static final KeywordDef NATIVE = new KeywordDef("native", true, null, null);
-    @NotNull
-    public static final KeywordDef NEW = new KeywordDef("new", true, null, null);
-    @NotNull
-    public static final KeywordDef PACKAGE = new KeywordDef("package", true, null, null);
-    @NotNull
-    public static final KeywordDef PRIVATE = new KeywordDef("private", true, null, null);
-    @NotNull
-    public static final KeywordDef PROTECTED = new KeywordDef("protected", true, null, null);
-    @NotNull
-    public static final KeywordDef PUBLIC = new KeywordDef("public", true, null, null);
-    @NotNull
-    public static final KeywordDef RETURN = new KeywordDef("return", true, null, null);
-    @NotNull
-    public static final KeywordDef SHORT = new KeywordDef("short", true, null, null);
-    @NotNull
-    public static final KeywordDef STATIC = new KeywordDef("static", true, null, null);
-    @NotNull
-    public static final KeywordDef SUPER = new KeywordDef("super", true, null, null);
-    @NotNull
-    public static final KeywordDef SWITCH = new KeywordDef("switch", true, null, null);
-    @NotNull
-    public static final KeywordDef SYNCHRONIZED = new KeywordDef("synchronized", true, null, null);
-    @NotNull
-    public static final KeywordDef THIS = new KeywordDef("this", true, null, null);
-    @NotNull
-    public static final KeywordDef THROW = new KeywordDef("throw", true, null, null);
-    @NotNull
-    public static final KeywordDef THROWS = new KeywordDef("throws", true, null, null);
-    @NotNull
-    public static final KeywordDef TRANSIENT = new KeywordDef("transient", true, null, null);
-    @NotNull
-    public static final KeywordDef TRY = new KeywordDef("try", true, null, null);
-
-    @NotNull
-    public static final List<KeywordDef> KEYWORDS;
-    @NotNull
-    public static final List<SymbolDef> SYMBOLS;
     @NotNull
     public static final List<OpDef> OPERATORS;
     @NotNull
-    public static final KeywordDef PLURIPOTENT = new KeywordDef("pluripotent", true, null, null);
+    private static final OpDef PURE_OP = new OpDef(PREFIX, null, "pure", "pure",
+                                                   false, true,
+                                                   null,
+                                                   OUTPUT_PRIORITY, true);
     @NotNull
-    public static final KeywordDef READONLY = new KeywordDef("readonly", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_1 = new OpDef(RESERVED, "...", null, "RESERVED_OPERATOR_1",
+                                                               true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef JOIN = new KeywordDef("join", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_2 = new OpDef(RESERVED, "->", null, "RESERVED_OPERATOR_1",
+                                                               true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef FAIL = new KeywordDef("fail", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_3 = new OpDef(RESERVED, "<-", null, "RESERVED_OPERATOR_1",
+                                                               true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef SWITCH1 = new KeywordDef("switch", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_4 = new OpDef(RESERVED, "?:", null, "RESERVED_OPERATOR_1",
+                                                               true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef DOLLAR1 = new KeywordDef("dollar", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_5 = new OpDef(RESERVED, "@", null, "RESERVED_OPERATOR_1",
+                                                               true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef FILTER = new KeywordDef("filter", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_6 = new OpDef(RESERVED, "::", null, "RESERVED_OPERATOR_1",
+                                                               true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef DISPATCH = new KeywordDef("dispatch", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_7 = new OpDef(RESERVED, "&=", null, "RESERVED_OPERATOR_1",
+                                                               true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef SEND = new KeywordDef("send", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_8 = new OpDef(RESERVED, "+>", null, "RESERVED_OPERATOR_1",
+                                                               true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef EMIT = new KeywordDef("emit", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_9 = new OpDef(RESERVED, "<+", null, "RESERVED_OPERATOR_1",
+                                                               true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef INCLUDE = new KeywordDef("include", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_10 = new OpDef(RESERVED, "|*", null, "RESERVED_OPERATOR_1",
+                                                                true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef IMPURE = new KeywordDef("impure", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_11 = new OpDef(RESERVED, "&>", null, "RESERVED_OPERATOR_1",
+                                                                true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef VARIANT = new KeywordDef("variant", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_12 = new OpDef(RESERVED, "<&", null, "RESERVED_OPERATOR_1",
+                                                                true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef VARY = new KeywordDef("vary", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_13 = new OpDef(RESERVED, "?>", null, "RESERVED_OPERATOR_1",
+                                                                true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef VARIES = new KeywordDef("varies", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_14 = new OpDef(RESERVED, "<?", null, "RESERVED_OPERATOR_1",
+                                                                true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef LAMBDA = new KeywordDef("lambda", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_15 = new OpDef(RESERVED, ">->", null,
+                                                                "RESERVED_OPERATOR_1",
+                                                                true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef CLOSURE = new KeywordDef("closure", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_16 = new OpDef(RESERVED, "@>", null, "RESERVED_OPERATOR_1",
+                                                                true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef SCOPE = new KeywordDef("scope", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_17 = new OpDef(RESERVED, "?..?", null,
+                                                                "RESERVED_OPERATOR_1",
+                                                                true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef DUMP = new KeywordDef("dump", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_18 = new OpDef(RESERVED, "?$?", null,
+                                                                "RESERVED_OPERATOR_1",
+                                                                true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef TRACE = new KeywordDef("trace", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_19 = new OpDef(RESERVED, "<$", null, "RESERVED_OPERATOR_1",
+                                                                true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef MEASURE = new KeywordDef("measure", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_20 = new OpDef(RESERVED, "<=<", null,
+                                                                "RESERVED_OPERATOR_1",
+                                                                true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef UNIT = new KeywordDef("unit", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_21 = new OpDef(RESERVED, "<++", null,
+                                                                "RESERVED_OPERATOR_1",
+                                                                true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef WAIT = new KeywordDef("wait", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_22 = new OpDef(RESERVED, "-_-", null,
+                                                                "RESERVED_OPERATOR_1",
+                                                                true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef AWAIT = new KeywordDef("await", true, null, null);
+    private static final OpDef RESERVED_OPERATOR_23 = new OpDef(RESERVED, ">&", null, "RESERVED_OPERATOR_1",
+                                                                true, true, null, 0, true);
     @NotNull
-    public static final KeywordDef SAVE = new KeywordDef("save", true, null, null);
+    private static final KeywordDef ABSTRACT = new KeywordDef("abstract", true, null, null);
     @NotNull
-    public static final KeywordDef LOAD = new KeywordDef("load", true, null, null);
+    private static final KeywordDef BREAK = new KeywordDef("break", true, null, null);
     @NotNull
-    private static final List<? extends Comparable> tokens =
+    private static final KeywordDef CASE = new KeywordDef("case", true, null, null);
+    @NotNull
+    private static final KeywordDef CATCH = new KeywordDef("catch", true, null, null);
+    @NotNull
+    private static final KeywordDef CLASS = new KeywordDef("class", true, null, null);
+    @NotNull
+    private static final KeywordDef CONTINUE = new KeywordDef("continue", true, null, null);
+    @NotNull
+    private static final KeywordDef DO = new KeywordDef("do", true, null, null);
+    @NotNull
+    private static final KeywordDef ENUM = new KeywordDef("enum", true, null, null);
+    @NotNull
+    private static final KeywordDef EXTENDS = new KeywordDef("extends", true, null, null);
+    @NotNull
+    private static final KeywordDef FINAL = new KeywordDef("final", true, null, null);
+    @NotNull
+    private static final KeywordDef FINALLY = new KeywordDef("finally", true, null, null);
+    @NotNull
+    private static final KeywordDef FLOAT = new KeywordDef("float", true, null, null);
+    @NotNull
+    private static final KeywordDef GOTO = new KeywordDef("goto", true, null, null);
+    @NotNull
+    private static final KeywordDef IMPLEMENTS = new KeywordDef("implements", true, null, null);
+    @NotNull
+    private static final KeywordDef IMPORT = new KeywordDef("import", true, null, null);
+    @NotNull
+    private static final KeywordDef INSTANCEOF = new KeywordDef("instanceof", true, null, null);
+    @NotNull
+    private static final KeywordDef INTERFACE = new KeywordDef("interface", true, null, null);
+    @NotNull
+    private static final KeywordDef NATIVE = new KeywordDef("native", true, null, null);
+    @NotNull
+    private static final KeywordDef NEW = new KeywordDef("new", true, null, null);
+    @NotNull
+    private static final KeywordDef PACKAGE = new KeywordDef("package", true, null, null);
+    @NotNull
+    private static final KeywordDef PRIVATE = new KeywordDef("private", true, null, null);
+    @NotNull
+    private static final KeywordDef PROTECTED = new KeywordDef("protected", true, null, null);
+    @NotNull
+    private static final KeywordDef PUBLIC = new KeywordDef("public", true, null, null);
+    @NotNull
+    private static final KeywordDef RETURN = new KeywordDef("return", true, null, null);
+    @NotNull
+    private static final KeywordDef SHORT = new KeywordDef("short", true, null, null);
+    @NotNull
+    private static final KeywordDef STATIC = new KeywordDef("static", true, null, null);
+    @NotNull
+    private static final KeywordDef SUPER = new KeywordDef("super", true, null, null);
+    @NotNull
+    private static final KeywordDef SWITCH = new KeywordDef("switch", true, null, null);
+    @NotNull
+    private static final KeywordDef SYNCHRONIZED = new KeywordDef("synchronized", true, null, null);
+    @NotNull
+    private static final KeywordDef THIS = new KeywordDef("this", true, null, null);
+    @NotNull
+    private static final KeywordDef THROW = new KeywordDef("throw", true, null, null);
+    @NotNull
+    private static final KeywordDef THROWS = new KeywordDef("throws", true, null, null);
+    @NotNull
+    private static final KeywordDef TRANSIENT = new KeywordDef("transient", true, null, null);
+    @NotNull
+    private static final KeywordDef TRY = new KeywordDef("try", true, null, null);
+    @NotNull
+    private static final List<KeywordDef> KEYWORDS;
+    @SuppressWarnings("unused")
+    @NotNull
+    private static final List<SymbolDef> SYMBOLS;
+    @NotNull
+    private static final KeywordDef PLURIPOTENT = new KeywordDef("pluripotent", true, null, null);
+    @NotNull
+    private static final KeywordDef READONLY = new KeywordDef("readonly", true, null, null);
+    @NotNull
+    private static final KeywordDef JOIN = new KeywordDef("join", true, null, null);
+    @NotNull
+    private static final KeywordDef FAIL = new KeywordDef("fail", true, null, null);
+    @NotNull
+    private static final KeywordDef FILTER = new KeywordDef("filter", true, null, null);
+    @NotNull
+    private static final KeywordDef DISPATCH = new KeywordDef("dispatch", true, null, null);
+    @NotNull
+    private static final KeywordDef SEND = new KeywordDef("send", true, null, null);
+    @NotNull
+    private static final KeywordDef EMIT = new KeywordDef("emit", true, null, null);
+    @NotNull
+    private static final KeywordDef INCLUDE = new KeywordDef("include", true, null, null);
+    @NotNull
+    private static final KeywordDef IMPURE = new KeywordDef("impure", true, null, null);
+    @NotNull
+    private static final KeywordDef VARIANT = new KeywordDef("variant", true, null, null);
+    @NotNull
+    private static final KeywordDef VARY = new KeywordDef("vary", true, null, null);
+    @NotNull
+    private static final KeywordDef VARIES = new KeywordDef("varies", true, null, null);
+    @NotNull
+    private static final KeywordDef LAMBDA = new KeywordDef("lambda", true, null, null);
+    @NotNull
+    private static final KeywordDef CLOSURE = new KeywordDef("closure", true, null, null);
+    @NotNull
+    private static final KeywordDef SCOPE = new KeywordDef("scope", true, null, null);
+    @NotNull
+    private static final KeywordDef DUMP = new KeywordDef("dump", true, null, null);
+    @NotNull
+    private static final KeywordDef TRACE = new KeywordDef("trace", true, null, null);
+    @NotNull
+    private static final KeywordDef MEASURE = new KeywordDef("measure", true, null, null);
+    @NotNull
+    private static final KeywordDef UNIT = new KeywordDef("unit", true, null, null);
+    @NotNull
+    private static final KeywordDef WAIT = new KeywordDef("wait", true, null, null);
+    @NotNull
+    private static final KeywordDef AWAIT = new KeywordDef("await", true, null, null);
+    @NotNull
+    private static final KeywordDef SAVE = new KeywordDef("save", true, null, null);
+    @NotNull
+    private static final KeywordDef LOAD = new KeywordDef("load", true, null, null);
+    @NotNull
+    private static final List<? extends Comparable<?>> tokens =
             asList(
-                    //                   new OpDef("\u2357"),
+                    //simple perators,
                     ALL,
                     AND,
                     ASSERT_EQ_REACT,
@@ -748,6 +723,43 @@ public class Symbols {
                     NO,
                     NULL,
 
+                    //complex operators
+                    CAST,
+                    FOR_OP,
+                    WHILE_OP,
+                    SUBSCRIPT_OP,
+                    PARAM_OP,
+                    WRITE_OP,
+                    READ_OP,
+
+
+                    //Reserved Operators
+                    RESERVED_OPERATOR_1,
+                    RESERVED_OPERATOR_2,
+                    RESERVED_OPERATOR_3,
+                    RESERVED_OPERATOR_4,
+                    RESERVED_OPERATOR_5,
+                    RESERVED_OPERATOR_6,
+                    RESERVED_OPERATOR_7,
+                    RESERVED_OPERATOR_8,
+                    RESERVED_OPERATOR_9,
+                    RESERVED_OPERATOR_10,
+                    RESERVED_OPERATOR_11,
+                    RESERVED_OPERATOR_12,
+                    RESERVED_OPERATOR_13,
+                    RESERVED_OPERATOR_14,
+                    RESERVED_OPERATOR_15,
+                    RESERVED_OPERATOR_16,
+                    RESERVED_OPERATOR_17,
+                    RESERVED_OPERATOR_18,
+                    RESERVED_OPERATOR_19,
+                    RESERVED_OPERATOR_20,
+                    RESERVED_OPERATOR_21,
+                    RESERVED_OPERATOR_22,
+                    RESERVED_OPERATOR_23,
+
+
+                    //keywords
                     VOID,
                     INFINITY,
                     PURE,
@@ -774,13 +786,6 @@ public class Symbols {
                     TO,
                     FROM,
 
-                    CAST,
-                    FOR_OP,
-                    WHILE_OP,
-                    SUBSCRIPT_OP,
-                    PARAM_OP,
-                    WRITE_OP,
-                    READ_OP,
 
                     //Reserved Keywords
                     ABSTRACT,
@@ -840,50 +845,24 @@ public class Symbols {
                     VARIANT,
                     VARIES,
                     VARY,
-                    WAIT,
-//                    DOLLAR1,
-                    
-                    //Reserved Operators
-                    RESERVED_OPERATOR_1,
-                    RESERVED_OPERATOR_2,
-                    RESERVED_OPERATOR_3,
-                    RESERVED_OPERATOR_4,
-                    RESERVED_OPERATOR_5,
-                    RESERVED_OPERATOR_6,
-                    RESERVED_OPERATOR_7,
-                    RESERVED_OPERATOR_8,
-                    RESERVED_OPERATOR_9,
-                    RESERVED_OPERATOR_10,
-                    RESERVED_OPERATOR_11,
-                    RESERVED_OPERATOR_12,
-                    RESERVED_OPERATOR_13,
-                    RESERVED_OPERATOR_14,
-                    RESERVED_OPERATOR_15,
-                    RESERVED_OPERATOR_16,
-                    RESERVED_OPERATOR_17,
-                    RESERVED_OPERATOR_18,
-                    RESERVED_OPERATOR_19,
-                    RESERVED_OPERATOR_20,
-                    RESERVED_OPERATOR_21,
-                    RESERVED_OPERATOR_22,
-                    RESERVED_OPERATOR_23
-
+                    WAIT
             );
 
     static {
 
-        OPERATORS = tokens.stream().filter(i -> i instanceof OpDef && !((OpDef) i).isReserved()).map(
+        OPERATORS = tokens.stream().filter(i -> (i instanceof OpDef) && !((OpDef) i).isReserved()).map(
                 i -> (OpDef) i).sorted().collect(Collectors.toList());
         OPERATORS.sort(Comparator.comparing(OpDef::name));
 
-        KEYWORDS = tokens.stream().filter(i -> i instanceof KeywordDef && !((KeywordDef) i).isReserved()).map(
+        KEYWORDS = tokens.stream().filter(i -> (i instanceof KeywordDef) && !((KeywordDef) i).isReserved()).map(
                 i -> (KeywordDef) i).sorted().collect(Collectors.toList());
 
-        SYMBOLS = tokens.stream().filter(i -> i instanceof SymbolDef && !((SymbolDef) i).isReserved()).map(
+        SYMBOLS = tokens.stream().filter(i -> (i instanceof SymbolDef) && !((SymbolDef) i).isReserved()).map(
                 i -> (SymbolDef) i).sorted().collect(Collectors.toList());
 
 
-        SYMBOL_STRINGS = tokens.stream().filter(symbol -> symbol instanceof HasSymbol && ((HasSymbol) symbol).symbol() != null).map(
+        SYMBOL_STRINGS = tokens.stream().filter(
+                symbol -> (symbol instanceof HasSymbol) && (((HasSymbol) symbol).symbol() != null)).map(
                 symbol -> ((HasSymbol) symbol).symbol()).sorted().collect(Collectors.toList());
 
 
@@ -892,19 +871,19 @@ public class Symbols {
                 Objects::nonNull).sorted().collect(Collectors.toList());
     }
 
-    public static void mainx(@NotNull String[] args) {
-        for (OpDef operator : OPERATORS) {
-
-            File file = new File("src/main/resources/examples/op", operator.name() + ".ds");
-            try {
-                if (!file.exists()) {
-                    Files.write("".getBytes(), file);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    public static void mainx(@NotNull String[] args) {
+//        for (OpDef operator : OPERATORS) {
+//
+//            File file = new File("src/main/resources/examples/op", operator.name() + ".ds");
+//            try {
+//                if (!file.exists()) {
+//                    Files.write("".getBytes(), file);
+//                }
+//            } catch (IOException e) {
+//                log.error(e.getMessage(), e);
+//            }
+//        }
+//    }
 
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
     public static void main(@NotNull String[] args) {
@@ -919,25 +898,25 @@ public class Symbols {
         System.out.println("## Appendix C - Reserved Keywords, Operators and Symbols");
         System.out.println("### Keywords\n");
         System.out.println("The following keywords are reserved:\n");
-        System.out.println("> " + tokens.stream().filter(i -> i instanceof KeywordDef && ((KeywordDef) i).isReserved()).map(
-                i -> ((KeywordDef) i).keyword()).sorted().collect(Collectors.joining(", ")));
+        System.out.println("> " + tokens.stream().filter(i -> (i instanceof KeywordDef) && ((KeywordDef) i).isReserved()).map(
+                i -> ((HasKeyword) i).keyword()).sorted().collect(Collectors.joining(", ")));
         System.out.println();
 
         System.out.println("### Operators\n");
         System.out.println("The following operator keywords are reserved:\n");
         System.out.println("> " + tokens.stream().filter(
-                i -> i instanceof OpDef && ((OpDef) i).keyword() != null && ((OpDef) i).isReserved()).map(
-                i -> ((OpDef) i).keyword()).sorted().collect(Collectors.joining(", ")));
+                i -> (i instanceof OpDef) && (((HasKeyword) i).keyword() != null) && ((OpDef) i).isReserved()).map(
+                i -> ((HasKeyword) i).keyword()).sorted().collect(Collectors.joining(", ")));
         System.out.println();
         System.out.println("The following operator symbols are reserved:\n");
         System.out.println("> `" + tokens.stream().filter(
-                i -> i instanceof OpDef && ((OpDef) i).symbol() != null && ((OpDef) i).isReserved()).map(
-                i -> ((OpDef) i).symbol()).sorted().collect(Collectors.joining(", ")) + " `");
+                i -> (i instanceof OpDef) && (((HasSymbol) i).symbol() != null) && ((OpDef) i).isReserved()).map(
+                i -> ((HasSymbol) i).symbol()).sorted().collect(Collectors.joining(", ")) + " `");
         System.out.println();
         System.out.println("### Symbols\n");
         System.out.println("The following general symbols are reserved:\n");
-        System.out.println("> `" + tokens.stream().filter(i -> i instanceof SymbolDef && ((SymbolDef) i).isReserved()).map(
-                i -> ((SymbolDef) i).symbol()).sorted().collect(Collectors.joining(", ")) + " `");
+        System.out.println("> `" + tokens.stream().filter(i -> (i instanceof SymbolDef) && ((SymbolDef) i).isReserved()).map(
+                i -> ((HasSymbol) i).symbol()).sorted().collect(Collectors.joining(", ")) + " `");
         System.out.println();
         System.out.println("## Appendix D - Operator Precedence");
 
@@ -949,23 +928,12 @@ public class Symbols {
         );
         System.out.printf("|%-30s|%-15s|%-10s|%-10s|%n", "Name", "Keyword", "Operator", "Type");
         System.out.printf("|%-30s|%-15s|%-10s|%-10s|%n", "-------", "-------", "-------", "-------");
-        ArrayList<OpDef> sortedOps = new ArrayList<>(OPERATORS);
-        sortedOps.sort(new Comparator<OpDef>() {
-            @Override
-            public int compare(@NotNull OpDef o1, @NotNull OpDef o2) {
-                return o2.priority() - o1.priority();
-            }
-        });
-        for (OpDef operator : sortedOps) {
-            System.out.printf("|%-30s|%-15s| %-9s|%-10s|%n", "[" + operator.name() + "](#op-" + operator.name() + ")", operator
-                                                                                                                               .keyword()
-                                                                                                                               !=
-                                                                                                                               null ? ("`"
-                                                                                                                                               + operator
-                                                                                                                                                         .keyword()
-                                                                                                                                               + "`")
-                                                                                                                               : " ",
-                              operator.symbol() != null ? ("`" + operator.symbol() + "`") : " ", operator.type().humanName());
+        List<OpDef> sortedOps = new ArrayList<>(OPERATORS);
+        sortedOps.sort((o1, o2) -> Integer.compare(o2.priority(), o1.priority()));
+        for (OpDef op : sortedOps) {
+            System.out.printf("|%-30s|%-15s| %-9s|%-10s|%n", "[" + op.name() + "](#op-" + op.name() + ")",
+                              (op.keyword() != null) ? ("`" + op.keyword() + "`") : " ",
+                              (op.symbol() != null) ? ("`" + op.symbol() + "`") : " ", op.type().humanName());
         }
     }
 

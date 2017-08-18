@@ -38,8 +38,8 @@ public class BinaryOp implements Binary<var>, Operator {
     @NotNull
     private SourceSegment source;
     @NotNull
-    private DollarParser parser;
-    private boolean pure;
+    private final DollarParser parser;
+    private final boolean pure;
 
 
     public BinaryOp(@NotNull DollarParser parser,
@@ -85,20 +85,20 @@ public class BinaryOp implements Binary<var>, Operator {
     @Override
     public var map(@NotNull var lhs, @NotNull var rhs) {
         if (immediate) {
-            final var lambda = DollarScriptSupport.createNode(operation.name(), SourceNodeOptions.NO_SCOPE, parser,
-                                                              source,
-                                                              Arrays.asList(lhs, rhs),
-                                                              new Pipeable() {
-                                                                  @Override
-                                                                  public var pipe(var... vars) throws Exception {
-                                                                      return function.apply(lhs, rhs);
-                                                                  }
-                                                              });
+            final var lambda = DollarScriptSupport.node(operation.name(), pure, SourceNodeOptions.NO_SCOPE, parser,
+                                                        source,
+                                                        Arrays.asList(lhs, rhs),
+                                                        new Pipeable() {
+                                                            @Override
+                                                            public var pipe(var... vars) throws Exception {
+                                                                return function.apply(lhs, rhs);
+                                                            }
+                                                        });
             return lambda;
 
         }
         //Lazy evaluation
-        return DollarScriptSupport.reactiveNode(operation.name(), SourceNodeOptions.NO_SCOPE, parser, source, lhs, rhs,
+        return DollarScriptSupport.reactiveNode(operation.name(), pure, SourceNodeOptions.NO_SCOPE, parser, source, lhs, rhs,
                                                 args -> function.apply(lhs, rhs));
     }
 

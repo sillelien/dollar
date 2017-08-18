@@ -17,6 +17,7 @@
 package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
+import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
@@ -27,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import static com.sillelien.dollar.api.DollarStatic.$void;
-import static dollar.internal.runtime.script.DollarScriptSupport.createNode;
 import static dollar.internal.runtime.script.SourceNodeOptions.SCOPE_WITH_CLOSURE;
 
 public class BlockOperator implements Map<Token, var> {
@@ -59,7 +59,7 @@ public class BlockOperator implements Map<Token, var> {
     @Override
     public var map(@NotNull Token token) {
         List<var> l = (List<var>) token.value();
-        return createNode("block", SCOPE_WITH_CLOSURE, dollarParser, token, l, parallel -> {
+        return DollarScriptSupport.node("block", pure, SCOPE_WITH_CLOSURE, dollarParser, token, l, parallel -> {
 
 
             return TO_BLOCK(l);

@@ -17,42 +17,29 @@
 package dollar.internal.runtime.script;
 
 import com.google.common.io.ByteStreams;
+import com.sillelien.dollar.api.BooleanAware;
 import com.sillelien.dollar.api.ControlFlowAware;
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.NumericAware;
 import com.sillelien.dollar.api.URIAware;
 import com.sillelien.dollar.api.VarInternal;
-import com.sillelien.dollar.api.execution.DollarExecutor;
-import com.sillelien.dollar.api.plugin.Plugins;
+import com.sillelien.dollar.api.collections.ImmutableList;
+import com.sillelien.dollar.api.script.ModuleResolver;
+import com.sillelien.dollar.api.time.Scheduler;
+import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.ParserErrorHandler;
 import dollar.internal.runtime.script.api.ParserOptions;
 import dollar.internal.runtime.script.api.Scope;
-import dollar.internal.runtime.script.operators.AssertOperator;
 import dollar.internal.runtime.script.operators.AssignmentOperator;
 import dollar.internal.runtime.script.operators.BlockOperator;
-import dollar.internal.runtime.script.operators.CastOperator;
 import dollar.internal.runtime.script.operators.CausesOperator;
 import dollar.internal.runtime.script.operators.CollectOperator;
 import dollar.internal.runtime.script.operators.DefinitionOperator;
-import dollar.internal.runtime.script.operators.EveryOperator;
-import dollar.internal.runtime.script.operators.ForOperator;
 import dollar.internal.runtime.script.operators.Func;
-import dollar.internal.runtime.script.operators.FunctionCallOperator;
-import dollar.internal.runtime.script.operators.IfOperator;
-import dollar.internal.runtime.script.operators.IsOperator;
-import dollar.internal.runtime.script.operators.MapOperator;
-import dollar.internal.runtime.script.operators.ModuleOperator;
 import dollar.internal.runtime.script.operators.ParameterOperator;
 import dollar.internal.runtime.script.operators.PipeOperator;
-import dollar.internal.runtime.script.operators.ReadOperator;
-import dollar.internal.runtime.script.operators.SubscriptOperator;
-import dollar.internal.runtime.script.operators.UnitOperator;
-import dollar.internal.runtime.script.operators.VariableUsageOperator;
-import dollar.internal.runtime.script.operators.WhenOperator;
-import dollar.internal.runtime.script.operators.WhileOperator;
-import dollar.internal.runtime.script.operators.WriteOperator;
 import dollar.internal.runtime.script.parser.OpDef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -75,33 +62,35 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static com.sillelien.dollar.api.DollarStatic.$;
-import static com.sillelien.dollar.api.DollarStatic.$void;
+import static com.sillelien.dollar.api.DollarStatic.*;
 import static dollar.internal.runtime.script.DollarLexer.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.OperatorPriority.EQ_PRIORITY;
-import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
+import static dollar.internal.runtime.script.SourceNodeOptions.*;
 import static dollar.internal.runtime.script.java.JavaScriptingSupport.compile;
 import static dollar.internal.runtime.script.parser.Symbols.*;
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.jparsec.Parsers.*;
 
-@SuppressWarnings("FeatureEnvy")
+@SuppressWarnings({"FeatureEnvy", "OverlyCoupledClass", "unchecked"})
 public class DollarParserImpl implements DollarParser {
     @NotNull
     public static final String NAMED_PARAMETER_META_ATTR = "__named_parameter";
-    @Nullable
-    public static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("DollarParser");
-
+    private static final double ONE_DAY = 24.0 * 60.0 * 60.0 * 1000.0;
     @NotNull
     private final ClassLoader classLoader;
     @NotNull
@@ -110,7 +99,6 @@ public class DollarParserImpl implements DollarParser {
     private final Map<String, var> exports = new ConcurrentHashMap<>();
     @NotNull
     private final ParserOptions options;
-
     @Nullable
     private String file;
 
@@ -123,19 +111,6 @@ public class DollarParserImpl implements DollarParser {
         this.options = options;
         this.classLoader = classLoader;
 
-    }
-
-    private Parser<var> dollarIdentifier(@NotNull Parser.Reference ref) {
-        //noinspection unchecked
-        return OP(DOLLAR).next(
-                array(Terminals.Identifier.PARSER, OP(DEFAULT).next(ref.lazy()).optional(null)).between(
-                        OP(LEFT_BRACE),
-                        OP(RIGHT_BRACE))).token().map(
-                t -> {
-                    Object[] objects = (Object[]) t.value();
-                    return getVariable(false, objects[0].toString(), false, (var) objects[1], t,
-                                       this);
-                });
     }
 
 
@@ -151,7 +126,6 @@ public class DollarParserImpl implements DollarParser {
         return errorHandler;
     }
 
-
     @NotNull
     @Override
     public ParserOptions options() {
@@ -166,7 +140,7 @@ public class DollarParserImpl implements DollarParser {
             Parser<?> parser = script();
             try {
                 parser.from(TOKENIZER, DollarLexer.IGNORED).parse(source);
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
                 getErrorHandler().handleTopLevel(e, null, (file != null) ? new File(file) : null);
 
             }
@@ -224,7 +198,6 @@ public class DollarParserImpl implements DollarParser {
         return $();
     }
 
-
     @NotNull
     private var parseMarkdown(@NotNull File file) throws IOException {
         PegDownProcessor pegDownProcessor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
@@ -235,7 +208,6 @@ public class DollarParserImpl implements DollarParser {
         root.accept(new CodeExtractionVisitor());
         return $();
     }
-
 
     @NotNull
     private Parser<var> script() throws Exception {
@@ -287,11 +259,11 @@ public class DollarParserImpl implements DollarParser {
                            .between(OP(LEFT_PAREN), OP(RIGHT_PAREN))
                            .or(Parsers.or(unitValue(true),
                                           list(ref.lazy(), true),
-                                          serialFunc(ref.lazy(), true),
+                                          mapFunc(ref.lazy(), true),
                                           assertOperator(ref, true),
                                           collectStatement(ref.lazy(), true),
                                           whenStatement(ref.lazy(), true),
-                                          functionCall(),
+                                          functionCall(true),
                                           DECIMAL_LITERAL,
                                           INTEGER_LITERAL,
                                           STRING_LITERAL,
@@ -305,7 +277,7 @@ public class DollarParserImpl implements DollarParser {
                            .between(OP(LEFT_PAREN), OP(RIGHT_PAREN))
                            .or(Parsers.or(unitValue(false),
                                           list(ref.lazy(), false),
-                                          serialFunc(ref.lazy(), false),
+                                          mapFunc(ref.lazy(), false),
                                           pureDeclarationOperator(ref),
                                           KEYWORD(PURE).next(expression(true)),
                                           moduleStatement(ref),
@@ -313,8 +285,8 @@ public class DollarParserImpl implements DollarParser {
                                           collectStatement(ref.lazy(), false),
                                           whenStatement(ref.lazy(), false),
                                           everyStatement(ref.lazy()),
-                                          functionCall(),
-                                          java(),
+                                          functionCall(false),
+                                          java(false),
                                           URL,
                                           DECIMAL_LITERAL,
                                           INTEGER_LITERAL,
@@ -336,26 +308,26 @@ public class DollarParserImpl implements DollarParser {
         table = infixl(pure, table, MOD, NumericAware::$modulus);
 
 
-        table = infixl(pure, table, INEQUALITY_OPERATOR, Func::inequality);
-        table = infixl(pure, table, EQUALITY, Func::equality);
-        table = infixl(pure, table, AND, Func::and);
+        table = infixl(pure, table, INEQUALITY_OPERATOR, Func::inequalityFunc);
+        table = infixl(pure, table, EQUALITY, Func::equalityFunc);
+        table = infixl(pure, table, AND, Func::andFunc);
         table = infixl(pure, table, OR, Func::orFunc);
-        table = infixl(pure, table, RANGE, Func::range);
+        table = infixl(pure, table, RANGE, Func::rangeFunc);
         table = infixl(pure, table, LT, Func::lt);
         table = infixl(pure, table, GT, Func::gt);
         table = infixl(pure, table, LT_EQUALS, Func::lte);
         table = infixl(pure, table, GT_EQUALS, Func::gte);
-        table = infixl(pure, table, MULTIPLY, Func::multiply);
-        table = infixl(pure, table, PAIR, Func::pair);
+        table = infixl(pure, table, MULTIPLY, Func::multiplyFunc);
+        table = infixl(pure, table, PAIR, Func::pairFunc);
         table = infixl(pure, table, ELSE, Func::elseFunc);
         table = infixl(pure, table, IN, Func::inFunc);
         table = infixl(pure, table, WHEN_OP, Func::listenFunc);
 
-        table = infixl(pure, table, EACH, (lhs, rhs) -> Func.each(pure, lhs, rhs));
-        table = infixl(pure, table, REDUCE, (lhs, rhs) -> Func.reduce(pure, lhs, rhs));
+        table = infixl(pure, table, EACH, (lhs, rhs) -> Func.eachFunc(pure, lhs, rhs));
+        table = infixl(pure, table, REDUCE, (lhs, rhs) -> Func.reduceFunc(pure, lhs, rhs));
 
-        table = infixlReactive(pure, table, ASSERT_EQ_REACT, Func::assertEquals);
-        table = infixlUnReactive(pure, table, ASSERT_EQ_UNREACT, Func::assertEquals);
+        table = infixlReactive(pure, table, ASSERT_EQ_REACT, Func::assertEqualsFunc);
+        table = infixlUnReactive(pure, table, ASSERT_EQ_UNREACT, Func::assertEqualsFunc);
 
 
         table = postfix(pure, table, DEC, var::$dec);
@@ -365,8 +337,8 @@ public class DollarParserImpl implements DollarParser {
         table = prefix(pure, table, SIZE, var::$size);
 
         table = prefix(pure, table, NOT, Func::notFunc);
-        table = prefix(pure, table, ERROR, Func::error);
-        table = prefix(pure, table, TRUTHY, Func::truthy);
+        table = prefix(pure, table, ERROR, Func::errorFunc);
+        table = prefix(pure, table, TRUTHY, Func::truthyFunc);
 
 
         table = prefixUnReactive(pure, table, FIX, VarInternal::_fixDeep);
@@ -379,7 +351,7 @@ public class DollarParserImpl implements DollarParser {
 
         table = table.postfix(pipeOperator(ref, pure), PIPE_OPERATOR.priority());
         table = table.postfix(isOperator(pure), EQ_PRIORITY);
-        table = table.postfix(memberOperator(ref), MEMBER.priority());
+        table = table.postfix(memberOperator(ref, pure), MEMBER.priority());
         table = table.postfix(subscriptOperator(ref, pure), SUBSCRIPT_OP.priority());
         table = table.postfix(castOperator(pure), CAST.priority());
         table = table.postfix(parameterOperator(ref, pure), PARAM_OP.priority());
@@ -411,7 +383,7 @@ public class DollarParserImpl implements DollarParser {
             table = prefix(false, table, PRINT, Func::outFunc);
             table = prefix(false, table, DEBUG, Func::debugFunc);
             table = prefix(false, table, ERR, Func::errFunc);
-            table = prefix(false, table, FORK, Func::fork);
+            table = prefix(false, table, FORK, Func::forkFunc);
 
             table = table.prefix(writeOperator(ref), WRITE_OP.priority());
             table = table.prefix(readOperator(), READ_OP.priority());
@@ -477,39 +449,111 @@ public class DollarParserImpl implements DollarParser {
     private Parser<var> builtin(boolean pure) {
         return BUILTIN
                        .token()
-                       .map(token -> reactiveNode("builtin", NO_SCOPE,
+                       .map(token -> reactiveNode("builtin", pure, NO_SCOPE,
                                                   this, token,
                                                   (var) token.value(),
                                                   args -> Builtins.execute(token.toString(), emptyList(), pure)));
     }
 
+    private Parser<var> dollarIdentifier(@NotNull Parser.Reference<var> ref) {
+        //noinspection unchecked
+        return OP(DOLLAR).next(
+                array(Terminals.Identifier.PARSER, OP(DEFAULT).next(ref.lazy()).optional(null)).between(
+                        OP(LEFT_BRACE),
+                        OP(RIGHT_BRACE)))
+                       .token().map(
+                        t -> {
+                            Object[] objects = (Object[]) t.value();
+                            return variableNode(false, objects[0].toString(),
+                                                false, (var) objects[1], t, this);
+                        });
+    }
+
+
     @NotNull
     private Parser<var> variableRef(boolean pure) {
         return identifier().followedBy(OP(LEFT_PAREN).not().peek())
                        .token()
-                       .map(token -> getVariable(pure, token.value().toString(),
-                                                 false, null,
-                                                 token, this));
+                       .map(token -> variableNode(pure, token.value().toString(),
+                                                  false, null,
+                                                  token, this));
     }
 
     private Parser<var> unitValue(boolean pure) {
-        return array(DECIMAL_LITERAL.or(INTEGER_LITERAL), BUILTIN).token().map(
-                new UnitOperator(this, pure));
+        return array(DECIMAL_LITERAL.or(INTEGER_LITERAL), BUILTIN)
+                       .token()
+                       .map(
+                               token -> {
+                                   Object[] objects = (Object[]) token.value();
+                                   var quantity = (var) objects[0];
+                                   var unit = (var) objects[1];
+                                   return node("unit", pure,
+                                               NEW_SCOPE, this, token,
+                                               asList(quantity, unit), i -> {
+                                               if (Builtins.exists(unit.toString())) {
+                                                   return Builtins.execute(objects[1].toString(),
+                                                                           singletonList(quantity), pure);
+                                               } else {
+                                                   final var defaultValue = $void();
+                                                   final var variable = variableNode(pure, unit.toString(),
+                                                                                     false,
+                                                                                     defaultValue, token, this);
+                                                   currentScope().setParameter("1", quantity);
+                                                   return fix(variable, false);
+                                               }
+                                           });
+                               });
     }
 
     private Parser<var> list(@NotNull Parser<var> expression, boolean pure) {
         return OP_NL(LEFT_BRACKET)
                        .next(expression.sepBy(COMMA_OR_NEWLINE_TERMINATOR))
                        .followedBy(COMMA_OR_NEWLINE_TERMINATOR.optional(null))
-                       .followedBy(NL_OP(RIGHT_BRACKET)).token().map(
-                        new ListOperator(this, pure));
+                       .followedBy(NL_OP(RIGHT_BRACKET))
+                       .token()
+                       .map(
+                               token -> {
+                                   List<var> members = (List<var>) token.value();
+                                   final var node = node("list", pure, SCOPE_WITH_CLOSURE,
+                                                         token, members, this,
+                                                         vars -> DollarFactory.fromList(new ImmutableList<>(members))
+                                   );
+                                   for (var v : members) {
+                                       v.$listen(i -> node.$notify());
+                                   }
+                                   return node;
+
+                               });
     }
 
-    private Parser<var> serialFunc(@NotNull Parser<var> expression, boolean pure) {
-        return OP_NL(LEFT_BRACE).next(expression.sepBy(COMMA_TERMINATOR))
+    @NotNull
+    private Parser<var> mapFunc(@NotNull Parser<var> expression, boolean pure) {
+        return OP_NL(LEFT_BRACE)
+                       .next(expression.sepBy(COMMA_TERMINATOR))
                        .followedBy(COMMA_TERMINATOR.optional(null))
-                       .followedBy(NL_OP(RIGHT_BRACE)).token()
-                       .map(new MapOperator(this, pure));
+                       .followedBy(NL_OP(RIGHT_BRACE))
+                       .token()
+                       .map(token -> {
+                           List<var> o = (List<var>) token.value();
+                           final var node = node("serial", pure, SCOPE_WITH_CLOSURE,
+                                                 token, o, this,
+                                                 i -> {
+                                                     if (o.size() == 1) {
+                                                         return DollarFactory.blockCollection(o);
+                                                     } else {
+                                                         var parallel = i[0];
+                                                         Stream<var> stream = parallel.isTrue() ? o.stream().parallel() : o.stream();
+                                                         return $(stream.map(v -> v._fix(parallel.isTrue()))
+                                                                          .collect(Collectors.toConcurrentMap(
+                                                                                  v -> v.pair() ? v.$pairKey() : v.$S(),
+                                                                                  v -> v.pair() ? v.$pairValue() : v)));
+                                                     }
+                                                 });
+                           for (var value : o) {
+                               value.$listen(i -> node.$notify());
+                           }
+                           return node;
+                       });
     }
 
     private Parser<var> moduleStatement(@NotNull Parser.Reference<var> ref) {
@@ -523,15 +567,57 @@ public class DollarParserImpl implements DollarParser {
                 }).sepBy(OP(COMMA)).between(OP(LEFT_PAREN), OP(RIGHT_PAREN)));
 
         return array(KEYWORD(MODULE), STRING_LITERAL.or(URL),
-                     parameters.optional(null)).token().map(new ModuleOperator(this));
+                     parameters.optional(null)).token()
+                       .map(token -> {
+                           Object[] objects = (Object[]) token.value();
+                           String moduleName = ((var) objects[1]).$S();
+                           @SuppressWarnings("unchecked") final Iterable<var> params = (Iterable<var>) objects[2];
+                           return node("module", false, NEW_SCOPE, this, token, emptyList(),
+                                       in -> {
+                                           String[] parts = moduleName.split(":", 2);
+                                           if (parts.length < 2) {
+                                               throw new IllegalArgumentException("Module " + moduleName + " needs to have a scheme");
+                                           }
+                                           Map<String, var> paramMap = new HashMap<>();
+                                           if (params != null) {
+                                               for (var param1 : params) {
+                                                   paramMap.put(param1.getMetaAttribute(NAMED_PARAMETER_META_ATTR), param1);
+                                               }
+                                           }
+                                           try {
+                                               return ModuleResolver
+                                                              .resolveModule(parts[0])
+                                                              .resolve(parts[1], currentScope(), this)
+                                                              .pipe($(paramMap))
+                                                              ._fix(true);
+
+                                           } catch (Exception e) {
+                                               return currentScope().handleError(e);
+                                           }
+
+                                       });
+
+                       });
 
     }
 
     private Parser<var> assertOperator(@NotNull Parser.Reference<var> ref, boolean pure) {
-        return OP(ASSERT).next(or(array(STRING_LITERAL.followedBy(OP(PAIR)), ref.lazy()),
-                                  array(OP(PAIR).optional(null), ref.lazy()))
+        return OP(ASSERT)
+                       .next(
+                               or(
+                                       array(STRING_LITERAL.followedBy(OP(PAIR)), ref.lazy()),
+                                       array(OP(PAIR).optional(null), ref.lazy()
+                                       )
+                               )
                                        .token()
-                                       .map(new AssertOperator(this, pure)));
+                                       .map(token -> {
+                                           Object[] objects = (Object[]) token.value();
+                                           var message = (var) objects[0];
+                                           var condition = (var) objects[1];
+                                           return reactiveNode("assert", pure, NO_SCOPE,
+                                                               this, token, condition,
+                                                               args -> Func.assertFunc(message, condition));
+                                       }));
     }
 
     private Parser<var> collectStatement(@NotNull Parser<var> expression, boolean pure) {
@@ -550,7 +636,17 @@ public class DollarParserImpl implements DollarParser {
         return KEYWORD_NL(WHEN)
                        .next(array(expression, expression))
                        .token()
-                       .map(new WhenOperator(this, pure));
+                       .map(token -> {
+                           Object[] objects = (Object[]) token.value();
+                           var lhs = (var) objects[0];
+                           var rhs = (var) objects[1];
+                           var lambda = node(WHEN.keyword(), pure, NEW_SCOPE, token,
+                                             asList(lhs, rhs), this,
+                                             i -> lhs.isTrue() ? $((Object) rhs.toJavaObject()) : $void()
+                           );
+                           lhs.$listen(i -> lhs.isTrue() ? $((Object) rhs.toJavaObject()) : $void());
+                           return lambda;
+                       });
     }
 
     private Parser<var> everyStatement(@NotNull Parser<var> expression) {
@@ -562,131 +658,196 @@ public class DollarParserImpl implements DollarParser {
                                            expression).optional(null),
                                    expression))
                        .token()
-                       .map(new EveryOperator(this, false));
+                       .map(token -> {
+                           final AtomicInteger count = new AtomicInteger(-1);
+                           Object[] objects = (Object[]) token.value();
+                           return reactiveNode("every", false, NEW_SCOPE,
+                                               this, token, (var) objects[3],
+                                               args -> {
+                                                   Scope scope = currentScope();
+                                                   Double duration = ((var) objects[0]).toDouble();
+                                                   assert duration != null;
+                                                   Scheduler.schedule(i -> {
+                                                       count.incrementAndGet();
+                                                       return inScope(true, scope, newScope -> {
+                                                           try {
+                                                               newScope.setParameter("1", $(count.get()));
+                                                               if ((objects[1] instanceof var) && ((BooleanAware) objects[1]).isTrue()) {
+                                                                   Scheduler.cancel(i[0].$S());
+                                                                   return i[0];
+                                                               } else if ((objects[2] instanceof var) && ((BooleanAware) objects[2]).isTrue()) {
+                                                                   return $void();
+                                                               } else {
+                                                                   return ((VarInternal) objects[3])._fixDeep();
+                                                               }
+                                                           } catch (RuntimeException e) {
+                                                               return scope.handleError(e);
+                                                           }
+
+                                                       });
+                                                   }, ((long) (duration * ONE_DAY)));
+                                                   return $void();
+                                               });
+
+                       });
     }
 
-    private Parser<var> functionCall() {
+    private Parser<var> functionCall(boolean pure) {
         return array(IDENTIFIER.or(BUILTIN).followedBy(OP(LEFT_PAREN).peek()))
                        .token()
-                       .map(new FunctionCallOperator(this));
+                       .map(token -> {
+                           Object[] objects = (Object[]) token.value();
+                           var functionName = (var) objects[0];
+                           return node("function-name", pure, NO_SCOPE, this, token,
+                                       singletonList(functionName),
+                                       args -> functionName);
+                       });
     }
 
-    final Parser<var> java() {
-        return token(new TokenMap<String>() {
-            @Nullable
-            @Override
-            public String map(@NotNull Token token) {
-                final Object val = token.value();
-                if (val instanceof Tokens.Fragment) {
-                    Tokens.Fragment c = (Tokens.Fragment) val;
-                    if (!"java".equals(c.tag())) {
-                        return null;
-                    }
-                    return c.text();
-                } else {
-                    return null;
-                }
-            }
-
-            @NotNull
-            @Override
-            public String toString() {
-                return "java";
-            }
-        }).token().map(token -> createNode("java", NO_SCOPE,
-                                           this,
-                                           token,
-                                           singletonList($void()),
-                                           in -> compile($void(), (String) token.value())));
+    final Parser<var> java(boolean pure) {
+        return token(new JavaTokenMap())
+                       .token()
+                       .map(token -> node("java", pure, NO_SCOPE, this, token,
+                                          singletonList($void()),
+                                          in -> compile($void(),
+                                                        (String) token.value())
+                            )
+                       );
     }
 
-
-    private <T> Parser<T> op(@NotNull OpDef def, @NotNull T value) {
-        return OP(def).token().map(new SourceMapper<>(value));
-
-    }
-
-//    private <T> Parser<T> op(T value, String name, @Nullable String keyword) {
-//        Parser<?> parser;
-//        if (keyword == null) {
-//            parser = OP(name);
-//        } else {
-//            parser = OP(name, keyword);
-//
-//        }
-//        return parser.token().inFunc(new SourceMapper<>(value));
-//
-//    }
 
     private Parser<Function<? super var, ? extends var>> pipeOperator(@NotNull Parser.Reference<var> ref,
                                                                       boolean pure) {
         //noinspection unchecked
         return (OP(PIPE_OPERATOR).optional(null)).next(
-                longest(BUILTIN, IDENTIFIER, functionCall().postfix(parameterOperator(ref, pure)),
+                longest(BUILTIN, IDENTIFIER, functionCall(pure).postfix(parameterOperator(ref, pure)),
                         ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))))
                        .token().map(new PipeOperator(this, pure));
     }
 
     private Parser<Function<? super var, ? extends var>> writeOperator(@NotNull Parser.Reference<var> ref) {
-        return array(KEYWORD(WRITE_KEYWORD), ref.lazy(), KEYWORD(BLOCK).optional(null),
-                     KEYWORD(MUTATE).optional(null))
-                       .followedBy(KEYWORD(TO).optional(null))
+        return array(KEYWORD(WRITE_KEYWORD),
+                     ref.lazy(),
+                     KEYWORD(BLOCK).optional(null),
+                     KEYWORD(MUTATE).optional(null)
+        ).followedBy(KEYWORD(TO).optional(null))
                        .token()
-                       .map(new WriteOperator(this));
+                       .map(token -> {
+                           Object[] objects = (Object[]) token.value();
+                           var lhs = (var) objects[1];
+                           boolean blocking = objects[2] != null;
+                           boolean mutating = objects[3] != null;
+                           return rhs -> reactiveNode("write", false, NO_SCOPE,
+                                                      this, token, (var) lhs, rhs,
+                                                      args -> rhs.$write(lhs, blocking, mutating)
+                           );
+                       });
     }
 
     private Parser<Function<? super var, ? extends var>> readOperator() {
-        return array(KEYWORD(READ_KEYWORD), KEYWORD(BLOCK).optional(null), KEYWORD(MUTATE).optional(null)).followedBy(
-                KEYWORD(FROM).optional(null))
+        return array(KEYWORD(READ_KEYWORD),
+                     KEYWORD(BLOCK).optional(null),
+                     KEYWORD(MUTATE).optional(null)
+        ).followedBy(KEYWORD(FROM).optional(null))
                        .token()
-                       .map(new ReadOperator(this));
+                       .map(token -> {
+                           Object[] objects = (Object[]) token.value();
+                           boolean blocking = objects[1] != null;
+                           boolean mutating = objects[2] != null;
+                           return rhs -> {
+                               List<var> in = asList((var) objects[1], (var) objects[2], rhs);
+                               return node("read", false, NO_SCOPE,
+                                           this, token, in,
+                                           i -> rhs.$read(blocking, mutating)
+                               );
+                           };
+                       });
     }
 
     private Parser<Function<var, var>> ifOperator(@NotNull Parser.Reference<var> ref, boolean pure) {
         return KEYWORD_NL(IF_OPERATOR)
                        .next(ref.lazy())
                        .token()
-                       .map(new IfOperator(this, pure));
+                       .map(token -> {
+                           var lhs = (var) token.value();
+                           return rhs -> node("if", pure,
+                                              NO_SCOPE, this,
+                                              token, asList(lhs, rhs),
+                                              i -> Func.ifFunc(lhs, rhs));
+                       });
     }
 
+    @SuppressWarnings("unchecked")
     private Parser<Function<? super var, ? extends var>> isOperator(boolean pure) {
         return KEYWORD(IS)
                        .next(IDENTIFIER.sepBy(OP(COMMA)))
                        .token()
-                       .map(new IsOperator(this, pure));
+                       .map(token -> lhs -> reactiveNode("is", pure,
+                                                         NO_SCOPE, this, token, lhs,
+                                                         args -> Func.isFunc(lhs, (List<var>) token.value())
+
+                            )
+                       );
     }
 
-    private Parser<Function<? super var, ? extends var>> memberOperator(@NotNull Parser.Reference<var> ref) {
+    private Parser<Function<? super var, ? extends var>> memberOperator(@NotNull Parser.Reference<var> ref, boolean pure) {
         return OP(MEMBER).followedBy(OP(MEMBER).not())
                        .next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN)).or(IDENTIFIER))
-                       .token().map(rhs ->
-                                            (Function<var, var>) lhs ->
-                                                                         reactiveNode("member", NO_SCOPE,
-                                                                                      this, rhs, lhs,
-                                                                                      (var) rhs.value(),
-                                                                                      args -> lhs.$(rhs.value().toString())
-                                                                         ));
+                       .token()
+                       .map(rhs -> lhs -> reactiveNode("member", pure, NO_SCOPE,
+                                                       this, rhs, lhs,
+                                                       (var) rhs.value(),
+                                                       args -> lhs.$(rhs.toString())
+                       ));
     }
 
     private Parser<Function<? super var, ? extends var>> forOperator(final @NotNull Parser.Reference<var> ref, boolean pure) {
         return array(KEYWORD(FOR), IDENTIFIER, KEYWORD(IN), ref.lazy())
                        .token()
-                       .map(new ForOperator(this, pure));
+                       .map(token -> {
+                           Object[] objects = (Object[]) token.value();
+                           String varName = objects[1].toString();
+                           var iterable = (var) objects[3];
+                           return rhs -> reactiveNode("for", pure, NEW_SCOPE, this, token, rhs,
+                                                      args -> Func.forFunc(pure, varName, iterable, rhs));
+                       });
     }
 
     private Parser<Function<? super var, ? extends var>> whileOperator(final @NotNull Parser.Reference<var> ref, boolean pure) {
         return KEYWORD(WHILE)
                        .next(ref.lazy())
                        .token()
-                       .map(new WhileOperator(this, pure));
+                       .map(token -> {
+                           var lhs = (var) token.value();
+                           return rhs -> node("while", pure, NEW_SCOPE,
+                                              this, token, asList(lhs, rhs),
+                                              i -> Func.whileFunc(lhs, rhs));
+                       });
     }
 
     private Parser<Function<? super var, ? extends var>> subscriptOperator(@NotNull Parser.Reference<var> ref, boolean pure) {
-        return OP(LEFT_BRACKET)
-                       .next(array(ref.lazy().followedBy(OP(RIGHT_BRACKET)), OP(ASSIGNMENT).next(ref.lazy()).optional(null)
-                       ))
+        return OP(LEFT_BRACKET).next(
+                array(
+                        ref.lazy().followedBy(OP(RIGHT_BRACKET)),
+                        OP(ASSIGNMENT)
+                                .next(ref.lazy()).optional(null))
+        )
                        .token()
-                       .map(new SubscriptOperator(this, pure));
+                       .map(token -> {
+                           Object[] rhs = (Object[]) token.value();
+                           return lhs -> {
+                               if (rhs[1] == null) {
+                                   return reactiveNode("subscript", pure, NO_SCOPE,
+                                                       this, token, lhs, (var) rhs[0],
+                                                       args -> lhs.$get(((var) rhs[0])));
+                               } else {
+                                   return node("subscript-assignment",
+                                               pure, NO_SCOPE, this, token,
+                                               asList(lhs, (var) rhs[0], (var) rhs[1]),
+                                               i -> lhs.$set((var) rhs[0], rhs[1]));
+                               }
+                           };
+                       });
     }
 
     private Parser<Function<? super var, ? extends var>> parameterOperator(@NotNull Parser.Reference<var> ref,
@@ -706,33 +867,55 @@ public class DollarParserImpl implements DollarParser {
                                 //no, just use the value
                                 return (var) objects[1];
                             }
-                        }).sepBy(COMMA_TERMINATOR)).followedBy(OP(RIGHT_PAREN)).token().map(
-                new ParameterOperator(this, pure));
+                        }).sepBy(COMMA_TERMINATOR)).followedBy(OP(RIGHT_PAREN))
+                       .token().map(new ParameterOperator(this, pure));
     }
 
     private Parser<Function<? super var, ? extends var>> variableUsageOperator(boolean pure) {
-        return or(OP(DOLLAR).followedBy(OP(LEFT_PAREN).peek())
-                          .token()
-                          .map(new VariableUsageOperator(pure, this, false)),
-                  OP(DOLLAR).followedBy(INTEGER_LITERAL.peek())
-                          .token()
-                          .map(lhs -> rhs -> getVariable(pure, rhs.toString(), true, null, lhs, this)));
+        return or(
+                OP(DOLLAR)
+                        .followedBy(OP(LEFT_PAREN).peek())
+                        .token()
+                        .map(token -> rhs -> node("variable-usage",
+                                                  pure, NO_SCOPE, this,
+                                                  token, singletonList(rhs),
+                                                  i -> variableNode(pure, rhs.toString(),
+                                                                    false, $void(), token, this))),
+                OP(DOLLAR)
+                        .followedBy(INTEGER_LITERAL.peek())
+                        .token()
+                        .map(lhs -> rhs -> variableNode(pure, rhs.toString(), true, null, lhs, this)));
     }
 
     private Parser<Function<? super var, ? extends var>> castOperator(boolean pure) {
-        return KEYWORD(AS).next(IDENTIFIER).token().map(new CastOperator(this, pure));
+        return KEYWORD(AS)
+                       .next(IDENTIFIER)
+                       .token()
+                       .map(token -> lhs -> reactiveNode("as", pure, NO_SCOPE,
+                                                         this, token, lhs,
+                                                         i -> Func.castFunc(lhs, token.toString())
+                            )
+                       );
     }
 
-    private Parser<Function<? super var, ? extends var>> assignmentOperator(
-                                                                                   @NotNull Parser.Reference<var> ref,
-                                                                                   boolean pure) {
+    private Parser<Function<? super var, ? extends var>> assignmentOperator(@NotNull Parser.Reference<var> ref,
+                                                                            boolean pure) {
         return array(KEYWORD(EXPORT).optional(null),
-                     or(KEYWORD(CONST), KEYWORD(VOLATILE), KEYWORD(VAR)).optional(null),
+                     or(
+                             KEYWORD(CONST),
+                             KEYWORD(VOLATILE),
+                             KEYWORD(VAR)
+                     ).optional(null),
                      IDENTIFIER.between(OP(LT), OP(GT)).optional(null),
                      ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN)).optional(null),
-                     OP(DOLLAR).next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))).or(IDENTIFIER).or(BUILTIN),
-                     or(OP(ASSIGNMENT), OP(LISTEN_ASSIGN), OP(SUBSCRIBE_ASSIGN))
-        ).token().map(new AssignmentOperator(false, pure, this));
+                     OP(DOLLAR).next(
+                             ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))
+                     ).or(IDENTIFIER).or(BUILTIN),
+                     or(
+                             OP(ASSIGNMENT),
+                             OP(LISTEN_ASSIGN),
+                             OP(SUBSCRIBE_ASSIGN))
+        ).token().map(new AssignmentOperator(pure, this));
     }
 
     private Parser<Function<? super var, ? extends var>> definitionOperator(@NotNull Parser.Reference<var> ref, boolean pure) {
@@ -768,6 +951,34 @@ public class DollarParserImpl implements DollarParser {
                               IDENTIFIER, expression(true))
                 )
         ).token().map(new DefinitionOperator(true, this)).map(map -> map.apply(null));
+    }
+
+    private <T> Parser<T> op(@NotNull OpDef def, @NotNull T value) {
+        return OP(def).token().map(new SourceMapper<>(value));
+
+    }
+
+    private static class JavaTokenMap implements TokenMap<String> {
+        @Nullable
+        @Override
+        public String map(@NotNull Token token) {
+            final Object val = token.value();
+            if (val instanceof Tokens.Fragment) {
+                Tokens.Fragment c = (Tokens.Fragment) val;
+                if (!"java".equals(c.tag())) {
+                    return null;
+                }
+                return c.text();
+            } else {
+                return null;
+            }
+        }
+
+        @NotNull
+        @Override
+        public String toString() {
+            return "java";
+        }
     }
 
     private class SourceMapper<T> implements Function<Token, T> {

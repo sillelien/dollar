@@ -26,11 +26,11 @@ import java.util.Objects;
 
 public class KeywordDef implements HasKeyword, Comparable<Object> {
     @NotNull
-    private String keyword;
-    private boolean reserved;
+    private final String keyword;
+    private final boolean reserved;
     @Nullable
-    private String description;
-    private String bnf;
+    private final String description;
+    private final String bnf;
 
     public KeywordDef(@NotNull String keyword, boolean reserved, @Language("md") @Nullable String description, String bnf) {
         this.keyword = keyword;
@@ -40,13 +40,14 @@ public class KeywordDef implements HasKeyword, Comparable<Object> {
     }
 
     @Override
+    @NotNull
     public String keyword() {
         return keyword;
     }
 
     @Override
     public int compareTo(@NotNull Object o) {
-        if (this.equals(o)) {
+        if (equals(o)) {
             return 0;
         }
         if (o instanceof HasKeyword) {

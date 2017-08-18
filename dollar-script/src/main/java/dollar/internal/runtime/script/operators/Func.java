@@ -16,17 +16,20 @@
 
 package dollar.internal.runtime.script.operators;
 
+import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.collections.Range;
+import com.sillelien.dollar.api.execution.DollarExecutor;
+import com.sillelien.dollar.api.plugin.Plugins;
 import com.sillelien.dollar.api.types.DollarFactory;
-import com.sillelien.dollar.api.types.ErrorType;
 import com.sillelien.dollar.api.var;
-import dollar.internal.runtime.script.DollarParserImpl;
-import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
-import dollar.internal.runtime.script.api.exceptions.DollarScriptFailureException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
 import static com.sillelien.dollar.api.types.DollarFactory.fromValue;
@@ -35,9 +38,15 @@ import static dollar.internal.runtime.script.DollarScriptSupport.inSubScope;
 import static dollar.internal.runtime.script.parser.Symbols.EACH;
 import static dollar.internal.runtime.script.parser.Symbols.REDUCE;
 
-public class Func {
+@SuppressWarnings({"UtilityClassCanBeEnum", "UtilityClassCanBeSingleton"})
+public final class Func {
+
     @NotNull
-    public static var reduce(@NotNull boolean pure, @NotNull var lhs, @NotNull var rhs) {
+    private static final DollarExecutor executor = Objects.requireNonNull(Plugins.sharedInstance(DollarExecutor.class));
+
+
+    @NotNull
+    public static var reduceFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         return lhs.$list().$stream(false).reduce((x, y) -> {
             try {
                 return inSubScope(false, pure, REDUCE.name(), newScope -> {
@@ -45,34 +54,33 @@ public class Func {
                     newScope.setParameter("2", y);
                     return rhs._fixDeep(false);
                 });
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
                 throw new DollarScriptException(e);
             }
-        }).get();
+        }).orElse($null(Type._ANY));
     }
 
-    public static var each(@NotNull boolean pure, @NotNull var lhs, @NotNull var rhs) {
+    @NotNull
+    public static var eachFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         return lhs.$each(i -> inSubScope(false, pure, EACH.name(),
                                          newScope -> {
-                                             newScope.setParameter(
-                                                     "1",
-                                                     i[0]);
-                                             return rhs._fixDeep(
-                                                     false);
+                                             newScope.setParameter("1", i[0]);
+                                             return rhs._fixDeep(false);
                                          }));
     }
 
+    @NotNull
     public static var elseFunc(@NotNull var lhs, @NotNull var rhs) {
         final var fixLhs = lhs._fixDeep();
         if (fixLhs.isBoolean() && fixLhs.isFalse()) {
-            return rhs._fix(2,
-                            false);
+            return rhs._fix(2, false);
         } else {
             return fixLhs;
         }
     }
 
-    public static var multiply(@NotNull var lhs, @NotNull var rhs) {
+    @NotNull
+    public static var multiplyFunc(@NotNull var lhs, @NotNull var rhs) {
         final var lhsFix = lhs._fix(false);
         if (Arrays.asList("block", "inFunc", "list").contains(
                 lhs.getMetaAttribute("operation"))) {
@@ -88,16 +96,16 @@ public class Func {
     }
 
     @NotNull
-    public static var error(@NotNull var v) {
+    public static var errorFunc(@NotNull var v) {
         return currentScope().addErrorHandler(v);
     }
 
     @NotNull
-    public static var truthy(@NotNull var i) {
-        return $(i.truthy());
+    public static var truthyFunc(@NotNull var v) {
+        return $(v.truthy());
     }
 
-    public static var pair(@NotNull var lhs, var rhs) {
+    public static var pairFunc(@NotNull var lhs, @NotNull var rhs) {
         return $(lhs.$S(), rhs);
     }
 
@@ -122,7 +130,7 @@ public class Func {
     }
 
     @NotNull
-    public static var range(var lhs, var rhs) {
+    public static var rangeFunc(@NotNull var lhs, @NotNull var rhs) {
         return fromValue(new Range(lhs, rhs));
     }
 
@@ -132,16 +140,16 @@ public class Func {
     }
 
     @NotNull
-    public static var and(@NotNull var lhs, @NotNull var rhs) {
+    public static var andFunc(@NotNull var lhs, @NotNull var rhs) {
         return $(lhs.isTrue() && rhs.isTrue());
     }
 
-    public static var equality(@NotNull var lhs, var rhs) {
+    public static var equalityFunc(@NotNull var lhs, @NotNull var rhs) {
         return $(lhs.equals(rhs));
     }
 
     @NotNull
-    public static var inequality(@NotNull var lhs, var rhs) {
+    public static var inequalityFunc(@NotNull var lhs, @NotNull var rhs) {
         return $(!lhs.equals(rhs));
     }
 
@@ -150,76 +158,130 @@ public class Func {
         return $(!v.isTrue());
     }
 
+    @NotNull
     public static var parallelFunc(@NotNull var v) {
         return v._fixDeep(true);
     }
 
     @NotNull
-    public static var fork(var v) {
-        return DollarFactory.fromFuture(
-                DollarParserImpl.executor.executeInBackground(() -> fix(v, false)));
+    public static var forkFunc(@NotNull var v) {
+        return DollarFactory.fromFuture(executor.executeInBackground(() -> fix(v, false)));
     }
 
-    public static var subscribeFunc(@NotNull var lhs, var rhs) {
+    @NotNull
+    public static var subscribeFunc(@NotNull var lhs, @NotNull var rhs) {
         return lhs.$subscribe(
-                i -> DollarScriptSupport.inSubScope(true, false, "subscribe-param", newScope -> {
-                    final var it = fix(i[0], false);
-                    currentScope().setParameter("1", it);
-                    currentScope().setParameter("it", it);
-                    return fix(rhs, false);
-                }));
+                i -> inSubScope(true, false,
+                                "subscribe-param", newScope -> {
+                            final var it = fix(i[0], false);
+                            currentScope().setParameter("1", it);
+                            currentScope().setParameter("it", it);
+                            return fix(rhs, false);
+                        }));
     }
 
-    public static var writeFunc(var lhs, @NotNull var rhs) {
+    @NotNull
+    public static var writeFunc(@NotNull var lhs, @NotNull var rhs) {
         return rhs.$write(lhs);
     }
 
-    public static var publishFunc(var lhs, @NotNull var rhs) {
+    @NotNull
+    public static var publishFunc(@NotNull var lhs, @NotNull var rhs) {
         return rhs.$publish(lhs);
     }
 
     @NotNull
-    public static var errFunc(@NotNull var i) {
-        i.err();
+    public static var errFunc(@NotNull var v) {
+        v.err();
         return $void();
     }
 
     @NotNull
-    public static var debugFunc(@NotNull var i) {
-        i.debug();
+    public static var debugFunc(@NotNull var v) {
+        v.debug();
         return $void();
     }
 
     @NotNull
-    public static var outFunc(@NotNull var i) {
-        i.out();
+    public static var outFunc(@NotNull var v) {
+        v.out();
         return $void();
     }
 
     @NotNull
-    public static var assertEquals(@NotNull var lhs2, @NotNull var rhs2) {
-        final var lhsFix1 = lhs2._fixDeep(false);
-        final var rhsFix1 = rhs2._fixDeep(false);
-        if (lhsFix1.equals(rhsFix1)) {
+    public static var assertEqualsFunc(@NotNull var lhs, @NotNull var rhs) {
+        final var lhsFix = lhs._fixDeep(false);
+        final var rhsFix = rhs._fixDeep(false);
+        if (lhsFix.equals(rhsFix)) {
             return $(true);
         } else {
-            throw new DollarScriptFailureException(ErrorType.ASSERTION,
-                                                   lhsFix1.toDollarScript() +
-                                                           " != " +
-                                                           rhsFix1.toDollarScript());
+            throw new DollarAssertionException(lhsFix.toDollarScript() + " != " + rhsFix.toDollarScript(), lhs);
         }
     }
 
     @NotNull
-    public static var listenFunc(@NotNull var lhs, var rhs) {
+    public static var listenFunc(@NotNull var lhs, @NotNull var rhs) {
         return lhs.isTrue() ? fix(rhs, false) : $void();
     }
 
+    @NotNull
     public static var readFunc(@NotNull var from) {
         return DollarFactory.fromURI(from).$read();
     }
 
-    public static var inFunc(var lhs1, var rhs1) {return rhs1.$contains(lhs1);}
+    public static var inFunc(@NotNull var lhs, @NotNull var rhs) {return rhs.$contains(lhs);}
 
-    public static var serialFunc(var v) {return v._fixDeep(false);}
+    @NotNull
+    public static var serialFunc(@NotNull var v) {return v._fixDeep(false);}
+
+    @NotNull
+    public static var whileFunc(@NotNull var lhs, @NotNull var rhs) {
+        while (lhs.isTrue()) {
+            rhs._fixDeep();
+        }
+        return $(false);
+    }
+
+    @NotNull
+    public static var assertFunc(@Nullable var message, @NotNull var condition) {
+        if (!condition.isTrue()) {
+            throw new DollarAssertionException("Assertion failed: " + (message != null ? message : ""), condition);
+
+        }
+        return $void();
+    }
+
+    @NotNull
+    public static var ifFunc(@NotNull var lhs, @NotNull var rhs) {
+        final var lhsFix = lhs._fixDeep();
+        boolean isTrue = lhsFix.isBoolean() && lhsFix.isTrue();
+        return isTrue ? rhs._fix(2, false) : DollarFactory.FALSE;
+    }
+
+    @NotNull
+    public static var isFunc(@NotNull var lhs, @NotNull List<var> value) {
+        return $(value.stream()
+                         .map(var::$S)
+                         .map(Type::valueOf)
+                         .filter(lhs::is).count() > 0);
+    }
+
+    @NotNull
+    public static var forFunc(boolean pure, @NotNull String varName, @NotNull var iterable, @NotNull var block) {
+        return iterable.$each(i -> {
+            currentScope()
+                    .set(varName,
+                         fix(i[0], false),
+                         false, null,
+                         null, false,
+                         false,
+                         pure);
+            return block._fixDeep(false);
+        });
+    }
+
+    @NotNull
+    public static var castFunc(@NotNull var lhs, @NotNull String typeName) {
+        return lhs.$as(Type.valueOf(typeName.toUpperCase()));
+    }
 }

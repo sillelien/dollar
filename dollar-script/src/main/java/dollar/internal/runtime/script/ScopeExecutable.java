@@ -18,8 +18,10 @@ package dollar.internal.runtime.script;
 
 import dollar.internal.runtime.script.api.Scope;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+@FunctionalInterface
 public interface ScopeExecutable<T> {
-     @NotNull
-     T execute(Scope scope) throws Exception;
+    @Nullable
+    T execute(@NotNull Scope scope) throws Exception;
 }

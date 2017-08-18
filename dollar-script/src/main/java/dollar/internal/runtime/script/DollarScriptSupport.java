@@ -95,13 +95,14 @@ public class DollarScriptSupport {
 
     @NotNull
     public static var reactiveNode(@NotNull String operation,
+                                   boolean pure,
                                    @NotNull SourceNodeOptions sourceNodeOptions,
                                    @NotNull DollarParser parser,
                                    @NotNull Token token,
                                    @NotNull var lhs,
                                    @NotNull Pipeable callable) {
 
-        return reactiveNode(operation, sourceNodeOptions,
+        return reactiveNode(operation, pure, sourceNodeOptions,
                             new SourceSegmentValue(currentScope(), token), parser,
                             lhs, callable
         );
@@ -109,16 +110,16 @@ public class DollarScriptSupport {
 
     @NotNull
     public static var reactiveNode(@NotNull String operation,
-                                   @NotNull SourceNodeOptions sourceNodeOptions,
+                                   boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
                                    @NotNull SourceSegment source,
                                    @NotNull DollarParser parser,
                                    @NotNull var lhs,
                                    @NotNull Pipeable callable) {
 
-        final var lambda = createNode(operation,
-                                      sourceNodeOptions, parser, source,
-                                      Collections.singletonList(lhs),
-                                      callable
+        final var lambda = node(operation,
+                                pure, sourceNodeOptions, parser, source,
+                                Collections.singletonList(lhs),
+                                callable
         );
         lhs.$listen(i -> lambda.$notify());
         return lambda;
@@ -126,26 +127,27 @@ public class DollarScriptSupport {
 
 
     @NotNull
-    public static var createNode(@NotNull String operation,
-                                 @NotNull SourceNodeOptions sourceNodeOptions,
-                                 @NotNull DollarParser parser,
-                                 @NotNull SourceSegment source,
-                                 @NotNull List<var> inputs,
-                                 @NotNull Pipeable callable) {
+    public static var node(@NotNull String operation,
+                           boolean pure,
+                           @NotNull SourceNodeOptions sourceNodeOptions,
+                           @NotNull DollarParser parser,
+                           @NotNull SourceSegment source,
+                           @NotNull List<var> inputs,
+                           @NotNull Pipeable pipeable) {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
-                new SourceNode(i -> callable.pipe(), source, inputs, operation, parser,
-                               sourceNodeOptions, createId(operation))));
+                new SourceNode(pipeable, source, inputs, operation, parser,
+                               sourceNodeOptions, createId(operation), pure)));
     }
 
     @NotNull
-    public static var createNode(@NotNull String operation,
-                                 @NotNull SourceNodeOptions sourceNodeOptions,
-                                 @NotNull DollarParser parser,
-                                 @NotNull Token token,
-                                 @NotNull List<var> inputs,
-                                 @NotNull Pipeable callable) {
+    public static var node(@NotNull String operation,
+                           boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
+                           @NotNull DollarParser parser,
+                           @NotNull Token token,
+                           @NotNull List<var> inputs,
+                           @NotNull Pipeable callable) {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
@@ -153,35 +155,35 @@ public class DollarScriptSupport {
                                new SourceSegmentValue(currentScope(), token),
                                inputs,
                                operation,
-                               parser, sourceNodeOptions, createId(operation))));
+                               parser, sourceNodeOptions, createId(operation), pure)));
     }
 
 
     @NotNull
-    public static var createNode(@NotNull String operation,
-                                 @NotNull SourceNodeOptions sourceNodeOptions,
-                                 @NotNull DollarParser parser,
-                                 @NotNull Token token,
-                                 @NotNull Scope scope,
-                                 @NotNull List<var> inputs,
-                                 @NotNull Pipeable callable) {
+    public static var node(@NotNull String operation,
+                           boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
+                           @NotNull DollarParser parser,
+                           @NotNull Token token,
+                           @NotNull Scope scope,
+                           @NotNull List<var> inputs,
+                           @NotNull Pipeable callable) {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
                 new SourceNode(callable, new SourceSegmentValue(scope, token), inputs,
-                               operation, parser, sourceNodeOptions, createId(operation))));
+                               operation, parser, sourceNodeOptions, createId(operation), pure)));
     }
 
     @NotNull
     public static var reactiveNode(@NotNull String operation,
-                                   @NotNull SourceNodeOptions sourceNodeOptions,
+                                   boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
                                    @NotNull DollarParser parser,
                                    @NotNull SourceSegment source,
                                    @NotNull var lhs,
                                    @NotNull var rhs,
                                    @NotNull Pipeable callable) {
-        final var lambda = createNode(operation, sourceNodeOptions, parser, source, Arrays.asList(lhs, rhs),
-                                      callable
+        final var lambda = node(operation, pure, sourceNodeOptions, parser, source, Arrays.asList(lhs, rhs),
+                                callable
         );
 
         rhs.$listen(i -> lambda.$notify());
@@ -191,13 +193,16 @@ public class DollarScriptSupport {
 
     @NotNull
     public static var reactiveNode(@NotNull String operation,
-                                   @NotNull SourceNodeOptions sourceNodeOptions, @NotNull DollarParser parser,
+                                   boolean pure,
+                                   @NotNull SourceNodeOptions sourceNodeOptions,
+                                   @NotNull DollarParser parser,
                                    @NotNull Token token,
                                    @NotNull var lhs,
-                                   @NotNull var rhs, @NotNull Pipeable callable) {
-        final var lambda = createNode(operation, sourceNodeOptions, parser,
-                                      new SourceSegmentValue(currentScope(), token),
-                                      Arrays.asList(lhs, rhs), callable
+                                   @NotNull var rhs,
+                                   @NotNull Pipeable callable) {
+        final var lambda = node(operation, pure, sourceNodeOptions, parser,
+                                new SourceSegmentValue(currentScope(), token),
+                                Arrays.asList(lhs, rhs), callable
         );
 
         rhs.$listen(i -> lambda.$notify());
@@ -207,17 +212,17 @@ public class DollarScriptSupport {
 
 
     @NotNull
-    public static var createNode(@NotNull String operation,
-                                 @NotNull SourceNodeOptions sourceNodeOptions, @NotNull Token token,
-                                 @NotNull List<var> inputs,
-                                 @NotNull DollarParser parser,
-                                 @NotNull Pipeable pipeable) {
+    public static var node(@NotNull String operation,
+                           boolean pure, @NotNull SourceNodeOptions sourceNodeOptions, @NotNull Token token,
+                           @NotNull List<var> inputs,
+                           @NotNull DollarParser parser,
+                           @NotNull Pipeable pipeable) {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
                 new SourceNode(pipeable::pipe,
                                new SourceSegmentValue(currentScope(), token), inputs, operation,
-                               parser, sourceNodeOptions, createId(operation))));
+                               parser, sourceNodeOptions, createId(operation), pure)));
     }
 
     @NotNull
@@ -239,7 +244,7 @@ public class DollarScriptSupport {
     }
 
 
-    @Nullable
+    @NotNull
     public static <T> T inScope(boolean runtime,
                                 @NotNull Scope parent,
                                 boolean pure,
@@ -299,9 +304,9 @@ public class DollarScriptSupport {
     }
 
     @Nullable
-    public static var getVariable(boolean pure, @NotNull String key, boolean numeric,
-                                  @Nullable var defaultValue,
-                                  @NotNull Token token, @NotNull DollarParser parser) {
+    public static var variableNode(boolean pure, @NotNull String key, boolean numeric,
+                                   @Nullable var defaultValue,
+                                   @NotNull Token token, @NotNull DollarParser parser) {
 //       if(pure && !(scope instanceof  PureScope)) {
 //           throw new IllegalStateException("Attempting to get a pure variable in an impure scope");
 //       }
@@ -309,8 +314,8 @@ public class DollarScriptSupport {
 
         var lambda[] = new var[1];
         UUID id = UUID.randomUUID();
-        lambda[0] = createNode("get-variable-" + key + "-" + id, SourceNodeOptions.NO_SCOPE, parser, token,
-                               $(key).$list().toVarList().mutable(), (i) -> {
+        lambda[0] = node("get-variable-" + key + "-" + id, pure, SourceNodeOptions.NO_SCOPE, parser, token,
+                         $(key).$list().toVarList().mutable(), (i) -> {
                     Scope scope = currentScope();
 
                     log.debug(

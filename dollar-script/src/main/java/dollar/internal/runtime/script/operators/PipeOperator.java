@@ -18,12 +18,10 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
-import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.Token;
-import org.jparsec.functors.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +30,7 @@ import java.util.function.Function;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static java.util.Collections.singletonList;
 
-public class PipeOperator implements Function<Token, Map<var, var>> {
+public class PipeOperator implements Function<Token, Function<var, var>> {
 
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("PipeOperator");
@@ -50,33 +48,33 @@ public class PipeOperator implements Function<Token, Map<var, var>> {
 
     @NotNull
     @Override
-    public Map<var, var> apply(@NotNull Token token) {
+    public Function<var, var> apply(@NotNull Token token) {
         var rhs = (var) token.value();
         return lhs -> reactiveNode(
-                "pipe", SourceNodeOptions.NEW_SCOPE, parser, token, rhs, i -> {
-                    return inSubScope(false, pure, "pipe-runtime",
-                                      runtimeScope -> {
-                                          currentScope().setParameter("1", lhs);
-                                          var rhsVal = rhs._fix(false);
-                                          if (!"function-call".equals(rhs.getMetaAttribute("operation"))) {
-                                              String rhsStr = rhsVal.toString();
-                                              log.debug("OPERATION: " + rhsStr);
-                                              if (rhs.getMetaAttribute(
-                                                      "__builtin") != null) {
-                                                  return Builtins.execute(rhsStr,
-                                                                          singletonList(lhs), pure);
-                                              } else {
-                                                  //fixed to level 2 as we are executing the function
-                                                  // in this scope
-                                                  return DollarScriptSupport.getVariable(pure, rhsStr, false, null, token,
-                                                                                         parser)._fix(2, false);
-                                              }
-                                          } else {
-                                              log.debug("PIPED TO FUNCTION");
-                                              return rhsVal;
-                                          }
+                "pipe", pure, SourceNodeOptions.NEW_SCOPE, parser, token, rhs,
+                i -> inSubScope(false, pure, "pipe-runtime",
+                                runtimeScope -> {
+                                    currentScope().setParameter("1", lhs);
+                                    var rhsVal = rhs._fix(false);
+                                    if ("function-call".equals(rhs.getMetaAttribute("operation"))) {
+                                        log.debug("PIPED TO FUNCTION");
+                                        return rhsVal;
+                                    } else {
+                                        String rhsStr = rhsVal.toString();
+                                        log.debug("OPERATION: {}", rhsStr);
+                                        if (rhs.getMetaAttribute("__builtin") != null) {
+                                            return Builtins.execute(rhsStr,
+                                                                    singletonList(lhs), pure);
+                                        } else {
+                                            //fixed to level 2 as we are executing the function
+                                            // in this scope
+                                            var variable = variableNode(pure, rhsStr, false, null, token,
+                                                                        parser);
+                                            assert variable != null;
+                                            return variable._fix(2, false);
+                                        }
+                                    }
 
-                                      });
-                });
+                                }));
     }
 }

@@ -16,9 +16,13 @@
 
 package dollar.internal.runtime.script.operators;
 
+import com.sillelien.dollar.api.BooleanAware;
+import com.sillelien.dollar.api.MetadataAware;
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.TypePrediction;
+import com.sillelien.dollar.api.VarInternal;
+import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.SourceNodeOptions;
@@ -29,191 +33,189 @@ import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
-import org.jparsec.functors.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
-public class AssignmentOperator implements Map<Token, Map<? super var, ? extends var>> {
+public class AssignmentOperator implements Function<Token, Function<? super var, ? extends var>> {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("AssignmentOperator");
+    private static final double MIN_PROBABILITY = 0.5;
     private final boolean pure;
-    private DollarParser parser;
+    @NotNull
+    private final DollarParser parser;
 
-    public AssignmentOperator(boolean push, boolean pure, DollarParser parser) {
+    public AssignmentOperator(boolean pure, @NotNull DollarParser parser) {
         this.pure = pure;
         this.parser = parser;
     }
 
     @NotNull
     private var assign(@NotNull var rhs,
-                       Object[] objects,
+                       @NotNull Object[] objects,
                        @Nullable var constraint,
                        boolean constant,
                        boolean isVolatile,
-                       String constraintSource,
+                       @Nullable String constraintSource,
                        @NotNull Scope scope,
                        @NotNull Token token,
                        boolean decleration) {
 
         final String varName = objects[4].toString();
 
-        Pipeable callable = new Pipeable() {
-            @Override
-            public var pipe(var... args) throws Exception {
+        Pipeable pipeable = args -> {
 
-                Scope currentScope = currentScope();
-                final var useConstraint;
-                final String useSource;
-                Scope varScope = DollarScriptSupport.getScopeForVar(pure, varName, false, currentScope());
-                if (constraint != null || varScope == null) {
-                    useConstraint = constraint;
-                    useSource = constraintSource;
-                } else {
-                    useConstraint = varScope.getConstraint(varName);
-                    useSource = varScope.getConstraintSource(varName);
-                }
-                final var rhsFixed = rhs._fix(1, false);
-
-                if (useConstraint != null) {
-                    DollarScriptSupport.inSubScope(true, pure, "assignment-constraint",
-                                                   newScope -> {
-                                                       newScope.setParameter("it", rhsFixed);
-                                                       newScope.setParameter("previous", newScope.get(varName));
-                                                       if (useConstraint.isFalse()) {
-//                        System.out.println(rhsFixed.toDollarScript());
-//                        System.out.println(useConstraint.isFalse());
-                                                           currentScope.handleError(new DollarScriptException("Constraint failed for variable " + varName + ""));
-                                                       }
-                                                       return null;
-                                                   });
-                }
-                if (objects[0] != null) {
-                    parser.export(varName, rhsFixed);
-                }
-                setVariable(currentScope, varName, rhsFixed, constant,
-                            constraint, useSource, isVolatile, constant, pure,
-                            decleration, token, parser);
-                return $void();
-
+            Scope currentScope = currentScope();
+            final var useConstraint;
+            final String useSource;
+            Scope varScope = DollarScriptSupport.getScopeForVar(pure, varName, false, currentScope());
+            if ((constraint != null) || (varScope == null)) {
+                useConstraint = constraint;
+                useSource = constraintSource;
+            } else {
+                useConstraint = varScope.getConstraint(varName);
+                useSource = varScope.getConstraintSource(varName);
             }
+            final var rhsFixed = rhs._fix(1, false);
+
+            if (useConstraint != null) {
+                inSubScope(true, pure, "assignment-constraint",
+                           newScope -> {
+                               newScope.setParameter("it", rhsFixed);
+                               var value = newScope.get(varName);
+                               assert value != null;
+                               newScope.setParameter("previous", value);
+                               if (useConstraint.isFalse()) {
+                                   currentScope.handleError(
+                                           new DollarScriptException("Constraint failed for variable " + varName + ""));
+                               }
+                               return null;
+                           });
+            }
+            if (objects[0] != null) {
+                parser.export(varName, rhsFixed);
+            }
+            setVariable(currentScope, varName, rhsFixed, constant,
+                        constraint, useSource, isVolatile, constant, pure,
+                        decleration, token, parser);
+            return $void();
+
         };
-        var node = createNode("assignment", SourceNodeOptions.NO_SCOPE, parser, token,
-                              Arrays.asList(constrain(scope, rhs, constraint,
-                                                      constraintSource)),
-                              callable);
         //        node.$listen(i -> scope.notify(varName));
-        return node;
+        return node("assignment", pure, NO_SCOPE, parser, token,
+                    singletonList(constrain(scope, rhs, constraint, constraintSource)), pipeable);
     }
 
     @Nullable
-    public Map<? super var, ? extends var> map(@NotNull Token token) {
-        Type type;
+    public Function<? super var, ? extends var> apply(@NotNull Token token) {
+        @Nullable Type type;
         Object[] objects = (Object[]) token.value();
-        var constraint;
-        final String constraintSource;
+        var constraint = null;
+        @Nullable final String constraintSource;
         if (objects[3] instanceof var) {
-            constraintSource = ((var) objects[3])._source().getSourceSegment();
+            SourceSegment sourceSegment = ((VarInternal) objects[3])._source();
+            assert sourceSegment != null;
+            constraintSource = sourceSegment.getSourceSegment();
         } else {
             constraintSource = null;
         }
         if (objects[2] != null) {
             type = Type.valueOf(objects[2].toString().toUpperCase());
-            constraint = createNode("constraint", SourceNodeOptions.NEW_SCOPE, token, Arrays.asList(), parser, i -> {
-                return $(currentScope().getParameter("it").is(type) && (objects[3] == null || ((var) objects[3]).isTrue()));
+            constraint = node("constraint", pure, SourceNodeOptions.NEW_SCOPE, token, emptyList(), parser, i -> {
+                var it = currentScope().getParameter("it");
+                assert it != null;
+                return $(it.is(type) && ((objects[3] == null) || ((BooleanAware) objects[3]).isTrue()));
             });
         } else {
             type = null;
-            constraint = (var) objects[3];
+            if (objects[3] instanceof var) constraint = (var) objects[3];
 
         }
         boolean constant;
         boolean isVolatile;
         final Object mutability = objects[1];
         boolean decleration = mutability != null;
-        constant = mutability != null && mutability.toString().equals("const");
-        isVolatile = mutability != null && mutability.toString().equals("volatile");
-        if (((var) objects[4]).getMetaAttribute("__builtin") != null) {
+        constant = (mutability != null) && "const".equals(mutability.toString());
+        isVolatile = (mutability != null) && "volatile".equals(mutability.toString());
+        if (((MetadataAware) objects[4]).getMetaAttribute("__builtin") != null) {
             throw new DollarScriptException("The variable '" +
                                                     objects[4] +
                                                     "' cannot be assigned as this name is the name of a builtin function.");
         }
         final String varName = objects[4].toString();
 
-        return new Map<var, var>() {
-
-            @NotNull
-            public var map(@NotNull var rhs) {
-                Scope scope = currentScope();
-                final TypePrediction prediction = rhs._predictType();
-                if (type != null && prediction != null) {
-                    final Double probability = prediction.probability(type);
-                    if (probability < 0.5 && !prediction.empty()) {
-                        log.warn("Type assertion may fail, expected " +
-                                         type +
-                                         " most likely type is " +
-                                         prediction.probableType() +
-                                         " (" +
-                                         (int) (prediction.probability(
-                                                 prediction.probableType()) * 100) +
-                                         "%) at " +
-                                         new SourceSegmentValue(currentScope(),
-                                                                token).getSourceMessage());
-                    }
+        var finalConstraint = constraint;
+        return (Function<var, var>) rhs -> {
+            Scope scope = currentScope();
+            final TypePrediction prediction = rhs._predictType();
+            if ((type != null) && (prediction != null)) {
+                final Double probability = prediction.probability(type);
+                if ((probability < MIN_PROBABILITY) && !prediction.empty()) {
+                    log.warn("Type assertion may fail, expected {} most likely type is {} ({}%) at {}", type,
+                             prediction.probableType(),
+                             (int) (prediction.probability(prediction.probableType()) * 100),
+                             new SourceSegmentValue(currentScope(), token).getSourceMessage()
+                    );
                 }
-
-                final String operator = objects[5].toString();
-                if (operator.equals("?=") || operator.equals("*=")) {
-                    final String useSource;
-                    var useConstraint;
-                    if (constraint != null) {
-                        useConstraint = constraint;
-                        useSource = constraintSource;
-                    } else {
-                        useConstraint = scope.getConstraint(varName);
-                        useSource = scope.getConstraintSource(varName);
-                    }
-                    if (operator.equals("?=")) {
-                        scope.set(varName, rhs, false, null, useSource, isVolatile, false,
-                                  pure);
-                        System.err.println("DYNAMIC: " + rhs.dynamic());
-
-                        return createNode("listen-assign", SourceNodeOptions.NO_SCOPE, parser, token,
-                                          singletonList(constrain(scope, rhs, constraint, useSource)),
-                                          c -> rhs.$listen(
-                                                  args -> {
-                                                      var value = args[0]._fixDeep();
-                                                      setVariable(scope, varName, value, false, useConstraint, useSource,
-                                                                  isVolatile, false, pure, decleration, token, parser);
-                                                      return value;
-                                                  })
-                        );
-
-                    } else if (operator.equals("*=")) {
-                        scope.set(varName, $void(), false, null, useSource, true, true, pure);
-                        Pipeable pipeable = c -> $(rhs.$subscribe(
-                                i -> setVariable(scope, varName,
-                                                 fix(i[0], false), false,
-                                                 useConstraint, useSource, true,
-                                                 false, pure, decleration,
-                                                 token, parser)));
-                        return createNode("subscribe-assign", SourceNodeOptions.NO_SCOPE, parser, token,
-                                          Arrays.asList(
-                                                  constrain(
-                                                          scope, rhs,
-                                                          constraint,
-                                                          useSource)),
-                                          pipeable);
-                    }
-                }
-                return assign(rhs, objects, constraint, constant, isVolatile, constraintSource,
-                              scope, token, decleration);
             }
+
+            final String op = objects[5].toString();
+            if ("?=".equals(op) || "*=".equals(op)) {
+                final String useSource;
+                var useConstraint;
+                if (finalConstraint != null) {
+                    useConstraint = finalConstraint;
+                    useSource = constraintSource;
+                } else {
+                    useConstraint = scope.getConstraint(varName);
+                    useSource = scope.getConstraintSource(varName);
+                }
+                List<var> inputs = singletonList(constrain(scope, rhs, finalConstraint, useSource));
+                if ("?=".equals(op)) {
+                    scope.set(varName, rhs, false, null, useSource, isVolatile, false,
+                              pure);
+                    log.debug("DYNAMIC: {}", rhs.dynamic());
+
+                    return node("listen-assign", pure, NO_SCOPE, parser, token, inputs,
+                                c -> {
+                                    Pipeable listener = args -> {
+                                        var value = args[0]._fixDeep();
+                                        setVariable(scope, varName, value, false, useConstraint, useSource,
+                                                    isVolatile, false, pure, decleration, token, parser);
+                                        return value;
+                                    };
+                                    return rhs.$listen(
+                                            listener);
+                                }
+                    );
+
+                } else if ("*=".equals(op)) {
+                    scope.set(varName, $void(), false, null, useSource, true, true, pure);
+                    return node("subscribe-assign", pure, NO_SCOPE, parser, token, inputs,
+                                c -> {
+                                    Pipeable subscriber = i -> setVariable(
+                                            scope,
+                                            varName,
+                                            fix(i[0], false),
+                                            false,
+                                            useConstraint, useSource,
+                                            true, false, pure,
+                                            decleration, token,
+                                            parser);
+                                    return $(rhs.$subscribe(subscriber));
+                                });
+                }
+            }
+            return assign(rhs, objects, finalConstraint, constant, isVolatile, constraintSource,
+                          scope, token, decleration);
         };
     }
 

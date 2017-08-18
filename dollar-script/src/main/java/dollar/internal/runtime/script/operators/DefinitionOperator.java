@@ -36,7 +36,7 @@ import static dollar.internal.runtime.script.DollarScriptSupport.*;
 
 public class DefinitionOperator implements Map<Token, Map<? super var, ? extends var>> {
     private final boolean pure;
-    private DollarParser parser;
+    private final DollarParser parser;
 
     public DefinitionOperator(boolean pure, DollarParser parser) {
         this.pure = pure;
@@ -86,11 +86,11 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
                 var constraint;
                 String constraintSource;
                 if (typeConstraintObj != null) {
-                    constraint = DollarScriptSupport.createNode("definition-constraint", SourceNodeOptions.NEW_SCOPE,
-                                                                token, new
-                                                                               ArrayList<>(),
-                                                                parser, i
-                                                                                -> {
+                    constraint = DollarScriptSupport.node("definition-constraint", pure, SourceNodeOptions.NEW_SCOPE,
+                                                          token, new
+                                                                         ArrayList<>(),
+                                                          parser, i
+                                                                          -> {
                                 final Type type = Type.valueOf(
                                         typeConstraintObj.toString().toUpperCase());
                                 var it = scope.getParameter("it");
@@ -103,8 +103,8 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
                 }
                 final String variableName = variableNameObj.toString();
 
-                var node = DollarScriptSupport.createNode(
-                        "assignment", SourceNodeOptions.NO_SCOPE, parser, token, Arrays.asList(
+                var node = DollarScriptSupport.node(
+                        "assignment", pure, SourceNodeOptions.NO_SCOPE, parser, token, Arrays.asList(
                                 constrain(scope, value, constraint, constraintSource)),
                         args -> {
                             setVariableDefinition(currentScope(), parser, token, pure, true,
@@ -114,8 +114,8 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
                                                   constraintSource
                             );
                             if (exportObj != null && exportObj.toString().equals("export")) {
-                                parser.export(variableName, DollarScriptSupport.createNode(
-                                        "assignment", SourceNodeOptions.NO_SCOPE, parser, token, Arrays.asList(value),
+                                parser.export(variableName, DollarScriptSupport.node(
+                                        "assignment", pure, SourceNodeOptions.NO_SCOPE, parser, token, Arrays.asList(value),
                                         exportArgs -> value));
                             }
                             return $void();

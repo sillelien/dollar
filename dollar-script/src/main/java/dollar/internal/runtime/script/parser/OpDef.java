@@ -29,25 +29,25 @@ import java.util.Objects;
 
 public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     @Nullable
-    private String symbol;
+    private final String symbol;
     @Nullable
-    private String keyword;
-    @Nullable
-    private String name;
-
-    private boolean reserved;
-    private boolean reactive;
-    private int priority;
+    private final String keyword;
     @NotNull
-    private OpDefType type;
+    private final String name;
+
+    private final boolean reserved;
+    private final boolean reactive;
+    private final int priority;
+    @NotNull
+    private final OpDefType type;
 
     @Nullable
     private String bnf;
-    private boolean pure;
+    private final boolean pure;
 
     public OpDef(@NotNull OpDefType type, @Nullable String symbol,
                  @Nullable String keyword,
-                 @Nullable String name,
+                 @NotNull String name,
                  boolean reserved,
                  boolean reactive,
                  @Nullable String bnf,
@@ -73,7 +73,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         return keyword;
     }
 
-    @Nullable
+    @NotNull
     public String name() {
         return name;
     }
@@ -94,7 +94,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
             return keyword.compareTo(String.valueOf(((OpDef) o).keyword()));
         }
         if (o instanceof OpDef && name != null) {
-            return name.compareTo(String.valueOf(((OpDef) o).name()));
+            return name.compareTo(((OpDef) o).name());
         }
 
         return name.compareTo(String.valueOf(o));

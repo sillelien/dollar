@@ -34,7 +34,6 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static dollar.internal.runtime.script.DollarScriptSupport.createNode;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 import static dollar.internal.runtime.script.parser.Symbols.CAUSES;
 
@@ -46,7 +45,7 @@ public class CausesOperator implements Binary<var>, Operator {
     @Nullable
     private SourceSegment source;
     @NotNull
-    private DollarParser parser;
+    private final DollarParser parser;
 
 
     public CausesOperator(boolean pure, @NotNull DollarParser parser) {
@@ -58,29 +57,31 @@ public class CausesOperator implements Binary<var>, Operator {
     @NotNull
     @Override
     public var map(@NotNull var lhs, @NotNull var rhs) {
-        return createNode(CAUSES.name(), SourceNodeOptions.NEW_SCOPE, parser, source, Arrays.asList(lhs, rhs), in -> {
-            String id = UUID.randomUUID().toString();
-            log.debug("Listening to " + lhs.getMetaObject("operation"));
-            log.debug("Listening to " + lhs._source().getSourceMessage());
-            String lhsFix = lhs.getMetaAttribute("variable");
-            if (lhsFix == null) {
+        return DollarScriptSupport.node(CAUSES.name(), pure, SourceNodeOptions.NEW_SCOPE, parser, source, Arrays.asList(lhs, rhs),
+                                        in -> {
+                                            String id = UUID.randomUUID().toString();
+                                            log.debug("Listening to " + lhs.getMetaObject("operation"));
+                                            log.debug("Listening to " + lhs._source().getSourceMessage());
+                                            String lhsFix = lhs.getMetaAttribute("variable");
+                                            if (lhsFix == null) {
 //                throw new DollarScriptException("The left hand side of the listen expression is not a variable",lhs);
-                return lhs.$listen(new Pipeable() {
-                    @Override
-                    public var pipe(var... vars) throws Exception {
-                        return rhs._fix(1, false);
-                    }
-                });
-            } else {
-                Scope scopeForVar = DollarScriptSupport.getScopeForVar(pure, lhsFix.toString(), false,
-                                                                       null);
-                if (scopeForVar == null) {
-                    throw new VariableNotFoundException(lhsFix.toString(), currentScope());
-                }
-                scopeForVar.listen(lhsFix.toString(), id, rhs);
-                return lhs;
-            }
-        });
+                                                return lhs.$listen(new Pipeable() {
+                                                    @Override
+                                                    public var pipe(var... vars) throws Exception {
+                                                        return rhs._fix(1, false);
+                                                    }
+                                                });
+                                            } else {
+                                                Scope scopeForVar = DollarScriptSupport.getScopeForVar(pure, lhsFix.toString(),
+                                                                                                       false,
+                                                                                                       null);
+                                                if (scopeForVar == null) {
+                                                    throw new VariableNotFoundException(lhsFix.toString(), currentScope());
+                                                }
+                                                scopeForVar.listen(lhsFix.toString(), id, rhs);
+                                                return lhs;
+                                            }
+                                        });
     }
 
     @Override

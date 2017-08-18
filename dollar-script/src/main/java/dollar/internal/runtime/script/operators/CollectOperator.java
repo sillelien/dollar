@@ -46,7 +46,7 @@ public class CollectOperator implements Map<Token, var> {
     private final boolean pure;
 
     public CollectOperator(@NotNull DollarParser dollarParser, boolean pure) {
-        this.parser = dollarParser;
+        parser = dollarParser;
         this.pure = pure;
     }
 
@@ -65,57 +65,57 @@ public class CollectOperator implements Map<Token, var> {
 
 
         String id = UUID.randomUUID().toString();
-        return createNode("collect", SourceNodeOptions.NEW_SCOPE, parser, token, Collections.singletonList(variable),
-                          (var... in) -> {
-                              Scope scopeForVar = DollarScriptSupport.getScopeForVar(pure, varName,
-                                                                                     false, null);
-                              if (scopeForVar == null) {
-                                  throw new VariableNotFoundException(varName, currentScope());
-                              }
+        return node("collect", pure, SourceNodeOptions.NEW_SCOPE, parser, token, Collections.singletonList(variable),
+                    (var... in) -> {
+                        Scope scopeForVar = DollarScriptSupport.getScopeForVar(pure, varName,
+                                                                               false, null);
+                        if (scopeForVar == null) {
+                            throw new VariableNotFoundException(varName, currentScope());
+                        }
 
 
-                              scopeForVar.listen(varName, id, new Pipeable() {
-                                  @NotNull
-                                  final int[] count = new int[]{-1};
-                                  @NotNull
-                                  final ArrayList<var> collected = new ArrayList<>();
+                        scopeForVar.listen(varName, id, new Pipeable() {
+                            @NotNull
+                            final int[] count = {-1};
+                            @NotNull
+                            final ArrayList<var> collected = new ArrayList<>();
 
-                                  @NotNull
-                                  @Override
-                                  public var pipe(var... in2) throws Exception {
-                                      var value = in2[1]._fixDeep();
-                                      count[0]++;
-                                      log.debug("Count is " + count[0] + " value is " + value);
-                                      inSubScope(true, pure, "collect-body",
-                                                 ns -> {
-                                                     ns.setParameter("count", $(count[0]));
-                                                     ns.setParameter("it", value);
-                                                     //noinspection StatementWithEmptyBody
-                                                     if (unless instanceof var && ((var) unless).isTrue()) {
-                                                         log.debug("Skipping " + value);
-                                                     } else {
-                                                         log.debug("Adding " + value);
-                                                         collected.add(value);
-                                                     }
-                                                     var returnValue = $void();
-                                                     ns.setParameter("collected", DollarFactory.fromList(collected));
-                                                     log.debug("Collected " + DollarFactory.fromList(collected));
-                                                     final boolean endValue = until instanceof var && ((var) until).isTrue();
-                                                     if (endValue) {
-                                                         returnValue = ((var) loop)._fixDeep();
-                                                         collected.clear();
-                                                         count[0] = -1;
-                                                         log.debug("Return value  " + returnValue);
-                                                     }
-                                                     return returnValue;
-                                                 });
-                                      return $void();
+                            @NotNull
+                            @Override
+                            public var pipe(var... in2) throws Exception {
+                                var value = in2[1]._fixDeep();
+                                count[0]++;
+                                log.debug("Count is " + count[0] + " value is " + value);
+                                inSubScope(true, pure, "collect-body",
+                                           ns -> {
+                                               ns.setParameter("count", $(count[0]));
+                                               ns.setParameter("it", value);
+                                               //noinspection StatementWithEmptyBody
+                                               if (unless instanceof var && ((var) unless).isTrue()) {
+                                                   log.debug("Skipping " + value);
+                                               } else {
+                                                   log.debug("Adding " + value);
+                                                   collected.add(value);
+                                               }
+                                               var returnValue = $void();
+                                               ns.setParameter("collected", DollarFactory.fromList(collected));
+                                               log.debug("Collected " + DollarFactory.fromList(collected));
+                                               final boolean endValue = until instanceof var && ((var) until).isTrue();
+                                               if (endValue) {
+                                                   returnValue = ((var) loop)._fixDeep();
+                                                   collected.clear();
+                                                   count[0] = -1;
+                                                   log.debug("Return value  " + returnValue);
+                                               }
+                                               return returnValue;
+                                           });
+                                return $void();
 
-                                  }
-                              });
-                              return $void();
+                            }
+                        });
+                        return $void();
 
-                          });
+                    });
 
 
     }

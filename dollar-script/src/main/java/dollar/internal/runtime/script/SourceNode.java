@@ -49,13 +49,13 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
-import static dollar.internal.runtime.script.DollarScriptSupport.createNode;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class SourceNode implements java.lang.reflect.InvocationHandler {
     @NotNull
-    public static final TypeLearner typeLearner = Plugins.sharedInstance(TypeLearner.class);
-    public static final String RETURN_SCOPE = "return-scope";
+    private static final TypeLearner typeLearner = Plugins.sharedInstance(TypeLearner.class);
+
+    //    public static final String RETURN_SCOPE = "return-scope";
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("DollarSource");
     @NotNull
@@ -92,23 +92,24 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     private final ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
 
     @NotNull
-    private List<var> inputs;
+    private final List<var> inputs;
 
     @Nullable
-    private String operation;
+    private final String operation;
 
     @Nullable
     private volatile TypePrediction prediction;
 
     @NotNull
-    private DollarParser parser;
+    private final DollarParser parser;
 
-    private boolean newScope;
+    private final boolean newScope;
 
-    private boolean scopeClosure;
+    private final boolean scopeClosure;
     @NotNull
-    private String id;
-    private boolean parallel;
+    private final String id;
+    private final boolean parallel;
+    private final boolean pure;
 
     public SourceNode(@NotNull Pipeable lambda,
                       @NotNull SourceSegment source,
@@ -116,15 +117,18 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                       @NotNull String operation,
                       @NotNull DollarParser parser,
                       @NotNull SourceNodeOptions sourceNodeOptions,
-                      @NotNull String id) {
-        this.parallel = sourceNodeOptions.isParallel();
+                      @NotNull String id,
+                      boolean pure) {
+        parallel = sourceNodeOptions.isParallel();
+        this.pure = pure;
 
 
         if (sourceNodeOptions.isScopeClosure()) {
             this.lambda = vars -> {
                 List<Scope> attachedScopes = new ArrayList<>(DollarScriptSupport.scopes());
-                return createNode(operation + "-closure", new SourceNodeOptions(false, false, sourceNodeOptions.isParallel()),
-                                  parser, source, inputs, vars2 -> {
+                return DollarScriptSupport.node(operation + "-closure", pure,
+                                                new SourceNodeOptions(false, false, sourceNodeOptions.isParallel()),
+                                                parser, source, inputs, vars2 -> {
                             for (Scope scope : attachedScopes) {
                                 DollarScriptSupport.pushScope(scope);
                             }
@@ -144,26 +148,20 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             this.lambda = lambda;
         }
         this.parser = parser;
-        this.newScope = sourceNodeOptions.isNewScope();
-        this.scopeClosure = sourceNodeOptions.isScopeClosure();
+        newScope = sourceNodeOptions.isNewScope();
+        scopeClosure = sourceNodeOptions.isScopeClosure();
         this.id = id;
-        if (operation == null) {
-            throw new NullPointerException();
-        }
-        if (inputs == null) {
-            throw new NullPointerException();
-        }
         this.inputs = inputs;
         this.operation = operation;
         this.source = source;
-        this.meta.put("operation", operation);
-        this.meta.put("id", id);
+        meta.put("operation", operation);
+        meta.put("id", id);
     }
 
 
     @Nullable
     @Override
-    public Object invoke(Object proxy, @NotNull Method method, @Nullable Object[] args) throws Throwable {
+    public Object invoke(@NotNull Object proxy, @NotNull Method method, @Nullable Object[] args) throws Throwable {
         try {
             if (Objects.equals(method.getName(), "_source")) {
                 return source;
@@ -179,10 +177,10 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             }
 
             if (Objects.equals(method.getName(), "_predictType")) {
-                if (this.prediction == null) {
-                    this.prediction = typeLearner.predict(operation, source, inputs);
+                if (prediction == null) {
+                    prediction = typeLearner.predict(operation, source, inputs);
                 }
-                return this.prediction;
+                return prediction;
             }
 
             Object result = null;
@@ -218,8 +216,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
                     result = DollarScriptSupport.inScope(true, useScope, newScope -> {
                         if (DollarStatic.getConfig().debugScope()) {
-                            log.info(
-                                    "EXE: " + operation + " " + method.getName() + " for " + source.getShortSourceMessage());
+                            log.info("EXE: " + operation + " " + method.getName() + " for " + source.getShortSourceMessage());
                         }
                         try {
                             return invokeMain(proxy, method, args);
