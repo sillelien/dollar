@@ -49,7 +49,7 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>          Object[] objects = (Object[]) token.value();
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>          String constraintSource = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>          <strong class="jxr_keyword">return</strong> rhs -&gt; {
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>              <strong class="jxr_keyword">return</strong> DollarScriptSupport.createReactiveNode(<span class="jxr_string">"for"</span>, SourceNodeOptions.NEW_SCOPE, dollarParser, token, rhs, args -&gt; {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>              <strong class="jxr_keyword">return</strong> DollarScriptSupport.reactiveNode(<span class="jxr_string">"for"</span>, SourceNodeOptions.NEW_SCOPE, dollarParser, token, rhs, args -&gt; {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>                  <strong class="jxr_keyword">return</strong> ((<strong class="jxr_keyword">var</strong>) objects[3]).$each(i -&gt; {
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>                      currentScope().set(objects[1].toString(),
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>                                         fix(i[0], false),

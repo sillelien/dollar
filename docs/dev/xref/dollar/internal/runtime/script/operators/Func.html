@@ -82,7 +82,7 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> multiply(@NotNull <strong class="jxr_keyword">var</strong> lhs, @NotNull <strong class="jxr_keyword">var</strong> rhs) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> lhsFix = lhs._fix(false);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">if</strong> (Arrays.asList(<span class="jxr_string">"block"</span>, <span class="jxr_string">"map"</span>, <span class="jxr_string">"list"</span>).contains(
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">if</strong> (Arrays.asList(<span class="jxr_string">"block"</span>, <span class="jxr_string">"inFunc"</span>, <span class="jxr_string">"list"</span>).contains(
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>                  lhs.getMetaAttribute(<span class="jxr_string">"operation"</span>))) {
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>              <strong class="jxr_keyword">var</strong> newValue = lhsFix._fixDeep(false);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>              Long max = rhs.toLong();
@@ -168,9 +168,9 @@
 <a class="jxr_linenumber" name="L160" href="#L160">160</a>                 DollarParserImpl.executor.executeInBackground(() -&gt; fix(v, false)));
 <a class="jxr_linenumber" name="L161" href="#L161">161</a>     }
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> subscribeFunc(@NotNull <strong class="jxr_keyword">boolean</strong> pure, @NotNull <strong class="jxr_keyword">var</strong> lhs, <strong class="jxr_keyword">var</strong> rhs) {
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> subscribeFunc(@NotNull <strong class="jxr_keyword">var</strong> lhs, <strong class="jxr_keyword">var</strong> rhs) {
 <a class="jxr_linenumber" name="L164" href="#L164">164</a>         <strong class="jxr_keyword">return</strong> lhs.$subscribe(
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>                 i -&gt; DollarScriptSupport.inSubScope(<strong class="jxr_keyword">true</strong>, pure, <span class="jxr_string">"subscribe-param"</span>, newScope -&gt; {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>                 i -&gt; DollarScriptSupport.inSubScope(<strong class="jxr_keyword">true</strong>, false, <span class="jxr_string">"subscribe-param"</span>, newScope -&gt; {
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>                     <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> it = fix(i[0], false);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a>                     currentScope().setParameter(<span class="jxr_string">"1"</span>, it);
 <a class="jxr_linenumber" name="L168" href="#L168">168</a>                     currentScope().setParameter(<span class="jxr_string">"it"</span>, it);
@@ -226,7 +226,11 @@
 <a class="jxr_linenumber" name="L218" href="#L218">218</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> readFunc(@NotNull <strong class="jxr_keyword">var</strong> from) {
 <a class="jxr_linenumber" name="L219" href="#L219">219</a>         <strong class="jxr_keyword">return</strong> DollarFactory.fromURI(from).$read();
 <a class="jxr_linenumber" name="L220" href="#L220">220</a>     }
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> }
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> inFunc(<strong class="jxr_keyword">var</strong> lhs1, <strong class="jxr_keyword">var</strong> rhs1) {<strong class="jxr_keyword">return</strong> rhs1.$contains(lhs1);}
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> serialFunc(<strong class="jxr_keyword">var</strong> v) {<strong class="jxr_keyword">return</strong> v._fixDeep(false);}
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017. All rights reserved.</div>

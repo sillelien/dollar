@@ -60,7 +60,7 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      @Override
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      <strong class="jxr_keyword">public</strong> Map&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; apply(@NotNull Token token) {
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>          <strong class="jxr_keyword">var</strong> rhs = (<strong class="jxr_keyword">var</strong>) token.value();
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>          <strong class="jxr_keyword">return</strong> lhs -&gt; createReactiveNode(
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>          <strong class="jxr_keyword">return</strong> lhs -&gt; reactiveNode(
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>                  <span class="jxr_string">"pipe"</span>, SourceNodeOptions.NEW_SCOPE, parser, token, rhs, i -&gt; {
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>                      <strong class="jxr_keyword">return</strong> inSubScope(false, pure, <span class="jxr_string">"pipe-runtime"</span>,
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>                                        runtimeScope -&gt; {
