@@ -292,6 +292,7 @@ public final class Symbols {
     @NotNull
     public static final OpDef IF_OPERATOR = new OpDef(BINARY, "???", "if", "if", false, true, null, IF_PRIORITY, true);
 
+
     @NotNull
     public static final OpDef WHEN_OP = new OpDef(BINARY, "?", "when", "when", false, true, null,
                                                   CONTROL_FLOW_PRIORITY, true);
@@ -322,9 +323,25 @@ public final class Symbols {
                                                UNARY_PRIORITY, true);
 
     @NotNull
+    public static final OpDef EVERY_OP = new OpDef(CONTROL_FLOW, null, null,
+                                                   "every", false, false,
+                                                   "every <duration> <expression>",
+                                                   NO_PRIORITY, false);
+
+    @NotNull
+    public static final OpDef COLLECT_OP = new OpDef(CONTROL_FLOW, null,
+                                                     null, "collect",
+                                                     false, false,
+                                                     "collect <expression> [ 'until' <expression> ] [ 'unless' <expression> ] <expression>",
+                                                     NO_PRIORITY, true);
+
+    @NotNull
     public static final OpDef FOR_OP = new OpDef(CONTROL_FLOW, null, "for", "for", false, true,
                                                  "for <variable-name> <iterable-expression> <expression>",
                                                  UNARY_PRIORITY, true);
+
+    @NotNull
+    public static final OpDef VAR_USAGE_OP = new OpDef(CONTROL_FLOW, null, null, "var-usage", false, true, null, NO_PRIORITY, true);
 
     @NotNull
     public static final OpDef WHILE_OP = new OpDef(CONTROL_FLOW, null, "while", "while", false, true,
@@ -355,6 +372,11 @@ public final class Symbols {
                                                   false, true,
                                                   "'read' ['block'] ['mutate'] ['from'] <expression>",
                                                   OUTPUT_PRIORITY, false);
+
+    @NotNull
+    public static final OpDef IS_OP = new OpDef(BINARY, null, "is", "is", false, true, null, IF_PRIORITY, true);
+
+
     @NotNull
     public static final List<String> SYMBOL_STRINGS;
     @NotNull
@@ -442,10 +464,10 @@ public final class Symbols {
     @NotNull
     public static final List<OpDef> OPERATORS;
     @NotNull
-    private static final OpDef PURE_OP = new OpDef(PREFIX, null, "pure", "pure",
-                                                   false, true,
-                                                   null,
-                                                   OUTPUT_PRIORITY, true);
+    public static final OpDef PURE_OP = new OpDef(PREFIX, null, "pure", "pure",
+                                                  false, true,
+                                                  null,
+                                                  OUTPUT_PRIORITY, true);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_1 = new OpDef(RESERVED, "...", null, "RESERVED_OPERATOR_1",
                                                                true, true, null, 0, true);
@@ -731,7 +753,7 @@ public final class Symbols {
                     PARAM_OP,
                     WRITE_OP,
                     READ_OP,
-
+                    IS_OP,
 
                     //Reserved Operators
                     RESERVED_OPERATOR_1,

@@ -35,8 +35,7 @@ import static com.sillelien.dollar.api.DollarStatic.*;
 import static com.sillelien.dollar.api.types.DollarFactory.fromValue;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 import static dollar.internal.runtime.script.DollarScriptSupport.inSubScope;
-import static dollar.internal.runtime.script.parser.Symbols.EACH;
-import static dollar.internal.runtime.script.parser.Symbols.REDUCE;
+import static dollar.internal.runtime.script.parser.Symbols.*;
 
 @SuppressWarnings({"UtilityClassCanBeEnum", "UtilityClassCanBeSingleton"})
 public final class Func {
@@ -47,6 +46,7 @@ public final class Func {
 
     @NotNull
     public static var reduceFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
+        assert REDUCE.validForPure(pure);
         return lhs.$list().$stream(false).reduce((x, y) -> {
             try {
                 return inSubScope(false, pure, REDUCE.name(), newScope -> {
@@ -62,6 +62,7 @@ public final class Func {
 
     @NotNull
     public static var eachFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
+        assert EACH.validForPure(pure);
         return lhs.$each(i -> inSubScope(false, pure, EACH.name(),
                                          newScope -> {
                                              newScope.setParameter("1", i[0]);
@@ -235,7 +236,9 @@ public final class Func {
     public static var serialFunc(@NotNull var v) {return v._fixDeep(false);}
 
     @NotNull
-    public static var whileFunc(@NotNull var lhs, @NotNull var rhs) {
+    public static var whileFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
+        assert WHILE_OP.validForPure(pure);
+
         while (lhs.isTrue()) {
             rhs._fixDeep();
         }
@@ -252,9 +255,10 @@ public final class Func {
     }
 
     @NotNull
-    public static var ifFunc(@NotNull var lhs, @NotNull var rhs) {
+    public static var ifFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         final var lhsFix = lhs._fixDeep();
         boolean isTrue = lhsFix.isBoolean() && lhsFix.isTrue();
+        assert IF_OPERATOR.validForPure(pure);
         return isTrue ? rhs._fix(2, false) : DollarFactory.FALSE;
     }
 
@@ -268,6 +272,7 @@ public final class Func {
 
     @NotNull
     public static var forFunc(boolean pure, @NotNull String varName, @NotNull var iterable, @NotNull var block) {
+        assert FOR_OP.validForPure(pure);
         return iterable.$each(i -> {
             currentScope()
                     .set(varName,

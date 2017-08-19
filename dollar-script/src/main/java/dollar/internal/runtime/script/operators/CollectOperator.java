@@ -37,6 +37,7 @@ import java.util.UUID;
 import static com.sillelien.dollar.api.DollarStatic.$;
 import static com.sillelien.dollar.api.DollarStatic.$void;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.parser.Symbols.COLLECT_OP;
 
 public class CollectOperator implements Map<Token, var> {
     @NotNull
@@ -48,6 +49,8 @@ public class CollectOperator implements Map<Token, var> {
     public CollectOperator(@NotNull DollarParser dollarParser, boolean pure) {
         parser = dollarParser;
         this.pure = pure;
+        assert COLLECT_OP.validForPure(pure);
+
     }
 
     @NotNull

@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import java.util.function.Function;
 
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.parser.Symbols.PIPE_OPERATOR;
 import static java.util.Collections.singletonList;
 
 public class PipeOperator implements Function<Token, Function<var, var>> {
@@ -40,6 +41,7 @@ public class PipeOperator implements Function<Token, Function<var, var>> {
 
 
     public PipeOperator(@NotNull DollarParser parser, boolean pure) {
+        assert PIPE_OPERATOR.validForPure(pure);
 
         this.parser = parser;
         this.pure = pure;
