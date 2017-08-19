@@ -31,7 +31,6 @@
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-core</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -94,7 +93,6 @@
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-script</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.sillelien</groupId>
@@ -164,83 +162,83 @@
                             </excludes>
                         </filter>
                     </filters>
-                    <relocations>
-                        <relocation>
-                            <pattern>org.apache</pattern>
-                            <shadedPattern>dollar.internal.apache</shadedPattern>
-                            <excludes>
-                                <exclude>org.apache.log4j.**</exclude>
-                            </excludes>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.mashape.unirest</pattern>
-                            <shadedPattern>dollar.internal.unirest</shadedPattern>
-                        </relocation>
-                        <!--<relocation>-->
-                        <!--<pattern>com.github.oxo42.stateless4j</pattern>-->
-                        <!--<shadedPattern>dollar.internal.stateless4j</shadedPattern>-->
-                        <!--</relocation>-->
-                        <relocation>
-                            <pattern>com.thoughtworks.xstream</pattern>
-                            <shadedPattern>dollar.internal.xstream</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.fasterxml.jackson</pattern>
-                            <shadedPattern>dollar.internal.jackson</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.beust.jcommander</pattern>
-                            <shadedPattern>dollar.internal.jcommander</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.jparsec</pattern>
-                            <shadedPattern>dollar.internal.jparsec</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.pegdown</pattern>
-                            <shadedPattern>dollar.internal.pegdown</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.sonatype.aether</pattern>
-                            <shadedPattern>dollar.internal.aether</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>io.dropwizard.metrics</pattern>
-                            <shadedPattern>dollar.internal.metrics</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.google.j2objc</pattern>
-                            <shadedPattern>dollar.internal.j2objc</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.google.errorprone</pattern>
-                            <shadedPattern>dollar.internal.errorprone</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.objectweb.asm</pattern>
-                            <shadedPattern>dollar.internal.asm</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.parboiled</pattern>
-                            <shadedPattern>dollar.internal.parboiled</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>net.sf.cglib</pattern>
-                            <shadedPattern>dollar.internal.cglib</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.yaml.snakeyaml</pattern>
-                            <shadedPattern>dollar.internal.snakeyaml</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.intellij.lang.annotations</pattern>
-                            <shadedPattern>dollar.internal.intellij.annotations</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.jetbrains.annotations</pattern>
-                            <shadedPattern>dollar.internal.intellij.annotations</shadedPattern>
-                        </relocation>
-                    </relocations>
+                    <!--<relocations>-->
+                    <!--<relocation>-->
+                    <!--<pattern>org.apache</pattern>-->
+                    <!--<shadedPattern>dollar.internal.apache</shadedPattern>-->
+                    <!--<excludes>-->
+                    <!--<exclude>org.apache.log4j.**</exclude>-->
+                    <!--</excludes>-->
+                    <!--</relocation>-->
+                    <!--<relocation>-->
+                    <!--<pattern>com.mashape.unirest</pattern>-->
+                    <!--<shadedPattern>dollar.internal.unirest</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--&lt;!&ndash;<relocation>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<pattern>com.github.oxo42.stateless4j</pattern>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<shadedPattern>dollar.internal.stateless4j</shadedPattern>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</relocation>&ndash;&gt;-->
+                    <!--<relocation>-->
+                    <!--<pattern>com.thoughtworks.xstream</pattern>-->
+                    <!--<shadedPattern>dollar.internal.xstream</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--<relocation>-->
+                    <!--<pattern>com.fasterxml.jackson</pattern>-->
+                    <!--<shadedPattern>dollar.internal.jackson</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--<relocation>-->
+                    <!--<pattern>com.beust.jcommander</pattern>-->
+                    <!--<shadedPattern>dollar.internal.jcommander</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--<relocation>-->
+                    <!--<pattern>org.jparsec</pattern>-->
+                    <!--<shadedPattern>dollar.internal.jparsec</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--<relocation>-->
+                    <!--<pattern>org.pegdown</pattern>-->
+                    <!--<shadedPattern>dollar.internal.pegdown</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--<relocation>-->
+                    <!--<pattern>org.sonatype.aether</pattern>-->
+                    <!--<shadedPattern>dollar.internal.aether</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--<relocation>-->
+                    <!--<pattern>io.dropwizard.metrics</pattern>-->
+                    <!--<shadedPattern>dollar.internal.metrics</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--<relocation>-->
+                    <!--<pattern>com.google.j2objc</pattern>-->
+                    <!--<shadedPattern>dollar.internal.j2objc</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--<relocation>-->
+                    <!--<pattern>com.google.errorprone</pattern>-->
+                    <!--<shadedPattern>dollar.internal.errorprone</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--<relocation>-->
+                    <!--<pattern>org.objectweb.asm</pattern>-->
+                    <!--<shadedPattern>dollar.internal.asm</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--<relocation>-->
+                    <!--<pattern>org.parboiled</pattern>-->
+                    <!--<shadedPattern>dollar.internal.parboiled</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--<relocation>-->
+                    <!--<pattern>net.sf.cglib</pattern>-->
+                    <!--<shadedPattern>dollar.internal.cglib</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--<relocation>-->
+                    <!--<pattern>org.yaml.snakeyaml</pattern>-->
+                    <!--<shadedPattern>dollar.internal.snakeyaml</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--<relocation>-->
+                    <!--<pattern>org.intellij.lang.annotations</pattern>-->
+                    <!--<shadedPattern>dollar.internal.intellij.annotations</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--<relocation>-->
+                    <!--<pattern>org.jetbrains.annotations</pattern>-->
+                    <!--<shadedPattern>dollar.internal.intellij.annotations</shadedPattern>-->
+                    <!--</relocation>-->
+                    <!--</relocations>-->
                     <transformers>
                         <transformer
                                 implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
