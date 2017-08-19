@@ -41,6 +41,8 @@ cp -f ~/.m2/repository/org/slf4j/slf4j-log4j12/${SLF4J_VERSION}/slf4j-log4j12-${
 cp -f ~/.m2/repository/log4j/log4j/${LOG4J_VERSION}/log4j-${LOG4J_VERSION}.jar ${DIST}/lib
 cp -f ~/.m2/repository/com/google/guava/guava/${GUAVA_VERSION}/guava-${GUAVA_VERSION}.jar ${DIST}/lib
 cp -f ~/.m2/repository/com/sillelien/dollar-mapdb/${MAPDB_VERSION}/dollar-mapdb-${MAPDB_VERSION}.jar ${DIST}/lib/dollar-mapdb.jar
+cp -f ~/.m2/repository/com/sillelien/dollar-script/${RELEASE_NUMBER}/dollar-script-${RELEASE_NUMBER}.jar ${DIST}/lib/dollar-script.jar
+cp -f ~/.m2/repository/com/sillelien/dollar-core/${RELEASE_NUMBER}/dollar-core-${RELEASE_NUMBER}.jar ${DIST}/lib/dollar-core.jar
 
 cp ${PROJECT}/.release ${DIST}/RELEASE
 cd ${DIST}

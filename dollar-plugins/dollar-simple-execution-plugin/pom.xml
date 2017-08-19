@@ -40,6 +40,7 @@
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-script</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>

@@ -17,7 +17,6 @@
 package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.BooleanAware;
-import com.sillelien.dollar.api.MetadataAware;
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.TypePrediction;
@@ -145,7 +144,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
         boolean decleration = mutability != null;
         constant = (mutability != null) && "const".equals(mutability.toString());
         isVolatile = (mutability != null) && "volatile".equals(mutability.toString());
-        if (((MetadataAware) objects[4]).getMetaAttribute("__builtin") != null) {
+        if (((var) objects[4]).getMetaAttribute("__builtin") != null) {
             throw new DollarScriptException("The variable '" +
                                                     objects[4] +
                                                     "' cannot be assigned as this name is the name of a builtin function.");

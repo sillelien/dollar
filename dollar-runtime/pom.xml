@@ -31,6 +31,7 @@
         <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-core</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -93,6 +94,7 @@
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-script</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.sillelien</groupId>
@@ -124,7 +126,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.1</version>
+                <version>3.0.0</version>
                 <configuration>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                     <shadedClassifierName>mod</shadedClassifierName>
@@ -175,8 +177,8 @@
                             <shadedPattern>dollar.internal.unirest</shadedPattern>
                         </relocation>
                         <!--<relocation>-->
-                            <!--<pattern>com.github.oxo42.stateless4j</pattern>-->
-                            <!--<shadedPattern>dollar.internal.stateless4j</shadedPattern>-->
+                        <!--<pattern>com.github.oxo42.stateless4j</pattern>-->
+                        <!--<shadedPattern>dollar.internal.stateless4j</shadedPattern>-->
                         <!--</relocation>-->
                         <relocation>
                             <pattern>com.thoughtworks.xstream</pattern>

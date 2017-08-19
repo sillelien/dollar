@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script.operators;
+package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.collections.Range;
@@ -106,6 +106,7 @@ public final class Func {
         return $(v.truthy());
     }
 
+    @NotNull
     public static var pairFunc(@NotNull var lhs, @NotNull var rhs) {
         return $(lhs.$S(), rhs);
     }

@@ -37,7 +37,6 @@ import dollar.internal.runtime.script.operators.BlockOperator;
 import dollar.internal.runtime.script.operators.CausesOperator;
 import dollar.internal.runtime.script.operators.CollectOperator;
 import dollar.internal.runtime.script.operators.DefinitionOperator;
-import dollar.internal.runtime.script.operators.Func;
 import dollar.internal.runtime.script.operators.ParameterOperator;
 import dollar.internal.runtime.script.operators.PipeOperator;
 import dollar.internal.runtime.script.parser.OpDef;
