@@ -44,7 +44,7 @@
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../dollar/internal/runtime/script/operators/DefinitionOperator.html">DefinitionOperator</a> <strong class="jxr_keyword">implements</strong> Map&lt;Token, Map&lt;? <strong class="jxr_keyword">super</strong> <strong class="jxr_keyword">var</strong>, ? <strong class="jxr_keyword">extends</strong> <strong class="jxr_keyword">var</strong>&gt;&gt; {
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> pure;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../dollar/internal/runtime/script/operators/DefinitionOperator.html">DefinitionOperator</a>(<strong class="jxr_keyword">boolean</strong> pure, <a href="../../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser) {
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>          <strong class="jxr_keyword">this</strong>.pure = pure;
@@ -94,11 +94,11 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>                  <strong class="jxr_keyword">var</strong> constraint;
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>                  String constraintSource;
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>                  <strong class="jxr_keyword">if</strong> (typeConstraintObj != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>                      constraint = DollarScriptSupport.createNode(<span class="jxr_string">"definition-constraint"</span>, SourceNodeOptions.NEW_SCOPE,
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>                                                                  token, <strong class="jxr_keyword">new</strong>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>                                                                                 ArrayList&lt;&gt;(),
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>                                                                  parser, i
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>                                                                                  -&gt; {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>                      constraint = DollarScriptSupport.node(<span class="jxr_string">"definition-constraint"</span>, pure, SourceNodeOptions.NEW_SCOPE,
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>                                                            token, <strong class="jxr_keyword">new</strong>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>                                                                           ArrayList&lt;&gt;(),
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>                                                            parser, i
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>                                                                            -&gt; {
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>                                  <strong class="jxr_keyword">final</strong> Type type = Type.valueOf(
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>                                          typeConstraintObj.toString().toUpperCase());
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>                                  <strong class="jxr_keyword">var</strong> it = scope.getParameter(<span class="jxr_string">"it"</span>);
@@ -111,8 +111,8 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>                 }
 <a class="jxr_linenumber" name="L104" href="#L104">104</a>                 <strong class="jxr_keyword">final</strong> String variableName = variableNameObj.toString();
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>                 <strong class="jxr_keyword">var</strong> node = DollarScriptSupport.createNode(
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>                         <span class="jxr_string">"assignment"</span>, SourceNodeOptions.NO_SCOPE, parser, token, Arrays.asList(
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>                 <strong class="jxr_keyword">var</strong> node = DollarScriptSupport.node(
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>                         <span class="jxr_string">"assignment"</span>, pure, SourceNodeOptions.NO_SCOPE, parser, token, Arrays.asList(
 <a class="jxr_linenumber" name="L108" href="#L108">108</a>                                 constrain(scope, value, constraint, constraintSource)),
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>                         args -&gt; {
 <a class="jxr_linenumber" name="L110" href="#L110">110</a>                             setVariableDefinition(currentScope(), parser, token, pure, <strong class="jxr_keyword">true</strong>,
@@ -122,8 +122,8 @@
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>                                                   constraintSource
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>                             );
 <a class="jxr_linenumber" name="L116" href="#L116">116</a>                             <strong class="jxr_keyword">if</strong> (exportObj != <strong class="jxr_keyword">null</strong> &amp;&amp; exportObj.toString().equals(<span class="jxr_string">"export"</span>)) {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>                                 parser.export(variableName, DollarScriptSupport.createNode(
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>                                         <span class="jxr_string">"assignment"</span>, SourceNodeOptions.NO_SCOPE, parser, token, Arrays.asList(value),
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>                                 parser.export(variableName, DollarScriptSupport.node(
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>                                         <span class="jxr_string">"assignment"</span>, pure, SourceNodeOptions.NO_SCOPE, parser, token, Arrays.asList(value),
 <a class="jxr_linenumber" name="L119" href="#L119">119</a>                                         exportArgs -&gt; value));
 <a class="jxr_linenumber" name="L120" href="#L120">120</a>                             }
 <a class="jxr_linenumber" name="L121" href="#L121">121</a>                             <strong class="jxr_keyword">return</strong> $<strong class="jxr_keyword">void</strong>();

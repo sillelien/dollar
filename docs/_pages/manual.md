@@ -1595,6 +1595,14 @@ unchanged <-> 1;
 
 ___
 
+### `is`      {#op-is}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+
+**`<expression> 'is' <expression>`**{: style="font-size: 60%"}
+
+
+___
+
 ### `<` (less-than)      {#op-less-than}
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
@@ -2463,6 +2471,7 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[else](#op-else)              |`else`         | `-:`     |binary    |
 |[fork](#op-fork)              |`fork`         | `-<`     |prefix    |
 |[if](#op-if)                  |`if`           | `???`    |binary    |
+|[is](#op-is)                  |`is`           |          |binary    |
 |[parallel](#op-parallel)      |`parallel`     | `|:|`    |prefix    |
 |[pause](#op-pause)            |`pause`        | `||>`    |prefix    |
 |[serial](#op-serial)          |`serial`       | `|..|`   |prefix    |
