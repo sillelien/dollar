@@ -54,7 +54,7 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>          List&lt;<strong class="jxr_keyword">var</strong>&gt; o = (List&lt;<strong class="jxr_keyword">var</strong>&gt;) t.value();
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>                  lambda =
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>                  DollarScriptSupport.createNode(<span class="jxr_string">"map"</span>, SourceNodeOptions.SCOPE_WITH_CLOSURE, t, o, dollarParser, i -&gt; {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>                  DollarScriptSupport.createNode(<span class="jxr_string">"inFunc"</span>, SourceNodeOptions.SCOPE_WITH_CLOSURE, t, o, dollarParser, i -&gt; {
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>                      <strong class="jxr_keyword">if</strong> (o.size() == 1) {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_comment">//                        System.out.println("BLOCK-MAP");</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_comment">//                        new Exception().printStackTrace();</em>
@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>                      } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>                          stream = o.stream();
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>                      }
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>                      <em class="jxr_comment">//Not really a map if only one entry unless it's a pair, in fact</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>                      <em class="jxr_comment">//Not really a inFunc if only one entry unless it's a pair, in fact</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>                      <em class="jxr_comment">// it's really a block.</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>                      <strong class="jxr_keyword">return</strong> $(stream.map(v -&gt; v._fix(parallel.isTrue()))
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>                                       .collect(Collectors.toConcurrentMap(
