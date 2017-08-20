@@ -34,11 +34,9 @@ import dollar.internal.runtime.script.api.ParserOptions;
 import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.operators.AssignmentOperator;
 import dollar.internal.runtime.script.operators.BlockOperator;
-import dollar.internal.runtime.script.operators.CausesOperator;
 import dollar.internal.runtime.script.operators.CollectOperator;
 import dollar.internal.runtime.script.operators.DefinitionOperator;
 import dollar.internal.runtime.script.operators.ParameterOperator;
-import dollar.internal.runtime.script.operators.PipeOperator;
 import dollar.internal.runtime.script.parser.OpDef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -324,6 +322,8 @@ public class DollarParserImpl implements DollarParser {
 
         table = infixl(pure, table, EACH, (lhs, rhs) -> Func.eachFunc(pure, lhs, rhs));
         table = infixl(pure, table, REDUCE, (lhs, rhs) -> Func.reduceFunc(pure, lhs, rhs));
+        table = infixl(pure, table, CAUSES, (lhs, rhs) -> Func.causesFunc(pure, lhs, rhs));
+
 
         table = infixlReactive(pure, table, ASSERT_EQ_REACT, Func::assertEqualsFunc);
         table = infixlUnReactive(pure, table, ASSERT_EQ_UNREACT, Func::assertEqualsFunc);
@@ -346,8 +346,6 @@ public class DollarParserImpl implements DollarParser {
 
 
         //More complex expression syntax
-        table = table.infixl(op(CAUSES, new CausesOperator(pure, this)), CAUSES.priority());
-
         table = table.postfix(pipeOperator(ref, pure), PIPE_OPERATOR.priority());
         table = table.postfix(isOperator(pure), EQ_PRIORITY);
         table = table.postfix(memberOperator(ref, pure), MEMBER.priority());
@@ -722,8 +720,15 @@ public class DollarParserImpl implements DollarParser {
         //noinspection unchecked
         return (OP(PIPE_OPERATOR).optional(null)).next(
                 longest(BUILTIN, IDENTIFIER, functionCall(pure).postfix(parameterOperator(ref, pure)),
-                        ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))))
-                       .token().map(new PipeOperator(this, pure));
+                        ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN)))
+        ).token()
+                       .map(token -> {
+                           assert PIPE_OPERATOR.validForPure(pure);
+                           var rhs = (var) token.value();
+                           return lhs -> reactiveNode("pipe", pure, NEW_SCOPE, this, token, rhs,
+                                                      i -> inSubScope(false, pure, "pipe-runtime",
+                                                                      s -> Func.pipeFunc(this, pure, token, rhs, lhs)));
+                       });
     }
 
     private Parser<Function<? super var, ? extends var>> writeOperator(@NotNull Parser.Reference<var> ref) {

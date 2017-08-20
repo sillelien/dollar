@@ -16,59 +16,46 @@
 
 package dollar.internal.runtime.script.operators;
 
-import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
-import dollar.internal.runtime.script.DollarParserImpl;
-import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
-import org.jparsec.functors.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
-import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
+import static dollar.internal.runtime.script.DollarParserImpl.NAMED_PARAMETER_META_ATTR;
+import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.SourceNodeOptions.SCOPE_WITH_CLOSURE;
 
-public class ParameterOperator implements Map<Token, Map<? super var, ? extends var>> {
+public class ParameterOperator implements Function<Token, Function<? super var, ? extends var>> {
     @NotNull
-    private static final Logger log = LoggerFactory.getLogger("ParameterOperator");
-    @NotNull
-    private final DollarParser dollarParser;
+    private final DollarParser parser;
     private final boolean pure;
 
 
-    public ParameterOperator(@NotNull DollarParser dollarParser, boolean pure) {
-        this.dollarParser = dollarParser;
+    public ParameterOperator(@NotNull DollarParser parser, boolean pure) {
+        this.parser = parser;
         this.pure = pure;
     }
 
     @Nullable
     @Override
-    public Map<? super var, ? extends var> map(@NotNull Token token) {
-        List<var> rhs = (List<var>) token.value();
+    public Function<? super var, ? extends var> apply(@NotNull Token token) {
+        @SuppressWarnings("unchecked") List<var> parameters = (List<var>) token.value();
         return lhs -> {
             boolean functionName;
             boolean builtin;
-            log.debug(lhs.getMetaAttribute("operation"));
+
             if ("function-name".equals(lhs.getMetaAttribute("operation"))) {
                 String lhsString = lhs.toString();
-                log.debug("BUILTIN?: " + lhsString);
-                if (Builtins.exists(lhsString)) {
-                    log.debug("BUILTIN: " + lhsString);
-                    builtin = true;
-                } else {
-                    builtin = false;
-                }
-                if (pure && Builtins.exists(lhsString) && !Builtins.isPure(lhsString)) {
-                    throw new DollarScriptException(
-                                                           "Cannot call the impure function '" + lhsString + "' in a pure expression.");
+                builtin = Builtins.exists(lhsString);
+                if (pure && builtin && !Builtins.isPure(lhsString)) {
+                    throw new DollarScriptException("Cannot call the impure function '" + lhsString + "' in a pure expression.");
                 }
                 functionName = true;
             } else {
@@ -76,86 +63,43 @@ public class ParameterOperator implements Map<Token, Map<? super var, ? extends 
                 builtin = false;
             }
 
-            String constraintSource = null;
-            var lambda = DollarScriptSupport.node("parameter", pure, SourceNodeOptions.SCOPE_WITH_CLOSURE, dollarParser, token, rhs,
-                                                  new Function(rhs, lhs, token, constraintSource, functionName, builtin)
+            var node = node("parameter", pure, SCOPE_WITH_CLOSURE,
+                            parser, token, parameters, i -> {
+                        //Add the special $* value for all the parameters
+                        currentScope().setParameter("*", $(parameters));
+                        int count = 0;
+                        for (var parameter : parameters) {
+                            currentScope().setParameter(String.valueOf(++count), parameter);
+
+                            //If the parameter is a named parameter then use the name (set as metadata on the value).
+                            String paramMetaAttribute = parameter.getMetaAttribute(NAMED_PARAMETER_META_ATTR);
+                            if (paramMetaAttribute != null) {
+                                currentScope().set(paramMetaAttribute, parameter, true, null,
+                                                   null, false, false, pure);
+                            }
+                        }
+                        var result;
+                        if (functionName) {
+                            String lhsString = lhs.toString();
+                            result = builtin ? Builtins.execute(lhsString, parameters, pure)
+                                             : variableNode(pure, lhsString, false, null, token, parser)
+                                                       ._fix(2,
+                                                             false);
+                        } else {
+                            result = lhs._fix(2, false);
+                        }
+
+                        return result;
+                    }
             );
+
             //reactive links
-            lhs.$listen(i -> lambda.$notify());
-            for (var param : rhs) {
-                param.$listen(i -> lambda.$notify());
+            lhs.$listen(i -> node.$notify());
+            for (var param : parameters) {
+                param.$listen(i -> node.$notify());
             }
-            return lambda;
+            return node;
         };
     }
 
-    private class Function implements Pipeable {
-        @NotNull
-        private final List<var> rhs;
-        @NotNull
-        private final var lhs;
-        @NotNull
-        private final Token token;
-        @Nullable
-        private final String constraintSource;
-        private final boolean functionName;
-        private final boolean builtin;
-
-        public Function(@NotNull List<var> rhs,
-                        @NotNull var lhs,
-                        @NotNull Token token,
-                        @Nullable String constraintSource, boolean functionName, boolean builtin) {
-            this.rhs = rhs;
-            this.lhs = lhs;
-            this.token = token;
-            this.constraintSource = constraintSource;
-            this.functionName = functionName;
-            this.builtin = builtin;
-        }
-
-        @NotNull
-        @Override
-        public var pipe(var... args) {
-            //Add the special $*
-            // value for all the
-            // parameters
-            currentScope().setParameter(
-                    "*",
-                    $(rhs));
-            int count = 0;
-            for (var param : rhs) {
-                currentScope().setParameter(String.valueOf(++count), param);
-                //If the parameter is a named parameter then use the name (set as metadata on the value).
-                if (param.getMetaAttribute(DollarParserImpl.NAMED_PARAMETER_META_ATTR) != null) {
-                    currentScope().set(
-                            param.getMetaAttribute(DollarParserImpl.NAMED_PARAMETER_META_ATTR),
-                            param, true, null,
-                            constraintSource, false, false, pure);
-                }
-            }
-            var result;
-            if (!functionName) {
-                result = lhs._fix(2, false);
-            } else {
-                String lhsString = lhs.toString();
-                //The lhs is a
-                // string, so
-                // let's
-                // see if it's a
-                // builtin function
-                //if not then
-                // assume
-                // it's a variable.
-                if (builtin) {
-                    result = Builtins.execute(lhsString, rhs, pure);
-                } else {
-                    final var valueUnfixed = DollarScriptSupport.variableNode(
-                            pure, lhsString, false, null, token, dollarParser);
-                    result = valueUnfixed._fix(2, false);
-                }
-            }
-
-            return result;
-        }
-    }
 }

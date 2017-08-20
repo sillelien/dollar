@@ -22,20 +22,25 @@ import com.sillelien.dollar.api.execution.DollarExecutor;
 import com.sillelien.dollar.api.plugin.Plugins;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
+import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
+import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jparsec.Token;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
 import static com.sillelien.dollar.api.types.DollarFactory.fromValue;
-import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
-import static dollar.internal.runtime.script.DollarScriptSupport.inSubScope;
+import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.parser.Symbols.*;
+import static java.util.Collections.singletonList;
 
 @SuppressWarnings({"UtilityClassCanBeEnum", "UtilityClassCanBeSingleton"})
 public final class Func {
@@ -289,5 +294,34 @@ public final class Func {
     @NotNull
     public static var castFunc(@NotNull var lhs, @NotNull String typeName) {
         return lhs.$as(Type.valueOf(typeName.toUpperCase()));
+    }
+
+    static var causesFunc(boolean pure, var lhs, var rhs) {
+        String lhsFix = lhs.getMetaAttribute("variable");
+        if (lhsFix == null) {
+            return lhs.$listen(vars -> rhs._fix(1, false));
+        } else {
+            Scope scopeForVar = getScopeForVar(pure, lhsFix, false, null);
+            if (scopeForVar == null) {
+                throw new VariableNotFoundException(lhsFix, currentScope());
+            }
+            scopeForVar.listen(lhsFix, UUID.randomUUID().toString(), rhs);
+            return lhs;
+        }
+    }
+
+    @NotNull
+    static var pipeFunc(@NotNull DollarParser parser, boolean pure, @NotNull Token token, @NotNull var rhs, @NotNull var lhs) {
+        currentScope().setParameter("1", lhs);
+        var rhsVal = rhs._fix(false);
+        String rhsStr = rhsVal.toString();
+        if ("function-call".equals(
+                rhs.getMetaAttribute("operation"))) {
+            return rhsVal;
+        } else {
+            return (rhs.getMetaAttribute("__builtin") != null)
+                           ? Builtins.execute(rhsStr, singletonList(lhs), pure)
+                           : variableNode(pure, rhsStr, false, null, token, parser)._fix(2, false);
+        }
     }
 }

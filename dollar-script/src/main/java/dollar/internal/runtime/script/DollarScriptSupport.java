@@ -303,30 +303,26 @@ public class DollarScriptSupport {
         }
     }
 
-    @Nullable
-    public static var variableNode(boolean pure, @NotNull String key, boolean numeric,
-                                   @Nullable var defaultValue,
+    @NotNull
+    public static var variableNode(boolean pure, @NotNull String key,
+                                   boolean numeric, @Nullable var defaultValue,
                                    @NotNull Token token, @NotNull DollarParser parser) {
-//       if(pure && !(scope instanceof  PureScope)) {
-//           throw new IllegalStateException("Attempting to get a pure variable in an impure scope");
-//       }
-        SourceSegment source = new SourceSegmentValue(currentScope(), token);
-
         var lambda[] = new var[1];
         UUID id = UUID.randomUUID();
         lambda[0] = node("get-variable-" + key + "-" + id, pure, SourceNodeOptions.NO_SCOPE, parser, token,
                          $(key).$list().toVarList().mutable(), (i) -> {
                     Scope scope = currentScope();
 
-                    log.debug(
-                            ansiColor("LOOKUP " + key, ANSI_CYAN) + " " + scope + " in " + scopes.get().size() + " scopes ");
+                    log.debug("{} {} in {} scopes ", ansiColor("LOOKUP " + key, ANSI_CYAN), scope, scopes.get().size());
                     if (numeric) {
                         if (scope.hasParameter(key)) {
                             return scope.getParameter(key);
                         }
                     } else {
                         if (scope.has(key)) {
-                            scope.getScopeForKey(key).listen(key, id.toString(), lambda[0]);
+                            Scope scopeForKey = scope.getScopeForKey(key);
+                            assert scopeForKey != null;
+                            scopeForKey.listen(key, id.toString(), lambda[0]);
                             return scope.get(key);
                         }
                     }
@@ -335,7 +331,7 @@ public class DollarScriptSupport {
                         Collections.reverse(scopes);
                         for (Scope scriptScope : scopes) {
                             if (!(scriptScope instanceof PureScope) && pure) {
-                                log.debug("Skipping " + scriptScope);
+                                log.debug("Skipping {}", scriptScope);
                             }
                             if (numeric) {
                                 if (scriptScope.hasParameter(key)) {
@@ -343,7 +339,9 @@ public class DollarScriptSupport {
                                 }
                             } else {
                                 if (scriptScope.has(key)) {
-                                    scriptScope.getScopeForKey(key).listen(key, id.toString(), lambda[0]);
+                                    Scope scopeForKey = scriptScope.getScopeForKey(key);
+                                    assert scopeForKey != null;
+                                    scopeForKey.listen(key, id.toString(), lambda[0]);
                                     return scriptScope.get(key);
                                 }
                             }
@@ -352,7 +350,7 @@ public class DollarScriptSupport {
                         throw e;
                     } catch (DollarScriptException e) {
                         return parser.getErrorHandler().handle(scope, null, e);
-                    } catch (Exception e) {
+                    } catch (RuntimeException e) {
                         return parser.getErrorHandler().handle(scope, null, e);
                     }
                     if (numeric) {
