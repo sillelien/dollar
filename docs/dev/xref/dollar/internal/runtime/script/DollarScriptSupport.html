@@ -311,272 +311,270 @@
 <a class="jxr_linenumber" name="L303" href="#L303">303</a>         }
 <a class="jxr_linenumber" name="L304" href="#L304">304</a>     }
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>     @Nullable
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> variableNode(<strong class="jxr_keyword">boolean</strong> pure, @NotNull String key, <strong class="jxr_keyword">boolean</strong> numeric,
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>                                    @Nullable <strong class="jxr_keyword">var</strong> defaultValue,
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>     @NotNull
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> variableNode(<strong class="jxr_keyword">boolean</strong> pure, @NotNull String key,
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>                                    <strong class="jxr_keyword">boolean</strong> numeric, @Nullable <strong class="jxr_keyword">var</strong> defaultValue,
 <a class="jxr_linenumber" name="L309" href="#L309">309</a>                                    @NotNull Token token, @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser) {
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_comment">//       if(pure &amp;&amp; !(scope instanceof  PureScope)) {</em>
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_comment">//           throw new IllegalStateException("Attempting to get a pure variable in an impure scope");</em>
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_comment">//       }</em>
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>         SourceSegment source = <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceSegmentValue.html">SourceSegmentValue</a>(currentScope(), token);
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>         <strong class="jxr_keyword">var</strong> lambda[] = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">var</strong>[1];
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>         UUID id = UUID.randomUUID();
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>         lambda[0] = node(<span class="jxr_string">"get-variable-"</span> + key + <span class="jxr_string">"-"</span> + id, pure, SourceNodeOptions.NO_SCOPE, parser, token,
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>                          $(key).$list().toVarList().mutable(), (i) -&gt; {
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>                     <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope = currentScope();
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>                     log.debug(
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>                             ansiColor(<span class="jxr_string">"LOOKUP "</span> + key, ANSI_CYAN) + <span class="jxr_string">" "</span> + scope + <span class="jxr_string">" in "</span> + scopes.get().size() + <span class="jxr_string">" scopes "</span>);
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>                     <strong class="jxr_keyword">if</strong> (numeric) {
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>                         <strong class="jxr_keyword">if</strong> (scope.hasParameter(key)) {
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>                             <strong class="jxr_keyword">return</strong> scope.getParameter(key);
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>                         }
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>                     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>                         <strong class="jxr_keyword">if</strong> (scope.has(key)) {
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>                             scope.getScopeForKey(key).listen(key, id.toString(), lambda[0]);
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>                             <strong class="jxr_keyword">return</strong> scope.get(key);
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>                         }
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>                     }
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>                     <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>                         List&lt;Scope&gt; scopes = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(DollarScriptSupport.scopes.get());
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>                         Collections.reverse(scopes);
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>                         <strong class="jxr_keyword">for</strong> (Scope scriptScope : scopes) {
-<a class="jxr_linenumber" name="L337" href="#L337">337</a>                             <strong class="jxr_keyword">if</strong> (!(scriptScope instanceof PureScope) &amp;&amp; pure) {
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>                                 log.debug(<span class="jxr_string">"Skipping "</span> + scriptScope);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>                             }
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>                             <strong class="jxr_keyword">if</strong> (numeric) {
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>                                 <strong class="jxr_keyword">if</strong> (scriptScope.hasParameter(key)) {
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>                                     <strong class="jxr_keyword">return</strong> scriptScope.getParameter(key);
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>                                 }
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>                             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>                                 <strong class="jxr_keyword">if</strong> (scriptScope.has(key)) {
-<a class="jxr_linenumber" name="L346" href="#L346">346</a>                                     scriptScope.getScopeForKey(key).listen(key, id.toString(), lambda[0]);
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>                                     <strong class="jxr_keyword">return</strong> scriptScope.get(key);
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>                                 }
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>                             }
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>                         }
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>                     } <strong class="jxr_keyword">catch</strong> (DollarAssertionException e) {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>                         <strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>                     } <strong class="jxr_keyword">catch</strong> (DollarScriptException e) {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>         <strong class="jxr_keyword">var</strong> lambda[] = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">var</strong>[1];
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>         UUID id = UUID.randomUUID();
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>         lambda[0] = node(<span class="jxr_string">"get-variable-"</span> + key + <span class="jxr_string">"-"</span> + id, pure, SourceNodeOptions.NO_SCOPE, parser, token,
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>                          $(key).$list().toVarList().mutable(), (i) -&gt; {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>                     <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope = currentScope();
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>                     log.debug(<span class="jxr_string">"{} {} in {} scopes "</span>, ansiColor(<span class="jxr_string">"LOOKUP "</span> + key, ANSI_CYAN), scope, scopes.get().size());
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>                     <strong class="jxr_keyword">if</strong> (numeric) {
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>                         <strong class="jxr_keyword">if</strong> (scope.hasParameter(key)) {
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>                             <strong class="jxr_keyword">return</strong> scope.getParameter(key);
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>                         }
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>                     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>                         <strong class="jxr_keyword">if</strong> (scope.has(key)) {
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>                             <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scopeForKey = scope.getScopeForKey(key);
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>                             assert scopeForKey != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>                             scopeForKey.listen(key, id.toString(), lambda[0]);
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>                             <strong class="jxr_keyword">return</strong> scope.get(key);
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>                         }
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>                     }
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>                     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>                         List&lt;Scope&gt; scopes = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(DollarScriptSupport.scopes.get());
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>                         Collections.reverse(scopes);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>                         <strong class="jxr_keyword">for</strong> (Scope scriptScope : scopes) {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>                             <strong class="jxr_keyword">if</strong> (!(scriptScope instanceof PureScope) &amp;&amp; pure) {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>                                 log.debug(<span class="jxr_string">"Skipping {}"</span>, scriptScope);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>                             }
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>                             <strong class="jxr_keyword">if</strong> (numeric) {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>                                 <strong class="jxr_keyword">if</strong> (scriptScope.hasParameter(key)) {
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>                                     <strong class="jxr_keyword">return</strong> scriptScope.getParameter(key);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>                                 }
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>                             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>                                 <strong class="jxr_keyword">if</strong> (scriptScope.has(key)) {
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>                                     <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scopeForKey = scriptScope.getScopeForKey(key);
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>                                     assert scopeForKey != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>                                     scopeForKey.listen(key, id.toString(), lambda[0]);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>                                     <strong class="jxr_keyword">return</strong> scriptScope.get(key);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>                                 }
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>                             }
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>                         }
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>                     } <strong class="jxr_keyword">catch</strong> (DollarAssertionException e) {
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>                         <strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>                     } <strong class="jxr_keyword">catch</strong> (DollarScriptException e) {
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>                         <strong class="jxr_keyword">return</strong> parser.getErrorHandler().handle(scope, <strong class="jxr_keyword">null</strong>, e);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>                     } <strong class="jxr_keyword">catch</strong> (RuntimeException e) {
 <a class="jxr_linenumber" name="L354" href="#L354">354</a>                         <strong class="jxr_keyword">return</strong> parser.getErrorHandler().handle(scope, <strong class="jxr_keyword">null</strong>, e);
-<a class="jxr_linenumber" name="L355" href="#L355">355</a>                     } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>                         <strong class="jxr_keyword">return</strong> parser.getErrorHandler().handle(scope, <strong class="jxr_keyword">null</strong>, e);
-<a class="jxr_linenumber" name="L357" href="#L357">357</a>                     }
-<a class="jxr_linenumber" name="L358" href="#L358">358</a>                     <strong class="jxr_keyword">if</strong> (numeric) {
-<a class="jxr_linenumber" name="L359" href="#L359">359</a>                         <strong class="jxr_keyword">return</strong> scope.getParameter(key);
-<a class="jxr_linenumber" name="L360" href="#L360">360</a>                     }
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
-<a class="jxr_linenumber" name="L362" href="#L362">362</a>                     <strong class="jxr_keyword">if</strong> (defaultValue != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>                         <strong class="jxr_keyword">return</strong> defaultValue;
-<a class="jxr_linenumber" name="L364" href="#L364">364</a>                     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>                         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/VariableNotFoundException.html">VariableNotFoundException</a>(key, scope);
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>                     }
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>                 }
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>         );
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>         lambda[0].setMetaAttribute(<span class="jxr_string">"variable"</span>, key);
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>         <strong class="jxr_keyword">return</strong> lambda[0];
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>                     }
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>                     <strong class="jxr_keyword">if</strong> (numeric) {
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>                         <strong class="jxr_keyword">return</strong> scope.getParameter(key);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>                     }
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>                     <strong class="jxr_keyword">if</strong> (defaultValue != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>                         <strong class="jxr_keyword">return</strong> defaultValue;
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>                     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>                         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/VariableNotFoundException.html">VariableNotFoundException</a>(key, scope);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>                     }
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>                 }
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>         );
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>         lambda[0].setMetaAttribute(<span class="jxr_string">"variable"</span>, key);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>         <strong class="jxr_keyword">return</strong> lambda[0];
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>     }
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>     }
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>     @Nullable
-<a class="jxr_linenumber" name="L376" href="#L376">376</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> getScopeForVar(<strong class="jxr_keyword">boolean</strong> pure,
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>                                        @NotNull String key,
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>                                        <strong class="jxr_keyword">boolean</strong> numeric,
-<a class="jxr_linenumber" name="L379" href="#L379">379</a>                                        @Nullable <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> initialScope) {
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
-<a class="jxr_linenumber" name="L381" href="#L381">381</a>         <strong class="jxr_keyword">if</strong> (initialScope == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L382" href="#L382">382</a>             initialScope = currentScope();
-<a class="jxr_linenumber" name="L383" href="#L383">383</a>         }
-<a class="jxr_linenumber" name="L384" href="#L384">384</a>         log.debug(
-<a class="jxr_linenumber" name="L385" href="#L385">385</a>                 ansiColor(<span class="jxr_string">"LOOKUP "</span> + key, ANSI_CYAN) + <span class="jxr_string">" "</span> + initialScope + <span class="jxr_string">" in "</span> + scopes.get().size() + <span class="jxr_string">" scopes "</span>);
-<a class="jxr_linenumber" name="L386" href="#L386">386</a>         <strong class="jxr_keyword">if</strong> (numeric) {
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>             <strong class="jxr_keyword">if</strong> (initialScope.hasParameter(key)) {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>                 <strong class="jxr_keyword">return</strong> initialScope;
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>             }
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L391" href="#L391">391</a>             <strong class="jxr_keyword">if</strong> (initialScope.has(key)) {
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>                 <strong class="jxr_keyword">return</strong> initialScope;
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>             }
-<a class="jxr_linenumber" name="L394" href="#L394">394</a>         }
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>         List&lt;Scope&gt; scopes = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(DollarScriptSupport.scopes.get());
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>         Collections.reverse(scopes);
-<a class="jxr_linenumber" name="L398" href="#L398">398</a>         <strong class="jxr_keyword">for</strong> (Scope scriptScope : scopes) {
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>             <strong class="jxr_keyword">if</strong> (!(scriptScope instanceof PureScope) &amp;&amp; pure) {
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>                 log.debug(<span class="jxr_string">"Skipping "</span> + scriptScope);
-<a class="jxr_linenumber" name="L401" href="#L401">401</a>             }
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>             <strong class="jxr_keyword">if</strong> (numeric) {
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>                 <strong class="jxr_keyword">if</strong> (scriptScope.hasParameter(key)) {
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>                     <strong class="jxr_keyword">return</strong> scriptScope;
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>                 }
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L407" href="#L407">407</a>                 <strong class="jxr_keyword">if</strong> (scriptScope.has(key)) {
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>                     <strong class="jxr_keyword">return</strong> scriptScope;
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>                 }
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>             }
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>         }
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>     @Nullable
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> getScopeForVar(<strong class="jxr_keyword">boolean</strong> pure,
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>                                        @NotNull String key,
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>                                        <strong class="jxr_keyword">boolean</strong> numeric,
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>                                        @Nullable <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> initialScope) {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>         <strong class="jxr_keyword">if</strong> (initialScope == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>             initialScope = currentScope();
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>         }
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>         log.debug(
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>                 ansiColor(<span class="jxr_string">"LOOKUP "</span> + key, ANSI_CYAN) + <span class="jxr_string">" "</span> + initialScope + <span class="jxr_string">" in "</span> + scopes.get().size() + <span class="jxr_string">" scopes "</span>);
+<a class="jxr_linenumber" name="L384" href="#L384">384</a>         <strong class="jxr_keyword">if</strong> (numeric) {
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>             <strong class="jxr_keyword">if</strong> (initialScope.hasParameter(key)) {
+<a class="jxr_linenumber" name="L386" href="#L386">386</a>                 <strong class="jxr_keyword">return</strong> initialScope;
+<a class="jxr_linenumber" name="L387" href="#L387">387</a>             }
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>             <strong class="jxr_keyword">if</strong> (initialScope.has(key)) {
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>                 <strong class="jxr_keyword">return</strong> initialScope;
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>             }
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>         }
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>         List&lt;Scope&gt; scopes = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(DollarScriptSupport.scopes.get());
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>         Collections.reverse(scopes);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>         <strong class="jxr_keyword">for</strong> (Scope scriptScope : scopes) {
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>             <strong class="jxr_keyword">if</strong> (!(scriptScope instanceof PureScope) &amp;&amp; pure) {
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>                 log.debug(<span class="jxr_string">"Skipping "</span> + scriptScope);
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>             }
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>             <strong class="jxr_keyword">if</strong> (numeric) {
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>                 <strong class="jxr_keyword">if</strong> (scriptScope.hasParameter(key)) {
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>                     <strong class="jxr_keyword">return</strong> scriptScope;
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>                 }
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>                 <strong class="jxr_keyword">if</strong> (scriptScope.has(key)) {
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>                     <strong class="jxr_keyword">return</strong> scriptScope;
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>                 }
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>             }
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>         }
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>     }
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>     }
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
-<a class="jxr_linenumber" name="L419" href="#L419">419</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> getRootScope() {
-<a class="jxr_linenumber" name="L420" href="#L420">420</a>         <strong class="jxr_keyword">return</strong> scopes.get().get(0);
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>     }
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 
-<a class="jxr_linenumber" name="L423" href="#L423">423</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setRootScope(@NotNull <a href="../../../../dollar/internal/runtime/script/ScriptScope.html">ScriptScope</a> rootScope) {
-<a class="jxr_linenumber" name="L424" href="#L424">424</a>         scopes.get().add(0, rootScope);
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>     }
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
-<a class="jxr_linenumber" name="L427" href="#L427">427</a>     @NotNull
-<a class="jxr_linenumber" name="L428" href="#L428">428</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> setVariableDefinition(@NotNull <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope,
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>                                             @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
-<a class="jxr_linenumber" name="L430" href="#L430">430</a>                                             @NotNull Token token,
-<a class="jxr_linenumber" name="L431" href="#L431">431</a>                                             <strong class="jxr_keyword">boolean</strong> pure, <strong class="jxr_keyword">boolean</strong> decleration, @NotNull String key,
-<a class="jxr_linenumber" name="L432" href="#L432">432</a>                                             @NotNull <strong class="jxr_keyword">var</strong> value,
-<a class="jxr_linenumber" name="L433" href="#L433">433</a>                                             @Nullable <strong class="jxr_keyword">var</strong> useConstraint,
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>                                             @Nullable String useSource) {
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 
-<a class="jxr_linenumber" name="L436" href="#L436">436</a>         <strong class="jxr_keyword">return</strong> setVariable(scope, key, value,
-<a class="jxr_linenumber" name="L437" href="#L437">437</a>                            <strong class="jxr_keyword">true</strong>, useConstraint, useSource,
-<a class="jxr_linenumber" name="L438" href="#L438">438</a>                            false, false, pure,
-<a class="jxr_linenumber" name="L439" href="#L439">439</a>                            decleration, token, parser);
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>     }
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 
-<a class="jxr_linenumber" name="L442" href="#L442">442</a>     @NotNull
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> setVariable(@NotNull <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope,
-<a class="jxr_linenumber" name="L444" href="#L444">444</a>                                   @NotNull String key,
-<a class="jxr_linenumber" name="L445" href="#L445">445</a>                                   @NotNull <strong class="jxr_keyword">var</strong> value,
-<a class="jxr_linenumber" name="L446" href="#L446">446</a>                                   <strong class="jxr_keyword">boolean</strong> readonly,
-<a class="jxr_linenumber" name="L447" href="#L447">447</a>                                   @Nullable <strong class="jxr_keyword">var</strong> useConstraint,
-<a class="jxr_linenumber" name="L448" href="#L448">448</a>                                   @Nullable String useSource,
-<a class="jxr_linenumber" name="L449" href="#L449">449</a>                                   <strong class="jxr_keyword">boolean</strong> isVolatile,
-<a class="jxr_linenumber" name="L450" href="#L450">450</a>                                   <strong class="jxr_keyword">boolean</strong> fixed,
-<a class="jxr_linenumber" name="L451" href="#L451">451</a>                                   <strong class="jxr_keyword">boolean</strong> pure,
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>                                   <strong class="jxr_keyword">boolean</strong> decleration,
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>                                   @NotNull Token token,
-<a class="jxr_linenumber" name="L454" href="#L454">454</a>                                   @Nullable <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser) {
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 
-<a class="jxr_linenumber" name="L456" href="#L456">456</a>         SourceSegment source = <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceSegmentValue.html">SourceSegmentValue</a>(scope, token);
-<a class="jxr_linenumber" name="L457" href="#L457">457</a>         <strong class="jxr_keyword">boolean</strong> numeric = key.matches(<span class="jxr_string">"^&#92;&#92;d+$"</span>);
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 
-<a class="jxr_linenumber" name="L460" href="#L460">460</a>         <strong class="jxr_keyword">if</strong> (scope.has(key)) {
-<a class="jxr_linenumber" name="L461" href="#L461">461</a>             <strong class="jxr_keyword">return</strong> updateVariable(scope, key, value, readonly, useConstraint, useSource,
-<a class="jxr_linenumber" name="L462" href="#L462">462</a>                                   isVolatile, fixed, pure,
-<a class="jxr_linenumber" name="L463" href="#L463">463</a>                                   decleration);
-<a class="jxr_linenumber" name="L464" href="#L464">464</a>         }
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_comment">//        if (decleration) {</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_comment">//            scope.listen(key, value);</em>
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_comment">//        }</em>
-<a class="jxr_linenumber" name="L468" href="#L468">468</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L469" href="#L469">469</a>             List&lt;Scope&gt; scopes = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(DollarScriptSupport.scopes.get());
-<a class="jxr_linenumber" name="L470" href="#L470">470</a>             Collections.reverse(scopes);
-<a class="jxr_linenumber" name="L471" href="#L471">471</a>             <strong class="jxr_keyword">for</strong> (Scope scriptScope : scopes) {
-<a class="jxr_linenumber" name="L472" href="#L472">472</a>                 <strong class="jxr_keyword">if</strong> (!(scriptScope instanceof PureScope) &amp;&amp; pure) {
-<a class="jxr_linenumber" name="L473" href="#L473">473</a>                     log.debug(<span class="jxr_string">"Skipping "</span> + scriptScope);
-<a class="jxr_linenumber" name="L474" href="#L474">474</a>                 }
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 
-<a class="jxr_linenumber" name="L476" href="#L476">476</a>                 <strong class="jxr_keyword">if</strong> (scriptScope.has(key)) {
-<a class="jxr_linenumber" name="L477" href="#L477">477</a>                     <strong class="jxr_keyword">return</strong> updateVariable(scriptScope, key, value, readonly, useConstraint, useSource,
-<a class="jxr_linenumber" name="L478" href="#L478">478</a>                                           isVolatile, fixed, pure,
-<a class="jxr_linenumber" name="L479" href="#L479">479</a>                                           decleration);
-<a class="jxr_linenumber" name="L480" href="#L480">480</a>                 }
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 
-<a class="jxr_linenumber" name="L482" href="#L482">482</a>             }
-<a class="jxr_linenumber" name="L483" href="#L483">483</a>         } <strong class="jxr_keyword">catch</strong> (DollarAssertionException e) {
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> getRootScope() {
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>         <strong class="jxr_keyword">return</strong> scopes.get().get(0);
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>     }
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setRootScope(@NotNull <a href="../../../../dollar/internal/runtime/script/ScriptScope.html">ScriptScope</a> rootScope) {
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>         scopes.get().add(0, rootScope);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>     }
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>     @NotNull
+<a class="jxr_linenumber" name="L426" href="#L426">426</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> setVariableDefinition(@NotNull <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope,
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>                                             @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>                                             @NotNull Token token,
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>                                             <strong class="jxr_keyword">boolean</strong> pure, <strong class="jxr_keyword">boolean</strong> decleration, @NotNull String key,
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>                                             @NotNull <strong class="jxr_keyword">var</strong> value,
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>                                             @Nullable <strong class="jxr_keyword">var</strong> useConstraint,
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>                                             @Nullable String useSource) {
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 
+<a class="jxr_linenumber" name="L434" href="#L434">434</a>         <strong class="jxr_keyword">return</strong> setVariable(scope, key, value,
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>                            <strong class="jxr_keyword">true</strong>, useConstraint, useSource,
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>                            false, false, pure,
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>                            decleration, token, parser);
+<a class="jxr_linenumber" name="L438" href="#L438">438</a>     }
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>     @NotNull
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> setVariable(@NotNull <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope,
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>                                   @NotNull String key,
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>                                   @NotNull <strong class="jxr_keyword">var</strong> value,
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>                                   <strong class="jxr_keyword">boolean</strong> readonly,
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>                                   @Nullable <strong class="jxr_keyword">var</strong> useConstraint,
+<a class="jxr_linenumber" name="L446" href="#L446">446</a>                                   @Nullable String useSource,
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>                                   <strong class="jxr_keyword">boolean</strong> isVolatile,
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>                                   <strong class="jxr_keyword">boolean</strong> fixed,
+<a class="jxr_linenumber" name="L449" href="#L449">449</a>                                   <strong class="jxr_keyword">boolean</strong> pure,
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>                                   <strong class="jxr_keyword">boolean</strong> decleration,
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>                                   @NotNull Token token,
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>                                   @Nullable <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser) {
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>         SourceSegment source = <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceSegmentValue.html">SourceSegmentValue</a>(scope, token);
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>         <strong class="jxr_keyword">boolean</strong> numeric = key.matches(<span class="jxr_string">"^&#92;&#92;d+$"</span>);
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 
+<a class="jxr_linenumber" name="L458" href="#L458">458</a>         <strong class="jxr_keyword">if</strong> (scope.has(key)) {
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>             <strong class="jxr_keyword">return</strong> updateVariable(scope, key, value, readonly, useConstraint, useSource,
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>                                   isVolatile, fixed, pure,
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>                                   decleration);
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>         }
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_comment">//        if (decleration) {</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_comment">//            scope.listen(key, value);</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_comment">//        }</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L467" href="#L467">467</a>             List&lt;Scope&gt; scopes = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(DollarScriptSupport.scopes.get());
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>             Collections.reverse(scopes);
+<a class="jxr_linenumber" name="L469" href="#L469">469</a>             <strong class="jxr_keyword">for</strong> (Scope scriptScope : scopes) {
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>                 <strong class="jxr_keyword">if</strong> (!(scriptScope instanceof PureScope) &amp;&amp; pure) {
+<a class="jxr_linenumber" name="L471" href="#L471">471</a>                     log.debug(<span class="jxr_string">"Skipping "</span> + scriptScope);
+<a class="jxr_linenumber" name="L472" href="#L472">472</a>                 }
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 
+<a class="jxr_linenumber" name="L474" href="#L474">474</a>                 <strong class="jxr_keyword">if</strong> (scriptScope.has(key)) {
+<a class="jxr_linenumber" name="L475" href="#L475">475</a>                     <strong class="jxr_keyword">return</strong> updateVariable(scriptScope, key, value, readonly, useConstraint, useSource,
+<a class="jxr_linenumber" name="L476" href="#L476">476</a>                                           isVolatile, fixed, pure,
+<a class="jxr_linenumber" name="L477" href="#L477">477</a>                                           decleration);
+<a class="jxr_linenumber" name="L478" href="#L478">478</a>                 }
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 
+<a class="jxr_linenumber" name="L480" href="#L480">480</a>             }
+<a class="jxr_linenumber" name="L481" href="#L481">481</a>         } <strong class="jxr_keyword">catch</strong> (DollarAssertionException e) {
+<a class="jxr_linenumber" name="L482" href="#L482">482</a>             <strong class="jxr_keyword">return</strong> parser.getErrorHandler().handle(scope, <strong class="jxr_keyword">null</strong>, e);
+<a class="jxr_linenumber" name="L483" href="#L483">483</a>         } <strong class="jxr_keyword">catch</strong> (DollarScriptException e) {
 <a class="jxr_linenumber" name="L484" href="#L484">484</a>             <strong class="jxr_keyword">return</strong> parser.getErrorHandler().handle(scope, <strong class="jxr_keyword">null</strong>, e);
-<a class="jxr_linenumber" name="L485" href="#L485">485</a>         } <strong class="jxr_keyword">catch</strong> (DollarScriptException e) {
+<a class="jxr_linenumber" name="L485" href="#L485">485</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L486" href="#L486">486</a>             <strong class="jxr_keyword">return</strong> parser.getErrorHandler().handle(scope, <strong class="jxr_keyword">null</strong>, e);
-<a class="jxr_linenumber" name="L487" href="#L487">487</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L488" href="#L488">488</a>             <strong class="jxr_keyword">return</strong> parser.getErrorHandler().handle(scope, <strong class="jxr_keyword">null</strong>, e);
-<a class="jxr_linenumber" name="L489" href="#L489">489</a>         }
-<a class="jxr_linenumber" name="L490" href="#L490">490</a>         <strong class="jxr_keyword">if</strong> (numeric) {
-<a class="jxr_linenumber" name="L491" href="#L491">491</a>             <strong class="jxr_keyword">return</strong> scope.getParameter(key);
-<a class="jxr_linenumber" name="L492" href="#L492">492</a>         }
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 
-<a class="jxr_linenumber" name="L494" href="#L494">494</a>         <strong class="jxr_keyword">if</strong> (decleration) {
-<a class="jxr_linenumber" name="L495" href="#L495">495</a>             log.debug(ansiColor(<span class="jxr_string">"SETTING  "</span> + key, ANSI_CYAN) + <span class="jxr_string">" "</span> + scope + <span class="jxr_string">" "</span> + scope);
-<a class="jxr_linenumber" name="L496" href="#L496">496</a>             <strong class="jxr_keyword">return</strong> scope.set(key, value, readonly, useConstraint, useSource, isVolatile,
-<a class="jxr_linenumber" name="L497" href="#L497">497</a>                              fixed,
-<a class="jxr_linenumber" name="L498" href="#L498">498</a>                              pure);
-<a class="jxr_linenumber" name="L499" href="#L499">499</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L500" href="#L500">500</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/VariableNotFoundException.html">VariableNotFoundException</a>(key, scope);
-<a class="jxr_linenumber" name="L501" href="#L501">501</a>         }
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 
+<a class="jxr_linenumber" name="L487" href="#L487">487</a>         }
+<a class="jxr_linenumber" name="L488" href="#L488">488</a>         <strong class="jxr_keyword">if</strong> (numeric) {
+<a class="jxr_linenumber" name="L489" href="#L489">489</a>             <strong class="jxr_keyword">return</strong> scope.getParameter(key);
+<a class="jxr_linenumber" name="L490" href="#L490">490</a>         }
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 
+<a class="jxr_linenumber" name="L492" href="#L492">492</a>         <strong class="jxr_keyword">if</strong> (decleration) {
+<a class="jxr_linenumber" name="L493" href="#L493">493</a>             log.debug(ansiColor(<span class="jxr_string">"SETTING  "</span> + key, ANSI_CYAN) + <span class="jxr_string">" "</span> + scope + <span class="jxr_string">" "</span> + scope);
+<a class="jxr_linenumber" name="L494" href="#L494">494</a>             <strong class="jxr_keyword">return</strong> scope.set(key, value, readonly, useConstraint, useSource, isVolatile,
+<a class="jxr_linenumber" name="L495" href="#L495">495</a>                              fixed,
+<a class="jxr_linenumber" name="L496" href="#L496">496</a>                              pure);
+<a class="jxr_linenumber" name="L497" href="#L497">497</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L498" href="#L498">498</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/VariableNotFoundException.html">VariableNotFoundException</a>(key, scope);
+<a class="jxr_linenumber" name="L499" href="#L499">499</a>         }
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 
+<a class="jxr_linenumber" name="L502" href="#L502">502</a>     }
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 
-<a class="jxr_linenumber" name="L504" href="#L504">504</a>     }
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 
-<a class="jxr_linenumber" name="L506" href="#L506">506</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> updateVariable(@NotNull <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope,
-<a class="jxr_linenumber" name="L507" href="#L507">507</a>                                       @NotNull String key,
-<a class="jxr_linenumber" name="L508" href="#L508">508</a>                                       @NotNull <strong class="jxr_keyword">var</strong> value,
-<a class="jxr_linenumber" name="L509" href="#L509">509</a>                                       <strong class="jxr_keyword">boolean</strong> readonly,
-<a class="jxr_linenumber" name="L510" href="#L510">510</a>                                       @Nullable <strong class="jxr_keyword">var</strong> useConstraint,
-<a class="jxr_linenumber" name="L511" href="#L511">511</a>                                       @Nullable String useSource,
-<a class="jxr_linenumber" name="L512" href="#L512">512</a>                                       <strong class="jxr_keyword">boolean</strong> isVolatile,
-<a class="jxr_linenumber" name="L513" href="#L513">513</a>                                       <strong class="jxr_keyword">boolean</strong> fixed,
-<a class="jxr_linenumber" name="L514" href="#L514">514</a>                                       <strong class="jxr_keyword">boolean</strong> pure, <strong class="jxr_keyword">boolean</strong> decleration) {
-<a class="jxr_linenumber" name="L515" href="#L515">515</a>         log.debug(ansiColor(<span class="jxr_string">"UPDATING "</span>, ANSI_CYAN) + key + <span class="jxr_string">" "</span> + scope);
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 
-<a class="jxr_linenumber" name="L517" href="#L517">517</a>         <strong class="jxr_keyword">if</strong> (decleration) {
-<a class="jxr_linenumber" name="L518" href="#L518">518</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarScriptException.html">DollarScriptException</a>(<span class="jxr_string">"Variable "</span> + key + <span class="jxr_string">" already defined in "</span> + scope);
-<a class="jxr_linenumber" name="L519" href="#L519">519</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 
-<a class="jxr_linenumber" name="L521" href="#L521">521</a>             <strong class="jxr_keyword">return</strong> scope.set(key,
-<a class="jxr_linenumber" name="L522" href="#L522">522</a>                              value,
-<a class="jxr_linenumber" name="L523" href="#L523">523</a>                              readonly,
-<a class="jxr_linenumber" name="L524" href="#L524">524</a>                              useConstraint,
-<a class="jxr_linenumber" name="L525" href="#L525">525</a>                              useSource,
-<a class="jxr_linenumber" name="L526" href="#L526">526</a>                              isVolatile,
-<a class="jxr_linenumber" name="L527" href="#L527">527</a>                              fixed,
-<a class="jxr_linenumber" name="L528" href="#L528">528</a>                              pure);
-<a class="jxr_linenumber" name="L529" href="#L529">529</a>         }
-<a class="jxr_linenumber" name="L530" href="#L530">530</a>     }
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 
-<a class="jxr_linenumber" name="L532" href="#L532">532</a>     @NotNull
-<a class="jxr_linenumber" name="L533" href="#L533">533</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> constrain(@NotNull <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope, @NotNull <strong class="jxr_keyword">var</strong> value, <strong class="jxr_keyword">var</strong> constraint, String source) {
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> <em class="jxr_comment">//        System.err.println("(" + source + ") " + rhs.$type().constraint());</em>
-<a class="jxr_linenumber" name="L535" href="#L535">535</a>         <strong class="jxr_keyword">if</strong> (!Objects.equals(value._constraintFingerprint(), source)) {
-<a class="jxr_linenumber" name="L536" href="#L536">536</a>             <strong class="jxr_keyword">if</strong> (value._constraintFingerprint() != <strong class="jxr_keyword">null</strong> &amp;&amp; !value._constraintFingerprint().isEmpty()) {
-<a class="jxr_linenumber" name="L537" href="#L537">537</a>                 scope.handleError(<strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarScriptException.html">DollarScriptException</a>(
-<a class="jxr_linenumber" name="L538" href="#L538">538</a>                                                                    <span class="jxr_string">"Trying to assign an invalid constrained variable "</span> + value._constraintFingerprint() + <span class="jxr_string">" vs "</span> + source,
-<a class="jxr_linenumber" name="L539" href="#L539">539</a>                                                                    value));
-<a class="jxr_linenumber" name="L540" href="#L540">540</a>             }
-<a class="jxr_linenumber" name="L541" href="#L541">541</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L542" href="#L542">542</a>             <strong class="jxr_keyword">if</strong> (value._constraintFingerprint() != <strong class="jxr_keyword">null</strong> &amp;&amp; !value._constraintFingerprint().isEmpty()) {
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_comment">//                System.err.println("Fingerprint: " + rhs.$type().constraint());</em>
-<a class="jxr_linenumber" name="L544" href="#L544">544</a>             }
-<a class="jxr_linenumber" name="L545" href="#L545">545</a>         }
-<a class="jxr_linenumber" name="L546" href="#L546">546</a>         <strong class="jxr_keyword">return</strong> value._constrain(constraint, source);
-<a class="jxr_linenumber" name="L547" href="#L547">547</a>     }
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 
-<a class="jxr_linenumber" name="L549" href="#L549">549</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String ansiColor(String text, String color) {
-<a class="jxr_linenumber" name="L550" href="#L550">550</a>         <strong class="jxr_keyword">return</strong> <span class="jxr_string">"\u001b["</span>  <em class="jxr_comment">// Prefix</em>
-<a class="jxr_linenumber" name="L551" href="#L551">551</a>                        + <span class="jxr_string">"0"</span>        <em class="jxr_comment">// Brightness</em>
-<a class="jxr_linenumber" name="L552" href="#L552">552</a>                        + <span class="jxr_string">";"</span>        <em class="jxr_comment">// Separator</em>
-<a class="jxr_linenumber" name="L553" href="#L553">553</a>                        + color       <em class="jxr_comment">// Red foreground</em>
-<a class="jxr_linenumber" name="L554" href="#L554">554</a>                        + <span class="jxr_string">"m"</span>        <em class="jxr_comment">// Suffix</em>
-<a class="jxr_linenumber" name="L555" href="#L555">555</a>                        + text       <em class="jxr_comment">// the text to output</em>
-<a class="jxr_linenumber" name="L556" href="#L556">556</a>                        + <span class="jxr_string">"\u001b[m"</span>; <em class="jxr_comment">// Prefix + Suffix to reset color</em>
-<a class="jxr_linenumber" name="L557" href="#L557">557</a>     }
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 
-<a class="jxr_linenumber" name="L559" href="#L559">559</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> pushScope(@NotNull <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope) {
-<a class="jxr_linenumber" name="L560" href="#L560">560</a>         addScope(<strong class="jxr_keyword">true</strong>, scope);
-<a class="jxr_linenumber" name="L561" href="#L561">561</a>     }
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 
-<a class="jxr_linenumber" name="L563" href="#L563">563</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> popScope(<a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope) {
-<a class="jxr_linenumber" name="L564" href="#L564">564</a>         <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> poppedScope = endScope(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L565" href="#L565">565</a>         <strong class="jxr_keyword">if</strong> (!poppedScope.equals(scope)) {
-<a class="jxr_linenumber" name="L566" href="#L566">566</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarAssertionException.html">DollarAssertionException</a>(<span class="jxr_string">"Popped scope does not equal expected scope"</span>);
-<a class="jxr_linenumber" name="L567" href="#L567">567</a>         }
-<a class="jxr_linenumber" name="L568" href="#L568">568</a>     }
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> }
+<a class="jxr_linenumber" name="L504" href="#L504">504</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> updateVariable(@NotNull <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope,
+<a class="jxr_linenumber" name="L505" href="#L505">505</a>                                       @NotNull String key,
+<a class="jxr_linenumber" name="L506" href="#L506">506</a>                                       @NotNull <strong class="jxr_keyword">var</strong> value,
+<a class="jxr_linenumber" name="L507" href="#L507">507</a>                                       <strong class="jxr_keyword">boolean</strong> readonly,
+<a class="jxr_linenumber" name="L508" href="#L508">508</a>                                       @Nullable <strong class="jxr_keyword">var</strong> useConstraint,
+<a class="jxr_linenumber" name="L509" href="#L509">509</a>                                       @Nullable String useSource,
+<a class="jxr_linenumber" name="L510" href="#L510">510</a>                                       <strong class="jxr_keyword">boolean</strong> isVolatile,
+<a class="jxr_linenumber" name="L511" href="#L511">511</a>                                       <strong class="jxr_keyword">boolean</strong> fixed,
+<a class="jxr_linenumber" name="L512" href="#L512">512</a>                                       <strong class="jxr_keyword">boolean</strong> pure, <strong class="jxr_keyword">boolean</strong> decleration) {
+<a class="jxr_linenumber" name="L513" href="#L513">513</a>         log.debug(ansiColor(<span class="jxr_string">"UPDATING "</span>, ANSI_CYAN) + key + <span class="jxr_string">" "</span> + scope);
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 
+<a class="jxr_linenumber" name="L515" href="#L515">515</a>         <strong class="jxr_keyword">if</strong> (decleration) {
+<a class="jxr_linenumber" name="L516" href="#L516">516</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarScriptException.html">DollarScriptException</a>(<span class="jxr_string">"Variable "</span> + key + <span class="jxr_string">" already defined in "</span> + scope);
+<a class="jxr_linenumber" name="L517" href="#L517">517</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 
+<a class="jxr_linenumber" name="L519" href="#L519">519</a>             <strong class="jxr_keyword">return</strong> scope.set(key,
+<a class="jxr_linenumber" name="L520" href="#L520">520</a>                              value,
+<a class="jxr_linenumber" name="L521" href="#L521">521</a>                              readonly,
+<a class="jxr_linenumber" name="L522" href="#L522">522</a>                              useConstraint,
+<a class="jxr_linenumber" name="L523" href="#L523">523</a>                              useSource,
+<a class="jxr_linenumber" name="L524" href="#L524">524</a>                              isVolatile,
+<a class="jxr_linenumber" name="L525" href="#L525">525</a>                              fixed,
+<a class="jxr_linenumber" name="L526" href="#L526">526</a>                              pure);
+<a class="jxr_linenumber" name="L527" href="#L527">527</a>         }
+<a class="jxr_linenumber" name="L528" href="#L528">528</a>     }
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 
+<a class="jxr_linenumber" name="L530" href="#L530">530</a>     @NotNull
+<a class="jxr_linenumber" name="L531" href="#L531">531</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> constrain(@NotNull <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope, @NotNull <strong class="jxr_keyword">var</strong> value, <strong class="jxr_keyword">var</strong> constraint, String source) {
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> <em class="jxr_comment">//        System.err.println("(" + source + ") " + rhs.$type().constraint());</em>
+<a class="jxr_linenumber" name="L533" href="#L533">533</a>         <strong class="jxr_keyword">if</strong> (!Objects.equals(value._constraintFingerprint(), source)) {
+<a class="jxr_linenumber" name="L534" href="#L534">534</a>             <strong class="jxr_keyword">if</strong> (value._constraintFingerprint() != <strong class="jxr_keyword">null</strong> &amp;&amp; !value._constraintFingerprint().isEmpty()) {
+<a class="jxr_linenumber" name="L535" href="#L535">535</a>                 scope.handleError(<strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarScriptException.html">DollarScriptException</a>(
+<a class="jxr_linenumber" name="L536" href="#L536">536</a>                                                                    <span class="jxr_string">"Trying to assign an invalid constrained variable "</span> + value._constraintFingerprint() + <span class="jxr_string">" vs "</span> + source,
+<a class="jxr_linenumber" name="L537" href="#L537">537</a>                                                                    value));
+<a class="jxr_linenumber" name="L538" href="#L538">538</a>             }
+<a class="jxr_linenumber" name="L539" href="#L539">539</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L540" href="#L540">540</a>             <strong class="jxr_keyword">if</strong> (value._constraintFingerprint() != <strong class="jxr_keyword">null</strong> &amp;&amp; !value._constraintFingerprint().isEmpty()) {
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_comment">//                System.err.println("Fingerprint: " + rhs.$type().constraint());</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a>             }
+<a class="jxr_linenumber" name="L543" href="#L543">543</a>         }
+<a class="jxr_linenumber" name="L544" href="#L544">544</a>         <strong class="jxr_keyword">return</strong> value._constrain(constraint, source);
+<a class="jxr_linenumber" name="L545" href="#L545">545</a>     }
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 
+<a class="jxr_linenumber" name="L547" href="#L547">547</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String ansiColor(String text, String color) {
+<a class="jxr_linenumber" name="L548" href="#L548">548</a>         <strong class="jxr_keyword">return</strong> <span class="jxr_string">"\u001b["</span>  <em class="jxr_comment">// Prefix</em>
+<a class="jxr_linenumber" name="L549" href="#L549">549</a>                        + <span class="jxr_string">"0"</span>        <em class="jxr_comment">// Brightness</em>
+<a class="jxr_linenumber" name="L550" href="#L550">550</a>                        + <span class="jxr_string">";"</span>        <em class="jxr_comment">// Separator</em>
+<a class="jxr_linenumber" name="L551" href="#L551">551</a>                        + color       <em class="jxr_comment">// Red foreground</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a>                        + <span class="jxr_string">"m"</span>        <em class="jxr_comment">// Suffix</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a>                        + text       <em class="jxr_comment">// the text to output</em>
+<a class="jxr_linenumber" name="L554" href="#L554">554</a>                        + <span class="jxr_string">"\u001b[m"</span>; <em class="jxr_comment">// Prefix + Suffix to reset color</em>
+<a class="jxr_linenumber" name="L555" href="#L555">555</a>     }
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 
+<a class="jxr_linenumber" name="L557" href="#L557">557</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> pushScope(@NotNull <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope) {
+<a class="jxr_linenumber" name="L558" href="#L558">558</a>         addScope(<strong class="jxr_keyword">true</strong>, scope);
+<a class="jxr_linenumber" name="L559" href="#L559">559</a>     }
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 
+<a class="jxr_linenumber" name="L561" href="#L561">561</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> popScope(<a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope) {
+<a class="jxr_linenumber" name="L562" href="#L562">562</a>         <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> poppedScope = endScope(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L563" href="#L563">563</a>         <strong class="jxr_keyword">if</strong> (!poppedScope.equals(scope)) {
+<a class="jxr_linenumber" name="L564" href="#L564">564</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarAssertionException.html">DollarAssertionException</a>(<span class="jxr_string">"Popped scope does not equal expected scope"</span>);
+<a class="jxr_linenumber" name="L565" href="#L565">565</a>         }
+<a class="jxr_linenumber" name="L566" href="#L566">566</a>     }
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017. All rights reserved.</div>
