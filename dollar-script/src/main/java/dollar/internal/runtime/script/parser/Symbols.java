@@ -290,7 +290,7 @@ public final class Symbols {
     public static final OpDef PAIR = new OpDef(BINARY, ":", "pair", "pair", false, true, null, PAIR_PRIORITY, true);
 
     @NotNull
-    public static final OpDef IF_OPERATOR = new OpDef(BINARY, "???", "if", "if", false, true, null, IF_PRIORITY, true);
+    public static final OpDef IF_OP = new OpDef(BINARY, "???", "if", "if", false, true, null, IF_PRIORITY, true);
 
 
     @NotNull
@@ -323,14 +323,21 @@ public final class Symbols {
                                                UNARY_PRIORITY, true);
 
     @NotNull
-    public static final OpDef EVERY_OP = new OpDef(CONTROL_FLOW, null, null,
+    public static final OpDef EVERY_OP = new OpDef(CONTROL_FLOW, null, "every",
                                                    "every", false, false,
                                                    "every <duration> <expression>",
                                                    NO_PRIORITY, false);
 
     @NotNull
+    public static final OpDef JAVA_OP = new OpDef(OTHER, null, null,
+                                                  "java", false, false,
+                                                  "`<java-code>`",
+                                                  NO_PRIORITY, false);
+
+
+    @NotNull
     public static final OpDef COLLECT_OP = new OpDef(CONTROL_FLOW, null,
-                                                     null, "collect",
+                                                     "collect", "collect",
                                                      false, false,
                                                      "collect <expression> [ 'until' <expression> ] [ 'unless' <expression> ] <expression>",
                                                      NO_PRIORITY, true);
@@ -376,6 +383,16 @@ public final class Symbols {
     @NotNull
     public static final OpDef IS_OP = new OpDef(BINARY, null, "is", "is", false, true, null, IF_PRIORITY, true);
 
+    @NotNull
+    public static final OpDef PURE_OP = new OpDef(PREFIX, null, "pure", "pure",
+                                                  false, true,
+                                                  null,
+                                                  OUTPUT_PRIORITY, true);
+    @NotNull
+    public static final OpDef MODULE_OP = new OpDef(OTHER, null, "module", "module",
+                                                    false, true,
+                                                    "module <name> (<parameter>)*",
+                                                    OUTPUT_PRIORITY, false);
 
     @NotNull
     public static final List<String> SYMBOL_STRINGS;
@@ -426,19 +443,13 @@ public final class Symbols {
                                       "Marks a variable as volatile, i.e. it can be accessed by multiple threads.",
                                       null);
     @NotNull
-    public static final KeywordDef COLLECT = new KeywordDef("collect", false, null, null);
-    @NotNull
     public static final KeywordDef UNTIL = new KeywordDef("until", false, null, null);
     @NotNull
     public static final KeywordDef UNLESS = new KeywordDef("unless", false, null, null);
     @NotNull
-    public static final KeywordDef WHEN = new KeywordDef("when", false, null, null);
-    @NotNull
     public static final KeywordDef IS = new KeywordDef("is", false, null, null);
     @NotNull
     public static final KeywordDef FOR = new KeywordDef("for", false, null, null);
-    @NotNull
-    public static final KeywordDef WHILE = new KeywordDef("while", false, null, null);
     @NotNull
     public static final KeywordDef AS = new KeywordDef("as", false, null, null);
     @NotNull
@@ -446,13 +457,7 @@ public final class Symbols {
     @NotNull
     public static final KeywordDef WITH = new KeywordDef("with", false, null, null);
     @NotNull
-    public static final KeywordDef MODULE = new KeywordDef("module", false, null, null);
-    @NotNull
     public static final KeywordDef EVERY = new KeywordDef("every", false, null, null);
-    @NotNull
-    public static final KeywordDef READ_KEYWORD = new KeywordDef("read", false, null, null);
-    @NotNull
-    public static final KeywordDef WRITE_KEYWORD = new KeywordDef("write", false, null, null);
     @NotNull
     public static final KeywordDef BLOCK = new KeywordDef("block", false, null, null);
     @NotNull
@@ -463,11 +468,7 @@ public final class Symbols {
     public static final KeywordDef FROM = new KeywordDef("from", false, null, null);
     @NotNull
     public static final List<OpDef> OPERATORS;
-    @NotNull
-    public static final OpDef PURE_OP = new OpDef(PREFIX, null, "pure", "pure",
-                                                  false, true,
-                                                  null,
-                                                  OUTPUT_PRIORITY, true);
+
     @NotNull
     private static final OpDef RESERVED_OPERATOR_1 = new OpDef(RESERVED, "...", null, "RESERVED_OPERATOR_1",
                                                                true, true, null, 0, true);
@@ -696,7 +697,7 @@ public final class Symbols {
                     FORK,
                     GT_EQUALS,
                     GT,
-                    IF_OPERATOR,
+                    IF_OP,
                     IN,
                     INC,
                     INEQUALITY_OPERATOR,
@@ -736,8 +737,6 @@ public final class Symbols {
                     TRUTHY,
                     UNPAUSE,
                     WRITE_SIMPLE,
-                    WHEN_OP,
-                    PURE_OP,
                     COMMA,
                     TRUE,
                     FALSE,
@@ -747,13 +746,18 @@ public final class Symbols {
 
                     //complex operators
                     CAST,
+                    COLLECT_OP,
                     FOR_OP,
+                    MODULE_OP,
+                    WHEN_OP,
+                    PURE_OP,
                     WHILE_OP,
                     SUBSCRIPT_OP,
                     PARAM_OP,
                     WRITE_OP,
                     READ_OP,
                     IS_OP,
+                    JAVA_OP,
 
                     //Reserved Operators
                     RESERVED_OPERATOR_1,
@@ -789,20 +793,14 @@ public final class Symbols {
                     CONST,
                     VAR,
                     VOLATILE,
-                    COLLECT,
                     UNTIL,
                     UNLESS,
-                    WHEN,
                     IS,
                     FOR,
-                    WHILE,
                     AS,
                     DEF,
                     WITH,
-                    MODULE,
                     EVERY,
-                    READ_KEYWORD,
-                    WRITE_KEYWORD,
                     BLOCK,
                     MUTATE,
                     TO,
@@ -873,7 +871,7 @@ public final class Symbols {
     static {
 
         OPERATORS = tokens.stream().filter(i -> (i instanceof OpDef) && !((OpDef) i).isReserved()).map(
-                i -> (OpDef) i).sorted().collect(Collectors.toList());
+                i -> (OpDef) i).collect(Collectors.toList());
         OPERATORS.sort(Comparator.comparing(OpDef::name));
 
         KEYWORDS = tokens.stream().filter(i -> (i instanceof KeywordDef) && !((KeywordDef) i).isReserved()).map(

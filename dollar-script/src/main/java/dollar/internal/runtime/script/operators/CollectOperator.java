@@ -70,7 +70,7 @@ public class CollectOperator implements Function<Token, var> {
 
 
         String id = UUID.randomUUID().toString();
-        return node("collect", pure, SourceNodeOptions.NEW_SCOPE, parser, token, Collections.singletonList(variable),
+        return node("collect", pure, SourceNodeOptions.NEW_SCOPE, Collections.singletonList(variable), token, parser,
                     (var... in) -> {
                         Scope scopeForVar = getScopeForVar(pure, varName, false, null);
 

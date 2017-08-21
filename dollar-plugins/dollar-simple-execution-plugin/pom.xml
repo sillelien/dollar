@@ -35,6 +35,7 @@
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-core</artifactId>
             <scope>provided</scope>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.sillelien</groupId>

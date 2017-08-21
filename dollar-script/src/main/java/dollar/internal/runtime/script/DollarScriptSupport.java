@@ -97,9 +97,7 @@ public class DollarScriptSupport {
     public static var reactiveNode(@NotNull String operation,
                                    boolean pure,
                                    @NotNull SourceNodeOptions sourceNodeOptions,
-                                   @NotNull DollarParser parser,
-                                   @NotNull Token token,
-                                   @NotNull var lhs,
+                                   @NotNull var lhs, @NotNull Token token, @NotNull DollarParser parser,
                                    @NotNull Pipeable callable) {
 
         return reactiveNode(operation, pure, sourceNodeOptions,
@@ -144,9 +142,7 @@ public class DollarScriptSupport {
     @NotNull
     public static var node(@NotNull String operation,
                            boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
-                           @NotNull DollarParser parser,
-                           @NotNull Token token,
-                           @NotNull List<var> inputs,
+                           @NotNull List<var> inputs, @NotNull Token token, @NotNull DollarParser parser,
                            @NotNull Pipeable callable) {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
@@ -195,10 +191,7 @@ public class DollarScriptSupport {
     public static var reactiveNode(@NotNull String operation,
                                    boolean pure,
                                    @NotNull SourceNodeOptions sourceNodeOptions,
-                                   @NotNull DollarParser parser,
-                                   @NotNull Token token,
-                                   @NotNull var lhs,
-                                   @NotNull var rhs,
+                                   @NotNull Token token, @NotNull var lhs, @NotNull var rhs, @NotNull DollarParser parser,
                                    @NotNull Pipeable callable) {
         final var lambda = node(operation, pure, sourceNodeOptions, parser,
                                 new SourceSegmentValue(currentScope(), token),
@@ -304,13 +297,18 @@ public class DollarScriptSupport {
     }
 
     @NotNull
+    public static var variableNode(boolean pure, @NotNull String key, @NotNull Token token, @NotNull DollarParser parser) {
+        return variableNode(pure, key, false, null, token, parser);
+    }
+    @NotNull
     public static var variableNode(boolean pure, @NotNull String key,
                                    boolean numeric, @Nullable var defaultValue,
                                    @NotNull Token token, @NotNull DollarParser parser) {
         var lambda[] = new var[1];
         UUID id = UUID.randomUUID();
-        lambda[0] = node("get-variable-" + key + "-" + id, pure, SourceNodeOptions.NO_SCOPE, parser, token,
-                         $(key).$list().toVarList().mutable(), (i) -> {
+        lambda[0] = node("get-variable-" + key + "-" + id, pure, SourceNodeOptions.NO_SCOPE, $(key).$list().toVarList().mutable(),
+                         token, parser,
+                         (i) -> {
                     Scope scope = currentScope();
 
                     log.debug("{} {} in {} scopes ", ansiColor("LOOKUP " + key, ANSI_CYAN), scope, scopes.get().size());

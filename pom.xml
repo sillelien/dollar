@@ -66,6 +66,7 @@
     </scm>
 
     <modules>
+        <module>dollar-core</module>
         <module>dollar-resolver</module>
         <module>dollar-runtime</module>
         <module>dollar-plugins</module>
@@ -84,11 +85,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>com.sillelien</groupId>
-                <artifactId>dollar-core</artifactId>
-                <version>0.3.373</version>
-            </dependency>
+
             <dependency>
                 <groupId>com.sillelien</groupId>
                 <artifactId>java-as-script</artifactId>

@@ -17,9 +17,12 @@
 package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.Type;
+import com.sillelien.dollar.api.VarInternal;
 import com.sillelien.dollar.api.collections.Range;
 import com.sillelien.dollar.api.execution.DollarExecutor;
 import com.sillelien.dollar.api.plugin.Plugins;
+import com.sillelien.dollar.api.script.ModuleResolver;
+import com.sillelien.dollar.api.time.Scheduler;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
@@ -32,9 +35,15 @@ import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
 import static com.sillelien.dollar.api.types.DollarFactory.fromValue;
@@ -47,6 +56,7 @@ public final class Func {
 
     @NotNull
     private static final DollarExecutor executor = Objects.requireNonNull(Plugins.sharedInstance(DollarExecutor.class));
+    private static final double ONE_DAY = 24.0 * 60.0 * 60.0 * 1000.0;
 
 
     @NotNull
@@ -264,7 +274,7 @@ public final class Func {
     public static var ifFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         final var lhsFix = lhs._fixDeep();
         boolean isTrue = lhsFix.isBoolean() && lhsFix.isTrue();
-        assert IF_OPERATOR.validForPure(pure);
+        assert IF_OP.validForPure(pure);
         return isTrue ? rhs._fix(2, false) : DollarFactory.FALSE;
     }
 
@@ -322,6 +332,82 @@ public final class Func {
             return (rhs.getMetaAttribute("__builtin") != null)
                            ? Builtins.execute(rhsStr, singletonList(lhs), pure)
                            : variableNode(pure, rhsStr, false, null, token, parser)._fix(2, false);
+        }
+    }
+
+    @NotNull
+    static var everyFunc(AtomicInteger count, var durationVar, var until, var unless, VarInternal block) {
+        Scope scope = currentScope();
+        Double duration = durationVar.toDouble();
+        assert duration != null;
+        Scheduler.schedule(i -> {
+            count.incrementAndGet();
+            return inScope(true, scope, newScope -> {
+                try {
+                    newScope.setParameter("1", $(count.get()));
+                    if ((until != null) && until.isTrue()) {
+                        Scheduler.cancel(i[0].$S());
+                        return i[0];
+                    } else {
+                        if ((unless != null) && unless.isTrue()) {
+                            return $void();
+                        } else {
+                            return block._fixDeep();
+                        }
+                    }
+                } catch (RuntimeException e) {
+                    return scope.handleError(e);
+                }
+
+            });
+        }, ((long) (duration * ONE_DAY)));
+        return $void();
+    }
+
+    @NotNull
+    static var moduleFunc(DollarParserImpl parser, String moduleName, Iterable<var> params) {
+        String[] parts = moduleName.split(":", 2);
+        if (parts.length < 2) {
+            throw new IllegalArgumentException("Module " + moduleName + " needs to have a scheme");
+        }
+        Map<String, var> paramMap = new HashMap<>();
+        if (params != null) {
+            for (var param1 : params) {
+                paramMap.put(param1.getMetaAttribute(DollarParserImpl.NAMED_PARAMETER_META_ATTR), param1);
+            }
+        }
+        try {
+            return ModuleResolver
+                           .resolveModule(parts[0])
+                           .resolve(parts[1], currentScope(), parser)
+                           .pipe($(paramMap))
+                           ._fix(true);
+
+        } catch (Exception e) {
+            return currentScope().handleError(e);
+        }
+    }
+
+    @NotNull
+    static var mapFunc(@NotNull List<var> entries, @NotNull var parallel) {
+        if (entries.size() == 1) {
+            return DollarFactory.blockCollection(entries);
+        } else {
+            Stream<var> stream = parallel.isTrue() ? entries.stream().parallel() : entries.stream();
+            return $(stream.map(v -> v._fix(parallel.isTrue()))
+                             .collect(Collectors.toConcurrentMap(
+                                     v -> v.pair() ? v.$pairKey() : v.$S(),
+                                     v -> v.pair() ? v.$pairValue() : v)));
+        }
+    }
+
+    @NotNull
+    public static var blockFunc(@NotNull List<var> l) {
+        if (l.isEmpty()) {
+            return $void();
+        } else {
+            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i)._fixDeep(false));
+            return l.get(l.size() - 1);
         }
     }
 }

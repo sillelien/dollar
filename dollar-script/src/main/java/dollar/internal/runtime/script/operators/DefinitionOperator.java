@@ -104,8 +104,8 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
                 final String variableName = variableNameObj.toString();
 
                 var node = DollarScriptSupport.node(
-                        "assignment", pure, SourceNodeOptions.NO_SCOPE, parser, token, Arrays.asList(
-                                constrain(scope, value, constraint, constraintSource)),
+                        "assignment", pure, SourceNodeOptions.NO_SCOPE, Arrays.asList(
+                                constrain(scope, value, constraint, constraintSource)), token, parser,
                         args -> {
                             setVariableDefinition(currentScope(), parser, token, pure, true,
                                                   variableName,
@@ -115,7 +115,7 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
                             );
                             if (exportObj != null && exportObj.toString().equals("export")) {
                                 parser.export(variableName, DollarScriptSupport.node(
-                                        "assignment", pure, SourceNodeOptions.NO_SCOPE, parser, token, Arrays.asList(value),
+                                        "assignment", pure, SourceNodeOptions.NO_SCOPE, Arrays.asList(value), token, parser,
                                         exportArgs -> value));
                             }
                             return $void();

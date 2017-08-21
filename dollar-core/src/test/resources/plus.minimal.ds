@@ -1,0 +1,375 @@
+"" + "" <=> ""
+"" + "@" <=> "@"
+"" + ("1970-01-01T00:00:01Z" as Date) <=> "1970-01-01T00:00:01Z"
+"" + ((-1)..(1)) <=> "-1..1"
+"" + -1 <=> "-1"
+"" + 0 <=> "0"
+"" + 0.1 <=> "0.1"
+"" + 1 <=> "1"
+"" + ERROR('EXCEPTION',"Test Exception") <=> "EXCEPTION Test Exception [com.sillelien.dollar.api.DollarException: Test Exception]"
+"" + [0,1,-1,] <=> "[ 0, 1, -1 ]"
+"" + false <=> "false"
+"" + null <=> ""
+"" + true <=> "true"
+"" + void <=> ""
+"" + {1 : 0.1,
+"value1" : true,
+true : 5,
+} <=> "{\"1\":0.1,\"value1\":true,\"true\":5}"
+"@" + "" <=> "@"
+"@" + "@" <=> "@@"
+"@" + ("1970-01-01T00:00:01Z" as Date) <=> "@1970-01-01T00:00:01Z"
+"@" + ((-1)..(1)) <=> "@-1..1"
+"@" + -1 <=> "@-1"
+"@" + 0 <=> "@0"
+"@" + 0.1 <=> "@0.1"
+"@" + 1 <=> "@1"
+"@" + ERROR('EXCEPTION',"Test Exception") <=> "@EXCEPTION Test Exception [com.sillelien.dollar.api.DollarException: Test Exception]"
+"@" + [0,1,-1,] <=> "@[ 0, 1, -1 ]"
+"@" + false <=> "@false"
+"@" + null <=> "@"
+"@" + true <=> "@true"
+"@" + void <=> "@"
+"@" + {1 : 0.1,
+"value1" : true,
+true : 5,
+} <=> "@{\"1\":0.1,\"value1\":true,\"true\":5}"
+("1970-01-01T00:00:01Z" as Date) + "" <=> "1970-01-01T00:00:01Z"
+("1970-01-01T00:00:01Z" as Date) + "@" <=> "1970-01-01T00:00:01Z@"
+("1970-01-01T00:00:01Z" as Date) + ("1970-01-01T00:00:01Z" as Date) <=> ("1970-01-01T00:00:02Z" as Date)
+("1970-01-01T00:00:01Z" as Date) + ((-1)..(1)) <=> ((-1)..(1))
+("1970-01-01T00:00:01Z" as Date) + -1 <=> ("1969-12-31T00:00:01Z" as Date)
+("1970-01-01T00:00:01Z" as Date) + 0 <=> ("1970-01-01T00:00:01Z" as Date)
+("1970-01-01T00:00:01Z" as Date) + 0.1 <=> ("1970-01-01T02:24:01Z" as Date)
+("1970-01-01T00:00:01Z" as Date) + 1 <=> ("1970-01-02T00:00:01Z" as Date)
+("1970-01-01T00:00:01Z" as Date) + ERROR('EXCEPTION',"Test Exception") <=> ("1970-01-01T00:00:01Z" as Date)
+("1970-01-01T00:00:01Z" as Date) + [0,1,-1,] <=> [("1970-01-01T00:00:01Z" as Date),0,1,-1,]
+("1970-01-01T00:00:01Z" as Date) + false <=> ("1970-01-01T00:00:01Z" as Date)
+("1970-01-01T00:00:01Z" as Date) + null <=> ("1970-01-01T00:00:01Z" as Date)
+("1970-01-01T00:00:01Z" as Date) + true <=> ("1970-01-02T00:00:01Z" as Date)
+("1970-01-01T00:00:01Z" as Date) + void <=> ("1970-01-01T00:00:01Z" as Date)
+("1970-01-01T00:00:01Z" as Date) + {1 : 0.1,
+"value1" : true,
+true : 5,
+} <=> ("1970-01-01T00:00:01Z" as Date)
+((-1)..(1)) + "" <=> (("-1")..("1"))
+((-1)..(1)) + "@" <=> (("-1@")..("1@"))
+((-1)..(1)) + ("1970-01-01T00:00:01Z" as Date) <=> ((-1)..(1))
+((-1)..(1)) + ((-1)..(1)) <=> ((((-2)..(0)))..(((0)..(2))))
+((-1)..(1)) + -1 <=> ((-2)..(0))
+((-1)..(1)) + 0 <=> ((-1)..(1))
+((-1)..(1)) + 0.1 <=> ((-0.9)..(1.1))
+((-1)..(1)) + 1 <=> ((0)..(2))
+((-1)..(1)) + ERROR('EXCEPTION',"Test Exception") <=> ((-1)..(1))
+((-1)..(1)) + [0,1,-1,] <=> (([-1,0,1,-1,])..([1,0,1,-1,]))
+((-1)..(1)) + false <=> ((-1)..(1))
+((-1)..(1)) + null <=> ((-1)..(1))
+((-1)..(1)) + true <=> ((0)..(2))
+((-1)..(1)) + void <=> ((-1)..(1))
+((-1)..(1)) + {1 : 0.1,
+"value1" : true,
+true : 5,
+} <=> ((-1)..(1))
+-1 + "" <=> "-1"
+-1 + "@" <=> "-1@"
+-1 + ("1970-01-01T00:00:01Z" as Date) <=> -1
+-1 + ((-1)..(1)) <=> ((-2)..(0))
+-1 + -1 <=> -2
+-1 + 0 <=> -1
+-1 + 0.1 <=> -0.9
+-1 + 1 <=> 0
+-1 + ERROR('EXCEPTION',"Test Exception") <=> -1
+-1 + [0,1,-1,] <=> [-1,0,1,-1,]
+-1 + false <=> -1
+-1 + null <=> -1
+-1 + true <=> 0
+-1 + void <=> -1
+-1 + {1 : 0.1,
+"value1" : true,
+true : 5,
+} <=> -1
+0 + "" <=> "0"
+0 + "@" <=> "0@"
+0 + ("1970-01-01T00:00:01Z" as Date) <=> 0
+0 + ((-1)..(1)) <=> ((-1)..(1))
+0 + -1 <=> -1
+0 + 0 <=> 0
+0 + 0.1 <=> 0.1
+0 + 1 <=> 1
+0 + ERROR('EXCEPTION',"Test Exception") <=> 0
+0 + [0,1,-1,] <=> [0,0,1,-1,]
+0 + false <=> 0
+0 + null <=> 0
+0 + true <=> 1
+0 + void <=> 0
+0 + {1 : 0.1,
+"value1" : true,
+true : 5,
+} <=> 0
+0.1 + "" <=> "0.1"
+0.1 + "@" <=> "0.1@"
+0.1 + ("1970-01-01T00:00:01Z" as Date) <=> 0.10001157407407409
+0.1 + ((-1)..(1)) <=> ((-0.9)..(1.1))
+0.1 + -1 <=> -0.9
+0.1 + 0 <=> 0.1
+0.1 + 0.1 <=> 0.2
+0.1 + 1 <=> 1.1
+0.1 + ERROR('EXCEPTION',"Test Exception") <=> 0.1
+0.1 + [0,1,-1,] <=> [0.1,0,1,-1,]
+0.1 + false <=> 0.1
+0.1 + null <=> 0.1
+0.1 + true <=> 1.1
+0.1 + void <=> 0.1
+0.1 + {1 : 0.1,
+"value1" : true,
+true : 5,
+} <=> 0.1
+1 + "" <=> "1"
+1 + "@" <=> "1@"
+1 + ("1970-01-01T00:00:01Z" as Date) <=> 1
+1 + ((-1)..(1)) <=> ((0)..(2))
+1 + -1 <=> 0
+1 + 0 <=> 1
+1 + 0.1 <=> 1.1
+1 + 1 <=> 2
+1 + ERROR('EXCEPTION',"Test Exception") <=> 1
+1 + [0,1,-1,] <=> [1,0,1,-1,]
+1 + false <=> 1
+1 + null <=> 1
+1 + true <=> 2
+1 + void <=> 1
+1 + {1 : 0.1,
+"value1" : true,
+true : 5,
+} <=> 1
+ERROR('EXCEPTION',"Test Exception") + "" <=> ERROR('EXCEPTION',"Test Exception")
+ERROR('EXCEPTION',"Test Exception") + "@" <=> ERROR('EXCEPTION',"Test Exception")
+ERROR('EXCEPTION',"Test Exception") + ("1970-01-01T00:00:01Z" as Date) <=> ERROR('EXCEPTION',"Test Exception")
+ERROR('EXCEPTION',"Test Exception") + ((-1)..(1)) <=> ERROR('EXCEPTION',"Test Exception")
+ERROR('EXCEPTION',"Test Exception") + -1 <=> ERROR('EXCEPTION',"Test Exception")
+ERROR('EXCEPTION',"Test Exception") + 0 <=> ERROR('EXCEPTION',"Test Exception")
+ERROR('EXCEPTION',"Test Exception") + 0.1 <=> ERROR('EXCEPTION',"Test Exception")
+ERROR('EXCEPTION',"Test Exception") + 1 <=> ERROR('EXCEPTION',"Test Exception")
+ERROR('EXCEPTION',"Test Exception") + ERROR('EXCEPTION',"Test Exception") <=> ERROR('EXCEPTION',"Test Exception")
+ERROR('EXCEPTION',"Test Exception") + [0,1,-1,] <=> ERROR('EXCEPTION',"Test Exception")
+ERROR('EXCEPTION',"Test Exception") + false <=> ERROR('EXCEPTION',"Test Exception")
+ERROR('EXCEPTION',"Test Exception") + null <=> ERROR('EXCEPTION',"Test Exception")
+ERROR('EXCEPTION',"Test Exception") + true <=> ERROR('EXCEPTION',"Test Exception")
+ERROR('EXCEPTION',"Test Exception") + void <=> ERROR('EXCEPTION',"Test Exception")
+ERROR('EXCEPTION',"Test Exception") + {1 : 0.1,
+"value1" : true,
+true : 5,
+} <=> ERROR('EXCEPTION',"Test Exception")
+[0,1,-1,] + "" <=> [0,1,-1,"",]
+[0,1,-1,] + "@" <=> [0,1,-1,"@",]
+[0,1,-1,] + ("1970-01-01T00:00:01Z" as Date) <=> [0,1,-1,("1970-01-01T00:00:01Z" as Date),]
+[0,1,-1,] + ((-1)..(1)) <=> [0,1,-1,((-1)..(1)),]
+[0,1,-1,] + -1 <=> [0,1,-1,-1,]
+[0,1,-1,] + 0 <=> [0,1,-1,0,]
+[0,1,-1,] + 0.1 <=> [0,1,-1,0.1,]
+[0,1,-1,] + 1 <=> [0,1,-1,1,]
+[0,1,-1,] + ERROR('EXCEPTION',"Test Exception") <=> [0,1,-1,ERROR('EXCEPTION',"Test Exception"),]
+[0,1,-1,] + [0,1,-1,] <=> [0,1,-1,0,1,-1,]
+[0,1,-1,] + false <=> [0,1,-1,false,]
+[0,1,-1,] + null <=> [0,1,-1,null,]
+[0,1,-1,] + true <=> [0,1,-1,true,]
+[0,1,-1,] + void <=> [0,1,-1,]
+[0,1,-1,] + {1 : 0.1,
+"value1" : true,
+true : 5,
+} <=> [0,1,-1,{1 : 0.1,
+"value1" : true,
+true : 5,
+},]
+false + "" <=> "false"
+false + "@" <=> "false@"
+false + ("1970-01-01T00:00:01Z" as Date) <=> true
+false + ((-1)..(1)) <=> ((-1)..(1))
+false + -1 <=> true
+false + 0 <=> false
+false + 0.1 <=> false
+false + 1 <=> true
+false + ERROR('EXCEPTION',"Test Exception") <=> false
+false + [0,1,-1,] <=> true
+false + false <=> false
+false + null <=> false
+false + true <=> true
+false + void <=> false
+false + {1 : 0.1,
+"value1" : true,
+true : 5,
+} <=> true
+null + "" <=> null
+null + "@" <=> null
+null + ("1970-01-01T00:00:01Z" as Date) <=> null
+null + ((-1)..(1)) <=> null
+null + -1 <=> null
+null + 0 <=> null
+null + 0.1 <=> null
+null + 1 <=> null
+null + ERROR('EXCEPTION',"Test Exception") <=> null
+null + [0,1,-1,] <=> null
+null + false <=> null
+null + null <=> null
+null + true <=> null
+null + void <=> null
+null + {1 : 0.1,
+"value1" : true,
+true : 5,
+} <=> null
+true + "" <=> "true"
+true + "@" <=> "true@"
+true + ("1970-01-01T00:00:01Z" as Date) <=> true
+true + ((-1)..(1)) <=> ((0)..(2))
+true + -1 <=> true
+true + 0 <=> true
+true + 0.1 <=> true
+true + 1 <=> true
+true + ERROR('EXCEPTION',"Test Exception") <=> true
+true + [0,1,-1,] <=> true
+true + false <=> true
+true + null <=> true
+true + true <=> true
+true + void <=> true
+true + {1 : 0.1,
+"value1" : true,
+true : 5,
+} <=> true
+void + "" <=> void
+void + "@" <=> void
+void + ("1970-01-01T00:00:01Z" as Date) <=> void
+void + ((-1)..(1)) <=> void
+void + -1 <=> void
+void + 0 <=> void
+void + 0.1 <=> void
+void + 1 <=> void
+void + ERROR('EXCEPTION',"Test Exception") <=> void
+void + [0,1,-1,] <=> void
+void + false <=> void
+void + null <=> void
+void + true <=> void
+void + void <=> void
+void + {1 : 0.1,
+"value1" : true,
+true : 5,
+} <=> void
+{1 : 0.1,
+"value1" : true,
+true : 5,
+} + "" <=> {"1" : 0.1,
+"value1" : true,
+"true" : 5,
+}
+{1 : 0.1,
+"value1" : true,
+true : 5,
+} + "@" <=> {"1" : 0.1,
+"value1" : true,
+"true" : 5,
+}
+{1 : 0.1,
+"value1" : true,
+true : 5,
+} + ("1970-01-01T00:00:01Z" as Date) <=> {1 : 0.1,
+"value1" : true,
+true : 5,
+"_3" : ("1970-01-01T00:00:01Z" as Date),
+}
+{1 : 0.1,
+"value1" : true,
+true : 5,
+} + ((-1)..(1)) <=> {1 : 0.1,
+"value1" : true,
+true : 5,
+"_3" : ((-1)..(1)),
+}
+{1 : 0.1,
+"value1" : true,
+true : 5,
+} + -1 <=> {1 : 0.1,
+"value1" : true,
+true : 5,
+"_3" : -1,
+}
+{1 : 0.1,
+"value1" : true,
+true : 5,
+} + 0 <=> {1 : 0.1,
+"value1" : true,
+true : 5,
+"_3" : 0,
+}
+{1 : 0.1,
+"value1" : true,
+true : 5,
+} + 0.1 <=> {1 : 0.1,
+"value1" : true,
+true : 5,
+"_3" : 0.1,
+}
+{1 : 0.1,
+"value1" : true,
+true : 5,
+} + 1 <=> {1 : 0.1,
+"value1" : true,
+true : 5,
+"_3" : 1,
+}
+{1 : 0.1,
+"value1" : true,
+true : 5,
+} + ERROR('EXCEPTION',"Test Exception") <=> {1 : 0.1,
+"value1" : true,
+true : 5,
+"_3" : ERROR('EXCEPTION',"Test Exception"),
+}
+{1 : 0.1,
+"value1" : true,
+true : 5,
+} + [0,1,-1,] <=> {1 : 0.1,
+"value1" : true,
+true : 5,
+"_3" : [0,1,-1,],
+}
+{1 : 0.1,
+"value1" : true,
+true : 5,
+} + false <=> {1 : 0.1,
+"value1" : true,
+true : 5,
+"_3" : false,
+}
+{1 : 0.1,
+"value1" : true,
+true : 5,
+} + null <=> {1 : 0.1,
+"value1" : true,
+true : 5,
+"_3" : null,
+}
+{1 : 0.1,
+"value1" : true,
+true : 5,
+} + true <=> {1 : 0.1,
+"value1" : true,
+true : 5,
+"_3" : true,
+}
+{1 : 0.1,
+"value1" : true,
+true : 5,
+} + void <=> {1 : 0.1,
+"value1" : true,
+true : 5,
+"_3" : void,
+}
+{1 : 0.1,
+"value1" : true,
+true : 5,
+} + {1 : 0.1,
+"value1" : true,
+true : 5,
+} <=> {1 : 0.1,
+"value1" : true,
+true : 5,
+}

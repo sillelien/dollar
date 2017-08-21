@@ -64,7 +64,7 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
             }
 
             var node = node("parameter", pure, SCOPE_WITH_CLOSURE,
-                            parser, token, parameters, i -> {
+                            parameters, token, parser, i -> {
                         //Add the special $* value for all the parameters
                         currentScope().setParameter("*", $(parameters));
                         int count = 0;

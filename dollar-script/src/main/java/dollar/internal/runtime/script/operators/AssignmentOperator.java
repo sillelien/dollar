@@ -109,8 +109,8 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
         };
         //        node.$listen(i -> scope.notify(varName));
-        return node("assignment", pure, NO_SCOPE, parser, token,
-                    singletonList(constrain(scope, rhs, constraint, constraintSource)), pipeable);
+        return node("assignment", pure, NO_SCOPE, singletonList(constrain(scope, rhs, constraint, constraintSource)), token, parser,
+                    pipeable);
     }
 
     @Nullable
@@ -183,7 +183,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                               pure);
                     log.debug("DYNAMIC: {}", rhs.dynamic());
 
-                    return node("listen-assign", pure, NO_SCOPE, parser, token, inputs,
+                    return node("listen-assign", pure, NO_SCOPE, inputs, token, parser,
                                 c -> {
                                     Pipeable listener = args -> {
                                         var value = args[0]._fixDeep();
@@ -198,7 +198,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
                 } else if ("*=".equals(op)) {
                     scope.set(varName, $void(), false, null, useSource, true, true, pure);
-                    return node("subscribe-assign", pure, NO_SCOPE, parser, token, inputs,
+                    return node("subscribe-assign", pure, NO_SCOPE, inputs, token, parser,
                                 c -> {
                                     Pipeable subscriber = i -> setVariable(
                                             scope,

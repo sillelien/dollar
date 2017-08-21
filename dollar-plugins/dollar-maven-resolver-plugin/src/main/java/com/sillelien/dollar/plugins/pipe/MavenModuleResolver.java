@@ -21,7 +21,6 @@ import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.script.ModuleResolver;
 import com.sillelien.dollar.deps.DependencyRetriever;
 import org.jetbrains.annotations.NotNull;
-import org.sonatype.aether.resolution.DependencyResolutionException;
 
 public class MavenModuleResolver implements ModuleResolver {
     @NotNull @Override
@@ -39,8 +38,7 @@ public class MavenModuleResolver implements ModuleResolver {
         String[] strings = uriWithoutScheme.split(":", 2);
         try {
             return (Pipeable) DependencyRetriever.retrieve(strings[1]).loadClass(strings[0]).newInstance();
-        } catch (@NotNull InstantiationException | IllegalAccessException | ClassNotFoundException |
-                DependencyResolutionException e) {
+        } catch (@NotNull Exception e) {
             return DollarStatic.logAndRethrow(e);
         }
     }

@@ -18,9 +18,9 @@ package dollar.internal.runtime.script.parser;
 
 public enum OpDefType {
 
-    PREFIX("prefix"), POSTFIX("postfix"), BINARY("binary"), ASSIGNMENT("assignment"), CONTROL_FLOW("control"), RESERVED("reserved");
+    PREFIX("prefix"), POSTFIX("postfix"), BINARY("binary"), ASSIGNMENT("assignment"), CONTROL_FLOW("control"), OTHER("other"), RESERVED("reserved");
 
-    private String humanName;
+    private final String humanName;
 
     OpDefType(String humanName) {this.humanName = humanName;}
 
