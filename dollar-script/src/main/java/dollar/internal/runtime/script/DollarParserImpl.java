@@ -106,7 +106,7 @@ public class DollarParserImpl implements DollarParser {
 
     @Override
     public void export(@NotNull String name, @NotNull var export) {
-        export.setMetaObject("scopes", new ArrayList<>(DollarScriptSupport.scopes()));
+        export.meta("scopes", new ArrayList<>(DollarScriptSupport.scopes()));
         exports.put(name, export);
     }
 
@@ -212,11 +212,11 @@ public class DollarParserImpl implements DollarParser {
             log.debug("Ended Parse Phase");
             log.debug("Starting Runtime Phase");
             for (int i = 0; i < (expressions.size() - 1); i++) {
-                expressions.get(i)._fixDeep(false);
+                expressions.get(i).$fixDeep(false);
 //              System.err.println(fixed);
             }
             var resultVar = expressions.get(expressions.size() - 1);
-            var fixedResult = resultVar._fixDeep(false);
+            var fixedResult = resultVar.$fixDeep(false);
             log.debug("Ended Runtime Phase");
             return fixedResult;
         });
@@ -320,7 +320,7 @@ public class DollarParserImpl implements DollarParser {
         table = prefix(pure, table, TRUTHY, Func::truthyFunc);
 
 
-        table = prefixUnReactive(pure, table, FIX, VarInternal::_fixDeep);
+        table = prefixUnReactive(pure, table, FIX, VarInternal::$fixDeep);
         table = prefixUnReactive(pure, table, PARALLEL, Func::parallelFunc);
         table = prefixUnReactive(pure, table, SERIAL, Func::serialFunc);
 
@@ -538,7 +538,7 @@ public class DollarParserImpl implements DollarParser {
         final Parser<List<var>> parameters =
                 KEYWORD(WITH).optional(null).next((param).map(objects -> {
                     var result = (var) objects[1];
-                    result.setMetaAttribute(NAMED_PARAMETER_META_ATTR, objects[0].toString());
+                    result.metaAttribute(NAMED_PARAMETER_META_ATTR, objects[0].toString());
                     return result;
                 }).sepBy(OP(COMMA)).between(OP(LEFT_PAREN), OP(RIGHT_PAREN)));
 
@@ -820,7 +820,7 @@ public class DollarParserImpl implements DollarParser {
                             if (objects[0] != null) {
                                 //yes so let's add the name as metadata to the value
                                 var result = (var) objects[1];
-                                result.setMetaAttribute(NAMED_PARAMETER_META_ATTR, objects[0].toString());
+                                result.metaAttribute(NAMED_PARAMETER_META_ATTR, objects[0].toString());
                                 return result;
                             } else {
                                 //no, just use the value

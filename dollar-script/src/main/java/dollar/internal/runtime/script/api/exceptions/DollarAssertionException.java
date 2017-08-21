@@ -34,6 +34,6 @@ public class DollarAssertionException extends DollarException {
     }
 
     public DollarAssertionException(@NotNull String s, @NotNull var rhs) {
-        super(s + ":\n" + rhs._source().getSourceMessage());
+        super(s + ":\n" + rhs.source().getSourceMessage());
     }
 }

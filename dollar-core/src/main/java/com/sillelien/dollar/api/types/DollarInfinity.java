@@ -304,7 +304,7 @@ public final class DollarInfinity extends AbstractDollar {
     @Override
     public boolean equals(Object other) {
         if (other instanceof var) {
-            var o = ((var) other)._fixDeep()._unwrap();
+            var o = ((var) other).$fixDeep().$unwrap();
             if (this == o) { return true; }
             if ((o == null) || (getClass() != o.getClass())) { return false; }
             DollarInfinity that = (DollarInfinity) o;

@@ -65,8 +65,8 @@ public class CollectOperator implements Function<Token, var> {
         Object unless = objects[2];
         Object loop = objects[3];
 
-        log.debug("Listening to {}", variable.getMetaObject("operation"));
-        String varName = variable.getMetaAttribute("variable");
+        log.debug("Listening to {}", variable.meta("operation"));
+        String varName = variable.metaAttribute("variable");
 
 
         String id = UUID.randomUUID().toString();
@@ -108,7 +108,7 @@ public class CollectOperator implements Function<Token, var> {
         @NotNull
         @Override
         public var pipe(var... in2) throws Exception {
-            var value = in2[1]._fixDeep();
+            var value = in2[1].$fixDeep();
             count.incrementAndGet();
             log.debug("Count is {} value is {}", count.get(), value);
             inSubScope(true, pure, "collect-body",
@@ -127,7 +127,7 @@ public class CollectOperator implements Function<Token, var> {
                            log.debug("Collected {}", fromList(collected));
                            final boolean endValue = (until != null) && until.isTrue();
                            if (endValue) {
-                               returnValue = loop._fixDeep();
+                               returnValue = loop.$fixDeep();
                                collected.clear();
                                count.set(-1);
                                log.debug("Return value  {}", returnValue);

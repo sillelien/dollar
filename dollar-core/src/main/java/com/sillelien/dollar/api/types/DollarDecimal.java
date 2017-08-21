@@ -47,7 +47,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     @NotNull
     @Override
     public var $divide(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         if ((rhsFix.toDouble() == null) || rhsFix.zero()) {
             return DollarFactory.infinity(positive(), errors(), rhsFix.errors());
         }
@@ -60,7 +60,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     @NotNull
     @Override
     public var $modulus(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         if (rhsFix.infinite()) {
             return DollarFactory.fromValue(0.0, errors(), rhsFix.errors());
         }
@@ -74,7 +74,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     @NotNull
     @Override
     public var $multiply(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         if (rhsFix.infinite()) {
             return rhsFix.$multiply(this);
         }
@@ -126,7 +126,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     @NotNull
     @Override
     public Type $type() {
-        return new Type(Type._DECIMAL, _constraintFingerprint());
+        return new Type(Type._DECIMAL, constraintLabel());
     }
 
     @NotNull
@@ -148,7 +148,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     @NotNull
     @Override
     public var $plus(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         if (rhsFix.string()) {
             return DollarFactory.fromValue(toString() + rhsFix, errors(), rhsFix.errors());
         } else if (rhsFix.range()) {
@@ -211,7 +211,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof var) {
-            var unwrapped = ((var) obj)._unwrap();
+            var unwrapped = ((var) obj).$unwrap();
             if (unwrapped instanceof DollarDecimal) {
                 return $equals(unwrapped);
             } else {

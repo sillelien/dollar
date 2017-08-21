@@ -65,7 +65,7 @@ public class DollarBlockCollection implements var {
     @NotNull
     var getValue() {
         for (int i = 0; i < (value.size() - 1); i++) {
-            value.get(i)._fixDeep(false);
+            value.get(i).$fixDeep(false);
         }
         return value.get(value.size() - 1);
     }
@@ -375,8 +375,8 @@ public class DollarBlockCollection implements var {
 
     @NotNull
     @Override
-    public String _constraintFingerprint() {
-        return getValue()._constraintFingerprint();
+    public String constraintLabel() {
+        return getValue().constraintLabel();
     }
 
     @Override
@@ -605,51 +605,7 @@ public class DollarBlockCollection implements var {
     @Override
     public boolean hasErrors() {return getValue().hasErrors();}
 
-    @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    public var $eval(
-                            @NotNull String js) {
-        return getValue().$eval(js);
-    }
 
-    @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    public var $pipe(
-                            @NotNull Pipeable pipe) {
-        return getValue().$pipe(pipe);
-    }
-
-    @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    public var $pipe(@NotNull String label,
-                     @NotNull Pipeable
-                             pipe) {
-        return getValue().$pipe(label, pipe);
-    }
-
-    @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    public var $pipe(@NotNull String label,
-                     @NotNull String js) {
-        return getValue().$pipe(label, js);
-    }
-
-    @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    public var $pipe(
-                            @NotNull Class<? extends Pipeable> clazz) {
-        return getValue().$pipe(clazz);
-    }
 
     @Override
     @NotNull
@@ -753,48 +709,48 @@ public class DollarBlockCollection implements var {
     @Override
     @NotNull
     @Guarded(ChainGuard.class)
-    public var _copy() {return getValue()._copy();}
+    public var $copy() {return getValue().$copy();}
 
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
     @Guarded(NotNullCollectionGuard.class)
     @NotNull
-    public var _copy(@NotNull ImmutableList<Throwable> errors) {return getValue()._copy(errors);}
+    public var $copy(@NotNull ImmutableList<Throwable> errors) {return getValue().$copy(errors);}
 
     @Override
     @NotNull
     @Guarded(ChainGuard.class)
-    public var _fix(boolean parallel) {return _fix(1, parallel);}
+    public var $fix(boolean parallel) {return $fix(1, parallel);}
 
     @NotNull
     @Override
-    public var _fix(int depth, boolean parallel) {
+    public var $fix(int depth, boolean parallel) {
         if (depth <= 1) {
             return this;
         } else {
-            return getValue()._fix(depth - 1, parallel);
+            return getValue().$fix(depth - 1, parallel);
         }
     }
 
     @NotNull
     @Override
     @Guarded(ChainGuard.class)
-    public var _fixDeep(boolean parallel) {
-        return _fix(Integer.MAX_VALUE, parallel);
+    public var $fixDeep(boolean parallel) {
+        return $fix(Integer.MAX_VALUE, parallel);
     }
 
     @NotNull
     @Override
-    public TypePrediction _predictType() {
-        return getValue()._predictType();
+    public TypePrediction predictType() {
+        return getValue().predictType();
     }
 
 
     @Override
     @Guarded(ChainGuard.class)
     @NotNull
-    public var _unwrap() {return getValue()._unwrap();}
+    public var $unwrap() {return getValue().$unwrap();}
 
     @Override
     public int compareTo(@NotNull var o) {return getValue().compareTo(o);}
@@ -879,10 +835,10 @@ public class DollarBlockCollection implements var {
 
     @NotNull
     @Override
-    public String getMetaAttribute(@NotNull String key) {return getValue().getMetaAttribute(key);}
+    public String metaAttribute(@NotNull String key) {return getValue().metaAttribute(key);}
 
     @Override
-    public void setMetaAttribute(@NotNull String key, @NotNull String value) {getValue().setMetaAttribute(key, value);}
+    public void metaAttribute(@NotNull String key, @NotNull String value) {getValue().metaAttribute(key, value);}
 
     @Override
     public boolean isBoolean() {return getValue().isBoolean();}
@@ -906,19 +862,19 @@ public class DollarBlockCollection implements var {
 
     @NotNull
     @Override
-    public var _constrain(@NotNull var constraint, @NotNull String source) {
-        return getValue()._constrain(constraint, source);
+    public var $constrain(@NotNull var constraint, @NotNull String source) {
+        return getValue().$constrain(constraint, source);
     }
 
     @NotNull
     @Override
-    public Object getMetaObject(@NotNull String key) {
-        return getValue().getMetaObject(key);
+    public Object meta(@NotNull String key) {
+        return getValue().meta(key);
     }
 
     @Override
-    public void setMetaObject(@NotNull String key, @NotNull Object value) {
-        getValue().setMetaObject(key, value);
+    public void meta(@NotNull String key, @NotNull Object value) {
+        getValue().meta(key, value);
     }
 
 }

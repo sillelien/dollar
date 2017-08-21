@@ -83,7 +83,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                 useConstraint = varScope.getConstraint(varName);
                 useSource = varScope.getConstraintSource(varName);
             }
-            final var rhsFixed = rhs._fix(1, false);
+            final var rhsFixed = rhs.$fix(1, false);
 
             if (useConstraint != null) {
                 inSubScope(true, pure, "assignment-constraint",
@@ -120,7 +120,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
         var constraint = null;
         @Nullable final String constraintSource;
         if (objects[3] instanceof var) {
-            SourceSegment sourceSegment = ((VarInternal) objects[3])._source();
+            SourceSegment sourceSegment = ((VarInternal) objects[3]).source();
             assert sourceSegment != null;
             constraintSource = sourceSegment.getSourceSegment();
         } else {
@@ -144,7 +144,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
         boolean decleration = mutability != null;
         constant = (mutability != null) && "const".equals(mutability.toString());
         isVolatile = (mutability != null) && "volatile".equals(mutability.toString());
-        if (((var) objects[4]).getMetaAttribute("__builtin") != null) {
+        if (((var) objects[4]).metaAttribute("__builtin") != null) {
             throw new DollarScriptException("The variable '" +
                                                     objects[4] +
                                                     "' cannot be assigned as this name is the name of a builtin function.");
@@ -154,7 +154,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
         var finalConstraint = constraint;
         return (Function<var, var>) rhs -> {
             Scope scope = currentScope();
-            final TypePrediction prediction = rhs._predictType();
+            final TypePrediction prediction = rhs.predictType();
             if ((type != null) && (prediction != null)) {
                 final Double probability = prediction.probability(type);
                 if ((probability < MIN_PROBABILITY) && !prediction.empty()) {
@@ -186,7 +186,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                     return node("listen-assign", pure, NO_SCOPE, inputs, token, parser,
                                 c -> {
                                     Pipeable listener = args -> {
-                                        var value = args[0]._fixDeep();
+                                        var value = args[0].$fixDeep();
                                         setVariable(scope, varName, value, false, useConstraint, useSource,
                                                     isVolatile, false, pure, decleration, token, parser);
                                         return value;

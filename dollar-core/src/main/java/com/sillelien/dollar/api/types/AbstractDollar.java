@@ -33,9 +33,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.SimpleScriptContext;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.security.MessageDigest;
@@ -48,21 +45,19 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.sillelien.dollar.api.types.meta.MetaConstants.CONSTRAINT_FINGERPRINT;
+
+@SuppressWarnings("OverlyComplexClass")
 public abstract class AbstractDollar implements var {
 
-    private static
-    @NotNull
-    final
-    ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
     @NotNull
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final
+
     @NotNull
-    ImmutableList<Throwable> errors;
+    private final ImmutableList<Throwable> errors;
+
     @NotNull
     private final ConcurrentHashMap<String, Object> meta = new ConcurrentHashMap<>();
-    @NotNull
-    private String src;
 
     AbstractDollar(@NotNull ImmutableList<Throwable> errors) {
         this.errors = errors;
@@ -89,35 +84,6 @@ public abstract class AbstractDollar implements var {
                 .permit(Signal.STOP, ResourceState.STOPPED)
                 .permit(Signal.DESTROY, ResourceState.DESTROYED);
         return stateMachineConfig;
-    }
-
-    @Override
-    public boolean queue() {
-        return false;
-    }
-
-    @NotNull
-    @Override
-    public var _constrain(@Nullable var constraint, @Nullable String constraintFingerprint) {
-        if ((constraint == null) || (constraintFingerprint == null)) {
-            return this;
-        }
-        String thisConstraintFingerprint = _constraintFingerprint();
-        if (thisConstraintFingerprint == null) {
-            setMetaAttribute("constraintFingerprint", constraintFingerprint);
-            return this;
-        } else if (thisConstraintFingerprint.equals(constraintFingerprint)) {
-            return this;
-        } else {
-            throw new ConstraintViolation(this, constraint, constraintFingerprint, constraintFingerprint);
-        }
-    }
-
-
-    @Nullable
-    @Override
-    public String _constraintFingerprint() {
-        return getMetaAttribute("constraintFingerprint");
     }
 
     @NotNull
@@ -168,7 +134,7 @@ public abstract class AbstractDollar implements var {
     public var $each(@NotNull Pipeable pipe) {
         List<var> result = new LinkedList<>();
         for (var v : toVarList()) {
-            var res = null;
+            var res;
             try {
                 res = pipe.pipe(v);
             } catch (Exception e) {
@@ -177,8 +143,7 @@ public abstract class AbstractDollar implements var {
             result.add(res);
 
         }
-        final var resultvar = DollarFactory.fromValue(result);
-        return resultvar;
+        return DollarFactory.fromValue(result);
     }
 
     @NotNull
@@ -250,7 +215,6 @@ public abstract class AbstractDollar implements var {
         }
     }
 
-
     @NotNull
     @Override
     public Stream<var> $stream(boolean parallel) {
@@ -259,96 +223,109 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $eval(@NotNull String js) {
-        return $pipe("anon", js);
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull String label, @NotNull Pipeable pipe) {
-        try {
-            return pipe.pipe(this);
-        } catch (Exception e) {
-            return DollarStatic.handleError(e, this);
-        }
-    }
-
-    @NotNull
-    public var $pipe(@NotNull String label, @NotNull String js) {
-        SimpleScriptContext context = new SimpleScriptContext();
-        Object value;
-        try {
-            nashorn.eval("var $=" + toJsonObject() + ";", context);
-            value = nashorn.eval(js, context);
-        } catch (Exception e) {
-            return DollarStatic.handleError(e, this);
-        }
-        return DollarFactory.fromValue(value, ImmutableList.of());
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
-        DollarStatic.threadContext.get().setPassValue(_copy());
-        Pipeable script = null;
-        try {
-            script = clazz.newInstance();
-        } catch (InstantiationException e) {
-            return DollarStatic.handleError(e.getCause(), this);
-        } catch (Exception e) {
-            return DollarStatic.handleError(e, this);
-        }
-        try {
-            return script.pipe(this);
-        } catch (Exception e) {
-            return DollarStatic.handleError(e, this);
-        }
-    }
-
-    @NotNull
-    @Override
-    public var _copy() {
+    public var $copy() {
+        //noinspection unchecked
         return DollarFactory.fromValue(toJavaObject(), ImmutableList.copyOf(errors()));
     }
 
     @NotNull
-    public var _copy(@NotNull ImmutableList<Throwable> errors) {
+    public var $copy(@NotNull ImmutableList<Throwable> errors) {
+        //noinspection unchecked
         return DollarFactory.fromValue(toJavaObject(), ImmutableList.copyOf(errors(), errors));
     }
 
     @NotNull
     final @Override
-    public var _fix(boolean parallel) {
-        return _fix(1, parallel);
+    public var $fix(boolean parallel) {
+        return $fix(1, parallel);
     }
+
+
+//    @NotNull
+//    public var $pipe(@NotNull String label, @NotNull Pipeable pipe) {
+//        try {
+//            return pipe.pipe(this);
+//        } catch (Exception e) {
+//            return DollarStatic.handleError(e, this);
+//        }
+//    }
+//
+//    @NotNull
+//    public var $pipe(@NotNull String label, @NotNull String js) {
+//        SimpleScriptContext context = new SimpleScriptContext();
+//        Object value;
+//        try {
+//            nashorn.eval("var $=" + toJsonObject() + ";", context);
+//            value = nashorn.eval(js, context);
+//        } catch (Exception e) {
+//            return DollarStatic.handleError(e, this);
+//        }
+//        return DollarFactory.fromValue(value, ImmutableList.of());
+//    }
+//
+//    @NotNull
+//    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
+//        DollarStatic.threadContext.get().setPassValue($copy());
+//        Pipeable script = null;
+//        try {
+//            script = clazz.newInstance();
+//        } catch (InstantiationException e) {
+//            return DollarStatic.handleError(e.getCause(), this);
+//        } catch (Exception e) {
+//            return DollarStatic.handleError(e, this);
+//        }
+//        try {
+//            return script.pipe(this);
+//        } catch (Exception e) {
+//            return DollarStatic.handleError(e, this);
+//        }
+//    }
 
     @NotNull
     @Override
-    public var _fix(int depth, boolean parallel) {
+    public var $fix(int depth, boolean parallel) {
         return this;
     }
 
     @NotNull
     @Override
-    public final var _fixDeep(boolean parallel) {
-        return _fix(Integer.MAX_VALUE, parallel);
+    public final var $fixDeep(boolean parallel) {
+        return $fix(Integer.MAX_VALUE, parallel);
     }
 
     @NotNull
     @Override
-    public TypePrediction _predictType() {
+    public TypePrediction predictType() {
         return new SingleValueTypePrediction($type());
     }
 
-
     @NotNull
     @Override
-    public var _unwrap() {
+    public var $unwrap() {
         return this;
     }
 
-    public void clear() {
-        DollarFactory.failure(ErrorType.INVALID_OPERATION);
+    @NotNull
+    @Override
+    public var $constrain(@Nullable var constraint, @Nullable String constraintFingerprint) {
+        if ((constraint == null) || (constraintFingerprint == null)) {
+            return this;
+        }
+        String thisConstraintFingerprint = constraintLabel();
+        if (thisConstraintFingerprint == null) {
+            metaAttribute(CONSTRAINT_FINGERPRINT, constraintFingerprint);
+            return this;
+        } else if (thisConstraintFingerprint.equals(constraintFingerprint)) {
+            return this;
+        } else {
+            throw new ConstraintViolation(this, constraint, constraintFingerprint, constraintFingerprint);
+        }
+    }
+
+    @Nullable
+    @Override
+    public String constraintLabel() {
+        return metaAttribute(CONSTRAINT_FINGERPRINT);
     }
 
     @NotNull
@@ -478,15 +455,25 @@ public abstract class AbstractDollar implements var {
         return false;
     }
 
+    @Override
+    public boolean queue() {
+        return false;
+    }
 
     @Nullable
     @Override
-    public String getMetaAttribute(@NotNull String key) {
+    public String metaAttribute(@NotNull String key) {
         return (String) meta.get(key);
     }
 
+    @NotNull
     @Override
-    public void setMetaAttribute(@NotNull String key, @NotNull String value) {
+    public Object meta(@NotNull String key) {
+        return meta.get(key);
+    }
+
+    @Override
+    public void metaAttribute(@NotNull String key, @NotNull String value) {
         if (meta.containsKey(key)) {
             DollarFactory.failure(ErrorType.METADATA_IMMUTABLE);
             return;
@@ -496,8 +483,18 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
+    public void meta(@NotNull String key, @NotNull Object value) {
+        meta.put(key, value);
+    }
+
+    @Override
     public int hashCode() {
-        return toJavaObject().hashCode();
+        Object o = toJavaObject();
+        if (o != null) {
+            return o.hashCode();
+        } else {
+            return 0;
+        }
     }
 
     @Override
@@ -514,7 +511,7 @@ public abstract class AbstractDollar implements var {
             return false;
         }
         if (obj instanceof var) {
-            var unwrapped = ((var) obj)._unwrap();
+            var unwrapped = ((var) obj).$unwrap();
             if (unwrapped == null) {
                 return false;
             }
@@ -523,10 +520,7 @@ public abstract class AbstractDollar implements var {
                 return false;
             }
             Object unwrappedVal = unwrapped.toJavaObject();
-            if (unwrappedVal == null) {
-                return false;
-            }
-            return dollarVal.equals(unwrappedDollar) || (val.equals(unwrappedVal));
+            return (unwrappedVal != null) && (dollarVal.equals(unwrappedDollar) || (val.equals(unwrappedVal)));
         } else {
             return dollarVal.equals(obj) || val.equals(obj);
         }
@@ -550,36 +544,9 @@ public abstract class AbstractDollar implements var {
         return 0L;
     }
 
-
     @NotNull
-    @Override
-    public var $errors() {
-        JsonObject json = new JsonObject();
-        if (!errors.isEmpty()) {
-            if (errors.get(0) instanceof DollarException) {
-                json.putNumber("httpCode", ((DollarException) errors.get(0)).httpCode());
-            }
-            json.putString("message", errors.get(0).getMessage());
-            JsonArray errorArray = new JsonArray();
-            for (Throwable error : errors) {
-                JsonObject errorJson = new JsonObject();
-                errorJson.putString("message", error.getMessage());
-                if (!DollarStatic.getConfig().production()) {
-                    errorJson.putString("stack", Arrays.toString(error.getStackTrace()));
-                } else {
-                    errorJson.putString("hash",
-                                        hash(Arrays.toString(error.getStackTrace()).getBytes()));
-                }
-                errorArray.addObject(errorJson);
-            }
-            json.putArray("errors", errorArray);
-        }
-        return DollarFactory.fromValue(json);
-    }
-
-    @NotNull
-    String hash(@NotNull byte[] bytes) {
-        MessageDigest md = null;
+    private String hash(@NotNull byte[] bytes) {
+        MessageDigest md;
         try {
             md = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
@@ -591,7 +558,7 @@ public abstract class AbstractDollar implements var {
         StringBuilder hexString = new StringBuilder();
 
         for (byte aDigest : digest) {
-            String hex = Integer.toHexString(0xff & aDigest);
+            @SuppressWarnings("MagicNumber") String hex = Integer.toHexString(0xff & aDigest);
             if (hex.length() == 1) {
                 hexString.append('0');
             }
@@ -600,14 +567,6 @@ public abstract class AbstractDollar implements var {
 
         return hexString.toString();
     }
-
-
-    @NotNull
-    @Override
-    public var $error(@NotNull String errorMessage, @NotNull ErrorType type) {
-        return DollarFactory.failure(type, errorMessage, true);
-    }
-
 
     @NotNull
     @Override
@@ -629,33 +588,31 @@ public abstract class AbstractDollar implements var {
         return $error("Unspecified Error");
     }
 
-
-    @Override
-    public boolean hasErrors() {
-        return !errors.isEmpty();
-    }
-
-
     @NotNull
     @Override
-    public List<String> errorTexts() {
-        return errors.stream().map(Throwable::getMessage).collect(Collectors.toList());
+    public var $errors() {
+        JsonObject json = new JsonObject();
+        if (!errors.isEmpty()) {
+            if (errors.get(0) instanceof DollarException) {
+                json.putNumber("httpCode", ((DollarException) errors.get(0)).httpCode());
+            }
+            json.putString("message", errors.get(0).getMessage());
+            JsonArray errorArray = new JsonArray();
+            for (Throwable error : errors) {
+                JsonObject errorJson = new JsonObject();
+                errorJson.putString("message", error.getMessage());
+                if (DollarStatic.getConfig().production()) {
+                    errorJson.putString("hash",
+                                        hash(Arrays.toString(error.getStackTrace()).getBytes()));
+                } else {
+                    errorJson.putString("stack", Arrays.toString(error.getStackTrace()));
+                }
+                errorArray.addObject(errorJson);
+            }
+            json.putArray("errors", errorArray);
+        }
+        return DollarFactory.fromValue(json);
     }
-
-
-    @NotNull
-    @Override
-    public ImmutableList<Throwable> errors() {
-        return errors;
-    }
-
-
-    @NotNull
-    @Override
-    public var clearErrors() {
-        return DollarFactory.fromValue(toJavaObject(), ImmutableList.of());
-    }
-
 
     @NotNull
     @Override
@@ -670,13 +627,31 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public Object getMetaObject(@NotNull String key) {
-        return meta.get(key);
+    public var $error(@NotNull String errorMessage, @NotNull ErrorType type) {
+        return DollarFactory.failure(type, errorMessage, true);
+    }
+
+    @NotNull
+    @Override
+    public var clearErrors() {
+        return DollarFactory.fromValue(toJavaObject(), ImmutableList.of());
+    }
+
+    @NotNull
+    @Override
+    public List<String> errorTexts() {
+        return errors.stream().map(Throwable::getMessage).collect(Collectors.toList());
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<Throwable> errors() {
+        return errors;
     }
 
     @Override
-    public void setMetaObject(@NotNull String key, @NotNull Object value) {
-        meta.put(key, value);
+    public boolean hasErrors() {
+        return !errors.isEmpty();
     }
 
 }

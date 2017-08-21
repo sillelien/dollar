@@ -348,7 +348,7 @@ public class DollarQueue extends AbstractDollar {
     @Override
     @NotNull
     public Type $type() {
-        return new Type(Type._QUEUE, _constraintFingerprint());
+        return new Type(Type._QUEUE, constraintLabel());
     }
 
     @NotNull

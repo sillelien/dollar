@@ -285,8 +285,8 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public String _constraintFingerprint() {
-        return getValue()._constraintFingerprint();
+    public String constraintLabel() {
+        return getValue().constraintLabel();
     }
 
     @Override
@@ -525,48 +525,6 @@ public class DollarWrapper implements var {
     }
 
     @NotNull
-    @Override
-    public var $eval(@NotNull String js) {
-        return $pipe("anon", js);
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull String label, @NotNull Pipeable pipe) {
-        return tracer.trace(this,
-                            monitor.run("$pipe",
-                                        "dollar.pipe.pipeable." + sanitize(label), "",
-                                        () -> getValue().$pipe(label, pipe)),
-                            StateTracer.Operations.EVAL, label,
-                            pipe.getClass().getName());
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull String label, @NotNull String js) {
-        return tracer.trace(this,
-                            monitor.run("$pipe",
-                                        "dollar.pipe.js." + sanitize(label),
-                                        "Evaluating: " + js,
-                                        () -> getValue().$pipe(label, js)),
-                            StateTracer.Operations.EVAL,
-                            label,
-                            js);
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
-        return tracer.trace(this,
-                            monitor.run("pipe",
-                                        "dollar.run.pipe." + sanitize(clazz),
-                                        "Piping to " + clazz.getName(),
-                                        () -> getValue().$pipe(clazz)),
-                            StateTracer.Operations.PIPE,
-                            clazz.getName());
-    }
-
-    @NotNull
     private String sanitize(@NotNull Class clazz) {
         return clazz.getName().toLowerCase();
     }
@@ -664,44 +622,44 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var _copy() {
-        return getValue()._copy();
+    public var $copy() {
+        return getValue().$copy();
     }
 
     @NotNull
     @Override
-    public var _copy(@NotNull ImmutableList<Throwable> errors) {
-        return getValue()._copy();
+    public var $copy(@NotNull ImmutableList<Throwable> errors) {
+        return getValue().$copy();
     }
 
     @NotNull
     @Override
-    public var _fix(boolean parallel) {
-        return getValue()._fix(parallel);
+    public var $fix(boolean parallel) {
+        return getValue().$fix(parallel);
     }
 
     @NotNull
     @Override
-    public var _fix(int depth, boolean parallel) {
-        return getValue()._fix(depth, parallel);
+    public var $fix(int depth, boolean parallel) {
+        return getValue().$fix(depth, parallel);
     }
 
     @NotNull
     @Override
-    public var _fixDeep(boolean parallel) {
-        return getValue()._fixDeep(parallel);
+    public var $fixDeep(boolean parallel) {
+        return getValue().$fixDeep(parallel);
     }
 
     @NotNull
     @Override
-    public TypePrediction _predictType() {
-        return getValue()._predictType();
+    public TypePrediction predictType() {
+        return getValue().predictType();
     }
 
     @NotNull
     @Override
-    public var _unwrap() {
-        return getValue()._unwrap();
+    public var $unwrap() {
+        return getValue().$unwrap();
     }
 
     @Override
@@ -771,24 +729,24 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public String getMetaAttribute(@NotNull String key) {
-        return getValue().getMetaAttribute(key);
+    public String metaAttribute(@NotNull String key) {
+        return getValue().metaAttribute(key);
     }
 
     @NotNull
     @Override
-    public Object getMetaObject(@NotNull String key) {
-        return getValue().getMetaObject(key);
+    public Object meta(@NotNull String key) {
+        return getValue().meta(key);
     }
 
     @Override
-    public void setMetaAttribute(@NotNull String key, @NotNull String value) {
-        getValue().setMetaAttribute(key, value);
+    public void metaAttribute(@NotNull String key, @NotNull String value) {
+        getValue().metaAttribute(key, value);
     }
 
     @Override
-    public void setMetaObject(@NotNull String key, @NotNull Object value) {
-        getValue().setMetaObject(key, value);
+    public void meta(@NotNull String key, @NotNull Object value) {
+        getValue().meta(key, value);
 
     }
 
@@ -854,8 +812,8 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var _constrain(@NotNull var constraint, @NotNull String source) {
-        return getValue()._constrain(constraint, source);
+    public var $constrain(@NotNull var constraint, @NotNull String source) {
+        return getValue().$constrain(constraint, source);
     }
 
     @NotNull

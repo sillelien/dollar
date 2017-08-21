@@ -747,7 +747,7 @@ public final class DollarFactory {
      */
     @NotNull
     public static String serialize(@NotNull var value) {
-        final Object jsonObject = toJson(value._fixDeep());
+        final Object jsonObject = toJson(value.$fixDeep());
         return jsonObject.toString();
     }
 

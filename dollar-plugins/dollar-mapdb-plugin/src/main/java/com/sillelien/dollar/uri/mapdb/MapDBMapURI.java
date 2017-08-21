@@ -76,7 +76,7 @@ public class MapDBMapURI extends AbstractMapDBURI implements MapModificationList
 
     @Override
     public var get(@NotNull var key) {
-        return bTreeMap.get(key._fixDeep());
+        return bTreeMap.get(key.$fixDeep());
     }
 
     @NotNull
@@ -87,7 +87,7 @@ public class MapDBMapURI extends AbstractMapDBURI implements MapModificationList
 
     @Override
     public var remove(@NotNull var v) {
-        return bTreeMap.remove(v._fixDeep());
+        return bTreeMap.remove(v.$fixDeep());
 
     }
 
@@ -100,7 +100,7 @@ public class MapDBMapURI extends AbstractMapDBURI implements MapModificationList
     @Override
     public var set(@NotNull var key, @NotNull var value) {
         if (!value.isVoid()) {
-            return bTreeMap.put(key, value._fixDeep());
+            return bTreeMap.put(key, value.$fixDeep());
         } else {
             return $void();
         }

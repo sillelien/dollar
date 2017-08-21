@@ -131,7 +131,7 @@ public class DollarList extends AbstractDollar {
     @Guarded(NotNullGuard.class)
     public var $divide(@NotNull var rhs) {
 
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         if ((rhsFix.toDouble() == null) || (rhsFix.toDouble() == 0.0)) {
             return DollarFactory.infinity(true, errors(), rhsFix.errors());
         }
@@ -158,7 +158,7 @@ public class DollarList extends AbstractDollar {
     @Override
     @Guarded(NotNullGuard.class)
     public var $multiply(@NotNull var rhs) {
-        var v = rhs._fixDeep();
+        var v = rhs.$fixDeep();
         ArrayList<var> list = new ArrayList<>();
         final int max = Math.abs(v.toInteger());
         if (max > MAX_LIST_MULTIPLIER) {
@@ -208,13 +208,13 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public ImmutableList<var> toVarList() {
-        return ImmutableList.copyOf($stream(false).map(v -> v._fix(false)).collect(Collectors.toList()));
+        return ImmutableList.copyOf($stream(false).map(v -> v.$fix(false)).collect(Collectors.toList()));
     }
 
     @NotNull
     @Override
     public Type $type() {
-        return new Type(Type._LIST, _constraintFingerprint());
+        return new Type(Type._LIST, constraintLabel());
     }
 
     @Override
@@ -477,13 +477,13 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var _copy() {
-        return DollarFactory.fromValue(list.stream().map(var::_copy).collect(Collectors.toList()), errors());
+    public var $copy() {
+        return DollarFactory.fromValue(list.stream().map(var::$copy).collect(Collectors.toList()), errors());
     }
 
     @NotNull
     @Override
-    public var _fix(int depth, boolean parallel) {
+    public var $fix(int depth, boolean parallel) {
         if (depth <= 1) {
             return this;
         } else {
@@ -492,7 +492,7 @@ public class DollarList extends AbstractDollar {
                 try {
                     result =
                             ImmutableList.copyOf(executor.submit(
-                                    () -> $stream(parallel).map(v -> v._fix(depth - 1, parallel)).collect(
+                                    () -> $stream(parallel).map(v -> v.$fix(depth - 1, parallel)).collect(
                                             Collectors.toList())).get());
 
                 } catch (InterruptedException e) {
@@ -513,7 +513,7 @@ public class DollarList extends AbstractDollar {
                 return new DollarList(errors(), result);
             } else {
                 return new DollarList(errors(),
-                                      ImmutableList.copyOf($stream(parallel).map(v -> v._fix(depth - 1, parallel))
+                                      ImmutableList.copyOf($stream(parallel).map(v -> v.$fix(depth - 1, parallel))
                                                                    .collect(Collectors.toList())));
             }
         }

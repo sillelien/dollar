@@ -45,21 +45,21 @@ public class DollarGuard implements java.lang.reflect.InvocationHandler {
         try {
             String name = method.getName();
 
-            if ("_unwrap".equals(name)) {
-                return in._unwrap();
+            if ("$unwrap".equals(name)) {
+                return in.$unwrap();
             }
-            if ("_fix".equals(name)) {
+            if ("$fix".equals(name)) {
                 if (args.length == 1) {
-                    return in._fix((Boolean) args[0]);
+                    return in.$fix((Boolean) args[0]);
                 } else {
-                    return in._fix((Integer) args[0], (Boolean) args[1]);
+                    return in.$fix((Integer) args[0], (Boolean) args[1]);
                 }
             }
-            if ("_fixDeep".equals(name)) {
+            if ("$fixDeep".equals(name)) {
                 if (args == null) {
-                    return in._fixDeep();
+                    return in.$fixDeep();
                 } else {
-                    return in._fixDeep((Boolean) args[0]);
+                    return in.$fixDeep((Boolean) args[0]);
                 }
             }
             if ("$notify".equals(name)) {

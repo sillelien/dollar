@@ -17,7 +17,6 @@
 package com.sillelien.dollar.api.types;
 
 import com.sillelien.dollar.api.DollarStatic;
-import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.collections.ImmutableList;
 import com.sillelien.dollar.api.collections.ImmutableMap;
@@ -239,19 +238,19 @@ public class DollarVoid extends AbstractDollar {
     @NotNull
     @Override
     public var $removeByKey(@NotNull String value) {
-        return _copy();
+        return $copy();
     }
 
     @NotNull
     @Override
     public var $set(@NotNull var key, Object value) {
-        return _copy();
+        return $copy();
     }
 
     @NotNull
     @Override
     public var remove(@NotNull Object value) {
-        return _copy();
+        return $copy();
     }
 
     @NotNull
@@ -272,23 +271,6 @@ public class DollarVoid extends AbstractDollar {
         return Stream.empty();
     }
 
-    @NotNull
-    @Override
-    public var $eval(@NotNull String js) {
-        return _copy();
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull String js, @NotNull String label) {
-        return _copy();
-    }
-
-    @NotNull
-    @Override
-    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
-        return _copy();
-    }
 
     @Override
     public int hashCode() {

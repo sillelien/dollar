@@ -36,6 +36,6 @@ final class FirstUnit extends Unit {
                                 .$("postcode", "bn1 6jj")
                                 .$("number", 343)
                 );
-        profile.$pipe(ExtractName.class).$pipe(WelcomeMessage.class).out();
+//        profile.$pipe(ExtractName.class).$pipe(WelcomeMessage.class).out();
     }
 }

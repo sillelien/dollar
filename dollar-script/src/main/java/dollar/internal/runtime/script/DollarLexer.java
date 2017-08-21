@@ -80,7 +80,7 @@ final class DollarLexer {
     @NotNull
     static final Parser<var> BUILTIN = token(new TokenTagMap("builtin")).map(s -> {
         var v = $(s);
-        v.setMetaAttribute("__builtin", s);
+        v.metaAttribute("__builtin", s);
         return v;
     });
     @NotNull

@@ -122,7 +122,7 @@ public class DollarMap extends AbstractDollar {
     @NotNull
     @Override
     public var $minus(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         if (rhsFix.map()) {
             LinkedHashMap<var, var> copy = copyMap();
             for (Map.Entry<var, var> entry : rhsFix.toVarMap().entrySet()) {
@@ -139,7 +139,7 @@ public class DollarMap extends AbstractDollar {
     @NotNull
     @Override
     public var $plus(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         if (rhsFix.map()) {
             LinkedHashMap<var, var> copy = copyMap();
             copy.putAll(rhsFix.toVarMap().mutable());
@@ -275,7 +275,7 @@ public class DollarMap extends AbstractDollar {
     @NotNull
     @Override
     public Type $type() {
-        return new Type(Type._MAP, _constraintFingerprint());
+        return new Type(Type._MAP, constraintLabel());
     }
 
     @Override
@@ -289,7 +289,7 @@ public class DollarMap extends AbstractDollar {
 
         LinkedHashMap<var, var> result = new LinkedHashMap<>();
         for (Map.Entry<var, var> entry : map.entrySet()) {
-            result.put(entry.getKey(), entry.getValue()._fix(false));
+            result.put(entry.getKey(), entry.getValue().$fix(false));
         }
         return copyOf(result);
     }
@@ -483,19 +483,19 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var _copy() {
+    public var $copy() {
         return DollarFactory.wrap(new DollarMap(errors(), map));
     }
 
     @NotNull
     @Override
-    public var _fix(int depth, boolean parallel) {
+    public var $fix(int depth, boolean parallel) {
         if (depth <= 1) {
             return this;
         } else {
             LinkedHashMap<var, var> result = new LinkedHashMap<>();
             for (Map.Entry<var, var> entry : map.entrySet()) {
-                result.put(entry.getKey(), entry.getValue()._fix(depth - 1, parallel));
+                result.put(entry.getKey(), entry.getValue().$fix(depth - 1, parallel));
             }
             return new DollarMap(errors(), result);
         }

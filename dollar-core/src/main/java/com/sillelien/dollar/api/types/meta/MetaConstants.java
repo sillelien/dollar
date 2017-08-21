@@ -14,25 +14,8 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script.api.exceptions;
+package com.sillelien.dollar.api.types.meta;
 
-import com.sillelien.dollar.api.var;
-import org.jetbrains.annotations.NotNull;
-
-public class DollarParserError extends Error {
-    public DollarParserError(@NotNull Throwable e) {
-        super(e);
-    }
-
-    public DollarParserError(@NotNull String errorMessage) {
-        super(errorMessage);
-    }
-
-    public DollarParserError(@NotNull String message, @NotNull Throwable cause) {
-        super(message, cause, true, true);
-    }
-
-    public DollarParserError(@NotNull String s, @NotNull var rhs) {
-        super(s + ":\n" + rhs.source().getSourceMessage());
-    }
+public class MetaConstants {
+    public static final String CONSTRAINT_FINGERPRINT = "dollar.internal.constraint.fingerprint";
 }

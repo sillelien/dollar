@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public interface var extends ErrorAware, TypeAware, PipeAware, Serializable, StringAware,
+public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
                                      VarInternal, NumericAware, BooleanAware, ControlFlowAware,
                                      URIAware, MetadataAware, Comparable<var>, LogAware, StateAware<var>,
                                      CollectionAware {

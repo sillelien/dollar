@@ -23,11 +23,6 @@ import org.jetbrains.annotations.NotNull;
 
 @Deprecated
 public interface PipeAware {
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Deprecated
-    @Guarded(ChainGuard.class)
-    var $eval(@NotNull String js);
 
     default
     @NotNull

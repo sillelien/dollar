@@ -74,7 +74,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @NotNull
     @Override
     public var $divide(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         if (rhsFix.string() && !rhsFix.toString().isEmpty()) {
             try {
 //                final Pattern pattern = Pattern.compile(rhsFix.toString(),Pattern.LITERAL);
@@ -123,7 +123,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @Override
     public var $multiply(@NotNull var rhs) {
         StringBuilder newValue = new StringBuilder();
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         if (rhsFix.number()) {
             if (rhsFix.toDouble() == 0.0) {
                 return DollarFactory.fromStringValue("", errors(), rhsFix.errors());
@@ -187,7 +187,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @NotNull
     @Override
     public Type $type() {
-        return new Type(Type._STRING, _constraintFingerprint());
+        return new Type(Type._STRING, constraintLabel());
     }
 
     @NotNull

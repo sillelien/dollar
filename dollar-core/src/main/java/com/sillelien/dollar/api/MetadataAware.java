@@ -17,6 +17,7 @@
 package com.sillelien.dollar.api;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface MetadataAware {
 
@@ -26,8 +27,8 @@ public interface MetadataAware {
      * @param key the key
      * @return the meta attribute
      */
-    @NotNull
-    String getMetaAttribute(@NotNull String key);
+    @Nullable
+    String metaAttribute(@NotNull String key);
 
     /**
      * Gets meta attribute.
@@ -35,8 +36,8 @@ public interface MetadataAware {
      * @param key the key
      * @return the meta object
      */
-    @NotNull
-    Object getMetaObject(@NotNull String key);
+    @Nullable
+    Object meta(@NotNull String key);
 
     /**
      * Sets meta attribute.
@@ -44,7 +45,7 @@ public interface MetadataAware {
      * @param key   the key
      * @param value the value
      */
-    void setMetaAttribute(@NotNull String key, @NotNull String value);
+    void metaAttribute(@NotNull String key, @NotNull String value);
 
     /**
      * Sets meta attribute.
@@ -52,5 +53,5 @@ public interface MetadataAware {
      * @param key   the key
      * @param value the value
      */
-    void setMetaObject(@NotNull String key, @NotNull Object value);
+    void meta(@NotNull String key, @NotNull Object value);
 }

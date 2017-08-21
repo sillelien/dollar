@@ -33,6 +33,8 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.sillelien.dollar.api.types.meta.MetaConstants.CONSTRAINT_FINGERPRINT;
+
 public class DollarLambda implements java.lang.reflect.InvocationHandler {
 
     @Nullable
@@ -65,7 +67,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
 
     /**
      * @param lambda  the lambda to lazily evaluate.
-     * @param fixable can we fix the value of the lambda with the use of _fix(boolean) - if you're waiting for a future
+     * @param fixable can we fix the value of the lambda with the use of $fix(boolean) - if you're waiting for a future
      *                to complete then false is a good value.
      */
     public DollarLambda(@NotNull Pipeable lambda, boolean fixable) {
@@ -81,9 +83,9 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
         if ((constraint == null) || (constraintSource == null)) {
             return source;
         }
-        String constraintFingerprint = (String) meta.get("constraintFingerprint");
+        String constraintFingerprint = (String) meta.get(CONSTRAINT_FINGERPRINT);
         if ((constraintFingerprint == null) || constraintSource.equals(constraintFingerprint)) {
-            meta.put("constraintFingerprint", constraintSource);
+            meta.put(CONSTRAINT_FINGERPRINT, constraintSource);
             return source;
         } else {
             throw new ConstraintViolation(source, constraint, constraintFingerprint, constraintSource);
@@ -118,37 +120,37 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 }
             } else if ("dynamic".equals(method.getName())) {
                 return true;
-            } else if ("_unwrap".equals(method.getName())) {
+            } else if ("$unwrap".equals(method.getName())) {
                 return proxy;
-//                return lambda.pipe(in)._unwrap();
-            } else if ("_fix".equals(method.getName())) {
+//                return lambda.pipe(in).$unwrap();
+            } else if ("$fix".equals(method.getName())) {
                 if (fixable) {
                     if (args.length == 1) {
-                        return lambda.pipe(DollarFactory.fromValue(args[0]))._fix((Boolean) args[0]);
+                        return lambda.pipe(DollarFactory.fromValue(args[0])).$fix((Boolean) args[0]);
                     } else {
-                        return lambda.pipe(DollarFactory.fromValue(args[1]))._fix((int) args[0], (Boolean) args[1]);
+                        return lambda.pipe(DollarFactory.fromValue(args[1])).$fix((int) args[0], (Boolean) args[1]);
 
                     }
                 } else {
                     return proxy;
                 }
-            } else if ("_fixDeep".equals(method.getName())) {
+            } else if ("$fixDeep".equals(method.getName())) {
                 if (fixable) {
                     if ((args == null) || (args.length == 0)) {
-                        return lambda.pipe(DollarFactory.fromValue(false))._fixDeep();
+                        return lambda.pipe(DollarFactory.fromValue(false)).$fixDeep();
                     } else {
-                        return lambda.pipe(DollarFactory.fromValue(args[0]))._fixDeep((Boolean) args[0]);
+                        return lambda.pipe(DollarFactory.fromValue(args[0])).$fixDeep((Boolean) args[0]);
                     }
                 } else {
                     return proxy;
                 }
-            } else if ("_constrain".equals(method.getName())) {
+            } else if ("$constrain".equals(method.getName())) {
                 return _constrain((var) proxy, (var) args[0], String.valueOf(args[1]));
-            } else if ("_constraintFingerprint".equals(method.getName())) {
-                return meta.get("constraintFingerprint");
-            } else if ("getMetaAttribute".equals(method.getName())) {
+            } else if ("constraintLabel".equals(method.getName())) {
+                return meta.get(CONSTRAINT_FINGERPRINT);
+            } else if ("metaAttribute".equals(method.getName())) {
                 return meta.get(args[0].toString());
-            } else if ("setMetaAttribute".equals(method.getName())) {
+            } else if ("metaAttribute".equals(method.getName())) {
                 meta.put(String.valueOf(args[0]), String.valueOf(args[1]));
                 return null;
             } else if ("_scope".equals(method.getName())) {
@@ -159,12 +161,12 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
 //                    meta.put("scope",args[0]);
 //                    return this;
 //                }
-//            } else if ("setMetaAttribute".equals(method.getName())) {
+//            } else if ("metaAttribute".equals(method.getName())) {
 //                meta.put(String.valueOf(args[0]), String.valueOf(args[1]));
 //                return null;
-            } else if ("getMetaObject".equals(method.getName())) {
+            } else if ("meta".equals(method.getName())) {
                 return meta.get(args[0]);
-            } else if ("setMetaObject".equals(method.getName())) {
+            } else if ("meta".equals(method.getName())) {
                 meta.put(args[0], args[1]);
                 return null;
             } else if ("$listen".equals(method.getName())) {

@@ -404,7 +404,7 @@ public class ScriptScope implements Scope {
     public void listen(@NotNull String key, @NotNull String id, @NotNull var listener) {
         checkDestroyed();
         listen(key, id, in -> {
-            log.debug("Notifying {}", listener._source().getSourceMessage());
+            log.debug("Notifying {}", listener.source().getSourceMessage());
                    listener.$notify();
                    return $void();
                }

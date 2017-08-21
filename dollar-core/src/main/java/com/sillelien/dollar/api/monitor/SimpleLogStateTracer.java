@@ -77,7 +77,7 @@ public class SimpleLogStateTracer implements StateTracer {
         Object unwrapped;
         String formatted;
         if (value instanceof var) {
-            unwrapped = ((var) value)._unwrap();
+            unwrapped = ((var) value).$unwrap();
         } else {
             unwrapped = value;
         }

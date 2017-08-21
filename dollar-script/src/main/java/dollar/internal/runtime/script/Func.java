@@ -67,7 +67,7 @@ public final class Func {
                 return inSubScope(false, pure, REDUCE.name(), newScope -> {
                     newScope.setParameter("1", x);
                     newScope.setParameter("2", y);
-                    return rhs._fixDeep(false);
+                    return rhs.$fixDeep(false);
                 });
             } catch (RuntimeException e) {
                 throw new DollarScriptException(e);
@@ -81,15 +81,15 @@ public final class Func {
         return lhs.$each(i -> inSubScope(false, pure, EACH.name(),
                                          newScope -> {
                                              newScope.setParameter("1", i[0]);
-                                             return rhs._fixDeep(false);
+                                             return rhs.$fixDeep(false);
                                          }));
     }
 
     @NotNull
     public static var elseFunc(@NotNull var lhs, @NotNull var rhs) {
-        final var fixLhs = lhs._fixDeep();
+        final var fixLhs = lhs.$fixDeep();
         if (fixLhs.isBoolean() && fixLhs.isFalse()) {
-            return rhs._fix(2, false);
+            return rhs.$fix(2, false);
         } else {
             return fixLhs;
         }
@@ -97,13 +97,13 @@ public final class Func {
 
     @NotNull
     public static var multiplyFunc(@NotNull var lhs, @NotNull var rhs) {
-        final var lhsFix = lhs._fix(false);
+        final var lhsFix = lhs.$fix(false);
         if (Arrays.asList("block", "inFunc", "list").contains(
-                lhs.getMetaAttribute("operation"))) {
-            var newValue = lhsFix._fixDeep(false);
+                lhs.metaAttribute("operation"))) {
+            var newValue = lhsFix.$fixDeep(false);
             Long max = rhs.toLong();
             for (int i = 1; i < max; i++) {
-                newValue = newValue.$plus(lhs._fixDeep());
+                newValue = newValue.$plus(lhs.$fixDeep());
             }
             return newValue;
         } else {
@@ -177,7 +177,7 @@ public final class Func {
 
     @NotNull
     public static var parallelFunc(@NotNull var v) {
-        return v._fixDeep(true);
+        return v.$fixDeep(true);
     }
 
     @NotNull
@@ -227,8 +227,8 @@ public final class Func {
 
     @NotNull
     public static var assertEqualsFunc(@NotNull var lhs, @NotNull var rhs) {
-        final var lhsFix = lhs._fixDeep(false);
-        final var rhsFix = rhs._fixDeep(false);
+        final var lhsFix = lhs.$fixDeep(false);
+        final var rhsFix = rhs.$fixDeep(false);
         if (lhsFix.equals(rhsFix)) {
             return $(true);
         } else {
@@ -249,14 +249,14 @@ public final class Func {
     public static var inFunc(@NotNull var lhs, @NotNull var rhs) {return rhs.$contains(lhs);}
 
     @NotNull
-    public static var serialFunc(@NotNull var v) {return v._fixDeep(false);}
+    public static var serialFunc(@NotNull var v) {return v.$fixDeep(false);}
 
     @NotNull
     public static var whileFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         assert WHILE_OP.validForPure(pure);
 
         while (lhs.isTrue()) {
-            rhs._fixDeep();
+            rhs.$fixDeep();
         }
         return $(false);
     }
@@ -272,10 +272,10 @@ public final class Func {
 
     @NotNull
     public static var ifFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
-        final var lhsFix = lhs._fixDeep();
+        final var lhsFix = lhs.$fixDeep();
         boolean isTrue = lhsFix.isBoolean() && lhsFix.isTrue();
         assert IF_OP.validForPure(pure);
-        return isTrue ? rhs._fix(2, false) : DollarFactory.FALSE;
+        return isTrue ? rhs.$fix(2, false) : DollarFactory.FALSE;
     }
 
     @NotNull
@@ -297,7 +297,7 @@ public final class Func {
                          null, false,
                          false,
                          pure);
-            return block._fixDeep(false);
+            return block.$fixDeep(false);
         });
     }
 
@@ -308,9 +308,9 @@ public final class Func {
 
     @NotNull
     static var causesFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
-        String lhsFix = lhs.getMetaAttribute("variable");
+        String lhsFix = lhs.metaAttribute("variable");
         if (lhsFix == null) {
-            return lhs.$listen(vars -> rhs._fix(1, false));
+            return lhs.$listen(vars -> rhs.$fix(1, false));
         } else {
             Scope scopeForVar = getScopeForVar(pure, lhsFix, false, null);
             if (scopeForVar == null) {
@@ -324,15 +324,15 @@ public final class Func {
     @NotNull
     static var pipeFunc(@NotNull DollarParser parser, boolean pure, @NotNull Token token, @NotNull var rhs, @NotNull var lhs) {
         currentScope().setParameter("1", lhs);
-        var rhsVal = rhs._fix(false);
+        var rhsVal = rhs.$fix(false);
         String rhsStr = rhsVal.toString();
         if ("function-call".equals(
-                rhs.getMetaAttribute("operation"))) {
+                rhs.metaAttribute("operation"))) {
             return rhsVal;
         } else {
-            return (rhs.getMetaAttribute("__builtin") != null)
+            return (rhs.metaAttribute("__builtin") != null)
                            ? Builtins.execute(rhsStr, singletonList(lhs), pure)
-                           : variableNode(pure, rhsStr, false, null, token, parser)._fix(2, false);
+                           : variableNode(pure, rhsStr, false, null, token, parser).$fix(2, false);
         }
     }
 
@@ -357,7 +357,7 @@ public final class Func {
                         if ((unless != null) && unless.isTrue()) {
                             return $void();
                         } else {
-                            return block._fixDeep();
+                            return block.$fixDeep();
                         }
                     }
                 } catch (RuntimeException e) {
@@ -373,12 +373,12 @@ public final class Func {
     static var moduleFunc(@NotNull DollarParserImpl parser, @NotNull String moduleName, @Nullable Iterable<var> params) {
         String[] parts = moduleName.split(":", 2);
         if (parts.length < 2) {
-            throw new IllegalArgumentException("Module " + moduleName + " needs to have a scheme");
+            throw new DollarScriptException("Module " + moduleName + " needs to have a scheme");
         }
         Map<String, var> paramMap = new HashMap<>();
         if (params != null) {
             for (var param1 : params) {
-                paramMap.put(param1.getMetaAttribute(DollarParserImpl.NAMED_PARAMETER_META_ATTR), param1);
+                paramMap.put(param1.metaAttribute(DollarParserImpl.NAMED_PARAMETER_META_ATTR), param1);
             }
         }
         try {
@@ -386,7 +386,7 @@ public final class Func {
                            .resolveModule(parts[0])
                            .resolve(parts[1], currentScope(), parser)
                            .pipe($(paramMap))
-                           ._fix(true);
+                           .$fix(true);
 
         } catch (Exception e) {
             return currentScope().handleError(e);
@@ -399,7 +399,7 @@ public final class Func {
             return DollarFactory.blockCollection(entries);
         } else {
             Stream<var> stream = parallel.isTrue() ? entries.stream().parallel() : entries.stream();
-            return $(stream.map(v -> v._fix(parallel.isTrue()))
+            return $(stream.map(v -> v.$fix(parallel.isTrue()))
                              .collect(Collectors.toConcurrentMap(
                                      v -> v.pair() ? v.$pairKey() : v.$S(),
                                      v -> v.pair() ? v.$pairValue() : v)));
@@ -411,7 +411,7 @@ public final class Func {
         if (l.isEmpty()) {
             return $void();
         } else {
-            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i)._fixDeep(false));
+            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fixDeep(false));
             return l.get(l.size() - 1);
         }
     }

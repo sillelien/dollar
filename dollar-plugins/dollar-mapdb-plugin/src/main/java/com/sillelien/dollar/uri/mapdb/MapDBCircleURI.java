@@ -71,9 +71,9 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
         }
         try {
             if (!blocking) {
-                return $(getQueue().offer(value._fixDeep()));
+                return $(getQueue().offer(value.$fixDeep()));
             } else {
-                getQueue().put(value._fixDeep());
+                getQueue().put(value.$fixDeep());
                 return $(true);
             }
 
@@ -122,7 +122,7 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
 
     @NotNull
     @Override public var removeValue(@NotNull var v) {
-        var unwrapped = v._unwrap();
+        var unwrapped = v.$unwrap();
         if(getQueue().remove(unwrapped)) {
             return unwrapped;
         } else {
@@ -166,7 +166,7 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
     @Override
     public void modify(@NotNull var key, @Nullable var oldValue, @Nullable var newValue, boolean triggered) {
         if(newValue != null) {
-            queue.offer(newValue._fixDeep());
+            queue.offer(newValue.$fixDeep());
         }
     }
 }

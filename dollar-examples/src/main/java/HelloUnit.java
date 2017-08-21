@@ -14,11 +14,7 @@
  *    limitations under the License.
  */
 
-import com.sillelien.dollar.SecondUnit;
 import com.sillelien.dollar.api.Unit;
-import com.sillelien.dollar.api.var;
-
-import java.util.Date;
 
 class HelloUnit extends Unit {
 
@@ -27,21 +23,21 @@ class HelloUnit extends Unit {
     }
 
 
-    HelloUnit() {
-        var a = $("A");
-        var profile = $("name", "Neil")
-                .$("age", new Date().getYear() + 1900 - 1970)
-                .$("gender", "male")
-                .$("projects", $jsonArray("snapito", "dollar_vertx"))
-                .$("location",
-                        $("city", "brighton")
-                                .$("postcode", "bn1 6jj")
-                                .$("number", 343)
-                );
-        profile.$pipe(SecondUnit.class).out();
-        profile.out();
-        System.out.println(args);
-        System.out.println(a);
-        System.out.println(in);
-    }
+//    HelloUnit() {
+//        var a = $("A");
+//        var profile = $("name", "Neil")
+//                .$("age", new Date().getYear() + 1900 - 1970)
+//                .$("gender", "male")
+//                .$("projects", $jsonArray("snapito", "dollar_vertx"))
+//                .$("location",
+//                        $("city", "brighton")
+//                                .$("postcode", "bn1 6jj")
+//                                .$("number", 343)
+//                );
+//        profile.$pipe(SecondUnit.class).out();
+//        profile.out();
+//        System.out.println(args);
+//        System.out.println(a);
+//        System.out.println(in);
+//    }
 }

@@ -188,7 +188,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
 
     @NotNull
     @Override
-    public var _copy() {
+    public var $copy() {
         return DollarFactory.fromValue(value, errors());
     }
 

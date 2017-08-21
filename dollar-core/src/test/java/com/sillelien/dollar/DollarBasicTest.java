@@ -23,7 +23,8 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.sillelien.dollar.api.DollarStatic.*;
+import static com.sillelien.dollar.api.DollarStatic.$;
+import static com.sillelien.dollar.api.DollarStatic.$jsonArray;
 import static org.junit.Assert.*;
 
 public class DollarBasicTest {
@@ -92,10 +93,10 @@ public class DollarBasicTest {
                                          .$("postcode", "bn1 6jj")
                                          .$("number", 343)
                               );
-        var result = profile.$pipe(v -> v[0].$("weight", "none of your business"));
-        String weight = result.$("weight").toHumanString();
-        assertEquals(weight, "none of your business");
-        assertTrue("Profile's state was mutated!!!", profile.$("weight").isVoid());
+//        var result = profile.$pipe(v -> v[0].$("weight", "none of your business"));
+//        String weight = result.$("weight").toHumanString();
+//        assertEquals(weight, "none of your business");
+//        assertTrue("Profile's state was mutated!!!", profile.$("weight").isVoid());
     }
 
     @Test
@@ -113,29 +114,6 @@ public class DollarBasicTest {
         assertEquals(1, $(map).$("sub").$("thing").toInteger().longValue());
     }
 
-    @Test
-    public void testNashorn() {
-        int age = 44;
-        var profile = $("name", "Neil")
-                              .$("age", age)
-                              .$("gender", "male")
-                              .$("projects", $jsonArray("snapito", "dollar_vertx"))
-                              .$("location",
-                                 $("city", "brighton")
-                                         .$("postcode", "bn1 6jj")
-                                         .$("number", 343)
-                              );
-        var ageRetrieved = profile.$eval("$['age']");
-        System.out.println(profile.$eval("$"));
-        System.out.println(ageRetrieved);
-        assertEquals(age, (int) ageRetrieved.toInteger());
-        assertEquals(age / 11, (int) profile.$eval("($['age'] / 11)").toInteger());
-        assertEquals("male", profile.$eval("$.gender").toJavaObject());
-        assertEquals(10, (int) profile.$eval("5*2").toInteger());
-        assertEquals(10, (int) $eval("10").toInteger());
-        assertEquals($("{\"name\":\"Dave\"}").$("name").toHumanString(), "Dave");
-        assertEquals($().$eval("({name:'Dave'})").$("name").toHumanString(), "Dave");
-    }
 
     @Test
     public void testNull() {

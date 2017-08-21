@@ -358,7 +358,7 @@ public final class DollarScriptSupport {
                     }
                 }
         );
-        lambda[0].setMetaAttribute("variable", key);
+        lambda[0].metaAttribute("variable", key);
         return lambda[0];
 
     }
@@ -524,18 +524,18 @@ public final class DollarScriptSupport {
     @NotNull
     public static var constrain(@NotNull Scope scope, @NotNull var value, @Nullable var constraint, @Nullable String source) {
 //        System.err.println("(" + source + ") " + rhs.$type().constraint());
-        if (!Objects.equals(value._constraintFingerprint(), source)) {
-            if ((value._constraintFingerprint() != null) && !value._constraintFingerprint().isEmpty()) {
+        if (!Objects.equals(value.constraintLabel(), source)) {
+            if ((value.constraintLabel() != null) && !value.constraintLabel().isEmpty()) {
                 scope.handleError(new DollarScriptException(
-                                                                   "Trying to assign an invalid constrained variable " + value._constraintFingerprint() + " vs " + source,
+                                                                   "Trying to assign an invalid constrained variable " + value.constraintLabel() + " vs " + source,
                                                                    value));
             }
         } else {
-            if ((value._constraintFingerprint() != null) && !value._constraintFingerprint().isEmpty()) {
+            if ((value.constraintLabel() != null) && !value.constraintLabel().isEmpty()) {
 //                System.err.println("Fingerprint: " + rhs.$type().constraint());
             }
         }
-        return value._constrain(constraint, source);
+        return value.$constrain(constraint, source);
     }
 
     public static String ansiColor(@NotNull String text, @NotNull String color) {

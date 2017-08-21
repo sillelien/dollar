@@ -49,6 +49,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
+import static com.sillelien.dollar.api.types.meta.MetaConstants.CONSTRAINT_FINGERPRINT;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class SourceNode implements java.lang.reflect.InvocationHandler {
@@ -60,7 +61,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     private static final Logger log = LoggerFactory.getLogger("DollarSource");
     @NotNull
     private static final List<String> nonScopeOperations = Arrays.asList(
-            "dynamic", "_constrain");
+            "dynamic", "$constrain");
     @Nullable
     private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
     private static final int MAX_STACK_DEPTH = 100;
@@ -151,20 +152,20 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     @Override
     public Object invoke(@NotNull Object proxy, @NotNull Method method, @Nullable Object[] args) throws Throwable {
         try {
-            if (Objects.equals(method.getName(), "_source")) {
+            if (Objects.equals(method.getName(), "source")) {
                 return source;
             }
             if (Objects.equals(method.getName(), "dynamic")) {
                 return true;
             }
 
-            if (Objects.equals(method.getName(), "_constrain")) {
+            if (Objects.equals(method.getName(), "$constrain")) {
                 if (args != null) {
                     return _constrain((var) proxy, (var) args[0], String.valueOf(args[1]));
                 }
             }
 
-            if (Objects.equals(method.getName(), "_predictType")) {
+            if (Objects.equals(method.getName(), "predictType")) {
                 if (prediction == null) {
                     prediction = typeLearner.predict(operation, source, inputs);
                 }
@@ -173,7 +174,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
             Object result = null;
             //Some operations do not require a valid scope
-            if ((!method.getName().startsWith("_fix") && (nonScopeOperations.contains(
+            if ((!method.getName().startsWith("$fix") && (nonScopeOperations.contains(
                     method.getName()) || method.getDeclaringClass().equals(
                     MetadataAware.class) || method.getDeclaringClass().equals(
                     VarInternal.class)))) {
@@ -227,7 +228,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             }
 
 
-            if (method.getName().startsWith("_fixDeep") && (result != null) && (result instanceof var)) {
+            if (method.getName().startsWith("$fixDeep") && (result != null) && (result instanceof var)) {
                 typeLearner.learn(operation, source, inputs, ((var) result).$type());
             }
             return result;
@@ -265,40 +266,37 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                     throw new IllegalStateException(String.valueOf(method));
                 }
 
-            } else if ("_unwrap".equals(method.getName())) {
+            } else if ("$unwrap".equals(method.getName())) {
                 return proxy;
-//                return lambda.pipe(in)._unwrap();
-            } else if ("_fix".equals(method.getName())) {
+//                return lambda.pipe(in).$unwrap();
+            } else if ("$fix".equals(method.getName())) {
 
                 if (args.length == 1) {
-                    return lambda.pipe(DollarFactory.fromValue(args[0]))._fix((Boolean) args[0]);
+                    return lambda.pipe(DollarFactory.fromValue(args[0])).$fix((Boolean) args[0]);
                 } else {
-                    return lambda.pipe(DollarFactory.fromValue(args[1]))._fix((int) args[0], (Boolean) args[1]);
+                    return lambda.pipe(DollarFactory.fromValue(args[1])).$fix((int) args[0], (Boolean) args[1]);
 
                 }
 
-            } else if ("_fixDeep".equals(method.getName())) {
+            } else if ("$fixDeep".equals(method.getName())) {
 
                 if ((args == null) || (args.length == 0)) {
-                    return lambda.pipe(DollarFactory.fromValue(parallel))._fixDeep();
+                    return lambda.pipe(DollarFactory.fromValue(parallel)).$fixDeep();
                 } else {
-                    return lambda.pipe(DollarFactory.fromValue(args[0]))._fixDeep((Boolean) args[0]);
+                    return lambda.pipe(DollarFactory.fromValue(args[0])).$fixDeep((Boolean) args[0]);
                 }
 
 
-            } else if ("_constraintFingerprint".equals(method.getName())) {
-                return meta.get("constraintFingerprint");
-            } else if ("getMetaAttribute".equals(method.getName())) {
+            } else if ("constraintLabel".equals(method.getName())) {
+                return meta.get(CONSTRAINT_FINGERPRINT);
+            } else if ("metaAttribute".equals(method.getName()) && args.length == 1) {
                 return meta.get(args[0].toString());
-            } else if ("setMetaAttribute".equals(method.getName())) {
+            } else if ("metaAttribute".equals(method.getName()) && args.length == 2) {
                 meta.put(String.valueOf(args[0]), String.valueOf(args[1]));
                 return null;
-            } else if ("setMetaAttribute".equals(method.getName())) {
-                meta.put(String.valueOf(args[0]), String.valueOf(args[1]));
-                return null;
-            } else if ("getMetaObject".equals(method.getName())) {
+            } else if ("meta".equals(method.getName()) && args.length == 1) {
                 return meta.get(args[0]);
-            } else if ("setMetaObject".equals(method.getName())) {
+            } else if ("meta".equals(method.getName()) && args.length == 2) {
                 meta.put(args[0], args[1]);
                 return null;
             } else if ("$listen".equals(method.getName())) {
@@ -352,9 +350,9 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
         if ((constraint == null) || (constraintSource == null)) {
             return source;
         }
-        String constraintFingerprint = (String) meta.get("constraintFingerprint");
+        String constraintFingerprint = (String) meta.get(CONSTRAINT_FINGERPRINT);
         if ((constraintFingerprint == null) || constraintSource.equals(constraintFingerprint)) {
-            meta.put("constraintFingerprint", constraintSource);
+            meta.put(CONSTRAINT_FINGERPRINT, constraintSource);
             return source;
         } else {
             throw new ConstraintViolation(source, constraint, constraintFingerprint, constraintSource);

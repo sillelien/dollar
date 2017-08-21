@@ -55,7 +55,7 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $minus(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         return DollarFactory.fromValue(new Range(DollarFactory.fromValue(range.lowerEndpoint().$minus(rhsFix)),
                                                  DollarFactory.fromValue(range.upperEndpoint().$minus(rhsFix))),
                                        errors(), rhsFix.errors());
@@ -64,7 +64,7 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $plus(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
 
         return DollarFactory.fromValue(new Range(DollarFactory.fromValue(range.lowerEndpoint().$plus(rhsFix)),
                                                  DollarFactory.fromValue(range.upperEndpoint().$plus(rhsFix))),
@@ -81,7 +81,7 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $divide(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         return DollarFactory.fromValue(new Range(DollarFactory.fromValue(range.lowerEndpoint().$divide(rhsFix)),
                                                  DollarFactory.fromValue(range.upperEndpoint().$divide(rhsFix))),
                                        errors(), rhsFix.errors());
@@ -90,7 +90,7 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $modulus(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         return DollarFactory.fromValue(new Range(DollarFactory.fromValue(range.lowerEndpoint().$modulus(rhsFix)),
                                                  DollarFactory.fromValue(range.upperEndpoint().$modulus(rhsFix))),
                                        errors(), rhsFix.errors());
@@ -99,7 +99,7 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $multiply(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         return DollarFactory.fromValue(new Range(DollarFactory.fromValue(range.lowerEndpoint().$multiply(rhsFix)),
                                                  DollarFactory.fromValue(range.upperEndpoint().$multiply(rhsFix))),
                                        errors(), rhsFix.errors());
@@ -195,7 +195,7 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public Type $type() {
-        return new Type(Type._RANGE, _constraintFingerprint());
+        return new Type(Type._RANGE, constraintLabel());
     }
 
     @Override
@@ -311,7 +311,7 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $removeByKey(@NotNull String value) {
-        return _copy();
+        return $copy();
 
     }
 
@@ -364,7 +364,7 @@ public class DollarRange extends AbstractDollar {
             return false;
         }
         if (obj instanceof var) {
-            var unwrapped = ((var) obj)._fixDeep()._unwrap();
+            var unwrapped = ((var) obj).$fixDeep().$unwrap();
             if (unwrapped instanceof DollarRange) {
                 return range.equals(((DollarRange) unwrapped).range);
             }

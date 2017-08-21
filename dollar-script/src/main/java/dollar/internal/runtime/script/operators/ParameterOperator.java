@@ -51,7 +51,7 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
             boolean functionName;
             boolean builtin;
 
-            if ("function-name".equals(lhs.getMetaAttribute("operation"))) {
+            if ("function-name".equals(lhs.metaAttribute("operation"))) {
                 String lhsString = lhs.toString();
                 builtin = Builtins.exists(lhsString);
                 if (pure && builtin && !Builtins.isPure(lhsString)) {
@@ -72,7 +72,7 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
                             currentScope().setParameter(String.valueOf(++count), parameter);
 
                             //If the parameter is a named parameter then use the name (set as metadata on the value).
-                            String paramMetaAttribute = parameter.getMetaAttribute(NAMED_PARAMETER_META_ATTR);
+                            String paramMetaAttribute = parameter.metaAttribute(NAMED_PARAMETER_META_ATTR);
                             if (paramMetaAttribute != null) {
                                 currentScope().set(paramMetaAttribute, parameter, true, null,
                                                    null, false, false, pure);
@@ -83,10 +83,10 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
                             String lhsString = lhs.toString();
                             result = builtin ? Builtins.execute(lhsString, parameters, pure)
                                              : variableNode(pure, lhsString, false, null, token, parser)
-                                                       ._fix(2,
+                                                       .$fix(2,
                                                              false);
                         } else {
-                            result = lhs._fix(2, false);
+                            result = lhs.$fix(2, false);
                         }
 
                         return result;

@@ -35,7 +35,7 @@ public interface TypeLearner extends ExtensionPoint<TypeLearner> {
         ArrayList<String> perms = new ArrayList<>();
         boolean first = true;
         for (var input : inputs) {
-            TypePrediction inputPrediction = input._predictType();
+            TypePrediction inputPrediction = input.predictType();
             final Set<String> types;
             if ((inputPrediction == null) || inputPrediction.empty()) {
                 types = Collections.singleton(Type._ANY.toString());

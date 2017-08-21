@@ -34,32 +34,32 @@ public interface VarInternal {
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    var _copy();
+    var $copy();
 
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
     @Guarded(NotNullCollectionGuard.class)
     @NotNull
-    var _copy(@NotNull ImmutableList<Throwable> errors);
+    var $copy(@NotNull ImmutableList<Throwable> errors);
 
-    @NotNull
     /**
-     * Like _unwrap() except it causes lambda evaluation but does not propagate through lists and maps.
+     * Like $unwrap() except it causes lambda evaluation but does not propagate through lists and maps.
      */
+    @NotNull
     @Guarded(ChainGuard.class)
-    var _fix(boolean parallel);
+    var $fix(boolean parallel);
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var _fix(int depth, boolean parallel);
+    var $fix(int depth, boolean parallel);
 
     @NotNull
     @Guarded(ChainGuard.class)
-    default var _fixDeep() { return _fixDeep(false);}
+    default var $fixDeep() { return $fixDeep(false);}
 
     @NotNull
     @Guarded(ChainGuard.class)
-    var _fixDeep(boolean parallel);
+    var $fixDeep(boolean parallel);
 
     /**
      * Attempt to predict what type this object is. For static types this will predict the the same value as returned by
@@ -68,10 +68,10 @@ public interface VarInternal {
      * @return a prediction of what type this object may be.
      */
     @NotNull
-    TypePrediction _predictType();
+    TypePrediction predictType();
 
     @Nullable
-    default SourceSegment _source() {
+    default SourceSegment source() {
         return null;
     }
 
@@ -82,13 +82,13 @@ public interface VarInternal {
      * @return an unwrapped class.
      */
     @Guarded(ChainGuard.class)
-    @NotNull
-    var _unwrap();
+    @Nullable
+    var $unwrap();
 
 
     @NotNull
-    var _constrain(@NotNull var constraint, @NotNull String constraintSource);
+    var $constrain(@NotNull var constraint, @NotNull String constraintSource);
 
-    @NotNull
-    String _constraintFingerprint();
+    @Nullable
+    String constraintLabel();
 }

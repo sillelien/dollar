@@ -63,7 +63,7 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     @NotNull
     @Override
     public var $divide(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         if (rhsFix.zero() || (rhsFix.toDouble() == null) || (rhsFix.toDouble() == 0.0)) {
             return DollarFactory.infinity(rhs.positive(), errors(), rhs.errors());
         }
@@ -136,7 +136,7 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     @NotNull
     @Override
     public Type $type() {
-        return new Type(Type._DATE, _constraintFingerprint());
+        return new Type(Type._DATE, constraintLabel());
     }
 
     @NotNull
@@ -197,7 +197,7 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     @NotNull
     @Override
     public var $plus(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         if (rhsFix.string()) {
             return DollarFactory.fromValue(toString() + rhsFix, errors(), rhsFix.errors());
         } else if (rhsFix.infinite()) {
@@ -272,7 +272,7 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof var) {
-            var unwrapped = ((var) obj)._unwrap();
+            var unwrapped = ((var) obj).$unwrap();
             if (unwrapped instanceof DollarDate) {
                 return $equals(unwrapped);
             } else {

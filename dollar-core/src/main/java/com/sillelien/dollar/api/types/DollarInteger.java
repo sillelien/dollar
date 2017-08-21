@@ -52,7 +52,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     @NotNull
     @Override
     public var $divide(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         if (rhsFix.infinite()) {
             return DollarFactory.fromValue(0, errors(), rhsFix.errors());
         } else if (rhsFix.decimal() && (rhsFix.toDouble() != 0.0)) {
@@ -68,7 +68,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     @NotNull
     @Override
     public var $modulus(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         if (rhsFix.infinite()) {
             return DollarFactory.infinity(positive(), errors(), rhsFix.errors());
         }
@@ -144,7 +144,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     @NotNull
     @Override
     public Type $type() {
-        return new Type(Type._INTEGER, _constraintFingerprint());
+        return new Type(Type._INTEGER, constraintLabel());
     }
 
     @NotNull
@@ -166,7 +166,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     @NotNull
     @Override
     public var $plus(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         if (rhsFix.infinite()) {
             return rhsFix;
         }
@@ -257,7 +257,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof var) {
-            var unwrapped = ((var) obj)._unwrap();
+            var unwrapped = ((var) obj).$unwrap();
             if (unwrapped instanceof DollarInteger) {
                 return $equals(unwrapped);
             } else {

@@ -236,7 +236,7 @@ public class DollarNull extends AbstractDollar {
     @NotNull
     @Override
     public var $set(@NotNull var key, Object value) {
-        return _copy();
+        return $copy();
     }
 
     @NotNull

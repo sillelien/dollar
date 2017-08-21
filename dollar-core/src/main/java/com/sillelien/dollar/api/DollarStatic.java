@@ -119,7 +119,7 @@ public class DollarStatic {
      */
     @NotNull
     public static var fix(@Nullable var v, boolean parallel) {
-        return (v != null) ? DollarFactory.wrap(v._fix(parallel)) : $void();
+        return (v != null) ? DollarFactory.wrap(v.$fix(parallel)) : $void();
     }
 
     /**
@@ -149,7 +149,7 @@ public class DollarStatic {
      */
     @NotNull
     public static var fix(@Nullable var v, int depth, boolean parallel) {
-        return (v != null) ? DollarFactory.wrap(v._fix(depth, parallel)) : $void();
+        return (v != null) ? DollarFactory.wrap(v.$fix(depth, parallel)) : $void();
     }
 
     /**
@@ -160,7 +160,7 @@ public class DollarStatic {
      */
     @NotNull
     public static var fix(@Nullable var v) {
-        return (v != null) ? DollarFactory.wrap(v._fix(false)) : $void();
+        return (v != null) ? DollarFactory.wrap(v.$fix(false)) : $void();
     }
 
     /**
@@ -171,7 +171,7 @@ public class DollarStatic {
      */
     @NotNull
     public static var fixDeep(@Nullable var v) {
-        return (v != null) ? DollarFactory.wrap(v._fixDeep(false)) : $void();
+        return (v != null) ? DollarFactory.wrap(v.$fixDeep(false)) : $void();
     }
 
     /**
@@ -183,7 +183,7 @@ public class DollarStatic {
      */
     @NotNull
     public static var fixDeep(@Nullable var v, boolean parallel) {
-        return (v != null) ? DollarFactory.wrap(v._fixDeep(parallel)) : $void();
+        return (v != null) ? DollarFactory.wrap(v.$fixDeep(parallel)) : $void();
     }
 
     /**
@@ -463,7 +463,7 @@ public class DollarStatic {
         if (failee == null) {
             return DollarFactory.failure(throwable);
         }
-        return failee._copy(ImmutableList.of(throwable));
+        return failee.$copy(ImmutableList.of(throwable));
 
     }
 
@@ -490,17 +490,6 @@ public class DollarStatic {
         threadContext.get().popLabel(value);
     }
 
-
-    /**
-     * $ eval.
-     *
-     * @param js the js
-     * @return the var
-     */
-    @NotNull
-    public static var $eval(@NotNull String js) {
-        return $().$eval(js);
-    }
 
     /**
      * $ fork.

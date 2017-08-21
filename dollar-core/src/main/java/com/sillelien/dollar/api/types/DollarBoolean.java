@@ -39,7 +39,7 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     @NotNull
     @Override
     public var $minus(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         return DollarFactory.fromValue(value ^ rhsFix.truthy(), errors(), rhsFix.errors());
     }
 
@@ -52,7 +52,7 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     @NotNull
     @Override
     public var $divide(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         return DollarFactory.fromValue(value == rhsFix.truthy(), errors(), rhsFix.errors());
     }
 
@@ -110,7 +110,7 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     @NotNull
     @Override
     public Type $type() {
-        return new Type(Type._BOOLEAN, _constraintFingerprint());
+        return new Type(Type._BOOLEAN, constraintLabel());
     }
 
     @NotNull
@@ -132,7 +132,7 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     @NotNull
     @Override
     public var $plus(@NotNull var rhs) {
-        var rhsFix = rhs._fixDeep();
+        var rhsFix = rhs.$fixDeep();
         if (rhsFix.list()) {
             rhsFix.$prepend(this);
         } else if (rhsFix.list()) {

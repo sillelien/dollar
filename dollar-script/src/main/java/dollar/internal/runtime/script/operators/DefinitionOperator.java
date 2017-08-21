@@ -49,7 +49,7 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
         Object[] objects = (Object[]) token.value();
 //        final String constraintSource;
 //        if (objects[1] instanceof var) {
-//            constraintSource = ((var) objects[1])._source().getSourceSegment();
+//            constraintSource = ((var) objects[1]).source().getSourceSegment();
 //        } else {
 //            constraintSource = null;
 //        }

@@ -38,7 +38,7 @@ public class DollarRangeTest {
         final var actual = $list(1).$plus($(2)).$plus($(3)).$plus($(4));
         assertFalse(range.equals(actual));
         assertFalse(actual.equals(range));
-        System.err.println(actual._unwrap().getClass());
+        System.err.println(actual.$unwrap().getClass());
         assertNotEquals(range, actual);
         assertEquals(range, $($(1), $(4)));
     }

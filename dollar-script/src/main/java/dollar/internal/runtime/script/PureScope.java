@@ -100,7 +100,7 @@ public class PureScope extends ScriptScope {
         if ((scope != null) && scope.getVariables().containsKey(key) && ((Variable) scope.getVariables().get(key)).isReadonly()) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
-        final var fixedValue = fixed ? value._fixDeep() : value;
+        final var fixedValue = fixed ? value.$fixDeep() : value;
         if (scope.getVariables().containsKey(key)) {
             final Variable variable = ((Variable)scope.getVariables().get(key));
             if (!variable.isVolatile() && (variable.getThread() != Thread.currentThread().getId())) {
