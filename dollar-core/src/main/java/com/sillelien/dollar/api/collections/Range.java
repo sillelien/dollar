@@ -17,13 +17,16 @@
 package com.sillelien.dollar.api.collections;
 
 import com.sillelien.dollar.api.var;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class Range {
+    @NotNull
     private final var start;
+    @NotNull
     private final var finish;
 
-    public Range(var start, var finish) {
+    public Range(@NotNull var start, @NotNull var finish) {
         this.start = start;
         this.finish = finish;
     }
@@ -31,14 +34,14 @@ public final class Range {
     @Override
     public int hashCode() {
         int result = start.hashCode();
-        result = 31 * result + finish.hashCode();
+        result = (31 * result) + finish.hashCode();
         return result;
     }
 
     @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if ((o == null) || (getClass() != o.getClass())) { return false; }
 
         Range range = (Range) o;
 
@@ -51,10 +54,12 @@ public final class Range {
         return false;
     }
 
+    @NotNull
     public var lowerEndpoint() {
         return start;
     }
 
+    @NotNull
     public var upperEndpoint() {
         return finish;
     }

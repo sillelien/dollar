@@ -41,22 +41,18 @@ import java.util.UUID;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 
-public class DollarScriptSupport {
+public final class DollarScriptSupport {
 
     @NotNull
     public static final String ANSI_CYAN = "36";
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(DollarScriptSupport.class);
     @NotNull
-    private static final ThreadLocal<List<Scope>> scopes = new ThreadLocal<List<Scope>>() {
-        @NotNull
-        @Override
-        protected List<Scope> initialValue() {
-            ArrayList<Scope> list = new ArrayList<>();
-            list.add(new ScriptScope("thread-" + Thread.currentThread().getId(), false));
-            return list;
-        }
-    };
+    private static final ThreadLocal<List<Scope>> scopes = ThreadLocal.withInitial(() -> {
+        ArrayList<Scope> list = new ArrayList<>();
+        list.add(new ScriptScope("thread-" + Thread.currentThread().getId(), false));
+        return list;
+    });
 
     @NotNull
     public static List<Scope> scopes() {
@@ -72,10 +68,10 @@ public class DollarScriptSupport {
     }
 
     private static void addScope(boolean runtime, @NotNull Scope scope) {
-        boolean newScope = scopes.get().size() == 0 || !scope.equals(currentScope());
+        boolean newScope = scopes.get().isEmpty() || !scope.equals(currentScope());
         scopes.get().add(scope);
         if (DollarStatic.getConfig().debugScope()) {
-            log.info(indent(scopes.get().size() - 1) + (runtime ? "**** " : "") + "BEGIN " + scope);
+            log.info("{}{}BEGIN {}", indent(scopes.get().size() - 1), runtime ? "**** " : "", scope);
         }
 
     }
@@ -86,7 +82,7 @@ public class DollarScriptSupport {
         Scope remove = scopes.get().remove(scopes.get().size() - 1);
         if (DollarStatic.getConfig().debugScope()) {
 
-            log.info(indent(scopes.get().size()) + (runtime ? "**** " : "") + "END:  " + remove);
+            log.info("{}{}END:  {}", indent(scopes.get().size()), runtime ? "**** " : "", remove);
 
         }
 
@@ -263,11 +259,11 @@ public class DollarScriptSupport {
         } finally {
             Scope poppedScope = endScope(runtime);
 //            poppedScope.destroy();
-            if (poppedScope != newScope) {
+            if (!Objects.equals(poppedScope, newScope)) {
                 throw new IllegalStateException("Popped wrong scope");
             }
             final Scope poppedScope2 = endScope(runtime);
-            if (poppedScope2 != parent) {
+            if (!Objects.equals(poppedScope2, parent)) {
                 throw new IllegalStateException("Popped wrong scope");
             }
         }
@@ -280,7 +276,7 @@ public class DollarScriptSupport {
                                 @NotNull Scope scope,
                                 @NotNull ScopeExecutable<T> r) {
 
-        boolean addedDynamicScope = scopes.get().size() > 0;
+        boolean addedDynamicScope = !scopes.get().isEmpty();
 
         addScope(runtime, scope);
         try {
@@ -289,7 +285,7 @@ public class DollarScriptSupport {
             throw new DollarScriptException(e);
         } finally {
             Scope poppedScope = endScope(runtime);
-            if (poppedScope != scope) {
+            if (!Objects.equals(poppedScope, scope)) {
                 throw new IllegalStateException("Popped wrong scope");
             }
 
@@ -377,8 +373,7 @@ public class DollarScriptSupport {
         if (initialScope == null) {
             initialScope = currentScope();
         }
-        log.debug(
-                ansiColor("LOOKUP " + key, ANSI_CYAN) + " " + initialScope + " in " + scopes.get().size() + " scopes ");
+        log.debug("{} {} in {} scopes ", ansiColor("LOOKUP " + key, ANSI_CYAN), initialScope, scopes.get().size());
         if (numeric) {
             if (initialScope.hasParameter(key)) {
                 return initialScope;
@@ -393,7 +388,7 @@ public class DollarScriptSupport {
         Collections.reverse(scopes);
         for (Scope scriptScope : scopes) {
             if (!(scriptScope instanceof PureScope) && pure) {
-                log.debug("Skipping " + scriptScope);
+                log.debug("Skipping {}", scriptScope);
             }
             if (numeric) {
                 if (scriptScope.hasParameter(key)) {
@@ -412,6 +407,7 @@ public class DollarScriptSupport {
 
     }
 
+    @NotNull
     public static Scope getRootScope() {
         return scopes.get().get(0);
     }
@@ -466,7 +462,7 @@ public class DollarScriptSupport {
             Collections.reverse(scopes);
             for (Scope scriptScope : scopes) {
                 if (!(scriptScope instanceof PureScope) && pure) {
-                    log.debug("Skipping " + scriptScope);
+                    log.debug("Skipping {}", scriptScope);
                 }
 
                 if (scriptScope.has(key)) {
@@ -488,7 +484,7 @@ public class DollarScriptSupport {
         }
 
         if (decleration) {
-            log.debug(ansiColor("SETTING  " + key, ANSI_CYAN) + " " + scope + " " + scope);
+            log.debug("{} {} {}", ansiColor("SETTING  " + key, ANSI_CYAN), scope, scope);
             return scope.set(key, value, readonly, useConstraint, useSource, isVolatile,
                              fixed,
                              pure);
@@ -508,7 +504,7 @@ public class DollarScriptSupport {
                                       boolean isVolatile,
                                       boolean fixed,
                                       boolean pure, boolean decleration) {
-        log.debug(ansiColor("UPDATING ", ANSI_CYAN) + key + " " + scope);
+        log.debug("{}{} {}", ansiColor("UPDATING ", ANSI_CYAN), key, scope);
 
         if (decleration) {
             throw new DollarScriptException("Variable " + key + " already defined in " + scope);
@@ -526,23 +522,23 @@ public class DollarScriptSupport {
     }
 
     @NotNull
-    public static var constrain(@NotNull Scope scope, @NotNull var value, var constraint, String source) {
+    public static var constrain(@NotNull Scope scope, @NotNull var value, @Nullable var constraint, @Nullable String source) {
 //        System.err.println("(" + source + ") " + rhs.$type().constraint());
         if (!Objects.equals(value._constraintFingerprint(), source)) {
-            if (value._constraintFingerprint() != null && !value._constraintFingerprint().isEmpty()) {
+            if ((value._constraintFingerprint() != null) && !value._constraintFingerprint().isEmpty()) {
                 scope.handleError(new DollarScriptException(
                                                                    "Trying to assign an invalid constrained variable " + value._constraintFingerprint() + " vs " + source,
                                                                    value));
             }
         } else {
-            if (value._constraintFingerprint() != null && !value._constraintFingerprint().isEmpty()) {
+            if ((value._constraintFingerprint() != null) && !value._constraintFingerprint().isEmpty()) {
 //                System.err.println("Fingerprint: " + rhs.$type().constraint());
             }
         }
         return value._constrain(constraint, source);
     }
 
-    public static String ansiColor(String text, String color) {
+    public static String ansiColor(@NotNull String text, @NotNull String color) {
         return "\u001b["  // Prefix
                        + "0"        // Brightness
                        + ";"        // Separator
@@ -556,7 +552,7 @@ public class DollarScriptSupport {
         addScope(true, scope);
     }
 
-    public static void popScope(Scope scope) {
+    public static void popScope(@NotNull Scope scope) {
         Scope poppedScope = endScope(true);
         if (!poppedScope.equals(scope)) {
             throw new DollarAssertionException("Popped scope does not equal expected scope");

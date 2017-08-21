@@ -16,7 +16,7 @@
 
 package com.sillelien.dollar;
 
-import org.apache.commons.io.FileUtils;
+import com.google.common.io.Files;
 import org.junit.Test;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
@@ -24,6 +24,7 @@ import org.pegdown.ast.RootNode;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * @author hello@neilellis.me
@@ -34,7 +35,8 @@ public class DocTest {
     public void test() throws IOException {
         try {
             PegDownProcessor processor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
-            RootNode rootNode = processor.parseMarkdown(FileUtils.readFileToString(new File("README.md")).toCharArray());
+            RootNode rootNode = processor.parseMarkdown(
+                    Files.asCharSource(new File("README.md"), Charset.forName("utf-8")).read().toCharArray());
             rootNode.accept(new DocTestingVisitor());
         } catch (Exception e) {
             e.printStackTrace();

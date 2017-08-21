@@ -62,87 +62,87 @@ import org.pegdown.ast.WikiLinkNode;
 
 public class CodeExtractionVisitor implements Visitor {
     @Override
-    public void visit(AbbreviationNode node) {
+    public void visit(@NotNull AbbreviationNode node) {
 
     }
 
     @Override
-    public void visit(AnchorLinkNode anchorLinkNode) {
+    public void visit(@NotNull AnchorLinkNode anchorLinkNode) {
 
     }
 
     @Override
-    public void visit(AutoLinkNode node) {
+    public void visit(@NotNull AutoLinkNode node) {
 
     }
 
     @Override
-    public void visit(BlockQuoteNode node) {
+    public void visit(@NotNull BlockQuoteNode node) {
 
     }
 
     @Override
-    public void visit(BulletListNode node) {
+    public void visit(@NotNull BulletListNode node) {
 
     }
 
     @Override
-    public void visit(CodeNode node) {
+    public void visit(@NotNull CodeNode node) {
 
     }
 
     @Override
-    public void visit(DefinitionListNode node) {
+    public void visit(@NotNull DefinitionListNode node) {
 
     }
 
     @Override
-    public void visit(DefinitionNode node) {
+    public void visit(@NotNull DefinitionNode node) {
 
     }
 
     @Override
-    public void visit(DefinitionTermNode node) {
+    public void visit(@NotNull DefinitionTermNode node) {
 
     }
 
     @Override
-    public void visit(ExpImageNode node) {
+    public void visit(@NotNull ExpImageNode node) {
 
     }
 
     @Override
-    public void visit(ExpLinkNode node) {
+    public void visit(@NotNull ExpLinkNode node) {
 
     }
 
     @Override
-    public void visit(HeaderNode node) {
+    public void visit(@NotNull HeaderNode node) {
 
     }
 
     @Override
-    public void visit(HtmlBlockNode node) {
+    public void visit(@NotNull HtmlBlockNode node) {
 
     }
 
     @Override
-    public void visit(InlineHtmlNode node) {
+    public void visit(@NotNull InlineHtmlNode node) {
 
     }
 
     @Override
-    public void visit(ListItemNode node) {
+    public void visit(@NotNull ListItemNode node) {
 
     }
 
     @Override
-    public void visit(MailLinkNode node) {
+    public void visit(@NotNull MailLinkNode node) {
 
     }
 
     @Override
-    public void visit(OrderedListNode node) {
+    public void visit(@NotNull OrderedListNode node) {
 
     }
 
@@ -153,22 +153,22 @@ public class CodeExtractionVisitor implements Visitor {
     }
 
     @Override
-    public void visit(QuotedNode node) {
+    public void visit(@NotNull QuotedNode node) {
 
     }
 
     @Override
-    public void visit(ReferenceNode node) {
+    public void visit(@NotNull ReferenceNode node) {
 
     }
 
     @Override
-    public void visit(RefImageNode node) {
+    public void visit(@NotNull RefImageNode node) {
 
     }
 
     @Override
-    public void visit(RefLinkNode node) {
+    public void visit(@NotNull RefLinkNode node) {
 
     }
 
@@ -180,56 +180,56 @@ public class CodeExtractionVisitor implements Visitor {
     }
 
     @Override
-    public void visit(SimpleNode node) {
+    public void visit(@NotNull SimpleNode node) {
 
     }
 
     @Override
-    public void visit(SpecialTextNode node) {
+    public void visit(@NotNull SpecialTextNode node) {
     }
 
     @Override
-    public void visit(StrikeNode node) {
-
-    }
-
-    @Override
-    public void visit(StrongEmphSuperNode node) {
+    public void visit(@NotNull StrikeNode node) {
 
     }
 
     @Override
-    public void visit(TableBodyNode node) {
+    public void visit(@NotNull StrongEmphSuperNode node) {
 
     }
 
     @Override
-    public void visit(TableCaptionNode node) {
+    public void visit(@NotNull TableBodyNode node) {
 
     }
 
     @Override
-    public void visit(TableCellNode node) {
+    public void visit(@NotNull TableCaptionNode node) {
 
     }
 
     @Override
-    public void visit(TableColumnNode node) {
+    public void visit(@NotNull TableCellNode node) {
 
     }
 
     @Override
-    public void visit(TableHeaderNode node) {
+    public void visit(@NotNull TableColumnNode node) {
 
     }
 
     @Override
-    public void visit(TableNode node) {
+    public void visit(@NotNull TableHeaderNode node) {
 
     }
 
     @Override
-    public void visit(TableRowNode node) {
+    public void visit(@NotNull TableNode node) {
+
+    }
+
+    @Override
+    public void visit(@NotNull TableRowNode node) {
 
     }
 
@@ -246,12 +246,12 @@ public class CodeExtractionVisitor implements Visitor {
     }
 
     @Override
-    public void visit(WikiLinkNode node) {
+    public void visit(@NotNull WikiLinkNode node) {
 
     }
 
     @Override
-    public void visit(TextNode node) {
+    public void visit(@NotNull TextNode node) {
 
     }
 
@@ -261,7 +261,7 @@ public class CodeExtractionVisitor implements Visitor {
     }
 
     @Override
-    public void visit(Node node) {
+    public void visit(@NotNull Node node) {
 
     }
 

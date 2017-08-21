@@ -16,14 +16,18 @@
 
 package dollar.internal.runtime.script.parser;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum OpDefType {
 
     PREFIX("prefix"), POSTFIX("postfix"), BINARY("binary"), ASSIGNMENT("assignment"), CONTROL_FLOW("control"), OTHER("other"), RESERVED("reserved");
 
+    @NotNull
     private final String humanName;
 
-    OpDefType(String humanName) {this.humanName = humanName;}
+    OpDefType(@NotNull String humanName) {this.humanName = humanName;}
 
+    @NotNull
     public String humanName() {
         return humanName;
     }

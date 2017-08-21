@@ -46,6 +46,7 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
     private final boolean failfast;
     private final boolean faultTolerant;
 
+    @NotNull
     private static final Logger log = LoggerFactory.getLogger("ParserErrorHandlerImpl");
 
     public ParserErrorHandlerImpl() {
@@ -76,7 +77,7 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
         } else {
             throwable = e;
         }
-        if ((e instanceof VariableNotFoundException && missingVariables) || failfast) {
+        if (((e instanceof VariableNotFoundException) && missingVariables) || failfast) {
             return scope.handleError(throwable);
         } else {
             return DollarFactory.failure(throwable);
@@ -95,7 +96,7 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
                                                        source);
         }
 
-        if (e instanceof DollarException && source != null) {
+        if ((e instanceof DollarException) && (source != null)) {
             ((DollarException) e).addSource(source);
             throw (DollarException) e;
         } else if (source != null) {
@@ -116,7 +117,7 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
     }
 
     @Override
-    public void handleTopLevel(@NotNull Throwable t, String name, File file) throws Throwable {
+    public void handleTopLevel(@NotNull Throwable t, @Nullable String name, @NotNull File file) throws Throwable {
         if (t instanceof DollarAssertionException) {
             System.out.println("An assertion failed");
 

@@ -31,14 +31,14 @@ public class AllVarMapGuard implements Guard {
     }
 
     @Override
-    public void postCondition(Object guarded, Method method, Object[] args, Object result) {
+    public void postCondition(@NotNull Object guarded, @NotNull Method method, @Nullable Object[] args, @NotNull Object result) {
         if (result instanceof Map) {
             ((Map) result).forEach((k, v) -> assertTrue(v instanceof var, method));
         }
     }
 
     @Override
-    public void preCondition(Object guarded, Method method, @Nullable Object[] args) {
+    public void preCondition(@NotNull Object guarded, @NotNull Method method, @Nullable Object[] args) {
         if (args != null) {
             for (Object arg : args) {
                 if (arg instanceof Map) {

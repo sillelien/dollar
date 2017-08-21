@@ -111,7 +111,7 @@ public class MultiHashMap<K, V> extends ConcurrentHashMap<K, Collection<V>> impl
     }
 
     @Override
-    public boolean containsValue(Object key, Object value) {
+    public boolean containsValue(@NotNull Object key, @NotNull Object value) {
         Collection coll = getCollection(key);
         return coll.contains(value);
     }
@@ -124,26 +124,26 @@ public class MultiHashMap<K, V> extends ConcurrentHashMap<K, Collection<V>> impl
 
     @NotNull
     @Override
-    public Collection<V> getCollection(Object key) {
-        return getOrDefault(key, new ArrayList<V>());
+    public Collection<V> getCollection(@NotNull Object key) {
+        return getOrDefault(key, new ArrayList<>());
     }
 
     @Nullable
     @Override
-    public Iterator<V> iterator(Object key) {
+    public Iterator<V> iterator(@NotNull Object key) {
         Collection coll = getCollection(key);
         return coll.iterator();
     }
 
     @Override
-    public boolean putAll(Object key, @Nullable Collection<V> values) {
-        if (values == null || values.size() == 0) {
+    public boolean putAll(@NotNull Object key, @Nullable Collection<V> values) {
+        if ((values == null) || values.isEmpty()) {
             return false;
         }
         Collection coll = getCollection(key);
-        if (coll.size() == 0) {
+        if (coll.isEmpty()) {
             coll = createCollection(values);
-            if (coll.size() == 0) {
+            if (coll.isEmpty()) {
                 return false;
             }
             super.put((K) key, coll);
@@ -154,11 +154,11 @@ public class MultiHashMap<K, V> extends ConcurrentHashMap<K, Collection<V>> impl
     }
 
     @Nullable
-    public V putValue(@NotNull K key, V value) {
+    public V putValue(@NotNull K key, @NotNull V value) {
         // NOTE:: putValue is called during deserialization in JDK < 1.4 !!!!!!
         //        so we must have a readObject()
         Collection<V> coll = getCollection(key);
-        if (coll.size() == 0) {
+        if (coll.isEmpty()) {
             super.put(key, coll);
         }
         boolean results = coll.add(value);
@@ -166,7 +166,7 @@ public class MultiHashMap<K, V> extends ConcurrentHashMap<K, Collection<V>> impl
     }
 
     @Override
-    public int size(Object key) {
+    public int size(@NotNull Object key) {
         Collection coll = getCollection(key);
         return coll.size();
     }
@@ -184,7 +184,7 @@ public class MultiHashMap<K, V> extends ConcurrentHashMap<K, Collection<V>> impl
     }
 
     @Override
-    public boolean containsValue(Object value) {
+    public boolean containsValue(@NotNull Object value) {
         Set pairs = super.entrySet();
 
         for (Object pair : pairs) {
@@ -277,9 +277,10 @@ public class MultiHashMap<K, V> extends ConcurrentHashMap<K, Collection<V>> impl
     /**
      * Inner iterator to view the elements.
      */
-    private class ValueIterator implements Iterator<V> {
+    private final class ValueIterator implements Iterator<V> {
         @NotNull
         private final Iterator<Collection<V>> backedIterator;
+        @NotNull
         private Iterator<V> tempIterator;
 
         private ValueIterator() {
@@ -291,7 +292,7 @@ public class MultiHashMap<K, V> extends ConcurrentHashMap<K, Collection<V>> impl
         }
 
         private boolean searchNextIterator() {
-            while (tempIterator == null || !tempIterator.hasNext()) {
+            while ((tempIterator == null) || !tempIterator.hasNext()) {
                 if (!backedIterator.hasNext()) {
                     return false;
                 }
@@ -300,6 +301,7 @@ public class MultiHashMap<K, V> extends ConcurrentHashMap<K, Collection<V>> impl
             return true;
         }
 
+        @NotNull
         public V next() {
             if (!searchNextIterator()) {
                 throw new NoSuchElementException();

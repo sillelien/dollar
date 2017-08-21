@@ -59,7 +59,7 @@ public class SymbolDef implements HasSymbol, Comparable<Object> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ((o == null) || (getClass() != o.getClass())) return false;
         SymbolDef symbolDef = (SymbolDef) o;
         return Objects.equals(symbol, symbolDef.symbol);
     }

@@ -41,12 +41,13 @@ import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 /**
  */
-public class JavaScriptingSupport {
+public final class JavaScriptingSupport {
 
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("JavaScriptingSupport");
 
-    @Nullable public static var compile(@NotNull var in, String java) {
+    @Nullable
+    public static var compile(@NotNull var in, @NotNull String java) {
         JProxyConfig jpConfig = JProxy.createJProxyConfig();
         jpConfig.setEnabled(true)
                 .setRelProxyOnReloadListener((objOld, objNew, proxy, method, args) -> {

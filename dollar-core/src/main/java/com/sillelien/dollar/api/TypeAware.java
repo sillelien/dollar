@@ -40,7 +40,8 @@ public interface TypeAware {
      * @param type the type to cast to
      * @return this casted
      */
-    var $as(Type type);
+    @NotNull
+    var $as(@NotNull Type type);
 
     /**
      * Convert this object into a list of objects, basically the same as casting to a List.
@@ -81,6 +82,7 @@ public interface TypeAware {
      *
      * @return the type
      */
+    @NotNull
     Type $type();
 
 
@@ -89,6 +91,7 @@ public interface TypeAware {
      *
      * @return the type
      */
+    @NotNull
     default Type type() {
         return $type();
     }
@@ -116,6 +119,7 @@ public interface TypeAware {
      *
      * @return the pair key
      */
+    @NotNull
     @Guarded(NotNullGuard.class)
     default var $pairKey() {
         return getPairKey();
@@ -127,6 +131,7 @@ public interface TypeAware {
      * @return the pair key
      * @deprecated (use $pairKey())
      */
+    @NotNull
     @Deprecated
     @Guarded(NotNullGuard.class)
     default var getPairKey() {

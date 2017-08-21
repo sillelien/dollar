@@ -17,13 +17,14 @@
 package com.sillelien.dollar.api.exceptions;
 
 import com.sillelien.dollar.api.DollarException;
+import org.jetbrains.annotations.NotNull;
 
 public class ValidationException extends DollarException {
-    public ValidationException(Throwable e) {
+    public ValidationException(@NotNull Throwable e) {
         super(e);
     }
 
-    public ValidationException(String errorMessage) {
+    public ValidationException(@NotNull String errorMessage) {
         super(errorMessage);
     }
 

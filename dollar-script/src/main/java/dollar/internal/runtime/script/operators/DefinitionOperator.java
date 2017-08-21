@@ -25,26 +25,27 @@ import dollar.internal.runtime.script.api.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
-import org.jparsec.functors.Map;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Function;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 import static com.sillelien.dollar.api.DollarStatic.$void;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 
-public class DefinitionOperator implements Map<Token, Map<? super var, ? extends var>> {
+public class DefinitionOperator implements Function<Token, Function<? super var, ? extends var>> {
     private final boolean pure;
+    @NotNull
     private final DollarParser parser;
 
-    public DefinitionOperator(boolean pure, DollarParser parser) {
+    public DefinitionOperator(boolean pure, @NotNull DollarParser parser) {
         this.pure = pure;
         this.parser = parser;
     }
 
     @Nullable
-    public Map<? super var, ? extends var> map(@NotNull Token token) {
+    public Function<? super var, ? extends var> apply(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
 //        final String constraintSource;
 //        if (objects[1] instanceof var) {
@@ -58,73 +59,70 @@ public class DefinitionOperator implements Map<Token, Map<? super var, ? extends
 
         exportObj = objects[0];
 
-        return new Map<var, var>() {
-            @NotNull
-            public var map(var v) {
-                var value;
-                Object variableNameObj;
-                final Object typeConstraintObj;
-                if (objects[2] != null && objects[2].toString().equals("def")) {
-                    variableNameObj = objects[3];
-                    if (objects.length == 5) {
-                        value = (var) objects[4];
-                    } else {
-                        value = v;
-                    }
-                    typeConstraintObj = objects[1];
-
+        return (Function<var, var>) v -> {
+            var value;
+            Object variableNameObj;
+            final Object typeConstraintObj;
+            if (objects[2] != null && objects[2].toString().equals("def")) {
+                variableNameObj = objects[3];
+                if (objects.length == 5) {
+                    value = (var) objects[4];
                 } else {
-                    variableNameObj = objects[3];
-                    if (objects.length == 6) {
-                        value = (var) objects[5];
-                    } else {
-                        value = v;
-                    }
-                    typeConstraintObj = objects[2];
-
+                    value = v;
                 }
-                var constraint;
-                String constraintSource;
-                if (typeConstraintObj != null) {
-                    constraint = DollarScriptSupport.node("definition-constraint", pure, SourceNodeOptions.NEW_SCOPE,
-                                                          token, new
-                                                                         ArrayList<>(),
-                                                          parser, i
-                                                                          -> {
-                                final Type type = Type.valueOf(
-                                        typeConstraintObj.toString().toUpperCase());
-                                var it = scope.getParameter("it");
-                                return $(it.is(type));
-                            });
-                    constraintSource = typeConstraintObj.toString().toUpperCase();
+                typeConstraintObj = objects[1];
+
+            } else {
+                variableNameObj = objects[3];
+                if (objects.length == 6) {
+                    value = (var) objects[5];
                 } else {
-                    constraint = null;
-                    constraintSource = null;
+                    value = v;
                 }
-                final String variableName = variableNameObj.toString();
+                typeConstraintObj = objects[2];
 
-                var node = DollarScriptSupport.node(
-                        "assignment", pure, SourceNodeOptions.NO_SCOPE, Arrays.asList(
-                                constrain(scope, value, constraint, constraintSource)), token, parser,
-                        args -> {
-                            setVariableDefinition(currentScope(), parser, token, pure, true,
-                                                  variableName,
-                                                  value,
-                                                  constraint,
-                                                  constraintSource
-                            );
-                            if (exportObj != null && exportObj.toString().equals("export")) {
-                                parser.export(variableName, DollarScriptSupport.node(
-                                        "assignment", pure, SourceNodeOptions.NO_SCOPE, Arrays.asList(value), token, parser,
-                                        exportArgs -> value));
-                            }
-                            return $void();
-                        }
-                );
-
-                node.$listen(i -> scope.notify(variableName));
-                return node;
             }
+            var constraint;
+            String constraintSource;
+            if (typeConstraintObj != null) {
+                constraint = DollarScriptSupport.node("definition-constraint", pure, SourceNodeOptions.NEW_SCOPE,
+                                                      token, new
+                                                                     ArrayList<>(),
+                                                      parser, i
+                                                                      -> {
+                            final Type type = Type.valueOf(
+                                    typeConstraintObj.toString().toUpperCase());
+                            var it = scope.getParameter("it");
+                            return $(it.is(type));
+                        });
+                constraintSource = typeConstraintObj.toString().toUpperCase();
+            } else {
+                constraint = null;
+                constraintSource = null;
+            }
+            final String variableName = variableNameObj.toString();
+
+            var node = DollarScriptSupport.node(
+                    "assignment", pure, SourceNodeOptions.NO_SCOPE, Arrays.asList(
+                            constrain(scope, value, constraint, constraintSource)), token, parser,
+                    args -> {
+                        setVariableDefinition(currentScope(), parser, token, pure, true,
+                                              variableName,
+                                              value,
+                                              constraint,
+                                              constraintSource
+                        );
+                        if (exportObj != null && exportObj.toString().equals("export")) {
+                            parser.export(variableName, DollarScriptSupport.node(
+                                    "assignment", pure, SourceNodeOptions.NO_SCOPE, Arrays.asList(value), token, parser,
+                                    exportArgs -> value));
+                        }
+                        return $void();
+                    }
+            );
+
+            node.$listen(i -> scope.notify(variableName));
+            return node;
         };
     }
 }

@@ -17,15 +17,17 @@
 package dollar.internal.runtime.script.api.exceptions;
 
 import dollar.internal.runtime.script.api.Scope;
+import org.jetbrains.annotations.NotNull;
 
 public class VariableNotFoundException extends DollarScriptException {
+    @NotNull
     private String variable;
 
-    public VariableNotFoundException(Throwable e) {
+    public VariableNotFoundException(@NotNull Throwable e) {
         super(e);
     }
 
-    public VariableNotFoundException(String variable, Scope scope) {
+    public VariableNotFoundException(@NotNull String variable, @NotNull Scope scope) {
         super("Variable not found '" + variable + "' in scope " + scope);
         this.variable = variable;
     }

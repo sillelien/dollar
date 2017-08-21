@@ -68,12 +68,13 @@ public class ScriptScope implements Scope {
     private String source;
     @Nullable
     private String file;
+    @NotNull
     private Parser<var> parser;
 
     private boolean parameterScope;
     private boolean destroyed;
 
-    public ScriptScope(String name, boolean root) {
+    public ScriptScope(@NotNull String name, boolean root) {
         this.root = root;
         parent = null;
         file = null;
@@ -81,7 +82,7 @@ public class ScriptScope implements Scope {
         id = name + ":" + counter.incrementAndGet();
     }
 
-    public ScriptScope(String source, String name, boolean root) {
+    public ScriptScope(@NotNull String source, @NotNull String name, boolean root) {
         this.root = root;
         parent = null;
         this.source = source;
@@ -91,7 +92,7 @@ public class ScriptScope implements Scope {
     }
 
 
-    public ScriptScope(@NotNull Scope parent, String name, boolean root) {
+    public ScriptScope(@NotNull Scope parent, @NotNull String name, boolean root) {
         this.parent = parent;
         file = parent.getFile();
         this.root = root;
@@ -100,9 +101,9 @@ public class ScriptScope implements Scope {
     }
 
     public ScriptScope(@NotNull Scope parent,
-                       String file,
+                       @NotNull String file,
                        @Nullable String source,
-                       String name,
+                       @NotNull String name,
                        boolean root) {
         this.parent = parent;
         this.file = file;
@@ -124,15 +125,15 @@ public class ScriptScope implements Scope {
         id = "(file-scope):" + counter.incrementAndGet();
     }
 
-    public ScriptScope(Scope parent,
+    public ScriptScope(@NotNull Scope parent,
                        @NotNull String id,
-                       String file,
+                       @NotNull String file,
                        boolean parameterScope,
                        @NotNull ConcurrentHashMap<String, Variable> variables,
                        @NotNull List<var> errorHandlers,
                        @NotNull MultiMap<String, Listener> listeners,
-                       String source,
-                       Parser<var> parser, boolean root) {
+                       @NotNull String source,
+                       @NotNull Parser<var> parser, boolean root) {
         this.parent = parent;
         this.id = id;
         this.file = file;
@@ -148,7 +149,7 @@ public class ScriptScope implements Scope {
     }
 
     @NotNull
-    public Scope addChild(String source, String name) {
+    public Scope addChild(@NotNull String source, @NotNull String name) {
         checkDestroyed();
 
         return new ScriptScope(this, file, source, name, false);
@@ -169,7 +170,7 @@ public class ScriptScope implements Scope {
         checkDestroyed();
 
         if (getConfig().debugScope()) {
-            log.info("Clearing scope " + this);
+            log.info("Clearing scope {}", this);
         }
         variables.clear();
         listeners.clear();
@@ -183,14 +184,14 @@ public class ScriptScope implements Scope {
             throw new DollarAssertionException("Cannot get numerical keys, use getParameter");
         }
         if (getConfig().debugScope()) {
-            log.info("Looking up " + key + " in " + this);
+            log.info("Looking up {} in {}", key, this);
         }
         Scope scope = getScopeForKey(key);
         if (scope == null) {
             scope = this;
         } else {
             if (getConfig().debugScope()) {
-                log.info(DollarScriptSupport.ansiColor("FOUND " + key,DollarScriptSupport.ANSI_CYAN) + " in " + scope);
+                log.info("{} in {}", DollarScriptSupport.ansiColor("FOUND " + key, DollarScriptSupport.ANSI_CYAN), scope);
             }
         }
         Variable result = (Variable) scope.getVariables().get(key);
@@ -202,7 +203,7 @@ public class ScriptScope implements Scope {
                 return result.getValue();
             }
         } else {
-            return result != null ? result.getValue() : $void();
+            return (result != null) ? result.getValue() : $void();
         }
     }
 
@@ -221,10 +222,10 @@ public class ScriptScope implements Scope {
             scope = this;
         }
         if (getConfig().debugScope()) {
-            log.info("Getting constraint for " + key + " in " + scope);
+            log.info("Getting constraint for {} in {}", key, scope);
         }
-        if (scope.getVariables().containsKey(key) && ((Variable) scope.getVariables().get(
-                key)).getConstraint() != null) {
+        if (scope.getVariables().containsKey(key) && (((Variable) scope.getVariables().get(
+                key)).getConstraint() != null)) {
             return ((Variable) scope.getVariables().get(key)).getConstraint();
         }
         return null;
@@ -240,10 +241,10 @@ public class ScriptScope implements Scope {
             scope = this;
         }
         if (getConfig().debugScope()) {
-            log.info("Getting constraint for " + key + " in " + scope);
+            log.info("Getting constraint for {} in {}", key, scope);
         }
-        if (scope.getVariables().containsKey(key) && ((Variable) scope.getVariables().get(
-                key)).getConstraintSource() != null) {
+        if (scope.getVariables().containsKey(key) && (((Variable) scope.getVariables().get(
+                key)).getConstraintSource() != null)) {
             return ((Variable) scope.getVariables().get(key)).getConstraintSource();
         }
         return null;
@@ -266,19 +267,19 @@ public class ScriptScope implements Scope {
         checkDestroyed();
 
         if (getConfig().debugScope()) {
-            log.info("Looking up parameter " + key + " in " + this);
+            log.info("Looking up parameter {} in {}", key, this);
         }
         Scope scope = getScopeForParameters();
         if (scope == null) {
             scope = this;
         } else {
             if (getConfig().debugScope()) {
-                log.info("Found " + key + " in " + scope);
+                log.info("Found {} in {}", key, scope);
             }
         }
         Variable result = ((Variable) scope.getVariables().get(key));
 
-        return result != null ? result.getValue() : $void();
+        return (result != null) ? result.getValue() : $void();
     }
 
     @Nullable
@@ -371,7 +372,7 @@ public class ScriptScope implements Scope {
             scope = this;
         }
         if (getConfig().debugScope()) {
-            log.info("Checking for " + key + " in " + scope);
+            log.info("Checking for {} in {}", key, scope);
         }
 
         Variable val = ((Variable) scope.getVariables().get(key));
@@ -384,14 +385,14 @@ public class ScriptScope implements Scope {
         checkDestroyed();
 
         if (getConfig().debugScope()) {
-            log.info("Looking up parameter " + key + " in " + this);
+            log.info("Looking up parameter {} in {}", key, this);
         }
         Scope scope = getScopeForParameters();
         if (scope == null) {
             scope = this;
         } else {
             if (getConfig().debugScope()) {
-                log.info("Found " + key + " in " + scope);
+                log.info("Found {} in {}", key, scope);
             }
         }
         Variable result = ((Variable) scope.getVariables().get(key));
@@ -403,7 +404,7 @@ public class ScriptScope implements Scope {
     public void listen(@NotNull String key, @NotNull String id, @NotNull var listener) {
         checkDestroyed();
         listen(key, id, in -> {
-                   log.debug("Notifying " + listener._source().getSourceMessage());
+            log.debug("Notifying {}", listener._source().getSourceMessage());
                    listener.$notify();
                    return $void();
                }
@@ -430,28 +431,27 @@ public class ScriptScope implements Scope {
 
         if (key.matches("[0-9]+")) {
             if (getConfig().debugScope()) {
-                log.info("Cannot listen to positional parameter $" + key + " in " + this);
+                log.info("Cannot listen to positional parameter ${} in {}", key, this);
             }
             return;
         }
         Scope scopeForKey = getScopeForKey(key);
         if (scopeForKey == null) {
             if (getConfig().debugScope()) {
-                log.info("Key " + key + " not found in " + this);
+                log.info("Key {} not found in {}", key, this);
             }
             scopeForKey = this;
         }
 
         if (getConfig().debugScope()) {
-            log.info(
-                    "Listening for " + key + " in " + scopeForKey);
+            log.info("Listening for {} in {}", key, scopeForKey);
         }
 
 
         if (listeners.getCollection(key).stream().filter(i -> i.getId().equals(id)).count() == 0) {
             scopeForKey.getListeners().putValue(key, listener);
         }
-        log.debug("Listener size now " + scopeForKey.getListeners().getCollection(key).size());
+        log.debug("Listener size now {}", scopeForKey.getListeners().getCollection(key).size());
     }
 
     @Nullable
@@ -470,11 +470,11 @@ public class ScriptScope implements Scope {
         if (value == null) {
             throw new NullPointerException();
         }
-        log.debug("Scope " + this + " notified for " + key);
+        log.debug("Scope {} notified for {}", this, key);
         if (listeners.containsKey(key)) {
-            log.debug("Scope " + this + " notified for " + key + " with " + listeners.getCollection(
+            log.debug("Scope {} notified for {} with {} listeners", this, key, listeners.getCollection(
                     key)
-                                                                                    .size() + " listeners");
+                                                                                       .size());
             new ArrayList<>(listeners.getCollection(key)).forEach(
                     pipe -> {
                         try {
@@ -485,7 +485,7 @@ public class ScriptScope implements Scope {
                         }
                     });
         } else {
-            log.debug("Scope " + this + " notified for " + key + " NO LISTENERS");
+            log.debug("Scope {} notified for {} NO LISTENERS", this, key);
         }
     }
 
@@ -515,7 +515,7 @@ public class ScriptScope implements Scope {
         }
         if (scope.getVariables().containsKey(key)) {
             final Variable variable = ((Variable) scope.getVariables().get(key));
-            if (!variable.isVolatile() && variable.getThread() != Thread.currentThread().getId()) {
+            if (!variable.isVolatile() && (variable.getThread() != Thread.currentThread().getId())) {
                 handleError(
                         new DollarScriptException("Concurrency Error: Cannot change the variable " +
                                                           key +
@@ -527,12 +527,12 @@ public class ScriptScope implements Scope {
                 }
             }
             if (getConfig().debugScope()) {
-                log.info("Setting " + key + " in " + scope);
+                log.info("Setting {} in {}", key, scope);
             }
             variable.setValue(value);
         } else {
             if (getConfig().debugScope()) {
-                log.info("Adding " + key + " in " + scope);
+                log.info("Adding {} in {}", key, scope);
             }
             scope.getVariables().put(key, new Variable(value, readonly, constraint, constraintSource, isVolatile, fixed, pure));
         }
@@ -546,7 +546,7 @@ public class ScriptScope implements Scope {
         checkDestroyed();
 
         if (getConfig().debugScope()) {
-            log.info("Setting parameter " + key + " in " + this);
+            log.info("Setting parameter {} in {}", key, this);
         }
         if (key.matches("[0-9]+") && variables.containsKey(key)) {
             throw new DollarScriptException("Cannot change the value of positional variable $" + key + " in scope " + this);
@@ -563,11 +563,12 @@ public class ScriptScope implements Scope {
         }
     }
 
+    @NotNull
     public Parser<var> getParser() {
         return parser;
     }
 
-    public void setParser(Parser<var> parser) {
+    public void setParser(@NotNull Parser<var> parser) {
         this.parser = parser;
     }
 
@@ -583,7 +584,7 @@ public class ScriptScope implements Scope {
         checkDestroyed();
 
         setParameter("it", value);
-        log.debug("SET it=" + value);
+        log.debug("SET it={}", value);
         if (oldValue != null) {
             setParameter("previous", oldValue.getValue());
         }

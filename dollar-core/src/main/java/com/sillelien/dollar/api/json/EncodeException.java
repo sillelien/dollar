@@ -16,15 +16,18 @@
 
 package com.sillelien.dollar.api.json;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 public class EncodeException extends RuntimeException {
 
-    public EncodeException(String message) {
+    public EncodeException(@NotNull String message) {
         super(message);
     }
 
     public EncodeException() {
+        super();
     }
 }

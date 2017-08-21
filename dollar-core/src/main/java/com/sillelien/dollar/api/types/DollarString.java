@@ -30,6 +30,7 @@ import org.yaml.snakeyaml.Yaml;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -91,7 +92,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
             if (rhsFix.toDouble() == 0.0) {
                 return DollarFactory.infinity(true, errors(), rhsFix.errors());
             }
-            if (rhsFix.toDouble() > 0.0 && rhsFix.toDouble() < 1.0) {
+            if ((rhsFix.toDouble() > 0.0) && (rhsFix.toDouble() < 1.0)) {
                 return $multiply(DollarFactory.fromValue(1.0 / rhsFix.toDouble(), rhs.errors()));
             }
             if (rhsFix.toDouble() < 0) {
@@ -121,13 +122,13 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @NotNull
     @Override
     public var $multiply(@NotNull var rhs) {
-        String newValue = "";
+        StringBuilder newValue = new StringBuilder();
         var rhsFix = rhs._fixDeep();
         if (rhsFix.number()) {
             if (rhsFix.toDouble() == 0.0) {
                 return DollarFactory.fromStringValue("", errors(), rhsFix.errors());
             }
-            if (rhsFix.toDouble() > 0.0 && rhsFix.toDouble() < 1.0) {
+            if ((rhsFix.toDouble() > 0.0) && (rhsFix.toDouble() < 1.0)) {
                 return $divide(DollarFactory.fromValue(1.0 / rhsFix.toDouble(), rhs.errors()));
             }
             if (rhsFix.toInteger() < 0) {
@@ -135,15 +136,15 @@ public class DollarString extends AbstractDollarSingleValue<String> {
             }
         }
         Long max = rhs.toLong();
-        if (max * value.length() > MAX_STRING_LENGTH) {
+        if ((max * value.length()) > MAX_STRING_LENGTH) {
             return failure(STRING_TOO_LARGE,
                            "String multiplication would result in a string with size of " + (max * value.length()),
                            false);
         }
         for (int i = 0; i < max; i++) {
-            newValue = newValue + value;
+            newValue.append(value);
         }
-        return DollarFactory.fromValue(newValue, errors());
+        return DollarFactory.fromValue(newValue.toString(), errors());
     }
 
     @NotNull
@@ -161,11 +162,11 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @Override
     public var $as(@NotNull Type type) {
         if (type.is(Type._BOOLEAN)) {
-            return DollarStatic.$(value.equals("true") || value.equals("yes"));
+            return DollarStatic.$("true".equals(value) || "yes".equals(value));
         } else if (type.is(Type._STRING)) {
             return this;
         } else if (type.is(Type._LIST)) {
-            return DollarStatic.$(Arrays.asList(this));
+            return DollarStatic.$(Collections.singletonList(this));
         } else if (type.is(Type._MAP)) {
             return DollarStatic.$("value", this);
         } else if (type.is(Type._DECIMAL)) {
@@ -278,7 +279,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     @Override
     public boolean equals(@Nullable Object obj) {
-        return obj != null && value.equals(obj.toString());
+        return (obj != null) && value.equals(obj.toString());
     }
 
     @Nullable

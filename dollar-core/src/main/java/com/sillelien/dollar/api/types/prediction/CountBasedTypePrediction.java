@@ -29,18 +29,19 @@ import java.util.Set;
 public class CountBasedTypePrediction implements TypePrediction, Serializable {
     @NotNull
     private final HashMap<Type, Long> values = new HashMap<>();
+    @NotNull
     private String name;
     private long total;
 
     public CountBasedTypePrediction() {
     }
 
-    public CountBasedTypePrediction(String name) {
+    public CountBasedTypePrediction(@NotNull String name) {
 
         this.name = name;
     }
 
-    public void addCount(Type type, long l) {
+    public void addCount(@NotNull Type type, long l) {
         total += l;
         if (values.containsKey(type)) {
             values.put(type, values.get(type) + l);
@@ -56,7 +57,7 @@ public class CountBasedTypePrediction implements TypePrediction, Serializable {
 
     @NotNull
     @Override
-    public Double probability(Type type) {
+    public Double probability(@NotNull Type type) {
         final Long value = values.get(type);
         if (value == null) {
             return 0.0;
@@ -84,7 +85,7 @@ public class CountBasedTypePrediction implements TypePrediction, Serializable {
         return values.keySet();
     }
 
-    public long getCount(Type type) {
+    public long getCount(@NotNull Type type) {
         return values.get(type);
     }
 

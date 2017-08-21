@@ -19,6 +19,7 @@ package com.sillelien.dollar.api;
 import com.sillelien.dollar.api.guard.ChainGuard;
 import com.sillelien.dollar.api.guard.Guarded;
 import com.sillelien.dollar.api.guard.NotNullGuard;
+import org.jetbrains.annotations.NotNull;
 
 public interface ControlFlowAware {
 
@@ -28,9 +29,10 @@ public interface ControlFlowAware {
      * @param map the map
      * @return the var
      */
+    @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    var $choose(var map);
+    var $choose(@NotNull var map);
 
     /**
      * $ each.
@@ -38,7 +40,8 @@ public interface ControlFlowAware {
      * @param pipe the pipe
      * @return the var
      */
+    @NotNull
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
-    var $each(Pipeable pipe);
+    var $each(@NotNull Pipeable pipe);
 }

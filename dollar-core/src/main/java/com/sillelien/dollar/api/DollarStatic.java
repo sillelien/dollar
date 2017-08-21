@@ -39,19 +39,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingDeque;
 
+@SuppressWarnings("UseOfObsoleteDateTimeApi")
 public class DollarStatic {
 
     /**
      * The thread context that all Dollar classes have access to.
      */
     @NotNull
-    public static final ThreadLocal<DollarThreadContext> threadContext = new ThreadLocal<DollarThreadContext>() {
-        @NotNull
-        @Override
-        protected DollarThreadContext initialValue() {
-            return new DollarThreadContext();
-        }
-    };
+    public static final ThreadLocal<DollarThreadContext> threadContext = ThreadLocal.withInitial(DollarThreadContext::new);
     @NotNull
     private static final ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
     @NotNull
@@ -124,7 +119,7 @@ public class DollarStatic {
      */
     @NotNull
     public static var fix(@Nullable var v, boolean parallel) {
-        return v != null ? DollarFactory.wrap(v._fix(parallel)) : $void();
+        return (v != null) ? DollarFactory.wrap(v._fix(parallel)) : $void();
     }
 
     /**
@@ -154,7 +149,7 @@ public class DollarStatic {
      */
     @NotNull
     public static var fix(@Nullable var v, int depth, boolean parallel) {
-        return v != null ? DollarFactory.wrap(v._fix(depth, parallel)) : $void();
+        return (v != null) ? DollarFactory.wrap(v._fix(depth, parallel)) : $void();
     }
 
     /**
@@ -165,7 +160,7 @@ public class DollarStatic {
      */
     @NotNull
     public static var fix(@Nullable var v) {
-        return v != null ? DollarFactory.wrap(v._fix(false)) : $void();
+        return (v != null) ? DollarFactory.wrap(v._fix(false)) : $void();
     }
 
     /**
@@ -176,7 +171,7 @@ public class DollarStatic {
      */
     @NotNull
     public static var fixDeep(@Nullable var v) {
-        return v != null ? DollarFactory.wrap(v._fixDeep(false)) : $void();
+        return (v != null) ? DollarFactory.wrap(v._fixDeep(false)) : $void();
     }
 
     /**
@@ -188,7 +183,7 @@ public class DollarStatic {
      */
     @NotNull
     public static var fixDeep(@Nullable var v, boolean parallel) {
-        return v != null ? DollarFactory.wrap(v._fixDeep(parallel)) : $void();
+        return (v != null) ? DollarFactory.wrap(v._fixDeep(parallel)) : $void();
     }
 
     /**
@@ -211,7 +206,7 @@ public class DollarStatic {
      * @return the var
      */
     @NotNull
-    public static var $range(String from, String to) {
+    public static var $range(@NotNull String from, @NotNull String to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 
@@ -223,7 +218,7 @@ public class DollarStatic {
      * @return the var
      */
     @NotNull
-    public static var $range(Date from, Date to) {
+    public static var $range(@NotNull Date from, @NotNull Date to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 
@@ -235,7 +230,7 @@ public class DollarStatic {
      * @return the var
      */
     @NotNull
-    public static var $range(LocalDateTime from, LocalDateTime to) {
+    public static var $range(@NotNull LocalDateTime from, @NotNull LocalDateTime to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 
@@ -247,7 +242,7 @@ public class DollarStatic {
      * @return the var
      */
     @NotNull
-    public static var $range(Instant from, Instant to) {
+    public static var $range(@NotNull Instant from, @NotNull Instant to) {
         return DollarFactory.fromRange($(from), $(to));
     }
 
@@ -269,7 +264,7 @@ public class DollarStatic {
      * @return the var
      */
     @NotNull
-    public static var $uri(String uri) {
+    public static var $uri(@NotNull String uri) {
         return DollarFactory.fromValue(URI.parse(uri));
     }
 
@@ -349,8 +344,8 @@ public class DollarStatic {
      * @return the var
      */
     @NotNull
-    public static var $(@NotNull Object name, Object o) {
-        if (name instanceof var && o instanceof var) {
+    public static var $(@NotNull Object name, @NotNull Object o) {
+        if ((name instanceof var) && (o instanceof var)) {
             if (((var) name).map()) {
                 return ((var) name).$plus((var) o);
 
@@ -444,6 +439,7 @@ public class DollarStatic {
      * @param call    the lambda to run.
      * @return the var
      */
+    @NotNull
     public static var $call(@NotNull DollarThreadContext context, @NotNull Callable<var> call) {
         threadContext.set(context.child());
         try {
@@ -586,6 +582,7 @@ public class DollarStatic {
      *
      * @return the dollar monitor
      */
+    @NotNull
     public static DollarMonitor monitor() {
         return threadContext.get().getMonitor();
     }
@@ -608,7 +605,7 @@ public class DollarStatic {
      * @return the var
      */
     @NotNull
-    public static var create(Object value) {
+    public static var create(@NotNull Object value) {
         return $(value);
     }
 
@@ -617,7 +614,7 @@ public class DollarStatic {
      *
      * @param message the message
      */
-    public static void log(Object message) {
+    public static void log(@NotNull Object message) {
         System.out.println(threadContext.get().getLabels() + ":" + message);
     }
 
@@ -639,7 +636,7 @@ public class DollarStatic {
      * @return the r
      */
     @NotNull
-    public static <R> R handleInterrupt(InterruptedException ie) {
+    public static <R> R handleInterrupt(@NotNull InterruptedException ie) {
         if (Thread.interrupted()) {
             log("Interrupted");
         }
@@ -651,7 +648,7 @@ public class DollarStatic {
      *
      * @param message the message
      */
-    public static void log(String message) {
+    public static void log(@NotNull String message) {
         System.out.println(threadContext.get().getLabels() + ":" + message);
     }
 
@@ -662,7 +659,7 @@ public class DollarStatic {
      * @return the dollar thread context
      */
     @NotNull
-    public static DollarThreadContext childContext(String s) {
+    public static DollarThreadContext childContext(@NotNull String s) {
         return threadContext.get().child(s);
     }
 
@@ -671,7 +668,7 @@ public class DollarStatic {
      *
      * @param label the label
      */
-    public static void label(String label) {
+    public static void label(@NotNull String label) {
         context().pushLabel(label);
     }
 
@@ -680,6 +677,7 @@ public class DollarStatic {
      *
      * @return the dollar thread context
      */
+    @NotNull
     public static DollarThreadContext context() {
         return threadContext.get();
     }

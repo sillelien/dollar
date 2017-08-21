@@ -21,6 +21,7 @@ import com.sillelien.dollar.api.collections.ImmutableList;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.types.ErrorType;
 import com.sillelien.dollar.api.var;
+import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.BuiltinNotFoundException;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,10 +35,11 @@ import java.util.stream.Collectors;
 import static com.sillelien.dollar.api.DollarStatic.$;
 import static com.sillelien.dollar.api.DollarStatic.$void;
 
-public class Builtins {
+public final class Builtins {
 
     private static final double DAY_IN_MILLIS = 24.0 * 60.0 * 60.0 * 1000.0;
-    @NotNull private static final HashMap<String, Builtin<var>> map;
+    @NotNull
+    private static final HashMap<String, Builtin<?>> map;
 
     static {
         map = new HashMap<>();
@@ -50,19 +52,14 @@ public class Builtins {
             values.remove(0);
             return $(String.format(message, values.stream().map(var::toJavaObject).toArray()));
         }, true, "FORMAT");
-        addJavaStyle(1, 1, (pure, args, scope) -> {
-            return args.get(0).$list().$stream(false).min((o1, o2) -> (int) Math.signum(o1.toDouble() - o2.toDouble())).get();
-        }, true, "MIN");
-        addJavaStyle(1, 1, (pure, args, scope) -> {
-            return args.get(0).$list().$stream(false).max((o1, o2) -> (int) Math.signum(o1.toDouble() - o2.toDouble())).get();
-        }, true, "MAX");
-        addJavaStyle(1, 1, (pure, args, scope) -> {
-            return $(args.get(0).$list().$stream(false).sorted().collect(Collectors.toList()));
-        }, true, "SORT");
+        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).$list().$stream(false).min(
+                (o1, o2) -> (int) Math.signum(o1.toDouble() - o2.toDouble())).get(), true, "MIN");
+        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).$list().$stream(false).max(
+                (o1, o2) -> (int) Math.signum(o1.toDouble() - o2.toDouble())).get(), true, "MAX");
+        addJavaStyle(1, 1, (pure, args, scope) -> $(args.get(0).$list().$stream(false).sorted().collect(Collectors.toList())), true,
+                     "SORT");
 
-        addJavaStyle(1, 1, (pure, args, scope) -> {
-            return $(args.get(0).$list().toList().get(0));
-        }, true, "FIRST");
+        addJavaStyle(1, 1, (pure, args, scope) -> $(args.get(0).$list().toList().get(0)), true, "FIRST");
 
         addJavaStyle(1, 1, (pure, args, scope) -> {
             ImmutableList<var> list = args.get(0).$list().toVarList();
@@ -84,9 +81,7 @@ public class Builtins {
                      "Second");
         addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toDouble() / (24.0 * 60.0), true, "M", "Minutes",
                      "Minute");
-        addJavaStyle(1, 1, (pure, args, scope) -> {
-            return args.get(0).toDouble() / 24.0;
-        }, true, "Hrs", "Hours", "H", "Hour");
+        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toDouble() / 24.0, true, "Hrs", "Hours", "H", "Hour");
         addJavaStyle(1, 1, (pure, args, scope) -> {
             try {
                 Thread.sleep((long) (args.get(0).toDouble() * DAY_IN_MILLIS));
@@ -113,26 +108,27 @@ public class Builtins {
         //todo: this will be used to provide libraries
     }
 
-    @NotNull public static var execute(String name, List<var> parameters, boolean pure) {
-        final Builtin<var> builtin = map.get(name);
+    @NotNull
+    public static var execute(@NotNull String name, @NotNull List<var> parameters, boolean pure) {
+        final Builtin<var> builtin = (Builtin<var>) map.get(name);
         if (builtin == null) {
             throw new BuiltinNotFoundException(name);
         }
         return builtin.execute(pure, parameters, DollarScriptSupport.currentScope());
     }
 
-    public static boolean exists(String name) {
+    public static boolean exists(@NotNull String name) {
         return map.containsKey(name);
     }
 
-    private static <T> void addJavaStyle(int minargs, int maxargs, Builtin.JavaStyle<T> lambda, boolean pure,
+    private static <T> void addJavaStyle(int minargs, int maxargs, @NotNull Builtin.JavaStyle<T> lambda, boolean pure,
                                          @NotNull String... names) {
         for (String name : names) {
             map.put(name, new Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure));
         }
     }
 
-    private static void addDollarStyle(int minargs, int maxargs, Builtin.DollarStyle lambda, boolean pure,
+    private static void addDollarStyle(int minargs, int maxargs, @NotNull Builtin.DollarStyle lambda, boolean pure,
                                        @NotNull String... names) {
         for (String name : names) {
             map.put(name, new Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure));
@@ -142,12 +138,14 @@ public class Builtins {
     private static void addDollarSingleNoScope(boolean isPure, @NotNull Function<var, var> lambda,
                                                @NotNull String... names) {
         for (String name : names) {
-            map.put(name, new Builtin.BuiltinImpl(name, (pure, args, scope) -> lambda.apply(args.get(0)), 1, 1,
-                                                  isPure));
+            map.put(name, new Builtin.BuiltinImpl(name, (Builtin<var>) (boolean pure, List<var> args, Scope scope) -> {
+                var v = args.get(0);
+                return lambda.apply(v);
+            }, 1, 1, isPure));
         }
     }
 
-    public static boolean isPure(String lhsString) {
-        return map.get(lhsString) != null && ((Builtin.BuiltinImpl) map.get(lhsString)).isPure();
+    public static boolean isPure(@NotNull String lhsString) {
+        return (map.get(lhsString) != null) && ((Builtin.BuiltinImpl) map.get(lhsString)).isPure();
     }
 }

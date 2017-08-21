@@ -38,7 +38,7 @@ public interface TypePrediction {
      * @return the probability as a double
      */
     @NotNull
-    Double probability(Type type);
+    Double probability(@NotNull Type type);
 
     /**
      * The most likely type based on the evidence supplied.

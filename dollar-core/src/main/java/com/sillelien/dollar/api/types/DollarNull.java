@@ -30,15 +30,16 @@ import java.util.Objects;
 public class DollarNull extends AbstractDollar {
 
 
+    @NotNull
     private final Type type;
 
 
-    public DollarNull(@NotNull ImmutableList<Throwable> errors, Type type) {
+    public DollarNull(@NotNull ImmutableList<Throwable> errors, @NotNull Type type) {
         super(errors);
         this.type = type;
     }
 
-    public DollarNull(Type type) {
+    public DollarNull(@NotNull Type type) {
         super(ImmutableList.of());
         this.type = type;
     }
@@ -115,6 +116,7 @@ public class DollarNull extends AbstractDollar {
         return ImmutableList.of();
     }
 
+    @NotNull
     @Override
     public Type $type() {
         return type;
@@ -239,13 +241,13 @@ public class DollarNull extends AbstractDollar {
 
     @NotNull
     @Override
-    public var remove(Object value) {
+    public var remove(@NotNull Object value) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $remove(var value) {
+    public var $remove(@NotNull var value) {
         return this;
     }
 
@@ -267,7 +269,7 @@ public class DollarNull extends AbstractDollar {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + type.hashCode();
+        result = (31 * result) + type.hashCode();
         return result;
     }
 

@@ -21,15 +21,15 @@ import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 public class DollarScriptException extends DollarException {
-    public DollarScriptException(Throwable e) {
+    public DollarScriptException(@NotNull Throwable e) {
         super(e);
     }
 
-    public DollarScriptException(String errorMessage) {
+    public DollarScriptException(@NotNull String errorMessage) {
         super(errorMessage);
     }
 
-    public DollarScriptException(Throwable t, String s) {
+    public DollarScriptException(@NotNull Throwable t, @NotNull String s) {
         super(t, s);
     }
 

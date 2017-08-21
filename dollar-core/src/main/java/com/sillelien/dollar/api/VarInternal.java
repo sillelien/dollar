@@ -49,12 +49,15 @@ public interface VarInternal {
     @Guarded(ChainGuard.class)
     var _fix(boolean parallel);
 
+    @NotNull
     @Guarded(ChainGuard.class)
     var _fix(int depth, boolean parallel);
 
+    @NotNull
     @Guarded(ChainGuard.class)
     default var _fixDeep() { return _fixDeep(false);}
 
+    @NotNull
     @Guarded(ChainGuard.class)
     var _fixDeep(boolean parallel);
 
@@ -64,6 +67,7 @@ public interface VarInternal {
      *
      * @return a prediction of what type this object may be.
      */
+    @NotNull
     TypePrediction _predictType();
 
     @Nullable
@@ -82,7 +86,9 @@ public interface VarInternal {
     var _unwrap();
 
 
-    var _constrain(var constraint, String constraintSource);
+    @NotNull
+    var _constrain(@NotNull var constraint, @NotNull String constraintSource);
 
+    @NotNull
     String _constraintFingerprint();
 }

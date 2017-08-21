@@ -16,7 +16,6 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
@@ -29,15 +28,19 @@ import java.util.Collections;
 import java.util.function.Function;
 
 public class UnaryOp implements Unary<var>, Operator {
+    @NotNull
     protected final OpDef operation;
     private final boolean immediate;
+    @NotNull
     protected SourceSegment source;
+    @NotNull
     protected DollarParser parser;
+    @NotNull
     private final Function<var, var> function;
 
     private final boolean pure;
 
-    public UnaryOp(DollarParser parser, OpDef operation, Function<var, var> function, boolean pure) {
+    public UnaryOp(@NotNull DollarParser parser, @NotNull OpDef operation, @NotNull Function<var, var> function, boolean pure) {
         this.operation = operation;
         this.function = function;
         this.parser = parser;
@@ -47,9 +50,9 @@ public class UnaryOp implements Unary<var>, Operator {
     }
 
     public UnaryOp(boolean immediate,
-                   Function<var, var> function,
-                   OpDef operation,
-                   DollarParser parser, boolean pure) {
+                   @NotNull Function<var, var> function,
+                   @NotNull OpDef operation,
+                   @NotNull DollarParser parser, boolean pure) {
         this.operation = operation;
         this.immediate = immediate;
         this.function = function;
@@ -58,14 +61,14 @@ public class UnaryOp implements Unary<var>, Operator {
         validate(operation);
     }
 
-    public void validate(OpDef operation) {
+    public void validate(@NotNull OpDef operation) {
         if (operation.reactive() == immediate) {
             throw new AssertionError("The operation " + operation.name() + " is marked as " + (operation.reactive()
                                                                                                        ? "reactive" : "unreactive") + " " +
                                              "yet this operator is set to be " + (immediate
                                                                                           ? "unreactive" : "reactive"));
         }
-        if (operation.type() != OpDefType.PREFIX && operation.type() != OpDefType.POSTFIX) {
+        if ((operation.type() != OpDefType.PREFIX) && (operation.type() != OpDefType.POSTFIX)) {
             throw new AssertionError("The operator " + operation.name() + " is not defined as a unary type but used in a unary " +
                                              "operator.");
         }
@@ -79,30 +82,23 @@ public class UnaryOp implements Unary<var>, Operator {
     public var map(@NotNull var from) {
 
         if (immediate) {
-            final var lambda = DollarScriptSupport.node(operation.name(), pure, SourceNodeOptions.NO_SCOPE, parser,
-                                                        source,
-                                                        Collections.singletonList(from),
-                                                        new Pipeable() {
-                                                            @Override
-                                                            public var pipe(var... vars) throws Exception {
-                                                                return function.apply(from);
-                                                            }
-                                                        });
-            return lambda;
+            return DollarScriptSupport.node(operation.name(), pure, SourceNodeOptions.NO_SCOPE, parser,
+                                            source,
+                                            Collections.singletonList(from),
+                                            vars -> function.apply(from));
 
         }
 
         //Lazy evaluation
-        final var lambda = DollarScriptSupport.reactiveNode(operation.name(), pure, SourceNodeOptions.NO_SCOPE, source, parser,
-                                                            from,
+        return DollarScriptSupport.reactiveNode(operation.name(), pure, SourceNodeOptions.NO_SCOPE, source, parser,
+                                                from,
                                                             args -> function.apply(from));
-        return lambda;
 
     }
 
 
     @Override
-    public void setSource(SourceSegment source) {
+    public void setSource(@NotNull SourceSegment source) {
         this.source = source;
     }
 }

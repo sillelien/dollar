@@ -34,13 +34,16 @@ public interface DollarParser {
     ParserOptions options();
 
 
-    @NotNull var parse(ScriptScope scriptScope, @NotNull String source) throws Exception;
+    @NotNull
+    var parse(@NotNull ScriptScope scriptScope, @NotNull String source) throws Exception;
 
     @NotNull var parse( @NotNull File file, boolean parallel) throws Exception;
 
-    @NotNull var parse(InputStream in, boolean parallel, Scope scope) throws Exception;
+    @NotNull
+    var parse(@NotNull InputStream in, boolean parallel, @NotNull Scope scope) throws Exception;
 
-    @NotNull var parse(InputStream in, String file, boolean parallel) throws Exception;
+    @NotNull
+    var parse(@NotNull InputStream in, @NotNull String file, boolean parallel) throws Exception;
 
     @NotNull var parse(@NotNull String source, boolean parallel) throws Exception;
 

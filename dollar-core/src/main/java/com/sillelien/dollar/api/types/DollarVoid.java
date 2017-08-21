@@ -26,12 +26,13 @@ import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 public class DollarVoid extends AbstractDollar {
 
 
+    @NotNull
     public static final var INSTANCE = DollarFactory.newVoid();
 
     public DollarVoid(@NotNull ImmutableList<Throwable> errors) {
@@ -110,7 +111,7 @@ public class DollarVoid extends AbstractDollar {
         } else if (type.is(Type._STRING)) {
             return DollarStatic.$("");
         } else if (type.is(Type._LIST)) {
-            return DollarStatic.$(Arrays.asList());
+            return DollarStatic.$(Collections.emptyList());
         } else if (type.is(Type._MAP)) {
             return DollarStatic.$("value", this);
         } else if (type.is(Type._DECIMAL)) {
@@ -249,13 +250,13 @@ public class DollarVoid extends AbstractDollar {
 
     @NotNull
     @Override
-    public var remove(Object value) {
+    public var remove(@NotNull Object value) {
         return _copy();
     }
 
     @NotNull
     @Override
-    public var $remove(var value) {
+    public var $remove(@NotNull var value) {
         return this;
     }
 
@@ -296,7 +297,7 @@ public class DollarVoid extends AbstractDollar {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        return (obj instanceof var && ((var) obj).toJavaObject() == null) || obj == null;
+        return ((obj instanceof var) && (((var) obj).toJavaObject() == null)) || (obj == null);
     }
 
     @Override
@@ -358,7 +359,7 @@ public class DollarVoid extends AbstractDollar {
      * @param you - you.
      */
     @SuppressWarnings("InfiniteRecursion")
-    void stare(var you) {
+    void stare(@NotNull var you) {
         stare(you);
     }
 }

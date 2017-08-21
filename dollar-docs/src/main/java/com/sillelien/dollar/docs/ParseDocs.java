@@ -28,15 +28,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 
-public class ParseDocs {
+public final class ParseDocs {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(@NotNull String[] args) throws IOException {
         parseDoc("scripting", new File(args[0]));
     }
 
 
-
-    private static void parseDoc(String page, @NotNull File outDir) throws IOException {
+    private static void parseDoc(@NotNull String page, @NotNull File outDir) throws IOException {
         outDir.mkdirs();
         String source = CharStreams.toString(
                 new InputStreamReader(ParseDocs.class.getResourceAsStream("/pages/" + page + ".md")));

@@ -48,7 +48,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
     public var $get(@NotNull var rhs) {
         if (equals(rhs)) {
             return DollarFactory.wrap(this);
-        } else if (rhs.integer() && rhs.toInteger() == 0) {
+        } else if (rhs.integer() && (rhs.toInteger() == 0)) {
             return DollarFactory.wrap(this);
         } else {
             return DollarFactory.failure(ErrorType.INVALID_SINGLE_VALUE_OPERATION,
@@ -119,7 +119,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $remove(var value) {
+    public var $remove(@NotNull var value) {
         return DollarFactory.failure(ErrorType.INVALID_SINGLE_VALUE_OPERATION,
                                      getClass().toString(), false);
     }

@@ -37,7 +37,7 @@ import static com.sillelien.dollar.api.DollarStatic.$;
 import static com.sillelien.dollar.api.DollarStatic.$range;
 import static java.util.Collections.singletonMap;
 
-public class TestGenerator {
+public final class TestGenerator {
 
     @NotNull
     public static List<var> allValues() {
@@ -97,7 +97,7 @@ public class TestGenerator {
                            toVarValues(Float.MIN_VALUE, Float.MAX_VALUE, Double.MIN_VALUE, Double.MAX_VALUE, 0.0, 1.0,
                                        -1.0, 100.0,
                                        -100.0, 0.5, -0.5, -0.1, 0.1), dateValues(), stringValues(), booleanValues(),
-                           Arrays.asList());
+                           Collections.emptyList());
     }
 
     @NotNull
@@ -119,7 +119,7 @@ public class TestGenerator {
         mixedMap.put("value2", true);
         mixedMap.put("value3", true);
         mixedMap.put(true, "true");
-        return toVarValues(Collections.EMPTY_MAP, singletonMap(1, "one"), singletonMap(true, "true"),
+        return toVarValues(Collections.emptyMap(), singletonMap(1, "one"), singletonMap(true, "true"),
                            singletonMap(Instant.ofEpochSecond(1_000_000), true), singletonMap(0.1, "0.1"),
                            singletonMap("string", "string"),
                            mixedMap);
@@ -255,14 +255,14 @@ public class TestGenerator {
     @NotNull
     public static List<var> largeListValues() {
         return toVarValues(largeIntValues(), largeDecimalValues(), largeDateValues(), stringValues(), booleanValues(),
-                           Arrays.asList());
+                           Collections.emptyList());
     }
 
     @NotNull
     public static List<var> smallListValues() {
         return toVarValues(smallIntValues(), smallDecimalValues(), smallDateValues(), stringValues(), booleanValues(),
                            smallRangeValues(),
-                           Arrays.asList());
+                           Collections.emptyList());
     }
 
     @NotNull
@@ -294,7 +294,7 @@ public class TestGenerator {
         mixedMap.put("value2", true);
         mixedMap.put("value3", true);
         mixedMap.put(true, "true");
-        return toVarValues(Collections.EMPTY_MAP, singletonMap(1, "one"), singletonMap(true, "true"),
+        return toVarValues(Collections.emptyMap(), singletonMap(1, "one"), singletonMap(true, "true"),
                            singletonMap(Instant.ofEpochSecond(1_000_000), true), singletonMap(0.1, "0.1"),
                            singletonMap("string", "string"),
                            mixedMap);

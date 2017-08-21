@@ -230,6 +230,7 @@ public interface NumericAware {
      *
      * @return the long
      */
+    @NotNull
     Long toLong();
 
     /**

@@ -30,10 +30,10 @@ public interface URIHandler {
     default var all() {return $void();}
 
     @NotNull
-    default var append(var value) {return write(value, true, true);}
+    default var append(@NotNull var value) {return write(value, true, true);}
 
     @NotNull
-    default var write(var value, boolean blocking, boolean mutating) {return $void();}
+    default var write(@NotNull var value, boolean blocking, boolean mutating) {return $void();}
 
     default void destroy() {}
 
@@ -41,17 +41,17 @@ public interface URIHandler {
     default var drain() {return $void();}
 
     @NotNull
-    default var get(var key) {return $void();}
+    default var get(@NotNull var key) {return $void();}
 
     default void init() {}
 
     default void pause() {}
 
     @NotNull
-    default var prepend(var value) {return $void();}
+    default var prepend(@NotNull var value) {return $void();}
 
     @NotNull
-    default var publish(var value) {
+    default var publish(@NotNull var value) {
         return write(value, false, false);
     }
 
@@ -59,13 +59,13 @@ public interface URIHandler {
     default var read(boolean blocking, boolean mutating) {return $void();}
 
     @NotNull
-    default var remove(var v) {return $void();}
+    default var remove(@NotNull var v) {return $void();}
 
     @NotNull
-    default var removeValue(var v) {return $void();}
+    default var removeValue(@NotNull var v) {return $void();}
 
     @NotNull
-    default var set(var key, var value) {return $void();}
+    default var set(@NotNull var key, @NotNull var value) {return $void();}
 
     default int size() { return 0;}
 
@@ -73,14 +73,14 @@ public interface URIHandler {
 
     default void stop() {}
 
-    default void subscribe(Pipeable consumer, String id) throws IOException {}
+    default void subscribe(@NotNull Pipeable consumer, @NotNull String id) throws IOException {}
 
     default void unpause() {}
 
-    default void unsubscribe(String subId) {}
+    default void unsubscribe(@NotNull String subId) {}
 
     @NotNull
-    default var insert(var $) {
+    default var insert(@NotNull var $) {
         return $void();
     }
 }

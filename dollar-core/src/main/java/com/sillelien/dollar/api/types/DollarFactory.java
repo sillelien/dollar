@@ -48,7 +48,6 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -66,7 +65,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 import static com.sillelien.dollar.api.DollarStatic.$void;
 
-public class DollarFactory {
+public final class DollarFactory {
 
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("DollarSource");
@@ -156,7 +155,7 @@ public class DollarFactory {
      */
     @SafeVarargs
     @NotNull
-    public static var fromValue(@NotNull Object o, @NotNull ImmutableList<Throwable>... errors) {
+    public static var fromValue(@Nullable Object o, @NotNull ImmutableList<Throwable>... errors) {
         return create(ImmutableList.copyOf(errors), o);
     }
 
@@ -171,10 +170,11 @@ public class DollarFactory {
     }
 
 
+    @SuppressWarnings("UseOfObsoleteDateTimeApi")
     @NotNull
     private static var create(@NotNull ImmutableList<Throwable> errors, @Nullable Object o) {
         if (o == null) {
-            if (errors.size() == 0) {
+            if (errors.isEmpty()) {
                 return VOID;
             }
             return wrap(new DollarVoid(errors));
@@ -183,7 +183,7 @@ public class DollarFactory {
             return (var) o;
         }
         if (o instanceof Boolean) {
-            if (errors.size() == 0) {
+            if (errors.isEmpty()) {
                 if ((Boolean) o) {
                     return TRUE;
                 } else {
@@ -214,10 +214,10 @@ public class DollarFactory {
         if (o instanceof JsonObject) {
             return wrap(new DollarMap(errors, new ImmutableJsonObject((JsonObject) o)));
         }
-        if (o.getClass().getSimpleName().equals("JSONObject") || o instanceof ObjectNode) {
+        if ("JSONObject".equals(o.getClass().getSimpleName()) || (o instanceof ObjectNode)) {
             return wrap(new DollarMap(errors, new JsonObject(o.toString())));
         }
-        if (o.getClass().getSimpleName().equals("JSONObject") || o instanceof ArrayNode) {
+        if ("JSONObject".equals(o.getClass().getSimpleName()) || (o instanceof ArrayNode)) {
             return wrap(new DollarList(errors, new JsonArray(o.toString())));
         }
         if (o instanceof ImmutableMap) {
@@ -241,10 +241,12 @@ public class DollarFactory {
         if (o instanceof URI) {
             return wrap(new DollarURI(errors, (URI) o));
         }
-        if (o instanceof java.net.URI || o instanceof java.net.URL) {
+        if ((o instanceof java.net.URI) || (o instanceof java.net.URL)) {
             return wrap(new DollarURI(errors, URI.parse(o.toString())));
         }
+        //noinspection UseOfObsoleteDateTimeApi
         if (o instanceof Date) {
+            //noinspection UseOfObsoleteDateTimeApi
             return wrap(new DollarDate(errors, ((Date) o).getTime()));
         }
         if (o instanceof LocalDateTime) {
@@ -254,37 +256,37 @@ public class DollarFactory {
             return wrap(new DollarDate(errors, (Instant) o));
         }
         if (o instanceof Double) {
-            if (errors.size() == 0 && (Double) o == 0.0) {
+            if (errors.isEmpty() && ((Double) o == 0.0)) {
                 return DOUBLE_ZERO;
             }
             return wrap(new DollarDecimal(errors, (Double) o));
         }
         if (o instanceof BigDecimal) {
-            if (errors.size() == 0 && ((BigDecimal) o).doubleValue() == 0.0) {
+            if (errors.isEmpty() && (((BigDecimal) o).doubleValue() == 0.0)) {
                 return DOUBLE_ZERO;
             }
             return wrap(new DollarDecimal(errors, ((BigDecimal) o).doubleValue()));
         }
         if (o instanceof Float) {
-            if (errors.size() == 0 && (Float) o == 0.0) {
+            if (errors.isEmpty() && ((Float) o == 0.0)) {
                 return DOUBLE_ZERO;
             }
             return wrap(new DollarDecimal(errors, ((Float) o).doubleValue()));
         }
         if (o instanceof Long) {
-            if (errors.size() == 0 && (Long) o == 0) {
+            if (errors.isEmpty() && ((Long) o == 0)) {
                 return INTEGER_ZERO;
             }
             return wrap(new DollarInteger(errors, (Long) o));
         }
         if (o instanceof Integer) {
-            if (errors.size() == 0 && (Integer) o == 0) {
+            if (errors.isEmpty() && ((Integer) o == 0)) {
                 return INTEGER_ZERO;
             }
             return wrap(new DollarInteger(errors, ((Integer) o).longValue()));
         }
         if (o instanceof Short) {
-            if (errors.size() == 0 && (Short) o == 0) {
+            if (errors.isEmpty() && ((Short) o == 0)) {
                 return INTEGER_ZERO;
             }
             return wrap(new DollarInteger(errors, ((Short) o).longValue()));
@@ -349,7 +351,7 @@ public class DollarFactory {
      * @return the var
      */
     @NotNull
-    public static var fromValue(@NotNull Object o) {
+    public static var fromValue(@Nullable Object o) {
         return fromValue(o, ImmutableList.of());
     }
 
@@ -689,7 +691,7 @@ public class DollarFactory {
             return wrap(new DollarInfinity(ImmutableList.of(), jsonObject.getBoolean(POSITIVE_KEY)));
         } else if (type.is(Type._STRING)) {
             if (!(jsonObject.get(VALUE_KEY) instanceof String)) {
-                log.error("_STRING type is not a a java String", jsonObject.get(VALUE_KEY));
+                log.error("_STRING type is not a a java String, {}", jsonObject.get(VALUE_KEY));
             }
             return wrap(new DollarString(ImmutableList.of(), jsonObject.getString(VALUE_KEY)));
         } else {
@@ -863,8 +865,6 @@ public class DollarFactory {
         Yaml yaml = new Yaml();
         try (FileInputStream fileInputStream = new FileInputStream(yamlFile)) {
             return wrap(fromValue(yaml.load(fileInputStream)));
-        } catch (FileNotFoundException e) {
-            return failure(e);
         } catch (IOException e) {
             return failure(e);
         }

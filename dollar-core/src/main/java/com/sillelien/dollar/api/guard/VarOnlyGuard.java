@@ -30,12 +30,12 @@ public class VarOnlyGuard implements Guard {
     }
 
     @Override
-    public void postCondition(Object guarded, Method method, Object[] args, Object result) {
+    public void postCondition(@NotNull Object guarded, @NotNull Method method, @NotNull Object[] args, @NotNull Object result) {
         assertTrue(result instanceof var, method);
     }
 
     @Override
-    public void preCondition(Object guarded, Method method, @Nullable Object[] args) {
+    public void preCondition(@NotNull Object guarded, @NotNull Method method, @Nullable Object[] args) {
         if (args != null) {
             for (Object arg : args) {
                 assertTrue(arg instanceof var, method);

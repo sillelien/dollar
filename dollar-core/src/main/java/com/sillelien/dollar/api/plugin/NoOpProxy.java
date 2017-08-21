@@ -20,13 +20,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
 
-public class NoOpProxy<T extends ExtensionPoint<T>> implements java.lang.reflect.InvocationHandler {
+public final class NoOpProxy<T extends ExtensionPoint<T>> implements java.lang.reflect.InvocationHandler {
 
 
+    @NotNull
     private final Class<T> c;
     private final boolean first = true;
 
-    private NoOpProxy(Class<T> c) {
+    private NoOpProxy(@NotNull Class<T> c) {
         this.c = c;
     }
 
@@ -39,7 +40,7 @@ public class NoOpProxy<T extends ExtensionPoint<T>> implements java.lang.reflect
     }
 
     @NotNull
-    public Object invoke(Object proxy, @NotNull Method m, Object[] args)
+    public Object invoke(@NotNull Object proxy, @NotNull Method m, @NotNull Object[] args)
             throws Throwable {
         throw new UnsupportedOperationException("Method " + m + " cannot be invoked as no provider for " + c.getName() + " could be found on the classpath, please add the appropriate plugin to the classpath.");
     }

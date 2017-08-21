@@ -30,9 +30,13 @@ public class KeywordDef implements HasKeyword, Comparable<Object> {
     private final boolean reserved;
     @Nullable
     private final String description;
+    @Nullable
     private final String bnf;
 
-    public KeywordDef(@NotNull String keyword, boolean reserved, @Language("md") @Nullable String description, String bnf) {
+    public KeywordDef(@NotNull String keyword,
+                      boolean reserved,
+                      @Language("md") @Nullable String description,
+                      @Nullable String bnf) {
         this.keyword = keyword;
         this.reserved = reserved;
         this.description = description;
@@ -82,7 +86,7 @@ public class KeywordDef implements HasKeyword, Comparable<Object> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ((o == null) || (getClass() != o.getClass())) return false;
         KeywordDef that = (KeywordDef) o;
         return Objects.equals(keyword, that.keyword);
     }

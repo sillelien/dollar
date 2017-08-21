@@ -82,11 +82,11 @@ public class GithubModuleResolver implements ModuleResolver {
 
     @NotNull
     private static File getFile(@NotNull String uriWithoutScheme) throws IOException, InterruptedException {
-        log.debug("GithubModuleResolver.getFile(" + uriWithoutScheme + ")");
+        log.debug("GithubModuleResolver.getFile({})", uriWithoutScheme);
 
         String[] githubRepo = uriWithoutScheme.split(":");
         final String githubUser = githubRepo[0];
-        final String branch = githubRepo[2].length() > 0 ? githubRepo[2] : "master";
+        final String branch = !githubRepo[2].isEmpty() ? githubRepo[2] : "master";
 
         final File dir = new File((FileUtil.SHARED_RUNTIME_PATH + "/modules/github") + "/" + githubUser + "/" + githubRepo[1] + "/" + branch);
         final String url = "https://github.com/" + githubRepo[0] + "/" + githubRepo[1] + ".git";

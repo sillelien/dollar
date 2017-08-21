@@ -69,7 +69,7 @@ public abstract class JsonElement implements Serializable {
                 converted.put(entry.getKey(), ((BigDecimal) obj).doubleValue());
             } else if (obj instanceof BigInteger) {
                 converted.put(entry.getKey(), ((BigInteger) obj).longValue());
-            } else if (obj == null || obj instanceof Number || obj instanceof Boolean) {
+            } else if ((obj == null) || (obj instanceof Number) || (obj instanceof Boolean)) {
                 // OK
                 converted.put(entry.getKey(), obj);
             } else {
@@ -94,7 +94,7 @@ public abstract class JsonElement implements Serializable {
                 arr.add(((BigDecimal) obj).doubleValue());
             } else if (obj instanceof BigInteger) {
                 arr.add(((BigInteger) obj).longValue());
-            } else if (obj == null || obj instanceof Number || obj instanceof Boolean) {
+            } else if ((obj == null) || (obj instanceof Number) || (obj instanceof Boolean)) {
                 arr.add(obj);
             } else {
                 throw new DollarException("Cannot have objects of class " + obj.getClass() + " in JSON");

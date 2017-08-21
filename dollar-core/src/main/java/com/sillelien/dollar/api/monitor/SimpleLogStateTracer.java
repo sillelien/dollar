@@ -25,8 +25,9 @@ import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 public class SimpleLogStateTracer implements StateTracer {
+    @NotNull
     @Override
-    public <R> R trace(Object before, R after, Operations operationType, @NotNull Object... values) {
+    public <R> R trace(@NotNull Object before, @NotNull R after, @NotNull Operations operationType, @NotNull Object... values) {
         String beforeStr = "";
         String afterStr = "";
         String afterNotes = "";
@@ -51,13 +52,13 @@ public class SimpleLogStateTracer implements StateTracer {
                 beforeStr = String.format("%s(%s)", before.toString(), before.getClass().getName());
             }
         }
-        if ((before instanceof DollarVoid || before == null) && (after instanceof DollarVoid || after == null)) {
+        if (((before instanceof DollarVoid) || (before == null)) && ((after instanceof DollarVoid) || (after == null))) {
             DollarStatic.log(String.format("%s%s: %s->%s",
                                            operationType,
                                            toDescription(values),
                                            beforeNotes,
                                            afterNotes));
-        } else if (before instanceof DollarVoid || before == null) {
+        } else if ((before instanceof DollarVoid) || (before == null)) {
             DollarStatic.log(String.format("%s%s: %s%s", operationType, toDescription(values), afterStr, afterNotes));
         } else {
             DollarStatic.log(String.format("%s%s: %s%s -> %s%s",
@@ -71,7 +72,8 @@ public class SimpleLogStateTracer implements StateTracer {
         return after;
     }
 
-    private String format(Object value) {
+    @NotNull
+    private String format(@NotNull Object value) {
         Object unwrapped;
         String formatted;
         if (value instanceof var) {
@@ -79,8 +81,8 @@ public class SimpleLogStateTracer implements StateTracer {
         } else {
             unwrapped = value;
         }
-        if (value instanceof var &&
-                    (((var) unwrapped).dynamic() || unwrapped instanceof DollarList || unwrapped instanceof DollarMap)) {
+        if ((value instanceof var) &&
+                    (((var) unwrapped).dynamic() || (unwrapped instanceof DollarList) || (unwrapped instanceof DollarMap))) {
             formatted = "<" + unwrapped.getClass().getSimpleName() + ">";
         } else {
             formatted = String.valueOf(value);
@@ -90,14 +92,14 @@ public class SimpleLogStateTracer implements StateTracer {
 
     @NotNull
     private String toDescription(@NotNull Object[] values) {
-        String result = "[";
+        StringBuilder result = new StringBuilder("[");
         for (Object value : values) {
             Object unwrapped;
             String formatted;
             formatted = format(value);
-            result += formatted + ", ";
+            result.append(formatted).append(", ");
         }
-        result += "]";
-        return result;
+        result.append("]");
+        return result.toString();
     }
 }

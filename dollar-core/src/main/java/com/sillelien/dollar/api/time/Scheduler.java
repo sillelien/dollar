@@ -33,7 +33,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 
-public class Scheduler {
+public final class Scheduler {
 
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("Scheduler");

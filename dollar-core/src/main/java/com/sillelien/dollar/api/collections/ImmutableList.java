@@ -31,10 +31,11 @@ import java.util.stream.Stream;
 
 public final class ImmutableList<V> implements Iterable<V> {
 
+    @NotNull
     private List<V> list = new ArrayList<>();
 
 
-    public ImmutableList(List<V> list) {
+    public ImmutableList(@NotNull List<V> list) {
         this.list = list;
     }
 
@@ -61,7 +62,7 @@ public final class ImmutableList<V> implements Iterable<V> {
         return new ImmutableList<>(list);
     }
 
-    public boolean contains(Object o) {return list.contains(o);}
+    public boolean contains(@NotNull Object o) {return list.contains(o);}
 
     public boolean containsAll(@NotNull Collection<?> c) {return list.containsAll(c);}
 
@@ -76,7 +77,7 @@ public final class ImmutableList<V> implements Iterable<V> {
     @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if ((o == null) || (getClass() != o.getClass())) { return false; }
 
         ImmutableList that = (ImmutableList) o;
 
@@ -84,12 +85,13 @@ public final class ImmutableList<V> implements Iterable<V> {
 
     }
 
+    @NotNull
     @Override
     public String toString() {
         return list.toString();
     }
 
-    public int indexOf(Object o) {return list.indexOf(o);}
+    public int indexOf(@NotNull Object o) {return list.indexOf(o);}
 
     public boolean isEmpty() {return list.isEmpty();}
 
@@ -98,9 +100,10 @@ public final class ImmutableList<V> implements Iterable<V> {
 
     public void forEach(@NotNull Consumer<? super V> action) {list.forEach(action);}
 
+    @NotNull
     public Spliterator<V> spliterator() {return list.spliterator();}
 
-    public int lastIndexOf(Object o) {return list.lastIndexOf(o);}
+    public int lastIndexOf(@NotNull Object o) {return list.lastIndexOf(o);}
 
     @NotNull
     public ListIterator<V> listIterator() {return list.listIterator();}
@@ -113,10 +116,12 @@ public final class ImmutableList<V> implements Iterable<V> {
         return new ArrayList<>(list);
     }
 
+    @NotNull
     public Stream<V> parallelStream() {return list.parallelStream();}
 
     public int size() {return list.size();}
 
+    @NotNull
     public Stream<V> stream() {return list.stream();}
 
     @NotNull

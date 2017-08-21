@@ -40,18 +40,18 @@ import static com.sillelien.dollar.api.DollarStatic.$void;
 
 public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationListener<var, var> {
 
+    @NotNull
     private static final ConcurrentHashMap<String, Future> subscribers = new ConcurrentHashMap<>();
     @Nullable private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
-    private final BTreeMap<var, var> bTreeMap;
-    private final int size;
     @NotNull
     private final ArrayBlockingQueue<var> queue;
 
 
     public MapDBCircleURI(@NotNull String scheme, @NotNull URI uri) {
         super(uri, scheme);
-        bTreeMap = tx.treeMap(getHost(), new VarSerializer(), new VarSerializer()).modificationListener(this).createOrOpen();
-        size= Integer.parseInt(uri.paramWithDefault("size", "100").get(0));
+        BTreeMap<var, var> bTreeMap = tx.treeMap(getHost(), new VarSerializer(), new VarSerializer()).modificationListener(
+                this).createOrOpen();
+        int size = Integer.parseInt(uri.paramWithDefault("size", "100").get(0));
         queue = new ArrayBlockingQueue<>(size);
     }
 
@@ -91,7 +91,9 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
         return DollarFactory.fromValue(objects);
     }
 
-    @NotNull @Override public var get(var key) {
+    @NotNull
+    @Override
+    public var get(@NotNull var key) {
         throw new UnsupportedOperationException();
     }
 
@@ -112,7 +114,9 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
             }
     }
 
-    @NotNull @Override public var remove(var v) {
+    @NotNull
+    @Override
+    public var remove(@NotNull var v) {
         throw new UnsupportedOperationException();
     }
 
@@ -126,7 +130,9 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
         }
     }
 
-    @NotNull @Override public var set(var key, var value) {
+    @NotNull
+    @Override
+    public var set(@NotNull var key, @NotNull var value) {
         throw new UnsupportedOperationException();
     }
 

@@ -26,12 +26,13 @@ import org.sonatype.aether.util.artifact.DefaultArtifact;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-public class DependencyRetriever {
+public final class DependencyRetriever {
 
+    @NotNull
     private static final Logger log = LoggerFactory.getLogger("DollarSource");
 
     static {
@@ -40,17 +41,18 @@ public class DependencyRetriever {
 
     @NotNull private static final File dollarLib;
 
-    public static JarFileLoader retrieve(String artifact) throws DependencyResolutionException {
+    public static JarFileLoader retrieve(@NotNull String artifact) throws DependencyResolutionException {
         return retrieve(new DefaultArtifact(artifact));
     }
 
-    @NotNull public static JarFileLoader retrieve(Artifact artifact) throws DependencyResolutionException {
+    @NotNull
+    public static JarFileLoader retrieve(@NotNull Artifact artifact) throws DependencyResolutionException {
         JarFileLoader jarFileClassLoader = new JarFileLoader(new URL[]{});
         loadInternal(artifact, jarFileClassLoader);
         return jarFileClassLoader;
     }
 
-    private static void loadInternal(Artifact artifact, @NotNull JarFileLoader jarFileClassLoader) throws
+    private static void loadInternal(@NotNull Artifact artifact, @NotNull JarFileLoader jarFileClassLoader) throws
                                                                                                    DependencyResolutionException {
         if (!dollarLib.exists()) {
             if (!dollarLib.mkdirs()) {
@@ -58,11 +60,11 @@ public class DependencyRetriever {
                 System.exit(-1);
             }
         }
-        Collection<RemoteRepository> remotes = Arrays.asList(
+        Collection<RemoteRepository> remotes = Collections.singletonList(
                 new RemoteRepository(
-                        "maven-central",
-                        "default",
-                        "http://repo1.maven.org/maven2/"
+                                            "maven-central",
+                                            "default",
+                                            "http://repo1.maven.org/maven2/"
                 )
         );
 //        final Aether aether = new Aether(remotes, dollarLib);

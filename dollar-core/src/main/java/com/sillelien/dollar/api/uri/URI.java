@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +33,7 @@ import java.util.Map;
 public class URI implements Serializable {
     @NotNull
     protected String uri;
+    @NotNull
     private volatile Map<String, List<String>> query;
 
 
@@ -70,10 +71,10 @@ public class URI implements Serializable {
 
     protected URI(@NotNull final URI url, @NotNull final String subPath) {
         this(url.path().endsWith("/")
-                     ? url + subPath
-                     : subPath +
-                               "/" +
-                               subPath);
+                     ? (url + subPath)
+                     : (subPath +
+                                "/" +
+                                subPath));
     }
 
     @NotNull
@@ -106,7 +107,7 @@ public class URI implements Serializable {
     }
 
     @NotNull
-    public static URI parse(String s) {
+    public static URI parse(@NotNull String s) {
         return new URI(s);
     }
 
@@ -117,12 +118,12 @@ public class URI implements Serializable {
         if (scheme == null) {
             int count = 0;
             for (final String element : pathElements()) {
-                if (element.length() > 0) {
+                if (!element.isEmpty()) {
                     reverseDNS = (count == 0 ? "" : reverseDNS + ".") + element;
                     count++;
                 }
             }
-            if (getFragment() != null && getFragment().length() > 0) {
+            if ((getFragment() != null) && !getFragment().isEmpty()) {
                 reverseDNS = (count == 0 ? "" : reverseDNS + ".") + getFragment().substring(1);
             }
         } else {
@@ -131,6 +132,7 @@ public class URI implements Serializable {
         return reverseDNS;
     }
 
+    @NotNull
     public String authority() {
         try {
             return new java.net.URI(uri).getAuthority();
@@ -153,10 +155,11 @@ public class URI implements Serializable {
         return uri.contains("#");
     }
 
-    public boolean hasParam(String param) {
+    public boolean hasParam(@NotNull String param) {
         return query().containsKey(param);
     }
 
+    @NotNull
     public Map<String, List<String>> query() {
         if (query == null) {
             final Map<String, List<String>> query_pairs = new LinkedHashMap<>();
@@ -165,13 +168,13 @@ public class URI implements Serializable {
                 final int idx = pair.indexOf("=");
                 final String key;
                 try {
-                    key = idx > 0 ? URLDecoder.decode(pair.substring(0, idx), "UTF-8") : pair;
+                    key = (idx > 0) ? URLDecoder.decode(pair.substring(0, idx), "UTF-8") : pair;
                     if (!query_pairs.containsKey(key)) {
                         query_pairs.put(key, new LinkedList<>());
                     }
                     final String value;
                     value =
-                            idx > 0 && pair.length() > idx + 1 ?
+                            ((idx > 0) && (pair.length() > (idx + 1))) ?
                                     URLDecoder.decode(pair.substring(idx + 1), "UTF-8") :
                                     null;
                     query_pairs.get(key).add(value);
@@ -217,7 +220,7 @@ public class URI implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if ((o == null) || (getClass() != o.getClass())) {
             return false;
         }
 
@@ -232,6 +235,7 @@ public class URI implements Serializable {
         return uri;
     }
 
+    @NotNull
     public String host() {
         try {
             return new java.net.URI(uri).getHost();
@@ -255,8 +259,9 @@ public class URI implements Serializable {
         return path.split("/");
     }
 
-    public List<String> paramWithDefault(String key, String defaultValue) {
-        return query().getOrDefault(key, Arrays.asList(defaultValue));
+    @NotNull
+    public List<String> paramWithDefault(@NotNull String key, @NotNull String defaultValue) {
+        return query().getOrDefault(key, Collections.singletonList(defaultValue));
     }
 
     /**
@@ -305,6 +310,7 @@ public class URI implements Serializable {
         return new URI(uri.substring(i + 1));
     }
 
+    @Nullable
     public String userInfo() {
         try {
             return new java.net.URI(uri).getUserInfo();

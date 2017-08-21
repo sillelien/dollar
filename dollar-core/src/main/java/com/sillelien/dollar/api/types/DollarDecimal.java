@@ -22,7 +22,7 @@ import com.sillelien.dollar.api.collections.ImmutableList;
 import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import static java.lang.Math.abs;
 
@@ -48,7 +48,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     @Override
     public var $divide(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
-        if (rhsFix.toDouble() == null || rhsFix.zero()) {
+        if ((rhsFix.toDouble() == null) || rhsFix.zero()) {
             return DollarFactory.infinity(positive(), errors(), rhsFix.errors());
         }
         if (rhsFix.infinite() || new Double(value / rhsFix.toDouble()).isInfinite()) {
@@ -83,7 +83,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         }
 
         if (new Double(value * rhsFix.toDouble()).isInfinite()) {
-            return DollarFactory.infinity(Math.signum(value) * Math.signum(rhsFix.toDouble()) > 0, errors(),
+            return DollarFactory.infinity((Math.signum(value) * Math.signum(rhsFix.toDouble())) > 0, errors(),
                                           rhs.errors());
         }
         return DollarFactory.fromValue(value * rhsFix.toDouble(), errors(), rhsFix.errors());
@@ -109,7 +109,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         } else if (type.is(Type._STRING)) {
             return DollarStatic.$(toHumanString());
         } else if (type.is(Type._LIST)) {
-            return DollarStatic.$(Arrays.asList(this));
+            return DollarStatic.$(Collections.singletonList(this));
         } else if (type.is(Type._MAP)) {
             return DollarStatic.$("value", this);
         } else if (type.is(Type._DECIMAL)) {

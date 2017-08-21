@@ -17,6 +17,7 @@
 package dollar.internal.runtime.script.api;
 
 import com.sillelien.dollar.api.var;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Variable {
@@ -29,9 +30,10 @@ public class Variable {
     @Nullable
     private final String constraintSource;
     private boolean isVolatile;
+    @NotNull
     private var value;
 
-    public Variable(var value, @Nullable var constraint, @Nullable String constraintSource) {
+    public Variable(@NotNull var value, @Nullable var constraint, @Nullable String constraintSource) {
 
         setValue(value);
         this.constraint = constraint;
@@ -42,7 +44,11 @@ public class Variable {
         thread = Thread.currentThread().getId();
     }
 
-    public Variable(var value, boolean readonly, @Nullable var constraint, String constraintSource, boolean isVolatile,
+    public Variable(@NotNull var value,
+                    boolean readonly,
+                    @Nullable var constraint,
+                    @Nullable String constraintSource,
+                    boolean isVolatile,
                     boolean fixed, boolean pure) {
         setValue(value);
         this.readonly = readonly;
@@ -73,18 +79,19 @@ public class Variable {
         return getValue().hashCode();
     }
 
+    @NotNull
     public var getValue() {
         return value;
     }
 
-    public void setValue(var value) {
+    public void setValue(@NotNull var value) {
         this.value = value;
     }
 
     @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if ((o == null) || (getClass() != o.getClass())) { return false; }
 
         Variable variable = (Variable) o;
 

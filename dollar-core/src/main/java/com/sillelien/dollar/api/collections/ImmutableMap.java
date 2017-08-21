@@ -34,10 +34,11 @@ public final class ImmutableMap<K extends Comparable<K>, V> implements
         Iterable<Map
                          .Entry<K, V>> {
 
+    @NotNull
     private final Map<K, V> map = new LinkedHashMap<>();
 
     @NotNull
-    public static <K extends Comparable<K>, V> ImmutableMap<K, V> of(K key, V value) {
+    public static <K extends Comparable<K>, V> ImmutableMap<K, V> of(@NotNull K key, @NotNull V value) {
         ImmutableMap<K, V> immutableMap = new ImmutableMap<>();
         immutableMap.map.put(key, value);
         return immutableMap;
@@ -59,23 +60,26 @@ public final class ImmutableMap<K extends Comparable<K>, V> implements
         return new ImmutableMap<>();
     }
 
-    public V compute(K key, @NotNull BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+    @NotNull
+    public V compute(@NotNull K key, @NotNull BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
         return map.compute(key, remappingFunction);
     }
 
-    public V computeIfAbsent(K key, @NotNull Function<? super K, ? extends V> mappingFunction) {
+    @NotNull
+    public V computeIfAbsent(@NotNull K key, @NotNull Function<? super K, ? extends V> mappingFunction) {
         return map.computeIfAbsent(key, mappingFunction);
     }
 
-    public V computeIfPresent(K key, @NotNull BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+    @NotNull
+    public V computeIfPresent(@NotNull K key, @NotNull BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
         return map.computeIfPresent(key, remappingFunction);
     }
 
-    public boolean containsKey(Object key) {
+    public boolean containsKey(@NotNull Object key) {
         return map.containsKey(key);
     }
 
-    public boolean containsValue(Object value) {
+    public boolean containsValue(@NotNull Object value) {
         return map.containsValue(value);
     }
 
@@ -88,11 +92,13 @@ public final class ImmutableMap<K extends Comparable<K>, V> implements
         map.forEach(action);
     }
 
-    public V get(Object key) {
+    @NotNull
+    public V get(@NotNull Object key) {
         return map.get(key);
     }
 
-    public V getOrDefault(Object key, V defaultValue) {
+    @NotNull
+    public V getOrDefault(@NotNull Object key, @NotNull V defaultValue) {
         return map.getOrDefault(key, defaultValue);
     }
 
@@ -122,6 +128,7 @@ public final class ImmutableMap<K extends Comparable<K>, V> implements
         map.entrySet().forEach(action);
     }
 
+    @NotNull
     @Override
     public Spliterator<Map.Entry<K, V>> spliterator() {
         return map.entrySet().spliterator();
@@ -149,9 +156,8 @@ public final class ImmutableMap<K extends Comparable<K>, V> implements
     @NotNull
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ImmutableMap{");
-        sb.append("map=").append(map);
-        sb.append('}');
-        return sb.toString();
+        String sb = "ImmutableMap{" + "map=" + map +
+                            '}';
+        return sb;
     }
 }

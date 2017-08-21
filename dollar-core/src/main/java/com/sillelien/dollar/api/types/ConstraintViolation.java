@@ -18,9 +18,13 @@ package com.sillelien.dollar.api.types;
 
 import com.sillelien.dollar.api.exceptions.DollarFailureException;
 import com.sillelien.dollar.api.var;
+import org.jetbrains.annotations.NotNull;
 
 public class ConstraintViolation extends DollarFailureException {
-    public ConstraintViolation(var constrainedVar, var constraint, String constrainedFingerprint, String constraintFingerPrint) {
+    public ConstraintViolation(@NotNull var constrainedVar,
+                               @NotNull var constraint,
+                               @NotNull String constrainedFingerprint,
+                               @NotNull String constraintFingerPrint) {
         super(ErrorType.ASSERTION,
               "Constrained var fingerprint " + constrainedFingerprint + " did not match constraint fingerprint for " + constraintFingerPrint);
     }

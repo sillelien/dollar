@@ -33,7 +33,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.UUID;
@@ -44,6 +43,7 @@ public class DollarURI extends AbstractDollar {
     private final StateMachine<ResourceState, Signal> stateMachine;
     @NotNull
     private final URI uri;
+    @NotNull
     private final URIHandler handler;
 
 
@@ -57,24 +57,12 @@ public class DollarURI extends AbstractDollar {
             throw new DollarException(e);
         }
         StateMachineConfig<ResourceState, Signal> stateMachineConfig = getDefaultStateMachineConfig();
-        stateMachineConfig.configure(ResourceState.RUNNING).onEntry(i -> {
-            handler.start();
-        });
-        stateMachineConfig.configure(ResourceState.RUNNING).onExit(i -> {
-            handler.stop();
-        });
-        stateMachineConfig.configure(ResourceState.INITIAL).onExit(i -> {
-            handler.init();
-        });
-        stateMachineConfig.configure(ResourceState.DESTROYED).onEntry(i -> {
-            handler.destroy();
-        });
-        stateMachineConfig.configure(ResourceState.PAUSED).onEntry(i -> {
-            handler.pause();
-        });
-        stateMachineConfig.configure(ResourceState.PAUSED).onExit(i -> {
-            handler.unpause();
-        });
+        stateMachineConfig.configure(ResourceState.RUNNING).onEntry(i -> handler.start());
+        stateMachineConfig.configure(ResourceState.RUNNING).onExit(i -> handler.stop());
+        stateMachineConfig.configure(ResourceState.INITIAL).onExit(i -> handler.init());
+        stateMachineConfig.configure(ResourceState.DESTROYED).onEntry(i -> handler.destroy());
+        stateMachineConfig.configure(ResourceState.PAUSED).onEntry(i -> handler.pause());
+        stateMachineConfig.configure(ResourceState.PAUSED).onExit(i -> handler.unpause());
         stateMachine = new StateMachine<>(ResourceState.INITIAL, stateMachineConfig);
 
     }
@@ -202,7 +190,7 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $write(var value, boolean blocking, boolean mutating) {
+    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
         ensureRunning();
         return handler.write(value, blocking, mutating);
     }
@@ -228,6 +216,7 @@ public class DollarURI extends AbstractDollar {
         return handler.read(blocking, mutating);
     }
 
+    @NotNull
     @Override
     public var $each(@NotNull Pipeable pipe) {
         return super.$each(pipe);
@@ -253,7 +242,7 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $publish(var lhs) {
+    public var $publish(@NotNull var lhs) {
         ensureRunning();
         return handler.publish(lhs);
     }
@@ -377,7 +366,7 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $remove(var key) {
+    public var $remove(@NotNull var key) {
         return DollarFactory.failure(ErrorType.INVALID_URI_OPERATION);
 
     }
@@ -399,7 +388,7 @@ public class DollarURI extends AbstractDollar {
     @Override
     public var $subscribe(@NotNull Pipeable pipe, @Nullable String id) {
         ensureRunning();
-        final String subId = id == null ? UUID.randomUUID().toString() : id;
+        final String subId = (id == null) ? UUID.randomUUID().toString() : id;
         try {
             handler.subscribe(i -> {
                 try {
@@ -414,7 +403,7 @@ public class DollarURI extends AbstractDollar {
             return DollarStatic.logAndRethrow(e);
         }
         return DollarFactory.blockCollection(
-                Arrays.asList(DollarStatic.$("id", subId).$("unsub", DollarFactory.fromLambda(i -> {
+                Collections.singletonList(DollarStatic.$("id", subId).$("unsub", DollarFactory.fromLambda(i -> {
                     handler.unsubscribe(subId);
                     return DollarStatic.$(subId);
                 }))));

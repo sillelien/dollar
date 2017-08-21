@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,7 +65,7 @@ public class SimpleTypeLearner implements TypeLearner {
     }
 
     @Override
-    public void learn(String name, SourceSegment source, @NotNull List<var> inputs, @NotNull Type type) {
+    public void learn(@NotNull String name, @NotNull SourceSegment source, @NotNull List<var> inputs, @NotNull Type type) {
         final ArrayList<String> perms = TypeLearner.perms(inputs);
         for (String perm : perms) {
             HTreeMap<String, Long> usageCounters = getMap(name, perm);
@@ -79,7 +79,7 @@ public class SimpleTypeLearner implements TypeLearner {
 
     @Nullable
     @Override
-    public TypePrediction predict(String name, SourceSegment source, @NotNull List<var> inputs) {
+    public TypePrediction predict(@NotNull String name, @NotNull SourceSegment source, @NotNull List<var> inputs) {
         final ArrayList<String> perms = TypeLearner.perms(inputs);
         CountBasedTypePrediction prediction = new CountBasedTypePrediction(name);
 
@@ -97,7 +97,7 @@ public class SimpleTypeLearner implements TypeLearner {
 
                         @NotNull
                         @Override
-                        public Double probability(Type type) {
+                        public Double probability(@NotNull Type type) {
                             return 1.0;
                         }
 
@@ -110,7 +110,7 @@ public class SimpleTypeLearner implements TypeLearner {
                         @NotNull
                         @Override
                         public Set<Type> types() {
-                            return new HashSet<>(Arrays.asList(Type._ANY));
+                            return new HashSet<>(Collections.singletonList(Type._ANY));
                         }
                     };
                 }
@@ -121,7 +121,7 @@ public class SimpleTypeLearner implements TypeLearner {
     }
 
     @NotNull
-    private HTreeMap<String, Long> getMap(String name, String perm) {
+    private HTreeMap<String, Long> getMap(@NotNull String name, @NotNull String perm) {
         assert db != null;
         return db.hashMap(name + "." + perm, Serializer.STRING, Serializer.LONG).createOrOpen();
     }

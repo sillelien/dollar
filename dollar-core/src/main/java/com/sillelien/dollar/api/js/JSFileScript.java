@@ -39,6 +39,7 @@ public class JSFileScript implements Pipeable {
     ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
 
 
+    @NotNull
     private final String script;
 
     public JSFileScript(@NotNull File file) throws IOException {

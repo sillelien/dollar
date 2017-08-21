@@ -34,9 +34,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class SocketURIHandler implements URIHandler {
     public static final int BLOCKING_TIMEOUT = 10;
+    @NotNull
     private static final ConcurrentHashMap<String, SocketIOServer> servers = new ConcurrentHashMap<>();
     @NotNull private final URI uri;
+    @NotNull
     private final ConcurrentHashMap<String, SocketIOSubscription> subscriptions = new ConcurrentHashMap<>();
+    @NotNull
     private SocketIOServer server;
 
     static {
@@ -45,7 +48,7 @@ public class SocketURIHandler implements URIHandler {
         }));
     }
 
-    public SocketURIHandler(String scheme, @NotNull URI uri) {
+    public SocketURIHandler(@NotNull String scheme, @NotNull URI uri) {
         this.uri = uri.sub();
     }
 
@@ -55,7 +58,7 @@ public class SocketURIHandler implements URIHandler {
     }
 
     @NotNull @Override
-    public var write(var value, boolean blocking, boolean mutating) {
+    public var write(@NotNull var value, boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
 
@@ -73,7 +76,7 @@ public class SocketURIHandler implements URIHandler {
     }
 
     @NotNull @Override
-    public var get(var key) {
+    public var get(@NotNull var key) {
         throw new UnsupportedOperationException();
     }
 
@@ -101,16 +104,17 @@ public class SocketURIHandler implements URIHandler {
     }
 
     @NotNull @Override
-    public var remove(var key) {
+    public var remove(@NotNull var key) {
         throw new UnsupportedOperationException();
     }
 
     @NotNull @Override
-    public var removeValue(var v) {
+    public var removeValue(@NotNull var v) {
         throw new UnsupportedOperationException();
     }
 
-    @NotNull public var set(var key, var value) {
+    @NotNull
+    public var set(@NotNull var key, @NotNull var value) {
         throw new UnsupportedOperationException();
     }
 
@@ -128,14 +132,14 @@ public class SocketURIHandler implements URIHandler {
     }
 
     @Override
-    public void subscribe(Pipeable consumer, @NotNull String id) throws IOException {
+    public void subscribe(@NotNull Pipeable consumer, @NotNull String id) throws IOException {
         final SocketIOSubscription listener = new SocketIOSubscription(consumer, id, uri);
         server.addListeners(listener);
         server.addConnectListener(listener);
         server.addDisconnectListener(listener);
         final Map<String, List<String>> query = uri.query();
         if (uri.hasParam("eventType")) {
-            final List<String> eventTypes = query.getOrDefault("eventType", Collections.EMPTY_LIST);
+            final List<String> eventTypes = query.getOrDefault("eventType", Collections.emptyList());
             for (String eventType : eventTypes) {
                 server.addEventListener(eventType, String.class, listener);
             }
@@ -151,7 +155,8 @@ public class SocketURIHandler implements URIHandler {
         subscriptions.remove(subId).destroy();
     }
 
-    private static SocketIOServer getServerFor(String hostname, int port) {
+    @NotNull
+    private static SocketIOServer getServerFor(@NotNull String hostname, int port) {
         String key = hostname + ":" + port;
         if (servers.containsKey(key)) {
             return servers.get(key);

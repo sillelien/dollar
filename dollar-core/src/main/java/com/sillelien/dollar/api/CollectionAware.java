@@ -213,7 +213,7 @@ public interface CollectionAware {
      */
     @Nullable
     @Guarded(ChainGuard.class)
-    default var $remove(Object valueToRemove) {
+    default var $remove(@NotNull Object valueToRemove) {
         return $remove(DollarStatic.$(valueToRemove));
     }
 
@@ -226,7 +226,7 @@ public interface CollectionAware {
      */
     @Nullable
     @Guarded(ChainGuard.class)
-    default <R> R remove(Object valueToRemove) {
+    default <R> R remove(@NotNull Object valueToRemove) {
         return $remove(DollarStatic.$(valueToRemove)).toJavaObject();
     }
 
@@ -238,7 +238,7 @@ public interface CollectionAware {
      */
     @NotNull
     @Guarded(ChainGuard.class)
-    var $remove(var valueToRemove);
+    var $remove(@NotNull var valueToRemove);
 
     @NotNull
     @Guarded(ChainGuard.class)

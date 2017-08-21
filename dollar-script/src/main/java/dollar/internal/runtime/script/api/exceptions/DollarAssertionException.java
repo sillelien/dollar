@@ -21,15 +21,15 @@ import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 public class DollarAssertionException extends DollarException {
-    public DollarAssertionException(Throwable e) {
+    public DollarAssertionException(@NotNull Throwable e) {
         super(e);
     }
 
-    public DollarAssertionException(String errorMessage) {
+    public DollarAssertionException(@NotNull String errorMessage) {
         super(errorMessage);
     }
 
-    public DollarAssertionException(Throwable t, String s) {
+    public DollarAssertionException(@NotNull Throwable t, @NotNull String s) {
         super(t, s);
     }
 

@@ -77,16 +77,16 @@ public class SourceSegmentValue implements SourceSegment {
     public String getSourceMessage() {
         int index = getStart();
         int length = getLength();
-        if (index < 0 || length < 0) {
+        if ((index < 0) || (length < 0)) {
             return "<unknown location>";
         }
-        if (index + length > source.length()) {
+        if ((index + length) > source.length()) {
             throw new DollarParserError("Index=" + index + " Length=" + length + " SourceLength=" + source.length() + " Source='" + source + "'");
         }
         String[] lines = source.substring(0, index).split("\n");
         int line = lines.length;
-        int column = index == 0 ? 0 : (source.charAt(index - 1) == '\n' ? 0 : lines[lines.length - 1].length());
-        int end = index + length >= source.length() ? source.length() - 1 : source.indexOf('\n', index + length);
+        int column = (index == 0) ? 0 : ((source.charAt(index - 1) == '\n') ? 0 : lines[lines.length - 1].length());
+        int end = ((index + length) >= source.length()) ? (source.length() - 1) : source.indexOf('\n', index + length);
         int start = index - column;
         String
                 highlightedSource =
@@ -105,16 +105,16 @@ public class SourceSegmentValue implements SourceSegment {
     public String getShortSourceMessage() {
         int index = getStart();
         int length = getLength();
-        if (index < 0 || length < 0) {
+        if ((index < 0) || (length < 0)) {
             return "<unknown location>";
         }
-        if (index + length > source.length()) {
+        if ((index + length) > source.length()) {
             throw new DollarAssertionException("Index=" + index + " Length=" + length + " SourceLength=" + source.length() + " Source='" + source + "'");
         }
         String[] lines = source.substring(0, index).split("\n");
         int line = lines.length;
-        int column = index == 0 ? 0 : (source.charAt(index - 1) == '\n' ? 0 : lines[lines.length - 1].length());
-        int end = index + length >= source.length() ? source.length() - 1 : source.indexOf('\n', index + length);
+        int column = (index == 0) ? 0 : ((source.charAt(index - 1) == '\n') ? 0 : lines[lines.length - 1].length());
+        int end = ((index + length) >= source.length()) ? (source.length() - 1) : source.indexOf('\n', index + length);
         int start = index - column;
         String
                 highlightedSource =

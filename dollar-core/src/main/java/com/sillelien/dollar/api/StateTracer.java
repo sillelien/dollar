@@ -16,11 +16,14 @@
 
 package com.sillelien.dollar.api;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface StateTracer {
     enum Operations {
         EVAL, LOAD, PIPE, POP, REMOVE_BY_VALUE, REMOVE_BY_KEY, SAVE, SPLIT, PUBLISH, PUSH, CREATE, HTTP_RESPONSE,
         CLEAR_ERRORS, RECEIVE, SEND, READ, SET, INC, DEC, CHOOSE
     }
 
-    <R> R trace(Object before, R after, Operations operationType, Object... values);
+    @NotNull
+    <R> R trace(@NotNull Object before, @NotNull R after, @NotNull Operations operationType, Object... values);
 }

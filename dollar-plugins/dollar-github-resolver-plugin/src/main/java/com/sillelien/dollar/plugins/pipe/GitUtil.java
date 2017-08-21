@@ -24,14 +24,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class GitUtil {
+public final class GitUtil {
 
     static {
         try {
             check();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -46,7 +44,7 @@ public class GitUtil {
         }
     }
 
-    public static void clone(@NotNull File dir, String url) throws IOException, InterruptedException {
+    public static void clone(@NotNull File dir, @NotNull String url) throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder("git", "clone", url, dir.getAbsolutePath());
         pb.directory(dir);
         Process p = pb.start();
@@ -54,7 +52,7 @@ public class GitUtil {
 //        System.out.println(CharStreams.toString(new InputStreamReader(p.getInputStream())));
     }
 
-    public static void checkout(File dir, String branch) throws IOException, InterruptedException {
+    public static void checkout(@NotNull File dir, @NotNull String branch) throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder("git", "checkout", branch);
         pb.directory(dir);
         Process p = pb.start();
@@ -62,7 +60,7 @@ public class GitUtil {
 //        System.out.println(CharStreams.toString(new InputStreamReader(p.getInputStream())));
     }
 
-    public static void pull(File dir) throws IOException, InterruptedException {
+    public static void pull(@NotNull File dir) throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder("git", "pull");
         pb.directory(dir);
         Process p = pb.start();

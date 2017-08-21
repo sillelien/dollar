@@ -41,56 +41,61 @@ public class ImmutableJsonObject {
         return json.copy().asObject();
     }
 
-    public boolean containsField(String fieldName) {
+    public boolean containsField(@NotNull String fieldName) {
         return json.containsField(fieldName);
     }
 
+    @NotNull
     public String encode() {
         return json.encode();
     }
 
+    @NotNull
     public String encodePrettily() {
         return json.encodePrettily();
     }
 
-    public JsonArray getArray(String fieldName, JsonArray def) {
+    @NotNull
+    public JsonArray getArray(@NotNull String fieldName, @NotNull JsonArray def) {
         return json.getArray(fieldName, def);
     }
 
     @Nullable
-    public JsonArray getArray(String fieldName) {
+    public JsonArray getArray(@NotNull String fieldName) {
         return json.getArray(fieldName);
     }
 
     @Nullable
-    public byte[] getBinary(String fieldName) {
+    public byte[] getBinary(@NotNull String fieldName) {
         return json.getBinary(fieldName);
     }
 
-    public byte[] getBinary(String fieldName, byte[] def) {
+    @NotNull
+    public byte[] getBinary(@NotNull String fieldName, @NotNull byte[] def) {
         return json.getBinary(fieldName, def);
     }
 
     @NotNull
-    public Boolean getBoolean(String fieldName) {
+    public Boolean getBoolean(@NotNull String fieldName) {
         return json.getBoolean(fieldName);
     }
 
-    public boolean getBoolean(String fieldName, boolean def) {
+    public boolean getBoolean(@NotNull String fieldName, boolean def) {
         return json.getBoolean(fieldName, def);
     }
 
     @Nullable
-    public JsonElement getElement(String fieldName) {
+    public JsonElement getElement(@NotNull String fieldName) {
         return json.getElement(fieldName);
     }
 
-    public JsonElement getElement(String fieldName, JsonElement def) {
+    @NotNull
+    public JsonElement getElement(@NotNull String fieldName, @NotNull JsonElement def) {
         return json.getElement(fieldName, def);
     }
 
     @NotNull
-    public <T> T getField(String fieldName) {
+    public <T> T getField(@NotNull String fieldName) {
         return json.getField(fieldName);
     }
 
@@ -100,52 +105,57 @@ public class ImmutableJsonObject {
     }
 
     @Nullable
-    public Integer getInteger(String fieldName) {
+    public Integer getInteger(@NotNull String fieldName) {
         return json.getInteger(fieldName);
     }
 
-    public Integer getInteger(String fieldName, int def) {
+    @NotNull
+    public Integer getInteger(@NotNull String fieldName, int def) {
         return json.getInteger(fieldName, def);
     }
 
     @Nullable
-    public Long getLong(String fieldName) {
+    public Long getLong(@NotNull String fieldName) {
         return json.getLong(fieldName);
     }
 
-    public Long getLong(String fieldName, long def) {
+    @NotNull
+    public Long getLong(@NotNull String fieldName, long def) {
         return json.getLong(fieldName, def);
     }
 
-    public Number getNumber(String fieldName, int def) {
+    @NotNull
+    public Number getNumber(@NotNull String fieldName, int def) {
         return json.getNumber(fieldName, def);
     }
 
     @NotNull
-    public Number getNumber(String fieldName) {
+    public Number getNumber(@NotNull String fieldName) {
         return json.getNumber(fieldName);
     }
 
-    public JsonObject getObject(String fieldName, JsonObject def) {
+    @NotNull
+    public JsonObject getObject(@NotNull String fieldName, @NotNull JsonObject def) {
         return json.getObject(fieldName, def);
     }
 
     @Nullable
-    public JsonObject getObject(String fieldName) {
+    public JsonObject getObject(@NotNull String fieldName) {
         return json.getObject(fieldName);
     }
 
     @NotNull
-    public String getString(String fieldName) {
+    public String getString(@NotNull String fieldName) {
         return json.getString(fieldName);
     }
 
-    public String getString(String fieldName, String def) {
+    @NotNull
+    public String getString(@NotNull String fieldName, @NotNull String def) {
         return json.getString(fieldName, def);
     }
 
     @NotNull
-    public <T> T getValue(String fieldName) {
+    public <T> T getValue(@NotNull String fieldName) {
         return json.getValue(fieldName);
     }
 
@@ -159,9 +169,10 @@ public class ImmutableJsonObject {
         if (obj instanceof JsonObject) {
             return json.equals(obj);
         }
-        return obj instanceof ImmutableJsonObject && json.equals(((ImmutableJsonObject) obj).json);
+        return (obj instanceof ImmutableJsonObject) && json.equals(((ImmutableJsonObject) obj).json);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return json.toString();
@@ -181,7 +192,7 @@ public class ImmutableJsonObject {
     }
 
     @NotNull
-    public JsonObject putNumber(String fieldName, Number value) {
+    public JsonObject putNumber(@NotNull String fieldName, @NotNull Number value) {
         return json.putNumber(fieldName, value);
     }
 

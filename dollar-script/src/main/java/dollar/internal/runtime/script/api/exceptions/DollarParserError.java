@@ -20,19 +20,19 @@ import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 public class DollarParserError extends Error {
-    public DollarParserError(Throwable e) {
+    public DollarParserError(@NotNull Throwable e) {
         super(e);
     }
 
-    public DollarParserError(String errorMessage) {
+    public DollarParserError(@NotNull String errorMessage) {
         super(errorMessage);
     }
 
-    public DollarParserError(String message, Throwable cause) {
+    public DollarParserError(@NotNull String message, @NotNull Throwable cause) {
         super(message, cause, true, true);
     }
 
-    public DollarParserError(String s, @NotNull var rhs) {
+    public DollarParserError(@NotNull String s, @NotNull var rhs) {
         super(s+":\n"+rhs._source().getSourceMessage());
     }
 }

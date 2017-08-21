@@ -18,11 +18,12 @@ package com.sillelien.dollar;
 
 import dollar.internal.runtime.script.DollarParserImpl;
 import dollar.internal.runtime.script.api.ParserOptions;
+import org.jetbrains.annotations.NotNull;
 
-public class Bulletin {
+public final class Bulletin {
 
 
-    public static void main(String[] args) throws Exception {
+    public static void main(@NotNull String[] args) throws Exception {
         new DollarParserImpl(new ParserOptions()).parse(Bulletin.class.getResourceAsStream("/bulletin.ds"),
                                                         "/bulletin.ds",
                                                     false);

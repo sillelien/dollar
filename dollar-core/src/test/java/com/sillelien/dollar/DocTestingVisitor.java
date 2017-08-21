@@ -16,7 +16,7 @@
 
 package com.sillelien.dollar;
 
-import org.apache.commons.io.FileUtils;
+import com.google.common.io.Files;
 import org.jetbrains.annotations.NotNull;
 import org.pegdown.ast.AbbreviationNode;
 import org.pegdown.ast.AnchorLinkNode;
@@ -65,13 +65,13 @@ import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.Charset;
 import java.util.Locale;
 
 public class DocTestingVisitor implements Visitor {
@@ -267,8 +267,8 @@ public class DocTestingVisitor implements Visitor {
                                         "        " + node.getText() + "\n" +
                                         "    }\n" +
                                         "}";
-                FileUtils.write(javaFile,
-                                string);
+                Files.write(string, javaFile,
+                            Charset.forName("utf-8"));
                 final JavaCompiler javac
                         = ToolProvider.getSystemJavaCompiler();
                 final StandardJavaFileManager jfm
@@ -283,8 +283,8 @@ public class DocTestingVisitor implements Visitor {
                     }
                 };
 
-                try (FileOutputStream fileOutputStream = FileUtils.openOutputStream(clazzFile)) {
-                    task = javac.getTask(new OutputStreamWriter(fileOutputStream), jfm, diagnosticListener, null, null,
+                try (BufferedWriter fileOutputStream = Files.newWriter(clazzFile, Charset.forName("utf-8"))) {
+                    task = javac.getTask(fileOutputStream, jfm, diagnosticListener, null, null,
                                          jfm.getJavaFileObjects(javaFile));
                 }
                 task.call();

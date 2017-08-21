@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script.java;
 
-public class JavaScriptingStaticImports {
+public final class JavaScriptingStaticImports {
     public static int staticImportTestMethod(){
         return 42;
     }

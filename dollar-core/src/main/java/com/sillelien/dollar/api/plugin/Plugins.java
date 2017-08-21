@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
-public class Plugins {
+public final class Plugins {
 
     @NotNull
     public static <T extends ExtensionPoint<T>> List<T> allProviders(@NotNull Class<T> serviceClass) {
@@ -54,7 +54,7 @@ public class Plugins {
     }
 
     @NotNull
-    public static URIHandlerFactory resolveURIProvider(String scheme) {
+    public static URIHandlerFactory resolveURIProvider(@NotNull String scheme) {
         final ServiceLoader<URIHandlerFactory> loader = ServiceLoader.load(URIHandlerFactory.class);
         for (URIHandlerFactory handler : loader) {
             if (handler.handlesScheme(scheme)) {

@@ -29,14 +29,14 @@ public class SetKeyValueGuard implements Guard {
     }
 
     @Override
-    public void postCondition(Object guarded, Method method, Object[] args, Object result) {
+    public void postCondition(@NotNull Object guarded, @NotNull Method method, @NotNull Object[] args, @NotNull Object result) {
         if (result instanceof Collection) {
             assertNotNull("return value", result, method);
         }
     }
 
     @Override
-    public void preCondition(Object guarded, Method method, Object[] args) {
+    public void preCondition(@NotNull Object guarded, @NotNull Method method, @NotNull Object[] args) {
 
         assertNotNull("first parameter ", args[0], method);
     }

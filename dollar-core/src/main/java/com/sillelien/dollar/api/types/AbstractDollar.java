@@ -54,11 +54,14 @@ public abstract class AbstractDollar implements var {
     @NotNull
     final
     ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
+    @NotNull
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final
     @NotNull
     ImmutableList<Throwable> errors;
+    @NotNull
     private final ConcurrentHashMap<String, Object> meta = new ConcurrentHashMap<>();
+    @NotNull
     private String src;
 
     AbstractDollar(@NotNull ImmutableList<Throwable> errors) {
@@ -96,7 +99,7 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var _constrain(@Nullable var constraint, @Nullable String constraintFingerprint) {
-        if (constraint == null || constraintFingerprint == null) {
+        if ((constraint == null) || (constraintFingerprint == null)) {
             return this;
         }
         String thisConstraintFingerprint = _constraintFingerprint();
@@ -111,6 +114,7 @@ public abstract class AbstractDollar implements var {
     }
 
 
+    @Nullable
     @Override
     public String _constraintFingerprint() {
         return getMetaAttribute("constraintFingerprint");
@@ -124,7 +128,7 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $write(var value, boolean blocking, boolean mutating) {
+    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
         return this;
     }
 
@@ -141,6 +145,7 @@ public abstract class AbstractDollar implements var {
         return this;
     }
 
+    @NotNull
     @Override
     public var $read(boolean blocking, boolean mutating) {
         return this;
@@ -148,7 +153,7 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $publish(var lhs) {
+    public var $publish(@NotNull var lhs) {
         return this;
     }
 
@@ -158,6 +163,7 @@ public abstract class AbstractDollar implements var {
         return map.$($S());
     }
 
+    @NotNull
     @Override
     public var $each(@NotNull Pipeable pipe) {
         List<var> result = new LinkedList<>();
@@ -361,7 +367,7 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var debugf(String message, Object... values) {
+    public var debugf(@NotNull String message, Object... values) {
         logger.debug(message, values);
         return this;
     }
@@ -390,7 +396,7 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var errorf(String message, Object... values) {
+    public var errorf(@NotNull String message, Object... values) {
         logger.error(message, values);
         return this;
     }
@@ -411,7 +417,7 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var infof(String message, Object... values) {
+    public var infof(@NotNull String message, Object... values) {
         logger.info(message, values);
         return this;
     }
@@ -473,6 +479,7 @@ public abstract class AbstractDollar implements var {
     }
 
 
+    @Nullable
     @Override
     public String getMetaAttribute(@NotNull String key) {
         return (String) meta.get(key);
@@ -537,6 +544,7 @@ public abstract class AbstractDollar implements var {
         return 0.0;
     }
 
+    @NotNull
     @Override
     public Long toLong() {
         return 0L;
@@ -547,7 +555,7 @@ public abstract class AbstractDollar implements var {
     @Override
     public var $errors() {
         JsonObject json = new JsonObject();
-        if (errors.size() > 0) {
+        if (!errors.isEmpty()) {
             if (errors.get(0) instanceof DollarException) {
                 json.putNumber("httpCode", ((DollarException) errors.get(0)).httpCode());
             }
@@ -660,6 +668,7 @@ public abstract class AbstractDollar implements var {
         }
     }
 
+    @NotNull
     @Override
     public Object getMetaObject(@NotNull String key) {
         return meta.get(key);

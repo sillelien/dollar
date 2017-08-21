@@ -32,9 +32,12 @@ import static java.util.concurrent.Executors.newFixedThreadPool;
 
 public class DefaultDollarExecutor implements DollarExecutor {
 
+    @NotNull
     public ForkJoinPool forkJoinPool;
 
+    @NotNull
     private ExecutorService backgroundExecutor;
+    @NotNull
     private ScheduledExecutorService scheduledExecutor;
 
 

@@ -65,7 +65,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         this.priority = priority;
         this.pure = pure;
 
-        if (!reserved && priority == 0) {
+        if (!reserved && (priority == 0)) {
             throw new AssertionError("Priority must be > 0");
         }
     }
@@ -95,10 +95,10 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         if (equals(o)) {
             return 0;
         }
-        if (o instanceof OpDef && keyword != null) {
+        if ((o instanceof OpDef) && (keyword != null)) {
             return keyword.compareTo(String.valueOf(((OpDef) o).keyword()));
         }
-        if (o instanceof OpDef && name != null) {
+        if ((o instanceof OpDef) && (name != null)) {
             return name.compareTo(((OpDef) o).name());
         }
 
@@ -126,7 +126,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                 stringBuilder.append("### `").append(symbol).append("` (").append(name).append(")");
             }
         }
-        stringBuilder.append("      {#op-" + name + "}").append("\n");
+        stringBuilder.append("      {#op-").append(name).append("}").append("\n");
         if (reactive) {
             stringBuilder.append("![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg)");
         } else {
@@ -189,10 +189,10 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
 
     @NotNull
     private String bnfSymbol() {
-        if (symbol != null && keyword != null) {
+        if ((symbol != null) && (keyword != null)) {
             return "('" + symbol + "'|" + "'" + keyword + "')";
         }
-        if (symbol == null && keyword != null) {
+        if ((symbol == null) && (keyword != null)) {
             return "'" + keyword + "'";
         }
         if (symbol != null) {
@@ -210,7 +210,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ((o == null) || (getClass() != o.getClass())) return false;
         OpDef opDef = (OpDef) o;
         return Objects.equals(symbol, opDef.symbol) &&
                        Objects.equals(keyword, opDef.keyword);
@@ -224,6 +224,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         return priority;
     }
 
+    @NotNull
     public OpDefType type() {
         return type;
     }

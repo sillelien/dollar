@@ -21,23 +21,27 @@ import com.sillelien.dollar.api.guard.Guarded;
 import com.sillelien.dollar.api.guard.Guards;
 import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 public class DollarGuard implements java.lang.reflect.InvocationHandler {
 
+    @NotNull
     private final var in;
 
 
-    public DollarGuard(var in) {
+    public DollarGuard(@NotNull var in) {
 
         this.in = in;
 
     }
 
+    @Nullable
     @Override
-    public Object invoke(Object proxy, @NotNull Method method, Object[] args) throws Throwable {
+    public Object invoke(@NotNull Object proxy, @NotNull Method method, @Nullable Object[] args) throws Throwable {
         try {
             String name = method.getName();
 
@@ -63,7 +67,7 @@ public class DollarGuard implements java.lang.reflect.InvocationHandler {
             }
 
 
-            if (Object.class == method.getDeclaringClass()) {
+            if (Objects.equals(Object.class, method.getDeclaringClass())) {
                 if ("equals".equals(name)) {
                     return in.equals(args[0]);
                 } else if ("hashCode".equals(name)) {
@@ -94,7 +98,8 @@ public class DollarGuard implements java.lang.reflect.InvocationHandler {
         }
     }
 
-    Object invokeWithGuards(@NotNull Method method, Object[] args, @NotNull Guarded[] guards) throws
+    @Nullable
+    Object invokeWithGuards(@NotNull Method method, @Nullable Object[] args, @NotNull Guarded[] guards) throws
             InstantiationException,
                     IllegalAccessException,
                     InvocationTargetException {

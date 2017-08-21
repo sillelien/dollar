@@ -23,7 +23,7 @@ import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.Collections;
 
 import static java.lang.Math.abs;
 
@@ -55,7 +55,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         var rhsFix = rhs._fixDeep();
         if (rhsFix.infinite()) {
             return DollarFactory.fromValue(0, errors(), rhsFix.errors());
-        } else if (rhsFix.decimal() && rhsFix.toDouble() != 0.0) {
+        } else if (rhsFix.decimal() && (rhsFix.toDouble() != 0.0)) {
             return DollarFactory.fromValue(value.doubleValue() / rhsFix.toDouble(), errors(),
                                            rhsFix.errors());
         } else if (rhsFix.toLong() == 0) {
@@ -127,7 +127,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         } else if (type.is(Type._STRING)) {
             return DollarStatic.$(toHumanString());
         } else if (type.is(Type._LIST)) {
-            return DollarStatic.$(Arrays.asList(this));
+            return DollarStatic.$(Collections.singletonList(this));
         } else if (type.is(Type._MAP)) {
             return DollarStatic.$("value", this);
         } else if (type.is(Type._INTEGER)) {
@@ -180,7 +180,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         } else if (rhsFix.string()) {
             return DollarFactory.fromValue(toString() + rhsFix, errors(), rhsFix.errors());
         } else {
-            if (abs(value.longValue()) < Long.MAX_VALUE / 2 && Math.abs(rhsFix.toLong()) < Long.MAX_VALUE / 2) {
+            if ((abs(value.longValue()) < (Long.MAX_VALUE / 2)) && (Math.abs(rhsFix.toLong()) < (Long.MAX_VALUE / 2))) {
                 return DollarFactory.fromValue(value + rhsFix.toLong(), errors(), rhsFix.errors());
             } else {
                 final BigDecimal added = new BigDecimal(value).add(new BigDecimal(rhsFix.toLong()));

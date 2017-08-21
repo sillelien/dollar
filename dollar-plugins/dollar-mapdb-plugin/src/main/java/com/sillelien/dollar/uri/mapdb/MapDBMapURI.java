@@ -36,9 +36,11 @@ import static com.sillelien.dollar.api.DollarStatic.$void;
 
 public class MapDBMapURI extends AbstractMapDBURI implements MapModificationListener<var, var> {
 
+    @NotNull
     private static final ConcurrentHashMap<String, MapListener<var, var, var>>
             subscribers =
             new ConcurrentHashMap<>();
+    @NotNull
     private final BTreeMap<var, var> bTreeMap;
 
     public MapDBMapURI(@NotNull String scheme, @NotNull URI uri) {
@@ -91,7 +93,7 @@ public class MapDBMapURI extends AbstractMapDBURI implements MapModificationList
 
     @NotNull
     @Override
-    public var removeValue(var v) {
+    public var removeValue(@NotNull var v) {
         throw new UnsupportedOperationException();
     }
 
@@ -112,14 +114,11 @@ public class MapDBMapURI extends AbstractMapDBURI implements MapModificationList
     @Override
     public void subscribe(@NotNull Pipeable consumer, @NotNull String id) throws IOException {
 
-        subscribers.put(id, new MapListener<var, var, var>() {
-            @Override
-            public void apply(@NotNull var var, @Nullable var oldValue, @Nullable var newValue) {
-                try {
-                    consumer.pipe($(var, newValue));
-                } catch (Exception e) {
-                    DollarFactory.failure(ErrorType.EXCEPTION, e, false);
-                }
+        subscribers.put(id, (var, oldValue, newValue) -> {
+            try {
+                consumer.pipe($(var, newValue));
+            } catch (Exception e) {
+                DollarFactory.failure(ErrorType.EXCEPTION, e, false);
             }
         });
 
@@ -131,6 +130,7 @@ public class MapDBMapURI extends AbstractMapDBURI implements MapModificationList
        subscribers.remove(subId);
     }
 
+    @NotNull
     private BTreeMap<var, var> getTreeMap(@NotNull DB d) {
         return bTreeMap;
     }

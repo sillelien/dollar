@@ -18,7 +18,7 @@ package dollar.internal.runtime.script.api.exceptions;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ErrorReporter {
+public final class ErrorReporter {
     public static void report(@NotNull Class<?> clazz, @NotNull Throwable t) {
 //        String
 //                rawDsn =

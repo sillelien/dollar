@@ -29,7 +29,7 @@ public interface Guard {
      * @param value  the value to check for null
      * @param method the method that the assertion relates to
      */
-    default void assertNotNull(Object value, Method method) {
+    default void assertNotNull(@NotNull Object value, @NotNull Method method) {
         assertNotNull("-", value, method);
     }
 
@@ -41,7 +41,7 @@ public interface Guard {
      * @param value  the value to check for null
      * @param method the method that the assertion relates to
      */
-    default void assertNotNull(String message, @Nullable Object value, Method method) {
+    default void assertNotNull(@NotNull String message, @Nullable Object value, @NotNull Method method) {
         if (value == null) {
             throw new AssertionError(description() + " " + message + " Not Null FAILED for " + method);
         }
@@ -61,7 +61,7 @@ public interface Guard {
      * @param condition the condition to check
      * @param method    the method that the assertion relates to
      */
-    default void assertTrue(boolean condition, Method method) {
+    default void assertTrue(boolean condition, @NotNull Method method) {
         if (!condition) {
             throw new AssertionError(description() + " FAILED for " + method);
         }
@@ -75,7 +75,7 @@ public interface Guard {
      * @param args    the arguments being passed in
      * @param result  the result that was returned from the method
      */
-    void postCondition(Object guarded, Method method, Object[] args, Object result);
+    void postCondition(@NotNull Object guarded, @NotNull Method method, @NotNull Object[] args, @NotNull Object result);
 
     /**
      * Pre condition check that is called before the method is executed.
@@ -84,6 +84,6 @@ public interface Guard {
      * @param method  the method that is being guarded
      * @param args    the arguments being passed in
      */
-    void preCondition(Object guarded, Method method, Object[] args);
+    void preCondition(@NotNull Object guarded, @NotNull Method method, @NotNull Object[] args);
 
 }

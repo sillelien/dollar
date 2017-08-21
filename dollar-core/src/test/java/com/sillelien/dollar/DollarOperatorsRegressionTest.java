@@ -17,11 +17,12 @@
 package com.sillelien.dollar;
 
 
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Files;
+import com.google.common.io.Resources;
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.json.JsonArray;
 import com.sillelien.dollar.api.var;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.BeforeClass;
@@ -29,6 +30,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -57,14 +59,18 @@ public class DollarOperatorsRegressionTest {
         regression("/", "divide", "minimal", testBinary(minimal(), noSmallDecimals(), operation));
     }
 
-    public void regression(String symbol, String operation, String variant, @NotNull List<List<var>> result) throws
+    public void regression(@NotNull String symbol,
+                           @NotNull String operation,
+                           @NotNull String variant,
+                           @NotNull List<List<var>> result) throws
             IOException {
         String filename = operation + "." + variant + ".json";
-        final JsonArray previous = new JsonArray(IOUtils.toString(getClass().getResourceAsStream("/" + filename)));
+        final JsonArray previous = new JsonArray(new String(ByteStreams.toByteArray(
+                getClass().getResourceAsStream("/" + filename))));
         //Use small to stop massive string creation
         final File file = new File("target", filename);
         final var current = $(result);
-        FileUtils.writeStringToFile(file, current.jsonArray().encodePrettily());
+        Files.write(current.jsonArray().encodePrettily(), file, Charset.forName("utf-8"));
         System.out.println(file.getAbsolutePath());
         SortedSet<String> typeComparison = new TreeSet<>();
         SortedSet<String> humanReadable = new TreeSet<>();
@@ -90,23 +96,22 @@ public class DollarOperatorsRegressionTest {
         }
         final String typesFile = operation + "." + variant + ".types.txt";
         final String humanFile = operation + "." + variant + ".ds";
-        FileUtils.writeLines(new File("target", typesFile), typeComparison);
-        FileUtils.writeLines(new File("target", humanFile), humanReadable);
-        final TreeSet
-                previousTypeComparison =
-                new TreeSet<String>(IOUtils.readLines(getClass().getResourceAsStream("/" + typesFile)));
+        Files.asCharSink(new File("target", typesFile), Charset.forName("utf-8")).writeLines(typeComparison);
+        Files.asCharSink(new File("target", humanFile), Charset.forName("utf-8")).writeLines(humanReadable);
+        final TreeSet previousTypeComparison = new TreeSet<>(Resources.asCharSource(getClass().getResource("/" + typesFile),
+                                                                                    Charset.forName("utf-8")).readLines());
         diff("type", previousTypeComparison.toString(), typeComparison.toString());
         diff("result", previous, current.jsonArray());
     }
 
-    public void diff(String desc, String lhs, String rhs) {
+    public void diff(@NotNull String desc, @NotNull String lhs, @NotNull String rhs) {
         final String difference = StringUtils.difference(lhs, rhs);
         if (!difference.isEmpty()) {
             fail("Difference for " + desc + " is " + difference + "\nCompare previous: " + lhs + "\nWith current " + rhs);
         }
     }
 
-    private void diff(String desc, @NotNull JsonArray lhs, @NotNull JsonArray rhs) {
+    private void diff(@NotNull String desc, @NotNull JsonArray lhs, @NotNull JsonArray rhs) {
         final List lhsArray = lhs.toStringList();
         final List rhsArray = rhs.toStringList();
         if (lhsArray.size() != rhsArray.size()) {

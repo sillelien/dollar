@@ -25,9 +25,10 @@ import java.util.Set;
 
 public class SingleValueTypePrediction implements TypePrediction {
 
+    @NotNull
     private final Type type;
 
-    public SingleValueTypePrediction(Type type) {this.type = type;}
+    public SingleValueTypePrediction(@NotNull Type type) {this.type = type;}
 
     @Override
     public boolean empty() {

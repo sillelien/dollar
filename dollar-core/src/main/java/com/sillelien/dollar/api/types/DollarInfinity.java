@@ -25,7 +25,6 @@ import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import static com.sillelien.dollar.api.DollarStatic.$void;
@@ -33,6 +32,7 @@ import static com.sillelien.dollar.api.DollarStatic.$void;
 public final class DollarInfinity extends AbstractDollar {
 
 
+    @NotNull
     public static final var INSTANCE = DollarFactory.INFINITY;
     private final boolean positive;
 
@@ -94,7 +94,7 @@ public final class DollarInfinity extends AbstractDollar {
         }
         boolean
                 positiveResult =
-                positive && v.positive() || !(positive && negative()) && !(!positive && v.positive());
+                (positive && v.positive()) || (!(positive && negative()) && !(!positive && v.positive()));
         return DollarFactory.wrap(new DollarInfinity(errors(), positiveResult));
     }
 
@@ -123,7 +123,7 @@ public final class DollarInfinity extends AbstractDollar {
         } else if (type.is(Type._STRING)) {
             return DollarStatic.$(positive ? "infinity" : "-infinity");
         } else if (type.is(Type._LIST)) {
-            return DollarStatic.$(Arrays.asList(this));
+            return DollarStatic.$(Collections.singletonList(this));
         } else if (type.is(Type._MAP)) {
             return DollarStatic.$("value", this);
         } else if (type.is(Type._DECIMAL)) {
@@ -265,13 +265,13 @@ public final class DollarInfinity extends AbstractDollar {
 
     @NotNull
     @Override
-    public var remove(Object value) {
+    public var remove(@NotNull Object value) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $remove(var value) {
+    public var $remove(@NotNull var value) {
         return this;
     }
 
@@ -284,7 +284,7 @@ public final class DollarInfinity extends AbstractDollar {
     @Override
     public int compareTo(@NotNull var o) {
         if (o.infinite()) {
-            return new Integer(sign()).compareTo(o.sign());
+            return Integer.compare(sign(), o.sign());
         } else {
             if (positive) {
                 return 1;
@@ -306,7 +306,7 @@ public final class DollarInfinity extends AbstractDollar {
         if (other instanceof var) {
             var o = ((var) other)._fixDeep()._unwrap();
             if (this == o) { return true; }
-            if (o == null || getClass() != o.getClass()) { return false; }
+            if ((o == null) || (getClass() != o.getClass())) { return false; }
             DollarInfinity that = (DollarInfinity) o;
 
             return positive == that.positive;

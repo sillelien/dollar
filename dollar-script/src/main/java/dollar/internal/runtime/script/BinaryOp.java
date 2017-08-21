@@ -16,7 +16,6 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
@@ -85,16 +84,10 @@ public class BinaryOp implements Binary<var>, Operator {
     @Override
     public var map(@NotNull var lhs, @NotNull var rhs) {
         if (immediate) {
-            final var lambda = DollarScriptSupport.node(operation.name(), pure, SourceNodeOptions.NO_SCOPE, parser,
-                                                        source,
-                                                        Arrays.asList(lhs, rhs),
-                                                        new Pipeable() {
-                                                            @Override
-                                                            public var pipe(var... vars) throws Exception {
-                                                                return function.apply(lhs, rhs);
-                                                            }
-                                                        });
-            return lambda;
+            return DollarScriptSupport.node(operation.name(), pure, SourceNodeOptions.NO_SCOPE, parser,
+                                            source,
+                                            Arrays.asList(lhs, rhs),
+                                            vars -> function.apply(lhs, rhs));
 
         }
         //Lazy evaluation

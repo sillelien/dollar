@@ -31,7 +31,7 @@ public interface DollarMonitor extends ExtensionPoint<DollarMonitor> {
     void dumpThread();
 
     @NotNull
-    <R> R run(String simpleLabel, String namespacedLabel, String info, Supplier<R> code);
+    <R> R run(@NotNull String simpleLabel, @NotNull String namespacedLabel, @NotNull String info, @NotNull Supplier<R> code);
 
-    void run(String simpleLabel, String namespacedLabel, String info, Runnable code);
+    void run(@NotNull String simpleLabel, @NotNull String namespacedLabel, @NotNull String info, @NotNull Runnable code);
 }

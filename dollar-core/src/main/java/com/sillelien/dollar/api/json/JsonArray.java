@@ -41,18 +41,21 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     }
 
     protected JsonArray(@NotNull List list, boolean copy) {
+        super();
         this.list = copy ? convertList(list) : list;
     }
 
-    public JsonArray(Object[] array) {
+    public JsonArray(@NotNull Object[] array) {
         this(new ArrayList<>(Arrays.asList(array)), true);
     }
 
     public JsonArray() {
+        super();
         list = new ArrayList<>();
     }
 
-    public JsonArray(String jsonString) {
+    public JsonArray(@NotNull String jsonString) {
+        super();
         list = Json.decodeValue(jsonString, List.class);
     }
 
@@ -82,30 +85,30 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
 
     @NotNull
     public JsonArray addObject(@Nullable JsonObject value) {
-        list.add(value == null ? null : value.map);
+        list.add((value == null) ? null : value.map);
         return this;
     }
 
     @NotNull
     JsonArray addArray(@Nullable JsonArray value) {
-        list.add(value == null ? null : value.list);
+        list.add((value == null) ? null : value.list);
         return this;
     }
 
     @NotNull
-    JsonArray addString(String str) {
+    JsonArray addString(@NotNull String str) {
         list.add(str);
         return this;
     }
 
     @NotNull
-    JsonArray addNumber(Number value) {
+    JsonArray addNumber(@NotNull Number value) {
         list.add(value);
         return this;
     }
 
     @NotNull
-    JsonArray addBoolean(Boolean value) {
+    JsonArray addBoolean(@NotNull Boolean value) {
         list.add(value);
         return this;
     }
@@ -129,7 +132,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
         return addObject(value.asObject());
     }
 
-    public boolean contains(Object value) {
+    public boolean contains(@NotNull Object value) {
         return list.contains(value);
     }
 
@@ -172,16 +175,18 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if ((o == null) || (getClass() != o.getClass())) { return false; }
         JsonArray that = (JsonArray) o;
         return list.equals(that.list);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return encodePrettily();
     }
 
+    @NotNull
     public String encodePrettily() throws EncodeException {
         return Json.encodePrettily(list);
     }
@@ -191,6 +196,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     public Iterator<Object> iterator() {
         return new Iterator<Object>() {
 
+            @NotNull
             final Iterator<Object> iter = list.iterator();
 
             @Override
@@ -234,6 +240,7 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
         return strings;
     }
 
+    @NotNull
     String encode() throws EncodeException {
         return Json.encode(list);
     }

@@ -23,7 +23,7 @@ public interface URIHandlerFactory extends ExtensionPoint<URIHandlerFactory> {
 
 
     @NotNull
-    URIHandler forURI(String scheme, URI uri) throws Exception;
+    URIHandler forURI(@NotNull String scheme, @NotNull URI uri) throws Exception;
 
-    boolean handlesScheme(String scheme);
+    boolean handlesScheme(@NotNull String scheme);
 }

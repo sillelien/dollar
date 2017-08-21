@@ -41,10 +41,12 @@ import java.util.stream.Collectors;
  */
 public class DollarQueue extends AbstractDollar {
 
+    @NotNull
     private final ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
+    @NotNull
     private final Queue<var> queue;
 
-    public DollarQueue(@NotNull ImmutableList<Throwable> errors, Queue<var> queue) {
+    public DollarQueue(@NotNull ImmutableList<Throwable> errors, @NotNull Queue<var> queue) {
         super(errors);
         this.queue = queue;
     }
@@ -52,6 +54,7 @@ public class DollarQueue extends AbstractDollar {
     /**
      * Generic read
      */
+    @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
     public var $read(boolean blocking, boolean mutating) {
@@ -65,7 +68,7 @@ public class DollarQueue extends AbstractDollar {
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    public var $write(var value, boolean blocking, boolean mutating) {
+    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
         if (mutating) {
             queue.add(value);
             listeners.forEach((s, pipeable) -> {
@@ -93,7 +96,7 @@ public class DollarQueue extends AbstractDollar {
     @Guarded(ChainGuard.class)
     public var $drain() {
         ArrayList<var> result = new ArrayList<>();
-        while (queue.size() > 0) {
+        while (!queue.isEmpty()) {
             result.add(queue.poll());
         }
         return DollarFactory.fromList(result);
@@ -103,7 +106,7 @@ public class DollarQueue extends AbstractDollar {
     @Override
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    public var $publish(var value) {
+    public var $publish(@NotNull var value) {
         listeners.forEach((s, pipeable) -> {
             try {
                 pipeable.pipe(value);
@@ -120,7 +123,7 @@ public class DollarQueue extends AbstractDollar {
     @Guarded(ChainGuard.class)
     public var $each(@NotNull Pipeable pipe) {
         ArrayList<var> result = new ArrayList<>();
-        while (queue.size() > 0) {
+        while (!queue.isEmpty()) {
             try {
                 result.add(pipe.pipe(queue.poll()));
             } catch (Exception e) {
@@ -260,7 +263,7 @@ public class DollarQueue extends AbstractDollar {
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
-    public var $remove(var valueToRemove) {
+    public var $remove(@NotNull var valueToRemove) {
         return DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
     }
 

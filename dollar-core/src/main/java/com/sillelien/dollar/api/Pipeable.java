@@ -16,6 +16,10 @@
 
 package com.sillelien.dollar.api;
 
+import org.jetbrains.annotations.NotNull;
+
+@FunctionalInterface
 public interface Pipeable {
+    @NotNull
     var pipe(var... in) throws Exception;
 }

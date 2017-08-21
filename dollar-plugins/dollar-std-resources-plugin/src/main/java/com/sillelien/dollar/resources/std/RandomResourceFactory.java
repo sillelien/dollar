@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2014-2015 Neil Ellis
+ *    Copyright (c) 2014-2017 Neil Ellis
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
  */
 
 package com.sillelien.dollar.resources.std;
@@ -36,6 +36,7 @@ public class RandomResourceFactory implements URIHandlerFactory {
     @Nullable private static final DollarExecutor
             executor =
             Plugins.sharedInstance(DollarExecutor.class);
+    @NotNull
     private final HashMap<String, Pipeable> consumers = new HashMap<>();
 
 
@@ -55,7 +56,9 @@ public class RandomResourceFactory implements URIHandlerFactory {
         return this;
     }
 
-    @NotNull @Override public URIHandler forURI(String scheme, URI uri) throws Exception {
+    @NotNull
+    @Override
+    public URIHandler forURI(@NotNull String scheme, @NotNull URI uri) throws Exception {
 
         return new URIHandler() {
 
@@ -83,15 +86,21 @@ public class RandomResourceFactory implements URIHandlerFactory {
                 return $(Math.random());
             }
 
-            @NotNull @Override public var remove(var v) {
+            @NotNull
+            @Override
+            public var remove(@NotNull var v) {
                 return $void();
             }
 
-            @NotNull @Override public var removeValue(var v) {
+            @NotNull
+            @Override
+            public var removeValue(@NotNull var v) {
                 return $void();
             }
 
-            @NotNull @Override public var set(var key, var value) {
+            @NotNull
+            @Override
+            public var set(@NotNull var key, @NotNull var value) {
                 return $void();
             }
 
@@ -105,20 +114,22 @@ public class RandomResourceFactory implements URIHandlerFactory {
             @Override public void stop() {
             }
 
-            @Override public void subscribe(Pipeable consumer, String id) throws IOException {
+            @Override
+            public void subscribe(@NotNull Pipeable consumer, @NotNull String id) throws IOException {
                 consumers.put(id, consumer);
             }
 
             @Override public void unpause() {
             }
 
-            @Override public void unsubscribe(String subId) {
+            @Override
+            public void unsubscribe(@NotNull String subId) {
                 consumers.remove(subId);
             }
         };
     }
 
     @Override public boolean handlesScheme(@NotNull String scheme) {
-        return scheme.equals("random");
+        return "random".equals(scheme);
     }
 }

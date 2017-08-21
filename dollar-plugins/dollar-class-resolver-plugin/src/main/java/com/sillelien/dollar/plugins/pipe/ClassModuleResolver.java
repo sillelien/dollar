@@ -33,7 +33,7 @@ public class ClassModuleResolver implements ModuleResolver {
     }
 
     @NotNull @Override
-    public <T,P> Pipeable resolve(@NotNull String uriWithoutScheme, T scope, P parser) throws Exception {
+    public <T, P> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope, @NotNull P parser) throws Exception {
         return (Pipeable) DollarStatic.context().getClassLoader().loadClass(uriWithoutScheme).newInstance();
     }
 }

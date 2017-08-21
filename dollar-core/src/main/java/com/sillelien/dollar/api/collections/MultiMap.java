@@ -34,7 +34,7 @@ public interface MultiMap<K, V> extends Cloneable, Serializable {
      */
     void clear();
 
-    boolean containsKey(Object key);
+    boolean containsKey(@NotNull Object key);
 
     /**
      * Checks whether the map contains the value specified. <p> This checks all collections against all keys for the
@@ -43,7 +43,7 @@ public interface MultiMap<K, V> extends Cloneable, Serializable {
      * @param value the value to search for
      * @return true if the map contains the value
      */
-    boolean containsValue(Object value);
+    boolean containsValue(@NotNull Object value);
 
     /**
      * Checks whether the collection at the specified key contains the value.
@@ -52,7 +52,7 @@ public interface MultiMap<K, V> extends Cloneable, Serializable {
      * @return true if the map contains the value
      * @since Commons Collections 3.1
      */
-    boolean containsValue(Object key, Object value);
+    boolean containsValue(@NotNull Object key, @NotNull Object value);
 
     @NotNull
     Iterable<? extends Map.Entry<K, Collection<V>>> entries();
@@ -66,7 +66,7 @@ public interface MultiMap<K, V> extends Cloneable, Serializable {
      * @since Commons Collections 3.1
      */
     @NotNull
-    Collection<V> getCollection(K key);
+    Collection<V> getCollection(@NotNull K key);
 
     /**
      * Gets an iterator for the collection mapped to the specified key.
@@ -76,7 +76,7 @@ public interface MultiMap<K, V> extends Cloneable, Serializable {
      * @since Commons Collections 3.1
      */
     @Nullable
-    Iterator<V> iterator(Object key);
+    Iterator<V> iterator(@NotNull Object key);
 
     /**
      * Adds a collection of values to the collection associated with the specified key.
@@ -86,7 +86,7 @@ public interface MultiMap<K, V> extends Cloneable, Serializable {
      * @return true if this map changed
      * @since Commons Collections 3.1
      */
-    boolean putAll(Object key, Collection<V> values);
+    boolean putAll(@NotNull Object key, @NotNull Collection<V> values);
 
     /**
      * Adds the value to the collection associated with the specified key. <p> Unlike a normal {@code Map} the
@@ -97,7 +97,7 @@ public interface MultiMap<K, V> extends Cloneable, Serializable {
      * @return the value added if the map changed and null if the map did not change
      */
     @Nullable
-    V putValue(K key, V value);
+    V putValue(@NotNull K key, @NotNull V value);
 
     /**
      * Removes a specific value from map. <p> The item is removed from the collection mapped to the specified key. Other
@@ -108,7 +108,7 @@ public interface MultiMap<K, V> extends Cloneable, Serializable {
      * @param item the value to remove
      * @return the value removed (which was passed in), null if nothing removed
      */
-    boolean remove(Object key, Object item);
+    boolean remove(@NotNull Object key, @NotNull Object item);
 
     /**
      * Gets the size of the collection mapped to the specified key.
@@ -117,7 +117,7 @@ public interface MultiMap<K, V> extends Cloneable, Serializable {
      * @return the size of the collection at the key, zero if key not in map
      * @since Commons Collections 3.1
      */
-    int size(Object key);
+    int size(@NotNull Object key);
 
     /**
      * Gets a collection containing all the values in the map. <p> This returns a collection containing the combination

@@ -163,7 +163,7 @@ public final class Type {
     }
 
     public boolean is(@Nullable Type t) {
-        return name.equals(t != null ? t.name : null);
+        return name.equals((t != null) ? t.name : null);
 
     }
 
@@ -200,7 +200,7 @@ public final class Type {
     @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ((o == null) || (getClass() != o.getClass())) return false;
         Type type = (Type) o;
         return Objects.equals(name, type.name) &&
                        Objects.equals(constraint, type.constraint);

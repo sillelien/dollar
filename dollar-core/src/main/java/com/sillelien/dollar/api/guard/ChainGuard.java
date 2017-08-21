@@ -17,6 +17,7 @@
 package com.sillelien.dollar.api.guard;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
 
@@ -28,13 +29,13 @@ public class ChainGuard implements Guard {
     }
 
     @Override
-    public void postCondition(Object guarded, Method method, Object[] args, Object result) {
+    public void postCondition(@NotNull Object guarded, @NotNull Method method, @Nullable Object[] args, @NotNull Object result) {
 
         assertNotNull("return value", result, method);
     }
 
     @Override
-    public void preCondition(Object guarded, Method method, Object[] args) {
+    public void preCondition(@NotNull Object guarded, @NotNull Method method, @Nullable Object[] args) {
 
     }
 

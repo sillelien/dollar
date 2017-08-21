@@ -37,7 +37,7 @@ public interface TypeLearner extends ExtensionPoint<TypeLearner> {
         for (var input : inputs) {
             TypePrediction inputPrediction = input._predictType();
             final Set<String> types;
-            if (inputPrediction == null || inputPrediction.empty()) {
+            if ((inputPrediction == null) || inputPrediction.empty()) {
                 types = Collections.singleton(Type._ANY.toString());
             } else {
                 types = inputPrediction.types().stream().map(Type::toString).collect(Collectors.toSet());
@@ -58,9 +58,9 @@ public interface TypeLearner extends ExtensionPoint<TypeLearner> {
         return perms;
     }
 
-    void learn(String name, SourceSegment source, List<var> inputs, Type type);
+    void learn(@NotNull String name, @NotNull SourceSegment source, @NotNull List<var> inputs, @NotNull Type type);
 
     @NotNull
-    TypePrediction predict(String name, SourceSegment source, List<var> inputs);
+    TypePrediction predict(@NotNull String name, @NotNull SourceSegment source, @NotNull List<var> inputs);
 
 }

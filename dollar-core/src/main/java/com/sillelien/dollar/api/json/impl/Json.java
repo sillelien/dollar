@@ -30,9 +30,11 @@ import java.util.Map;
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-public class Json {
+public final class Json {
 
+    @NotNull
     private final static ObjectMapper mapper = new ObjectMapper();
+    @NotNull
     private final static ObjectMapper prettyMapper = new ObjectMapper();
 
     static {
@@ -40,7 +42,8 @@ public class Json {
         mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
     }
 
-    public static String encode(Object obj) throws EncodeException {
+    @NotNull
+    public static String encode(@NotNull Object obj) throws EncodeException {
         try {
             return mapper.writeValueAsString(obj);
         } catch (Exception e) {
@@ -48,7 +51,8 @@ public class Json {
         }
     }
 
-    public static String encodePrettily(Object obj) throws EncodeException {
+    @NotNull
+    public static String encodePrettily(@NotNull Object obj) throws EncodeException {
         try {
             return prettyMapper.writeValueAsString(obj);
         } catch (Exception e) {
@@ -58,7 +62,7 @@ public class Json {
 
     @NotNull
     @SuppressWarnings("unchecked")
-    public static <T> T decodeValue(String str, @NotNull Class<?> clazz) throws DecodeException {
+    public static <T> T decodeValue(@NotNull String str, @NotNull Class<?> clazz) throws DecodeException {
         try {
             return (T) mapper.readValue(str, clazz);
         } catch (Exception e) {
@@ -67,7 +71,7 @@ public class Json {
     }
 
     @NotNull
-    public static JsonObject fromJavaObject(Object o) {
+    public static JsonObject fromJavaObject(@NotNull Object o) {
 
         return new JsonObject(mapper.convertValue(o, Map.class));
 

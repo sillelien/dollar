@@ -19,6 +19,7 @@ package com.sillelien.dollar.api;
 import com.sillelien.dollar.api.guard.ChainGuard;
 import com.sillelien.dollar.api.guard.Guarded;
 import com.sillelien.dollar.api.guard.NotNullGuard;
+import org.jetbrains.annotations.NotNull;
 
 public interface LogAware {
 
@@ -28,15 +29,17 @@ public interface LogAware {
      * @param message the message
      * @return the var
      */
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    var debug(Object message);
+    var debug(@NotNull Object message);
 
     /**
      * Debug var.
      *
      * @return the var
      */
+    @NotNull
     @Guarded(ChainGuard.class)
     var debug();
 
@@ -47,9 +50,10 @@ public interface LogAware {
      * @param values  the values
      * @return the var
      */
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    var debugf(String message, Object... values);
+    var debugf(@NotNull String message, Object... values);
 
     /**
      * Error var.
@@ -57,9 +61,10 @@ public interface LogAware {
      * @param exception the exception
      * @return the var
      */
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    var error(Throwable exception);
+    var error(@NotNull Throwable exception);
 
     /**
      * Error var.
@@ -67,15 +72,17 @@ public interface LogAware {
      * @param message the message
      * @return the var
      */
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    var error(Object message);
+    var error(@NotNull Object message);
 
     /**
      * Error var.
      *
      * @return the var
      */
+    @NotNull
     @Guarded(ChainGuard.class)
     var error();
 
@@ -86,9 +93,10 @@ public interface LogAware {
      * @param values  the values
      * @return the var
      */
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    var errorf(String message, Object... values);
+    var errorf(@NotNull String message, Object... values);
 
     /**
      * Info var.
@@ -96,15 +104,17 @@ public interface LogAware {
      * @param message the message
      * @return the var
      */
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    var info(Object message);
+    var info(@NotNull Object message);
 
     /**
      * Info var.
      *
      * @return the var
      */
+    @NotNull
     @Guarded(ChainGuard.class)
     var info();
 
@@ -115,9 +125,10 @@ public interface LogAware {
      * @param values  the values
      * @return the var
      */
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullGuard.class)
-    var infof(String message, Object... values);
+    var infof(@NotNull String message, Object... values);
 
 
 }

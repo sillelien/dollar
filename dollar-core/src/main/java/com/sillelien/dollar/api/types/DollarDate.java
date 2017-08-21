@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoField;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Objects;
 
 public class DollarDate extends AbstractDollarSingleValue<Instant> {
@@ -64,7 +64,7 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     @Override
     public var $divide(@NotNull var rhs) {
         var rhsFix = rhs._fixDeep();
-        if (rhsFix.zero() || rhsFix.toDouble() == null || rhsFix.toDouble() == 0.0) {
+        if (rhsFix.zero() || (rhsFix.toDouble() == null) || (rhsFix.toDouble() == 0.0)) {
             return DollarFactory.infinity(rhs.positive(), errors(), rhs.errors());
         }
         return DollarFactory.fromValue(asDecimal() / rhs.toDouble(), errors(), rhs.errors());
@@ -119,7 +119,7 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
         } else if (type.is(Type._STRING)) {
             return DollarStatic.$(value.toString());
         } else if (type.is(Type._LIST)) {
-            return DollarStatic.$(Arrays.asList(this));
+            return DollarStatic.$(Collections.singletonList(this));
         } else if (type.is(Type._MAP)) {
             return DollarStatic.$("value", this);
         } else if (type.is(Type._DECIMAL)) {
@@ -212,7 +212,7 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
                                                errors(),
                                                rhsFix.errors());
             } catch (DateTimeException dte) {
-                if (value.getEpochSecond() + (ONE_DAY_SECONDS * rhsFix.toDouble()) > 0) {
+                if ((value.getEpochSecond() + (ONE_DAY_SECONDS * rhsFix.toDouble())) > 0) {
                     return DollarFactory.fromValue(LocalDateTime.MAX, errors(),
                                                    rhsFix.errors());
                 } else {

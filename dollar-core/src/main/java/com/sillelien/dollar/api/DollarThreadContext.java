@@ -27,14 +27,19 @@ import java.util.UUID;
 public class DollarThreadContext {
 
 
+    @NotNull
     private List<String> labels = new ArrayList<>();
+    @NotNull
     private DollarMonitor monitor = Plugins.newInstance(DollarMonitor.class);
+    @NotNull
     private var passValue;
+    @NotNull
     private String threadKey = UUID.randomUUID().toString();
+    @NotNull
     private ClassLoader classLoader = DollarThreadContext.class.getClassLoader();
 
-    private DollarThreadContext(List<String> labels, DollarMonitor monitor, var passValue,
-                                String threadKey) {
+    private DollarThreadContext(@NotNull List<String> labels, @NotNull DollarMonitor monitor, @NotNull var passValue,
+                                @NotNull String threadKey) {
         this.labels = labels;
         this.monitor = monitor;
         this.passValue = passValue;
@@ -51,47 +56,52 @@ public class DollarThreadContext {
     }
 
     @NotNull
-    public DollarThreadContext child(String s) {
+    public DollarThreadContext child(@NotNull String s) {
         return new DollarThreadContext(new ArrayList<>(labels), monitor, passValue, threadKey + ":" + s);
     }
 
+    @NotNull
     public ClassLoader getClassLoader() {
         return classLoader;
     }
 
-    public void setClassLoader(ClassLoader classLoader) {
+    public void setClassLoader(@NotNull ClassLoader classLoader) {
         this.classLoader = classLoader;
     }
 
+    @NotNull
     public List<String> getLabels() {
         return labels;
     }
 
-    public void setLabels(List<String> labels) {
+    public void setLabels(@NotNull List<String> labels) {
         this.labels = labels;
     }
 
+    @NotNull
     public DollarMonitor getMonitor() {
         return monitor;
     }
 
-    public void setMonitor(DollarMonitor monitor) {
+    public void setMonitor(@NotNull DollarMonitor monitor) {
         this.monitor = monitor;
     }
 
+    @NotNull
     public var getPassValue() {
         return passValue;
     }
 
-    public void setPassValue(var passValue) {
+    public void setPassValue(@NotNull var passValue) {
         this.passValue = passValue;
     }
 
+    @NotNull
     public String getThreadKey() {
         return threadKey;
     }
 
-    public void setThreadKey(String threadKey) {
+    public void setThreadKey(@NotNull String threadKey) {
         this.threadKey = threadKey;
     }
 
@@ -102,7 +112,7 @@ public class DollarThreadContext {
         }
     }
 
-    public void pushLabel(String label) {
+    public void pushLabel(@NotNull String label) {
         labels.add(label);
     }
 }

@@ -31,14 +31,15 @@ import java.util.List;
 
 public class DollarRange extends AbstractDollar {
 
+    @NotNull
     private final Range range;
 
-    public DollarRange(@NotNull ImmutableList<Throwable> errors, Object start, Object finish) {
+    public DollarRange(@NotNull ImmutableList<Throwable> errors, @NotNull Object start, @NotNull Object finish) {
         super(errors);
         range = new Range(DollarStatic.$(start), DollarStatic.$(finish));
     }
 
-    public DollarRange(@NotNull ImmutableList<Throwable> errors, Range range) {
+    public DollarRange(@NotNull ImmutableList<Throwable> errors, @NotNull Range range) {
         super(errors);
         this.range = range;
     }
@@ -273,8 +274,8 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $containsValue(@NotNull var value) {
-        return DollarStatic.$(range.lowerEndpoint().compareTo(DollarStatic.$(value)) <= 0 &&
-                                      range.upperEndpoint().compareTo(DollarStatic.$(value)) >= 0);
+        return DollarStatic.$((range.lowerEndpoint().compareTo(DollarStatic.$(value)) <= 0) &&
+                                      (range.upperEndpoint().compareTo(DollarStatic.$(value)) >= 0));
     }
 
     @NotNull
@@ -322,13 +323,13 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     @Override
-    public var remove(Object value) {
+    public var remove(@NotNull Object value) {
         return DollarFactory.failure(ErrorType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
     @Override
-    public var $remove(var value) {
+    public var $remove(@NotNull var value) {
         return DollarFactory.failure(ErrorType.INVALID_RANGE_OPERATION);
     }
 
@@ -377,6 +378,7 @@ public class DollarRange extends AbstractDollar {
         return diff().toDouble();
     }
 
+    @NotNull
     @Override
     public Long toLong() {
         return diff().toLong();

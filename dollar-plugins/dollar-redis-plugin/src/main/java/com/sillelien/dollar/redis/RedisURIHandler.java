@@ -38,7 +38,7 @@ public class RedisURIHandler implements URIHandler {
     @NotNull private final String path;
     @NotNull private final String query;
 
-    public RedisURIHandler(URI uri, JedisPoolConfig jedisPoolConfig) {
+    public RedisURIHandler(@NotNull URI uri, @NotNull JedisPoolConfig jedisPoolConfig) {
         URI uri1 = uri;
         String host = uri1.host();
         int port = uri1.port();
@@ -118,7 +118,7 @@ public class RedisURIHandler implements URIHandler {
     }
 
     @NotNull @Override
-    public var removeValue(var v) {
+    public var removeValue(@NotNull var v) {
         throw new UnsupportedOperationException();
     }
 
@@ -144,7 +144,7 @@ public class RedisURIHandler implements URIHandler {
     }
 
     @Override
-    public void subscribe(@NotNull Pipeable consumer, String id) {
+    public void subscribe(@NotNull Pipeable consumer, @NotNull String id) {
         try (Jedis jedis = jedisPool.getResource()) {
             jedis.subscribe(new JedisPubSub() {
                 @Override
@@ -192,7 +192,8 @@ public class RedisURIHandler implements URIHandler {
         //TODO
     }
 
-    @Override public void unsubscribe(String subId) {
+    @Override
+    public void unsubscribe(@NotNull String subId) {
         //TODO
     }
 

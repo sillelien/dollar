@@ -17,13 +17,14 @@
 package com.sillelien.dollar.api.exceptions;
 
 import com.sillelien.dollar.api.DollarException;
+import org.jetbrains.annotations.NotNull;
 
 public class LambdaRecursionException extends DollarException {
-    public LambdaRecursionException(Throwable e) {
+    public LambdaRecursionException(@NotNull Throwable e) {
         super(e);
     }
 
-    public LambdaRecursionException(String errorMessage) {
+    public LambdaRecursionException(@NotNull String errorMessage) {
         super(errorMessage);
     }
 

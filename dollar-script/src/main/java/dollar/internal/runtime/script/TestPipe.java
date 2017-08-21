@@ -18,8 +18,10 @@ package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.var;
+import org.jetbrains.annotations.NotNull;
 
 public class TestPipe implements Pipeable {
+    @NotNull
     @Override
     public var pipe(var... in) throws Exception {
         in[0].err();

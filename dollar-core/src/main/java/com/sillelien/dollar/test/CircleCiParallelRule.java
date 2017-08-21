@@ -24,8 +24,9 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 public final class CircleCiParallelRule implements TestRule {
+    @NotNull
     @Override
-    public Statement apply(Statement statement, @NotNull Description description) {
+    public Statement apply(@NotNull Statement statement, @NotNull Description description) {
 
         boolean runTest = true;
 

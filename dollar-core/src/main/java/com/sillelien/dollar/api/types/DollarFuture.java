@@ -25,6 +25,7 @@ import java.util.concurrent.Future;
 
 public class DollarFuture implements java.lang.reflect.InvocationHandler {
 
+    @NotNull
     private Future<var> value = new CompletableFuture<>();
 
     /**
@@ -32,12 +33,13 @@ public class DollarFuture implements java.lang.reflect.InvocationHandler {
      *
      * @param value the value
      */
-    public DollarFuture(Future<var> value) {
+    public DollarFuture(@NotNull Future<var> value) {
         this.value = value;
     }
 
+    @NotNull
     @Override
-    public Object invoke(Object proxy, @NotNull Method method, Object[] args) throws Throwable {
+    public Object invoke(@NotNull Object proxy, @NotNull Method method, @NotNull Object[] args) throws Throwable {
         return method.invoke(value.get(), args);
     }
 }

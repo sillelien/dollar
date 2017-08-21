@@ -26,12 +26,14 @@ import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractMapDBURI implements URIHandler {
+    @NotNull
     private static final ConcurrentHashMap<String, DB> txs = new ConcurrentHashMap<>();
     @NotNull
     protected final String scheme;
     @NotNull protected final URI uri;
     @NotNull
     protected final DB tx;
+    @NotNull
     private final String host;
 
     public AbstractMapDBURI(
@@ -79,5 +81,6 @@ public abstract class AbstractMapDBURI implements URIHandler {
         //TODO
     }
 
+    @NotNull
     protected String getHost() {return host;}
 }

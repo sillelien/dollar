@@ -25,14 +25,17 @@ import java.util.List;
 
 public abstract class Unit extends DollarStatic implements Pipeable {
 
+    @NotNull
     private static final ThreadLocal<Class<? extends Unit>> $THIS = new ThreadLocal<>();
+    @NotNull
     protected static List<String> args;
     @NotNull
 //  protected var passedIn = DollarStatic.threadContext.get().getPassValue();
     protected final var in = DollarFactory.fromValue(JsonUtil.argsToJson(args));
+    @NotNull
     protected var out;
 
-    protected static void mainClass(Class<? extends Unit> main) {
+    protected static void mainClass(@NotNull Class<? extends Unit> main) {
         $THIS.set(main);
     }
 
@@ -44,7 +47,7 @@ public abstract class Unit extends DollarStatic implements Pipeable {
 //        }
 //    }
 
-    public static void main(String[] args) throws IllegalAccessException, InstantiationException {
+    public static void main(@NotNull String[] args) throws IllegalAccessException, InstantiationException {
         if ($THIS.get() == null) {
             System.err.println(
                     "Please add a line in this class which says 'public static void main(String[] args) {run(<classname>.class,args);}'");
@@ -53,7 +56,7 @@ public abstract class Unit extends DollarStatic implements Pipeable {
 
     }
 
-    protected static void run(Class<? extends Unit> main, String[] args) {
+    protected static void run(@NotNull Class<? extends Unit> main, @NotNull String[] args) {
         $THIS.set(main);
         Unit.args = Arrays.asList(args);
         $run(() -> {
@@ -79,6 +82,7 @@ public abstract class Unit extends DollarStatic implements Pipeable {
         });
     }
 
+    @NotNull
     @Override
     public var pipe(var... in) throws Exception {
         return in[0];
@@ -86,7 +90,7 @@ public abstract class Unit extends DollarStatic implements Pipeable {
 
     @NotNull
     public var result() {
-        return out != null ? out : in;
+        return (out != null) ? out : in;
     }
 
 

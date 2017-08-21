@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
-public class JsonUtil {
+public final class JsonUtil {
     @NotNull
     public static JsonObject argsToJson(@NotNull List<String> args) {
         JsonObject json = new JsonObject();
@@ -31,7 +31,7 @@ public class JsonUtil {
             for (String arg : args) {
                 if (arg.startsWith("-")) {
                     if (!key.isEmpty()) {
-                        if (value instanceof String && ((String) value).isEmpty()) {
+                        if ((value instanceof String) && ((String) value).isEmpty()) {
                             value = true;
                         }
                         json.putValue(key, value);
@@ -40,7 +40,7 @@ public class JsonUtil {
                     value = "";
                 } else {
                     Object argConverted = convert(arg);
-                    if (value instanceof String && ((String) value).isEmpty()) {
+                    if ((value instanceof String) && ((String) value).isEmpty()) {
                         value = argConverted;
                     } else if (value instanceof JsonArray) {
                         ((JsonArray) value).add(argConverted);
@@ -49,7 +49,7 @@ public class JsonUtil {
                     }
                 }
             }
-            if (value instanceof String && ((String) value).isEmpty()) {
+            if ((value instanceof String) && ((String) value).isEmpty()) {
                 value = true;
             }
             json.putValue(key, value);
@@ -57,9 +57,10 @@ public class JsonUtil {
         return json;
     }
 
+    @NotNull
     private static Object convert(@NotNull String arg) {
         Object argConverted = arg;
-        if (arg.equals("true") || arg.equals("false")) {
+        if ("true".equals(arg) || "false".equals(arg)) {
             argConverted = Boolean.valueOf(arg);
         } else if (arg.matches("^\\d+$")) {
             argConverted = Long.valueOf(arg);

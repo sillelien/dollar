@@ -50,7 +50,7 @@ public class MapDBURIFactory implements URIHandlerFactory {
 
     @Override
     public boolean handlesScheme(@NotNull String scheme) {
-        return scheme.equals("db");
+        return "db".equals(scheme);
     }
 }
 

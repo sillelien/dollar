@@ -431,7 +431,7 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $remove(var key) {
+    public var $remove(@NotNull var key) {
         final LinkedHashMap<var, var> newMap = new LinkedHashMap<>(map);
         newMap.remove(key);
         return DollarFactory.fromValue(newMap, errors());
@@ -445,7 +445,7 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $listen(Pipeable pipe) {
+    public var $listen(@NotNull Pipeable pipe) {
         String key = UUID.randomUUID().toString();
         $listen(pipe, key);
         return DollarStatic.$(key);
@@ -453,7 +453,7 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $listen(Pipeable pipe, String key) {
+    public var $listen(@NotNull Pipeable pipe, @NotNull String key) {
         for (var v : map.values()) {
             //Join the children to this, so if the children change
             //listeners to this get the latest value of this.

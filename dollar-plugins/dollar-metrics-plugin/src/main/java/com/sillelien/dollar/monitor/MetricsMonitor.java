@@ -29,13 +29,15 @@ import java.util.function.Supplier;
 
 public class MetricsMonitor implements DollarMonitor {
 
-  private final MetricRegistry metrics = new MetricRegistry();
+    @NotNull
+    private final MetricRegistry metrics = new MetricRegistry();
   @NotNull
   private final ConsoleReporter reporter;
 
   static {
   }
 
+    @NotNull
     private final Logger log = LoggerFactory.getLogger(getClass());
 
 
@@ -61,24 +63,24 @@ public class MetricsMonitor implements DollarMonitor {
   }
 
   @Override
-  public <R> R run(String simpleLabel, String namespacedLabel, String info, @NotNull Supplier<R> code) {
+  public <R> R run(@NotNull String simpleLabel, @NotNull String namespacedLabel, @NotNull String info, @NotNull Supplier<R> code) {
     Timer timer = metrics.timer(namespacedLabel);
-    log.debug("BEFORE : " + simpleLabel + " : " + info);
+      log.debug("BEFORE : {} : {}", simpleLabel, info);
     Timer.Context time = timer.time();
     R r = code.get();
     time.stop();
-    log.debug("AFTER : " + simpleLabel + " : " + info);
+      log.debug("AFTER : {} : {}", simpleLabel, info);
     return r;
   }
 
   @Override
-  public void run(String simpleLabel, String namespacedLabel, String info, @NotNull Runnable code) {
+  public void run(@NotNull String simpleLabel, @NotNull String namespacedLabel, @NotNull String info, @NotNull Runnable code) {
     Timer timer = metrics.timer(namespacedLabel);
-    log.debug("BEFORE : " + simpleLabel + " : " + info);
+      log.debug("BEFORE : {} : {}", simpleLabel, info);
     Timer.Context time = timer.time();
     code.run();
     time.stop();
-    log.debug("AFTER : " + simpleLabel + " : " + info);
+      log.debug("AFTER : {} : {}", simpleLabel, info);
   }
 
 }

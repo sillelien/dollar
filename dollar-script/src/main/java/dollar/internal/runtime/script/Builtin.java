@@ -26,26 +26,31 @@ import java.util.List;
 
 public interface Builtin<T> {
 
-    @NotNull T execute(boolean pure, List<var> args, Scope scope);
+    @NotNull
+    T execute(boolean pure, @NotNull List<var> args, @NotNull Scope scope);
 
 
     interface DollarStyle extends Builtin<var> {
-        @NotNull var execute(boolean pure, List<var> args, Scope scope);
+        @NotNull
+        var execute(boolean pure, @NotNull List<var> args, @NotNull Scope scope);
     }
 
     interface JavaStyle<T> extends Builtin<T> {
-        @NotNull T execute(boolean pure, List<var> args, Scope scope);
+        @NotNull
+        T execute(boolean pure, @NotNull List<var> args, @NotNull Scope scope);
     }
 
-    class BuiltinImpl implements Builtin<var> {
+    class BuiltinImpl<R> implements Builtin<var> {
 
         private final int minargs;
         private final int maxargs;
+        @NotNull
         private final Builtin function;
         private final boolean pure;
+        @NotNull
         private final String name;
 
-        public BuiltinImpl(String name, Builtin function, int minargs, int maxargs, boolean pure) {
+        public BuiltinImpl(@NotNull String name, @NotNull Builtin<R> function, int minargs, int maxargs, boolean pure) {
             this.name = name;
             this.function = function;
             this.minargs = minargs;
@@ -58,7 +63,7 @@ public interface Builtin<T> {
         }
 
         @NotNull @Override
-        public var execute(boolean pure, @NotNull List<var> args, Scope scope) {
+        public var execute(boolean pure, @NotNull List<var> args, @NotNull Scope scope) {
             if (!this.pure && pure) {
                 throw new DollarScriptException("Cannot use an impure function '" + name + "' in a pure expression");
             }

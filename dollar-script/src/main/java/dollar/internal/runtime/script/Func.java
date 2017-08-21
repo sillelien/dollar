@@ -306,7 +306,8 @@ public final class Func {
         return lhs.$as(Type.valueOf(typeName.toUpperCase()));
     }
 
-    static var causesFunc(boolean pure, var lhs, var rhs) {
+    @NotNull
+    static var causesFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         String lhsFix = lhs.getMetaAttribute("variable");
         if (lhsFix == null) {
             return lhs.$listen(vars -> rhs._fix(1, false));
@@ -336,7 +337,11 @@ public final class Func {
     }
 
     @NotNull
-    static var everyFunc(AtomicInteger count, var durationVar, var until, var unless, VarInternal block) {
+    static var everyFunc(@NotNull AtomicInteger count,
+                         @NotNull var durationVar,
+                         @Nullable var until,
+                         @Nullable var unless,
+                         @NotNull VarInternal block) {
         Scope scope = currentScope();
         Double duration = durationVar.toDouble();
         assert duration != null;
@@ -365,7 +370,7 @@ public final class Func {
     }
 
     @NotNull
-    static var moduleFunc(DollarParserImpl parser, String moduleName, Iterable<var> params) {
+    static var moduleFunc(@NotNull DollarParserImpl parser, @NotNull String moduleName, @Nullable Iterable<var> params) {
         String[] parts = moduleName.split(":", 2);
         if (parts.length < 2) {
             throw new IllegalArgumentException("Module " + moduleName + " needs to have a scheme");

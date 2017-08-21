@@ -34,7 +34,7 @@ public class MavenModuleResolver implements ModuleResolver {
     }
 
     @NotNull @Override
-    public <T,P> Pipeable resolve(@NotNull String uriWithoutScheme, T scope, P parser) {
+    public <T, P> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope, @NotNull P parser) {
         String[] strings = uriWithoutScheme.split(":", 2);
         try {
             return (Pipeable) DependencyRetriever.retrieve(strings[1]).loadClass(strings[0]).newInstance();

@@ -30,14 +30,14 @@ public class NotNullGuard implements Guard {
     }
 
     @Override
-    public void postCondition(Object guarded, Method method, Object[] args, Object result) {
+    public void postCondition(@NotNull Object guarded, @NotNull Method method, @Nullable Object[] args, @NotNull Object result) {
         if (result instanceof Collection) {
             assertNotNull("return value", result, method);
         }
     }
 
     @Override
-    public void preCondition(Object guarded, Method method, @Nullable Object[] args) {
+    public void preCondition(@NotNull Object guarded, @NotNull Method method, @Nullable Object[] args) {
         int count = 0;
         if (args != null) {
             for (Object arg : args) {

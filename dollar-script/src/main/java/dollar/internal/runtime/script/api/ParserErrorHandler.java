@@ -34,6 +34,6 @@ public interface ParserErrorHandler {
 
     @NotNull var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull Exception e);
 
-    <T extends Throwable> void handleTopLevel(@NotNull T t, String name, File file) throws T;
+    <T extends Throwable> void handleTopLevel(@NotNull T t, @NotNull String name, @NotNull File file) throws T;
 
 }

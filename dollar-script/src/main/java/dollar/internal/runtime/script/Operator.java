@@ -17,8 +17,9 @@
 package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.script.SourceSegment;
+import org.jetbrains.annotations.NotNull;
 
 public interface Operator {
 
-    void setSource(SourceSegment source);
+    void setSource(@NotNull SourceSegment source);
 }

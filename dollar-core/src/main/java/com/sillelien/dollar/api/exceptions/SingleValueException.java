@@ -16,12 +16,14 @@
 
 package com.sillelien.dollar.api.exceptions;
 
+import org.jetbrains.annotations.NotNull;
+
 class SingleValueException extends UnsupportedOperationException {
     public SingleValueException() {
         super("Cannot perform this operation on a single value data");
     }
 
-    public SingleValueException(String message) {
+    public SingleValueException(@NotNull String message) {
         super(message);
     }
 }

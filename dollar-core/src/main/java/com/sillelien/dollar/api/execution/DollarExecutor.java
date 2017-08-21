@@ -33,7 +33,7 @@ public interface DollarExecutor extends ExtensionPoint<DollarExecutor> {
      * @return a future for the result
      */
     @NotNull
-    <T> Future<T> executeInBackground(Callable<T> callable);
+    <T> Future<T> executeInBackground(@NotNull Callable<T> callable);
 
     /**
      * Submit a job for execution <b>immediately</b> in an unspecified manner.
@@ -43,7 +43,7 @@ public interface DollarExecutor extends ExtensionPoint<DollarExecutor> {
      * @return the fork/join task
      */
     @NotNull
-    <T> Future<T> executeNow(Callable<T> callable);
+    <T> Future<T> executeNow(@NotNull Callable<T> callable);
 
     /**
      * Force stop, that is do not wait for tasks to finish.
@@ -63,7 +63,7 @@ public interface DollarExecutor extends ExtensionPoint<DollarExecutor> {
      * @return a Future for the task, to enable cancellation
      */
     @NotNull
-    Future<?> scheduleEvery(long millis, Runnable runnable);
+    Future<?> scheduleEvery(long millis, @NotNull Runnable runnable);
 
     /**
      * Submit a job for execution in an unspecified manner.
@@ -73,6 +73,6 @@ public interface DollarExecutor extends ExtensionPoint<DollarExecutor> {
      * @return the fork/join task
      */
     @NotNull
-    <T> Future<T> submit(Callable<T> callable);
+    <T> Future<T> submit(@NotNull Callable<T> callable);
 
 }

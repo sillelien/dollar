@@ -21,32 +21,38 @@ import com.sillelien.dollar.api.guard.Guarded;
 import com.sillelien.dollar.api.guard.NotNullParametersGuard;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.types.ErrorType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 public interface URIAware {
 
+    @NotNull
     @Guarded(ChainGuard.class)
     var $all();
 
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    default var $dispatch(var lhs) {
+    default var $dispatch(@NotNull var lhs) {
         return $write(lhs, false, false);
     }
 
 
+    @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    var $write(var value, boolean blocking, boolean mutating);
+    var $write(@NotNull var value, boolean blocking, boolean mutating);
 
+    @NotNull
     @Guarded(ChainGuard.class)
     var $drain();
 
 
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    default var $give(var lhs) {
+    default var $give(@NotNull var lhs) {
         return $write(lhs, false, true);
     }
 
@@ -55,12 +61,15 @@ public interface URIAware {
      *
      * @param pipeable action
      */
-    default var $listen(Pipeable pipeable) {return DollarStatic.$void();}
+    @NotNull
+    default var $listen(@NotNull Pipeable pipeable) {return DollarStatic.$void();}
 
+    @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
     var $notify();
 
+    @NotNull
     @Guarded(ChainGuard.class)
     default var $peek() {
         return $read(false, false);
@@ -69,42 +78,49 @@ public interface URIAware {
     /**
      * Generic read
      */
+    @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
     var $read(boolean blocking, boolean mutating);
 
+    @NotNull
     @Guarded(ChainGuard.class)
     default var $poll() {
         return $read(false, true);
     }
 
+    @NotNull
     @Guarded(ChainGuard.class)
     default var $pop() {
         return $read(true, true);
     }
 
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    var $publish(var lhs);
+    var $publish(@NotNull var lhs);
 
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    default var $push(var lhs) {
+    default var $push(@NotNull var lhs) {
         return $write(lhs, true, true);
     }
 
     /**
      * Receive (from this) synchronously.
      */
+    @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
     default var $read() {
         return $read(true, true);
     }
 
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    default var $subscribe(Pipeable subscription) {
+    default var $subscribe(@NotNull Pipeable subscription) {
         return $subscribe(subscription, UUID.randomUUID().toString());
     }
 
@@ -115,20 +131,23 @@ public interface URIAware {
      * @param id
      * @return
      */
-    default var $listen(Pipeable pipeable, String id) {return DollarStatic.$void();}
+    @NotNull
+    default var $listen(@NotNull Pipeable pipeable, @NotNull String id) {return DollarStatic.$void();}
 
+    @NotNull
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    default var $subscribe(Pipeable subscription, String key) {
+    default var $subscribe(@NotNull Pipeable subscription, @NotNull String key) {
         return DollarFactory.failure(ErrorType.INVALID_OPERATION);
     }
 
     /**
      * Send (to this) synchronously.
      */
+    @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
-    default var $write(var value) {
+    default var $write(@NotNull var value) {
         return $write(value, true, true);
     }
 

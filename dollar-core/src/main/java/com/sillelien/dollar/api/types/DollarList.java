@@ -132,7 +132,7 @@ public class DollarList extends AbstractDollar {
     public var $divide(@NotNull var rhs) {
 
         var rhsFix = rhs._fixDeep();
-        if (rhsFix.toDouble() == null || rhsFix.toDouble() == 0.0) {
+        if ((rhsFix.toDouble() == null) || (rhsFix.toDouble() == 0.0)) {
             return DollarFactory.infinity(true, errors(), rhsFix.errors());
         }
         final int size = (int) ((double) list.size() / Math.abs(rhsFix.toDouble()));
@@ -178,8 +178,7 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public Integer toInteger() {
-        return $stream(false).collect(Collectors.summingInt(
-                NumericAware::toInteger));
+        return $stream(false).mapToInt(NumericAware::toInteger).sum();
     }
 
     @NotNull
@@ -227,8 +226,8 @@ public class DollarList extends AbstractDollar {
     @Override
     public ImmutableMap<var, var> toVarMap() {
         AtomicInteger counter = new AtomicInteger();
-        return list.stream().map(var -> DollarStatic.$(String.valueOf(counter.getAndIncrement()), var)).collect(
-                Collectors.reducing(CollectionAware::$append)).get().toVarMap();
+        return list.stream().map(var -> DollarStatic.$(String.valueOf(counter.getAndIncrement()), var)).reduce(
+                CollectionAware::$append).get().toVarMap();
     }
 
     @NotNull
@@ -420,7 +419,7 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $remove(var value) {
+    public var $remove(@NotNull var value) {
         List<var> newList = list.stream().filter(val -> !val.equals(value)).collect(Collectors.toList());
         return DollarFactory.fromValue(newList, errors());
     }
@@ -434,7 +433,7 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
-    public var $listen(Pipeable pipe) {
+    public var $listen(@NotNull Pipeable pipe) {
         String key = UUID.randomUUID().toString();
         $listen(pipe, key);
         return DollarStatic.$(key);
@@ -442,7 +441,7 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $listen(Pipeable pipe, String key) {
+    public var $listen(@NotNull Pipeable pipe, @NotNull String key) {
         for (var v : list) {
             //Join the children to this, so if the children change
             //listeners to this get the latest value of this.

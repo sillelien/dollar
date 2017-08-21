@@ -28,12 +28,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class ParserMain {
+public final class ParserMain {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("ParserMain");
 
 
-    public static void main(String[] args) throws Throwable {
+    public static void main(@NotNull String[] args) throws Throwable {
 
         final ParserOptions options = new ParserOptions();
         new JCommander(options, args);
@@ -58,9 +58,10 @@ public class ParserMain {
     }
 
     private static class ParserConfiguration implements Configuration {
+        @NotNull
         private final ParserOptions options;
 
-        public ParserConfiguration(ParserOptions options) {this.options = options;}
+        public ParserConfiguration(@NotNull ParserOptions options) {this.options = options;}
 
         @Override public boolean debugScope() {
             return options.isDebugScope();

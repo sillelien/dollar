@@ -24,6 +24,7 @@ import java.util.List;
 
 public class ParserOptions {
 
+    @NotNull
     @Parameter(names = "--profile", description = "The configuration profile to use")
     private String profile;
 
@@ -42,6 +43,7 @@ public class ParserOptions {
     @Parameter(names = "--debug-scope")
     private boolean debugScope;
 
+    @NotNull
     @Parameter(description = "The file to execute")
     private List<File> files;
 
@@ -56,11 +58,11 @@ public class ParserOptions {
     }
 
     public boolean isProduction() {
-        return profile.equalsIgnoreCase("prod");
+        return "prod".equalsIgnoreCase(profile);
     }
 
     public boolean isDevelopment() {
-        return profile.equalsIgnoreCase("dev");
+        return "dev".equalsIgnoreCase(profile);
     }
 
     public boolean isMonitor() {
@@ -76,7 +78,7 @@ public class ParserOptions {
     }
 
     public boolean isTest() {
-        return profile.equalsIgnoreCase("test");
+        return "test".equalsIgnoreCase(profile);
     }
 
     public boolean isTolerateErrors() {

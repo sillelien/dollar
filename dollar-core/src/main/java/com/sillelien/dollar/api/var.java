@@ -62,7 +62,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable, Str
     @Guarded(NotNullGuard.class)
     default String $S() {
         String s = toHumanString();
-        return s == null ? "" : s;
+        return (s == null) ? "" : s;
 
     }
 
@@ -71,6 +71,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable, Str
      *
      * @return the string
      */
+    @NotNull
     String toHumanString();
 
     /**
@@ -83,7 +84,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable, Str
     @Guarded(ChainGuard.class)
     @Guarded(ReturnVarOnlyGuard.class)
     @Guarded(NotNullParametersGuard.class)
-    var $default(var v);
+    var $default(@NotNull var v);
 
     /**
      * Returns the mime type of this {@link var} object. By default this will be 'application/json'
@@ -96,6 +97,7 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable, Str
         return DollarStatic.$("application/json");
     }
 
+    @NotNull
     default String $serialized() {
         return DollarFactory.toJson(this).toString();
     }
@@ -207,28 +209,28 @@ public interface var extends ErrorAware, TypeAware, PipeAware, Serializable, Str
     }
 
 
-    default boolean equalsString(String s) {
+    default boolean equalsString(@NotNull String s) {
         return toString().equals(s);
     }
 
 
-    default boolean eq(String s) {
+    default boolean eq(@NotNull String s) {
         return toString().equals(s);
     }
 
-    default boolean eq(Integer i) {
+    default boolean eq(@NotNull Integer i) {
         return toInteger().equals(i);
     }
 
-    default boolean eq(Double d) {
+    default boolean eq(@NotNull Double d) {
         return toInteger().equals(d);
     }
 
-    default boolean eq(List l) {
+    default boolean eq(@NotNull List l) {
         return toList().mutable().equals(l);
     }
 
-    default boolean eq(Map m) {
+    default boolean eq(@NotNull Map m) {
         return toJavaMap().equals(m);
     }
 

@@ -74,7 +74,7 @@ public class DollarException extends RuntimeException {
     @NotNull
     @Override
     public String getMessage() {
-        if (sourceList.size() == 0) {
+        if (sourceList.isEmpty()) {
             return super.getMessage();
 
         } else {

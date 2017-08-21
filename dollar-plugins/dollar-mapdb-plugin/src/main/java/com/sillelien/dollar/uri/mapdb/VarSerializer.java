@@ -32,7 +32,7 @@ import static com.sillelien.dollar.api.DollarStatic.$void;
 
 public class VarSerializer extends GroupSerializerObjectArray<var> implements Serializable {
     @Override public void serialize(@NotNull DataOutput2 out, @Nullable var value) throws IOException {
-        if (value != null && !value.isVoid()) {
+        if ((value != null) && !value.isVoid()) {
             out.writeUTF(value.$type().name());
             out.writeUTF(DollarFactory.serialize(value));
         } else {

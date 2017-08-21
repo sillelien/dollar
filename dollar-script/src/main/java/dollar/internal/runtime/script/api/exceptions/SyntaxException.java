@@ -17,13 +17,14 @@
 package dollar.internal.runtime.script.api.exceptions;
 
 import com.sillelien.dollar.api.DollarException;
+import org.jetbrains.annotations.NotNull;
 
 class SyntaxException extends DollarException {
-    public SyntaxException(Throwable e) {
+    public SyntaxException(@NotNull Throwable e) {
         super(e);
     }
 
-    public SyntaxException(String errorMessage) {
+    public SyntaxException(@NotNull String errorMessage) {
         super(errorMessage);
     }
 }

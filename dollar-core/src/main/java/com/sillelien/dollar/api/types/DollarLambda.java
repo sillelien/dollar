@@ -29,6 +29,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,13 +39,9 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
     private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
 
     private static final int MAX_STACK_DEPTH = 100;
-    private static final ThreadLocal<List<DollarLambda>> notifyStack = new ThreadLocal<List<DollarLambda>>() {
-        @NotNull
-        @Override
-        protected List<DollarLambda> initialValue() {
-            return new ArrayList<>();
-        }
-    };
+    @NotNull
+    private static final ThreadLocal<List<DollarLambda>> notifyStack = ThreadLocal.withInitial(ArrayList::new);
+    @NotNull
     private static final ThreadLocal<List<DollarLambda>> stack = new ThreadLocal<List<DollarLambda>>() {
         @NotNull
         @Override
@@ -52,12 +49,14 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             return new ArrayList<>();
         }
     };
+    @NotNull
     protected final ConcurrentHashMap<Object, Object> meta = new ConcurrentHashMap<>();
     @NotNull
     protected final Pipeable lambda;
     @NotNull
     private final var in;
     private final boolean fixable;
+    @NotNull
     private final ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
 
     public DollarLambda(@NotNull Pipeable lambda) {
@@ -77,12 +76,13 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
     }
 
 
-    public var _constrain(var source, @Nullable var constraint, @Nullable String constraintSource) {
-        if (constraint == null || constraintSource == null) {
+    @NotNull
+    public var _constrain(@NotNull var source, @Nullable var constraint, @Nullable String constraintSource) {
+        if ((constraint == null) || (constraintSource == null)) {
             return source;
         }
         String constraintFingerprint = (String) meta.get("constraintFingerprint");
-        if (constraintFingerprint == null || constraintSource.equals(constraintFingerprint)) {
+        if ((constraintFingerprint == null) || constraintSource.equals(constraintFingerprint)) {
             meta.put("constraintFingerprint", constraintSource);
             return source;
         } else {
@@ -92,7 +92,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
 
     @Nullable
     @Override
-    public Object invoke(@Nullable Object proxy, @NotNull Method method, @NotNull Object[] args) throws Throwable {
+    public Object invoke(@Nullable Object proxy, @NotNull Method method, @Nullable Object[] args) throws Throwable {
         if (stack.get().size() > MAX_STACK_DEPTH) {
             in.error("Stack consists of the following Lambda types: ");
             for (DollarLambda stackEntry : stack.get()) {
@@ -104,23 +104,24 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
         try {
             if (proxy == null) {
                 return null;
-            } else if (Object.class == method.getDeclaringClass()) {
+            } else if (Objects.equals(Object.class, method.getDeclaringClass())) {
                 String name = method.getName();
-                if ("equals".equals(name)) {
-                    return execute().equals(args[0]);
-                } else if ("hashCode".equals(name)) {
-                    return execute().hashCode();
-                } else if ("toString".equals(name)) {
-                    return execute().toString();
-                } else {
-                    throw new IllegalStateException(String.valueOf(method));
+                switch (name) {
+                    case "equals":
+                        return execute().equals(args[0]);
+                    case "hashCode":
+                        return execute().hashCode();
+                    case "toString":
+                        return execute().toString();
+                    default:
+                        throw new IllegalStateException(String.valueOf(method));
                 }
-            } else if (method.getName().equals("dynamic")) {
+            } else if ("dynamic".equals(method.getName())) {
                 return true;
-            } else if (method.getName().equals("_unwrap")) {
+            } else if ("_unwrap".equals(method.getName())) {
                 return proxy;
 //                return lambda.pipe(in)._unwrap();
-            } else if (method.getName().equals("_fix")) {
+            } else if ("_fix".equals(method.getName())) {
                 if (fixable) {
                     if (args.length == 1) {
                         return lambda.pipe(DollarFactory.fromValue(args[0]))._fix((Boolean) args[0]);
@@ -131,9 +132,9 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 } else {
                     return proxy;
                 }
-            } else if (method.getName().equals("_fixDeep")) {
+            } else if ("_fixDeep".equals(method.getName())) {
                 if (fixable) {
-                    if (args == null || args.length == 0) {
+                    if ((args == null) || (args.length == 0)) {
                         return lambda.pipe(DollarFactory.fromValue(false))._fixDeep();
                     } else {
                         return lambda.pipe(DollarFactory.fromValue(args[0]))._fixDeep((Boolean) args[0]);
@@ -141,16 +142,16 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 } else {
                     return proxy;
                 }
-            } else if (method.getName().equals("_constrain")) {
+            } else if ("_constrain".equals(method.getName())) {
                 return _constrain((var) proxy, (var) args[0], String.valueOf(args[1]));
-            } else if (method.getName().equals("_constraintFingerprint")) {
+            } else if ("_constraintFingerprint".equals(method.getName())) {
                 return meta.get("constraintFingerprint");
-            } else if (method.getName().equals("getMetaAttribute")) {
+            } else if ("getMetaAttribute".equals(method.getName())) {
                 return meta.get(args[0].toString());
-            } else if (method.getName().equals("setMetaAttribute")) {
+            } else if ("setMetaAttribute".equals(method.getName())) {
                 meta.put(String.valueOf(args[0]), String.valueOf(args[1]));
                 return null;
-            } else if (method.getName().equals("_scope")) {
+            } else if ("_scope".equals(method.getName())) {
                 throw new Exception("Deprectated (_scope)");
 //                if(args.length == 0) {
 //                    return meta.get("scope");
@@ -158,22 +159,22 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
 //                    meta.put("scope",args[0]);
 //                    return this;
 //                }
-            } else if (method.getName().equals("setMetaAttribute")) {
-                meta.put(String.valueOf(args[0]), String.valueOf(args[1]));
-                return null;
-            } else if (method.getName().equals("getMetaObject")) {
+//            } else if ("setMetaAttribute".equals(method.getName())) {
+//                meta.put(String.valueOf(args[0]), String.valueOf(args[1]));
+//                return null;
+            } else if ("getMetaObject".equals(method.getName())) {
                 return meta.get(args[0]);
-            } else if (method.getName().equals("setMetaObject")) {
+            } else if ("setMetaObject".equals(method.getName())) {
                 meta.put(args[0], args[1]);
                 return null;
-            } else if (method.getName().equals("$listen")) {
+            } else if ("$listen".equals(method.getName())) {
                 String listenerId = UUID.randomUUID().toString();
                 if (args.length == 2) {
                     listenerId = String.valueOf(args[1]);
                 }
                 listeners.put(listenerId, (Pipeable) args[0]);
                 return DollarStatic.$(listenerId);
-            } else if (method.getName().equals("$notify")) {
+            } else if ("$notify".equals(method.getName())) {
                 if (notifyStack.get().contains(this)) {
                     //throw new IllegalStateException("Recursive notify loop detected");
                     return proxy;
@@ -185,13 +186,13 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 }
                 notifyStack.get().remove(this);
                 return proxy;
-            } else if (method.getName().equals("$remove")) {
+            } else if ("$remove".equals(method.getName())) {
                 //noinspection SuspiciousMethodCalls
                 listeners.remove(args[0]);
                 return args[0];
-            } else if (method.getName().equals("hasErrors")) {
+            } else if ("hasErrors".equals(method.getName())) {
                 return false;
-            } else if (method.getName().equals("$copy") || method.getName().equals("copy")) {
+            } else if ("$copy".equals(method.getName()) || "copy".equals(method.getName())) {
                 return proxy;
             } else {
 //            System.err.println(method);
@@ -212,5 +213,6 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
         }
     }
 
+    @NotNull
     public var execute() throws Exception {return executor.executeNow(() -> lambda.pipe(in)).get();}
 }

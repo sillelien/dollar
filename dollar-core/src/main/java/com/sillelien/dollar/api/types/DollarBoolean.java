@@ -22,7 +22,7 @@ import com.sillelien.dollar.api.collections.ImmutableList;
 import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
 
@@ -93,7 +93,7 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         } else if (type.is(Type._STRING)) {
             return DollarStatic.$(toHumanString());
         } else if (type.is(Type._LIST)) {
-            return DollarStatic.$(Arrays.asList(this));
+            return DollarStatic.$(Collections.singletonList(this));
         } else if (type.is(Type._MAP)) {
             return DollarStatic.$("value", this);
         } else if (type.is(Type._DECIMAL)) {

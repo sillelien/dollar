@@ -26,17 +26,19 @@ import org.jetbrains.annotations.Nullable;
 
 public class DollarError extends DollarVoid {
 
+    @NotNull
     private final ErrorType errorType;
+    @NotNull
     private final String errorMessage;
 
-    public DollarError(@NotNull ImmutableList<Throwable> errors, ErrorType errorType,
-                       String errorMessage) {
+    public DollarError(@NotNull ImmutableList<Throwable> errors, @NotNull ErrorType errorType,
+                       @NotNull String errorMessage) {
         super(errors);
         this.errorType = errorType;
         this.errorMessage = errorMessage;
     }
 
-    public DollarError(ErrorType errorType, @NotNull Throwable t) {
+    public DollarError(@NotNull ErrorType errorType, @NotNull Throwable t) {
 
         super(ImmutableList.of(t));
         this.errorType = errorType;
@@ -44,7 +46,7 @@ public class DollarError extends DollarVoid {
     }
 
 
-    public DollarError(ErrorType errorType, String errorMessage, Throwable t) {
+    public DollarError(@NotNull ErrorType errorType, @NotNull String errorMessage, @NotNull Throwable t) {
 
         super(ImmutableList.of(t));
         this.errorType = errorType;
@@ -52,7 +54,7 @@ public class DollarError extends DollarVoid {
     }
 
 
-    public DollarError(ErrorType errorType, String errorMessage) {
+    public DollarError(@NotNull ErrorType errorType, @NotNull String errorMessage) {
 
         super(ImmutableList.of(new DollarException(errorMessage)));
         this.errorType = errorType;

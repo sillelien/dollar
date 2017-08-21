@@ -37,13 +37,16 @@ import static com.sillelien.dollar.api.DollarStatic.$;
 
 public class HttpURIHandler implements URIHandler {
     public static final int BLOCKING_TIMEOUT = 10;
+    @NotNull
     private static final ConcurrentHashMap<String, RouteableNanoHttpd> servers = new ConcurrentHashMap<>();
     @NotNull private final URI uri;
+    @NotNull
     private final ConcurrentHashMap<String, String> subscriptions = new ConcurrentHashMap<>();
+    @NotNull
     private RouteableNanoHttpd httpd;
     @Nullable private String method = "GET";
 
-    public HttpURIHandler(String scheme, @NotNull URI uri) {
+    public HttpURIHandler(@NotNull String scheme, @NotNull URI uri) {
         if (uri.hasSubScheme()) {
             this.uri = URI.parse(scheme + ":" + uri.sub().sub().asString());
             method = this.uri.sub().scheme();
@@ -58,7 +61,7 @@ public class HttpURIHandler implements URIHandler {
     }
 
     @NotNull @Override
-    public var write(var value, boolean blocking, boolean mutating) {
+    public var write(@NotNull var value, boolean blocking, boolean mutating) {
         throw new UnsupportedOperationException();
     }
 
@@ -72,7 +75,7 @@ public class HttpURIHandler implements URIHandler {
     }
 
     @NotNull @Override
-    public var get(var key) {
+    public var get(@NotNull var key) {
         throw new UnsupportedOperationException();
     }
 
@@ -90,24 +93,23 @@ public class HttpURIHandler implements URIHandler {
             return DollarFactory.fromStream(SerializedType.JSON, Unirest.get(uri.toString())
                     .header("Accept","application/json")
                     .asJson().getRawBody());
-        } catch (UnirestException e) {
-            return DollarStatic.handleError(e, null);
-        } catch (IOException e) {
+        } catch (UnirestException | IOException e) {
             return DollarStatic.handleError(e, null);
         }
     }
 
     @NotNull @Override
-    public var remove(var key) {
+    public var remove(@NotNull var key) {
         throw new UnsupportedOperationException();
     }
 
     @NotNull @Override
-    public var removeValue(var v) {
+    public var removeValue(@NotNull var v) {
         throw new UnsupportedOperationException();
     }
 
-    @NotNull public var set(var key, var value) {
+    @NotNull
+    public var set(@NotNull var key, @NotNull var value) {
         throw new UnsupportedOperationException();
     }
 
@@ -125,8 +127,8 @@ public class HttpURIHandler implements URIHandler {
     }
 
     @Override
-    public void subscribe(Pipeable consumer, @NotNull String id) throws IOException {
-        httpd = getHttpServerFor(uri.host(), uri.port() > 0 ? uri.port() : 80);
+    public void subscribe(@NotNull Pipeable consumer, @NotNull String id) throws IOException {
+        httpd = getHttpServerFor(uri.host(), (uri.port() > 0) ? uri.port() : 80);
         final String path = uri.path();
         httpd.handle(path, new RequestHandler(consumer));
         subscriptions.put(id, path);
@@ -140,7 +142,8 @@ public class HttpURIHandler implements URIHandler {
         httpd.remove(subscriptions.get(subId));
     }
 
-    private static RouteableNanoHttpd getHttpServerFor(String hostname, int port) throws IOException {
+    @NotNull
+    private static RouteableNanoHttpd getHttpServerFor(@NotNull String hostname, int port) throws IOException {
         String key = hostname + ":" + port;
         if (servers.containsKey(key)) {
             return servers.get(key);
@@ -154,17 +157,18 @@ public class HttpURIHandler implements URIHandler {
 
     public static class RouteableNanoHttpd extends NanoHttpdServer {
 
+        @NotNull
         private final Map<String, RequestHandler> handlers = new HashMap<>();
 
-        public RouteableNanoHttpd(String hostname, int port) {
+        public RouteableNanoHttpd(@NotNull String hostname, int port) {
             super(hostname, port);
         }
 
-        public void handle(String key, RequestHandler handler) {
+        public void handle(@NotNull String key, @NotNull RequestHandler handler) {
             handlers.put(key, handler);
         }
 
-        public void remove(String key) {
+        public void remove(@NotNull String key) {
             handlers.remove(key);
         }
 
@@ -182,9 +186,10 @@ public class HttpURIHandler implements URIHandler {
     }
 
     public class RequestHandler {
+        @NotNull
         private final Pipeable consumer;
 
-        public RequestHandler(Pipeable consumer) {
+        public RequestHandler(@NotNull Pipeable consumer) {
             this.consumer = consumer;
         }
 
@@ -203,10 +208,11 @@ public class HttpURIHandler implements URIHandler {
                 NanoHttpdServer.Response
                         response =
                         new NanoHttpdServer.Response(new NanoHttpdServer.Response.IStatus() {
-                    @Override
-                    public String getDescription() {
-                        return out.$("reason").$default($("")).toHumanString();
-                    }
+                            @NotNull
+                            @Override
+                            public String getDescription() {
+                                return out.$("reason").$default($("")).toHumanString();
+                            }
 
                     @Override
                     public int getRequestStatus() {

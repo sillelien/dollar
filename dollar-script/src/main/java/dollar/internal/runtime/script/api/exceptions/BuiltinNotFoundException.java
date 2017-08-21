@@ -16,14 +16,17 @@
 
 package dollar.internal.runtime.script.api.exceptions;
 
+import org.jetbrains.annotations.NotNull;
+
 public class BuiltinNotFoundException extends DollarScriptException {
+    @NotNull
     private String variable;
 
-    public BuiltinNotFoundException(Throwable e) {
+    public BuiltinNotFoundException(@NotNull Throwable e) {
         super(e);
     }
 
-    public BuiltinNotFoundException(String variable) {
+    public BuiltinNotFoundException(@NotNull String variable) {
         super("Builtin not found '" + variable + "'");
         this.variable = variable;
     }

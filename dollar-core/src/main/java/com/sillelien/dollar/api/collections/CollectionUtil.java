@@ -22,7 +22,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class CollectionUtil {
+public final class CollectionUtil {
+    @NotNull
     public static String fromStream(@NotNull InputStream stream) throws IOException {
         String s;
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
