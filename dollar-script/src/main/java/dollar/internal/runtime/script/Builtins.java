@@ -110,7 +110,7 @@ public class Builtins {
         addJavaStyle(2, 2, (pure, args, scope) -> args.get(0).toString().matches(args.get(1).$S()), true, "MATCHES");
 
         //todo: use a service loader to load additional builtins :- http://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html
-        //todo: this will be used to provide the additional dollar-game library
+        //todo: this will be used to provide libraries
     }
 
     @NotNull public static var execute(String name, List<var> parameters, boolean pure) {
