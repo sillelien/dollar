@@ -72,7 +72,7 @@ public class UnaryOp implements Unary<var>, Operator {
             throw new AssertionError("The operator " + operation.name() + " is not defined as a unary type but used in a unary " +
                                              "operator.");
         }
-        if (pure && !operation.pure()) {
+        if (pure && (operation.pure() != null) && !operation.pure()) {
             throw new AssertionError("The operation " + operation.name() + " is marked as " + (operation.pure() ? "pure" : "impure") + " yet this operator is set to be " + (pure ? "pure" : "impure"));
         }
     }
@@ -85,14 +85,14 @@ public class UnaryOp implements Unary<var>, Operator {
             return DollarScriptSupport.node(operation.name(), pure, SourceNodeOptions.NO_SCOPE, parser,
                                             source,
                                             Collections.singletonList(from),
-                                            vars -> function.apply(from));
+                                            vars -> function.apply(from), operation);
 
         }
 
         //Lazy evaluation
         return DollarScriptSupport.reactiveNode(operation.name(), pure, SourceNodeOptions.NO_SCOPE, source, parser,
                                                 from,
-                                                            args -> function.apply(from));
+                                                args -> function.apply(from), operation);
 
     }
 

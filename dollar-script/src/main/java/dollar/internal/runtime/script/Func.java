@@ -47,6 +47,7 @@ import java.util.stream.Stream;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
 import static com.sillelien.dollar.api.types.DollarFactory.fromValue;
+import static com.sillelien.dollar.api.types.meta.MetaConstants.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.singletonList;
@@ -60,7 +61,7 @@ public final class Func {
 
 
     @NotNull
-    public static var reduceFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
+    static var reduceFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         assert REDUCE.validForPure(pure);
         return lhs.$list().$stream(false).reduce((x, y) -> {
             try {
@@ -76,17 +77,21 @@ public final class Func {
     }
 
     @NotNull
-    public static var eachFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
+    static var eachFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         assert EACH.validForPure(pure);
-        return lhs.$each(i -> inSubScope(false, pure, EACH.name(),
-                                         newScope -> {
-                                             newScope.setParameter("1", i[0]);
-                                             return rhs.$fixDeep(false);
-                                         }));
+        return lhs.$each(i -> {
+            var result = inSubScope(false, pure, EACH.name(),
+                                    newScope -> {
+                                        newScope.setParameter("1", i[0]);
+                                        return rhs.$fixDeep(false);
+                                    });
+            assert result != null;
+            return result;
+        });
     }
 
     @NotNull
-    public static var elseFunc(@NotNull var lhs, @NotNull var rhs) {
+    static var elseFunc(@NotNull var lhs, @NotNull var rhs) {
         final var fixLhs = lhs.$fixDeep();
         if (fixLhs.isBoolean() && fixLhs.isFalse()) {
             return rhs.$fix(2, false);
@@ -96,10 +101,9 @@ public final class Func {
     }
 
     @NotNull
-    public static var multiplyFunc(@NotNull var lhs, @NotNull var rhs) {
+    static var multiplyFunc(@NotNull var lhs, @NotNull var rhs) {
         final var lhsFix = lhs.$fix(false);
-        if (Arrays.asList("block", "inFunc", "list").contains(
-                lhs.metaAttribute("operation"))) {
+        if (Arrays.asList(BLOCK_OP.name(), MAP_OP.name(), LIST_OP.name()).contains(lhs.metaAttribute(OPERATION_NAME))) {
             var newValue = lhsFix.$fixDeep(false);
             Long max = rhs.toLong();
             for (int i = 1; i < max; i++) {
@@ -112,81 +116,32 @@ public final class Func {
     }
 
     @NotNull
-    public static var errorFunc(@NotNull var v) {
+    static var errorFunc(@NotNull var v) {
         return currentScope().addErrorHandler(v);
     }
 
     @NotNull
-    public static var truthyFunc(@NotNull var v) {
-        return $(v.truthy());
-    }
-
-    @NotNull
-    public static var pairFunc(@NotNull var lhs, @NotNull var rhs) {
+    static var pairFunc(@NotNull var lhs, @NotNull var rhs) {
         return $(lhs.$S(), rhs);
     }
 
     @NotNull
-    public static var gte(@NotNull var lhs, @NotNull var rhs) {
-        return $(lhs.compareTo(rhs) >= 0);
-    }
-
-    @NotNull
-    public static var lte(@NotNull var lhs, @NotNull var rhs) {
-        return $(lhs.compareTo(rhs) <= 0);
-    }
-
-    @NotNull
-    public static var gt(@NotNull var lhs, @NotNull var rhs) {
-        return $(lhs.compareTo(rhs) > 0);
-    }
-
-    @NotNull
-    public static var lt(@NotNull var lhs, @NotNull var rhs) {
-        return $(lhs.compareTo(rhs) < 0);
-    }
-
-    @NotNull
-    public static var rangeFunc(@NotNull var lhs, @NotNull var rhs) {
+    static var rangeFunc(@NotNull var lhs, @NotNull var rhs) {
         return fromValue(new Range(lhs, rhs));
     }
 
     @NotNull
-    public static var orFunc(@NotNull var lhs, @NotNull var rhs) {
-        return $(lhs.isTrue() || rhs.isTrue());
-    }
-
-    @NotNull
-    public static var andFunc(@NotNull var lhs, @NotNull var rhs) {
-        return $(lhs.isTrue() && rhs.isTrue());
-    }
-
-    public static var equalityFunc(@NotNull var lhs, @NotNull var rhs) {
-        return $(lhs.equals(rhs));
-    }
-
-    @NotNull
-    public static var inequalityFunc(@NotNull var lhs, @NotNull var rhs) {
-        return $(!lhs.equals(rhs));
-    }
-
-    @NotNull
-    public static var notFunc(@NotNull var v) {
-        return $(!v.isTrue());
-    }
-
-    @NotNull
-    public static var parallelFunc(@NotNull var v) {
+    static var parallelFunc(@NotNull var v) {
         return v.$fixDeep(true);
     }
 
     @NotNull
-    public static var forkFunc(@NotNull var v) {
+    static var forkFunc(@NotNull var v) {
         return DollarFactory.fromFuture(executor.executeInBackground(() -> fix(v, false)));
     }
 
     @NotNull
-    public static var subscribeFunc(@NotNull var lhs, @NotNull var rhs) {
+    static var subscribeFunc(@NotNull var lhs, @NotNull var rhs) {
         return lhs.$subscribe(
                 i -> inSubScope(true, false,
                                 "subscribe-param", newScope -> {
@@ -198,35 +153,17 @@ public final class Func {
     }
 
     @NotNull
-    public static var writeFunc(@NotNull var lhs, @NotNull var rhs) {
+    static var writeFunc(@NotNull var lhs, @NotNull var rhs) {
         return rhs.$write(lhs);
     }
 
     @NotNull
-    public static var publishFunc(@NotNull var lhs, @NotNull var rhs) {
+    static var publishFunc(@NotNull var lhs, @NotNull var rhs) {
         return rhs.$publish(lhs);
     }
 
     @NotNull
-    public static var errFunc(@NotNull var v) {
-        v.err();
-        return $void();
-    }
-
-    @NotNull
-    public static var debugFunc(@NotNull var v) {
-        v.debug();
-        return $void();
-    }
-
-    @NotNull
-    public static var outFunc(@NotNull var v) {
-        v.out();
-        return $void();
-    }
-
-    @NotNull
-    public static var assertEqualsFunc(@NotNull var lhs, @NotNull var rhs) {
+    static var assertEqualsFunc(@NotNull var lhs, @NotNull var rhs) {
         final var lhsFix = lhs.$fixDeep(false);
         final var rhsFix = rhs.$fixDeep(false);
         if (lhsFix.equals(rhsFix)) {
@@ -237,22 +174,22 @@ public final class Func {
     }
 
     @NotNull
-    public static var listenFunc(@NotNull var lhs, @NotNull var rhs) {
+    static var listenFunc(@NotNull var lhs, @NotNull var rhs) {
         return lhs.isTrue() ? fix(rhs, false) : $void();
     }
 
     @NotNull
-    public static var readFunc(@NotNull var from) {
+    static var readFunc(@NotNull var from) {
         return DollarFactory.fromURI(from).$read();
     }
 
-    public static var inFunc(@NotNull var lhs, @NotNull var rhs) {return rhs.$contains(lhs);}
+    static var inFunc(@NotNull var lhs, @NotNull var rhs) {return rhs.$contains(lhs);}
 
     @NotNull
-    public static var serialFunc(@NotNull var v) {return v.$fixDeep(false);}
+    static var serialFunc(@NotNull var v) {return v.$fixDeep(false);}
 
     @NotNull
-    public static var whileFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
+    static var whileFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         assert WHILE_OP.validForPure(pure);
 
         while (lhs.isTrue()) {
@@ -262,7 +199,7 @@ public final class Func {
     }
 
     @NotNull
-    public static var assertFunc(@Nullable var message, @NotNull var condition) {
+    static var assertFunc(@Nullable var message, @NotNull var condition) {
         if (!condition.isTrue()) {
             throw new DollarAssertionException("Assertion failed: " + (message != null ? message : ""), condition);
 
@@ -271,7 +208,7 @@ public final class Func {
     }
 
     @NotNull
-    public static var ifFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
+    static var ifFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         final var lhsFix = lhs.$fixDeep();
         boolean isTrue = lhsFix.isBoolean() && lhsFix.isTrue();
         assert IF_OP.validForPure(pure);
@@ -279,7 +216,7 @@ public final class Func {
     }
 
     @NotNull
-    public static var isFunc(@NotNull var lhs, @NotNull List<var> value) {
+    static var isFunc(@NotNull var lhs, @NotNull List<var> value) {
         return $(value.stream()
                          .map(var::$S)
                          .map(Type::valueOf)
@@ -287,7 +224,7 @@ public final class Func {
     }
 
     @NotNull
-    public static var forFunc(boolean pure, @NotNull String varName, @NotNull var iterable, @NotNull var block) {
+    static var forFunc(boolean pure, @NotNull String varName, @NotNull var iterable, @NotNull var block) {
         assert FOR_OP.validForPure(pure);
         return iterable.$each(i -> {
             currentScope()
@@ -302,13 +239,13 @@ public final class Func {
     }
 
     @NotNull
-    public static var castFunc(@NotNull var lhs, @NotNull String typeName) {
+    static var castFunc(@NotNull var lhs, @NotNull String typeName) {
         return lhs.$as(Type.valueOf(typeName.toUpperCase()));
     }
 
     @NotNull
     static var causesFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
-        String lhsFix = lhs.metaAttribute("variable");
+        String lhsFix = lhs.metaAttribute(VARIABLE);
         if (lhsFix == null) {
             return lhs.$listen(vars -> rhs.$fix(1, false));
         } else {
@@ -326,11 +263,10 @@ public final class Func {
         currentScope().setParameter("1", lhs);
         var rhsVal = rhs.$fix(false);
         String rhsStr = rhsVal.toString();
-        if ("function-call".equals(
-                rhs.metaAttribute("operation"))) {
+        if (FUNCTION_NAME_OP.name().equals(rhs.metaAttribute(OPERATION_NAME))) {
             return rhsVal;
         } else {
-            return (rhs.metaAttribute("__builtin") != null)
+            return (rhs.metaAttribute(IS_BUILTIN) != null)
                            ? Builtins.execute(rhsStr, singletonList(lhs), pure)
                            : variableNode(pure, rhsStr, false, null, token, parser).$fix(2, false);
         }
@@ -407,7 +343,7 @@ public final class Func {
     }
 
     @NotNull
-    public static var blockFunc(@NotNull List<var> l) {
+    static var blockFunc(@NotNull List<var> l) {
         if (l.isEmpty()) {
             return $void();
         } else {

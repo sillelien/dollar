@@ -20,7 +20,6 @@ import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.Variable;
-import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
@@ -36,32 +35,55 @@ public class PureScope extends ScriptScope {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(PureScope.class);
 
-    public PureScope(@NotNull Scope parent, @NotNull String source, @NotNull String name, @Nullable String file) {
-        super(parent, (file != null) ? file : parent.getFile(), source, name, false);
+    PureScope(@NotNull Scope parent, @NotNull String source, @NotNull String name, @Nullable String file) {
+        super(parent, _file(parent, file), source, name, false);
     }
 
-    @Override public void clear() {
+    @NotNull
+    private static String _file(@NotNull Scope parent, @Nullable String file) {
+        if (file != null) {
+            return file;
+        } else {
+            String parentFile = parent.getFile();
+            assert parentFile != null;
+            return parentFile;
+        }
+    }
+
+    @Override
+    public void clear() {
         throw new UnsupportedOperationException("Cannot clear a pure scope");
     }
 
-    @NotNull @Override public var get(@NotNull String key, boolean mustFind) {
+    @NotNull
+    @Override
+    public var get(@NotNull String key, boolean mustFind) {
         if (key.matches("[0-9]+")) {
-            throw new DollarScriptException("Cannot get numerical keys, use getParameter");
+            throw new AssertionError("Cannot get numerical keys, use getParameter");
         }
-        if (DollarStatic.getConfig().debugScope()) { log.info("Looking up {} in {}", key, this); }
+        if (DollarStatic.getConfig().debugScope()) {
+            log.info("Looking up {} in {}", key, this);
+        }
         Scope scope = getScopeForKey(key);
         if (scope == null) {
             scope = this;
         } else {
-            if (DollarStatic.getConfig().debugScope()) { log.info("Found {} in {}", key, scope); }
+            if (DollarStatic.getConfig().debugScope()) {
+                log.info("Found {} in {}", key, scope);
+            }
         }
         Variable result = (Variable) scope.getVariables().get(key);
-        if ((result != null) && !(result.isReadonly() && result.isFixed()) && !result.isPure()) {
-            throw new UnsupportedOperationException(
-                    "Cannot access non constant values in a pure expression, putValue either 'pure' or 'const' as " +
-                    "appropriate before '" +
-                    key +
-                    "'");
+        if ((result != null)) {
+            if (!result.isPure()) {
+                throw new DollarScriptException("Cannot access impure values in a pure expression, put  'pure'  before the " +
+                                                        "definition of '" + key + "' (" + this + ")");
+            }
+            if (result.isReadonly()) {
+
+            } else {
+                throw new DollarScriptException("Cannot access non constant values in a pure expression, put 'const' before  the " +
+                                                        "definition of '" + key + "' (" + this + ")");
+            }
         }
         if (mustFind) {
             if (result == null) {
@@ -74,57 +96,68 @@ public class PureScope extends ScriptScope {
         }
     }
 
-    @Nullable @Override public Scope getScopeForParameters() {
+    @Nullable
+    @Override
+    public Scope getScopeForParameters() {
         return this;
     }
 
-    @NotNull @Override
+    @NotNull
+    @Override
     public var set(@NotNull String key, @NotNull var value, boolean readonly, @Nullable var constraint,
                    @NotNull String constraintSource,
                    boolean isVolatile, boolean fixed,
                    boolean pure) {
+        if (!pure) {
+            throw new DollarScriptException("Cannot have impure variables in a pure expression, variable was " + key + ", (" + this + ")",
+                                            value);
+        }
         if (isVolatile) {
-            throw new UnsupportedOperationException("Cannot have volatile variables in a pure expression");
+            throw new DollarScriptException("Cannot have volatile variables in a pure expression");
         }
         if (key.matches("[0-9]+")) {
-            throw new DollarAssertionException("Cannot set numerical keys, use setParameter");
+            throw new AssertionError("Cannot set numerical keys, use setParameter");
         }
         Scope scope = getScopeForKey(key);
         if ((scope != null) && !Objects.equals(scope, this)) {
-            throw new UnsupportedOperationException("Cannot modify variables outside of a pure scope");
+            throw new DollarScriptException("Cannot modify variables outside of a pure scope");
         }
         if (scope == null) {
             scope = this;
         }
         if (DollarStatic.getConfig().debugScope()) { log.info("Setting {} in {}", key, scope); }
-        if ((scope != null) && scope.getVariables().containsKey(key) && ((Variable) scope.getVariables().get(key)).isReadonly()) {
+        if (scope.getVariables().containsKey(key) && ((Variable) scope.getVariables().get(key)).isReadonly()) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
         final var fixedValue = fixed ? value.$fixDeep() : value;
         if (scope.getVariables().containsKey(key)) {
-            final Variable variable = ((Variable)scope.getVariables().get(key));
+            final Variable variable = ((Variable) scope.getVariables().get(key));
             if (!variable.isVolatile() && (variable.getThread() != Thread.currentThread().getId())) {
                 handleError(new DollarScriptException("Concurrency Error: Cannot change the variable " +
-                                                      key +
-                                                      " in a different thread from that which is created in."));
+                                                              key +
+                                                              " in a different thread from that which is created in."));
             }
             if (variable.getConstraint() != null) {
-                if (constraint != null) {
-                    handleError(new DollarScriptException(
-                            "Cannot change the constraint on a variable, attempted to redeclare for " + key));
-                }
+                handleError(new DollarScriptException(
+                                                             "Cannot change the constraint on a variable, attempted to redeclare for " + key));
             }
             variable.setValue(fixedValue);
         } else {
             scope.getVariables()
-                 .put(key, new Variable(fixedValue, readonly, constraint, constraintSource, false, fixed, pure));
+                    .put(key, new Variable(fixedValue, readonly, constraint, constraintSource, false, fixed, pure));
         }
         scope.notifyScope(key, fixedValue);
         return value;
     }
 
-    @NotNull @Override
+    @NotNull
+    @Override
     public String toString() {
         return id + "(P)->" + parent;
+    }
+
+    @Override
+    public boolean pure() {
+        return true;
     }
 }

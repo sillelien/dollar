@@ -33,6 +33,7 @@ import java.util.function.Function;
 import static com.sillelien.dollar.api.DollarStatic.$;
 import static com.sillelien.dollar.api.DollarStatic.$void;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.parser.Symbols.DEFINITION;
 
 public class DefinitionOperator implements Function<Token, Function<? super var, ? extends var>> {
     private final boolean pure;
@@ -94,7 +95,7 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
                                     typeConstraintObj.toString().toUpperCase());
                             var it = scope.getParameter("it");
                             return $(it.is(type));
-                        });
+                        }, DEFINITION);
                 constraintSource = typeConstraintObj.toString().toUpperCase();
             } else {
                 constraint = null;
@@ -103,7 +104,7 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
             final String variableName = variableNameObj.toString();
 
             var node = DollarScriptSupport.node(
-                    "assignment", pure, SourceNodeOptions.NO_SCOPE, Arrays.asList(
+                    DEFINITION.name(), pure, SourceNodeOptions.NO_SCOPE, Arrays.asList(
                             constrain(scope, value, constraint, constraintSource)), token, parser,
                     args -> {
                         setVariableDefinition(currentScope(), parser, token, pure, true,
@@ -114,12 +115,12 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
                         );
                         if (exportObj != null && exportObj.toString().equals("export")) {
                             parser.export(variableName, DollarScriptSupport.node(
-                                    "assignment", pure, SourceNodeOptions.NO_SCOPE, Arrays.asList(value), token, parser,
-                                    exportArgs -> value));
+                                    DEFINITION.name(), pure, SourceNodeOptions.NO_SCOPE, Arrays.asList(value), token, parser,
+                                    exportArgs -> value, DEFINITION));
                         }
                         return $void();
-                    }
-            );
+                    },
+                    DEFINITION);
 
             node.$listen(i -> scope.notify(variableName));
             return node;

@@ -63,7 +63,7 @@ public class BinaryOp implements Binary<var>, Operator {
             throw new DollarParserError("The operator " + operation.name() + " is defined as not BINARY but used in a binary " +
                                                 "operator.");
         }
-        if (pure && !operation.pure()) {
+        if (pure && (operation.pure() != null) && !operation.pure()) {
             throw new AssertionError("The operation " + operation.name() + " is marked as " + (operation.pure() ? "pure" : "impure") + " yet this operator is set to be " + (pure ? "pure" : "impure"));
         }
     }
@@ -87,12 +87,12 @@ public class BinaryOp implements Binary<var>, Operator {
             return DollarScriptSupport.node(operation.name(), pure, SourceNodeOptions.NO_SCOPE, parser,
                                             source,
                                             Arrays.asList(lhs, rhs),
-                                            vars -> function.apply(lhs, rhs));
+                                            vars -> function.apply(lhs, rhs), operation);
 
         }
         //Lazy evaluation
         return DollarScriptSupport.reactiveNode(operation.name(), pure, SourceNodeOptions.NO_SCOPE, parser, source, lhs, rhs,
-                                                args -> function.apply(lhs, rhs));
+                                                args -> function.apply(lhs, rhs), operation);
     }
 
     @Override

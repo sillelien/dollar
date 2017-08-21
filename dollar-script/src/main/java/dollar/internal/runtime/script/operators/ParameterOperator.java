@@ -28,9 +28,13 @@ import java.util.List;
 import java.util.function.Function;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
+import static com.sillelien.dollar.api.types.meta.MetaConstants.IMPURE;
+import static com.sillelien.dollar.api.types.meta.MetaConstants.OPERATION_NAME;
 import static dollar.internal.runtime.script.DollarParserImpl.NAMED_PARAMETER_META_ATTR;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.SourceNodeOptions.SCOPE_WITH_CLOSURE;
+import static dollar.internal.runtime.script.parser.Symbols.FUNCTION_NAME_OP;
+import static dollar.internal.runtime.script.parser.Symbols.PARAM_OP;
 
 public class ParameterOperator implements Function<Token, Function<? super var, ? extends var>> {
     @NotNull
@@ -51,7 +55,7 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
             boolean functionName;
             boolean builtin;
 
-            if ("function-name".equals(lhs.metaAttribute("operation"))) {
+            if (FUNCTION_NAME_OP.name().equals(lhs.metaAttribute(OPERATION_NAME))) {
                 String lhsString = lhs.toString();
                 builtin = Builtins.exists(lhsString);
                 if (pure && builtin && !Builtins.isPure(lhsString)) {
@@ -75,7 +79,7 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
                             String paramMetaAttribute = parameter.metaAttribute(NAMED_PARAMETER_META_ATTR);
                             if (paramMetaAttribute != null) {
                                 currentScope().set(paramMetaAttribute, parameter, true, null,
-                                                   null, false, false, pure);
+                                                   null, false, false, !parameter.hasMeta(IMPURE));
                             }
                         }
                         var result;
@@ -90,8 +94,8 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
                         }
 
                         return result;
-                    }
-            );
+                    },
+                            PARAM_OP);
 
             //reactive links
             lhs.$listen(i -> node.$notify());

@@ -466,7 +466,7 @@ public abstract class AbstractDollar implements var {
         return (String) meta.get(key);
     }
 
-    @NotNull
+    @Nullable
     @Override
     public Object meta(@NotNull String key) {
         return meta.get(key);

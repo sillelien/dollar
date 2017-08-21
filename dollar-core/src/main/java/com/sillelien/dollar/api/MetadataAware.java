@@ -37,8 +37,12 @@ public interface MetadataAware {
      * @return the meta object
      */
     @Nullable
-    Object meta(@NotNull String key);
+    <T> T meta(@NotNull String key);
 
+
+    default boolean hasMeta(@NotNull String key) {
+        return meta(key) != null;
+    }
     /**
      * Sets meta attribute.
      *
@@ -53,5 +57,5 @@ public interface MetadataAware {
      * @param key   the key
      * @param value the value
      */
-    void meta(@NotNull String key, @NotNull Object value);
+    <T> void meta(@NotNull String key, @NotNull T value);
 }

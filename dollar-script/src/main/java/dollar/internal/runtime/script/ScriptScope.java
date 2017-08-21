@@ -646,5 +646,10 @@ public class ScriptScope implements Scope {
         destroyed = true;
     }
 
+    @Override
+    public boolean pure() {
+        return false;
+    }
+
 
 }

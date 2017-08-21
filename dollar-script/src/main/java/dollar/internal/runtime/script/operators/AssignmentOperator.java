@@ -39,8 +39,10 @@ import java.util.List;
 import java.util.function.Function;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
+import static com.sillelien.dollar.api.types.meta.MetaConstants.IS_BUILTIN;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
+import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
@@ -110,7 +112,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
         };
         //        node.$listen(i -> scope.notify(varName));
         return node("assignment", pure, NO_SCOPE, singletonList(constrain(scope, rhs, constraint, constraintSource)), token, parser,
-                    pipeable);
+                    pipeable, ASSIGNMENT);
     }
 
     @Nullable
@@ -132,7 +134,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                 var it = currentScope().getParameter("it");
                 assert it != null;
                 return $(it.is(type) && ((objects[3] == null) || ((BooleanAware) objects[3]).isTrue()));
-            });
+            }, ASSIGNMENT);
         } else {
             type = null;
             if (objects[3] instanceof var) constraint = (var) objects[3];
@@ -144,7 +146,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
         boolean decleration = mutability != null;
         constant = (mutability != null) && "const".equals(mutability.toString());
         isVolatile = (mutability != null) && "volatile".equals(mutability.toString());
-        if (((var) objects[4]).metaAttribute("__builtin") != null) {
+        if (((var) objects[4]).metaAttribute(IS_BUILTIN) != null) {
             throw new DollarScriptException("The variable '" +
                                                     objects[4] +
                                                     "' cannot be assigned as this name is the name of a builtin function.");
@@ -193,8 +195,8 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                     };
                                     return rhs.$listen(
                                             listener);
-                                }
-                    );
+                                },
+                                LISTEN_ASSIGN);
 
                 } else if ("*=".equals(op)) {
                     scope.set(varName, $void(), false, null, useSource, true, true, pure);
@@ -210,7 +212,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                             decleration, token,
                                             parser);
                                     return $(rhs.$subscribe(subscriber));
-                                });
+                                }, SUBSCRIBE_ASSIGN);
                 }
             }
             return assign(rhs, objects, finalConstraint, constant, isVolatile, constraintSource,

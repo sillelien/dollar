@@ -41,6 +41,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
+import static com.sillelien.dollar.api.types.meta.MetaConstants.IS_BUILTIN;
 import static dollar.internal.runtime.script.Builtins.exists;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.lang.Character.isAlphabetic;
@@ -80,7 +81,7 @@ final class DollarLexer {
     @NotNull
     static final Parser<var> BUILTIN = token(new TokenTagMap("builtin")).map(s -> {
         var v = $(s);
-        v.metaAttribute("__builtin", s);
+        v.metaAttribute(IS_BUILTIN, s);
         return v;
     });
     @NotNull

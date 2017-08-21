@@ -19,6 +19,7 @@ package com.sillelien.dollar.main;
 import com.beust.jcommander.JCommander;
 import com.sillelien.dollar.api.Configuration;
 import com.sillelien.dollar.api.DollarStatic;
+import dollar.internal.runtime.script.DollarExitError;
 import dollar.internal.runtime.script.DollarParserImpl;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.ParserOptions;
@@ -45,6 +46,8 @@ public final class ParserMain {
             if (!options.isServer()) {
                 System.exit(0);
             }
+        } catch (DollarExitError dee) {
+            System.exit(-1);
         } catch (Throwable t) {
             try {
                 parser.getErrorHandler().handleTopLevel(t, file.getName(), file);

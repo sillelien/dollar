@@ -16,6 +16,28 @@
 
 package com.sillelien.dollar.api.types.meta;
 
+import org.jetbrains.annotations.NotNull;
+
 public class MetaConstants {
+    @NotNull
     public static final String CONSTRAINT_FINGERPRINT = "dollar.internal.constraint.fingerprint";
+    @NotNull
+    public static final String IS_BUILTIN = "dollar.internal.builtin";
+
+    @NotNull
+    public static final String VARIABLE = "dollar.internal.variable";
+
+    @NotNull
+    public static final String OPERATION_NAME = "dollar.internal.operation.name";
+
+    @NotNull
+    public static final String OPERATION = "dollar.internal.operation";
+
+
+    @NotNull
+    public static final String IMPURE = "dollar.internal.pure";
+
+    @NotNull
+    public static final String ID = "dollar.internal.id";
+
 }

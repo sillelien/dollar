@@ -1,0 +1,7 @@
+def impureFunc {
+     @@ $1;
+}
+
+pure {
+    impureFunc();
+}

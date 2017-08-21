@@ -124,6 +124,18 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
     }
 
     @NotNull
+    @Guarded(ChainGuard.class)
+    default var $equals(@Nullable var other) {
+        return DollarFactory.fromValue(equals(other));
+    }
+
+    @NotNull
+    @Guarded(ChainGuard.class)
+    default var $notEquals(@Nullable var other) {
+        return DollarFactory.fromValue(!equals(other));
+    }
+
+    @NotNull
     @Guarded(NotNullGuard.class)
     @Override
     String toString();

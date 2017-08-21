@@ -67,7 +67,7 @@ public interface VarInternal {
      *
      * @return a prediction of what type this object may be.
      */
-    @NotNull
+    @Nullable
     TypePrediction predictType();
 
     @Nullable

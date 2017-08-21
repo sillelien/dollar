@@ -36,8 +36,8 @@ public final class Symbols {
 
 
     @NotNull
-    public static final OpDef PIPE_OPERATOR = new OpDef(BINARY, "|", "pipe", "pipe",
-                                                        false, true, null, PIPE_PRIORITY, true);
+    public static final OpDef PIPE_OP = new OpDef(BINARY, "|", "pipe", "pipe",
+                                                  false, true, null, PIPE_PRIORITY, true);
     @NotNull
     public static final OpDef WRITE_SIMPLE = new OpDef(BINARY, ">>", null, "write-simple",
                                                        false, true, null, OUTPUT_PRIORITY, false);
@@ -387,12 +387,48 @@ public final class Symbols {
     public static final OpDef PURE_OP = new OpDef(PREFIX, null, "pure", "pure",
                                                   false, true,
                                                   null,
-                                                  OUTPUT_PRIORITY, true);
+                                                  NO_PRIORITY, true);
     @NotNull
     public static final OpDef MODULE_OP = new OpDef(OTHER, null, "module", "module",
                                                     false, true,
                                                     "module <name> (<parameter>)*",
-                                                    OUTPUT_PRIORITY, false);
+                                                    NO_PRIORITY, false);
+
+    @NotNull
+    public static final OpDef BUILTIN_OP = new OpDef(OTHER, null, null, "builtin",
+                                                     false, true,
+                                                     "<name> (<parameter>)*",
+                                                     NO_PRIORITY, null);
+
+    @NotNull
+    public static final OpDef UNIT_OP = new OpDef(POSTFIX, null, null, "unit",
+                                                  false, true,
+                                                  "<numeric> <unit-name>",
+                                                  NO_PRIORITY, null);
+
+    @NotNull
+    public static final OpDef LIST_OP = new OpDef(COLLECTION, null, null, "list",
+                                                  false, true,
+                                                  "'[' ( <expression> ',' ) * [ <expression> ] ']'",
+                                                  NO_PRIORITY, null);
+
+    @NotNull
+    public static final OpDef MAP_OP = new OpDef(COLLECTION, null, null, "map",
+                                                 false, true,
+                                                 "'{' ( <expression> ',' ) * [ <expression> ] '}'",
+                                                 NO_PRIORITY, null);
+
+    @NotNull
+    public static final OpDef BLOCK_OP = new OpDef(COLLECTION, null, null, "map",
+                                                   false, true,
+                                                   "'{' ( <expression> ';' ) * [ <expression> ] '}'",
+                                                   NO_PRIORITY, null);
+
+    @NotNull
+    public static final OpDef FUNCTION_NAME_OP = new OpDef(OTHER, null, null, "function-call",
+                                                           false, true,
+                                                           "'<builtin-name> | <variable-name>",
+                                                           NO_PRIORITY, null);
 
     @NotNull
     public static final List<String> SYMBOL_STRINGS;
@@ -717,7 +753,7 @@ public final class Symbols {
                     OR,
                     PARALLEL,
                     PAUSE,
-                    PIPE_OPERATOR,
+                    PIPE_OP,
                     PLUS,
                     PRINT,
                     PUBLISH,

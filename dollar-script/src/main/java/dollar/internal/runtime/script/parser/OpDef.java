@@ -43,7 +43,8 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
 
     @Nullable
     private String bnf;
-    private final boolean pure;
+    @Nullable
+    private final Boolean pure;
 
     public OpDef(@NotNull OpDefType type,
                  @Nullable String symbol,
@@ -53,7 +54,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                  boolean reactive,
                  @Nullable String bnf,
                  int priority,
-                 boolean pure) {
+                 @Nullable Boolean pure) {
         this.type = type;
 
         this.symbol = symbol;
@@ -229,7 +230,11 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         return type;
     }
 
-    public boolean pure() {
+    public Boolean pure() {
         return pure;
+    }
+
+    public String helpText() {
+        return asMarkdown();
     }
 }

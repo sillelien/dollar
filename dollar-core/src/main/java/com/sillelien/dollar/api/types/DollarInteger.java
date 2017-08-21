@@ -259,7 +259,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         if (obj instanceof var) {
             var unwrapped = ((var) obj).$unwrap();
             if (unwrapped instanceof DollarInteger) {
-                return $equals(unwrapped);
+                return value.equals(unwrapped.toLong());
             } else {
                 return value.toString().equals(obj.toString());
             }
@@ -278,10 +278,6 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     @Override
     public Long toLong() {
         return value;
-    }
-
-    boolean $equals(@NotNull var other) {
-        return value.equals(other.toLong());
     }
 
 }

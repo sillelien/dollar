@@ -73,13 +73,14 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     @NotNull
     @Override
     public var $modulus(@NotNull var rhs) {
-        return DollarFactory.fromValue(asDecimal() % rhs.toDouble(), errors(), rhs.errors());
+        return DollarFactory.wrap(new DollarDecimal(errors(), asDecimal() % rhs.toDouble()));
     }
 
     @NotNull
     @Override
-    public var $multiply(@NotNull var v) {
-        return DollarFactory.fromValue(asDecimal() * v.toDouble(), errors(), v.errors());
+    public var $multiply(@NotNull var rhs) {
+        System.err.println("MULTIPLY");
+        return DollarFactory.wrap(new DollarDecimal(errors(), asDecimal() * rhs.toDouble()));
     }
 
     @Override
@@ -274,7 +275,7 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
         if (obj instanceof var) {
             var unwrapped = ((var) obj).$unwrap();
             if (unwrapped instanceof DollarDate) {
-                return $equals(unwrapped);
+                return Objects.equals(toString(), unwrapped.toString());
             } else {
                 return toString().equals(obj.toString());
             }
@@ -293,10 +294,6 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     @Override
     public Long toLong() {
         return asDecimal().longValue();
-    }
-
-    boolean $equals(@NotNull var other) {
-        return Objects.equals(toString(), other.toString());
     }
 
     @NotNull

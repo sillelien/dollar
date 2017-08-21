@@ -95,4 +95,6 @@ public interface Scope {
 
 
     void destroy();
+
+    boolean pure();
 }

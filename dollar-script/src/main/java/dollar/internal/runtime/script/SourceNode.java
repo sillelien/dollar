@@ -33,6 +33,8 @@ import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
+import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
+import dollar.internal.runtime.script.parser.OpDef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -49,7 +51,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
-import static com.sillelien.dollar.api.types.meta.MetaConstants.CONSTRAINT_FINGERPRINT;
+import static com.sillelien.dollar.api.types.meta.MetaConstants.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class SourceNode implements java.lang.reflect.InvocationHandler {
@@ -83,8 +85,8 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     @NotNull
     private final List<var> inputs;
 
-    @Nullable
-    private final String operation;
+    @NotNull
+    private final String name;
 
     @Nullable
     private volatile TypePrediction prediction;
@@ -99,23 +101,25 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     private final String id;
     private final boolean parallel;
     private final boolean pure;
+    private final OpDef operation;
 
     public SourceNode(@NotNull Pipeable lambda,
                       @NotNull SourceSegment source,
                       @NotNull List<var> inputs,
-                      @NotNull String operation,
+                      @NotNull String name,
                       @NotNull DollarParser parser,
                       @NotNull SourceNodeOptions sourceNodeOptions,
                       @NotNull String id,
-                      boolean pure) {
+                      boolean pure, @NotNull OpDef operation) {
         parallel = sourceNodeOptions.isParallel();
         this.pure = pure;
+        this.operation = operation;
 
 
         if (sourceNodeOptions.isScopeClosure()) {
             this.lambda = vars -> {
                 List<Scope> attachedScopes = new ArrayList<>(DollarScriptSupport.scopes());
-                return DollarScriptSupport.node(operation + "-closure", pure,
+                return DollarScriptSupport.node(name + "-closure", pure,
                                                 new SourceNodeOptions(false, false, sourceNodeOptions.isParallel()),
                                                 parser, source, inputs, vars2 -> {
                             for (Scope scope : attachedScopes) {
@@ -131,7 +135,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
                             }
 
-                        });
+                        }, operation);
             };
         } else {
             this.lambda = lambda;
@@ -141,10 +145,14 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
         scopeClosure = sourceNodeOptions.isScopeClosure();
         this.id = id;
         this.inputs = inputs;
-        this.operation = operation;
+        this.name = name;
         this.source = source;
-        meta.put("operation", operation);
-        meta.put("id", id);
+        meta.put(OPERATION_NAME, name);
+        meta.put(OPERATION, operation);
+        if (!this.pure) {
+            meta.put(IMPURE, "true");
+        }
+        meta.put(ID, id);
     }
 
 
@@ -167,7 +175,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
             if (Objects.equals(method.getName(), "predictType")) {
                 if (prediction == null) {
-                    prediction = typeLearner.predict(operation, source, inputs);
+                    prediction = typeLearner.predict(name, source, inputs);
                 }
                 return prediction;
             }
@@ -198,14 +206,23 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 }
                 try {
                     if (newScope) {
-                        useScope = new ScriptScope(currentScope(), operation, false);
+                        if (pure) {
+                            useScope = new PureScope(currentScope(), currentScope().getSource(), name, currentScope().getFile());
+                        } else {
+                            if (currentScope().pure() && (operation.pure() != null) && !operation.pure()) {
+                                throw new DollarScriptException("Attempted to create an impure scope within a pure scope " +
+                                                                        "(" + currentScope() + ") for " + name,
+                                                                source);
+                            }
+                            useScope = new ScriptScope(currentScope(), name, false);
+                        }
                     } else {
                         useScope = currentScope();
                     }
 
-                    result = DollarScriptSupport.inScope(true, useScope, newScope -> {
+                    result = DollarScriptSupport.inScope(true, useScope, s -> {
                         if (DollarStatic.getConfig().debugScope()) {
-                            log.info("EXE: {} {} for {}", operation, method.getName(), source.getShortSourceMessage());
+                            log.info("EXE: {} {} for {}", name, method.getName(), source.getShortSourceMessage());
                         }
                         try {
                             return invokeMain(proxy, method, args);
@@ -229,12 +246,15 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
 
             if (method.getName().startsWith("$fixDeep") && (result != null) && (result instanceof var)) {
-                typeLearner.learn(operation, source, inputs, ((var) result).$type());
+                typeLearner.learn(name, source, inputs, ((var) result).$type());
             }
             return result;
         } catch (DollarAssertionException e) {
             log.warn(e.getMessage(), e);
             throw e;
+        } catch (DollarScriptException e) {
+            log.warn(e.getMessage(), e);
+            return parser.getErrorHandler().handle(currentScope(), source, e);
         } catch (DollarException e) {
             log.warn(e.getMessage(), e);
             return parser.getErrorHandler().handle(currentScope(), source, e);
@@ -289,14 +309,14 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
             } else if ("constraintLabel".equals(method.getName())) {
                 return meta.get(CONSTRAINT_FINGERPRINT);
-            } else if ("metaAttribute".equals(method.getName()) && args.length == 1) {
+            } else if ("metaAttribute".equals(method.getName()) && (((args != null) ? args.length : 0) == 1)) {
                 return meta.get(args[0].toString());
-            } else if ("metaAttribute".equals(method.getName()) && args.length == 2) {
+            } else if ("metaAttribute".equals(method.getName()) && (((args != null) ? args.length : 0) == 2)) {
                 meta.put(String.valueOf(args[0]), String.valueOf(args[1]));
                 return null;
-            } else if ("meta".equals(method.getName()) && args.length == 1) {
+            } else if ("meta".equals(method.getName()) && (((args != null) ? args.length : 0) == 1)) {
                 return meta.get(args[0]);
-            } else if ("meta".equals(method.getName()) && args.length == 2) {
+            } else if ("meta".equals(method.getName()) && (((args != null) ? args.length : 0) == 2)) {
                 meta.put(args[0], args[1]);
                 return null;
             } else if ("$listen".equals(method.getName())) {

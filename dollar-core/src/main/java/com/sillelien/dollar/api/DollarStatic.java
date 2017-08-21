@@ -728,4 +728,62 @@ public class DollarStatic {
     public static void setConfig(@NotNull Configuration config) {
         DollarStatic.config = config;
     }
+
+    @NotNull
+    public static var $truthy(@NotNull var v) {
+        return $(v.truthy());
+    }
+
+    @NotNull
+    public static var $gte(@NotNull var lhs, @NotNull var rhs) {
+        return $(lhs.compareTo(rhs) >= 0);
+    }
+
+    @NotNull
+    public static var $lte(@NotNull var lhs, @NotNull var rhs) {
+        return $(lhs.compareTo(rhs) <= 0);
+    }
+
+    @NotNull
+    public static var $gt(@NotNull var lhs, @NotNull var rhs) {
+        return $(lhs.compareTo(rhs) > 0);
+    }
+
+    @NotNull
+    public static var $lt(@NotNull var lhs, @NotNull var rhs) {
+        return $(lhs.compareTo(rhs) < 0);
+    }
+
+    @NotNull
+    public static var $or(@NotNull var lhs, @NotNull var rhs) {
+        return $(lhs.isTrue() || rhs.isTrue());
+    }
+
+    @NotNull
+    public static var $and(@NotNull var lhs, @NotNull var rhs) {
+        return $(lhs.isTrue() && rhs.isTrue());
+    }
+
+    @NotNull
+    public static var $not(@NotNull var v) {
+        return $(!v.isTrue());
+    }
+
+    @NotNull
+    public static var $err(@NotNull var v) {
+        v.err();
+        return $void();
+    }
+
+    @NotNull
+    public static var $debug(@NotNull var v) {
+        v.debug();
+        return $void();
+    }
+
+    @NotNull
+    public static var $out(@NotNull var v) {
+        v.out();
+        return $void();
+    }
 }

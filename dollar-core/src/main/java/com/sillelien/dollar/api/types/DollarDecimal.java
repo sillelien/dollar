@@ -213,7 +213,11 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         if (obj instanceof var) {
             var unwrapped = ((var) obj).$unwrap();
             if (unwrapped instanceof DollarDecimal) {
-                return $equals(unwrapped);
+                if (integer()) {
+                    return value.longValue() == unwrapped.toLong();
+                } else {
+                    return value.doubleValue() == unwrapped.toDouble();
+                }
             } else {
                 return value.toString().equals(obj.toString());
             }
@@ -232,14 +236,6 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     @Override
     public Long toLong() {
         return value.longValue();
-    }
-
-    boolean $equals(@NotNull var other) {
-        if (integer()) {
-            return value.longValue() == other.toLong();
-        } else {
-            return value.doubleValue() == other.toDouble();
-        }
     }
 
     @NotNull

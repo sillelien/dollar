@@ -148,9 +148,9 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 return _constrain((var) proxy, (var) args[0], String.valueOf(args[1]));
             } else if ("constraintLabel".equals(method.getName())) {
                 return meta.get(CONSTRAINT_FINGERPRINT);
-            } else if ("metaAttribute".equals(method.getName())) {
+            } else if ("metaAttribute".equals(method.getName()) && (args.length == 1)) {
                 return meta.get(args[0].toString());
-            } else if ("metaAttribute".equals(method.getName())) {
+            } else if ("metaAttribute".equals(method.getName()) && (args.length == 2)) {
                 meta.put(String.valueOf(args[0]), String.valueOf(args[1]));
                 return null;
             } else if ("_scope".equals(method.getName())) {
@@ -164,9 +164,9 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
 //            } else if ("metaAttribute".equals(method.getName())) {
 //                meta.put(String.valueOf(args[0]), String.valueOf(args[1]));
 //                return null;
-            } else if ("meta".equals(method.getName())) {
+            } else if ("meta".equals(method.getName()) && (args.length == 1)) {
                 return meta.get(args[0]);
-            } else if ("meta".equals(method.getName())) {
+            } else if ("meta".equals(method.getName()) && (args.length == 2)) {
                 meta.put(args[0], args[1]);
                 return null;
             } else if ("$listen".equals(method.getName())) {

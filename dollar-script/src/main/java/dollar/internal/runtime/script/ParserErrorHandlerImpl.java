@@ -155,7 +155,7 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
                 log.debug(t.getMessage(), t);
             }
             t.printStackTrace(System.err);
-            System.exit(1);
+            throw new DollarExitError();
         }
         if (t instanceof DollarScriptException) {
             ErrorReporter.report(getClass(), t);

@@ -17,10 +17,20 @@
 package dollar.internal.runtime.script.api.exceptions;
 
 import com.sillelien.dollar.api.DollarException;
+import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
+import dollar.internal.runtime.script.parser.OpDef;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class DollarScriptException extends DollarException {
+    @NotNull
+    private String rawMessage;
+    @Nullable
+    private SourceSegment source;
+    @Nullable
+    private OpDef operation;
+
     public DollarScriptException(@NotNull Throwable e) {
         super(e);
     }
@@ -35,5 +45,32 @@ public class DollarScriptException extends DollarException {
 
     public DollarScriptException(@NotNull String s, @NotNull var rhs) {
         super(s + ":\n" + rhs.source().getSourceMessage());
+        rawMessage = s;
+        source = rhs.source();
+    }
+
+    public DollarScriptException(@NotNull String s, @NotNull SourceSegment source) {
+        super(s + ":\n" + source.getSourceMessage());
+        rawMessage = s;
+        this.source = source;
+    }
+
+    public DollarScriptException(@NotNull String s, @NotNull SourceSegment source, OpDef operation) {
+        super((s + ":\n" + source.getSourceMessage() + "\n\n") + (operation != null ? operation.helpText() : ""));
+        rawMessage = s;
+        this.source = source;
+        this.operation = operation;
+    }
+
+    public String rawMessage() {
+        return rawMessage;
+    }
+
+    public SourceSegment source() {
+        return source;
+    }
+
+    public OpDef operation() {
+        return operation;
     }
 }
