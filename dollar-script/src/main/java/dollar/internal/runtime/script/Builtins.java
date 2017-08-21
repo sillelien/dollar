@@ -142,7 +142,7 @@ public class Builtins {
     private static void addDollarSingleNoScope(boolean isPure, @NotNull Function<var, var> lambda,
                                                @NotNull String... names) {
         for (String name : names) {
-            map.put(name, new Builtin.BuiltinImpl(name, (pure, args, scope) -> lambda.apply((var) args.get(0)), 1, 1,
+            map.put(name, new Builtin.BuiltinImpl(name, (pure, args, scope) -> lambda.apply(args.get(0)), 1, 1,
                                                   isPure));
         }
     }

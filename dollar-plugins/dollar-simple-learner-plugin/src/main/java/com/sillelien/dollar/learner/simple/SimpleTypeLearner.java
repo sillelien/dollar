@@ -73,7 +73,7 @@ public class SimpleTypeLearner implements TypeLearner {
             usageCounters.put(type.toString(),count);
         }
         db.commit();
-        this.modified = true;
+        modified = true;
 
     }
 

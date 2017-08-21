@@ -35,18 +35,18 @@ public class SourceSegmentValue implements SourceSegment {
     private final String source;
     private final int start;
     @NotNull
-    private String shortHash;
+    private final String shortHash;
 
     public SourceSegmentValue(@NotNull Scope scope, @NotNull Token t) {
         this.scope = scope;
-        this.sourceFile = scope.getFile();
-        this.length = t.length();
-        this.start = t.index();
+        sourceFile = scope.getFile();
+        length = t.length();
+        start = t.index();
         if(scope.getSource() == null) {
             throw new DollarParserError("Cannot create a SourceSegmentValue from a scope with no source: "+scope);
         }
-        this.source = scope.getSource();
-        this.shortHash = new FNV().fnv1_32(source.getBytes()).toString(36);
+        source = scope.getSource();
+        shortHash = new FNV().fnv1_32(source.getBytes()).toString(36);
     }
 
     @NotNull

@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2014-2015 Neil Ellis
+ *    Copyright (c) 2014-2017 Neil Ellis
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
  */
 
 package com.sillelien.dollar.http;
@@ -46,7 +46,7 @@ public class HttpURIHandler implements URIHandler {
     public HttpURIHandler(String scheme, @NotNull URI uri) {
         if (uri.hasSubScheme()) {
             this.uri = URI.parse(scheme + ":" + uri.sub().sub().asString());
-            this.method = this.uri.sub().scheme();
+            method = this.uri.sub().scheme();
         } else {
             this.uri = uri;
         }
@@ -126,8 +126,8 @@ public class HttpURIHandler implements URIHandler {
 
     @Override
     public void subscribe(Pipeable consumer, @NotNull String id) throws IOException {
-        httpd = getHttpServerFor(this.uri.host(), this.uri.port() > 0 ? this.uri.port() : 80);
-        final String path = this.uri.path();
+        httpd = getHttpServerFor(uri.host(), uri.port() > 0 ? uri.port() : 80);
+        final String path = uri.path();
         httpd.handle(path, new RequestHandler(consumer));
         subscriptions.put(id, path);
     }

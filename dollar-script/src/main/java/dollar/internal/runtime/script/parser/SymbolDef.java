@@ -24,8 +24,8 @@ import java.util.Objects;
 
 public class SymbolDef implements HasSymbol, Comparable<Object> {
     @NotNull
-    private String symbol;
-    private boolean reserved;
+    private final String symbol;
+    private final boolean reserved;
 
     public SymbolDef(@NotNull String symbol, boolean reserved) {
         this.symbol = symbol;
@@ -39,7 +39,7 @@ public class SymbolDef implements HasSymbol, Comparable<Object> {
 
     @Override
     public int compareTo(@NotNull Object o) {
-        if (this.equals(o)) {
+        if (equals(o)) {
             return 0;
         }
         if (o instanceof HasSymbol) {

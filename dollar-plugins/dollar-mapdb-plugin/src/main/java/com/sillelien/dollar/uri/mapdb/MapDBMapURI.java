@@ -39,7 +39,7 @@ public class MapDBMapURI extends AbstractMapDBURI implements MapModificationList
     private static final ConcurrentHashMap<String, MapListener<var, var, var>>
             subscribers =
             new ConcurrentHashMap<>();
-    private BTreeMap<var, var> bTreeMap;
+    private final BTreeMap<var, var> bTreeMap;
 
     public MapDBMapURI(@NotNull String scheme, @NotNull URI uri) {
         super(uri, scheme);

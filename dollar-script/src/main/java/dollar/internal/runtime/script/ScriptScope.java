@@ -75,28 +75,28 @@ public class ScriptScope implements Scope {
 
     public ScriptScope(String name, boolean root) {
         this.root = root;
-        this.parent = null;
-        this.file = null;
-        this.source = null;
-        id = String.valueOf(name + ":" + counter.incrementAndGet());
+        parent = null;
+        file = null;
+        source = null;
+        id = name + ":" + counter.incrementAndGet();
     }
 
     public ScriptScope(String source, String name, boolean root) {
         this.root = root;
-        this.parent = null;
+        parent = null;
         this.source = source;
-        this.file = null;
+        file = null;
 
-        id = String.valueOf(name + ":" + counter.incrementAndGet());
+        id = name + ":" + counter.incrementAndGet();
     }
 
 
     public ScriptScope(@NotNull Scope parent, String name, boolean root) {
         this.parent = parent;
-        this.file = parent.getFile();
+        file = parent.getFile();
         this.root = root;
-        this.source = parent.getSource();
-        id = String.valueOf(name + ":" + counter.incrementAndGet());
+        source = parent.getSource();
+        id = name + ":" + counter.incrementAndGet();
     }
 
     public ScriptScope(@NotNull Scope parent,
@@ -114,14 +114,14 @@ public class ScriptScope implements Scope {
 
         }
 
-        id = String.valueOf(name + ":" + counter.incrementAndGet());
+        id = name + ":" + counter.incrementAndGet();
     }
 
     public ScriptScope(@Nullable String source, @NotNull File file, boolean root) {
         this.source = source;
         this.file = file.getAbsolutePath();
         this.root = root;
-        id = String.valueOf("(file-scope):" + counter.incrementAndGet());
+        id = "(file-scope):" + counter.incrementAndGet();
     }
 
     public ScriptScope(Scope parent,
@@ -551,9 +551,9 @@ public class ScriptScope implements Scope {
         if (key.matches("[0-9]+") && variables.containsKey(key)) {
             throw new DollarScriptException("Cannot change the value of positional variable $" + key + " in scope " + this);
         }
-        this.parameterScope = true;
+        parameterScope = true;
         variables.put(key, new Variable(value, null, null));
-        this.notifyScope(key, value);
+        notifyScope(key, value);
         return value;
     }
 
@@ -603,12 +603,12 @@ public class ScriptScope implements Scope {
     public void setParent(@Nullable Scope scope) {
         checkDestroyed();
 
-        if (this.isRoot()) {
+        if (isRoot()) {
             throw new UnsupportedOperationException("Cannot set the parent scope of a root scope, attempted to set " + scope);
         }
-        this.parent = scope;
-        this.source = scope.getSource();
-        this.file = scope.getFile();
+        parent = scope;
+        source = scope.getSource();
+        file = scope.getFile();
 
     }
 
@@ -634,15 +634,15 @@ public class ScriptScope implements Scope {
     public Scope copy() {
         checkDestroyed();
 
-        return new ScriptScope(this.parent, "*" + this.id.split(":")[0] + ":" + counter.incrementAndGet(), this.file,
-                               this.parameterScope,
-                               this.variables, this.errorHandlers, this.listeners, this.source, this.parser, this.root);
+        return new ScriptScope(parent, "*" + id.split(":")[0] + ":" + counter.incrementAndGet(), file,
+                               parameterScope,
+                               variables, errorHandlers, listeners, source, parser, root);
     }
 
     @Override
     public void destroy() {
         clear();
-        this.destroyed = true;
+        destroyed = true;
     }
 
 

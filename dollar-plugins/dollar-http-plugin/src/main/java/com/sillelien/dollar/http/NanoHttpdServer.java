@@ -116,7 +116,7 @@ public abstract class NanoHttpdServer {
      */
     public NanoHttpdServer(String hostname, int port) {
         this.hostname = hostname;
-        this.myPort = port;
+        myPort = port;
         setTempFileManagerFactory(new DefaultTempFileManagerFactory());
         setAsyncRunner(new DefaultAsyncRunner());
     }
@@ -455,8 +455,8 @@ public abstract class NanoHttpdServer {
      * {@code File.createTempFile()} in the directory specified.
      */
     public static class DefaultTempFile implements TempFile {
-        private File file;
-        private OutputStream fstream;
+        private final File file;
+        private final OutputStream fstream;
 
         public DefaultTempFile(@NotNull String tempdir) throws IOException {
             file = File.createTempFile("NanoHTTPD-", "", new File(tempdir));
@@ -512,12 +512,12 @@ public abstract class NanoHttpdServer {
 
             @NotNull @Override
             public String getDescription() {
-                return "" + this.requestStatus + " " + description;
+                return "" + requestStatus + " " + description;
             }
 
             @Override
             public int getRequestStatus() {
-                return this.requestStatus;
+                return requestStatus;
             }
         }
         /**
@@ -555,7 +555,7 @@ public abstract class NanoHttpdServer {
             this.status = status;
             this.mimeType = mimeType;
             try {
-                this.data = txt != null ? new ByteArrayInputStream(txt.getBytes("UTF-8")) : null;
+                data = txt != null ? new ByteArrayInputStream(txt.getBytes("UTF-8")) : null;
             } catch (java.io.UnsupportedEncodingException uee) {
                 uee.printStackTrace();
             }
@@ -1394,7 +1394,7 @@ public abstract class NanoHttpdServer {
      * supplied).
      */
     @NotNull protected Map<String, List<String>> decodeParameters(@NotNull Map<String, String> parms) {
-        return this.decodeParameters(parms.get(QUERY_STRING_PARAMETER));
+        return decodeParameters(parms.get(QUERY_STRING_PARAMETER));
     }
 
     /**

@@ -136,7 +136,7 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
 
     @Override public void subscribe(@NotNull Pipeable consumer, @NotNull String id) throws IOException {
         final Future schedule = executor.scheduleEvery(1000, () ->{
-            Object o = MapDBCircleURI.this.getQueue().poll();
+            Object o = getQueue().poll();
             if (o != null) {
                 try {
                     consumer.pipe($(o));

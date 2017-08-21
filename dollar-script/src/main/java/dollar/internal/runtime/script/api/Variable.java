@@ -33,10 +33,10 @@ public class Variable {
 
     public Variable(var value, @Nullable var constraint, @Nullable String constraintSource) {
 
-        this.setValue(value);
+        setValue(value);
         this.constraint = constraint;
         this.constraintSource = constraintSource;
-        this.fixed = false;
+        fixed = false;
         readonly = false;
         pure = false;
         thread = Thread.currentThread().getId();
@@ -44,11 +44,11 @@ public class Variable {
 
     public Variable(var value, boolean readonly, @Nullable var constraint, String constraintSource, boolean isVolatile,
                     boolean fixed, boolean pure) {
-        this.setValue(value);
+        setValue(value);
         this.readonly = readonly;
         this.constraint = constraint;
         this.constraintSource = constraintSource;
-        this.setVolatile(isVolatile);
+        setVolatile(isVolatile);
         this.fixed = fixed;
         this.pure = pure;
         thread = Thread.currentThread().getId();
