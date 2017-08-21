@@ -34,7 +34,7 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> {
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">interface</strong> <a href="../../../../../dollar/internal/runtime/script/api/Scope.html">Listener</a> <strong class="jxr_keyword">extends</strong> Pipeable {
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">interface</strong> <a href="../../../../../dollar/internal/runtime/script/api/Scope.html">Listener</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../com/sillelien/dollar/api/Pipeable.html">Pipeable</a> {
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>          @NotNull
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>          String getId();
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>      }
@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">void</strong> listen(@NotNull String key, @NotNull String id, @NotNull <strong class="jxr_keyword">var</strong> listener);
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">void</strong> listen(@NotNull String key, @NotNull String id, @NotNull Pipeable listener);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">void</strong> listen(@NotNull String key, @NotNull String id, @NotNull <a href="../../../../../com/sillelien/dollar/api/Pipeable.html">Pipeable</a> listener);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>      @Nullable <strong class="jxr_keyword">var</strong> notify(@NotNull String variableName);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
@@ -103,7 +103,9 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>      <strong class="jxr_keyword">void</strong> destroy();
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  }
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      <strong class="jxr_keyword">boolean</strong> pure();
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017. All rights reserved.</div>

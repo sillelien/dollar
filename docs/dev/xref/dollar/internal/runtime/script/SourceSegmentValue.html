@@ -33,7 +33,7 @@
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.Nullable;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.jparsec.Token;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../dollar/internal/runtime/script/SourceSegmentValue.html">SourceSegmentValue</a> <strong class="jxr_keyword">implements</strong> SourceSegment {
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../dollar/internal/runtime/script/SourceSegmentValue.html">SourceSegmentValue</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../com/sillelien/dollar/api/script/SourceSegment.html">SourceSegment</a> {
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>      @NotNull
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>      @Nullable
@@ -43,18 +43,18 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String source;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> start;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>      @NotNull
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">private</strong> String shortHash;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String shortHash;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../dollar/internal/runtime/script/SourceSegmentValue.html">SourceSegmentValue</a>(@NotNull <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope, @NotNull Token t) {
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>          <strong class="jxr_keyword">this</strong>.scope = scope;
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>          <strong class="jxr_keyword">this</strong>.sourceFile = scope.getFile();
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>          <strong class="jxr_keyword">this</strong>.length = t.length();
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>          <strong class="jxr_keyword">this</strong>.start = t.index();
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>          sourceFile = scope.getFile();
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>          length = t.length();
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>          start = t.index();
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>          <strong class="jxr_keyword">if</strong>(scope.getSource() == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarParserError.html">DollarParserError</a>(<span class="jxr_string">"Cannot create a SourceSegmentValue from a scope with no source: "</span>+scope);
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>          }
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>          <strong class="jxr_keyword">this</strong>.source = scope.getSource();
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>          <strong class="jxr_keyword">this</strong>.shortHash = <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/util/FNV.html">FNV</a>().fnv1_32(source.getBytes()).toString(36);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>          source = scope.getSource();
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>          shortHash = <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/util/FNV.html">FNV</a>().fnv1_32(source.getBytes()).toString(36);
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      }
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      @NotNull
@@ -85,16 +85,16 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">public</strong> String getSourceMessage() {
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>          <strong class="jxr_keyword">int</strong> index = getStart();
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>          <strong class="jxr_keyword">int</strong> length = getLength();
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>          <strong class="jxr_keyword">if</strong> (index &lt; 0 || length &lt; 0) {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>          <strong class="jxr_keyword">if</strong> ((index &lt; 0) || (length &lt; 0)) {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>              <strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;unknown location&gt;"</span>;
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>          }
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>          <strong class="jxr_keyword">if</strong> (index + length &gt; source.length()) {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          <strong class="jxr_keyword">if</strong> ((index + length) &gt; source.length()) {
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarParserError.html">DollarParserError</a>(<span class="jxr_string">"Index="</span> + index + <span class="jxr_string">" Length="</span> + length + <span class="jxr_string">" SourceLength="</span> + source.length() + <span class="jxr_string">" Source='"</span> + source + <span class="jxr_string">"'"</span>);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>          }
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          String[] lines = source.substring(0, index).split(<span class="jxr_string">"\n"</span>);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>          <strong class="jxr_keyword">int</strong> line = lines.length;
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>          <strong class="jxr_keyword">int</strong> column = index == 0 ? 0 : (source.charAt(index - 1) == '\n' ? 0 : lines[lines.length - 1].length());
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">int</strong> end = index + length &gt;= source.length() ? source.length() - 1 : source.indexOf('\n', index + length);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          <strong class="jxr_keyword">int</strong> column = (index == 0) ? 0 : ((source.charAt(index - 1) == '\n') ? 0 : lines[lines.length - 1].length());
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">int</strong> end = ((index + length) &gt;= source.length()) ? (source.length() - 1) : source.indexOf('\n', index + length);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>          <strong class="jxr_keyword">int</strong> start = index - column;
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>          String
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>                  highlightedSource =
@@ -113,16 +113,16 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>     <strong class="jxr_keyword">public</strong> String getShortSourceMessage() {
 <a class="jxr_linenumber" name="L106" href="#L106">106</a>         <strong class="jxr_keyword">int</strong> index = getStart();
 <a class="jxr_linenumber" name="L107" href="#L107">107</a>         <strong class="jxr_keyword">int</strong> length = getLength();
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>         <strong class="jxr_keyword">if</strong> (index &lt; 0 || length &lt; 0) {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>         <strong class="jxr_keyword">if</strong> ((index &lt; 0) || (length &lt; 0)) {
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>             <strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;unknown location&gt;"</span>;
 <a class="jxr_linenumber" name="L110" href="#L110">110</a>         }
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>         <strong class="jxr_keyword">if</strong> (index + length &gt; source.length()) {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>         <strong class="jxr_keyword">if</strong> ((index + length) &gt; source.length()) {
 <a class="jxr_linenumber" name="L112" href="#L112">112</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarAssertionException.html">DollarAssertionException</a>(<span class="jxr_string">"Index="</span> + index + <span class="jxr_string">" Length="</span> + length + <span class="jxr_string">" SourceLength="</span> + source.length() + <span class="jxr_string">" Source='"</span> + source + <span class="jxr_string">"'"</span>);
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>         }
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>         String[] lines = source.substring(0, index).split(<span class="jxr_string">"\n"</span>);
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>         <strong class="jxr_keyword">int</strong> line = lines.length;
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>         <strong class="jxr_keyword">int</strong> column = index == 0 ? 0 : (source.charAt(index - 1) == '\n' ? 0 : lines[lines.length - 1].length());
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>         <strong class="jxr_keyword">int</strong> end = index + length &gt;= source.length() ? source.length() - 1 : source.indexOf('\n', index + length);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>         <strong class="jxr_keyword">int</strong> column = (index == 0) ? 0 : ((source.charAt(index - 1) == '\n') ? 0 : lines[lines.length - 1].length());
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>         <strong class="jxr_keyword">int</strong> end = ((index + length) &gt;= source.length()) ? (source.length() - 1) : source.indexOf('\n', index + length);
 <a class="jxr_linenumber" name="L118" href="#L118">118</a>         <strong class="jxr_keyword">int</strong> start = index - column;
 <a class="jxr_linenumber" name="L119" href="#L119">119</a>         String
 <a class="jxr_linenumber" name="L120" href="#L120">120</a>                 highlightedSource =
