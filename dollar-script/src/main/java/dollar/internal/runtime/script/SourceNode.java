@@ -197,7 +197,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 //This method does require a scope
                 Scope useScope;
 
-                Object attachedScopes = meta.get("scopes");
+                Object attachedScopes = meta.get(SCOPES);
                 if (attachedScopes != null) {
                     List<Scope> scopes = new ArrayList<>((List<Scope>) attachedScopes);
                     for (Scope scope : scopes) {

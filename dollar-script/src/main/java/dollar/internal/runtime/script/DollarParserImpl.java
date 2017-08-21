@@ -54,6 +54,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,6 +63,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
+import static com.sillelien.dollar.api.types.meta.MetaConstants.SCOPES;
 import static dollar.internal.runtime.script.DollarLexer.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.Func.*;
@@ -105,7 +107,7 @@ public class DollarParserImpl implements DollarParser {
 
     @Override
     public void export(@NotNull String name, @NotNull var export) {
-//        export.meta("scopes", new ArrayList<>(DollarScriptSupport.scopes()));
+        export.meta(SCOPES, new ArrayList<>(DollarScriptSupport.scopes()));
         exports.put(name, export);
     }
 

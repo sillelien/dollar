@@ -38,6 +38,9 @@ public class MetaConstants {
     public static final String IMPURE = "dollar.internal.pure";
 
     @NotNull
+    public static final String SCOPES = "dollar.internal.scopes";
+
+    @NotNull
     public static final String ID = "dollar.internal.id";
 
 }
