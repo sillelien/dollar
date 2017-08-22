@@ -199,7 +199,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 }
                 try {
                     if (newScope) {
-                        if (pure) {
+                        if (pure || currentScope().pure()) {
                             useScope = new PureScope(currentScope(), currentScope().getSource(), name, currentScope().getFile());
                         } else {
                             if (currentScope().pure() && (operation.pure() != null) && !operation.pure()) {
@@ -218,7 +218,13 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                             log.info("EXE: {} {} for {}", name, method.getName(), source.getShortSourceMessage());
                         }
                         try {
-                            return invokeMain(proxy, method, args);
+                            try {
+                                stack.get().add(this);
+                                return invokeMain(proxy, method, args);
+                            } finally {
+                                stack.get().remove(stack.get().size() - 1);
+                            }
+
                         } catch (Throwable throwable) {
                             return currentScope().handleError(throwable, source);
                         }
@@ -275,18 +281,18 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             } else if ("$fix".equals(method.getName())) {
 
                 if (args.length == 1) {
-                    return lambda.pipe(DollarFactory.fromValue(args[0])).$fix((Boolean) args[0]);
+                    return executePipe(DollarFactory.fromValue(args[0])).$fix((Boolean) args[0]);
                 } else {
-                    return lambda.pipe(DollarFactory.fromValue(args[1])).$fix((int) args[0], (Boolean) args[1]);
+                    return executePipe(DollarFactory.fromValue(args[1])).$fix((int) args[0], (Boolean) args[1]);
 
                 }
 
             } else if ("$fixDeep".equals(method.getName())) {
 
                 if ((args == null) || (args.length == 0)) {
-                    return lambda.pipe(DollarFactory.fromValue(parallel)).$fixDeep();
+                    return executePipe(DollarFactory.fromValue(parallel)).$fixDeep();
                 } else {
-                    return lambda.pipe(DollarFactory.fromValue(args[0])).$fixDeep((Boolean) args[0]);
+                    return executePipe(DollarFactory.fromValue(args[0])).$fixDeep((Boolean) args[0]);
                 }
 
 
@@ -336,16 +342,16 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 if (out == null) {
                     return null;
                 }
-                try {
-                    stack.get().add(this);
-                    return method.invoke(out, args);
-                } finally {
-                    stack.get().remove(stack.get().size() - 1);
-                }
+                return method.invoke(out, args);
             }
         } catch (InvocationTargetException e) {
             return currentScope().handleError(e, source);
         }
+    }
+
+    @NotNull
+    public var executePipe(var var) throws Exception {
+        return lambda.pipe(var);
     }
 
     @NotNull
@@ -363,5 +369,5 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     }
 
     @NotNull
-    public var execute() throws Exception {return executor.executeNow(() -> lambda.pipe($(parallel))).get();}
+    public var execute() throws Exception {return executor.executeNow(() -> executePipe($(parallel))).get();}
 }

@@ -33,6 +33,7 @@ import dollar.internal.runtime.script.operators.AssignmentOperator;
 import dollar.internal.runtime.script.operators.CollectOperator;
 import dollar.internal.runtime.script.operators.DefinitionOperator;
 import dollar.internal.runtime.script.operators.ParameterOperator;
+import dollar.internal.runtime.script.operators.PureDefinitionOperator;
 import dollar.internal.runtime.script.parser.OpDef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -264,6 +265,7 @@ public class DollarParserImpl implements DollarParser {
                                           everyExpression(ref.lazy(), false),
                                           functionCall(false),
                                           java(false),
+                                          pureDefinitionOperator(ref),
                                           URL,
                                           DECIMAL_LITERAL,
                                           INTEGER_LITERAL,
@@ -339,7 +341,7 @@ public class DollarParserImpl implements DollarParser {
         table = table.prefix(variableUsageOperator(pure), 1000);
 
         table = table.prefix(assignmentOperator(ref, pure), ASSIGNMENT.priority());
-        table = table.prefix(pureDefinitionOperator(ref, pure), DEFINITION.priority());
+        table = table.prefix(definitionOperator(ref, pure), DEFINITION.priority());
 
         if (!pure) {
             table = infixl(false, table, PUBLISH, Func::publishFunc);
@@ -882,29 +884,55 @@ public class DollarParserImpl implements DollarParser {
     }
 
 
-    private Parser<Function<? super var, ? extends var>> pureDefinitionOperator(@NotNull Parser.Reference<var> ref,
-                                                                                boolean pure) throws Exception {
+    private Parser<var> pureDefinitionOperator(@NotNull Parser.Reference<var> ref) throws Exception {
         assert PURE_OP.validForPure(true);
 
-        return or(
-                array(KEYWORD(PURE).optional(null), //0
-                      KEYWORD(EXPORT).optional(null),//1
-                      KEYWORD(CONST).optional(null), //2
-                      IDENTIFIER.between(OP(LT), OP(GT)).optional(null),//3
-                      OP(DOLLAR).next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))).or(IDENTIFIER), //4
-                      OP(DEFINITION) //5
+        return KEYWORD(PURE).next(or(
+                array(
+                        KEYWORD(EXPORT).optional(null),//0
+                        IDENTIFIER.between(OP(LT), OP(GT)).optional(null),//1
+                        OP(DOLLAR).next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))).or(IDENTIFIER), //2
+                        OP(DEFINITION),//3
+                        expression(true)//4
 
-                ),
-                array(KEYWORD(PURE).optional(null), //0
-                      KEYWORD(EXPORT).optional(null), //1
-                      IDENTIFIER.between(OP(LT), OP(GT)).optional(null), //2
-                      KEYWORD(DEF), //3
-                      IDENTIFIER //4
 
-                )
+                ).token().map(new PureDefinitionOperator(this, false)),
 
-        ).token().map(new DefinitionOperator(pure, this));
+                KEYWORD(EXPORT).optional(null), //0
+                IDENTIFIER.between(OP(LT), OP(GT)).optional(null), //1
+                KEYWORD(DEF), //2
+                IDENTIFIER, //3
+                expression(true)//4
+
+
+                                  ).token().map(new PureDefinitionOperator(this, true))
+
+        );
     }
+
+    private Parser<Function<? super var, ? extends var>> definitionOperator(@NotNull Parser.Reference<var> ref,
+                                                                            boolean pure) throws Exception {
+
+        return or(
+                array(
+                        KEYWORD(EXPORT).optional(null),//0
+                        KEYWORD(CONST).optional(null), //1
+                        IDENTIFIER.between(OP(LT), OP(GT)).optional(null),//2
+                        OP(DOLLAR).next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))).or(IDENTIFIER), //3
+                        OP(DEFINITION) //4
+
+                ).token().map(new DefinitionOperator(pure, this, false)),
+                array(
+                        KEYWORD(EXPORT).optional(null), //0
+                        IDENTIFIER.between(OP(LT), OP(GT)).optional(null), //1
+                        KEYWORD(DEF), //2
+                        IDENTIFIER //3
+
+                ).token().map(new DefinitionOperator(pure, this, true))
+
+        );
+    }
+
 
     private <T> Parser<T> op(@NotNull OpDef def, @NotNull T value) {
         return OP(def).token().map(new SourceMapper<>(value));

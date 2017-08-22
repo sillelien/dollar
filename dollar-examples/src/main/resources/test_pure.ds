@@ -27,3 +27,17 @@ testParams ("Hello", "World") <=> "World Hello"
 
 pure const testParams2 := {last + " " + first}
 testParams2(first="Hello", last="World") <=> "World Hello"
+
+
+pure def pureFunc {
+     fix($1 + pureFunc2($1))
+}
+
+pure def pureFunc2 {
+     fix($1)
+}
+
+
+@@ pure {
+    pureFunc(2);
+}

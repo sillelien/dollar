@@ -160,6 +160,7 @@ public class ScriptScope implements Scope {
 
     public void checkPure(@NotNull Scope parent) {
         if (parent.pure() && !this.pure()) {
+            log.debug("Impure child {} of pure parent {}", id, parent);
             handleError(new PureFunctionException());
         }
     }
@@ -224,7 +225,7 @@ public class ScriptScope implements Scope {
     @Nullable
     @Override
     public Variable getVariable(@NotNull String key) {
-        return getVariables().get(key);
+        return variables.get(key);
     }
 
     @Nullable

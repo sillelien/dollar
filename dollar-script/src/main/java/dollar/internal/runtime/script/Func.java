@@ -49,6 +49,7 @@ import static com.sillelien.dollar.api.DollarStatic.*;
 import static com.sillelien.dollar.api.types.DollarFactory.fromValue;
 import static com.sillelien.dollar.api.types.meta.MetaConstants.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.singletonList;
 
@@ -347,5 +348,30 @@ public final class Func {
             IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fixDeep(false));
             return l.get(l.size() - 1);
         }
+    }
+
+    @NotNull
+    public static var definitionFunc(@NotNull Token token,
+                                     boolean export,
+                                     @NotNull var value,
+                                     @NotNull var variableName,
+                                     @Nullable var constraint,
+                                     @Nullable String constraintSource,
+                                     @NotNull DollarParser parser,
+                                     boolean pure, boolean readonly) {
+        String key = variableName.$S();
+
+        setVariable(currentScope(), key, value,
+                    readonly, constraint, constraintSource,
+                    false, false, pure,
+                    true, token, parser);
+
+        if (export) {
+            parser.export(key,
+                          node(DEFINITION, pure, NO_SCOPE,
+                               singletonList(value), token, parser,
+                               exportArgs -> value));
+        }
+        return $void();
     }
 }

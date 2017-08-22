@@ -1,5 +1,5 @@
 pure def pureFunc {
-     $1 + impureFunc()
+     $1 + impureFunc($1)
 }
 
 def impureFunc {
@@ -8,5 +8,5 @@ def impureFunc {
 
 
 @@ pure {
-    pureFunc();
+    pureFunc(2);
 }

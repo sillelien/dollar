@@ -73,7 +73,7 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
     }
 
     @Override
-    public void handleTopLevel(@NotNull Throwable t, @Nullable String name, @NotNull File file) throws Throwable {
+    public void handleTopLevel(@NotNull Throwable t, @Nullable String name, @Nullable File file) throws Throwable {
         log.debug(t.getMessage(), t);
         if (t instanceof DollarAssertionException) {
             System.out.println("ASSERTION FAILURE");

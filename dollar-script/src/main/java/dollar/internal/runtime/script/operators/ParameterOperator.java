@@ -26,6 +26,7 @@ import org.jparsec.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -60,6 +61,7 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
             boolean functionName;
             boolean builtin;
 
+            boolean isPure = pure;
             if (FUNCTION_NAME_OP.name().equals(lhs.metaAttribute(OPERATION_NAME))) {
                 String lhsString = lhs.toString();
                 builtin = Builtins.exists(lhsString);
@@ -75,18 +77,21 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
             var node = node(PARAM_OP, "parameter", pure, SCOPE_WITH_CLOSURE,
                             parameters, token, parser, i -> {
                         //Add the special $* value for all the parameters
-                        currentScope().parameter("*", $(parameters));
                         int count = 0;
+                        List<var> fixedParams = new ArrayList<>();
                         for (var parameter : parameters) {
-                            currentScope().parameter(String.valueOf(++count), parameter);
+                            var fixedParam = parameter.$fix(1, false);
+                            fixedParams.add(fixedParam);
+                            currentScope().parameter(String.valueOf(++count), fixedParam);
 
                             //If the parameter is a named parameter then use the name (set as metadata on the value).
-                            String paramMetaAttribute = parameter.metaAttribute(NAMED_PARAMETER_META_ATTR);
+                            String paramMetaAttribute = fixedParam.metaAttribute(NAMED_PARAMETER_META_ATTR);
                             if (paramMetaAttribute != null) {
-                                currentScope().set(paramMetaAttribute, parameter, true, null,
-                                                   null, false, false, !parameter.hasMeta(IMPURE));
+                                currentScope().set(paramMetaAttribute, fixedParam, true, null,
+                                                   null, false, false, !fixedParam.hasMeta(IMPURE));
                             }
                         }
+                        currentScope().parameter("*", $(fixedParams));
                         var result;
                         if (functionName) {
                             String lhsString = lhs.toString();

@@ -402,7 +402,7 @@ Error handling couldn't be simpler. Define an error expression using the error k
 ```dollar
 var errorHappened= false
 error { @@ msg; errorHappened= true }
-var a=1/0
+var a= << http://fake.com:99999
 .: errorHappened
 ```
 

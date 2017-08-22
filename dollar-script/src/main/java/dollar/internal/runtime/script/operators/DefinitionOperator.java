@@ -18,6 +18,7 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.var;
+import dollar.internal.runtime.script.Func;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.Scope;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +31,6 @@ import java.util.ArrayList;
 import java.util.function.Function;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
-import static com.sillelien.dollar.api.DollarStatic.$void;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
@@ -43,56 +43,51 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
     private final boolean pure;
     @NotNull
     private final DollarParser parser;
+    private final boolean def;
 
-    public DefinitionOperator(boolean pure, @NotNull DollarParser parser) {
+    public DefinitionOperator(boolean pure, @NotNull DollarParser parser, boolean def) {
         this.pure = pure;
         this.parser = parser;
+        this.def = def;
     }
 
     @Nullable
     public Function<? super var, ? extends var> apply(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
-//        final String constraintSource;
-//        if (objects[1] instanceof var) {
-//            constraintSource = ((var) objects[1]).source().getSourceSegment();
-//        } else {
-//            constraintSource = null;
-//        }
         Scope scope = currentScope();
 
-        final Object exportObj;
+        final Object exportObj = objects[1];
 
-        boolean pureDef = objects[0] != null;
-        exportObj = objects[1];
-
-        return (Function<var, var>) v -> {
+        return (Function<var, var>) rhs -> {
             var value;
             var variableName;
             final var typeConstraintObj;
-            if ((objects.length == 5) && "def".equals(objects[3].toString())) {
-                variableName = (var) objects[4];
-                value = v;
-                typeConstraintObj = (var) objects[2];
-
-            } else if (objects.length == 6) {
-                variableName = (var) objects[4];
-                value = v;
-                typeConstraintObj = (var) objects[3];
-            } else {
-                throw new AssertionError("Invalid objects length");
-            }
-
             @Nullable var constraint;
             @Nullable String constraintSource;
+            boolean readonly;
 
-            boolean createPureVar = pureDef || this.pure;
-            if (createPureVar) {
+            if (def) {
+                variableName = (var) objects[3];
+                value = rhs;
+                typeConstraintObj = (var) objects[1];
+                readonly = true;
+
+            } else {
+                variableName = (var) objects[3];
+                value = rhs;
+                typeConstraintObj = (var) objects[2];
+                readonly = objects[1] != null;
+            }
+
+
+            if (pure) {
                 log.info("Creating pure variable {}", variableName);
             } else {
                 log.info("Creating impure variable {}", variableName);
             }
+
             if (typeConstraintObj != null) {
-                constraint = node(DEFINITION, "definition-constraint", createPureVar, NEW_SCOPE,
+                constraint = node(DEFINITION, "definition-constraint", pure, NEW_SCOPE,
                                   token, new ArrayList<>(), parser,
                                   i -> $(scope.parameter("it").is(Type.of(typeConstraintObj))));
                 constraintSource = typeConstraintObj.$S().toUpperCase();
@@ -101,22 +96,11 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
                 constraintSource = null;
             }
 
-            var node = node(DEFINITION, createPureVar, NO_SCOPE,
+            boolean finalReadonly = readonly;
+            var node = node(DEFINITION, pure, NO_SCOPE,
                             singletonList(constrain(scope, value, constraint, constraintSource)), token, parser,
-                            i -> {
-                                String key = variableName.$S();
-
-                                setVariableDefinition(currentScope(), parser, token, createPureVar, true,
-                                                      key, value, constraint, constraintSource);
-
-                                if ((exportObj != null) && "export".equals(exportObj.toString())) {
-                                    parser.export(key,
-                                                  node(DEFINITION, createPureVar, NO_SCOPE,
-                                                       singletonList(value), token, parser,
-                                                       exportArgs -> value));
-                                }
-                                return $void();
-                            }
+                            i -> Func.definitionFunc(token, (exportObj != null), value, variableName, constraint, constraintSource,
+                                                     parser, pure, finalReadonly)
             );
 
             node.$listen(i -> scope.notify(variableName.$S()));
