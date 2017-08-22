@@ -1215,6 +1215,14 @@ choose
 
 ___
 
+### `collect`      {#op-collect}
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+
+**`collect <expression> [ 'until' <expression> ] [ 'unless' <expression> ] <expression>`**{: style="font-size: 60%"}
+
+
+___
+
 ### `create` or `|||>`      {#op-create}
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
@@ -1595,6 +1603,22 @@ unchanged <-> 1;
 
 ___
 
+### `is`      {#op-is}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+
+**`<expression> 'is' <expression>`**{: style="font-size: 60%"}
+
+
+___
+
+### java      {#op-java}
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+
+**``<java-code>``**{: style="font-size: 60%"}
+
+
+___
+
 ### `<` (less-than)      {#op-less-than}
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
@@ -1673,6 +1697,14 @@ Deducts a value from another value
 
 ___
 
+### `module`      {#op-module}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+
+**`module <name> (<parameter>)*`**{: style="font-size: 60%"}
+
+
+___
+
 ### `mod` or `%`      {#op-modulus}
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
@@ -1708,6 +1740,7 @@ Returns the product of two values. If the left-hand-side is scalar (non collecti
 .: 1 * 1.0 is DECIMAL
 .: 2.0 * 1 is DECIMAL
 .: 2.0 * 1.0 is DECIMAL
+.: DATE() * 10 is Decimal
 
 ```
 
@@ -2267,9 +2300,6 @@ ___
 ### block
 
 
-### collect
-
-
 ### const
 
 Mark a variable definition as a constant, i.e. readonly.
@@ -2306,9 +2336,6 @@ Boolean false.
 ### is
 
 
-### module
-
-
 ### mutate
 
 
@@ -2328,9 +2355,6 @@ A NULL value of ANY type.
 
 The start of a pure expression.
 
-
-
-### read
 
 
 ### to
@@ -2366,16 +2390,7 @@ Marks a variable as volatile, i.e. it can be accessed by multiple threads.
 
 
 
-### when
-
-
-### while
-
-
 ### with
-
-
-### write
 
 
 ### yes
@@ -2450,7 +2465,6 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[choose](#op-choose)          |`choose`       | `?*`     |binary    |
 |[drain](#op-drain)            |`drain`        | `<-<`    |prefix    |
 |[publish](#op-publish)        |`publish`      | `*>`     |binary    |
-|[pure](#op-pure)              |`pure`         |          |prefix    |
 |[read](#op-read)              |`read`         |          |prefix    |
 |[read-simple](#op-read-simple)|               | `<<`     |prefix    |
 |[subscribe](#op-subscribe)    |`subscribe`    | `<*`     |binary    |
@@ -2463,6 +2477,7 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[else](#op-else)              |`else`         | `-:`     |binary    |
 |[fork](#op-fork)              |`fork`         | `-<`     |prefix    |
 |[if](#op-if)                  |`if`           | `???`    |binary    |
+|[is](#op-is)                  |`is`           |          |binary    |
 |[parallel](#op-parallel)      |`parallel`     | `|:|`    |prefix    |
 |[pause](#op-pause)            |`pause`        | `||>`    |prefix    |
 |[serial](#op-serial)          |`serial`       | `|..|`   |prefix    |
@@ -2481,3 +2496,7 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[err](#op-err)                |`err`          | `??`     |prefix    |
 |[error](#op-error)            |`error`        | `?->`    |prefix    |
 |[print](#op-print)            |`print`        | `@@`     |prefix    |
+|[collect](#op-collect)        |`collect`      |          |control   |
+|[java](#op-java)              |               |          |other     |
+|[module](#op-module)          |`module`       |          |other     |
+|[pure](#op-pure)              |`pure`         |          |prefix    |

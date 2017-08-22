@@ -40,7 +40,7 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/sillelien/dollar/uri/mapdb/VarSerializer.html">VarSerializer</a> <strong class="jxr_keyword">extends</strong> GroupSerializerObjectArray&lt;<strong class="jxr_keyword">var</strong>&gt; <strong class="jxr_keyword">implements</strong> Serializable {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>      @Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> serialize(@NotNull DataOutput2 out, @Nullable <strong class="jxr_keyword">var</strong> value) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>          <strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong> &amp;&amp; !value.isVoid()) {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>          <strong class="jxr_keyword">if</strong> ((value != <strong class="jxr_keyword">null</strong>) &amp;&amp; !value.isVoid()) {
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>              out.writeUTF(value.$type().name());
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>              out.writeUTF(DollarFactory.serialize(value));
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>          } <strong class="jxr_keyword">else</strong> {
@@ -50,7 +50,7 @@
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>      }
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>      @NotNull @Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> deserialize(@NotNull DataInput2 in, <strong class="jxr_keyword">int</strong> available) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>          <strong class="jxr_keyword">final</strong> Type type = Type.valueOf(in.readUTF());
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          <strong class="jxr_keyword">final</strong> <a href="../../../../../com/sillelien/dollar/api/Type.html">Type</a> type = Type.valueOf(in.readUTF());
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>          <strong class="jxr_keyword">if</strong> (type.is(Type._VOID)) {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>              in.readUTF();
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>              <strong class="jxr_keyword">return</strong> $<strong class="jxr_keyword">void</strong>();

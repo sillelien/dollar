@@ -36,13 +36,13 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../dollar/internal/runtime/script/api/ParserErrorHandler.html">ParserErrorHandler</a> {
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>      @NotNull
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>      <strong class="jxr_keyword">var</strong> handle(@NotNull <a href="../../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope, @Nullable SourceSegment source, @NotNull <a href="../../../../../dollar/internal/runtime/script/api/exceptions/DollarAssertionException.html">DollarAssertionException</a> e);
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      <strong class="jxr_keyword">var</strong> handle(@NotNull <a href="../../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope, @Nullable <a href="../../../../../com/sillelien/dollar/api/script/SourceSegment.html">SourceSegment</a> source, @NotNull <a href="../../../../../dollar/internal/runtime/script/api/exceptions/DollarAssertionException.html">DollarAssertionException</a> e);
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>      @NotNull <strong class="jxr_keyword">var</strong> handle(@NotNull <a href="../../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope, @Nullable SourceSegment source, @NotNull DollarException e);
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      @NotNull <strong class="jxr_keyword">var</strong> handle(@NotNull <a href="../../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope, @Nullable <a href="../../../../../com/sillelien/dollar/api/script/SourceSegment.html">SourceSegment</a> source, @NotNull <a href="../../../../../com/sillelien/dollar/api/DollarException.html">DollarException</a> e);
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      @NotNull <strong class="jxr_keyword">var</strong> handle(@NotNull <a href="../../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope, @Nullable SourceSegment source, @NotNull Exception e);
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      @NotNull <strong class="jxr_keyword">var</strong> handle(@NotNull <a href="../../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope, @Nullable <a href="../../../../../com/sillelien/dollar/api/script/SourceSegment.html">SourceSegment</a> source, @NotNull Exception e);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>      &lt;T <strong class="jxr_keyword">extends</strong> Throwable&gt; <strong class="jxr_keyword">void</strong> handleTopLevel(@NotNull T t, String name, File file) <strong class="jxr_keyword">throws</strong> T;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      &lt;T <strong class="jxr_keyword">extends</strong> Throwable&gt; <strong class="jxr_keyword">void</strong> handleTopLevel(@NotNull T t, @NotNull String name, @NotNull File file) <strong class="jxr_keyword">throws</strong> T;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  }
 </pre>
