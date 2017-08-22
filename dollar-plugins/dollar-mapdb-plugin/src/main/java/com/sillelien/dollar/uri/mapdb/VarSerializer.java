@@ -42,7 +42,7 @@ public class VarSerializer extends GroupSerializerObjectArray<var> implements Se
     }
 
     @NotNull @Override public var deserialize(@NotNull DataInput2 in, int available) throws IOException {
-        final Type type = Type.valueOf(in.readUTF());
+        final Type type = Type.of(in.readUTF());
         if (type.is(Type._VOID)) {
             in.readUTF();
             return $void();

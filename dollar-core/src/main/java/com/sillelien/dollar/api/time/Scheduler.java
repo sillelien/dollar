@@ -16,10 +16,10 @@
 
 package com.sillelien.dollar.api.time;
 
+import com.sillelien.dollar.api.DollarException;
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.execution.DollarExecutor;
 import com.sillelien.dollar.api.plugin.Plugins;
-import com.sillelien.dollar.api.types.DollarFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -54,8 +54,7 @@ public final class Scheduler {
                 assert executor != null;
                 task.pipe($(id));
             } catch (Exception e) {
-                log.debug(e.getMessage(), e);
-                DollarFactory.failure(e);
+                throw new DollarException(e);
             }
         }));
         return id;

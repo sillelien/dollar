@@ -646,7 +646,7 @@ public final class DollarFactory {
         if (!jsonObject.containsField(TYPE_KEY)) {
             type = Type._MAP;
         } else {
-            type = Type.valueOf(jsonObject.getString(TYPE_KEY));
+            type = Type.of(jsonObject.getString(TYPE_KEY));
         }
 
         if (type.is(Type._VOID)) {

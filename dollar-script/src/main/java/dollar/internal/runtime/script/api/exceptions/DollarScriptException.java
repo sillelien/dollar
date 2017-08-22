@@ -62,6 +62,16 @@ public class DollarScriptException extends DollarException {
         this.operation = operation;
     }
 
+    public DollarScriptException(Throwable cause, SourceSegment source) {
+        super(cause, cause.getMessage() + ":\n" + source.getSourceMessage());
+        this.source = source;
+    }
+
+    public DollarScriptException(Throwable cause, var context) {
+        super(cause, context.source().getSourceMessage());
+        source = context.source();
+    }
+
     public String rawMessage() {
         return rawMessage;
     }

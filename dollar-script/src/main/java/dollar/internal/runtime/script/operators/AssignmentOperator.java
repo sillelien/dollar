@@ -90,10 +90,10 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
             if (useConstraint != null) {
                 inSubScope(true, pure, "assignment-constraint",
                            newScope -> {
-                               newScope.setParameter("it", rhsFixed);
+                               newScope.parameter("it", rhsFixed);
                                var value = newScope.get(varName);
                                assert value != null;
-                               newScope.setParameter("previous", value);
+                               newScope.parameter("previous", value);
                                if (useConstraint.isFalse()) {
                                    currentScope.handleError(
                                            new DollarScriptException("Constraint failed for variable " + varName + ""));
@@ -111,8 +111,9 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
         };
         //        node.$listen(i -> scope.notify(varName));
-        return node("assignment", pure, NO_SCOPE, singletonList(constrain(scope, rhs, constraint, constraintSource)), token, parser,
-                    pipeable, ASSIGNMENT);
+        return node(ASSIGNMENT, "assignment", pure, NO_SCOPE, singletonList(constrain(scope, rhs, constraint, constraintSource)),
+                    token, parser,
+                    pipeable);
     }
 
     @Nullable
@@ -129,12 +130,12 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
             constraintSource = null;
         }
         if (objects[2] != null) {
-            type = Type.valueOf(objects[2].toString().toUpperCase());
-            constraint = node("constraint", pure, SourceNodeOptions.NEW_SCOPE, token, emptyList(), parser, i -> {
-                var it = currentScope().getParameter("it");
+            type = Type.of(objects[2].toString().toUpperCase());
+            constraint = node(ASSIGNMENT, "constraint", pure, SourceNodeOptions.NEW_SCOPE, token, emptyList(), parser, i -> {
+                var it = currentScope().parameter("it");
                 assert it != null;
                 return $(it.is(type) && ((objects[3] == null) || ((BooleanAware) objects[3]).isTrue()));
-            }, ASSIGNMENT);
+            });
         } else {
             type = null;
             if (objects[3] instanceof var) constraint = (var) objects[3];
@@ -185,7 +186,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                               pure);
                     log.debug("DYNAMIC: {}", rhs.dynamic());
 
-                    return node("listen-assign", pure, NO_SCOPE, inputs, token, parser,
+                    return node(LISTEN_ASSIGN, "listen-assign", pure, NO_SCOPE, inputs, token, parser,
                                 c -> {
                                     Pipeable listener = args -> {
                                         var value = args[0].$fixDeep();
@@ -195,12 +196,12 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                     };
                                     return rhs.$listen(
                                             listener);
-                                },
-                                LISTEN_ASSIGN);
+                                }
+                    );
 
                 } else if ("*=".equals(op)) {
                     scope.set(varName, $void(), false, null, useSource, true, true, pure);
-                    return node("subscribe-assign", pure, NO_SCOPE, inputs, token, parser,
+                    return node(SUBSCRIBE_ASSIGN, "subscribe-assign", pure, NO_SCOPE, inputs, token, parser,
                                 c -> {
                                     Pipeable subscriber = i -> setVariable(
                                             scope,
@@ -212,7 +213,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                             decleration, token,
                                             parser);
                                     return $(rhs.$subscribe(subscriber));
-                                }, SUBSCRIBE_ASSIGN);
+                                });
                 }
             }
             return assign(rhs, objects, finalConstraint, constant, isVolatile, constraintSource,

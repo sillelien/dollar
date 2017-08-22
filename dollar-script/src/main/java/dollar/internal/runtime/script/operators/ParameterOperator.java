@@ -23,6 +23,8 @@ import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.function.Function;
@@ -38,6 +40,8 @@ import static dollar.internal.runtime.script.parser.Symbols.PARAM_OP;
 
 public class ParameterOperator implements Function<Token, Function<? super var, ? extends var>> {
     @NotNull
+    private static final Logger log = LoggerFactory.getLogger("ParameterOperator");
+    @NotNull
     private final DollarParser parser;
     private final boolean pure;
 
@@ -45,6 +49,7 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
     public ParameterOperator(@NotNull DollarParser parser, boolean pure) {
         this.parser = parser;
         this.pure = pure;
+        log.info("Created {} param op", pure ? "pure" : "impure");
     }
 
     @Nullable
@@ -67,13 +72,13 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
                 builtin = false;
             }
 
-            var node = node("parameter", pure, SCOPE_WITH_CLOSURE,
+            var node = node(PARAM_OP, "parameter", pure, SCOPE_WITH_CLOSURE,
                             parameters, token, parser, i -> {
                         //Add the special $* value for all the parameters
-                        currentScope().setParameter("*", $(parameters));
+                        currentScope().parameter("*", $(parameters));
                         int count = 0;
                         for (var parameter : parameters) {
-                            currentScope().setParameter(String.valueOf(++count), parameter);
+                            currentScope().parameter(String.valueOf(++count), parameter);
 
                             //If the parameter is a named parameter then use the name (set as metadata on the value).
                             String paramMetaAttribute = parameter.metaAttribute(NAMED_PARAMETER_META_ATTR);
@@ -94,8 +99,8 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
                         }
 
                         return result;
-                    },
-                            PARAM_OP);
+                    }
+            );
 
             //reactive links
             lhs.$listen(i -> node.$notify());

@@ -66,12 +66,12 @@ public final class Func {
         return lhs.$list().$stream(false).reduce((x, y) -> {
             try {
                 return inSubScope(false, pure, REDUCE.name(), newScope -> {
-                    newScope.setParameter("1", x);
-                    newScope.setParameter("2", y);
+                    newScope.parameter("1", x);
+                    newScope.parameter("2", y);
                     return rhs.$fixDeep(false);
                 });
             } catch (RuntimeException e) {
-                throw new DollarScriptException(e);
+                return currentScope().handleError(e);
             }
         }).orElse($null(Type._ANY));
     }
@@ -82,7 +82,7 @@ public final class Func {
         return lhs.$each(i -> {
             var result = inSubScope(false, pure, EACH.name(),
                                     newScope -> {
-                                        newScope.setParameter("1", i[0]);
+                                        newScope.parameter("1", i[0]);
                                         return rhs.$fixDeep(false);
                                     });
             assert result != null;
@@ -146,8 +146,8 @@ public final class Func {
                 i -> inSubScope(true, false,
                                 "subscribe-param", newScope -> {
                             final var it = fix(i[0], false);
-                            currentScope().setParameter("1", it);
-                            currentScope().setParameter("it", it);
+                            currentScope().parameter("1", it);
+                            currentScope().parameter("it", it);
                             return fix(rhs, false);
                         }));
     }
@@ -219,7 +219,7 @@ public final class Func {
     static var isFunc(@NotNull var lhs, @NotNull List<var> value) {
         return $(value.stream()
                          .map(var::$S)
-                         .map(Type::valueOf)
+                         .map(Type::of)
                          .filter(lhs::is).count() > 0);
     }
 
@@ -240,7 +240,7 @@ public final class Func {
 
     @NotNull
     static var castFunc(@NotNull var lhs, @NotNull String typeName) {
-        return lhs.$as(Type.valueOf(typeName.toUpperCase()));
+        return lhs.$as(Type.of(typeName.toUpperCase()));
     }
 
     @NotNull
@@ -260,7 +260,7 @@ public final class Func {
 
     @NotNull
     static var pipeFunc(@NotNull DollarParser parser, boolean pure, @NotNull Token token, @NotNull var rhs, @NotNull var lhs) {
-        currentScope().setParameter("1", lhs);
+        currentScope().parameter("1", lhs);
         var rhsVal = rhs.$fix(false);
         String rhsStr = rhsVal.toString();
         if (FUNCTION_NAME_OP.name().equals(rhs.metaAttribute(OPERATION_NAME))) {
@@ -284,8 +284,8 @@ public final class Func {
         Scheduler.schedule(i -> {
             count.incrementAndGet();
             return inScope(true, scope, newScope -> {
-                try {
-                    newScope.setParameter("1", $(count.get()));
+
+                newScope.parameter("1", $(count.get()));
                     if ((until != null) && until.isTrue()) {
                         Scheduler.cancel(i[0].$S());
                         return i[0];
@@ -296,9 +296,6 @@ public final class Func {
                             return block.$fixDeep();
                         }
                     }
-                } catch (RuntimeException e) {
-                    return scope.handleError(e);
-                }
 
             });
         }, ((long) (duration * ONE_DAY)));
@@ -306,7 +303,9 @@ public final class Func {
     }
 
     @NotNull
-    static var moduleFunc(@NotNull DollarParserImpl parser, @NotNull String moduleName, @Nullable Iterable<var> params) {
+    static var moduleFunc(@NotNull DollarParserImpl parser,
+                          @NotNull String moduleName,
+                          @Nullable Iterable<var> params) throws Exception {
         String[] parts = moduleName.split(":", 2);
         if (parts.length < 2) {
             throw new DollarScriptException("Module " + moduleName + " needs to have a scheme");
@@ -317,16 +316,14 @@ public final class Func {
                 paramMap.put(param1.metaAttribute(DollarParserImpl.NAMED_PARAMETER_META_ATTR), param1);
             }
         }
-        try {
-            return ModuleResolver
+
+        return ModuleResolver
                            .resolveModule(parts[0])
                            .resolve(parts[1], currentScope(), parser)
                            .pipe($(paramMap))
                            .$fix(true);
 
-        } catch (Exception e) {
-            return currentScope().handleError(e);
-        }
+
     }
 
     @NotNull

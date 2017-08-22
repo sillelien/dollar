@@ -18,6 +18,7 @@ package dollar.internal.runtime.script.api;
 
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.collections.MultiMap;
+import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,6 +41,9 @@ public interface Scope {
 
     @Nullable var get(@NotNull String key);
 
+    @Nullable
+    Variable getVariable(@NotNull String key);
+
     @Nullable var getConstraint(@NotNull String key);
 
     @Nullable
@@ -51,7 +55,8 @@ public interface Scope {
 
     @NotNull MultiMap<String, Listener> getListeners();
 
-    @Nullable var getParameter(@NotNull String key);
+    @NotNull
+    var parameter(@NotNull String key);
 
     @Nullable Scope getScopeForKey(@NotNull String key);
 
@@ -62,6 +67,12 @@ public interface Scope {
     @NotNull <T>  Map<String, T> getVariables();
 
     @NotNull var handleError(@NotNull Throwable t);
+
+    @NotNull
+    var handleError(@NotNull Throwable t, var context);
+
+    @NotNull
+    var handleError(@NotNull Throwable t, SourceSegment context);
 
     boolean has(@NotNull String key);
 
@@ -79,7 +90,8 @@ public interface Scope {
                      @Nullable String constraintSource, boolean isVolatile,
                      boolean fixed, boolean pure);
 
-    @NotNull var setParameter(@NotNull String key, @NotNull var value);
+    @NotNull
+    var parameter(@NotNull String key, @NotNull var value);
 
     void setParent(@Nullable Scope scope);
 

@@ -25,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
 
+import java.util.Objects;
+
 public class SourceSegmentValue implements SourceSegment {
     @NotNull
     private final Scope scope;
@@ -88,16 +90,13 @@ public class SourceSegmentValue implements SourceSegment {
         int column = (index == 0) ? 0 : ((source.charAt(index - 1) == '\n') ? 0 : lines[lines.length - 1].length());
         int end = ((index + length) >= source.length()) ? (source.length() - 1) : source.indexOf('\n', index + length);
         int start = index - column;
-        String
-                highlightedSource =
-                "\n    " +
-                        source.substring(start, index).replaceAll("\n", "\n    ") +
-                        " → " +
-                        source.substring(index, index + length) +
-                        " ← " +
-                        source.substring(index + length, end).replaceAll("\n", "\n    ") +
-                        "\n\n" + "see " + getSourceFile() + "(" + line + ":" + column + ")\n";
-        return highlightedSource;
+        return "\n    " +
+                       source.substring(start, index).replaceAll("\n", "\n    ") +
+                       " → " +
+                       source.substring(index, index + length) +
+                       " ← " +
+                       source.substring(index + length, end).replaceAll("\n", "\n    ") +
+                       "\n\n" + "see " + getSourceFile() + "(" + line + ":" + column + ")\n";
     }
 
     @NotNull
@@ -116,14 +115,11 @@ public class SourceSegmentValue implements SourceSegment {
         int column = (index == 0) ? 0 : ((source.charAt(index - 1) == '\n') ? 0 : lines[lines.length - 1].length());
         int end = ((index + length) >= source.length()) ? (source.length() - 1) : source.indexOf('\n', index + length);
         int start = index - column;
-        String
-                highlightedSource =
-                " " +
-                        source.substring(start, index).replaceAll("\n+", " ") +
-                        " → " + source.substring(index, index + length) + " ← " +
-                        source.substring(index + length, end).replaceAll("\n+", " ") +
-                        " " + getSourceFile() + "(" + line + ":" + column + ")";
-        return highlightedSource;
+        return " " +
+                       source.substring(start, index).replaceAll("\n+", " ") +
+                       " → " + source.substring(index, index + length) + " ← " +
+                       source.substring(index + length, end).replaceAll("\n+", " ") +
+                       " " + getSourceFile() + "(" + line + ":" + column + ")";
     }
 
     @NotNull
@@ -135,5 +131,21 @@ public class SourceSegmentValue implements SourceSegment {
     @Override
     public int getStart() {
         return start; //TODO
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(scope, sourceFile, length, start);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SourceSegmentValue that = (SourceSegmentValue) o;
+        return (length == that.length) &&
+                       (start == that.start) &&
+                       Objects.equals(scope, that.scope) &&
+                       Objects.equals(sourceFile, that.sourceFile);
     }
 }

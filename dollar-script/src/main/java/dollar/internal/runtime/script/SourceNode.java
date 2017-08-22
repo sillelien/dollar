@@ -16,7 +16,6 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.DollarException;
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.MetadataAware;
 import com.sillelien.dollar.api.Pipeable;
@@ -32,7 +31,6 @@ import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.Scope;
-import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.parser.OpDef;
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +58,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
     //    public static final String RETURN_SCOPE = "return-scope";
     @NotNull
-    private static final Logger log = LoggerFactory.getLogger("DollarSource");
+    private static final Logger log = LoggerFactory.getLogger(SourceNode.class);
     @NotNull
     private static final List<String> nonScopeOperations = Arrays.asList(
             "dynamic", "$constrain");
@@ -87,21 +85,17 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
     @NotNull
     private final String name;
-
-    @Nullable
-    private volatile TypePrediction prediction;
-
     @NotNull
     private final DollarParser parser;
-
     private final boolean newScope;
-
     private final boolean scopeClosure;
     @NotNull
     private final String id;
     private final boolean parallel;
     private final boolean pure;
     private final OpDef operation;
+    @Nullable
+    private volatile TypePrediction prediction;
 
     public SourceNode(@NotNull Pipeable lambda,
                       @NotNull SourceSegment source,
@@ -190,8 +184,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 try {
                     result = invokeMain(proxy, method, args);
                 } catch (Throwable throwable) {
-                    log.debug(throwable.getMessage(), throwable);
-                    throw new DollarException(throwable);
+                    return currentScope().handleError(throwable, source);
                 }
             } else {
                 //This method does require a scope
@@ -227,8 +220,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                         try {
                             return invokeMain(proxy, method, args);
                         } catch (Throwable throwable) {
-                            log.debug(throwable.getMessage(), throwable);
-                            throw new DollarException(throwable);
+                            return currentScope().handleError(throwable, source);
                         }
                     });
                 } finally {
@@ -249,15 +241,6 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 typeLearner.learn(name, source, inputs, ((var) result).$type());
             }
             return result;
-        } catch (DollarAssertionException e) {
-            log.warn(e.getMessage(), e);
-            throw e;
-        } catch (DollarScriptException e) {
-            log.warn(e.getMessage(), e);
-            return parser.getErrorHandler().handle(currentScope(), source, e);
-        } catch (DollarException e) {
-            log.warn(e.getMessage(), e);
-            return parser.getErrorHandler().handle(currentScope(), source, e);
         } catch (Exception e) {
             log.warn(e.getMessage(), e);
             return parser.getErrorHandler().handle(currentScope(), source, e);
@@ -361,7 +344,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 }
             }
         } catch (InvocationTargetException e) {
-            throw e.getCause();
+            return currentScope().handleError(e, source);
         }
     }
 

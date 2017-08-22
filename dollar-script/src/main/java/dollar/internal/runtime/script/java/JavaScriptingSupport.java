@@ -16,7 +16,6 @@
 
 package dollar.internal.runtime.script.java;
 
-import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.var;
 import com.sillelien.jas.jproxy.JProxy;
 import com.sillelien.jas.jproxy.JProxyConfig;
@@ -92,7 +91,7 @@ public final class JavaScriptingSupport {
         try {
             result = $(scriptEngine.eval(code.toString(), bindings));
         } catch (ScriptException e) {
-            return DollarStatic.handleError(e, null);
+            return currentScope().handleError(e);
         }
         return result;
     }

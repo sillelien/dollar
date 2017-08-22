@@ -18,24 +18,28 @@ package dollar.internal.runtime.script.operators;
 
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.var;
-import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.function.Function;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 import static com.sillelien.dollar.api.DollarStatic.$void;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
+import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.DEFINITION;
+import static java.util.Collections.singletonList;
 
 public class DefinitionOperator implements Function<Token, Function<? super var, ? extends var>> {
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger("DefinitionOperator");
     private final boolean pure;
     @NotNull
     private final DollarParser parser;
@@ -58,71 +62,64 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
 
         final Object exportObj;
 
-        exportObj = objects[0];
+        boolean pureDef = objects[0] != null;
+        exportObj = objects[1];
 
         return (Function<var, var>) v -> {
             var value;
-            Object variableNameObj;
-            final Object typeConstraintObj;
-            if (objects[2] != null && objects[2].toString().equals("def")) {
-                variableNameObj = objects[3];
-                if (objects.length == 5) {
-                    value = (var) objects[4];
-                } else {
-                    value = v;
-                }
-                typeConstraintObj = objects[1];
+            var variableName;
+            final var typeConstraintObj;
+            if ((objects.length == 5) && "def".equals(objects[3].toString())) {
+                variableName = (var) objects[4];
+                value = v;
+                typeConstraintObj = (var) objects[2];
 
+            } else if (objects.length == 6) {
+                variableName = (var) objects[4];
+                value = v;
+                typeConstraintObj = (var) objects[3];
             } else {
-                variableNameObj = objects[3];
-                if (objects.length == 6) {
-                    value = (var) objects[5];
-                } else {
-                    value = v;
-                }
-                typeConstraintObj = objects[2];
-
+                throw new AssertionError("Invalid objects length");
             }
-            var constraint;
-            String constraintSource;
+
+            @Nullable var constraint;
+            @Nullable String constraintSource;
+
+            boolean createPureVar = pureDef || this.pure;
+            if (createPureVar) {
+                log.info("Creating pure variable {}", variableName);
+            } else {
+                log.info("Creating impure variable {}", variableName);
+            }
             if (typeConstraintObj != null) {
-                constraint = DollarScriptSupport.node("definition-constraint", pure, SourceNodeOptions.NEW_SCOPE,
-                                                      token, new
-                                                                     ArrayList<>(),
-                                                      parser, i
-                                                                      -> {
-                            final Type type = Type.valueOf(
-                                    typeConstraintObj.toString().toUpperCase());
-                            var it = scope.getParameter("it");
-                            return $(it.is(type));
-                        }, DEFINITION);
-                constraintSource = typeConstraintObj.toString().toUpperCase();
+                constraint = node(DEFINITION, "definition-constraint", createPureVar, NEW_SCOPE,
+                                  token, new ArrayList<>(), parser,
+                                  i -> $(scope.parameter("it").is(Type.of(typeConstraintObj))));
+                constraintSource = typeConstraintObj.$S().toUpperCase();
             } else {
                 constraint = null;
                 constraintSource = null;
             }
-            final String variableName = variableNameObj.toString();
 
-            var node = DollarScriptSupport.node(
-                    DEFINITION.name(), pure, SourceNodeOptions.NO_SCOPE, Arrays.asList(
-                            constrain(scope, value, constraint, constraintSource)), token, parser,
-                    args -> {
-                        setVariableDefinition(currentScope(), parser, token, pure, true,
-                                              variableName,
-                                              value,
-                                              constraint,
-                                              constraintSource
-                        );
-                        if (exportObj != null && exportObj.toString().equals("export")) {
-                            parser.export(variableName, DollarScriptSupport.node(
-                                    DEFINITION.name(), pure, SourceNodeOptions.NO_SCOPE, Arrays.asList(value), token, parser,
-                                    exportArgs -> value, DEFINITION));
-                        }
-                        return $void();
-                    },
-                    DEFINITION);
+            var node = node(DEFINITION, createPureVar, NO_SCOPE,
+                            singletonList(constrain(scope, value, constraint, constraintSource)), token, parser,
+                            i -> {
+                                String key = variableName.$S();
 
-            node.$listen(i -> scope.notify(variableName));
+                                setVariableDefinition(currentScope(), parser, token, createPureVar, true,
+                                                      key, value, constraint, constraintSource);
+
+                                if ((exportObj != null) && "export".equals(exportObj.toString())) {
+                                    parser.export(key,
+                                                  node(DEFINITION, createPureVar, NO_SCOPE,
+                                                       singletonList(value), token, parser,
+                                                       exportArgs -> value));
+                                }
+                                return $void();
+                            }
+            );
+
+            node.$listen(i -> scope.notify(variableName.$S()));
             return node;
         };
     }

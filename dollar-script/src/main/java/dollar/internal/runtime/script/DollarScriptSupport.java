@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script;
 
+import com.sillelien.dollar.api.DollarException;
 import com.sillelien.dollar.api.DollarStatic;
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.script.SourceSegment;
@@ -23,8 +24,10 @@ import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.Scope;
+import dollar.internal.runtime.script.api.Variable;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
+import dollar.internal.runtime.script.api.exceptions.PureFunctionException;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import dollar.internal.runtime.script.parser.OpDef;
 import org.jetbrains.annotations.NotNull;
@@ -42,6 +45,7 @@ import java.util.UUID;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
 import static com.sillelien.dollar.api.types.meta.MetaConstants.VARIABLE;
+import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.VAR_USAGE_OP;
 
 public final class DollarScriptSupport {
@@ -166,17 +170,17 @@ public final class DollarScriptSupport {
     }
 
     @NotNull
-    public static var node(boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
+    public static var node(@NotNull OpDef operation, boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
                            @NotNull List<var> inputs, @NotNull Token token, @NotNull DollarParser parser,
-                           @NotNull Pipeable callable, @NotNull OpDef operation) {
-        return node(operation.name(), pure, sourceNodeOptions, inputs, token, parser, callable, operation);
+                           @NotNull Pipeable callable) {
+        return node(operation, operation.name(), pure, sourceNodeOptions, inputs, token, parser, callable);
     }
 
     @NotNull
-    public static var node(@NotNull String name,
+    public static var node(@NotNull OpDef operation, @NotNull String name,
                            boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
                            @NotNull List<var> inputs, @NotNull Token token, @NotNull DollarParser parser,
-                           @NotNull Pipeable callable, @NotNull OpDef operation) {
+                           @NotNull Pipeable callable) {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
@@ -233,11 +237,11 @@ public final class DollarScriptSupport {
 
 
     @NotNull
-    public static var node(@NotNull String name,
+    public static var node(OpDef operation, @NotNull String name,
                            boolean pure, @NotNull SourceNodeOptions sourceNodeOptions, @NotNull Token token,
                            @NotNull List<var> inputs,
                            @NotNull DollarParser parser,
-                           @NotNull Pipeable pipeable, OpDef operation) {
+                           @NotNull Pipeable pipeable) {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
@@ -313,6 +317,8 @@ public final class DollarScriptSupport {
         addScope(runtime, scope);
         try {
             return r.execute(scope);
+        } catch (DollarException e) {
+            throw e;
         } catch (Exception e) {
             throw new DollarScriptException(e);
         } finally {
@@ -334,7 +340,7 @@ public final class DollarScriptSupport {
                                    @NotNull Token token, @NotNull DollarParser parser) {
         var lambda[] = new var[1];
         UUID id = UUID.randomUUID();
-        lambda[0] = node("get-variable-" + key + "-" + id, pure, SourceNodeOptions.NO_SCOPE, $(key).$list().toVarList().mutable(),
+        lambda[0] = node(VAR_USAGE_OP, pure, NO_SCOPE, $(key).$list().toVarList().mutable(),
                          token, parser,
                          (i) -> {
                     Scope scope = currentScope();
@@ -342,14 +348,19 @@ public final class DollarScriptSupport {
                     log.debug("{} {} in {} scopes ", ansiColor("LOOKUP " + key, ANSI_CYAN), scope, scopes.get().size());
                     if (numeric) {
                         if (scope.hasParameter(key)) {
-                            return scope.getParameter(key);
+                            return scope.parameter(key);
                         }
                     } else {
                         if (scope.has(key)) {
                             Scope scopeForKey = scope.getScopeForKey(key);
                             assert scopeForKey != null;
                             scopeForKey.listen(key, id.toString(), lambda[0]);
-                            return scope.get(key);
+                            Variable v = scopeForKey.getVariable(key);
+                            if (!v.isPure() && (pure || currentScope().pure())) {
+                                currentScope().handleError(new PureFunctionException("Attempted to use an impure variable in a " +
+                                                                                             "pure context"));
+                            }
+                            return v.getValue();
                         }
                     }
                     try {
@@ -361,14 +372,20 @@ public final class DollarScriptSupport {
                             }
                             if (numeric) {
                                 if (scriptScope.hasParameter(key)) {
-                                    return scriptScope.getParameter(key);
+                                    return scriptScope.parameter(key);
                                 }
                             } else {
                                 if (scriptScope.has(key)) {
                                     Scope scopeForKey = scriptScope.getScopeForKey(key);
                                     assert scopeForKey != null;
                                     scopeForKey.listen(key, id.toString(), lambda[0]);
-                                    return scriptScope.get(key);
+                                    Variable v = scopeForKey.getVariable(key);
+                                    if (!v.isPure() && (pure || currentScope().pure())) {
+                                        currentScope().handleError(new PureFunctionException("Attempted to use an impure " +
+                                                                                                     "variable in a pure " +
+                                                                                                     "context"));
+                                    }
+                                    return v.getValue();
                                 }
                             }
                         }
@@ -380,7 +397,7 @@ public final class DollarScriptSupport {
                         return parser.getErrorHandler().handle(scope, null, e);
                     }
                     if (numeric) {
-                        return scope.getParameter(key);
+                        return scope.parameter(key);
                     }
 
                     if (defaultValue != null) {
@@ -388,8 +405,8 @@ public final class DollarScriptSupport {
                     } else {
                         throw new VariableNotFoundException(key, scope);
                     }
-                         },
-                         VAR_USAGE_OP);
+                         }
+        );
         lambda[0].metaAttribute(VARIABLE, key);
         return lambda[0];
 
@@ -512,7 +529,7 @@ public final class DollarScriptSupport {
             return parser.getErrorHandler().handle(scope, null, e);
         }
         if (numeric) {
-            return scope.getParameter(key);
+            return scope.parameter(key);
         }
 
         if (decleration) {

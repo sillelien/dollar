@@ -19,8 +19,10 @@ package com.sillelien.dollar.api;
 import com.sillelien.dollar.api.script.SourceSegment;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class DollarException extends RuntimeException {
 
@@ -37,7 +39,7 @@ public class DollarException extends RuntimeException {
      * @param cause the cause of this exception
      */
     public DollarException(@NotNull Throwable cause) {
-        super(cause);
+        super(unravel(cause));
     }
 
     /**
@@ -56,19 +58,16 @@ public class DollarException extends RuntimeException {
      * @param message the error message associated with this exception
      */
     public DollarException(@NotNull Throwable cause, @NotNull String message) {
-        super(message, cause);
+        super(message, unravel(cause));
     }
 
-    /**
-     * Add source information, this is useful if the exception is thrown while executing DollarScript.
-     *
-     * @param source the source code to which the exception relates
-     */
-    public void addSource(@NotNull SourceSegment source) {
-        if (source == null) {
-            throw new NullPointerException();
+    public static @NotNull
+    Throwable unravel(@NotNull Throwable e) {
+        if ((e instanceof InvocationTargetException) || (e instanceof ExecutionException)) {
+            return unravel(e.getCause());
+        } else {
+            return e;
         }
-        sourceList.add(source);
     }
 
     @NotNull
@@ -99,5 +98,19 @@ public class DollarException extends RuntimeException {
      */
     public int httpCode() {
         return 500;
+    }
+
+    /**
+     * Add source information, this is useful if the exception is thrown while executing DollarScript.
+     *
+     * @param source the source code to which the exception relates
+     */
+    public void addSource(@NotNull SourceSegment source) {
+        if (source == null) {
+            throw new NullPointerException();
+        }
+        if (!sourceList.contains(source)) {
+            sourceList.add(source);
+        }
     }
 }

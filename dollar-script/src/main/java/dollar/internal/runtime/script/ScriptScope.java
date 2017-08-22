@@ -20,12 +20,15 @@ import com.sillelien.dollar.api.DollarException;
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.collections.MultiHashMap;
 import com.sillelien.dollar.api.collections.MultiMap;
+import com.sillelien.dollar.api.exceptions.LambdaRecursionException;
+import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.Variable;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
+import dollar.internal.runtime.script.api.exceptions.PureFunctionException;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,12 +46,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.sillelien.dollar.api.DollarException.unravel;
 import static com.sillelien.dollar.api.DollarStatic.*;
 
 public class ScriptScope implements Scope {
 
     @NotNull
-    private static final Logger log = LoggerFactory.getLogger("ScriptScope");
+    private static final Logger log = LoggerFactory.getLogger(ScriptScope.class);
 
     @NotNull
     private static final AtomicInteger counter = new AtomicInteger();
@@ -98,6 +102,8 @@ public class ScriptScope implements Scope {
         this.root = root;
         source = parent.getSource();
         id = name + ":" + counter.incrementAndGet();
+        checkPure(parent);
+
     }
 
     public ScriptScope(@NotNull Scope parent,
@@ -116,6 +122,7 @@ public class ScriptScope implements Scope {
         }
 
         id = name + ":" + counter.incrementAndGet();
+        checkPure(parent);
     }
 
     public ScriptScope(@Nullable String source, @NotNull File file, boolean root) {
@@ -123,6 +130,7 @@ public class ScriptScope implements Scope {
         this.file = file.getAbsolutePath();
         this.root = root;
         id = "(file-scope):" + counter.incrementAndGet();
+
     }
 
     public ScriptScope(@NotNull Scope parent,
@@ -146,13 +154,14 @@ public class ScriptScope implements Scope {
         this.source = source;
         this.parser = parser;
         this.root = root;
+        checkPure(parent);
+
     }
 
-    @NotNull
-    public Scope addChild(@NotNull String source, @NotNull String name) {
-        checkDestroyed();
-
-        return new ScriptScope(this, file, source, name, false);
+    public void checkPure(@NotNull Scope parent) {
+        if (parent.pure() && !this.pure()) {
+            handleError(new PureFunctionException());
+        }
     }
 
     @NotNull
@@ -181,7 +190,7 @@ public class ScriptScope implements Scope {
     public var get(@NotNull String key, boolean mustFind) {
         checkDestroyed();
         if (key.matches("[0-9]+")) {
-            throw new DollarAssertionException("Cannot get numerical keys, use getParameter");
+            throw new DollarAssertionException("Cannot get numerical keys, use parameter");
         }
         if (getConfig().debugScope()) {
             log.info("Looking up {} in {}", key, this);
@@ -210,6 +219,12 @@ public class ScriptScope implements Scope {
     @Override
     public var get(@NotNull String key) {
         return get(key, false);
+    }
+
+    @Nullable
+    @Override
+    public Variable getVariable(@NotNull String key) {
+        return getVariables().get(key);
     }
 
     @Nullable
@@ -263,7 +278,7 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public var getParameter(@NotNull String key) {
+    public var parameter(@NotNull String key) {
         checkDestroyed();
 
         if (getConfig().debugScope()) {
@@ -331,36 +346,74 @@ public class ScriptScope implements Scope {
     @NotNull
     @Override
     public var handleError(@NotNull Throwable t) {
-        log.warn(t.getMessage(), t);
+        Throwable unravelled = unravel(t);
+        if (!(unravelled instanceof DollarException)) {
+            if (unravelled.getCause() instanceof DollarException) {
+                return handleError(unravelled.getCause());
+            }
+        }
+        if (unravelled instanceof DollarAssertionException) {
+            throw (DollarAssertionException) unravelled;
+        }
         if (errorHandlers.isEmpty()) {
+            log.info("No error handlers in {} so passing up.", this);
             if (parent == null) {
-                if (t instanceof ParserException) {
-                    throw (ParserException) t;
+                if (unravelled instanceof ParserException) {
+                    if (unravelled.getCause() instanceof DollarException) {
+                        return handleError(unravelled.getCause());
+                    } else {
+                        throw (ParserException) unravelled;
+                    }
                 }
-                if (t instanceof DollarParserError) {
-                    throw (DollarParserError) t;
+                if (unravelled instanceof DollarParserError) {
+                    throw (DollarParserError) unravelled;
                 }
-                if (t instanceof DollarException) {
-                    throw (DollarException) t;
+                if (unravelled instanceof DollarException) {
+                    throw (DollarException) unravelled;
                 }
-                throw new DollarScriptException(t);
+                throw new DollarScriptException(unravelled);
             } else {
-                return parent.handleError(t);
+                return parent.handleError(unravelled);
             }
         } else {
-            setParameter("type", $(t.getClass().getName()));
-            setParameter("msg", $(t.getMessage()));
+            log.info("Error handler in {}", this);
+            parameter("type", $(unravelled.getClass().getName()));
+            parameter("msg", $(unravelled.getMessage()));
             try {
                 for (var handler : errorHandlers) {
                     fix(handler, false);
                 }
             } finally {
-                setParameter("type", $void());
-                setParameter("msg", $void());
+                parameter("type", $void());
+                parameter("msg", $void());
             }
             return $void();
         }
 
+    }
+
+    @NotNull
+    @Override
+    public var handleError(@NotNull Throwable t, var context) {
+        return handleError(new DollarScriptException(t, context));
+    }
+
+    @NotNull
+    @Override
+    public var handleError(@NotNull Throwable t, SourceSegment source) {
+        if (t instanceof LambdaRecursionException) {
+            return handleError(new DollarParserError(
+                                                            "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
+                                                                    "expressions. The simplest way to solve this is to use the 'fix' operator or the '=' operator to " +
+                                                                    "reduce the amount of lazy evaluation. The error occured at " +
+                                                                    source));
+        }
+        if (t instanceof DollarException) {
+            ((DollarException) t).addSource(source);
+            return handleError(t);
+        } else {
+            return handleError(new DollarScriptException(t, source));
+        }
     }
 
     @Override
@@ -480,8 +533,7 @@ public class ScriptScope implements Scope {
                         try {
                             pipe.pipe($(key), value);
                         } catch (Exception e) {
-                            log.error(e.getMessage(), e);
-                            throw new DollarScriptException(e);
+                            handleError(e);
                         }
                     });
         } else {
@@ -502,7 +554,7 @@ public class ScriptScope implements Scope {
         checkDestroyed();
 
         if (key.matches("[0-9]+")) {
-            throw new DollarAssertionException("Cannot set numerical keys, use setParameter");
+            throw new DollarAssertionException("Cannot set numerical keys, use parameter");
         }
         Scope scope = getScopeForKey(key);
         if (scope == null) {
@@ -523,7 +575,8 @@ public class ScriptScope implements Scope {
             }
             if (variable.getConstraint() != null) {
                 if (constraint != null) {
-                    handleError(new DollarScriptException("Cannot change the constraint on a variable, attempted to redeclare for " + key));
+                    handleError(
+                            new DollarScriptException("Cannot change the constraint on a variable, attempted to redeclare for " + key));
                 }
             }
             if (getConfig().debugScope()) {
@@ -542,7 +595,7 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public var setParameter(@NotNull String key, @NotNull var value) {
+    public var parameter(@NotNull String key, @NotNull var value) {
         checkDestroyed();
 
         if (getConfig().debugScope()) {
@@ -578,26 +631,26 @@ public class ScriptScope implements Scope {
         return id + "->" + parent;
     }
 
+    @Override
+    public Scope getParent() {
+        return parent;
+    }
+
     private boolean checkConstraint(@NotNull var value,
                                     @Nullable Variable oldValue,
                                     @NotNull var constraint) {
         checkDestroyed();
 
-        setParameter("it", value);
+        parameter("it", value);
         log.debug("SET it={}", value);
         if (oldValue != null) {
-            setParameter("previous", oldValue.getValue());
+            parameter("previous", oldValue.getValue());
         }
         final boolean fail = constraint.isFalse();
-        setParameter("it", $void());
-        setParameter("previous", $void());
+        parameter("it", $void());
+        parameter("previous", $void());
         return fail;
-    }    @Override
-    public Scope getParent() {
-        return parent;
     }
-
-
 
 
     @Override

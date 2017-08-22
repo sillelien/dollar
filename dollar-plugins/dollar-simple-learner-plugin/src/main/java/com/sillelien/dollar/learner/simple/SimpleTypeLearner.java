@@ -87,7 +87,7 @@ public class SimpleTypeLearner implements TypeLearner {
             HTreeMap<String, Long> tally = getMap(name, perm);
             for (Object type : tally.keySet()) {
                 String typeStr = type.toString();
-                prediction.addCount(Type.valueOf(typeStr), tally.getOrDefault(typeStr,0L));
+                prediction.addCount(Type.of(typeStr), tally.getOrDefault(typeStr, 0L));
                 if (prediction.types().size() > MAX_POSSIBLE_RETURN_VALUES) {
                     return new TypePrediction() {
                         @Override

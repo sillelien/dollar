@@ -1,0 +1,12 @@
+pure def pureFunc {
+     $1 + impureFunc()
+}
+
+def impureFunc {
+     $1 + 1
+}
+
+
+@@ pure {
+    pureFunc();
+}

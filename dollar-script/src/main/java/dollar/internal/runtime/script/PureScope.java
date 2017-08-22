@@ -59,7 +59,7 @@ public class PureScope extends ScriptScope {
     @Override
     public var get(@NotNull String key, boolean mustFind) {
         if (key.matches("[0-9]+")) {
-            throw new AssertionError("Cannot get numerical keys, use getParameter");
+            throw new AssertionError("Cannot get numerical keys, use parameter");
         }
         if (DollarStatic.getConfig().debugScope()) {
             log.info("Looking up {} in {}", key, this);
@@ -116,7 +116,7 @@ public class PureScope extends ScriptScope {
             throw new DollarScriptException("Cannot have volatile variables in a pure expression");
         }
         if (key.matches("[0-9]+")) {
-            throw new AssertionError("Cannot set numerical keys, use setParameter");
+            throw new AssertionError("Cannot set numerical keys, use parameter");
         }
         Scope scope = getScopeForKey(key);
         if ((scope != null) && !Objects.equals(scope, this)) {

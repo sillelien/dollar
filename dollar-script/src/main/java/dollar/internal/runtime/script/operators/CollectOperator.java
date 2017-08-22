@@ -72,7 +72,7 @@ public class CollectOperator implements Function<Token, var> {
 
 
         String id = UUID.randomUUID().toString();
-        return node(pure, NEW_SCOPE, Collections.singletonList(variable), token, parser,
+        return node(COLLECT_OP, pure, NEW_SCOPE, Collections.singletonList(variable), token, parser,
                     (var... in) -> {
                         Scope scopeForVar = getScopeForVar(pure, varName, false, null);
 
@@ -83,7 +83,7 @@ public class CollectOperator implements Function<Token, var> {
                         scopeForVar.listen(varName, id, new VarListener((var) unless, (var) until, (var) loop));
                         return $void();
 
-                    }, COLLECT_OP);
+                    });
 
 
     }
@@ -115,8 +115,8 @@ public class CollectOperator implements Function<Token, var> {
             log.debug("Count is {} value is {}", count.get(), value);
             inSubScope(true, pure, "collect-body",
                        ns -> {
-                           ns.setParameter("count", $(count.get()));
-                           ns.setParameter("it", value);
+                           ns.parameter("count", $(count.get()));
+                           ns.parameter("it", value);
 
                            if ((unless != null) && unless.isTrue()) {
                                log.debug("Skipping {}", value);
@@ -125,7 +125,7 @@ public class CollectOperator implements Function<Token, var> {
                                collected.add(value);
                            }
                            var returnValue = $void();
-                           ns.setParameter("collected", fromList(collected));
+                           ns.parameter("collected", fromList(collected));
                            log.debug("Collected {}", fromList(collected));
                            final boolean endValue = (until != null) && until.isTrue();
                            if (endValue) {

@@ -127,7 +127,7 @@ public class ParserTest {
 
     @ParameterizedTest
     @ValueSource(
-            strings = {"negative/neg_scopes_1.ds", "negative/neg_pure_1.ds", "negative/neg_pure_2.ds"})
+            strings = {"negative/neg_scopes_1.ds", "negative/neg_pure_1.ds", "negative/neg_pure_2.ds", "negative/neg_pure_3.ds"})
 
     public void negativeTestScripts(@NotNull String filename) throws Exception {
         System.out.println("Testing " + filename);

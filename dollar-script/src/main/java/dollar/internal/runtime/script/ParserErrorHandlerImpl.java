@@ -17,18 +17,13 @@
 package dollar.internal.runtime.script;
 
 import com.sillelien.dollar.api.DollarException;
-import com.sillelien.dollar.api.exceptions.LambdaRecursionException;
 import com.sillelien.dollar.api.script.SourceSegment;
-import com.sillelien.dollar.api.types.DollarFactory;
-import com.sillelien.dollar.api.types.ErrorType;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.api.ParserErrorHandler;
 import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
-import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.ErrorReporter;
-import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.error.Location;
@@ -38,7 +33,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
+import java.util.Objects;
+
+import static com.sillelien.dollar.api.DollarException.unravel;
 
 @SuppressWarnings("UseOfSystemOutOrSystemErr")
 public class ParserErrorHandlerImpl implements ParserErrorHandler {
@@ -59,72 +56,33 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
     @NotNull
     @Override
     public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull DollarAssertionException e) {
-
-        if (!faultTolerant) {
-            return scope.handleError(e);
-        } else {
-            return DollarFactory.failure(e);
-        }
+        return handleInternal(scope, source, e);
     }
 
     @NotNull
     @Override
     public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull DollarException e) {
-
-        final Throwable throwable;
-        if (source != null) {
-            throwable = new DollarParserError(e.getMessage() + " at " + source.getSourceMessage(), e);
-        } else {
-            throwable = e;
-        }
-        if (((e instanceof VariableNotFoundException) && missingVariables) || failfast) {
-            return scope.handleError(throwable);
-        } else {
-            return DollarFactory.failure(throwable);
-        }
-
+        return handleInternal(scope, source, e);
     }
 
     @Override
     @NotNull
-    public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull Exception e) {
-        if (e instanceof LambdaRecursionException) {
-            throw new DollarParserError(
-                                               "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
-                                                       "expressions. The simplest way to solve this is to use the 'fix' operator or the '=' operator to " +
-                                                       "reduce the amount of lazy evaluation. The error occured at " +
-                                                       source);
-        }
+    public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull Throwable e) {
+        return handleInternal(scope, source, e);
 
-        if ((e instanceof DollarException) && (source != null)) {
-            ((DollarException) e).addSource(source);
-            throw (DollarException) e;
-        } else if (source != null) {
-            return DollarFactory.failureWithSource(ErrorType.EXCEPTION, unravel(e), source);
-        } else {
-            return DollarFactory.failure(ErrorType.EXCEPTION, unravel(e), false);
-        }
-
-    }
-
-    private @NotNull
-    Throwable unravel(@NotNull Throwable e) {
-        if (e instanceof InvocationTargetException) {
-            return e.getCause();
-        } else {
-            return e;
-        }
     }
 
     @Override
     public void handleTopLevel(@NotNull Throwable t, @Nullable String name, @NotNull File file) throws Throwable {
+        log.debug(t.getMessage(), t);
         if (t instanceof DollarAssertionException) {
-            System.out.println("An assertion failed");
+            System.out.println("ASSERTION FAILURE");
 
         }
         if (t instanceof DollarException) {
             ErrorReporter.report(getClass(), t);
-            log.error(t.getMessage(), t);
+            System.out.println(t.getMessage());
+            return;
         }
         if (t instanceof ParserException) {
             Location location = ((ParserException) t).getLocation();
@@ -150,18 +108,29 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
             }
             System.out.println();
             if (t.getCause() instanceof DollarScriptException) {
-                log.debug(t.getCause().getMessage(), t);
+                System.out.println(t.getCause().getMessage());
             } else {
-                log.debug(t.getMessage(), t);
+                System.out.println(t.getMessage());
             }
-            t.printStackTrace(System.err);
             throw new DollarExitError();
-        }
-        if (t instanceof DollarScriptException) {
-            ErrorReporter.report(getClass(), t);
-            log.error(t.getMessage(), t);
         } else {
-            throw t;
+            if (!Objects.equals(unravel(t), t)) {
+                handleTopLevel(unravel(t), name, file);
+                return;
+            }
+        }
+        throw t;
+    }
+
+    @NotNull
+    private var handleInternal(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull Throwable e) {
+
+        if ((e instanceof DollarException) && (source != null)) {
+            return scope.handleError(e, source);
+        } else if (source != null) {
+            return scope.handleError(new DollarScriptException(e, source));
+        } else {
+            return scope.handleError(new DollarScriptException(e));
         }
     }
 

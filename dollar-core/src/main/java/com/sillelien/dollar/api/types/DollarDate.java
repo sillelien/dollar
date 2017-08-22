@@ -79,7 +79,6 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     @NotNull
     @Override
     public var $multiply(@NotNull var rhs) {
-        System.err.println("MULTIPLY");
         return DollarFactory.wrap(new DollarDecimal(errors(), asDecimal() * rhs.toDouble()));
     }
 

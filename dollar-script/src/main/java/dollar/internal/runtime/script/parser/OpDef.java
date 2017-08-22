@@ -23,10 +23,12 @@ import dollar.internal.runtime.script.HasSymbol;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Objects;
 
+@SuppressWarnings("CallToPrintStackTrace")
 public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     @Nullable
     private final String symbol;
@@ -40,11 +42,10 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     private final int priority;
     @NotNull
     private final OpDefType type;
-
-    @Nullable
-    private String bnf;
     @Nullable
     private final Boolean pure;
+    @Nullable
+    private String bnf;
 
     public OpDef(@NotNull OpDefType type,
                  @Nullable String symbol,
@@ -162,7 +163,9 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                         CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream(filename), Charsets.UTF_8)));
                 stringBuilder.append("\n\n");
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+        } catch (RuntimeException e) {
             e.printStackTrace(System.err);
             throw new AssertionError(e);
         }
@@ -173,12 +176,12 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
             if (resourceAsStream != null) {
 
                 stringBuilder.append("```\n");
-                stringBuilder.append(CharStreams.toString(
-                        new InputStreamReader(getClass().getResourceAsStream(filename), Charsets.UTF_8)));
-
+                stringBuilder.append(CharStreams.toString(new InputStreamReader(resourceAsStream, Charsets.UTF_8)));
                 stringBuilder.append("```\n");
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+        } catch (RuntimeException e) {
             e.printStackTrace(System.err);
             throw new AssertionError(e);
         }

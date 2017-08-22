@@ -141,18 +141,34 @@ public final class Type {
     }
 
     /**
-     * Create a Type from a string or null if it doesn't exist.
+     * Create a Type from a string
      *
      * @param name the name of the Type
      * @return the Type
      */
     @NotNull
-    public static Type valueOf(@NotNull String name) {
+    public static Type of(@NotNull String name) {
         String[] split = name.split(":");
         if (split.length == 2) {
-            return new Type(split[0], split[1]);
+            return new Type(split[0].toUpperCase(), split[1]);
         } else {
-            return new Type(name);
+            return new Type(name.toUpperCase());
+        }
+    }
+
+    /**
+     * Create a Type from a var
+     *
+     * @param name the name of the Type
+     * @return the Type
+     */
+    @NotNull
+    public static Type of(@NotNull var name) {
+        String[] split = name.$S().split(":");
+        if (split.length == 2) {
+            return new Type(split[0].toUpperCase(), split[1]);
+        } else {
+            return new Type(name.$S().toUpperCase());
         }
     }
 

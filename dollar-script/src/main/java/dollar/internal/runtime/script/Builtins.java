@@ -33,7 +33,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
-import static com.sillelien.dollar.api.DollarStatic.$void;
 
 public final class Builtins {
 
@@ -87,8 +86,7 @@ public final class Builtins {
                 Thread.sleep((long) (args.get(0).toDouble() * DAY_IN_MILLIS));
                 return args.get(0);
             } catch (InterruptedException e) {
-                e.printStackTrace();
-                return $void();
+                return scope.handleError(e);
             }
         }, false, "SLEEP");
         addDollarStyle(1, 2, (pure, args, scope) -> {
