@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          String id = UUID.randomUUID().toString();
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">return</strong> node(pure, NEW_SCOPE, Collections.singletonList(variable), token, parser,
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">return</strong> node(COLLECT_OP, pure, NEW_SCOPE, Collections.singletonList(variable), token, parser,
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>                      (<strong class="jxr_keyword">var</strong>... in) -&gt; {
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>                          <a href="../../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scopeForVar = getScopeForVar(pure, varName, false, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>                          scopeForVar.listen(varName, id, <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/operators/CollectOperator.html">VarListener</a>((<strong class="jxr_keyword">var</strong>) unless, (<strong class="jxr_keyword">var</strong>) until, (<strong class="jxr_keyword">var</strong>) loop));
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>                          <strong class="jxr_keyword">return</strong> $<strong class="jxr_keyword">void</strong>();
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>                      }, COLLECT_OP);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>                      });
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>      }
@@ -123,8 +123,8 @@
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>             log.debug(<span class="jxr_string">"Count is {} value is {}"</span>, count.get(), value);
 <a class="jxr_linenumber" name="L116" href="#L116">116</a>             inSubScope(<strong class="jxr_keyword">true</strong>, pure, <span class="jxr_string">"collect-body"</span>,
 <a class="jxr_linenumber" name="L117" href="#L117">117</a>                        ns -&gt; {
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>                            ns.setParameter(<span class="jxr_string">"count"</span>, $(count.get()));
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>                            ns.setParameter(<span class="jxr_string">"it"</span>, value);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>                            ns.parameter(<span class="jxr_string">"count"</span>, $(count.get()));
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>                            ns.parameter(<span class="jxr_string">"it"</span>, value);
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 
 <a class="jxr_linenumber" name="L121" href="#L121">121</a>                            <strong class="jxr_keyword">if</strong> ((unless != <strong class="jxr_keyword">null</strong>) &amp;&amp; unless.isTrue()) {
 <a class="jxr_linenumber" name="L122" href="#L122">122</a>                                log.debug(<span class="jxr_string">"Skipping {}"</span>, value);
@@ -133,7 +133,7 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>                                collected.add(value);
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>                            }
 <a class="jxr_linenumber" name="L127" href="#L127">127</a>                            <strong class="jxr_keyword">var</strong> returnValue = $<strong class="jxr_keyword">void</strong>();
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>                            ns.setParameter(<span class="jxr_string">"collected"</span>, fromList(collected));
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>                            ns.parameter(<span class="jxr_string">"collected"</span>, fromList(collected));
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>                            log.debug(<span class="jxr_string">"Collected {}"</span>, fromList(collected));
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>                            <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> endValue = (until != <strong class="jxr_keyword">null</strong>) &amp;&amp; until.isTrue();
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>                            <strong class="jxr_keyword">if</strong> (endValue) {

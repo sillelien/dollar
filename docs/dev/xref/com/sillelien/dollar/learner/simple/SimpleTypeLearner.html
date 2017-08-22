@@ -95,7 +95,7 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>              HTreeMap&lt;String, Long&gt; tally = getMap(name, perm);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>              <strong class="jxr_keyword">for</strong> (Object type : tally.keySet()) {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>                  String typeStr = type.toString();
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>                  prediction.addCount(Type.valueOf(typeStr), tally.getOrDefault(typeStr,0L));
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>                  prediction.addCount(Type.of(typeStr), tally.getOrDefault(typeStr, 0L));
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>                  <strong class="jxr_keyword">if</strong> (prediction.types().size() &gt; MAX_POSSIBLE_RETURN_VALUES) {
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>                      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/sillelien/dollar/api/TypePrediction.html">TypePrediction</a>() {
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>                          @Override

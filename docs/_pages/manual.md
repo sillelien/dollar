@@ -407,7 +407,7 @@ Error handling couldn't be simpler. Define an error expression using the error k
 ```
 var errorHappened= false
 error { @@ msg; errorHappened= true }
-var a=1/0
+var a= << http://fake.com:99999
 .: errorHappened
 ```
 
@@ -1435,9 +1435,10 @@ The right-hand-side is executed if an error occurs in the current scope.
 
 ```
 var errorHappened= false
-error { @@ msg; errorHappened= true }
-var a=1/0
-.: errorHappened
+error { ?? msg; errorHappened= true }
+def redis "redis://localhost:999999/test" as uri
+write ("Hello World " + DATE()) to redis
+.: &errorHappened
 ```
 
 ___

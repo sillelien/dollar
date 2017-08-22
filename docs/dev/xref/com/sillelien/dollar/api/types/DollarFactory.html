@@ -654,7 +654,7 @@
 <a class="jxr_linenumber" name="L646" href="#L646">646</a>         <strong class="jxr_keyword">if</strong> (!jsonObject.containsField(TYPE_KEY)) {
 <a class="jxr_linenumber" name="L647" href="#L647">647</a>             type = Type._MAP;
 <a class="jxr_linenumber" name="L648" href="#L648">648</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L649" href="#L649">649</a>             type = Type.valueOf(jsonObject.getString(TYPE_KEY));
+<a class="jxr_linenumber" name="L649" href="#L649">649</a>             type = Type.of(jsonObject.getString(TYPE_KEY));
 <a class="jxr_linenumber" name="L650" href="#L650">650</a>         }
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> 
 <a class="jxr_linenumber" name="L652" href="#L652">652</a>         <strong class="jxr_keyword">if</strong> (type.is(Type._VOID)) {
