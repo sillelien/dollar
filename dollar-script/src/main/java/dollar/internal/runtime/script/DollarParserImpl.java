@@ -873,7 +873,14 @@ public class DollarParserImpl implements DollarParser {
                              KEYWORD(VAR)
                      ).optional(null),//1
                      IDENTIFIER.between(OP(LT), OP(GT)).optional(null),//2
-                     ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN)).optional(null),//3
+                     ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN)).optional(null).token().map((Token token) -> {
+                         if (token.value() != null) {
+                             ((var) token.value()).meta(CONSTRAINT_SOURCE, new SourceSegmentValue(currentScope(), token));
+                             return token.value();
+                         } else {
+                             return null;
+                         }
+                     }),//3
                      OP(DOLLAR).next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))).or(IDENTIFIER).or(BUILTIN), //4
                      or(
                              OP(ASSIGNMENT),
@@ -891,7 +898,11 @@ public class DollarParserImpl implements DollarParser {
                 array(
                         KEYWORD(EXPORT).optional(null),//0
                         IDENTIFIER.between(OP(LT), OP(GT)).optional(null),//1
-                        OP(DOLLAR).next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))).or(IDENTIFIER), //2
+                        OP(DOLLAR).next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))).or(IDENTIFIER).token().map(
+                                (Token token) -> {
+                                    ((var) token.value()).meta(CONSTRAINT_SOURCE, new SourceSegmentValue(currentScope(), token));
+                                    return token.value();
+                                }), //2
                         OP(DEFINITION),//3
                         expression(true)//4
 

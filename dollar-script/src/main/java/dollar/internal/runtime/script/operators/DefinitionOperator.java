@@ -19,6 +19,7 @@ package dollar.internal.runtime.script.operators;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.Func;
+import dollar.internal.runtime.script.SourceSegmentValue;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.Scope;
 import org.jetbrains.annotations.NotNull;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.function.Function;
 
 import static com.sillelien.dollar.api.DollarStatic.$;
+import static com.sillelien.dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
@@ -90,7 +92,12 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
                 constraint = node(DEFINITION, "definition-constraint", pure, NEW_SCOPE,
                                   token, new ArrayList<>(), parser,
                                   i -> $(scope.parameter("it").is(Type.of(typeConstraintObj))));
-                constraintSource = typeConstraintObj.$S().toUpperCase();
+                SourceSegmentValue meta = typeConstraintObj.meta(CONSTRAINT_SOURCE);
+                if (meta != null) {
+                    constraintSource = meta.getSourceSegment();
+                } else {
+                    constraintSource = null;
+                }
             } else {
                 constraint = null;
                 constraintSource = null;
