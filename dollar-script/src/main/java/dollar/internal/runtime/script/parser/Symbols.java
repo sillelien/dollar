@@ -935,7 +935,7 @@ public final class Symbols {
                 Objects::nonNull).sorted().collect(Collectors.toList());
     }
 
-    public static void main(@NotNull String[] args) {
+    public static void mainx(@NotNull String[] args) {
         for (OpDef operator : OPERATORS) {
 
             File file = new File("src/main/resources/examples/op", operator.name() + ".ds");
@@ -959,7 +959,7 @@ public final class Symbols {
     }
 
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
-    public static void mainx(@NotNull String[] args) {
+    public static void main(@NotNull String[] args) {
         System.out.println("## Appendix A - Operators");
         for (OpDef operator : OPERATORS) {
             System.out.println(operator.asMarkdown());
