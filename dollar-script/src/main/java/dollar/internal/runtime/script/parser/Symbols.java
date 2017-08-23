@@ -16,11 +16,14 @@
 
 package dollar.internal.runtime.script.parser;
 
+import com.google.common.io.Files;
 import dollar.internal.runtime.script.HasKeyword;
 import dollar.internal.runtime.script.HasSymbol;
 import dollar.internal.runtime.script.OperatorPriority;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -781,19 +784,24 @@ public final class Symbols {
                     NULL,
 
                     //complex operators
+                    BLOCK_OP,
+                    BUILTIN_OP,
                     CAST,
                     COLLECT_OP,
                     FOR_OP,
-                    MODULE_OP,
-                    WHEN_OP,
-                    PURE_OP,
-                    WHILE_OP,
-                    SUBSCRIPT_OP,
-                    PARAM_OP,
-                    WRITE_OP,
-                    READ_OP,
                     IS_OP,
                     JAVA_OP,
+                    LIST_OP,
+                    MAP_OP,
+                    MODULE_OP,
+                    PARAM_OP,
+                    PURE_OP,
+                    READ_OP,
+                    SUBSCRIPT_OP,
+                    UNIT_OP,
+                    WHEN_OP,
+                    WHILE_OP,
+                    WRITE_OP,
 
                     //Reserved Operators
                     RESERVED_OPERATOR_1,
@@ -927,22 +935,31 @@ public final class Symbols {
                 Objects::nonNull).sorted().collect(Collectors.toList());
     }
 
-//    public static void mainx(@NotNull String[] args) {
-//        for (OpDef operator : OPERATORS) {
-//
-//            File file = new File("src/main/resources/examples/op", operator.name() + ".ds");
-//            try {
-//                if (!file.exists()) {
-//                    Files.write("".getBytes(), file);
-//                }
-//            } catch (IOException e) {
+    public static void main(@NotNull String[] args) {
+        for (OpDef operator : OPERATORS) {
+
+            File file = new File("src/main/resources/examples/op", operator.name() + ".ds");
+            try {
+                if (!file.exists()) {
+                    Files.write("".getBytes(), file);
+                }
+            } catch (IOException e) {
 //                log.error(e.getMessage(), e);
-//            }
-//        }
-//    }
+            }
+
+            File mdFile = new File("src/main/resources/examples/op", operator.name() + ".md");
+            try {
+                if (!mdFile.exists()) {
+                    Files.write("".getBytes(), mdFile);
+                }
+            } catch (IOException e) {
+//                log.error(e.getMessage(), e);
+            }
+        }
+    }
 
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
-    public static void main(@NotNull String[] args) {
+    public static void mainx(@NotNull String[] args) {
         System.out.println("## Appendix A - Operators");
         for (OpDef operator : OPERATORS) {
             System.out.println(operator.asMarkdown());
