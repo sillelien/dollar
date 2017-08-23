@@ -134,7 +134,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         } else {
             stringBuilder.append("![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg)");
         }
-        if (pure) {
+        if ((pure != null) && pure) {
             stringBuilder.append(" ![pure](https://img.shields.io/badge/function-pure-green.svg)");
         } else {
             stringBuilder.append(" ![impure](https://img.shields.io/badge/function-impure-blue.svg)");
