@@ -1,0 +1,18 @@
+var e=void
+
+//Length is greater than or equal to 4 unless void
+var (#it >= 4 || it is VOID) collectedValues=void
+
+//count starts at 0 so this means five to collect (except if it contains the value 10)
+collect e until count == 4 unless it == 10{
+    print count
+    print collected
+    collectedValues= collected
+}
+
+e=1; e=2; e=3; e=4; e=5; e=6
+&collectedValues <=> [1,2,3,4,5]
+e=7; e=8; e=9; e=10
+&collectedValues <=> [6,7,8,9]
+e=11; e=12; e=13; e=14; e=15; e=16
+&collectedValues <=> [11,12,13,14,15]

@@ -44,7 +44,7 @@ public class DollarScriptException extends DollarException {
     }
 
     public DollarScriptException(@NotNull String s, @NotNull var rhs) {
-        super(s + ":\n" + rhs.source().getSourceMessage());
+        super(s + ":\n" + (rhs.source() != null ? rhs.source().getSourceMessage() : " [no source]"));
         rawMessage = s;
         source = rhs.source();
     }

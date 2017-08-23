@@ -564,10 +564,10 @@ public final class DollarScriptSupport {
     public static var constrain(@NotNull Scope scope, @NotNull var value, @Nullable var constraint, @Nullable String source) {
 //        System.err.println("(" + source + ") " + rhs.$type().constraint());
         if (!Objects.equals(value.constraintLabel(), source)) {
-            if ((value.constraintLabel() != null) && !value.constraintLabel().isEmpty()) {
-                scope.handleError(new DollarScriptException(
-                                                                   "Trying to assign an invalid constrained variable " + value.constraintLabel() + " vs " + source,
-                                                                   value));
+            if ((source != null) && (value.constraintLabel() != null) && !value.constraintLabel().isEmpty()) {
+                scope.handleError(
+                        new DollarScriptException("Trying to assign an invalid constrained variable " + value.constraintLabel() + " vs " + source,
+                                                  value));
             }
         } else {
             if ((value.constraintLabel() != null) && !value.constraintLabel().isEmpty()) {
@@ -599,4 +599,7 @@ public final class DollarScriptSupport {
     }
 
 
+    public static String randomId() {
+        return UUID.randomUUID().toString();
+    }
 }

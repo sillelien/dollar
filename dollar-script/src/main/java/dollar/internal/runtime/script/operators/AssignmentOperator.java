@@ -20,11 +20,8 @@ import com.sillelien.dollar.api.BooleanAware;
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.Type;
 import com.sillelien.dollar.api.TypePrediction;
-import com.sillelien.dollar.api.VarInternal;
-import com.sillelien.dollar.api.script.SourceSegment;
 import com.sillelien.dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SourceNodeOptions;
 import dollar.internal.runtime.script.SourceSegmentValue;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.Scope;
@@ -39,8 +36,10 @@ import java.util.List;
 import java.util.function.Function;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
+import static com.sillelien.dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
 import static com.sillelien.dollar.api.types.meta.MetaConstants.IS_BUILTIN;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.emptyList;
@@ -104,9 +103,8 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
             if (objects[0] != null) {
                 parser.export(varName, rhsFixed);
             }
-            setVariable(currentScope, varName, rhsFixed, constant,
-                        constraint, useSource, isVolatile, constant, pure,
-                        decleration, token, parser);
+            setVariable(currentScope, varName, rhsFixed, constant, constraint, useSource, isVolatile, constant, pure, decleration,
+                        token, parser);
             return $void();
 
         };
@@ -123,19 +121,24 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
         var constraint = null;
         @Nullable final String constraintSource;
         if (objects[3] instanceof var) {
-            SourceSegment sourceSegment = ((VarInternal) objects[3]).source();
-            assert sourceSegment != null;
-            constraintSource = sourceSegment.getSourceSegment();
+            SourceSegmentValue meta = ((var) objects[3]).meta(CONSTRAINT_SOURCE);
+            if (meta != null) {
+                constraintSource = meta.getSourceSegment();
+            } else {
+                constraintSource = null;
+            }
         } else {
             constraintSource = null;
         }
         if (objects[2] != null) {
             type = Type.of(objects[2].toString().toUpperCase());
-            constraint = node(ASSIGNMENT, "constraint", pure, SourceNodeOptions.NEW_SCOPE, token, emptyList(), parser, i -> {
-                var it = currentScope().parameter("it");
-                assert it != null;
-                return $(it.is(type) && ((objects[3] == null) || ((BooleanAware) objects[3]).isTrue()));
-            });
+            constraint = node(ASSIGNMENT, "constraint", pure, NEW_SCOPE,
+                              token, emptyList(),
+                              parser, i -> {
+                        var it = currentScope().parameter("it");
+                        assert it != null;
+                        return $(it.is(type) && ((objects[3] == null) || ((BooleanAware) objects[3]).isTrue()));
+                    });
         } else {
             type = null;
             if (objects[3] instanceof var) constraint = (var) objects[3];

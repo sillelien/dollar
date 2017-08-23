@@ -64,6 +64,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static com.sillelien.dollar.api.DollarStatic.*;
+import static com.sillelien.dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
 import static com.sillelien.dollar.api.types.meta.MetaConstants.SCOPES;
 import static dollar.internal.runtime.script.DollarLexer.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
@@ -865,21 +866,20 @@ public class DollarParserImpl implements DollarParser {
                                                                             boolean pure) {
         assert ASSIGNMENT.validForPure(pure);
 
-        return array(KEYWORD(EXPORT).optional(null),
+        return array(KEYWORD(EXPORT).optional(null),//0
                      or(
                              KEYWORD(CONST),
                              KEYWORD(VOLATILE),
                              KEYWORD(VAR)
-                     ).optional(null),
-                     IDENTIFIER.between(OP(LT), OP(GT)).optional(null),
-                     ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN)).optional(null),
-                     OP(DOLLAR).next(
-                             ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))
-                     ).or(IDENTIFIER).or(BUILTIN),
+                     ).optional(null),//1
+                     IDENTIFIER.between(OP(LT), OP(GT)).optional(null),//2
+                     ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN)).optional(null),//3
+                     OP(DOLLAR).next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))).or(IDENTIFIER).or(BUILTIN), //4
                      or(
                              OP(ASSIGNMENT),
                              OP(LISTEN_ASSIGN),
-                             OP(SUBSCRIBE_ASSIGN))
+                             OP(SUBSCRIBE_ASSIGN)
+                     )//5
         ).token().map(new AssignmentOperator(pure, this));
     }
 
@@ -918,7 +918,11 @@ public class DollarParserImpl implements DollarParser {
                         KEYWORD(EXPORT).optional(null),//0
                         KEYWORD(CONST).optional(null), //1
                         IDENTIFIER.between(OP(LT), OP(GT)).optional(null),//2
-                        OP(DOLLAR).next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))).or(IDENTIFIER), //3
+                        (OP(DOLLAR).next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))).or(IDENTIFIER))
+                                .token().map((Token token) -> {
+                            ((var) token.value()).meta(CONSTRAINT_SOURCE, new SourceSegmentValue(currentScope(), token));
+                            return token.value();
+                        }), //3
                         OP(DEFINITION) //4
 
                 ).token().map(new DefinitionOperator(pure, this, false)),
