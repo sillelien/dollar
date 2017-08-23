@@ -302,6 +302,16 @@ var pair2 = "second" : "World";
 
 ```
 
+Dollar maps are also associative arrays (like JavaScript) allowing you to request members from them using the list subscript syntax
+
+```
+{"key1":1,"key2":2} ["key"+1] <=> 1
+{"key1":1,"key2":2} [1] <=> {"key2":2}
+{"key1":1,"key2":2} [1]["key2"] <=> 2
+```
+
+As you can see from the example you can request a key/value pair (or Tuple if you like) by it's position using a numeric subscript. Or you can treat it as an associative array and request an entry by specifying the key name. Any expression can be used as a subscript, numerical values will be used as indexes, otherwise the string value will be used as a key.
+
 
 ### Lists
 
@@ -325,16 +335,6 @@ You can count the size of the list using the size operator `#`.
 ```
 #[1,2,3,4] <=> 4
 ```
-
-Dollar maps are also associative arrays (like JavaScript) allowing you to request members from them using the list subscript syntax
-
-```
-{"key1":1,"key2":2} ["key"+1] <=> 1
-{"key1":1,"key2":2} [1] <=> {"key2":2}
-{"key1":1,"key2":2} [1]["key2"] <=> 2
-```
-
-As you can see from the example you can request a key/value pair (or Tuple if you like) by it's position using a numeric subscript. Or you can treat it as an associative array and request an entry by specifying the key name. Any expression can be used as a subscript, numerical values will be used as indexes, otherwise the string value will be used as a key.
 
 
 ### Ranges
@@ -1040,9 +1040,11 @@ TODO
 
 
 
-all
+Returns a non-destructive read of all the values of a collection or URI addressed resource.
+
 
 ```
+var posts = <@ https://jsonplaceholder.typicode.com/posts
 ```
 
 ___
@@ -1119,14 +1121,29 @@ ___
 
 
 
-assign
+Values can be assigned to a variable using the standard `=` assignment operator. A variable is declared using either 'var', 'const' or 'volatile'. 
+
+`var` is used to mark a simple declaration of a mutable variable. E.g. `var a = 1; a= 2`. 
+
+`const` is used to declare a readonly variable, since all values in Dollar are immutable this makes the variable both readonly and immutable.
+
+`volatile` is used to declare the variable as mutable from multiple threads.
+
+Although there are no compile type constraints in Dollar a runtime type system can be built using constraints. Constraints are declared at the time of variable assignment or declaration. A constraint once declared on a variable cannot be changed. The constraint is placed before the variable name at the time of declaration in parenthesis.
+ 
+ Of course since the use of `(it is XXXX)` is very common, so Dollar provides a specific runtime type constraint that can be added in conjunction with other constraints. Simply prefix the assignment or decleration with `<XXXX>` where XXXX is the runtime type.
+ 
+ Values can be also be marked for `export` as in Javascript.
+
 
 ```
-var a=1
-a causes { @@ $1 }
-a=2
-a=3
-a=4
+var (it < 100) a = 50
+var (it > previous || previous is Void) b = 5
+b=6
+b=7
+var ( it is String) s1="String value"
+var <string> (#it > 5) s2="String value"
+const immutableValue= "Hello World"
 ```
 
 ___
@@ -1138,9 +1155,13 @@ ___
 
 
 
+Dollar has many built-in functions.
+
+//TODO: document them
 
 
 ```
+var now= DATE();
 ```
 
 ___
@@ -1221,10 +1242,12 @@ ___
 
 
 
-choose
+The choose operator is a simple reversal of the subscript operator used for code clarity.
+
 
 ```
-
+var value= "red";
+value choose {"red": "roses", "green": "tomatoes"} <-> "roses"
 ```
 
 ___
@@ -1694,8 +1717,19 @@ ___
 
 
 
+Dollar's lists are pretty similar to JavaScript arrays. They are defined using the `[1,2,3]` style syntax and accessed using the `x[y]` subscript syntax. You can count the size of the list using the size operator `#`. Dollar maps are also associative arrays (like JavaScript) allowing you to request members from them using the list subscript syntax `x[y]` or the member syntax `.`.
+
 
 ```
+[1,2,3][1] <=> 2
+#[1,2,3,4] <=> 4
+
+.: [1,2,3] + 4 == [1,2,3,4];
+.: [1,2,3,4] - 4 == [1,2,3];
+.: [] + 1 == [1] ;
+.: [1] + [1] == [1,1];
+.: [1] + 1 == [1,1];
+
 ```
 
 ___
