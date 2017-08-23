@@ -28,20 +28,20 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../dollar/internal/runtime/script/api/exceptions/DollarParserError.html">DollarParserError</a> <strong class="jxr_keyword">extends</strong> Error {
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../dollar/internal/runtime/script/api/exceptions/DollarParserError.html">DollarParserError</a>(Throwable e) {
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../dollar/internal/runtime/script/api/exceptions/DollarParserError.html">DollarParserError</a>(@NotNull Throwable e) {
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>          <strong class="jxr_keyword">super</strong>(e);
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>      }
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../dollar/internal/runtime/script/api/exceptions/DollarParserError.html">DollarParserError</a>(String errorMessage) {
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../dollar/internal/runtime/script/api/exceptions/DollarParserError.html">DollarParserError</a>(@NotNull String errorMessage) {
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>          <strong class="jxr_keyword">super</strong>(errorMessage);
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>      }
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../dollar/internal/runtime/script/api/exceptions/DollarParserError.html">DollarParserError</a>(String message, Throwable cause) {
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../dollar/internal/runtime/script/api/exceptions/DollarParserError.html">DollarParserError</a>(@NotNull String message, @NotNull Throwable cause) {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>          <strong class="jxr_keyword">super</strong>(message, cause, <strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>      }
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../dollar/internal/runtime/script/api/exceptions/DollarParserError.html">DollarParserError</a>(String s, @NotNull <strong class="jxr_keyword">var</strong> rhs) {
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>          <strong class="jxr_keyword">super</strong>(s+<span class="jxr_string">":\n"</span>+rhs._source().getSourceMessage());
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../dollar/internal/runtime/script/api/exceptions/DollarParserError.html">DollarParserError</a>(@NotNull String s, @NotNull <strong class="jxr_keyword">var</strong> rhs) {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>          <strong class="jxr_keyword">super</strong>(s + <span class="jxr_string">":\n"</span> + rhs.source().getSourceMessage());
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>      }
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  }
 </pre>
