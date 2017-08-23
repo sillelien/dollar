@@ -297,6 +297,16 @@ var pair2 = "second" : "World";
 
 ```
 
+Dollar maps are also associative arrays (like JavaScript) allowing you to request members from them using the list subscript syntax
+
+```dollar
+{"key1":1,"key2":2} ["key"+1] <=> 1
+{"key1":1,"key2":2} [1] <=> {"key2":2}
+{"key1":1,"key2":2} [1]["key2"] <=> 2
+```
+
+As you can see from the example you can request a key/value pair (or Tuple if you like) by it's position using a numeric subscript. Or you can treat it as an associative array and request an entry by specifying the key name. Any expression can be used as a subscript, numerical values will be used as indexes, otherwise the string value will be used as a key.
+
 
 ### Lists
 
@@ -320,16 +330,6 @@ You can count the size of the list using the size operator `#`.
 ```dollar
 #[1,2,3,4] <=> 4
 ```
-
-Dollar maps are also associative arrays (like JavaScript) allowing you to request members from them using the list subscript syntax
-
-```dollar
-{"key1":1,"key2":2} ["key"+1] <=> 1
-{"key1":1,"key2":2} [1] <=> {"key2":2}
-{"key1":1,"key2":2} [1]["key2"] <=> 2
-```
-
-As you can see from the example you can request a key/value pair (or Tuple if you like) by it's position using a numeric subscript. Or you can treat it as an associative array and request an entry by specifying the key name. Any expression can be used as a subscript, numerical values will be used as indexes, otherwise the string value will be used as a key.
 
 
 ### Ranges

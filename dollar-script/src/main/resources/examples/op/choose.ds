@@ -1,1 +1,2 @@
-
+var value= "red";
+value choose {"red": "roses", "green": "tomatoes"} <-> "roses"

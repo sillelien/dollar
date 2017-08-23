@@ -18,7 +18,7 @@ package com.sillelien.dollar.http;
 
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sillelien.dollar.api.DollarStatic;
+import com.sillelien.dollar.api.DollarException;
 import com.sillelien.dollar.api.Pipeable;
 import com.sillelien.dollar.api.types.DollarFactory;
 import com.sillelien.dollar.api.types.SerializedType;
@@ -57,7 +57,8 @@ public class HttpURIHandler implements URIHandler {
 
     @NotNull @Override
     public var all() {
-        throw new UnsupportedOperationException();
+        //TODO: decide better implementation
+        return read(false, false);
     }
 
     @NotNull @Override
@@ -94,7 +95,7 @@ public class HttpURIHandler implements URIHandler {
                     .header("Accept","application/json")
                     .asJson().getRawBody());
         } catch (UnirestException | IOException e) {
-            return DollarStatic.handleError(e, null);
+            throw new DollarException(e);
         }
     }
 
