@@ -45,13 +45,12 @@ import java.util.UUID;
 
 import static dollar.api.DollarStatic.$;
 import static dollar.api.types.meta.MetaConstants.VARIABLE;
-import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.VAR_USAGE_OP;
 
 public final class DollarScriptSupport {
 
     @NotNull
-    public static final String ANSI_CYAN = "36";
+    static final String ANSI_CYAN = "36";
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(DollarScriptSupport.class);
     @NotNull
@@ -62,7 +61,7 @@ public final class DollarScriptSupport {
     });
 
     @NotNull
-    public static List<Scope> scopes() {
+    static List<Scope> scopes() {
         return scopes.get();
     }
 
@@ -96,72 +95,14 @@ public final class DollarScriptSupport {
         return remove;
     }
 
-    @NotNull
-    public static var reactiveNode(boolean pure,
-                                   @NotNull SourceNodeOptions sourceNodeOptions,
-                                   @NotNull var lhs, @NotNull Token token, @NotNull DollarParser parser,
-                                   @NotNull Pipeable callable, OpDef operation) {
-        return reactiveNode(operation.name(), pure, sourceNodeOptions, lhs, token, parser, callable, operation);
-    }
-
-    @NotNull
-    public static var reactiveNode(@NotNull String name,
-                                   boolean pure,
-                                   @NotNull SourceNodeOptions sourceNodeOptions,
-                                   @NotNull var lhs, @NotNull Token token, @NotNull DollarParser parser,
-                                   @NotNull Pipeable callable, OpDef operation) {
-
-        return reactiveNode(name, pure, sourceNodeOptions,
-                            new SourceSegmentValue(currentScope(), token), parser,
-                            lhs, callable,
-                            operation);
-    }
-
-    @NotNull
-    public static var reactiveNode(boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
-                                   @NotNull SourceSegment source,
-                                   @NotNull DollarParser parser,
-                                   @NotNull var lhs,
-                                   @NotNull Pipeable callable, OpDef operation) {
-        return reactiveNode(operation.name(), pure, sourceNodeOptions, source, parser, lhs, callable, operation);
-    }
-
-    @NotNull
-    public static var reactiveNode(@NotNull String name,
-                                   boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
-                                   @NotNull SourceSegment source,
-                                   @NotNull DollarParser parser,
-                                   @NotNull var lhs,
-                                   @NotNull Pipeable callable, OpDef operation) {
-
-        final var lambda = node(name,
-                                pure, sourceNodeOptions, parser, source,
-                                Collections.singletonList(lhs),
-                                callable,
-                                operation);
-        lhs.$listen(i -> lambda.$notify());
-        return lambda;
-    }
-
-
-    @NotNull
-    public static var node(boolean pure,
-                           @NotNull SourceNodeOptions sourceNodeOptions,
-                           @NotNull DollarParser parser,
-                           @NotNull SourceSegment source,
-                           @NotNull List<var> inputs,
-                           @NotNull Pipeable pipeable, @NotNull OpDef operation) {
-        return node(operation.name(), pure, sourceNodeOptions, parser, source, inputs, pipeable, operation);
-    }
-
-    @NotNull
-    public static var node(@NotNull String name,
+    public static var node(@NotNull OpDef operation,
+                           @NotNull String name,
                            boolean pure,
                            @NotNull SourceNodeOptions sourceNodeOptions,
                            @NotNull DollarParser parser,
                            @NotNull SourceSegment source,
                            @NotNull List<var> inputs,
-                           @NotNull Pipeable pipeable, @NotNull OpDef operation) {
+                           @NotNull Pipeable pipeable) {
         return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
@@ -169,85 +110,98 @@ public final class DollarScriptSupport {
                                sourceNodeOptions, createId(name), pure, operation)));
     }
 
-    @NotNull
-    public static var node(@NotNull OpDef operation, boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
-                           @NotNull List<var> inputs, @NotNull Token token, @NotNull DollarParser parser,
-                           @NotNull Pipeable callable) {
-        return node(operation, operation.name(), pure, sourceNodeOptions, inputs, token, parser, callable);
-    }
-
-    @NotNull
-    public static var node(@NotNull OpDef operation, @NotNull String name,
-                           boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
-                           @NotNull List<var> inputs, @NotNull Token token, @NotNull DollarParser parser,
-                           @NotNull Pipeable callable) {
-        return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
-                DollarStatic.class.getClassLoader(),
-                new Class<?>[]{var.class},
-                new SourceNode(callable,
-                               new SourceSegmentValue(currentScope(), token),
-                               inputs,
-                               name,
-                               parser, sourceNodeOptions, createId(name), pure, operation)));
-    }
-
-
-    @NotNull
-    public static var reactiveNode(boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
-                                   @NotNull DollarParser parser,
-                                   @NotNull SourceSegment source,
-                                   @NotNull var lhs,
-                                   @NotNull var rhs,
-                                   @NotNull Pipeable callable, @NotNull OpDef operation) {
-        return reactiveNode(operation.name(), pure, sourceNodeOptions, parser, source, lhs, rhs, callable, operation);
-    }
-
-    @NotNull
-    public static var reactiveNode(@NotNull String name,
-                                   boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
-                                   @NotNull DollarParser parser,
-                                   @NotNull SourceSegment source,
-                                   @NotNull var lhs,
-                                   @NotNull var rhs,
-                                   @NotNull Pipeable callable, @NotNull OpDef operation) {
-        final var lambda = node(name, pure, sourceNodeOptions, parser, source, Arrays.asList(lhs, rhs),
-                                callable,
-                                operation);
-
-        rhs.$listen(i -> lambda.$notify());
-        lhs.$listen(i -> lambda.$notify());
-        return lambda;
-    }
-
-    @NotNull
-    public static var reactiveNode(@NotNull String name,
-                                   boolean pure,
-                                   @NotNull SourceNodeOptions sourceNodeOptions,
-                                   @NotNull Token token, @NotNull var lhs, @NotNull var rhs, @NotNull DollarParser parser,
-                                   @NotNull Pipeable callable, OpDef operation) {
-        final var lambda = node(name, pure, sourceNodeOptions, parser,
-                                new SourceSegmentValue(currentScope(), token),
-                                Arrays.asList(lhs, rhs), callable,
-                                operation);
-
-        rhs.$listen(i -> lambda.$notify());
-        lhs.$listen(i -> lambda.$notify());
-        return lambda;
-    }
-
-
-    @NotNull
-    public static var node(OpDef operation, @NotNull String name,
-                           boolean pure, @NotNull SourceNodeOptions sourceNodeOptions, @NotNull Token token,
-                           @NotNull List<var> inputs,
+    public static var node(@NotNull OpDef operation,
+                           boolean pure,
                            @NotNull DollarParser parser,
+                           @NotNull SourceSegment source,
+                           @NotNull List<var> inputs,
                            @NotNull Pipeable pipeable) {
-        return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
-                DollarStatic.class.getClassLoader(),
-                new Class<?>[]{var.class},
-                new SourceNode(pipeable::pipe,
-                               new SourceSegmentValue(currentScope(), token), inputs, name,
-                               parser, sourceNodeOptions, createId(name), pure, operation)));
+        return node(operation, operation.name(), pure, operation.nodeOptions(), parser, source, inputs, pipeable);
+    }
+
+
+    public static var node(@NotNull OpDef operation,
+                           boolean pure,
+                           @NotNull DollarParser parser,
+                           @NotNull Token token,
+                           @NotNull List<var> inputs,
+                           @NotNull Pipeable callable) {
+        return node(operation, operation.name(), pure, operation.nodeOptions(), parser,
+                    new SourceSegmentValue(currentScope(), token), inputs, callable);
+    }
+
+
+    @NotNull
+    static var reactiveNode(@NotNull OpDef operation, @NotNull String name,
+                            boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
+                            @NotNull DollarParser parser,
+                            @NotNull SourceSegment source,
+                            @NotNull var lhs,
+                            @NotNull var rhs,
+                            @NotNull Pipeable callable) {
+        final var lambda = node(operation, name, pure, sourceNodeOptions, parser, source, Arrays.asList(lhs, rhs),
+                                callable
+        );
+
+        rhs.$listen(i -> lambda.$notify());
+        lhs.$listen(i -> lambda.$notify());
+        return lambda;
+    }
+
+    @NotNull
+    static var reactiveNode(@NotNull OpDef operation,
+                            boolean pure,
+                            @NotNull Token token,
+                            @NotNull var lhs,
+                            @NotNull var rhs,
+                            @NotNull DollarParser parser,
+                            @NotNull Pipeable callable) {
+        return reactiveNode(operation, operation.name(), pure, operation.nodeOptions(), parser,
+                            new SourceSegmentValue(currentScope(),
+                                                   token), lhs,
+                            rhs, callable);
+
+    }
+
+
+    static var reactiveNode(@NotNull OpDef operation,
+                            boolean pure,
+                            @NotNull DollarParser parser, @NotNull SourceSegment source,
+                            @NotNull var lhs,
+                            @NotNull var rhs,
+                            @NotNull Pipeable callable) {
+        return reactiveNode(operation, operation.name(), pure, operation.nodeOptions(), parser, source, lhs,
+                            rhs, callable);
+
+    }
+
+    @NotNull
+    static var reactiveNode(@NotNull OpDef operation,
+                            boolean pure,
+                            @NotNull var lhs,
+                            @NotNull Token token,
+                            @NotNull DollarParser parser,
+                            @NotNull Pipeable callable) {
+
+        return reactiveNode(operation, pure, new SourceSegmentValue(currentScope(), token), parser, lhs, callable
+        );
+    }
+
+    @NotNull
+    static var reactiveNode(@NotNull OpDef operation,
+                            boolean pure,
+                            @NotNull SourceSegment source,
+                            @NotNull DollarParser parser,
+                            @NotNull var lhs,
+                            @NotNull Pipeable callable) {
+
+        final var lambda = node(operation, operation.name(),
+                                pure, operation.nodeOptions(), parser, source,
+                                Collections.singletonList(lhs),
+                                callable
+        );
+        lhs.$listen(i -> lambda.$notify());
+        return lambda;
     }
 
     @NotNull
@@ -341,7 +295,7 @@ public final class DollarScriptSupport {
                                    @NotNull Token token, @NotNull DollarParser parser) {
         var lambda[] = new var[1];
         UUID id = UUID.randomUUID();
-        lambda[0] = node(VAR_USAGE_OP, pure, NO_SCOPE, $(key).$list().toVarList().mutable(), token, parser,
+        lambda[0] = node(VAR_USAGE_OP, pure, parser, token, $(key).$list().toVarList().mutable(),
                          (i) -> {
                              Scope scope = currentScope();
 

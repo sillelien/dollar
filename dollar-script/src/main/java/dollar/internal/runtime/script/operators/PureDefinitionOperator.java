@@ -20,6 +20,7 @@ import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.var;
 import dollar.internal.runtime.script.Func;
+import dollar.internal.runtime.script.SourceSegmentValue;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +34,6 @@ import java.util.function.Function;
 import static dollar.api.DollarStatic.$;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
-import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.DEFINITION;
 import static java.util.Collections.singletonList;
 
@@ -78,8 +78,8 @@ public class PureDefinitionOperator implements Function<Token, var> {
 
         log.info("Creating pure variable {}", varName);
         if (typeConstraintObj != null) {
-            constraint = node(DEFINITION, "definition-constraint", true, NEW_SCOPE,
-                              token, new ArrayList<>(), parser,
+            constraint = node(DEFINITION, "definition-constraint", true, NEW_SCOPE, parser,
+                              new SourceSegmentValue(currentScope(), token), new ArrayList<>(),
                               i -> $(scope.parameter("it").is(Type.of(typeConstraintObj))));
             constraintSource = typeConstraintObj.$S().toUpperCase();
         } else {
@@ -87,8 +87,7 @@ public class PureDefinitionOperator implements Function<Token, var> {
             constraintSource = null;
         }
 
-        var node = node(DEFINITION, true, NO_SCOPE,
-                        singletonList(constrain(scope, value, constraint, constraintSource)), token, parser,
+        var node = node(DEFINITION, true, parser, token, singletonList(constrain(scope, value, constraint, constraintSource)),
                         i -> Func.definitionFunc(token, (exportObj != null), value, varName, constraint, constraintSource, parser,
                                                  true, true)
         );

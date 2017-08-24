@@ -24,21 +24,23 @@ import dollar.internal.runtime.script.parser.OpDefType;
 import org.jetbrains.annotations.NotNull;
 import org.jparsec.functors.Unary;
 
-import java.util.Collections;
 import java.util.function.Function;
+
+import static dollar.internal.runtime.script.DollarScriptSupport.node;
+import static dollar.internal.runtime.script.DollarScriptSupport.reactiveNode;
+import static java.util.Collections.singletonList;
 
 public class UnaryOp implements Unary<var>, Operator {
     @NotNull
     protected final OpDef operation;
     private final boolean immediate;
     @NotNull
+    private final Function<var, var> function;
+    private final boolean pure;
+    @NotNull
     protected SourceSegment source;
     @NotNull
     protected DollarParser parser;
-    @NotNull
-    private final Function<var, var> function;
-
-    private final boolean pure;
 
     public UnaryOp(@NotNull DollarParser parser, @NotNull OpDef operation, @NotNull Function<var, var> function, boolean pure) {
         this.operation = operation;
@@ -82,17 +84,12 @@ public class UnaryOp implements Unary<var>, Operator {
     public var map(@NotNull var from) {
 
         if (immediate) {
-            return DollarScriptSupport.node(operation.name(), pure, SourceNodeOptions.NO_SCOPE, parser,
-                                            source,
-                                            Collections.singletonList(from),
-                                            vars -> function.apply(from), operation);
+            return node(operation, pure, parser, source, singletonList(from), vars -> function.apply(from));
 
         }
 
         //Lazy evaluation
-        return DollarScriptSupport.reactiveNode(operation.name(), pure, SourceNodeOptions.NO_SCOPE, source, parser,
-                                                from,
-                                                args -> function.apply(from), operation);
+        return reactiveNode(operation, pure, source, parser, from, args -> function.apply(from));
 
     }
 

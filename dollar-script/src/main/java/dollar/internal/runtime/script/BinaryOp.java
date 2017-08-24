@@ -28,6 +28,9 @@ import org.jparsec.functors.Binary;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 
+import static dollar.internal.runtime.script.DollarScriptSupport.node;
+import static dollar.internal.runtime.script.DollarScriptSupport.reactiveNode;
+
 public class BinaryOp implements Binary<var>, Operator {
     private final boolean immediate;
     @NotNull
@@ -35,10 +38,10 @@ public class BinaryOp implements Binary<var>, Operator {
     @NotNull
     private final OpDef operation;
     @NotNull
-    private SourceSegment source;
-    @NotNull
     private final DollarParser parser;
     private final boolean pure;
+    @NotNull
+    private SourceSegment source;
 
 
     public BinaryOp(@NotNull DollarParser parser,
@@ -49,6 +52,18 @@ public class BinaryOp implements Binary<var>, Operator {
         this.function = function;
         this.pure = pure;
         immediate = false;
+        validate(operation);
+    }
+
+    public BinaryOp(boolean immediate,
+                    @NotNull OpDef operation,
+                    @NotNull DollarParser parser,
+                    @NotNull BiFunction<var, var, var> function, boolean pure) {
+        this.immediate = immediate;
+        this.function = function;
+        this.operation = operation;
+        this.parser = parser;
+        this.pure = pure;
         validate(operation);
     }
 
@@ -68,31 +83,15 @@ public class BinaryOp implements Binary<var>, Operator {
         }
     }
 
-    public BinaryOp(boolean immediate,
-                    @NotNull OpDef operation,
-                    @NotNull DollarParser parser,
-                    @NotNull BiFunction<var, var, var> function, boolean pure) {
-        this.immediate = immediate;
-        this.function = function;
-        this.operation = operation;
-        this.parser = parser;
-        this.pure = pure;
-        validate(operation);
-    }
-
     @NotNull
     @Override
     public var map(@NotNull var lhs, @NotNull var rhs) {
         if (immediate) {
-            return DollarScriptSupport.node(operation.name(), pure, SourceNodeOptions.NO_SCOPE, parser,
-                                            source,
-                                            Arrays.asList(lhs, rhs),
-                                            vars -> function.apply(lhs, rhs), operation);
+            return node(operation, pure, parser, source, Arrays.asList(lhs, rhs), vars -> function.apply(lhs, rhs));
 
         }
         //Lazy evaluation
-        return DollarScriptSupport.reactiveNode(operation.name(), pure, SourceNodeOptions.NO_SCOPE, parser, source, lhs, rhs,
-                                                args -> function.apply(lhs, rhs), operation);
+        return reactiveNode(operation, pure, parser, source, lhs, rhs, args -> function.apply(lhs, rhs));
     }
 
     @Override

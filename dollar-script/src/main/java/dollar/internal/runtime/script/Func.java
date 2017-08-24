@@ -49,7 +49,6 @@ import static dollar.api.DollarStatic.*;
 import static dollar.api.types.DollarFactory.fromValue;
 import static dollar.api.types.meta.MetaConstants.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
-import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.singletonList;
 
@@ -368,8 +367,8 @@ public final class Func {
 
         if (export) {
             parser.export(key,
-                          node(DEFINITION, pure, NO_SCOPE,
-                               singletonList(value), token, parser,
+                          node(DEFINITION, pure,
+                               parser, token, singletonList(value),
                                exportArgs -> value));
         }
         return $void();

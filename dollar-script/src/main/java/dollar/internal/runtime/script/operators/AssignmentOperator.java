@@ -40,7 +40,6 @@ import static dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
 import static dollar.api.types.meta.MetaConstants.IS_BUILTIN;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
-import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -109,9 +108,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
         };
         //        node.$listen(i -> scope.notify(varName));
-        return node(ASSIGNMENT, "assignment", pure, NO_SCOPE, singletonList(constrain(scope, rhs, constraint, constraintSource)),
-                    token, parser,
-                    pipeable);
+        return node(ASSIGNMENT, pure, parser, token, singletonList(constrain(scope, rhs, constraint, constraintSource)), pipeable);
     }
 
     @Nullable
@@ -132,9 +129,9 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
         }
         if (objects[2] != null) {
             type = Type.of(objects[2].toString().toUpperCase());
-            constraint = node(ASSIGNMENT, "constraint", pure, NEW_SCOPE,
-                              token, emptyList(),
-                              parser, i -> {
+            constraint = node(ASSIGNMENT, "assignment-constraint", pure, NEW_SCOPE, parser, new SourceSegmentValue(currentScope(),
+                                                                                                                   token),
+                              emptyList(), i -> {
                         var it = currentScope().parameter("it");
                         assert it != null;
                         return $(it.is(type) && ((objects[3] == null) || ((BooleanAware) objects[3]).isTrue()));
@@ -185,26 +182,22 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                 }
                 List<var> inputs = singletonList(constrain(scope, rhs, finalConstraint, useSource));
                 if ("?=".equals(op)) {
-                    scope.set(varName, rhs, false, null, useSource, isVolatile, false,
-                              pure);
+                    scope.set(varName, rhs, false, null, useSource, isVolatile, false, pure);
                     log.debug("DYNAMIC: {}", rhs.dynamic());
 
-                    return node(LISTEN_ASSIGN, "listen-assign", pure, NO_SCOPE, inputs, token, parser,
-                                c -> {
-                                    Pipeable listener = args -> {
-                                        var value = args[0].$fixDeep();
-                                        setVariable(scope, varName, value, false, useConstraint, useSource,
-                                                    isVolatile, false, pure, decleration, token, parser);
-                                        return value;
-                                    };
-                                    return rhs.$listen(
-                                            listener);
-                                }
+                    return node(WHEN_ASSIGN, pure, parser, token, inputs,
+                                c -> rhs.$listen(
+                                        parallel -> {
+                                            var value = parallel[0].$fixDeep();
+                                            setVariable(scope, varName, value, false, useConstraint, useSource,
+                                                        isVolatile, false, pure, decleration, token, parser);
+                                            return value;
+                                        })
                     );
 
                 } else if ("*=".equals(op)) {
                     scope.set(varName, $void(), false, null, useSource, true, true, pure);
-                    return node(SUBSCRIBE_ASSIGN, "subscribe-assign", pure, NO_SCOPE, inputs, token, parser,
+                    return node(SUBSCRIBE_ASSIGN, pure, parser, token, inputs,
                                 c -> {
                                     Pipeable subscriber = i -> setVariable(
                                             scope,
@@ -219,8 +212,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                 });
                 }
             }
-            return assign(rhs, objects, finalConstraint, constant, isVolatile, constraintSource,
-                          scope, token, decleration);
+            return assign(rhs, objects, finalConstraint, constant, isVolatile, constraintSource, scope, token, decleration);
         };
     }
 

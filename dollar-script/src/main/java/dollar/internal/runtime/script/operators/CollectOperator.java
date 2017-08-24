@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
@@ -39,8 +38,8 @@ import static dollar.api.types.DollarFactory.fromList;
 import static dollar.api.types.meta.MetaConstants.OPERATION_NAME;
 import static dollar.api.types.meta.MetaConstants.VARIABLE;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
-import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.COLLECT_OP;
+import static java.util.Collections.singletonList;
 
 public class CollectOperator implements Function<Token, var> {
     @NotNull
@@ -72,8 +71,8 @@ public class CollectOperator implements Function<Token, var> {
 
 
         String id = UUID.randomUUID().toString();
-        return node(COLLECT_OP, pure, NEW_SCOPE, Collections.singletonList(variable), token, parser,
-                    (var... in) -> {
+        return node(COLLECT_OP, pure, parser, token, singletonList(variable),
+                    parallel -> {
                         Scope scopeForVar = getScopeForVar(pure, varName, false, null);
 
                         if (scopeForVar == null) {

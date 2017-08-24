@@ -35,7 +35,6 @@ import static dollar.api.types.meta.MetaConstants.IMPURE;
 import static dollar.api.types.meta.MetaConstants.OPERATION_NAME;
 import static dollar.internal.runtime.script.DollarParserImpl.NAMED_PARAMETER_META_ATTR;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
-import static dollar.internal.runtime.script.SourceNodeOptions.SCOPE_WITH_CLOSURE;
 import static dollar.internal.runtime.script.parser.Symbols.FUNCTION_NAME_OP;
 import static dollar.internal.runtime.script.parser.Symbols.PARAM_OP;
 
@@ -74,37 +73,36 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
                 builtin = false;
             }
 
-            var node = node(PARAM_OP, "parameter", pure, SCOPE_WITH_CLOSURE,
-                            parameters, token, parser, i -> {
-                        //Add the special $* value for all the parameters
-                        int count = 0;
-                        List<var> fixedParams = new ArrayList<>();
-                        for (var parameter : parameters) {
-                            var fixedParam = parameter.$fix(1, false);
-                            fixedParams.add(fixedParam);
-                            currentScope().parameter(String.valueOf(++count), fixedParam);
+            var node = node(PARAM_OP, pure, parser, token, parameters, i -> {
+                                //Add the special $* value for all the parameters
+                                int count = 0;
+                                List<var> fixedParams = new ArrayList<>();
+                                for (var parameter : parameters) {
+                                    var fixedParam = parameter.$fix(1, false);
+                                    fixedParams.add(fixedParam);
+                                    currentScope().parameter(String.valueOf(++count), fixedParam);
 
-                            //If the parameter is a named parameter then use the name (set as metadata on the value).
-                            String paramMetaAttribute = fixedParam.metaAttribute(NAMED_PARAMETER_META_ATTR);
-                            if (paramMetaAttribute != null) {
-                                currentScope().set(paramMetaAttribute, fixedParam, true, null,
-                                                   null, false, false, !fixedParam.hasMeta(IMPURE));
+                                    //If the parameter is a named parameter then use the name (set as metadata on the value).
+                                    String paramMetaAttribute = fixedParam.metaAttribute(NAMED_PARAMETER_META_ATTR);
+                                    if (paramMetaAttribute != null) {
+                                        currentScope().set(paramMetaAttribute, fixedParam, true, null,
+                                                           null, false, false, !fixedParam.hasMeta(IMPURE));
+                                    }
+                                }
+                                currentScope().parameter("*", $(fixedParams));
+                                var result;
+                                if (functionName) {
+                                    String lhsString = lhs.toString();
+                                    result = builtin ? Builtins.execute(lhsString, parameters, pure)
+                                                     : variableNode(pure, lhsString, false, null, token, parser)
+                                                               .$fix(2,
+                                                                     false);
+                                } else {
+                                    result = lhs.$fix(2, false);
+                                }
+
+                                return result;
                             }
-                        }
-                        currentScope().parameter("*", $(fixedParams));
-                        var result;
-                        if (functionName) {
-                            String lhsString = lhs.toString();
-                            result = builtin ? Builtins.execute(lhsString, parameters, pure)
-                                             : variableNode(pure, lhsString, false, null, token, parser)
-                                                       .$fix(2,
-                                                             false);
-                        } else {
-                            result = lhs.$fix(2, false);
-                        }
-
-                        return result;
-                    }
             );
 
             //reactive links

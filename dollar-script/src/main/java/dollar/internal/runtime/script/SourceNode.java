@@ -113,7 +113,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
         if (sourceNodeOptions.isScopeClosure()) {
             this.lambda = vars -> {
                 List<Scope> attachedScopes = new ArrayList<>(DollarScriptSupport.scopes());
-                return DollarScriptSupport.node(name + "-closure", pure,
+                return DollarScriptSupport.node(operation, name + "-closure", pure,
                                                 new SourceNodeOptions(false, false, sourceNodeOptions.isParallel()),
                                                 parser, source, inputs, vars2 -> {
                             for (Scope scope : attachedScopes) {
@@ -129,7 +129,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
                             }
 
-                        }, operation);
+                        });
             };
         } else {
             this.lambda = lambda;

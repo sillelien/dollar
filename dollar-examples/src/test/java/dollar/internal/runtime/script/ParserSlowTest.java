@@ -43,7 +43,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SuppressWarnings("ALL")
-public class ParserTest {
+public class ParserSlowTest {
 
     @ClassRule
     public static final CircleCiParallelRule className = new CircleCiParallelRule();
@@ -63,7 +63,7 @@ public class ParserTest {
     public static List<String> operatorList() {
         return Symbols.OPERATORS.stream().map(i -> {
             String file = "/examples/op/" + i.name() + ".ds";
-            InputStream resourceAsStream = ParserTest.class.getResourceAsStream(file);
+            InputStream resourceAsStream = ParserSlowTest.class.getResourceAsStream(file);
             if (resourceAsStream != null) {
                 try {
                     if (CharStreams.toString(new InputStreamReader(resourceAsStream)).matches("\\s*")) {
@@ -97,52 +97,15 @@ public class ParserTest {
     @ValueSource(
 //            "bulletin.ds",
 //            "example.ds",
-            strings = {"test_date.ds", "test_block_closure.ds", "test_list_closure.ds", "test_map_closure.ds", "test_scopes.ds",
-                              "test1.ds",
-                              "test_arrays.ds", "test_builtins.ds", "test_casting.ds", "test_date.ds", "test_fix1.ds",
-                              "test_fix2.ds", "test_fix3.ds", "test_iteration.ds", "test_java.ds", "test_logic.ds",
-                              "test_numeric.ds", "test_parameters.ds", "test_pure.ds", "test_ranges.ds", "test_reactive1.ds",
-                              "test_reactive2.ds", "test_reactive3.ds", "test_reactive4.ds", "test_reactive5.ds",
-                              "test_reactive6.ds", "test_reactive7.ds", "test_reactive8.ds", "test_redis.ds", "test_strings.ds",
-                              "test_uris.ds", "test_variables.ds", "test_concurrency.ds", "test_control_flow.ds",
-                              "test_modules.ds", "test3.ds"})
+            strings = {"slow/test_redis.ds",
+                              "slow/test_uris.ds", "slow/test_concurrency.ds",
+                              "slow/test_modules.ds"})
 
     public void testScript(@NotNull String filename) throws Exception {
         System.out.println("Testing " + filename);
         new DollarParserImpl(options).parse(getClass().getResourceAsStream("/" + filename), filename, parallel);
     }
 
-    @Test
-
-    public void singleScriptTest() throws Exception {
-        try {
-            new DollarParserImpl(options).parse(getClass().getResourceAsStream("/test_java.ds"),
-                                                "/test_java.ds",
-                                                parallel);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
-    @ParameterizedTest
-    @ValueSource(
-            strings = {"negative/neg_scopes_1.ds", "negative/neg_pure_1.ds", "negative/neg_pure_2.ds", "negative/neg_pure_3.ds",
-                              "negative/neg_pure_4.ds"})
-
-    public void negativeTestScripts(@NotNull String filename) throws Exception {
-        System.out.println("Testing " + filename);
-        try {
-            new DollarParserImpl(options).parse(getClass().getResourceAsStream("/" + filename), filename, parallel);
-            fail("Expected exception");
-        } catch (AssertionError e) {
-            fail(e);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        } finally {
-
-        }
-    }
 
     @ParameterizedTest
     @MethodSource("operatorList")

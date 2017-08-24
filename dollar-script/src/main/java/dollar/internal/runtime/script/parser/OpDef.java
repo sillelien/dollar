@@ -20,6 +20,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import dollar.internal.runtime.script.HasKeyword;
 import dollar.internal.runtime.script.HasSymbol;
+import dollar.internal.runtime.script.SourceNodeOptions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,6 +47,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     private final Boolean pure;
     @Nullable
     private String bnf;
+    private SourceNodeOptions nodeOptions;
 
     public OpDef(@NotNull OpDefType type,
                  @Nullable String symbol,
@@ -55,7 +57,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                  boolean reactive,
                  @Nullable String bnf,
                  int priority,
-                 @Nullable Boolean pure) {
+                 @Nullable Boolean pure, SourceNodeOptions nodeOptions) {
         this.type = type;
 
         this.symbol = symbol;
@@ -66,6 +68,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         this.bnf = bnf;
         this.priority = priority;
         this.pure = pure;
+        this.nodeOptions = nodeOptions;
 
         if (!reserved && (priority == 0)) {
             throw new AssertionError("Priority must be > 0");
@@ -239,5 +242,9 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
 
     public String helpText() {
         return asMarkdown();
+    }
+
+    public SourceNodeOptions nodeOptions() {
+        return nodeOptions;
     }
 }

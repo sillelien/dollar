@@ -35,7 +35,6 @@ import static dollar.api.DollarStatic.$;
 import static dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
-import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.DEFINITION;
 import static java.util.Collections.singletonList;
 
@@ -89,8 +88,8 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
             }
 
             if (typeConstraintObj != null) {
-                constraint = node(DEFINITION, "definition-constraint", pure, NEW_SCOPE,
-                                  token, new ArrayList<>(), parser,
+                constraint = node(DEFINITION, "definition-constraint", pure, NEW_SCOPE, parser,
+                                  new SourceSegmentValue(currentScope(), token), new ArrayList<>(),
                                   i -> $(scope.parameter("it").is(Type.of(typeConstraintObj))));
                 SourceSegmentValue meta = typeConstraintObj.meta(CONSTRAINT_SOURCE);
                 if (meta != null) {
@@ -104,8 +103,7 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
             }
 
             boolean finalReadonly = readonly;
-            var node = node(DEFINITION, pure, NO_SCOPE,
-                            singletonList(constrain(scope, value, constraint, constraintSource)), token, parser,
+            var node = node(DEFINITION, pure, parser, token, singletonList(constrain(scope, value, constraint, constraintSource)),
                             i -> Func.definitionFunc(token, (exportObj != null), value, variableName, constraint, constraintSource,
                                                      parser, pure, finalReadonly)
             );
