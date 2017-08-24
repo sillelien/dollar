@@ -16,9 +16,9 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.var;
-import org.jparsec.functors.Unary;
+import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
+import org.jparsec.functors.Unary;
 
 enum UnaryOperator implements Unary<var> {
     ERR {

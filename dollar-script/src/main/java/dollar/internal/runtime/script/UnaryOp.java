@@ -16,8 +16,8 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.script.SourceSegment;
-import com.sillelien.dollar.api.var;
+import dollar.api.script.SourceSegment;
+import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.parser.OpDef;
 import dollar.internal.runtime.script.parser.OpDefType;

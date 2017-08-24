@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script.api.exceptions;
 
-import com.sillelien.dollar.api.var;
+import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 public class DollarParserError extends Error {

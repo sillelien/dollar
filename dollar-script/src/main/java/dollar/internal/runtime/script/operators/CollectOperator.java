@@ -16,10 +16,10 @@
 
 package dollar.internal.runtime.script.operators;
 
-import com.sillelien.dollar.api.Pipeable;
-import com.sillelien.dollar.api.var;
+import dollar.api.Pipeable;
+import dollar.api.Scope;
+import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,11 +33,11 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
-import static com.sillelien.dollar.api.DollarStatic.$;
-import static com.sillelien.dollar.api.DollarStatic.$void;
-import static com.sillelien.dollar.api.types.DollarFactory.fromList;
-import static com.sillelien.dollar.api.types.meta.MetaConstants.OPERATION_NAME;
-import static com.sillelien.dollar.api.types.meta.MetaConstants.VARIABLE;
+import static dollar.api.DollarStatic.$;
+import static dollar.api.DollarStatic.$void;
+import static dollar.api.types.DollarFactory.fromList;
+import static dollar.api.types.meta.MetaConstants.OPERATION_NAME;
+import static dollar.api.types.meta.MetaConstants.VARIABLE;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.COLLECT_OP;

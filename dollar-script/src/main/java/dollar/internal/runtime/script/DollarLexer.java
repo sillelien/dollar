@@ -16,9 +16,9 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.Type;
-import com.sillelien.dollar.api.types.DollarFactory;
-import com.sillelien.dollar.api.var;
+import dollar.api.Type;
+import dollar.api.types.DollarFactory;
+import dollar.api.var;
 import dollar.internal.runtime.script.parser.OpDef;
 import dollar.internal.runtime.script.parser.Symbols;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -40,8 +40,8 @@ import java.util.Arrays;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.sillelien.dollar.api.DollarStatic.*;
-import static com.sillelien.dollar.api.types.meta.MetaConstants.IS_BUILTIN;
+import static dollar.api.DollarStatic.*;
+import static dollar.api.types.meta.MetaConstants.IS_BUILTIN;
 import static dollar.internal.runtime.script.Builtins.exists;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.lang.Character.isAlphabetic;
@@ -105,13 +105,13 @@ final class DollarLexer {
     @NotNull
     private static final Function<String, Tokens.Fragment> BACKTICK_QUOTE_STRING = new Function<String, Tokens.Fragment>() {
         public Tokens.Fragment apply(@NotNull String text) {
-            return fragment(tokenizeBackTick(text), "java");
+            return fragment(tokenizeBackTick(text), "backtick");
         }
 
         @NotNull
         @Override
         public String toString() {
-            return "JAVA_STRING";
+            return "BACKTICK_STRING";
         }
     };
 
@@ -121,7 +121,7 @@ final class DollarLexer {
             or(DollarLexer.url(),
                OPERATORS.tokenizer(),
                DollarLexer.decimal(),
-               java(),
+               script(),
                Scanners.DOUBLE_QUOTE_STRING.map(new Function<String, String>() {
                    @NotNull
                    public String apply(@NotNull String text) {
@@ -184,7 +184,7 @@ final class DollarLexer {
         });
     }
 
-    public static Parser<?> java() {
+    public static Parser<?> script() {
         Parser<?> quote = Scanners.isChar('`');
         return Patterns.regex("((``)|[^`])*").toScanner("Java Snippet")
                        .between(quote, quote)

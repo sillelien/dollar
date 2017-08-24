@@ -332,10 +332,10 @@ public final class Symbols {
                                                    NO_PRIORITY, false);
 
     @NotNull
-    public static final OpDef JAVA_OP = new OpDef(OTHER, null, null,
-                                                  "java", false, false,
-                                                  "`<java-code>`",
-                                                  NO_PRIORITY, false);
+    public static final OpDef SCRIPT_OP = new OpDef(OTHER, null, null,
+                                                    "script", false, false,
+                                                    "<language-name> `<code>`",
+                                                    NO_PRIORITY, false);
 
 
     @NotNull
@@ -790,7 +790,7 @@ public final class Symbols {
                     COLLECT_OP,
                     FOR_OP,
                     IS_OP,
-                    JAVA_OP,
+                    SCRIPT_OP,
                     LIST_OP,
                     MAP_OP,
                     MODULE_OP,

@@ -16,9 +16,9 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.types.DollarFactory;
-import com.sillelien.dollar.api.var;
-import dollar.internal.runtime.script.api.Scope;
+import dollar.api.Scope;
+import dollar.api.types.DollarFactory;
+import dollar.api.var;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import org.jetbrains.annotations.NotNull;
 

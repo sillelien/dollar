@@ -16,17 +16,17 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.Type;
-import com.sillelien.dollar.api.VarInternal;
-import com.sillelien.dollar.api.collections.Range;
-import com.sillelien.dollar.api.execution.DollarExecutor;
-import com.sillelien.dollar.api.plugin.Plugins;
-import com.sillelien.dollar.api.script.ModuleResolver;
-import com.sillelien.dollar.api.time.Scheduler;
-import com.sillelien.dollar.api.types.DollarFactory;
-import com.sillelien.dollar.api.var;
+import dollar.api.Scope;
+import dollar.api.Type;
+import dollar.api.VarInternal;
+import dollar.api.collections.Range;
+import dollar.api.execution.DollarExecutor;
+import dollar.api.plugin.Plugins;
+import dollar.api.script.ModuleResolver;
+import dollar.api.time.Scheduler;
+import dollar.api.types.DollarFactory;
+import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
@@ -45,9 +45,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.sillelien.dollar.api.DollarStatic.*;
-import static com.sillelien.dollar.api.types.DollarFactory.fromValue;
-import static com.sillelien.dollar.api.types.meta.MetaConstants.*;
+import static dollar.api.DollarStatic.*;
+import static dollar.api.types.DollarFactory.fromValue;
+import static dollar.api.types.meta.MetaConstants.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.*;

@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script.operators;
 
-import com.sillelien.dollar.api.var;
+import dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
@@ -30,9 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.sillelien.dollar.api.DollarStatic.$;
-import static com.sillelien.dollar.api.types.meta.MetaConstants.IMPURE;
-import static com.sillelien.dollar.api.types.meta.MetaConstants.OPERATION_NAME;
+import static dollar.api.DollarStatic.$;
+import static dollar.api.types.meta.MetaConstants.IMPURE;
+import static dollar.api.types.meta.MetaConstants.OPERATION_NAME;
 import static dollar.internal.runtime.script.DollarParserImpl.NAMED_PARAMETER_META_ATTR;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.SourceNodeOptions.SCOPE_WITH_CLOSURE;

@@ -16,8 +16,8 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.Pipeable;
-import com.sillelien.dollar.api.var;
+import dollar.api.Pipeable;
+import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 public class TestPipe implements Pipeable {

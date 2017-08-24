@@ -16,10 +16,10 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.DollarStatic;
-import com.sillelien.dollar.api.var;
-import dollar.internal.runtime.script.api.Scope;
-import dollar.internal.runtime.script.api.Variable;
+import dollar.api.DollarStatic;
+import dollar.api.Scope;
+import dollar.api.Variable;
+import dollar.api.var;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
-import static com.sillelien.dollar.api.DollarStatic.$void;
+import static dollar.api.DollarStatic.$void;
 
 public class PureScope extends ScriptScope {
     @NotNull
@@ -138,13 +138,13 @@ public class PureScope extends ScriptScope {
                                                               " in a different thread from that which is created in."));
             }
             if (variable.getConstraint() != null) {
-                handleError(new DollarScriptException(
-                                                             "Cannot change the constraint on a variable, attempted to redeclare for " + key));
+                handleError(
+                        new DollarScriptException("Cannot change the constraint on a variable, attempted to redeclare for " + key));
             }
             variable.setValue(fixedValue);
         } else {
             scope.getVariables()
-                    .put(key, new Variable(fixedValue, readonly, constraint, constraintSource, false, fixed, pure));
+                    .put(key, new Variable(fixedValue, readonly, constraint, constraintSource, false, fixed, pure, false));
         }
         scope.notifyScope(key, fixedValue);
         return value;

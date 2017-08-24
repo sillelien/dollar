@@ -16,11 +16,11 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.DollarException;
-import com.sillelien.dollar.api.script.SourceSegment;
-import com.sillelien.dollar.api.var;
+import dollar.api.DollarException;
+import dollar.api.Scope;
+import dollar.api.script.SourceSegment;
+import dollar.api.var;
 import dollar.internal.runtime.script.api.ParserErrorHandler;
-import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.ErrorReporter;
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Objects;
 
-import static com.sillelien.dollar.api.DollarException.unravel;
+import static dollar.api.DollarException.unravel;
 
 @SuppressWarnings("UseOfSystemOutOrSystemErr")
 public class ParserErrorHandlerImpl implements ParserErrorHandler {

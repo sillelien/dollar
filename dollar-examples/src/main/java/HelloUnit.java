@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-import com.sillelien.dollar.api.Unit;
+import dollar.api.Unit;
 
 class HelloUnit extends Unit {
 

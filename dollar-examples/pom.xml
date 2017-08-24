@@ -43,6 +43,11 @@
             <artifactId>rest-assured</artifactId>
         </dependency>
         <dependency>
+            <artifactId>dollar-scripting-java-plugin</artifactId>
+            <groupId>com.sillelien</groupId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <artifactId>dollar-std-resources-plugins</artifactId>
             <groupId>com.sillelien</groupId>
             <version>${project.version}</version>

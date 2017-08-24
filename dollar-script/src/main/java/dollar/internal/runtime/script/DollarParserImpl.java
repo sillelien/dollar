@@ -17,18 +17,18 @@
 package dollar.internal.runtime.script;
 
 import com.google.common.io.ByteStreams;
-import com.sillelien.dollar.api.ControlFlowAware;
-import com.sillelien.dollar.api.DollarStatic;
-import com.sillelien.dollar.api.NumericAware;
-import com.sillelien.dollar.api.URIAware;
-import com.sillelien.dollar.api.VarInternal;
-import com.sillelien.dollar.api.collections.ImmutableList;
-import com.sillelien.dollar.api.types.DollarFactory;
-import com.sillelien.dollar.api.var;
+import dollar.api.ControlFlowAware;
+import dollar.api.DollarStatic;
+import dollar.api.NumericAware;
+import dollar.api.Scope;
+import dollar.api.URIAware;
+import dollar.api.VarInternal;
+import dollar.api.collections.ImmutableList;
+import dollar.api.types.DollarFactory;
+import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.ParserErrorHandler;
 import dollar.internal.runtime.script.api.ParserOptions;
-import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.operators.AssignmentOperator;
 import dollar.internal.runtime.script.operators.CollectOperator;
 import dollar.internal.runtime.script.operators.DefinitionOperator;
@@ -63,15 +63,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static com.sillelien.dollar.api.DollarStatic.*;
-import static com.sillelien.dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
-import static com.sillelien.dollar.api.types.meta.MetaConstants.SCOPES;
+import static dollar.api.DollarStatic.*;
+import static dollar.api.scripting.ScriptingSupport.compile;
+import static dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
+import static dollar.api.types.meta.MetaConstants.SCOPES;
 import static dollar.internal.runtime.script.DollarLexer.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.Func.*;
 import static dollar.internal.runtime.script.OperatorPriority.EQ_PRIORITY;
 import static dollar.internal.runtime.script.SourceNodeOptions.*;
-import static dollar.internal.runtime.script.java.JavaScriptingSupport.compile;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -265,7 +265,7 @@ public class DollarParserImpl implements DollarParser {
                                           whenExpression(ref.lazy(), false),
                                           everyExpression(ref.lazy(), false),
                                           functionCall(false),
-                                          java(false),
+                                          script(ref, false),
                                           pureDefinitionOperator(ref),
                                           URL,
                                           DECIMAL_LITERAL,
@@ -640,13 +640,18 @@ public class DollarParserImpl implements DollarParser {
                        });
     }
 
-    final Parser<var> java(boolean pure) {
-        return token(new JavaTokenMap())
+    final Parser<var> script(@NotNull Parser.Reference<var> ref, boolean pure) {
+        return array(or(BUILTIN).or(IDENTIFIER),
+                     token(new BacktickScriptMap()),
+                     parameterOperator(ref, pure).optional(v -> $void()))
                        .token()
-                       .map(token -> node(JAVA_OP, JAVA_OP.name(), pure, NO_SCOPE,
-                                          singletonList($void()), token, this,
-                                          i -> compile($void(), (String) token.value())
-                            )
+                       .map((Token token) -> {
+                                Object[] objects = (Object[]) token.value();
+                                return node(SCRIPT_OP, pure, NEW_SCOPE,
+                                            singletonList($void()), token, this,
+                                            i -> compile(String.valueOf(objects[0]), String.valueOf(objects[1]),
+                                                         currentScope()));
+                            }
                        );
     }
 
@@ -954,14 +959,14 @@ public class DollarParserImpl implements DollarParser {
 
     }
 
-    private static class JavaTokenMap implements TokenMap<String> {
+    private static class BacktickScriptMap implements TokenMap<String> {
         @Nullable
         @Override
         public String map(@NotNull Token token) {
             final Object val = token.value();
             if (val instanceof Tokens.Fragment) {
                 Tokens.Fragment c = (Tokens.Fragment) val;
-                if (!"java".equals(c.tag())) {
+                if (!"backtick".equals(c.tag())) {
                     return null;
                 }
                 return c.text();
@@ -973,7 +978,7 @@ public class DollarParserImpl implements DollarParser {
         @NotNull
         @Override
         public String toString() {
-            return "java";
+            return "backtick";
         }
     }
 

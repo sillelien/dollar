@@ -17,10 +17,10 @@
 package dollar.internal.runtime.script;
 
 import com.google.common.io.CharStreams;
-import com.sillelien.dollar.api.DollarStatic;
-import com.sillelien.dollar.test.CircleCiParallelRule;
+import dollar.api.DollarStatic;
 import dollar.internal.runtime.script.api.ParserOptions;
 import dollar.internal.runtime.script.parser.Symbols;
+import dollar.test.CircleCiParallelRule;
 import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
@@ -116,8 +116,8 @@ public class ParserTest {
 
     public void singleScriptTest() throws Exception {
         try {
-            new DollarParserImpl(options).parse(getClass().getResourceAsStream("/test_pure.ds"),
-                                                "/test_pure.ds",
+            new DollarParserImpl(options).parse(getClass().getResourceAsStream("/test_java.ds"),
+                                                "/test_java.ds",
                                                 parallel);
         } catch (Exception e) {
             e.printStackTrace();

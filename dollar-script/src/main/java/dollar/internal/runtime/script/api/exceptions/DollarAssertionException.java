@@ -16,8 +16,8 @@
 
 package dollar.internal.runtime.script.api.exceptions;
 
-import com.sillelien.dollar.api.DollarException;
-import com.sillelien.dollar.api.var;
+import dollar.api.DollarException;
+import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 public class DollarAssertionException extends DollarException {

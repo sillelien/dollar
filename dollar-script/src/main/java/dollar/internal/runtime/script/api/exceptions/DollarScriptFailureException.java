@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script.api.exceptions;
 
-import com.sillelien.dollar.api.types.ErrorType;
+import dollar.api.types.ErrorType;
 import org.jetbrains.annotations.NotNull;
 
 public class DollarScriptFailureException extends DollarScriptException {

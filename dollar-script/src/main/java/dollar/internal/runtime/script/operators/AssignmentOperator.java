@@ -16,15 +16,15 @@
 
 package dollar.internal.runtime.script.operators;
 
-import com.sillelien.dollar.api.BooleanAware;
-import com.sillelien.dollar.api.Pipeable;
-import com.sillelien.dollar.api.Type;
-import com.sillelien.dollar.api.TypePrediction;
-import com.sillelien.dollar.api.var;
+import dollar.api.BooleanAware;
+import dollar.api.Pipeable;
+import dollar.api.Scope;
+import dollar.api.Type;
+import dollar.api.TypePrediction;
+import dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.SourceSegmentValue;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,9 +35,9 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.sillelien.dollar.api.DollarStatic.*;
-import static com.sillelien.dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
-import static com.sillelien.dollar.api.types.meta.MetaConstants.IS_BUILTIN;
+import static dollar.api.DollarStatic.*;
+import static dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
+import static dollar.api.types.meta.MetaConstants.IS_BUILTIN;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;

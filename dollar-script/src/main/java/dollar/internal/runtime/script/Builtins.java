@@ -16,12 +16,12 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.StateAware;
-import com.sillelien.dollar.api.collections.ImmutableList;
-import com.sillelien.dollar.api.types.DollarFactory;
-import com.sillelien.dollar.api.types.ErrorType;
-import com.sillelien.dollar.api.var;
-import dollar.internal.runtime.script.api.Scope;
+import dollar.api.Scope;
+import dollar.api.StateAware;
+import dollar.api.collections.ImmutableList;
+import dollar.api.types.DollarFactory;
+import dollar.api.types.ErrorType;
+import dollar.api.var;
 import dollar.internal.runtime.script.api.exceptions.BuiltinNotFoundException;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.sillelien.dollar.api.DollarStatic.$;
+import static dollar.api.DollarStatic.$;
 
 public final class Builtins {
 

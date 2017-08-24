@@ -16,15 +16,15 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.DollarException;
-import com.sillelien.dollar.api.Pipeable;
-import com.sillelien.dollar.api.collections.MultiHashMap;
-import com.sillelien.dollar.api.collections.MultiMap;
-import com.sillelien.dollar.api.exceptions.LambdaRecursionException;
-import com.sillelien.dollar.api.script.SourceSegment;
-import com.sillelien.dollar.api.var;
-import dollar.internal.runtime.script.api.Scope;
-import dollar.internal.runtime.script.api.Variable;
+import dollar.api.DollarException;
+import dollar.api.Pipeable;
+import dollar.api.Scope;
+import dollar.api.Variable;
+import dollar.api.collections.MultiHashMap;
+import dollar.api.collections.MultiMap;
+import dollar.api.exceptions.LambdaRecursionException;
+import dollar.api.script.SourceSegment;
+import dollar.api.var;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
@@ -45,9 +45,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
-import static com.sillelien.dollar.api.DollarException.unravel;
-import static com.sillelien.dollar.api.DollarStatic.*;
+import static dollar.api.DollarException.unravel;
+import static dollar.api.DollarStatic.*;
 
 public class ScriptScope implements Scope {
 
@@ -588,7 +589,8 @@ public class ScriptScope implements Scope {
             if (getConfig().debugScope()) {
                 log.info("Adding {} in {}", key, scope);
             }
-            scope.getVariables().put(key, new Variable(value, readonly, constraint, constraintSource, isVolatile, fixed, pure));
+            scope.getVariables().put(key, new Variable(value, readonly, constraint, constraintSource, isVolatile, fixed, pure,
+                                                       key.matches("[0-9]+")));
         }
         scope.notifyScope(key, value);
         return value;
@@ -606,7 +608,7 @@ public class ScriptScope implements Scope {
             throw new DollarScriptException("Cannot change the value of positional variable $" + key + " in scope " + this);
         }
         parameterScope = true;
-        variables.put(key, new Variable(value, null, null));
+        variables.put(key, new Variable(value, null, null, true));
         notifyScope(key, value);
         return value;
     }
@@ -703,6 +705,11 @@ public class ScriptScope implements Scope {
     @Override
     public boolean pure() {
         return false;
+    }
+
+    @Override
+    public List<var> getParametersAsVars() {
+        return variables.values().stream().filter(Variable::isNumeric).map(Variable::getValue).collect(Collectors.toList());
     }
 
 

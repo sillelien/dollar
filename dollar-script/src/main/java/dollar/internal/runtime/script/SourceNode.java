@@ -16,21 +16,21 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.DollarStatic;
-import com.sillelien.dollar.api.MetadataAware;
-import com.sillelien.dollar.api.Pipeable;
-import com.sillelien.dollar.api.TypePrediction;
-import com.sillelien.dollar.api.VarInternal;
-import com.sillelien.dollar.api.exceptions.LambdaRecursionException;
-import com.sillelien.dollar.api.execution.DollarExecutor;
-import com.sillelien.dollar.api.plugin.Plugins;
-import com.sillelien.dollar.api.script.SourceSegment;
-import com.sillelien.dollar.api.script.TypeLearner;
-import com.sillelien.dollar.api.types.ConstraintViolation;
-import com.sillelien.dollar.api.types.DollarFactory;
-import com.sillelien.dollar.api.var;
+import dollar.api.DollarStatic;
+import dollar.api.MetadataAware;
+import dollar.api.Pipeable;
+import dollar.api.Scope;
+import dollar.api.TypePrediction;
+import dollar.api.VarInternal;
+import dollar.api.exceptions.LambdaRecursionException;
+import dollar.api.execution.DollarExecutor;
+import dollar.api.plugin.Plugins;
+import dollar.api.script.SourceSegment;
+import dollar.api.script.TypeLearner;
+import dollar.api.types.ConstraintViolation;
+import dollar.api.types.DollarFactory;
+import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.Scope;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.parser.OpDef;
 import org.jetbrains.annotations.NotNull;
@@ -48,8 +48,8 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.sillelien.dollar.api.DollarStatic.$;
-import static com.sillelien.dollar.api.types.meta.MetaConstants.*;
+import static dollar.api.DollarStatic.$;
+import static dollar.api.types.meta.MetaConstants.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class SourceNode implements java.lang.reflect.InvocationHandler {

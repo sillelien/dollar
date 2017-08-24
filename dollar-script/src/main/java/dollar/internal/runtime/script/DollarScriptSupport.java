@@ -16,15 +16,15 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.DollarException;
-import com.sillelien.dollar.api.DollarStatic;
-import com.sillelien.dollar.api.Pipeable;
-import com.sillelien.dollar.api.script.SourceSegment;
-import com.sillelien.dollar.api.types.DollarFactory;
-import com.sillelien.dollar.api.var;
+import dollar.api.DollarException;
+import dollar.api.DollarStatic;
+import dollar.api.Pipeable;
+import dollar.api.Scope;
+import dollar.api.Variable;
+import dollar.api.script.SourceSegment;
+import dollar.api.types.DollarFactory;
+import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.Scope;
-import dollar.internal.runtime.script.api.Variable;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.PureFunctionException;
@@ -43,8 +43,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static com.sillelien.dollar.api.DollarStatic.$;
-import static com.sillelien.dollar.api.types.meta.MetaConstants.VARIABLE;
+import static dollar.api.DollarStatic.$;
+import static dollar.api.types.meta.MetaConstants.VARIABLE;
 import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.VAR_USAGE_OP;
 

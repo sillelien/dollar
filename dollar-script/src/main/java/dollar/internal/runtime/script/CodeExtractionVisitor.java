@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script;
 
-import com.sillelien.dollar.api.DollarException;
+import dollar.api.DollarException;
 import dollar.internal.runtime.script.api.ParserOptions;
 import org.jetbrains.annotations.NotNull;
 import org.pegdown.ast.AbbreviationNode;

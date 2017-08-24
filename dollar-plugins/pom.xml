@@ -29,6 +29,7 @@
     <artifactId>dollar-plugins</artifactId>
     <packaging>pom</packaging>
     <modules>
+        <module>dollar-java-plugin</module>
         <module>dollar-redis-plugin</module>
         <module>dollar-metrics-plugin</module>
         <module>dollar-socketio-plugin</module>

@@ -38,7 +38,7 @@ ${BLURB}
 
 Every example you see below is *Java* I emphasize that as it may not look familiar to you, that is intentional - I have done my best to make it clear that you are working with **untyped** objects, to avoid confusion.
 
-All static methods such as `$()` can be accessed by importing `import static com.sillelien.dollar.api.DollarStatic.*;`
+All static methods such as `$()` can be accessed by importing `import static DollarStatic.*;`
 
 
 ## Creating objects

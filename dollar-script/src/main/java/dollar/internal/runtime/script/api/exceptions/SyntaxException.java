@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script.api.exceptions;
 
-import com.sillelien.dollar.api.DollarException;
+import dollar.api.DollarException;
 import org.jetbrains.annotations.NotNull;
 
 class SyntaxException extends DollarException {

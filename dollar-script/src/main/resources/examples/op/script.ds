@@ -1,0 +1,5 @@
+var variableA="Hello World"
+
+var java = java `out=scope.get("variableA");`
+
+java <=> "Hello World"

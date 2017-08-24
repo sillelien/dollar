@@ -756,27 +756,28 @@ var titles = posts each { $1.title }
 In this example we've requested a single value (using `<<`) from a uri and assigned the value to `posts` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `title`. The each operator returns a list of the results and that is what is passed to standard out.
 
 
-## Using Java
+## Using Other Languages
 
-Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of Java. To do so, just surround the Java in backticks.
+Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of another language. To do so, just surround the code in backticks and prefix with the languages name. Currently only `java` is supported but more will be added soon.
 
 ```dollar
 
 var variableA="Hello World"
 
-var java = `out=scope.get("variableA");`
+var java = java `out=scope.get("variableA");`
 
 java <=> "Hello World"
 
 ```
+### Java
 
 A whole bunch of imports are done for you automatically (see below) but you will have to fully qualify any thirdparty libs.
  
 > imports `dollar.lang.*``dollar.internal.runtime.script.api.*` `com.sillelien.dollar.api.*` `java.io.*` `java.math.*` `java.net.*` `java.nio.file.*` `java.util.*` `java.util.concurrent.*` `java.util.function.*` `java.util.prefs.*` `java.util.regex.*` `java.util.stream.*`
  
- > static imports `com.sillelien.dollar.api.DollarStatic.*` `dollar.internal.runtime.script.java.JavaScriptingStaticImports.*`
+ > static imports `DollarStatic.*` `dollar.internal.runtime.script.java.JavaScriptingStaticImports.*`
 
-The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (dollar.internal.runtime.script.api.Scope) object on which you can get and set Dollar variables.
+The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (Scope) object on which you can get and set Dollar variables.
 
 Reactive behaviour is supported on the Scope object with the `listen` and `notify` methods on variables. You'll need to then built your reactivity around those variables or on the `out` object directly (that's a pretty advanced topic).
 

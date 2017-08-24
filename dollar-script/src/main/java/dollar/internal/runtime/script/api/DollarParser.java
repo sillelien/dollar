@@ -16,7 +16,8 @@
 
 package dollar.internal.runtime.script.api;
 
-import com.sillelien.dollar.api.var;
+import dollar.api.Scope;
+import dollar.api.var;
 import dollar.internal.runtime.script.ScriptScope;
 import org.jetbrains.annotations.NotNull;
 

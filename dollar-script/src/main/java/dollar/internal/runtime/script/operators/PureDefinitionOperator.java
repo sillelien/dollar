@@ -16,11 +16,11 @@
 
 package dollar.internal.runtime.script.operators;
 
-import com.sillelien.dollar.api.Type;
-import com.sillelien.dollar.api.var;
+import dollar.api.Scope;
+import dollar.api.Type;
+import dollar.api.var;
 import dollar.internal.runtime.script.Func;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.function.Function;
 
-import static com.sillelien.dollar.api.DollarStatic.$;
+import static dollar.api.DollarStatic.$;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;

@@ -1,6 +1,6 @@
 const variableA="Hello World"
 
-const javaTest = `
+const javaTest = java`
 out=scope.get("variableA");
 if(staticImportTestMethod() != 42) throw new AssertionError("Not 42");
 //remove this when we have dollar.lang classes set up.
