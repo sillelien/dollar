@@ -121,7 +121,7 @@
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>         <strong class="jxr_keyword">if</strong> (sourceNodeOptions.isScopeClosure()) {
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>             <strong class="jxr_keyword">this</strong>.lambda = vars -&gt; {
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>                 List&lt;Scope&gt; attachedScopes = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(DollarScriptSupport.scopes());
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>                 <strong class="jxr_keyword">return</strong> DollarScriptSupport.node(name + <span class="jxr_string">"-closure"</span>, pure,
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>                 <strong class="jxr_keyword">return</strong> DollarScriptSupport.node(operation, name + <span class="jxr_string">"-closure"</span>, pure,
 <a class="jxr_linenumber" name="L117" href="#L117">117</a>                                                 <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceNodeOptions.html">SourceNodeOptions</a>(false, false, sourceNodeOptions.isParallel()),
 <a class="jxr_linenumber" name="L118" href="#L118">118</a>                                                 parser, source, inputs, vars2 -&gt; {
 <a class="jxr_linenumber" name="L119" href="#L119">119</a>                             <strong class="jxr_keyword">for</strong> (Scope scope : attachedScopes) {
@@ -137,7 +137,7 @@
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>                             }
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>                         }, operation);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>                         });
 <a class="jxr_linenumber" name="L133" href="#L133">133</a>             };
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>         } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L135" href="#L135">135</a>             <strong class="jxr_keyword">this</strong>.lambda = lambda;

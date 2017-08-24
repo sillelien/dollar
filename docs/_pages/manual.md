@@ -1149,6 +1149,12 @@ const immutableValue= "Hello World"
 
 ___
 
+### `?=` (assign-when)      {#op-assign-when}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+
+
+___
+
 ### builtin      {#op-builtin}
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
@@ -1677,9 +1683,13 @@ ___
 
 
 
+A boolean operator that returns true if the left-hand-side variable is one of the types listed on the right-hand-side. Analogous to Java's `instanceof`.
 
 
 ```
+.: 1 is Integer,Decimal
+.: "Hello" is String
+.: 1.0 is Decimal,String
 ```
 
 ___
@@ -1739,18 +1749,6 @@ Dollar's lists are pretty similar to JavaScript arrays. They are defined using t
 .: [1] + [1] == [1,1];
 .: [1] + 1 == [1,1];
 
-```
-
-___
-
-### `?=` (listen-assign)      {#op-listen-assign}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
-
-
-
-listen-assign
-
-```
 ```
 
 ___
@@ -2211,7 +2209,7 @@ ___
 ### script      {#op-script}
 ![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
-**`<language-name> `<code>``**{: style="font-size: 60%"}
+**`<language-name> `` ` ``<script-code>`` ` ```**{: style="font-size: 60%"}
 
 
 
@@ -2220,11 +2218,26 @@ Hopefully you'll find Dollar a useful and productive language, but there will be
 
 
 ```
-var variableA="Hello World"
+const variableA="Hello World"
 
-var java = java `out=scope.get("variableA");`
 
-java <=> "Hello World"
+//In this example we are accessing the scope from within Java to directly access variables in Dollar.
+//Note that the script has scope closure so all variables in both the lexical and runtime scope
+//are available.
+
+const javaTest = java`
+out=scope.get("variableA");
+`
+
+javaTest <=> "Hello World"
+
+//Now we parametrize the script. The parameters are available in a list of 'var' objects (see the dollar-core docs)
+
+const javaWithParam = java`
+out=in.get(0).$multiply(in.get(1)).$multiply(in.get(2));
+` (10,20,30)
+
+javaWithParam <=> 10*20*30
 ```
 
 ___
@@ -2645,8 +2658,8 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[stop](#op-stop)              |`stop`         | `<|`     |prefix    |
 |[unpause](#op-unpause)        |`unpause`      | `<||`    |prefix    |
 |[assign](#op-assign)          |               | `=`      |assignment|
+|[assign-when](#op-assign-when)|               | `?=`     |assignment|
 |[declaration](#op-declaration)|               | `:=`     |assignment|
-|[listen-assign](#op-listen-assign)|               | `?=`     |assignment|
 |[subscribe-assign](#op-subscribe-assign)|               | `*=`     |assignment|
 |[assert](#op-assert)          |`assert`       | `.:`     |prefix    |
 |[assert-equals](#op-assert-equals)|`assert-equals`| `<->`    |binary    |
