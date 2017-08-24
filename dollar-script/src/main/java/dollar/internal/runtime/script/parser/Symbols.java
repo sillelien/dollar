@@ -54,7 +54,7 @@ public final class Symbols {
 
     @NotNull
     public static final OpDef ASSERT = new OpDef(PREFIX, ".:", "assert", "assert",
-                                                 false, true, null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, null);
+                                                 false, true, null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, "\u2234");
     @NotNull
     public static final OpDef LT_EQUALS = new OpDef(BINARY, "<=", null, "less-than-equal",
                                                     false, true, null, EQ_PRIORITY, true, NO_SCOPE, null);
@@ -144,37 +144,38 @@ public final class Symbols {
     @NotNull
     public static final OpDef START = new OpDef(PREFIX, "|>", "start", "start",
                                                 false, true,
-                                                "('|>'|'start') <expression>", SIGNAL_PRIORITY, true, NO_SCOPE, null);
+                                                "('|>'|'start') <expression>", SIGNAL_PRIORITY, true, NO_SCOPE, ":arrow_forward:");
 
     @NotNull
     public static final OpDef STOP = new OpDef(PREFIX, "<|", "stop", "stop",
                                                false, true,
-                                               null, SIGNAL_PRIORITY, false, NO_SCOPE, null);
+                                               null, SIGNAL_PRIORITY, false, NO_SCOPE, ":black_square_for_stop:");
 
     @NotNull
     public static final OpDef PAUSE = new OpDef(PREFIX, "||>", "pause", "pause",
                                                 false, true,
-                                                null, SIGNAL_PRIORITY, false, NO_SCOPE, null);
+                                                null, SIGNAL_PRIORITY, false, NO_SCOPE, ":double_vertical_bar:");
 
     @NotNull
     public static final OpDef UNPAUSE = new OpDef(PREFIX, "<||", "unpause", "unpause",
                                                   false, true,
-                                                  null, SIGNAL_PRIORITY, false, NO_SCOPE, null);
+                                                  null, SIGNAL_PRIORITY, false, NO_SCOPE,
+                                                  ":black_right_pointing_triangle_with_double_vertical_bar:");
 
     @NotNull
     public static final OpDef DESTROY = new OpDef(PREFIX, "<|||", "destroy", "destroy",
                                                   false, true,
-                                                  null, SIGNAL_PRIORITY, false, NO_SCOPE, null);
+                                                  null, SIGNAL_PRIORITY, false, NO_SCOPE, ":rewind:");
 
     @NotNull
     public static final OpDef CREATE = new OpDef(PREFIX, "|||>", "create", "create",
                                                  false, true,
-                                                 null, SIGNAL_PRIORITY, false, NO_SCOPE, null);
+                                                 null, SIGNAL_PRIORITY, false, NO_SCOPE, ":fast_forward:");
 
     @NotNull
     public static final OpDef STATE = new OpDef(PREFIX, "<|>", "state", "state",
                                                 false, true,
-                                                null, SIGNAL_PRIORITY, false, NO_SCOPE, null);
+                                                null, SIGNAL_PRIORITY, false, NO_SCOPE, ":keycap_asterisk:");
 
     @NotNull
     public static final OpDef PLUS = new OpDef(BINARY, "+", "plus", "plus",
@@ -218,12 +219,12 @@ public final class Symbols {
     public static final OpDef ERROR = new OpDef(PREFIX, "?->", "error", "error",
                                                 false, true,
                                                 null,
-                                                LINE_PREFIX_PRIORITY, true, NO_SCOPE, null);
+                                                LINE_PREFIX_PRIORITY, true, NO_SCOPE, ":fire:");
 
     @NotNull
     public static final OpDef SIZE = new OpDef(PREFIX, "#", "size", "size",
                                                false, true,
-                                               null, UNARY_PRIORITY, true, NO_SCOPE, null);
+                                               null, UNARY_PRIORITY, true, NO_SCOPE, ":hash:");
 
     @NotNull
     public static final OpDef MOD = new OpDef(BINARY, "%", "mod", "modulus",
@@ -231,15 +232,15 @@ public final class Symbols {
                                               null, MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null);
 
     @NotNull
-    public static final OpDef ERR = new OpDef(PREFIX, "??", "err", "err",
+    public static final OpDef ERR = new OpDef(PREFIX, "!?", "err", "err",
                                               false,
                                               true,
-                                              null, LINE_PREFIX_PRIORITY, false, NO_SCOPE, null);
+                                              null, LINE_PREFIX_PRIORITY, false, NO_SCOPE, ":interrobang:");
 
     @NotNull
     public static final OpDef DEBUG = new OpDef(PREFIX, "!!", "debug", "debug",
                                                 false, true,
-                                                null, LINE_PREFIX_PRIORITY, false, NO_SCOPE, null);
+                                                null, LINE_PREFIX_PRIORITY, false, NO_SCOPE, "‼️:bangbang:");
 
     @NotNull
     public static final OpDef ASSERT_EQ_REACT = new OpDef(BINARY, "<=>",
@@ -251,7 +252,7 @@ public final class Symbols {
     public static final OpDef ASSERT_EQ_UNREACT = new OpDef(BINARY, "<->", "assert-equals",
                                                             "assert-equals",
                                                             false, false,
-                                                            null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, null);
+                                                            null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, "left_right_arrow");
     @NotNull
     public static final OpDef EACH = new OpDef(BINARY, "=>>", "each", "each", false, true, null,
                                                MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null);
@@ -285,7 +286,7 @@ public final class Symbols {
                                                       false, true, null, ASSIGNMENT_PRIORITY, true, NO_SCOPE, null);
 
     @NotNull
-    public static final OpDef IN = new OpDef(BINARY, "€", "in", "in", false, true, null, IN_PRIORITY, true, NO_SCOPE, null);
+    public static final OpDef IN = new OpDef(BINARY, "€", "in", "in", false, true, null, IN_PRIORITY, true, NO_SCOPE, "\u2208");
 
     @NotNull
     public static final OpDef DRAIN = new OpDef(PREFIX, "<-<", "drain", "drain", false, true, null, OUTPUT_PRIORITY, false,

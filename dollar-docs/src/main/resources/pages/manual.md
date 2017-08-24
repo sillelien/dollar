@@ -408,19 +408,19 @@ var a= << http://fake.com:99999
 
 ### Logging
 
-Logging is done by the `print`,`debug` and `err` keywords and the `@@`,`!!` and `??` operators.
+Logging is done by the `print`,`debug` and `err` keywords and the `@@`,`!!` and `!?` operators.
 
 | Keyword  | Operator |
 | -------- | -------- |
 | `print`  | `@@`     |
 | `debug`  | `!!`     |
-| `err`    | `??`     |
+| `err`    | `!?`     |
 
 
 ```dollar
 @@ "I'm a stdout message"
 !! "I'm a debug message"
-?? "I'm an error message"
+!? "I'm an error message"
 ```
 
 ## Type System

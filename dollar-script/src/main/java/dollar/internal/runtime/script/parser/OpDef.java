@@ -92,6 +92,11 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         return name;
     }
 
+    @NotNull
+    public String emoji() {
+        return emoji;
+    }
+
     public boolean validForPure(boolean pure) {
         return !pure || (this.pure && pure);
     }
@@ -126,9 +131,9 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     public String asMarkdown() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("###");
-        if (emoji != null) {
-            stringBuilder.append(" ").append(emoji);
-        }
+//        if (emoji != null) {
+//            stringBuilder.append(" ").append(emoji);
+//        }
         if (symbol == null) {
             if (keyword != null) {
                 stringBuilder.append("`").append(keyword).append("`");

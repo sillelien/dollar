@@ -78,7 +78,7 @@ sleep   + sleep keyword
 0 - Line Prefix
 @@  - stdout
 !! - debug
-?? - stderr
+!? - stderr
 .: - assert
 
 TODO
