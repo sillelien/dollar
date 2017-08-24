@@ -1953,7 +1953,7 @@ var pair2 = "second" : "World";
 ___
 
 ### `parallel` or `|:|`      {#op-parallel}
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`('|:|'|'parallel') <expression>`**{: style="font-size: 60%"}
 
@@ -1963,8 +1963,8 @@ Causes the right-hand-side expression to be evaluated in parallel, most useful i
 
 ```
 const testList := [ TIME(), {SLEEP(1 Sec); TIME();}, TIME() ];
-var a= |..| testList;
-var b= |:| testList;
+var a= |..| testList ;
+var b= |:| testList ;
 
 //Test different execution orders
 .: a[2] >= a[1]
@@ -2199,9 +2199,33 @@ ___
 
 
 
-reduce
+Performs areductionon the elements of the left-hand-side expression, using an
+     associative accumulation function, and returns the reduced value,
+     if any. This is equivalent to Java code of
+     
+```java
+ boolean foundAny = false;
+ T result = null;
+ for (T element : this stream) {
+     if (!foundAny) {
+         foundAny = true;
+         result = element;
+     }
+     else
+         result = accumulator.apply(result, element);
+ }
+ return foundAny ? Optional.of(result) : Optional.empty();
 
 ```
+     
+but is not constrained to execute sequentially.
+
+The rhs function/expression must be an associative function.
+
+
+
+```
+[1,2,3,4,5] reduce ($1 + $2)
 ```
 
 ___
@@ -2243,7 +2267,7 @@ javaWithParam <=> 10*20*30
 ___
 
 ### `serial` or `|..|`      {#op-serial}
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`('|..|'|'serial') <expression>`**{: style="font-size: 60%"}
 
