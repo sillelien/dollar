@@ -24,21 +24,21 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar.internal.runtime.script;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.DollarStatic;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.MetadataAware;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.Pipeable;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.TypePrediction;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.VarInternal;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.exceptions.LambdaRecursionException;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.execution.DollarExecutor;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.plugin.Plugins;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.script.SourceSegment;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.script.TypeLearner;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.types.ConstraintViolation;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.types.DollarFactory;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.<strong class="jxr_keyword">var</strong>;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.DollarParser;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.Scope;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.DollarStatic;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.MetadataAware;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.Pipeable;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.Scope;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.api.TypePrediction;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarInternal;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> dollar.api.exceptions.LambdaRecursionException;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> dollar.api.execution.DollarExecutor;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> dollar.api.plugin.Plugins;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.SourceSegment;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.TypeLearner;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.ConstraintViolation;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarFactory;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.DollarParser;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.parser.OpDef;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
@@ -56,13 +56,13 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> java.util.UUID;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.ConcurrentHashMap;
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.sillelien.dollar.api.DollarStatic.$;
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.sillelien.dollar.api.types.meta.MetaConstants.*;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.api.DollarStatic.$;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.api.types.meta.MetaConstants.*;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../dollar/internal/runtime/script/SourceNode.html">SourceNode</a> <strong class="jxr_keyword">implements</strong> java.lang.reflect.InvocationHandler {
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>      @NotNull
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../com/sillelien/dollar/api/script/TypeLearner.html">TypeLearner</a> typeLearner = Objects.requireNonNull(Plugins.sharedInstance(TypeLearner.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../dollar/api/script/TypeLearner.html">TypeLearner</a> typeLearner = Objects.requireNonNull(Plugins.sharedInstance(TypeLearner.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      <em class="jxr_comment">//    public static final String RETURN_SCOPE = "return-scope";</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      @NotNull
@@ -71,7 +71,7 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; nonScopeOperations = Arrays.asList(
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>              <span class="jxr_string">"dynamic"</span>, <span class="jxr_string">"$constrain"</span>);
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      @Nullable
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../com/sillelien/dollar/api/execution/DollarExecutor.html">DollarExecutor</a> executor = Plugins.sharedInstance(DollarExecutor.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../dollar/api/execution/DollarExecutor.html">DollarExecutor</a> executor = Plugins.sharedInstance(DollarExecutor.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_STACK_DEPTH = 100;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      @NotNull
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ThreadLocal&lt;List&lt;SourceNode&gt;&gt; notifyStack = ThreadLocal.withInitial(ArrayList::<strong class="jxr_keyword">new</strong>);
@@ -81,9 +81,9 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ConcurrentHashMap&lt;Object, Object&gt; meta = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>      @NotNull
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../com/sillelien/dollar/api/Pipeable.html">Pipeable</a> lambda;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> lambda;
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>      @NotNull
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../com/sillelien/dollar/api/script/SourceSegment.html">SourceSegment</a> source;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source;
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>      @NotNull
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ConcurrentHashMap&lt;String, Pipeable&gt; listeners = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
@@ -103,10 +103,10 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> pure;
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation;
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>      @Nullable
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a href="../../../../com/sillelien/dollar/api/TypePrediction.html">TypePrediction</a> prediction;
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a href="../../../../dollar/api/TypePrediction.html">TypePrediction</a> prediction;
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../dollar/internal/runtime/script/SourceNode.html">SourceNode</a>(@NotNull <a href="../../../../com/sillelien/dollar/api/Pipeable.html">Pipeable</a> lambda,
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>                       @NotNull <a href="../../../../com/sillelien/dollar/api/script/SourceSegment.html">SourceSegment</a> source,
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../dollar/internal/runtime/script/SourceNode.html">SourceNode</a>(@NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> lambda,
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>                       @NotNull <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source,
 <a class="jxr_linenumber" name="L102" href="#L102">102</a>                       @NotNull List&lt;<strong class="jxr_keyword">var</strong>&gt; inputs,
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>                       @NotNull String name,
 <a class="jxr_linenumber" name="L104" href="#L104">104</a>                       @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
@@ -196,7 +196,7 @@
 <a class="jxr_linenumber" name="L188" href="#L188">188</a>                 }
 <a class="jxr_linenumber" name="L189" href="#L189">189</a>             } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L190" href="#L190">190</a>                 <em class="jxr_comment">//This method does require a scope</em>
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>                 <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> useScope;
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>                 <a href="../../../../dollar/api/Scope.html">Scope</a> useScope;
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 
 <a class="jxr_linenumber" name="L193" href="#L193">193</a>                 Object attachedScopes = meta.get(SCOPES);
 <a class="jxr_linenumber" name="L194" href="#L194">194</a>                 <strong class="jxr_keyword">if</strong> (attachedScopes != <strong class="jxr_keyword">null</strong>) {
@@ -265,7 +265,7 @@
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 
 <a class="jxr_linenumber" name="L258" href="#L258">258</a>     <strong class="jxr_keyword">public</strong> Object invokeMain(@Nullable Object proxy, @NotNull Method method, @Nullable Object[] args) <strong class="jxr_keyword">throws</strong> Throwable {
 <a class="jxr_linenumber" name="L259" href="#L259">259</a>         <strong class="jxr_keyword">if</strong> (stack.get().size() &gt; MAX_STACK_DEPTH) {
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/sillelien/dollar/api/exceptions/LambdaRecursionException.html">LambdaRecursionException</a>(stack.get().size());
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/api/exceptions/LambdaRecursionException.html">LambdaRecursionException</a>(stack.get().size());
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 
 <a class="jxr_linenumber" name="L262" href="#L262">262</a>         }
 <a class="jxr_linenumber" name="L263" href="#L263">263</a>         <strong class="jxr_keyword">try</strong> {
@@ -372,7 +372,7 @@
 <a class="jxr_linenumber" name="L364" href="#L364">364</a>             meta.put(CONSTRAINT_FINGERPRINT, constraintSource);
 <a class="jxr_linenumber" name="L365" href="#L365">365</a>             <strong class="jxr_keyword">return</strong> source;
 <a class="jxr_linenumber" name="L366" href="#L366">366</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/sillelien/dollar/api/types/ConstraintViolation.html">ConstraintViolation</a>(source, constraint, constraintFingerprint, constraintSource);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/api/types/ConstraintViolation.html">ConstraintViolation</a>(source, constraint, constraintFingerprint, constraintSource);
 <a class="jxr_linenumber" name="L368" href="#L368">368</a>         }
 <a class="jxr_linenumber" name="L369" href="#L369">369</a>     }
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 

@@ -24,11 +24,11 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar.internal.runtime.script;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.DollarException;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.script.SourceSegment;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.<strong class="jxr_keyword">var</strong>;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.ParserErrorHandler;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.Scope;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.DollarException;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.Scope;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.SourceSegment;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.ParserErrorHandler;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.exceptions.ErrorReporter;
@@ -43,7 +43,7 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> java.io.File;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> java.util.Objects;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.sillelien.dollar.api.DollarException.unravel;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.api.DollarException.unravel;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  @SuppressWarnings(<span class="jxr_string">"UseOfSystemOutOrSystemErr"</span>)
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../dollar/internal/runtime/script/ParserErrorHandlerImpl.html">ParserErrorHandlerImpl</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../dollar/internal/runtime/script/api/ParserErrorHandler.html">ParserErrorHandler</a> {
@@ -63,19 +63,19 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>      @NotNull
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>      @Override
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> handle(@NotNull <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope, @Nullable <a href="../../../../com/sillelien/dollar/api/script/SourceSegment.html">SourceSegment</a> source, @NotNull <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarAssertionException.html">DollarAssertionException</a> e) {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> handle(@NotNull <a href="../../../../dollar/api/Scope.html">Scope</a> scope, @Nullable <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source, @NotNull <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarAssertionException.html">DollarAssertionException</a> e) {
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>          <strong class="jxr_keyword">return</strong> handleInternal(scope, source, e);
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      }
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      @NotNull
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      @Override
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> handle(@NotNull <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope, @Nullable <a href="../../../../com/sillelien/dollar/api/script/SourceSegment.html">SourceSegment</a> source, @NotNull <a href="../../../../com/sillelien/dollar/api/DollarException.html">DollarException</a> e) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> handle(@NotNull <a href="../../../../dollar/api/Scope.html">Scope</a> scope, @Nullable <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source, @NotNull <a href="../../../../dollar/api/DollarException.html">DollarException</a> e) {
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">return</strong> handleInternal(scope, source, e);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      }
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      @Override
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      @NotNull
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> handle(@NotNull <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope, @Nullable <a href="../../../../com/sillelien/dollar/api/script/SourceSegment.html">SourceSegment</a> source, @NotNull Throwable e) {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> handle(@NotNull <a href="../../../../dollar/api/Scope.html">Scope</a> scope, @Nullable <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source, @NotNull Throwable e) {
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">return</strong> handleInternal(scope, source, e);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>      }
@@ -131,7 +131,7 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a>     }
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>     @NotNull
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">var</strong> handleInternal(@NotNull <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope, @Nullable <a href="../../../../com/sillelien/dollar/api/script/SourceSegment.html">SourceSegment</a> source, @NotNull Throwable e) {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">var</strong> handleInternal(@NotNull <a href="../../../../dollar/api/Scope.html">Scope</a> scope, @Nullable <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source, @NotNull Throwable e) {
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
 <a class="jxr_linenumber" name="L128" href="#L128">128</a>         <strong class="jxr_keyword">if</strong> ((e instanceof DollarException) &amp;&amp; (source != <strong class="jxr_keyword">null</strong>)) {
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>             <strong class="jxr_keyword">return</strong> scope.handleError(e, source);

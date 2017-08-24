@@ -24,10 +24,10 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar.internal.runtime.script.operators;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.Pipeable;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.<strong class="jxr_keyword">var</strong>;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.DollarParser;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.Scope;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.Pipeable;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.Scope;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.DollarParser;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.Nullable;
@@ -41,11 +41,11 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.AtomicLong;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> java.util.function.Function;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.sillelien.dollar.api.DollarStatic.$;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.sillelien.dollar.api.DollarStatic.$<strong class="jxr_keyword">void</strong>;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.sillelien.dollar.api.types.DollarFactory.fromList;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.sillelien.dollar.api.types.meta.MetaConstants.OPERATION_NAME;
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.sillelien.dollar.api.types.meta.MetaConstants.VARIABLE;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.api.DollarStatic.$;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.api.DollarStatic.$<strong class="jxr_keyword">void</strong>;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.api.types.DollarFactory.fromList;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.api.types.meta.MetaConstants.OPERATION_NAME;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.api.types.meta.MetaConstants.VARIABLE;
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.DollarScriptSupport.*;
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.parser.Symbols.COLLECT_OP;
@@ -82,7 +82,7 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          String id = UUID.randomUUID().toString();
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">return</strong> node(COLLECT_OP, pure, NEW_SCOPE, Collections.singletonList(variable), token, parser,
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>                      (<strong class="jxr_keyword">var</strong>... in) -&gt; {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>                          <a href="../../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scopeForVar = getScopeForVar(pure, varName, false, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>                          <a href="../../../../../dollar/api/Scope.html">Scope</a> scopeForVar = getScopeForVar(pure, varName, false, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>                          <strong class="jxr_keyword">if</strong> (scopeForVar == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>                              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/api/exceptions/VariableNotFoundException.html">VariableNotFoundException</a>(varName, currentScope());
@@ -97,7 +97,7 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>      }
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../dollar/internal/runtime/script/operators/CollectOperator.html">VarListener</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../com/sillelien/dollar/api/Pipeable.html">Pipeable</a> {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../dollar/internal/runtime/script/operators/CollectOperator.html">VarListener</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../dollar/api/Pipeable.html">Pipeable</a> {
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>          @NotNull
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>          <strong class="jxr_keyword">final</strong> AtomicLong count = <strong class="jxr_keyword">new</strong> AtomicLong(-1);
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>          @NotNull

@@ -24,17 +24,17 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar.internal.runtime.script;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.Type;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.VarInternal;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.collections.Range;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.execution.DollarExecutor;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.plugin.Plugins;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.script.ModuleResolver;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.time.Scheduler;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.types.DollarFactory;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> com.sillelien.dollar.api.<strong class="jxr_keyword">var</strong>;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.DollarParser;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.Scope;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.Scope;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.Type;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarInternal;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.collections.Range;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.api.execution.DollarExecutor;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.api.plugin.Plugins;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.ModuleResolver;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> dollar.api.time.Scheduler;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarFactory;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.DollarParser;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
@@ -53,9 +53,9 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">import</strong> java.util.stream.IntStream;
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> java.util.stream.Stream;
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.sillelien.dollar.api.DollarStatic.*;
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.sillelien.dollar.api.types.DollarFactory.fromValue;
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.sillelien.dollar.api.types.meta.MetaConstants.*;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.api.DollarStatic.*;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.api.types.DollarFactory.fromValue;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.api.types.meta.MetaConstants.*;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.DollarScriptSupport.*;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.parser.Symbols.*;
@@ -65,7 +65,7 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../dollar/internal/runtime/script/Func.html">Func</a> {
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      @NotNull
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../com/sillelien/dollar/api/execution/DollarExecutor.html">DollarExecutor</a> executor = Objects.requireNonNull(Plugins.sharedInstance(DollarExecutor.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../dollar/api/execution/DollarExecutor.html">DollarExecutor</a> executor = Objects.requireNonNull(Plugins.sharedInstance(DollarExecutor.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> ONE_DAY = 24.0 * 60.0 * 60.0 * 1000.0;
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>     @NotNull
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> rangeFunc(@NotNull <strong class="jxr_keyword">var</strong> lhs, @NotNull <strong class="jxr_keyword">var</strong> rhs) {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>         <strong class="jxr_keyword">return</strong> fromValue(<strong class="jxr_keyword">new</strong> <a href="../../../../com/sillelien/dollar/api/collections/Range.html">Range</a>(lhs, rhs));
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>         <strong class="jxr_keyword">return</strong> fromValue(<strong class="jxr_keyword">new</strong> <a href="../../../../dollar/api/collections/Range.html">Range</a>(lhs, rhs));
 <a class="jxr_linenumber" name="L132" href="#L132">132</a>     }
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>     @NotNull
@@ -258,7 +258,7 @@
 <a class="jxr_linenumber" name="L250" href="#L250">250</a>         <strong class="jxr_keyword">if</strong> (lhsFix == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L251" href="#L251">251</a>             <strong class="jxr_keyword">return</strong> lhs.$listen(vars -&gt; rhs.$fix(1, false));
 <a class="jxr_linenumber" name="L252" href="#L252">252</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>             <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scopeForVar = getScopeForVar(pure, lhsFix, false, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>             <a href="../../../../dollar/api/Scope.html">Scope</a> scopeForVar = getScopeForVar(pure, lhsFix, false, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L254" href="#L254">254</a>             <strong class="jxr_keyword">if</strong> (scopeForVar == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L255" href="#L255">255</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/VariableNotFoundException.html">VariableNotFoundException</a>(lhsFix, currentScope());
 <a class="jxr_linenumber" name="L256" href="#L256">256</a>             }
@@ -286,8 +286,8 @@
 <a class="jxr_linenumber" name="L278" href="#L278">278</a>                          @NotNull <strong class="jxr_keyword">var</strong> durationVar,
 <a class="jxr_linenumber" name="L279" href="#L279">279</a>                          @Nullable <strong class="jxr_keyword">var</strong> until,
 <a class="jxr_linenumber" name="L280" href="#L280">280</a>                          @Nullable <strong class="jxr_keyword">var</strong> unless,
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>                          @NotNull <a href="../../../../com/sillelien/dollar/api/VarInternal.html">VarInternal</a> block) {
-<a class="jxr_linenumber" name="L282" href="#L282">282</a>         <a href="../../../../dollar/internal/runtime/script/api/Scope.html">Scope</a> scope = currentScope();
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>                          @NotNull <a href="../../../../dollar/api/VarInternal.html">VarInternal</a> block) {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>         <a href="../../../../dollar/api/Scope.html">Scope</a> scope = currentScope();
 <a class="jxr_linenumber" name="L283" href="#L283">283</a>         Double duration = durationVar.toDouble();
 <a class="jxr_linenumber" name="L284" href="#L284">284</a>         assert duration != <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L285" href="#L285">285</a>         Scheduler.schedule(i -&gt; {
@@ -326,7 +326,7 @@
 <a class="jxr_linenumber" name="L318" href="#L318">318</a>             }
 <a class="jxr_linenumber" name="L319" href="#L319">319</a>         }
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>         <strong class="jxr_keyword">return</strong> <a href="../../../../com/sillelien/dollar/api/script/ModuleResolver.html">ModuleResolver</a>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>         <strong class="jxr_keyword">return</strong> <a href="../../../../dollar/api/script/ModuleResolver.html">ModuleResolver</a>
 <a class="jxr_linenumber" name="L322" href="#L322">322</a>                            .resolveModule(parts[0])
 <a class="jxr_linenumber" name="L323" href="#L323">323</a>                            .resolve(parts[1], currentScope(), parser)
 <a class="jxr_linenumber" name="L324" href="#L324">324</a>                            .pipe($(paramMap))

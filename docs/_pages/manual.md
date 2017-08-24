@@ -761,27 +761,28 @@ var titles = posts each { $1.title }
 In this example we've requested a single value (using `<<`) from a uri and assigned the value to `posts` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `title`. The each operator returns a list of the results and that is what is passed to standard out.
 
 
-## Using Java
+## Using Other Languages
 
-Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of Java. To do so, just surround the Java in backticks.
+Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of another language. To do so, just surround the code in backticks and prefix with the languages name. Currently only `java` is supported but more will be added soon.
 
 ```
 
 var variableA="Hello World"
 
-var java = `out=scope.get("variableA");`
+var java = java `out=scope.get("variableA");`
 
 java <=> "Hello World"
 
 ```
+### Java
 
 A whole bunch of imports are done for you automatically (see below) but you will have to fully qualify any thirdparty libs.
  
 > imports `dollar.lang.*``dollar.internal.runtime.script.api.*` `com.sillelien.dollar.api.*` `java.io.*` `java.math.*` `java.net.*` `java.nio.file.*` `java.util.*` `java.util.concurrent.*` `java.util.function.*` `java.util.prefs.*` `java.util.regex.*` `java.util.stream.*`
  
- > static imports `com.sillelien.dollar.api.DollarStatic.*` `dollar.internal.runtime.script.java.JavaScriptingStaticImports.*`
+ > static imports `DollarStatic.*` `dollar.internal.runtime.script.java.JavaScriptingStaticImports.*`
 
-The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (dollar.internal.runtime.script.api.Scope) object on which you can get and set Dollar variables.
+The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (Scope) object on which you can get and set Dollar variables.
 
 Reactive behaviour is supported on the Scope object with the `listen` and `notify` methods on variables. You'll need to then built your reactivity around those variables or on the `out` object directly (that's a pretty advanced topic).
 
@@ -1259,9 +1260,28 @@ ___
 
 
 
+The `collect` operator listens for changes in the supplied expression adding all the values to a list until the `until` clause is triggered. It then evaluates the second expression with the values `it` for the current value, `count` for the number of messages **received** since last emission and `collected` for the collected values. The whole operator itself emits `void` unless the collection operation is triggered in which case it emits the collection itself. Values can be skipped with an `unless` clause. Skipped messages increase the count value, so use `#collected` if you want the number of collected values.
 
 
 ```
+var e=void
+
+//Length is greater than or equal to 4 unless void
+var (#it >= 4 || it is VOID) collectedValues=void
+
+//count starts at 0 so this means five to collect (except if it contains the value 10)
+collect e until count == 4 unless it == 10{
+    print count
+    print collected
+    collectedValues= collected
+}
+
+e=1; e=2; e=3; e=4; e=5; e=6
+&collectedValues <=> [1,2,3,4,5]
+e=7; e=8; e=9; e=10
+&collectedValues <=> [6,7,8,9]
+e=11; e=12; e=13; e=14; e=15; e=16
+&collectedValues <=> [11,12,13,14,15]
 ```
 
 ___
@@ -1303,6 +1323,9 @@ ___
 
 
 Declares a variable to have a value, this is declarative and reactive such that saying `const a := b + 1` means that `a` always equals `b+1` no matter the value of b. The shorthand `def` is the same as `const <variable-name> :=` so `def a {b+1}` is the same as `const a := b + 1` but is syntactically better when declaring function like variables.
+
+Declarations can also be marked as pure so that they can be used in pure scopes, this is done by prefixing the declaration with `pure`.
+
 
 ```
 var variableA = 1
@@ -1651,20 +1674,6 @@ ___
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
 **`<expression> 'is' <expression>`**{: style="font-size: 60%"}
-
-
-
-
-
-```
-```
-
-___
-
-### java      {#op-java}
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
-
-**``<java-code>``**{: style="font-size: 60%"}
 
 
 
@@ -2199,6 +2208,27 @@ reduce
 
 ___
 
+### script      {#op-script}
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+
+**`<language-name> `<code>``**{: style="font-size: 60%"}
+
+
+
+
+Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of another language. To do so, just surround the code in backticks and prefix with the languages name. Currently only `java` is supported but more will be added soon.
+
+
+```
+var variableA="Hello World"
+
+var java = java `out=scope.get("variableA");`
+
+java <=> "Hello World"
+```
+
+___
+
 ### `serial` or `|..|`      {#op-serial}
 ![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
@@ -2627,10 +2657,10 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[print](#op-print)            |`print`        | `@@`     |prefix    |
 |[builtin](#op-builtin)        |               |          |other     |
 |[collect](#op-collect)        |`collect`      |          |control   |
-|[java](#op-java)              |               |          |other     |
 |[list](#op-list)              |               |          |collection|
 |[map](#op-map)                |               |          |collection|
 |[map](#op-map)                |               |          |collection|
 |[module](#op-module)          |`module`       |          |other     |
 |[pure](#op-pure)              |`pure`         |          |prefix    |
+|[script](#op-script)          |               |          |other     |
 |[unit](#op-unit)              |               |          |postfix   |
