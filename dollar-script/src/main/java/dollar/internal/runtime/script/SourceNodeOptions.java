@@ -18,6 +18,8 @@ package dollar.internal.runtime.script;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class SourceNodeOptions {
     @NotNull
     public static final SourceNodeOptions NO_SCOPE = new SourceNodeOptions(false, false, false);
@@ -47,5 +49,20 @@ public class SourceNodeOptions {
 
     public boolean isParallel() {
         return parallel;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(newScope, scopeClosure, parallel);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SourceNodeOptions that = (SourceNodeOptions) o;
+        return newScope == that.newScope &&
+                       scopeClosure == that.scopeClosure &&
+                       parallel == that.parallel;
     }
 }

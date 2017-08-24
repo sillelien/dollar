@@ -29,6 +29,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Objects;
 
+import static dollar.internal.runtime.script.SourceNodeOptions.*;
+
 @SuppressWarnings("CallToPrintStackTrace")
 public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     @Nullable
@@ -141,6 +143,13 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
             stringBuilder.append(" ![pure](https://img.shields.io/badge/function-pure-green.svg)");
         } else {
             stringBuilder.append(" ![impure](https://img.shields.io/badge/function-impure-blue.svg)");
+        }
+        if (nodeOptions.equals(NO_SCOPE)) {
+            stringBuilder.append(" ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)");
+        } else if (nodeOptions.equals(NEW_SCOPE)) {
+            stringBuilder.append(" ![New Scope](https://img.shields.io/badge/scope-new-blue.svg)");
+        } else if (nodeOptions.equals(SCOPE_WITH_CLOSURE)) {
+            stringBuilder.append(" ![New Scope](https://img.shields.io/badge/scope-closure-green.svg)");
         }
         stringBuilder.append("\n\n");
         if (bnf == null) {

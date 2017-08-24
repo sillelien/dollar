@@ -336,7 +336,7 @@ public final class Symbols {
     @NotNull
     public static final OpDef SCRIPT_OP = new OpDef(OTHER, null, null,
                                                     "script", false, false,
-                                                    "<language-name> `` ` ``<script-code>`` ` ``",
+                                                    "<language-name> \\'<script-code>\\`",
                                                     NO_PRIORITY, false, NO_SCOPE);
 
 
