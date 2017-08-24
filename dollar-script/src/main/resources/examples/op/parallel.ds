@@ -1,6 +1,6 @@
 const testList := [ TIME(), {SLEEP(1 Sec); TIME();}, TIME() ];
-var a= |..| testList;
-var b= |:| testList;
+var a= |..| testList ;
+var b= |:| testList ;
 
 //Test different execution orders
 .: a[2] >= a[1]

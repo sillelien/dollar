@@ -196,12 +196,12 @@ public final class Symbols {
     @NotNull
     public static final OpDef PARALLEL = new OpDef(PREFIX, "|:|", "parallel", "parallel",
                                                    false, false,
-                                                   null, SIGNAL_PRIORITY, true, NO_SCOPE);
+                                                   null, SIGNAL_PRIORITY, true, NEW_PARALLEL_SCOPE);
 
     @NotNull
     public static final OpDef SERIAL = new OpDef(PREFIX, "|..|", "serial", "serial",
                                                  false, false,
-                                                 null, SIGNAL_PRIORITY, true, NO_SCOPE);
+                                                 null, SIGNAL_PRIORITY, true, NEW_SERIAL_SCOPE);
     @NotNull
     public static final OpDef FORK = new OpDef(PREFIX, "-<", "fork", "fork",
                                                false,

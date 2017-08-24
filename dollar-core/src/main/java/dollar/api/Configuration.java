@@ -56,4 +56,6 @@ public interface Configuration {
      * objects are being wrapped.
      */
     boolean wrapForMonitoring();
+
+    boolean debugParallel();
 }

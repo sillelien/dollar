@@ -48,6 +48,7 @@ public class ParserOptions {
     private List<File> files;
 
     private boolean production;
+    private boolean debugParallel;
 
     @NotNull public File getFile() {
         return files.get(0);
@@ -87,5 +88,13 @@ public class ParserOptions {
 
     public void setTolerateErrors(boolean tolerateErrors) {
         this.tolerateErrors = tolerateErrors;
+    }
+
+    public boolean isDebugParallel() {
+        return debugParallel;
+    }
+
+    public void setDebugParallel(boolean debugParallel) {
+        this.debugParallel = debugParallel;
     }
 }

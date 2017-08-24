@@ -111,4 +111,5 @@ public interface Scope {
 
     List<var> getParametersAsVars();
 
+    boolean parallel();
 }

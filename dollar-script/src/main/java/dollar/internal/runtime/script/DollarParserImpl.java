@@ -23,7 +23,6 @@ import dollar.api.NumericAware;
 import dollar.api.Scope;
 import dollar.api.URIAware;
 import dollar.api.VarInternal;
-import dollar.api.collections.ImmutableList;
 import dollar.api.types.DollarFactory;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
@@ -63,7 +62,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static dollar.api.DollarStatic.*;
+import static dollar.api.DollarStatic.$;
+import static dollar.api.DollarStatic.$void;
 import static dollar.api.scripting.ScriptingSupport.compile;
 import static dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
 import static dollar.api.types.meta.MetaConstants.SCOPES;
@@ -156,7 +156,7 @@ public class DollarParserImpl implements DollarParser {
             return parseMarkdown(file);
         } else {
             String source = new String(Files.readAllBytes(file.toPath()));
-            return parse(new ScriptScope(source, file, true), source);
+            return parse(new ScriptScope(source, file, true, parallel), source);
         }
 
     }
@@ -165,7 +165,7 @@ public class DollarParserImpl implements DollarParser {
     @NotNull
     public var parse(@NotNull InputStream in, boolean parallel, @NotNull Scope scope) throws Exception {
         String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(scope, "(stream)", source, "(stream-scope)", true), source);
+        return parse(new ScriptScope(scope, "(stream)", source, "(stream-scope)", true, parallel), source);
     }
 
     @Override
@@ -173,13 +173,13 @@ public class DollarParserImpl implements DollarParser {
     public var parse(@NotNull InputStream in, @NotNull String file, boolean parallel) throws Exception {
         this.file = file;
         String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(source, new File(file), true), source);
+        return parse(new ScriptScope(source, new File(file), true, parallel), source);
     }
 
     @Override
     @NotNull
     public var parse(@NotNull String source, boolean parallel) throws Exception {
-        return parse(new ScriptScope(source, "(string)", true), source);
+        return parse(new ScriptScope(source, "(string)", true, parallel), source);
     }
 
     @Override
@@ -324,10 +324,11 @@ public class DollarParserImpl implements DollarParser {
 
 
         table = prefixUnReactive(pure, table, FIX, VarInternal::$fixDeep);
-        table = prefixUnReactive(pure, table, PARALLEL, Func::parallelFunc);
+        table = prefixUnReactive(pure, table, PARALLEL, v -> v.$fixDeep(true));
         table = prefixUnReactive(pure, table, SERIAL, Func::serialFunc);
 
-
+        table = table.prefix(parallelOperator(ref, pure), PARALLEL.priority());
+        table = table.prefix(serialOperator(ref, pure), SERIAL.priority());
         //More complex expression syntax
         table = table.postfix(pipeOperator(ref, pure), PIPE_OP.priority());
         table = table.postfix(isOperator(pure), EQ_PRIORITY);
@@ -473,7 +474,7 @@ public class DollarParserImpl implements DollarParser {
                                                    } else {
                                                        final var variable = variableNode(pure, unitName, token, this);
                                                        currentScope().parameter("1", quantity);
-                                                       return fix(variable, false);
+                                                       return DollarScriptSupport.fix(variable);
                                                    }
                                                });
                                });
@@ -489,7 +490,12 @@ public class DollarParserImpl implements DollarParser {
                                token -> {
                                    List<var> entries = (List<var>) token.value();
                                    final var node = node(LIST_OP, pure, this, token, entries,
-                                                         vars -> DollarFactory.fromList(new ImmutableList<>(entries))
+                                                         vars -> {
+                                                             log.info("Fixing list {}",
+                                                                      currentScope().parallel() ? "parallel" : "serial");
+                                                             return DollarFactory.fromList(entries).$fix(1,
+                                                                                                         currentScope().parallel());
+                                                         }
                                    );
                                    entries.forEach(entry -> entry.$listen(i -> node.$notify()));
                                    return node;
@@ -506,7 +512,7 @@ public class DollarParserImpl implements DollarParser {
                        .token()
                        .map(token -> {
                            List<var> o = (List<var>) token.value();
-                           final var node = node(MAP_OP, pure, this, token, o, i -> mapFunc(o, i[0]));
+                           final var node = node(MAP_OP, pure, this, token, o, i -> mapFunc(o));
                            o.forEach(entry -> entry.$listen(i -> node.$notify()));
                            return node;
                        });
@@ -705,6 +711,25 @@ public class DollarParserImpl implements DollarParser {
                            var lhs = (var) token.value();
                            assert IF_OP.validForPure(pure);
                            return rhs -> node(IF_OP, pure, this, token, asList(lhs, rhs), i -> ifFunc(pure, lhs, rhs));
+                       });
+    }
+
+
+    private Parser<Function<var, var>> parallelOperator(@NotNull Parser.Reference<var> ref, boolean pure) {
+        return OP(PARALLEL)
+                       .token()
+                       .map(token -> rhs -> {
+                           assert PARALLEL.validForPure(pure);
+                           return node(PARALLEL, pure, this, token, singletonList(rhs), ns -> rhs.$fix(2, true));
+                       });
+    }
+
+    private Parser<Function<var, var>> serialOperator(@NotNull Parser.Reference<var> ref, boolean pure) {
+        return OP(SERIAL)
+                       .token()
+                       .map(token -> rhs -> {
+                           assert SERIAL.validForPure(pure);
+                           return node(SERIAL, pure, this, token, singletonList(rhs), ns -> rhs.$fix(2, false));
                        });
     }
 

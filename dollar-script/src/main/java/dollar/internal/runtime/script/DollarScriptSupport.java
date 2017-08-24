@@ -44,6 +44,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import static dollar.api.DollarStatic.$;
+import static dollar.api.DollarStatic.$void;
 import static dollar.api.types.meta.MetaConstants.VARIABLE;
 import static dollar.internal.runtime.script.parser.Symbols.VAR_USAGE_OP;
 
@@ -56,7 +57,7 @@ public final class DollarScriptSupport {
     @NotNull
     private static final ThreadLocal<List<Scope>> scopes = ThreadLocal.withInitial(() -> {
         ArrayList<Scope> list = new ArrayList<>();
-        list.add(new ScriptScope("thread-" + Thread.currentThread().getId(), false));
+        list.add(new ScriptScope("thread-" + Thread.currentThread().getId(), false, false));
         return list;
     });
 
@@ -215,30 +216,34 @@ public final class DollarScriptSupport {
         return scopes.get().get(scopes.get().size() - 1);
     }
 
-    @Nullable
-    @SuppressWarnings("ThrowFromFinallyBlock")
     public static <T> T inSubScope(boolean runtime, boolean pure, @NotNull String scopeName,
                                    @NotNull ScopeExecutable<T> r) {
-        return inScope(runtime, new ScriptScope(DollarScriptSupport.currentScope(), scopeName, false), r);
+        return inScope(runtime, new ScriptScope(currentScope(), scopeName, false, currentScope().parallel()), r);
     }
 
 
-    @NotNull
+    @SuppressWarnings("ThrowFromFinallyBlock")
+    public static <T> T inSubScope(boolean runtime, boolean pure, boolean parallel, @NotNull String scopeName,
+                                   @NotNull ScopeExecutable<T> r) {
+        return inScope(runtime, new ScriptScope(currentScope(), scopeName, false, parallel), r);
+    }
+
+
     public static <T> T inScope(boolean runtime,
                                 @NotNull Scope parent,
                                 boolean pure,
-                                @NotNull String scopeName,
+                                boolean parallel, @NotNull String scopeName,
                                 @NotNull ScopeExecutable<T> r) {
         Scope newScope;
         if (pure) {
-            newScope = new PureScope(parent, parent.getSource(), scopeName, parent.getFile());
+            newScope = new PureScope(parent, parent.getSource(), scopeName, parent.getFile(), parallel);
         } else {
             if ((parent instanceof PureScope)) {
                 throw new IllegalStateException(
                                                        "trying to switch to an impure scope in a pure scope.");
             }
             newScope = new ScriptScope(parent, parent.getFile(), parent.getSource(), scopeName,
-                                       false);
+                                       false, parallel);
         }
         addScope(runtime, parent);
         addScope(runtime, newScope);
@@ -556,4 +561,28 @@ public final class DollarScriptSupport {
     public static String randomId() {
         return UUID.randomUUID().toString();
     }
+
+    /**
+     * Fix var.
+     *
+     * @param v        the v
+     * @param parallel Should execution be in parallel?
+     * @return the var
+     */
+    @NotNull
+    public static var fix(@Nullable var v, boolean parallel) {
+        return (v != null) ? DollarFactory.wrap(v.$fix(parallel)) : $void();
+    }
+
+    /**
+     * Fix var.
+     *
+     * @param v the v
+     * @return the var
+     */
+    @NotNull
+    public static var fix(@Nullable var v) {
+        return (v != null) ? DollarFactory.wrap(v.$fix(currentScope().parallel())) : $void();
+    }
+
 }

@@ -879,7 +879,7 @@ public final class DollarFactory {
     }
 
     @NotNull
-    public static var fromList(@NotNull ArrayList<var> vars) {
+    public static var fromList(@NotNull List<var> vars) {
         return wrap(new DollarList(ImmutableList.of(), ImmutableList.copyOf(vars)));
     }
 

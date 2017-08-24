@@ -33,19 +33,22 @@ import dollar.api.plugin.Plugins;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DollarList extends AbstractDollar {
 
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger("DollarList");
     public static final int MAX_LIST_MULTIPLIER = 1000;
     @Nullable
     private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
@@ -205,7 +208,11 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public ImmutableList<var> toVarList() {
-        return ImmutableList.copyOf($stream(false).map(v -> v.$fix(false)).collect(Collectors.toList()));
+        List<var> result = new ArrayList<>();
+        for (var in : list) {
+            result.add(in.$fix(1, false));
+        }
+        return ImmutableList.copyOf(result);
     }
 
     @NotNull
@@ -481,38 +488,33 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public var $fix(int depth, boolean parallel) {
-        if (depth <= 1) {
+        if (depth < 1) {
+            if (DollarStatic.getConfig().debugParallel()) {
+                log.info("Fixing done in {}", parallel ? "parallel" : "serial");
+            }
+
             return this;
         } else {
-            ImmutableList<var> result;
+            List<var> result = new ArrayList<>();
             if (parallel) {
-                try {
-                    result =
-                            ImmutableList.copyOf(executor.submit(
-                                    () -> $stream(parallel).map(v -> v.$fix(depth - 1, parallel)).collect(
-                                            Collectors.toList())).get());
+                for (var in : list) {
+                    if (DollarStatic.getConfig().debugParallel()) {
+                        log.info("Fixing list in parallel (depth={})", depth);
 
-                } catch (InterruptedException e) {
-                    Thread.interrupted();
-                    result =
-                            ImmutableList.of(
-                                    DollarFactory.failure(ErrorType.INTERRUPTED, e,
-                                                          false));
-
-                } catch (ExecutionException e) {
-                    result =
-                            ImmutableList.of(
-                                    DollarFactory.failure(ErrorType.EXECUTION_FAILURE,
-                                                          e.getCause(),
-                                                          false));
-
+                    }
+                    result.add(DollarStatic.$fork(() -> in.$fix(depth - 1, true)));
                 }
-                return new DollarList(errors(), result);
+
             } else {
-                return new DollarList(errors(),
-                                      ImmutableList.copyOf($stream(parallel).map(v -> v.$fix(depth - 1, parallel))
-                                                                   .collect(Collectors.toList())));
+                for (var in : list) {
+                    if (DollarStatic.getConfig().debugParallel()) {
+                        log.info("Fixing list in serial (depth={})", depth);
+
+                    }
+                    result.add(in.$fix(depth - 1, false));
+                }
             }
+            return DollarFactory.fromList(result);
         }
 
     }

@@ -91,9 +91,11 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     private final boolean scopeClosure;
     @NotNull
     private final String id;
-    private final boolean parallel;
+
     private final boolean pure;
     private final OpDef operation;
+    @NotNull
+    private final SourceNodeOptions sourceNodeOptions;
     @Nullable
     private volatile TypePrediction prediction;
 
@@ -105,10 +107,10 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                       @NotNull SourceNodeOptions sourceNodeOptions,
                       @NotNull String id,
                       boolean pure, @NotNull OpDef operation) {
-        parallel = sourceNodeOptions.isParallel();
+
         this.pure = pure;
         this.operation = operation;
-
+        this.sourceNodeOptions = sourceNodeOptions;
 
         if (sourceNodeOptions.isScopeClosure()) {
             this.lambda = vars -> {
@@ -200,14 +202,15 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 try {
                     if (newScope) {
                         if (pure || currentScope().pure()) {
-                            useScope = new PureScope(currentScope(), currentScope().getSource(), name, currentScope().getFile());
+                            useScope = new PureScope(currentScope(), currentScope().getSource(), name, currentScope().getFile(),
+                                                     isParallel());
                         } else {
                             if (currentScope().pure() && (operation.pure() != null) && !operation.pure()) {
                                 throw new DollarScriptException("Attempted to create an impure scope within a pure scope " +
                                                                         "(" + currentScope() + ") for " + name,
                                                                 source);
                             }
-                            useScope = new ScriptScope(currentScope(), name, false);
+                            useScope = new ScriptScope(currentScope(), name, false, isParallel());
                         }
                     } else {
                         useScope = currentScope();
@@ -216,6 +219,11 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                     result = DollarScriptSupport.inScope(true, useScope, s -> {
                         if (DollarStatic.getConfig().debugScope()) {
                             log.info("EXE: {} {} for {}", name, method.getName(), source.getShortSourceMessage());
+                        }
+                        if (DollarStatic.getConfig().debugParallel()) {
+                            if (currentScope().parallel()) {
+                                log.info("PARALLEL: {} {}", name, method);
+                            }
                         }
                         try {
                             try {
@@ -251,6 +259,11 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             log.warn(e.getMessage(), e);
             return parser.getErrorHandler().handle(currentScope(), source, e);
         }
+    }
+
+    public boolean isParallel() {
+        Boolean configuredParallel = sourceNodeOptions.isParallel();
+        return (configuredParallel != null) ? configuredParallel : currentScope().parallel();
     }
 
     @Nullable
@@ -290,7 +303,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             } else if ("$fixDeep".equals(method.getName())) {
 
                 if ((args == null) || (args.length == 0)) {
-                    return executePipe(DollarFactory.fromValue(parallel)).$fixDeep();
+                    return executePipe(DollarFactory.fromValue(isParallel())).$fixDeep(isParallel());
                 } else {
                     return executePipe(DollarFactory.fromValue(args[0])).$fixDeep((Boolean) args[0]);
                 }
@@ -369,5 +382,5 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     }
 
     @NotNull
-    public var execute() throws Exception {return executor.executeNow(() -> executePipe($(parallel))).get();}
+    public var execute() throws Exception {return executor.executeNow(() -> executePipe($(isParallel()))).get();}
 }

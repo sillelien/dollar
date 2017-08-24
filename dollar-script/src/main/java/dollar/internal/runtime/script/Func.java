@@ -63,7 +63,7 @@ public final class Func {
     @NotNull
     static var reduceFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         assert REDUCE.validForPure(pure);
-        return lhs.$list().$stream(false).reduce((x, y) -> {
+        return lhs.$list().$stream(currentScope().parallel()).reduce((x, y) -> {
             try {
                 return inSubScope(false, pure, REDUCE.name(), newScope -> {
                     newScope.parameter("1", x);
@@ -83,7 +83,7 @@ public final class Func {
             var result = inSubScope(false, pure, EACH.name(),
                                     newScope -> {
                                         newScope.parameter("1", i[0]);
-                                        return rhs.$fixDeep(false);
+                                        return rhs.$fixDeep(currentScope().parallel());
                                     });
             assert result != null;
             return result;
@@ -92,7 +92,7 @@ public final class Func {
 
     @NotNull
     static var elseFunc(@NotNull var lhs, @NotNull var rhs) {
-        final var fixLhs = lhs.$fixDeep();
+        final var fixLhs = lhs.$fixDeep(currentScope().parallel());
         if (fixLhs.isBoolean() && fixLhs.isFalse()) {
             return rhs.$fix(2, false);
         } else {
@@ -137,7 +137,7 @@ public final class Func {
 
     @NotNull
     static var forkFunc(@NotNull var v) {
-        return DollarFactory.fromFuture(executor.executeInBackground(() -> fix(v, false)));
+        return DollarFactory.fromFuture(executor.executeInBackground(() -> DollarScriptSupport.fix(v)));
     }
 
     @NotNull
@@ -145,10 +145,10 @@ public final class Func {
         return lhs.$subscribe(
                 i -> inSubScope(true, false,
                                 "subscribe-param", newScope -> {
-                            final var it = fix(i[0], false);
+                            final var it = DollarScriptSupport.fix(i[0]);
                             currentScope().parameter("1", it);
                             currentScope().parameter("it", it);
-                            return fix(rhs, false);
+                            return DollarScriptSupport.fix(rhs);
                         }));
     }
 
@@ -164,8 +164,8 @@ public final class Func {
 
     @NotNull
     static var assertEqualsFunc(@NotNull var lhs, @NotNull var rhs) {
-        final var lhsFix = lhs.$fixDeep(false);
-        final var rhsFix = rhs.$fixDeep(false);
+        final var lhsFix = lhs.$fixDeep(currentScope().parallel());
+        final var rhsFix = rhs.$fixDeep(currentScope().parallel());
         if (lhsFix.equals(rhsFix)) {
             return $(true);
         } else {
@@ -175,7 +175,7 @@ public final class Func {
 
     @NotNull
     static var listenFunc(@NotNull var lhs, @NotNull var rhs) {
-        return lhs.isTrue() ? fix(rhs, false) : $void();
+        return lhs.isTrue() ? DollarScriptSupport.fix(rhs) : $void();
     }
 
     @NotNull
@@ -186,14 +186,14 @@ public final class Func {
     static var inFunc(@NotNull var lhs, @NotNull var rhs) {return rhs.$contains(lhs);}
 
     @NotNull
-    static var serialFunc(@NotNull var v) {return v.$fixDeep(false);}
+    static var serialFunc(@NotNull var v) {return v.$fixDeep(currentScope().parallel());}
 
     @NotNull
     static var whileFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         assert WHILE_OP.validForPure(pure);
 
         while (lhs.isTrue()) {
-            rhs.$fixDeep();
+            rhs.$fixDeep(currentScope().parallel());
         }
         return $(false);
     }
@@ -209,10 +209,10 @@ public final class Func {
 
     @NotNull
     static var ifFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
-        final var lhsFix = lhs.$fixDeep();
+        final var lhsFix = lhs.$fixDeep(currentScope().parallel());
         boolean isTrue = lhsFix.isBoolean() && lhsFix.isTrue();
         assert IF_OP.validForPure(pure);
-        return isTrue ? rhs.$fix(2, false) : DollarFactory.FALSE;
+        return isTrue ? rhs.$fix(2, currentScope().parallel()) : DollarFactory.FALSE;
     }
 
     @NotNull
@@ -229,7 +229,7 @@ public final class Func {
         return iterable.$each(i -> {
             currentScope()
                     .set(varName,
-                         fix(i[0], false),
+                         DollarScriptSupport.fix(i[0]),
                          false, null,
                          null, false,
                          false,
@@ -247,7 +247,7 @@ public final class Func {
     static var causesFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         String lhsFix = lhs.metaAttribute(VARIABLE);
         if (lhsFix == null) {
-            return lhs.$listen(vars -> rhs.$fix(1, false));
+            return lhs.$listen(vars -> rhs.$fix(1, currentScope().parallel()));
         } else {
             Scope scopeForVar = getScopeForVar(pure, lhsFix, false, null);
             if (scopeForVar == null) {
@@ -261,14 +261,14 @@ public final class Func {
     @NotNull
     static var pipeFunc(@NotNull DollarParser parser, boolean pure, @NotNull Token token, @NotNull var rhs, @NotNull var lhs) {
         currentScope().parameter("1", lhs);
-        var rhsVal = rhs.$fix(false);
+        var rhsVal = rhs.$fix(currentScope().parallel());
         String rhsStr = rhsVal.toString();
         if (FUNCTION_NAME_OP.name().equals(rhs.metaAttribute(OPERATION_NAME))) {
             return rhsVal;
         } else {
             return (rhs.metaAttribute(IS_BUILTIN) != null)
                            ? Builtins.execute(rhsStr, singletonList(lhs), pure)
-                           : variableNode(pure, rhsStr, false, null, token, parser).$fix(2, false);
+                           : variableNode(pure, rhsStr, false, null, token, parser).$fix(2, currentScope().parallel());
         }
     }
 
@@ -293,7 +293,7 @@ public final class Func {
                         if ((unless != null) && unless.isTrue()) {
                             return $void();
                         } else {
-                            return block.$fixDeep();
+                            return block.$fixDeep(currentScope().parallel());
                         }
                     }
 
@@ -321,18 +321,18 @@ public final class Func {
                            .resolveModule(parts[0])
                            .resolve(parts[1], currentScope(), parser)
                            .pipe($(paramMap))
-                           .$fix(true);
+                       .$fix(currentScope().parallel());
 
 
     }
 
     @NotNull
-    static var mapFunc(@NotNull List<var> entries, @NotNull var parallel) {
+    static var mapFunc(@NotNull List<var> entries) {
         if (entries.size() == 1) {
             return DollarFactory.blockCollection(entries);
         } else {
-            Stream<var> stream = parallel.isTrue() ? entries.stream().parallel() : entries.stream();
-            return $(stream.map(v -> v.$fix(parallel.isTrue()))
+            Stream<var> stream = currentScope().parallel() ? entries.stream().parallel() : entries.stream();
+            return $(stream.map(v -> v.$fix(currentScope().parallel()))
                              .collect(Collectors.toConcurrentMap(
                                      v -> v.pair() ? v.$pairKey() : v.$S(),
                                      v -> v.pair() ? v.$pairValue() : v)));
@@ -344,7 +344,7 @@ public final class Func {
         if (l.isEmpty()) {
             return $void();
         } else {
-            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fixDeep(false));
+            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fixDeep(currentScope().parallel()));
             return l.get(l.size() - 1);
         }
     }

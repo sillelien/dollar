@@ -89,5 +89,10 @@ public final class ParserMain {
         @Override public boolean wrapForMonitoring() {
             return options.isMonitor();
         }
+
+        @Override
+        public boolean debugParallel() {
+            return options.isDebugParallel();
+        }
     }
 }

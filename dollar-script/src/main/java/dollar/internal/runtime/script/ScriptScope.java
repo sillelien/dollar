@@ -78,17 +78,20 @@ public class ScriptScope implements Scope {
 
     private boolean parameterScope;
     private boolean destroyed;
+    private boolean parallel;
 
-    public ScriptScope(@NotNull String name, boolean root) {
+    public ScriptScope(@NotNull String name, boolean root, boolean parallel) {
         this.root = root;
+        this.parallel = parallel;
         parent = null;
         file = null;
         source = null;
         id = name + ":" + counter.incrementAndGet();
     }
 
-    public ScriptScope(@NotNull String source, @NotNull String name, boolean root) {
+    public ScriptScope(@NotNull String source, @NotNull String name, boolean root, boolean parallel) {
         this.root = root;
+        this.parallel = parallel;
         parent = null;
         this.source = source;
         file = null;
@@ -97,12 +100,13 @@ public class ScriptScope implements Scope {
     }
 
 
-    public ScriptScope(@NotNull Scope parent, @NotNull String name, boolean root) {
+    public ScriptScope(@NotNull Scope parent, @NotNull String name, boolean root, boolean parallel) {
         this.parent = parent;
         file = parent.getFile();
         this.root = root;
         source = parent.getSource();
         id = name + ":" + counter.incrementAndGet();
+        this.parallel = parallel;
         checkPure(parent);
 
     }
@@ -111,10 +115,11 @@ public class ScriptScope implements Scope {
                        @NotNull String file,
                        @Nullable String source,
                        @NotNull String name,
-                       boolean root) {
+                       boolean root, boolean parallel) {
         this.parent = parent;
         this.file = file;
         this.root = root;
+        this.parallel = parallel;
         if (source == null) {
             throw new NullPointerException("No source for " + parent);
         } else {
@@ -126,10 +131,11 @@ public class ScriptScope implements Scope {
         checkPure(parent);
     }
 
-    public ScriptScope(@Nullable String source, @NotNull File file, boolean root) {
+    public ScriptScope(@Nullable String source, @NotNull File file, boolean root, boolean parallel) {
         this.source = source;
         this.file = file.getAbsolutePath();
         this.root = root;
+        this.parallel = parallel;
         id = "(file-scope):" + counter.incrementAndGet();
 
     }
@@ -142,11 +148,12 @@ public class ScriptScope implements Scope {
                        @NotNull List<var> errorHandlers,
                        @NotNull MultiMap<String, Listener> listeners,
                        @NotNull String source,
-                       @NotNull Parser<var> parser, boolean root) {
+                       @NotNull Parser<var> parser, boolean root, boolean parallel) {
         this.parent = parent;
         this.id = id;
         this.file = file;
         this.parameterScope = parameterScope;
+        this.parallel = parallel;
         this.variables.putAll(variables);
         this.errorHandlers.addAll(errorHandlers);
         for (Map.Entry<String, Collection<Listener>> entry : listeners.entries()) {
@@ -628,31 +635,24 @@ public class ScriptScope implements Scope {
         this.parser = parser;
     }
 
-    @Nullable
-    @Override
-    public String toString() {
-        return id + "->" + parent;
-    }
-
     @Override
     public Scope getParent() {
         return parent;
     }
 
-    private boolean checkConstraint(@NotNull var value,
-                                    @Nullable Variable oldValue,
-                                    @NotNull var constraint) {
+    @NotNull
+    @Override
+    public Scope copy() {
         checkDestroyed();
 
-        parameter("it", value);
-        log.debug("SET it={}", value);
-        if (oldValue != null) {
-            parameter("previous", oldValue.getValue());
-        }
-        final boolean fail = constraint.isFalse();
-        parameter("it", $void());
-        parameter("previous", $void());
-        return fail;
+        return new ScriptScope(parent, "*" + id.split(":")[0] + ":" + counter.incrementAndGet(), file,
+                               parameterScope,
+                               variables, errorHandlers, listeners, source, parser, root, parallel);
+    }
+
+    @Override
+    public boolean parallel() {
+        return parallel;
     }
 
 
@@ -686,14 +686,10 @@ public class ScriptScope implements Scope {
         return root;
     }
 
-    @NotNull
+    @Nullable
     @Override
-    public Scope copy() {
-        checkDestroyed();
-
-        return new ScriptScope(parent, "*" + id.split(":")[0] + ":" + counter.incrementAndGet(), file,
-                               parameterScope,
-                               variables, errorHandlers, listeners, source, parser, root);
+    public String toString() {
+        return id + (parallel ? "=>" : "->") + parent;
     }
 
     @Override
@@ -710,6 +706,22 @@ public class ScriptScope implements Scope {
     @Override
     public List<var> getParametersAsVars() {
         return variables.values().stream().filter(Variable::isNumeric).map(Variable::getValue).collect(Collectors.toList());
+    }
+
+    private boolean checkConstraint(@NotNull var value,
+                                    @Nullable Variable oldValue,
+                                    @NotNull var constraint) {
+        checkDestroyed();
+
+        parameter("it", value);
+        log.debug("SET it={}", value);
+        if (oldValue != null) {
+            parameter("previous", oldValue.getValue());
+        }
+        final boolean fail = constraint.isFalse();
+        parameter("it", $void());
+        parameter("previous", $void());
+        return fail;
     }
 
 

@@ -50,6 +50,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 import static dollar.internal.runtime.script.util.FileUtil.delete;
 
 public class GithubModuleResolver implements ModuleResolver {
@@ -192,7 +193,8 @@ public class GithubModuleResolver implements ModuleResolver {
                 newScope.set(entry.getKey().$S(), entry.getValue(), true, null, null, false, false, false);
             }
             return new DollarParserImpl(((DollarParser) parser).options(), classLoader).parse(
-                    new ScriptScope((Scope) scope, mainFile.getAbsolutePath(), content, "github-module-scope", false), content);
+                    new ScriptScope((Scope) scope, mainFile.getAbsolutePath(), content, "github-module-scope", false,
+                                    currentScope().parallel()), content);
         });
     }
 }

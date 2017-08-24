@@ -35,7 +35,8 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.function.Function;
 
-import static dollar.api.DollarStatic.*;
+import static dollar.api.DollarStatic.$;
+import static dollar.api.DollarStatic.$void;
 import static dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
 import static dollar.api.types.meta.MetaConstants.IS_BUILTIN;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
@@ -83,10 +84,10 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                 useConstraint = varScope.getConstraint(varName);
                 useSource = varScope.getConstraintSource(varName);
             }
-            final var rhsFixed = rhs.$fix(1, false);
+            final var rhsFixed = rhs.$fix(1, currentScope().parallel());
 
             if (useConstraint != null) {
-                inSubScope(true, pure, "assignment-constraint",
+                inSubScope(true, pure, false, "assignment-constraint",
                            newScope -> {
                                newScope.parameter("it", rhsFixed);
                                var value = newScope.get(varName);
@@ -187,8 +188,8 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
                     return node(WHEN_ASSIGN, pure, parser, token, inputs,
                                 c -> rhs.$listen(
-                                        parallel -> {
-                                            var value = parallel[0].$fixDeep();
+                                        args -> {
+                                            var value = args[0].$fixDeep(currentScope().parallel());
                                             setVariable(scope, varName, value, false, useConstraint, useSource,
                                                         isVolatile, false, pure, decleration, token, parser);
                                             return value;
@@ -202,7 +203,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                     Pipeable subscriber = i -> setVariable(
                                             scope,
                                             varName,
-                                            fix(i[0], false),
+                                            DollarScriptSupport.fix(i[0]),
                                             false,
                                             useConstraint, useSource,
                                             true, false, pure,

@@ -17,23 +17,30 @@
 package dollar.internal.runtime.script;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 public class SourceNodeOptions {
     @NotNull
-    public static final SourceNodeOptions NO_SCOPE = new SourceNodeOptions(false, false, false);
+    public static final SourceNodeOptions NO_SCOPE = new SourceNodeOptions(false, false, null);
     @NotNull
-    public static final SourceNodeOptions NEW_SCOPE = new SourceNodeOptions(true, false, false);
+    public static final SourceNodeOptions NEW_SCOPE = new SourceNodeOptions(true, false, null);
     @NotNull
-    public static final SourceNodeOptions SCOPE_WITH_CLOSURE = new SourceNodeOptions(true, true, false);
+    public static final SourceNodeOptions NEW_PARALLEL_SCOPE = new SourceNodeOptions(true, false, true);
+    @NotNull
+    public static final SourceNodeOptions NEW_SERIAL_SCOPE = new SourceNodeOptions(true, false, false);
+    @NotNull
+    public static final SourceNodeOptions SCOPE_WITH_CLOSURE = new SourceNodeOptions(true, true, null);
 
 
     private final boolean newScope;
     private final boolean scopeClosure;
-    private final boolean parallel;
 
-    public SourceNodeOptions(boolean newScope, boolean scopeClosure, boolean parallel) {
+    @Nullable
+    private final Boolean parallel;
+
+    public SourceNodeOptions(boolean newScope, boolean scopeClosure, @Nullable Boolean parallel) {
         this.newScope = newScope;
         this.scopeClosure = scopeClosure;
         this.parallel = parallel;
@@ -47,7 +54,8 @@ public class SourceNodeOptions {
         return scopeClosure;
     }
 
-    public boolean isParallel() {
+    @Nullable
+    public Boolean isParallel() {
         return parallel;
     }
 

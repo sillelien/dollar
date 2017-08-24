@@ -23,6 +23,7 @@ public class SystemPropertyConfiguration implements Configuration {
     private boolean monitor = Boolean.parseBoolean(System.getProperty("dollar.monitor", "false"));
     private boolean production = Boolean.parseBoolean(System.getProperty("dollar.production", "false"));
     private boolean debugScope = Boolean.parseBoolean(System.getProperty("dollar.debug.scope", "false"));
+    private boolean debugParallel = Boolean.parseBoolean(System.getProperty("dollar.debug.parallel", "false"));
     private boolean failFast = true;
 
 
@@ -64,5 +65,10 @@ public class SystemPropertyConfiguration implements Configuration {
     @Override
     public boolean wrapForMonitoring() {
         return production || monitor;
+    }
+
+    @Override
+    public boolean debugParallel() {
+        return debugParallel;
     }
 }
