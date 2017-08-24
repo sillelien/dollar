@@ -18,6 +18,7 @@ package dollar.internal.runtime.script.parser;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
+import com.vdurmont.emoji.EmojiParser;
 import dollar.internal.runtime.script.HasKeyword;
 import dollar.internal.runtime.script.HasSymbol;
 import dollar.internal.runtime.script.SourceNodeOptions;
@@ -48,6 +49,8 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     @Nullable
     private final Boolean pure;
     @Nullable
+    private String emoji;
+    @Nullable
     private String bnf;
     private SourceNodeOptions nodeOptions;
 
@@ -59,9 +62,11 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                  boolean reactive,
                  @Nullable String bnf,
                  int priority,
-                 @Nullable Boolean pure, SourceNodeOptions nodeOptions) {
+                 @Nullable Boolean pure, SourceNodeOptions nodeOptions, String emoji) {
         this.type = type;
-
+        if (emoji != null) {
+            this.emoji = EmojiParser.parseToUnicode(emoji);
+        }
         this.symbol = symbol;
         this.keyword = keyword;
         this.name = name;
@@ -120,17 +125,21 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     @NotNull
     public String asMarkdown() {
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("###");
+        if (emoji != null) {
+            stringBuilder.append(" ").append(emoji);
+        }
         if (symbol == null) {
             if (keyword != null) {
-                stringBuilder.append("### `").append(keyword).append("`");
+                stringBuilder.append("`").append(keyword).append("`");
             } else {
-                stringBuilder.append("### ").append(name);
+                stringBuilder.append(" ").append(name);
             }
         } else {
             if (keyword != null) {
-                stringBuilder.append("### `").append(keyword).append("` or `").append(symbol).append("`");
+                stringBuilder.append(" `").append(keyword).append("` or `").append(symbol).append("`");
             } else {
-                stringBuilder.append("### `").append(symbol).append("` (").append(name).append(")");
+                stringBuilder.append(" `").append(symbol).append("` (").append(name).append(")");
             }
         }
         stringBuilder.append("      {#op-").append(name).append("}").append("\n");

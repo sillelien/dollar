@@ -40,6 +40,11 @@
             <artifactId>jparsec</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.vdurmont</groupId>
+            <artifactId>emoji-java</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.sillelien</groupId>
             <artifactId>dollar-core</artifactId>
             <version>${project.version}</version>
