@@ -58,4 +58,4 @@ then
     echo "Usage: dollar <filename>.ds"
     exit 1
 fi
-java -classpath "${DOLLAR_HOME}/lib/*:${DOLLAR_HOME}/ext:${DOLLAR_HOME}/plugins/*:${DOLLAR_HOME}/etc:${HOME}/.dollar/lib" com.sillelien.dollar.main.ParserMain $@
+java -classpath "${DOLLAR_HOME}/lib/*:${DOLLAR_HOME}/ext:${DOLLAR_HOME}/plugins/*:${DOLLAR_HOME}/etc:${HOME}/.dollar/lib" dollar.main.ParserMain $@
