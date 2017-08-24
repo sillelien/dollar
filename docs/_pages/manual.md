@@ -302,6 +302,16 @@ var pair2 = "second" : "World";
 
 ```
 
+Dollar maps are also associative arrays (like JavaScript) allowing you to request members from them using the list subscript syntax
+
+```
+{"key1":1,"key2":2} ["key"+1] <=> 1
+{"key1":1,"key2":2} [1] <=> {"key2":2}
+{"key1":1,"key2":2} [1]["key2"] <=> 2
+```
+
+As you can see from the example you can request a key/value pair (or Tuple if you like) by it's position using a numeric subscript. Or you can treat it as an associative array and request an entry by specifying the key name. Any expression can be used as a subscript, numerical values will be used as indexes, otherwise the string value will be used as a key.
+
 
 ### Lists
 
@@ -325,16 +335,6 @@ You can count the size of the list using the size operator `#`.
 ```
 #[1,2,3,4] <=> 4
 ```
-
-Dollar maps are also associative arrays (like JavaScript) allowing you to request members from them using the list subscript syntax
-
-```
-{"key1":1,"key2":2} ["key"+1] <=> 1
-{"key1":1,"key2":2} [1] <=> {"key2":2}
-{"key1":1,"key2":2} [1]["key2"] <=> 2
-```
-
-As you can see from the example you can request a key/value pair (or Tuple if you like) by it's position using a numeric subscript. Or you can treat it as an associative array and request an entry by specifying the key name. Any expression can be used as a subscript, numerical values will be used as indexes, otherwise the string value will be used as a key.
 
 
 ### Ranges
@@ -407,7 +407,7 @@ Error handling couldn't be simpler. Define an error expression using the error k
 ```
 var errorHappened= false
 error { @@ msg; errorHappened= true }
-var a=1/0
+var a= << http://fake.com:99999
 .: errorHappened
 ```
 
@@ -761,27 +761,28 @@ var titles = posts each { $1.title }
 In this example we've requested a single value (using `<<`) from a uri and assigned the value to `posts` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `title`. The each operator returns a list of the results and that is what is passed to standard out.
 
 
-## Using Java
+## Using Other Languages
 
-Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of Java. To do so, just surround the Java in backticks.
+Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of another language. To do so, just surround the code in backticks and prefix with the languages name. Currently only `java` is supported but more will be added soon.
 
 ```
 
 var variableA="Hello World"
 
-var java = `out=scope.get("variableA");`
+var java = java `out=scope.get("variableA");`
 
 java <=> "Hello World"
 
 ```
+### Java
 
 A whole bunch of imports are done for you automatically (see below) but you will have to fully qualify any thirdparty libs.
  
 > imports `dollar.lang.*``dollar.internal.runtime.script.api.*` `com.sillelien.dollar.api.*` `java.io.*` `java.math.*` `java.net.*` `java.nio.file.*` `java.util.*` `java.util.concurrent.*` `java.util.function.*` `java.util.prefs.*` `java.util.regex.*` `java.util.stream.*`
  
- > static imports `com.sillelien.dollar.api.DollarStatic.*` `dollar.internal.runtime.script.java.JavaScriptingStaticImports.*`
+ > static imports `DollarStatic.*` `dollar.internal.runtime.script.java.JavaScriptingStaticImports.*`
 
-The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (dollar.internal.runtime.script.api.Scope) object on which you can get and set Dollar variables.
+The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (Scope) object on which you can get and set Dollar variables.
 
 Reactive behaviour is supported on the Scope object with the `listen` and `notify` methods on variables. You'll need to then built your reactivity around those variables or on the `out` object directly (that's a pretty advanced topic).
 
@@ -1040,9 +1041,11 @@ TODO
 
 
 
-all
+Returns a non-destructive read of all the values of a collection or URI addressed resource.
+
 
 ```
+var posts = <@ https://jsonplaceholder.typicode.com/posts
 ```
 
 ___
@@ -1119,14 +1122,53 @@ ___
 
 
 
-assign
+Values can be assigned to a variable using the standard `=` assignment operator. A variable is declared using either 'var', 'const' or 'volatile'. 
+
+`var` is used to mark a simple declaration of a mutable variable. E.g. `var a = 1; a= 2`. 
+
+`const` is used to declare a readonly variable, since all values in Dollar are immutable this makes the variable both readonly and immutable.
+
+`volatile` is used to declare the variable as mutable from multiple threads.
+
+Although there are no compile type constraints in Dollar a runtime type system can be built using constraints. Constraints are declared at the time of variable assignment or declaration. A constraint once declared on a variable cannot be changed. The constraint is placed before the variable name at the time of declaration in parenthesis.
+ 
+ Of course since the use of `(it is XXXX)` is very common, so Dollar provides a specific runtime type constraint that can be added in conjunction with other constraints. Simply prefix the assignment or decleration with `<XXXX>` where XXXX is the runtime type.
+ 
+ Values can be also be marked for `export` as in Javascript.
+
 
 ```
-var a=1
-a causes { @@ $1 }
-a=2
-a=3
-a=4
+var (it < 100) a = 50
+var (it > previous || previous is Void) b = 5
+b=6
+b=7
+var ( it is String) s1="String value"
+var <string> (#it > 5) s2="String value"
+const immutableValue= "Hello World"
+```
+
+___
+
+### `?=` (assign-when)      {#op-assign-when}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+
+
+___
+
+### builtin      {#op-builtin}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+
+**`<name> (<parameter>)*`**{: style="font-size: 60%"}
+
+
+
+Dollar has many built-in functions.
+
+//TODO: document them
+
+
+```
+var now= DATE();
 ```
 
 ___
@@ -1207,10 +1249,45 @@ ___
 
 
 
-choose
+The choose operator is a simple reversal of the subscript operator used for code clarity.
+
 
 ```
+var value= "red";
+value choose {"red": "roses", "green": "tomatoes"} <-> "roses"
+```
 
+___
+
+### `collect`      {#op-collect}
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+
+**`collect <expression> [ 'until' <expression> ] [ 'unless' <expression> ] <expression>`**{: style="font-size: 60%"}
+
+
+
+The `collect` operator listens for changes in the supplied expression adding all the values to a list until the `until` clause is triggered. It then evaluates the second expression with the values `it` for the current value, `count` for the number of messages **received** since last emission and `collected` for the collected values. The whole operator itself emits `void` unless the collection operation is triggered in which case it emits the collection itself. Values can be skipped with an `unless` clause. Skipped messages increase the count value, so use `#collected` if you want the number of collected values.
+
+
+```
+var e=void
+
+//Length is greater than or equal to 4 unless void
+var (#it >= 4 || it is VOID) collectedValues=void
+
+//count starts at 0 so this means five to collect (except if it contains the value 10)
+collect e until count == 4 unless it == 10{
+    print count
+    print collected
+    collectedValues= collected
+}
+
+e=1; e=2; e=3; e=4; e=5; e=6
+&collectedValues <=> [1,2,3,4,5]
+e=7; e=8; e=9; e=10
+&collectedValues <=> [6,7,8,9]
+e=11; e=12; e=13; e=14; e=15; e=16
+&collectedValues <=> [11,12,13,14,15]
 ```
 
 ___
@@ -1252,6 +1329,9 @@ ___
 
 
 Declares a variable to have a value, this is declarative and reactive such that saying `const a := b + 1` means that `a` always equals `b+1` no matter the value of b. The shorthand `def` is the same as `const <variable-name> :=` so `def a {b+1}` is the same as `const a := b + 1` but is syntactically better when declaring function like variables.
+
+Declarations can also be marked as pure so that they can be used in pure scopes, this is done by prefixing the declaration with `pure`.
+
 
 ```
 var variableA = 1
@@ -1427,9 +1507,10 @@ The right-hand-side is executed if an error occurs in the current scope.
 
 ```
 var errorHappened= false
-error { @@ msg; errorHappened= true }
-var a=1/0
-.: errorHappened
+error { ?? msg; errorHappened= true }
+def redis "redis://localhost:999999/test" as uri
+write ("Hello World " + DATE()) to redis
+.: &errorHappened
 ```
 
 ___
@@ -1595,6 +1676,24 @@ unchanged <-> 1;
 
 ___
 
+### `is`      {#op-is}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+
+**`<expression> 'is' <expression>`**{: style="font-size: 60%"}
+
+
+
+A boolean operator that returns true if the left-hand-side variable is one of the types listed on the right-hand-side. Analogous to Java's `instanceof`.
+
+
+```
+.: 1 is Integer,Decimal
+.: "Hello" is String
+.: 1.0 is Decimal,String
+```
+
+___
+
 ### `<` (less-than)      {#op-less-than}
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
@@ -1629,12 +1728,53 @@ The standard `<=` operator, it uses Comparable#compareTo and will work with any 
 
 ___
 
-### `?=` (listen-assign)      {#op-listen-assign}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+### list      {#op-list}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+
+**`'[' ( <expression> ',' ) * [ <expression> ] ']'`**{: style="font-size: 60%"}
 
 
 
-listen-assign
+
+Dollar's lists are pretty similar to JavaScript arrays. They are defined using the `[1,2,3]` style syntax and accessed using the `x[y]` subscript syntax. You can count the size of the list using the size operator `#`. Dollar maps are also associative arrays (like JavaScript) allowing you to request members from them using the list subscript syntax `x[y]` or the member syntax `.`.
+
+
+```
+[1,2,3][1] <=> 2
+#[1,2,3,4] <=> 4
+
+.: [1,2,3] + 4 == [1,2,3,4];
+.: [1,2,3,4] - 4 == [1,2,3];
+.: [] + 1 == [1] ;
+.: [1] + [1] == [1,1];
+.: [1] + 1 == [1,1];
+
+```
+
+___
+
+### map      {#op-map}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+
+**`'{' ( <expression> ';' ) * [ <expression> ] '}'`**{: style="font-size: 60%"}
+
+
+
+
+
+```
+```
+
+___
+
+### map      {#op-map}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+
+**`'{' ( <expression> ',' ) * [ <expression> ] '}'`**{: style="font-size: 60%"}
+
+
+
+
 
 ```
 ```
@@ -1669,6 +1809,20 @@ Deducts a value from another value
 
 ```
 2 - 1 <=> 1
+```
+
+___
+
+### `module`      {#op-module}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+
+**`module <name> (<parameter>)*`**{: style="font-size: 60%"}
+
+
+
+
+
+```
 ```
 
 ___
@@ -1708,6 +1862,7 @@ Returns the product of two values. If the left-hand-side is scalar (non collecti
 .: 1 * 1.0 is DECIMAL
 .: 2.0 * 1 is DECIMAL
 .: 2.0 * 1.0 is DECIMAL
+.: DATE() * 10 is Decimal
 
 ```
 
@@ -2051,6 +2206,42 @@ reduce
 
 ___
 
+### script      {#op-script}
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+
+**`<language-name> `` ` ``<script-code>`` ` ```**{: style="font-size: 60%"}
+
+
+
+
+Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of another language. To do so, just surround the code in backticks and prefix with the languages name. Currently only `java` is supported but more will be added soon.
+
+
+```
+const variableA="Hello World"
+
+
+//In this example we are accessing the scope from within Java to directly access variables in Dollar.
+//Note that the script has scope closure so all variables in both the lexical and runtime scope
+//are available.
+
+const javaTest = java`
+out=scope.get("variableA");
+`
+
+javaTest <=> "Hello World"
+
+//Now we parametrize the script. The parameters are available in a list of 'var' objects (see the dollar-core docs)
+
+const javaWithParam = java`
+out=in.get(0).$multiply(in.get(1)).$multiply(in.get(2));
+` (10,20,30)
+
+javaWithParam <=> 10*20*30
+```
+
+___
+
 ### `serial` or `|..|`      {#op-serial}
 ![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
 
@@ -2178,6 +2369,20 @@ The truthy operator `~` converts any value to a boolean by applying the rule tha
 
 ___
 
+### unit      {#op-unit}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+
+**`<numeric> <unit-name>`**{: style="font-size: 60%"}
+
+
+
+
+
+```
+```
+
+___
+
 ### `unpause` or `<||`      {#op-unpause}
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
 
@@ -2267,9 +2472,6 @@ ___
 ### block
 
 
-### collect
-
-
 ### const
 
 Mark a variable definition as a constant, i.e. readonly.
@@ -2306,9 +2508,6 @@ Boolean false.
 ### is
 
 
-### module
-
-
 ### mutate
 
 
@@ -2328,9 +2527,6 @@ A NULL value of ANY type.
 
 The start of a pure expression.
 
-
-
-### read
 
 
 ### to
@@ -2366,16 +2562,7 @@ Marks a variable as volatile, i.e. it can be accessed by multiple threads.
 
 
 
-### when
-
-
-### while
-
-
 ### with
-
-
-### write
 
 
 ### yes
@@ -2450,7 +2637,6 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[choose](#op-choose)          |`choose`       | `?*`     |binary    |
 |[drain](#op-drain)            |`drain`        | `<-<`    |prefix    |
 |[publish](#op-publish)        |`publish`      | `*>`     |binary    |
-|[pure](#op-pure)              |`pure`         |          |prefix    |
 |[read](#op-read)              |`read`         |          |prefix    |
 |[read-simple](#op-read-simple)|               | `<<`     |prefix    |
 |[subscribe](#op-subscribe)    |`subscribe`    | `<*`     |binary    |
@@ -2463,6 +2649,7 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[else](#op-else)              |`else`         | `-:`     |binary    |
 |[fork](#op-fork)              |`fork`         | `-<`     |prefix    |
 |[if](#op-if)                  |`if`           | `???`    |binary    |
+|[is](#op-is)                  |`is`           |          |binary    |
 |[parallel](#op-parallel)      |`parallel`     | `|:|`    |prefix    |
 |[pause](#op-pause)            |`pause`        | `||>`    |prefix    |
 |[serial](#op-serial)          |`serial`       | `|..|`   |prefix    |
@@ -2471,8 +2658,8 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[stop](#op-stop)              |`stop`         | `<|`     |prefix    |
 |[unpause](#op-unpause)        |`unpause`      | `<||`    |prefix    |
 |[assign](#op-assign)          |               | `=`      |assignment|
+|[assign-when](#op-assign-when)|               | `?=`     |assignment|
 |[declaration](#op-declaration)|               | `:=`     |assignment|
-|[listen-assign](#op-listen-assign)|               | `?=`     |assignment|
 |[subscribe-assign](#op-subscribe-assign)|               | `*=`     |assignment|
 |[assert](#op-assert)          |`assert`       | `.:`     |prefix    |
 |[assert-equals](#op-assert-equals)|`assert-equals`| `<->`    |binary    |
@@ -2481,3 +2668,12 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[err](#op-err)                |`err`          | `??`     |prefix    |
 |[error](#op-error)            |`error`        | `?->`    |prefix    |
 |[print](#op-print)            |`print`        | `@@`     |prefix    |
+|[builtin](#op-builtin)        |               |          |other     |
+|[collect](#op-collect)        |`collect`      |          |control   |
+|[list](#op-list)              |               |          |collection|
+|[map](#op-map)                |               |          |collection|
+|[map](#op-map)                |               |          |collection|
+|[module](#op-module)          |`module`       |          |other     |
+|[pure](#op-pure)              |`pure`         |          |prefix    |
+|[script](#op-script)          |               |          |other     |
+|[unit](#op-unit)              |               |          |postfix   |
