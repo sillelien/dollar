@@ -492,8 +492,14 @@ public class DollarMap extends AbstractDollar {
             return this;
         } else {
             LinkedHashMap<var, var> result = new LinkedHashMap<>();
-            for (Map.Entry<var, var> entry : map.entrySet()) {
-                result.put(entry.getKey(), entry.getValue().$fix(depth - 1, parallel));
+            if (parallel) {
+                for (Map.Entry<var, var> entry : map.entrySet()) {
+                    result.put(entry.getKey(), DollarStatic.$fork(() -> entry.getValue().$fix(depth - 1, true)));
+                }
+            } else {
+                for (Map.Entry<var, var> entry : map.entrySet()) {
+                    result.put(entry.getKey(), entry.getValue().$fix(depth - 1, false));
+                }
             }
             return new DollarMap(errors(), result);
         }
