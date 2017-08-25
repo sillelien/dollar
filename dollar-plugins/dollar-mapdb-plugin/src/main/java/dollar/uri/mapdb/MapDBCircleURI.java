@@ -27,6 +27,8 @@ import dollar.internal.mapdb.BTreeMap;
 import dollar.internal.mapdb.MapModificationListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +39,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationListener<var, var> {
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(MapDBCircleURI.class);
 
     @NotNull
     private static final ConcurrentHashMap<String, Future> subscribers = new ConcurrentHashMap<>();
@@ -47,8 +51,10 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
 
     public MapDBCircleURI(@NotNull String scheme, @NotNull URI uri) {
         super(uri, scheme);
-        BTreeMap<var, var> bTreeMap = tx.treeMap(getHost(), new VarSerializer(), new VarSerializer()).modificationListener(
-                this).createOrOpen();
+        try (BTreeMap<var, var> bTreeMap = tx.treeMap(getHost(), new VarSerializer(), new VarSerializer()).modificationListener(
+                this).createOrOpen()) {
+
+        }
         int size = Integer.parseInt(uri.paramWithDefault("size", "100").get(0));
         queue = new ArrayBlockingQueue<>(size);
     }
@@ -76,7 +82,7 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
             }
 
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.debug(e.getMessage(), e);
             return DollarStatic.$(false);
         }
     }
@@ -107,7 +113,7 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
                     return getQueue().peek();
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.debug(e.getMessage(), e);
                 return DollarStatic.$void();
             }
     }
@@ -145,7 +151,7 @@ public class MapDBCircleURI extends AbstractMapDBURI implements MapModificationL
                 try {
                     consumer.pipe(DollarStatic.$(o));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.debug(e.getMessage(), e);
                 }
             }
         });

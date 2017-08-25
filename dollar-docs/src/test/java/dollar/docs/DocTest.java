@@ -19,13 +19,18 @@ package dollar.docs;
 import com.google.common.io.CharStreams;
 import dollar.internal.runtime.script.DollarParserImpl;
 import dollar.internal.runtime.script.api.ParserOptions;
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStreamReader;
 
 public class DocTest {
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(DocTest.class);
 
     @Before
     public void setUp() throws Exception {
@@ -43,7 +48,7 @@ public class DocTest {
             new DollarParserImpl(new ParserOptions()).parseMarkdown(
                     CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/pages/manual.md"))));
         } catch (Exception e) {
-            e.printStackTrace();
+            log.debug(e.getMessage(), e);
             throw e;
         }
     }

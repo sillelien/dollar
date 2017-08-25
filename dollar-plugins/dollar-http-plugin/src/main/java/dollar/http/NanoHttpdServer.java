@@ -18,6 +18,8 @@ package dollar.http;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -57,6 +59,10 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 public abstract class NanoHttpdServer {
+
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(NanoHttpdServer.class);
+
     /**
      * Maximum time to wait on Socket.getInputStream().read() (in milliseconds) This is required as the Keep-Alive HTTP
      * connections would otherwise block the socket reading thread forever (or as long the browser is open).
@@ -244,7 +250,7 @@ public abstract class NanoHttpdServer {
                                          (e instanceof SocketException) &&
                                                  "NanoHttpd Shutdown".equals(e.getMessage())
                             )) {
-                                e.printStackTrace();
+                                log.debug(e.getMessage(), e);
                             }
                         } finally {
                             safeClose(outputStream);
@@ -309,7 +315,7 @@ public abstract class NanoHttpdServer {
                 myThread.join();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.debug(e.getMessage(), e);
         }
     }
 

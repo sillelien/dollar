@@ -25,6 +25,8 @@ import dollar.api.uri.URIHandlerFactory;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,6 +35,8 @@ import static dollar.api.DollarStatic.$;
 import static dollar.api.DollarStatic.$void;
 
 public class RandomResourceFactory implements URIHandlerFactory {
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(RandomResourceFactory.class);
     @Nullable private static final DollarExecutor
             executor =
             Plugins.sharedInstance(DollarExecutor.class);
@@ -46,7 +50,7 @@ public class RandomResourceFactory implements URIHandlerFactory {
                 try {
                     consumer.pipe($(Math.random()));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.debug(e.getMessage(), e);
                 }
             }
         });

@@ -24,6 +24,8 @@ import dollar.api.json.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public class DollarError extends DollarVoid {
 
     @NotNull
@@ -103,5 +105,20 @@ public class DollarError extends DollarVoid {
         jsonObject.putString("errorType", errorType.name());
         jsonObject.putString("errorMessage", errorMessage);
         return jsonObject;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), errorType, errorMessage);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        DollarError that = (DollarError) o;
+        return errorType == that.errorType &&
+                       Objects.equals(errorMessage, that.errorMessage);
     }
 }

@@ -17,10 +17,13 @@
 package dollar;
 
 import com.google.common.io.Files;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.ast.RootNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +33,8 @@ import java.nio.charset.Charset;
  * @author hello@neilellis.me
  */
 public class DocTest {
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger("DocTest");
 
     @Test
     public void test() throws IOException {
@@ -39,7 +44,7 @@ public class DocTest {
                     Files.asCharSource(new File("README.md"), Charset.forName("utf-8")).read().toCharArray());
             rootNode.accept(new DocTestingVisitor());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.debug(e.getMessage(), e);
             throw e;
         }
     }

@@ -47,8 +47,6 @@ import java.util.stream.Stream;
 public class DollarBlockCollection implements var {
     @NotNull
     private final List<var> value;
-    @NotNull
-    private volatile var cachedValue;
 
 
     public DollarBlockCollection(@NotNull List<var> value) {

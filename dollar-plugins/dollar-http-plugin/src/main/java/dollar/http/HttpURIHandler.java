@@ -27,6 +27,8 @@ import dollar.api.uri.URIHandler;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -36,6 +38,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import static dollar.api.DollarStatic.$;
 
 public class HttpURIHandler implements URIHandler {
+
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(HttpURIHandler.class);
+
     public static final int BLOCKING_TIMEOUT = 10;
     @NotNull
     private static final ConcurrentHashMap<String, RouteableNanoHttpd> servers = new ConcurrentHashMap<>();
@@ -223,7 +229,7 @@ public class HttpURIHandler implements URIHandler {
                 out.$("headers").$map().toVarMap().forEach((s, v) -> response.addHeader(s.$S(), v.$S()));
                 return response;
             } catch (Exception e) {
-                e.printStackTrace();
+                log.debug(e.getMessage(), e);
                 return new NanoHttpdServer.Response(NanoHttpdServer.Response.Status.INTERNAL_ERROR, "text/plain",
                                                     e.getMessage());
             }

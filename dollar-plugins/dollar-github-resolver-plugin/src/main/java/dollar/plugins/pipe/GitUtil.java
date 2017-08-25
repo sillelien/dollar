@@ -19,18 +19,22 @@ package dollar.plugins.pipe;
 import com.google.common.io.CharStreams;
 import dollar.api.DollarException;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public final class GitUtil {
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(GitUtil.class);
 
     static {
         try {
             check();
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            log.debug(e.getMessage(), e);
         }
     }
 

@@ -19,6 +19,8 @@ package dollar.api.uri;
 import dollar.api.DollarException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -31,6 +33,10 @@ import java.util.List;
 import java.util.Map;
 
 public class URI implements Serializable {
+
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(URI.class);
+
     @NotNull
     protected String uri;
     @NotNull
@@ -179,7 +185,7 @@ public class URI implements Serializable {
                                     null;
                     query_pairs.get(key).add(value);
                 } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                    log.debug(e.getMessage(), e);
                 }
             }
             query = query_pairs;

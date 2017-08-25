@@ -135,6 +135,6 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
     }
 
     private void log(@NotNull Throwable e) {
-        e.printStackTrace();
+        log.debug(e.getMessage(), e);
     }
 }

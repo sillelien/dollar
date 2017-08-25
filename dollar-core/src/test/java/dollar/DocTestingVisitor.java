@@ -58,6 +58,8 @@ import org.pegdown.ast.TextNode;
 import org.pegdown.ast.VerbatimNode;
 import org.pegdown.ast.Visitor;
 import org.pegdown.ast.WikiLinkNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticListener;
@@ -75,6 +77,8 @@ import java.nio.charset.Charset;
 import java.util.Locale;
 
 public class DocTestingVisitor implements Visitor {
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(DocTestingVisitor.class);
     @Override
     public void visit(AbbreviationNode node) {
 
@@ -298,16 +302,16 @@ public class DocTestingVisitor implements Visitor {
                     ((Runnable) cls.newInstance()).run();
                 } catch (MalformedURLException e) {
                     System.err.println(string);
-                    e.printStackTrace();
+                    log.debug(e.getMessage(), e);
                 } catch (ClassNotFoundException e) {
                     System.err.println(string);
-                    e.printStackTrace();
+                    log.debug(e.getMessage(), e);
                 } catch (InstantiationException e) {
                     System.err.println(string);
-                    e.printStackTrace();
+                    log.debug(e.getMessage(), e);
                 } catch (IllegalAccessException e) {
                     System.err.println(string);
-                    e.printStackTrace();
+                    log.debug(e.getMessage(), e);
                 }
                 System.out.println("Parsed: " + node.getText());
             } catch (IOException e) {

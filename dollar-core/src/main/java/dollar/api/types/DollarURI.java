@@ -35,16 +35,14 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.UUID;
 
 public class DollarURI extends AbstractDollar {
 
-    @NotNull
-    private final StateMachine<ResourceState, Signal> stateMachine;
-    @NotNull
-    private final URI uri;
-    @NotNull
-    private final URIHandler handler;
+    private final transient @NotNull StateMachine<ResourceState, Signal> stateMachine;
+    private final @NotNull URI uri;
+    private final transient @NotNull URIHandler handler;
 
 
     public DollarURI(@NotNull ImmutableList<Throwable> errors, @NotNull URI uri) {
@@ -53,17 +51,18 @@ public class DollarURI extends AbstractDollar {
         String scheme = uri.scheme();
         try {
             handler = Plugins.resolveURIProvider(scheme).forURI(scheme, uri);
+
+            StateMachineConfig<ResourceState, Signal> stateMachineConfig = getDefaultStateMachineConfig();
+            stateMachineConfig.configure(ResourceState.RUNNING).onEntry(i -> handler.start());
+            stateMachineConfig.configure(ResourceState.RUNNING).onExit(i -> handler.stop());
+            stateMachineConfig.configure(ResourceState.INITIAL).onExit(i -> handler.init());
+            stateMachineConfig.configure(ResourceState.DESTROYED).onEntry(i -> handler.destroy());
+            stateMachineConfig.configure(ResourceState.PAUSED).onEntry(i -> handler.pause());
+            stateMachineConfig.configure(ResourceState.PAUSED).onExit(i -> handler.unpause());
+            stateMachine = new StateMachine<>(ResourceState.INITIAL, stateMachineConfig);
         } catch (Exception e) {
             throw new DollarException(e);
         }
-        StateMachineConfig<ResourceState, Signal> stateMachineConfig = getDefaultStateMachineConfig();
-        stateMachineConfig.configure(ResourceState.RUNNING).onEntry(i -> handler.start());
-        stateMachineConfig.configure(ResourceState.RUNNING).onExit(i -> handler.stop());
-        stateMachineConfig.configure(ResourceState.INITIAL).onExit(i -> handler.init());
-        stateMachineConfig.configure(ResourceState.DESTROYED).onEntry(i -> handler.destroy());
-        stateMachineConfig.configure(ResourceState.PAUSED).onEntry(i -> handler.pause());
-        stateMachineConfig.configure(ResourceState.PAUSED).onExit(i -> handler.unpause());
-        stateMachine = new StateMachine<>(ResourceState.INITIAL, stateMachineConfig);
 
     }
 
@@ -158,83 +157,6 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public String toHumanString() {
-        return uri.toString();
-    }
-
-    @NotNull
-    @Override
-    public String toDollarScript() {
-        return String.format("(\"%s\" as Uri)", org.apache.commons.lang.StringEscapeUtils.escapeJava(uri.toString()));
-    }
-
-    @NotNull
-    @Override
-    public <R> R toJavaObject() {
-        return (R) uri;
-    }
-
-    @NotNull
-
-    @Override
-    public var $all() {
-        ensureRunning();
-        return handler.all();
-    }
-
-    @NotNull
-    @Override
-    public Type $type() {
-        return new Type(Type._URI, constraintLabel());
-    }
-
-    @NotNull
-    @Override
-    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
-        ensureRunning();
-        return handler.write(value, blocking, mutating);
-    }
-
-    @NotNull
-    @Override
-    public var $drain() {
-        ensureRunning();
-        return handler.drain();
-    }
-
-    @NotNull
-    @Override
-    public var $notify() {
-        ensureRunning();
-        return handler.write(this, false, false);
-    }
-
-    @NotNull
-    @Override
-    public var $read(boolean blocking, boolean mutating) {
-        ensureRunning();
-        return handler.read(blocking, mutating);
-    }
-
-    @NotNull
-    @Override
-    public var $each(@NotNull Pipeable pipe) {
-        return super.$each(pipe);
-    }
-
-    @NotNull
-    @Override
-    public StateMachine<ResourceState, Signal> getStateMachine() {
-        return stateMachine;
-    }
-
-    @Override
-    public boolean uri() {
-        return true;
-    }
-
-    @NotNull
-    @Override
     public ImmutableList<var> toVarList() {
         ensureRunning();
         return ImmutableList.copyOf(handler.all().toVarList());
@@ -242,9 +164,8 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $publish(@NotNull var lhs) {
-        ensureRunning();
-        return handler.publish(lhs);
+    public Type $type() {
+        return new Type(Type._URI, constraintLabel());
     }
 
     @Override
@@ -295,6 +216,98 @@ public class DollarURI extends AbstractDollar {
     @Override
     public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
         return ImmutableMap.copyOf(Collections.<K, V>emptyMap());
+    }
+
+    @NotNull
+    @Override
+    public String toHumanString() {
+        return uri.toString();
+    }
+
+    @NotNull
+    @Override
+    public String toDollarScript() {
+        return String.format("(\"%s\" as Uri)", org.apache.commons.lang.StringEscapeUtils.escapeJava(uri.toString()));
+    }
+
+    @NotNull
+    @Override
+    public <R> R toJavaObject() {
+        return (R) uri;
+    }
+
+    @NotNull
+
+    @Override
+    public var $all() {
+        ensureRunning();
+        return handler.all();
+    }
+
+    @NotNull
+    @Override
+    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
+        ensureRunning();
+        return handler.write(value, blocking, mutating);
+    }
+
+    @NotNull
+    @Override
+    public var $drain() {
+        ensureRunning();
+        return handler.drain();
+    }
+
+    @NotNull
+    @Override
+    public var $notify() {
+        ensureRunning();
+        return handler.write(this, false, false);
+    }
+
+    @NotNull
+    @Override
+    public var $read(boolean blocking, boolean mutating) {
+        ensureRunning();
+        return handler.read(blocking, mutating);
+    }
+
+    @NotNull
+    @Override
+    public var $publish(@NotNull var lhs) {
+        ensureRunning();
+        return handler.publish(lhs);
+    }
+
+    @NotNull
+    @Override
+    public var $each(@NotNull Pipeable pipe) {
+        return super.$each(pipe);
+    }
+
+    @NotNull
+    @Override
+    public StateMachine<ResourceState, Signal> getStateMachine() {
+        return stateMachine;
+    }
+
+    @Override
+    public boolean uri() {
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), uri);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        DollarURI dollarURI = (DollarURI) o;
+        return Objects.equals(uri, dollarURI.uri);
     }
 
     @NotNull
@@ -394,13 +407,11 @@ public class DollarURI extends AbstractDollar {
                 try {
                     return pipe.pipe(i);
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    return DollarStatic.logAndRethrow(e);
+                    throw new DollarException(e);
                 }
             }, subId);
         } catch (IOException e) {
-            e.printStackTrace();
-            return DollarStatic.logAndRethrow(e);
+            throw new DollarException(e);
         }
         return DollarFactory.blockCollection(
                 Collections.singletonList(DollarStatic.$("id", subId).$("unsub", DollarFactory.fromLambda(i -> {

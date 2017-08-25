@@ -29,6 +29,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,6 +45,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @SuppressWarnings("ALL")
 public class ParserQuickTest {
+
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(ParserQuickTest.class);
 
     @ClassRule
     public static final CircleCiParallelRule className = new CircleCiParallelRule();
@@ -119,7 +124,7 @@ public class ParserQuickTest {
                                                 "/test_date.ds",
                                                 parallel);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.debug(e.getMessage(), e);
             throw e;
         }
     }
@@ -137,7 +142,7 @@ public class ParserQuickTest {
         } catch (AssertionError e) {
             fail(e);
         } catch (Throwable e) {
-            e.printStackTrace();
+            log.debug(e.getMessage(), e);
         } finally {
 
         }

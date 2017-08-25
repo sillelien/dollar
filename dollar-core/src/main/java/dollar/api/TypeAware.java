@@ -309,8 +309,7 @@ public interface TypeAware {
      * @return a list of vars.
      */
     @Guarded(NotNullCollectionGuard.class)
-    @NotNull
-    ImmutableList<?> toList();
+    @NotNull <T> ImmutableList<T> toList();
 
     /**
      * Returns this object as a set of nested maps the values are completely unwrapped and don't contain 'var' objects.

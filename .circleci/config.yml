@@ -463,6 +463,7 @@ workflows:
             - devdocs
             - maven-deploy
             - docs-preflight
+            - sonar
           filters:
             branches:
               only: master
