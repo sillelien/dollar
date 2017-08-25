@@ -153,9 +153,13 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         } else {
             stringBuilder.append("![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square)");
         }
-        if ((pure != null) && pure) {
-            stringBuilder.append(" ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square)");
-        } else {
+        if ((pure != null))
+            if (pure) {
+                stringBuilder.append(" ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square)");
+            } else {
+                stringBuilder.append(" ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square)");
+            }
+        else {
             stringBuilder.append(" ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square)");
         }
         if (nodeOptions.equals(NO_SCOPE)) {
@@ -165,6 +169,12 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         } else if (nodeOptions.equals(SCOPE_WITH_CLOSURE)) {
             stringBuilder.append(
                     " ![New Scope](https://img.shields.io/badge/scope-new%20with%20closure-green.svg?style=flat-square)");
+        } else if (nodeOptions.equals(NEW_PARALLEL_SCOPE)) {
+            stringBuilder.append(" ![New Parallel Scope](https://img.shields.io/badge/scope-new%20parallel-red" +
+                                         ".svg?style=flat-square)");
+        } else if (nodeOptions.equals(NEW_SERIAL_SCOPE)) {
+            stringBuilder.append(" ![New Serial Scope](https://img.shields.io/badge/scope-new%20serial-yellow" +
+                                         ".svg?style=flat-square)");
         }
         if (nodeOptions.isParallel() != null) {
             if (nodeOptions.isParallel()) {
