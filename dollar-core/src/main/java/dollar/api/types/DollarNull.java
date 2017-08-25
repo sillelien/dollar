@@ -163,7 +163,7 @@ public class DollarNull extends AbstractDollar {
     }
 
     @Override
-    public ImmutableList<String> strings() {
+    public ImmutableList<String> toStrings() {
         return ImmutableList.of();
     }
 

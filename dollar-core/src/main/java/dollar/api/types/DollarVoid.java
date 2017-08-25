@@ -171,7 +171,7 @@ public class DollarVoid extends AbstractDollar {
     }
 
     @Override
-    public ImmutableList<String> strings() {
+    public ImmutableList<String> toStrings() {
         return ImmutableList.of();
     }
 

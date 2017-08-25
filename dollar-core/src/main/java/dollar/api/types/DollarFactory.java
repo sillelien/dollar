@@ -131,6 +131,8 @@ public final class DollarFactory {
     @NotNull
     public static final var INFINITY = wrap(new DollarInfinity(true));
 
+    private DollarFactory() {
+    }
 
     /**
      * The Monitor.
@@ -328,20 +330,6 @@ public final class DollarFactory {
         return wrap(new DollarMap(errors, json));
     }
 
-//
-//    /**
-//     * From gson object.
-//     *
-//     * @param o the o
-//     * @return the var
-//     */
-//    @NotNull
-//    public static var fromGsonObject(Object o) {
-//        Gson gson = new Gson();
-//        String json = gson.toJson(o);
-//        return create(ImmutableList.<Throwable>of(), json);
-//    }
-
     /**
      * From value.
      *
@@ -411,7 +399,6 @@ public final class DollarFactory {
         if (DollarStatic.getConfig().failFast() && !quiet) {
             throw new DollarFailureException(t, errorType);
         } else {
-//            t.printStackTrace(System.err);
             return wrap(new DollarError(ImmutableList.of(t), errorType, t.getMessage()));
         }
     }
@@ -428,7 +415,6 @@ public final class DollarFactory {
         if (DollarStatic.getConfig().failFast()) {
             throw new DollarFailureException(t, errorType);
         } else {
-//            t.printStackTrace(System.err);
             return wrap(new DollarError(ImmutableList.of(t), errorType, t.getMessage()));
         }
     }
@@ -611,7 +597,7 @@ public final class DollarFactory {
             dollarFailureException.addSource(source);
             throw dollarFailureException;
         } else {
-            return wrap(new DollarError(ImmutableList.of(throwable), errorType, null));
+            return wrap(new DollarError(ImmutableList.of(throwable), errorType, throwable.getMessage()));
         }
     }
 
@@ -703,11 +689,7 @@ public final class DollarFactory {
             return DollarStatic.$void();
         } else if (value instanceof LinkedHashMap) {
             JsonObject json = new JsonObject((Map<String, Object>) value);
-//            if (json.containsField(TYPE_KEY)) {
             return fromJson(json);
-//            } else {
-//                return fromValue(value);
-//            }
         } else if (value instanceof ArrayList) {
             ArrayList list = (ArrayList) value;
             ArrayList<var> result = new ArrayList<>();
@@ -743,10 +725,10 @@ public final class DollarFactory {
      * @param value the value
      * @return the string
      */
-    @NotNull
+    @Nullable
     public static String serialize(@NotNull var value) {
         final Object jsonObject = toJson(value.$fixDeep());
-        return jsonObject.toString();
+        return (jsonObject == null) ? null : jsonObject.toString();
     }
 
     @NotNull
@@ -810,8 +792,6 @@ public final class DollarFactory {
                 var v = map.get(fieldName);
                 json.putValue(fieldName.toString(), toJson(v));
             }
-            final JsonObject containerObject = new JsonObject();
-//            json.putString(TYPE_KEY, value.$type().name());
             return json;
         } else if (i.is(Type._RANGE)) {
             final JsonObject rangeObject = new JsonObject();

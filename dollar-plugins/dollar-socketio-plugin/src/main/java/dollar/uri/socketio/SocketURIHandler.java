@@ -92,7 +92,7 @@ public class SocketURIHandler implements URIHandler {
     @NotNull @Override public var publish(@NotNull var value) {
         ArrayList<var> responses = new ArrayList<>();
         server.getBroadcastOperations()
-              .sendEvent(value.getPairKey().toString(), value.getPairValue().toJsonObject().toMap());
+                .sendEvent(value.$pairKey().toString(), value.$pairValue().toJsonObject().toMap());
         for (SocketIOSubscription subscription : subscriptions.values()) {
         }
         return DollarFactory.fromValue(responses);

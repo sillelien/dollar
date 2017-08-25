@@ -184,7 +184,7 @@ public final class DollarInfinity extends AbstractDollar {
     }
 
     @Override
-    public ImmutableList<String> strings() {
+    public ImmutableList<String> toStrings() {
         return ImmutableList.of();
     }
 

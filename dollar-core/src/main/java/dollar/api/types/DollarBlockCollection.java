@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-@Deprecated
+
 //Created by BlockOperator directly now
 public class DollarBlockCollection implements var {
     @NotNull
@@ -115,8 +115,8 @@ public class DollarBlockCollection implements var {
     @Override
     public String toDollarScript() {
         StringBuilder builder = new StringBuilder("{");
-        for (var value : toVarList()) {
-            builder.append(value.toDollarScript()).append("\n");
+        for (var v : toVarList()) {
+            builder.append(v.toDollarScript()).append("\n");
         }
         builder.append("}");
         return builder.toString();
@@ -386,9 +386,10 @@ public class DollarBlockCollection implements var {
     public boolean dynamic() {return getValue().dynamic();}
 
     @NotNull
-    @Override
     @Guarded(NotNullGuard.class)
-    public var getPairKey() {return getValue().getPairKey();}
+    public var getPairKey() {
+        return getValue().$pairKey();
+    }
 
     @Override
     @NotNull
@@ -405,9 +406,10 @@ public class DollarBlockCollection implements var {
     }
 
     @NotNull
-    @Override
     @Guarded(NotNullGuard.class)
-    public var getPairValue() {return getValue().getPairValue();}
+    public var getPairValue() {
+        return getValue().$pairValue();
+    }
 
     @Override
     @Guarded(NotNullGuard.class)
@@ -442,7 +444,7 @@ public class DollarBlockCollection implements var {
 
     @Override
     @Nullable
-    public ImmutableList<String> strings() {return getValue().strings();}
+    public ImmutableList<String> toStrings() {return getValue().toStrings();}
 
     @NotNull
     @Override

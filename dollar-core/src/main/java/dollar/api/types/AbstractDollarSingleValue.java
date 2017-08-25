@@ -147,7 +147,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
     }
 
     @Override
-    public ImmutableList<String> strings() {
+    public ImmutableList<String> toStrings() {
         return ImmutableList.of(toHumanString());
     }
 

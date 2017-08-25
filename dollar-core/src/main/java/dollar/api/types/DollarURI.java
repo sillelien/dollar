@@ -281,7 +281,7 @@ public class DollarURI extends AbstractDollar {
 
     @Nullable
     @Override
-    public ImmutableList<String> strings() {
+    public ImmutableList<String> toStrings() {
         return ImmutableList.of();
     }
 

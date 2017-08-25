@@ -315,7 +315,7 @@ public class DollarMap extends AbstractDollar {
     }
 
     @Override
-    public ImmutableList<String> strings() {
+    public ImmutableList<String> toStrings() {
         List<String> values = new ArrayList<>();
         ImmutableMap<String, Object> map = toJavaMap();
         for (Map.Entry<String, Object> entry : map.entrySet()) {

@@ -123,19 +123,6 @@ public interface TypeAware {
     @NotNull
     @Guarded(NotNullGuard.class)
     default var $pairKey() {
-        return getPairKey();
-    }
-
-    /**
-     * Gets pair key.
-     *
-     * @return the pair key
-     * @deprecated (use $pairKey())
-     */
-    @NotNull
-    @Deprecated
-    @Guarded(NotNullGuard.class)
-    default var getPairKey() {
         return toVarMap().keySet().iterator().next();
     }
 
@@ -176,24 +163,11 @@ public interface TypeAware {
      * Gets pair value.
      *
      * @return the pair value
-     * @deprecated use $pairValue()
-     */
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Deprecated
-    default var getPairValue() {
-        return toVarMap().values().iterator().next();
-    }
-
-    /**
-     * Gets pair value.
-     *
-     * @return the pair value
      */
     @NotNull
     @Guarded(NotNullGuard.class)
     default var $pairValue() {
-        return getPairValue();
+        return toVarMap().values().iterator().next();
     }
 
     /**
@@ -214,15 +188,6 @@ public interface TypeAware {
     @Guarded(NotNullGuard.class)
     boolean is(@NotNull Type... types);
 
-    /**
-     * Is error.
-     *
-     * @return true if this object represents an error
-     * @deprecated use error()
-     */
-    default boolean isError() {
-        return false;
-    }
 
 
     /**
@@ -331,23 +296,11 @@ public interface TypeAware {
     /**
      * Returns this object as a list of string values or null if this is not applicable.
      *
-     * @return a list of strings
-     * @deprecated use toStrings()
-     */
-    @Deprecated
-    @Nullable
-    ImmutableList<String> strings();
-
-
-    /**
-     * Returns this object as a list of string values or null if this is not applicable.
-     *
-     * @return a list of strings
+     * @return a list of toStrings
      */
     @Nullable
-    default ImmutableList<String> toStrings() {
-        return strings();
-    }
+    ImmutableList<String> toStrings();
+
 
     /**
      * Converts this to a list of value objects such as you would get from $(). Only really useful for collection

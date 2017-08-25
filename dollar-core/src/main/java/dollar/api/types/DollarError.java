@@ -92,7 +92,6 @@ public class DollarError extends DollarVoid {
         return "ERROR('" + errorType.name() + "'," + DollarStatic.$(errorMessage).toDollarScript() + ")";
     }
 
-    @Override
     public boolean isError() {
         return true;
     }

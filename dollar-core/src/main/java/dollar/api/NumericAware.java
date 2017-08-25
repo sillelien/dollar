@@ -50,7 +50,7 @@ public interface NumericAware {
     }
 
     /**
-     * Deducts from var, for strings this means remove all occurrence of and for collections it means remove the value
+     * Deducts from var, for toStrings this means remove all occurrence of and for collections it means remove the value
      * from the collection. For numbers it is standard numeric arithmetic.
      *
      * @param rhs the value to deduct from this
@@ -65,7 +65,7 @@ public interface NumericAware {
 
     /**
      * Returns a new {@link var} with this value added to it. Like {@link #$minus(var)} the actual behaviour varies with
-     * types. So for strings this is concatenation for collections it is adding a new element.
+     * types. So for toStrings this is concatenation for collections it is adding a new element.
      *
      * @param rhs the value to add
      * @return a new object with the value supplied added
@@ -76,7 +76,7 @@ public interface NumericAware {
     var $plus(@NotNull var rhs);
 
     /**
-     * Negate the value, for lists, strings and maps this means reversing the elements. For numbers it is the usual
+     * Negate the value, for lists, toStrings and maps this means reversing the elements. For numbers it is the usual
      * numeric negation.
      *
      * @return the negated value
@@ -87,7 +87,7 @@ public interface NumericAware {
     var $negate();
 
     /**
-     * Divide the value. For strings this means splitting. For numbers this is the usual numerical division.
+     * Divide the value. For toStrings this means splitting. For numbers this is the usual numerical division.
      *
      * @param rhs the value to divide by
      * @return the divided value
@@ -111,7 +111,7 @@ public interface NumericAware {
     }
 
     /**
-     * Subtract the value from this object. For strings and collections this means remove all occurrences of the RHS
+     * Subtract the value from this object. For toStrings and collections this means remove all occurrences of the RHS
      * argument.
      *
      * @param rhs the value to subtract

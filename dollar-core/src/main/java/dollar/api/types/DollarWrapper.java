@@ -362,8 +362,8 @@ public class DollarWrapper implements var {
     }
 
     @Override
-    public ImmutableList<String> strings() {
-        return getValue().strings();
+    public ImmutableList<String> toStrings() {
+        return getValue().toStrings();
     }
 
     @NotNull

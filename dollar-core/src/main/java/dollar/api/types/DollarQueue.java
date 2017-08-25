@@ -381,7 +381,7 @@ public class DollarQueue extends AbstractDollar {
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
-    public ImmutableList<String> strings() {
+    public ImmutableList<String> toStrings() {
         return ImmutableList.copyOf(queue.stream().map(var::toString).collect(Collectors.toList()));
     }
 

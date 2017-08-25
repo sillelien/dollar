@@ -257,7 +257,7 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public ImmutableList<String> strings() {
+    public ImmutableList<String> toStrings() {
         return ImmutableList.copyOf(list.stream().map(Object::toString).collect(Collectors.toList()));
     }
 

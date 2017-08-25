@@ -233,7 +233,7 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public ImmutableList<String> strings() {
+    public ImmutableList<String> toStrings() {
         DollarFactory.failure(ErrorType.INVALID_RANGE_OPERATION);
         return null;
     }

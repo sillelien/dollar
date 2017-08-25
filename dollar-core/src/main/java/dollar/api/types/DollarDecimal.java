@@ -51,7 +51,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         if ((rhsFix.toDouble() == null) || rhsFix.zero()) {
             return DollarFactory.infinity(positive(), errors(), rhsFix.errors());
         }
-        if (rhsFix.infinite() || new Double(value / rhsFix.toDouble()).isInfinite()) {
+        if (rhsFix.infinite() || Double.valueOf(value / rhsFix.toDouble()).isInfinite()) {
             return DollarFactory.fromValue(0, errors(), rhsFix.errors());
         }
         return DollarFactory.fromValue(value / rhsFix.toDouble(), errors(), rhsFix.errors());
@@ -82,7 +82,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
             return DollarFactory.fromValue(0.0, errors(), rhsFix.errors());
         }
 
-        if (new Double(value * rhsFix.toDouble()).isInfinite()) {
+        if (Double.valueOf(value * rhsFix.toDouble()).isInfinite()) {
             return DollarFactory.infinity((Math.signum(value) * Math.signum(rhsFix.toDouble())) > 0, errors(),
                                           rhs.errors());
         }
@@ -156,7 +156,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         } else if (rhsFix.list()) {
             return DollarFactory.fromValue(rhsFix.$prepend(this), errors(), rhsFix.errors());
         } else {
-            if (new Double(value + rhsFix.toDouble()).isInfinite()) {
+            if (Double.valueOf(value + rhsFix.toDouble()).isInfinite()) {
                 return DollarFactory.infinity(Math.signum(value + rhsFix.toDouble()) > 0, errors(), rhs.errors());
             }
             return DollarFactory.fromValue(value + rhsFix.toDouble(), errors(), rhsFix.errors());
@@ -209,6 +209,11 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     }
 
     @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof var) {
             var unwrapped = ((var) obj).$unwrap();
@@ -221,6 +226,8 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
             } else {
                 return value.toString().equals(obj.toString());
             }
+        } else if (obj == null) {
+            return false;
         } else {
             return value.toString().equals(obj.toString());
         }
