@@ -33,7 +33,6 @@ import java.util.Objects;
 
 public class DollarDate extends AbstractDollarSingleValue<Instant> {
 
-    private static final double ONE_DAY_MILLIS = 24.0 * 60.0 * 60.0 * 1000.0;
     private static final double ONE_DAY_SECONDS = 24.0 * 60.0 * 60.0;
 
     public DollarDate(@NotNull ImmutableList<Throwable> errors, @NotNull Long value) {
@@ -163,20 +162,6 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
                                        errors());
     }
 
-//    @NotNull
-//    @Override
-//    public var $dec(@NotNull var amount) {
-//        return DollarFactory.fromValue(value.plusSeconds((long) (ONE_DAY_SECONDS * amount.toDouble())), errors(),
-//                                       amount.errors());
-//    }
-//
-//    @NotNull
-//    @Override
-//    public var $inc(@NotNull var amount) {
-//        return DollarFactory.fromValue(value.minusSeconds((long) (ONE_DAY_SECONDS * amount.toDouble())), errors(),
-//                                       amount.errors());
-//    }
-
     @NotNull
     @Override
     public var $set(@NotNull var key, @NotNull Object v) {
@@ -278,9 +263,17 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
             } else {
                 return toString().equals(obj.toString());
             }
+        } else if (obj == null) {
+            return false;
         } else {
             return toString().equals(obj.toString());
         }
+    }
+
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
     }
 
     @NotNull
@@ -305,10 +298,6 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     @Override
     public String toJavaObject() {
         return value.toString();
-    }
-
-    private long asLong(double d) {
-        return (long) (d * ONE_DAY_MILLIS);
     }
 
 }
