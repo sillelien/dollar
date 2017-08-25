@@ -1,4 +1,4 @@
-com.sillelien.dollar
-com.sillelien.dollar.docs
-com.sillelien.dollar.json
+dollar
+dollar.docs
 dollar.internal.runtime.script
+dollar.json
