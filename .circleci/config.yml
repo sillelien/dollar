@@ -68,6 +68,20 @@ jobs:
             name: promote
             command: ~/build-utils/promote_from_staging.sh
 
+  sonar:
+      <<: *defaults
+
+      steps:
+        - checkout
+
+        - run:
+            name: init
+            command: /home/circleci/.build-init.sh
+
+        - run:
+            name: promote
+            command: ~/build-utils/sonar.sh
+
 
     maven-deploy:
       <<: *defaults
@@ -416,6 +430,14 @@ workflows:
           filters:
             branches:
               only: staging
+
+      - sonar:
+          requires:
+            - build
+            - devdocs
+          filters:
+            branches:
+              only: master
 
       - dist:
           requires:
