@@ -2003,7 +2003,7 @@ ___
 
 ### `parallel` or `|:|` {#op-parallel}
 
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![Parallel Execution](https://img.shields.io/badge/evaluation-parallel-blue.svg?style=flat-square)
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Parallel Scope](https://img.shields.io/badge/scope-new%20parallel-red.svg?style=flat-square) ![Parallel Execution](https://img.shields.io/badge/evaluation-parallel-blue.svg?style=flat-square)
 
 **`('|:|'|'parallel') <expression>`**{: style="font-size: 60%"}
 
@@ -2260,7 +2260,7 @@ ___
 
 
 
-Performs areductionon the elements of the left-hand-side expression, using an
+Performs a reduction on the elements of the left-hand-side expression, using an
      associative accumulation function, and returns the reduced value,
      if any. This is equivalent to Java code of
      
@@ -2330,7 +2330,7 @@ ___
 
 ### `serial` or `|..|` {#op-serial}
 
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![Serial Execution](https://img.shields.io/badge/evaluation-serial-green.svg?style=flat-square)
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Serial Scope](https://img.shields.io/badge/scope-new%20serial-yellow.svg?style=flat-square) ![Serial Execution](https://img.shields.io/badge/evaluation-serial-green.svg?style=flat-square)
 
 **`('|..|'|'serial') <expression>`**{: style="font-size: 60%"}
 
