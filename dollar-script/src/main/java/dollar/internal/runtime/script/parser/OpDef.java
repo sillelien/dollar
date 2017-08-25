@@ -136,7 +136,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
 //        }
         if (symbol == null) {
             if (keyword != null) {
-                stringBuilder.append("`").append(keyword).append("`");
+                stringBuilder.append(" `").append(keyword).append("`");
             } else {
                 stringBuilder.append(" ").append(name);
             }
@@ -147,7 +147,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                 stringBuilder.append(" `").append(symbol).append("` (").append(name).append(")");
             }
         }
-        stringBuilder.append("      {#op-").append(name).append("}").append("\n");
+        stringBuilder.append(" {#op-").append(name).append("}").append("\n\n");
         if (reactive) {
             stringBuilder.append("![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square)");
         } else {
