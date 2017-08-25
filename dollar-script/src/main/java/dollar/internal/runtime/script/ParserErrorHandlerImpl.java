@@ -39,17 +39,11 @@ import static dollar.api.DollarException.unravel;
 
 @SuppressWarnings("UseOfSystemOutOrSystemErr")
 public class ParserErrorHandlerImpl implements ParserErrorHandler {
-    private final boolean missingVariables;
-    private final boolean failfast;
-    private final boolean faultTolerant;
 
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("ParserErrorHandlerImpl");
 
     public ParserErrorHandlerImpl() {
-        missingVariables = true;
-        failfast = true;
-        faultTolerant = false;
     }
 
 
@@ -83,8 +77,7 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
             ErrorReporter.report(getClass(), t);
             System.out.println(t.getMessage());
             return;
-        }
-        if (t instanceof ParserException) {
+        } else if (t instanceof ParserException) {
             Location location = ((ParserException) t).getLocation();
             ParseErrorDetails errorDetails = ((ParserException) t).getErrorDetails();
             System.out.println();
@@ -134,7 +127,4 @@ public class ParserErrorHandlerImpl implements ParserErrorHandler {
         }
     }
 
-    private void log(@NotNull Throwable e) {
-        log.debug(e.getMessage(), e);
-    }
 }
