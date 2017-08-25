@@ -339,7 +339,7 @@ public final class Symbols {
     @NotNull
     public static final OpDef SCRIPT_OP = new OpDef(OTHER, null, null,
                                                     "script", false, false,
-                                                    "<language-name> \\'<script-code>\\`",
+                                                    " <language-name> ``<script-code>`` ",
                                                     NO_PRIORITY, false, NO_SCOPE, null);
 
 
@@ -428,7 +428,7 @@ public final class Symbols {
                                                  NO_PRIORITY, null, SCOPE_WITH_CLOSURE, null);
 
     @NotNull
-    public static final OpDef BLOCK_OP = new OpDef(COLLECTION, null, null, "map",
+    public static final OpDef BLOCK_OP = new OpDef(COLLECTION, null, null, "block",
                                                    false, true,
                                                    "'{' ( <expression> ';' ) * [ <expression> ] '}'",
                                                    NO_PRIORITY, null, SCOPE_WITH_CLOSURE, null);
