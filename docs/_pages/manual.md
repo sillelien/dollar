@@ -302,6 +302,16 @@ var pair2 = "second" : "World";
 
 ```
 
+Dollar maps are also associative arrays (like JavaScript) allowing you to request members from them using the list subscript syntax
+
+```
+{"key1":1,"key2":2} ["key"+1] <=> 1
+{"key1":1,"key2":2} [1] <=> {"key2":2}
+{"key1":1,"key2":2} [1]["key2"] <=> 2
+```
+
+As you can see from the example you can request a key/value pair (or Tuple if you like) by it's position using a numeric subscript. Or you can treat it as an associative array and request an entry by specifying the key name. Any expression can be used as a subscript, numerical values will be used as indexes, otherwise the string value will be used as a key.
+
 
 ### Lists
 
@@ -325,16 +335,6 @@ You can count the size of the list using the size operator `#`.
 ```
 #[1,2,3,4] <=> 4
 ```
-
-Dollar maps are also associative arrays (like JavaScript) allowing you to request members from them using the list subscript syntax
-
-```
-{"key1":1,"key2":2} ["key"+1] <=> 1
-{"key1":1,"key2":2} [1] <=> {"key2":2}
-{"key1":1,"key2":2} [1]["key2"] <=> 2
-```
-
-As you can see from the example you can request a key/value pair (or Tuple if you like) by it's position using a numeric subscript. Or you can treat it as an associative array and request an entry by specifying the key name. Any expression can be used as a subscript, numerical values will be used as indexes, otherwise the string value will be used as a key.
 
 
 ### Ranges
@@ -407,7 +407,7 @@ Error handling couldn't be simpler. Define an error expression using the error k
 ```
 var errorHappened= false
 error { @@ msg; errorHappened= true }
-var a=1/0
+var a= << http://fake.com:99999
 .: errorHappened
 ```
 
@@ -761,27 +761,28 @@ var titles = posts each { $1.title }
 In this example we've requested a single value (using `<<`) from a uri and assigned the value to `posts` then we simply iterate over the results  using `each` and each value (passed in to the scope as `$1`) we extract the `title`. The each operator returns a list of the results and that is what is passed to standard out.
 
 
-## Using Java
+## Using Other Languages
 
-Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of Java. To do so, just surround the Java in backticks.
+Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of another language. To do so, just surround the code in backticks and prefix with the languages name. Currently only `java` is supported but more will be added soon.
 
 ```
 
 var variableA="Hello World"
 
-var java = `out=scope.get("variableA");`
+var java = java `out=scope.get("variableA");`
 
 java <=> "Hello World"
 
 ```
+### Java
 
 A whole bunch of imports are done for you automatically (see below) but you will have to fully qualify any thirdparty libs.
  
 > imports `dollar.lang.*``dollar.internal.runtime.script.api.*` `com.sillelien.dollar.api.*` `java.io.*` `java.math.*` `java.net.*` `java.nio.file.*` `java.util.*` `java.util.concurrent.*` `java.util.function.*` `java.util.prefs.*` `java.util.regex.*` `java.util.stream.*`
  
- > static imports `com.sillelien.dollar.api.DollarStatic.*` `dollar.internal.runtime.script.java.JavaScriptingStaticImports.*`
+ > static imports `DollarStatic.*` `dollar.internal.runtime.script.java.JavaScriptingStaticImports.*`
 
-The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (dollar.internal.runtime.script.api.Scope) object on which you can get and set Dollar variables.
+The return type will be of type `var` and is stored in the variable `out`. The Java snippet also has access to the scope (Scope) object on which you can get and set Dollar variables.
 
 Reactive behaviour is supported on the Scope object with the `listen` and `notify` methods on variables. You'll need to then built your reactivity around those variables or on the `out` object directly (that's a pretty advanced topic).
 
@@ -1034,21 +1035,23 @@ TODO
 
 ## Appendix A - Operators
 ### `all` or `<@`      {#op-all}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('<@'|'all') <expression>`**{: style="font-size: 60%"}
 
 
 
-all
+Returns a non-destructive read of all the values of a collection or URI addressed resource.
+
 
 ```
+var posts = <@ https://jsonplaceholder.typicode.com/posts
 ```
 
 ___
 
 ### `and` or `&&`      {#op-and}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('&&'|'and') <expression>`**{: style="font-size: 60%"}
 
@@ -1066,7 +1069,7 @@ false && false <=> false
 ___
 
 ### `assert` or `.:`      {#op-assert}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('.:'|'assert') <expression>`**{: style="font-size: 60%"}
 
@@ -1084,7 +1087,7 @@ The assertion opeartor is used to assert that an expression holds true. It is a 
 ___
 
 ### `assert-equals` or `<->`      {#op-assert-equals}
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('<->'|'assert-equals') <expression>`**{: style="font-size: 60%"}
 
@@ -1099,7 +1102,7 @@ Asserts that at the point of execution that the left-hand-side is equal to the r
 ___
 
 ### `<=>` (assert-equals-reactive)      {#op-assert-equals-reactive}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> '<=>' <expression>`**{: style="font-size: 60%"}
 
@@ -1115,24 +1118,63 @@ lamdaVar(5) <=> 15
 ___
 
 ### `=` (assign)      {#op-assign}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 
 
-assign
+Values can be assigned to a variable using the standard `=` assignment operator. A variable is declared using either 'var', 'const' or 'volatile'. 
+
+`var` is used to mark a simple declaration of a mutable variable. E.g. `var a = 1; a= 2`. 
+
+`const` is used to declare a readonly variable, since all values in Dollar are immutable this makes the variable both readonly and immutable.
+
+`volatile` is used to declare the variable as mutable from multiple threads.
+
+Although there are no compile type constraints in Dollar a runtime type system can be built using constraints. Constraints are declared at the time of variable assignment or declaration. A constraint once declared on a variable cannot be changed. The constraint is placed before the variable name at the time of declaration in parenthesis.
+ 
+ Of course since the use of `(it is XXXX)` is very common, so Dollar provides a specific runtime type constraint that can be added in conjunction with other constraints. Simply prefix the assignment or decleration with `<XXXX>` where XXXX is the runtime type.
+ 
+ Values can be also be marked for `export` as in Javascript.
+
 
 ```
-var a=1
-a causes { @@ $1 }
-a=2
-a=3
-a=4
+var (it < 100) a = 50
+var (it > previous || previous is Void) b = 5
+b=6
+b=7
+var ( it is String) s1="String value"
+var <string> (#it > 5) s2="String value"
+const immutableValue= "Hello World"
+```
+
+___
+
+### `?=` (assign-when)      {#op-assign-when}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
+
+
+___
+
+### builtin      {#op-builtin}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
+
+**`<name> (<parameter>)*`**{: style="font-size: 60%"}
+
+
+
+Dollar has many built-in functions.
+
+//TODO: document them
+
+
+```
+var now= DATE();
 ```
 
 ___
 
 ### cast      {#op-cast}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> 'as' <type>`**{: style="font-size: 60%"}
 
@@ -1180,7 +1222,7 @@ true as VOID <=> void
 ___
 
 ### `causes` or `=>`      {#op-causes}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('=>'|'causes') <expression>`**{: style="font-size: 60%"}
 
@@ -1201,22 +1243,57 @@ a=2 ; &a <=> 2 ; &b <=> 2
 ___
 
 ### `choose` or `?*`      {#op-choose}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('?*'|'choose') <expression>`**{: style="font-size: 60%"}
 
 
 
-choose
+The choose operator is a simple reversal of the subscript operator used for code clarity.
+
 
 ```
+var value= "red";
+value choose {"red": "roses", "green": "tomatoes"} <-> "roses"
+```
 
+___
+
+### `collect`      {#op-collect}
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg)
+
+**`collect <expression> [ 'until' <expression> ] [ 'unless' <expression> ] <expression>`**{: style="font-size: 60%"}
+
+
+
+The `collect` operator listens for changes in the supplied expression adding all the values to a list until the `until` clause is triggered. It then evaluates the second expression with the values `it` for the current value, `count` for the number of messages **received** since last emission and `collected` for the collected values. The whole operator itself emits `void` unless the collection operation is triggered in which case it emits the collection itself. Values can be skipped with an `unless` clause. Skipped messages increase the count value, so use `#collected` if you want the number of collected values.
+
+
+```
+var e=void
+
+//Length is greater than or equal to 4 unless void
+var (#it >= 4 || it is VOID) collectedValues=void
+
+//count starts at 0 so this means five to collect (except if it contains the value 10)
+collect e until count == 4 unless it == 10{
+    print count
+    print collected
+    collectedValues= collected
+}
+
+e=1; e=2; e=3; e=4; e=5; e=6
+&collectedValues <=> [1,2,3,4,5]
+e=7; e=8; e=9; e=10
+&collectedValues <=> [6,7,8,9]
+e=11; e=12; e=13; e=14; e=15; e=16
+&collectedValues <=> [11,12,13,14,15]
 ```
 
 ___
 
 ### `create` or `|||>`      {#op-create}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('|||>'|'create') <expression>`**{: style="font-size: 60%"}
 
@@ -1230,7 +1307,7 @@ Creates a service described typically by a URI.
 ___
 
 ### `debug` or `!!`      {#op-debug}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('!!'|'debug') <expression>`**{: style="font-size: 60%"}
 
@@ -1245,13 +1322,16 @@ Sends the result of the right-hand-side to the debug log.
 ___
 
 ### `:=` (declaration)      {#op-declaration}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`( [export] [const] <variable-name> ':=' <expression>) | ( def <variable-name> <expression )`**{: style="font-size: 60%"}
 
 
 
 Declares a variable to have a value, this is declarative and reactive such that saying `const a := b + 1` means that `a` always equals `b+1` no matter the value of b. The shorthand `def` is the same as `const <variable-name> :=` so `def a {b+1}` is the same as `const a := b + 1` but is syntactically better when declaring function like variables.
+
+Declarations can also be marked as pure so that they can be used in pure scopes, this is done by prefixing the declaration with `pure`.
+
 
 ```
 var variableA = 1
@@ -1264,7 +1344,7 @@ variableA = 2
 ___
 
 ### `dec` or `--`      {#op-decrement}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('--'|'dec') <expression>`**{: style="font-size: 60%"}
 
@@ -1282,7 +1362,7 @@ unchanged <-> 1;
 ___
 
 ### `default` or `:-`      {#op-default}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> (':-'|'default') <expression>`**{: style="font-size: 60%"}
 
@@ -1298,7 +1378,7 @@ void :- "Hello" <=> "Hello"
 ___
 
 ### `destroy` or `<|||`      {#op-destroy}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('<|||'|'destroy') <expression>`**{: style="font-size: 60%"}
 
@@ -1312,7 +1392,7 @@ destroy
 ___
 
 ### `divide` or `/`      {#op-divide}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('/'|'divide') <expression>`**{: style="font-size: 60%"}
 
@@ -1333,7 +1413,7 @@ Divides one value by another.
 ___
 
 ### `drain` or `<-<`      {#op-drain}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('<-<'|'drain') <expression>`**{: style="font-size: 60%"}
 
@@ -1348,7 +1428,7 @@ Drain an expression, using a URI of all it's data. This is a complete destructiv
 ___
 
 ### `each` or `=>>`      {#op-each}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('=>>'|'each') <expression>`**{: style="font-size: 60%"}
 
@@ -1366,7 +1446,7 @@ var titles = posts each { $1.title }
 ___
 
 ### `else` or `-:`      {#op-else}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('-:'|'else') <expression>`**{: style="font-size: 60%"}
 
@@ -1385,7 +1465,7 @@ var b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 ___
 
 ### `equal` or `==`      {#op-equal}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('=='|'equal') <expression>`**{: style="font-size: 60%"}
 
@@ -1402,7 +1482,7 @@ Compares two values to see if they are equal. Works with all types and maps to t
 ___
 
 ### `err` or `??`      {#op-err}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('??'|'err') <expression>`**{: style="font-size: 60%"}
 
@@ -1417,7 +1497,7 @@ Sends the result of the right-hand-side to `stderr`.
 ___
 
 ### `error` or `?->`      {#op-error}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('?->'|'error') <expression>`**{: style="font-size: 60%"}
 
@@ -1427,15 +1507,16 @@ The right-hand-side is executed if an error occurs in the current scope.
 
 ```
 var errorHappened= false
-error { @@ msg; errorHappened= true }
-var a=1/0
-.: errorHappened
+error { ?? msg; errorHappened= true }
+def redis "redis://localhost:999999/test" as uri
+write ("Hello World " + DATE()) to redis
+.: &errorHappened
 ```
 
 ___
 
 ### `fix` or `&`      {#op-fix}
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('&'|'fix') <expression>`**{: style="font-size: 60%"}
 
@@ -1454,7 +1535,7 @@ reactiveValue= 2
 ___
 
 ### `for`      {#op-for}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg)
 
 **`for <variable-name> <iterable-expression> <expression>`**{: style="font-size: 60%"}
 
@@ -1472,7 +1553,7 @@ for i in 1..10 {
 ___
 
 ### `fork` or `-<`      {#op-fork}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('-<'|'fork') <expression>`**{: style="font-size: 60%"}
 
@@ -1495,7 +1576,7 @@ var d= TIME()
 ___
 
 ### `>` (greater-than)      {#op-greater-than}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> '>' <expression>`**{: style="font-size: 60%"}
 
@@ -1510,7 +1591,7 @@ The standard `>` operator, it uses Comparable#compareTo and will work with any D
 ___
 
 ### `>=` (greater-than-equal)      {#op-greater-than-equal}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> '>=' <expression>`**{: style="font-size: 60%"}
 
@@ -1527,7 +1608,7 @@ The standard `>=` operator, it uses Comparable#compareTo and will work with any 
 ___
 
 ### `if` or `???`      {#op-if}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('???'|'if') <expression>`**{: style="font-size: 60%"}
 
@@ -1561,7 +1642,7 @@ var b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 ___
 
 ### `in` or `€`      {#op-in}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('€'|'in') <expression>`**{: style="font-size: 60%"}
 
@@ -1578,7 +1659,7 @@ Returns true if the left-hand-side expression is contained in the right-hand-sid
 ___
 
 ### `inc` or `++`      {#op-increment}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('++'|'inc') <expression>`**{: style="font-size: 60%"}
 
@@ -1595,8 +1676,26 @@ unchanged <-> 1;
 
 ___
 
+### `is`      {#op-is}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
+
+**`<expression> 'is' <expression>`**{: style="font-size: 60%"}
+
+
+
+A boolean operator that returns true if the left-hand-side variable is one of the types listed on the right-hand-side. Analogous to Java's `instanceof`.
+
+
+```
+.: 1 is Integer,Decimal
+.: "Hello" is String
+.: 1.0 is Decimal,String
+```
+
+___
+
 ### `<` (less-than)      {#op-less-than}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> '<' <expression>`**{: style="font-size: 60%"}
 
@@ -1612,7 +1711,7 @@ The standard `<` operator, it uses Comparable#compareTo and will work with any D
 ___
 
 ### `<=` (less-than-equal)      {#op-less-than-equal}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> '<=' <expression>`**{: style="font-size: 60%"}
 
@@ -1629,12 +1728,53 @@ The standard `<=` operator, it uses Comparable#compareTo and will work with any 
 
 ___
 
-### `?=` (listen-assign)      {#op-listen-assign}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+### list      {#op-list}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![New Scope](https://img.shields.io/badge/scope-closure-green.svg)
+
+**`'[' ( <expression> ',' ) * [ <expression> ] ']'`**{: style="font-size: 60%"}
 
 
 
-listen-assign
+
+Dollar's lists are pretty similar to JavaScript arrays. They are defined using the `[1,2,3]` style syntax and accessed using the `x[y]` subscript syntax. You can count the size of the list using the size operator `#`. Dollar maps are also associative arrays (like JavaScript) allowing you to request members from them using the list subscript syntax `x[y]` or the member syntax `.`.
+
+
+```
+[1,2,3][1] <=> 2
+#[1,2,3,4] <=> 4
+
+.: [1,2,3] + 4 == [1,2,3,4];
+.: [1,2,3,4] - 4 == [1,2,3];
+.: [] + 1 == [1] ;
+.: [1] + [1] == [1,1];
+.: [1] + 1 == [1,1];
+
+```
+
+___
+
+### map      {#op-map}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![New Scope](https://img.shields.io/badge/scope-closure-green.svg)
+
+**`'{' ( <expression> ';' ) * [ <expression> ] '}'`**{: style="font-size: 60%"}
+
+
+
+
+
+```
+```
+
+___
+
+### map      {#op-map}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![New Scope](https://img.shields.io/badge/scope-closure-green.svg)
+
+**`'{' ( <expression> ',' ) * [ <expression> ] '}'`**{: style="font-size: 60%"}
+
+
+
+
 
 ```
 ```
@@ -1642,7 +1782,7 @@ listen-assign
 ___
 
 ### `.` (member)      {#op-member}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> '.' <expression>`**{: style="font-size: 60%"}
 
@@ -1659,7 +1799,7 @@ The membership or `.` operator accesses the member of a map by it's key.
 ___
 
 ### `minus` or `-`      {#op-minus}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('-'|'minus') <expression>`**{: style="font-size: 60%"}
 
@@ -1673,8 +1813,22 @@ Deducts a value from another value
 
 ___
 
+### `module`      {#op-module}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg)
+
+**`module <name> (<parameter>)*`**{: style="font-size: 60%"}
+
+
+
+
+
+```
+```
+
+___
+
 ### `mod` or `%`      {#op-modulus}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('%'|'mod') <expression>`**{: style="font-size: 60%"}
 
@@ -1693,7 +1847,7 @@ Returns the remainder (modulus) of the division of the left-hand-side by the rig
 ___
 
 ### `multiply` or `*`      {#op-multiply}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('*'|'multiply') <expression>`**{: style="font-size: 60%"}
 
@@ -1708,13 +1862,14 @@ Returns the product of two values. If the left-hand-side is scalar (non collecti
 .: 1 * 1.0 is DECIMAL
 .: 2.0 * 1 is DECIMAL
 .: 2.0 * 1.0 is DECIMAL
+.: DATE() * 10 is Decimal
 
 ```
 
 ___
 
 ### `negate` or `-`      {#op-negate}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('-'|'negate') <expression>`**{: style="font-size: 60%"}
 
@@ -1729,7 +1884,7 @@ Negates a value.
 ___
 
 ### `not` or `!`      {#op-not}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('!'|'not') <expression>`**{: style="font-size: 60%"}
 
@@ -1746,7 +1901,7 @@ not( true ) <=> false
 ___
 
 ### `not-equal` or `!=`      {#op-not-equal}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('!='|'not-equal') <expression>`**{: style="font-size: 60%"}
 
@@ -1762,7 +1917,7 @@ Returns true if the two expression are not equal.
 ___
 
 ### `or` or `||`      {#op-or}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('||'|'or') <expression>`**{: style="font-size: 60%"}
 
@@ -1779,7 +1934,7 @@ false || false <=> false
 ___
 
 ### `pair` or `:`      {#op-pair}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> (':'|'pair') <expression>`**{: style="font-size: 60%"}
 
@@ -1808,8 +1963,8 @@ Causes the right-hand-side expression to be evaluated in parallel, most useful i
 
 ```
 const testList := [ TIME(), {SLEEP(1 Sec); TIME();}, TIME() ];
-var a= |..| testList;
-var b= |:| testList;
+var a= |..| testList ;
+var b= |:| testList ;
 
 //Test different execution orders
 .: a[2] >= a[1]
@@ -1819,7 +1974,7 @@ var b= |:| testList;
 ___
 
 ### parameter      {#op-parameter}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![New Scope](https://img.shields.io/badge/scope-closure-green.svg)
 
 **`( <expression> | <builtin-name> | <function-name> ) '(' ( <expression> | <name> '=' <expression> )* ')'`**{: style="font-size: 60%"}
 
@@ -1871,7 +2026,7 @@ func ("Hello", "World") <=> "World Hello"
 ___
 
 ### `pause` or `||>`      {#op-pause}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('||>'|'pause') <expression>`**{: style="font-size: 60%"}
 
@@ -1885,7 +2040,7 @@ Pauses a service described typically by a URI.
 ___
 
 ### `pipe` or `|`      {#op-pipe}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg)
 
 **`<expression> ('|'|'pipe') <expression>`**{: style="font-size: 60%"}
 
@@ -1910,7 +2065,7 @@ def funcB {
 ___
 
 ### `plus` or `+`      {#op-plus}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('+'|'plus') <expression>`**{: style="font-size: 60%"}
 
@@ -1938,7 +2093,7 @@ var pair2 = "second" : "World";
 ___
 
 ### `print` or `@@`      {#op-print}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('@@'|'print') <expression>`**{: style="font-size: 60%"}
 
@@ -1954,7 +2109,7 @@ print "World"
 ___
 
 ### `publish` or `*>`      {#op-publish}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('*>'|'publish') <expression>`**{: style="font-size: 60%"}
 
@@ -1968,7 +2123,7 @@ publish
 ___
 
 ### `pure`      {#op-pure}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`'pure' <expression>`**{: style="font-size: 60%"}
 
@@ -1994,7 +2149,7 @@ var a= pure {
 ___
 
 ### `range` or `..`      {#op-range}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('..'|'range') <expression>`**{: style="font-size: 60%"}
 
@@ -2010,7 +2165,7 @@ Creates a RANGE between the two values specified.
 ___
 
 ### `read`      {#op-read}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`'read' ['block'] ['mutate'] ['from'] <expression>`**{: style="font-size: 60%"}
 
@@ -2024,7 +2179,7 @@ The read operator is used to read data from an expression typically a URI. It ha
 ___
 
 ### `<<` (read-simple)      {#op-read-simple}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`'<<' <expression>`**{: style="font-size: 60%"}
 
@@ -2038,15 +2193,75 @@ Performs a simple read from another data item, typically this is used with a URI
 ___
 
 ### `reduce` or `>>=`      {#op-reduce}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('>>='|'reduce') <expression>`**{: style="font-size: 60%"}
 
 
 
-reduce
+Performs areductionon the elements of the left-hand-side expression, using an
+     associative accumulation function, and returns the reduced value,
+     if any. This is equivalent to Java code of
+     
+```java
+ boolean foundAny = false;
+ T result = null;
+ for (T element : this stream) {
+     if (!foundAny) {
+         foundAny = true;
+         result = element;
+     }
+     else
+         result = accumulator.apply(result, element);
+ }
+ return foundAny ? Optional.of(result) : Optional.empty();
 
 ```
+     
+but is not constrained to execute sequentially.
+
+The rhs function/expression must be an associative function.
+
+
+
+```
+[1,2,3,4,5] reduce ($1 + $2)
+```
+
+___
+
+### script      {#op-script}
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
+
+**`<language-name> \'<script-code>\``**{: style="font-size: 60%"}
+
+
+
+
+Hopefully you'll find Dollar a useful and productive language, but there will be many times when you just want to quickly nip out to a bit of another language. To do so, just surround the code in backticks and prefix with the languages name. Currently only `java` is supported but more will be added soon.
+
+
+```
+const variableA="Hello World"
+
+
+//In this example we are accessing the scope from within Java to directly access variables in Dollar.
+//Note that the script has scope closure so all variables in both the lexical and runtime scope
+//are available.
+
+const javaTest = java`
+out=scope.get("variableA");
+`
+
+javaTest <=> "Hello World"
+
+//Now we parametrize the script. The parameters are available in a list of 'var' objects (see the dollar-core docs)
+
+const javaWithParam = java`
+out=in.get(0).$multiply(in.get(1)).$multiply(in.get(2));
+` (10,20,30)
+
+javaWithParam <=> 10*20*30
 ```
 
 ___
@@ -2066,7 +2281,7 @@ Causes the right-hand-side expression to be evaluated in serial, most useful in 
 ___
 
 ### `size` or `#`      {#op-size}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('#'|'size') <expression>`**{: style="font-size: 60%"}
 
@@ -2080,7 +2295,7 @@ Returns the size of non-scalar types or the length of a string.
 ___
 
 ### `start` or `|>`      {#op-start}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('|>'|'start') <expression>`**{: style="font-size: 60%"}
 
@@ -2094,7 +2309,7 @@ Starts a service described typically by a URI.
 ___
 
 ### `state` or `<|>`      {#op-state}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('<|>'|'state') <expression>`**{: style="font-size: 60%"}
 
@@ -2108,7 +2323,7 @@ Returns the state of a service described typically by a URI.
 ___
 
 ### `stop` or `<|`      {#op-stop}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('<|'|'stop') <expression>`**{: style="font-size: 60%"}
 
@@ -2122,7 +2337,7 @@ Stops a service described typically by a URI.
 ___
 
 ### `subscribe` or `<*`      {#op-subscribe}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> ('<*'|'subscribe') <expression>`**{: style="font-size: 60%"}
 
@@ -2136,7 +2351,7 @@ subscribe
 ___
 
 ### `*=` (subscribe-assign)      {#op-subscribe-assign}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 
 
@@ -2148,7 +2363,7 @@ subscribe-assign
 ___
 
 ### subscript      {#op-subscript}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`( <expression> '[' <index-expression>|<key-expression> ']' ) | ( <expression> '.' (<index-expression>|<key-expression>) )`**{: style="font-size: 60%"}
 
@@ -2165,7 +2380,7 @@ subscript operator
 ___
 
 ### `truthy` or `~`      {#op-truthy}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('~'|'truthy') <expression>`**{: style="font-size: 60%"}
 
@@ -2178,8 +2393,22 @@ The truthy operator `~` converts any value to a boolean by applying the rule tha
 
 ___
 
+### unit      {#op-unit}
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg)
+
+**`<numeric> <unit-name>`**{: style="font-size: 60%"}
+
+
+
+
+
+```
+```
+
+___
+
 ### `unpause` or `<||`      {#op-unpause}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`('<||'|'unpause') <expression>`**{: style="font-size: 60%"}
 
@@ -2193,7 +2422,7 @@ Un-pauses a service described typically by a URI.
 ___
 
 ### `when` or `?`      {#op-when}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg)
 
 **`<expression> ('?'|'when') <expression>`**{: style="font-size: 60%"}
 
@@ -2219,7 +2448,7 @@ when c > 3 { @@ c}
 ___
 
 ### `while`      {#op-while}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![pure](https://img.shields.io/badge/function-pure-green.svg) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg)
 
 **`while <condition> <expression>`**{: style="font-size: 60%"}
 
@@ -2233,7 +2462,7 @@ while operator
 ___
 
 ### `write`      {#op-write}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`'write' ['block'] ['mutate'] ['to'] <expression>`**{: style="font-size: 60%"}
 
@@ -2247,7 +2476,7 @@ The write operator is used to write data to an expression typically a URI. It ha
 ___
 
 ### `>>` (write-simple)      {#op-write-simple}
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg) ![impure](https://img.shields.io/badge/function-impure-blue.svg) ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)
 
 **`<expression> '>>' <expression>`**{: style="font-size: 60%"}
 
@@ -2265,9 +2494,6 @@ ___
 
 
 ### block
-
-
-### collect
 
 
 ### const
@@ -2306,9 +2532,6 @@ Boolean false.
 ### is
 
 
-### module
-
-
 ### mutate
 
 
@@ -2328,9 +2551,6 @@ A NULL value of ANY type.
 
 The start of a pure expression.
 
-
-
-### read
 
 
 ### to
@@ -2366,16 +2586,7 @@ Marks a variable as volatile, i.e. it can be accessed by multiple threads.
 
 
 
-### when
-
-
-### while
-
-
 ### with
-
-
-### write
 
 
 ### yes
@@ -2450,7 +2661,6 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[choose](#op-choose)          |`choose`       | `?*`     |binary    |
 |[drain](#op-drain)            |`drain`        | `<-<`    |prefix    |
 |[publish](#op-publish)        |`publish`      | `*>`     |binary    |
-|[pure](#op-pure)              |`pure`         |          |prefix    |
 |[read](#op-read)              |`read`         |          |prefix    |
 |[read-simple](#op-read-simple)|               | `<<`     |prefix    |
 |[subscribe](#op-subscribe)    |`subscribe`    | `<*`     |binary    |
@@ -2463,6 +2673,7 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[else](#op-else)              |`else`         | `-:`     |binary    |
 |[fork](#op-fork)              |`fork`         | `-<`     |prefix    |
 |[if](#op-if)                  |`if`           | `???`    |binary    |
+|[is](#op-is)                  |`is`           |          |binary    |
 |[parallel](#op-parallel)      |`parallel`     | `|:|`    |prefix    |
 |[pause](#op-pause)            |`pause`        | `||>`    |prefix    |
 |[serial](#op-serial)          |`serial`       | `|..|`   |prefix    |
@@ -2471,8 +2682,8 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[stop](#op-stop)              |`stop`         | `<|`     |prefix    |
 |[unpause](#op-unpause)        |`unpause`      | `<||`    |prefix    |
 |[assign](#op-assign)          |               | `=`      |assignment|
+|[assign-when](#op-assign-when)|               | `?=`     |assignment|
 |[declaration](#op-declaration)|               | `:=`     |assignment|
-|[listen-assign](#op-listen-assign)|               | `?=`     |assignment|
 |[subscribe-assign](#op-subscribe-assign)|               | `*=`     |assignment|
 |[assert](#op-assert)          |`assert`       | `.:`     |prefix    |
 |[assert-equals](#op-assert-equals)|`assert-equals`| `<->`    |binary    |
@@ -2481,3 +2692,12 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[err](#op-err)                |`err`          | `??`     |prefix    |
 |[error](#op-error)            |`error`        | `?->`    |prefix    |
 |[print](#op-print)            |`print`        | `@@`     |prefix    |
+|[builtin](#op-builtin)        |               |          |other     |
+|[collect](#op-collect)        |`collect`      |          |control   |
+|[list](#op-list)              |               |          |collection|
+|[map](#op-map)                |               |          |collection|
+|[map](#op-map)                |               |          |collection|
+|[module](#op-module)          |`module`       |          |other     |
+|[pure](#op-pure)              |`pure`         |          |prefix    |
+|[script](#op-script)          |               |          |other     |
+|[unit](#op-unit)              |               |          |postfix   |
