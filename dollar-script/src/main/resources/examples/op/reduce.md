@@ -1,4 +1,4 @@
-Performs areductionon the elements of the left-hand-side expression, using an
+Performs a reduction on the elements of the left-hand-side expression, using an
      associative accumulation function, and returns the reduced value,
      if any. This is equivalent to Java code of
      
