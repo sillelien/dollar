@@ -347,7 +347,7 @@
 <a class="jxr_linenumber" name="L339" href="#L339">339</a>     @NotNull
 <a class="jxr_linenumber" name="L340" href="#L340">340</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> SCRIPT_OP = <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a>(OTHER, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>,
 <a class="jxr_linenumber" name="L341" href="#L341">341</a>                                                     <span class="jxr_string">"script"</span>, false, false,
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>                                                     <span class="jxr_string">"&lt;language-name&gt; &#92;&#92;'&lt;script-code&gt;&#92;&#92;`"</span>,
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>                                                     <span class="jxr_string">" &lt;language-name&gt; ``&lt;script-code&gt;`` "</span>,
 <a class="jxr_linenumber" name="L343" href="#L343">343</a>                                                     NO_PRIORITY, false, NO_SCOPE, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 
@@ -436,7 +436,7 @@
 <a class="jxr_linenumber" name="L428" href="#L428">428</a>                                                  NO_PRIORITY, <strong class="jxr_keyword">null</strong>, SCOPE_WITH_CLOSURE, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 
 <a class="jxr_linenumber" name="L430" href="#L430">430</a>     @NotNull
-<a class="jxr_linenumber" name="L431" href="#L431">431</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> BLOCK_OP = <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a>(COLLECTION, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"map"</span>,
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> BLOCK_OP = <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a>(COLLECTION, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"block"</span>,
 <a class="jxr_linenumber" name="L432" href="#L432">432</a>                                                    false, <strong class="jxr_keyword">true</strong>,
 <a class="jxr_linenumber" name="L433" href="#L433">433</a>                                                    <span class="jxr_string">"'{' ( &lt;expression&gt; ';' ) * [ &lt;expression&gt; ] '}'"</span>,
 <a class="jxr_linenumber" name="L434" href="#L434">434</a>                                                    NO_PRIORITY, <strong class="jxr_keyword">null</strong>, SCOPE_WITH_CLOSURE, <strong class="jxr_keyword">null</strong>);

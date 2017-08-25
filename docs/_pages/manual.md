@@ -1162,6 +1162,15 @@ ___
 
 ___
 
+### block {#op-block}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new%20with%20closure-green.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+
+**`'{' ( <expression> ';' ) * [ <expression> ] '}'`**{: style="font-size: 60%"}
+
+
+___
+
 ### builtin {#op-builtin}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
@@ -1794,21 +1803,6 @@ ___
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new%20with%20closure-green.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
 
-**`'{' ( <expression> ';' ) * [ <expression> ] '}'`**{: style="font-size: 60%"}
-
-
-
-
-
-```
-```
-
-___
-
-### map {#op-map}
-
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new%20with%20closure-green.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
-
 **`'{' ( <expression> ',' ) * [ <expression> ] '}'`**{: style="font-size: 60%"}
 
 
@@ -2295,7 +2289,7 @@ ___
 
 ![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
 
-**`<language-name> \'<script-code>\``**{: style="font-size: 60%"}
+**` <language-name> ``<script-code>`` `**{: style="font-size: 60%"}
 
 
 
@@ -2769,10 +2763,10 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[err](#op-err)                |`err`          | `!?`     |prefix    |
 |[error](#op-error)            |`error`        | `?->`    |prefix    |
 |[print](#op-print)            |`print`        | `@@`     |prefix    |
+|[block](#op-block)            |               |          |collection|
 |[builtin](#op-builtin)        |               |          |other     |
 |[collect](#op-collect)        |`collect`      |          |control   |
 |[list](#op-list)              |               |          |collection|
-|[map](#op-map)                |               |          |collection|
 |[map](#op-map)                |               |          |collection|
 |[module](#op-module)          |`module`       |          |other     |
 |[pure](#op-pure)              |`pure`         |          |prefix    |

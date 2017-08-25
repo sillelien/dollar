@@ -31,7 +31,6 @@ dollar.lang
 dollar.learner.simple
 dollar.main
 dollar.monitor
-dollar.pipe
 dollar.plugins.pipe
 dollar.redis
 dollar.resources.std
