@@ -68,7 +68,7 @@ jobs:
             name: promote
             command: ~/build-utils/promote_from_staging.sh
 
-  sonar:
+    sonar:
       <<: *defaults
 
       steps:
