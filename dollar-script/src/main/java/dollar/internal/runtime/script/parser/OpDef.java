@@ -149,21 +149,34 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         }
         stringBuilder.append("      {#op-").append(name).append("}").append("\n");
         if (reactive) {
-            stringBuilder.append("![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg)");
+            stringBuilder.append("![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square)");
         } else {
-            stringBuilder.append("![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg)");
+            stringBuilder.append("![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square)");
         }
         if ((pure != null) && pure) {
-            stringBuilder.append(" ![pure](https://img.shields.io/badge/function-pure-green.svg)");
+            stringBuilder.append(" ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square)");
         } else {
-            stringBuilder.append(" ![impure](https://img.shields.io/badge/function-impure-blue.svg)");
+            stringBuilder.append(" ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square)");
         }
         if (nodeOptions.equals(NO_SCOPE)) {
-            stringBuilder.append(" ![No Scope](https://img.shields.io/badge/scope-none-grey.svg)");
+            stringBuilder.append(" ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square)");
         } else if (nodeOptions.equals(NEW_SCOPE)) {
-            stringBuilder.append(" ![New Scope](https://img.shields.io/badge/scope-new-blue.svg)");
+            stringBuilder.append(" ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square)");
         } else if (nodeOptions.equals(SCOPE_WITH_CLOSURE)) {
-            stringBuilder.append(" ![New Scope](https://img.shields.io/badge/scope-closure-green.svg)");
+            stringBuilder.append(
+                    " ![New Scope](https://img.shields.io/badge/scope-new%20with%20closure-green.svg?style=flat-square)");
+        }
+        if (nodeOptions.isParallel() != null) {
+            if (nodeOptions.isParallel()) {
+                stringBuilder.append(
+                        " ![Parallel Execution](https://img.shields.io/badge/evaluation-parallel-blue.svg?style=flat-square)");
+            } else {
+                stringBuilder.append(
+                        " ![Serial Execution](https://img.shields.io/badge/evaluation-serial-green.svg?style=flat-square)");
+            }
+        } else {
+            stringBuilder.append(
+                    " ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)");
         }
         stringBuilder.append("\n\n");
         if (bnf == null) {
