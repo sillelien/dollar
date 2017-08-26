@@ -1054,7 +1054,7 @@ TODO
 ## Appendix A - Operators
 ### `all` or `<@` {#op-all}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('<@'|'all') <expression>`**{: style="font-size: 60%"}
 
@@ -1071,7 +1071,7 @@ ___
 
 ### `and` or `&&` {#op-and}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('&&'|'and') <expression>`**{: style="font-size: 60%"}
 
@@ -1090,7 +1090,7 @@ ___
 
 ### `assert` or `.:` {#op-assert}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('.:'|'assert') <expression>`**{: style="font-size: 60%"}
 
@@ -1109,7 +1109,7 @@ ___
 
 ### `assert-equals` or `<->` {#op-assert-equals}
 
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('<->'|'assert-equals') <expression>`**{: style="font-size: 60%"}
 
@@ -1125,7 +1125,7 @@ ___
 
 ### `<=>` (assert-equals-reactive) {#op-assert-equals-reactive}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> '<=>' <expression>`**{: style="font-size: 60%"}
 
@@ -1142,7 +1142,7 @@ ___
 
 ### `=` (assign) {#op-assign}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 
 
@@ -1175,14 +1175,14 @@ ___
 
 ### `?=` (assign-when) {#op-assign-when}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 
 ___
 
 ### block {#op-block}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new%20with%20closure-green.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new%20with%20closure-green.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`'{' ( <expression> ';' ) * [ <expression> ] '}'`**{: style="font-size: 60%"}
 
@@ -1191,7 +1191,7 @@ ___
 
 ### builtin {#op-builtin}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<name> (<parameter>)*`**{: style="font-size: 60%"}
 
@@ -1210,7 +1210,7 @@ ___
 
 ### cast {#op-cast}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> 'as' <type>`**{: style="font-size: 60%"}
 
@@ -1259,7 +1259,7 @@ ___
 
 ### `causes` or `=>` {#op-causes}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('=>'|'causes') <expression>`**{: style="font-size: 60%"}
 
@@ -1281,7 +1281,7 @@ ___
 
 ### `choose` or `?*` {#op-choose}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('?*'|'choose') <expression>`**{: style="font-size: 60%"}
 
@@ -1299,7 +1299,7 @@ ___
 
 ### `collect` {#op-collect}
 
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`collect <expression> [ 'until' <expression> ] [ 'unless' <expression> ] <expression>`**{: style="font-size: 60%"}
 
@@ -1333,7 +1333,7 @@ ___
 
 ### `create` or `|||>` {#op-create}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('|||>'|'create') <expression>`**{: style="font-size: 60%"}
 
@@ -1348,7 +1348,7 @@ ___
 
 ### `debug` or `!!` {#op-debug}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('!!'|'debug') <expression>`**{: style="font-size: 60%"}
 
@@ -1364,7 +1364,7 @@ ___
 
 ### `:=` (declaration) {#op-declaration}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`( [export] [const] <variable-name> ':=' <expression>) | ( def <variable-name> <expression )`**{: style="font-size: 60%"}
 
@@ -1387,7 +1387,7 @@ ___
 
 ### `dec` or `--` {#op-decrement}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('--'|'dec') <expression>`**{: style="font-size: 60%"}
 
@@ -1406,7 +1406,7 @@ ___
 
 ### `default` or `:-` {#op-default}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> (':-'|'default') <expression>`**{: style="font-size: 60%"}
 
@@ -1423,7 +1423,7 @@ ___
 
 ### `destroy` or `<|||` {#op-destroy}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('<|||'|'destroy') <expression>`**{: style="font-size: 60%"}
 
@@ -1438,7 +1438,7 @@ ___
 
 ### `divide` or `/` {#op-divide}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('/'|'divide') <expression>`**{: style="font-size: 60%"}
 
@@ -1460,7 +1460,7 @@ ___
 
 ### `drain` or `<-<` {#op-drain}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('<-<'|'drain') <expression>`**{: style="font-size: 60%"}
 
@@ -1476,7 +1476,7 @@ ___
 
 ### `each` or `=>>` {#op-each}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('=>>'|'each') <expression>`**{: style="font-size: 60%"}
 
@@ -1495,7 +1495,7 @@ ___
 
 ### `else` or `-:` {#op-else}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('-:'|'else') <expression>`**{: style="font-size: 60%"}
 
@@ -1515,7 +1515,7 @@ ___
 
 ### `equal` or `==` {#op-equal}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('=='|'equal') <expression>`**{: style="font-size: 60%"}
 
@@ -1533,7 +1533,7 @@ ___
 
 ### `err` or `!?` {#op-err}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('!?'|'err') <expression>`**{: style="font-size: 60%"}
 
@@ -1549,7 +1549,7 @@ ___
 
 ### `error` or `?->` {#op-error}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('?->'|'error') <expression>`**{: style="font-size: 60%"}
 
@@ -1569,7 +1569,7 @@ ___
 
 ### `fix` or `&` {#op-fix}
 
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('&'|'fix') <expression>`**{: style="font-size: 60%"}
 
@@ -1589,7 +1589,7 @@ ___
 
 ### `for` {#op-for}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`for <variable-name> <iterable-expression> <expression>`**{: style="font-size: 60%"}
 
@@ -1608,7 +1608,7 @@ ___
 
 ### `fork` or `-<` {#op-fork}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('-<'|'fork') <expression>`**{: style="font-size: 60%"}
 
@@ -1632,7 +1632,7 @@ ___
 
 ### `>` (greater-than) {#op-greater-than}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> '>' <expression>`**{: style="font-size: 60%"}
 
@@ -1648,7 +1648,7 @@ ___
 
 ### `>=` (greater-than-equal) {#op-greater-than-equal}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> '>=' <expression>`**{: style="font-size: 60%"}
 
@@ -1666,7 +1666,7 @@ ___
 
 ### `if` or `???` {#op-if}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('???'|'if') <expression>`**{: style="font-size: 60%"}
 
@@ -1701,7 +1701,7 @@ ___
 
 ### `in` or `€` {#op-in}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('€'|'in') <expression>`**{: style="font-size: 60%"}
 
@@ -1719,7 +1719,7 @@ ___
 
 ### `inc` or `++` {#op-increment}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('++'|'inc') <expression>`**{: style="font-size: 60%"}
 
@@ -1738,7 +1738,7 @@ ___
 
 ### `is` {#op-is}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> 'is' <expression>`**{: style="font-size: 60%"}
 
@@ -1757,7 +1757,7 @@ ___
 
 ### `<` (less-than) {#op-less-than}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> '<' <expression>`**{: style="font-size: 60%"}
 
@@ -1774,7 +1774,7 @@ ___
 
 ### `<=` (less-than-equal) {#op-less-than-equal}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> '<=' <expression>`**{: style="font-size: 60%"}
 
@@ -1793,7 +1793,7 @@ ___
 
 ### list {#op-list}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new%20with%20closure-green.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new%20with%20closure-green.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`'[' ( <expression> ',' ) * [ <expression> ] ']'`**{: style="font-size: 60%"}
 
@@ -1819,7 +1819,7 @@ ___
 
 ### map {#op-map}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new%20with%20closure-green.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new%20with%20closure-green.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`'{' ( <expression> ',' ) * [ <expression> ] '}'`**{: style="font-size: 60%"}
 
@@ -1834,7 +1834,7 @@ ___
 
 ### `.` (member) {#op-member}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> '.' <expression>`**{: style="font-size: 60%"}
 
@@ -1852,7 +1852,7 @@ ___
 
 ### `minus` or `-` {#op-minus}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('-'|'minus') <expression>`**{: style="font-size: 60%"}
 
@@ -1868,7 +1868,7 @@ ___
 
 ### `module` {#op-module}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`module <name> (<parameter>)*`**{: style="font-size: 60%"}
 
@@ -1883,7 +1883,7 @@ ___
 
 ### `mod` or `%` {#op-modulus}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('%'|'mod') <expression>`**{: style="font-size: 60%"}
 
@@ -1903,7 +1903,7 @@ ___
 
 ### `multiply` or `*` {#op-multiply}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('*'|'multiply') <expression>`**{: style="font-size: 60%"}
 
@@ -1926,7 +1926,7 @@ ___
 
 ### `negate` or `-` {#op-negate}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('-'|'negate') <expression>`**{: style="font-size: 60%"}
 
@@ -1942,7 +1942,7 @@ ___
 
 ### `not` or `!` {#op-not}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('!'|'not') <expression>`**{: style="font-size: 60%"}
 
@@ -1960,7 +1960,7 @@ ___
 
 ### `not-equal` or `!=` {#op-not-equal}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('!='|'not-equal') <expression>`**{: style="font-size: 60%"}
 
@@ -1977,7 +1977,7 @@ ___
 
 ### `or` or `||` {#op-or}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('||'|'or') <expression>`**{: style="font-size: 60%"}
 
@@ -1995,7 +1995,7 @@ ___
 
 ### `pair` or `:` {#op-pair}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> (':'|'pair') <expression>`**{: style="font-size: 60%"}
 
@@ -2015,7 +2015,7 @@ ___
 
 ### `parallel` or `|:|` {#op-parallel}
 
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Parallel Scope](https://img.shields.io/badge/scope-new%20parallel-red.svg?style=flat-square) ![Parallel Execution](https://img.shields.io/badge/evaluation-parallel-blue.svg?style=flat-square)
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Parallel Scope](https://img.shields.io/badge/scope-new%20parallel-red.svg?style=flat-square) ![Parallel Execution](https://img.shields.io/badge/order-parallel-blue.svg?style=flat-square)
 
 **`('|:|'|'parallel') <expression>`**{: style="font-size: 60%"}
 
@@ -2037,7 +2037,7 @@ ___
 
 ### parameter {#op-parameter}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new%20with%20closure-green.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new%20with%20closure-green.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`( <expression> | <builtin-name> | <function-name> ) '(' ( <expression> | <name> '=' <expression> )* ')'`**{: style="font-size: 60%"}
 
@@ -2090,7 +2090,7 @@ ___
 
 ### `pause` or `||>` {#op-pause}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('||>'|'pause') <expression>`**{: style="font-size: 60%"}
 
@@ -2105,7 +2105,7 @@ ___
 
 ### `pipe` or `|` {#op-pipe}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('|'|'pipe') <expression>`**{: style="font-size: 60%"}
 
@@ -2131,7 +2131,7 @@ ___
 
 ### `plus` or `+` {#op-plus}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('+'|'plus') <expression>`**{: style="font-size: 60%"}
 
@@ -2160,7 +2160,7 @@ ___
 
 ### `print` or `@@` {#op-print}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('@@'|'print') <expression>`**{: style="font-size: 60%"}
 
@@ -2177,7 +2177,7 @@ ___
 
 ### `publish` or `*>` {#op-publish}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('*>'|'publish') <expression>`**{: style="font-size: 60%"}
 
@@ -2192,7 +2192,7 @@ ___
 
 ### `pure` {#op-pure}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`'pure' <expression>`**{: style="font-size: 60%"}
 
@@ -2219,7 +2219,7 @@ ___
 
 ### `range` or `..` {#op-range}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('..'|'range') <expression>`**{: style="font-size: 60%"}
 
@@ -2275,7 +2275,7 @@ ___
 
 ### `read` {#op-read}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`'read' ['block'] ['mutate'] ['from'] <expression>`**{: style="font-size: 60%"}
 
@@ -2290,7 +2290,7 @@ ___
 
 ### `<<` (read-simple) {#op-read-simple}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`'<<' <expression>`**{: style="font-size: 60%"}
 
@@ -2305,7 +2305,7 @@ ___
 
 ### `reduce` or `>>=` {#op-reduce}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('>>='|'reduce') <expression>`**{: style="font-size: 60%"}
 
@@ -2344,7 +2344,7 @@ ___
 
 ### script {#op-script}
 
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **` <language-name> ``<script-code>`` `**{: style="font-size: 60%"}
 
@@ -2381,7 +2381,7 @@ ___
 
 ### `serial` or `|..|` {#op-serial}
 
-![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Serial Scope](https://img.shields.io/badge/scope-new%20serial-yellow.svg?style=flat-square) ![Serial Execution](https://img.shields.io/badge/evaluation-serial-green.svg?style=flat-square)
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Serial Scope](https://img.shields.io/badge/scope-new%20serial-yellow.svg?style=flat-square) ![Serial Execution](https://img.shields.io/badge/order-serial-green.svg?style=flat-square)
 
 **`('|..|'|'serial') <expression>`**{: style="font-size: 60%"}
 
@@ -2396,7 +2396,7 @@ ___
 
 ### `size` or `#` {#op-size}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('#'|'size') <expression>`**{: style="font-size: 60%"}
 
@@ -2411,7 +2411,7 @@ ___
 
 ### `start` or `|>` {#op-start}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('|>'|'start') <expression>`**{: style="font-size: 60%"}
 
@@ -2426,7 +2426,7 @@ ___
 
 ### `state` or `<|>` {#op-state}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('<|>'|'state') <expression>`**{: style="font-size: 60%"}
 
@@ -2441,7 +2441,7 @@ ___
 
 ### `stop` or `<|` {#op-stop}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('<|'|'stop') <expression>`**{: style="font-size: 60%"}
 
@@ -2456,7 +2456,7 @@ ___
 
 ### `subscribe` or `<*` {#op-subscribe}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('<*'|'subscribe') <expression>`**{: style="font-size: 60%"}
 
@@ -2471,7 +2471,7 @@ ___
 
 ### `*=` (subscribe-assign) {#op-subscribe-assign}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 
 
@@ -2484,7 +2484,7 @@ ___
 
 ### subscript {#op-subscript}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`( <expression> '[' <index-expression>|<key-expression> ']' ) | ( <expression> '.' (<index-expression>|<key-expression>) )`**{: style="font-size: 60%"}
 
@@ -2502,7 +2502,7 @@ ___
 
 ### `truthy` or `~` {#op-truthy}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('~'|'truthy') <expression>`**{: style="font-size: 60%"}
 
@@ -2517,7 +2517,7 @@ ___
 
 ### unit {#op-unit}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<numeric> <unit-name>`**{: style="font-size: 60%"}
 
@@ -2532,7 +2532,7 @@ ___
 
 ### `unpause` or `<||` {#op-unpause}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`('<||'|'unpause') <expression>`**{: style="font-size: 60%"}
 
@@ -2547,7 +2547,7 @@ ___
 
 ### `when` or `?` {#op-when}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> ('?'|'when') <expression>`**{: style="font-size: 60%"}
 
@@ -2574,7 +2574,7 @@ ___
 
 ### `while` {#op-while}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`while <condition> <expression>`**{: style="font-size: 60%"}
 
@@ -2589,7 +2589,7 @@ ___
 
 ### `write` {#op-write}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`'write' ['block'] ['mutate'] ['to'] <expression>`**{: style="font-size: 60%"}
 
@@ -2604,7 +2604,7 @@ ___
 
 ### `>>` (write-simple) {#op-write-simple}
 
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 **`<expression> '>>' <expression>`**{: style="font-size: 60%"}
 
