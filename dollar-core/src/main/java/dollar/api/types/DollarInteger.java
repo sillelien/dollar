@@ -17,7 +17,6 @@
 package dollar.api.types;
 
 import com.google.common.collect.ImmutableList;
-import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
 import dollar.api.var;
@@ -202,7 +201,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         if (o.number()) {
             return (value.compareTo(o.toLong()));
         } else {
-            throw new DollarException("Invalid comparison right-hand-side is not a number.");
+            return 1;
         }
     }
 

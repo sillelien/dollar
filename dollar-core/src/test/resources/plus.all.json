@@ -39755,7 +39755,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [10..12..22..24]"
       }
     }
   ],
@@ -39782,7 +39782,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [11..11..23..23]"
       }
     }
   ],
@@ -39809,7 +39809,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [-23..-9.223372036854776E18]"
       }
     }
   ],
@@ -39836,7 +39836,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [9223372036854775784..-9.223372036854776E18]"
       }
     }
   ],
@@ -40933,7 +40933,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [[ -1, -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]..[ 1, -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]]"
       }
     }
   ],
@@ -40959,11 +40959,39 @@
       0.1
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        -1,
+        1.401298464324817E-45,
+        3.4028234663852886E38,
+        4.9E-324,
+        1.7976931348623157E308,
+        0.0,
+        1.0,
+        -1.0,
+        100.0,
+        -100.0,
+        0.5,
+        -0.5,
+        -0.1,
+        0.1
+      ],
+      "upper": [
+        1,
+        1.401298464324817E-45,
+        3.4028234663852886E38,
+        4.9E-324,
+        1.7976931348623157E308,
+        0.0,
+        1.0,
+        -1.0,
+        100.0,
+        -100.0,
+        0.5,
+        -0.5,
+        -0.1,
+        0.1
+      ]
     }
   ],
   [
@@ -41000,11 +41028,63 @@
       }
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        -1,
+        {
+          "$type": "DATE",
+          "text": "1970-01-01T00:00:00Z",
+          "millis": 0
+        },
+        {
+          "$type": "DATE",
+          "text": "1969-12-31T23:59:59Z",
+          "millis": -1000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-12T13:46:40Z",
+          "millis": 1000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-24T03:33:20Z",
+          "millis": 2000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-02-04T17:20:00Z",
+          "millis": 2999999999
+        }
+      ],
+      "upper": [
+        1,
+        {
+          "$type": "DATE",
+          "text": "1970-01-01T00:00:00Z",
+          "millis": 0
+        },
+        {
+          "$type": "DATE",
+          "text": "1969-12-31T23:59:59Z",
+          "millis": -1000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-12T13:46:40Z",
+          "millis": 1000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-24T03:33:20Z",
+          "millis": 2000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-02-04T17:20:00Z",
+          "millis": 2999999999
+        }
+      ]
     }
   ],
   [
@@ -41027,11 +41107,35 @@
       "0"
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        -1,
+        "",
+        "@",
+        "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+        "@@ @@ @@@ @@ @@ @@",
+        " ",
+        "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+        "\n\t\r",
+        "1",
+        "true",
+        "false",
+        "0"
+      ],
+      "upper": [
+        1,
+        "",
+        "@",
+        "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+        "@@ @@ @@@ @@ @@ @@",
+        " ",
+        "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+        "\n\t\r",
+        "1",
+        "true",
+        "false",
+        "0"
+      ]
     }
   ],
   [
@@ -41045,11 +41149,17 @@
       false
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        -1,
+        true,
+        false
+      ],
+      "upper": [
+        1,
+        true,
+        false
+      ]
     }
   ],
   [
@@ -41063,7 +41173,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [[ -1 ]..[ 1 ]]"
       }
     }
   ],
@@ -41109,7 +41219,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [-2..0..0..2]"
       }
     }
   ],
@@ -41128,7 +41238,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [-1..-1..1..1]"
       }
     }
   ],
@@ -41147,7 +41257,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [-1..9223372036854775806..1..9.223372036854776E18]"
       }
     }
   ],
@@ -42015,7 +42125,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [[ 0, -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]..[ 0, -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]]"
       }
     }
   ],
@@ -42041,11 +42151,39 @@
       0.1
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        0,
+        1.401298464324817E-45,
+        3.4028234663852886E38,
+        4.9E-324,
+        1.7976931348623157E308,
+        0.0,
+        1.0,
+        -1.0,
+        100.0,
+        -100.0,
+        0.5,
+        -0.5,
+        -0.1,
+        0.1
+      ],
+      "upper": [
+        0,
+        1.401298464324817E-45,
+        3.4028234663852886E38,
+        4.9E-324,
+        1.7976931348623157E308,
+        0.0,
+        1.0,
+        -1.0,
+        100.0,
+        -100.0,
+        0.5,
+        -0.5,
+        -0.1,
+        0.1
+      ]
     }
   ],
   [
@@ -42082,11 +42220,63 @@
       }
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        0,
+        {
+          "$type": "DATE",
+          "text": "1970-01-01T00:00:00Z",
+          "millis": 0
+        },
+        {
+          "$type": "DATE",
+          "text": "1969-12-31T23:59:59Z",
+          "millis": -1000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-12T13:46:40Z",
+          "millis": 1000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-24T03:33:20Z",
+          "millis": 2000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-02-04T17:20:00Z",
+          "millis": 2999999999
+        }
+      ],
+      "upper": [
+        0,
+        {
+          "$type": "DATE",
+          "text": "1970-01-01T00:00:00Z",
+          "millis": 0
+        },
+        {
+          "$type": "DATE",
+          "text": "1969-12-31T23:59:59Z",
+          "millis": -1000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-12T13:46:40Z",
+          "millis": 1000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-24T03:33:20Z",
+          "millis": 2000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-02-04T17:20:00Z",
+          "millis": 2999999999
+        }
+      ]
     }
   ],
   [
@@ -42109,11 +42299,35 @@
       "0"
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        0,
+        "",
+        "@",
+        "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+        "@@ @@ @@@ @@ @@ @@",
+        " ",
+        "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+        "\n\t\r",
+        "1",
+        "true",
+        "false",
+        "0"
+      ],
+      "upper": [
+        0,
+        "",
+        "@",
+        "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+        "@@ @@ @@@ @@ @@ @@",
+        " ",
+        "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+        "\n\t\r",
+        "1",
+        "true",
+        "false",
+        "0"
+      ]
     }
   ],
   [
@@ -42127,11 +42341,17 @@
       false
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        0,
+        true,
+        false
+      ],
+      "upper": [
+        0,
+        true,
+        false
+      ]
     }
   ],
   [
@@ -42145,7 +42365,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [[ 0 ]..[ 0 ]]"
       }
     }
   ],
@@ -42191,7 +42411,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [-1..1..-1..1]"
       }
     }
   ],
@@ -42210,7 +42430,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [0..0..0..0]"
       }
     }
   ],
@@ -42229,7 +42449,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [0..9223372036854775807..0..9223372036854775807]"
       }
     }
   ],
@@ -42248,7 +42468,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [-9223372036854775807..9223372036854775807..-9223372036854775807..9223372036854775807]"
       }
     }
   ],
@@ -43097,7 +43317,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [[ 0, -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]..[ 9223372036854775807, -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]]"
       }
     }
   ],
@@ -43123,11 +43343,39 @@
       0.1
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        0,
+        1.401298464324817E-45,
+        3.4028234663852886E38,
+        4.9E-324,
+        1.7976931348623157E308,
+        0.0,
+        1.0,
+        -1.0,
+        100.0,
+        -100.0,
+        0.5,
+        -0.5,
+        -0.1,
+        0.1
+      ],
+      "upper": [
+        9223372036854775807,
+        1.401298464324817E-45,
+        3.4028234663852886E38,
+        4.9E-324,
+        1.7976931348623157E308,
+        0.0,
+        1.0,
+        -1.0,
+        100.0,
+        -100.0,
+        0.5,
+        -0.5,
+        -0.1,
+        0.1
+      ]
     }
   ],
   [
@@ -43164,11 +43412,63 @@
       }
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        0,
+        {
+          "$type": "DATE",
+          "text": "1970-01-01T00:00:00Z",
+          "millis": 0
+        },
+        {
+          "$type": "DATE",
+          "text": "1969-12-31T23:59:59Z",
+          "millis": -1000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-12T13:46:40Z",
+          "millis": 1000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-24T03:33:20Z",
+          "millis": 2000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-02-04T17:20:00Z",
+          "millis": 2999999999
+        }
+      ],
+      "upper": [
+        9223372036854775807,
+        {
+          "$type": "DATE",
+          "text": "1970-01-01T00:00:00Z",
+          "millis": 0
+        },
+        {
+          "$type": "DATE",
+          "text": "1969-12-31T23:59:59Z",
+          "millis": -1000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-12T13:46:40Z",
+          "millis": 1000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-24T03:33:20Z",
+          "millis": 2000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-02-04T17:20:00Z",
+          "millis": 2999999999
+        }
+      ]
     }
   ],
   [
@@ -43191,11 +43491,35 @@
       "0"
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        0,
+        "",
+        "@",
+        "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+        "@@ @@ @@@ @@ @@ @@",
+        " ",
+        "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+        "\n\t\r",
+        "1",
+        "true",
+        "false",
+        "0"
+      ],
+      "upper": [
+        9223372036854775807,
+        "",
+        "@",
+        "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+        "@@ @@ @@@ @@ @@ @@",
+        " ",
+        "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+        "\n\t\r",
+        "1",
+        "true",
+        "false",
+        "0"
+      ]
     }
   ],
   [
@@ -43209,11 +43533,17 @@
       false
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        0,
+        true,
+        false
+      ],
+      "upper": [
+        9223372036854775807,
+        true,
+        false
+      ]
     }
   ],
   [
@@ -43227,7 +43557,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [[ 0 ]..[ 9223372036854775807 ]]"
       }
     }
   ],
@@ -43273,7 +43603,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [-1..1..9223372036854775806..9.223372036854776E18]"
       }
     }
   ],
@@ -43292,7 +43622,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [0..0..9223372036854775807..9223372036854775807]"
       }
     }
   ],
@@ -43311,7 +43641,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [0..9223372036854775807..9223372036854775807..1.8446744073709552E19]"
       }
     }
   ],
@@ -43330,7 +43660,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [-9223372036854775807..9223372036854775807..0..1.8446744073709552E19]"
       }
     }
   ],
@@ -44173,7 +44503,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [[ -9223372036854775807, -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]..[ 9223372036854775807, -2147483648, 2147483647, -9223372036854775807, 9223372036854775807, 0, 1, -1, 100, -100 ]]"
       }
     }
   ],
@@ -44199,11 +44529,39 @@
       0.1
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        -9223372036854775807,
+        1.401298464324817E-45,
+        3.4028234663852886E38,
+        4.9E-324,
+        1.7976931348623157E308,
+        0.0,
+        1.0,
+        -1.0,
+        100.0,
+        -100.0,
+        0.5,
+        -0.5,
+        -0.1,
+        0.1
+      ],
+      "upper": [
+        9223372036854775807,
+        1.401298464324817E-45,
+        3.4028234663852886E38,
+        4.9E-324,
+        1.7976931348623157E308,
+        0.0,
+        1.0,
+        -1.0,
+        100.0,
+        -100.0,
+        0.5,
+        -0.5,
+        -0.1,
+        0.1
+      ]
     }
   ],
   [
@@ -44240,11 +44598,63 @@
       }
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        -9223372036854775807,
+        {
+          "$type": "DATE",
+          "text": "1970-01-01T00:00:00Z",
+          "millis": 0
+        },
+        {
+          "$type": "DATE",
+          "text": "1969-12-31T23:59:59Z",
+          "millis": -1000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-12T13:46:40Z",
+          "millis": 1000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-24T03:33:20Z",
+          "millis": 2000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-02-04T17:20:00Z",
+          "millis": 2999999999
+        }
+      ],
+      "upper": [
+        9223372036854775807,
+        {
+          "$type": "DATE",
+          "text": "1970-01-01T00:00:00Z",
+          "millis": 0
+        },
+        {
+          "$type": "DATE",
+          "text": "1969-12-31T23:59:59Z",
+          "millis": -1000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-12T13:46:40Z",
+          "millis": 1000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-01-24T03:33:20Z",
+          "millis": 2000000000
+        },
+        {
+          "$type": "DATE",
+          "text": "1970-02-04T17:20:00Z",
+          "millis": 2999999999
+        }
+      ]
     }
   ],
   [
@@ -44267,11 +44677,35 @@
       "0"
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        -9223372036854775807,
+        "",
+        "@",
+        "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+        "@@ @@ @@@ @@ @@ @@",
+        " ",
+        "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+        "\n\t\r",
+        "1",
+        "true",
+        "false",
+        "0"
+      ],
+      "upper": [
+        9223372036854775807,
+        "",
+        "@",
+        "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+        "@@ @@ @@@ @@ @@ @@",
+        " ",
+        "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
+        "\n\t\r",
+        "1",
+        "true",
+        "false",
+        "0"
+      ]
     }
   ],
   [
@@ -44285,11 +44719,17 @@
       false
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        -9223372036854775807,
+        true,
+        false
+      ],
+      "upper": [
+        9223372036854775807,
+        true,
+        false
+      ]
     }
   ],
   [
@@ -44303,7 +44743,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [[ -9223372036854775807 ]..[ 9223372036854775807 ]]"
       }
     }
   ],
@@ -44368,7 +44808,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [-9223372036854775807..-9223372036854775807..9223372036854775807..9223372036854775807]"
       }
     }
   ],
@@ -44387,7 +44827,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [-9223372036854775807..0..9223372036854775807..1.8446744073709552E19]"
       }
     }
   ],
@@ -47318,11 +47758,31 @@
       -100
     ],
     {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
-      }
+      "$type": "RANGE",
+      "lower": [
+        -0.05,
+        -2147483648,
+        2147483647,
+        -9223372036854775807,
+        9223372036854775807,
+        0,
+        1,
+        -1,
+        100,
+        -100
+      ],
+      "upper": [
+        -0.1,
+        -2147483648,
+        2147483647,
+        -9223372036854775807,
+        9223372036854775807,
+        0,
+        1,
+        -1,
+        100,
+        -100
+      ]
     }
   ],
   [

@@ -1410,7 +1410,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [[ -1, 0, 1, -1 ]..[ 1, 0, 1, -1 ]]"
       }
     }
   ],
@@ -1429,7 +1429,7 @@
       "$type": "ERROR",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid comparison right-hand-side is not a number."
+        "errorMessage": "Invalid range: [-2..0..0..2]"
       }
     }
   ],
