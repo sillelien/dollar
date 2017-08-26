@@ -31,15 +31,15 @@
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.parser.OpDef;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.parser.OpDefType;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.jparsec.functors.Binary;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.function.BiFunction;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.function.BiFunction;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.function.BinaryOperator;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.DollarScriptSupport.node;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.DollarScriptSupport.reactiveNode;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../dollar/internal/runtime/script/BinaryOp.html">BinaryOp</a> <strong class="jxr_keyword">implements</strong> Binary&lt;<strong class="jxr_keyword">var</strong>&gt;, <a href="../../../../dollar/internal/runtime/script/Operator.html">Operator</a> {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../dollar/internal/runtime/script/BinaryOp.html">BinaryOp</a> <strong class="jxr_keyword">implements</strong> BinaryOperator&lt;<strong class="jxr_keyword">var</strong>&gt;, <a href="../../../../dollar/internal/runtime/script/Operator.html">Operator</a> {
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> immediate;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>      @NotNull
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BiFunction&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; function;
@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>      @NotNull
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>      @Override
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> map(@NotNull <strong class="jxr_keyword">var</strong> lhs, @NotNull <strong class="jxr_keyword">var</strong> rhs) {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> apply(@NotNull <strong class="jxr_keyword">var</strong> lhs, @NotNull <strong class="jxr_keyword">var</strong> rhs) {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">if</strong> (immediate) {
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>              <strong class="jxr_keyword">return</strong> node(operation, pure, parser, source, Arrays.asList(lhs, rhs), vars -&gt; function.apply(lhs, rhs));
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
