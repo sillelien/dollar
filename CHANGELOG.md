@@ -1,5 +1,77 @@
 # Change Log
 
+## [0.3.4450](https://github.com/sillelien/dollar/tree/0.3.4450) (2017-08-25)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4432...0.3.4450)
+
+## [0.3.4432](https://github.com/sillelien/dollar/tree/0.3.4432) (2017-08-25)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4425...0.3.4432)
+
+## [0.3.4425](https://github.com/sillelien/dollar/tree/0.3.4425) (2017-08-25)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4412...0.3.4425)
+
+## [0.3.4412](https://github.com/sillelien/dollar/tree/0.3.4412) (2017-08-25)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4406...0.3.4412)
+
+## [0.3.4406](https://github.com/sillelien/dollar/tree/0.3.4406) (2017-08-25)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4386...0.3.4406)
+
+## [0.3.4386](https://github.com/sillelien/dollar/tree/0.3.4386) (2017-08-25)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4381...0.3.4386)
+
+## [0.3.4381](https://github.com/sillelien/dollar/tree/0.3.4381) (2017-08-25)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4364...0.3.4381)
+
+## [0.3.4364](https://github.com/sillelien/dollar/tree/0.3.4364) (2017-08-25)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4349...0.3.4364)
+
+## [0.3.4349](https://github.com/sillelien/dollar/tree/0.3.4349) (2017-08-25)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4324...0.3.4349)
+
+## [0.3.4324](https://github.com/sillelien/dollar/tree/0.3.4324) (2017-08-24)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4321...0.3.4324)
+
+## [0.3.4321](https://github.com/sillelien/dollar/tree/0.3.4321) (2017-08-24)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4304...0.3.4321)
+
+## [0.3.4304](https://github.com/sillelien/dollar/tree/0.3.4304) (2017-08-24)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4289...0.3.4304)
+
+## [0.3.4289](https://github.com/sillelien/dollar/tree/0.3.4289) (2017-08-24)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4274...0.3.4289)
+
+## [0.3.4274](https://github.com/sillelien/dollar/tree/0.3.4274) (2017-08-24)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4267...0.3.4274)
+
+## [0.3.4267](https://github.com/sillelien/dollar/tree/0.3.4267) (2017-08-24)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4255...0.3.4267)
+
+## [0.3.4255](https://github.com/sillelien/dollar/tree/0.3.4255) (2017-08-23)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4250...0.3.4255)
+
+## [0.3.4250](https://github.com/sillelien/dollar/tree/0.3.4250) (2017-08-23)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4235...0.3.4250)
+
+## [0.3.4235](https://github.com/sillelien/dollar/tree/0.3.4235) (2017-08-23)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4220...0.3.4235)
+
+## [0.3.4220](https://github.com/sillelien/dollar/tree/0.3.4220) (2017-08-23)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4205...0.3.4220)
+
+## [0.3.4205](https://github.com/sillelien/dollar/tree/0.3.4205) (2017-08-23)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4188...0.3.4205)
+
+## [0.3.4188](https://github.com/sillelien/dollar/tree/0.3.4188) (2017-08-22)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4171...0.3.4188)
+
+## [0.3.4171](https://github.com/sillelien/dollar/tree/0.3.4171) (2017-08-21)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4142...0.3.4171)
+
+## [0.3.4142](https://github.com/sillelien/dollar/tree/0.3.4142) (2017-08-20)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4127...0.3.4142)
+
+## [0.3.4127](https://github.com/sillelien/dollar/tree/0.3.4127) (2017-08-19)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4102...0.3.4127)
+
 ## [0.3.4102](https://github.com/sillelien/dollar/tree/0.3.4102) (2017-08-18)
 [Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4087...0.3.4102)
 
