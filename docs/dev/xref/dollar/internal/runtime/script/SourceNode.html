@@ -210,7 +210,7 @@
 <a class="jxr_linenumber" name="L202" href="#L202">202</a>                 <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L203" href="#L203">203</a>                     <strong class="jxr_keyword">if</strong> (newScope) {
 <a class="jxr_linenumber" name="L204" href="#L204">204</a>                         <strong class="jxr_keyword">if</strong> (pure || currentScope().pure()) {
-<a class="jxr_linenumber" name="L205" href="#L205">205</a>                             useScope = <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/PureScope.html">PureScope</a>(currentScope(), currentScope().getSource(), name, currentScope().getFile(),
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>                             useScope = <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/PureScope.html">PureScope</a>(currentScope(), currentScope().source(), name, currentScope().file(),
 <a class="jxr_linenumber" name="L206" href="#L206">206</a>                                                      isParallel());
 <a class="jxr_linenumber" name="L207" href="#L207">207</a>                         } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L208" href="#L208">208</a>                             <strong class="jxr_keyword">if</strong> (currentScope().pure() &amp;&amp; (operation.pure() != <strong class="jxr_keyword">null</strong>) &amp;&amp; !operation.pure()) {

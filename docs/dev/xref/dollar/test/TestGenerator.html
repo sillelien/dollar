@@ -109,15 +109,15 @@
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 
 <a class="jxr_linenumber" name="L102" href="#L102">102</a>     @NotNull
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List&lt;<strong class="jxr_keyword">var</strong>&gt; rangeValues() {
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>         <strong class="jxr_keyword">return</strong> toVarValues(DollarStatic.$range(Instant.ofEpochSecond(1_000_000), Instant.ofEpochSecond(2_000_000)),
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>                            DollarStatic.$range(-1, 1),
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>                            DollarStatic.$range(0,
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>                                                -1), DollarStatic.$range(
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>                         0, 0), DollarStatic.$range(1, -1), DollarStatic.$range(0, Long.MAX_VALUE),
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>         <strong class="jxr_keyword">return</strong> toVarValues(DollarStatic.$range(Instant.ofEpochSecond(1_000_000),
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>                                                Instant.ofEpochSecond(2_000_000)),
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>                            DollarStatic.$range(-1, 1),
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>                            DollarStatic.$range(0, 0),
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>                            DollarStatic.$range(0L, Long.MAX_VALUE),
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>                            DollarStatic.$range(-Long.MAX_VALUE, Long.MAX_VALUE),
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>                            DollarStatic.$range(<span class="jxr_string">"a"</span>, <span class="jxr_string">"z"</span>), DollarStatic.$range(<span class="jxr_string">"@"</span>, <span class="jxr_string">"\uF8FF"</span>), DollarStatic.$range(<span class="jxr_string">"z"</span>, <span class="jxr_string">"a"</span>),
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>                            DollarStatic.$range(-0.1, -0.05),
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>                            DollarStatic.$range(1, -0.1));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>                            DollarStatic.$range(<span class="jxr_string">"a"</span>, <span class="jxr_string">"z"</span>),
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>                            DollarStatic.$range(<span class="jxr_string">"@"</span>, <span class="jxr_string">"\uF8FF"</span>),
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>                            DollarStatic.$range(-0.1, -0.05));
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>     }
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>     @NotNull
@@ -280,44 +280,42 @@
 <a class="jxr_linenumber" name="L272" href="#L272">272</a>         <strong class="jxr_keyword">return</strong> toVarValues(DollarStatic.$range(Instant.ofEpochSecond(1_000_000), Instant.ofEpochSecond(1_100_000)),
 <a class="jxr_linenumber" name="L273" href="#L273">273</a>                            DollarStatic.$range(-1, 1),
 <a class="jxr_linenumber" name="L274" href="#L274">274</a>                            DollarStatic.$range(0,
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>                                                -1), DollarStatic.$range(
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>                         0, 0), DollarStatic.$range(1, -1), DollarStatic.$range(0, Long.MAX_VALUE),
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>                                                1), DollarStatic.$range(
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>                         0, 0), DollarStatic.$range(1, 2), DollarStatic.$range(0, Long.MAX_VALUE),
 <a class="jxr_linenumber" name="L277" href="#L277">277</a>                            DollarStatic.$range(-Long.MAX_VALUE, Long.MAX_VALUE),
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>                            DollarStatic.$range(<span class="jxr_string">"a"</span>, <span class="jxr_string">"z"</span>), DollarStatic.$range(<span class="jxr_string">"@"</span>, <span class="jxr_string">"\uF8FF"</span>), DollarStatic.$range(<span class="jxr_string">"z"</span>, <span class="jxr_string">"a"</span>),
-<a class="jxr_linenumber" name="L279" href="#L279">279</a>                            DollarStatic.$range(-0.1, -0.05),
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>                            DollarStatic.$range(1, -0.1));
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>     }
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>     @NotNull
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List&lt;<strong class="jxr_keyword">var</strong>&gt; smallRangeValues() {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a>         <strong class="jxr_keyword">return</strong> toVarValues(DollarStatic.$range(Instant.ofEpochSecond(1), Instant.ofEpochSecond(1)), DollarStatic.$range(-1, 1),
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>                            DollarStatic.$range(0,
-<a class="jxr_linenumber" name="L287" href="#L287">287</a>                                                -1), DollarStatic.$range(
-<a class="jxr_linenumber" name="L288" href="#L288">288</a>                         0, 0), DollarStatic.$range(1, -1), DollarStatic.$range(0, 5), DollarStatic.$range(-5, 5),
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>                            DollarStatic.$range(<span class="jxr_string">"a"</span>, <span class="jxr_string">"d"</span>), DollarStatic.$range(<span class="jxr_string">"s"</span>, <span class="jxr_string">"a"</span>), DollarStatic.$range(-0.1, -0.05),
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>                            DollarStatic.$range(1, -0.1));
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>     }
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>     @NotNull
-<a class="jxr_linenumber" name="L294" href="#L294">294</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List&lt;<strong class="jxr_keyword">var</strong>&gt; smallMapValues() {
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>         HashMap&lt;Object, Object&gt; mixedMap = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>         mixedMap.put(1, 0.1);
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>         mixedMap.put(<strong class="jxr_keyword">true</strong>, 5);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>         mixedMap.put(<span class="jxr_string">"value1"</span>, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>         mixedMap.put(<span class="jxr_string">"value2"</span>, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>         mixedMap.put(<span class="jxr_string">"value3"</span>, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>         mixedMap.put(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"true"</span>);
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>         <strong class="jxr_keyword">return</strong> toVarValues(Collections.emptyMap(), singletonMap(1, <span class="jxr_string">"one"</span>), singletonMap(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"true"</span>),
-<a class="jxr_linenumber" name="L303" href="#L303">303</a>                            singletonMap(Instant.ofEpochSecond(1_000_000), <strong class="jxr_keyword">true</strong>), singletonMap(0.1, <span class="jxr_string">"0.1"</span>),
-<a class="jxr_linenumber" name="L304" href="#L304">304</a>                            singletonMap(<span class="jxr_string">"string"</span>, <span class="jxr_string">"string"</span>),
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>                            mixedMap);
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>     }
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>     @NotNull
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List&lt;<strong class="jxr_keyword">var</strong>&gt; largeMapValues() {
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>         <strong class="jxr_keyword">return</strong> mapValues();
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>     }
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> }
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>                            DollarStatic.$range(<span class="jxr_string">"a"</span>, <span class="jxr_string">"z"</span>), DollarStatic.$range(<span class="jxr_string">"@"</span>, <span class="jxr_string">"\uF8FF"</span>),
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>                            DollarStatic.$range(-0.1, -0.05));
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>     }
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>     @NotNull
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List&lt;<strong class="jxr_keyword">var</strong>&gt; smallRangeValues() {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>         <strong class="jxr_keyword">return</strong> toVarValues(DollarStatic.$range(Instant.ofEpochSecond(1), Instant.ofEpochSecond(1)), DollarStatic.$range(-1, 1),
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>                            DollarStatic.$range(0,
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>                                                1), DollarStatic.$range(
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>                         0, 0), DollarStatic.$range(0, 5), DollarStatic.$range(-5, 5),
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>                            DollarStatic.$range(<span class="jxr_string">"a"</span>, <span class="jxr_string">"d"</span>), DollarStatic.$range(-0.1, -0.05));
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>     }
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>     @NotNull
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List&lt;<strong class="jxr_keyword">var</strong>&gt; smallMapValues() {
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>         HashMap&lt;Object, Object&gt; mixedMap = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>         mixedMap.put(1, 0.1);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>         mixedMap.put(<strong class="jxr_keyword">true</strong>, 5);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>         mixedMap.put(<span class="jxr_string">"value1"</span>, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>         mixedMap.put(<span class="jxr_string">"value2"</span>, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>         mixedMap.put(<span class="jxr_string">"value3"</span>, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>         mixedMap.put(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>         <strong class="jxr_keyword">return</strong> toVarValues(Collections.emptyMap(), singletonMap(1, <span class="jxr_string">"one"</span>), singletonMap(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"true"</span>),
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>                            singletonMap(Instant.ofEpochSecond(1_000_000), <strong class="jxr_keyword">true</strong>), singletonMap(0.1, <span class="jxr_string">"0.1"</span>),
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>                            singletonMap(<span class="jxr_string">"string"</span>, <span class="jxr_string">"string"</span>),
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>                            mixedMap);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a>     }
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>     @NotNull
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List&lt;<strong class="jxr_keyword">var</strong>&gt; largeMapValues() {
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>         <strong class="jxr_keyword">return</strong> mapValues();
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>     }
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017. All rights reserved.</div>
