@@ -41,13 +41,13 @@ public class SourceSegmentValue implements SourceSegment {
 
     public SourceSegmentValue(@NotNull Scope scope, @NotNull Token t) {
         this.scope = scope;
-        sourceFile = scope.getFile();
+        sourceFile = scope.file();
         length = t.length();
         start = t.index();
-        if(scope.getSource() == null) {
+        if (scope.source() == null) {
             throw new DollarParserError("Cannot create a SourceSegmentValue from a scope with no source: "+scope);
         }
-        source = scope.getSource();
+        source = scope.source();
         shortHash = new FNV().fnv1_32(source.getBytes()).toString(36);
     }
 
@@ -125,7 +125,7 @@ public class SourceSegmentValue implements SourceSegment {
     @NotNull
     @Override
     public String getSourceSegment() {
-        return scope.getSource().substring(start, start + length);
+        return scope.source().substring(start, start + length);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class SourceSegmentValue implements SourceSegment {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ((o == null) || (getClass() != o.getClass())) return false;
         SourceSegmentValue that = (SourceSegmentValue) o;
         return (length == that.length) &&
                        (start == that.start) &&

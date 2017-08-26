@@ -17,14 +17,14 @@
 package dollar.api.types;
 
 import com.github.oxo42.stateless4j.StateMachine;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Signal;
 import dollar.api.StateTracer;
 import dollar.api.Type;
 import dollar.api.TypePrediction;
-import dollar.api.collections.ImmutableList;
-import dollar.api.collections.ImmutableMap;
 import dollar.api.json.ImmutableJsonObject;
 import dollar.api.monitor.DollarMonitor;
 import dollar.api.var;
@@ -664,7 +664,7 @@ public class DollarWrapper implements var {
 
     @Override
     public int compareTo(@NotNull var o) {
-        return getValue().compareTo(o);
+        return getValue().compareTo(o.$unwrap());
     }
 
     @NotNull

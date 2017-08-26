@@ -52,7 +52,8 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     private String emoji;
     @Nullable
     private String bnf;
-    private SourceNodeOptions nodeOptions;
+    @NotNull
+    private final SourceNodeOptions nodeOptions;
 
     public OpDef(@NotNull OpDefType type,
                  @Nullable String symbol,
@@ -62,7 +63,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                  boolean reactive,
                  @Nullable String bnf,
                  int priority,
-                 @Nullable Boolean pure, SourceNodeOptions nodeOptions, String emoji) {
+                 @Nullable Boolean pure, @NotNull SourceNodeOptions nodeOptions, @Nullable String emoji) {
         this.type = type;
         if (emoji != null) {
             this.emoji = EmojiParser.parseToUnicode(emoji);

@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.io.ByteStreams;
 import dollar.api.ControlFlowAware;
 import dollar.api.DollarStatic;
@@ -24,10 +25,12 @@ import dollar.api.Scope;
 import dollar.api.URIAware;
 import dollar.api.VarInternal;
 import dollar.api.types.DollarFactory;
+import dollar.api.types.DollarRange;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.ParserErrorHandler;
 import dollar.internal.runtime.script.api.ParserOptions;
+import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.operators.AssignmentOperator;
 import dollar.internal.runtime.script.operators.CollectOperator;
 import dollar.internal.runtime.script.operators.DefinitionOperator;
@@ -55,6 +58,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,6 +66,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import static com.google.common.io.Files.asCharSource;
 import static dollar.api.DollarStatic.$;
 import static dollar.api.DollarStatic.$void;
 import static dollar.api.scripting.ScriptingSupport.compile;
@@ -195,9 +200,8 @@ public class DollarParserImpl implements DollarParser {
     private var parseMarkdown(@NotNull File file) throws IOException {
         PegDownProcessor pegDownProcessor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
         RootNode root =
-                pegDownProcessor.parseMarkdown(
-                        com.google.common.io.Files.toString(file, Charset.forName("utf-8"))
-                                .toCharArray());
+                pegDownProcessor.parseMarkdown(asCharSource(file, Charset.forName("utf-8"))
+                                                       .read().toCharArray());
         root.accept(new CodeExtractionVisitor());
         return $();
     }
@@ -244,6 +248,7 @@ public class DollarParserImpl implements DollarParser {
                                           collectExpression(ref.lazy(), true),
                                           whenExpression(ref.lazy(), true),
                                           functionCall(true),
+                                          rangeExpression(ref, true),
                                           DECIMAL_LITERAL,
                                           INTEGER_LITERAL,
                                           STRING_LITERAL,
@@ -267,6 +272,7 @@ public class DollarParserImpl implements DollarParser {
                                           functionCall(false),
                                           scriptExpression(ref, false),
                                           pureDefinitionOperator(ref),
+                                          rangeExpression(ref, false),
                                           URL,
                                           DECIMAL_LITERAL,
                                           INTEGER_LITERAL,
@@ -292,7 +298,6 @@ public class DollarParserImpl implements DollarParser {
         table = infixl(pure, table, EQUALITY, var::$equals);
         table = infixl(pure, table, AND, DollarStatic::$and);
         table = infixl(pure, table, OR, DollarStatic::$or);
-        table = infixl(pure, table, RANGE, Func::rangeFunc);
         table = infixl(pure, table, LT, DollarStatic::$lt);
         table = infixl(pure, table, GT, DollarStatic::$gt);
         table = infixl(pure, table, LT_EQUALS, DollarStatic::$lte);
@@ -380,7 +385,7 @@ public class DollarParserImpl implements DollarParser {
                                        @NotNull OperatorTable<var> table,
                                        @NotNull OpDef operator,
                                        @NotNull Function<var, var> f2) {
-        return table.postfix(op(operator, new UnaryOp(this, operator, f2, pure)), operator.priority());
+        return table.postfix(op(operator, new DollarUnaryOperator(this, operator, f2, pure)), operator.priority());
     }
 
     @NotNull
@@ -406,7 +411,7 @@ public class DollarParserImpl implements DollarParser {
                                                 @NotNull OperatorTable<var> table,
                                                 @NotNull OpDef operator,
                                                 @NotNull Function<var, var> f) {
-        return table.prefix(op(operator, new UnaryOp(true, f, operator, this, pure)),
+        return table.prefix(op(operator, new DollarUnaryOperator(true, f, operator, this, pure)),
                             operator.priority());
     }
 
@@ -415,7 +420,7 @@ public class DollarParserImpl implements DollarParser {
                                       @NotNull OperatorTable<var> table,
                                       @NotNull OpDef operator,
                                       @NotNull Function<var, var> f) {
-        return table.prefix(op(operator, new UnaryOp(this, operator, f, pure)), operator.priority());
+        return table.prefix(op(operator, new DollarUnaryOperator(this, operator, f, pure)), operator.priority());
     }
 
     @NotNull
@@ -499,6 +504,41 @@ public class DollarParserImpl implements DollarParser {
                                    );
                                    entries.forEach(entry -> entry.$listen(i -> node.$notify()));
                                    return node;
+
+                               });
+    }
+
+    private Parser<var> rangeExpression(@NotNull Parser.Reference<var> expression, boolean pure) {
+        return array(or(OP(LEFT_BRACKET), OP(LEFT_PAREN)),//0
+                     expression.lazy().optional(null),//1
+                     OP(RANGE),//2
+                     expression.lazy().optional(null),//3
+                     or(OP(RIGHT_BRACKET), OP(RIGHT_PAREN))//4
+        ).token()
+                       .map(
+                               token -> {
+                                   Object[] objects = (Object[]) token.value();
+                                   var upperBound = (var) objects[3];
+                                   var lowerBound = (var) objects[1];
+                                   return node(RANGE, pure, this, token, Arrays.asList(lowerBound, upperBound),
+                                               args -> {
+                                                   boolean closedLeft = objects[0].toString().equals(LEFT_BRACKET.symbol());
+                                                   boolean closedRight = objects[4].toString().equals(RIGHT_BRACKET.symbol());
+                                                   boolean lowerBounds = lowerBound != null;
+                                                   boolean upperBounds = upperBound != null;
+                                                   if (!closedLeft && !closedRight && (lowerBound != null) && (upperBound != null)
+                                                               && lowerBound.$unwrap().equals(upperBound.$unwrap())) {
+                                                       throw new DollarScriptException("Cannot create an open range with " +
+                                                                                               "identical upper and lower " +
+                                                                                               "bounds", new SourceSegmentValue
+                                                                                                                 (currentScope(),
+                                                                                                                  token));
+                                                   } else {
+                                                       return DollarFactory.wrap(
+                                                               new DollarRange(ImmutableList.of(), lowerBounds, upperBounds,
+                                                                               closedLeft, closedRight, lowerBound, upperBound));
+                                                   }
+                                               });
 
                                });
     }

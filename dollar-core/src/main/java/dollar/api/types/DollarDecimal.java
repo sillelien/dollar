@@ -16,9 +16,9 @@
 
 package dollar.api.types;
 
+import com.google.common.collect.ImmutableList;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
-import dollar.api.collections.ImmutableList;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 

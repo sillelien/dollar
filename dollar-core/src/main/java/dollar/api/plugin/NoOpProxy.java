@@ -33,10 +33,11 @@ public final class NoOpProxy<T extends ExtensionPoint<T>> implements java.lang.r
 
     @NotNull
     public static <T extends ExtensionPoint<T>> T newInstance(@NotNull Class<T> c) {
+        //noinspection unchecked
         return (T) java.lang.reflect.Proxy.newProxyInstance(
                 c.getClassLoader(),
-                new Class<?>[]{c},
-                new NoOpProxy<>(c));
+                new Class[]{c},
+                new NoOpProxy<T>(c));
     }
 
     @NotNull

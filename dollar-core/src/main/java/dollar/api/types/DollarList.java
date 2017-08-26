@@ -16,13 +16,13 @@
 
 package dollar.api.types;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import dollar.api.CollectionAware;
 import dollar.api.DollarStatic;
 import dollar.api.NumericAware;
 import dollar.api.Pipeable;
 import dollar.api.Type;
-import dollar.api.collections.ImmutableList;
-import dollar.api.collections.ImmutableMap;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.guard.Guarded;
 import dollar.api.guard.NotNullGuard;
@@ -104,7 +104,7 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public var $minus(@NotNull var rhs) {
-        ArrayList<var> newVal = new ArrayList<>(list.mutable());
+        ArrayList<var> newVal = new ArrayList<>(list);
         newVal.remove(rhs);
         return DollarFactory.fromValue(newVal, errors());
     }
@@ -121,7 +121,7 @@ public class DollarList extends AbstractDollar {
     @Override
     @Guarded(NotNullGuard.class)
     public var $negate() {
-        ArrayList<var> result = new ArrayList<>(list.mutable());
+        ArrayList<var> result = new ArrayList<>(list);
         Collections.reverse(result);
         return DollarFactory.fromValue(result, errors());
     }
@@ -167,7 +167,7 @@ public class DollarList extends AbstractDollar {
                                          false);
         }
         for (int i = 0; i < max; i++) {
-            list.addAll(this.list.mutable());
+            list.addAll(this.list);
         }
         if (v.negative()) {
             Collections.reverse(list);
@@ -309,7 +309,7 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public <R> R toJavaObject() {
-        return (R) Collections.unmodifiableList(toList().mutable());
+        return (R) Collections.unmodifiableList(toList());
     }
 
     @org.jetbrains.annotations.NotNull
@@ -340,9 +340,9 @@ public class DollarList extends AbstractDollar {
     @Override
     public var $append(@NotNull var value) {
 
-        final ArrayList<var> newList = new ArrayList<>(toVarList().mutable());
+        final ArrayList<var> newList = new ArrayList<>(toVarList());
         if (value.list()) {
-            newList.addAll(value.toVarList().mutable());
+            newList.addAll(value.toVarList());
         } else {
             newList.add(value);
         }
@@ -380,11 +380,11 @@ public class DollarList extends AbstractDollar {
         final ArrayList newList = new ArrayList();
 
         if (value.list()) {
-            newList.addAll(value.toVarList().mutable());
+            newList.addAll(value.toVarList());
         } else {
             newList.add(value);
         }
-        newList.addAll(toVarList().mutable());
+        newList.addAll(toVarList());
         return DollarFactory.fromValue(newList, errors(), value.errors());
     }
 
@@ -393,9 +393,9 @@ public class DollarList extends AbstractDollar {
     @Override
     public var $insert(@NotNull var value, int position) {
         final ArrayList newList = new ArrayList();
-        newList.addAll(toVarList().mutable());
+        newList.addAll(toVarList());
         if (value.list()) {
-            newList.addAll(position, value.toVarList().mutable());
+            newList.addAll(position, value.toVarList());
         } else {
             newList.add(position, value);
         }
@@ -412,7 +412,7 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Override
     public var $set(@NotNull var key, @NotNull Object value) {
-        ArrayList<var> newVal = new ArrayList<>(list.mutable());
+        ArrayList<var> newVal = new ArrayList<>(list);
         if (key.integer()) {
             newVal.set(key.toInteger(), DollarFactory.fromValue(value));
         } else {
@@ -529,11 +529,11 @@ public class DollarList extends AbstractDollar {
         if (obj == null) {
             return false;
         } else if (obj instanceof ImmutableList) {
-            return list.mutable().equals(((ImmutableList) obj).mutable());
+            return list.equals(obj);
         } else if (obj instanceof List) {
-            return list.mutable().equals(obj);
+            return list.equals(obj);
         } else if (obj instanceof var) {
-            return list.mutable().equals(((var) obj).toVarList().mutable());
+            return list.equals(((var) obj).toVarList());
         }
         return false;
     }

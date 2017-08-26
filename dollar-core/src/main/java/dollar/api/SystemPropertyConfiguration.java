@@ -27,11 +27,16 @@ public class SystemPropertyConfiguration implements Configuration {
     private boolean failFast = true;
 
 
-    public SystemPropertyConfiguration(boolean safe, boolean monitor, boolean production, boolean debugScope) {
+    public SystemPropertyConfiguration(boolean safe,
+                                       boolean monitor,
+                                       boolean production,
+                                       boolean debugScope,
+                                       boolean debugParallel) {
         this.safe = safe;
         this.monitor = monitor;
         this.production = production;
         this.debugScope = debugScope;
+        this.debugParallel = debugParallel;
     }
 
     public SystemPropertyConfiguration() {

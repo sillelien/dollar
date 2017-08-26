@@ -16,8 +16,8 @@
 
 package dollar.api;
 
-import dollar.api.collections.ImmutableList;
-import dollar.api.collections.ImmutableMap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import dollar.api.guard.AllVarCollectionGuard;
 import dollar.api.guard.AllVarMapGuard;
 import dollar.api.guard.ChainGuard;

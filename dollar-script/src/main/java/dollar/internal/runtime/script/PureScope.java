@@ -44,7 +44,7 @@ public class PureScope extends ScriptScope {
         if (file != null) {
             return file;
         } else {
-            String parentFile = parent.getFile();
+            String parentFile = parent.file();
             assert parentFile != null;
             return parentFile;
         }
@@ -64,7 +64,7 @@ public class PureScope extends ScriptScope {
         if (DollarStatic.getConfig().debugScope()) {
             log.info("Looking up {} in {}", key, this);
         }
-        Scope scope = getScopeForKey(key);
+        Scope scope = scopeForKey(key);
         if (scope == null) {
             scope = this;
         } else {
@@ -72,7 +72,7 @@ public class PureScope extends ScriptScope {
                 log.info("Found {} in {}", key, scope);
             }
         }
-        Variable result = (Variable) scope.getVariables().get(key);
+        Variable result = (Variable) scope.variables().get(key);
         if ((result != null)) {
             if (!result.isPure()) {
                 throw new DollarScriptException("Cannot access impure values in a pure expression, put  'pure'  before the " +
@@ -98,7 +98,7 @@ public class PureScope extends ScriptScope {
 
     @Nullable
     @Override
-    public Scope getScopeForParameters() {
+    public Scope scopeForParameters() {
         return this;
     }
 
@@ -118,7 +118,7 @@ public class PureScope extends ScriptScope {
         if (key.matches("[0-9]+")) {
             throw new AssertionError("Cannot set numerical keys, use parameter");
         }
-        Scope scope = getScopeForKey(key);
+        Scope scope = scopeForKey(key);
         if ((scope != null) && !Objects.equals(scope, this)) {
             throw new DollarScriptException("Cannot modify variables outside of a pure scope");
         }
@@ -126,12 +126,12 @@ public class PureScope extends ScriptScope {
             scope = this;
         }
         if (DollarStatic.getConfig().debugScope()) { log.info("Setting {} in {}", key, scope); }
-        if (scope.getVariables().containsKey(key) && ((Variable) scope.getVariables().get(key)).isReadonly()) {
+        if (scope.variables().containsKey(key) && ((Variable) scope.variables().get(key)).isReadonly()) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
         final var fixedValue = fixed ? value.$fixDeep() : value;
-        if (scope.getVariables().containsKey(key)) {
-            final Variable variable = ((Variable) scope.getVariables().get(key));
+        if (scope.variables().containsKey(key)) {
+            final Variable variable = ((Variable) scope.variables().get(key));
             if (!variable.isVolatile() && (variable.getThread() != Thread.currentThread().getId())) {
                 handleError(new DollarScriptException("Concurrency Error: Cannot change the variable " +
                                                               key +
@@ -143,7 +143,7 @@ public class PureScope extends ScriptScope {
             }
             variable.setValue(fixedValue);
         } else {
-            scope.getVariables()
+            scope.variables()
                     .put(key, new Variable(fixedValue, readonly, constraint, constraintSource, false, fixed, pure, false));
         }
         scope.notifyScope(key, fixedValue);

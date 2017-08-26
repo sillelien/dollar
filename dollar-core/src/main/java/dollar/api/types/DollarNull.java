@@ -16,10 +16,10 @@
 
 package dollar.api.types;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
-import dollar.api.collections.ImmutableList;
-import dollar.api.collections.ImmutableMap;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

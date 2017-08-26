@@ -23,15 +23,15 @@ import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.parser.OpDef;
 import dollar.internal.runtime.script.parser.OpDefType;
 import org.jetbrains.annotations.NotNull;
-import org.jparsec.functors.Binary;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 
 import static dollar.internal.runtime.script.DollarScriptSupport.node;
 import static dollar.internal.runtime.script.DollarScriptSupport.reactiveNode;
 
-public class BinaryOp implements Binary<var>, Operator {
+public class BinaryOp implements BinaryOperator<var>, Operator {
     private final boolean immediate;
     @NotNull
     private final BiFunction<var, var, var> function;
@@ -85,7 +85,7 @@ public class BinaryOp implements Binary<var>, Operator {
 
     @NotNull
     @Override
-    public var map(@NotNull var lhs, @NotNull var rhs) {
+    public var apply(@NotNull var lhs, @NotNull var rhs) {
         if (immediate) {
             return node(operation, pure, parser, source, Arrays.asList(lhs, rhs), vars -> function.apply(lhs, rhs));
 

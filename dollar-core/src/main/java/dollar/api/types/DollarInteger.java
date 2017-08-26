@@ -16,9 +16,10 @@
 
 package dollar.api.types;
 
+import com.google.common.collect.ImmutableList;
+import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
-import dollar.api.collections.ImmutableList;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
@@ -195,10 +196,13 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
 
     @Override
     public int compareTo(@NotNull var o) {
+        if (equals(o)) {
+            return 0;
+        }
         if (o.number()) {
-            return $minus(o).toInteger();
+            return (value.compareTo(o.toLong()));
         } else {
-            return toDollarScript().compareTo(o.toDollarScript());
+            throw new DollarException("Invalid comparison right-hand-side is not a number.");
         }
     }
 

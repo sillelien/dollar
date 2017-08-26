@@ -18,6 +18,7 @@ package dollar.api.types;
 
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.CompletableFuture;
@@ -37,9 +38,9 @@ public class DollarFuture implements java.lang.reflect.InvocationHandler {
         this.value = value;
     }
 
-    @NotNull
+    @Nullable
     @Override
-    public Object invoke(@NotNull Object proxy, @NotNull Method method, @NotNull Object[] args) throws Throwable {
+    public Object invoke(@NotNull Object proxy, @NotNull Method method, @Nullable Object[] args) throws Throwable {
         return method.invoke(value.get(), args);
     }
 }

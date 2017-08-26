@@ -1,5 +1,5 @@
 var (it < 100) a = 50
-var (it > previous || previous is Void) b = 5
+var (previous is Void || it > previous ) b = 5
 b=6
 b=7
 var ( it is String) s1="String value"

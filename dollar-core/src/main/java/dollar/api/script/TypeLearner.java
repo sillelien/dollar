@@ -35,23 +35,25 @@ public interface TypeLearner extends ExtensionPoint<TypeLearner> {
         ArrayList<String> perms = new ArrayList<>();
         boolean first = true;
         for (var input : inputs) {
-            TypePrediction inputPrediction = input.predictType();
-            final Set<String> types;
-            if ((inputPrediction == null) || inputPrediction.empty()) {
-                types = Collections.singleton(Type._ANY.toString());
-            } else {
-                types = inputPrediction.types().stream().map(Type::toString).collect(Collectors.toSet());
-            }
-            if (first) {
-                perms.addAll(types);
-                first = false;
-            } else {
-                for (String type : types) {
-                    ArrayList<String> newPerms = new ArrayList<>();
-                    for (String perm : perms) {
-                        newPerms.add(perm + "-" + type);
+            if (input != null) {
+                TypePrediction inputPrediction = input.predictType();
+                final Set<String> types;
+                if ((inputPrediction == null) || inputPrediction.empty()) {
+                    types = Collections.singleton(Type._ANY.toString());
+                } else {
+                    types = inputPrediction.types().stream().map(Type::toString).collect(Collectors.toSet());
+                }
+                if (first) {
+                    perms.addAll(types);
+                    first = false;
+                } else {
+                    for (String type : types) {
+                        ArrayList<String> newPerms = new ArrayList<>();
+                        for (String perm : perms) {
+                            newPerms.add(perm + "-" + type);
+                        }
+                        perms = newPerms;
                     }
-                    perms = newPerms;
                 }
             }
         }

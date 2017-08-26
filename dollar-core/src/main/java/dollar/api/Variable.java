@@ -19,7 +19,7 @@ package dollar.api;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Variable {
+public final class Variable {
     private final boolean readonly;
     @Nullable
     private final var constraint;
@@ -31,11 +31,10 @@ public class Variable {
     private boolean isVolatile;
     @NotNull
     private var value;
-    private boolean numeric;
+    private final boolean numeric;
 
     public Variable(@NotNull var value, @Nullable var constraint, @Nullable String constraintSource, boolean numeric) {
         this.numeric = numeric;
-
         setValue(value);
         this.constraint = constraint;
         this.constraintSource = constraintSource;
@@ -99,10 +98,6 @@ public class Variable {
 
         return getValue().equals(variable.getValue());
 
-    }
-
-    public boolean isFixed() {
-        return fixed;
     }
 
     public boolean isPure() {

@@ -202,7 +202,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 try {
                     if (newScope) {
                         if (pure || currentScope().pure()) {
-                            useScope = new PureScope(currentScope(), currentScope().getSource(), name, currentScope().getFile(),
+                            useScope = new PureScope(currentScope(), currentScope().source(), name, currentScope().file(),
                                                      isParallel());
                         } else {
                             if (currentScope().pure() && (operation.pure() != null) && !operation.pure()) {

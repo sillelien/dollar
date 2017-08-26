@@ -16,7 +16,7 @@
 
 package dollar.api;
 
-import dollar.api.collections.ImmutableList;
+import com.google.common.collect.ImmutableList;
 import dollar.api.guard.ChainGuard;
 import dollar.api.guard.Guarded;
 import dollar.api.guard.NotNullCollectionGuard;

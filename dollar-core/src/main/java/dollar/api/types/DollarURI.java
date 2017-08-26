@@ -18,13 +18,13 @@ package dollar.api.types;
 
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Signal;
 import dollar.api.Type;
-import dollar.api.collections.ImmutableList;
-import dollar.api.collections.ImmutableMap;
 import dollar.api.plugin.Plugins;
 import dollar.api.uri.URI;
 import dollar.api.uri.URIHandler;
@@ -304,7 +304,7 @@ public class DollarURI extends AbstractDollar {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ((o == null) || (getClass() != o.getClass())) return false;
         if (!super.equals(o)) return false;
         DollarURI dollarURI = (DollarURI) o;
         return Objects.equals(uri, dollarURI.uri);

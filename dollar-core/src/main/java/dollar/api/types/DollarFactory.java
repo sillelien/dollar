@@ -20,16 +20,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Range;
 import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.StateTracer;
 import dollar.api.Type;
 import dollar.api.collections.CollectionUtil;
-import dollar.api.collections.ImmutableList;
-import dollar.api.collections.ImmutableMap;
-import dollar.api.collections.MultiMap;
-import dollar.api.collections.Range;
 import dollar.api.exceptions.DollarFailureException;
 import dollar.api.json.DecodeException;
 import dollar.api.json.ImmutableJsonObject;
@@ -65,8 +65,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 public final class DollarFactory {
 
-    @NotNull
-    private static final Logger log = LoggerFactory.getLogger("DollarSource");
     /**
      * The constant VALUE_KEY.
      */
@@ -127,13 +125,12 @@ public final class DollarFactory {
      */
     @NotNull
     public static final var INTEGER_ZERO = wrap(new DollarInteger(ImmutableList.of(), 0L));
-
     @NotNull
     public static final var INFINITY = wrap(new DollarInfinity(true));
-
-    private DollarFactory() {
-    }
-
+    @NotNull
+    public static final var NEGATIVE_INFINITY = wrap(new DollarInfinity(false));
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger("DollarSource");
     /**
      * The Monitor.
      */
@@ -145,6 +142,8 @@ public final class DollarFactory {
     @NotNull
     static StateTracer tracer = DollarStatic.tracer();
 
+    private DollarFactory() {
+    }
 
     /**
      * From value.
@@ -156,7 +155,16 @@ public final class DollarFactory {
     @SafeVarargs
     @NotNull
     public static var fromValue(@Nullable Object o, @NotNull ImmutableList<Throwable>... errors) {
-        return create(ImmutableList.copyOf(errors), o);
+        return create(ImmutableList.copyOf(mergeErrors(errors)), o);
+    }
+
+    @NotNull
+    private static List<Throwable> mergeErrors(@NotNull ImmutableList<Throwable>[] errors) {
+        List<Throwable> mergedErrors = new ArrayList<>();
+        for (ImmutableList<Throwable> errorList : errors) {
+            mergedErrors.addAll(errorList);
+        }
+        return mergedErrors;
     }
 
     /**
@@ -221,7 +229,7 @@ public final class DollarFactory {
             return wrap(new DollarList(errors, new JsonArray(o.toString())));
         }
         if (o instanceof ImmutableMap) {
-            return wrap(new DollarMap(errors, ((ImmutableMap<?, ?>) o).mutable()));
+            return wrap(new DollarMap(errors, ((ImmutableMap<?, ?>) o)));
         }
         if (o instanceof Map) {
             return wrap(new DollarMap(errors, (Map) o));
@@ -292,7 +300,7 @@ public final class DollarFactory {
             return wrap(new DollarInteger(errors, ((Short) o).longValue()));
         }
         if (o instanceof Range) {
-            return wrap(new DollarRange(errors, (Range) o));
+            return wrap(new DollarRange(errors, (Range) o, false));
         }
         if (o instanceof ImmutableJsonObject) {
             return wrap(new DollarMap(errors, (ImmutableJsonObject) o));
@@ -322,8 +330,8 @@ public final class DollarFactory {
             }
         }
         JsonObject json;
-        if (o instanceof MultiMap) {
-            json = DollarStatic.mapToJson((MultiMap) o);
+        if (o instanceof Multimap) {
+            json = DollarStatic.mapToJson((Multimap) o);
         } else {
             json = Json.fromJavaObject(o);
         }
@@ -495,7 +503,7 @@ public final class DollarFactory {
     @SafeVarargs
     @NotNull
     public static var fromStringValue(@NotNull String body, ImmutableList<Throwable>... errors) {
-        return wrap(new DollarString(ImmutableList.copyOf(errors), body));
+        return wrap(new DollarString(ImmutableList.copyOf(mergeErrors(errors)), body));
     }
 
     /**
@@ -796,7 +804,7 @@ public final class DollarFactory {
         } else if (i.is(Type._RANGE)) {
             final JsonObject rangeObject = new JsonObject();
             rangeObject.putString(TYPE_KEY, value.$type().name());
-            final Range range = value.toJavaObject();
+            final Range<var> range = value.toJavaObject();
             rangeObject.putValue(LOWERBOUND_KEY, toJson(range.lowerEndpoint()));
             rangeObject.putValue(UPPERBOUND_KEY, toJson(range.upperEndpoint()));
             return rangeObject;
@@ -823,13 +831,13 @@ public final class DollarFactory {
     @SafeVarargs
     @NotNull
     public static var infinity(boolean positive, ImmutableList<Throwable>... errors) {
-        return wrap(new DollarInfinity(ImmutableList.copyOf(errors), positive));
+        return wrap(new DollarInfinity(ImmutableList.copyOf(mergeErrors(errors)), positive));
     }
 
     @SafeVarargs
     @NotNull
     public static var newNull(@NotNull Type type, ImmutableList<Throwable>... errors) {
-        return new DollarNull(ImmutableList.copyOf(errors), type);
+        return new DollarNull(ImmutableList.copyOf(mergeErrors(errors)), type);
     }
 
     @NotNull
@@ -850,7 +858,7 @@ public final class DollarFactory {
 
     @NotNull
     public static var fromMap(@NotNull ImmutableMap<var, var> entries) {
-        return wrap(new DollarMap(ImmutableList.of(), entries.mutable()));
+        return wrap(new DollarMap(ImmutableList.of(), entries));
     }
 
     @NotNull

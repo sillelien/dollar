@@ -73,6 +73,7 @@ public final class Json {
     @NotNull
     public static JsonObject fromJavaObject(@NotNull Object o) {
 
+        //noinspection unchecked
         return new JsonObject(mapper.convertValue(o, Map.class));
 
     }

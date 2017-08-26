@@ -17,12 +17,12 @@
 package dollar.api.types;
 
 import com.github.oxo42.stateless4j.StateMachine;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import dollar.api.Pipeable;
 import dollar.api.Signal;
 import dollar.api.Type;
 import dollar.api.TypePrediction;
-import dollar.api.collections.ImmutableList;
-import dollar.api.collections.ImmutableMap;
 import dollar.api.guard.AllVarCollectionGuard;
 import dollar.api.guard.AllVarMapGuard;
 import dollar.api.guard.ChainGuard;

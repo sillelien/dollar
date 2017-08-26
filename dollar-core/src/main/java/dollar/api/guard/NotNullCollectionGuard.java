@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class NotNullCollectionGuard implements Guard {
     @NotNull
     @Override

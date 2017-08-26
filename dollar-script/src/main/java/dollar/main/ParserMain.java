@@ -37,7 +37,8 @@ public final class ParserMain {
     public static void main(@NotNull String[] args) throws Throwable {
 
         final ParserOptions options = new ParserOptions();
-        new JCommander(options, args);
+        JCommander jCommander = new JCommander(options);
+        jCommander.parse(args);
         File file = options.getFile();
         DollarStatic.setConfig(new ParserConfiguration(options));
         DollarParser parser = new DollarParserImpl(options);

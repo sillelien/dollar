@@ -16,8 +16,8 @@
 
 package dollar.api;
 
-import dollar.api.collections.ImmutableList;
-import dollar.api.collections.MultiMap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Multimap;
 import dollar.api.json.JsonArray;
 import dollar.api.json.JsonObject;
 import dollar.api.monitor.DollarMonitor;
@@ -27,6 +27,8 @@ import dollar.api.types.DollarFuture;
 import dollar.api.uri.URI;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.time.Instant;
@@ -49,6 +51,8 @@ public class DollarStatic {
     public static final ThreadLocal<DollarThreadContext> threadContext = ThreadLocal.withInitial(DollarThreadContext::new);
     @NotNull
     private static final ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(DollarStatic.class);
     @NotNull
     private static Configuration config = new SystemPropertyConfiguration();
 
@@ -91,7 +95,7 @@ public class DollarStatic {
      */
     @NotNull
     public static var $range(long from, long to) {
-        return DollarFactory.fromRange($(from), $(to));
+        return DollarFactory.fromRange(DollarStatic.$(from), DollarStatic.$(to));
     }
 
     /**
@@ -136,7 +140,6 @@ public class DollarStatic {
     public static var $null(@NotNull Type type) {
         return DollarFactory.newNull(type);
     }
-
 
     /**
      * Fix, i.e. evaluate lambdas to the depth supplied, optionally hinting that parallel behaviour is fine
@@ -403,9 +406,9 @@ public class DollarStatic {
      * @return the json object
      */
     @NotNull
-    public static JsonObject mapToJson(@NotNull MultiMap<String, String> map) {
+    public static JsonObject mapToJson(@NotNull Multimap<String, String> map) {
         JsonObject jsonObject = new JsonObject();
-        for (Map.Entry<String, Collection<String>> entry : map.entries()) {
+        for (Map.Entry<String, Collection<String>> entry : map.asMap().entrySet()) {
             jsonObject.putString(entry.getKey(), entry.getValue().iterator().next());
         }
         return jsonObject;
@@ -429,7 +432,6 @@ public class DollarStatic {
         }
         return jsonObject;
     }
-
 
     /**
      * The beginning of any Dollar Code should start with a DollarStatic.run/call method. This creates an identifier
@@ -490,7 +492,6 @@ public class DollarStatic {
         threadContext.get().popLabel(value);
     }
 
-
     /**
      * $ fork.
      *
@@ -530,7 +531,6 @@ public class DollarStatic {
         return DollarFactory.fromValue(values, ImmutableList.of());
     }
 
-
     public static var $blockingQueue() {
         return DollarFactory.fromQueue(new LinkedBlockingDeque<>());
     }
@@ -565,7 +565,6 @@ public class DollarStatic {
         }
     }
 
-
     /**
      * Monitor dollar monitor.
      *
@@ -575,7 +574,6 @@ public class DollarStatic {
     public static DollarMonitor monitor() {
         return threadContext.get().getMonitor();
     }
-
 
     /**
      * Create var.
@@ -604,7 +602,7 @@ public class DollarStatic {
      * @param message the message
      */
     public static void log(@NotNull Object message) {
-        System.out.println(threadContext.get().getLabels() + ":" + message);
+        log.info("{}:{}", threadContext.get().getLabels(), message);
     }
 
     /**
@@ -638,7 +636,7 @@ public class DollarStatic {
      * @param message the message
      */
     public static void log(@NotNull String message) {
-        System.out.println(threadContext.get().getLabels() + ":" + message);
+        log.info("{}:{}", threadContext.get().getLabels(), message);
     }
 
     /**

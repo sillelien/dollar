@@ -16,10 +16,10 @@
 
 package dollar.api.types;
 
+import com.google.common.collect.ImmutableList;
 import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
-import dollar.api.collections.ImmutableList;
 import dollar.api.json.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -115,10 +115,10 @@ public class DollarError extends DollarVoid {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ((o == null) || (getClass() != o.getClass())) return false;
         if (!super.equals(o)) return false;
         DollarError that = (DollarError) o;
-        return errorType == that.errorType &&
+        return (errorType == that.errorType) &&
                        Objects.equals(errorMessage, that.errorMessage);
     }
 }

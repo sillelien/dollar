@@ -67,10 +67,10 @@ public class SourceNodeOptions {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if ((o == null) || (getClass() != o.getClass())) return false;
         SourceNodeOptions that = (SourceNodeOptions) o;
-        return newScope == that.newScope &&
-                       scopeClosure == that.scopeClosure &&
-                       parallel == that.parallel;
+        return (newScope == that.newScope) &&
+                       (scopeClosure == that.scopeClosure) &&
+                       (parallel == that.parallel);
     }
 }

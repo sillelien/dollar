@@ -16,12 +16,12 @@
 
 package dollar.internal.runtime.script;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import dollar.api.DollarException;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.Variable;
-import dollar.api.collections.MultiHashMap;
-import dollar.api.collections.MultiMap;
 import dollar.api.exceptions.LambdaRecursionException;
 import dollar.api.script.SourceSegment;
 import dollar.api.var;
@@ -58,12 +58,12 @@ public class ScriptScope implements Scope {
     @NotNull
     private static final AtomicInteger counter = new AtomicInteger();
     @NotNull
-    protected final ConcurrentHashMap<String, Variable> variables = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Variable> variables = new ConcurrentHashMap<>();
 
     @NotNull
     final String id;
     @NotNull
-    private final MultiMap<String, Listener> listeners = new MultiHashMap<>();
+    private final Multimap<String, Listener> listeners = ArrayListMultimap.create();
     @NotNull
     private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
     private final boolean root;
@@ -73,14 +73,14 @@ public class ScriptScope implements Scope {
     private String source;
     @Nullable
     private String file;
-    @NotNull
-    private Parser<var> parser;
+    private final boolean parallel;
 
     private boolean parameterScope;
     private boolean destroyed;
-    private boolean parallel;
+    @Nullable
+    private Parser<var> parser;
 
-    public ScriptScope(@NotNull String name, boolean root, boolean parallel) {
+    ScriptScope(@NotNull String name, boolean root, boolean parallel) {
         this.root = root;
         this.parallel = parallel;
         parent = null;
@@ -89,7 +89,7 @@ public class ScriptScope implements Scope {
         id = name + ":" + counter.incrementAndGet();
     }
 
-    public ScriptScope(@NotNull String source, @NotNull String name, boolean root, boolean parallel) {
+    ScriptScope(@NotNull String source, @NotNull String name, boolean root, boolean parallel) {
         this.root = root;
         this.parallel = parallel;
         parent = null;
@@ -100,11 +100,11 @@ public class ScriptScope implements Scope {
     }
 
 
-    public ScriptScope(@NotNull Scope parent, @NotNull String name, boolean root, boolean parallel) {
+    ScriptScope(@NotNull Scope parent, @NotNull String name, boolean root, boolean parallel) {
         this.parent = parent;
-        file = parent.getFile();
+        file = parent.file();
         this.root = root;
-        source = parent.getSource();
+        source = parent.source();
         id = name + ":" + counter.incrementAndGet();
         this.parallel = parallel;
         checkPure(parent);
@@ -131,7 +131,7 @@ public class ScriptScope implements Scope {
         checkPure(parent);
     }
 
-    public ScriptScope(@Nullable String source, @NotNull File file, boolean root, boolean parallel) {
+    ScriptScope(@Nullable String source, @NotNull File file, boolean root, boolean parallel) {
         this.source = source;
         this.file = file.getAbsolutePath();
         this.root = root;
@@ -140,15 +140,15 @@ public class ScriptScope implements Scope {
 
     }
 
-    public ScriptScope(@NotNull Scope parent,
-                       @NotNull String id,
-                       @NotNull String file,
-                       boolean parameterScope,
-                       @NotNull ConcurrentHashMap<String, Variable> variables,
-                       @NotNull List<var> errorHandlers,
-                       @NotNull MultiMap<String, Listener> listeners,
-                       @NotNull String source,
-                       @NotNull Parser<var> parser, boolean root, boolean parallel) {
+    private ScriptScope(@NotNull Scope parent,
+                        @NotNull String id,
+                        @NotNull String file,
+                        boolean parameterScope,
+                        @NotNull ConcurrentHashMap<String, Variable> variables,
+                        @NotNull List<var> errorHandlers,
+                        @NotNull Multimap<String, Listener> listeners,
+                        @NotNull String source,
+                        @NotNull Parser<var> parser, boolean root, boolean parallel) {
         this.parent = parent;
         this.id = id;
         this.file = file;
@@ -156,7 +156,7 @@ public class ScriptScope implements Scope {
         this.parallel = parallel;
         this.variables.putAll(variables);
         this.errorHandlers.addAll(errorHandlers);
-        for (Map.Entry<String, Collection<Listener>> entry : listeners.entries()) {
+        for (Map.Entry<String, Collection<Listener>> entry : listeners.asMap().entrySet()) {
             this.listeners.putAll(entry.getKey(), entry.getValue());
         }
         this.source = source;
@@ -166,8 +166,8 @@ public class ScriptScope implements Scope {
 
     }
 
-    public void checkPure(@NotNull Scope parent) {
-        if (parent.pure() && !this.pure()) {
+    private void checkPure(@NotNull Scope parent) {
+        if (parent.pure() && !pure()) {
             log.debug("Impure child {} of pure parent {}", id, parent);
             handleError(new PureFunctionException());
         }
@@ -204,7 +204,7 @@ public class ScriptScope implements Scope {
         if (getConfig().debugScope()) {
             log.info("Looking up {} in {}", key, this);
         }
-        Scope scope = getScopeForKey(key);
+        Scope scope = scopeForKey(key);
         if (scope == null) {
             scope = this;
         } else {
@@ -212,7 +212,7 @@ public class ScriptScope implements Scope {
                 log.info("{} in {}", DollarScriptSupport.ansiColor("FOUND " + key, DollarScriptSupport.ANSI_CYAN), scope);
             }
         }
-        Variable result = (Variable) scope.getVariables().get(key);
+        Variable result = (Variable) scope.variables().get(key);
 
         if (mustFind) {
             if (result == null) {
@@ -232,56 +232,55 @@ public class ScriptScope implements Scope {
 
     @Nullable
     @Override
-    public Variable getVariable(@NotNull String key) {
+    public Variable variable(@NotNull String key) {
         return variables.get(key);
     }
 
     @Nullable
     @Override
-    public var getConstraint(@NotNull String key) {
+    public var constraint(@NotNull String key) {
         checkDestroyed();
 
-        Scope scope = getScopeForKey(key);
+        Scope scope = scopeForKey(key);
         if (scope == null) {
             scope = this;
         }
         if (getConfig().debugScope()) {
             log.info("Getting constraint for {} in {}", key, scope);
         }
-        if (scope.getVariables().containsKey(key) && (((Variable) scope.getVariables().get(
+        if (scope.variables().containsKey(key) && (((Variable) scope.variables().get(
                 key)).getConstraint() != null)) {
-            return ((Variable) scope.getVariables().get(key)).getConstraint();
+            return ((Variable) scope.variables().get(key)).getConstraint();
         }
         return null;
     }
 
     @Nullable
     @Override
-    public String getConstraintSource(@NotNull String key) {
+    public String constraintSource(@NotNull String key) {
         checkDestroyed();
 
-        Scope scope = getScopeForKey(key);
+        Scope scope = scopeForKey(key);
         if (scope == null) {
             scope = this;
         }
         if (getConfig().debugScope()) {
             log.info("Getting constraint for {} in {}", key, scope);
         }
-        if (scope.getVariables().containsKey(key) && (((Variable) scope.getVariables().get(
+        if (scope.variables().containsKey(key) && (((Variable) scope.variables().get(
                 key)).getConstraintSource() != null)) {
-            return ((Variable) scope.getVariables().get(key)).getConstraintSource();
+            return ((Variable) scope.variables().get(key)).getConstraintSource();
         }
         return null;
     }
 
     @Override
-    public String getFile() {
+    public String file() {
         return file;
     }
 
-    @NotNull
     @Override
-    public MultiMap<String, Listener> getListeners() {
+    public @NotNull Multimap<String, Listener> listeners() {
         return listeners;
     }
 
@@ -293,7 +292,7 @@ public class ScriptScope implements Scope {
         if (getConfig().debugScope()) {
             log.info("Looking up parameter {} in {}", key, this);
         }
-        Scope scope = getScopeForParameters();
+        Scope scope = scopeForParameters();
         if (scope == null) {
             scope = this;
         } else {
@@ -301,21 +300,21 @@ public class ScriptScope implements Scope {
                 log.info("Found {} in {}", key, scope);
             }
         }
-        Variable result = ((Variable) scope.getVariables().get(key));
+        Variable result = ((Variable) scope.variables().get(key));
 
         return (result != null) ? result.getValue() : $void();
     }
 
     @Nullable
     @Override
-    public Scope getScopeForKey(@NotNull String key) {
+    public Scope scopeForKey(@NotNull String key) {
         checkDestroyed();
 
         if (variables.containsKey(key)) {
             return this;
         }
         if (parent != null) {
-            return parent.getScopeForKey(key);
+            return parent.scopeForKey(key);
         } else {
 //            if (DollarStatic.getConfig().debugScope()) { log.info("Scope not found for " + key); }
             return null;
@@ -324,14 +323,14 @@ public class ScriptScope implements Scope {
 
     @Nullable
     @Override
-    public Scope getScopeForParameters() {
+    public Scope scopeForParameters() {
         checkDestroyed();
 
         if (parameterScope) {
             return this;
         }
         if (parent != null) {
-            return parent.getScopeForParameters();
+            return parent.scopeForParameters();
         } else {
             if (getConfig().debugScope()) {
                 log.info("Parameter scope not found.");
@@ -342,13 +341,13 @@ public class ScriptScope implements Scope {
 
     @Nullable
     @Override
-    public String getSource() {
+    public String source() {
         return source;
     }
 
     @NotNull
     @Override
-    public Map<String, Variable> getVariables() {
+    public Map<String, Variable> variables() {
         return variables;
     }
 
@@ -429,7 +428,7 @@ public class ScriptScope implements Scope {
     public boolean has(@NotNull String key) {
         checkDestroyed();
 
-        Scope scope = getScopeForKey(key);
+        Scope scope = scopeForKey(key);
         if (scope == null) {
             scope = this;
         }
@@ -437,7 +436,7 @@ public class ScriptScope implements Scope {
             log.info("Checking for {} in {}", key, scope);
         }
 
-        Variable val = ((Variable) scope.getVariables().get(key));
+        Variable val = ((Variable) scope.variables().get(key));
         return val != null;
 
     }
@@ -449,7 +448,7 @@ public class ScriptScope implements Scope {
         if (getConfig().debugScope()) {
             log.info("Looking up parameter {} in {}", key, this);
         }
-        Scope scope = getScopeForParameters();
+        Scope scope = scopeForParameters();
         if (scope == null) {
             scope = this;
         } else {
@@ -457,7 +456,7 @@ public class ScriptScope implements Scope {
                 log.info("Found {} in {}", key, scope);
             }
         }
-        Variable result = ((Variable) scope.getVariables().get(key));
+        Variable result = ((Variable) scope.variables().get(key));
 
         return result != null;
     }
@@ -497,7 +496,7 @@ public class ScriptScope implements Scope {
             }
             return;
         }
-        Scope scopeForKey = getScopeForKey(key);
+        Scope scopeForKey = scopeForKey(key);
         if (scopeForKey == null) {
             if (getConfig().debugScope()) {
                 log.info("Key {} not found in {}", key, this);
@@ -510,10 +509,10 @@ public class ScriptScope implements Scope {
         }
 
 
-        if (listeners.getCollection(key).stream().filter(i -> i.getId().equals(id)).count() == 0) {
-            scopeForKey.getListeners().putValue(key, listener);
+        if (listeners.get(key).stream().filter(i -> i.getId().equals(id)).count() == 0) {
+            scopeForKey.listeners().put(key, listener);
         }
-        log.debug("Listener size now {}", scopeForKey.getListeners().getCollection(key).size());
+        log.debug("Listener size now {}", scopeForKey.listeners().get(key).size());
     }
 
     @Nullable
@@ -534,10 +533,10 @@ public class ScriptScope implements Scope {
         }
         log.debug("Scope {} notified for {}", this, key);
         if (listeners.containsKey(key)) {
-            log.debug("Scope {} notified for {} with {} listeners", this, key, listeners.getCollection(
+            log.debug("Scope {} notified for {} with {} listeners", this, key, listeners.get(
                     key)
                                                                                        .size());
-            new ArrayList<>(listeners.getCollection(key)).forEach(
+            new ArrayList<>(listeners.get(key)).forEach(
                     pipe -> {
                         try {
                             pipe.pipe($(key), value);
@@ -565,17 +564,17 @@ public class ScriptScope implements Scope {
         if (key.matches("[0-9]+")) {
             throw new DollarAssertionException("Cannot set numerical keys, use parameter");
         }
-        Scope scope = getScopeForKey(key);
+        Scope scope = scopeForKey(key);
         if (scope == null) {
             scope = this;
         }
 
-        if (scope.getVariables().containsKey(key) && ((Variable) scope.getVariables().get(
+        if (scope.variables().containsKey(key) && ((Variable) scope.variables().get(
                 key)).isReadonly()) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
-        if (scope.getVariables().containsKey(key)) {
-            final Variable variable = ((Variable) scope.getVariables().get(key));
+        if (scope.variables().containsKey(key)) {
+            final Variable variable = ((Variable) scope.variables().get(key));
             if (!variable.isVolatile() && (variable.getThread() != Thread.currentThread().getId())) {
                 handleError(
                         new DollarScriptException("Concurrency Error: Cannot change the variable " +
@@ -596,8 +595,8 @@ public class ScriptScope implements Scope {
             if (getConfig().debugScope()) {
                 log.info("Adding {} in {}", key, scope);
             }
-            scope.getVariables().put(key, new Variable(value, readonly, constraint, constraintSource, isVolatile, fixed, pure,
-                                                       key.matches("[0-9]+")));
+            scope.variables().put(key, new Variable(value, readonly, constraint, constraintSource, isVolatile, fixed, pure,
+                                                    key.matches("[0-9]+")));
         }
         scope.notifyScope(key, value);
         return value;
@@ -626,18 +625,32 @@ public class ScriptScope implements Scope {
         }
     }
 
-    @NotNull
-    public Parser<var> getParser() {
-        return parser;
-    }
+    @Override
+    public void parent(@Nullable Scope scope) {
+        checkDestroyed();
 
-    public void setParser(@NotNull Parser<var> parser) {
-        this.parser = parser;
+        if (isRoot()) {
+            throw new UnsupportedOperationException("Cannot set the parent scope of a root scope, attempted to set " + scope);
+        }
+        parent = scope;
+        source = scope.source();
+        file = scope.file();
+
     }
 
     @Override
-    public Scope getParent() {
+    public Scope parent() {
         return parent;
+    }
+
+    @Override
+    public boolean hasParent(Scope scope) {
+        checkDestroyed();
+
+        if (parent() == null) {
+            return false;
+        }
+        return parent().equals(scope) || parent().hasParent(scope);
     }
 
     @NotNull
@@ -651,33 +664,28 @@ public class ScriptScope implements Scope {
     }
 
     @Override
+    public List<var> parametersAsVars() {
+        return variables.values().stream().filter(Variable::isNumeric).map(Variable::getValue).collect(Collectors.toList());
+    }
+
+    @NotNull
+    public Parser<var> parser() {
+        return parser;
+    }
+
+    @Override
     public boolean parallel() {
         return parallel;
     }
 
-
-    @Override
-    public void setParent(@Nullable Scope scope) {
-        checkDestroyed();
-
-        if (isRoot()) {
-            throw new UnsupportedOperationException("Cannot set the parent scope of a root scope, attempted to set " + scope);
-        }
-        parent = scope;
-        source = scope.getSource();
-        file = scope.getFile();
-
+    public void parser(@NotNull Parser<var> parser) {
+        this.parser = parser;
     }
 
-
+    @Nullable
     @Override
-    public boolean hasParent(Scope scope) {
-        checkDestroyed();
-
-        if (getParent() == null) {
-            return false;
-        }
-        return getParent().equals(scope) || getParent().hasParent(scope);
+    public String toString() {
+        return id + (parallel ? "=>" : "->") + parent;
     }
 
 
@@ -686,11 +694,7 @@ public class ScriptScope implements Scope {
         return root;
     }
 
-    @Nullable
-    @Override
-    public String toString() {
-        return id + (parallel ? "=>" : "->") + parent;
-    }
+
 
     @Override
     public void destroy() {
@@ -701,11 +705,6 @@ public class ScriptScope implements Scope {
     @Override
     public boolean pure() {
         return false;
-    }
-
-    @Override
-    public List<var> getParametersAsVars() {
-        return variables.values().stream().filter(Variable::isNumeric).map(Variable::getValue).collect(Collectors.toList());
     }
 
     private boolean checkConstraint(@NotNull var value,

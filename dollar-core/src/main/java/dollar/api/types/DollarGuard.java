@@ -16,7 +16,7 @@
 
 package dollar.api.types;
 
-import dollar.api.DollarStatic;
+import dollar.api.DollarException;
 import dollar.api.guard.Guarded;
 import dollar.api.guard.Guards;
 import dollar.api.var;
@@ -94,7 +94,7 @@ public class DollarGuard implements java.lang.reflect.InvocationHandler {
         } catch (InvocationTargetException e) {
             throw e.getCause();
         } catch (Exception e) {
-            return DollarStatic.logAndRethrow(e);
+            throw new DollarException(e);
         }
     }
 

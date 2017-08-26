@@ -16,9 +16,9 @@
 
 package dollar.api.types;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import dollar.api.DollarStatic;
-import dollar.api.collections.ImmutableList;
-import dollar.api.collections.ImmutableMap;
 import dollar.api.json.ImmutableJsonObject;
 import dollar.api.json.JsonObject;
 import dollar.api.var;
@@ -165,7 +165,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableList<Object> toList() {
+    public ImmutableList<? extends T> toList() {
         return ImmutableList.of(value);
     }
 

@@ -16,6 +16,7 @@
 
 package dollar.redis;
 
+import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.uri.URI;
@@ -150,7 +151,7 @@ public class RedisURIHandler implements URIHandler {
                     try {
                         consumer.pipe(DollarStatic.$(message));
                     } catch (Exception e) {
-                        DollarStatic.logAndRethrow(e);
+                        throw new DollarException(e);
                     }
                 }
 
@@ -159,7 +160,7 @@ public class RedisURIHandler implements URIHandler {
                     try {
                         consumer.pipe(DollarStatic.$(message));
                     } catch (Exception e) {
-                        DollarStatic.logAndRethrow(e);
+                        throw new DollarException(e);
                     }
                 }
 

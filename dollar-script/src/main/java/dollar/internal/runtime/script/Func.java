@@ -19,7 +19,6 @@ package dollar.internal.runtime.script;
 import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.VarInternal;
-import dollar.api.collections.Range;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.plugin.Plugins;
 import dollar.api.script.ModuleResolver;
@@ -46,7 +45,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static dollar.api.DollarStatic.*;
-import static dollar.api.types.DollarFactory.fromValue;
 import static dollar.api.types.meta.MetaConstants.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.parser.Symbols.*;
@@ -125,15 +123,6 @@ public final class Func {
         return $(lhs.$S(), rhs);
     }
 
-    @NotNull
-    static var rangeFunc(@NotNull var lhs, @NotNull var rhs) {
-        return fromValue(new Range(lhs, rhs));
-    }
-
-    @NotNull
-    static var parallelFunc(@NotNull var v) {
-        return v.$fixDeep(true);
-    }
 
     @NotNull
     static var forkFunc(@NotNull var v) {

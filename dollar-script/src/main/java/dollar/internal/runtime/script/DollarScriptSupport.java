@@ -236,13 +236,13 @@ public final class DollarScriptSupport {
                                 @NotNull ScopeExecutable<T> r) {
         Scope newScope;
         if (pure) {
-            newScope = new PureScope(parent, parent.getSource(), scopeName, parent.getFile(), parallel);
+            newScope = new PureScope(parent, parent.source(), scopeName, parent.file(), parallel);
         } else {
             if ((parent instanceof PureScope)) {
                 throw new IllegalStateException(
                                                        "trying to switch to an impure scope in a pure scope.");
             }
-            newScope = new ScriptScope(parent, parent.getFile(), parent.getSource(), scopeName,
+            newScope = new ScriptScope(parent, parent.file(), parent.source(), scopeName,
                                        false, parallel);
         }
         addScope(runtime, parent);
@@ -300,7 +300,7 @@ public final class DollarScriptSupport {
                                    @NotNull Token token, @NotNull DollarParser parser) {
         var lambda[] = new var[1];
         UUID id = UUID.randomUUID();
-        lambda[0] = node(VAR_USAGE_OP, pure, parser, token, $(key).$list().toVarList().mutable(),
+        lambda[0] = node(VAR_USAGE_OP, pure, parser, token, $(key).$list().toVarList(),
                          (i) -> {
                              Scope scope = currentScope();
 
@@ -311,10 +311,10 @@ public final class DollarScriptSupport {
                                  }
                              } else {
                                  if (scope.has(key)) {
-                                     Scope scopeForKey = scope.getScopeForKey(key);
+                                     Scope scopeForKey = scope.scopeForKey(key);
                                      assert scopeForKey != null;
                                      scopeForKey.listen(key, id.toString(), lambda[0]);
-                                     Variable v = scopeForKey.getVariable(key);
+                                     Variable v = scopeForKey.variable(key);
                                      if (!v.isPure() && (pure || scope.pure())) {
                                          currentScope().handleError(
                                                  new PureFunctionException("Attempted to use an impure variable in a " +
@@ -336,10 +336,10 @@ public final class DollarScriptSupport {
                                          }
                                      } else {
                                          if (scriptScope.has(key)) {
-                                             Scope scopeForKey = scriptScope.getScopeForKey(key);
+                                             Scope scopeForKey = scriptScope.scopeForKey(key);
                                              assert scopeForKey != null;
                                              scopeForKey.listen(key, id.toString(), lambda[0]);
-                                             Variable v = scopeForKey.getVariable(key);
+                                             Variable v = scopeForKey.variable(key);
                                              if (!v.isPure() && (pure || scope.pure())) {
                                                  scope.handleError(
                                                          new PureFunctionException("Attempted to use an impure " +

@@ -101,15 +101,15 @@ public final class TestGenerator {
 
     @NotNull
     public static List<var> rangeValues() {
-        return toVarValues(DollarStatic.$range(Instant.ofEpochSecond(1_000_000), Instant.ofEpochSecond(2_000_000)),
+        return toVarValues(DollarStatic.$range(Instant.ofEpochSecond(1_000_000),
+                                               Instant.ofEpochSecond(2_000_000)),
                            DollarStatic.$range(-1, 1),
-                           DollarStatic.$range(0,
-                                               -1), DollarStatic.$range(
-                        0, 0), DollarStatic.$range(1, -1), DollarStatic.$range(0, Long.MAX_VALUE),
+                           DollarStatic.$range(0, 0),
+                           DollarStatic.$range(0L, Long.MAX_VALUE),
                            DollarStatic.$range(-Long.MAX_VALUE, Long.MAX_VALUE),
-                           DollarStatic.$range("a", "z"), DollarStatic.$range("@", "\uF8FF"), DollarStatic.$range("z", "a"),
-                           DollarStatic.$range(-0.1, -0.05),
-                           DollarStatic.$range(1, -0.1));
+                           DollarStatic.$range("a", "z"),
+                           DollarStatic.$range("@", "\uF8FF"),
+                           DollarStatic.$range(-0.1, -0.05));
     }
 
     @NotNull
@@ -272,22 +272,20 @@ public final class TestGenerator {
         return toVarValues(DollarStatic.$range(Instant.ofEpochSecond(1_000_000), Instant.ofEpochSecond(1_100_000)),
                            DollarStatic.$range(-1, 1),
                            DollarStatic.$range(0,
-                                               -1), DollarStatic.$range(
-                        0, 0), DollarStatic.$range(1, -1), DollarStatic.$range(0, Long.MAX_VALUE),
+                                               1), DollarStatic.$range(
+                        0, 0), DollarStatic.$range(1, 2), DollarStatic.$range(0, Long.MAX_VALUE),
                            DollarStatic.$range(-Long.MAX_VALUE, Long.MAX_VALUE),
-                           DollarStatic.$range("a", "z"), DollarStatic.$range("@", "\uF8FF"), DollarStatic.$range("z", "a"),
-                           DollarStatic.$range(-0.1, -0.05),
-                           DollarStatic.$range(1, -0.1));
+                           DollarStatic.$range("a", "z"), DollarStatic.$range("@", "\uF8FF"),
+                           DollarStatic.$range(-0.1, -0.05));
     }
 
     @NotNull
     public static List<var> smallRangeValues() {
         return toVarValues(DollarStatic.$range(Instant.ofEpochSecond(1), Instant.ofEpochSecond(1)), DollarStatic.$range(-1, 1),
                            DollarStatic.$range(0,
-                                               -1), DollarStatic.$range(
-                        0, 0), DollarStatic.$range(1, -1), DollarStatic.$range(0, 5), DollarStatic.$range(-5, 5),
-                           DollarStatic.$range("a", "d"), DollarStatic.$range("s", "a"), DollarStatic.$range(-0.1, -0.05),
-                           DollarStatic.$range(1, -0.1));
+                                               1), DollarStatic.$range(
+                        0, 0), DollarStatic.$range(0, 5), DollarStatic.$range(-5, 5),
+                           DollarStatic.$range("a", "d"), DollarStatic.$range(-0.1, -0.05));
     }
 
     @NotNull

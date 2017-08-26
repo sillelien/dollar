@@ -81,8 +81,8 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                 useConstraint = constraint;
                 useSource = constraintSource;
             } else {
-                useConstraint = varScope.getConstraint(varName);
-                useSource = varScope.getConstraintSource(varName);
+                useConstraint = varScope.constraint(varName);
+                useSource = varScope.constraintSource(varName);
             }
             final var rhsFixed = rhs.$fix(1, currentScope().parallel());
 
@@ -178,8 +178,8 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                     useConstraint = finalConstraint;
                     useSource = constraintSource;
                 } else {
-                    useConstraint = scope.getConstraint(varName);
-                    useSource = scope.getConstraintSource(varName);
+                    useConstraint = scope.constraint(varName);
+                    useSource = scope.constraintSource(varName);
                 }
                 List<var> inputs = singletonList(constrain(scope, rhs, finalConstraint, useSource));
                 if ("?=".equals(op)) {

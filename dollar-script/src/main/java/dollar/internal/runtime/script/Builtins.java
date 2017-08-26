@@ -16,9 +16,9 @@
 
 package dollar.internal.runtime.script;
 
+import com.google.common.collect.ImmutableList;
 import dollar.api.Scope;
 import dollar.api.StateAware;
-import dollar.api.collections.ImmutableList;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.ErrorType;
 import dollar.api.var;

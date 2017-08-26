@@ -17,9 +17,9 @@
 package dollar.api.json;
 
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import dollar.api.DollarException;
-import dollar.api.collections.ImmutableList;
-import dollar.api.collections.ImmutableMap;
 import dollar.api.json.impl.Json;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,10 +31,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("rawtypes")
 public class JsonArray extends JsonElement implements Iterable<Object> {
 
     @NotNull
-    final List list;
+    final List<Object> list;
 
     public JsonArray(@NotNull List list) {
         this(list, true);
@@ -90,31 +91,31 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     }
 
     @NotNull
-    JsonArray addArray(@Nullable JsonArray value) {
+    private JsonArray addArray(@Nullable JsonArray value) {
         list.add((value == null) ? null : value.list);
         return this;
     }
 
     @NotNull
-    JsonArray addString(@NotNull String str) {
+    private JsonArray addString(@NotNull String str) {
         list.add(str);
         return this;
     }
 
     @NotNull
-    JsonArray addNumber(@NotNull Number value) {
+    private JsonArray addNumber(@NotNull Number value) {
         list.add(value);
         return this;
     }
 
     @NotNull
-    JsonArray addBoolean(@NotNull Boolean value) {
+    private JsonArray addBoolean(@NotNull Boolean value) {
         list.add(value);
         return this;
     }
 
     @NotNull
-    JsonArray addBinary(@Nullable byte[] value) {
+    private JsonArray addBinary(@Nullable byte[] value) {
         String encoded = (value == null) ? null : Base64.getEncoder().encodeToString(value);
         list.add(encoded);
         return this;
@@ -154,12 +155,12 @@ public class JsonArray extends JsonElement implements Iterable<Object> {
     private <T> T convertObject(@Nullable final Object obj) {
         Object retVal = obj;
         if (obj != null) {
-            if (obj instanceof List) {
-                retVal = new JsonArray((List) obj, false);
-            } else if (obj instanceof ImmutableList) {
-                retVal = new JsonArray((((ImmutableList) obj).mutable()), false);
+            if (obj instanceof ImmutableList) {
+                retVal = new JsonArray((((ImmutableList) obj)), false);
             } else if (obj instanceof ImmutableMap) {
-                retVal = new JsonObject(((ImmutableMap) obj).mutable(), false);
+                retVal = new JsonObject(((ImmutableMap) obj), false);
+            } else if (obj instanceof List) {
+                retVal = new JsonArray((List) obj, false);
             } else if (obj instanceof Map) {
                 retVal = new JsonObject((Map<String, Object>) obj, false);
             }

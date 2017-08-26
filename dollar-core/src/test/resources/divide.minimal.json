@@ -377,7 +377,7 @@
     {
       "$type": "RANGE",
       "lower": 0,
-      "upper": -1
+      "upper": 1
     },
     0
   ],
@@ -395,7 +395,7 @@
     {
       "$type": "RANGE",
       "lower": 1,
-      "upper": -1
+      "upper": 2
     },
     0
   ],
@@ -445,28 +445,7 @@
     0,
     {
       "$type": "RANGE",
-      "lower": "z",
-      "upper": "a"
-    },
-    {
-      "$type": "INFINITY",
-      "positive": true
-    }
-  ],
-  [
-    0,
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    },
-    0
-  ],
-  [
-    0,
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
+      "lower": -0.05,
       "upper": -0.1
     },
     0
@@ -921,7 +900,7 @@
     {
       "$type": "RANGE",
       "lower": 0,
-      "upper": -1
+      "upper": 1
     },
     0
   ],
@@ -939,7 +918,7 @@
     {
       "$type": "RANGE",
       "lower": 1,
-      "upper": -1
+      "upper": 2
     },
     0
   ],
@@ -989,31 +968,10 @@
     1,
     {
       "$type": "RANGE",
-      "lower": "z",
-      "upper": "a"
-    },
-    {
-      "$type": "INFINITY",
-      "positive": true
-    }
-  ],
-  [
-    1,
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    },
-    1
-  ],
-  [
-    1,
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
+      "lower": -0.05,
       "upper": -0.1
     },
-    0
+    1
   ],
   [
     1,
@@ -1465,7 +1423,7 @@
     {
       "$type": "RANGE",
       "lower": 0,
-      "upper": -1
+      "upper": 1
     },
     0
   ],
@@ -1483,7 +1441,7 @@
     {
       "$type": "RANGE",
       "lower": 1,
-      "upper": -1
+      "upper": 2
     },
     0
   ],
@@ -1533,31 +1491,10 @@
     -1,
     {
       "$type": "RANGE",
-      "lower": "z",
-      "upper": "a"
-    },
-    {
-      "$type": "INFINITY",
-      "positive": false
-    }
-  ],
-  [
-    -1,
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    },
-    -1
-  ],
-  [
-    -1,
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
+      "lower": -0.05,
       "upper": -0.1
     },
-    0
+    -1
   ],
   [
     -1,
@@ -2006,9 +1943,9 @@
     {
       "$type": "RANGE",
       "lower": 0,
-      "upper": -1
+      "upper": 1
     },
-    -0.05
+    0.05
   ],
   [
     0.1,
@@ -2024,9 +1961,9 @@
     {
       "$type": "RANGE",
       "lower": 1,
-      "upper": -1
+      "upper": 2
     },
-    -0.03333333333333333
+    0.05
   ],
   [
     0.1,
@@ -2074,31 +2011,10 @@
     0.1,
     {
       "$type": "RANGE",
-      "lower": "z",
-      "upper": "a"
-    },
-    {
-      "$type": "INFINITY",
-      "positive": true
-    }
-  ],
-  [
-    0.1,
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    },
-    0.09523809523809523
-  ],
-  [
-    0.1,
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
+      "lower": -0.05,
       "upper": -0.1
     },
-    -0.047619047619047616
+    0.09523809523809523
   ],
   [
     0.1,
@@ -2735,9 +2651,9 @@
     {
       "$type": "RANGE",
       "lower": 0,
-      "upper": -1
+      "upper": 1
     },
-    -5.787037037037037E-6
+    5.787037037037037E-6
   ],
   [
     {
@@ -2761,9 +2677,9 @@
     {
       "$type": "RANGE",
       "lower": 1,
-      "upper": -1
+      "upper": 2
     },
-    -3.858024691358025E-6
+    5.787037037037037E-6
   ],
   [
     {
@@ -2831,39 +2747,10 @@
     },
     {
       "$type": "RANGE",
-      "lower": "z",
-      "upper": "a"
-    },
-    {
-      "$type": "INFINITY",
-      "positive": true
-    }
-  ],
-  [
-    {
-      "$type": "DATE",
-      "text": "1970-01-01T00:00:01Z",
-      "millis": 1000
-    },
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    },
-    1.1022927689594355E-5
-  ],
-  [
-    {
-      "$type": "DATE",
-      "text": "1970-01-01T00:00:01Z",
-      "millis": 1000
-    },
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
+      "lower": -0.05,
       "upper": -0.1
     },
-    -5.511463844797178E-6
+    1.1022927689594355E-5
   ],
   [
     {
@@ -3289,7 +3176,7 @@
     {
       "$type": "RANGE",
       "lower": 0,
-      "upper": -1
+      "upper": 1
     },
     ""
   ],
@@ -3307,7 +3194,7 @@
     {
       "$type": "RANGE",
       "lower": 1,
-      "upper": -1
+      "upper": 2
     },
     ""
   ],
@@ -3351,25 +3238,7 @@
     "",
     {
       "$type": "RANGE",
-      "lower": "z",
-      "upper": "a"
-    },
-    ""
-  ],
-  [
-    "",
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    },
-    ""
-  ],
-  [
-    "",
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
+      "lower": -0.05,
       "upper": -0.1
     },
     ""
@@ -3749,7 +3618,7 @@
     {
       "$type": "RANGE",
       "lower": 0,
-      "upper": -1
+      "upper": 1
     },
     "@"
   ],
@@ -3767,7 +3636,7 @@
     {
       "$type": "RANGE",
       "lower": 1,
-      "upper": -1
+      "upper": 2
     },
     "@"
   ],
@@ -3811,25 +3680,7 @@
     "@",
     {
       "$type": "RANGE",
-      "lower": "z",
-      "upper": "a"
-    },
-    "@"
-  ],
-  [
-    "@",
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    },
-    "@"
-  ],
-  [
-    "@",
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
+      "lower": -0.05,
       "upper": -0.1
     },
     "@"
@@ -4203,7 +4054,7 @@
     {
       "$type": "RANGE",
       "lower": 0,
-      "upper": -1
+      "upper": 1
     },
     true
   ],
@@ -4221,7 +4072,7 @@
     {
       "$type": "RANGE",
       "lower": 1,
-      "upper": -1
+      "upper": 2
     },
     true
   ],
@@ -4265,25 +4116,7 @@
     true,
     {
       "$type": "RANGE",
-      "lower": "z",
-      "upper": "a"
-    },
-    true
-  ],
-  [
-    true,
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    },
-    true
-  ],
-  [
-    true,
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
+      "lower": -0.05,
       "upper": -0.1
     },
     true
@@ -4657,7 +4490,7 @@
     {
       "$type": "RANGE",
       "lower": 0,
-      "upper": -1
+      "upper": 1
     },
     false
   ],
@@ -4675,7 +4508,7 @@
     {
       "$type": "RANGE",
       "lower": 1,
-      "upper": -1
+      "upper": 2
     },
     false
   ],
@@ -4719,25 +4552,7 @@
     false,
     {
       "$type": "RANGE",
-      "lower": "z",
-      "upper": "a"
-    },
-    false
-  ],
-  [
-    false,
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    },
-    false
-  ],
-  [
-    false,
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
+      "lower": -0.05,
       "upper": -0.1
     },
     false
@@ -5460,10 +5275,10 @@
     {
       "$type": "RANGE",
       "lower": 0,
-      "upper": -1
+      "upper": 1
     },
     [
-      -1
+      0
     ]
   ],
   [
@@ -5492,10 +5307,10 @@
     {
       "$type": "RANGE",
       "lower": 1,
-      "upper": -1
+      "upper": 2
     },
     [
-      -1
+      0
     ]
   ],
   [
@@ -5566,43 +5381,12 @@
     ],
     {
       "$type": "RANGE",
-      "lower": "z",
-      "upper": "a"
-    },
-    {
-      "$type": "INFINITY",
-      "positive": true
-    }
-  ],
-  [
-    [
-      0,
-      1,
-      -1
-    ],
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
+      "lower": -0.05,
+      "upper": -0.1
     },
     [
       0,
       1
-    ]
-  ],
-  [
-    [
-      0,
-      1,
-      -1
-    ],
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
-      "upper": -0.1
-    },
-    [
-      -1
     ]
   ],
   [
@@ -5797,9 +5581,11 @@
     },
     -1,
     {
-      "$type": "RANGE",
-      "lower": 1,
-      "upper": -1
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Invalid range: [1..-1]"
+      }
     }
   ],
   [
@@ -5920,9 +5706,11 @@
     },
     -1.0,
     {
-      "$type": "RANGE",
-      "lower": 1.0,
-      "upper": -1.0
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Invalid range: [1.0..-1.0]"
+      }
     }
   ],
   [
@@ -5972,9 +5760,11 @@
     },
     -0.5,
     {
-      "$type": "RANGE",
-      "lower": 2.0,
-      "upper": -2.0
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Invalid range: [2.0..-2.0]"
+      }
     }
   ],
   [
@@ -5985,9 +5775,11 @@
     },
     -0.1,
     {
-      "$type": "RANGE",
-      "lower": 10.0,
-      "upper": -10.0
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Invalid range: [10.0..-10.0]"
+      }
     }
   ],
   [
@@ -6515,7 +6307,7 @@
     {
       "$type": "RANGE",
       "lower": 0,
-      "upper": -1
+      "upper": 1
     },
     {
       "$type": "RANGE",
@@ -6549,7 +6341,7 @@
     {
       "$type": "RANGE",
       "lower": 1,
-      "upper": -1
+      "upper": 2
     },
     {
       "$type": "RANGE",
@@ -6635,53 +6427,13 @@
     },
     {
       "$type": "RANGE",
-      "lower": "z",
-      "upper": "a"
-    },
-    {
-      "$type": "RANGE",
-      "lower": {
-        "$type": "INFINITY",
-        "positive": false
-      },
-      "upper": {
-        "$type": "INFINITY",
-        "positive": true
-      }
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": -1,
-      "upper": 1
-    },
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    },
-    {
-      "$type": "RANGE",
-      "lower": -1,
-      "upper": 1
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": -1,
-      "upper": 1
-    },
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
+      "lower": -0.05,
       "upper": -0.1
     },
     {
       "$type": "RANGE",
-      "lower": 0,
-      "upper": 0
+      "lower": -1,
+      "upper": 1
     }
   ],
   [
@@ -7151,7 +6903,7 @@
     {
       "$type": "RANGE",
       "lower": 0,
-      "upper": -1
+      "upper": 1
     },
     null
   ],
@@ -7169,7 +6921,7 @@
     {
       "$type": "RANGE",
       "lower": 1,
-      "upper": -1
+      "upper": 2
     },
     null
   ],
@@ -7213,25 +6965,7 @@
     null,
     {
       "$type": "RANGE",
-      "lower": "z",
-      "upper": "a"
-    },
-    null
-  ],
-  [
-    null,
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    },
-    null
-  ],
-  [
-    null,
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
+      "lower": -0.05,
       "upper": -0.1
     },
     null
@@ -7512,7 +7246,7 @@
     {
       "$type": "RANGE",
       "lower": 0,
-      "upper": -1
+      "upper": 1
     }
   ],
   [
@@ -7526,7 +7260,7 @@
     {
       "$type": "RANGE",
       "lower": 1,
-      "upper": -1
+      "upper": 2
     }
   ],
   [
@@ -7560,21 +7294,7 @@
   [
     {
       "$type": "RANGE",
-      "lower": "z",
-      "upper": "a"
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    }
-  ],
-  [
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
+      "lower": -0.05,
       "upper": -0.1
     }
   ],
@@ -8491,7 +8211,7 @@
     {
       "$type": "RANGE",
       "lower": 0,
-      "upper": -1
+      "upper": 1
     },
     {
       "$type": "ERROR",
@@ -8533,7 +8253,7 @@
     {
       "$type": "RANGE",
       "lower": 1,
-      "upper": -1
+      "upper": 2
     },
     {
       "$type": "ERROR",
@@ -8637,49 +8357,7 @@
     },
     {
       "$type": "RANGE",
-      "lower": "z",
-      "upper": "a"
-    },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Test Exception"
-      }
-    }
-  ],
-  [
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Test Exception"
-      }
-    },
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Test Exception"
-      }
-    }
-  ],
-  [
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "EXCEPTION",
-        "errorMessage": "Test Exception"
-      }
-    },
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
+      "lower": -0.05,
       "upper": -0.1
     },
     {
@@ -9607,7 +9285,7 @@
     {
       "$type": "RANGE",
       "lower": 0,
-      "upper": -1
+      "upper": 1
     },
     {
       "$type": "ERROR",
@@ -9645,7 +9323,7 @@
     {
       "$type": "RANGE",
       "lower": 1,
-      "upper": -1
+      "upper": 2
     },
     {
       "$type": "ERROR",
@@ -9739,45 +9417,7 @@
     },
     {
       "$type": "RANGE",
-      "lower": "z",
-      "upper": "a"
-    },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
-      }
-    }
-  ],
-  [
-    {
-      "1": 0.1,
-      "value1": true,
-      "true": 5
-    },
-    {
-      "$type": "RANGE",
-      "lower": -0.1,
-      "upper": -0.05
-    },
-    {
-      "$type": "ERROR",
-      "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
-      }
-    }
-  ],
-  [
-    {
-      "1": 0.1,
-      "value1": true,
-      "true": 5
-    },
-    {
-      "$type": "RANGE",
-      "lower": 1.0,
+      "lower": -0.05,
       "upper": -0.1
     },
     {

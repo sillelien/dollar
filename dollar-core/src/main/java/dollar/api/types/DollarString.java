@@ -16,9 +16,9 @@
 
 package dollar.api.types;
 
+import com.google.common.collect.ImmutableList;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
-import dollar.api.collections.ImmutableList;
 import dollar.api.guard.Guarded;
 import dollar.api.guard.NotNullGuard;
 import dollar.api.json.JsonArray;
@@ -218,8 +218,8 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     public var $plus(@NotNull var rhs) {
         final ImmutableList<Throwable> thisErrors = errors();
         final ArrayList<Throwable> errors = new ArrayList<>();
-        errors.addAll(thisErrors.mutable());
-        errors.addAll(rhs.errors().mutable());
+        errors.addAll(thisErrors);
+        errors.addAll(rhs.errors());
         return DollarFactory.wrap(new DollarString(ImmutableList.copyOf(errors), value + rhs.toHumanString()));
     }
 

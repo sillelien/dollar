@@ -16,11 +16,11 @@
 
 package dollar.api.types;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Range;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
-import dollar.api.collections.ImmutableList;
-import dollar.api.collections.ImmutableMap;
-import dollar.api.collections.Range;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -133,7 +133,7 @@ public final class DollarInfinity extends AbstractDollar {
         } else if (type.is(Type._DATE)) {
             return this;
         } else if (type.is(Type._RANGE)) {
-            return DollarFactory.fromValue(new Range($(0), $(0)));
+            return DollarFactory.fromValue(Range.closed($(0), $(0)));
         } else {
             return DollarFactory.failure(ErrorType.INVALID_CAST, type.toString(), false);
         }

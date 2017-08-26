@@ -80,7 +80,7 @@ public final class JavaScriptingLanguage implements ScriptingLanguage {
         JProxyScriptEngine scriptEngine = (JProxyScriptEngine) factory.getScriptEngine();
         scriptEngine.init(jpConfig);
         Bindings bindings = scriptEngine.createBindings();
-        bindings.put("in", scope.getParametersAsVars());
+        bindings.put("in", scope.parametersAsVars());
         bindings.put("scope", scope);
 
         StringBuilder code = new StringBuilder();

@@ -19,6 +19,7 @@ package dollar.api;
 import dollar.api.monitor.DollarMonitor;
 import dollar.api.plugin.Plugins;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,14 +32,14 @@ public class DollarThreadContext {
     private List<String> labels = new ArrayList<>();
     @NotNull
     private DollarMonitor monitor = Plugins.newInstance(DollarMonitor.class);
-    @NotNull
+    @Nullable
     private var passValue;
     @NotNull
     private String threadKey = UUID.randomUUID().toString();
     @NotNull
     private ClassLoader classLoader = DollarThreadContext.class.getClassLoader();
 
-    private DollarThreadContext(@NotNull List<String> labels, @NotNull DollarMonitor monitor, @NotNull var passValue,
+    private DollarThreadContext(@NotNull List<String> labels, @NotNull DollarMonitor monitor, @Nullable var passValue,
                                 @NotNull String threadKey) {
         this.labels = labels;
         this.monitor = monitor;
@@ -87,7 +88,7 @@ public class DollarThreadContext {
         this.monitor = monitor;
     }
 
-    @NotNull
+    @Nullable
     public var getPassValue() {
         return passValue;
     }

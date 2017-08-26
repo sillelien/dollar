@@ -16,7 +16,7 @@
 
 package dollar.api;
 
-import dollar.api.collections.MultiMap;
+import com.google.common.collect.Multimap;
 import dollar.api.script.SourceSegment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,29 +41,28 @@ public interface Scope {
     @Nullable var get(@NotNull String key);
 
     @Nullable
-    Variable getVariable(@NotNull String key);
+    Variable variable(@NotNull String key);
 
-    @Nullable var getConstraint(@NotNull String key);
+    @Nullable var constraint(@NotNull String key);
 
     @Nullable
-    String getConstraintSource(@NotNull String key);
+    String constraintSource(@NotNull String key);
 
 
+    @Nullable String file();
 
-    @Nullable String getFile();
-
-    @NotNull MultiMap<String, Listener> getListeners();
+    @NotNull Multimap<String, Listener> listeners();
 
     @NotNull
     var parameter(@NotNull String key);
 
-    @Nullable Scope getScopeForKey(@NotNull String key);
+    @Nullable Scope scopeForKey(@NotNull String key);
 
-    @Nullable Scope getScopeForParameters();
+    @Nullable Scope scopeForParameters();
 
-    @Nullable String getSource();
+    @Nullable String source();
 
-    @NotNull <T>  Map<String, T> getVariables();
+    @NotNull <T> Map<String, T> variables();
 
     @NotNull var handleError(@NotNull Throwable t);
 
@@ -92,10 +91,10 @@ public interface Scope {
     @NotNull
     var parameter(@NotNull String key, @NotNull var value);
 
-    void setParent(@Nullable Scope scope);
+    void parent(@Nullable Scope scope);
 
     @Nullable
-    Scope getParent();
+    Scope parent();
 
     boolean hasParent(@Nullable Scope scope);
 
@@ -109,7 +108,7 @@ public interface Scope {
 
     boolean pure();
 
-    List<var> getParametersAsVars();
+    List<var> parametersAsVars();
 
     boolean parallel();
 }

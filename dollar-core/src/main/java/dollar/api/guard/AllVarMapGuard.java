@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class AllVarMapGuard implements Guard {
     @NotNull
     @Override

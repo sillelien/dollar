@@ -16,7 +16,7 @@
 
 package dollar.plugins.pipe;
 
-import dollar.api.DollarStatic;
+import dollar.api.DollarException;
 import dollar.api.Pipeable;
 import dollar.api.script.ModuleResolver;
 import dollar.deps.DependencyRetriever;
@@ -39,7 +39,7 @@ public class MavenModuleResolver implements ModuleResolver {
         try {
             return (Pipeable) DependencyRetriever.retrieve(strings[1]).loadClass(strings[0]).newInstance();
         } catch (@NotNull Exception e) {
-            return DollarStatic.logAndRethrow(e);
+            throw new DollarException(e);
         }
     }
 }

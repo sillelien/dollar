@@ -334,12 +334,30 @@ You can count the size of the list using the size operator `#`.
 
 ### Ranges
 
-Dollar (at present) supports numerical and character ranges
+Dollar (at present) supports numerical and character ranges using Maven style syntax
+
+
+In pseudocode:
+```
+(a..b) = {x | a < x < b}
+[a..b] = {x | a <= x <= b}
+[a..b) = {x | a <= x < b}
+(a..b] = {x | a < x <= b}
+(a..) = {x | x > a}
+[a..) = {x | x >= a}
+(..b) = {x | x < b}
+(..b] = {x | x <= b}
+(..) = all values
+```
+
+Please see [the Guava docs](https://github.com/google/guava/wiki/RangesExplained) for more information on the range format used.
+
 
 ```dollar
 
-#("a".."c") <=> 3
-(1..3)[1] <=>2
+#("a".."c") <=> 1
+#["a".."c"] <=> 3
+[1..3][1] <=>2
 
 ```
 
@@ -491,7 +509,7 @@ Although there are no compile type constraints in Dollar a runtime type system c
 
 ```dollar
 var (it < 100) a = 50
-var (it > previous || previous is Void) b = 5
+var (previous is Void|| it > previous) b = 5
 b=6
 b=7
 var ( it is String) s="String value"
@@ -609,7 +627,7 @@ var b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 
 ```dollar
 
-for i in 1..10 {
+for i in [1..10] {
     @@ i
 }
 

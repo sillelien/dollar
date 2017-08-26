@@ -1407,19 +1407,11 @@
       -1
     ],
     {
-      "$type": "RANGE",
-      "lower": [
-        -1,
-        0,
-        1,
-        -1
-      ],
-      "upper": [
-        1,
-        0,
-        1,
-        -1
-      ]
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Invalid comparison right-hand-side is not a number."
+      }
     }
   ],
   [
@@ -1434,16 +1426,10 @@
       "upper": 1
     },
     {
-      "$type": "RANGE",
-      "lower": {
-        "$type": "RANGE",
-        "lower": -2,
-        "upper": 0
-      },
-      "upper": {
-        "$type": "RANGE",
-        "lower": 0,
-        "upper": 2
+      "$type": "ERROR",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "Invalid comparison right-hand-side is not a number."
       }
     }
   ],

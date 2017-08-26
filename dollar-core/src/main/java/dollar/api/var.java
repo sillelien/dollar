@@ -116,6 +116,7 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
      *
      * @return this
      */
+    @SuppressWarnings("UseOfSystemOutOrSystemErr")
     @NotNull
     @Guarded(ChainGuard.class)
     default var err() {
@@ -154,6 +155,7 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
     /**
      * Prints the toHumanString() value of this {@link var} to standard out.
      */
+    @SuppressWarnings("UseOfSystemOutOrSystemErr")
     @NotNull
     @Guarded(ChainGuard.class)
     default var out() {
@@ -239,7 +241,7 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
     }
 
     default boolean eq(@NotNull List l) {
-        return toList().mutable().equals(l);
+        return toList().equals(l);
     }
 
     default boolean eq(@NotNull Map m) {

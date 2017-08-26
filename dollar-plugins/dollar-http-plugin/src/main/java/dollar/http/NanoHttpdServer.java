@@ -191,6 +191,7 @@ public abstract class NanoHttpdServer {
 
         Map<String, String> parms = session.getParms();
         parms.put(QUERY_STRING_PARAMETER, session.getQueryParameterString());
+        //noinspection deprecation
         return serve(session.getUri(), method, session.getHeaders(), parms, files);
     }
 
@@ -205,12 +206,13 @@ public abstract class NanoHttpdServer {
      *
      * @return HTTP response, see class Response for details
      */
+    @SuppressWarnings("DeprecatedIsStillUsed")
     @NotNull @Deprecated
-    public Response serve(@NotNull String uri,
-                          @NotNull Method method,
-                          @NotNull Map<String, String> headers,
-                          @NotNull Map<String, String> parms,
-                          @NotNull Map<String, String> files) {
+    private Response serve(@NotNull String uri,
+                           @NotNull Method method,
+                           @NotNull Map<String, String> headers,
+                           @NotNull Map<String, String> parms,
+                           @NotNull Map<String, String> files) {
         return new Response(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "Not Found");
     }
 
@@ -589,7 +591,7 @@ public abstract class NanoHttpdServer {
             try {
                 data = (txt != null) ? new ByteArrayInputStream(txt.getBytes("UTF-8")) : null;
             } catch (java.io.UnsupportedEncodingException uee) {
-                uee.printStackTrace();
+                log.error(uee.getMessage(), uee);
             }
         }
 
@@ -784,6 +786,7 @@ public abstract class NanoHttpdServer {
         }
     }
 
+    @SuppressWarnings("UseOfObsoleteDateTimeApi")
     public static class Cookie {
         @NotNull
         private final String n;

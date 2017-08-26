@@ -18,12 +18,12 @@ package dollar.api.types;
 
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
+import com.google.common.collect.ImmutableList;
 import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Signal;
 import dollar.api.TypePrediction;
-import dollar.api.collections.ImmutableList;
 import dollar.api.json.JsonArray;
 import dollar.api.json.JsonObject;
 import dollar.api.types.meta.MetaConstants;
@@ -38,6 +38,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -230,7 +231,10 @@ public abstract class AbstractDollar implements var {
     @NotNull
     public var $copy(@NotNull ImmutableList<Throwable> errors) {
         //noinspection unchecked
-        return DollarFactory.fromValue(toJavaObject(), ImmutableList.copyOf(errors(), errors));
+        List<Throwable> errorsMerged = new ArrayList<>();
+        errorsMerged.addAll(errors);
+        errorsMerged.addAll(errors());
+        return DollarFactory.fromValue(toJavaObject(), ImmutableList.copyOf(errorsMerged));
     }
 
     @NotNull
@@ -467,8 +471,9 @@ public abstract class AbstractDollar implements var {
 
     @Nullable
     @Override
-    public Object meta(@NotNull String key) {
-        return meta.get(key);
+    public <T> T meta(@NotNull String key) {
+        //noinspection unchecked
+        return (T) meta.get(key);
     }
 
     @Override

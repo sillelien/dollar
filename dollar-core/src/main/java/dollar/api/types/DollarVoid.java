@@ -16,11 +16,11 @@
 
 package dollar.api.types;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Range;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
-import dollar.api.collections.ImmutableList;
-import dollar.api.collections.ImmutableMap;
-import dollar.api.collections.Range;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -120,7 +120,7 @@ public class DollarVoid extends AbstractDollar {
         } else if (type.is(Type._VOID)) {
             return this;
         } else if (type.is(Type._RANGE)) {
-            return DollarFactory.fromValue(new Range($(0), $(0)));
+            return DollarFactory.fromValue(Range.closed($(0), $(0)));
         } else {
             return DollarFactory.failure(ErrorType.INVALID_CAST, type.toString(), false);
         }
@@ -177,14 +177,14 @@ public class DollarVoid extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableList<Object> toList() {
+    public <T> ImmutableList<T> toList() {
         return ImmutableList.of();
     }
 
     @NotNull
     @Override
-    public ImmutableMap toJavaMap() {
-        return ImmutableMap.emptyMap();
+    public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
+        return ImmutableMap.of();
     }
 
     @NotNull
@@ -279,6 +279,9 @@ public class DollarVoid extends AbstractDollar {
 
     @Override
     public boolean equals(@Nullable Object obj) {
+        if (obj instanceof var && ((var) obj).isVoid()) {
+            return true;
+        }
         return ((obj instanceof var) && (((var) obj).toJavaObject() == null)) || (obj == null);
     }
 

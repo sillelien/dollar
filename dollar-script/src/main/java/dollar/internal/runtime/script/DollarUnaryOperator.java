@@ -22,15 +22,15 @@ import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.parser.OpDef;
 import dollar.internal.runtime.script.parser.OpDefType;
 import org.jetbrains.annotations.NotNull;
-import org.jparsec.functors.Unary;
 
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import static dollar.internal.runtime.script.DollarScriptSupport.node;
 import static dollar.internal.runtime.script.DollarScriptSupport.reactiveNode;
 import static java.util.Collections.singletonList;
 
-public class UnaryOp implements Unary<var>, Operator {
+public class DollarUnaryOperator implements UnaryOperator<var>, Operator {
     @NotNull
     protected final OpDef operation;
     private final boolean immediate;
@@ -42,7 +42,10 @@ public class UnaryOp implements Unary<var>, Operator {
     @NotNull
     protected DollarParser parser;
 
-    public UnaryOp(@NotNull DollarParser parser, @NotNull OpDef operation, @NotNull Function<var, var> function, boolean pure) {
+    public DollarUnaryOperator(@NotNull DollarParser parser,
+                               @NotNull OpDef operation,
+                               @NotNull Function<var, var> function,
+                               boolean pure) {
         this.operation = operation;
         this.function = function;
         this.parser = parser;
@@ -51,10 +54,10 @@ public class UnaryOp implements Unary<var>, Operator {
         validate(operation);
     }
 
-    public UnaryOp(boolean immediate,
-                   @NotNull Function<var, var> function,
-                   @NotNull OpDef operation,
-                   @NotNull DollarParser parser, boolean pure) {
+    public DollarUnaryOperator(boolean immediate,
+                               @NotNull Function<var, var> function,
+                               @NotNull OpDef operation,
+                               @NotNull DollarParser parser, boolean pure) {
         this.operation = operation;
         this.immediate = immediate;
         this.function = function;
@@ -81,7 +84,7 @@ public class UnaryOp implements Unary<var>, Operator {
 
     @NotNull
     @Override
-    public var map(@NotNull var from) {
+    public var apply(@NotNull var from) {
 
         if (immediate) {
             return node(operation, pure, parser, source, singletonList(from), vars -> function.apply(from));
