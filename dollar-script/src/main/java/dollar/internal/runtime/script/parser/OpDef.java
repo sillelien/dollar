@@ -180,14 +180,14 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         if (nodeOptions.isParallel() != null) {
             if (nodeOptions.isParallel()) {
                 stringBuilder.append(
-                        " ![Parallel Execution](https://img.shields.io/badge/evaluation-parallel-blue.svg?style=flat-square)");
+                        " ![Parallel Execution](https://img.shields.io/badge/order-parallel-blue.svg?style=flat-square)");
             } else {
                 stringBuilder.append(
-                        " ![Serial Execution](https://img.shields.io/badge/evaluation-serial-green.svg?style=flat-square)");
+                        " ![Serial Execution](https://img.shields.io/badge/order-serial-green.svg?style=flat-square)");
             }
         } else {
             stringBuilder.append(
-                    " ![Inherited Execution](https://img.shields.io/badge/evaluation-inherited-lightgrey.svg?style=flat-square)");
+                    " ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)");
         }
         stringBuilder.append("\n\n");
         if (bnf == null) {
