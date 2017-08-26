@@ -240,7 +240,29 @@ public interface CollectionAware {
     @Guarded(ChainGuard.class)
     var $remove(@NotNull var valueToRemove);
 
-    @NotNull
-    @Guarded(ChainGuard.class)
     int size();
+
+    @Guarded(ChainGuard.class)
+    var $min(boolean parallel);
+
+    @Guarded(ChainGuard.class)
+    var $max(boolean parallel);
+
+    @Guarded(ChainGuard.class)
+    var $sum(boolean parallel);
+
+    @Guarded(ChainGuard.class)
+    var $avg(boolean parallel);
+
+    @Guarded(ChainGuard.class)
+    var $reverse(boolean parallel);
+
+    @Guarded(ChainGuard.class)
+    var $sort(boolean parallel);
+
+    @Guarded(ChainGuard.class)
+    var $unique(boolean parallel);
+
+    @Guarded(ChainGuard.class)
+    var $product(boolean parallel);
 }

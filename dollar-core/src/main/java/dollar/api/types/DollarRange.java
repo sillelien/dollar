@@ -33,6 +33,7 @@ import java.util.List;
 
 import static dollar.api.DollarStatic.$void;
 import static dollar.api.types.DollarFactory.INFINITY;
+import static dollar.api.types.DollarFactory.wrap;
 
 public class DollarRange extends AbstractDollar {
 
@@ -125,24 +126,24 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $abs() {
-        return DollarFactory.wrap(new DollarRange(errors(),
-                                                  Range.range(DollarFactory.fromValue(range.lowerEndpoint().$abs()),
-                                                              range.lowerBoundType(),
-                                                              DollarFactory.fromValue(range.upperEndpoint().$abs()),
-                                                              range.upperBoundType())
-                                                         , reversed));
+        return wrap(new DollarRange(errors(),
+                                    Range.range(DollarFactory.fromValue(range.lowerEndpoint().$abs()),
+                                                range.lowerBoundType(),
+                                                DollarFactory.fromValue(range.upperEndpoint().$abs()),
+                                                range.upperBoundType())
+                                           , reversed));
     }
 
     @NotNull
     @Override
     public var $minus(@NotNull var rhs) {
         var rhsFix = rhs.$fixDeep();
-        return DollarFactory.wrap(new DollarRange(errors(),
-                                                  Range.range(DollarFactory.fromValue(range.lowerEndpoint().$minus(rhsFix)),
-                                                              range.lowerBoundType(),
-                                                              DollarFactory.fromValue(range.upperEndpoint().$minus(rhsFix)),
-                                                              range.upperBoundType())
-                                                         , reversed));
+        return wrap(new DollarRange(errors(),
+                                    Range.range(DollarFactory.fromValue(range.lowerEndpoint().$minus(rhsFix)),
+                                                range.lowerBoundType(),
+                                                DollarFactory.fromValue(range.upperEndpoint().$minus(rhsFix)),
+                                                range.upperBoundType())
+                                           , reversed));
     }
 
     @NotNull
@@ -150,36 +151,36 @@ public class DollarRange extends AbstractDollar {
     public var $plus(@NotNull var rhs) {
         var rhsFix = rhs.$fixDeep();
 
-        return DollarFactory.wrap(new DollarRange(errors(),
-                                                  Range.range(DollarFactory.fromValue(range.lowerEndpoint().$plus(rhsFix)),
-                                                              range.lowerBoundType(),
-                                                              DollarFactory.fromValue(range.upperEndpoint().$plus(rhsFix)),
-                                                              range.upperBoundType())
-                                                         , reversed));
+        return wrap(new DollarRange(errors(),
+                                    Range.range(DollarFactory.fromValue(range.lowerEndpoint().$plus(rhsFix)),
+                                                range.lowerBoundType(),
+                                                DollarFactory.fromValue(range.upperEndpoint().$plus(rhsFix)),
+                                                range.upperBoundType())
+                                           , reversed));
 
     }
 
     @NotNull
     @Override
     public var $negate() {
-        return DollarFactory.wrap(new DollarRange(errors(),
-                                                  Range.range(DollarFactory.fromValue(range.lowerEndpoint().$negate()),
-                                                              range.lowerBoundType(),
-                                                              DollarFactory.fromValue(range.upperEndpoint().$negate()),
-                                                              range.upperBoundType())
-                                                         , reversed));
+        return wrap(new DollarRange(errors(),
+                                    Range.range(DollarFactory.fromValue(range.lowerEndpoint().$negate()),
+                                                range.lowerBoundType(),
+                                                DollarFactory.fromValue(range.upperEndpoint().$negate()),
+                                                range.upperBoundType())
+                                           , reversed));
     }
 
     @NotNull
     @Override
     public var $divide(@NotNull var rhs) {
         var rhsFix = rhs.$fixDeep();
-        return DollarFactory.wrap(new DollarRange(errors(),
-                                                  Range.range(DollarFactory.fromValue(range.lowerEndpoint().$divide(rhsFix)),
-                                                              range.lowerBoundType(),
-                                                              DollarFactory.fromValue(range.upperEndpoint().$divide(rhsFix)),
-                                                              range.upperBoundType())
-                                                         , reversed));
+        return wrap(new DollarRange(errors(),
+                                    Range.range(DollarFactory.fromValue(range.lowerEndpoint().$divide(rhsFix)),
+                                                range.lowerBoundType(),
+                                                DollarFactory.fromValue(range.upperEndpoint().$divide(rhsFix)),
+                                                range.upperBoundType())
+                                           , reversed));
 
     }
 
@@ -187,12 +188,12 @@ public class DollarRange extends AbstractDollar {
     @Override
     public var $modulus(@NotNull var rhs) {
         var rhsFix = rhs.$fixDeep();
-        return DollarFactory.wrap(new DollarRange(errors(),
-                                                  Range.range(DollarFactory.fromValue(range.lowerEndpoint().$modulus(rhsFix)),
-                                                              range.lowerBoundType(),
-                                                              DollarFactory.fromValue(range.upperEndpoint().$modulus(rhsFix)),
-                                                              range.upperBoundType())
-                                                         , reversed));
+        return wrap(new DollarRange(errors(),
+                                    Range.range(DollarFactory.fromValue(range.lowerEndpoint().$modulus(rhsFix)),
+                                                range.lowerBoundType(),
+                                                DollarFactory.fromValue(range.upperEndpoint().$modulus(rhsFix)),
+                                                range.upperBoundType())
+                                           , reversed));
 
     }
 
@@ -200,12 +201,12 @@ public class DollarRange extends AbstractDollar {
     @Override
     public var $multiply(@NotNull var rhs) {
         var rhsFix = rhs.$fixDeep();
-        return DollarFactory.wrap(new DollarRange(errors(),
-                                                  Range.range(DollarFactory.fromValue(range.lowerEndpoint().$multiply(rhsFix)),
-                                                              range.lowerBoundType(),
-                                                              DollarFactory.fromValue(range.upperEndpoint().$multiply(rhsFix)),
-                                                              range.upperBoundType())
-                                                         , reversed));
+        return wrap(new DollarRange(errors(),
+                                    Range.range(DollarFactory.fromValue(range.lowerEndpoint().$multiply(rhsFix)),
+                                                range.lowerBoundType(),
+                                                DollarFactory.fromValue(range.upperEndpoint().$multiply(rhsFix)),
+                                                range.upperBoundType())
+                                           , reversed));
 
     }
 
@@ -405,7 +406,12 @@ public class DollarRange extends AbstractDollar {
     @Override
     public var $get(@NotNull var key) {
         if (key.integer()) {
-            long keyL = key.toLong();
+            long keyL;
+            if (key.toLong() < 0) {
+                keyL = size() + key.toLong();
+            } else {
+                keyL = key.toLong();
+            }
             var upper = range.upperEndpoint();
             assert upper != null;
             var lower = range.lowerEndpoint();
@@ -607,5 +613,44 @@ public class DollarRange extends AbstractDollar {
     public boolean truthy() {
         return !range.isEmpty();
     }
+
+
+    @NotNull
+    @Override
+    public var $min(boolean parallel) {
+        return lower();
+    }
+
+    @NotNull
+    @Override
+    public var $max(boolean parallel) {
+        return upper();
+    }
+
+
+    @NotNull
+    @Override
+    public var $avg(boolean parallel) {
+        //TODO: can we calculate without iteration?
+        return $sum(parallel).$divide($size());
+    }
+
+    @Override
+    public var $reverse(boolean parallel) {
+        return wrap(new DollarRange(errors(), range, !reversed));
+    }
+
+    @NotNull
+    @Override
+    public var $sort(boolean parallel) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $unique(boolean parallel) {
+        return this;
+    }
+
 
 }

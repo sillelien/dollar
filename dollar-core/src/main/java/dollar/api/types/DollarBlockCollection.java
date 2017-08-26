@@ -606,7 +606,6 @@ public class DollarBlockCollection implements var {
     public boolean hasErrors() {return getValue().hasErrors();}
 
 
-
     @Override
     @NotNull
     @Guarded(ChainGuard.class)
@@ -704,6 +703,47 @@ public class DollarBlockCollection implements var {
     @Override
     public int size() {
         return getValue().size();
+    }
+
+    @Override
+    public var $min(boolean parallel) {
+        return getValue().$min(parallel);
+    }
+
+    @Override
+    public var $max(boolean parallel) {
+        return getValue().$max(parallel);
+    }
+
+    @Override
+    public var $sum(boolean parallel) {
+        return getValue().$sum(parallel);
+    }
+
+    @Override
+    public var $avg(boolean parallel) {
+        return getValue().$avg(parallel);
+    }
+
+    @Override
+    public var $reverse(boolean parallel) {
+        return getValue().$reverse(parallel);
+
+    }
+
+    @Override
+    public var $sort(boolean parallel) {
+        return getValue().$sort(parallel);
+    }
+
+    @Override
+    public var $unique(boolean parallel) {
+        return getValue().$unique(parallel);
+    }
+
+    @Override
+    public var $product(boolean parallel) {
+        return null;
     }
 
     @Override

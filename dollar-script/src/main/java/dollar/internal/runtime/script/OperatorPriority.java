@@ -33,6 +33,8 @@ public interface OperatorPriority {
     int EQ_PRIORITY = 100;
     int COMP_PRIORITY = 150;
     int PLUS_MINUS_PRIORITY = 200;
+    int REVERSE_PRIORITY = 400;
+    int SORT_PRIORITY = 700;
     int OUTPUT_PRIORITY = 50;
     int IF_PRIORITY = 20;
     int CAST_PRIORITY = 80;

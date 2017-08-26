@@ -880,4 +880,8 @@ public final class DollarFactory {
         ImmutableList<Throwable> empty = ImmutableList.of();
         return wrap(new DollarMap(empty, ImmutableMap.of(create(empty, k), create(empty, v))));
     }
+
+    public static var fromSet(@NotNull Set<var> vars) {
+        return wrap(new DollarList(ImmutableList.of(), ImmutableList.of(vars)));
+    }
 }

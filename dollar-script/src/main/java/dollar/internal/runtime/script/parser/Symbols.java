@@ -140,6 +140,62 @@ public final class Symbols {
                                                 false, true,
                                                 null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
 
+/*
+[1..3]<- <=> [3..1] //reverse
+[1..3][/] <=> [1,2,3] //split ($list)
+[1,2,3][<] <=> 1 //min ($min)
+[1,2,3][>] <=> 3 //max ($min)
+[1,2,3][+] <=> 6 //sum ($plus)
+[1,2,3][%] <=> 2 //mean ($plus)/($size)
+[1,2,3][*] <=> 6 //product ($multiply)
+
+ */
+
+    @NotNull
+    public static final OpDef REVERSE = new OpDef(POSTFIX, "<-", "reversed", "reversed",
+                                                  false, true,
+                                                  null, REVERSE_PRIORITY, true, NO_SCOPE, null);
+
+    @NotNull
+    public static final OpDef UNIQUE = new OpDef(POSTFIX, "[!]", "unique", "unique",
+                                                 false, true,
+                                                 null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+
+
+    @NotNull
+    public static final OpDef SORT = new OpDef(PREFIX, "->", "sorted", "sorted",
+                                               false, true,
+                                               null, SORT_PRIORITY, true, NO_SCOPE, null);
+
+    @NotNull
+    public static final OpDef SPLIT = new OpDef(POSTFIX, "[/]", "split", "split",
+                                                false, true,
+                                                null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+
+    @NotNull
+    public static final OpDef MIN = new OpDef(POSTFIX, "[<]", "min", "min",
+                                              false, true,
+                                              null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+
+    @NotNull
+    public static final OpDef MAX = new OpDef(POSTFIX, "[>]", "max", "max",
+                                              false, true,
+                                              null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+
+    @NotNull
+    public static final OpDef SUM = new OpDef(POSTFIX, "[+]", "sum", "sum",
+                                              false, true,
+                                              null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+
+    @NotNull
+    public static final OpDef AVG = new OpDef(POSTFIX, "[%]", "avg", "avg",
+                                              false, true,
+                                              null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+
+    @NotNull
+    public static final OpDef PRODUCT = new OpDef(POSTFIX, "[*]", "product", "product",
+                                                  false, true,
+                                                  null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
 
     @NotNull
     public static final OpDef START = new OpDef(PREFIX, "|>", "start", "start",
@@ -788,6 +844,17 @@ public final class Symbols {
                     YES,
                     NO,
                     NULL,
+
+                    //List/Set operators
+                    UNIQUE,
+                    MAX,
+                    MIN,
+                    SUM,
+                    PRODUCT,
+                    AVG,
+                    SPLIT,
+                    REVERSE,
+                    SORT,
 
                     //complex operators
                     BLOCK_OP,

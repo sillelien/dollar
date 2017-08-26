@@ -16,7 +16,6 @@
 
 package dollar.internal.runtime.script;
 
-import com.google.common.collect.ImmutableList;
 import dollar.api.Scope;
 import dollar.api.StateAware;
 import dollar.api.types.DollarFactory;
@@ -30,7 +29,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static dollar.api.DollarStatic.$;
 
@@ -43,7 +41,6 @@ public final class Builtins {
     static {
         map = new HashMap<>();
         addDollarStyle(1, 1, (pure, args, scope) -> args.get(0).$abs(), true, "ABS");
-        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).$size(), true, "COUNT");
 
         addJavaStyle(1, Integer.MAX_VALUE, (pure, args, scope) -> {
             String message = args.get(0).$S();
@@ -51,19 +48,7 @@ public final class Builtins {
             values.remove(0);
             return $(String.format(message, values.stream().map(var::toJavaObject).toArray()));
         }, true, "FORMAT");
-        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).$list().$stream(false).min(
-                (o1, o2) -> (int) Math.signum(o1.toDouble() - o2.toDouble())).get(), true, "MIN");
-        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).$list().$stream(false).max(
-                (o1, o2) -> (int) Math.signum(o1.toDouble() - o2.toDouble())).get(), true, "MAX");
-        addJavaStyle(1, 1, (pure, args, scope) -> $(args.get(0).$list().$stream(false).sorted().collect(Collectors.toList())), true,
-                     "SORT");
 
-        addJavaStyle(1, 1, (pure, args, scope) -> $(args.get(0).$list().toList().get(0)), true, "FIRST");
-
-        addJavaStyle(1, 1, (pure, args, scope) -> {
-            ImmutableList<var> list = args.get(0).$list().toVarList();
-            return $(list.get(list.size() - 1));
-        }, true, "LAST");
         addDollarSingleNoScope(false, StateAware::$start, "START");
         addDollarSingleNoScope(false, StateAware::$stop, "STOP");
         addDollarSingleNoScope(false, StateAware::$create, "CREATE");

@@ -4,7 +4,7 @@ const firstPost= posts[0]
 @@ firstPost
 
 const titles= posts each { $1.title }
-.: COUNT(titles) != 0
+.: #(titles) != 0
 
 @@titles
 

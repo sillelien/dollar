@@ -87,7 +87,7 @@ final class DollarLexer {
     @NotNull
     static final Parser<var> URL = token(new TokenTagMap("uri")).map(DollarFactory::fromURI);
     @NotNull
-    private static final Terminals OPERATORS = Terminals.operators(Symbols.SYMBOL_STRINGS);
+    static final Terminals OPERATORS = Terminals.operators(Symbols.SYMBOL_STRINGS);
     @NotNull
     static final Parser<?> TERMINATOR_SYMBOL = or(OP(NEWLINE), OP(SEMI_COLON)).many1();
     @NotNull
@@ -97,13 +97,14 @@ final class DollarLexer {
     @NotNull
     static final Parser<?> SEMICOLON_TERMINATOR = or(OP(SEMI_COLON).followedBy(OP(NEWLINE).many()), OP(NEWLINE).many1());
     @NotNull
-    private static final Terminals KEYWORDS = Terminals.operators(Symbols.KEYWORD_STRINGS);
+    static final Terminals KEYWORDS = Terminals.operators(Symbols.KEYWORD_STRINGS);
 
     @NotNull
     static final Parser<var> IDENTIFIER_KEYWORD = identifierKeyword();
 
     @NotNull
     private static final Function<String, Tokens.Fragment> BACKTICK_QUOTE_STRING = new Function<String, Tokens.Fragment>() {
+        @Override
         public Tokens.Fragment apply(@NotNull String text) {
             return fragment(tokenizeBackTick(text), "backtick");
         }
@@ -123,6 +124,7 @@ final class DollarLexer {
                DollarLexer.decimal(),
                script(),
                Scanners.DOUBLE_QUOTE_STRING.map(new Function<String, String>() {
+                   @Override
                    @NotNull
                    public String apply(@NotNull String text) {
                        return tokenizeDoubleQuote(text);
@@ -135,6 +137,7 @@ final class DollarLexer {
                    }
                }),
                Scanners.SINGLE_QUOTE_STRING.map(new Function<String, String>() {
+                   @Override
                    @NotNull
                    public String apply(@NotNull String text) {
                        return tokenizeSingleQuote(text);
@@ -171,6 +174,7 @@ final class DollarLexer {
                                              )
                                ).toScanner("uri").source()
         ).map(new Function<String, Tokens.Fragment>() {
+            @Override
             @NotNull
             public Tokens.Fragment apply(@NotNull String text) {
                 return fragment(text, "uri");
@@ -220,6 +224,7 @@ final class DollarLexer {
                 ).toScanner("decimal")
                         .source()
                         .map(new Function<String, Tokens.Fragment>() {
+                            @Override
                             @NotNull
                             public Tokens.Fragment apply(@NotNull String text) {
                                 return fragment(text, Tokens.Tag.DECIMAL);
@@ -286,6 +291,7 @@ final class DollarLexer {
             }
         }.toScanner("builtin").source()
                        .map(new Function<String, Tokens.Fragment>() {
+                           @Override
                            @NotNull
                            public Tokens.Fragment apply(@NotNull String text) {
                                return fragment(text, "builtin");

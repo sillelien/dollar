@@ -289,6 +289,7 @@ public class DollarList extends AbstractDollar {
      *
      * @return a JsonArray
      */
+    @Override
     @NotNull
     @Guarded(NotNullGuard.class)
     public JsonArray jsonArray() {
@@ -325,7 +326,12 @@ public class DollarList extends AbstractDollar {
     @Override
     public var $get(@NotNull var key) {
         if (key.number()) {
-            return list.get(key.toInteger());
+            if (key.toLong() < 0) {
+                return list.get(size() + key.toInteger());
+            } else {
+                return list.get(key.toInteger());
+            }
+
         }
         for (var var : list) {
             if (var.equals(key)) {
@@ -574,5 +580,14 @@ public class DollarList extends AbstractDollar {
     public boolean truthy() {
         return !list.isEmpty();
     }
+
+
+    @Override
+    public var $reverse(boolean parallel) {
+        ArrayList<var> newList = new ArrayList<>(list);
+        Collections.reverse(newList);
+        return DollarFactory.wrap(new DollarList(errors(), ImmutableList.copyOf(newList)));
+    }
+
 
 }

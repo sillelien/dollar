@@ -21,6 +21,7 @@ import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.google.common.collect.ImmutableList;
 import dollar.api.DollarException;
 import dollar.api.DollarStatic;
+import dollar.api.NumericAware;
 import dollar.api.Pipeable;
 import dollar.api.Signal;
 import dollar.api.TypePrediction;
@@ -46,6 +47,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static dollar.api.DollarStatic.$void;
 
 @SuppressWarnings("OverlyComplexClass")
 public abstract class AbstractDollar implements var {
@@ -89,7 +92,7 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var $all() {
-        return DollarStatic.$void();
+        return $void();
     }
 
     @NotNull
@@ -101,7 +104,7 @@ public abstract class AbstractDollar implements var {
     @NotNull
     @Override
     public var $drain() {
-        return DollarStatic.$void();
+        return $void();
     }
 
     @NotNull
@@ -228,6 +231,7 @@ public abstract class AbstractDollar implements var {
         return DollarFactory.fromValue(toJavaObject(), ImmutableList.copyOf(errors()));
     }
 
+    @Override
     @NotNull
     public var $copy(@NotNull ImmutableList<Throwable> errors) {
         //noinspection unchecked
@@ -658,4 +662,51 @@ public abstract class AbstractDollar implements var {
         return !errors.isEmpty();
     }
 
+    @NotNull
+    @Override
+    public var $min(boolean parallel) {
+        return $stream(parallel).min(Comparable::compareTo).orElse($void());
+    }
+
+    @NotNull
+    @Override
+    public var $max(boolean parallel) {
+        return $stream(parallel).max(Comparable::compareTo).orElse($void());
+    }
+
+    @NotNull
+    @Override
+    public var $sum(boolean parallel) {
+        return $stream(parallel).reduce(NumericAware::$plus).orElse($void());
+
+    }
+
+    @NotNull
+    @Override
+    public var $avg(boolean parallel) {
+        return $sum(parallel).$divide($size());
+    }
+
+    @Override
+    public var $reverse(boolean parallel) {
+        throw new UnsupportedOperationException("Cannot reverse a " + type());
+    }
+
+    @NotNull
+    @Override
+    public var $sort(boolean parallel) {
+        return DollarFactory.fromList($stream(parallel).sorted().collect(Collectors.toList()));
+    }
+
+    @NotNull
+    @Override
+    public var $unique(boolean parallel) {
+        return DollarFactory.fromSet($stream(parallel).collect(Collectors.toSet()));
+    }
+
+    @NotNull
+    @Override
+    public var $product(boolean parallel) {
+        return $stream(parallel).reduce(NumericAware::$multiply).orElse($void());
+    }
 }

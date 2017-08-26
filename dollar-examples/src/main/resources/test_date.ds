@@ -25,8 +25,6 @@ def Fortnight {$1 * 14}
 @@ DATE() + 1 Fortnight
 
 
-[1,2,3,4]|SORT|MIN
-[1,2,3,4] SORT MIN
 
 
 

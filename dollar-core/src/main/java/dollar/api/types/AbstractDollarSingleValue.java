@@ -68,6 +68,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
         return DollarStatic.$(this.value.equals(value));
     }
 
+    @Override
     @NotNull
     public var $has(@NotNull var key) {
         return DollarStatic.$(equals(key));
@@ -105,6 +106,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
     }
 
 
+    @Override
     @NotNull
     public var $removeByKey(@NotNull String value) {
         return DollarFactory.failure(ErrorType.INVALID_SINGLE_VALUE_OPERATION,
@@ -112,6 +114,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
 
     }
 
+    @Override
     @NotNull
     public var $set(@NotNull var key, Object value) {
         return DollarFactory.failure(ErrorType.INVALID_SINGLE_VALUE_OPERATION);
@@ -158,6 +161,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
     }
 
 
+    @Override
     @NotNull
     public ImmutableJsonObject toJsonObject() {
         return new ImmutableJsonObject(new JsonObject());
@@ -169,6 +173,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
         return ImmutableList.of(value);
     }
 
+    @Override
     @NotNull
     public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
         return ImmutableMap.copyOf(Collections.singletonMap((K) "value", (V) value));
@@ -214,4 +219,46 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
     public String toJsonString() {
         return String.valueOf((Object) toJavaObject());
     }
+
+
+    @Override
+    public var $min(boolean parallel) {
+        return this;
+    }
+
+    @Override
+    public var $max(boolean parallel) {
+        return this;
+    }
+
+    @Override
+    public var $sum(boolean parallel) {
+        return this;
+    }
+
+    @Override
+    public var $avg(boolean parallel) {
+        return this;
+    }
+
+    @Override
+    public var $reverse(boolean parallel) {
+        return this;
+    }
+
+    @Override
+    public var $sort(boolean parallel) {
+        return this;
+    }
+
+    @Override
+    public var $unique(boolean parallel) {
+        return this;
+    }
+
+    @Override
+    public var $product(boolean parallel) {
+        return this;
+    }
+
 }

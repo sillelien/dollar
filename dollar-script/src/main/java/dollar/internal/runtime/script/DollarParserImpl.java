@@ -327,6 +327,15 @@ public class DollarParserImpl implements DollarParser {
         table = prefix(pure, table, ERROR, Func::errorFunc);
         table = prefix(pure, table, TRUTHY, DollarStatic::$truthy);
 
+        table = postfix(pure, table, MIN, v -> v.$min(currentScope().parallel()));
+        table = postfix(pure, table, MAX, v -> v.$max(currentScope().parallel()));
+        table = postfix(pure, table, SUM, v -> v.$sum(currentScope().parallel()));
+        table = postfix(pure, table, PRODUCT, v -> v.$product(currentScope().parallel()));
+        table = postfix(pure, table, SPLIT, var::$list);
+        table = prefix(pure, table, SORT, v -> v.$sort(currentScope().parallel()));
+        table = postfix(pure, table, REVERSE, var -> var.$reverse(currentScope().parallel()));
+        table = postfix(pure, table, UNIQUE, v -> v.$unique(currentScope().parallel()));
+        table = postfix(pure, table, AVG, v -> v.$avg(currentScope().parallel()));
 
         table = prefixUnReactive(pure, table, FIX, VarInternal::$fixDeep);
         table = prefixUnReactive(pure, table, PARALLEL, v -> v.$fixDeep(true));
@@ -385,7 +394,16 @@ public class DollarParserImpl implements DollarParser {
                                        @NotNull OperatorTable<var> table,
                                        @NotNull OpDef operator,
                                        @NotNull Function<var, var> f2) {
-        return table.postfix(op(operator, new DollarUnaryOperator(this, operator, f2, pure)), operator.priority());
+
+        return table.postfix(
+                DollarLexer.OPERATORS.token(operator.symbol()).token().map(new SourceMapper<>(new DollarUnaryOperator(this,
+                                                                                                                      operator,
+                                                                                                                      f2, pure))),
+                operator.priority()).
+                                            prefix(DollarLexer.KEYWORDS.token(operator.keyword()).token().map(
+                                                    new SourceMapper<>(new DollarUnaryOperator(this,
+                                                                                               operator, f2, pure))),
+                                                   operator.priority());
     }
 
     @NotNull
