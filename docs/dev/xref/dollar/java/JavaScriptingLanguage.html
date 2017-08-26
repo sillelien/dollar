@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>          JProxyScriptEngine scriptEngine = (JProxyScriptEngine) factory.getScriptEngine();
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>          scriptEngine.init(jpConfig);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>          Bindings bindings = scriptEngine.createBindings();
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>          bindings.put(<span class="jxr_string">"in"</span>, scope.getParametersAsVars());
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          bindings.put(<span class="jxr_string">"in"</span>, scope.parametersAsVars());
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>          bindings.put(<span class="jxr_string">"scope"</span>, scope);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          StringBuilder code = <strong class="jxr_keyword">new</strong> StringBuilder();

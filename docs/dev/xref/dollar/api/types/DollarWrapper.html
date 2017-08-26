@@ -25,14 +25,14 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar.api.types;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.github.oxo42.stateless4j.StateMachine;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.DollarStatic;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.Pipeable;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.Signal;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.api.StateTracer;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.api.Type;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> dollar.api.TypePrediction;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> dollar.api.collections.ImmutableList;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> dollar.api.collections.ImmutableMap;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.ImmutableList;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.ImmutableMap;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.DollarStatic;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.api.Pipeable;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.api.Signal;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> dollar.api.StateTracer;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> dollar.api.Type;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> dollar.api.TypePrediction;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> dollar.api.json.ImmutableJsonObject;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> dollar.api.monitor.DollarMonitor;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
@@ -672,7 +672,7 @@
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 
 <a class="jxr_linenumber" name="L665" href="#L665">665</a>     @Override
 <a class="jxr_linenumber" name="L666" href="#L666">666</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(@NotNull <strong class="jxr_keyword">var</strong> o) {
-<a class="jxr_linenumber" name="L667" href="#L667">667</a>         <strong class="jxr_keyword">return</strong> getValue().compareTo(o);
+<a class="jxr_linenumber" name="L667" href="#L667">667</a>         <strong class="jxr_keyword">return</strong> getValue().compareTo(o.$unwrap());
 <a class="jxr_linenumber" name="L668" href="#L668">668</a>     }
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> 
 <a class="jxr_linenumber" name="L670" href="#L670">670</a>     @NotNull
