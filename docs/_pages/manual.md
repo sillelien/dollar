@@ -1180,6 +1180,15 @@ ___
 
 ___
 
+### `avg` or `[%]` {#op-avg}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`<expression> ('[%]'|'avg')`**{: style="font-size: 60%"}
+
+
+___
+
 ### block {#op-block}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new%20with%20closure-green.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
@@ -1813,6 +1822,17 @@ Dollar's lists are pretty similar to JavaScript arrays. They are defined using t
 .: [1] + [1] == [1,1];
 .: [1] + 1 == [1,1];
 
+[1..3][-1] <=> 3
+[1..3]<- <=> [3..1] //reverse
+[1..3][/] <=> [1,2,3] //split
+[1,2,3][<] <=> 1 //min
+[1,2,3][>] <=> 3 //max
+[1,2,3][+] <=> 6 //sum
+[1,2,3][%] <=> 2 //avg
+[1,2,3][*] <=> 6 //product
+->[3,1,2] <=> [1,2,3] //sort
+->[3,1,2]<- <=> [3,2,1] //sort then reverse
+
 ```
 
 ___
@@ -1832,6 +1852,15 @@ ___
 
 ___
 
+### `max` or `[>]` {#op-max}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`<expression> ('[>]'|'max')`**{: style="font-size: 60%"}
+
+
+___
+
 ### `.` (member) {#op-member}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
@@ -1847,6 +1876,15 @@ The membership or `.` operator accesses the member of a map by it's key.
 {"key1":1,"key2":2}.key2 <=> 2
 {"key1":1,"key2":2}[1].key2 <=> 2
 ```
+
+___
+
+### `min` or `[<]` {#op-min}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`<expression> ('[<]'|'min')`**{: style="font-size: 60%"}
+
 
 ___
 
@@ -2175,6 +2213,15 @@ print "World"
 
 ___
 
+### `product` or `[*]` {#op-product}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`<expression> ('[*]'|'product')`**{: style="font-size: 60%"}
+
+
+___
+
 ### `publish` or `*>` {#op-publish}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
@@ -2269,6 +2316,7 @@ Please see https://github.com/google/guava/wiki/RangesExplained for more informa
 # [1..1] <=> 1
 # [1..1) <=> void
 
+
 ```
 
 ___
@@ -2342,6 +2390,15 @@ The rhs function/expression must be an associative function.
 
 ___
 
+### `reversed` or `<-` {#op-reversed}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`<expression> ('<-'|'reversed')`**{: style="font-size: 60%"}
+
+
+___
+
 ### script {#op-script}
 
 ![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
@@ -2406,6 +2463,24 @@ Returns the size of non-scalar types or the length of a string.
 
 ```
 ```
+
+___
+
+### `sorted` or `->` {#op-sorted}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`('->'|'sorted') <expression>`**{: style="font-size: 60%"}
+
+
+___
+
+### `split` or `[/]` {#op-split}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`<expression> ('[/]'|'split')`**{: style="font-size: 60%"}
+
 
 ___
 
@@ -2500,6 +2575,15 @@ subscript operator
 
 ___
 
+### `sum` or `[+]` {#op-sum}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`<expression> ('[+]'|'sum')`**{: style="font-size: 60%"}
+
+
+___
+
 ### `truthy` or `~` {#op-truthy}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
@@ -2512,6 +2596,15 @@ The truthy operator `~` converts any value to a boolean by applying the rule tha
 
 ```
 ```
+
+___
+
+### `unique` or `[!]` {#op-unique}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`<expression> ('[!]'|'unique')`**{: style="font-size: 60%"}
+
 
 ___
 
@@ -2753,6 +2846,7 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |Name                          |Keyword        |Operator  |Type      |
 |-------                       |-------        |-------   |-------   |
 |[fix](#op-fix)                |`fix`          | `&`      |prefix    |
+|[sorted](#op-sorted)          |`sorted`       | `->`     |prefix    |
 |[range](#op-range)            |`range`        | `..`     |binary    |
 |[default](#op-default)        |`default`      | `:-`     |binary    |
 |[member](#op-member)          |               | `.`      |binary    |
@@ -2764,6 +2858,7 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[in](#op-in)                  |`in`           | `€`      |binary    |
 |[increment](#op-increment)    |`inc`          | `++`     |prefix    |
 |[not](#op-not)                |`not`          | `!`      |prefix    |
+|[reversed](#op-reversed)      |`reversed`     | `<-`     |postfix   |
 |[size](#op-size)              |`size`         | `#`      |prefix    |
 |[truthy](#op-truthy)          |`truthy`       | `~`      |prefix    |
 |[while](#op-while)            |`while`        |          |control   |
@@ -2772,9 +2867,16 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[modulus](#op-modulus)        |`mod`          | `%`      |binary    |
 |[multiply](#op-multiply)      |`multiply`     | `*`      |binary    |
 |[reduce](#op-reduce)          |`reduce`       | `>>=`    |binary    |
+|[avg](#op-avg)                |`avg`          | `[%]`    |postfix   |
+|[max](#op-max)                |`max`          | `[>]`    |postfix   |
+|[min](#op-min)                |`min`          | `[<]`    |postfix   |
 |[minus](#op-minus)            |`minus`        | `-`      |binary    |
 |[negate](#op-negate)          |`negate`       | `-`      |prefix    |
 |[plus](#op-plus)              |`plus`         | `+`      |binary    |
+|[product](#op-product)        |`product`      | `[*]`    |postfix   |
+|[split](#op-split)            |`split`        | `[/]`    |postfix   |
+|[sum](#op-sum)                |`sum`          | `[+]`    |postfix   |
+|[unique](#op-unique)          |`unique`       | `[!]`    |postfix   |
 |[greater-than](#op-greater-than)|               | `>`      |binary    |
 |[less-than](#op-less-than)    |               | `<`      |binary    |
 |[pipe](#op-pipe)              |`pipe`         | `|`      |binary    |
