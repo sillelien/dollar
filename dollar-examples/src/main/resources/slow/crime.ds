@@ -1,0 +1,27 @@
+//First we get the Geo Location of our IP address
+var geo= read http://freegeoip.net/json/
+var lat= geo.latitude
+var lon= geo.longitude
+
+//And the date of about a month ago
+var month= (DATE()-31)['MONTH_OF_YEAR']
+var year= (DATE()-31)['YEAR_OF_ERA']
+
+var crimes= read ("https://data.police.uk/api/crimes-at-location?date=" + year + "-" + month + "&lat=" + lat + "&lng=" + lon) as Uri;
+
+//take the category from each crime
+var categories= crimes each { $1.category; }
+
+//assert that it is a list
+.: categories is List
+
+//~ is the truthy operator void is false, 0 is false, "" is false, empty list is false, empty map is false.
+if (~ categories["anti-social-behaviour"]) {
+    @@ "Anti-Social behaviour in your area last month!"
+} else {
+    @@ "No anti-social behaviour in your area last month!"
+}
+
+"The End!"
+
+

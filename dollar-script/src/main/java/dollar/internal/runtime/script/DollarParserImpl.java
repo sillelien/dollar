@@ -188,7 +188,7 @@ public class DollarParserImpl implements DollarParser {
     }
 
     @NotNull
-    private var parseMarkdown(@NotNull File file) throws IOException {
+    public var parseMarkdown(@NotNull File file) throws IOException {
         PegDownProcessor pegDownProcessor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
         RootNode root =
                 pegDownProcessor.parseMarkdown(asCharSource(file, Charset.forName("utf-8"))

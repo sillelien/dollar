@@ -27,34 +27,34 @@ I'm also working full-time on this, if you wish to support efforts back me on [P
 
 **Thanks!**
 
-Below is a fully functional persistent chat server in dollar:
+Find out your local anti-social crime stats:
 
 ```dollar
-    //Fully working persistent chat server
-  server= socketio://127.0.0.1:8092/bulletin?eventType=chatevent
-  lastMessages= db:circular://messages/tmp/messages10.db?size=10
-  
-  message *= server
-  timestampedMessage := (message + {"timestamp":DATE()})
-  timestampedMessage >> lastMessages
-  
-  ("chatevent" : timestampedMessage) publish server
-  
-  http://127.0.0.1:8091/messages subscribe {
-      {"body":all lastMessages, "headers":{"Access-Control-Allow-Origin":"*"}}
-  }
-  
-  //User management 
-  
-  users= db:map://users/tmp/users10.db
-  
-  when (~message.userName) {
-      users[message.userName]={"msg":message}
-  }
-  
-  http://127.0.0.1:8091/users subscribe {
-      {"body" : all users}
-  }
+//First we get the Geo Location of our IP address
+var geo= read http://freegeoip.net/json/
+var lat= geo.latitude
+var lon= geo.longitude
+
+//And the date of about a month ago
+var month= (DATE()-31)['MONTH_OF_YEAR']
+var year= (DATE()-31)['YEAR_OF_ERA']
+
+var crimes= read ("https://data.police.uk/api/crimes-at-location?date=" + year + "-" + month + "&lat=" + lat + "&lng=" + lon) as Uri;
+
+//take the category from each crime
+var categories= crimes each { $1.category; }
+
+//assert that it is a list
+.: categories is List
+
+//~ is the truthy operator void is false, 0 is false, "" is false, empty list is false, empty map is false.
+if (~ categories["anti-social-behaviour"]) {
+    @@ "Anti-Social behaviour in your area last month!"
+} else {
+    @@ "No anti-social behaviour in your area last month!"
+}
+
+"The End!"
 
 ```
 

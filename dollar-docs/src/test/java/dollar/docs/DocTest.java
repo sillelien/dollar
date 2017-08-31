@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.InputStreamReader;
 
 public class DocTest {
@@ -47,6 +48,21 @@ public class DocTest {
         try {
             new DollarParserImpl(new ParserOptions()).parseMarkdown(
                     CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/pages/manual.md"))));
+        } catch (Exception e) {
+            log.debug(e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @Test
+    public void testReadme() throws Exception {
+        try {
+            File dir = new File("").getAbsoluteFile();
+            while (!new File(dir, ".git").exists()) {
+                System.err.println(dir);
+                dir = dir.getParentFile();
+            }
+            new DollarParserImpl(new ParserOptions()).parseMarkdown(new File(dir, "README.tmpl.md"));
         } catch (Exception e) {
             log.debug(e.getMessage(), e);
             throw e;
