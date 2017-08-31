@@ -50,12 +50,15 @@ then
     fi
     mv zulu* jdk
 fi
+
 cd -  &> /dev/null
 export JAVA_HOME=${DOLLAR_HOME}/jdk/
+
 if [ $# -ne 1 ]
 then
     echo "Dollar v${DOLLAR_VERSION}"
     echo "Usage: dollar <filename>.ds"
     exit 1
 fi
+
 java -classpath "${DOLLAR_HOME}/lib/*:${DOLLAR_HOME}/ext:${DOLLAR_HOME}/plugins/*:${DOLLAR_HOME}/etc:${HOME}/.dollar/lib" dollar.main.ParserMain $@
