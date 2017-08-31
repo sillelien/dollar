@@ -1,8 +1,8 @@
 
 // Listen assignment
-
-
 var h=1
-var i ?= h + 2
+var i ? (h < 3) = (h + 2)
 h=4
-i <=> 6
+i is VOID
+h=2
+i <=>4
