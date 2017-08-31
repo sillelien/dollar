@@ -480,9 +480,9 @@ NANO_OF_SECOND, NANO_OF_DAY, MICRO_OF_SECOND, MICRO_OF_DAY, MILLI_OF_SECOND, MIL
 As you can see we can do date arithmetic, but thanks to another Dollar feature anything that can be specified as xxx(i) can also be written i xxx (where i is an integer or decimal and xxx is an identifier). So we can add days hours and seconds to the date.
 
 ```dollar
-@@ DATE() + 1 Day
-@@ DATE() + 1 Hour
-@@ DATE() + 1 Sec
+@@ DATE() + 1 DAY
+@@ DATE() + 1 HOUR
+@@ DATE() + 1 SEC
 ```
 
 Those values are built in, but we can easily define them ourselves.
@@ -1011,7 +1011,7 @@ The parallel operator `|:|` or `parallel` causes the right hand side expression 
 
 ```dollar
 
-const testList := [ TIME(), {SLEEP(1 Sec); TIME();}, TIME() ];
+const testList := [ TIME(), {SLEEP(1 SEC); TIME();}, TIME() ];
 var a= |..| testList;
 var b= |:| testList;
 //Test different execution orders
@@ -1026,12 +1026,12 @@ As you can see the order of evaluation of lists and maps **but not line blocks**
 The fork operator `-<` or `fork` will cause an expression to be evaluated in the background and any reference to the forked expression will block until a value is ready.
 
 ```dollar
-const sleepTime := {@@ "Background Sleeping";SLEEP(4 Sec); @@ "Background Finished Sleeping";TIME()}
+const sleepTime := {@@ "Background Sleeping";SLEEP(4 SECS); @@ "Background Finished Sleeping";TIME()}
 //Any future reference to c will block until c has completed evaluation
 var c= fork sleepTime
-SLEEP(1 Sec)
+SLEEP(1 SEC)
 @@ "Main thread sleeping ..."
-SLEEP(2 Secs)
+SLEEP(2 SECS)
 @@ "Main thread finished sleeping ..."
 var d= TIME()
 .: c > d
