@@ -24,8 +24,8 @@ public final class ExampleApp {
 
 
     public static void main(@NotNull String[] args) throws Exception {
-        new DollarParserImpl(new ParserOptions()).parse(ExampleApp.class.getResourceAsStream("/example.ds"),
-                                                        "/example.ds",
-                                                    false);
+        new DollarParserImpl(new ParserOptions()).parse(ExampleApp.class.getResourceAsStream("/slow/air_quality.ds"),
+                                                        "/slow/air_quality.ds",
+                                                        false);
     }
 }
