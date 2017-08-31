@@ -70,8 +70,7 @@ import static com.google.common.io.Files.asCharSource;
 import static dollar.api.DollarStatic.$;
 import static dollar.api.DollarStatic.$void;
 import static dollar.api.scripting.ScriptingSupport.compile;
-import static dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
-import static dollar.api.types.meta.MetaConstants.SCOPES;
+import static dollar.api.types.meta.MetaConstants.*;
 import static dollar.internal.runtime.script.DollarLexer.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.Func.*;
@@ -947,9 +946,20 @@ public class DollarParserImpl implements DollarParser {
                      }),//3
                      OP(DOLLAR).next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))).or(IDENTIFIER).or(BUILTIN), //4
                      or(
-                             OP(ASSIGNMENT),
-                             OP(WHEN_ASSIGN),
-                             OP(SUBSCRIBE_ASSIGN)
+                             OP(ASSIGNMENT).map(i -> {
+                                 var var = $(i.toString());
+                                 var.metaAttribute(ASSIGNMENT_TYPE, "assign");
+                                 return var;
+                             }),
+                             OP(WHEN_OP).next(ref.lazy()).followedBy(OP(ASSIGNMENT)).map(var -> {
+                                 var.metaAttribute(ASSIGNMENT_TYPE, "when");
+                                 return var;
+                             }),
+                             OP(SUBSCRIBE_ASSIGN).map(i -> {
+                                 var var = $(i);
+                                 var.metaAttribute(ASSIGNMENT_TYPE, "subscribe");
+                                 return var;
+                             })
                      )//5
         ).token().map(new AssignmentOperator(pure, this));
     }

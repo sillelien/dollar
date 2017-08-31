@@ -337,8 +337,10 @@ public final class Symbols {
                                                            "subscribe-assign",
                                                            false, true, null, ASSIGNMENT_PRIORITY, true, NO_SCOPE, null);
     @NotNull
-    public static final OpDef WHEN_ASSIGN = new OpDef(OpDefType.ASSIGNMENT, "?=", null, "assign-when",
-                                                      false, true, null, ASSIGNMENT_PRIORITY, true, NO_SCOPE, null);
+    public static final OpDef WHEN_ASSIGN = new OpDef(OpDefType.ASSIGNMENT, null, null, "when-assign",
+                                                      false, true,
+                                                      "('var'|'volatile') [<type-assertion>] <variable-name> ?= <condition-expression> <assignment-expression>",
+                                                      ASSIGNMENT_PRIORITY, true, NO_SCOPE, null);
 
     @NotNull
     public static final OpDef IN = new OpDef(BINARY, "€", "in", "in", false, true, null, IN_PRIORITY, true, NO_SCOPE, "\u2208");

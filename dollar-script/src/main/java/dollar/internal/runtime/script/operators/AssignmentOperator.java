@@ -21,6 +21,7 @@ import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.TypePrediction;
+import dollar.api.types.meta.MetaConstants;
 import dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.SourceSegmentValue;
@@ -171,8 +172,8 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                 }
             }
 
-            final String op = objects[5].toString();
-            if ("?=".equals(op) || "*=".equals(op)) {
+            final String op = ((var) objects[5]).metaAttribute(MetaConstants.ASSIGNMENT_TYPE);
+            if ("when".equals(op) || "subscribe".equals(op)) {
                 final String useSource;
                 var useConstraint;
                 if (finalConstraint != null) {
@@ -183,21 +184,30 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                     useSource = scope.constraintSource(varName);
                 }
                 List<var> inputs = singletonList(constrain(scope, rhs, finalConstraint, useSource));
-                if ("?=".equals(op)) {
-                    scope.set(varName, rhs, false, null, useSource, isVolatile, false, pure);
+                if ("when".equals(op)) {
                     log.debug("DYNAMIC: {}", rhs.dynamic());
 
                     return node(WHEN_ASSIGN, pure, parser, token, inputs,
-                                c -> rhs.$listen(
-                                        args -> {
-                                            var value = args[0].$fixDeep(currentScope().parallel());
-                                            setVariable(scope, varName, value, false, useConstraint, useSource,
-                                                        isVolatile, false, pure, declaration, token, parser);
-                                            return value;
-                                        })
+                                c -> {
+                                    var rhsInitial = rhs.$fixDeep(currentScope().parallel());
+                                    scope.set(varName, ((var) objects[5]).isTrue() ? rhsInitial : $void(), false, null, useSource,
+                                              isVolatile, false, pure);
+                                    return rhs.$listen(
+                                            args -> {
+                                                if (((var) objects[5]).isTrue()) {
+                                                    var value = rhs.$fixDeep(currentScope().parallel());
+                                                    setVariable(scope, varName, value, false, useConstraint, useSource,
+                                                                isVolatile, false, pure, false, token, parser);
+
+                                                    return value;
+                                                } else {
+                                                    return $void();
+                                                }
+                                            });
+                                }
                     );
 
-                } else if ("*=".equals(op)) {
+                } else if ("subscribe".equals(op)) {
                     scope.set(varName, $void(), false, null, useSource, true, true, pure);
                     return node(SUBSCRIBE_ASSIGN, pure, parser, token, inputs,
                                 c -> {
