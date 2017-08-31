@@ -358,8 +358,8 @@ public final class Symbols {
 
 
     @NotNull
-    public static final OpDef WHEN_OP = new OpDef(BINARY, "?", "when", "when", false, true, null,
-                                                  CONTROL_FLOW_PRIORITY, true, NEW_SCOPE, null);
+    public static final OpDef WHEN = new OpDef(BINARY, "?", "when", "when", false, true, null,
+                                               CONTROL_FLOW_PRIORITY, true, NEW_SCOPE, null);
 
     @NotNull
     public static final OpDef REDUCE = new OpDef(BINARY, ">>=", "reduce", "reduce", false, true, null,
@@ -885,7 +885,7 @@ public final class Symbols {
                     READ_OP,
                     SUBSCRIPT_OP,
                     UNIT_OP,
-                    WHEN_OP,
+                    WHEN,
                     WHILE_OP,
                     WINDOW_OP,
                     WRITE_OP,

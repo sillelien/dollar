@@ -297,7 +297,7 @@ public class DollarParserImpl implements DollarParser {
         table = infixl(pure, table, PAIR, Func::pairFunc);
         table = infixl(pure, table, ELSE, Func::elseFunc);
         table = infixl(pure, table, IN, Func::inFunc);
-        table = infixl(pure, table, WHEN_OP, Func::listenFunc);
+        table = infixl(pure, table, WHEN, Func::listenFunc);
 
         table = infixl(pure, table, EACH, (lhs, rhs) -> eachFunc(pure, lhs, rhs));
         table = infixl(pure, table, REDUCE, (lhs, rhs) -> reduceFunc(pure, lhs, rhs));
@@ -650,15 +650,15 @@ public class DollarParserImpl implements DollarParser {
 
 
     private Parser<var> whenExpression(@NotNull Parser<var> expression, boolean pure) {
-        return KEYWORD_NL(WHEN_OP)
+        return KEYWORD_NL(WHEN)
                        .next(array(expression, expression))
                        .token()
                        .map(token -> {
-                           assert WHEN_OP.validForPure(pure);
+                           assert WHEN.validForPure(pure);
                            Object[] objects = (Object[]) token.value();
                            var lhs = (var) objects[0];
                            var rhs = (var) objects[1];
-                           var lambda = node(WHEN_OP, pure, this, token, asList(lhs, rhs),
+                           var lambda = node(WHEN, pure, this, token, asList(lhs, rhs),
                                              i -> lhs.isTrue() ? $((Object) rhs.toJavaObject()) : $void()
                            );
                            lhs.$listen(i -> lhs.isTrue() ? $((Object) rhs.toJavaObject()) : $void());
@@ -951,12 +951,12 @@ public class DollarParserImpl implements DollarParser {
                                  var.metaAttribute(ASSIGNMENT_TYPE, "assign");
                                  return var;
                              }),
-                             OP(WHEN_OP).next(ref.lazy()).followedBy(OP(ASSIGNMENT)).map(var -> {
+                             OP(WHEN).next(ref.lazy()).followedBy(OP(ASSIGNMENT)).map(var -> {
                                  var.metaAttribute(ASSIGNMENT_TYPE, "when");
                                  return var;
                              }),
                              OP(SUBSCRIBE_ASSIGN).map(i -> {
-                                 var var = $(i);
+                                 var var = $(i.toString());
                                  var.metaAttribute(ASSIGNMENT_TYPE, "subscribe");
                                  return var;
                              })
