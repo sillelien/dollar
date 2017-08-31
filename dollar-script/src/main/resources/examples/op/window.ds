@@ -1,12 +1,12 @@
 var a= 1;
 volatile collectedValues= void;
-window (a) over (10 Seconds) period (5 Seconds) unless (a == 5)  until (a == 29) {
+window (a) over (10 S) period (5 S) unless (a == 5)  until (a == 29) {
         @@collected
         collectedValues= collected;
 }
 
 for i in [1..32] {
-    SLEEP (1 Second)
+    SLEEP (1 S)
     a=a+1
 }
 

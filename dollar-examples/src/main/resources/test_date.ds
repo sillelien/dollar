@@ -19,9 +19,9 @@
 
 def Fortnight {$1 * 14}
 
-@@ DATE() + 1 Day
-@@ DATE() + 1 Hour
-@@ DATE() + 1 Sec
+@@ DATE() + 1 DAY
+@@ DATE() + 1 HOUR
+@@ DATE() + 1 SEC
 @@ DATE() + 1 Fortnight
 
 

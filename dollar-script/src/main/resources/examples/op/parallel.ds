@@ -1,4 +1,4 @@
-const testList := [ TIME(), {SLEEP(1 Sec); TIME();}, TIME() ];
+const testList := [ TIME(), {SLEEP(1 S); TIME();}, TIME() ];
 var a= |..| testList ;
 var b= |:| testList ;
 

@@ -31,12 +31,12 @@ import java.util.List;
 import java.util.function.Function;
 
 import static dollar.api.DollarStatic.$;
+import static dollar.internal.runtime.script.Constants.*;
 
 public final class Builtins {
-
-    private static final double DAY_IN_MILLIS = 24.0 * 60.0 * 60.0 * 1000.0;
     @NotNull
     private static final HashMap<String, Builtin<?>> map;
+
 
     static {
         map = new HashMap<>();
@@ -57,15 +57,15 @@ public final class Builtins {
         addDollarSingleNoScope(false, StateAware::$unpause, "UNPAUSE");
         addDollarSingleNoScope(false, StateAware::$state, "STATE");
 
-        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toDouble() / DAY_IN_MILLIS, true, "Millis", "Milli", "MS",
-                     "Milliseconds", "Millisecond");
-        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toDouble() / (24.0 * 60.0 * 60.0), true, "Secs", "S",
-                     "Sec",
-                     "Seconds",
-                     "Second");
-        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toDouble() / (24.0 * 60.0), true, "M", "Minutes",
-                     "Minute");
-        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toDouble() / 24.0, true, "Hrs", "Hours", "H", "Hour");
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
+                0).toDouble() / DAY_IN_MILLIS), true, "MS", "MILLIS", "MILLISECONDS", "MILLISECOND");
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
+                0).toDouble() / DAY_IN_SECONDS), true, "S", "SEC", "SECS", "SECONDS");
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
+                0).toDouble() / DAY_IN_MINUTES), true, "M", "MINUTES",
+                     "MINUTE");
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
+                0).toDouble() / DAY_IN_HOURS), true, "H", "HOUR", "HOURS");
         addJavaStyle(1, 1, (pure, args, scope) -> {
             try {
                 Thread.sleep((long) (args.get(0).toDouble() * DAY_IN_MILLIS));
@@ -81,7 +81,14 @@ public final class Builtins {
                 return DollarFactory.failure(ErrorType.valueOf(args.get(0).toString()), args.get(1).toString(), true);
             }
         }, true, "ERROR");
-        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toDouble(), true, "Days", "Day", "D");
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(0).toDouble()), true,
+                     "DAYS", "DAY", "D");
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
+                0).toDouble() * WEEK_IN_DAYS), true, "WEEKS", "WEEK", "W");
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
+                0).toDouble() * MONTH_IN_DAYS), true, "MONTHS", "MONTH", "MTH", "MTHS");
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
+                0).toDouble() * YEAR_IN_DAYS), true, "YEARS", "YEAR", "YRS", "YR", "Y");
         addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toString().length(), true, "LEN");
         addJavaStyle(0, 0, (pure, args, scope) -> $(new Date()), false, "DATE");
         addJavaStyle(0, 0, (pure, args, scope) -> System.currentTimeMillis(), false, "TIME");

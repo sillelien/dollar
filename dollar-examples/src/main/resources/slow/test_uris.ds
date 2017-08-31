@@ -12,14 +12,14 @@ const titles= posts each { $1.title }
 volatile a=0
 volatile b=0
 
-@@ "100 Millis ="+100 Millis
+@@ "100 MS ="+100 MS
 
-every 100 Millis until ($1 == 5) unless ($1 == 3) {
+every 100 MS until ($1 == 5) unless ($1 == 3) {
     a= a + 1
     @@ "Hello " + a
 }
 
-every 100 Millis until ($1 == 5) {
+every 100 MS until ($1 == 5) {
     b= b + 1;
     @@ "Goodbye " + b;
 }

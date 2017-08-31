@@ -22,7 +22,7 @@ sub.unsub()
 @@ chat.state_
 chat.stop_()
 @@ chat.state_
-SLEEP(1 Second)
+SLEEP(1 S)
 //chat.state_ <=> ["STOPPED","STOPPED"]
 
 

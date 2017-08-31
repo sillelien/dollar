@@ -14,10 +14,10 @@ def a {
 }
 
 @@ a
-SLEEP(500 Millis)
+SLEEP(500 MS)
 @@ a
 
 //chat := import "github:neilellis:dollar-example-module:chat.ds"
 //chat.server( "channel" : "test" )
 
-SLEEP(1 Sec)
+SLEEP(1 S)
