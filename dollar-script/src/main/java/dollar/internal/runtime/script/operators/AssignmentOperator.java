@@ -112,6 +112,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
         return node(ASSIGNMENT, pure, parser, token, singletonList(constrain(scope, rhs, constraint, constraintSource)), pipeable);
     }
 
+    @Override
     @Nullable
     public Function<? super var, ? extends var> apply(@NotNull Token token) {
         @Nullable Type type;
@@ -145,7 +146,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
         boolean constant;
         boolean isVolatile;
         final Object mutability = objects[1];
-        boolean decleration = mutability != null;
+        boolean declaration = mutability != null;
         constant = (mutability != null) && "const".equals(mutability.toString());
         isVolatile = (mutability != null) && "volatile".equals(mutability.toString());
         if (((var) objects[4]).metaAttribute(IS_BUILTIN) != null) {
@@ -191,7 +192,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                         args -> {
                                             var value = args[0].$fixDeep(currentScope().parallel());
                                             setVariable(scope, varName, value, false, useConstraint, useSource,
-                                                        isVolatile, false, pure, decleration, token, parser);
+                                                        isVolatile, false, pure, declaration, token, parser);
                                             return value;
                                         })
                     );
@@ -207,13 +208,13 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                             false,
                                             useConstraint, useSource,
                                             true, false, pure,
-                                            decleration, token,
+                                            declaration, token,
                                             parser);
                                     return $(rhs.$subscribe(subscriber));
                                 });
                 }
             }
-            return assign(rhs, objects, finalConstraint, constant, isVolatile, constraintSource, scope, token, decleration);
+            return assign(rhs, objects, finalConstraint, constant, isVolatile, constraintSource, scope, token, declaration);
         };
     }
 

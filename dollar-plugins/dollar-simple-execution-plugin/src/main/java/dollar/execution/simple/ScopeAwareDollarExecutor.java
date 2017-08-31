@@ -33,6 +33,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static dollar.api.DollarStatic.getConfig;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 import static java.lang.Runtime.getRuntime;
 import static java.util.concurrent.Executors.newFixedThreadPool;
@@ -87,14 +88,18 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
     @Override
     public <T> Future<T> executeInBackground(@NotNull Callable<T> callable) {
         assert backgroundExecutor != null;
-        log.debug("Background Execution");
+        if (getConfig().debugExecution()) {
+            log.info("Background Execution");
+        }
         return backgroundExecutor.submit(wrap(callable));
     }
 
     @NotNull
     @Override
     public <T> Future<T> executeNow(@NotNull Callable<T> callable) {
-        log.debug("Immediate Execution");
+        if (getConfig().debugExecution()) {
+            log.info("Immediate Execution");
+        }
         final FutureTask<T> tFutureTask = new FutureTask<>(callable);
         tFutureTask.run();
         return tFutureTask;
@@ -133,7 +138,9 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
     @Override
     public <T> Future<T> submit(@NotNull Callable<T> callable) {
         assert forkJoinPool != null;
-        log.debug("Forking");
+        if (getConfig().debugExecution()) {
+            log.info("Forking");
+        }
         return forkJoinPool.submit(wrap(callable));
     }
 

@@ -17,4 +17,10 @@
 package dollar.internal.runtime.script;
 
 public class DollarExitError extends Error {
+    public DollarExitError() {
+    }
+
+    public DollarExitError(Throwable throwable) {
+        super(throwable);
+    }
 }

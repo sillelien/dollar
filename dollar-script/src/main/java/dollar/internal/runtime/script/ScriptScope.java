@@ -58,23 +58,21 @@ public class ScriptScope implements Scope {
     @NotNull
     private static final AtomicInteger counter = new AtomicInteger();
     @NotNull
-    private final ConcurrentHashMap<String, Variable> variables = new ConcurrentHashMap<>();
-
-    @NotNull
     final String id;
+    @NotNull
+    private final ConcurrentHashMap<String, Variable> variables = new ConcurrentHashMap<>();
     @NotNull
     private final Multimap<String, Listener> listeners = ArrayListMultimap.create();
     @NotNull
     private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
     private final boolean root;
+    private final boolean parallel;
     @Nullable
     Scope parent;
     @Nullable
     private String source;
     @Nullable
     private String file;
-    private final boolean parallel;
-
     private boolean parameterScope;
     private boolean destroyed;
     @Nullable
@@ -366,20 +364,35 @@ public class ScriptScope implements Scope {
         if (errorHandlers.isEmpty()) {
             log.info("No error handlers in {} so passing up.", this);
             if (parent == null) {
-                if (unravelled instanceof ParserException) {
-                    if (unravelled.getCause() instanceof DollarException) {
-                        return handleError(unravelled.getCause());
-                    } else {
-                        throw (ParserException) unravelled;
+                log.info("No parent so handling error in {}", this);
+
+                log.error(unravelled.getMessage(), unravelled);
+                if (getConfig().failFast()) {
+                    log.info("Fail-fast option is set");
+                    try {
+                        ErrorHandlerFactory.instance().handleTopLevel(unravelled, id, (file == null) ? null : new File(file));
+                    } catch (Throwable throwable) {
+                        log.error(throwable.getMessage(), throwable);
                     }
+                    System.exit(1);
+                    throw new DollarExitError();
+                } else {
+                    log.info("Fail-fast option is not set");
+                    if (unravelled instanceof ParserException) {
+                        if (unravelled.getCause() instanceof DollarException) {
+                            return handleError(unravelled.getCause());
+                        } else {
+                            throw (ParserException) unravelled;
+                        }
+                    }
+                    if (unravelled instanceof DollarParserError) {
+                        throw (DollarParserError) unravelled;
+                    }
+                    if (unravelled instanceof DollarException) {
+                        throw (DollarException) unravelled;
+                    }
+                    throw new DollarScriptException(unravelled);
                 }
-                if (unravelled instanceof DollarParserError) {
-                    throw (DollarParserError) unravelled;
-                }
-                if (unravelled instanceof DollarException) {
-                    throw (DollarException) unravelled;
-                }
-                throw new DollarScriptException(unravelled);
             } else {
                 return parent.handleError(unravelled);
             }
@@ -465,7 +478,9 @@ public class ScriptScope implements Scope {
     public void listen(@NotNull String key, @NotNull String id, @NotNull var listener) {
         checkDestroyed();
         listen(key, id, in -> {
-            log.debug("Notifying {}", listener.source().getSourceMessage());
+            if (getConfig().debugEvents()) {
+                log.info("Notifying {} in scope {}", listener.source().getSourceMessage(), this);
+            }
                    listener.$notify();
                    return $void();
                }
@@ -475,6 +490,10 @@ public class ScriptScope implements Scope {
 
     @Override
     public void listen(@NotNull String key, @NotNull String id, @NotNull Pipeable pipe) {
+        if (getConfig().debugEvents()) {
+            log.info("listen called on scope {} with id {}", this, id);
+        }
+
         checkDestroyed();
         Listener listener = new Listener() {
             @NotNull
@@ -486,33 +505,44 @@ public class ScriptScope implements Scope {
             @NotNull
             @Override
             public var pipe(var... vars) throws Exception {
+                if (getConfig().debugEvents()) {
+                    log.info("Listener triggered on scope {} for key {} and value {}", ScriptScope.this, vars[0], vars[1]
+                                                                                                                          .dynamic() ? vars[1].source() : vars[1]);
+                }
+
                 return pipe.pipe(vars);
             }
         };
 
         if (key.matches("[0-9]+")) {
-            if (getConfig().debugScope()) {
+            if (getConfig().debugEvents()) {
                 log.info("Cannot listen to positional parameter ${} in {}", key, this);
             }
             return;
         }
         Scope scopeForKey = scopeForKey(key);
         if (scopeForKey == null) {
-            if (getConfig().debugScope()) {
+            if (getConfig().debugEvents()) {
                 log.info("Key {} not found in {}", key, this);
             }
-            scopeForKey = this;
+            throw new DollarException("Cannot find " + key + " in scope " + this);
         }
 
-        if (getConfig().debugScope()) {
+        if (getConfig().debugEvents()) {
             log.info("Listening for {} in {}", key, scopeForKey);
         }
 
 
         if (listeners.get(key).stream().filter(i -> i.getId().equals(id)).count() == 0) {
             scopeForKey.listeners().put(key, listener);
+        } else {
+            if (getConfig().debugEvents()) {
+                log.info("Listener {} for {} in {} already exists", id, key, scopeForKey);
+            }
         }
-        log.debug("Listener size now {}", scopeForKey.listeners().get(key).size());
+        if (getConfig().debugEvents()) {
+            log.info("Listener size now {}", scopeForKey.listeners().get(key).size());
+        }
     }
 
     @Nullable
@@ -531,21 +561,29 @@ public class ScriptScope implements Scope {
         if (value == null) {
             throw new NullPointerException();
         }
-        log.debug("Scope {} notified for {}", this, key);
+        if (getConfig().debugEvents()) {
+
+            log.info("Scope {} notified for {}", this, key);
+        }
         if (listeners.containsKey(key)) {
-            log.debug("Scope {} notified for {} with {} listeners", this, key, listeners.get(
-                    key)
-                                                                                       .size());
+            if (getConfig().debugEvents()) {
+                log.debug("Scope {} notified for {} with {} listeners", this, key, listeners.get(key).size());
+            }
             new ArrayList<>(listeners.get(key)).forEach(
-                    pipe -> {
+                    listener -> {
                         try {
-                            pipe.pipe($(key), value);
+                            if (getConfig().debugEvents()) {
+                                log.debug("Listener {} notified in scope {} for key {}", listener.getId(), this, key);
+                            }
+                            listener.pipe($(key), value);
                         } catch (Exception e) {
                             handleError(e);
                         }
                     });
         } else {
-            log.debug("Scope {} notified for {} NO LISTENERS", this, key);
+            if (getConfig().debugEvents()) {
+                log.info("Scope {} notified for {} NO LISTENERS", this, key);
+            }
         }
     }
 
@@ -619,12 +657,6 @@ public class ScriptScope implements Scope {
         return value;
     }
 
-    private void checkDestroyed() {
-        if (destroyed) {
-            throw new IllegalStateException("Attempted to use a destroyed scope " + this);
-        }
-    }
-
     @Override
     public void parent(@Nullable Scope scope) {
         checkDestroyed();
@@ -653,6 +685,11 @@ public class ScriptScope implements Scope {
         return parent().equals(scope) || parent().hasParent(scope);
     }
 
+    @Override
+    public boolean isRoot() {
+        return root;
+    }
+
     @NotNull
     @Override
     public Scope copy() {
@@ -664,18 +701,35 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public List<var> parametersAsVars() {
-        return variables.values().stream().filter(Variable::isNumeric).map(Variable::getValue).collect(Collectors.toList());
+    public void destroy() {
+        clear();
+        destroyed = true;
     }
 
-    @NotNull
-    public Parser<var> parser() {
-        return parser;
+    @Override
+    public boolean pure() {
+        return false;
+    }
+
+    @Override
+    public List<var> parametersAsVars() {
+        return variables.values().stream().filter(Variable::isNumeric).map(Variable::getValue).collect(Collectors.toList());
     }
 
     @Override
     public boolean parallel() {
         return parallel;
+    }
+
+    private void checkDestroyed() {
+        if (destroyed) {
+            throw new IllegalStateException("Attempted to use a destroyed scope " + this);
+        }
+    }
+
+    @NotNull
+    public Parser<var> parser() {
+        return parser;
     }
 
     public void parser(@NotNull Parser<var> parser) {
@@ -686,25 +740,6 @@ public class ScriptScope implements Scope {
     @Override
     public String toString() {
         return id + (parallel ? "=>" : "->") + parent;
-    }
-
-
-    @Override
-    public boolean isRoot() {
-        return root;
-    }
-
-
-
-    @Override
-    public void destroy() {
-        clear();
-        destroyed = true;
-    }
-
-    @Override
-    public boolean pure() {
-        return false;
     }
 
     private boolean checkConstraint(@NotNull var value,

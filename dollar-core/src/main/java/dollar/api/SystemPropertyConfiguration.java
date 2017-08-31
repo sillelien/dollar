@@ -16,28 +16,17 @@
 
 package dollar.api;
 
-@SuppressWarnings("PointlessBooleanExpression")
 public class SystemPropertyConfiguration implements Configuration {
 
-    private boolean safe = Boolean.parseBoolean(System.getProperty("dollar.safe", "true"));
-    private boolean monitor = Boolean.parseBoolean(System.getProperty("dollar.monitor", "false"));
-    private boolean production = Boolean.parseBoolean(System.getProperty("dollar.production", "false"));
-    private boolean debugScope = Boolean.parseBoolean(System.getProperty("dollar.debug.scope", "false"));
-    private boolean debugParallel = Boolean.parseBoolean(System.getProperty("dollar.debug.parallel", "false"));
-    private boolean failFast = true;
+    private final boolean debugEvents = Boolean.parseBoolean(System.getProperty("dollar.debug.events", "false"));
+    private final boolean debugExecution = Boolean.parseBoolean(System.getProperty("dollar.debug.execution", "false"));
+    private final boolean safe = Boolean.parseBoolean(System.getProperty("dollar.safe", "true"));
+    private final boolean monitor = Boolean.parseBoolean(System.getProperty("dollar.monitor", "false"));
+    private final boolean production = Boolean.parseBoolean(System.getProperty("dollar.production", "false"));
+    private final boolean debugScope = Boolean.parseBoolean(System.getProperty("dollar.debug.scope", "false"));
+    private final boolean debugParallel = Boolean.parseBoolean(System.getProperty("dollar.debug.parallel", "false"));
+    private boolean failFast = Boolean.parseBoolean(System.getProperty("dollar.fail.fast", "false"));
 
-
-    public SystemPropertyConfiguration(boolean safe,
-                                       boolean monitor,
-                                       boolean production,
-                                       boolean debugScope,
-                                       boolean debugParallel) {
-        this.safe = safe;
-        this.monitor = monitor;
-        this.production = production;
-        this.debugScope = debugScope;
-        this.debugParallel = debugParallel;
-    }
 
     public SystemPropertyConfiguration() {
     }
@@ -45,6 +34,16 @@ public class SystemPropertyConfiguration implements Configuration {
     @Override
     public boolean debugScope() {
         return debugScope;
+    }
+
+    @Override
+    public boolean debugEvents() {
+        return debugEvents;
+    }
+
+    @Override
+    public boolean debugExecution() {
+        return debugExecution;
     }
 
     @Override

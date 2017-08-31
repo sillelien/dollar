@@ -21,6 +21,7 @@ import dollar.api.Configuration;
 import dollar.api.DollarStatic;
 import dollar.internal.runtime.script.DollarExitError;
 import dollar.internal.runtime.script.DollarParserImpl;
+import dollar.internal.runtime.script.ErrorHandlerFactory;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.ParserOptions;
 import org.jetbrains.annotations.NotNull;
@@ -51,7 +52,7 @@ public final class ParserMain {
             System.exit(-1);
         } catch (Throwable t) {
             try {
-                parser.getErrorHandler().handleTopLevel(t, file.getName(), file);
+                ErrorHandlerFactory.instance().handleTopLevel(t, file.getName(), file);
             } catch (Throwable throwable) {
                 log.error(throwable.getMessage(), throwable);
                 System.exit(1);
@@ -67,27 +68,43 @@ public final class ParserMain {
 
         public ParserConfiguration(@NotNull ParserOptions options) {this.options = options;}
 
-        @Override public boolean debugScope() {
+        @Override
+        public boolean debugScope() {
             return options.isDebugScope();
         }
 
-        @Override public boolean failFast() {
-            return !options.isTolerateErrors();
+        @Override
+        public boolean debugEvents() {
+            return options.isDebugEvents();
         }
 
-        @Override public void failFast(boolean failFast) {
-            options.setTolerateErrors(!failFast);
+        @Override
+        public boolean debugExecution() {
+            return options.isDebugExecution();
         }
 
-        @Override public boolean production() {
+        @Override
+        public boolean failFast() {
+            return options.isFailFast();
+        }
+
+        @Override
+        public void failFast(boolean failFast) {
+            options.setFailFast(failFast);
+        }
+
+        @Override
+        public boolean production() {
             return options.isProduction();
         }
 
-        @Override public boolean wrapForGuards() {
+        @Override
+        public boolean wrapForGuards() {
             return options.isSafe();
         }
 
-        @Override public boolean wrapForMonitoring() {
+        @Override
+        public boolean wrapForMonitoring() {
             return options.isMonitor();
         }
 

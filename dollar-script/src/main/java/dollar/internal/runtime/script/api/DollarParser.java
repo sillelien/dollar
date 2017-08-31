@@ -29,7 +29,6 @@ public interface DollarParser {
 
     void export(@NotNull String name, @NotNull var export);
 
-    @NotNull ParserErrorHandler getErrorHandler();
 
     @NotNull
     ParserOptions options();
@@ -38,7 +37,7 @@ public interface DollarParser {
     @NotNull
     var parse(@NotNull ScriptScope scriptScope, @NotNull String source) throws Exception;
 
-    @NotNull var parse( @NotNull File file, boolean parallel) throws Exception;
+    @NotNull var parse(@NotNull File file, boolean parallel) throws Exception;
 
     @NotNull
     var parse(@NotNull InputStream in, boolean parallel, @NotNull Scope scope) throws Exception;

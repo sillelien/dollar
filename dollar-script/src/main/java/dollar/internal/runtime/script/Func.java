@@ -28,7 +28,6 @@ import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
-import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
@@ -38,14 +37,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static dollar.api.DollarStatic.*;
-import static dollar.api.types.meta.MetaConstants.*;
+import static dollar.api.types.meta.MetaConstants.IS_BUILTIN;
+import static dollar.api.types.meta.MetaConstants.OPERATION_NAME;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.singletonList;
@@ -53,10 +52,9 @@ import static java.util.Collections.singletonList;
 @SuppressWarnings({"UtilityClassCanBeEnum", "UtilityClassCanBeSingleton"})
 public final class Func {
 
+    public static final double ONE_DAY = 24.0 * 60.0 * 60.0 * 1000.0;
     @NotNull
     private static final DollarExecutor executor = Objects.requireNonNull(Plugins.sharedInstance(DollarExecutor.class));
-    private static final double ONE_DAY = 24.0 * 60.0 * 60.0 * 1000.0;
-
 
     @NotNull
     static var reduceFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
@@ -164,7 +162,8 @@ public final class Func {
 
     @NotNull
     static var listenFunc(@NotNull var lhs, @NotNull var rhs) {
-        return lhs.isTrue() ? DollarScriptSupport.fix(rhs) : $void();
+        lhs.$fixDeep(currentScope().parallel());
+        return lhs.$listen(var -> lhs.isTrue() ? DollarScriptSupport.fix(rhs) : $void());
     }
 
     @NotNull
@@ -234,17 +233,8 @@ public final class Func {
 
     @NotNull
     static var causesFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
-        String lhsFix = lhs.metaAttribute(VARIABLE);
-        if (lhsFix == null) {
-            return lhs.$listen(vars -> rhs.$fix(1, currentScope().parallel()));
-        } else {
-            Scope scopeForVar = getScopeForVar(pure, lhsFix, false, null);
-            if (scopeForVar == null) {
-                throw new VariableNotFoundException(lhsFix, currentScope());
-            }
-            scopeForVar.listen(lhsFix, UUID.randomUUID().toString(), rhs);
-            return lhs;
-        }
+        lhs.$fixDeep(currentScope().parallel());
+        return lhs.$listen(vars -> rhs.$fix(1, currentScope().parallel()));
     }
 
     @NotNull
@@ -275,16 +265,16 @@ public final class Func {
             return inScope(true, scope, newScope -> {
 
                 newScope.parameter("1", $(count.get()));
-                    if ((until != null) && until.isTrue()) {
-                        Scheduler.cancel(i[0].$S());
-                        return i[0];
+                if ((until != null) && until.isTrue()) {
+                    Scheduler.cancel(i[0].$S());
+                    return i[0];
+                } else {
+                    if ((unless != null) && unless.isTrue()) {
+                        return $void();
                     } else {
-                        if ((unless != null) && unless.isTrue()) {
-                            return $void();
-                        } else {
-                            return block.$fixDeep(currentScope().parallel());
-                        }
+                        return block.$fixDeep(currentScope().parallel());
                     }
+                }
 
             });
         }, ((long) (duration * ONE_DAY)));
@@ -307,9 +297,9 @@ public final class Func {
         }
 
         return ModuleResolver
-                           .resolveModule(parts[0])
-                           .resolve(parts[1], currentScope(), parser)
-                           .pipe($(paramMap))
+                       .resolveModule(parts[0])
+                       .resolve(parts[1], currentScope(), parser)
+                       .pipe($(paramMap))
                        .$fix(currentScope().parallel());
 
 

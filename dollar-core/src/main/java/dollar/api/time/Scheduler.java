@@ -29,16 +29,13 @@ import org.slf4j.LoggerFactory;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public final class Scheduler {
 
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("Scheduler");
 
-    @NotNull
-    private static final ScheduledExecutorService scheduler = new ScheduledThreadPoolExecutor(3);
+
     @Nullable
     private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
     @NotNull

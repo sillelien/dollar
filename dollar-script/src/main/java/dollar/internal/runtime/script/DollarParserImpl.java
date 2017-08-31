@@ -28,7 +28,6 @@ import dollar.api.types.DollarFactory;
 import dollar.api.types.DollarRange;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.ParserErrorHandler;
 import dollar.internal.runtime.script.api.ParserOptions;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.operators.AssignmentOperator;
@@ -36,6 +35,7 @@ import dollar.internal.runtime.script.operators.CollectOperator;
 import dollar.internal.runtime.script.operators.DefinitionOperator;
 import dollar.internal.runtime.script.operators.ParameterOperator;
 import dollar.internal.runtime.script.operators.PureDefinitionOperator;
+import dollar.internal.runtime.script.operators.WindowOperator;
 import dollar.internal.runtime.script.parser.OpDef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -83,7 +83,6 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.jparsec.Parsers.*;
 
-@SuppressWarnings({"FeatureEnvy", "OverlyCoupledClass", "unchecked"})
 public class DollarParserImpl implements DollarParser {
     @NotNull
     public static final String NAMED_PARAMETER_META_ATTR = "__named_parameter";
@@ -91,8 +90,6 @@ public class DollarParserImpl implements DollarParser {
     private static final Logger log = LoggerFactory.getLogger("DollarParser");
     @NotNull
     private final ClassLoader classLoader;
-    @NotNull
-    private final ParserErrorHandler errorHandler = new ParserErrorHandlerImpl();
     @NotNull
     private final Map<String, var> exports = new ConcurrentHashMap<>();
     @NotNull
@@ -118,12 +115,6 @@ public class DollarParserImpl implements DollarParser {
         exports.put(name, export);
     }
 
-    @Override
-    @NotNull
-    public ParserErrorHandler getErrorHandler() {
-        return errorHandler;
-    }
-
     @NotNull
     @Override
     public ParserOptions options() {
@@ -139,7 +130,8 @@ public class DollarParserImpl implements DollarParser {
             try {
                 parser.from(TOKENIZER, DollarLexer.IGNORED).parse(source);
             } catch (RuntimeException e) {
-                getErrorHandler().handleTopLevel(e, null, (file != null) ? new File(file) : null);
+                ErrorHandlerFactory.instance().handleTopLevel(e, null,
+                                                              (file != null) ? new File(file) : null);
 
             }
             return $(exports);
@@ -238,14 +230,14 @@ public class DollarParserImpl implements DollarParser {
         Parser<var> main;
         Parser.Reference<var> ref = Parser.newReference();
         if (pure) {
-            //noinspection unchecked
             main = ref.lazy()
                            .between(OP(LEFT_PAREN), OP(RIGHT_PAREN))
                            .or(Parsers.or(unitExpression(true),
                                           listExpression(ref.lazy(), true),
                                           mapExpression(ref.lazy(), true),
                                           assertExpression(ref, true),
-                                          collectExpression(ref.lazy(), true),
+                                          collectExpression(ref, true),
+                                          windowExpression(ref, true),
                                           whenExpression(ref.lazy(), true),
                                           functionCall(true),
                                           rangeExpression(ref, true),
@@ -257,7 +249,6 @@ public class DollarParserImpl implements DollarParser {
                                           builtin(true)))
                            .or(blockExpression(ref.lazy(), true).between(OP_NL(LEFT_BRACE), NL_OP(RIGHT_BRACE)));
         } else {
-            //noinspection unchecked
             main = ref.lazy()
                            .between(OP(LEFT_PAREN), OP(RIGHT_PAREN))
                            .or(Parsers.or(unitExpression(false),
@@ -266,7 +257,8 @@ public class DollarParserImpl implements DollarParser {
                                           KEYWORD(PURE).next(expression(true)),
                                           moduleExpression(ref),
                                           assertExpression(ref, false),
-                                          collectExpression(ref.lazy(), false),
+                                          collectExpression(ref, false),
+                                          windowExpression(ref, false),
                                           whenExpression(ref.lazy(), false),
                                           everyExpression(ref.lazy(), false),
                                           functionCall(false),
@@ -338,8 +330,6 @@ public class DollarParserImpl implements DollarParser {
         table = postfix(pure, table, AVG, v -> v.$avg(currentScope().parallel()));
 
         table = prefixUnReactive(pure, table, FIX, VarInternal::$fixDeep);
-        table = prefixUnReactive(pure, table, PARALLEL, v -> v.$fixDeep(true));
-        table = prefixUnReactive(pure, table, SERIAL, Func::serialFunc);
 
         table = table.prefix(parallelOperator(ref, pure), PARALLEL.priority());
         table = table.prefix(serialOperator(ref, pure), SERIAL.priority());
@@ -457,7 +447,6 @@ public class DollarParserImpl implements DollarParser {
     }
 
     private Parser<var> dollarIdentifier(@NotNull Parser.Reference<var> ref) {
-        //noinspection unchecked
         return OP(DOLLAR).next(
                 array(Terminals.Identifier.PARSER, OP(DEFAULT).next(ref.lazy()).optional(null)).between(
                         OP(LEFT_BRACE),
@@ -632,17 +621,34 @@ public class DollarParserImpl implements DollarParser {
                                        }));
     }
 
-    private Parser<var> collectExpression(@NotNull Parser<var> expression, boolean pure) {
+    private Parser<var> collectExpression(@NotNull Parser.Reference<var> ref, boolean pure) {
         return KEYWORD_NL(COLLECT_OP)
                        .next(
-                               array(expression,
-                                     KEYWORD(UNTIL).next(expression).optional(null),
-                                     KEYWORD(UNLESS).next(expression).optional(null),
-                                     expression)
+                               array(ref.lazy(),
+                                     KEYWORD(UNTIL).next(ref.lazy()).optional(null),
+                                     KEYWORD(UNLESS).next(ref.lazy()).optional(null),
+                                     ref.lazy())
                        )
                        .token()
                        .map(new CollectOperator(this, pure));
     }
+
+
+    private Parser<var> windowExpression(@NotNull Parser.Reference<var> ref, boolean pure) {
+        return KEYWORD_NL(WINDOW_OP)
+                       .next(
+                               array(ref.lazy(),//0
+                                     KEYWORD(OVER).next(ref.lazy()).optional(null),//1
+                                     KEYWORD(PERIOD).next(ref.lazy()).optional(null),//2
+                                     KEYWORD(UNLESS).next(ref.lazy()).optional(null),//3
+                                     KEYWORD(UNTIL).next(ref.lazy()).optional(null),//4
+                                     ref.lazy())//5
+
+                       )
+                       .token()
+                       .map(new WindowOperator(this, pure));
+    }
+
 
     private Parser<var> whenExpression(@NotNull Parser<var> expression, boolean pure) {
         return KEYWORD_NL(WHEN_OP)
@@ -708,7 +714,6 @@ public class DollarParserImpl implements DollarParser {
 
 
     private Parser<Function<? super var, ? extends var>> pipeOperator(@NotNull Parser.Reference<var> ref, boolean pure) {
-        //noinspection unchecked
         return (OP(PIPE_OP).optional(null)).next(
                 longest(BUILTIN,
                         IDENTIFIER,
@@ -791,7 +796,6 @@ public class DollarParserImpl implements DollarParser {
                        });
     }
 
-    @SuppressWarnings("unchecked")
     private Parser<Function<? super var, ? extends var>> isOperator(boolean pure) {
         return KEYWORD(IS_OP)
                        .next(IDENTIFIER.sepBy(OP(COMMA)))

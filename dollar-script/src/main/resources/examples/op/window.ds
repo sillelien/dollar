@@ -1,0 +1,16 @@
+var a= 1;
+volatile collectedValues= void;
+window (a) over (10 Seconds) period (5 Seconds) unless (a == 5)  until (a == 29) {
+        @@collected
+        collectedValues= collected;
+}
+
+for i in [1..32] {
+    SLEEP (1 Second)
+    a=a+1
+}
+
+
+.: #collectedValues > 0
+collectedValues <-> [21,22,23,24,25,26,27,28,29]
+@@ collectedValues

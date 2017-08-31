@@ -56,18 +56,6 @@ public interface URIAware {
         return $write(lhs, false, true);
     }
 
-    /**
-     * THis is for reactive programming using lamdas, you probably want $subscribe(...).
-     *
-     * @param pipeable action
-     */
-    @NotNull
-    default var $listen(@NotNull Pipeable pipeable) {return DollarStatic.$void();}
-
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    var $notify();
 
     @NotNull
     @Guarded(ChainGuard.class)

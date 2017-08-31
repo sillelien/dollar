@@ -35,7 +35,6 @@ import static dollar.internal.runtime.script.SourceNodeOptions.*;
 import static dollar.internal.runtime.script.parser.OpDefType.*;
 import static java.util.Arrays.asList;
 
-@SuppressWarnings({"UtilityClassCanBeEnum", "UtilityClassCanBeSingleton"})
 public final class Symbols {
 
 
@@ -406,6 +405,15 @@ public final class Symbols {
                                                      "collect <expression> [ 'until' <expression> ] [ 'unless' <expression> ] <expression>",
                                                      NO_PRIORITY, true, NEW_SCOPE, null);
 
+
+    @NotNull
+    public static final OpDef WINDOW_OP = new OpDef(CONTROL_FLOW, null,
+                                                    "window", "window",
+                                                    false, false,
+                                                    "window <expression> [ 'every' <duration-expression> ] [ 'unless' <expression> ] <expression>",
+                                                    NO_PRIORITY, true, NEW_SCOPE, null);
+
+
     @NotNull
     public static final OpDef FOR_OP = new OpDef(CONTROL_FLOW, null, "for", "for", false, true,
                                                  "for <variable-name> <iterable-expression> <expression>",
@@ -559,6 +567,10 @@ public final class Symbols {
     public static final KeywordDef WITH = new KeywordDef("with", false, null, null);
     @NotNull
     public static final KeywordDef EVERY = new KeywordDef("every", false, null, null);
+    @NotNull
+    public static final KeywordDef OVER = new KeywordDef("over", false, null, null);
+    @NotNull
+    public static final KeywordDef PERIOD = new KeywordDef("period", false, null, null);
     @NotNull
     public static final KeywordDef BLOCK = new KeywordDef("block", false, null, null);
     @NotNull
@@ -715,7 +727,6 @@ public final class Symbols {
     private static final KeywordDef TRY = new KeywordDef("try", true, null, null);
     @NotNull
     private static final List<KeywordDef> KEYWORDS;
-    @SuppressWarnings("unused")
     @NotNull
     private static final List<SymbolDef> SYMBOLS;
     @NotNull
@@ -846,15 +857,15 @@ public final class Symbols {
                     NULL,
 
                     //List/Set operators
-                    UNIQUE,
+                    AVG,
                     MAX,
                     MIN,
-                    SUM,
                     PRODUCT,
-                    AVG,
-                    SPLIT,
                     REVERSE,
                     SORT,
+                    SPLIT,
+                    SUM,
+                    UNIQUE,
 
                     //complex operators
                     BLOCK_OP,
@@ -874,6 +885,7 @@ public final class Symbols {
                     UNIT_OP,
                     WHEN_OP,
                     WHILE_OP,
+                    WINDOW_OP,
                     WRITE_OP,
 
                     //Reserved Operators
@@ -903,6 +915,8 @@ public final class Symbols {
 
 
                     //keywords
+                    OVER,
+                    PERIOD,
                     VOID,
                     INFINITY,
                     PURE,
@@ -1014,6 +1028,7 @@ public final class Symbols {
             File file = new File("src/main/resources/examples/op", operator.name() + ".ds");
             try {
                 if (!file.exists()) {
+                    System.out.println("Creating " + operator.name() + ".ds");
                     Files.write("".getBytes(), file);
                 }
             } catch (IOException e) {
@@ -1023,6 +1038,7 @@ public final class Symbols {
             File mdFile = new File("src/main/resources/examples/op", operator.name() + ".md");
             try {
                 if (!mdFile.exists()) {
+                    System.out.println("Creating " + operator.name() + ".md");
                     Files.write("".getBytes(), mdFile);
                 }
             } catch (IOException e) {
@@ -1031,7 +1047,6 @@ public final class Symbols {
         }
     }
 
-    @SuppressWarnings("UseOfSystemOutOrSystemErr")
     public static void main(@NotNull String[] args) {
         System.out.println("## Appendix A - Operators");
         for (OpDef operator : OPERATORS) {

@@ -116,7 +116,6 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
      *
      * @return this
      */
-    @SuppressWarnings("UseOfSystemOutOrSystemErr")
     @NotNull
     @Guarded(ChainGuard.class)
     default var err() {
@@ -155,7 +154,6 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
     /**
      * Prints the toHumanString() value of this {@link var} to standard out.
      */
-    @SuppressWarnings("UseOfSystemOutOrSystemErr")
     @NotNull
     @Guarded(ChainGuard.class)
     default var out() {
@@ -176,8 +174,7 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
      *
      * @return the underlying Java object
      */
-    @Nullable
-    <R> R toJavaObject();
+    @Nullable <R> R toJavaObject();
 
 
     /**
@@ -247,6 +244,22 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
     default boolean eq(@NotNull Map m) {
         return toJavaMap().equals(m);
     }
+
+    /**
+     * THis is for reactive programming using lamdas, you probably want $subscribe(...).
+     *
+     * @param pipeable action
+     */
+    @NotNull
+    default var $listen(@NotNull Pipeable pipeable) {return DollarStatic.$void();}
+
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
+    var $notify();
+
+    @NotNull
+    default var $cancel(@NotNull var id) {return DollarStatic.$void();}
 
 
 }

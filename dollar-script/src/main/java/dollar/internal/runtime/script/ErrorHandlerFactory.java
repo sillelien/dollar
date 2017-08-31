@@ -37,13 +37,16 @@ import java.util.Objects;
 
 import static dollar.api.DollarException.unravel;
 
-@SuppressWarnings("UseOfSystemOutOrSystemErr")
-public class ParserErrorHandlerImpl implements ParserErrorHandler {
+public class ErrorHandlerFactory implements ParserErrorHandler {
 
     @NotNull
-    private static final Logger log = LoggerFactory.getLogger("ParserErrorHandlerImpl");
+    private static final Logger log = LoggerFactory.getLogger("ErrorHandlerFactory");
 
-    public ParserErrorHandlerImpl() {
+    private ErrorHandlerFactory() {
+    }
+
+    public static ParserErrorHandler instance() {
+        return new ErrorHandlerFactory();
     }
 
 

@@ -49,6 +49,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static dollar.api.DollarStatic.$;
+import static dollar.api.DollarStatic.getConfig;
 import static dollar.api.types.meta.MetaConstants.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
@@ -99,14 +100,14 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     @Nullable
     private volatile TypePrediction prediction;
 
-    public SourceNode(@NotNull Pipeable lambda,
-                      @NotNull SourceSegment source,
-                      @NotNull List<var> inputs,
-                      @NotNull String name,
-                      @NotNull DollarParser parser,
-                      @NotNull SourceNodeOptions sourceNodeOptions,
-                      @NotNull String id,
-                      boolean pure, @NotNull OpDef operation) {
+    SourceNode(@NotNull Pipeable lambda,
+               @NotNull SourceSegment source,
+               @NotNull List<var> inputs,
+               @NotNull String name,
+               @NotNull DollarParser parser,
+               @NotNull SourceNodeOptions sourceNodeOptions,
+               @NotNull String id,
+               boolean pure, @NotNull OpDef operation) {
 
         this.pure = pure;
         this.operation = operation;
@@ -257,7 +258,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             return result;
         } catch (Exception e) {
             log.warn(e.getMessage(), e);
-            return parser.getErrorHandler().handle(currentScope(), source, e);
+            return ErrorHandlerFactory.instance().handle(currentScope(), source, e);
         }
     }
 
@@ -267,8 +268,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     }
 
     @Nullable
-
-    public Object invokeMain(@Nullable Object proxy, @NotNull Method method, @Nullable Object[] args) throws Throwable {
+    private Object invokeMain(@Nullable Object proxy, @NotNull Method method, @Nullable Object[] args) throws Throwable {
         if (stack.get().size() > MAX_STACK_DEPTH) {
             throw new LambdaRecursionException(stack.get().size());
 
@@ -323,25 +323,35 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 return null;
             } else if ("$listen".equals(method.getName())) {
                 String listenerId = UUID.randomUUID().toString();
-                if (args.length == 2) {
+                if ((args != null) && (args.length == 2)) {
                     listenerId = String.valueOf(args[1]);
+                }
+                if (getConfig().debugEvents()) {
+                    log.info("$listen called on a source node, id used is {} source is {} ", listenerId,
+                             source.getShortSourceMessage());
                 }
                 listeners.put(listenerId, (Pipeable) args[0]);
                 return $(listenerId);
             } else if ("$notify".equals(method.getName())) {
                 if (notifyStack.get().contains(this)) {
-                    //throw new IllegalStateException("Recursive notify loop detected");
+//                    throw new IllegalStateException("Recursive notify loop detected");
                     return proxy;
                 }
-                notifyStack.get().add(this);
-                final var value = execute();
-                for (Pipeable listener : listeners.values()) {
-                    listener.pipe(value);
+                if (getConfig().debugEvents()) {
+                    log.info("$notify called on a source node, id used is {} source is {} listener stack size is {}", id,
+                             source.getShortSourceMessage(), listeners.size());
                 }
-                notifyStack.get().remove(this);
+                notifyStack.get().add(this);
+                try {
+
+                    for (Pipeable listener : listeners.values()) {
+                        listener.pipe((var) proxy);
+                    }
+                } finally {
+                    notifyStack.get().remove(this);
+                }
                 return proxy;
-            } else if ("$remove".equals(method.getName())) {
-                //noinspection SuspiciousMethodCalls
+            } else if ("$cancel".equals(method.getName())) {
                 listeners.remove(args[0]);
                 return args[0];
             } else if ("hasErrors".equals(method.getName())) {
@@ -363,12 +373,12 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     }
 
     @NotNull
-    public var executePipe(var var) throws Exception {
+    private var executePipe(var var) throws Exception {
         return lambda.pipe(var);
     }
 
     @NotNull
-    public var _constrain(@NotNull var source, @Nullable var constraint, @Nullable String constraintSource) {
+    private var _constrain(@NotNull var source, @Nullable var constraint, @Nullable String constraintSource) {
         if ((constraint == null) || (constraintSource == null)) {
             return source;
         }

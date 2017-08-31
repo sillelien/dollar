@@ -25,7 +25,22 @@ public interface Configuration {
     boolean debugScope();
 
     /**
-     * Returns true if Dollar should throw exceptions rather than return errors.
+     * Returns true if debug messages will be produced for event activity (i.e. notify/listen)
+     *
+     * @return true if events are to be debugged
+     */
+    boolean debugEvents();
+
+    /**
+     * Returns true if debug messages will be produced for event activity (i.e. notify/listen)
+     *
+     * @return true if events are to be debugged
+     */
+    boolean debugExecution();
+
+
+    /**
+     * Returns true if Dollar should stop on error (much like BASH's set -e)
      *
      * @return true if we're failing fast
      */

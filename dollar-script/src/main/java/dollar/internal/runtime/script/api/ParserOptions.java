@@ -37,10 +37,10 @@ public class ParserOptions {
     @Parameter(names = "--server", description = "Run in server mode")
     private boolean server;
 
-    @Parameter(names = "--tolerate-errors", description = "Continue execution after an error")
-    private boolean tolerateErrors;
+    @Parameter(names = {"--fail-fast", "-e"}, description = "Fail on error")
+    private boolean failFast;
 
-    @Parameter(names = "--debug-scope")
+    @Parameter(names = "--debug-scope", description = "Debug scope usage")
     private boolean debugScope;
 
     @NotNull
@@ -48,9 +48,15 @@ public class ParserOptions {
     private List<File> files;
 
     private boolean production;
+    @Parameter(names = "--debug-parallel", description = "Debug parallel execution and parallel scopes")
     private boolean debugParallel;
+    @Parameter(names = "--debug-events", description = "Debug listen/notify internal events")
+    private boolean debugEvents;
+    @Parameter(names = "--debug-execution", description = "Debug execution (fork, immediate, schedule etc.)")
+    private boolean debugExecution;
 
-    @NotNull public File getFile() {
+    @NotNull
+    public File getFile() {
         return files.get(0);
     }
 
@@ -82,12 +88,12 @@ public class ParserOptions {
         return "test".equalsIgnoreCase(profile);
     }
 
-    public boolean isTolerateErrors() {
-        return tolerateErrors;
+    public boolean isFailFast() {
+        return failFast;
     }
 
-    public void setTolerateErrors(boolean tolerateErrors) {
-        this.tolerateErrors = tolerateErrors;
+    public void setFailFast(boolean failFast) {
+        this.failFast = failFast;
     }
 
     public boolean isDebugParallel() {
@@ -96,5 +102,21 @@ public class ParserOptions {
 
     public void setDebugParallel(boolean debugParallel) {
         this.debugParallel = debugParallel;
+    }
+
+    public boolean isDebugEvents() {
+        return debugEvents;
+    }
+
+    public void setDebugEvents(boolean debugEvents) {
+        this.debugEvents = debugEvents;
+    }
+
+    public boolean isDebugExecution() {
+        return debugExecution;
+    }
+
+    public void setDebugExecution(boolean debugExecution) {
+        this.debugExecution = debugExecution;
     }
 }

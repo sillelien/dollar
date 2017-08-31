@@ -120,8 +120,8 @@ public class ParserQuickTest {
 
     public void singleScriptTest() throws Exception {
         try {
-            new DollarParserImpl(options).parse(getClass().getResourceAsStream("/test_ranges.ds"),
-                                                "/test_ranges.ds",
+            new DollarParserImpl(options).parse(getClass().getResourceAsStream("/examples/op/when.ds"),
+                                                "/examples/op/when.ds",
                                                 parallel);
         } catch (Exception e) {
             log.debug(e.getMessage(), e);
