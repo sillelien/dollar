@@ -97,7 +97,7 @@ public class ParserSlowTest {
     @ValueSource(
 //            "bulletin.ds",
 //            "example.ds",
-            strings = {"slow/crime.ds", "slow/air_quality.ds", "slow/test_redis.ds",
+            strings = {"slow/air_quality.ds", "slow/test_redis.ds",
                               "slow/test_uris.ds", "slow/test_concurrency.ds",
                               "slow/test_modules.ds"})
 
