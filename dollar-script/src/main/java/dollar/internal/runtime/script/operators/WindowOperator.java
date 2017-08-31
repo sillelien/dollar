@@ -67,7 +67,7 @@ public class WindowOperator implements Function<Token, var> {
 
         var expression = (var) objects[0];
         var over = (var) objects[1];
-        var period = (var) objects[2];
+        var period = (objects[2] == null) ? over : (var) objects[2];
         var unless = (var) objects[3];
         var until = (var) objects[4];
         var block = (var) objects[5];
@@ -99,7 +99,7 @@ public class WindowOperator implements Function<Token, var> {
                         log.info("After expression listen");
                         Scheduler.schedule(i -> inSubScope(true, pure, "window-operator-period", newScope -> {
                             log.info("Schedule called on WindowOperator");
-                            newScope.parameter("1", DollarFactory.fromValue(notifyListener.count.get()));
+                            newScope.parameter("count", DollarFactory.fromValue(notifyListener.count.get()));
                             newScope.parameter("collected", DollarFactory.fromList(notifyListener.collected
                                                                                            .asMap()
                                                                                            .entrySet()

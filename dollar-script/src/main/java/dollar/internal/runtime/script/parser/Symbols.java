@@ -410,7 +410,7 @@ public final class Symbols {
     public static final OpDef WINDOW_OP = new OpDef(CONTROL_FLOW, null,
                                                     "window", "window",
                                                     false, false,
-                                                    "window <expression> [ 'every' <duration-expression> ] [ 'unless' <expression> ] <expression>",
+                                                    "window <expression> 'over' <duration-expression> [ 'period' <duration-expression> ] [ 'unless' <expression> ] [ 'until' <expression> ]  <window-expression>",
                                                     NO_PRIORITY, true, NEW_SCOPE, null);
 
 

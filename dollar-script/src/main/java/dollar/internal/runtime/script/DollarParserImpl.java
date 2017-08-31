@@ -638,7 +638,7 @@ public class DollarParserImpl implements DollarParser {
         return KEYWORD_NL(WINDOW_OP)
                        .next(
                                array(ref.lazy(),//0
-                                     KEYWORD(OVER).next(ref.lazy()).optional(null),//1
+                                     KEYWORD(OVER).next(ref.lazy()),//1
                                      KEYWORD(PERIOD).next(ref.lazy()).optional(null),//2
                                      KEYWORD(UNLESS).next(ref.lazy()).optional(null),//3
                                      KEYWORD(UNTIL).next(ref.lazy()).optional(null),//4
