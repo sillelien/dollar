@@ -1173,19 +1173,6 @@ const immutableValue= "Hello World"
 
 ___
 
-### `?=` (assign-when) {#op-assign-when}
-
-![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
-
-
-
-
-
-```
-```
-
-___
-
 ### `avg` or `[%]` {#op-avg}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
@@ -2731,6 +2718,28 @@ when c > 3 { @@ c}
 
 ___
 
+### when-assign {#op-when-assign}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`('var'|'volatile') [<type-assertion>] <variable-name> '?' <condition-expression> '='<assignment-expression>`**{: style="font-size: 60%"}
+
+
+
+The 'when assign' operator assigns updates a variable to the assignment expression whenever the 'condition expression' changes and is true.
+
+
+```
+var h=1
+var i ? (h < 3) = (h + 2)
+h=4
+i is VOID
+h=2
+i <=>4
+```
+
+___
+
 ### `while` {#op-while}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
@@ -3031,9 +3040,9 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[stop](#op-stop)              |`stop`         | `<|`     |prefix    |
 |[unpause](#op-unpause)        |`unpause`      | `<||`    |prefix    |
 |[assign](#op-assign)          |               | `=`      |assignment|
-|[assign-when](#op-assign-when)|               | `?=`     |assignment|
 |[declaration](#op-declaration)|               | `:=`     |assignment|
 |[subscribe-assign](#op-subscribe-assign)|               | `*=`     |assignment|
+|[when-assign](#op-when-assign)|               |          |assignment|
 |[assert](#op-assert)          |`assert`       | `.:`     |prefix    |
 |[assert-equals](#op-assert-equals)|`assert-equals`| `<->`    |binary    |
 |[assert-equals-reactive](#op-assert-equals-reactive)|               | `<=>`    |binary    |
