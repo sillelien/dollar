@@ -189,12 +189,13 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
                     return node(WHEN_ASSIGN, pure, parser, token, inputs,
                                 c -> {
-                                    var rhsInitial = rhs.$fixDeep(currentScope().parallel());
-                                    scope.set(varName, ((var) objects[5]).isTrue() ? rhsInitial : $void(), false, null, useSource,
+                                    var condition = (var) objects[5];
+                                    var initial = rhs.$fixDeep(currentScope().parallel());
+                                    scope.set(varName, condition.isTrue() ? initial : $void(), false, null, useSource,
                                               isVolatile, false, pure);
-                                    return rhs.$listen(
+                                    return condition.$listen(
                                             args -> {
-                                                if (((var) objects[5]).isTrue()) {
+                                                if (condition.isTrue()) {
                                                     var value = rhs.$fixDeep(currentScope().parallel());
                                                     setVariable(scope, varName, value, false, useConstraint, useSource,
                                                                 isVolatile, false, pure, false, token, parser);

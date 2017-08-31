@@ -4,6 +4,9 @@
 @charset "utf-8";
 
 @import "minimal-mistakes";
+body {
+    font-size:15px !important;
+}
 
 .sidebar {
     @include clearfix();
@@ -66,6 +69,8 @@
 }
 
 .page {
+
+
 
     @include breakpoint($large) {
         float: right;

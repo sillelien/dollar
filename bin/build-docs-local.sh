@@ -14,10 +14,12 @@ echo
 echo "{% include toc %}"
 echo
 tail -n +2 $PROJECT/dollar-docs/src/main/resources/pages/manual.md
-cd dollar-script
+cd dollar-script &> /dev/null
 mvn -q  -e -Dexec.mainClass="dollar.internal.runtime.script.parser.Symbols" compile exec:java
+cd - &> /dev/null
 }
 
+manual
 manual > /tmp/manual.md
 cp -f /tmp/manual.md $PROJECT/docs/_pages/manual.md
-echo "cd $PROJECT/docs/ &&" bundle exec jekyll serve
+echo "cd $PROJECT/docs/ && bundle exec jekyll serve"
