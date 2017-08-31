@@ -485,9 +485,9 @@ NANO_OF_SECOND, NANO_OF_DAY, MICRO_OF_SECOND, MICRO_OF_DAY, MILLI_OF_SECOND, MIL
 As you can see we can do date arithmetic, but thanks to another Dollar feature anything that can be specified as xxx(i) can also be written i xxx (where i is an integer or decimal and xxx is an identifier). So we can add days hours and seconds to the date.
 
 ```
-@@ DATE() + 1 Day
-@@ DATE() + 1 Hour
-@@ DATE() + 1 Sec
+@@ DATE() + 1 DAY
+@@ DATE() + 1 HOUR
+@@ DATE() + 1 SEC
 ```
 
 Those values are built in, but we can easily define them ourselves.
@@ -1016,7 +1016,7 @@ The parallel operator `|:|` or `parallel` causes the right hand side expression 
 
 ```
 
-const testList := [ TIME(), {SLEEP(1 Sec); TIME();}, TIME() ];
+const testList := [ TIME(), {SLEEP(1 SEC); TIME();}, TIME() ];
 var a= |..| testList;
 var b= |:| testList;
 //Test different execution orders
@@ -1031,12 +1031,12 @@ As you can see the order of evaluation of lists and maps **but not line blocks**
 The fork operator `-<` or `fork` will cause an expression to be evaluated in the background and any reference to the forked expression will block until a value is ready.
 
 ```
-const sleepTime := {@@ "Background Sleeping";SLEEP(4 Sec); @@ "Background Finished Sleeping";TIME()}
+const sleepTime := {@@ "Background Sleeping";SLEEP(4 SECS); @@ "Background Finished Sleeping";TIME()}
 //Any future reference to c will block until c has completed evaluation
 var c= fork sleepTime
-SLEEP(1 Sec)
+SLEEP(1 SEC)
 @@ "Main thread sleeping ..."
-SLEEP(2 Secs)
+SLEEP(2 SECS)
 @@ "Main thread finished sleeping ..."
 var d= TIME()
 .: c > d
@@ -1178,6 +1178,12 @@ ___
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
 
+
+
+
+```
+```
+
 ___
 
 ### `avg` or `[%]` {#op-avg}
@@ -1187,6 +1193,12 @@ ___
 **`<expression> ('[%]'|'avg')`**{: style="font-size: 60%"}
 
 
+
+
+
+```
+```
+
 ___
 
 ### block {#op-block}
@@ -1195,6 +1207,12 @@ ___
 
 **`'{' ( <expression> ';' ) * [ <expression> ] '}'`**{: style="font-size: 60%"}
 
+
+
+
+
+```
+```
 
 ___
 
@@ -1626,12 +1644,12 @@ ___
 Executes the right-hand-side in a seperate thread returning a 'future'. Any attempt to make use of the returned value from this operator will block until that thread finishes.
 
 ```
-const sleepTime := {@@ "Background Sleeping";SLEEP(4 Sec); @@ "Background Finished Sleeping";TIME()}
+const sleepTime := {@@ "Background Sleeping";SLEEP(4 S); @@ "Background Finished Sleeping";TIME()}
 //Any future reference to c will block until c has completed evaluation
 var c= fork sleepTime
-SLEEP(1 Sec)
+SLEEP(1 S)
 @@ "Main thread sleeping ..."
-SLEEP(2 Secs)
+SLEEP(2 S)
 @@ "Main thread finished sleeping ..."
 var d= TIME()
 .: c > d
@@ -1859,6 +1877,12 @@ ___
 **`<expression> ('[>]'|'max')`**{: style="font-size: 60%"}
 
 
+
+
+
+```
+```
+
 ___
 
 ### `.` (member) {#op-member}
@@ -1885,6 +1909,12 @@ ___
 
 **`<expression> ('[<]'|'min')`**{: style="font-size: 60%"}
 
+
+
+
+
+```
+```
 
 ___
 
@@ -2062,7 +2092,7 @@ ___
 Causes the right-hand-side expression to be evaluated in parallel, most useful in conjunction with list blocks.
 
 ```
-const testList := [ TIME(), {SLEEP(1 Sec); TIME();}, TIME() ];
+const testList := [ TIME(), {SLEEP(1 S); TIME();}, TIME() ];
 var a= |..| testList ;
 var b= |:| testList ;
 
@@ -2219,6 +2249,12 @@ ___
 
 **`<expression> ('[*]'|'product')`**{: style="font-size: 60%"}
 
+
+
+
+
+```
+```
 
 ___
 
@@ -2397,6 +2433,12 @@ ___
 **`<expression> ('<-'|'reversed')`**{: style="font-size: 60%"}
 
 
+
+
+
+```
+```
+
 ___
 
 ### script {#op-script}
@@ -2473,6 +2515,12 @@ ___
 **`('->'|'sorted') <expression>`**{: style="font-size: 60%"}
 
 
+
+
+
+```
+```
+
 ___
 
 ### `split` or `[/]` {#op-split}
@@ -2481,6 +2529,12 @@ ___
 
 **`<expression> ('[/]'|'split')`**{: style="font-size: 60%"}
 
+
+
+
+
+```
+```
 
 ___
 
@@ -2582,6 +2636,12 @@ ___
 **`<expression> ('[+]'|'sum')`**{: style="font-size: 60%"}
 
 
+
+
+
+```
+```
+
 ___
 
 ### `truthy` or `~` {#op-truthy}
@@ -2605,6 +2665,12 @@ ___
 
 **`<expression> ('[!]'|'unique')`**{: style="font-size: 60%"}
 
+
+
+
+
+```
+```
 
 ___
 
@@ -2676,6 +2742,53 @@ ___
 while operator
 
 ```
+```
+
+___
+
+### `window` {#op-window}
+
+![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`window <expression> 'over' <duration-expression> [ 'period' <duration-expression> ] [ 'unless' <expression> ] [ 'until' <expression> ]  <window-expression>`**{: style="font-size: 60%"}
+
+
+
+The window operator provides a time window based view of a changing value.
+
+The first part of the window operator is the expression this will be listened to for changes and it's value passed into the windowing process. 
+
+The next part is the `over` clause which determines the duration over which changes are captured. Any change that is older than this duration is discarded.
+
+Following this is the optional `period` clause which determines how often the the window is calculated and the window-expression evaluated. If it is not supplied it defaults to the value in the `over` clause.
+
+Next is the optional `unless` clause which specifies which changes to ignore, if this clause is true then the change will be ignored.
+
+Then the optional `until` clause which specifies a condition for when the windowing should stop completely.
+
+Finally the window-expression is the expression which is evaluated with the following variables available:
+
+* `count` a value that increments on every window-expression evaluation
+* `collected` a list of values that have been windowed across the duration of the `over` clause and which have not been excluded by the `unless` clause. 
+
+
+```
+var a= 1;
+volatile collectedValues= void;
+window (a) over (10 S) period (5 S) unless (a == 5)  until (a == 29) {
+        @@collected
+        collectedValues= collected;
+}
+
+for i in [1..32] {
+    SLEEP (1 S)
+    a=a+1
+}
+
+
+.: #collectedValues > 0
+collectedValues <-> [21,22,23,24,25,26,27,28,29]
+@@ collectedValues
 ```
 
 ___
@@ -2766,6 +2879,12 @@ Boolean false.
 
 A NULL value of ANY type.
 
+
+
+### over
+
+
+### period
 
 
 ### pure
@@ -2931,3 +3050,4 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[pure](#op-pure)              |`pure`         |          |prefix    |
 |[script](#op-script)          |               |          |other     |
 |[unit](#op-unit)              |               |          |postfix   |
+|[window](#op-window)          |`window`       |          |control   |
