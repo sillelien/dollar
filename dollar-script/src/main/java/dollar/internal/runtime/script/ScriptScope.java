@@ -49,6 +49,7 @@ import java.util.stream.Collectors;
 
 import static dollar.api.DollarException.unravel;
 import static dollar.api.DollarStatic.*;
+import static dollar.internal.runtime.script.DollarScriptSupport.removePrefix;
 
 public class ScriptScope implements Scope {
 
@@ -194,7 +195,8 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public var get(@NotNull String key, boolean mustFind) {
+    public var get(@NotNull String k, boolean mustFind) {
+        String key = removePrefix(k);
         checkDestroyed();
         if (key.matches("[0-9]+")) {
             throw new DollarAssertionException("Cannot get numerical keys, use parameter");
@@ -230,15 +232,16 @@ public class ScriptScope implements Scope {
 
     @Nullable
     @Override
-    public Variable variable(@NotNull String key) {
-        return variables.get(key);
+    public Variable variable(@NotNull String k) {
+        return variables.get(removePrefix(k));
     }
 
     @Nullable
     @Override
-    public var constraint(@NotNull String key) {
+    public var constraint(@NotNull String k) {
         checkDestroyed();
 
+        String key = removePrefix(k);
         Scope scope = scopeForKey(key);
         if (scope == null) {
             scope = this;
@@ -255,9 +258,10 @@ public class ScriptScope implements Scope {
 
     @Nullable
     @Override
-    public String constraintSource(@NotNull String key) {
+    public String constraintSource(@NotNull String k) {
         checkDestroyed();
 
+        String key = removePrefix(k);
         Scope scope = scopeForKey(key);
         if (scope == null) {
             scope = this;
@@ -305,8 +309,9 @@ public class ScriptScope implements Scope {
 
     @Nullable
     @Override
-    public Scope scopeForKey(@NotNull String key) {
+    public Scope scopeForKey(@NotNull String k) {
         checkDestroyed();
+        String key = removePrefix(k);
 
         if (variables.containsKey(key)) {
             return this;
@@ -438,9 +443,10 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public boolean has(@NotNull String key) {
+    public boolean has(@NotNull String k) {
         checkDestroyed();
 
+        String key = removePrefix(k);
         Scope scope = scopeForKey(key);
         if (scope == null) {
             scope = this;
@@ -455,8 +461,9 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public boolean hasParameter(@NotNull String key) {
+    public boolean hasParameter(@NotNull String k) {
         checkDestroyed();
+        String key = removePrefix(k);
 
         if (getConfig().debugScope()) {
             log.info("Looking up parameter {} in {}", key, this);
@@ -475,8 +482,10 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public void listen(@NotNull String key, @NotNull String id, @NotNull var listener) {
+    public void listen(@NotNull String k, @NotNull String id, @NotNull var listener) {
         checkDestroyed();
+        String key = removePrefix(k);
+
         listen(key, id, in -> {
             if (getConfig().debugEvents()) {
                 log.info("Notifying {} in scope {}", listener.source().getSourceMessage(), this);
@@ -489,12 +498,14 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public void listen(@NotNull String key, @NotNull String id, @NotNull Pipeable pipe) {
+    public void listen(@NotNull String k, @NotNull String id, @NotNull Pipeable pipe) {
         if (getConfig().debugEvents()) {
             log.info("listen called on scope {} with id {}", this, id);
         }
 
         checkDestroyed();
+        String key = removePrefix(k);
+
         Listener listener = new Listener() {
             @NotNull
             @Override
@@ -547,16 +558,20 @@ public class ScriptScope implements Scope {
 
     @Nullable
     @Override
-    public var notify(@NotNull String variableName) {
+    public var notify(@NotNull String k) {
+        String key = removePrefix(k);
+
         checkDestroyed();
-        var value = get(variableName);
-        notifyScope((variableName), value);
+        var value = get(key);
+        notifyScope((key), value);
         return value;
     }
 
     @Override
-    public void notifyScope(@NotNull String key, @NotNull var value) {
+    public void notifyScope(@NotNull String k, @NotNull var value) {
         checkDestroyed();
+
+        String key = removePrefix(k);
 
         if (value == null) {
             throw new NullPointerException();
@@ -589,7 +604,7 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public var set(@NotNull String key,
+    public var set(@NotNull String k,
                    @NotNull var value,
                    boolean readonly,
                    @Nullable var constraint,
@@ -598,6 +613,7 @@ public class ScriptScope implements Scope {
                    boolean fixed,
                    boolean pure) {
         checkDestroyed();
+        String key = removePrefix(k);
 
         if (key.matches("[0-9]+")) {
             throw new DollarAssertionException("Cannot set numerical keys, use parameter");

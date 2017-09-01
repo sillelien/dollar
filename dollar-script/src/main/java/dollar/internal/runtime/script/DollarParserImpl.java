@@ -127,7 +127,7 @@ public class DollarParserImpl implements DollarParser {
             DollarStatic.context().setClassLoader(classLoader);
             Parser<?> parser = script();
             try {
-                parser.from(TOKENIZER, DollarLexer.IGNORED).parse(source);
+                parser.from(TOKENIZER, IGNORED).parse(source);
             } catch (RuntimeException e) {
                 ErrorHandlerFactory.instance().handleTopLevel(e, null,
                                                               (file != null) ? new File(file) : null);
@@ -384,15 +384,17 @@ public class DollarParserImpl implements DollarParser {
                                        @NotNull OpDef operator,
                                        @NotNull Function<var, var> f2) {
 
-        return table.postfix(
-                DollarLexer.OPERATORS.token(operator.symbol()).token().map(new SourceMapper<>(new DollarUnaryOperator(this,
-                                                                                                                      operator,
-                                                                                                                      f2, pure))),
-                operator.priority()).
-                                            prefix(DollarLexer.KEYWORDS.token(operator.keyword()).token().map(
-                                                    new SourceMapper<>(new DollarUnaryOperator(this,
-                                                                                               operator, f2, pure))),
-                                                   operator.priority());
+        OperatorTable<var> result = table;
+        if (operator.symbol() != null) {
+            result = result.postfix(DollarLexer.OPERATORS.token(operator.symbol()).token().map(
+                    new SourceMapper<>(new DollarUnaryOperator(this, operator, f2, pure))),
+                                    operator.priority());
+        }
+        if (operator.keyword() != null) {
+            result = result.prefix(KEYWORDS.token(operator.keyword()).token().map(
+                    new SourceMapper<>(new DollarUnaryOperator(this, operator, f2, pure))), operator.priority());
+        }
+        return result;
     }
 
     @NotNull
@@ -816,8 +818,7 @@ public class DollarParserImpl implements DollarParser {
                        .map(rhs -> lhs -> {
                            assert MEMBER.validForPure(pure);
                            return reactiveNode(MEMBER, pure, rhs, lhs, (var) rhs.value(), this,
-                                               i -> lhs.$(rhs.toString())
-                           );
+                                               i -> lhs.$(removePrefix(rhs.toString())));
                        });
     }
 
@@ -866,7 +867,8 @@ public class DollarParserImpl implements DollarParser {
                            return lhs -> {
                                SourceSegmentValue source = new SourceSegmentValue(currentScope(), token);
                                if (subscript == null) {
-                                   return reactiveNode(SUBSCRIPT_OP, SUBSCRIPT_OP.name() + "-read", pure, NO_SCOPE, this, source,
+                                   return reactiveNode(SUBSCRIPT_OP, SUBSCRIPT_OP.name() + "-read", pure, NO_SCOPE, this,
+                                                       source,
                                                        lhs, expression, args -> lhs.$get(expression));
                                } else {
                                    return node(SUBSCRIPT_OP, SUBSCRIPT_OP.name() + "-write", pure, NO_SCOPE, this, source,
@@ -974,7 +976,8 @@ public class DollarParserImpl implements DollarParser {
                         IDENTIFIER.between(OP(LT), OP(GT)).optional(null),//1
                         OP(DOLLAR).next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))).or(IDENTIFIER).token().map(
                                 (Token token) -> {
-                                    ((var) token.value()).meta(CONSTRAINT_SOURCE, new SourceSegmentValue(currentScope(), token));
+                                    ((var) token.value()).meta(CONSTRAINT_SOURCE,
+                                                               new SourceSegmentValue(currentScope(), token));
                                     return token.value();
                                 }), //2
                         OP(DEFINITION),//3

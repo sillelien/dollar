@@ -39,7 +39,7 @@ public final class Symbols {
 
 
     @NotNull
-    public static final OpDef PIPE_OP = new OpDef(BINARY, "|", "pipe", "pipe",
+    public static final OpDef PIPE_OP = new OpDef(BINARY, "|", null, "pipe",
                                                   false, true, null, PIPE_PRIORITY, true, NEW_SCOPE, null);
     @NotNull
     public static final OpDef WRITE_SIMPLE = new OpDef(BINARY, ">>", null, "write-simple",
@@ -68,12 +68,12 @@ public final class Symbols {
     public static final SymbolDef RIGHT_PAREN = new SymbolDef(")", false);
 
     @NotNull
-    public static final OpDef DEC = new OpDef(PREFIX, "--", "dec", "decrement",
+    public static final OpDef DEC = new OpDef(PREFIX, "--", null, "decrement",
                                               false,
                                               true, null, INC_DEC_PRIORITY, true, NO_SCOPE, null);
 
     @NotNull
-    public static final OpDef INC = new OpDef(PREFIX, "++", "inc", "increment",
+    public static final OpDef INC = new OpDef(PREFIX, "++", null, "increment",
                                               false, true, null, INC_DEC_PRIORITY, true, NO_SCOPE, null);
 
     @NotNull
@@ -121,21 +121,21 @@ public final class Symbols {
                                               null, OperatorPriority.AND_PRIORITY, true, NO_SCOPE, null);
 
     @NotNull
-    public static final OpDef MULTIPLY = new OpDef(BINARY, "*", "multiply", "multiply",
+    public static final OpDef MULTIPLY = new OpDef(BINARY, "*", null, "multiply",
                                                    false, true,
                                                    null, MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null);
 
     @NotNull
-    public static final OpDef DIVIDE = new OpDef(BINARY, "/", "divide", "divide",
+    public static final OpDef DIVIDE = new OpDef(BINARY, "/", null, "divide",
                                                  false, true,
                                                  null, MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null);
     @NotNull
-    public static final OpDef NEGATE = new OpDef(PREFIX, "-", "negate", "negate",
+    public static final OpDef NEGATE = new OpDef(PREFIX, "-", null, "negate",
                                                  false, true,
                                                  null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
 
     @NotNull
-    public static final OpDef MINUS = new OpDef(BINARY, "-", "minus", "minus",
+    public static final OpDef MINUS = new OpDef(BINARY, "-", null, "minus",
                                                 false, true,
                                                 null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
 
@@ -233,7 +233,7 @@ public final class Symbols {
                                                 null, SIGNAL_PRIORITY, false, NO_SCOPE, ":keycap_asterisk:");
 
     @NotNull
-    public static final OpDef PLUS = new OpDef(BINARY, "+", "plus", "plus",
+    public static final OpDef PLUS = new OpDef(BINARY, "+", null, "plus",
                                                false, true,
                                                null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
 
@@ -265,7 +265,7 @@ public final class Symbols {
                                                null, SIGNAL_PRIORITY, false, NO_SCOPE, null);
 
     @NotNull
-    public static final OpDef RANGE = new OpDef(BINARY, "..", "range", "range",
+    public static final OpDef RANGE = new OpDef(BINARY, "..", null, "range",
                                                 false, true,
                                                 null,
                                                 OperatorPriority.RANGE_PRIORITY, true, NO_SCOPE, null);
@@ -277,12 +277,12 @@ public final class Symbols {
                                                 LINE_PREFIX_PRIORITY, true, NO_SCOPE, ":fire:");
 
     @NotNull
-    public static final OpDef SIZE = new OpDef(PREFIX, "#", "size", "size",
+    public static final OpDef SIZE = new OpDef(PREFIX, "#", null, "size",
                                                false, true,
                                                null, UNARY_PRIORITY, true, NO_SCOPE, ":hash:");
 
     @NotNull
-    public static final OpDef MOD = new OpDef(BINARY, "%", "mod", "modulus",
+    public static final OpDef MOD = new OpDef(BINARY, "%", null, "modulus",
                                               false, true,
                                               null, MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null);
 
@@ -304,7 +304,7 @@ public final class Symbols {
                                                           false, true,
                                                           null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, null);
     @NotNull
-    public static final OpDef ASSERT_EQ_UNREACT = new OpDef(BINARY, "<->", "assert-equals",
+    public static final OpDef ASSERT_EQ_UNREACT = new OpDef(BINARY, "<->", null,
                                                             "assert-equals",
                                                             false, false,
                                                             null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, "left_right_arrow");
@@ -321,11 +321,11 @@ public final class Symbols {
                                                     OUTPUT_PRIORITY, false, NO_SCOPE, null);
 
     @NotNull
-    public static final OpDef EQUALITY = new OpDef(BINARY, "==", "equal", "equal", false, true, null, EQ_PRIORITY, true, NO_SCOPE,
+    public static final OpDef EQUALITY = new OpDef(BINARY, "==", null, "equal", false, true, null, EQ_PRIORITY, true, NO_SCOPE,
                                                    null);
 
     @NotNull
-    public static final OpDef INEQUALITY_OPERATOR = new OpDef(BINARY, "!=", "not-equal", "not-equal",
+    public static final OpDef INEQUALITY_OPERATOR = new OpDef(BINARY, "!=", null, "not-equal",
                                                               false, true, null,
                                                               EQ_PRIORITY, true, NO_SCOPE, null);
     @NotNull
@@ -351,10 +351,10 @@ public final class Symbols {
 
 
     @NotNull
-    public static final OpDef PAIR = new OpDef(BINARY, ":", "pair", "pair", false, true, null, PAIR_PRIORITY, true, NO_SCOPE, null);
+    public static final OpDef PAIR = new OpDef(BINARY, ":", null, "pair", false, true, null, PAIR_PRIORITY, true, NO_SCOPE, null);
 
     @NotNull
-    public static final OpDef IF_OP = new OpDef(BINARY, "???", "if", "if", false, true, null, IF_PRIORITY, true, NO_SCOPE, null);
+    public static final OpDef IF_OP = new OpDef(BINARY, null, "if", "if", false, true, null, IF_PRIORITY, true, NO_SCOPE, null);
 
 
     @NotNull
@@ -374,10 +374,10 @@ public final class Symbols {
                                               null);
 
     @NotNull
-    public static final OpDef ELSE = new OpDef(BINARY, "-:", "else", "else", false, true, null, IF_PRIORITY, true, NO_SCOPE, null);
+    public static final OpDef ELSE = new OpDef(BINARY, null, "else", "else", false, true, null, IF_PRIORITY, true, NO_SCOPE, null);
 
     @NotNull
-    public static final OpDef TRUTHY = new OpDef(PREFIX, "~", "truthy", "truthy",
+    public static final OpDef TRUTHY = new OpDef(PREFIX, "~", null, "truthy",
                                                  false,
                                                  true,
                                                  null,
@@ -941,64 +941,66 @@ public final class Symbols {
 
 
                     //Reserved Keywords
+                    IMPORT,
+                    IMPURE,
+                    FAIL,
+                    INCLUDE,
+                    JOIN,
+                    RETURN,
+                    PACKAGE,
+                    THIS,
+                    CLASS,
+                    READONLY,
+                    SEND,
+                    DISPATCH,
+                    SUPER,
+                    THROW,
+                    ENUM,
+                    IMPLEMENTS,
+                    INSTANCEOF,
+                    INTERFACE,
+                    NEW,
+                    SCOPE,
+                    TRANSIENT,
+                    EXTENDS,
+                    STATIC,
+
                     ABSTRACT,
                     AWAIT,
                     BREAK,
                     CASE,
                     CATCH,
-                    CLASS,
                     CLOSURE,
                     CONTINUE,
-                    DISPATCH,
                     DO,
                     DUMP,
                     EMIT,
-                    ENUM,
-                    EXTENDS,
-                    FAIL,
                     FILTER,
                     FINAL,
                     FINALLY,
                     FLOAT,
                     GOTO,
-                    IMPLEMENTS,
-                    IMPORT,
-                    IMPURE,
-                    INCLUDE,
-                    INSTANCEOF,
-                    INTERFACE,
-                    JOIN,
                     LAMBDA,
                     LOAD,
                     MEASURE,
                     NATIVE,
-                    NEW,
-                    PACKAGE,
                     PLURIPOTENT,
                     PRIVATE,
                     PROTECTED,
                     PUBLIC,
-                    READONLY,
-                    RETURN,
                     SAVE,
-                    SCOPE,
-                    SEND,
                     SHORT,
-                    STATIC,
-                    SUPER,
                     SWITCH,
                     SYNCHRONIZED,
-                    THIS,
-                    THROW,
                     THROWS,
                     TRACE,
-                    TRANSIENT,
                     TRY,
                     UNIT,
                     VARIANT,
                     VARIES,
                     VARY,
                     WAIT
+
             );
 
     static {

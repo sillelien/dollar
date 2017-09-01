@@ -37,12 +37,12 @@ var geo= read http://freegeoip.net/json/
 var lat= geo.latitude
 var lon= geo.longitude
 
-var quality= read ("https://api.openaq.org/v1/measurements?radius=10000&limit=1&coordinates="+ lat + "," + lon) as URI;
+var quality= read ("https://api.openaq.org/v1/measurements?radius=10000&limit=5&coordinates="+ lat + "," + lon) as URI;
 
 //Now output the quality from each result
 quality.results each {
     @@ $1.location
-    @@ $1.parameter +" was "+ $1.value +  " " + $1["unit"]
+    @@ $1.parameter +" was "+ $1.value +  " " + $1["unit"] +" on " + $1.date.utc
 }
 
 "The End!"

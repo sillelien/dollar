@@ -506,6 +506,14 @@ public final class DollarScriptSupport {
 
     }
 
+    public static String removePrefix(@NotNull String key) {
+        if (key.startsWith("_")) {
+            return key.substring(1);
+        } else {
+            return key;
+        }
+    }
+
     private static var updateVariable(@NotNull Scope scope,
                                       @NotNull String key,
                                       @NotNull var value,

@@ -56,6 +56,14 @@ var errorOccured= false
 var $("a"+"b")=2
 ab <=> 2
 
+//Using the _ prefix to avoid clashing with keywords
+var _map= {
+    "in": 1,
+}
+
+var _in= map._in
+_in <=> 1
+
 
 
 

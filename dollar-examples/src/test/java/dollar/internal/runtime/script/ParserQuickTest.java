@@ -101,14 +101,14 @@ public class ParserQuickTest {
     @ValueSource(
 //            "bulletin.ds",
 //            "example.ds",
-            strings = {"test_date.ds", "test_block_closure.ds", "test_list_closure.ds", "test_map_closure.ds", "test_scopes.ds",
+            strings = {"test_variables.ds", "test_date.ds", "test_block_closure.ds", "test_list_closure.ds", "test_map_closure.ds", "test_scopes.ds",
                               "test1.ds",
                               "test_arrays.ds", "test_builtins.ds", "test_casting.ds", "test_date.ds", "test_fix1.ds",
                               "test_fix2.ds", "test_fix3.ds", "test_iteration.ds", "test_java.ds", "test_logic.ds",
                               "test_numeric.ds", "test_parameters.ds", "test_pure.ds", "test_ranges.ds", "test_reactive1.ds",
                               "test_reactive2.ds", "test_reactive3.ds", "test_reactive4.ds", "test_reactive5.ds",
                               "test_reactive6.ds", "test_reactive7.ds", "test_reactive8.ds", "test_strings.ds",
-                              "test_variables.ds", "test_control_flow.ds",
+                              "test_control_flow.ds",
                               "test3.ds"})
 
     public void testScript(@NotNull String filename) throws Exception {

@@ -324,6 +324,7 @@ final class DollarLexer {
                 case "null":
                     return $null(Type._ANY);
                 default:
+
                     return $(i);
             }
         });
