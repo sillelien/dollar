@@ -28,7 +28,6 @@ import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -216,11 +215,13 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @NotNull
     @Override
     public var $plus(@NotNull var rhs) {
-        final ImmutableList<Throwable> thisErrors = errors();
-        final ArrayList<Throwable> errors = new ArrayList<>();
-        errors.addAll(thisErrors);
-        errors.addAll(rhs.errors());
-        return DollarFactory.wrap(new DollarString(ImmutableList.copyOf(errors), value + rhs.toHumanString()));
+        return DollarFactory.wrap(new DollarString(ImmutableList.copyOf(errors()), value + rhs.$S()));
+    }
+
+    @NotNull
+    @Override
+    public String toJsonString() {
+        return "\"" + value + "\"";
     }
 
     @Override
@@ -253,6 +254,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return !value.isEmpty();
     }
 
+    @Override
     @NotNull
     @Guarded(NotNullGuard.class)
     public JsonArray jsonArray() {
@@ -276,7 +278,6 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         return true;
     }
 
-    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     @Override
     public boolean equals(@Nullable Object obj) {
         return (obj != null) && value.equals(obj.toString());
@@ -290,11 +291,5 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         } catch (NumberFormatException nfe) {
             return null;
         }
-    }
-
-    @NotNull
-    @Override
-    public String toJsonString() {
-        return "\"" + value + "\"";
     }
 }

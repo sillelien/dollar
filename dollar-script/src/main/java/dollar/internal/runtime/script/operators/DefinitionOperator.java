@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.function.Function;
 
 import static dollar.api.DollarStatic.$;
@@ -36,7 +37,6 @@ import static dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.DEFINITION;
-import static java.util.Collections.singletonList;
 
 public class DefinitionOperator implements Function<Token, Function<? super var, ? extends var>> {
     @NotNull
@@ -52,6 +52,7 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
         this.def = def;
     }
 
+    @Override
     @Nullable
     public Function<? super var, ? extends var> apply(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
@@ -88,9 +89,13 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
             }
 
             if (typeConstraintObj != null) {
+                Type type = Type.of(typeConstraintObj);
                 constraint = node(DEFINITION, "definition-constraint", pure, NEW_SCOPE, parser,
                                   new SourceSegmentValue(currentScope(), token), new ArrayList<>(),
-                                  i -> $(scope.parameter("it").is(Type.of(typeConstraintObj))));
+                                  i -> {
+                                      return $(scope.parameter("it").is(type));
+                                  }, null);
+                checkLearntType(token, type, rhs, MIN_PROBABILITY);
                 SourceSegmentValue meta = typeConstraintObj.meta(CONSTRAINT_SOURCE);
                 if (meta != null) {
                     constraintSource = meta.getSourceSegment();
@@ -103,7 +108,9 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
             }
 
             boolean finalReadonly = readonly;
-            var node = node(DEFINITION, pure, parser, token, singletonList(constrain(scope, value, constraint, constraintSource)),
+
+            var node = node(DEFINITION, pure, parser, token, Arrays.asList(rhs, constrain(scope, value, constraint,
+                                                                                          constraintSource)),
                             i -> Func.definitionFunc(token, (exportObj != null), value, variableName, constraint, constraintSource,
                                                      parser, pure, finalReadonly)
             );

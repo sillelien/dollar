@@ -39,7 +39,7 @@ public class DollarParserTest {
     @Test
     public void test() throws Exception {
         try {
-            new DollarParserImpl(new ParserOptions()).parse(getClass().getResourceAsStream("/test1.ds"), "/test1.ds",
+            new DollarParserImpl(new ParserOptions()).parse(getClass().getResourceAsStream("/quick/test1.ds"), "/quick/test1.ds",
                                                             false);
         } catch (Exception e) {
             System.err.println(e.getCause().getMessage());

@@ -19,9 +19,12 @@ package dollar.internal.runtime.script;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
+import dollar.api.Type;
+import dollar.api.TypePrediction;
 import dollar.api.Variable;
 import dollar.api.script.SourceSegment;
 import dollar.api.types.DollarFactory;
+import dollar.api.types.meta.MetaConstants;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
@@ -35,6 +38,7 @@ import org.jparsec.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -48,6 +52,7 @@ import static dollar.internal.runtime.script.parser.Symbols.VAR_USAGE_OP;
 
 public final class DollarScriptSupport {
 
+    public static final double MIN_PROBABILITY = 0.5;
     @NotNull
     static final String ANSI_CYAN = "36";
     @NotNull
@@ -101,12 +106,26 @@ public final class DollarScriptSupport {
                            @NotNull DollarParser parser,
                            @NotNull SourceSegment source,
                            @NotNull List<var> inputs,
-                           @NotNull Pipeable pipeable) {
-        return DollarFactory.wrap((var) java.lang.reflect.Proxy.newProxyInstance(
+                           @NotNull Pipeable pipeable,
+                           Type suggestedType) {
+        var result = DollarFactory.wrap((var) Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
                 new SourceNode(pipeable, source, inputs, name, parser,
                                sourceNodeOptions, createId(name), pure, operation)));
+        try {
+            if (suggestedType != null) {
+                result.meta(MetaConstants.TYPE_HINT, suggestedType);
+            } else {
+                Type type = operation.typeFor(inputs.toArray(new var[inputs.size()]));
+                if (type != null) {
+                    result.meta(MetaConstants.TYPE_HINT, type);
+                }
+            }
+            return result;
+        } catch (Exception e) {
+            throw new DollarScriptException(e, source);
+        }
     }
 
     public static var node(@NotNull OpDef operation,
@@ -115,7 +134,7 @@ public final class DollarScriptSupport {
                            @NotNull SourceSegment source,
                            @NotNull List<var> inputs,
                            @NotNull Pipeable pipeable) {
-        return node(operation, operation.name(), pure, operation.nodeOptions(), parser, source, inputs, pipeable);
+        return node(operation, operation.name(), pure, operation.nodeOptions(), parser, source, inputs, pipeable, null);
     }
 
 
@@ -126,11 +145,10 @@ public final class DollarScriptSupport {
                            @NotNull List<var> inputs,
                            @NotNull Pipeable callable) {
         return node(operation, operation.name(), pure, operation.nodeOptions(), parser,
-                    new SourceSegmentValue(currentScope(), token), inputs, callable);
+                    new SourceSegmentValue(currentScope(), token), inputs, callable, null);
     }
 
 
-    @NotNull
     static var reactiveNode(@NotNull OpDef operation, @NotNull String name,
                             boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
                             @NotNull DollarParser parser,
@@ -139,8 +157,9 @@ public final class DollarScriptSupport {
                             @NotNull var rhs,
                             @NotNull Pipeable callable) {
         final var node = node(operation, name, pure, sourceNodeOptions, parser, source, Arrays.asList(lhs, rhs),
-                              callable
+                              callable, null
         );
+
 
         rhs.$listen(i -> node.$notify());
         lhs.$listen(i -> node.$notify());
@@ -197,8 +216,7 @@ public final class DollarScriptSupport {
         final var node = node(operation, operation.name(),
                               pure, operation.nodeOptions(), parser, source,
                               Collections.singletonList(lhs),
-                              callable
-        );
+                              callable, null);
         lhs.$listen(i -> node.$notify());
         return node;
     }
@@ -600,4 +618,17 @@ public final class DollarScriptSupport {
         return (v != null) ? DollarFactory.wrap(v.$fix(currentScope().parallel())) : $void();
     }
 
+    public static void checkLearntType(@NotNull Token token, @Nullable Type type, var rhs, Double threshold) {
+        final TypePrediction prediction = rhs.predictType();
+        if ((type != null) && (prediction != null)) {
+            final Double probability = prediction.probability(type);
+            if ((probability < threshold) && !prediction.empty()) {
+                log.warn("Type assertion may fail, expected {} most likely type is {} ({}%) at {}", type,
+                         prediction.probableType(),
+                         (int) (prediction.probability(prediction.probableType()) * 100),
+                         new SourceSegmentValue(currentScope(), token).getSourceMessage()
+                );
+            }
+        }
+    }
 }

@@ -873,7 +873,7 @@ public class DollarParserImpl implements DollarParser {
                                } else {
                                    return node(SUBSCRIPT_OP, SUBSCRIPT_OP.name() + "-write", pure, NO_SCOPE, this, source,
                                                asList(lhs, expression, subscript),
-                                               i -> lhs.$set(expression, subscript));
+                                               i -> lhs.$set(expression, subscript), null);
                                }
                            };
                        });
@@ -921,7 +921,8 @@ public class DollarParserImpl implements DollarParser {
                        .token()
                        .map(token -> lhs -> {
                                 assert CAST.validForPure(pure);
-                           return reactiveNode(CAST, pure, lhs, token, this, i -> castFunc(lhs, token.toString())
+                           return reactiveNode(CAST, pure, token, lhs, (var) token.value(), this,
+                                               i -> castFunc(lhs, token.toString())
                            );
                             }
                        );

@@ -17,6 +17,9 @@
 package dollar.internal.runtime.script.parser;
 
 import com.google.common.io.Files;
+import dollar.api.Type;
+import dollar.api.var;
+import dollar.internal.runtime.script.Builtins;
 import dollar.internal.runtime.script.HasKeyword;
 import dollar.internal.runtime.script.HasSymbol;
 import dollar.internal.runtime.script.OperatorPriority;
@@ -28,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static dollar.internal.runtime.script.OperatorPriority.*;
@@ -38,44 +42,39 @@ import static java.util.Arrays.asList;
 public final class Symbols {
 
 
+    public static final Function<var[], Type> FIRST_TYPE_F = vars -> vars[0].$type();
     @NotNull
     public static final OpDef PIPE_OP = new OpDef(BINARY, "|", null, "pipe",
-                                                  false, true, null, PIPE_PRIORITY, true, NEW_SCOPE, null);
+                                                  false, true, null, PIPE_PRIORITY, true, NEW_SCOPE, null, FIRST_TYPE_F);
+    public static final Function<var[], Type> VOID_TYPE_F = i -> Type._VOID;
     @NotNull
     public static final OpDef WRITE_SIMPLE = new OpDef(BINARY, ">>", null, "write-simple",
-                                                       false, true, null, OUTPUT_PRIORITY, false, NO_SCOPE, null);
+                                                       false, true, null, OUTPUT_PRIORITY, false, NO_SCOPE, null, VOID_TYPE_F);
+    public static final Function<var[], Type> ANY_TYPE_F = i -> Type._ANY;
     @NotNull
     public static final OpDef READ_SIMPLE = new OpDef(PREFIX, "<<", null, "read-simple",
-                                                      false, true, null, OUTPUT_PRIORITY, false, NO_SCOPE, null);
-    @NotNull
-    public static final OpDef CAUSES = new OpDef(BINARY, "=>", "causes", "causes",
-                                                 false, true, null, CONTROL_FLOW_PRIORITY, true, NO_SCOPE, null);
-
+                                                      false, true, null, OUTPUT_PRIORITY, false, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
     public static final OpDef ASSERT = new OpDef(PREFIX, ".:", "assert", "assert",
-                                                 false, true, null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, "\u2234");
+                                                 false, true, null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, "\u2234", VOID_TYPE_F);
+    public static final Function<var[], Type> BOOL_TYPE_F = i -> Type._BOOLEAN;
     @NotNull
     public static final OpDef LT_EQUALS = new OpDef(BINARY, "<=", null, "less-than-equal",
-                                                    false, true, null, EQ_PRIORITY, true, NO_SCOPE, null);
+                                                    false, true, null, EQ_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
     public static final OpDef GT_EQUALS = new OpDef(BINARY, ">=", null, "greater-than-equal",
-                                                    false, true, null, EQ_PRIORITY, true, NO_SCOPE, null);
-
+                                                    false, true, null, EQ_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
     public static final SymbolDef LEFT_PAREN = new SymbolDef("(", false);
-
     @NotNull
     public static final SymbolDef RIGHT_PAREN = new SymbolDef(")", false);
-
     @NotNull
     public static final OpDef DEC = new OpDef(PREFIX, "--", null, "decrement",
                                               false,
-                                              true, null, INC_DEC_PRIORITY, true, NO_SCOPE, null);
-
+                                              true, null, INC_DEC_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
     public static final OpDef INC = new OpDef(PREFIX, "++", null, "increment",
-                                              false, true, null, INC_DEC_PRIORITY, true, NO_SCOPE, null);
-
+                                              false, true, null, INC_DEC_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
     public static final OpDef DEFINITION = new OpDef(OpDefType.ASSIGNMENT, ":=", null,
                                                      "declaration",
@@ -83,61 +82,58 @@ public final class Symbols {
                                                      true,
                                                      "( [export] [const] <variable-name> ':=' <expression>) | ( def " +
                                                              "<variable-name> <expression )",
-                                                     ASSIGNMENT_PRIORITY, true, NO_SCOPE, null);
+                                                     ASSIGNMENT_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
     public static final OpDef FIX = new OpDef(PREFIX, "&", "fix", "fix",
                                               false,
-                                              false, null, FIX_PRIORITY, true, NO_SCOPE, null);
-
-
+                                              false, null, FIX_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
     public static final OpDef MEMBER = new OpDef(BINARY, ".", null, "member",
                                                  false,
                                                  true,
-                                                 null, MEMBER_PRIORITY, true, NO_SCOPE, null);
-
+                                                 null, MEMBER_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
     @NotNull
     public static final OpDef LT = new OpDef(BINARY, "<", null, "less-than",
                                              false, true,
-                                             null, COMP_PRIORITY, true, NO_SCOPE, null);
-
+                                             null, COMP_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
     public static final OpDef GT = new OpDef(BINARY, ">", null, "greater-than",
                                              false, true,
-                                             null, COMP_PRIORITY, true, NO_SCOPE, null);
+                                             null, COMP_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
     public static final OpDef NOT = new OpDef(PREFIX, "!", "not", "not", false,
-                                              true, null, UNARY_PRIORITY, true, NO_SCOPE, null);
-
+                                              true, null, UNARY_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
     public static final OpDef OR = new OpDef(BINARY, "||", "or", "or",
                                              false,
                                              true, null,
-                                             OperatorPriority.LOGICAL_OR_PRIORITY, true, NO_SCOPE, null);
-
+                                             OperatorPriority.LOGICAL_OR_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
     public static final OpDef AND = new OpDef(BINARY, "&&", "and", "and",
                                               false, true,
-                                              null, OperatorPriority.AND_PRIORITY, true, NO_SCOPE, null);
-
+                                              null, OperatorPriority.AND_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
+    public static final Function<var[], Type> RHS_TYPE_F = i -> i[1].$type();
+    @NotNull
+    public static final OpDef CAUSES = new OpDef(BINARY, "=>", "causes", "causes",
+                                                 false, true, null, CONTROL_FLOW_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
     @NotNull
     public static final OpDef MULTIPLY = new OpDef(BINARY, "*", null, "multiply",
                                                    false, true,
-                                                   null, MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null);
+                                                   null, MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
 
     @NotNull
     public static final OpDef DIVIDE = new OpDef(BINARY, "/", null, "divide",
                                                  false, true,
-                                                 null, MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null);
+                                                 null, MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
     @NotNull
     public static final OpDef NEGATE = new OpDef(PREFIX, "-", null, "negate",
                                                  false, true,
-                                                 null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+                                                 null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
 
     @NotNull
     public static final OpDef MINUS = new OpDef(BINARY, "-", null, "minus",
                                                 false, true,
-                                                null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+                                                null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
 
 /*
 [1..3]<- <=> [3..1] //reverse
@@ -153,251 +149,263 @@ public final class Symbols {
     @NotNull
     public static final OpDef REVERSE = new OpDef(POSTFIX, "<-", "reversed", "reversed",
                                                   false, true,
-                                                  null, REVERSE_PRIORITY, true, NO_SCOPE, null);
+                                                  null, REVERSE_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
 
     @NotNull
     public static final OpDef UNIQUE = new OpDef(POSTFIX, "[!]", "unique", "unique",
                                                  false, true,
-                                                 null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+                                                 null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
 
 
     @NotNull
     public static final OpDef SORT = new OpDef(PREFIX, "->", "sorted", "sorted",
                                                false, true,
-                                               null, SORT_PRIORITY, true, NO_SCOPE, null);
+                                               null, SORT_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
 
     @NotNull
     public static final OpDef SPLIT = new OpDef(POSTFIX, "[/]", "split", "split",
                                                 false, true,
-                                                null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+                                                null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
 
     @NotNull
     public static final OpDef MIN = new OpDef(POSTFIX, "[<]", "min", "min",
                                               false, true,
-                                              null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+                                              null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
 
     @NotNull
     public static final OpDef MAX = new OpDef(POSTFIX, "[>]", "max", "max",
                                               false, true,
-                                              null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+                                              null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
 
     @NotNull
     public static final OpDef SUM = new OpDef(POSTFIX, "[+]", "sum", "sum",
                                               false, true,
-                                              null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+                                              null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
 
     @NotNull
     public static final OpDef AVG = new OpDef(POSTFIX, "[%]", "avg", "avg",
                                               false, true,
-                                              null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+                                              null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
 
     @NotNull
     public static final OpDef PRODUCT = new OpDef(POSTFIX, "[*]", "product", "product",
                                                   false, true,
-                                                  null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+                                                  null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
 
     @NotNull
     public static final OpDef START = new OpDef(PREFIX, "|>", "start", "start",
                                                 false, true,
-                                                "('|>'|'start') <expression>", SIGNAL_PRIORITY, true, NO_SCOPE, ":arrow_forward:");
+                                                "('|>'|'start') <expression>", SIGNAL_PRIORITY, true, NO_SCOPE, ":arrow_forward:",
+                                                VOID_TYPE_F);
 
     @NotNull
     public static final OpDef STOP = new OpDef(PREFIX, "<|", "stop", "stop",
                                                false, true,
-                                               null, SIGNAL_PRIORITY, false, NO_SCOPE, ":black_square_for_stop:");
+                                               null, SIGNAL_PRIORITY, false, NO_SCOPE, ":black_square_for_stop:", VOID_TYPE_F);
 
     @NotNull
     public static final OpDef PAUSE = new OpDef(PREFIX, "||>", "pause", "pause",
                                                 false, true,
-                                                null, SIGNAL_PRIORITY, false, NO_SCOPE, ":double_vertical_bar:");
+                                                null, SIGNAL_PRIORITY, false, NO_SCOPE, ":double_vertical_bar:", VOID_TYPE_F);
 
     @NotNull
     public static final OpDef UNPAUSE = new OpDef(PREFIX, "<||", "unpause", "unpause",
                                                   false, true,
                                                   null, SIGNAL_PRIORITY, false, NO_SCOPE,
-                                                  ":black_right_pointing_triangle_with_double_vertical_bar:");
+                                                  ":black_right_pointing_triangle_with_double_vertical_bar:", VOID_TYPE_F);
 
     @NotNull
     public static final OpDef DESTROY = new OpDef(PREFIX, "<|||", "destroy", "destroy",
                                                   false, true,
-                                                  null, SIGNAL_PRIORITY, false, NO_SCOPE, ":rewind:");
+                                                  null, SIGNAL_PRIORITY, false, NO_SCOPE, ":rewind:", VOID_TYPE_F);
 
     @NotNull
     public static final OpDef CREATE = new OpDef(PREFIX, "|||>", "create", "create",
                                                  false, true,
-                                                 null, SIGNAL_PRIORITY, false, NO_SCOPE, ":fast_forward:");
+                                                 null, SIGNAL_PRIORITY, false, NO_SCOPE, ":fast_forward:", VOID_TYPE_F);
 
     @NotNull
     public static final OpDef STATE = new OpDef(PREFIX, "<|>", "state", "state",
                                                 false, true,
-                                                null, SIGNAL_PRIORITY, false, NO_SCOPE, ":keycap_asterisk:");
+                                                null, SIGNAL_PRIORITY, false, NO_SCOPE, ":keycap_asterisk:", ANY_TYPE_F);
 
     @NotNull
     public static final OpDef PLUS = new OpDef(BINARY, "+", null, "plus",
                                                false, true,
-                                               null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null);
+                                               null, PLUS_MINUS_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
 
     @NotNull
     public static final OpDef DEFAULT = new OpDef(BINARY, ":-", "default", "default",
                                                   false,
                                                   true,
                                                   null,
-                                                  MEMBER_PRIORITY, true, NO_SCOPE, null);
+                                                  MEMBER_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
 
     @NotNull
     public static final OpDef PRINT = new OpDef(PREFIX, "@@", "print", "print",
                                                 false, true,
-                                                null, LINE_PREFIX_PRIORITY, false, NO_SCOPE, null);
+                                                null, LINE_PREFIX_PRIORITY, false, NO_SCOPE, null, VOID_TYPE_F);
 
     @NotNull
     public static final OpDef PARALLEL = new OpDef(PREFIX, "|:|", "parallel", "parallel",
                                                    false, false,
-                                                   null, SIGNAL_PRIORITY, true, NEW_PARALLEL_SCOPE, ":vertical_traffic_light:");
+                                                   null, SIGNAL_PRIORITY, true, NEW_PARALLEL_SCOPE, ":vertical_traffic_light:",
+                                                   FIRST_TYPE_F);
 
     @NotNull
     public static final OpDef SERIAL = new OpDef(PREFIX, "|..|", "serial", "serial",
                                                  false, false,
-                                                 null, SIGNAL_PRIORITY, true, NEW_SERIAL_SCOPE, ":traffic_light:");
+                                                 null, SIGNAL_PRIORITY, true, NEW_SERIAL_SCOPE, ":traffic_light:", FIRST_TYPE_F);
     @NotNull
     public static final OpDef FORK = new OpDef(PREFIX, "-<", "fork", "fork",
                                                false,
                                                true,
-                                               null, SIGNAL_PRIORITY, false, NO_SCOPE, null);
+                                               null, SIGNAL_PRIORITY, false, NO_SCOPE, null, FIRST_TYPE_F);
 
+    public static final Function<var[], Type> RANGE_TYPE_F = i -> Type._RANGE;
     @NotNull
     public static final OpDef RANGE = new OpDef(BINARY, "..", null, "range",
                                                 false, true,
                                                 null,
-                                                OperatorPriority.RANGE_PRIORITY, true, NO_SCOPE, null);
+                                                OperatorPriority.RANGE_PRIORITY, true, NO_SCOPE, null, RANGE_TYPE_F);
 
     @NotNull
     public static final OpDef ERROR = new OpDef(PREFIX, "?->", "error", "error",
                                                 false, true,
                                                 null,
-                                                LINE_PREFIX_PRIORITY, true, NO_SCOPE, ":fire:");
+                                                LINE_PREFIX_PRIORITY, true, NO_SCOPE, ":fire:", VOID_TYPE_F);
 
+    public static final Function<var[], Type> INTEGER_TYPE_F = i -> Type._INTEGER;
     @NotNull
     public static final OpDef SIZE = new OpDef(PREFIX, "#", null, "size",
                                                false, true,
-                                               null, UNARY_PRIORITY, true, NO_SCOPE, ":hash:");
+                                               null, UNARY_PRIORITY, true, NO_SCOPE, ":hash:", INTEGER_TYPE_F);
 
     @NotNull
     public static final OpDef MOD = new OpDef(BINARY, "%", null, "modulus",
                                               false, true,
-                                              null, MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null);
+                                              null, MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
 
     @NotNull
     public static final OpDef ERR = new OpDef(PREFIX, "!?", "err", "err",
                                               false,
                                               true,
-                                              null, LINE_PREFIX_PRIORITY, false, NO_SCOPE, ":interrobang:");
+                                              null, LINE_PREFIX_PRIORITY, false, NO_SCOPE, ":interrobang:", VOID_TYPE_F);
 
     @NotNull
     public static final OpDef DEBUG = new OpDef(PREFIX, "!!", "debug", "debug",
                                                 false, true,
-                                                null, LINE_PREFIX_PRIORITY, false, NO_SCOPE, "‼️:bangbang:");
+                                                null, LINE_PREFIX_PRIORITY, false, NO_SCOPE, "‼️:bangbang:", VOID_TYPE_F);
 
     @NotNull
     public static final OpDef ASSERT_EQ_REACT = new OpDef(BINARY, "<=>",
                                                           null,
                                                           "assert-equals-reactive",
                                                           false, true,
-                                                          null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, null);
+                                                          null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
     public static final OpDef ASSERT_EQ_UNREACT = new OpDef(BINARY, "<->", null,
                                                             "assert-equals",
                                                             false, false,
-                                                            null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, "left_right_arrow");
+                                                            null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, "left_right_arrow",
+                                                            BOOL_TYPE_F);
+    public static final Function<var[], Type> LIST_TYPE_F = i -> Type._LIST;
     @NotNull
     public static final OpDef EACH = new OpDef(BINARY, "=>>", "each", "each", false, true, null,
-                                               MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null);
+                                               MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null, LIST_TYPE_F);
 
     @NotNull
     public static final OpDef PUBLISH = new OpDef(BINARY, "*>", "publish", "publish", false, true, null,
-                                                  OUTPUT_PRIORITY, false, NO_SCOPE, null);
+                                                  OUTPUT_PRIORITY, false, NO_SCOPE, null, VOID_TYPE_F);
 
     @NotNull
     public static final OpDef SUBSCRIBE = new OpDef(BINARY, "<*", "subscribe", "subscribe", false, true, null,
-                                                    OUTPUT_PRIORITY, false, NO_SCOPE, null);
+                                                    OUTPUT_PRIORITY, false, NO_SCOPE, null, ANY_TYPE_F);
 
     @NotNull
     public static final OpDef EQUALITY = new OpDef(BINARY, "==", null, "equal", false, true, null, EQ_PRIORITY, true, NO_SCOPE,
-                                                   null);
+                                                   null, BOOL_TYPE_F);
 
     @NotNull
     public static final OpDef INEQUALITY_OPERATOR = new OpDef(BINARY, "!=", null, "not-equal",
                                                               false, true, null,
-                                                              EQ_PRIORITY, true, NO_SCOPE, null);
+                                                              EQ_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
     public static final OpDef ASSIGNMENT = new OpDef(OpDefType.ASSIGNMENT, "=", null, "assign", false, true, null,
-                                                     ASSIGNMENT_PRIORITY, true, NO_SCOPE, null);
+                                                     ASSIGNMENT_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
 
     @NotNull
     public static final OpDef SUBSCRIBE_ASSIGN = new OpDef(OpDefType.ASSIGNMENT, "*=", null,
                                                            "subscribe-assign",
-                                                           false, true, null, ASSIGNMENT_PRIORITY, true, NO_SCOPE, null);
+                                                           false, true, null, ASSIGNMENT_PRIORITY, true, NO_SCOPE, null,
+                                                           ANY_TYPE_F);
     @NotNull
     public static final OpDef WHEN_ASSIGN = new OpDef(OpDefType.ASSIGNMENT, null, null, "when-assign",
                                                       false, true,
                                                       "('var'|'volatile') [<type-assertion>] <variable-name> '?' <condition-expression> '='<assignment-expression>",
-                                                      ASSIGNMENT_PRIORITY, true, NO_SCOPE, null);
+                                                      ASSIGNMENT_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
 
     @NotNull
-    public static final OpDef IN = new OpDef(BINARY, "€", "in", "in", false, true, null, IN_PRIORITY, true, NO_SCOPE, "\u2208");
+    public static final OpDef IN = new OpDef(BINARY, "€", "in", "in", false, true, null, IN_PRIORITY, true, NO_SCOPE, "\u2208",
+                                             BOOL_TYPE_F);
 
     @NotNull
     public static final OpDef DRAIN = new OpDef(PREFIX, "<-<", "drain", "drain", false, true, null, OUTPUT_PRIORITY, false,
-                                                NO_SCOPE, null);
+                                                NO_SCOPE, null, LIST_TYPE_F);
 
+
+    public static final Function<var[], Type> MAP_TYPE_F = i -> Type._MAP;
+    @NotNull
+    public static final OpDef PAIR = new OpDef(BINARY, ":", null, "pair", false, true, null, PAIR_PRIORITY, true, NO_SCOPE, null,
+                                               MAP_TYPE_F);
 
     @NotNull
-    public static final OpDef PAIR = new OpDef(BINARY, ":", null, "pair", false, true, null, PAIR_PRIORITY, true, NO_SCOPE, null);
-
-    @NotNull
-    public static final OpDef IF_OP = new OpDef(BINARY, null, "if", "if", false, true, null, IF_PRIORITY, true, NO_SCOPE, null);
+    public static final OpDef IF_OP = new OpDef(BINARY, null, "if", "if", false, true, null, IF_PRIORITY, true, NO_SCOPE, null,
+                                                FIRST_TYPE_F);
 
 
     @NotNull
     public static final OpDef WHEN = new OpDef(BINARY, "?", "when", "when", false, true, null,
-                                               CONTROL_FLOW_PRIORITY, true, NEW_SCOPE, null);
+                                               CONTROL_FLOW_PRIORITY, true, NEW_SCOPE, null, RHS_TYPE_F);
 
     @NotNull
     public static final OpDef REDUCE = new OpDef(BINARY, ">>=", "reduce", "reduce", false, true, null,
-                                                 MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null);
+                                                 MULTIPLY_DIVIDE_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
 
     @NotNull
     public static final OpDef CHOOSE = new OpDef(BINARY, "?*", "choose", "choose", false, true, null,
-                                                 CONTROL_FLOW_PRIORITY, true, NO_SCOPE, null);
+                                                 CONTROL_FLOW_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
 
     @NotNull
     public static final OpDef ALL = new OpDef(PREFIX, "<@", "all", "all", false, true, null, OUTPUT_PRIORITY, false, NO_SCOPE,
-                                              null);
+                                              null, LIST_TYPE_F);
 
     @NotNull
-    public static final OpDef ELSE = new OpDef(BINARY, null, "else", "else", false, true, null, IF_PRIORITY, true, NO_SCOPE, null);
+    public static final OpDef ELSE = new OpDef(BINARY, null, "else", "else", false, true, null, IF_PRIORITY, true, NO_SCOPE, null,
+                                               RHS_TYPE_F);
 
     @NotNull
     public static final OpDef TRUTHY = new OpDef(PREFIX, "~", null, "truthy",
                                                  false,
                                                  true,
                                                  null,
-                                                 UNARY_PRIORITY, true, NO_SCOPE, null);
+                                                 UNARY_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
 
     @NotNull
     public static final OpDef CAST = new OpDef(POSTFIX, null, null, "cast", false, true, "<expression> 'as' <type>",
-                                               UNARY_PRIORITY, true, NO_SCOPE, null);
+                                               UNARY_PRIORITY, true, NO_SCOPE, null, i -> Type.of(i[1]));
 
     @NotNull
     public static final OpDef EVERY_OP = new OpDef(CONTROL_FLOW, null, "every",
                                                    "every", false, false,
                                                    "every <duration> <expression>",
-                                                   NO_PRIORITY, false, NEW_SCOPE, null);
+                                                   NO_PRIORITY, false, NEW_SCOPE, null, VOID_TYPE_F);
 
     @NotNull
     public static final OpDef SCRIPT_OP = new OpDef(OTHER, null, null,
                                                     "script", false, false,
                                                     " <language-name> ``<script-code>`` ",
-                                                    NO_PRIORITY, false, NO_SCOPE, null);
+                                                    NO_PRIORITY, false, NO_SCOPE, null, ANY_TYPE_F);
 
 
     @NotNull
@@ -405,7 +413,7 @@ public final class Symbols {
                                                      "collect", "collect",
                                                      false, false,
                                                      "collect <expression> [ 'until' <expression> ] [ 'unless' <expression> ] <expression>",
-                                                     NO_PRIORITY, true, NEW_SCOPE, null);
+                                                     NO_PRIORITY, true, NEW_SCOPE, null, VOID_TYPE_F);
 
 
     @NotNull
@@ -413,97 +421,99 @@ public final class Symbols {
                                                     "window", "window",
                                                     false, false,
                                                     "window <expression> 'over' <duration-expression> [ 'period' <duration-expression> ] [ 'unless' <expression> ] [ 'until' <expression> ]  <window-expression>",
-                                                    NO_PRIORITY, true, NEW_SCOPE, null);
+                                                    NO_PRIORITY, true, NEW_SCOPE, null, VOID_TYPE_F);
 
 
     @NotNull
     public static final OpDef FOR_OP = new OpDef(CONTROL_FLOW, null, "for", "for", false, true,
                                                  "for <variable-name> <iterable-expression> <expression>",
-                                                 UNARY_PRIORITY, true, NEW_SCOPE, null);
+                                                 UNARY_PRIORITY, true, NEW_SCOPE, null, VOID_TYPE_F);
 
     @NotNull
     public static final OpDef VAR_USAGE_OP = new OpDef(CONTROL_FLOW, null, null, "var-usage", false, true, null, NO_PRIORITY, true,
-                                                       NO_SCOPE, null);
+                                                       NO_SCOPE, null,
+                                                       FIRST_TYPE_F);
 
     @NotNull
     public static final OpDef WHILE_OP = new OpDef(CONTROL_FLOW, null, "while", "while", false, true,
                                                    "while <condition> <expression>",
-                                                   UNARY_PRIORITY, true, NEW_SCOPE, null);
+                                                   UNARY_PRIORITY, true, NEW_SCOPE, null, VOID_TYPE_F);
 
     @NotNull
     public static final OpDef SUBSCRIPT_OP = new OpDef(POSTFIX, null, null, "subscript", false, true,
                                                        "( <expression> '[' <index-expression>|<key-expression> ']' ) | " +
                                                                "( <expression> '.' (<index-expression>|<key-expression>) )",
-                                                       MEMBER_PRIORITY, true, NO_SCOPE, null);
+                                                       MEMBER_PRIORITY, true, NO_SCOPE, null, ANY_TYPE_F);
 
     @NotNull
     public static final OpDef PARAM_OP = new OpDef(POSTFIX, null, null, "parameter", false, true,
                                                    "( <expression> | <builtin-name> | <function-name> ) '(' " +
                                                            "( <expression> | <name> '=' <expression> )* ')'",
-                                                   MEMBER_PRIORITY, true, SCOPE_WITH_CLOSURE, null);
+                                                   MEMBER_PRIORITY, true, SCOPE_WITH_CLOSURE, null, ANY_TYPE_F);
 
     @NotNull
     public static final OpDef WRITE_OP = new OpDef(CONTROL_FLOW, null, "write", "write",
                                                    false, true,
                                                    "'write' ['block'] ['mutate'] ['to'] <expression>",
-                                                   OUTPUT_PRIORITY, false, NO_SCOPE, null);
+                                                   OUTPUT_PRIORITY, false, NO_SCOPE, null, VOID_TYPE_F);
 
 
     @NotNull
     public static final OpDef READ_OP = new OpDef(PREFIX, null, "read", "read",
                                                   false, true,
                                                   "'read' ['block'] ['mutate'] ['from'] <expression>",
-                                                  OUTPUT_PRIORITY, false, NO_SCOPE, null);
+                                                  OUTPUT_PRIORITY, false, NO_SCOPE, null, ANY_TYPE_F);
 
     @NotNull
-    public static final OpDef IS_OP = new OpDef(BINARY, null, "is", "is", false, true, null, IF_PRIORITY, true, NO_SCOPE, null);
+    public static final OpDef IS_OP = new OpDef(BINARY, null, "is", "is", false, true, null, IF_PRIORITY, true, NO_SCOPE, null,
+                                                BOOL_TYPE_F);
 
     @NotNull
     public static final OpDef PURE_OP = new OpDef(PREFIX, null, "pure", "pure",
                                                   false, true,
                                                   null,
-                                                  NO_PRIORITY, true, NO_SCOPE, null);
+                                                  NO_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
     public static final OpDef MODULE_OP = new OpDef(OTHER, null, "module", "module",
                                                     false, true,
                                                     "module <name> (<parameter>)*",
-                                                    NO_PRIORITY, false, NEW_SCOPE, null);
+                                                    NO_PRIORITY, false, NEW_SCOPE, null, ANY_TYPE_F);
 
     @NotNull
     public static final OpDef BUILTIN_OP = new OpDef(OTHER, null, null, "builtin",
                                                      false, true,
                                                      "<name> (<parameter>)*",
-                                                     NO_PRIORITY, null, NO_SCOPE, null);
+                                                     NO_PRIORITY, null, NO_SCOPE, null, i -> Builtins.type(i[0].$S()));
 
     @NotNull
     public static final OpDef UNIT_OP = new OpDef(POSTFIX, null, null, "unit",
                                                   false, true,
                                                   "<numeric> <unit-name>",
-                                                  NO_PRIORITY, null, NEW_SCOPE, null);
+                                                  NO_PRIORITY, null, NEW_SCOPE, null, ANY_TYPE_F);
 
     @NotNull
     public static final OpDef LIST_OP = new OpDef(COLLECTION, null, null, "list",
                                                   false, true,
                                                   "'[' ( <expression> ',' ) * [ <expression> ] ']'",
-                                                  NO_PRIORITY, null, SCOPE_WITH_CLOSURE, null);
+                                                  NO_PRIORITY, null, SCOPE_WITH_CLOSURE, null, LIST_TYPE_F);
 
     @NotNull
     public static final OpDef MAP_OP = new OpDef(COLLECTION, null, null, "map",
                                                  false, true,
                                                  "'{' ( <expression> ',' ) * [ <expression> ] '}'",
-                                                 NO_PRIORITY, null, SCOPE_WITH_CLOSURE, null);
+                                                 NO_PRIORITY, null, SCOPE_WITH_CLOSURE, null, MAP_TYPE_F);
 
     @NotNull
     public static final OpDef BLOCK_OP = new OpDef(COLLECTION, null, null, "block",
                                                    false, true,
                                                    "'{' ( <expression> ';' ) * [ <expression> ] '}'",
-                                                   NO_PRIORITY, null, SCOPE_WITH_CLOSURE, null);
+                                                   NO_PRIORITY, null, SCOPE_WITH_CLOSURE, null, i -> Type._BLOCK);
 
     @NotNull
     public static final OpDef FUNCTION_NAME_OP = new OpDef(OTHER, null, null, "function-call",
                                                            false, true,
                                                            "'<builtin-name> | <variable-name>",
-                                                           NO_PRIORITY, null, NO_SCOPE, null);
+                                                           NO_PRIORITY, null, NO_SCOPE, null, ANY_TYPE_F);
 
     @NotNull
     public static final List<String> SYMBOL_STRINGS;
@@ -586,79 +596,79 @@ public final class Symbols {
 
     @NotNull
     private static final OpDef RESERVED_OPERATOR_1 = new OpDef(RESERVED, "...", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_2 = new OpDef(RESERVED, "->", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_3 = new OpDef(RESERVED, "<-", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_4 = new OpDef(RESERVED, "?:", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_5 = new OpDef(RESERVED, "@", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_6 = new OpDef(RESERVED, "::", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_7 = new OpDef(RESERVED, "&=", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_8 = new OpDef(RESERVED, "+>", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_9 = new OpDef(RESERVED, "<+", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_10 = new OpDef(RESERVED, "|*", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_11 = new OpDef(RESERVED, "&>", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_12 = new OpDef(RESERVED, "<&", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_13 = new OpDef(RESERVED, "?>", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_14 = new OpDef(RESERVED, "<?", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_15 = new OpDef(RESERVED, ">->", null,
                                                                 "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_16 = new OpDef(RESERVED, "@>", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_17 = new OpDef(RESERVED, "?..?", null,
                                                                 "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_18 = new OpDef(RESERVED, "?$?", null,
                                                                 "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_19 = new OpDef(RESERVED, "<$", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_20 = new OpDef(RESERVED, "<=<", null,
                                                                 "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_21 = new OpDef(RESERVED, "<++", null,
                                                                 "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_22 = new OpDef(RESERVED, "-_-", null,
                                                                 "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_23 = new OpDef(RESERVED, ">&", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, null);
     @NotNull
     private static final KeywordDef ABSTRACT = new KeywordDef("abstract", true, null, null);
     @NotNull

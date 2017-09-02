@@ -19,6 +19,8 @@ package dollar.internal.runtime.script.parser;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.vdurmont.emoji.EmojiParser;
+import dollar.api.Type;
+import dollar.api.var;
 import dollar.internal.runtime.script.HasKeyword;
 import dollar.internal.runtime.script.HasSymbol;
 import dollar.internal.runtime.script.SourceNodeOptions;
@@ -29,10 +31,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Objects;
+import java.util.function.Function;
 
 import static dollar.internal.runtime.script.SourceNodeOptions.*;
 
-@SuppressWarnings("CallToPrintStackTrace")
 public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     @Nullable
     private final String symbol;
@@ -48,12 +50,13 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     private final OpDefType type;
     @Nullable
     private final Boolean pure;
+    @NotNull
+    private final SourceNodeOptions nodeOptions;
+    private final Function<var[], Type> typeFunction;
     @Nullable
     private String emoji;
     @Nullable
     private String bnf;
-    @NotNull
-    private final SourceNodeOptions nodeOptions;
 
     public OpDef(@NotNull OpDefType type,
                  @Nullable String symbol,
@@ -63,8 +66,12 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                  boolean reactive,
                  @Nullable String bnf,
                  int priority,
-                 @Nullable Boolean pure, @NotNull SourceNodeOptions nodeOptions, @Nullable String emoji) {
+                 @Nullable Boolean pure,
+                 @NotNull SourceNodeOptions nodeOptions,
+                 @Nullable String emoji,
+                 Function<var[], Type> typeFunction) {
         this.type = type;
+        this.typeFunction = typeFunction;
         if (emoji != null) {
             this.emoji = EmojiParser.parseToUnicode(emoji);
         }
@@ -83,6 +90,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         }
     }
 
+    @Override
     @Nullable
     public String keyword() {
         return keyword;
@@ -127,7 +135,6 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         return reserved;
     }
 
-    @SuppressWarnings("UseOfSystemOutOrSystemErr")
     @NotNull
     public String asMarkdown() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -293,5 +300,9 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
 
     public SourceNodeOptions nodeOptions() {
         return nodeOptions;
+    }
+
+    public Type typeFor(@NotNull var... vars) {
+        return typeFunction.apply(vars);
     }
 }

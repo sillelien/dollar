@@ -18,11 +18,13 @@ package dollar.internal.runtime.script;
 
 import dollar.api.Scope;
 import dollar.api.StateAware;
+import dollar.api.Type;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.ErrorType;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.exceptions.BuiltinNotFoundException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,32 +42,32 @@ public final class Builtins {
 
     static {
         map = new HashMap<>();
-        addDollarStyle(1, 1, (pure, args, scope) -> args.get(0).$abs(), true, "ABS");
+        addDollarStyle(1, 1, (pure, args, scope) -> args.get(0).$abs(), true, Type._ANY, "ABS");
 
         addJavaStyle(1, Integer.MAX_VALUE, (pure, args, scope) -> {
             String message = args.get(0).$S();
             ArrayList<var> values = new ArrayList<>(args);
             values.remove(0);
             return $(String.format(message, values.stream().map(var::toJavaObject).toArray()));
-        }, true, "FORMAT");
+        }, true, Type._STRING, "FORMAT");
 
-        addDollarSingleNoScope(false, StateAware::$start, "START");
-        addDollarSingleNoScope(false, StateAware::$stop, "STOP");
-        addDollarSingleNoScope(false, StateAware::$create, "CREATE");
-        addDollarSingleNoScope(false, StateAware::$destroy, "DESTROY");
-        addDollarSingleNoScope(false, StateAware::$pause, "PAUSE");
-        addDollarSingleNoScope(false, StateAware::$unpause, "UNPAUSE");
-        addDollarSingleNoScope(false, StateAware::$state, "STATE");
+        addDollarSingleNoScope(false, StateAware::$start, Type._VOID, "START");
+        addDollarSingleNoScope(false, StateAware::$stop, Type._VOID, "STOP");
+        addDollarSingleNoScope(false, StateAware::$create, Type._VOID, "CREATE");
+        addDollarSingleNoScope(false, StateAware::$destroy, Type._VOID, "DESTROY");
+        addDollarSingleNoScope(false, StateAware::$pause, Type._VOID, "PAUSE");
+        addDollarSingleNoScope(false, StateAware::$unpause, Type._VOID, "UNPAUSE");
+        addDollarSingleNoScope(false, StateAware::$state, Type._VOID, "STATE");
 
         addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
-                0).toDouble() / DAY_IN_MILLIS), true, "MS", "MILLIS", "MILLISECONDS", "MILLISECOND");
+                0).toDouble() / DAY_IN_MILLIS), true, Type._DECIMAL, "MS", "MILLIS", "MILLISECONDS", "MILLISECOND");
         addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
-                0).toDouble() / DAY_IN_SECONDS), true, "S", "SEC", "SECS", "SECONDS");
+                0).toDouble() / DAY_IN_SECONDS), true, Type._DECIMAL, "S", "SEC", "SECS", "SECONDS");
         addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
-                0).toDouble() / DAY_IN_MINUTES), true, "M", "MINUTES",
+                0).toDouble() / DAY_IN_MINUTES), true, Type._DECIMAL, "M", "MINUTES",
                      "MINUTE");
         addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
-                0).toDouble() / DAY_IN_HOURS), true, "H", "HOUR", "HOURS");
+                0).toDouble() / DAY_IN_HOURS), true, Type._DECIMAL, "H", "HOUR", "HOURS");
         addJavaStyle(1, 1, (pure, args, scope) -> {
             try {
                 Thread.sleep((long) (args.get(0).toDouble() * DAY_IN_MILLIS));
@@ -73,26 +75,26 @@ public final class Builtins {
             } catch (InterruptedException e) {
                 return scope.handleError(e);
             }
-        }, false, "SLEEP");
+        }, false, Type._VOID, "SLEEP");
         addDollarStyle(1, 2, (pure, args, scope) -> {
             if (args.size() == 1) {
                 return DollarFactory.failure(ErrorType.valueOf(args.get(0).toString()), "", true);
             } else {
                 return DollarFactory.failure(ErrorType.valueOf(args.get(0).toString()), args.get(1).toString(), true);
             }
-        }, true, "ERROR");
+        }, true, Type._ANY, "ERROR");
         addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(0).toDouble()), true,
-                     "DAYS", "DAY", "D");
+                     Type._DECIMAL, "DAYS", "DAY", "D");
         addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
-                0).toDouble() * WEEK_IN_DAYS), true, "WEEKS", "WEEK", "W");
+                0).toDouble() * WEEK_IN_DAYS), true, Type._DECIMAL, "WEEKS", "WEEK", "W");
         addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
-                0).toDouble() * MONTH_IN_DAYS), true, "MONTHS", "MONTH", "MTH", "MTHS");
+                0).toDouble() * MONTH_IN_DAYS), true, Type._DECIMAL, "MONTHS", "MONTH", "MTH", "MTHS");
         addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
-                0).toDouble() * YEAR_IN_DAYS), true, "YEARS", "YEAR", "YRS", "YR", "Y");
-        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toString().length(), true, "LEN");
-        addJavaStyle(0, 0, (pure, args, scope) -> $(new Date()), false, "DATE");
-        addJavaStyle(0, 0, (pure, args, scope) -> System.currentTimeMillis(), false, "TIME");
-        addJavaStyle(2, 2, (pure, args, scope) -> args.get(0).toString().matches(args.get(1).$S()), true, "MATCHES");
+                0).toDouble() * YEAR_IN_DAYS), true, Type._DECIMAL, "YEARS", "YEAR", "YRS", "YR", "Y");
+        addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toString().length(), true, Type._INTEGER, "LEN");
+        addJavaStyle(0, 0, (pure, args, scope) -> $(new Date()), false, Type._DATE, "DATE");
+        addJavaStyle(0, 0, (pure, args, scope) -> System.currentTimeMillis(), false, Type._INTEGER, "TIME");
+        addJavaStyle(2, 2, (pure, args, scope) -> args.get(0).toString().matches(args.get(1).$S()), true, Type._BOOLEAN, "MATCHES");
 
         //todo: use a service loader to load additional builtins :- http://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html
         //todo: this will be used to provide libraries
@@ -112,30 +114,39 @@ public final class Builtins {
     }
 
     private static <T> void addJavaStyle(int minargs, int maxargs, @NotNull Builtin.JavaStyle<T> lambda, boolean pure,
-                                         @NotNull String... names) {
+                                         Type type, @NotNull String... names) {
         for (String name : names) {
-            map.put(name, new Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure));
+            map.put(name, new Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure, type));
         }
     }
 
     private static void addDollarStyle(int minargs, int maxargs, @NotNull Builtin.DollarStyle lambda, boolean pure,
-                                       @NotNull String... names) {
+                                       Type type, @NotNull String... names) {
         for (String name : names) {
-            map.put(name, new Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure));
+            map.put(name, new Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure, type));
         }
     }
 
     private static void addDollarSingleNoScope(boolean isPure, @NotNull Function<var, var> lambda,
-                                               @NotNull String... names) {
+                                               Type type, @NotNull String... names) {
         for (String name : names) {
-            map.put(name, new Builtin.BuiltinImpl(name, (Builtin<var>) (boolean pure, List<var> args, Scope scope) -> {
-                var v = args.get(0);
-                return lambda.apply(v);
-            }, 1, 1, isPure));
+            map.put(name, new Builtin.BuiltinImpl(name, new Builtin<var>() {
+                @NotNull
+                @Override
+                public var execute(boolean pure, @NotNull List<var> args, @NotNull Scope scope) {
+                    var v = args.get(0);
+                    return lambda.apply(v);
+                }
+            }, 1, 1, isPure, type));
         }
     }
 
     public static boolean isPure(@NotNull String lhsString) {
         return (map.get(lhsString) != null) && ((Builtin.BuiltinImpl) map.get(lhsString)).isPure();
+    }
+
+    @Nullable
+    public static Type type(String s) {
+        return (((Builtin.BuiltinImpl<?>) map.get(s)).type());
     }
 }

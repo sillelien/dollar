@@ -1,0 +1,5 @@
+var <integer> a = 1;
+def f {
+   var <string>b = a + 1;
+}
+

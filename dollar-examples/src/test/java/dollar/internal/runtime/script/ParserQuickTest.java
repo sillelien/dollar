@@ -43,15 +43,12 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-@SuppressWarnings("ALL")
 public class ParserQuickTest {
-
-    @NotNull
-    private static final Logger log = LoggerFactory.getLogger(ParserQuickTest.class);
 
     @ClassRule
     public static final CircleCiParallelRule className = new CircleCiParallelRule();
-
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(ParserQuickTest.class);
     @NotNull
     private static final String[] files = {
     };
@@ -101,15 +98,15 @@ public class ParserQuickTest {
     @ValueSource(
 //            "bulletin.ds",
 //            "example.ds",
-            strings = {"test_variables.ds", "test_date.ds", "test_block_closure.ds", "test_list_closure.ds", "test_map_closure.ds", "test_scopes.ds",
-                              "test1.ds",
-                              "test_arrays.ds", "test_builtins.ds", "test_casting.ds", "test_date.ds", "test_fix1.ds",
-                              "test_fix2.ds", "test_fix3.ds", "test_iteration.ds", "test_java.ds", "test_logic.ds",
-                              "test_numeric.ds", "test_parameters.ds", "test_pure.ds", "test_ranges.ds", "test_reactive1.ds",
-                              "test_reactive2.ds", "test_reactive3.ds", "test_reactive4.ds", "test_reactive5.ds",
-                              "test_reactive6.ds", "test_reactive7.ds", "test_reactive8.ds", "test_strings.ds",
-                              "test_control_flow.ds",
-                              "test3.ds"})
+            strings = {"quick/test_variables.ds", "quick/test_date.ds", "quick/test_block_closure.ds", "quick/test_list_closure.ds", "quick/test_map_closure.ds", "quick/test_scopes.ds",
+                              "quick/test1.ds",
+                              "quick/test_arrays.ds", "quick/test_builtins.ds", "quick/test_casting.ds", "quick/test_date.ds", "quick/test_fix1.ds",
+                              "quick/test_fix2.ds", "quick/test_fix3.ds", "quick/test_iteration.ds", "quick/test_java.ds", "quick/test_logic.ds",
+                              "quick/test_numeric.ds", "quick/test_parameters.ds", "quick/test_pure.ds", "quick/test_ranges.ds", "quick/test_reactive1.ds",
+                              "quick/test_reactive2.ds", "quick/test_reactive3.ds", "quick/test_reactive4.ds", "quick/test_reactive5.ds",
+                              "quick/test_reactive6.ds", "quick/test_reactive7.ds", "quick/test_reactive8.ds", "quick/test_strings.ds",
+                              "quick/test_control_flow.ds",
+                              "quick/test3.ds", "quick/test_types_1.ds"})
 
     public void testScript(@NotNull String filename) throws Exception {
         System.out.println("Testing " + filename);
@@ -132,7 +129,7 @@ public class ParserQuickTest {
     @ParameterizedTest
     @ValueSource(
             strings = {"negative/neg_scopes_1.ds", "negative/neg_pure_1.ds", "negative/neg_pure_2.ds", "negative/neg_pure_3.ds",
-                              "negative/neg_pure_4.ds", "negative/neg_is_1.ds"})
+                              "negative/neg_pure_4.ds", "negative/neg_is_1.ds", "negative/neg_types_1.ds"})
 
     public void negativeTestScripts(@NotNull String filename) throws Exception {
         System.out.println("Testing " + filename);
@@ -152,7 +149,7 @@ public class ParserQuickTest {
     @Test
     public void testMarkdown1() throws IOException {
         new DollarParserImpl(options).parseMarkdown(
-                CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/test1.md"))));
+                CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/quick/test1.md"))));
     }
 
 

@@ -42,7 +42,6 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-@SuppressWarnings("ALL")
 public class ParserSlowTest {
 
     @ClassRule
@@ -124,7 +123,7 @@ public class ParserSlowTest {
     @Test
     public void testMarkdown1() throws IOException {
         new DollarParserImpl(options).parseMarkdown(
-                CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/test1.md"))));
+                CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/quick/test1.md"))));
     }
 
 

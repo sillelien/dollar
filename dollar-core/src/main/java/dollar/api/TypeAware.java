@@ -93,6 +93,7 @@ public interface TypeAware {
      * @return the type
      */
     @NotNull
+    @Deprecated
     default Type type() {
         return $type();
     }
@@ -187,7 +188,6 @@ public interface TypeAware {
      */
     @Guarded(NotNullGuard.class)
     boolean is(@NotNull Type... types);
-
 
 
     /**

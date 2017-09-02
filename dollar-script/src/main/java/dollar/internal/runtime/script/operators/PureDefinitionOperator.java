@@ -49,6 +49,7 @@ public class PureDefinitionOperator implements Function<Token, var> {
         this.def = def;
     }
 
+    @Override
     @Nullable
     public var apply(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
@@ -78,10 +79,13 @@ public class PureDefinitionOperator implements Function<Token, var> {
 
         log.info("Creating pure variable {}", varName);
         if (typeConstraintObj != null) {
+            Type type = Type.of(typeConstraintObj);
             constraint = node(DEFINITION, "definition-constraint", true, NEW_SCOPE, parser,
                               new SourceSegmentValue(currentScope(), token), new ArrayList<>(),
-                              i -> $(scope.parameter("it").is(Type.of(typeConstraintObj))));
+                              i -> $(scope.parameter("it").is(type)), null);
             constraintSource = typeConstraintObj.$S().toUpperCase();
+            checkLearntType(token, type, value, MIN_PROBABILITY);
+
         } else {
             constraint = null;
             constraintSource = null;

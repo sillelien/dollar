@@ -20,6 +20,7 @@ import dollar.api.DollarStatic;
 import dollar.api.MetadataAware;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
+import dollar.api.Type;
 import dollar.api.TypePrediction;
 import dollar.api.VarInternal;
 import dollar.api.exceptions.LambdaRecursionException;
@@ -29,6 +30,8 @@ import dollar.api.script.SourceSegment;
 import dollar.api.script.TypeLearner;
 import dollar.api.types.ConstraintViolation;
 import dollar.api.types.DollarFactory;
+import dollar.api.types.meta.MetaConstants;
+import dollar.api.types.prediction.SingleValueTypePrediction;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
@@ -132,7 +135,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
                             }
 
-                        });
+                        }, null);
             };
         } else {
             this.lambda = lambda;
@@ -170,9 +173,16 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 }
             }
 
+            if (Objects.equals(method.getName(), "$type")) {
+                return meta.get(MetaConstants.TYPE_HINT);
+            }
+
             if (Objects.equals(method.getName(), "predictType")) {
                 if (prediction == null) {
                     prediction = typeLearner.predict(name, source, inputs);
+                }
+                if (meta.get(MetaConstants.TYPE_HINT) != null) {
+                    return new SingleValueTypePrediction((Type) meta.get(MetaConstants.TYPE_HINT));
                 }
                 return prediction;
             }
@@ -252,7 +262,10 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             }
 
 
-            if (method.getName().startsWith("$fixDeep") && (result != null) && (result instanceof var)) {
+            if (method.getName().startsWith("$fixDeep") && (result instanceof var)) {
+                if (meta.get(MetaConstants.TYPE_HINT) == null) {
+                    meta.put(MetaConstants.TYPE_HINT, ((var) result).$type());
+                }
                 typeLearner.learn(name, source, inputs, ((var) result).$type());
             }
             return result;

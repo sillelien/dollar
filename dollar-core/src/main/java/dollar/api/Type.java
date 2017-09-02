@@ -93,6 +93,7 @@ public final class Type {
 
     @NotNull
     public static final Type _QUEUE = new Type("QUEUE");
+    public static final Type _BLOCK = new Type("BLOCK");
 
 
     @NotNull
@@ -178,9 +179,13 @@ public final class Type {
         return name.hashCode();
     }
 
-    public boolean is(@Nullable Type t) {
-        return name.equals((t != null) ? t.name : null);
-
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if (this == o) return true;
+        if ((o == null) || (getClass() != o.getClass())) return false;
+        Type type = (Type) o;
+        return Objects.equals(name, type.name) &&
+                       Objects.equals(constraint, type.constraint);
     }
 
     @Contract(pure = true)
@@ -188,6 +193,11 @@ public final class Type {
     @Override
     public String toString() {
         return constraint.isEmpty() ? name : (name + ":" + constraint);
+    }
+
+    public boolean is(@Nullable Type t) {
+        return name.equals((t != null) ? t.name : null);
+
     }
 
     /**
@@ -212,13 +222,7 @@ public final class Type {
         return constraint;
     }
 
-
-    @Override
-    public boolean equals(@Nullable Object o) {
-        if (this == o) return true;
-        if ((o == null) || (getClass() != o.getClass())) return false;
-        Type type = (Type) o;
-        return Objects.equals(name, type.name) &&
-                       Objects.equals(constraint, type.constraint);
+    public boolean canBe(Type type) {
+        return type.name.equalsIgnoreCase(name);
     }
 }

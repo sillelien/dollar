@@ -282,7 +282,8 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public @NotNull Multimap<String, Listener> listeners() {
+    public @NotNull
+    Multimap<String, Listener> listeners() {
         return listeners;
     }
 

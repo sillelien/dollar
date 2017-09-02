@@ -45,5 +45,9 @@ public class MetaConstants {
     @NotNull
     public static final String ID = "dollar.internal.id";
 
+    @NotNull
     public static final String ASSIGNMENT_TYPE = "dollar.internal.assignment.type";
+
+    @NotNull
+    public static final String TYPE_HINT = "dollar.internal.type.hint";
 }

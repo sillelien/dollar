@@ -20,7 +20,7 @@ import dollar.api.BooleanAware;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.Type;
-import dollar.api.TypePrediction;
+import dollar.api.script.SourceSegment;
 import dollar.api.types.meta.MetaConstants;
 import dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
@@ -33,6 +33,7 @@ import org.jparsec.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
@@ -44,12 +45,10 @@ import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 
 public class AssignmentOperator implements Function<Token, Function<? super var, ? extends var>> {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("AssignmentOperator");
-    private static final double MIN_PROBABILITY = 0.5;
     private final boolean pure;
     @NotNull
     private final DollarParser parser;
@@ -59,7 +58,6 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
         this.parser = parser;
     }
 
-    @NotNull
     private var assign(@NotNull var rhs,
                        @NotNull Object[] objects,
                        @Nullable var constraint,
@@ -68,7 +66,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                        @Nullable String constraintSource,
                        @NotNull Scope scope,
                        @NotNull Token token,
-                       boolean decleration) {
+                       boolean decleration, Type type, SourceSegment sourceSegment) {
 
         final String varName = objects[4].toString();
 
@@ -87,6 +85,12 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
             }
             final var rhsFixed = rhs.$fix(1, currentScope().parallel());
 
+            if (rhsFixed.$type() != null && type != null) {
+                if (!rhsFixed.$type().canBe(type)) {
+                    throw new DollarScriptException("Type mismatch expected " + type + " got " + rhsFixed.$type(), sourceSegment);
+                }
+
+            }
             if (useConstraint != null) {
                 inSubScope(true, pure, false, "assignment-constraint",
                            newScope -> {
@@ -110,7 +114,8 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
         };
         //        node.$listen(i -> scope.notify(varName));
-        return node(ASSIGNMENT, pure, parser, token, singletonList(constrain(scope, rhs, constraint, constraintSource)), pipeable);
+        return node(ASSIGNMENT, pure, parser, token, Arrays.asList(rhs, constrain(scope, rhs, constraint, constraintSource)),
+                    pipeable);
     }
 
     @Override
@@ -138,7 +143,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                         var it = currentScope().parameter("it");
                         assert it != null;
                         return $(it.is(type) && ((objects[3] == null) || ((BooleanAware) objects[3]).isTrue()));
-                    });
+                    }, type);
         } else {
             type = null;
             if (objects[3] instanceof var) constraint = (var) objects[3];
@@ -160,17 +165,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
         var finalConstraint = constraint;
         return (Function<var, var>) rhs -> {
             Scope scope = currentScope();
-            final TypePrediction prediction = rhs.predictType();
-            if ((type != null) && (prediction != null)) {
-                final Double probability = prediction.probability(type);
-                if ((probability < MIN_PROBABILITY) && !prediction.empty()) {
-                    log.warn("Type assertion may fail, expected {} most likely type is {} ({}%) at {}", type,
-                             prediction.probableType(),
-                             (int) (prediction.probability(prediction.probableType()) * 100),
-                             new SourceSegmentValue(currentScope(), token).getSourceMessage()
-                    );
-                }
-            }
+            checkLearntType(token, type, rhs, MIN_PROBABILITY);
 
             final String op = ((var) objects[5]).metaAttribute(MetaConstants.ASSIGNMENT_TYPE);
             if ("when".equals(op) || "subscribe".equals(op)) {
@@ -183,7 +178,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                     useConstraint = scope.constraint(varName);
                     useSource = scope.constraintSource(varName);
                 }
-                List<var> inputs = singletonList(constrain(scope, rhs, finalConstraint, useSource));
+                List<var> inputs = Arrays.asList(rhs, constrain(scope, rhs, finalConstraint, useSource));
                 if ("when".equals(op)) {
                     log.debug("DYNAMIC: {}", rhs.dynamic());
 
@@ -225,7 +220,8 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                 });
                 }
             }
-            return assign(rhs, objects, finalConstraint, constant, isVolatile, constraintSource, scope, token, declaration);
+            return assign(rhs, objects, finalConstraint, constant, isVolatile, constraintSource, scope, token, declaration, type,
+                          new SourceSegmentValue(currentScope(), token));
         };
     }
 
