@@ -16,14 +16,15 @@
 
 package dollar.internal.runtime.script.api.exceptions;
 
-import dollar.api.DollarException;
+import dollar.api.exceptions.DollarFailureException;
 import dollar.api.script.SourceSegment;
+import dollar.api.types.ErrorType;
 import dollar.api.var;
 import dollar.internal.runtime.script.parser.OpDef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class DollarScriptException extends DollarException {
+public class DollarScriptException extends DollarFailureException {
     @NotNull
     private String rawMessage;
     @Nullable
@@ -54,6 +55,19 @@ public class DollarScriptException extends DollarException {
         rawMessage = s;
         this.source = source;
     }
+
+    public DollarScriptException(@NotNull ErrorType errorType, @NotNull SourceSegment source) {
+        super(errorType, source.getSourceMessage());
+        rawMessage = errorType.name();
+        this.source = source;
+    }
+
+    public DollarScriptException(@NotNull ErrorType errorType, String additional, @NotNull SourceSegment source) {
+        super(errorType, additional + ":\n" + source.getSourceMessage());
+        rawMessage = errorType.name();
+        this.source = source;
+    }
+
 
     public DollarScriptException(@NotNull String s, @NotNull SourceSegment source, OpDef operation) {
         super((s + ":\n" + source.getSourceMessage() + "\n\n") + (operation != null ? operation.helpText() : ""));

@@ -19,6 +19,7 @@ package dollar.api.types;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import dollar.api.DollarStatic;
+import dollar.api.exceptions.DollarFailureException;
 import dollar.api.json.ImmutableJsonObject;
 import dollar.api.json.JsonObject;
 import dollar.api.var;
@@ -35,12 +36,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
     AbstractDollarSingleValue(@NotNull ImmutableList<Throwable> errors, @NotNull T value) {
         super(errors);
         this.value = value;
-    }
-
-    @NotNull
-    @Override
-    public var $containsKey(@NotNull var value) {
-        return DollarStatic.$(false);
     }
 
     @NotNull
@@ -68,6 +63,12 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
         return DollarStatic.$(this.value.equals(value));
     }
 
+    @NotNull
+    @Override
+    public var $containsKey(@NotNull var value) {
+        return DollarStatic.$(false);
+    }
+
     @Override
     @NotNull
     public var $has(@NotNull var key) {
@@ -88,12 +89,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
 
     @NotNull
     @Override
-    public int size() {
-        return 1;
-    }
-
-    @NotNull
-    @Override
     public var $prepend(@NotNull var value) {
         return DollarFactory.fromValue(Arrays.asList(value, this), errors(), value.errors());
     }
@@ -104,7 +99,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
         return DollarFactory.failure(ErrorType.INVALID_SINGLE_VALUE_OPERATION,
                                      getClass().toString(), false);
     }
-
 
     @Override
     @NotNull
@@ -117,7 +111,7 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
     @Override
     @NotNull
     public var $set(@NotNull var key, Object value) {
-        return DollarFactory.failure(ErrorType.INVALID_SINGLE_VALUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
     @NotNull
@@ -125,6 +119,12 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
     public var $remove(@NotNull var value) {
         return DollarFactory.failure(ErrorType.INVALID_SINGLE_VALUE_OPERATION,
                                      getClass().toString(), false);
+    }
+
+    @NotNull
+    @Override
+    public int size() {
+        return 1;
     }
 
     @NotNull
@@ -156,19 +156,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
 
     @NotNull
     @Override
-    public String toHumanString() {
-        return value.toString();
-    }
-
-
-    @Override
-    @NotNull
-    public ImmutableJsonObject toJsonObject() {
-        return new ImmutableJsonObject(new JsonObject());
-    }
-
-    @NotNull
-    @Override
     public ImmutableList<? extends T> toList() {
         return ImmutableList.of(value);
     }
@@ -181,8 +168,26 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
 
     @NotNull
     @Override
+    public String toHumanString() {
+        return value.toString();
+    }
+
+    @Override
+    @NotNull
+    public ImmutableJsonObject toJsonObject() {
+        return new ImmutableJsonObject(new JsonObject());
+    }
+
+    @NotNull
+    @Override
+    public String toJsonString() {
+        return String.valueOf((Object) toJavaObject());
+    }
+
+    @NotNull
+    @Override
     public var $plus(@NotNull var rhs) {
-        return DollarFactory.failure(ErrorType.INVALID_SINGLE_VALUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_SINGLE_VALUE_OPERATION);
     }
 
     @NotNull
@@ -206,20 +211,6 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
     public int hashCode() {
         return value.toString().hashCode();
     }
-
-    @NotNull
-    public Stream<String> keyStream() {
-        return Stream.empty();
-
-    }
-
-
-    @NotNull
-    @Override
-    public String toJsonString() {
-        return String.valueOf((Object) toJavaObject());
-    }
-
 
     @Override
     public var $min(boolean parallel) {
@@ -259,6 +250,12 @@ public abstract class AbstractDollarSingleValue<T> extends AbstractDollar {
     @Override
     public var $product(boolean parallel) {
         return this;
+    }
+
+    @NotNull
+    public Stream<String> keyStream() {
+        return Stream.empty();
+
     }
 
 }

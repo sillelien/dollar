@@ -335,6 +335,10 @@ public final class Symbols {
                                                      ASSIGNMENT_PRIORITY, true, NO_SCOPE, null, RHS_TYPE_F);
 
     @NotNull
+    public static final OpDef ASSIGNMENT_CONSTRAINT = new OpDef(OpDefType.ASSIGNMENT, null, null, "assignment-constraint", false,
+                                                                true, null, ASSIGNMENT_PRIORITY, true, NO_SCOPE, null, null);
+
+    @NotNull
     public static final OpDef SUBSCRIBE_ASSIGN = new OpDef(OpDefType.ASSIGNMENT, "*=", null,
                                                            "subscribe-assign",
                                                            false, true, null, ASSIGNMENT_PRIORITY, true, NO_SCOPE, null,
@@ -449,7 +453,7 @@ public final class Symbols {
     public static final OpDef PARAM_OP = new OpDef(POSTFIX, null, null, "parameter", false, true,
                                                    "( <expression> | <builtin-name> | <function-name> ) '(' " +
                                                            "( <expression> | <name> '=' <expression> )* ')'",
-                                                   MEMBER_PRIORITY, true, SCOPE_WITH_CLOSURE, null, ANY_TYPE_F);
+                                                   MEMBER_PRIORITY, true, SCOPE_WITH_CLOSURE, null, null);
 
     @NotNull
     public static final OpDef WRITE_OP = new OpDef(CONTROL_FLOW, null, "write", "write",
@@ -514,6 +518,18 @@ public final class Symbols {
                                                            false, true,
                                                            "'<builtin-name> | <variable-name>",
                                                            NO_PRIORITY, null, NO_SCOPE, null, ANY_TYPE_F);
+
+    @NotNull
+    public static final OpDef CLASS_OP = new OpDef(OTHER, null, "class", "class",
+                                                   false, true,
+                                                   "'class' <identifier> <expression>",
+                                                   NO_PRIORITY, null, NO_SCOPE, null, i -> Type.of(i[0]));
+
+    @NotNull
+    public static final OpDef NEW_OP = new OpDef(PREFIX, null, "new", "new",
+                                                 false, true,
+                                                 "'new' <identifier> (<parameters>)",
+                                                 NO_PRIORITY, null, NEW_SCOPE, null, i -> Type.of(i[0]));
 
     @NotNull
     public static final List<String> SYMBOL_STRINGS;
@@ -593,7 +609,8 @@ public final class Symbols {
     public static final KeywordDef FROM = new KeywordDef("from", false, null, null);
     @NotNull
     public static final List<OpDef> OPERATORS;
-
+    @NotNull
+    public static final KeywordDef THIS = new KeywordDef("this", true, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_1 = new OpDef(RESERVED, "...", null, "RESERVED_OPERATOR_1",
                                                                true, true, null, 0, true, NO_SCOPE, null, null);
@@ -678,8 +695,6 @@ public final class Symbols {
     @NotNull
     private static final KeywordDef CATCH = new KeywordDef("catch", true, null, null);
     @NotNull
-    private static final KeywordDef CLASS = new KeywordDef("class", true, null, null);
-    @NotNull
     private static final KeywordDef CONTINUE = new KeywordDef("continue", true, null, null);
     @NotNull
     private static final KeywordDef DO = new KeywordDef("do", true, null, null);
@@ -706,8 +721,6 @@ public final class Symbols {
     @NotNull
     private static final KeywordDef NATIVE = new KeywordDef("native", true, null, null);
     @NotNull
-    private static final KeywordDef NEW = new KeywordDef("new", true, null, null);
-    @NotNull
     private static final KeywordDef PACKAGE = new KeywordDef("package", true, null, null);
     @NotNull
     private static final KeywordDef PRIVATE = new KeywordDef("private", true, null, null);
@@ -727,8 +740,6 @@ public final class Symbols {
     private static final KeywordDef SWITCH = new KeywordDef("switch", true, null, null);
     @NotNull
     private static final KeywordDef SYNCHRONIZED = new KeywordDef("synchronized", true, null, null);
-    @NotNull
-    private static final KeywordDef THIS = new KeywordDef("this", true, null, null);
     @NotNull
     private static final KeywordDef THROW = new KeywordDef("throw", true, null, null);
     @NotNull
@@ -883,6 +894,7 @@ public final class Symbols {
                     BLOCK_OP,
                     BUILTIN_OP,
                     CAST,
+                    CLASS_OP,
                     COLLECT_OP,
                     FOR_OP,
                     IS_OP,
@@ -890,6 +902,7 @@ public final class Symbols {
                     LIST_OP,
                     MAP_OP,
                     MODULE_OP,
+                    NEW_OP,
                     PARAM_OP,
                     PURE_OP,
                     READ_OP,
@@ -959,7 +972,6 @@ public final class Symbols {
                     RETURN,
                     PACKAGE,
                     THIS,
-                    CLASS,
                     READONLY,
                     SEND,
                     DISPATCH,
@@ -969,7 +981,6 @@ public final class Symbols {
                     IMPLEMENTS,
                     INSTANCEOF,
                     INTERFACE,
-                    NEW,
                     SCOPE,
                     TRANSIENT,
                     EXTENDS,

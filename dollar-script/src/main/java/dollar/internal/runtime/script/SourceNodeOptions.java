@@ -27,6 +27,8 @@ public class SourceNodeOptions {
     @NotNull
     public static final SourceNodeOptions NEW_SCOPE = new SourceNodeOptions(true, false, null);
     @NotNull
+    public static final SourceNodeOptions CLASS_SCOPE = new SourceNodeOptions(true, false, null);
+    @NotNull
     public static final SourceNodeOptions NEW_PARALLEL_SCOPE = new SourceNodeOptions(true, false, true);
     @NotNull
     public static final SourceNodeOptions NEW_SERIAL_SCOPE = new SourceNodeOptions(true, false, false);

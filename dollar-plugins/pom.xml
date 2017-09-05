@@ -40,6 +40,7 @@
         <module>dollar-class-resolver-plugin</module>
         <module>dollar-std-resources-plugin</module>
         <module>dollar-simple-learner-plugin</module>
+        <!--<module>dollar-smart-learner-plugin</module>-->
         <module>dollar-simple-execution-plugin</module>
     </modules>
 

@@ -30,10 +30,10 @@ for v in ["a".."c"] {
 
 
 //Variable constraints
-def string (it is STRING)
+def string (it is String)
 var (string) d="test"
 
-var <string> f="testing"
+var <String> f="testing"
 
 
 var (previous != it || previous is VOID) e = 1

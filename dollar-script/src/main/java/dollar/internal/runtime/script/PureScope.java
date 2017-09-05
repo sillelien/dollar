@@ -36,7 +36,7 @@ public class PureScope extends ScriptScope {
     private static final Logger log = LoggerFactory.getLogger(PureScope.class);
 
     PureScope(@NotNull Scope parent, @NotNull String source, @NotNull String name, @Nullable String file, boolean parallel) {
-        super(parent, _file(parent, file), source, name, false, parallel);
+        super(parent, _file(parent, file), source, name, false, parallel, false);
     }
 
     @NotNull
@@ -150,14 +150,14 @@ public class PureScope extends ScriptScope {
         return value;
     }
 
+    @Override
+    public boolean pure() {
+        return true;
+    }
+
     @NotNull
     @Override
     public String toString() {
         return id + "(P)" + (parallel() ? "=>" : "->") + parent;
-    }
-
-    @Override
-    public boolean pure() {
-        return true;
     }
 }

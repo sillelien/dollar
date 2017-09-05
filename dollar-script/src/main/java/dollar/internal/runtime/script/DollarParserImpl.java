@@ -62,6 +62,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -152,7 +153,7 @@ public class DollarParserImpl implements DollarParser {
             return parseMarkdown(file);
         } else {
             String source = new String(Files.readAllBytes(file.toPath()));
-            return parse(new ScriptScope(source, file, true, parallel), source);
+            return parse(new ScriptScope(source, file, true, parallel, false), source);
         }
 
     }
@@ -161,7 +162,7 @@ public class DollarParserImpl implements DollarParser {
     @NotNull
     public var parse(@NotNull InputStream in, boolean parallel, @NotNull Scope scope) throws Exception {
         String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(scope, "(stream)", source, "(stream-scope)", true, parallel), source);
+        return parse(new ScriptScope(scope, "(stream)", source, "(stream-scope)", true, parallel, false), source);
     }
 
     @Override
@@ -169,13 +170,13 @@ public class DollarParserImpl implements DollarParser {
     public var parse(@NotNull InputStream in, @NotNull String file, boolean parallel) throws Exception {
         this.file = file;
         String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(source, new File(file), true, parallel), source);
+        return parse(new ScriptScope(source, new File(file), true, parallel, false), source);
     }
 
     @Override
     @NotNull
     public var parse(@NotNull String source, boolean parallel) throws Exception {
-        return parse(new ScriptScope(source, "(string)", true, parallel), source);
+        return parse(new ScriptScope(source, "(string)", true, parallel, false), source);
     }
 
     @Override
@@ -245,6 +246,7 @@ public class DollarParserImpl implements DollarParser {
                                           STRING_LITERAL,
                                           IDENTIFIER_KEYWORD,
                                           variableRef(true),
+
                                           builtin(true)))
                            .or(blockExpression(ref.lazy(), true).between(OP_NL(LEFT_BRACE), NL_OP(RIGHT_BRACE)));
         } else {
@@ -254,6 +256,9 @@ public class DollarParserImpl implements DollarParser {
                                           listExpression(ref.lazy(), false),
                                           mapExpression(ref.lazy(), false),
                                           KEYWORD(PURE).next(expression(true)),
+                                          classExpression(ref, false),
+                                          newExpression(ref, false),
+                                          thisRef(false),
                                           moduleExpression(ref),
                                           assertExpression(ref, false),
                                           collectExpression(ref, false),
@@ -264,6 +269,7 @@ public class DollarParserImpl implements DollarParser {
                                           scriptExpression(ref, false),
                                           pureDefinitionOperator(ref),
                                           rangeExpression(ref, false),
+                                          forkExpression(ref, false),
                                           URL,
                                           DECIMAL_LITERAL,
                                           INTEGER_LITERAL,
@@ -367,7 +373,6 @@ public class DollarParserImpl implements DollarParser {
             table = prefix(false, table, PRINT, DollarStatic::$out);
             table = prefix(false, table, DEBUG, DollarStatic::$debug);
             table = prefix(false, table, ERR, DollarStatic::$err);
-            table = prefix(false, table, FORK, Func::forkFunc);
 
             table = table.prefix(writeOperator(ref), WRITE_OP.priority());
             table = table.prefix(readOperator(), READ_OP.priority());
@@ -471,6 +476,40 @@ public class DollarParserImpl implements DollarParser {
                        .map(token -> variableNode(pure, token.toString(), token, this));
     }
 
+    @NotNull
+    private Parser<var> forkExpression(@NotNull Parser.Reference<var> ref, boolean pure) {
+        return KEYWORD_NL(FORK)
+                       .next(ref.lazy())
+                       .token()
+                       .map(token -> {
+                                return node(FORK, "fork-execute", pure,
+                                            this, token, Arrays.asList((var) token.value()),
+                                            i -> {
+                                                log.debug("Executing in background ...");
+                                                Future<var> varFuture = executor.executeInBackground(
+                                                        () -> ((var) token.value()).$fix(1, currentScope().parallel()));
+                                                log.debug("Future obtained, returning future node");
+                                                return node(FORK, "fork-retrieve", pure, this, token,
+                                                            Arrays.asList((var) token.value()),
+                                                            j -> {
+                                                                log.debug("Waiting for future ...");
+//                                                              Thread.dumpStack();
+                                                                return varFuture.get();
+                                                            }
+                                                );
+                                            });
+                            }
+                       );
+    }
+
+
+    @NotNull
+    private Parser<var> thisRef(boolean pure) {
+        return KEYWORD_NL(THIS).followedBy(OP(LEFT_PAREN).not().peek())
+                       .token()
+                       .map(token -> variableNode(pure, token.toString(), token, this));
+    }
+
     private Parser<var> unitExpression(boolean pure) {
         return array(DECIMAL_LITERAL.or(INTEGER_LITERAL), BUILTIN)
                        .token()
@@ -502,7 +541,7 @@ public class DollarParserImpl implements DollarParser {
                        .map(
                                token -> {
                                    List<var> entries = (List<var>) token.value();
-                                   final var node = node(LIST_OP, pure, this, token, entries,
+                                   final var node = node(LIST_OP, "list-" + shortHash(token), pure, this, token, entries,
                                                          vars -> {
                                                              log.info("Fixing list {}",
                                                                       currentScope().parallel() ? "parallel" : "serial");
@@ -560,7 +599,7 @@ public class DollarParserImpl implements DollarParser {
                        .token()
                        .map(token -> {
                            List<var> o = (List<var>) token.value();
-                           final var node = node(MAP_OP, pure, this, token, o, i -> mapFunc(o));
+                           final var node = node(MAP_OP, "map-" + shortHash(token), pure, this, token, o, i -> mapFunc(o));
                            o.forEach(entry -> entry.$listen(i -> node.$notify()));
                            return node;
                        });
@@ -577,7 +616,9 @@ public class DollarParserImpl implements DollarParser {
                                  .followedBy(SEMICOLON_TERMINATOR.optional(null))
                                  .map(var -> var)
                                  .token()
-                                 .map(token -> node(BLOCK_OP, pure, this, token, (List<var>) token.value(),
+                                 .map(token -> node(BLOCK_OP,
+                                                    "block-" + shortHash(token), pure,
+                                                    this, token, (List<var>) token.value(),
                                                     i -> blockFunc((List<var>) token.value())));
         ref.set(or);
         return or;
@@ -634,6 +675,61 @@ public class DollarParserImpl implements DollarParser {
                        .map(new CollectOperator(this, pure));
     }
 
+    private Parser<var> classExpression(@NotNull Parser.Reference<var> ref, boolean pure) {
+        return KEYWORD_NL(CLASS_OP)
+                       .next(
+                               array(IDENTIFIER,
+                                     ref.lazy()
+                               )
+                       )
+                       .token()
+                       .map(token -> {
+                           Object[] objects = (Object[]) token.value();
+                           return node(CLASS_OP, "class-" + objects[0], pure, this, token,
+                                       Arrays.asList((var) objects[0], (var) objects[1]), i -> {
+                                       ClassScopeFactory classScopeFactory = new ClassScopeFactory(currentScope(),
+                                                                                                   objects[0].toString(),
+                                                                                                   (var) objects[1], false,
+                                                                                                   currentScope().parallel());
+
+                                       currentScope().registerClass(objects[0].toString(), classScopeFactory);
+                                       return $void();
+                                   });
+                       });
+    }
+
+    private Parser<var> newExpression(@NotNull Parser.Reference<var> ref, boolean pure) {
+        return KEYWORD_NL(NEW_OP)
+                       .next(
+                               array(IDENTIFIER,
+                                     OP(LEFT_PAREN).next(
+                                             or(array(IDENTIFIER.followedBy(OP(ASSIGNMENT)), ref.lazy()),
+                                                array(OP(ASSIGNMENT).optional(null), ref.lazy())).map(
+                                                     objects -> {
+                                                         assert PARAM_OP.validForPure(pure);
+                                                         //Is it a named parameter
+                                                         if (objects[0] != null) {
+                                                             //yes so let's add the name as metadata to the value
+                                                             var result = (var) objects[1];
+                                                             result.metaAttribute(NAMED_PARAMETER_META_ATTR, objects[0].toString());
+                                                             return result;
+                                                         } else {
+                                                             //no, just use the value
+                                                             return (var) objects[1];
+                                                         }
+                                                     }).sepBy(COMMA_TERMINATOR)).followedBy(OP(RIGHT_PAREN)))
+                                       .token()
+                                       .map(token -> {
+                                           Object[] objects = (Object[]) token.value();
+                                           String name = objects[0].toString();
+                                           return node(NEW_OP, "new-" + objects[0], pure, this, token,
+                                                       Arrays.asList((var) objects[0]),
+                                                       i -> {
+                                                           return currentScope().getDollarClass(name).instance(
+                                                                   (List<var>) objects[1]);
+                                                       });
+                                       }));
+    }
 
     private Parser<var> windowExpression(@NotNull Parser.Reference<var> ref, boolean pure) {
         return KEYWORD_NL(WINDOW_OP)
@@ -742,8 +838,11 @@ public class DollarParserImpl implements DollarParser {
                            var lhs = (var) objects[1];
                            boolean blocking = objects[2] != null;
                            boolean mutating = objects[3] != null;
-                           return rhs -> reactiveNode(WRITE_OP, false, token, lhs, rhs, this,
-                                                      i -> rhs.$write(lhs, blocking, mutating)
+
+                           return rhs -> node(WRITE_OP, false, this, token, Arrays.asList(lhs, rhs),
+                                              i -> {
+                                                  return rhs.$write(lhs, blocking, mutating);
+                                              }
                            );
                        });
     }
@@ -921,7 +1020,8 @@ public class DollarParserImpl implements DollarParser {
                        .token()
                        .map(token -> lhs -> {
                                 assert CAST.validForPure(pure);
-                           return reactiveNode(CAST, pure, token, lhs, (var) token.value(), this,
+                           return reactiveNode(CAST, "cast-" + token.toString().toLowerCase(), pure, token, lhs,
+                                               (var) token.value(), this,
                                                i -> castFunc(lhs, token.toString())
                            );
                             }

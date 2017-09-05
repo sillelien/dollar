@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableMap;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Type;
+import dollar.api.exceptions.DollarFailureException;
 import dollar.api.json.ImmutableJsonObject;
 import dollar.api.json.JsonObject;
 import dollar.api.var;
@@ -46,7 +47,7 @@ public class DollarMap extends AbstractDollar {
      * <p>
      * For example: {@code eb.send("api.validate", $("key", key).$("params", request.params()).$) }
      */
-    private final
+    protected final
     @NotNull
     LinkedHashMap<var, var> map;
 
@@ -91,6 +92,11 @@ public class DollarMap extends AbstractDollar {
     public DollarMap(@NotNull ImmutableList<Throwable> errors, @NotNull ImmutableJsonObject immutableJsonObject) {
         super(errors);
         map = mapToVarMap(immutableJsonObject.toMap());
+    }
+
+    public DollarMap() {
+        super(ImmutableList.of());
+        map = new LinkedHashMap<>();
     }
 
     @NotNull
@@ -166,26 +172,26 @@ public class DollarMap extends AbstractDollar {
     @NotNull
     @Override
     public var $divide(@NotNull var rhs) {
-        return DollarFactory.failure(ErrorType.INVALID_MAP_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_MAP_OPERATION);
     }
 
     @NotNull
     @Override
     public var $modulus(@NotNull var rhs) {
-        return DollarFactory.failure(ErrorType.INVALID_MAP_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_MAP_OPERATION);
     }
 
     @NotNull
     @Override
     public var $multiply(@NotNull var v) {
-        return DollarFactory.failure(ErrorType.INVALID_MAP_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_MAP_OPERATION);
     }
 
     @NotNull
     @Override
     public Integer toInteger() {
-        DollarFactory.failure(ErrorType.INVALID_MAP_OPERATION);
-        return null;
+        @NotNull var result;
+        throw new DollarFailureException(ErrorType.INVALID_MAP_OPERATION);
     }
 
     @NotNull
@@ -226,6 +232,13 @@ public class DollarMap extends AbstractDollar {
         return (R) varMapToMap();
     }
 
+    @NotNull
+    @Override
+    public var $listen(@NotNull Pipeable pipe) {
+        String key = UUID.randomUUID().toString();
+        $listen(pipe, key);
+        return DollarStatic.$(key);
+    }
 
     @NotNull
     private <K extends Comparable<K>, V> Map<K, V> varMapToMap() {
@@ -255,7 +268,7 @@ public class DollarMap extends AbstractDollar {
         } else if (type.is(Type._VOID)) {
             return DollarStatic.$void();
         } else {
-            return DollarFactory.failure(ErrorType.INVALID_CAST);
+            throw new DollarFailureException(ErrorType.INVALID_CAST);
         }
     }
 
@@ -290,6 +303,12 @@ public class DollarMap extends AbstractDollar {
             result.put(entry.getKey(), entry.getValue().$fix(false));
         }
         return ImmutableMap.copyOf(result);
+    }
+
+    @NotNull
+    @Override
+    public var $map() {
+        return this;
     }
 
     @NotNull
@@ -363,6 +382,7 @@ public class DollarMap extends AbstractDollar {
         return DollarFactory.fromValue(newMap, errors(), value.errors());
     }
 
+    @Override
     @NotNull
     public var $containsValue(@NotNull var value) {
         return DollarStatic.$(map.containsValue(value));
@@ -443,14 +463,6 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $listen(@NotNull Pipeable pipe) {
-        String key = UUID.randomUUID().toString();
-        $listen(pipe, key);
-        return DollarStatic.$(key);
-    }
-
-    @NotNull
-    @Override
     public var $listen(@NotNull Pipeable pipe, @NotNull String key) {
         for (var v : map.values()) {
             //Join the children to this, so if the children change
@@ -462,8 +474,8 @@ public class DollarMap extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $map() {
-        return this;
+    public Stream<var> $stream(boolean parallel) {
+        return split().values().stream();
     }
 
     @NotNull
@@ -471,12 +483,6 @@ public class DollarMap extends AbstractDollar {
     public var $notify() {
         map.values().forEach(var::$notify);
         return this;
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $stream(boolean parallel) {
-        return split().values().stream();
     }
 
     @NotNull

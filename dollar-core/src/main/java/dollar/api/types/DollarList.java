@@ -23,6 +23,7 @@ import dollar.api.DollarStatic;
 import dollar.api.NumericAware;
 import dollar.api.Pipeable;
 import dollar.api.Type;
+import dollar.api.exceptions.DollarFailureException;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.guard.Guarded;
 import dollar.api.guard.NotNullGuard;
@@ -47,9 +48,9 @@ import java.util.stream.Stream;
 
 public class DollarList extends AbstractDollar {
 
+    public static final int MAX_LIST_MULTIPLIER = 1000;
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("DollarList");
-    public static final int MAX_LIST_MULTIPLIER = 1000;
     @Nullable
     private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
     @NotNull
@@ -67,12 +68,11 @@ public class DollarList extends AbstractDollar {
                 if (((var) value).dynamic() || !((var) value).isVoid()) {
                     l.add((var) value);
                 }
-            } else //noinspection StatementWithEmptyBody
-                if (value == null) {
-                    l.add(DollarStatic.$null(Type._ANY));
-                } else {
-                    l.add(DollarFactory.fromValue(value, errors));
-                }
+            } else if (value == null) {
+                l.add(DollarStatic.$null(Type._ANY));
+            } else {
+                l.add(DollarFactory.fromValue(value, errors));
+            }
         }
         this.list = ImmutableList.copyOf(l);
     }
@@ -85,12 +85,11 @@ public class DollarList extends AbstractDollar {
                 if (((var) value).dynamic() || !((var) value).isVoid()) {
                     l.add((var) value);
                 }
-            } else //noinspection StatementWithEmptyBody
-                if (value == null) {
-                    l.add(DollarStatic.$null(Type._ANY));
-                } else {
-                    l.add(DollarFactory.fromValue(value, errors));
-                }
+            } else if (value == null) {
+                l.add(DollarStatic.$null(Type._ANY));
+            } else {
+                l.add(DollarFactory.fromValue(value, errors));
+            }
         }
         list = ImmutableList.copyOf(l);
     }
@@ -201,7 +200,7 @@ public class DollarList extends AbstractDollar {
         } else if (type.is(Type._BOOLEAN)) {
             return DollarStatic.$(!list.isEmpty());
         } else {
-            return DollarFactory.failure(ErrorType.INVALID_CAST);
+            throw new DollarFailureException(ErrorType.INVALID_CAST);
         }
     }
 
@@ -324,6 +323,15 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
+    @Guarded(NotNullGuard.class)
+    public var $listen(@NotNull Pipeable pipe) {
+        String key = UUID.randomUUID().toString();
+        $listen(pipe, key);
+        return DollarStatic.$(key);
+    }
+
+    @NotNull
+    @Override
     public var $get(@NotNull var key) {
         if (key.number()) {
             if (key.toLong() < 0) {
@@ -408,11 +416,10 @@ public class DollarList extends AbstractDollar {
         return DollarFactory.fromValue(newList, errors(), value.errors());
     }
 
-
     @NotNull
     @Override
     public var $removeByKey(@NotNull String value) {
-        return DollarFactory.failure(ErrorType.INVALID_LIST_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_LIST_OPERATION);
     }
 
     @NotNull
@@ -422,7 +429,7 @@ public class DollarList extends AbstractDollar {
         if (key.integer()) {
             newVal.set(key.toInteger(), DollarFactory.fromValue(value));
         } else {
-            return DollarFactory.failure(ErrorType.INVALID_LIST_OPERATION);
+            throw new DollarFailureException(ErrorType.INVALID_LIST_OPERATION);
         }
         return DollarFactory.fromValue(newVal, errors());
     }
@@ -438,15 +445,6 @@ public class DollarList extends AbstractDollar {
     @Override
     public int size() {
         return list.size();
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
-    public var $listen(@NotNull Pipeable pipe) {
-        String key = UUID.randomUUID().toString();
-        $listen(pipe, key);
-        return DollarStatic.$(key);
     }
 
     @NotNull
@@ -468,13 +466,6 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $notify() {
-        list.forEach(var::$notify);
-        return this;
-    }
-
-    @NotNull
-    @Override
     public Stream<var> $stream(boolean parallel) {
         Stream<var> stream;
         if (parallel) {
@@ -483,6 +474,13 @@ public class DollarList extends AbstractDollar {
             stream = list.stream();
         }
         return stream;
+    }
+
+    @NotNull
+    @Override
+    public var $notify() {
+        list.forEach(var::$notify);
+        return this;
     }
 
     @NotNull
@@ -545,6 +543,13 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
+    public var $reverse(boolean parallel) {
+        ArrayList<var> newList = new ArrayList<>(list);
+        Collections.reverse(newList);
+        return DollarFactory.wrap(new DollarList(errors(), ImmutableList.copyOf(newList)));
+    }
+
+    @Override
     public int compareTo(@NotNull var o) {
         //TODO: improve comparisons
         if (list.stream().allMatch(v -> v.compareTo(o) == -1)) {
@@ -579,14 +584,6 @@ public class DollarList extends AbstractDollar {
     @Override
     public boolean truthy() {
         return !list.isEmpty();
-    }
-
-
-    @Override
-    public var $reverse(boolean parallel) {
-        ArrayList<var> newList = new ArrayList<>(list);
-        Collections.reverse(newList);
-        return DollarFactory.wrap(new DollarList(errors(), ImmutableList.copyOf(newList)));
     }
 
 

@@ -178,7 +178,6 @@ public final class DollarFactory {
     }
 
 
-    @SuppressWarnings("UseOfObsoleteDateTimeApi")
     @NotNull
     private static var create(@NotNull ImmutableList<Throwable> errors, @Nullable Object o) {
         if (o == null) {
@@ -252,9 +251,7 @@ public final class DollarFactory {
         if ((o instanceof java.net.URI) || (o instanceof java.net.URL)) {
             return wrap(new DollarURI(errors, URI.parse(o.toString())));
         }
-        //noinspection UseOfObsoleteDateTimeApi
         if (o instanceof Date) {
-            //noinspection UseOfObsoleteDateTimeApi
             return wrap(new DollarDate(errors, ((Date) o).getTime()));
         }
         if (o instanceof LocalDateTime) {
@@ -347,21 +344,6 @@ public final class DollarFactory {
     @NotNull
     public static var fromValue(@Nullable Object o) {
         return fromValue(o, ImmutableList.of());
-    }
-
-    /**
-     * Failure var.
-     *
-     * @param errorType the failure type
-     * @return the var
-     */
-    @NotNull
-    public static var failure(@NotNull ErrorType errorType) {
-        if (DollarStatic.getConfig().failFast()) {
-            throw new DollarFailureException(errorType);
-        } else {
-            return wrap(new DollarError(errorType, ""));
-        }
     }
 
     /**
@@ -793,14 +775,7 @@ public final class DollarFactory {
 
             return array;
         } else if (i.is(Type._MAP)) {
-            final JsonObject json = new JsonObject();
-            ImmutableMap<var, var> map = value.toVarMap();
-            final Set<var> fieldNames = map.keySet();
-            for (var fieldName : fieldNames) {
-                var v = map.get(fieldName);
-                json.putValue(fieldName.toString(), toJson(v));
-            }
-            return json;
+            return mapToJsonInternal(value);
         } else if (i.is(Type._RANGE)) {
             final JsonObject rangeObject = new JsonObject();
             rangeObject.putString(TYPE_KEY, value.$type().name());
@@ -811,8 +786,21 @@ public final class DollarFactory {
         } else if (i.is(Type._ANY)) {
             return null;
         } else {
-            throw new DollarException("Unrecognized type " + value.$type());
+            return mapToJsonInternal(value);
         }
+    }
+
+    @NotNull
+    @Nullable
+    private static Object mapToJsonInternal(@NotNull var value) {
+        final JsonObject json = new JsonObject();
+        ImmutableMap<var, var> map = value.toVarMap();
+        final Set<var> fieldNames = map.keySet();
+        for (var fieldName : fieldNames) {
+            var v = map.get(fieldName);
+            json.putValue(fieldName.toString(), toJson(v));
+        }
+        return json;
     }
 
     /**

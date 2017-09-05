@@ -19,6 +19,7 @@ package dollar.api.types;
 import com.google.common.collect.ImmutableList;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
+import dollar.api.exceptions.DollarFailureException;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
@@ -119,7 +120,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         } else if (type.is(Type._VOID)) {
             return DollarStatic.$void();
         } else {
-            return DollarFactory.failure(ErrorType.INVALID_CAST);
+            throw new DollarFailureException(ErrorType.INVALID_CAST);
         }
     }
 
@@ -161,6 +162,11 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
             }
             return DollarFactory.fromValue(value + rhsFix.toDouble(), errors(), rhsFix.errors());
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
     }
 
     @Override
@@ -206,11 +212,6 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     @Override
     public boolean integer() {
         return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return value.hashCode();
     }
 
     @Override

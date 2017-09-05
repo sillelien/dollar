@@ -1,0 +1,23 @@
+class MyFirstClass {
+    const intVal= 20 + $1;
+    var mutableVal= 10;
+
+    def updateMutableVal {
+        this["mutableVal"]=$1;
+    }
+
+    def myFunction {
+        $1+" World"
+    }
+
+}
+
+var <MyFirstClass> instance= new MyFirstClass(20)
+
+@@ (new MyFirstClass(10)).myFunction("Hello")
+(new MyFirstClass(10)).myFunction("Hello") <=> "Hello World"
+(new MyFirstClass(10)).intVal <=> 30
+instance.intVal <=> 40
+//instance["mutableVal"]= 10;
+//instance.updateMutableVal(100)
+//instance.mutableVal <=> 30

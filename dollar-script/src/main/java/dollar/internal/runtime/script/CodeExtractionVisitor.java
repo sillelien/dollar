@@ -238,7 +238,7 @@ public class CodeExtractionVisitor implements Visitor {
         if ("dollar".equals(node.getType())) {
             try {
                 new DollarParserImpl(new ParserOptions()).parse(
-                        new ScriptScope(node.getText(), "(markdown)", true, false), node.getText());
+                        new ScriptScope(node.getText(), "(markdown)", true, false, false), node.getText());
             } catch (Exception e) {
                 throw new DollarException(e, node.getText());
             }

@@ -58,8 +58,7 @@ import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class SourceNode implements java.lang.reflect.InvocationHandler {
     @NotNull
-    private static final TypeLearner typeLearner = Objects.requireNonNull(Plugins.sharedInstance(TypeLearner.class));
-
+    private static final TypeLearner typeLearner;
     //    public static final String RETURN_SCOPE = "return-scope";
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(SourceNode.class);
@@ -80,13 +79,10 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     private final Pipeable lambda;
     @NotNull
     private final SourceSegment source;
-
     @NotNull
     private final ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
-
     @NotNull
     private final List<var> inputs;
-
     @NotNull
     private final String name;
     @NotNull
@@ -95,13 +91,21 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     private final boolean scopeClosure;
     @NotNull
     private final String id;
-
     private final boolean pure;
     private final OpDef operation;
     @NotNull
     private final SourceNodeOptions sourceNodeOptions;
     @Nullable
     private volatile TypePrediction prediction;
+
+    static {
+        try {
+            typeLearner = Objects.requireNonNull(Plugins.sharedInstance(TypeLearner.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
     SourceNode(@NotNull Pipeable lambda,
                @NotNull SourceSegment source,
@@ -153,6 +157,11 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             meta.put(IMPURE, "true");
         }
         meta.put(ID, id);
+        Type opType = operation.typeFor(inputs.toArray(new var[inputs.size()]));
+        if (opType != null) {
+            log.debug(name + ":" + opType);
+            meta.put(MetaConstants.TYPE_HINT, opType);
+        }
     }
 
 
@@ -174,7 +183,13 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             }
 
             if (Objects.equals(method.getName(), "$type")) {
-                return meta.get(MetaConstants.TYPE_HINT);
+                if (meta.get(MetaConstants.TYPE_HINT) != null) {
+                    return meta.get(MetaConstants.TYPE_HINT);
+                } else if (prediction != null) {
+                    return prediction.probableType();
+                } else {
+                    return Type._ANY;
+                }
             }
 
             if (Objects.equals(method.getName(), "predictType")) {
@@ -221,7 +236,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                                                                         "(" + currentScope() + ") for " + name,
                                                                 source);
                             }
-                            useScope = new ScriptScope(currentScope(), name, false, isParallel());
+                            useScope = new ScriptScope(currentScope(), name, false, isParallel(), false);
                         }
                     } else {
                         useScope = currentScope();
@@ -263,9 +278,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
 
             if (method.getName().startsWith("$fixDeep") && (result instanceof var)) {
-                if (meta.get(MetaConstants.TYPE_HINT) == null) {
-                    meta.put(MetaConstants.TYPE_HINT, ((var) result).$type());
-                }
+
                 typeLearner.learn(name, source, inputs, ((var) result).$type());
             }
             return result;
@@ -305,11 +318,14 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 return proxy;
 //                return lambda.pipe(in).$unwrap();
             } else if ("$fix".equals(method.getName())) {
-
                 if (args.length == 1) {
-                    return executePipe(DollarFactory.fromValue(args[0])).$fix((Boolean) args[0]);
+                    return executePipe(DollarFactory.fromValue(args[0]));
                 } else {
-                    return executePipe(DollarFactory.fromValue(args[1])).$fix((int) args[0], (Boolean) args[1]);
+                    if ((int) args[0] > 1) {
+                        return executePipe(DollarFactory.fromValue(args[1])).$fix((int) args[0] - 1, (Boolean) args[1]);
+                    } else {
+                        return executePipe(DollarFactory.fromValue(args[1]));
+                    }
 
                 }
 

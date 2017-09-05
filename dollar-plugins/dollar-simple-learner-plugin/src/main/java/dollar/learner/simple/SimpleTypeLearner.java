@@ -16,6 +16,8 @@
 
 package dollar.learner.simple;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.SingleValueConverter;
 import dollar.api.Type;
 import dollar.api.TypePrediction;
 import dollar.api.execution.DollarExecutor;
@@ -24,39 +26,40 @@ import dollar.api.script.SourceSegment;
 import dollar.api.script.TypeLearner;
 import dollar.api.types.prediction.CountBasedTypePrediction;
 import dollar.api.var;
-import dollar.internal.mapdb.DB;
-import dollar.internal.mapdb.DBMaker;
-import dollar.internal.mapdb.HTreeMap;
-import dollar.internal.mapdb.Serializer;
 import dollar.internal.runtime.script.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 public class SimpleTypeLearner implements TypeLearner {
 
 
-    public static final int MAX_POSSIBLE_RETURN_VALUES = 5;
     @Nullable
     private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
+    private static final XStream xstream = new XStream();
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(SimpleTypeLearner.class);
+    @NotNull
+    private ConcurrentHashMap<String, TypeScoreMap> map = new ConcurrentHashMap<>();
 
-
-
-    private transient boolean modified;
-    @Nullable
-    private DB db;
 
     public SimpleTypeLearner() {
-       start();
-       Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
+        start();
+        Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
     }
-
 
     @NotNull
     @Override
@@ -66,77 +69,84 @@ public class SimpleTypeLearner implements TypeLearner {
 
     @Override
     public void learn(@NotNull String name, @NotNull SourceSegment source, @NotNull List<var> inputs, @NotNull Type type) {
-        final ArrayList<String> perms = TypeLearner.perms(inputs);
-        for (String perm : perms) {
-            HTreeMap<String, Long> usageCounters = getMap(name, perm);
-            Long count = usageCounters.getOrDefault(type.toString(), 0L);
-            usageCounters.put(type.toString(),count);
+        String key = key(name, source, inputs);
+        TypeScoreMap typeScoreMap = map.get(key);
+        if (typeScoreMap == null) {
+            typeScoreMap = map.getOrDefault(key, new TypeScoreMap(key));
         }
-        db.commit();
-        modified = true;
 
+        typeScoreMap.increment(type);
+        map.put(key, typeScoreMap);
     }
 
     @Nullable
     @Override
     public TypePrediction predict(@NotNull String name, @NotNull SourceSegment source, @NotNull List<var> inputs) {
-        final ArrayList<String> perms = TypeLearner.perms(inputs);
-        CountBasedTypePrediction prediction = new CountBasedTypePrediction(name);
-
-        for (String perm : perms) {
-            HTreeMap<String, Long> tally = getMap(name, perm);
-            for (Object type : tally.keySet()) {
-                String typeStr = type.toString();
-                prediction.addCount(Type.of(typeStr), tally.getOrDefault(typeStr, 0L));
-                if (prediction.types().size() > MAX_POSSIBLE_RETURN_VALUES) {
-                    return new TypePrediction() {
-                        @Override
-                        public boolean empty() {
-                            return false;
-                        }
-
-                        @NotNull
-                        @Override
-                        public Double probability(@NotNull Type type) {
-                            return 1.0;
-                        }
-
-                        @Nullable
-                        @Override
-                        public Type probableType() {
-                            return Type._ANY;
-                        }
-
-                        @NotNull
-                        @Override
-                        public Set<Type> types() {
-                            return new HashSet<>(Collections.singletonList(Type._ANY));
-                        }
-                    };
-                }
-            }
+        String key = key(name, source, inputs);
+        TypeScoreMap typeAtomicLongMap = map.get(key);
+        if (typeAtomicLongMap == null) {
+            return null;
+        } else {
+            return new CountBasedTypePrediction(key, typeAtomicLongMap.map());
         }
-        return prediction;
 
     }
 
-    @NotNull
-    private HTreeMap<String, Long> getMap(@NotNull String name, @NotNull String perm) {
-        assert db != null;
-        return db.hashMap(name + "." + perm, Serializer.STRING, Serializer.LONG).createOrOpen();
+    private String key(@NotNull String name, @NotNull SourceSegment source, @NotNull List<var> inputs) {
+        return name + "(" + inputs.stream().limit(30).filter(Objects::nonNull).limit(10).map(
+                i -> (i.$type() != null) ? i.$type() : Type._ANY).map(
+                Type::toString).collect(
+                Collectors.joining(",")) + ")";
     }
 
     @Override
     public void start() {
-        db = DBMaker.fileDB(new File(FileUtil.getTempDir("types"), "typelearner.db")).fileMmapEnable().make();
+        xstream.alias("count", java.util.concurrent.atomic.AtomicLong.class);
+        xstream.alias("scoreMap", TypeScoreMap.class);
+        xstream.registerConverter(new SingleValueConverter() {
+            @Override
+            public String toString(Object obj) {
+                return obj.toString();
+            }
+
+            @Override
+            public Object fromString(String str) {
+                return new AtomicLong(Long.parseLong(str));
+            }
+
+            @Override
+            public boolean canConvert(Class type) {
+                return type.equals(AtomicLong.class);
+            }
+        });
+        if (mapFile().exists()) {
+            log.info("Loading learnt types from {}", mapFile());
+            map = (ConcurrentHashMap<String, TypeScoreMap>) xstream.fromXML(mapFile());
+            log.info("Loaded {} entries", map.size());
+            Set<Map.Entry<String, TypeScoreMap>> entries = new HashSet<>(map.entrySet());
+            for (Map.Entry<String, TypeScoreMap> entry : entries) {
+                if (entry.getValue().expired()) {
+                    log.debug("Expired {}", entry.getKey());
+                    map.remove(entry.getKey());
+                }
+            }
+        }
     }
 
     @Override
     public void stop() {
-        if (db != null) {
-            db.close();
-            db= null;
+        try {
+            log.info("Saving learnt types to {}", mapFile());
+            xstream.toXML(map, new FileWriter(mapFile()));
+            log.info("Saved {} entries", map.size());
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
         }
+    }
+
+    @NotNull
+    private File mapFile() {
+        return new File(FileUtil.getRuntimeDir("simple.type.learner"), "map.xml");
     }
 
 }

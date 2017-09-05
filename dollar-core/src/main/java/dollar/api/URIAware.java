@@ -16,10 +16,10 @@
 
 package dollar.api;
 
+import dollar.api.exceptions.DollarFailureException;
 import dollar.api.guard.ChainGuard;
 import dollar.api.guard.Guarded;
 import dollar.api.guard.NotNullParametersGuard;
-import dollar.api.types.DollarFactory;
 import dollar.api.types.ErrorType;
 import org.jetbrains.annotations.NotNull;
 
@@ -126,7 +126,7 @@ public interface URIAware {
     @Guarded(ChainGuard.class)
     @Guarded(NotNullParametersGuard.class)
     default var $subscribe(@NotNull Pipeable subscription, @NotNull String key) {
-        return DollarFactory.failure(ErrorType.INVALID_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_OPERATION);
     }
 
     /**

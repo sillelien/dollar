@@ -25,6 +25,7 @@ import dollar.api.NumericAware;
 import dollar.api.Pipeable;
 import dollar.api.Signal;
 import dollar.api.TypePrediction;
+import dollar.api.exceptions.DollarFailureException;
 import dollar.api.json.JsonArray;
 import dollar.api.json.JsonObject;
 import dollar.api.types.meta.MetaConstants;
@@ -50,7 +51,6 @@ import java.util.stream.Stream;
 
 import static dollar.api.DollarStatic.$void;
 
-@SuppressWarnings("OverlyComplexClass")
 public abstract class AbstractDollar implements var {
 
     @NotNull
@@ -62,7 +62,7 @@ public abstract class AbstractDollar implements var {
     @NotNull
     private final ConcurrentHashMap<String, Object> meta = new ConcurrentHashMap<>();
 
-    AbstractDollar(@NotNull ImmutableList<Throwable> errors) {
+    protected AbstractDollar(@NotNull ImmutableList<Throwable> errors) {
         this.errors = errors;
     }
 
@@ -105,13 +105,6 @@ public abstract class AbstractDollar implements var {
     @Override
     public var $drain() {
         return $void();
-    }
-
-    @NotNull
-    @Override
-    public var $notify() {
-//        do nothing, not a reactive type
-        return this;
     }
 
     @NotNull
@@ -226,15 +219,20 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
+    public var $notify() {
+//        do nothing, not a reactive type
+        return this;
+    }
+
+    @NotNull
+    @Override
     public var $copy() {
-        //noinspection unchecked
         return DollarFactory.fromValue(toJavaObject(), ImmutableList.copyOf(errors()));
     }
 
     @Override
     @NotNull
     public var $copy(@NotNull ImmutableList<Throwable> errors) {
-        //noinspection unchecked
         List<Throwable> errorsMerged = new ArrayList<>();
         errorsMerged.addAll(errors);
         errorsMerged.addAll(errors());
@@ -476,16 +474,14 @@ public abstract class AbstractDollar implements var {
     @Nullable
     @Override
     public <T> T meta(@NotNull String key) {
-        //noinspection unchecked
         return (T) meta.get(key);
     }
 
     @Override
     public void metaAttribute(@NotNull String key, @NotNull String value) {
         if (meta.containsKey(key)) {
-            DollarFactory.failure(ErrorType.METADATA_IMMUTABLE);
-            return;
-
+            @NotNull var result;
+            throw new DollarFailureException(ErrorType.METADATA_IMMUTABLE);
         }
         meta.put(key, value);
     }
@@ -566,7 +562,7 @@ public abstract class AbstractDollar implements var {
         StringBuilder hexString = new StringBuilder();
 
         for (byte aDigest : digest) {
-            @SuppressWarnings("MagicNumber") String hex = Integer.toHexString(0xff & aDigest);
+            String hex = Integer.toHexString(0xff & aDigest);
             if (hex.length() == 1) {
                 hexString.append('0');
             }

@@ -24,6 +24,7 @@ import com.google.common.collect.Range;
 import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
+import dollar.api.exceptions.DollarFailureException;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,7 +40,7 @@ public class DollarRange extends AbstractDollar {
 
     @NotNull
     private final Range<var> range;
-    private boolean reversed = false;
+    private boolean reversed;
 
     public DollarRange(@NotNull ImmutableList<Throwable> errors, @NotNull var start, @NotNull var finish) {
         super(errors);
@@ -290,7 +291,7 @@ public class DollarRange extends AbstractDollar {
         } else if (type.is(Type._VOID)) {
             return $void();
         } else {
-            return DollarFactory.failure(ErrorType.INVALID_CAST);
+            throw new DollarFailureException(ErrorType.INVALID_CAST);
         }
     }
 
@@ -326,15 +327,15 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public ImmutableMap<var, var> toVarMap() {
-        DollarFactory.failure(ErrorType.INVALID_RANGE_OPERATION);
-        return ImmutableMap.of();
+        @NotNull var result;
+        throw new DollarFailureException(ErrorType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
     @Override
     public String toYaml() {
-        DollarFactory.failure(ErrorType.INVALID_RANGE_OPERATION);
-        return "";
+        @NotNull var result;
+        throw new DollarFailureException(ErrorType.INVALID_RANGE_OPERATION);
     }
 
     @Override
@@ -354,8 +355,7 @@ public class DollarRange extends AbstractDollar {
 
     @Override
     public ImmutableList<String> toStrings() {
-        DollarFactory.failure(ErrorType.INVALID_RANGE_OPERATION);
-        return null;
+        throw new DollarFailureException(ErrorType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
@@ -468,7 +468,7 @@ public class DollarRange extends AbstractDollar {
             }
 
         }
-        return DollarFactory.failure(ErrorType.INVALID_RANGE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
@@ -486,7 +486,7 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $containsKey(@NotNull var value) {
-        return DollarFactory.failure(ErrorType.INVALID_RANGE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
@@ -523,19 +523,19 @@ public class DollarRange extends AbstractDollar {
     @NotNull
     @Override
     public var $set(@NotNull var key, Object value) {
-        return DollarFactory.failure(ErrorType.INVALID_RANGE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
     @Override
     public var remove(@NotNull Object value) {
-        return DollarFactory.failure(ErrorType.INVALID_RANGE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
     @Override
     public var $remove(@NotNull var value) {
-        return DollarFactory.failure(ErrorType.INVALID_RANGE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_RANGE_OPERATION);
     }
 
     @NotNull
@@ -589,32 +589,6 @@ public class DollarRange extends AbstractDollar {
         return diff().toLong();
     }
 
-    @Override
-    public boolean isBoolean() {
-        return false;
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean neitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
-    public boolean truthy() {
-        return !range.isEmpty();
-    }
-
-
     @NotNull
     @Override
     public var $min(boolean parallel) {
@@ -626,7 +600,6 @@ public class DollarRange extends AbstractDollar {
     public var $max(boolean parallel) {
         return upper();
     }
-
 
     @NotNull
     @Override
@@ -650,6 +623,31 @@ public class DollarRange extends AbstractDollar {
     @Override
     public var $unique(boolean parallel) {
         return this;
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean neitherTrueNorFalse() {
+        return true;
+    }
+
+    @Override
+    public boolean truthy() {
+        return !range.isEmpty();
     }
 
 

@@ -83,7 +83,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                 useConstraint = varScope.constraint(varName);
                 useSource = varScope.constraintSource(varName);
             }
-            final var rhsFixed = rhs.$fix(1, currentScope().parallel());
+            final var rhsFixed = rhs.$fix(2, currentScope().parallel());
 
             if (rhsFixed.$type() != null && type != null) {
                 if (!rhsFixed.$type().canBe(type)) {
@@ -136,9 +136,10 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
             constraintSource = null;
         }
         if (objects[2] != null) {
-            type = Type.of(objects[2].toString().toUpperCase());
-            constraint = node(ASSIGNMENT, "assignment-constraint", pure, NEW_SCOPE, parser, new SourceSegmentValue(currentScope(),
-                                                                                                                   token),
+            type = Type.of(objects[2].toString());
+            constraint = node(ASSIGNMENT_CONSTRAINT, "assignment-constraint", pure, NEW_SCOPE, parser,
+                              new SourceSegmentValue(currentScope(),
+                                                     token),
                               emptyList(), i -> {
                         var it = currentScope().parameter("it");
                         assert it != null;

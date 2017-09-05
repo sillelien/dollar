@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -49,12 +50,11 @@ import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.singletonList;
 
-@SuppressWarnings({"UtilityClassCanBeEnum", "UtilityClassCanBeSingleton"})
 public final class Func {
 
     public static final double ONE_DAY = 24.0 * 60.0 * 60.0 * 1000.0;
     @NotNull
-    private static final DollarExecutor executor = Objects.requireNonNull(Plugins.sharedInstance(DollarExecutor.class));
+    static final DollarExecutor executor = Objects.requireNonNull(Plugins.sharedInstance(DollarExecutor.class));
 
     @NotNull
     static var reduceFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
@@ -123,8 +123,8 @@ public final class Func {
 
 
     @NotNull
-    static var forkFunc(@NotNull var v) {
-        return DollarFactory.fromFuture(executor.executeInBackground(() -> DollarScriptSupport.fix(v)));
+    static Future<var> forkFunc(@NotNull var v) {
+        return executor.executeInBackground(() -> DollarScriptSupport.fix(v));
     }
 
     @NotNull
@@ -228,7 +228,7 @@ public final class Func {
 
     @NotNull
     static var castFunc(@NotNull var lhs, @NotNull String typeName) {
-        return lhs.$as(Type.of(typeName.toUpperCase()));
+        return lhs.$as(Type.of(typeName));
     }
 
     @NotNull
@@ -323,7 +323,7 @@ public final class Func {
         if (l.isEmpty()) {
             return $void();
         } else {
-            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fixDeep(currentScope().parallel()));
+            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fix(1, currentScope().parallel()));
             return l.get(l.size() - 1);
         }
     }

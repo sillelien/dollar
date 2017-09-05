@@ -25,6 +25,7 @@ import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Signal;
 import dollar.api.Type;
+import dollar.api.exceptions.DollarFailureException;
 import dollar.api.plugin.Plugins;
 import dollar.api.uri.URI;
 import dollar.api.uri.URIHandler;
@@ -69,7 +70,7 @@ public class DollarURI extends AbstractDollar {
     @NotNull
     @Override
     public var $abs() {
-        return DollarFactory.failure(ErrorType.INVALID_URI_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
@@ -90,25 +91,25 @@ public class DollarURI extends AbstractDollar {
     @NotNull
     @Override
     public var $negate() {
-        return DollarFactory.failure(ErrorType.INVALID_URI_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
     public var $divide(@NotNull var rhs) {
-        return DollarFactory.failure(ErrorType.INVALID_URI_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
     public var $modulus(@NotNull var rhs) {
-        return DollarFactory.failure(ErrorType.INVALID_URI_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
     @Override
     public var $multiply(@NotNull var v) {
-        return DollarFactory.failure(ErrorType.INVALID_URI_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
     }
 
     @Override
@@ -151,7 +152,7 @@ public class DollarURI extends AbstractDollar {
         } else if (type.is(Type._URI)) {
             return this;
         } else {
-            return DollarFactory.failure(ErrorType.INVALID_CAST);
+            throw new DollarFailureException(ErrorType.INVALID_CAST);
         }
     }
 
@@ -260,13 +261,6 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $notify() {
-        ensureRunning();
-        return handler.write(this, false, false);
-    }
-
-    @NotNull
-    @Override
     public var $read(boolean blocking, boolean mutating) {
         ensureRunning();
         return handler.read(blocking, mutating);
@@ -289,6 +283,13 @@ public class DollarURI extends AbstractDollar {
     @Override
     public StateMachine<ResourceState, Signal> getStateMachine() {
         return stateMachine;
+    }
+
+    @NotNull
+    @Override
+    public var $notify() {
+        ensureRunning();
+        return handler.write(this, false, false);
     }
 
     @Override
@@ -323,6 +324,7 @@ public class DollarURI extends AbstractDollar {
         return handler.append(DollarStatic.$(value));
     }
 
+    @Override
     @NotNull
     public var $containsValue(@NotNull var value) {
         return DollarStatic.$(false);
@@ -380,7 +382,7 @@ public class DollarURI extends AbstractDollar {
     @NotNull
     @Override
     public var $remove(@NotNull var key) {
-        return DollarFactory.failure(ErrorType.INVALID_URI_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
 
     }
 

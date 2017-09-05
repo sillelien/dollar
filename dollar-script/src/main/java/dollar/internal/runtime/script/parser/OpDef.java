@@ -26,6 +26,8 @@ import dollar.internal.runtime.script.HasSymbol;
 import dollar.internal.runtime.script.SourceNodeOptions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,13 +38,14 @@ import java.util.function.Function;
 import static dollar.internal.runtime.script.SourceNodeOptions.*;
 
 public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(OpDef.class);
     @Nullable
     private final String symbol;
     @Nullable
     private final String keyword;
     @NotNull
     private final String name;
-
     private final boolean reserved;
     private final boolean reactive;
     private final int priority;
@@ -303,6 +306,14 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     }
 
     public Type typeFor(@NotNull var... vars) {
-        return typeFunction.apply(vars);
+        if (typeFunction == null) {
+            return null;
+        }
+        try {
+            return typeFunction.apply(vars);
+        } catch (Exception e) {
+            log.error(type + ":" + e.getMessage(), e);
+            throw e;
+        }
     }
 }

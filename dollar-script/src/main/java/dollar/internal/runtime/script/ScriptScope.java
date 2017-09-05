@@ -18,6 +18,7 @@ package dollar.internal.runtime.script;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import dollar.api.DollarClass;
 import dollar.api.DollarException;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
@@ -63,34 +64,37 @@ public class ScriptScope implements Scope {
     @NotNull
     private final ConcurrentHashMap<String, Variable> variables = new ConcurrentHashMap<>();
     @NotNull
+    private final ConcurrentHashMap<String, DollarClass> classes = new ConcurrentHashMap<>();
+    @NotNull
     private final Multimap<String, Listener> listeners = ArrayListMultimap.create();
     @NotNull
     private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
     private final boolean root;
     private final boolean parallel;
+    private final boolean classScope;
     @Nullable
     Scope parent;
-    @Nullable
-    private String source;
-    @Nullable
-    private String file;
+    @Nullable String source;
+    @Nullable String file;
     private boolean parameterScope;
     private boolean destroyed;
     @Nullable
     private Parser<var> parser;
 
-    ScriptScope(@NotNull String name, boolean root, boolean parallel) {
+    ScriptScope(@NotNull String name, boolean root, boolean parallel, boolean classScope) {
         this.root = root;
         this.parallel = parallel;
+        this.classScope = classScope;
         parent = null;
         file = null;
         source = null;
         id = name + ":" + counter.incrementAndGet();
     }
 
-    ScriptScope(@NotNull String source, @NotNull String name, boolean root, boolean parallel) {
+    ScriptScope(@NotNull String source, @NotNull String name, boolean root, boolean parallel, boolean classScope) {
         this.root = root;
         this.parallel = parallel;
+        this.classScope = classScope;
         parent = null;
         this.source = source;
         file = null;
@@ -99,13 +103,14 @@ public class ScriptScope implements Scope {
     }
 
 
-    ScriptScope(@NotNull Scope parent, @NotNull String name, boolean root, boolean parallel) {
+    ScriptScope(@NotNull Scope parent, @NotNull String name, boolean root, boolean parallel, boolean classScope) {
         this.parent = parent;
         file = parent.file();
         this.root = root;
         source = parent.source();
         id = name + ":" + counter.incrementAndGet();
         this.parallel = parallel;
+        this.classScope = classScope;
         checkPure(parent);
 
     }
@@ -114,11 +119,12 @@ public class ScriptScope implements Scope {
                        @NotNull String file,
                        @Nullable String source,
                        @NotNull String name,
-                       boolean root, boolean parallel) {
+                       boolean root, boolean parallel, boolean classScope) {
         this.parent = parent;
         this.file = file;
         this.root = root;
         this.parallel = parallel;
+        this.classScope = classScope;
         if (source == null) {
             throw new NullPointerException("No source for " + parent);
         } else {
@@ -130,11 +136,12 @@ public class ScriptScope implements Scope {
         checkPure(parent);
     }
 
-    ScriptScope(@Nullable String source, @NotNull File file, boolean root, boolean parallel) {
+    ScriptScope(@Nullable String source, @NotNull File file, boolean root, boolean parallel, boolean classScope) {
         this.source = source;
         this.file = file.getAbsolutePath();
         this.root = root;
         this.parallel = parallel;
+        this.classScope = classScope;
         id = "(file-scope):" + counter.incrementAndGet();
 
     }
@@ -147,12 +154,13 @@ public class ScriptScope implements Scope {
                         @NotNull List<var> errorHandlers,
                         @NotNull Multimap<String, Listener> listeners,
                         @NotNull String source,
-                        @NotNull Parser<var> parser, boolean root, boolean parallel) {
+                        @NotNull Parser<var> parser, boolean root, boolean parallel, boolean classScope) {
         this.parent = parent;
         this.id = id;
         this.file = file;
         this.parameterScope = parameterScope;
         this.parallel = parallel;
+        this.classScope = classScope;
         this.variables.putAll(variables);
         this.errorHandlers.addAll(errorHandlers);
         for (Map.Entry<String, Collection<Listener>> entry : listeners.asMap().entrySet()) {
@@ -380,7 +388,7 @@ public class ScriptScope implements Scope {
                     } catch (Throwable throwable) {
                         log.error(throwable.getMessage(), throwable);
                     }
-                    System.exit(1);
+//                    System.exit(1);
                     throw new DollarExitError();
                 } else {
                     log.info("Fail-fast option is not set");
@@ -435,11 +443,12 @@ public class ScriptScope implements Scope {
                                                                     "reduce the amount of lazy evaluation. The error occured at " +
                                                                     source));
         }
-        if (t instanceof DollarException) {
-            ((DollarException) t).addSource(source);
-            return handleError(t);
+        Throwable unravel = unravel(t);
+        if (unravel instanceof DollarException) {
+            ((DollarException) unravel).addSource(source);
+            return handleError(unravel);
         } else {
-            return handleError(new DollarScriptException(t, source));
+            return handleError(new DollarScriptException(unravel, source));
         }
     }
 
@@ -613,6 +622,9 @@ public class ScriptScope implements Scope {
                    boolean isVolatile,
                    boolean fixed,
                    boolean pure) {
+        if (parent != null && parent.isClassScope()) {
+            return parent.set(k, value, readonly, constraint, constraintSource, isVolatile, fixed, pure);
+        }
         checkDestroyed();
         String key = removePrefix(k);
 
@@ -714,7 +726,7 @@ public class ScriptScope implements Scope {
 
         return new ScriptScope(parent, "*" + id.split(":")[0] + ":" + counter.incrementAndGet(), file,
                                parameterScope,
-                               variables, errorHandlers, listeners, source, parser, root, parallel);
+                               variables, errorHandlers, listeners, source, parser, root, parallel, classScope);
     }
 
     @Override
@@ -728,6 +740,7 @@ public class ScriptScope implements Scope {
         return false;
     }
 
+    @NotNull
     @Override
     public List<var> parametersAsVars() {
         return variables.values().stream().filter(Variable::isNumeric).map(Variable::getValue).collect(Collectors.toList());
@@ -736,6 +749,30 @@ public class ScriptScope implements Scope {
     @Override
     public boolean parallel() {
         return parallel;
+    }
+
+    @Override
+    public void registerClass(@NotNull String name, @NotNull DollarClass dollarClass) {
+
+        log.info("Registering class {} in {}", name, this);
+        classes.put(name, dollarClass);
+    }
+
+    @Override
+    public DollarClass getDollarClass(String name) {
+        DollarClass clazz = classes.get(name);
+        if (clazz != null) {
+            return clazz;
+        }
+        if (parent != null) {
+            return parent.getDollarClass(name);
+        }
+        throw new VariableNotFoundException(name, this);
+    }
+
+    @Override
+    public boolean isClassScope() {
+        return classScope;
     }
 
     private void checkDestroyed() {

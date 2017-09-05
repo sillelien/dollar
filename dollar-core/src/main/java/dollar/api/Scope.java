@@ -67,10 +67,10 @@ public interface Scope {
     @NotNull var handleError(@NotNull Throwable t);
 
     @NotNull
-    var handleError(@NotNull Throwable t, var context);
+    var handleError(@NotNull Throwable t, @NotNull var context);
 
     @NotNull
-    var handleError(@NotNull Throwable t, SourceSegment context);
+    var handleError(@NotNull Throwable t, @NotNull SourceSegment context);
 
     boolean has(@NotNull String key);
 
@@ -108,7 +108,13 @@ public interface Scope {
 
     boolean pure();
 
-    List<var> parametersAsVars();
+    @NotNull List<var> parametersAsVars();
 
     boolean parallel();
+
+    void registerClass(@NotNull String name, @NotNull DollarClass dollarClass);
+
+    DollarClass getDollarClass(String name);
+
+    boolean isClassScope();
 }

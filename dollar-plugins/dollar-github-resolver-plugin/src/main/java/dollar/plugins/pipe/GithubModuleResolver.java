@@ -69,6 +69,7 @@ public class GithubModuleResolver implements ModuleResolver {
                         .expireAfterWrite(5, TimeUnit.MINUTES)
 //                .removalListener((RemovalListener<String, File>) notification -> delete(notification.getValue()))
                         .build(new CacheLoader<String, File>() {
+                            @Override
                             @NotNull
                             public File load(@NotNull String key) throws IOException, ExecutionException, InterruptedException {
 
@@ -194,7 +195,7 @@ public class GithubModuleResolver implements ModuleResolver {
             }
             return new DollarParserImpl(((DollarParser) parser).options(), classLoader).parse(
                     new ScriptScope((Scope) scope, mainFile.getAbsolutePath(), content, "github-module-scope", false,
-                                    currentScope().parallel()), content);
+                                    currentScope().parallel(), false), content);
         });
     }
 }

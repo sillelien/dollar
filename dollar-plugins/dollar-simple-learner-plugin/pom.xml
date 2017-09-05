@@ -36,13 +36,13 @@
             <artifactId>dollar-script</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
-
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
         <dependency>
-            <groupId>com.sillelien</groupId>
-            <artifactId>dollar-mapdb</artifactId>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.10</version>
         </dependency>
-
     </dependencies>
 
 

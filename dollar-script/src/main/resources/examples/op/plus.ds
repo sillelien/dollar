@@ -8,7 +8,7 @@ var pair2 = "second" : "World";
 .: [1] + [1] == [1,1];
 .: [1] + 1 == [1,1];
 
-.: (1 + 1.0) is DECIMAL
-.: (1.0 + 1.0) is DECIMAL
-.: (1.0 + 1) is DECIMAL
-.: (1 + 1) is INTEGER
+.: (1 + 1.0) is Decimal
+.: (1.0 + 1.0) is Decimal
+.: (1.0 + 1) is Decimal
+.: (1 + 1) is Integer

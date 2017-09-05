@@ -22,8 +22,7 @@ import dollar.internal.runtime.script.api.ParserOptions;
 import dollar.internal.runtime.script.parser.Symbols;
 import dollar.test.CircleCiParallelRule;
 import org.jetbrains.annotations.NotNull;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -84,15 +83,16 @@ public class ParserQuickTest {
         }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
-    @Before
-    public void setUp() throws Exception {
-
+    @BeforeClass
+    public static void before() {
+        DollarStatic.getConfig().failFast(true);
     }
 
-    @After
-    public void tearDown() throws Exception {
-
+    @BeforeClass
+    public static void after() {
+        DollarStatic.getConfig().failFast(false);
     }
+
 
     @ParameterizedTest
     @ValueSource(
@@ -117,8 +117,8 @@ public class ParserQuickTest {
 
     public void singleScriptTest() throws Exception {
         try {
-            new DollarParserImpl(options).parse(getClass().getResourceAsStream("/examples/op/when.ds"),
-                                                "/examples/op/when.ds",
+            new DollarParserImpl(options).parse(getClass().getResourceAsStream("/quick/test_classes.ds"),
+                                                "/quick/test_classes.ds",
                                                 parallel);
         } catch (Exception e) {
             log.debug(e.getMessage(), e);

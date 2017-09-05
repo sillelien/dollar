@@ -28,10 +28,10 @@ public final class Variable {
     private final boolean fixed;
     @Nullable
     private final String constraintSource;
+    private final boolean numeric;
     private boolean isVolatile;
     @NotNull
     private var value;
-    private final boolean numeric;
 
     public Variable(@NotNull var value, @Nullable var constraint, @Nullable String constraintSource, boolean numeric) {
         this.numeric = numeric;
@@ -80,15 +80,6 @@ public final class Variable {
         return getValue().hashCode();
     }
 
-    @NotNull
-    public var getValue() {
-        return value;
-    }
-
-    public void setValue(@NotNull var value) {
-        this.value = value;
-    }
-
     @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) { return true; }
@@ -98,6 +89,15 @@ public final class Variable {
 
         return getValue().equals(variable.getValue());
 
+    }
+
+    @NotNull
+    public var getValue() {
+        return value;
+    }
+
+    public void setValue(@NotNull var value) {
+        this.value = value;
     }
 
     public boolean isPure() {
@@ -121,4 +121,7 @@ public final class Variable {
     }
 
 
+    public Variable copy(@NotNull var var) {
+        return new Variable(var, readonly, constraint, constraintSource, isVolatile, fixed, pure, numeric);
+    }
 }

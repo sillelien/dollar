@@ -29,27 +29,27 @@ public final class Type {
      * The constant STRING.
      */
     @NotNull
-    public static final Type _STRING = new Type("STRING");
+    public static final Type _STRING = new Type("String");
     /**
      * The constant DECIMAL.
      */
     @NotNull
-    public static final Type _DECIMAL = new Type("DECIMAL");
+    public static final Type _DECIMAL = new Type("Decimal");
     /**
      * The constant INTEGER.
      */
     @NotNull
-    public static final Type _INTEGER = new Type("INTEGER");
+    public static final Type _INTEGER = new Type("Integer");
     /**
      * The constant LIST.
      */
     @NotNull
-    public static final Type _LIST = new Type("LIST");
+    public static final Type _LIST = new Type("List");
     /**
      * The constant MAP.
      */
     @NotNull
-    public static final Type _MAP = new Type("MAP");
+    public static final Type _MAP = new Type("Map");
     /**
      * The constant URI.
      */
@@ -59,41 +59,43 @@ public final class Type {
      * The constant VOID.
      */
     @NotNull
-    public static final Type _VOID = new Type("VOID");
+    public static final Type _VOID = new Type("Void");
     /**
      * The constant RANGE.
      */
     @NotNull
-    public static final Type _RANGE = new Type("RANGE");
+    public static final Type _RANGE = new Type("Range");
     /**
      * The constant BOOLEAN.
      */
     @NotNull
-    public static final Type _BOOLEAN = new Type("BOOLEAN");
+    public static final Type _BOOLEAN = new Type("Boolean");
     /**
      * The constant ERROR.
      */
     @NotNull
-    public static final Type _ERROR = new Type("ERROR");
+    public static final Type _ERROR = new Type("Error");
     /**
      * The constant DATE.
      */
     @NotNull
-    public static final Type _DATE = new Type("DATE");
+    public static final Type _DATE = new Type("Date");
     /**
      * The constant INFINITY.
      */
     @NotNull
-    public static final Type _INFINITY = new Type("INFINITY");
+    public static final Type _INFINITY = new Type("Infinity");
     /**
      * The constant ANY.
      */
     @NotNull
-    public static final Type _ANY = new Type("ANY");
+    public static final Type _ANY = new Type("Any");
 
     @NotNull
-    public static final Type _QUEUE = new Type("QUEUE");
-    public static final Type _BLOCK = new Type("BLOCK");
+    public static final Type _QUEUE = new Type("Queue");
+
+    @NotNull
+    public static final Type _BLOCK = new Type("Block");
 
 
     @NotNull
@@ -109,7 +111,7 @@ public final class Type {
      */
     public Type(@NotNull String name, @NotNull String constraint) {
 
-        this.name = name.toUpperCase();
+        this.name = name;
         if (constraint != null) {
             this.constraint = constraint;
         } else {
@@ -137,7 +139,8 @@ public final class Type {
      */
     public Type(@NotNull String name) {
 
-        this.name = name.toUpperCase();
+        this.name = name
+        ;
         constraint = "";
     }
 
@@ -151,9 +154,9 @@ public final class Type {
     public static Type of(@NotNull String name) {
         String[] split = name.split(":");
         if (split.length == 2) {
-            return new Type(split[0].toUpperCase(), split[1]);
+            return new Type(split[0], split[1]);
         } else {
-            return new Type(name.toUpperCase());
+            return new Type(name);
         }
     }
 
@@ -167,9 +170,9 @@ public final class Type {
     public static Type of(@NotNull var name) {
         String[] split = name.$S().split(":");
         if (split.length == 2) {
-            return new Type(split[0].toUpperCase(), split[1]);
+            return new Type(split[0], split[1]);
         } else {
-            return new Type(name.$S().toUpperCase());
+            return new Type(name.$S());
         }
     }
 
@@ -223,6 +226,6 @@ public final class Type {
     }
 
     public boolean canBe(Type type) {
-        return type.name.equalsIgnoreCase(name);
+        return type.name.equals(name);
     }
 }

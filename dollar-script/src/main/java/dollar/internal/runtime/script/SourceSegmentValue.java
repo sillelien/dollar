@@ -45,10 +45,16 @@ public class SourceSegmentValue implements SourceSegment {
         length = t.length();
         start = t.index();
         if (scope.source() == null) {
-            throw new DollarParserError("Cannot create a SourceSegmentValue from a scope with no source: "+scope);
+            throw new DollarParserError("Cannot create a SourceSegmentValue from a scope with no source: " + scope);
         }
         source = scope.source();
-        shortHash = new FNV().fnv1_32(source.getBytes()).toString(36);
+        if (source != null) {
+            shortHash = new FNV().fnv1_64(
+                    (sourceFile + "(" + start + ":" + length + ")" + source.substring(start, start + length)).getBytes()).toString(
+                    36);
+        } else {
+            shortHash = sourceFile + "(" + start + ":" + length + ")";
+        }
     }
 
     @NotNull

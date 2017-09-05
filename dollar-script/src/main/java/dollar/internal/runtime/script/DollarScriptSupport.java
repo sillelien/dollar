@@ -47,7 +47,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 import static dollar.api.DollarStatic.*;
+import static dollar.api.types.meta.MetaConstants.IMPURE;
 import static dollar.api.types.meta.MetaConstants.VARIABLE;
+import static dollar.internal.runtime.script.DollarParserImpl.NAMED_PARAMETER_META_ATTR;
 import static dollar.internal.runtime.script.parser.Symbols.VAR_USAGE_OP;
 
 public final class DollarScriptSupport {
@@ -60,7 +62,7 @@ public final class DollarScriptSupport {
     @NotNull
     private static final ThreadLocal<List<Scope>> scopes = ThreadLocal.withInitial(() -> {
         ArrayList<Scope> list = new ArrayList<>();
-        list.add(new ScriptScope("thread-" + Thread.currentThread().getId(), false, false));
+        list.add(new ScriptScope("thread-" + Thread.currentThread().getId(), false, false, false));
         return list;
     });
 
@@ -148,6 +150,17 @@ public final class DollarScriptSupport {
                     new SourceSegmentValue(currentScope(), token), inputs, callable, null);
     }
 
+    public static var node(@NotNull OpDef operation,
+                           String name,
+                           boolean pure,
+                           @NotNull DollarParser parser,
+                           @NotNull Token token,
+                           @NotNull List<var> inputs,
+                           @NotNull Pipeable callable) {
+        return node(operation, name, pure, operation.nodeOptions(), parser,
+                    new SourceSegmentValue(currentScope(), token), inputs, callable, null);
+    }
+
 
     static var reactiveNode(@NotNull OpDef operation, @NotNull String name,
                             boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
@@ -175,6 +188,22 @@ public final class DollarScriptSupport {
                             @NotNull DollarParser parser,
                             @NotNull Pipeable callable) {
         return reactiveNode(operation, operation.name(), pure, operation.nodeOptions(), parser,
+                            new SourceSegmentValue(currentScope(),
+                                                   token), lhs,
+                            rhs, callable);
+
+    }
+
+    @NotNull
+    static var reactiveNode(@NotNull OpDef operation,
+                            String name,
+                            boolean pure,
+                            @NotNull Token token,
+                            @NotNull var lhs,
+                            @NotNull var rhs,
+                            @NotNull DollarParser parser,
+                            @NotNull Pipeable callable) {
+        return reactiveNode(operation, name, pure, operation.nodeOptions(), parser,
                             new SourceSegmentValue(currentScope(),
                                                    token), lhs,
                             rhs, callable);
@@ -234,13 +263,13 @@ public final class DollarScriptSupport {
 
     public static <T> T inSubScope(boolean runtime, boolean pure, @NotNull String scopeName,
                                    @NotNull ScopeExecutable<T> r) {
-        return inScope(runtime, new ScriptScope(currentScope(), scopeName, false, currentScope().parallel()), r);
+        return inScope(runtime, new ScriptScope(currentScope(), scopeName, false, currentScope().parallel(), false), r);
     }
 
 
     public static <T> T inSubScope(boolean runtime, boolean pure, boolean parallel, @NotNull String scopeName,
                                    @NotNull ScopeExecutable<T> r) {
-        return inScope(runtime, new ScriptScope(currentScope(), scopeName, false, parallel), r);
+        return inScope(runtime, new ScriptScope(currentScope(), scopeName, false, parallel, false), r);
     }
 
 
@@ -258,7 +287,7 @@ public final class DollarScriptSupport {
                                                        "trying to switch to an impure scope in a pure scope.");
             }
             newScope = new ScriptScope(parent, parent.file(), parent.source(), scopeName,
-                                       false, parallel);
+                                       false, parallel, false);
         }
         addScope(runtime, parent);
         addScope(runtime, newScope);
@@ -314,7 +343,9 @@ public final class DollarScriptSupport {
                                    @NotNull Token token, @NotNull DollarParser parser) {
         var node[] = new var[1];
         UUID id = UUID.randomUUID();
-        node[0] = node(VAR_USAGE_OP, pure, parser, token, $(key).$list().toVarList(),
+        SourceSegmentValue sourceSegmentValue = new SourceSegmentValue(currentScope(), token);
+        node[0] = node(VAR_USAGE_OP, "var-usage-" + key + "-" + sourceSegmentValue.getShortHash(), pure, parser, token,
+                       $(key).$list().toVarList(),
                        (i) -> {
                            Scope scope = currentScope();
 
@@ -622,13 +653,42 @@ public final class DollarScriptSupport {
         final TypePrediction prediction = rhs.predictType();
         if ((type != null) && (prediction != null)) {
             final Double probability = prediction.probability(type);
+            log.info("Predicted " + prediction.probableType() + " at " + (new SourceSegmentValue(currentScope(),
+                                                                                                 token)).getShortSourceMessage());
             if ((probability < threshold) && !prediction.empty()) {
                 log.warn("Type assertion may fail, expected {} most likely type is {} ({}%) at {}", type,
                          prediction.probableType(),
                          (int) (prediction.probability(prediction.probableType()) * 100),
                          new SourceSegmentValue(currentScope(), token).getSourceMessage()
                 );
+                if (getConfig().failFast()) {
+                    throw new DollarScriptException("Type prediction failed, was expecting " + type + " but most likely type is " + prediction.probableType() + " if this prediction is wrong please add an explicit cast (using 'as " + type.name() + "')");
+                }
             }
         }
+    }
+
+    @NotNull
+    static String shortHash(Token token) {
+        return new SourceSegmentValue(currentScope(), token).getShortHash();
+    }
+
+    public static void addParameterstoCurrentScope(Scope scope, List<var> parameters) {
+        //Add the special $* value for all the parameters
+        int count = 0;
+        List<var> fixedParams = new ArrayList<>();
+        for (var parameter : parameters) {
+            var fixedParam = parameter.$fix(1, false);
+            fixedParams.add(fixedParam);
+            scope.parameter(String.valueOf(++count), fixedParam);
+
+            //If the parameter is a named parameter then use the name (set as metadata on the value).
+            String paramMetaAttribute = fixedParam.metaAttribute(NAMED_PARAMETER_META_ATTR);
+            if (paramMetaAttribute != null) {
+                scope.set(paramMetaAttribute, fixedParam, true, null,
+                          null, false, false, !fixedParam.hasMeta(IMPURE));
+            }
+        }
+        scope.parameter("*", $(fixedParams));
     }
 }

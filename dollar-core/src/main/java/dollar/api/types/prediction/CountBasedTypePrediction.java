@@ -25,15 +25,18 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 public class CountBasedTypePrediction implements TypePrediction, Serializable {
     @NotNull
-    private final HashMap<Type, Long> values = new HashMap<>();
+    private final HashMap<String, AtomicLong> values = new HashMap<>();
     @NotNull
     private String name;
     private long total;
 
-    public CountBasedTypePrediction() {
+    public CountBasedTypePrediction(@NotNull String name, Map<String, AtomicLong> typeAtomicLongMap) {
+        values.putAll(typeAtomicLongMap);
     }
 
     public CountBasedTypePrediction(@NotNull String name) {
@@ -44,9 +47,9 @@ public class CountBasedTypePrediction implements TypePrediction, Serializable {
     public void addCount(@NotNull Type type, long l) {
         total += l;
         if (values.containsKey(type)) {
-            values.put(type, values.get(type) + l);
+            values.get(type.toString()).addAndGet(l);
         } else {
-            values.put(type, l);
+            values.put(type.toString(), new AtomicLong(l));
         }
     }
 
@@ -58,11 +61,11 @@ public class CountBasedTypePrediction implements TypePrediction, Serializable {
     @NotNull
     @Override
     public Double probability(@NotNull Type type) {
-        final Long value = values.get(type);
+        final AtomicLong value = values.get(type);
         if (value == null) {
             return 0.0;
         }
-        return ((double) value) / total;
+        return value.doubleValue() / total;
     }
 
     @Nullable
@@ -70,10 +73,10 @@ public class CountBasedTypePrediction implements TypePrediction, Serializable {
     public Type probableType() {
         long max = 0;
         Type result = null;
-        for (Map.Entry<Type, Long> entry : values.entrySet()) {
-            if (entry.getValue() > max) {
-                max = entry.getValue();
-                result = entry.getKey();
+        for (Map.Entry<String, AtomicLong> entry : values.entrySet()) {
+            if (entry.getValue().get() > max) {
+                max = entry.getValue().get();
+                result = Type.of(entry.getKey());
             }
         }
         return result;
@@ -82,11 +85,11 @@ public class CountBasedTypePrediction implements TypePrediction, Serializable {
     @NotNull
     @Override
     public Set<Type> types() {
-        return values.keySet();
+        return values.keySet().stream().map(Type::of).collect(Collectors.toSet());
     }
 
     public long getCount(@NotNull Type type) {
-        return values.get(type);
+        return values.get(type).get();
     }
 
     @NotNull

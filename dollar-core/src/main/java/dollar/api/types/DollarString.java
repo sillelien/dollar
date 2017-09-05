@@ -19,6 +19,7 @@ package dollar.api.types;
 import com.google.common.collect.ImmutableList;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
+import dollar.api.exceptions.DollarFailureException;
 import dollar.api.guard.Guarded;
 import dollar.api.guard.NotNullGuard;
 import dollar.api.json.JsonArray;
@@ -115,7 +116,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @NotNull
     @Override
     public var $modulus(@NotNull var rhs) {
-        return failure(INVALID_STRING_OPERATION);
+        throw new DollarFailureException(INVALID_STRING_OPERATION);
     }
 
     @NotNull
@@ -179,7 +180,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         } else if (type.is(Type._URI)) {
             return DollarFactory.fromURI(value);
         } else {
-            return failure(INVALID_CAST);
+            throw new DollarFailureException(INVALID_CAST);
         }
     }
 

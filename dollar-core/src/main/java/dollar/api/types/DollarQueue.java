@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableMap;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Type;
+import dollar.api.exceptions.DollarFailureException;
 import dollar.api.guard.ChainGuard;
 import dollar.api.guard.Guarded;
 import dollar.api.guard.NotNullGuard;
@@ -51,20 +52,14 @@ public class DollarQueue extends AbstractDollar {
         this.queue = queue;
     }
 
-    /**
-     * Generic read
-     */
     @NotNull
-    @Guarded(NotNullParametersGuard.class)
+    @Override
     @Guarded(ChainGuard.class)
-    public var $read(boolean blocking, boolean mutating) {
-        if (mutating) {
-            return queue.poll();
-        } else {
-            return queue.peek();
-        }
+    public var $all() {
+        return $list();
     }
 
+    @Override
     @NotNull
     @Guarded(NotNullParametersGuard.class)
     @Guarded(ChainGuard.class)
@@ -80,15 +75,8 @@ public class DollarQueue extends AbstractDollar {
             });
             return this;
         } else {
-            return DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
+            throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
         }
-    }
-
-    @NotNull
-    @Override
-    @Guarded(ChainGuard.class)
-    public var $all() {
-        return $list();
     }
 
     @NotNull
@@ -100,6 +88,21 @@ public class DollarQueue extends AbstractDollar {
             result.add(queue.poll());
         }
         return DollarFactory.fromList(result);
+    }
+
+    /**
+     * Generic read
+     */
+    @Override
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
+    public var $read(boolean blocking, boolean mutating) {
+        if (mutating) {
+            return queue.poll();
+        } else {
+            return queue.peek();
+        }
     }
 
     @NotNull
@@ -134,6 +137,11 @@ public class DollarQueue extends AbstractDollar {
     }
 
     @Override
+    public boolean queue() {
+        return true;
+    }
+
+    @Override
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
     @NotNull
@@ -153,8 +161,8 @@ public class DollarQueue extends AbstractDollar {
     @Override
     @Guarded(NotNullGuard.class)
     public String toDollarScript() {
-        DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
-        return ErrorType.INVALID_QUEUE_OPERATION.toString();
+        @NotNull var result;
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
     @NotNull
@@ -200,28 +208,28 @@ public class DollarQueue extends AbstractDollar {
     @Override
     @Guarded(NotNullGuard.class)
     public var $append(@NotNull var value) {
-        return DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
     public var $containsValue(@NotNull var value) {
-        return DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
     public var $containsKey(@NotNull var value) {
-        return DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
     public var $has(@NotNull var key) {
-        return DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
     @NotNull
@@ -243,28 +251,28 @@ public class DollarQueue extends AbstractDollar {
     @Override
     @Guarded(NotNullGuard.class)
     public var $insert(@NotNull var value, int position) {
-        return DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
     public var $removeByKey(@NotNull String key) {
-        return DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
     public var $set(@NotNull var key, @Nullable Object value) {
-        return DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
     public var $remove(@NotNull var valueToRemove) {
-        return DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
     @Override
@@ -281,7 +289,7 @@ public class DollarQueue extends AbstractDollar {
     @Override
     @Guarded(NotNullGuard.class)
     public var $abs() {
-        return DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
     @NotNull
@@ -295,35 +303,34 @@ public class DollarQueue extends AbstractDollar {
     @Override
     @Guarded(NotNullGuard.class)
     public var $negate() {
-        return DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
     public var $divide(@NotNull var rhs) {
-        return DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
     public var $modulus(@NotNull var rhs) {
-        return DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
     public var $multiply(@NotNull var v) {
-        return DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
     @NotNull
     @Override
     public Integer toInteger() {
-        DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION);
-        return null;
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
     @Override
@@ -335,7 +342,7 @@ public class DollarQueue extends AbstractDollar {
         } else if (type.is(Type._MAP)) {
             return DollarStatic.$(queue.toArray()).$map();
         }
-        return DollarFactory.failure(ErrorType.INVALID_CAST);
+        throw new DollarFailureException(ErrorType.INVALID_CAST);
     }
 
     @NotNull
@@ -377,7 +384,6 @@ public class DollarQueue extends AbstractDollar {
         return false;
     }
 
-
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
@@ -397,10 +403,5 @@ public class DollarQueue extends AbstractDollar {
     @Guarded(NotNullGuard.class)
     public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
         return $map().toJavaMap();
-    }
-
-    @Override
-    public boolean queue() {
-        return true;
     }
 }

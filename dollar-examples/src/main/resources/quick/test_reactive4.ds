@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 
-.: void is VOID
+.: void is Void
 
 var e=void
 
 //Length is greater than or equal to 4 unless void
-var (#it >= 4 || it is VOID) collectedValues= void
+var (#it >= 4 || it is Void) collectedValues= void
 
 //count starts at 0 so this means five to collect
 collect e until count == 4 unless it == 10 {

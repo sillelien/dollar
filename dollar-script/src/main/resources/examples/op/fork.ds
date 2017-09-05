@@ -1,9 +1,11 @@
-const sleepTime := {@@ "Background Sleeping";SLEEP(4 S); @@ "Background Finished Sleeping";TIME()}
+def sleepTime {@@ "Background Sleeping";SLEEP(4 S); @@ "Background Finished Sleeping";TIME()}
 //Any future reference to c will block until c has completed evaluation
 var c= fork sleepTime
-SLEEP(1 S)
 @@ "Main thread sleeping ..."
 SLEEP(2 S)
 @@ "Main thread finished sleeping ..."
 var d= TIME()
+@@ d
+@@ c
+.: c is Integer
 .: c > d

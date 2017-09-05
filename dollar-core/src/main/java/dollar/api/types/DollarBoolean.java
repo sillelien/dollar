@@ -19,6 +19,7 @@ package dollar.api.types;
 import com.google.common.collect.ImmutableList;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
+import dollar.api.exceptions.DollarFailureException;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,13 +60,13 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     @NotNull
     @Override
     public var $modulus(@NotNull var rhs) {
-        return DollarFactory.failure(ErrorType.INVALID_BOOLEAN_VALUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
     @NotNull
     @Override
     public var $multiply(@NotNull var v) {
-        return DollarFactory.failure(ErrorType.INVALID_BOOLEAN_VALUE_OPERATION);
+        throw new DollarFailureException(ErrorType.INVALID_BOOLEAN_VALUE_OPERATION);
     }
 
     @Override
@@ -103,7 +104,7 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         } else if (type.is(Type._VOID)) {
             return DollarStatic.$void();
         } else {
-            return DollarFactory.failure(ErrorType.INVALID_CAST);
+            throw new DollarFailureException(ErrorType.INVALID_CAST);
         }
     }
 

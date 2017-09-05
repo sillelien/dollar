@@ -1,7 +1,7 @@
 #!/usr/bin/env dollar
 
 
-def redis "redis://localhost:6379/test" as uri
+const redis= "redis://localhost:6379/test" as URI
 write ("Hello World " + DATE()) to redis
 
 @@ all redis
