@@ -50,6 +50,7 @@ import java.util.stream.Collectors;
 
 import static dollar.api.DollarException.unravel;
 import static dollar.api.DollarStatic.*;
+import static dollar.internal.runtime.script.DollarScriptSupport.inSubScope;
 import static dollar.internal.runtime.script.DollarScriptSupport.removePrefix;
 
 public class ScriptScope implements Scope {
@@ -238,7 +239,7 @@ public class ScriptScope implements Scope {
         return get(key, false);
     }
 
-    @Nullable
+
     @Override
     public Variable variable(@NotNull String k) {
         return variables.get(removePrefix(k));
@@ -299,21 +300,11 @@ public class ScriptScope implements Scope {
     @Override
     public var parameter(@NotNull String key) {
         checkDestroyed();
-
-        if (getConfig().debugScope()) {
-            log.info("Looking up parameter {} in {}", key, this);
-        }
-        Scope scope = scopeForParameters();
+        Scope scope = scopeForKey(key);
         if (scope == null) {
-            scope = this;
-        } else {
-            if (getConfig().debugScope()) {
-                log.info("Found {} in {}", key, scope);
-            }
+            throw new VariableNotFoundException(key, this);
         }
-        Variable result = ((Variable) scope.variables().get(key));
-
-        return (result != null) ? result.getValue() : $void();
+        return scope.variable(key).getValue();
     }
 
     @Nullable
@@ -333,23 +324,6 @@ public class ScriptScope implements Scope {
         }
     }
 
-    @Nullable
-    @Override
-    public Scope scopeForParameters() {
-        checkDestroyed();
-
-        if (parameterScope) {
-            return this;
-        }
-        if (parent != null) {
-            return parent.scopeForParameters();
-        } else {
-            if (getConfig().debugScope()) {
-                log.info("Parameter scope not found.");
-            }
-            return null;
-        }
-    }
 
     @Nullable
     @Override
@@ -411,18 +385,21 @@ public class ScriptScope implements Scope {
                 return parent.handleError(unravelled);
             }
         } else {
-            log.info("Error handler in {}", this);
-            parameter("type", $(unravelled.getClass().getName()));
-            parameter("msg", $(unravelled.getMessage()));
-            try {
-                for (var handler : errorHandlers) {
-                    fix(handler, false);
+            return inSubScope(true, pure(), "error-scope", newScope -> {
+                log.info("Error handler in {}", this);
+                parameter("type", $(unravelled.getClass().getName()));
+                parameter("msg", $(unravelled.getMessage()));
+                try {
+                    for (var handler : errorHandlers) {
+                        handler.$fixDeep(false);
+                    }
+                } finally {
+                    parameter("type", $void());
+                    parameter("msg", $void());
                 }
-            } finally {
-                parameter("type", $void());
-                parameter("msg", $void());
-            }
-            return $void();
+                return $void();
+            });
+
         }
 
     }
@@ -472,23 +449,8 @@ public class ScriptScope implements Scope {
 
     @Override
     public boolean hasParameter(@NotNull String k) {
-        checkDestroyed();
-        String key = removePrefix(k);
-
-        if (getConfig().debugScope()) {
-            log.info("Looking up parameter {} in {}", key, this);
-        }
-        Scope scope = scopeForParameters();
-        if (scope == null) {
-            scope = this;
-        } else {
-            if (getConfig().debugScope()) {
-                log.info("Found {} in {}", key, scope);
-            }
-        }
-        Variable result = ((Variable) scope.variables().get(key));
-
-        return result != null;
+        Variable variable = variable(k);
+        return variable != null && variable.isParameter();
     }
 
     @Override
@@ -612,7 +574,6 @@ public class ScriptScope implements Scope {
         }
     }
 
-    @NotNull
     @Override
     public var set(@NotNull String k,
                    @NotNull var value,
@@ -622,6 +583,7 @@ public class ScriptScope implements Scope {
                    boolean isVolatile,
                    boolean fixed,
                    boolean pure) {
+
         if (parent != null && parent.isClassScope()) {
             return parent.set(k, value, readonly, constraint, constraintSource, isVolatile, fixed, pure);
         }
@@ -654,6 +616,7 @@ public class ScriptScope implements Scope {
                             new DollarScriptException("Cannot change the constraint on a variable, attempted to redeclare for " + key));
                 }
             }
+
             if (getConfig().debugScope()) {
                 log.info("Setting {} in {}", key, scope);
             }
@@ -663,7 +626,7 @@ public class ScriptScope implements Scope {
                 log.info("Adding {} in {}", key, scope);
             }
             scope.variables().put(key, new Variable(value, readonly, constraint, constraintSource, isVolatile, fixed, pure,
-                                                    key.matches("[0-9]+")));
+                                                    key.matches("[0-9]+"), false));
         }
         scope.notifyScope(key, value);
         return value;
@@ -681,7 +644,7 @@ public class ScriptScope implements Scope {
             throw new DollarScriptException("Cannot change the value of positional variable $" + key + " in scope " + this);
         }
         parameterScope = true;
-        variables.put(key, new Variable(value, null, null, true));
+        variables.put(key, new Variable(value, pure(), key.matches("[0-9]+"), true));
         notifyScope(key, value);
         return value;
     }

@@ -99,8 +99,9 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                assert value != null;
                                newScope.parameter("previous", value);
                                if (useConstraint.isFalse()) {
-                                   currentScope.handleError(
-                                           new DollarScriptException("Constraint failed for variable " + varName + ""));
+                                   newScope.handleError(
+                                           new DollarScriptException("Constraint failed for variable " + varName + "",
+                                                                     sourceSegment));
                                }
                                return null;
                            });

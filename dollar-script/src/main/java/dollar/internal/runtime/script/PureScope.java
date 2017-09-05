@@ -96,13 +96,6 @@ public class PureScope extends ScriptScope {
         }
     }
 
-    @Nullable
-    @Override
-    public Scope scopeForParameters() {
-        return this;
-    }
-
-    @NotNull
     @Override
     public var set(@NotNull String key, @NotNull var value, boolean readonly, @Nullable var constraint,
                    @NotNull String constraintSource,
@@ -144,7 +137,8 @@ public class PureScope extends ScriptScope {
             variable.setValue(fixedValue);
         } else {
             scope.variables()
-                    .put(key, new Variable(fixedValue, readonly, constraint, constraintSource, false, fixed, pure, false));
+                    .put(key, new Variable(fixedValue, readonly, constraint, constraintSource, false, fixed, pure, false,
+                                           false));
         }
         scope.notifyScope(key, fixedValue);
         return value;
@@ -160,4 +154,6 @@ public class PureScope extends ScriptScope {
     public String toString() {
         return id + "(P)" + (parallel() ? "=>" : "->") + parent;
     }
+
+
 }

@@ -29,12 +29,33 @@ public final class Variable {
     @Nullable
     private final String constraintSource;
     private final boolean numeric;
+    private final boolean parameter;
     private boolean isVolatile;
     @NotNull
     private var value;
 
-    public Variable(@NotNull var value, @Nullable var constraint, @Nullable String constraintSource, boolean numeric) {
+    public Variable(@NotNull var value, boolean pure, boolean numeric, boolean parameter) {
+        this.parameter = parameter;
+        if (!parameter) {
+            throw new AssertionError("Wrong constructor for non parameters");
+        }
         this.numeric = numeric;
+        setValue(value);
+        constraint = null;
+        constraintSource = null;
+        fixed = false;
+        readonly = true;
+        this.pure = pure;
+        thread = Thread.currentThread().getId();
+    }
+
+    public Variable(@NotNull var value,
+                    @Nullable var constraint,
+                    @Nullable String constraintSource,
+                    boolean numeric,
+                    boolean parameter) {
+        this.numeric = numeric;
+        this.parameter = parameter;
         setValue(value);
         this.constraint = constraint;
         this.constraintSource = constraintSource;
@@ -49,8 +70,9 @@ public final class Variable {
                     @Nullable var constraint,
                     @Nullable String constraintSource,
                     boolean isVolatile,
-                    boolean fixed, boolean pure, boolean numeric) {
+                    boolean fixed, boolean pure, boolean numeric, boolean parameter) {
         this.numeric = numeric;
+        this.parameter = parameter;
         setValue(value);
         this.readonly = readonly;
         this.constraint = constraint;
@@ -122,6 +144,10 @@ public final class Variable {
 
 
     public Variable copy(@NotNull var var) {
-        return new Variable(var, readonly, constraint, constraintSource, isVolatile, fixed, pure, numeric);
+        return new Variable(var, readonly, constraint, constraintSource, isVolatile, fixed, pure, numeric, parameter);
+    }
+
+    public boolean isParameter() {
+        return parameter;
     }
 }

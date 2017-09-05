@@ -1,6 +1,18 @@
 var outer=10;
 
-const scopedMap := {$1;outer;{var inner=20;inner+outer+$1}}
+const scopedMap := {
+            $1;
+            outer=$1;
+            @@ $1;
+            @@ outer;
+            {
+                var inner=20;
+                @@ "inner"+ inner
+                @@ "outer" + outer
+                @@ "$1"+$1
+                inner+outer+$1
+            }
+}
 
-scopedMap(5)() <=> 35;
+scopedMap(5)(10) <=> 35;
 

@@ -47,7 +47,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 import static dollar.api.DollarStatic.*;
-import static dollar.api.types.meta.MetaConstants.IMPURE;
 import static dollar.api.types.meta.MetaConstants.VARIABLE;
 import static dollar.internal.runtime.script.DollarParserImpl.NAMED_PARAMETER_META_ATTR;
 import static dollar.internal.runtime.script.parser.Symbols.VAR_USAGE_OP;
@@ -354,25 +353,21 @@ public final class DollarScriptSupport {
                                         scopes.get().size());
 
                            }
-                           if (numeric) {
-                               if (scope.hasParameter(key)) {
-                                   return scope.parameter(key);
+
+                           if (scope.has(key)) {
+                               Scope scopeForKey = scope.scopeForKey(key);
+                               assert scopeForKey != null;
+                               log.debug("Listening to scope {} for key {}", scopeForKey, key);
+                               scopeForKey.listen(key, id.toString(), node[0]);
+                               Variable v = scopeForKey.variable(key);
+                               if (!v.isPure() && (pure || scope.pure())) {
+                                   currentScope().handleError(
+                                           new PureFunctionException("Attempted to use an impure variable in a " +
+                                                                             "pure context"));
                                }
-                           } else {
-                               if (scope.has(key)) {
-                                   Scope scopeForKey = scope.scopeForKey(key);
-                                   assert scopeForKey != null;
-                                   log.debug("Listening to scope {} for key {}", scopeForKey, key);
-                                   scopeForKey.listen(key, id.toString(), node[0]);
-                                   Variable v = scopeForKey.variable(key);
-                                   if (!v.isPure() && (pure || scope.pure())) {
-                                       currentScope().handleError(
-                                               new PureFunctionException("Attempted to use an impure variable in a " +
-                                                                                 "pure context"));
-                                   }
-                                   return v.getValue();
-                               }
+                               return v.getValue();
                            }
+
                            try {
                                List<Scope> scopes = new ArrayList<>(DollarScriptSupport.scopes.get());
                                Collections.reverse(scopes);
@@ -380,25 +375,21 @@ public final class DollarScriptSupport {
                                    if (!(scriptScope instanceof PureScope) && pure) {
                                        log.debug("Skipping {}", scriptScope);
                                    }
-                                   if (numeric) {
-                                       if (scriptScope.hasParameter(key)) {
-                                           return scriptScope.parameter(key);
+
+                                   if (scriptScope.has(key)) {
+                                       Scope scopeForKey = scriptScope.scopeForKey(key);
+                                       assert scopeForKey != null;
+                                       log.debug("Listening to scope {} for key {}", scopeForKey, key);
+                                       scopeForKey.listen(key, id.toString(), node[0]);
+                                       Variable v = scopeForKey.variable(key);
+                                       if (!v.isPure() && (pure || scope.pure())) {
+                                           scope.handleError(
+                                                   new PureFunctionException("Attempted to use an impure " +
+                                                                                     "variable in a pure " +
+                                                                                     "context"));
                                        }
-                                   } else {
-                                       if (scriptScope.has(key)) {
-                                           Scope scopeForKey = scriptScope.scopeForKey(key);
-                                           assert scopeForKey != null;
-                                           log.debug("Listening to scope {} for key {}", scopeForKey, key);
-                                           scopeForKey.listen(key, id.toString(), node[0]);
-                                           Variable v = scopeForKey.variable(key);
-                                           if (!v.isPure() && (pure || scope.pure())) {
-                                               scope.handleError(
-                                                       new PureFunctionException("Attempted to use an impure " +
-                                                                                         "variable in a pure " +
-                                                                                         "context"));
-                                           }
-                                           return v.getValue();
-                                       }
+                                       return v.getValue();
+
                                    }
                                }
                            } catch (DollarAssertionException e) {
@@ -685,8 +676,7 @@ public final class DollarScriptSupport {
             //If the parameter is a named parameter then use the name (set as metadata on the value).
             String paramMetaAttribute = fixedParam.metaAttribute(NAMED_PARAMETER_META_ATTR);
             if (paramMetaAttribute != null) {
-                scope.set(paramMetaAttribute, fixedParam, true, null,
-                          null, false, false, !fixedParam.hasMeta(IMPURE));
+                scope.parameter(paramMetaAttribute, fixedParam);
             }
         }
         scope.parameter("*", $(fixedParams));

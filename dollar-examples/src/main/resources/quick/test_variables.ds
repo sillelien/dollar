@@ -36,7 +36,7 @@ var (string) d="test"
 var <String> f="testing"
 
 
-var (previous != it || previous is VOID) e = 1
+var (previous != it || previous is Void) e = 1
 @@e
 e=2
 e=3

@@ -210,11 +210,7 @@ public class DollarParserImpl implements DollarParser {
                 TERMINATOR_SYMBOL).many1()).map(expressions -> {
             log.debug("Ended Parse Phase");
             log.debug("Starting Runtime Phase");
-            for (int i = 0; i < (expressions.size() - 1); i++) {
-                expressions.get(i).$fixDeep(false);
-//              System.err.println(fixed);
-            }
-            var resultVar = expressions.get(expressions.size() - 1);
+            var resultVar = Func.blockFunc(expressions);
             var fixedResult = resultVar.$fixDeep(false);
             log.debug("Ended Runtime Phase");
             return fixedResult;

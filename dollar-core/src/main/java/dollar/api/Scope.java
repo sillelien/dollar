@@ -40,8 +40,8 @@ public interface Scope {
 
     @Nullable var get(@NotNull String key);
 
-    @Nullable
-    Variable variable(@NotNull String key);
+    Variable variable(@NotNull String k);
+
 
     @Nullable var constraint(@NotNull String key);
 
@@ -57,8 +57,6 @@ public interface Scope {
     var parameter(@NotNull String key);
 
     @Nullable Scope scopeForKey(@NotNull String key);
-
-    @Nullable Scope scopeForParameters();
 
     @Nullable String source();
 
@@ -84,9 +82,9 @@ public interface Scope {
 
     void notifyScope(@NotNull String key, @NotNull var value);
 
-    @NotNull var set(@NotNull String key, @NotNull var value, boolean readonly, @Nullable var constraint,
-                     @Nullable String constraintSource, boolean isVolatile,
-                     boolean fixed, boolean pure);
+    var set(@NotNull String key, @NotNull var value, boolean readonly, @Nullable var constraint,
+            @Nullable String constraintSource, boolean isVolatile,
+            boolean fixed, boolean pure);
 
     @NotNull
     var parameter(@NotNull String key, @NotNull var value);

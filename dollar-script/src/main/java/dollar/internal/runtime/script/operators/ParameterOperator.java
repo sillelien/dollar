@@ -74,7 +74,7 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
             }
 
             var node = node(PARAM_OP, name, pure, parser, token, parameters, i -> {
-                addParameterstoCurrentScope(currentScope(), parameters);
+                                addParameterstoCurrentScope(currentScope(), parameters);
 
                                 var result;
                                 if (functionName) {
