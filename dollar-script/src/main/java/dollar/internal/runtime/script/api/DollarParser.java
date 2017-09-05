@@ -27,6 +27,8 @@ import java.io.InputStream;
 public interface DollarParser {
 
 
+    @NotNull ThreadLocal<DollarParser> parser = new ThreadLocal<>();
+
     void export(@NotNull String name, @NotNull var export);
 
 

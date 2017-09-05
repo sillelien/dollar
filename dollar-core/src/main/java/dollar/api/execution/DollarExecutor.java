@@ -17,10 +17,13 @@
 package dollar.api.execution;
 
 import dollar.api.plugin.ExtensionPoint;
+import dollar.api.script.SourceSegment;
+import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.function.Function;
 
 public interface DollarExecutor extends ExtensionPoint<DollarExecutor> {
 
@@ -32,8 +35,7 @@ public interface DollarExecutor extends ExtensionPoint<DollarExecutor> {
      * @param <T>      the return type
      * @return a future for the result
      */
-    @NotNull
-    <T> Future<T> executeInBackground(@NotNull Callable<T> callable);
+    @NotNull <T> Future<T> executeInBackground(@NotNull Callable<T> callable);
 
     /**
      * Submit a job for execution <b>immediately</b> in an unspecified manner.
@@ -42,8 +44,7 @@ public interface DollarExecutor extends ExtensionPoint<DollarExecutor> {
      * @param callable the job to perform
      * @return the fork/join task
      */
-    @NotNull
-    <T> Future<T> executeNow(@NotNull Callable<T> callable);
+    @NotNull <T> Future<T> executeNow(@NotNull Callable<T> callable);
 
     /**
      * Force stop, that is do not wait for tasks to finish.
@@ -72,7 +73,7 @@ public interface DollarExecutor extends ExtensionPoint<DollarExecutor> {
      * @param callable the job to perform
      * @return the fork/join task
      */
-    @NotNull
-    <T> Future<T> submit(@NotNull Callable<T> callable);
+    @NotNull <T> Future<T> submit(@NotNull Callable<T> callable);
 
+    var fork(SourceSegment source, var in, Function<var, var> call);
 }

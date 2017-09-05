@@ -58,13 +58,13 @@ public final class DollarScriptSupport {
     @NotNull
     static final String ANSI_CYAN = "36";
     @NotNull
-    private static final Logger log = LoggerFactory.getLogger(DollarScriptSupport.class);
-    @NotNull
-    private static final ThreadLocal<List<Scope>> scopes = ThreadLocal.withInitial(() -> {
+    static final ThreadLocal<List<Scope>> scopes = ThreadLocal.withInitial(() -> {
         ArrayList<Scope> list = new ArrayList<>();
         list.add(new ScriptScope("thread-" + Thread.currentThread().getId(), false, false, false));
         return list;
     });
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(DollarScriptSupport.class);
 
     @NotNull
     static List<Scope> scopes() {
@@ -690,5 +690,9 @@ public final class DollarScriptSupport {
             }
         }
         scope.parameter("*", $(fixedParams));
+    }
+
+    public static DollarParser getParser() {
+        return DollarParser.parser.get();
     }
 }

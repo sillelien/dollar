@@ -62,7 +62,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -124,6 +123,7 @@ public class DollarParserImpl implements DollarParser {
     @Override
     @NotNull
     public var parse(@NotNull ScriptScope scope, @NotNull String source) throws Exception {
+        DollarParser.parser.set(this);
         var v = DollarScriptSupport.inScope(false, scope, newScope -> {
             DollarStatic.context().setClassLoader(classLoader);
             Parser<?> parser = script();
@@ -486,17 +486,9 @@ public class DollarParserImpl implements DollarParser {
                                             this, token, Arrays.asList((var) token.value()),
                                             i -> {
                                                 log.debug("Executing in background ...");
-                                                Future<var> varFuture = executor.executeInBackground(
-                                                        () -> ((var) token.value()).$fix(1, currentScope().parallel()));
-                                                log.debug("Future obtained, returning future node");
-                                                return node(FORK, "fork-retrieve", pure, this, token,
-                                                            Arrays.asList((var) token.value()),
-                                                            j -> {
-                                                                log.debug("Waiting for future ...");
-//                                                              Thread.dumpStack();
-                                                                return varFuture.get();
-                                                            }
-                                                );
+                                                return executor.fork(new SourceSegmentValue(currentScope(), token), (var) token
+                                                                                                                                  .value(),
+                                                                     in -> in.$fix(1, currentScope().parallel()));
                                             });
                             }
                        );
@@ -883,7 +875,7 @@ public class DollarParserImpl implements DollarParser {
                        .token()
                        .map(token -> rhs -> {
                            assert PARALLEL.validForPure(pure);
-                           return node(PARALLEL, pure, this, token, singletonList(rhs), ns -> rhs.$fix(2, true));
+                           return node(PARALLEL, pure, this, token, singletonList(rhs), ns -> rhs.$fixDeep(true));
                        });
     }
 
@@ -892,7 +884,7 @@ public class DollarParserImpl implements DollarParser {
                        .token()
                        .map(token -> rhs -> {
                            assert SERIAL.validForPure(pure);
-                           return node(SERIAL, pure, this, token, singletonList(rhs), ns -> rhs.$fix(2, false));
+                           return node(SERIAL, pure, this, token, singletonList(rhs), ns -> rhs.$fixDeep(false));
                        });
     }
 

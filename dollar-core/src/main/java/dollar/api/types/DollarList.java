@@ -292,7 +292,7 @@ public class DollarList extends AbstractDollar {
     @NotNull
     @Guarded(NotNullGuard.class)
     public JsonArray jsonArray() {
-        return (JsonArray) DollarFactory.toJson(this);
+        return (JsonArray) DollarFactory.toJson($fixDeep());
     }
 
     @NotNull
@@ -506,7 +506,7 @@ public class DollarList extends AbstractDollar {
                         log.info("Fixing list in parallel (depth={})", depth);
 
                     }
-                    result.add(DollarStatic.$fork(() -> in.$fix(depth - 1, true)));
+                    result.add(DollarStatic.$fork(source(), in, i -> i.$fix(depth, true)));
                 }
 
             } else {
@@ -515,7 +515,7 @@ public class DollarList extends AbstractDollar {
                         log.info("Fixing list in serial (depth={})", depth);
 
                     }
-                    result.add(in.$fix(depth - 1, false));
+                    result.add(in.$fix(depth, false));
                 }
             }
             return DollarFactory.fromList(result);

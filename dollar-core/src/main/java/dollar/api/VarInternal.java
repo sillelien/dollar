@@ -72,7 +72,7 @@ public interface VarInternal {
 
     @Nullable
     default SourceSegment source() {
-        return null;
+        return SourceSegment.source.get();
     }
 
 

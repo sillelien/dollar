@@ -92,9 +92,7 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
                 Type type = Type.of(typeConstraintObj);
                 constraint = node(DEFINITION, "definition-constraint", pure, NEW_SCOPE, parser,
                                   new SourceSegmentValue(currentScope(), token), new ArrayList<>(),
-                                  i -> {
-                                      return $(scope.parameter("it").is(type));
-                                  }, null);
+                                  i -> $(scope.parameter("it").is(type)), null);
                 checkLearntType(token, type, rhs, MIN_PROBABILITY);
                 SourceSegmentValue meta = typeConstraintObj.meta(CONSTRAINT_SOURCE);
                 if (meta != null) {

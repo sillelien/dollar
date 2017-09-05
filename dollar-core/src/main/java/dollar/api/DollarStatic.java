@@ -18,12 +18,14 @@ package dollar.api;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
+import dollar.api.execution.DollarExecutor;
 import dollar.api.json.JsonArray;
 import dollar.api.json.JsonObject;
 import dollar.api.monitor.DollarMonitor;
 import dollar.api.monitor.SimpleLogStateTracer;
+import dollar.api.plugin.Plugins;
+import dollar.api.script.SourceSegment;
 import dollar.api.types.DollarFactory;
-import dollar.api.types.DollarFuture;
 import dollar.api.uri.URI;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,12 +38,13 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.function.Function;
 
-@SuppressWarnings("UseOfObsoleteDateTimeApi")
 public class DollarStatic {
 
     /**
@@ -49,6 +52,8 @@ public class DollarStatic {
      */
     @NotNull
     public static final ThreadLocal<DollarThreadContext> threadContext = ThreadLocal.withInitial(DollarThreadContext::new);
+    @NotNull
+    static final DollarExecutor executor = Objects.requireNonNull(Plugins.sharedInstance(DollarExecutor.class));
     @NotNull
     private static final ExecutorService threadPoolExecutor = Executors.newCachedThreadPool();
     @NotNull
@@ -495,17 +500,12 @@ public class DollarStatic {
     /**
      * $ fork.
      *
-     * @param call the call
-     * @return the var
+     * @param source
+     * @param in
+     * @param call   the call  @return the var
      */
-    @NotNull
-    public static var $fork(@NotNull Callable<var> call) {
-        DollarThreadContext child = threadContext.get().child();
-        return (var) java.lang.reflect.Proxy.newProxyInstance(
-                DollarStatic.class.getClassLoader(),
-                new Class<?>[]{var.class},
-                new DollarFuture(threadPoolExecutor.submit(() -> $call(child, call))));
-
+    public static var $fork(SourceSegment source, var in, Function<var, var> call) {
+        return executor.fork(source, in, call);
     }
 
     /**

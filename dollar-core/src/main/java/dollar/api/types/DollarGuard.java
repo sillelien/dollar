@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class DollarGuard implements java.lang.reflect.InvocationHandler {
@@ -49,6 +50,9 @@ public class DollarGuard implements java.lang.reflect.InvocationHandler {
                 return in.$unwrap();
             }
             if ("$fix".equals(name)) {
+                if (args == null || args.length == 0) {
+                    throw new AssertionError("Args for $fix was " + Arrays.toString(args));
+                }
                 if (args.length == 1) {
                     return in.$fix((Boolean) args[0]);
                 } else {

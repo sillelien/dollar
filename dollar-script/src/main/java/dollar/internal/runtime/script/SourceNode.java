@@ -168,6 +168,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     @Nullable
     @Override
     public Object invoke(@NotNull Object proxy, @NotNull Method method, @Nullable Object[] args) throws Throwable {
+        SourceSegment.source.set(source);
         try {
             if (Objects.equals(method.getName(), "source")) {
                 return source;

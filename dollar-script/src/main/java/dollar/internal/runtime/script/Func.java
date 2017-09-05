@@ -323,7 +323,7 @@ public final class Func {
         if (l.isEmpty()) {
             return $void();
         } else {
-            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fix(1, currentScope().parallel()));
+            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fixDeep(currentScope().parallel()));
             return l.get(l.size() - 1);
         }
     }

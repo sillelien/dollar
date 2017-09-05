@@ -20,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 
 public interface SourceSegment {
 
+    ThreadLocal<SourceSegment> source = new ThreadLocal<>();
+
     /**
      * Returns the complete source code from which this segment comes.
      *

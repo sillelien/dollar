@@ -500,7 +500,7 @@ public class DollarMap extends AbstractDollar {
             LinkedHashMap<var, var> result = new LinkedHashMap<>();
             if (parallel) {
                 for (Map.Entry<var, var> entry : map.entrySet()) {
-                    result.put(entry.getKey(), DollarStatic.$fork(() -> entry.getValue().$fix(depth - 1, true)));
+                    result.put(entry.getKey(), DollarStatic.$fork(source(), entry.getValue(), in -> in.$fix(depth - 1, true)));
                 }
             } else {
                 for (Map.Entry<var, var> entry : map.entrySet()) {

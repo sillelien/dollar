@@ -1,7 +1,11 @@
-const testList := [ TIME(), @@  $1 + 1, {SLEEP(1 S); @@ $1 + 2; TIME();}($1), @@ $1 + 3, TIME() ];
+const testList := [ TIME(), {SLEEP(4 S); TIME();},  TIME() ];
 var a= |..| testList("serial: ") ;
 var b= |:| testList("parallel: ") ;
 
+@@"a="+a
+@@"b="+b
 //Test different execution orders
+.: a[0] is Integer
+.: a[1] > a[0]
 .: a[2] >= a[1]
 .: b[2] < b[1]
