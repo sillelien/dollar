@@ -17,6 +17,7 @@
 package dollar.internal.runtime.script.parser;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.MoreObjects;
 import com.google.common.io.CharStreams;
 import com.vdurmont.emoji.EmojiParser;
 import dollar.api.Type;
@@ -288,6 +289,24 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                        com.google.common.base.Objects.equal(typeFunction, opDef.typeFunction) &&
                        com.google.common.base.Objects.equal(emoji, opDef.emoji) &&
                        com.google.common.base.Objects.equal(bnf, opDef.bnf);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                       .add("symbol", symbol)
+                       .add("keyword", keyword)
+                       .add("name", name)
+                       .add("reserved", reserved)
+                       .add("reactive", reactive)
+                       .add("priority", priority)
+                       .add("type", type)
+                       .add("pure", pure)
+                       .add("nodeOptions", nodeOptions)
+                       .add("typeFunction", typeFunction)
+                       .add("emoji", emoji)
+                       .add("bnf", bnf)
+                       .toString();
     }
 
     public boolean reactive() {

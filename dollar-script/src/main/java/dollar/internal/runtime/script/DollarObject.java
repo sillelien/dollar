@@ -175,8 +175,7 @@ public class DollarObject extends AbstractDollar {
             if (variable == null) {
                 throw new DollarException("No such field " + key + " in class " + name);
             }
-            var value = variable.getValue().$fix(1, currentScope().parallel());
-            return value;
+            return variable.getValue();
         });
     }
 
@@ -277,8 +276,7 @@ public class DollarObject extends AbstractDollar {
         ScriptScope subScope = new ScriptScope(currentScope(), "this-" + name, false, currentScope().parallel(), true);
         DollarObject thisObject = new DollarObject(name, constructor, fields, true);
         subScope.set("this", thisObject, true, null, null, true, false, false);
-        inScope(true, subScope, exe);
-        return thisObject;
+        return inScope(true, subScope, exe);
     }
 
     @NotNull

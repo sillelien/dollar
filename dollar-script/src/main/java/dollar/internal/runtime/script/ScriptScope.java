@@ -460,9 +460,9 @@ public class ScriptScope implements Scope {
         String key = removePrefix(k);
 
         listen(key, id, in -> {
-            if (getConfig().debugEvents()) {
-                log.info("Notifying {} in scope {}", listener.source().getSourceMessage(), this);
-            }
+                   if (getConfig().debugEvents()) {
+                       log.info("Notifying {} in scope {}", listener.source().getSourceMessage(), this);
+                   }
                    listener.$notify();
                    return $void();
                }

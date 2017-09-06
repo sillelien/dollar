@@ -13,9 +13,9 @@ class MyFirstClass {
 }
 
 var <MyFirstClass> instance= new MyFirstClass(20)
-
-@@ (new MyFirstClass(10)).myFunction("Hello")
-(new MyFirstClass(10)).myFunction("Hello") <=> "Hello World"
+@@ (((new MyFirstClass(10)).myFunction)("Hello"))
+(((new MyFirstClass(10)).myFunction)("Hello")) <=> "Hello World"
+(((new MyFirstClass(10)).myFunction)("Hello")) <=> "Hello World"
 (new MyFirstClass(10)).intVal <=> 30
 instance.intVal <=> 40
 //instance["mutableVal"]= 10;

@@ -919,8 +919,9 @@ public class DollarParserImpl implements DollarParser {
                        .token()
                        .map(rhs -> lhs -> {
                            assert MEMBER.validForPure(pure);
-                           return reactiveNode(MEMBER, pure, rhs, lhs, (var) rhs.value(), this,
-                                               i -> lhs.$(removePrefix(rhs.toString())));
+                           var result = reactiveNode(MEMBER, pure, rhs, lhs, (var) rhs.value(), this,
+                                                     i -> lhs.$get(DollarFactory.fromStringValue(removePrefix(rhs.toString()))));
+                           return result;
                        });
     }
 
