@@ -28,11 +28,11 @@ import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
+import dollar.internal.runtime.script.parser.OpDef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,8 +44,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static dollar.api.DollarStatic.*;
-import static dollar.api.types.meta.MetaConstants.IS_BUILTIN;
-import static dollar.api.types.meta.MetaConstants.OPERATION_NAME;
+import static dollar.api.types.meta.MetaConstants.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.singletonList;
@@ -98,15 +97,21 @@ public final class Func {
 
     @NotNull
     static var multiplyFunc(@NotNull var lhs, @NotNull var rhs) {
-        final var lhsFix = lhs.$fix(false);
-        if (Arrays.asList(BLOCK_OP.name(), MAP_OP.name(), LIST_OP.name()).contains(lhs.metaAttribute(OPERATION_NAME))) {
-            var newValue = lhsFix.$fixDeep(false);
+        OpDef operation = lhs.meta(OPERATION);
+        if ((operation != null) && (operation.equals(BLOCK_OP) || operation.equals(LIST_OP) || operation.equals(MAP_OP))) {
+            var newValue = lhs.$fixDeep();
             Long max = rhs.toLong();
+            if (max > Constants.MAX_MULTIPLY) {
+                throw new DollarScriptException("Cannot multiply a block, map  or list by a factor larger than " +
+                                                        Constants
+                                                                .MAX_MULTIPLY, lhs.source());
+            }
             for (int i = 1; i < max; i++) {
                 newValue = newValue.$plus(lhs.$fixDeep());
             }
             return newValue;
         } else {
+            final var lhsFix = lhs.$fix(1, false);
             return lhsFix.$multiply(rhs);
         }
     }
@@ -241,13 +246,13 @@ public final class Func {
     static var pipeFunc(@NotNull DollarParser parser, boolean pure, @NotNull Token token, @NotNull var rhs, @NotNull var lhs) {
         currentScope().parameter("1", lhs);
         var rhsVal = rhs.$fix(currentScope().parallel());
-        String rhsStr = rhsVal.toString();
         if (FUNCTION_NAME_OP.name().equals(rhs.metaAttribute(OPERATION_NAME))) {
             return rhsVal;
         } else {
+            String rhsStr = rhsVal.toString();
             return (rhs.metaAttribute(IS_BUILTIN) != null)
                            ? Builtins.execute(rhsStr, singletonList(lhs), pure)
-                           : variableNode(pure, rhsStr, false, null, token, parser).$fix(2, currentScope().parallel());
+                           : variableNode(pure, rhsStr, false, null, token, parser).$fix(1, currentScope().parallel());
         }
     }
 
@@ -319,12 +324,12 @@ public final class Func {
     }
 
     @NotNull
-    static var blockFunc(@NotNull List<var> l) {
+    static var blockFunc(int depth, @NotNull List<var> l) {
         if (l.isEmpty()) {
             return $void();
         } else {
-            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fix(1, currentScope().parallel()));
-            return l.get(l.size() - 1);
+            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fix(depth, currentScope().parallel()));
+            return l.get(l.size() - 1).$fix(depth, currentScope().parallel());
         }
     }
 
@@ -336,7 +341,8 @@ public final class Func {
                                      @Nullable var constraint,
                                      @Nullable String constraintSource,
                                      @NotNull DollarParser parser,
-                                     boolean pure, boolean readonly) {
+                                     boolean pure,
+                                     boolean readonly) {
         String key = variableName.$S();
 
         setVariable(currentScope(), key, value,
@@ -351,5 +357,9 @@ public final class Func {
                                exportArgs -> value));
         }
         return $void();
+    }
+
+    public static var fixFunc(var v) {
+        return v.$fix(2, currentScope().parallel());
     }
 }

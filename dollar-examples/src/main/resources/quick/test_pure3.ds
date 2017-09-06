@@ -1,0 +1,6 @@
+
+const testParams := pure($2 + " " + $1)
+testParams ("Hello", "World") <=> "World Hello"
+
+pure const testParams2 := {last + " " + first}
+testParams2(first="Hello", last="World") <=> "World Hello"

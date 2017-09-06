@@ -1,0 +1,13 @@
+pure def pureFunc2 {
+     $1
+}
+
+pure def pureFunc {
+     $1 + pureFunc2($1)
+}
+
+
+
+@@ pure {
+    pureFunc(2);
+}

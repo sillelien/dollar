@@ -108,7 +108,7 @@ public final class DollarScriptSupport {
                            @NotNull SourceSegment source,
                            @NotNull List<var> inputs,
                            @NotNull Pipeable pipeable,
-                           Type suggestedType) {
+                           @Nullable Type suggestedType) {
         var result = DollarFactory.wrap((var) Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
@@ -349,7 +349,7 @@ public final class DollarScriptSupport {
                            Scope scope = currentScope();
 
                            if (getConfig().debugScope()) {
-                               log.info("{} {} in {} scopes ", ansiColor("LOOKUP " + key, ANSI_CYAN), scope,
+                               log.info("{} {} in {} scopes ", highlight("LOOKUP " + key, ANSI_CYAN), scope,
                                         scopes.get().size());
 
                            }
@@ -362,8 +362,8 @@ public final class DollarScriptSupport {
                                Variable v = scopeForKey.variable(key);
                                if (!v.isPure() && (pure || scope.pure())) {
                                    currentScope().handleError(
-                                           new PureFunctionException("Attempted to use an impure variable in a " +
-                                                                             "pure context"));
+                                           new PureFunctionException("Attempted to use an impure variable " + key + " in a " +
+                                                                             "pure context " + scopeForKey, sourceSegmentValue));
                                }
                                return v.getValue();
                            }
@@ -426,7 +426,7 @@ public final class DollarScriptSupport {
             initialScope = currentScope();
         }
         if (getConfig().debugScope()) {
-            log.info("{} {} in {} scopes ", ansiColor("LOOKUP " + key, ANSI_CYAN), initialScope, scopes.get().size());
+            log.info("{} {} in {} scopes ", highlight("LOOKUP " + key, ANSI_CYAN), initialScope, scopes.get().size());
         }
         if (numeric) {
             if (initialScope.hasParameter(key)) {
@@ -534,7 +534,7 @@ public final class DollarScriptSupport {
 
         if (decleration) {
             if (getConfig().debugScope()) {
-                log.info("{} {} {}", ansiColor("SETTING  " + key, ANSI_CYAN), scope, scope);
+                log.info("{} {} {}", highlight("SETTING  " + key, ANSI_CYAN), scope, scope);
             }
             return scope.set(key, value, readonly, useConstraint, useSource, isVolatile,
                              fixed,
@@ -564,7 +564,7 @@ public final class DollarScriptSupport {
                                       boolean fixed,
                                       boolean pure, boolean decleration) {
         if (getConfig().debugScope()) {
-            log.info("{}{} {}", ansiColor("UPDATING ", ANSI_CYAN), key, scope);
+            log.info("{}{} {}", highlight("UPDATING ", ANSI_CYAN), key, scope);
         }
         if (decleration) {
             throw new DollarScriptException("Variable " + key + " already defined in " + scope);
@@ -591,14 +591,18 @@ public final class DollarScriptSupport {
         return value.$constrain(constraint, source);
     }
 
-    public static String ansiColor(@NotNull String text, @NotNull String color) {
-        return "\u001b["  // Prefix
-                       + "0"        // Brightness
-                       + ";"        // Separator
-                       + color       // Red foreground
-                       + "m"        // Suffix
-                       + text       // the text to output
-                       + "\u001b[m"; // Prefix + Suffix to reset color
+    public static String highlight(@NotNull String text, @NotNull String color) {
+        if (getConfig().colorHighlighting()) {
+            return "\u001b["  // Prefix
+                           + "0"        // Brightness
+                           + ";"        // Separator
+                           + color       // Red foreground
+                           + "m"        // Suffix
+                           + text       // the text to output
+                           + "\u001b[m"; // Prefix + Suffix to reset color
+        } else {
+            return "***" + text + "***";
+        }
     }
 
     public static void pushScope(@NotNull Scope scope) {

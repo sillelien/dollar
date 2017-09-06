@@ -112,5 +112,10 @@ public final class ParserMain {
         public boolean debugParallel() {
             return options.isDebugParallel();
         }
+
+        @Override
+        public boolean colorHighlighting() {
+            return options.isColorHighlighting();
+        }
     }
 }

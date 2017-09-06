@@ -73,4 +73,6 @@ public interface Configuration {
     boolean wrapForMonitoring();
 
     boolean debugParallel();
+
+    boolean colorHighlighting();
 }

@@ -74,17 +74,20 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
             }
 
             var node = node(PARAM_OP, name, pure, parser, token, parameters, i -> {
+
                                 addParameterstoCurrentScope(currentScope(), parameters);
 
                                 var result;
                                 if (functionName) {
                                     String lhsString = lhs.toString();
-                                    result = builtin ? Builtins.execute(lhsString, parameters, pure)
-                                                     : variableNode(pure, lhsString, false, null, token, parser)
-                                                               .$fix(2,
-                                                                     false);
+                                    if (builtin) {
+                                        result = Builtins.execute(lhsString, parameters, pure);
+                                    } else {
+                                        result = variableNode(pure, lhsString, false, null, token, parser)
+                                                         .$fixDeep(false);
+                                    }
                                 } else {
-                                    result = lhs.$fix(2, false);
+                                    result = lhs.$fix(1, false);
                                 }
 
                                 return result;

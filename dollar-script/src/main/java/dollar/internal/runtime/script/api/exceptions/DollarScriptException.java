@@ -45,45 +45,50 @@ public class DollarScriptException extends DollarFailureException {
     }
 
     public DollarScriptException(@NotNull String s, @NotNull var rhs) {
-        super(s + ":\n" + (rhs.source() != null ? rhs.source().getSourceMessage() : " [no source]"));
+        super(s + ":\n" + optionalSource(rhs.source()));
         rawMessage = s;
         source = rhs.source();
     }
 
     public DollarScriptException(@NotNull String s, @NotNull SourceSegment source) {
-        super(s + ":\n" + source.getSourceMessage());
+        super(s + ":\n" + optionalSource(source));
         rawMessage = s;
         this.source = source;
     }
 
     public DollarScriptException(@NotNull ErrorType errorType, @NotNull SourceSegment source) {
-        super(errorType, source.getSourceMessage());
+        super(errorType, optionalSource(source));
         rawMessage = errorType.name();
         this.source = source;
     }
 
-    public DollarScriptException(@NotNull ErrorType errorType, String additional, @NotNull SourceSegment source) {
-        super(errorType, additional + ":\n" + source.getSourceMessage());
+    public DollarScriptException(@NotNull ErrorType errorType, @NotNull String additional, @NotNull SourceSegment source) {
+        super(errorType, additional + ":\n" + optionalSource(source));
         rawMessage = errorType.name();
         this.source = source;
     }
 
-
-    public DollarScriptException(@NotNull String s, @NotNull SourceSegment source, OpDef operation) {
-        super((s + ":\n" + source.getSourceMessage() + "\n\n") + (operation != null ? operation.helpText() : ""));
+    public DollarScriptException(@NotNull String s, @Nullable SourceSegment source, OpDef operation) {
+        super((s + ":\n" + optionalSource(source) + "\n\n") + (operation != null ? operation.helpText() : ""));
         rawMessage = s;
         this.source = source;
         this.operation = operation;
     }
 
-    public DollarScriptException(Throwable cause, SourceSegment source) {
-        super(cause, cause.getMessage() + ":\n" + source.getSourceMessage());
+
+    public DollarScriptException(Throwable cause, @Nullable SourceSegment source) {
+        super(cause, cause.getMessage() + ":\n" + optionalSource(source));
         this.source = source;
     }
 
     public DollarScriptException(Throwable cause, var context) {
         super(cause, context.source().getSourceMessage());
         source = context.source();
+    }
+
+    @NotNull
+    private static String optionalSource(@Nullable SourceSegment source) {
+        return (source == null) ? "" : source.getSourceMessage();
     }
 
     public String rawMessage() {

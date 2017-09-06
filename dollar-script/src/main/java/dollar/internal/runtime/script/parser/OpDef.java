@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Objects;
 import java.util.function.Function;
 
 import static dollar.internal.runtime.script.SourceNodeOptions.*;
@@ -268,16 +267,27 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(symbol, keyword);
+        return com.google.common.base.Objects.hashCode(symbol, keyword, name, reserved, reactive, priority, type, pure, nodeOptions,
+                                                       typeFunction, emoji, bnf);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if ((o == null) || (getClass() != o.getClass())) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         OpDef opDef = (OpDef) o;
-        return Objects.equals(symbol, opDef.symbol) &&
-                       Objects.equals(keyword, opDef.keyword);
+        return reserved == opDef.reserved &&
+                       reactive == opDef.reactive &&
+                       priority == opDef.priority &&
+                       com.google.common.base.Objects.equal(symbol, opDef.symbol) &&
+                       com.google.common.base.Objects.equal(keyword, opDef.keyword) &&
+                       com.google.common.base.Objects.equal(name, opDef.name) &&
+                       type == opDef.type &&
+                       com.google.common.base.Objects.equal(pure, opDef.pure) &&
+                       com.google.common.base.Objects.equal(nodeOptions, opDef.nodeOptions) &&
+                       com.google.common.base.Objects.equal(typeFunction, opDef.typeFunction) &&
+                       com.google.common.base.Objects.equal(emoji, opDef.emoji) &&
+                       com.google.common.base.Objects.equal(bnf, opDef.bnf);
     }
 
     public boolean reactive() {

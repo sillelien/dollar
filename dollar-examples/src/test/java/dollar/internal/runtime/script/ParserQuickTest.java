@@ -98,11 +98,11 @@ public class ParserQuickTest {
     @ValueSource(
 //            "bulletin.ds",
 //            "example.ds",
-            strings = {"quick/test_variables.ds", "quick/test_date.ds", "quick/test_block_closure.ds", "quick/test_list_closure.ds", "quick/test_map_closure.ds", "quick/test_scopes.ds",
+            strings = {"quick/test_classes.ds", "quick/test_variables.ds", "quick/test_date.ds", "quick/test_block_closure.ds", "quick/test_list_closure.ds", "quick/test_map_closure.ds", "quick/test_scopes.ds",
                               "quick/test1.ds",
                               "quick/test_arrays.ds", "quick/test_builtins.ds", "quick/test_casting.ds", "quick/test_date.ds", "quick/test_fix1.ds",
                               "quick/test_fix2.ds", "quick/test_fix3.ds", "quick/test_iteration.ds", "quick/test_java.ds", "quick/test_logic.ds",
-                              "quick/test_numeric.ds", "quick/test_parameters.ds", "quick/test_pure.ds", "quick/test_ranges.ds", "quick/test_reactive1.ds",
+                              "quick/test_numeric.ds", "quick/test_parameters.ds", "quick/test_pure1.ds", "quick/test_pure2.ds", "quick/test_pure3.ds", "quick/test_pure4.ds", "quick/test_ranges.ds", "quick/test_reactive1.ds",
                               "quick/test_reactive2.ds", "quick/test_reactive3.ds", "quick/test_reactive4.ds", "quick/test_reactive5.ds",
                               "quick/test_reactive6.ds", "quick/test_reactive7.ds", "quick/test_reactive8.ds", "quick/test_strings.ds",
                               "quick/test_control_flow.ds",

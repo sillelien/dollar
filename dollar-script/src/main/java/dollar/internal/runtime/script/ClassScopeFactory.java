@@ -18,12 +18,15 @@ package dollar.internal.runtime.script;
 
 import dollar.api.DollarClass;
 import dollar.api.Scope;
+import dollar.api.VarInternal;
+import dollar.api.types.DollarFactory;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
 
@@ -33,9 +36,9 @@ public class ClassScopeFactory implements DollarClass {
     @NotNull
     private final String name;
     @NotNull
-    private final var expression;
+    private final List<var> expression;
 
-    ClassScopeFactory(@NotNull Scope parent, @NotNull String name, @NotNull var expression, boolean root, boolean parallel) {
+    ClassScopeFactory(@NotNull Scope parent, @NotNull String name, List<var> expression, boolean root, boolean parallel) {
 
         this.name = name;
         this.expression = expression;
@@ -45,13 +48,11 @@ public class ClassScopeFactory implements DollarClass {
     @Override
     public var instance(List<var> params) {
         ScriptScope subScope = new ScriptScope(currentScope(), "class-" + name, false, currentScope().parallel(), true);
-        return inScope(true, subScope, cs -> {
-            addParameterstoCurrentScope(currentScope(), params);
-            var constructor = (expression).$fix(1, currentScope().parallel());
-
-            DollarObject object = new DollarObject(name, constructor, currentScope().variables());
-
-            return object;
+        return inScope(true, subScope, scope -> {
+            addParameterstoCurrentScope(scope, params);
+            var constructor = DollarFactory.fromList(expression.stream().map(VarInternal::$fixDeep).collect(Collectors.toList()));
+//            System.err.println(scope.variables());
+            return new DollarObject(name, constructor, scope.variables());
         });
     }
 

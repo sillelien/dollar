@@ -2,9 +2,7 @@ var outer=10;
 
 const scopedMap := {
             $1;
-            outer=$1;
-            @@ $1;
-            @@ outer;
+            outer;
             {
                 var inner=20;
                 @@ "inner"+ inner

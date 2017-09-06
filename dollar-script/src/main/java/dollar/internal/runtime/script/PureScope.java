@@ -98,7 +98,7 @@ public class PureScope extends ScriptScope {
 
     @Override
     public var set(@NotNull String key, @NotNull var value, boolean readonly, @Nullable var constraint,
-                   @NotNull String constraintSource,
+                   @Nullable String constraintSource,
                    boolean isVolatile, boolean fixed,
                    boolean pure) {
         if (!pure) {

@@ -1,0 +1,4 @@
+pure const a=9
+var b= pure ( a + 1)
+b<=>10
+@@b

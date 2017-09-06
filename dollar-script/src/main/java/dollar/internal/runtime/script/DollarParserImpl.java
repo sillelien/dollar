@@ -23,7 +23,6 @@ import dollar.api.DollarStatic;
 import dollar.api.NumericAware;
 import dollar.api.Scope;
 import dollar.api.URIAware;
-import dollar.api.VarInternal;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.DollarRange;
 import dollar.api.var;
@@ -210,7 +209,7 @@ public class DollarParserImpl implements DollarParser {
                 TERMINATOR_SYMBOL).many1()).map(expressions -> {
             log.debug("Ended Parse Phase");
             log.debug("Starting Runtime Phase");
-            var resultVar = Func.blockFunc(expressions);
+            var resultVar = Func.blockFunc(Integer.MAX_VALUE, expressions);
             var fixedResult = resultVar.$fixDeep(false);
             log.debug("Ended Runtime Phase");
             return fixedResult;
@@ -222,9 +221,16 @@ public class DollarParserImpl implements DollarParser {
 
 
     @NotNull
-    private Parser<var> expression(final boolean pure) throws Exception {
+    private Parser<var> expression(final boolean pure) {
         Parser<var> main;
         Parser.Reference<var> ref = Parser.newReference();
+        return expressionInternal(pure, ref);
+
+    }
+
+    @NotNull
+    private Parser<var> expressionInternal(boolean pure, Parser.Reference<var> ref) {
+        Parser<var> main;
         if (pure) {
             main = ref.lazy()
                            .between(OP(LEFT_PAREN), OP(RIGHT_PAREN))
@@ -252,7 +258,7 @@ public class DollarParserImpl implements DollarParser {
                                           listExpression(ref.lazy(), false),
                                           mapExpression(ref.lazy(), false),
                                           KEYWORD(PURE).next(expression(true)),
-                                          classExpression(ref, false),
+                                          classExpression(ref),
                                           newExpression(ref, false),
                                           thisRef(false),
                                           moduleExpression(ref),
@@ -330,7 +336,7 @@ public class DollarParserImpl implements DollarParser {
         table = postfix(pure, table, UNIQUE, v -> v.$unique(currentScope().parallel()));
         table = postfix(pure, table, AVG, v -> v.$avg(currentScope().parallel()));
 
-        table = prefixUnReactive(pure, table, FIX, VarInternal::$fixDeep);
+        table = prefixUnReactive(pure, table, FIX, Func::fixFunc);
 
         table = table.prefix(parallelOperator(ref, pure), PARALLEL.priority());
         table = table.prefix(serialOperator(ref, pure), SERIAL.priority());
@@ -376,8 +382,8 @@ public class DollarParserImpl implements DollarParser {
         Parser<var> parser = table.build(main);
         ref.set(parser);
         return parser;
-
     }
+
 
     @NotNull
     private OperatorTable<var> postfix(boolean pure,
@@ -421,8 +427,7 @@ public class DollarParserImpl implements DollarParser {
                                                 @NotNull OperatorTable<var> table,
                                                 @NotNull OpDef operator,
                                                 @NotNull Function<var, var> f) {
-        return table.prefix(op(operator, new DollarUnaryOperator(true, f, operator, this, pure)),
-                            operator.priority());
+        return table.prefix(op(operator, new DollarUnaryOperator(true, f, operator, this, pure)), operator.priority());
     }
 
     @NotNull
@@ -594,7 +599,7 @@ public class DollarParserImpl implements DollarParser {
     }
 
     @NotNull
-    private Parser<var> blockExpression(@NotNull Parser<var> parentParser, boolean pure) throws Exception {
+    private Parser<var> blockExpression(@NotNull Parser<var> parentParser, boolean pure) {
         Parser.Reference<var> ref = Parser.newReference();
         //Now we do the complex part, the following will only return the last value in the
         //block when the block is evaluated, but it will trigger execution of the rest.
@@ -607,7 +612,7 @@ public class DollarParserImpl implements DollarParser {
                                  .map(token -> node(BLOCK_OP,
                                                     "block-" + shortHash(token), pure,
                                                     this, token, (List<var>) token.value(),
-                                                    i -> blockFunc((List<var>) token.value())));
+                                                    i -> blockFunc(1, (List<var>) token.value())));
         ref.set(or);
         return or;
     }
@@ -663,26 +668,36 @@ public class DollarParserImpl implements DollarParser {
                        .map(new CollectOperator(this, pure));
     }
 
-    private Parser<var> classExpression(@NotNull Parser.Reference<var> ref, boolean pure) {
+    private Parser<var> classExpression(@NotNull Parser.Reference<var> ref) {
         return KEYWORD_NL(CLASS_OP)
                        .next(
                                array(IDENTIFIER,
-                                     ref.lazy()
+                                     OP_NL(LEFT_BRACE).next(
+                                             (ref.lazy().prefix(
+                                                     or(assignmentOperator(ref, false),
+                                                        definitionOperator(ref, false)
+                                                     )
+                                             )).sepBy1(SEMICOLON_TERMINATOR).followedBy(SEMICOLON_TERMINATOR.optional(null))
+                                     ).followedBy(OP(RIGHT_BRACE))
                                )
                        )
                        .token()
                        .map(token -> {
                            Object[] objects = (Object[]) token.value();
-                           return node(CLASS_OP, "class-" + objects[0], pure, this, token,
-                                       Arrays.asList((var) objects[0], (var) objects[1]), i -> {
-                                       ClassScopeFactory classScopeFactory = new ClassScopeFactory(currentScope(),
-                                                                                                   objects[0].toString(),
-                                                                                                   (var) objects[1], false,
-                                                                                                   currentScope().parallel());
+                           ArrayList<var> in = new ArrayList<>();
+                           in.add((var) objects[0]);
+                           in.addAll((List<var>) objects[1]);
+                           return node(CLASS_OP, "class-" + objects[0],
+                                       false, this, token, in,
+                                       i -> {
+                                           ClassScopeFactory factory = new ClassScopeFactory(currentScope(),
+                                                                                             objects[0].toString(),
+                                                                                             (List<var>) objects[1], false,
+                                                                                             currentScope().parallel());
 
-                                       currentScope().registerClass(objects[0].toString(), classScopeFactory);
-                                       return $void();
-                                   });
+                                           currentScope().registerClass(objects[0].toString(), factory);
+                                           return $void();
+                                       });
                        });
     }
 
@@ -1056,7 +1071,7 @@ public class DollarParserImpl implements DollarParser {
     }
 
 
-    private Parser<var> pureDefinitionOperator(@NotNull Parser.Reference<var> ref) throws Exception {
+    private Parser<var> pureDefinitionOperator(@NotNull Parser.Reference<var> ref) {
         assert PURE_OP.validForPure(true);
 
         return KEYWORD(PURE).next(or(
@@ -1088,7 +1103,7 @@ public class DollarParserImpl implements DollarParser {
     }
 
     private Parser<Function<? super var, ? extends var>> definitionOperator(@NotNull Parser.Reference<var> ref,
-                                                                            boolean pure) throws Exception {
+                                                                            boolean pure) {
 
         return or(
                 array(

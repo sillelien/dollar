@@ -16,7 +16,6 @@
 
 package dollar.internal.runtime.script;
 
-@SuppressWarnings({"WeakerAccess", "UtilityClassCanBeEnum", "UtilityClassCanBeSingleton"})
 public final class Constants {
     public static final double YEAR_IN_DAYS = 365.25;
     public static final double MONTH_IN_DAYS = YEAR_IN_DAYS / 12.0;
@@ -25,4 +24,5 @@ public final class Constants {
     public static final double DAY_IN_MINUTES = DAY_IN_HOURS * 60.0;
     public static final double DAY_IN_SECONDS = DAY_IN_MINUTES * 60.0;
     public static final double DAY_IN_MILLIS = DAY_IN_SECONDS * 1000.0;
+    public static final long MAX_MULTIPLY = 100000;
 }

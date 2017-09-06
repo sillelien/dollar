@@ -9,18 +9,26 @@ b<=>10
 //gotcha - this assigns z to 1 in a pure scope and returns
 pure const z= 1;
 
-pure def reverse [$1[1],$1[0]]
-reverse([2,1]) <=> [1,2]
+pure {
+    def reverse [$1[1],$1[0]]
+    reverse([2,1]) <=> [1,2]
+}
 
 const c= pure {
+    def reverse [$1[1],$1[0]]
     [2,1]|reverse <=> [1,2]
 }
 
-[2,1]|reverse <=> [1,2]
+{
+    def reverse [$1[1],$1[0]]
+    [2,1]|reverse <=> [1,2]
+
+
 
 //You must use the fix operator here to avoid an infinitely recursive expression.
 fix ([2,1]|reverse)|reverse <=> [2,1]
 
+}
 
 const testParams := pure($2 + " " + $1)
 testParams ("Hello", "World") <=> "World Hello"

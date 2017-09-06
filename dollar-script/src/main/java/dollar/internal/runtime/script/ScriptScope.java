@@ -50,6 +50,7 @@ import java.util.stream.Collectors;
 
 import static dollar.api.DollarException.unravel;
 import static dollar.api.DollarStatic.*;
+import static dollar.api.types.meta.MetaConstants.IMPURE;
 import static dollar.internal.runtime.script.DollarScriptSupport.inSubScope;
 import static dollar.internal.runtime.script.DollarScriptSupport.removePrefix;
 
@@ -218,7 +219,7 @@ public class ScriptScope implements Scope {
             scope = this;
         } else {
             if (getConfig().debugScope()) {
-                log.info("{} in {}", DollarScriptSupport.ansiColor("FOUND " + key, DollarScriptSupport.ANSI_CYAN), scope);
+                log.info("{} in {}", DollarScriptSupport.highlight("FOUND " + key, DollarScriptSupport.ANSI_CYAN), scope);
             }
         }
         Variable result = (Variable) scope.variables().get(key);
@@ -644,7 +645,7 @@ public class ScriptScope implements Scope {
             throw new DollarScriptException("Cannot change the value of positional variable $" + key + " in scope " + this);
         }
         parameterScope = true;
-        variables.put(key, new Variable(value, pure(), key.matches("[0-9]+"), true));
+        variables.put(key, new Variable(value, value.meta(IMPURE) == null, key.matches("[0-9]+"), true));
         notifyScope(key, value);
         return value;
     }

@@ -40,7 +40,7 @@ public class ParserOptions {
     @Parameter(names = {"--fail-fast", "-e"}, description = "Fail on error")
     private boolean failFast;
 
-    @Parameter(names = "--debug-scope", description = "Debug scope usage")
+    @Parameter(names = "--debug-scope", description = "(Internal) Debug scope usage")
     private boolean debugScope;
 
     @NotNull
@@ -48,12 +48,17 @@ public class ParserOptions {
     private List<File> files;
 
     private boolean production;
-    @Parameter(names = "--debug-parallel", description = "Debug parallel execution and parallel scopes")
+
+    @Parameter(names = "--debug-parallel", description = "(Internal) Debug parallel execution and parallel scopes")
     private boolean debugParallel;
-    @Parameter(names = "--debug-events", description = "Debug listen/notify internal events")
+
+    @Parameter(names = "--debug-events", description = "(Internal) Debug listen/notify internal events")
     private boolean debugEvents;
-    @Parameter(names = "--debug-execution", description = "Debug execution (fork, immediate, schedule etc.)")
+    @Parameter(names = "--debug-execution", description = "(Internal) Debug execution (fork, immediate, schedule etc.)")
+
     private boolean debugExecution;
+    @Parameter(names = "--debug-color-log", description = "(Internal) Adds some (limited) escape sequence based color highlighting in logs.")
+    private boolean colorHighlighting;
 
     @NotNull
     public File getFile() {
@@ -118,5 +123,9 @@ public class ParserOptions {
 
     public void setDebugExecution(boolean debugExecution) {
         this.debugExecution = debugExecution;
+    }
+
+    public boolean isColorHighlighting() {
+        return colorHighlighting;
     }
 }

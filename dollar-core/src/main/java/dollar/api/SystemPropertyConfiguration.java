@@ -25,6 +25,7 @@ public class SystemPropertyConfiguration implements Configuration {
     private final boolean production = Boolean.parseBoolean(System.getProperty("dollar.production", "false"));
     private final boolean debugScope = Boolean.parseBoolean(System.getProperty("dollar.debug.scope", "false"));
     private final boolean debugParallel = Boolean.parseBoolean(System.getProperty("dollar.debug.parallel", "false"));
+    private final boolean colorHighlighting = Boolean.parseBoolean(System.getProperty("dollar.color.log", "false"));
     private boolean failFast = Boolean.parseBoolean(System.getProperty("dollar.fail.fast", "false"));
 
 
@@ -74,5 +75,10 @@ public class SystemPropertyConfiguration implements Configuration {
     @Override
     public boolean debugParallel() {
         return debugParallel;
+    }
+
+    @Override
+    public boolean colorHighlighting() {
+        return colorHighlighting;
     }
 }

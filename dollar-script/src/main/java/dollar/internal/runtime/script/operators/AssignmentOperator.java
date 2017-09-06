@@ -83,7 +83,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                 useConstraint = varScope.constraint(varName);
                 useSource = varScope.constraintSource(varName);
             }
-            final var rhsFixed = rhs.$fix(2, currentScope().parallel());
+            final var rhsFixed = rhs.$fix(1, currentScope().parallel());
 
             if (rhsFixed.$type() != null && type != null) {
                 if (!rhsFixed.$type().canBe(type)) {
