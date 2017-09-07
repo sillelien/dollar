@@ -45,10 +45,9 @@ def nothing {
 
 &c <=> 4
 
-// Assignment, the '=' fixes to depth 1
-
+// Assignment, the '=' fixes to depth 2
 var d= {c= c+1}
-&c <=> 4
+&c <=> 5
 &d
 &c <=> 5
 

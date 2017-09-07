@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import dollar.api.DollarClass;
@@ -43,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -73,6 +75,8 @@ public class ScriptScope implements Scope {
     private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
     private final boolean root;
     private final boolean classScope;
+    @NotNull
+    private final UUID uuid = UUID.randomUUID();
     @Nullable
     Scope parent;
     @Nullable String source;
@@ -97,7 +101,6 @@ public class ScriptScope implements Scope {
         parent = null;
         this.source = source;
         file = null;
-
         id = name + ":" + counter.incrementAndGet();
     }
 
@@ -138,7 +141,7 @@ public class ScriptScope implements Scope {
         this.file = file.getAbsolutePath();
         this.root = root;
         this.classScope = classScope;
-        id = "(file-scope):" + counter.incrementAndGet();
+        id = "(file-" + file.getName().toLowerCase().replaceAll("[^a-z0-9]", "-") + "):" + counter.incrementAndGet();
 
     }
 
@@ -166,6 +169,29 @@ public class ScriptScope implements Scope {
         this.root = root;
         checkPure(parent);
 
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(uuid);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ScriptScope that = (ScriptScope) o;
+        return Objects.equal(uuid, that.uuid);
+    }
+
+    @Nullable
+    @Override
+    public String toString() {
+        if (parent != null) {
+            return id + "->" + parent;
+        } else {
+            return id;
+        }
     }
 
     private void checkPure(@NotNull Scope parent) {
@@ -232,7 +258,6 @@ public class ScriptScope implements Scope {
     public var get(@NotNull String key) {
         return get(key, false);
     }
-
 
     @Override
     public Variable variable(@NotNull String k) {
@@ -317,7 +342,6 @@ public class ScriptScope implements Scope {
             return null;
         }
     }
-
 
     @Nullable
     @Override
@@ -703,7 +727,6 @@ public class ScriptScope implements Scope {
         return variables.values().stream().filter(Variable::isNumeric).map(Variable::getValue).collect(Collectors.toList());
     }
 
-
     @Override
     public void registerClass(@NotNull String name, @NotNull DollarClass dollarClass) {
 
@@ -741,12 +764,6 @@ public class ScriptScope implements Scope {
 
     public void parser(@NotNull Parser<var> parser) {
         this.parser = parser;
-    }
-
-    @Nullable
-    @Override
-    public String toString() {
-        return id + "->" + parent;
     }
 
     private boolean checkConstraint(@NotNull var value,

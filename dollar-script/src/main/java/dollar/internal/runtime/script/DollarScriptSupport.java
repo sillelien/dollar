@@ -314,16 +314,24 @@ public final class DollarScriptSupport {
                                 @NotNull Scope scope,
                                 @NotNull ScopeExecutable<T> r) {
 
-        addScope(runtime, scope);
+        final boolean scopeAdded;
+        if (scopes.get().get(scopes.get().size() - 1).equals(scope)) {
+            scopeAdded = false;
+        } else {
+            addScope(runtime, scope);
+            scopeAdded = true;
+        }
         try {
             return r.execute(scope);
         } catch (Exception e) {
             scope.handleError(e);
             return null;
         } finally {
-            Scope poppedScope = endScope(runtime);
-            if (!Objects.equals(poppedScope, scope)) {
-                throw new IllegalStateException("Popped wrong scope");
+            if (scopeAdded) {
+                Scope poppedScope = endScope(runtime);
+                if (!Objects.equals(poppedScope, scope)) {
+                    throw new IllegalStateException("Popped wrong scope");
+                }
             }
 
         }
@@ -398,7 +406,7 @@ public final class DollarScriptSupport {
                                return ErrorHandlerFactory.instance().handle(scope, null, e);
                            }
                            if (numeric) {
-                               throw new VariableNotFoundException(key, scope);
+                               throw new VariableNotFoundException(key, scope, sourceSegmentValue);
                            }
 
                            if (defaultValue != null) {

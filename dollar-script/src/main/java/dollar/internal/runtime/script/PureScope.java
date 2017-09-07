@@ -58,9 +58,7 @@ public class PureScope extends ScriptScope {
     @NotNull
     @Override
     public var get(@NotNull String key, boolean mustFind) {
-        if (key.matches("[0-9]+")) {
-            throw new AssertionError("Cannot get numerical keys, use parameter");
-        }
+
         if (DollarStatic.getConfig().debugScope()) {
             log.info("Looking up {} in {}", key, this);
         }

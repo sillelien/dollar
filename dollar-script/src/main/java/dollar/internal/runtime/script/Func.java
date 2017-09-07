@@ -16,7 +16,6 @@
 
 package dollar.internal.runtime.script;
 
-import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.VarInternal;
@@ -47,6 +46,7 @@ import java.util.stream.Stream;
 import static dollar.api.DollarStatic.*;
 import static dollar.api.types.meta.MetaConstants.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.SourceNodeOptions.SCOPE_WITH_CLOSURE;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.singletonList;
 
@@ -310,10 +310,10 @@ public final class Func {
 
     static var mapFunc(boolean parallel, @NotNull List<var> entries) {
         if (entries.size() == 1) {
-            return DollarFactory.blockCollection(entries);
+            return blockFunc(2, entries);
         } else {
             Stream<var> stream = parallel ? entries.stream().parallel() : entries.stream();
-            return $(stream.map(v -> v.$fix(parallel))
+            return $(stream.map(v -> v.$fix(2, parallel))
                              .collect(Collectors.toConcurrentMap(
                                      v -> v.pair() ? v.$pairKey() : v.$S(),
                                      v -> v.pair() ? v.$pairValue() : v)));
@@ -348,10 +348,11 @@ public final class Func {
                     true, token, parser);
 
         if (export) {
-            @NotNull Pipeable callable = exportArgs -> value;
             parser.export(key, node(DEFINITION, "export-" + DEFINITION.name(),
-                                    pure, SourceNodeOptions.SCOPE_WITH_CLOSURE, parser,
-                                    new SourceSegmentValue(currentScope(), token), singletonList(value), callable, null));
+                                    pure, SCOPE_WITH_CLOSURE, parser,
+                                    new SourceSegmentValue(currentScope(), token),
+                                    singletonList(value), exportArgs -> value.$fix(2, false),
+                                    null));
         }
         return $void();
     }

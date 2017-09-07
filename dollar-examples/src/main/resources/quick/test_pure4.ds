@@ -3,10 +3,12 @@ pure def pureFunc2 {
 }
 
 pure def pureFunc {
-     $1 + pureFunc2($1)
+     fix($1 + pureFunc2($1))
 }
 
-
+pure {
+    pureFunc(1);
+}
 
 @@ pure {
     pureFunc(2);
