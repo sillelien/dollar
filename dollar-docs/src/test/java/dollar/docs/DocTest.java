@@ -63,7 +63,8 @@ public class DocTest {
                 dir = dir.getParentFile();
             }
             new DollarParserImpl(new ParserOptions()).parseMarkdown(new File(dir, "README.tmpl.md"));
-        } catch (Exception e) {
+        } catch (Throwable e) {
+            e.printStackTrace(System.err);
             log.debug(e.getMessage(), e);
             throw e;
         }

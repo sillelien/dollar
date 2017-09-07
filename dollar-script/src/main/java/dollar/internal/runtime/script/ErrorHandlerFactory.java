@@ -108,7 +108,7 @@ public class ErrorHandlerFactory implements ParserErrorHandler {
             } else {
                 System.out.println(t.getMessage());
             }
-            throw new DollarExitError();
+            throw new DollarExitError(t);
         } else {
             if (!Objects.equals(unravel(t), t)) {
                 handleTopLevel(unravel(t), name, file);

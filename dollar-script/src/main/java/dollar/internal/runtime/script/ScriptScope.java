@@ -290,7 +290,11 @@ public class ScriptScope implements Scope {
 
     @Override
     public String file() {
-        return parent.file();
+        if (parent != null) {
+            return parent.file();
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -365,7 +369,7 @@ public class ScriptScope implements Scope {
                         log.error(throwable.getMessage(), throwable);
                     }
 //                    System.exit(1);
-                    throw new DollarExitError();
+                    throw new DollarExitError(unravelled);
                 } else {
                     log.info("Fail-fast option is not set");
                     if (unravelled instanceof ParserException) {

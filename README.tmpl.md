@@ -45,8 +45,6 @@ quality.results each {
     @@ $1.parameter +" was "+ $1.value +  " " + $1["unit"] +" on " + $1.date.utc
 }
 
-"The End!"
-
 
 ```
 
