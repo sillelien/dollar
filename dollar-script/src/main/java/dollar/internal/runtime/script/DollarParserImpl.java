@@ -340,6 +340,7 @@ public class DollarParserImpl implements DollarParser {
 
         table = table.prefix(parallelOperator(ref, pure), PARALLEL.priority());
         table = table.prefix(serialOperator(ref, pure), SERIAL.priority());
+
         //More complex expression syntax
         table = table.postfix(pipeOperator(ref, pure), PIPE_OP.priority());
         table = table.postfix(isOperator(pure), EQ_PRIORITY);
@@ -487,9 +488,8 @@ public class DollarParserImpl implements DollarParser {
                                             this, token, Arrays.asList((var) token.value()),
                                             i -> {
                                                 log.debug("Executing in background ...");
-                                                return executor.fork(new SourceSegmentValue(currentScope(), token), (var) token
-                                                                                                                                  .value(),
-                                                                     in -> in.$fixDeep(false));
+                                                return executor.forkAndReturnId(new SourceSegmentValue(currentScope(), token),
+                                                                                (var) token.value(), in -> in.$fixDeep(false));
                                             });
                             }
                        );

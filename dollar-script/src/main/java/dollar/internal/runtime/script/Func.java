@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script;
 
+import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.VarInternal;
@@ -325,7 +326,7 @@ public final class Func {
             return $void();
         } else {
             IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fix(depth, false));
-            return l.get(l.size() - 1).$fix(depth, false);
+            return l.get(l.size() - 1).$fix(1, false);
         }
     }
 
@@ -347,15 +348,15 @@ public final class Func {
                     true, token, parser);
 
         if (export) {
-            parser.export(key,
-                          node(DEFINITION, pure,
-                               parser, token, singletonList(value),
-                               exportArgs -> value));
+            @NotNull Pipeable callable = exportArgs -> value;
+            parser.export(key, node(DEFINITION, "export-" + DEFINITION.name(),
+                                    pure, SourceNodeOptions.SCOPE_WITH_CLOSURE, parser,
+                                    new SourceSegmentValue(currentScope(), token), singletonList(value), callable, null));
         }
         return $void();
     }
 
     public static var fixFunc(var v) {
-        return v.$fix(2, false);
+        return v.$fix(Integer.MAX_VALUE, false);
     }
 }

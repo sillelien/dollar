@@ -116,6 +116,11 @@ public class DefaultDollarExecutor implements DollarExecutor {
     }
 
     @Override
+    public var forkAndReturnId(SourceSegment source, var in, Function<var, var> call) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public var fork(SourceSegment source, var in, Function<var, var> call) {
         try {
             return submit(() -> call.apply(in)).get();

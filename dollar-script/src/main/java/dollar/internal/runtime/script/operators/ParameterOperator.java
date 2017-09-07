@@ -84,10 +84,11 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
                                         result = Builtins.execute(lhsString, parameters, pure);
                                     } else {
                                         result = variableNode(pure, lhsString, false, null, token, parser)
-                                                         .$fixDeep(false);
+                                                         .$fix(2, false);
                                     }
                                 } else {
-                                    result = lhs.$fix(1, false);
+
+                                    result = lhs.$fix(2, false);
                                 }
 
                                 return result;

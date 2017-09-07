@@ -1,4 +1,4 @@
-def sleepTime {@@ "Background Sleeping";SLEEP(4 S); @@ "Background Finished Sleeping";TIME()}
+def sleepTime {@@ "Background Sleeping "+TIME();SLEEP(4 S); @@ "Background Finished Sleeping "+TIME();fix (TIME())}
 //Any future reference to c will block until c has completed evaluation
 var forkId= fork sleepTime
 @@ "Main thread sleeping ..."
@@ -6,5 +6,7 @@ SLEEP(2 S)
 @@ "Main thread finished sleeping ..."
 var d= TIME()
 var forkResult= $(forkId);
+@@ forkResult
+@@ d
 .: forkResult is Integer
 .: forkResult > d

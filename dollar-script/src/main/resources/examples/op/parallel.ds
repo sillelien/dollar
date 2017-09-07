@@ -1,5 +1,5 @@
-const testListS := [ TIME(), {SLEEP(4 S); TIME();},  TIME() ];
-const testListP := |:|  [ TIME(), {SLEEP(4 S); TIME();},  TIME() ];
+const testListS := fix [ TIME(), {SLEEP(4 S); TIME();},  TIME() ];
+const testListP := fix |:|  [ TIME(), {SLEEP(4 S); TIME();},  TIME() ];
 var a= testListS("serial: ") ;
 var b= testListP("parallel: ") ;
 
@@ -7,6 +7,6 @@ var b= testListP("parallel: ") ;
 @@"b="+b
 //Test different execution orders
 .: a[0] is Integer
-.: a[1] > a[0]
+.: a[1] >= a[0]
 .: a[2] >= a[1]
 .: b[2] <= b[1]

@@ -83,7 +83,8 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                 useConstraint = varScope.constraint(varName);
                 useSource = varScope.constraintSource(varName);
             }
-            final var rhsFixed = rhs.$fixDeep(false);
+            //Don't change this value, 2 is the 'instinctive' depth a programmer would expect
+            final var rhsFixed = rhs.$fix(2, false);
 
             if (rhsFixed.$type() != null && type != null) {
                 if (!rhsFixed.$type().canBe(type)) {

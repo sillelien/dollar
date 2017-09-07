@@ -75,5 +75,7 @@ public interface DollarExecutor extends ExtensionPoint<DollarExecutor> {
      */
     @NotNull <T> Future<T> submit(@NotNull Callable<T> callable);
 
+    var forkAndReturnId(SourceSegment source, var in, Function<var, var> call);
+
     var fork(SourceSegment source, var in, Function<var, var> call);
 }

@@ -154,7 +154,7 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
 
     @NotNull
     @Override
-    public var fork(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call) {
+    public var forkAndReturnId(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call) {
         Future<var> varFuture = submit(() -> call.apply(in));
         String id = DollarScriptSupport.randomId();
         log.debug("Future obtained, returning future node");
@@ -162,11 +162,22 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
                                     Arrays.asList(in),
                                     j -> {
                                         log.debug("Waiting for future ...");
-//                                                              Thread.dumpStack();
                                         return varFuture.get();
                                     }
         ), true, null, null, true, false, false);
         return DollarFactory.fromStringValue(id);
+    }
+
+    @Override
+    public var fork(SourceSegment source, var in, Function<var, var> call) {
+        Future<var> varFuture = submit(() -> call.apply(in));
+        return node(FORK, false, DollarParser.parser.get(), source,
+                    Arrays.asList(in),
+                    j -> {
+                        log.debug("Waiting for future ...");
+                        return varFuture.get();
+                    }
+        );
     }
 
     private Runnable wrap(@NotNull Runnable runnable) {
