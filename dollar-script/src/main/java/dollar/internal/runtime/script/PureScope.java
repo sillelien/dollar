@@ -36,18 +36,13 @@ public class PureScope extends ScriptScope {
     private static final Logger log = LoggerFactory.getLogger(PureScope.class);
 
     PureScope(@NotNull Scope parent, @NotNull String source, @NotNull String name, @Nullable String file) {
-        super(parent, _file(parent, file), source, name, false, false);
+        super(parent, source, name, false, false);
     }
 
     @NotNull
-    private static String _file(@NotNull Scope parent, @Nullable String file) {
-        if (file != null) {
-            return file;
-        } else {
-            String parentFile = parent.file();
-            assert parentFile != null;
-            return parentFile;
-        }
+    @Override
+    public String toString() {
+        return id + "(P)" + "->" + parent;
     }
 
     @Override
@@ -145,12 +140,6 @@ public class PureScope extends ScriptScope {
     @Override
     public boolean pure() {
         return true;
-    }
-
-    @NotNull
-    @Override
-    public String toString() {
-        return id + "(P)" + "->" + parent;
     }
 
 

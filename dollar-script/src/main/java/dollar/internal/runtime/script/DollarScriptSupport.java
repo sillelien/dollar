@@ -285,7 +285,7 @@ public final class DollarScriptSupport {
                 throw new IllegalStateException(
                                                        "trying to switch to an impure scope in a pure scope.");
             }
-            newScope = new ScriptScope(parent, parent.file(), parent.source(), scopeName,
+            newScope = new ScriptScope(parent, parent.source(), scopeName,
                                        false, false);
         }
         addScope(runtime, parent);

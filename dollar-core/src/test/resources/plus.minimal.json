@@ -22,7 +22,7 @@
   [
     0,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -65,12 +65,12 @@
   [
     0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
@@ -87,7 +87,7 @@
   [
     0,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -127,7 +127,7 @@
   [
     1,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -170,12 +170,12 @@
   [
     1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 2
     }
@@ -192,7 +192,7 @@
   [
     1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -232,7 +232,7 @@
   [
     -1,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -275,12 +275,12 @@
   [
     -1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -2,
       "upper": 0
     }
@@ -297,7 +297,7 @@
   [
     -1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -337,7 +337,7 @@
   [
     0.1,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -380,12 +380,12 @@
   [
     0.1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.9,
       "upper": 1.1
     }
@@ -402,7 +402,7 @@
   [
     0.1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -421,76 +421,76 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     0,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     1,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-02T00:00:01Z",
       "millis": 86400999
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     -1,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1969-12-31T00:00:01Z",
       "millis": -86399000
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     0.1,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T02:24:01Z",
       "millis": 8641000
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:02Z",
       "millis": 2000
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -499,7 +499,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -508,33 +508,33 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     true,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-02T00:00:01Z",
       "millis": 86400999
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     false,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -545,7 +545,7 @@
     ],
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-01T00:00:01Z",
         "millis": 1000
       },
@@ -556,68 +556,68 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     null,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -627,7 +627,7 @@
       "true": 5
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     }
@@ -655,7 +655,7 @@
   [
     "",
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -693,7 +693,7 @@
   [
     "",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -711,7 +711,7 @@
   [
     "",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -751,7 +751,7 @@
   [
     "@",
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -789,7 +789,7 @@
   [
     "@",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -807,7 +807,7 @@
   [
     "@",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -847,7 +847,7 @@
   [
     true,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -885,12 +885,12 @@
   [
     true,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 2
     }
@@ -907,7 +907,7 @@
   [
     true,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -947,7 +947,7 @@
   [
     false,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -985,12 +985,12 @@
   [
     false,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
@@ -1007,7 +1007,7 @@
   [
     false,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1087,7 +1087,7 @@
       -1
     ],
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -1096,7 +1096,7 @@
       1,
       -1,
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-01T00:00:01Z",
         "millis": 1000
       }
@@ -1185,7 +1185,7 @@
       -1
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -1194,7 +1194,7 @@
       1,
       -1,
       {
-        "$type": "RANGE",
+        "$type": "Range",
         "lower": -1,
         "upper": 1
       }
@@ -1233,7 +1233,7 @@
       -1
     ],
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1244,7 +1244,7 @@
       1,
       -1,
       {
-        "$type": "ERROR",
+        "$type": "Error",
         "value": {
           "errorType": "EXCEPTION",
           "errorMessage": "Test Exception"
@@ -1276,128 +1276,128 @@
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 2
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     -1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -2,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     0.1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.9,
       "upper": 1.1
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     "",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "-1",
       "upper": "1"
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     "@",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "-1@",
       "upper": "1@"
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     true,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 2
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     false,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -1407,7 +1407,7 @@
       -1
     ],
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Invalid range: [[ -1, 0, 1, -1 ]..[ 1, 0, 1, -1 ]]"
@@ -1416,17 +1416,17 @@
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Invalid range: [-2..0..0..2]"
@@ -1435,51 +1435,51 @@
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     null,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -1489,7 +1489,7 @@
       "true": 5
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
@@ -1517,7 +1517,7 @@
   [
     null,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -1555,7 +1555,7 @@
   [
     null,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -1573,7 +1573,7 @@
   [
     null,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1604,7 +1604,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     }
@@ -1630,7 +1630,7 @@
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
@@ -1641,7 +1641,7 @@
   [],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1657,7 +1657,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1665,7 +1665,7 @@
     },
     0,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1674,7 +1674,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1682,7 +1682,7 @@
     },
     1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1691,7 +1691,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1699,7 +1699,7 @@
     },
     -1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1708,7 +1708,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1716,7 +1716,7 @@
     },
     0.1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1725,19 +1725,19 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1746,7 +1746,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1754,7 +1754,7 @@
     },
     "",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1763,7 +1763,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1771,7 +1771,7 @@
     },
     "@",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1780,7 +1780,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1788,7 +1788,7 @@
     },
     true,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1797,7 +1797,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1805,7 +1805,7 @@
     },
     false,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1814,7 +1814,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1826,7 +1826,7 @@
       -1
     ],
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1835,19 +1835,19 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1856,7 +1856,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1864,7 +1864,7 @@
     },
     null,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1873,14 +1873,14 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1889,21 +1889,21 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1912,7 +1912,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1924,7 +1924,7 @@
       "true": 5
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -1994,7 +1994,7 @@
       "true": 5
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2003,7 +2003,7 @@
       "value1": true,
       "true": 5,
       "_3": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-01T00:00:01Z",
         "millis": 1000
       }
@@ -2092,7 +2092,7 @@
       "true": 5
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -2101,7 +2101,7 @@
       "value1": true,
       "true": 5,
       "_3": {
-        "$type": "RANGE",
+        "$type": "Range",
         "lower": -1,
         "upper": 1
       }
@@ -2141,7 +2141,7 @@
       "true": 5
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -2152,7 +2152,7 @@
       "value1": true,
       "true": 5,
       "_3": {
-        "$type": "ERROR",
+        "$type": "Error",
         "value": {
           "errorType": "EXCEPTION",
           "errorMessage": "Test Exception"

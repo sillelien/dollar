@@ -152,7 +152,7 @@ public class DollarParserImpl implements DollarParser {
             return parseMarkdown(file);
         } else {
             String source = new String(Files.readAllBytes(file.toPath()));
-            return parse(new ScriptScope(source, file, true, false), source);
+            return parse(new FileScope(source, file, true, false), source);
         }
 
     }
@@ -161,7 +161,7 @@ public class DollarParserImpl implements DollarParser {
     @NotNull
     public var parse(@NotNull InputStream in, boolean parallel, @NotNull Scope scope) throws Exception {
         String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(scope, "(stream)", source, "(stream-scope)", true, false), source);
+        return parse(new ScriptScope(scope, source, "(stream-scope)", true, false), source);
     }
 
     @Override
@@ -169,7 +169,7 @@ public class DollarParserImpl implements DollarParser {
     public var parse(@NotNull InputStream in, @NotNull String file, boolean parallel) throws Exception {
         this.file = file;
         String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(source, new File(file), true, false), source);
+        return parse(new FileScope(source, new File(file), true, false), source);
     }
 
     @Override

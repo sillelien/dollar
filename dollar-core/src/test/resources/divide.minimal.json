@@ -23,7 +23,7 @@
     0,
     0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -71,7 +71,7 @@
     0,
     0.0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -118,7 +118,7 @@
   [
     0,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-12T13:46:40Z",
       "millis": 1000000000
     },
@@ -127,7 +127,7 @@
   [
     0,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-24T03:33:20Z",
       "millis": 2000000000
     },
@@ -136,7 +136,7 @@
   [
     0,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-02-04T17:20:00Z",
       "millis": 2999999999
     },
@@ -146,7 +146,7 @@
     0,
     "",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -154,7 +154,7 @@
     0,
     "@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -162,7 +162,7 @@
     0,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -170,7 +170,7 @@
     0,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -178,7 +178,7 @@
     0,
     " ",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -186,7 +186,7 @@
     0,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -194,7 +194,7 @@
     0,
     "\n\t\r",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -202,7 +202,7 @@
     0,
     "1",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -210,7 +210,7 @@
     0,
     "true",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -218,7 +218,7 @@
     0,
     "false",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -226,7 +226,7 @@
     0,
     "0",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -239,7 +239,7 @@
     0,
     false,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -257,7 +257,7 @@
       -100
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -279,7 +279,7 @@
       0.1
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -287,23 +287,23 @@
     0,
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-24T03:33:20Z",
         "millis": 2000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-02-04T17:20:00Z",
         "millis": 2999999999
       }
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -323,7 +323,7 @@
       "0"
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -334,7 +334,7 @@
       false
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -342,21 +342,21 @@
     0,
     [],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       "upper": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-13T17:33:20Z",
         "millis": 1100000000
       }
@@ -366,7 +366,7 @@
   [
     0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -375,7 +375,7 @@
   [
     0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 1
     },
@@ -384,7 +384,7 @@
   [
     0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     },
@@ -393,7 +393,7 @@
   [
     0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 1,
       "upper": 2
     },
@@ -402,12 +402,12 @@
   [
     0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 9223372036854775807
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Cannot create a Dollar Integer with a value less than -9223372036854775807"
@@ -417,7 +417,7 @@
   [
     0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -9223372036854775807,
       "upper": 9223372036854775807
     },
@@ -426,7 +426,7 @@
   [
     0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "a",
       "upper": "z"
     },
@@ -435,7 +435,7 @@
   [
     0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "@",
       "upper": ""
     },
@@ -444,7 +444,7 @@
   [
     0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.05,
       "upper": -0.1
     },
@@ -454,7 +454,7 @@
     0,
     {},
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -464,7 +464,7 @@
       "1": "one"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -474,7 +474,7 @@
       "true": "true"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -484,7 +484,7 @@
       "1970-01-12T13:46:40Z": true
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -494,7 +494,7 @@
       "0.1": "0.1"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -504,7 +504,7 @@
       "string": "string"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -518,7 +518,7 @@
       "true": "true"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -546,7 +546,7 @@
     1,
     0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -594,7 +594,7 @@
     1,
     0.0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -641,7 +641,7 @@
   [
     1,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-12T13:46:40Z",
       "millis": 1000000000
     },
@@ -650,7 +650,7 @@
   [
     1,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-24T03:33:20Z",
       "millis": 2000000000
     },
@@ -659,7 +659,7 @@
   [
     1,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-02-04T17:20:00Z",
       "millis": 2999999999
     },
@@ -669,7 +669,7 @@
     1,
     "",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -677,7 +677,7 @@
     1,
     "@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -685,7 +685,7 @@
     1,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -693,7 +693,7 @@
     1,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -701,7 +701,7 @@
     1,
     " ",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -709,7 +709,7 @@
     1,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -717,7 +717,7 @@
     1,
     "\n\t\r",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -725,7 +725,7 @@
     1,
     "1",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -733,7 +733,7 @@
     1,
     "true",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -741,7 +741,7 @@
     1,
     "false",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -749,7 +749,7 @@
     1,
     "0",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -762,7 +762,7 @@
     1,
     false,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -780,7 +780,7 @@
       -100
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -802,7 +802,7 @@
       0.1
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -810,23 +810,23 @@
     1,
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-24T03:33:20Z",
         "millis": 2000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-02-04T17:20:00Z",
         "millis": 2999999999
       }
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -846,7 +846,7 @@
       "0"
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -857,7 +857,7 @@
       false
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -865,21 +865,21 @@
     1,
     [],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       "upper": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-13T17:33:20Z",
         "millis": 1100000000
       }
@@ -889,7 +889,7 @@
   [
     1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -898,7 +898,7 @@
   [
     1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 1
     },
@@ -907,7 +907,7 @@
   [
     1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     },
@@ -916,7 +916,7 @@
   [
     1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 1,
       "upper": 2
     },
@@ -925,12 +925,12 @@
   [
     1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 9223372036854775807
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Cannot create a Dollar Integer with a value less than -9223372036854775807"
@@ -940,7 +940,7 @@
   [
     1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -9223372036854775807,
       "upper": 9223372036854775807
     },
@@ -949,7 +949,7 @@
   [
     1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "a",
       "upper": "z"
     },
@@ -958,7 +958,7 @@
   [
     1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "@",
       "upper": ""
     },
@@ -967,7 +967,7 @@
   [
     1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.05,
       "upper": -0.1
     },
@@ -977,7 +977,7 @@
     1,
     {},
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -987,7 +987,7 @@
       "1": "one"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -997,7 +997,7 @@
       "true": "true"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1007,7 +1007,7 @@
       "1970-01-12T13:46:40Z": true
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1017,7 +1017,7 @@
       "0.1": "0.1"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1027,7 +1027,7 @@
       "string": "string"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1041,7 +1041,7 @@
       "true": "true"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1069,7 +1069,7 @@
     -1,
     0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1117,7 +1117,7 @@
     -1,
     0.0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1164,7 +1164,7 @@
   [
     -1,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-12T13:46:40Z",
       "millis": 1000000000
     },
@@ -1173,7 +1173,7 @@
   [
     -1,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-24T03:33:20Z",
       "millis": 2000000000
     },
@@ -1182,7 +1182,7 @@
   [
     -1,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-02-04T17:20:00Z",
       "millis": 2999999999
     },
@@ -1192,7 +1192,7 @@
     -1,
     "",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1200,7 +1200,7 @@
     -1,
     "@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1208,7 +1208,7 @@
     -1,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1216,7 +1216,7 @@
     -1,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1224,7 +1224,7 @@
     -1,
     " ",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1232,7 +1232,7 @@
     -1,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1240,7 +1240,7 @@
     -1,
     "\n\t\r",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1248,7 +1248,7 @@
     -1,
     "1",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1256,7 +1256,7 @@
     -1,
     "true",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1264,7 +1264,7 @@
     -1,
     "false",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1272,7 +1272,7 @@
     -1,
     "0",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1285,7 +1285,7 @@
     -1,
     false,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1303,7 +1303,7 @@
       -100
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1325,7 +1325,7 @@
       0.1
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1333,23 +1333,23 @@
     -1,
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-24T03:33:20Z",
         "millis": 2000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-02-04T17:20:00Z",
         "millis": 2999999999
       }
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1369,7 +1369,7 @@
       "0"
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1380,7 +1380,7 @@
       false
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1388,21 +1388,21 @@
     -1,
     [],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
   [
     -1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       "upper": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-13T17:33:20Z",
         "millis": 1100000000
       }
@@ -1412,7 +1412,7 @@
   [
     -1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -1421,7 +1421,7 @@
   [
     -1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 1
     },
@@ -1430,7 +1430,7 @@
   [
     -1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     },
@@ -1439,7 +1439,7 @@
   [
     -1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 1,
       "upper": 2
     },
@@ -1448,12 +1448,12 @@
   [
     -1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 9223372036854775807
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Cannot create a Dollar Integer with a value less than -9223372036854775807"
@@ -1463,7 +1463,7 @@
   [
     -1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -9223372036854775807,
       "upper": 9223372036854775807
     },
@@ -1472,7 +1472,7 @@
   [
     -1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "a",
       "upper": "z"
     },
@@ -1481,7 +1481,7 @@
   [
     -1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "@",
       "upper": ""
     },
@@ -1490,7 +1490,7 @@
   [
     -1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.05,
       "upper": -0.1
     },
@@ -1500,7 +1500,7 @@
     -1,
     {},
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1510,7 +1510,7 @@
       "1": "one"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1520,7 +1520,7 @@
       "true": "true"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1530,7 +1530,7 @@
       "1970-01-12T13:46:40Z": true
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1540,7 +1540,7 @@
       "0.1": "0.1"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1550,7 +1550,7 @@
       "string": "string"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1564,7 +1564,7 @@
       "true": "true"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": false
     }
   ],
@@ -1592,7 +1592,7 @@
     0.1,
     0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1640,7 +1640,7 @@
     0.1,
     0.0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1687,7 +1687,7 @@
   [
     0.1,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-12T13:46:40Z",
       "millis": 1000000000
     },
@@ -1696,7 +1696,7 @@
   [
     0.1,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-24T03:33:20Z",
       "millis": 2000000000
     },
@@ -1705,7 +1705,7 @@
   [
     0.1,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-02-04T17:20:00Z",
       "millis": 2999999999
     },
@@ -1715,7 +1715,7 @@
     0.1,
     "",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1723,7 +1723,7 @@
     0.1,
     "@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1731,7 +1731,7 @@
     0.1,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1739,7 +1739,7 @@
     0.1,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1747,7 +1747,7 @@
     0.1,
     " ",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1755,7 +1755,7 @@
     0.1,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1763,7 +1763,7 @@
     0.1,
     "\n\t\r",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1776,7 +1776,7 @@
     0.1,
     "true",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1784,7 +1784,7 @@
     0.1,
     "false",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1792,7 +1792,7 @@
     0.1,
     "0",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1805,7 +1805,7 @@
     0.1,
     false,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1823,7 +1823,7 @@
       -100
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1845,7 +1845,7 @@
       0.1
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1853,23 +1853,23 @@
     0.1,
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-24T03:33:20Z",
         "millis": 2000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-02-04T17:20:00Z",
         "millis": 2999999999
       }
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1889,7 +1889,7 @@
       "0"
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1900,7 +1900,7 @@
       false
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -1908,21 +1908,21 @@
     0.1,
     [],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     0.1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       "upper": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-13T17:33:20Z",
         "millis": 1100000000
       }
@@ -1932,7 +1932,7 @@
   [
     0.1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -1941,7 +1941,7 @@
   [
     0.1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 1
     },
@@ -1950,7 +1950,7 @@
   [
     0.1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     },
@@ -1959,7 +1959,7 @@
   [
     0.1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 1,
       "upper": 2
     },
@@ -1968,12 +1968,12 @@
   [
     0.1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 9223372036854775807
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Cannot create a Dollar Integer with a value less than -9223372036854775807"
@@ -1983,7 +1983,7 @@
   [
     0.1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -9223372036854775807,
       "upper": 9223372036854775807
     },
@@ -1992,7 +1992,7 @@
   [
     0.1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "a",
       "upper": "z"
     },
@@ -2001,7 +2001,7 @@
   [
     0.1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "@",
       "upper": ""
     },
@@ -2010,7 +2010,7 @@
   [
     0.1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.05,
       "upper": -0.1
     },
@@ -2020,7 +2020,7 @@
     0.1,
     {},
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -2030,7 +2030,7 @@
       "1": "one"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -2040,7 +2040,7 @@
       "true": "true"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -2050,7 +2050,7 @@
       "1970-01-12T13:46:40Z": true
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -2060,7 +2060,7 @@
       "0.1": "0.1"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -2070,7 +2070,7 @@
       "string": "string"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -2084,13 +2084,13 @@
       "true": "true"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2099,7 +2099,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2108,7 +2108,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2117,7 +2117,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2126,19 +2126,19 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2147,7 +2147,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2156,7 +2156,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2165,7 +2165,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2174,7 +2174,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2183,7 +2183,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2192,7 +2192,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2201,7 +2201,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2210,19 +2210,19 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     0.0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2231,7 +2231,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2240,7 +2240,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2249,7 +2249,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2258,7 +2258,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2267,7 +2267,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2276,7 +2276,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2285,7 +2285,7 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2294,12 +2294,12 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-12T13:46:40Z",
       "millis": 1000000000
     },
@@ -2307,12 +2307,12 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-24T03:33:20Z",
       "millis": 2000000000
     },
@@ -2320,12 +2320,12 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-02-04T17:20:00Z",
       "millis": 2999999999
     },
@@ -2333,91 +2333,91 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     "",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     "@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     " ",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     "\n\t\r",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2426,43 +2426,43 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     "true",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     "false",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     "0",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2471,19 +2471,19 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     false,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2499,13 +2499,13 @@
       -100
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2525,41 +2525,41 @@
       0.1
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-24T03:33:20Z",
         "millis": 2000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-02-04T17:20:00Z",
         "millis": 2999999999
       }
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2577,13 +2577,13 @@
       "0"
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2592,37 +2592,37 @@
       false
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     [],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       "upper": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-13T17:33:20Z",
         "millis": 1100000000
       }
@@ -2631,12 +2631,12 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -2644,12 +2644,12 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 1
     },
@@ -2657,12 +2657,12 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     },
@@ -2670,12 +2670,12 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 1,
       "upper": 2
     },
@@ -2683,17 +2683,17 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 9223372036854775807
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Cannot create a Dollar Integer with a value less than -9223372036854775807"
@@ -2702,12 +2702,12 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -9223372036854775807,
       "upper": 9223372036854775807
     },
@@ -2715,12 +2715,12 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "a",
       "upper": "z"
     },
@@ -2728,12 +2728,12 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "@",
       "upper": ""
     },
@@ -2741,12 +2741,12 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.05,
       "upper": -0.1
     },
@@ -2754,19 +2754,19 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
     {},
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2774,13 +2774,13 @@
       "1": "one"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2788,13 +2788,13 @@
       "true": "true"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2802,13 +2802,13 @@
       "1970-01-12T13:46:40Z": true
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2816,13 +2816,13 @@
       "0.1": "0.1"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2830,13 +2830,13 @@
       "string": "string"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-01T00:00:01Z",
       "millis": 1000
     },
@@ -2848,7 +2848,7 @@
       "true": "true"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -2876,7 +2876,7 @@
     "",
     0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -2924,7 +2924,7 @@
     "",
     0.0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -2971,7 +2971,7 @@
   [
     "",
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-12T13:46:40Z",
       "millis": 1000000000
     },
@@ -2980,7 +2980,7 @@
   [
     "",
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-24T03:33:20Z",
       "millis": 2000000000
     },
@@ -2989,7 +2989,7 @@
   [
     "",
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-02-04T17:20:00Z",
       "millis": 2999999999
     },
@@ -3098,17 +3098,17 @@
     "",
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-24T03:33:20Z",
         "millis": 2000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-02-04T17:20:00Z",
         "millis": 2999999999
       }
@@ -3148,14 +3148,14 @@
   [
     "",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       "upper": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-13T17:33:20Z",
         "millis": 1100000000
       }
@@ -3165,7 +3165,7 @@
   [
     "",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -3174,7 +3174,7 @@
   [
     "",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 1
     },
@@ -3183,7 +3183,7 @@
   [
     "",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     },
@@ -3192,7 +3192,7 @@
   [
     "",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 1,
       "upper": 2
     },
@@ -3201,7 +3201,7 @@
   [
     "",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 9223372036854775807
     },
@@ -3210,7 +3210,7 @@
   [
     "",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -9223372036854775807,
       "upper": 9223372036854775807
     },
@@ -3219,7 +3219,7 @@
   [
     "",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "a",
       "upper": "z"
     },
@@ -3228,7 +3228,7 @@
   [
     "",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "@",
       "upper": ""
     },
@@ -3237,7 +3237,7 @@
   [
     "",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.05,
       "upper": -0.1
     },
@@ -3318,7 +3318,7 @@
     "@",
     0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -3366,7 +3366,7 @@
     "@",
     0.0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -3413,7 +3413,7 @@
   [
     "@",
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-12T13:46:40Z",
       "millis": 1000000000
     },
@@ -3422,7 +3422,7 @@
   [
     "@",
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-24T03:33:20Z",
       "millis": 2000000000
     },
@@ -3431,7 +3431,7 @@
   [
     "@",
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-02-04T17:20:00Z",
       "millis": 2999999999
     },
@@ -3540,17 +3540,17 @@
     "@",
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-24T03:33:20Z",
         "millis": 2000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-02-04T17:20:00Z",
         "millis": 2999999999
       }
@@ -3590,14 +3590,14 @@
   [
     "@",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       "upper": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-13T17:33:20Z",
         "millis": 1100000000
       }
@@ -3607,7 +3607,7 @@
   [
     "@",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -3616,7 +3616,7 @@
   [
     "@",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 1
     },
@@ -3625,7 +3625,7 @@
   [
     "@",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     },
@@ -3634,7 +3634,7 @@
   [
     "@",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 1,
       "upper": 2
     },
@@ -3643,7 +3643,7 @@
   [
     "@",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 9223372036854775807
     },
@@ -3652,7 +3652,7 @@
   [
     "@",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -9223372036854775807,
       "upper": 9223372036854775807
     },
@@ -3661,7 +3661,7 @@
   [
     "@",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "a",
       "upper": "z"
     },
@@ -3670,7 +3670,7 @@
   [
     "@",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "@",
       "upper": ""
     },
@@ -3679,7 +3679,7 @@
   [
     "@",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.05,
       "upper": -0.1
     },
@@ -3849,7 +3849,7 @@
   [
     true,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-12T13:46:40Z",
       "millis": 1000000000
     },
@@ -3858,7 +3858,7 @@
   [
     true,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-24T03:33:20Z",
       "millis": 2000000000
     },
@@ -3867,7 +3867,7 @@
   [
     true,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-02-04T17:20:00Z",
       "millis": 2999999999
     },
@@ -3976,17 +3976,17 @@
     true,
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-24T03:33:20Z",
         "millis": 2000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-02-04T17:20:00Z",
         "millis": 2999999999
       }
@@ -4026,14 +4026,14 @@
   [
     true,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       "upper": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-13T17:33:20Z",
         "millis": 1100000000
       }
@@ -4043,7 +4043,7 @@
   [
     true,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -4052,7 +4052,7 @@
   [
     true,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 1
     },
@@ -4061,7 +4061,7 @@
   [
     true,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     },
@@ -4070,7 +4070,7 @@
   [
     true,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 1,
       "upper": 2
     },
@@ -4079,7 +4079,7 @@
   [
     true,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 9223372036854775807
     },
@@ -4088,7 +4088,7 @@
   [
     true,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -9223372036854775807,
       "upper": 9223372036854775807
     },
@@ -4097,7 +4097,7 @@
   [
     true,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "a",
       "upper": "z"
     },
@@ -4106,7 +4106,7 @@
   [
     true,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "@",
       "upper": ""
     },
@@ -4115,7 +4115,7 @@
   [
     true,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.05,
       "upper": -0.1
     },
@@ -4285,7 +4285,7 @@
   [
     false,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-12T13:46:40Z",
       "millis": 1000000000
     },
@@ -4294,7 +4294,7 @@
   [
     false,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-24T03:33:20Z",
       "millis": 2000000000
     },
@@ -4303,7 +4303,7 @@
   [
     false,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-02-04T17:20:00Z",
       "millis": 2999999999
     },
@@ -4412,17 +4412,17 @@
     false,
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-24T03:33:20Z",
         "millis": 2000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-02-04T17:20:00Z",
         "millis": 2999999999
       }
@@ -4462,14 +4462,14 @@
   [
     false,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       "upper": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-13T17:33:20Z",
         "millis": 1100000000
       }
@@ -4479,7 +4479,7 @@
   [
     false,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -4488,7 +4488,7 @@
   [
     false,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 1
     },
@@ -4497,7 +4497,7 @@
   [
     false,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     },
@@ -4506,7 +4506,7 @@
   [
     false,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 1,
       "upper": 2
     },
@@ -4515,7 +4515,7 @@
   [
     false,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 9223372036854775807
     },
@@ -4524,7 +4524,7 @@
   [
     false,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -9223372036854775807,
       "upper": 9223372036854775807
     },
@@ -4533,7 +4533,7 @@
   [
     false,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "a",
       "upper": "z"
     },
@@ -4542,7 +4542,7 @@
   [
     false,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "@",
       "upper": ""
     },
@@ -4551,7 +4551,7 @@
   [
     false,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.05,
       "upper": -0.1
     },
@@ -4652,7 +4652,7 @@
     ],
     0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -4744,7 +4744,7 @@
     ],
     0.0,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -4911,7 +4911,7 @@
       -1
     ],
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-12T13:46:40Z",
       "millis": 1000000000
     },
@@ -4924,7 +4924,7 @@
       -1
     ],
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-24T03:33:20Z",
       "millis": 2000000000
     },
@@ -4937,7 +4937,7 @@
       -1
     ],
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-02-04T17:20:00Z",
       "millis": 2999999999
     },
@@ -4951,7 +4951,7 @@
     ],
     "",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -4963,7 +4963,7 @@
     ],
     "@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -4975,7 +4975,7 @@
     ],
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -4987,7 +4987,7 @@
     ],
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -4999,7 +4999,7 @@
     ],
     " ",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5011,7 +5011,7 @@
     ],
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5023,7 +5023,7 @@
     ],
     "\n\t\r",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5048,7 +5048,7 @@
     ],
     "true",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5060,7 +5060,7 @@
     ],
     "false",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5072,7 +5072,7 @@
     ],
     "0",
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5097,7 +5097,7 @@
     ],
     false,
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5119,7 +5119,7 @@
       -100
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5145,7 +5145,7 @@
       0.1
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5157,23 +5157,23 @@
     ],
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-24T03:33:20Z",
         "millis": 2000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-02-04T17:20:00Z",
         "millis": 2999999999
       }
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5197,7 +5197,7 @@
       "0"
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5212,7 +5212,7 @@
       false
     ],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5224,7 +5224,7 @@
     ],
     [],
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5235,14 +5235,14 @@
       -1
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       "upper": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-13T17:33:20Z",
         "millis": 1100000000
       }
@@ -5258,7 +5258,7 @@
       -1
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -5273,7 +5273,7 @@
       -1
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 1
     },
@@ -5288,7 +5288,7 @@
       -1
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     },
@@ -5305,7 +5305,7 @@
       -1
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 1,
       "upper": 2
     },
@@ -5320,12 +5320,12 @@
       -1
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 9223372036854775807
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Cannot create a Dollar Integer with a value less than -9223372036854775807"
@@ -5339,7 +5339,7 @@
       -1
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -9223372036854775807,
       "upper": 9223372036854775807
     },
@@ -5354,7 +5354,7 @@
       -1
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "a",
       "upper": "z"
     },
@@ -5367,7 +5367,7 @@
       -1
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "@",
       "upper": ""
     },
@@ -5380,7 +5380,7 @@
       -1
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.05,
       "upper": -0.1
     },
@@ -5397,7 +5397,7 @@
     ],
     {},
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5411,7 +5411,7 @@
       "1": "one"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5425,7 +5425,7 @@
       "true": "true"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5439,7 +5439,7 @@
       "1970-01-12T13:46:40Z": true
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5453,7 +5453,7 @@
       "0.1": "0.1"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5467,7 +5467,7 @@
       "string": "string"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
@@ -5485,103 +5485,103 @@
       "true": "true"
     },
     {
-      "$type": "INFINITY",
+      "$type": "Infinity",
       "positive": true
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     -2147483648,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     2147483647,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     -9223372036854775807,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     9223372036854775807,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     -1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Invalid range: [1..-1]"
@@ -5590,123 +5590,123 @@
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     100,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     -100,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     -3.4028234663852886E38,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 2.938736052218037E-39,
       "upper": -2.938736052218037E-39
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     3.4028234663852886E38,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -2.938736052218037E-39,
       "upper": 2.938736052218037E-39
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     -1.7976931348623157E308,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 5.562684646268003E-309,
       "upper": -5.562684646268003E-309
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     1.7976931348623157E308,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -5.562684646268003E-309,
       "upper": 5.562684646268003E-309
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     0.0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     1.0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1.0,
       "upper": 1.0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     -1.0,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Invalid range: [1.0..-1.0]"
@@ -5715,52 +5715,52 @@
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     100.0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.01,
       "upper": 0.01
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     -100.0,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0.01,
       "upper": -0.01
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     0.5,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -2.0,
       "upper": 2.0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     -0.5,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Invalid range: [2.0..-2.0]"
@@ -5769,13 +5769,13 @@
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     -0.1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Invalid range: [10.0..-10.0]"
@@ -5784,312 +5784,312 @@
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     0.1,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -10.0,
       "upper": 10.0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-12T13:46:40Z",
       "millis": 1000000000
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-24T03:33:20Z",
       "millis": 2000000000
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-02-04T17:20:00Z",
       "millis": 2999999999
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     "",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     "@",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     " ",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     "\n\t\r",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     "1",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     "true",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     "false",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     "0",
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     true,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     false,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -6105,20 +6105,20 @@
       -100
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -6138,55 +6138,55 @@
       0.1
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-24T03:33:20Z",
         "millis": 2000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-02-04T17:20:00Z",
         "millis": 2999999999
       }
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -6204,20 +6204,20 @@
       "0"
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -6226,142 +6226,142 @@
       false
     ],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     [],
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       "upper": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-13T17:33:20Z",
         "millis": 1100000000
       }
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 1,
       "upper": 2
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 9223372036854775807
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Cannot create a Dollar Integer with a value less than -9223372036854775807"
@@ -6370,94 +6370,94 @@
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -9223372036854775807,
       "upper": 9223372036854775807
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "a",
       "upper": "z"
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "@",
       "upper": ""
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.05,
       "upper": -0.1
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {},
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -6465,20 +6465,20 @@
       "1": "one"
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -6486,20 +6486,20 @@
       "true": "true"
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -6507,20 +6507,20 @@
       "1970-01-12T13:46:40Z": true
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -6528,20 +6528,20 @@
       "0.1": "0.1"
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -6549,20 +6549,20 @@
       "string": "string"
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -6574,13 +6574,13 @@
       "true": "true"
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": false
       },
       "upper": {
-        "$type": "INFINITY",
+        "$type": "Infinity",
         "positive": true
       }
     }
@@ -6698,7 +6698,7 @@
   [
     null,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-12T13:46:40Z",
       "millis": 1000000000
     },
@@ -6707,7 +6707,7 @@
   [
     null,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-24T03:33:20Z",
       "millis": 2000000000
     },
@@ -6716,7 +6716,7 @@
   [
     null,
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-02-04T17:20:00Z",
       "millis": 2999999999
     },
@@ -6825,17 +6825,17 @@
     null,
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-24T03:33:20Z",
         "millis": 2000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-02-04T17:20:00Z",
         "millis": 2999999999
       }
@@ -6875,14 +6875,14 @@
   [
     null,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       "upper": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-13T17:33:20Z",
         "millis": 1100000000
       }
@@ -6892,7 +6892,7 @@
   [
     null,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
@@ -6901,7 +6901,7 @@
   [
     null,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 1
     },
@@ -6910,7 +6910,7 @@
   [
     null,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     },
@@ -6919,7 +6919,7 @@
   [
     null,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 1,
       "upper": 2
     },
@@ -6928,7 +6928,7 @@
   [
     null,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 9223372036854775807
     },
@@ -6937,7 +6937,7 @@
   [
     null,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -9223372036854775807,
       "upper": 9223372036854775807
     },
@@ -6946,7 +6946,7 @@
   [
     null,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "a",
       "upper": "z"
     },
@@ -6955,7 +6955,7 @@
   [
     null,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "@",
       "upper": ""
     },
@@ -6964,7 +6964,7 @@
   [
     null,
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.05,
       "upper": -0.1
     },
@@ -7089,21 +7089,21 @@
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-12T13:46:40Z",
       "millis": 1000000000
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-24T03:33:20Z",
       "millis": 2000000000
     }
   ],
   [
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-02-04T17:20:00Z",
       "millis": 2999999999
     }
@@ -7180,17 +7180,17 @@
   [
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-24T03:33:20Z",
         "millis": 2000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-02-04T17:20:00Z",
         "millis": 2999999999
       }
@@ -7222,14 +7222,14 @@
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       "upper": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-13T17:33:20Z",
         "millis": 1100000000
       }
@@ -7237,63 +7237,63 @@
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 1
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 1,
       "upper": 2
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 9223372036854775807
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -9223372036854775807,
       "upper": 9223372036854775807
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "a",
       "upper": "z"
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "@",
       "upper": ""
     }
   ],
   [
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.05,
       "upper": -0.1
     }
@@ -7337,7 +7337,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7345,7 +7345,7 @@
     },
     -2147483648,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7354,7 +7354,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7362,7 +7362,7 @@
     },
     2147483647,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7371,7 +7371,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7379,7 +7379,7 @@
     },
     -9223372036854775807,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7388,7 +7388,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7396,7 +7396,7 @@
     },
     9223372036854775807,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7405,7 +7405,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7413,7 +7413,7 @@
     },
     0,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7422,7 +7422,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7430,7 +7430,7 @@
     },
     1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7439,7 +7439,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7447,7 +7447,7 @@
     },
     -1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7456,7 +7456,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7464,7 +7464,7 @@
     },
     100,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7473,7 +7473,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7481,7 +7481,7 @@
     },
     -100,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7490,7 +7490,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7498,7 +7498,7 @@
     },
     -3.4028234663852886E38,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7507,7 +7507,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7515,7 +7515,7 @@
     },
     3.4028234663852886E38,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7524,7 +7524,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7532,7 +7532,7 @@
     },
     -1.7976931348623157E308,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7541,7 +7541,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7549,7 +7549,7 @@
     },
     1.7976931348623157E308,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7558,7 +7558,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7566,7 +7566,7 @@
     },
     0.0,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7575,7 +7575,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7583,7 +7583,7 @@
     },
     1.0,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7592,7 +7592,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7600,7 +7600,7 @@
     },
     -1.0,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7609,7 +7609,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7617,7 +7617,7 @@
     },
     100.0,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7626,7 +7626,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7634,7 +7634,7 @@
     },
     -100.0,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7643,7 +7643,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7651,7 +7651,7 @@
     },
     0.5,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7660,7 +7660,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7668,7 +7668,7 @@
     },
     -0.5,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7677,7 +7677,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7685,7 +7685,7 @@
     },
     -0.1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7694,7 +7694,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7702,7 +7702,7 @@
     },
     0.1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7711,19 +7711,19 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-12T13:46:40Z",
       "millis": 1000000000
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7732,19 +7732,19 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-24T03:33:20Z",
       "millis": 2000000000
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7753,19 +7753,19 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-02-04T17:20:00Z",
       "millis": 2999999999
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7774,7 +7774,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7782,7 +7782,7 @@
     },
     "",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7791,7 +7791,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7799,7 +7799,7 @@
     },
     "@",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7808,7 +7808,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7816,7 +7816,7 @@
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7825,7 +7825,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7833,7 +7833,7 @@
     },
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7842,7 +7842,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7850,7 +7850,7 @@
     },
     " ",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7859,7 +7859,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7867,7 +7867,7 @@
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7876,7 +7876,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7884,7 +7884,7 @@
     },
     "\n\t\r",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7893,7 +7893,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7901,7 +7901,7 @@
     },
     "1",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7910,7 +7910,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7918,7 +7918,7 @@
     },
     "true",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7927,7 +7927,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7935,7 +7935,7 @@
     },
     "false",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7944,7 +7944,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7952,7 +7952,7 @@
     },
     "0",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7961,7 +7961,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7969,7 +7969,7 @@
     },
     true,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7978,7 +7978,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7986,7 +7986,7 @@
     },
     false,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -7995,7 +7995,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8013,7 +8013,7 @@
       -100
     ],
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8022,7 +8022,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8044,7 +8044,7 @@
       0.1
     ],
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8053,7 +8053,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8061,23 +8061,23 @@
     },
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-24T03:33:20Z",
         "millis": 2000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-02-04T17:20:00Z",
         "millis": 2999999999
       }
     ],
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8086,7 +8086,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8106,7 +8106,7 @@
       "0"
     ],
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8115,7 +8115,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8126,7 +8126,7 @@
       false
     ],
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8135,7 +8135,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8143,7 +8143,7 @@
     },
     [],
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8152,27 +8152,27 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       "upper": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-13T17:33:20Z",
         "millis": 1100000000
       }
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8181,19 +8181,19 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8202,19 +8202,19 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 1
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8223,19 +8223,19 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8244,19 +8244,19 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 1,
       "upper": 2
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8265,19 +8265,19 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 9223372036854775807
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8286,19 +8286,19 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -9223372036854775807,
       "upper": 9223372036854775807
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8307,19 +8307,19 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "a",
       "upper": "z"
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8328,19 +8328,19 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "@",
       "upper": ""
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8349,19 +8349,19 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
       }
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.05,
       "upper": -0.1
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8370,7 +8370,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8378,7 +8378,7 @@
     },
     {},
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8387,7 +8387,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8397,7 +8397,7 @@
       "1": "one"
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8406,7 +8406,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8416,7 +8416,7 @@
       "true": "true"
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8425,7 +8425,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8435,7 +8435,7 @@
       "1970-01-12T13:46:40Z": true
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8444,7 +8444,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8454,7 +8454,7 @@
       "0.1": "0.1"
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8463,7 +8463,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8473,7 +8473,7 @@
       "string": "string"
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8482,7 +8482,7 @@
   ],
   [
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8496,7 +8496,7 @@
       "true": "true"
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
         "errorMessage": "Test Exception"
@@ -8511,10 +8511,10 @@
     },
     -2147483648,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8526,10 +8526,10 @@
     },
     2147483647,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8541,10 +8541,10 @@
     },
     -9223372036854775807,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8556,10 +8556,10 @@
     },
     9223372036854775807,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8571,10 +8571,10 @@
     },
     0,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8586,10 +8586,10 @@
     },
     1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8601,10 +8601,10 @@
     },
     -1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8616,10 +8616,10 @@
     },
     100,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8631,10 +8631,10 @@
     },
     -100,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8646,10 +8646,10 @@
     },
     -3.4028234663852886E38,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8661,10 +8661,10 @@
     },
     3.4028234663852886E38,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8676,10 +8676,10 @@
     },
     -1.7976931348623157E308,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8691,10 +8691,10 @@
     },
     1.7976931348623157E308,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8706,10 +8706,10 @@
     },
     0.0,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8721,10 +8721,10 @@
     },
     1.0,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8736,10 +8736,10 @@
     },
     -1.0,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8751,10 +8751,10 @@
     },
     100.0,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8766,10 +8766,10 @@
     },
     -100.0,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8781,10 +8781,10 @@
     },
     0.5,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8796,10 +8796,10 @@
     },
     -0.5,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8811,10 +8811,10 @@
     },
     -0.1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8826,10 +8826,10 @@
     },
     0.1,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8840,15 +8840,15 @@
       "true": 5
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-12T13:46:40Z",
       "millis": 1000000000
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8859,15 +8859,15 @@
       "true": 5
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-01-24T03:33:20Z",
       "millis": 2000000000
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8878,15 +8878,15 @@
       "true": 5
     },
     {
-      "$type": "DATE",
+      "$type": "Date",
       "text": "1970-02-04T17:20:00Z",
       "millis": 2999999999
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8898,10 +8898,10 @@
     },
     "",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8913,10 +8913,10 @@
     },
     "@",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8928,10 +8928,10 @@
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8943,10 +8943,10 @@
     },
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8958,10 +8958,10 @@
     },
     " ",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8973,10 +8973,10 @@
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -8988,10 +8988,10 @@
     },
     "\n\t\r",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9003,10 +9003,10 @@
     },
     "1",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9018,10 +9018,10 @@
     },
     "true",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9033,10 +9033,10 @@
     },
     "false",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9048,10 +9048,10 @@
     },
     "0",
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9063,10 +9063,10 @@
     },
     true,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9078,10 +9078,10 @@
     },
     false,
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9103,10 +9103,10 @@
       -100
     ],
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9132,10 +9132,10 @@
       0.1
     ],
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9147,26 +9147,26 @@
     },
     [
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-24T03:33:20Z",
         "millis": 2000000000
       },
       {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-02-04T17:20:00Z",
         "millis": 2999999999
       }
     ],
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9190,10 +9190,10 @@
       "0"
     ],
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9208,10 +9208,10 @@
       false
     ],
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9223,10 +9223,10 @@
     },
     [],
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9237,23 +9237,23 @@
       "true": 5
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-12T13:46:40Z",
         "millis": 1000000000
       },
       "upper": {
-        "$type": "DATE",
+        "$type": "Date",
         "text": "1970-01-13T17:33:20Z",
         "millis": 1100000000
       }
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9264,15 +9264,15 @@
       "true": 5
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -1,
       "upper": 1
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9283,15 +9283,15 @@
       "true": 5
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 1
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9302,15 +9302,15 @@
       "true": 5
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 0
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9321,15 +9321,15 @@
       "true": 5
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 1,
       "upper": 2
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9340,15 +9340,15 @@
       "true": 5
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": 0,
       "upper": 9223372036854775807
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9359,15 +9359,15 @@
       "true": 5
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -9223372036854775807,
       "upper": 9223372036854775807
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9378,15 +9378,15 @@
       "true": 5
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "a",
       "upper": "z"
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9397,15 +9397,15 @@
       "true": 5
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": "@",
       "upper": ""
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9416,15 +9416,15 @@
       "true": 5
     },
     {
-      "$type": "RANGE",
+      "$type": "Range",
       "lower": -0.05,
       "upper": -0.1
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9436,10 +9436,10 @@
     },
     {},
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9453,10 +9453,10 @@
       "1": "one"
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9470,10 +9470,10 @@
       "true": "true"
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9487,10 +9487,10 @@
       "1970-01-12T13:46:40Z": true
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9504,10 +9504,10 @@
       "0.1": "0.1"
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9521,10 +9521,10 @@
       "string": "string"
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ],
@@ -9542,10 +9542,10 @@
       "true": "true"
     },
     {
-      "$type": "ERROR",
+      "$type": "Error",
       "value": {
-        "errorType": "INVALID_MAP_OPERATION",
-        "errorMessage": ""
+        "errorType": "EXCEPTION",
+        "errorMessage": "INVALID_MAP_OPERATION"
       }
     }
   ]

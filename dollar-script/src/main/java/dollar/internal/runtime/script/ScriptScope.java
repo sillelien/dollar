@@ -80,7 +80,6 @@ public class ScriptScope implements Scope {
     @Nullable
     Scope parent;
     @Nullable String source;
-    @Nullable String file;
     private boolean parameterScope;
     private boolean destroyed;
     @Nullable
@@ -90,7 +89,6 @@ public class ScriptScope implements Scope {
         this.root = root;
         this.classScope = classScope;
         parent = null;
-        file = null;
         source = null;
         id = name + ":" + counter.incrementAndGet();
     }
@@ -100,14 +98,12 @@ public class ScriptScope implements Scope {
         this.classScope = classScope;
         parent = null;
         this.source = source;
-        file = null;
         id = name + ":" + counter.incrementAndGet();
     }
 
 
     ScriptScope(@NotNull Scope parent, @NotNull String name, boolean root, boolean classScope) {
         this.parent = parent;
-        file = parent.file();
         this.root = root;
         source = parent.source();
         id = name + ":" + counter.incrementAndGet();
@@ -117,12 +113,10 @@ public class ScriptScope implements Scope {
     }
 
     public ScriptScope(@NotNull Scope parent,
-                       @NotNull String file,
                        @Nullable String source,
                        @NotNull String name,
                        boolean root, boolean classScope) {
         this.parent = parent;
-        this.file = file;
         this.root = root;
         this.classScope = classScope;
         if (source == null) {
@@ -136,18 +130,9 @@ public class ScriptScope implements Scope {
         checkPure(parent);
     }
 
-    ScriptScope(@Nullable String source, @NotNull File file, boolean root, boolean classScope) {
-        this.source = source;
-        this.file = file.getAbsolutePath();
-        this.root = root;
-        this.classScope = classScope;
-        id = "(file-" + file.getName().toLowerCase().replaceAll("[^a-z0-9]", "-") + "):" + counter.incrementAndGet();
-
-    }
 
     private ScriptScope(@NotNull Scope parent,
                         @NotNull String id,
-                        @NotNull String file,
                         boolean parameterScope,
                         @NotNull ConcurrentHashMap<String, Variable> variables,
                         @NotNull List<var> errorHandlers,
@@ -156,7 +141,6 @@ public class ScriptScope implements Scope {
                         @NotNull Parser<var> parser, boolean root, boolean classScope) {
         this.parent = parent;
         this.id = id;
-        this.file = file;
         this.parameterScope = parameterScope;
         this.classScope = classScope;
         this.variables.putAll(variables);
@@ -306,7 +290,7 @@ public class ScriptScope implements Scope {
 
     @Override
     public String file() {
-        return file;
+        return parent.file();
     }
 
     @Override
@@ -376,7 +360,7 @@ public class ScriptScope implements Scope {
                 if (getConfig().failFast()) {
                     log.info("Fail-fast option is set");
                     try {
-                        ErrorHandlerFactory.instance().handleTopLevel(unravelled, id, (file == null) ? null : new File(file));
+                        ErrorHandlerFactory.instance().handleTopLevel(unravelled, id, new File(file()));
                     } catch (Throwable throwable) {
                         log.error(throwable.getMessage(), throwable);
                     }
@@ -668,19 +652,6 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public void parent(@Nullable Scope scope) {
-        checkDestroyed();
-
-        if (isRoot()) {
-            throw new UnsupportedOperationException("Cannot set the parent scope of a root scope, attempted to set " + scope);
-        }
-        parent = scope;
-        source = scope.source();
-        file = scope.file();
-
-    }
-
-    @Override
     public Scope parent() {
         return parent;
     }
@@ -705,7 +676,7 @@ public class ScriptScope implements Scope {
     public Scope copy() {
         checkDestroyed();
 
-        return new ScriptScope(parent, "*" + id.split(":")[0] + ":" + counter.incrementAndGet(), file,
+        return new ScriptScope(parent, "*" + id.split(":")[0] + ":" + counter.incrementAndGet(),
                                parameterScope,
                                variables, errorHandlers, listeners, source, parser, root, classScope);
     }

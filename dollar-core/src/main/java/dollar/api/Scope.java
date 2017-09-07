@@ -89,8 +89,6 @@ public interface Scope {
     @NotNull
     var parameter(@NotNull String key, @NotNull var value);
 
-    void parent(@Nullable Scope scope);
-
     @Nullable
     Scope parent();
 

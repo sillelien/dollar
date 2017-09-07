@@ -29,7 +29,7 @@ import dollar.api.var;
 import dollar.deps.DependencyRetriever;
 import dollar.internal.runtime.script.DollarParserImpl;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.ScriptScope;
+import dollar.internal.runtime.script.FileScope;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
@@ -193,8 +193,8 @@ public class GithubModuleResolver implements ModuleResolver {
                 newScope.set(entry.getKey().$S(), entry.getValue(), true, null, null, false, false, false);
             }
             return new DollarParserImpl(((DollarParser) parser).options(), classLoader).parse(
-                    new ScriptScope((Scope) scope, mainFile.getAbsolutePath(), content, "github-module-scope", false,
-                                    false), content);
+                    new FileScope((Scope) scope, mainFile.getAbsolutePath(), content, "github-module-scope", false,
+                                  false), content);
         });
     }
 }

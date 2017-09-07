@@ -995,239 +995,239 @@ void / {} <=> void
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / " " <=> ERROR('INVALID_MAP_OPERATION',"")
+} / " " <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / "" <=> ERROR('INVALID_MAP_OPERATION',"")
+} / "" <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / "0" <=> ERROR('INVALID_MAP_OPERATION',"")
+} / "0" <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / "1" <=> ERROR('INVALID_MAP_OPERATION',"")
+} / "1" <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / "@" <=> ERROR('INVALID_MAP_OPERATION',"")
+} / "@" <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / "@@ @@ @@@ @@ @@ @@" <=> ERROR('INVALID_MAP_OPERATION',"")
+} / "@@ @@ @@@ @@ @@ @@" <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" <=> ERROR('INVALID_MAP_OPERATION',"")
+} / "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / "\n\t\r" <=> ERROR('INVALID_MAP_OPERATION',"")
+} / "\n\t\r" <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" <=> ERROR('INVALID_MAP_OPERATION',"")
+} / "\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026" <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / "false" <=> ERROR('INVALID_MAP_OPERATION',"")
+} / "false" <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / "true" <=> ERROR('INVALID_MAP_OPERATION',"")
+} / "true" <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / ("1970-01-12T13:46:40Z" as Date) <=> ERROR('INVALID_MAP_OPERATION',"")
+} / ("1970-01-12T13:46:40Z" as Date) <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / ("1970-01-24T03:33:20Z" as Date) <=> ERROR('INVALID_MAP_OPERATION',"")
+} / ("1970-01-24T03:33:20Z" as Date) <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / ("1970-02-04T17:20:00Z" as Date) <=> ERROR('INVALID_MAP_OPERATION',"")
+} / ("1970-02-04T17:20:00Z" as Date) <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / (("@")..("\uF8FF")) <=> ERROR('INVALID_MAP_OPERATION',"")
+} / (("@")..("\uF8FF")) <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / (("a")..("z")) <=> ERROR('INVALID_MAP_OPERATION',"")
+} / (("a")..("z")) <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / ((("1970-01-12T13:46:40Z" as Date))..(("1970-01-13T17:33:20Z" as Date))) <=> ERROR('INVALID_MAP_OPERATION',"")
+} / ((("1970-01-12T13:46:40Z" as Date))..(("1970-01-13T17:33:20Z" as Date))) <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / ((-0.1)..(-0.05)) <=> ERROR('INVALID_MAP_OPERATION',"")
+} / ((-0.1)..(-0.05)) <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / ((-1)..(1)) <=> ERROR('INVALID_MAP_OPERATION',"")
+} / ((-1)..(1)) <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / ((-9223372036854775807)..(9223372036854775807)) <=> ERROR('INVALID_MAP_OPERATION',"")
+} / ((-9223372036854775807)..(9223372036854775807)) <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / ((0)..(0)) <=> ERROR('INVALID_MAP_OPERATION',"")
+} / ((0)..(0)) <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / ((0)..(1)) <=> ERROR('INVALID_MAP_OPERATION',"")
+} / ((0)..(1)) <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / ((0)..(9223372036854775807)) <=> ERROR('INVALID_MAP_OPERATION',"")
+} / ((0)..(9223372036854775807)) <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / ((1)..(2)) <=> ERROR('INVALID_MAP_OPERATION',"")
+} / ((1)..(2)) <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / -0.1 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / -0.1 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / -0.5 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / -0.5 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / -1 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / -1 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / -1.0 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / -1.0 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / -1.7976931348623157E308 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / -1.7976931348623157E308 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / -100 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / -100 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / -100.0 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / -100.0 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / -2147483648 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / -2147483648 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / -3.4028234663852886E38 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / -3.4028234663852886E38 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / -9223372036854775807 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / -9223372036854775807 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / 0 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / 0 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / 0.0 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / 0.0 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / 0.1 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / 0.1 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / 0.5 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / 0.5 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / 1 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / 1 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / 1.0 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / 1.0 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / 1.7976931348623157E308 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / 1.7976931348623157E308 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / 100 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / 100 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / 100.0 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / 100.0 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / 2147483647 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / 2147483647 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / 3.4028234663852886E38 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / 3.4028234663852886E38 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / 9223372036854775807 <=> ERROR('INVALID_MAP_OPERATION',"")
+} / 9223372036854775807 <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> ERROR('INVALID_MAP_OPERATION',"")
+} / ["","@","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@","@@ @@ @@@ @@ @@ @@"," ","\uFB02\u2021\u00B0\u00B7\u201A\u00CF\u00CC\u00D3\u00D4\uF8FF^\u00F8\u03C0\u00E5\u00DF\u2202\u0192\u00A9\u02D9\u2206\u02DA\u00AC\u2026\u00E6\u2026;\u2026","\n\t\r","1","true","false","0",] <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / [("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> ERROR('INVALID_MAP_OPERATION',"")
+} / [("1970-01-12T13:46:40Z" as Date),("1970-01-24T03:33:20Z" as Date),("1970-02-04T17:20:00Z" as Date),] <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> ERROR('INVALID_MAP_OPERATION',"")
+} / [-2147483648,2147483647,-9223372036854775807,9223372036854775807,0,1,-1,100,-100,] <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / [-3.4028234663852886E38,3.4028234663852886E38,-1.7976931348623157E308,1.7976931348623157E308,0.0,1.0,-1.0,100.0,-100.0,0.5,-0.5,-0.1,0.1,] <=> ERROR('INVALID_MAP_OPERATION',"")
+} / [-3.4028234663852886E38,3.4028234663852886E38,-1.7976931348623157E308,1.7976931348623157E308,0.0,1.0,-1.0,100.0,-100.0,0.5,-0.5,-0.1,0.1,] <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / [] <=> ERROR('INVALID_MAP_OPERATION',"")
+} / [] <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / [true,false,] <=> ERROR('INVALID_MAP_OPERATION',"")
+} / [true,false,] <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / false <=> ERROR('INVALID_MAP_OPERATION',"")
+} / false <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / true <=> ERROR('INVALID_MAP_OPERATION',"")
+} / true <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
 } / {"string" : "string",
-} <=> ERROR('INVALID_MAP_OPERATION',"")
+} <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
 } / {("1970-01-12T13:46:40Z" as Date) : true,
-} <=> ERROR('INVALID_MAP_OPERATION',"")
+} <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
 } / {0.1 : "0.1",
-} <=> ERROR('INVALID_MAP_OPERATION',"")
+} <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
 } / {1 : "one",
-} <=> ERROR('INVALID_MAP_OPERATION',"")
+} <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
@@ -1236,13 +1236,13 @@ true : 5,
 "value1" : true,
 "value3" : true,
 true : "true",
-} <=> ERROR('INVALID_MAP_OPERATION',"")
+} <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
 } / {true : "true",
-} <=> ERROR('INVALID_MAP_OPERATION',"")
+} <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
 {1 : 0.1,
 "value1" : true,
 true : 5,
-} / {} <=> ERROR('INVALID_MAP_OPERATION',"")
+} / {} <=> ERROR('EXCEPTION',"INVALID_MAP_OPERATION")
