@@ -19,6 +19,7 @@ package dollar.execution.simple;
 import dollar.api.Scope;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.script.SourceSegment;
+import dollar.api.types.DollarFactory;
 import dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
 import dollar.internal.runtime.script.api.DollarParser;
@@ -107,7 +108,7 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
         if (getConfig().debugExecution()) {
             log.info("Immediate Execution");
         }
-        final FutureTask<T> tFutureTask = new FutureTask<>(callable);
+        final FutureTask<T> tFutureTask = new FutureTask<>(wrap(callable));
         tFutureTask.run();
         return tFutureTask;
     }
@@ -155,16 +156,17 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
     @Override
     public var fork(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call) {
         Future<var> varFuture = submit(() -> call.apply(in));
-
+        String id = DollarScriptSupport.randomId();
         log.debug("Future obtained, returning future node");
-        return node(FORK, false, DollarParser.parser.get(), source,
-                    Arrays.asList(in),
-                    j -> {
-                        log.debug("Waiting for future ...");
+        currentScope().set(id, node(FORK, false, DollarParser.parser.get(), source,
+                                    Arrays.asList(in),
+                                    j -> {
+                                        log.debug("Waiting for future ...");
 //                                                              Thread.dumpStack();
-                        return varFuture.get();
-                    }
-        );
+                                        return varFuture.get();
+                                    }
+        ), true, null, null, true, false, false);
+        return DollarFactory.fromStringValue(id);
     }
 
     private Runnable wrap(@NotNull Runnable runnable) {
@@ -179,6 +181,10 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
 
     private <T> Callable<T> wrap(@NotNull Callable<T> callable) {
         Scope scope = currentScope();
-        return () -> DollarScriptSupport.inScope(true, scope, newScope -> callable.call());
+        DollarParser parser = DollarParser.parser.get();
+        return () -> DollarScriptSupport.inScope(true, scope, newScope -> {
+            DollarParser.parser.set(parser);
+            return callable.call();
+        });
     }
 }

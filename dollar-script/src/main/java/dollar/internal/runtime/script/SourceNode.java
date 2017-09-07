@@ -229,15 +229,14 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 try {
                     if (newScope) {
                         if (pure || currentScope().pure()) {
-                            useScope = new PureScope(currentScope(), currentScope().source(), name, currentScope().file(),
-                                                     isParallel());
+                            useScope = new PureScope(currentScope(), currentScope().source(), name, currentScope().file());
                         } else {
                             if (currentScope().pure() && (operation.pure() != null) && !operation.pure()) {
                                 throw new DollarScriptException("Attempted to create an impure scope within a pure scope " +
                                                                         "(" + currentScope() + ") for " + name,
                                                                 source);
                             }
-                            useScope = new ScriptScope(currentScope(), name, false, isParallel(), false);
+                            useScope = new ScriptScope(currentScope(), name, false, false);
                         }
                     } else {
                         useScope = currentScope();
@@ -248,7 +247,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                             log.info("EXE: {} {} for {}", name, method.getName(), source.getShortSourceMessage());
                         }
                         if (DollarStatic.getConfig().debugParallel()) {
-                            if (currentScope().parallel()) {
+                            if (false) {
                                 log.info("PARALLEL: {} {}", name, method);
                             }
                         }
@@ -289,10 +288,6 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
         }
     }
 
-    public boolean isParallel() {
-        Boolean configuredParallel = sourceNodeOptions.isParallel();
-        return (configuredParallel != null) ? configuredParallel : currentScope().parallel();
-    }
 
     @Nullable
     private Object invokeMain(@Nullable Object proxy, @NotNull Method method, @Nullable Object[] args) throws Throwable {
@@ -306,11 +301,11 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             } else if (Objects.equals(Object.class, method.getDeclaringClass())) {
                 String name = method.getName();
                 if ("equals".equals(name)) {
-                    return execute().equals(args[0]);
+                    return execute(false).equals(args[0]);
                 } else if ("hashCode".equals(name)) {
-                    return execute().hashCode();
+                    return execute(false).hashCode();
                 } else if ("toString".equals(name)) {
-                    return execute().toString();
+                    return execute(false).toString();
                 } else {
                     throw new IllegalStateException(String.valueOf(method));
                 }
@@ -333,7 +328,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             } else if ("$fixDeep".equals(method.getName())) {
 
                 if ((args == null) || (args.length == 0)) {
-                    return executePipe(DollarFactory.fromValue(isParallel())).$fixDeep(isParallel());
+                    return executePipe(DollarFactory.fromValue(false)).$fixDeep(false);
                 } else {
                     return executePipe(DollarFactory.fromValue(args[0])).$fixDeep((Boolean) args[0]);
                 }
@@ -391,7 +386,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             } else {
 //            System.err.println(method);
 
-                var out = execute();
+                var out = execute(false);
                 if (out == null) {
                     return null;
                 }
@@ -422,5 +417,5 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     }
 
     @NotNull
-    public var execute() throws Exception {return executor.executeNow(() -> executePipe($(isParallel()))).get();}
+    public var execute(boolean parallel) throws Exception {return executor.executeNow(() -> executePipe($(parallel))).get();}
 }

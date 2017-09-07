@@ -128,7 +128,7 @@ public class CollectOperator implements Function<Token, var> {
                            log.debug("Collected {}", fromList(collected));
                            final boolean endValue = (until != null) && until.isTrue();
                            if (endValue) {
-                               returnValue = loop.$fixDeep(currentScope().parallel());
+                               returnValue = loop.$fixDeep(false);
                                collected.clear();
                                count.set(-1);
                                log.debug("Return value  {}", returnValue);

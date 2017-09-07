@@ -1,24 +1,22 @@
 
-def testArray [ TIME(), {SLEEP(2 S);TIME();}, TIME() ];
+
+var a= serial [ TIME(), {SLEEP(2 S);TIME();}, TIME() ];
 
 
-var a= serial testArray;
-
-
-var b= parallel testArray;
+var b= parallel [ TIME(), {SLEEP(2 S);TIME();}, TIME() ];
 
 @@ a
 @@ b
 
 
 //Test different execution orders
-.: b[2] < b[1]
+.: b[2] <= b[1]
 .: a[2] >= a[1]
 
 def sleepTime {@@ "Background Sleeping";SLEEP(4 S); @@ "Background Finished Sleeping";TIME()}
 
 //Any future reference to c will block until c has completed evaluation
-const c= fork sleepTime
+const forkId= fork sleepTime
 
 SLEEP (1 S)
 
@@ -30,9 +28,9 @@ SLEEP (2 S)
 
 const d= TIME()
 
-@@ c
+
 @@ d
 
-.: c > d
+.: $(forkId) > d
 
 

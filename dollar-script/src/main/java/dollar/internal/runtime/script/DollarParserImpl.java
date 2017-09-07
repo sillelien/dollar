@@ -152,7 +152,7 @@ public class DollarParserImpl implements DollarParser {
             return parseMarkdown(file);
         } else {
             String source = new String(Files.readAllBytes(file.toPath()));
-            return parse(new ScriptScope(source, file, true, parallel, false), source);
+            return parse(new ScriptScope(source, file, true, false), source);
         }
 
     }
@@ -161,7 +161,7 @@ public class DollarParserImpl implements DollarParser {
     @NotNull
     public var parse(@NotNull InputStream in, boolean parallel, @NotNull Scope scope) throws Exception {
         String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(scope, "(stream)", source, "(stream-scope)", true, parallel, false), source);
+        return parse(new ScriptScope(scope, "(stream)", source, "(stream-scope)", true, false), source);
     }
 
     @Override
@@ -169,13 +169,13 @@ public class DollarParserImpl implements DollarParser {
     public var parse(@NotNull InputStream in, @NotNull String file, boolean parallel) throws Exception {
         this.file = file;
         String source = new String(ByteStreams.toByteArray(in));
-        return parse(new ScriptScope(source, new File(file), true, parallel, false), source);
+        return parse(new ScriptScope(source, new File(file), true, false), source);
     }
 
     @Override
     @NotNull
     public var parse(@NotNull String source, boolean parallel) throws Exception {
-        return parse(new ScriptScope(source, "(string)", true, parallel, false), source);
+        return parse(new ScriptScope(source, "(string)", true, false), source);
     }
 
     @Override
@@ -326,15 +326,15 @@ public class DollarParserImpl implements DollarParser {
         table = prefix(pure, table, ERROR, Func::errorFunc);
         table = prefix(pure, table, TRUTHY, DollarStatic::$truthy);
 
-        table = postfix(pure, table, MIN, v -> v.$min(currentScope().parallel()));
-        table = postfix(pure, table, MAX, v -> v.$max(currentScope().parallel()));
-        table = postfix(pure, table, SUM, v -> v.$sum(currentScope().parallel()));
-        table = postfix(pure, table, PRODUCT, v -> v.$product(currentScope().parallel()));
+        table = postfix(pure, table, MIN, v -> v.$min(false));
+        table = postfix(pure, table, MAX, v -> v.$max(false));
+        table = postfix(pure, table, SUM, v -> v.$sum(false));
+        table = postfix(pure, table, PRODUCT, v -> v.$product(false));
         table = postfix(pure, table, SPLIT, var::$list);
-        table = prefix(pure, table, SORT, v -> v.$sort(currentScope().parallel()));
-        table = postfix(pure, table, REVERSE, var -> var.$reverse(currentScope().parallel()));
-        table = postfix(pure, table, UNIQUE, v -> v.$unique(currentScope().parallel()));
-        table = postfix(pure, table, AVG, v -> v.$avg(currentScope().parallel()));
+        table = prefix(pure, table, SORT, v -> v.$sort(false));
+        table = postfix(pure, table, REVERSE, var -> var.$reverse(false));
+        table = postfix(pure, table, UNIQUE, v -> v.$unique(false));
+        table = postfix(pure, table, AVG, v -> v.$avg(false));
 
         table = prefixUnReactive(pure, table, FIX, Func::fixFunc);
 
@@ -489,7 +489,7 @@ public class DollarParserImpl implements DollarParser {
                                                 log.debug("Executing in background ...");
                                                 return executor.fork(new SourceSegmentValue(currentScope(), token), (var) token
                                                                                                                                   .value(),
-                                                                     in -> in.$fix(1, currentScope().parallel()));
+                                                                     in -> in.$fixDeep(false));
                                             });
                             }
                        );
@@ -526,26 +526,26 @@ public class DollarParserImpl implements DollarParser {
     }
 
     private Parser<var> listExpression(@NotNull Parser<var> expression, boolean pure) {
-        return OP_NL(LEFT_BRACKET)
-                       .next(expression.sepBy(COMMA_OR_NEWLINE_TERMINATOR))
-                       .followedBy(COMMA_OR_NEWLINE_TERMINATOR.optional(null))
-                       .followedBy(NL_OP(RIGHT_BRACKET))
-                       .token()
-                       .map(
-                               token -> {
-                                   List<var> entries = (List<var>) token.value();
-                                   final var node = node(LIST_OP, "list-" + shortHash(token), pure, this, token, entries,
-                                                         vars -> {
-                                                             log.info("Fixing list {}",
-                                                                      currentScope().parallel() ? "parallel" : "serial");
-                                                             return DollarFactory.fromList(entries).$fix(1,
-                                                                                                         currentScope().parallel());
-                                                         }
-                                   );
-                                   entries.forEach(entry -> entry.$listen(i -> node.$notify()));
-                                   return node;
+        return array(
+                OP_NL(PARALLEL).optional(null),
+                OP_NL(LEFT_BRACKET).next(expression.sepBy(COMMA_OR_NEWLINE_TERMINATOR)).followedBy(
+                        COMMA_OR_NEWLINE_TERMINATOR.optional(null))
+                        .followedBy(NL_OP(RIGHT_BRACKET))
+        ).token().map(
+                token -> {
+                    Object[] objects = (Object[]) token.value();
+                    boolean parallel = objects[0] != null;
+                    List<var> entries = (List<var>) objects[1];
+                    final var node = node(LIST_OP, "list-" + shortHash(token), pure, this, token, entries,
+                                          vars -> {
+                                              log.info("Fixing list {}", parallel ? "parallel" : "serial");
+                                              return DollarFactory.fromList(entries).$fix(1, parallel);
+                                          }
+                    );
+                    entries.forEach(entry -> entry.$listen(i -> node.$notify()));
+                    return node;
 
-                               });
+                });
     }
 
     private Parser<var> rangeExpression(@NotNull Parser.Reference<var> expression, boolean pure) {
@@ -585,17 +585,22 @@ public class DollarParserImpl implements DollarParser {
 
     @NotNull
     private Parser<var> mapExpression(@NotNull Parser<var> expression, boolean pure) {
-        return OP_NL(LEFT_BRACE)
-                       .next(expression.sepBy(COMMA_TERMINATOR))
-                       .followedBy(COMMA_TERMINATOR.optional(null))
-                       .followedBy(NL_OP(RIGHT_BRACE))
-                       .token()
-                       .map(token -> {
-                           List<var> o = (List<var>) token.value();
-                           final var node = node(MAP_OP, "map-" + shortHash(token), pure, this, token, o, i -> mapFunc(o));
-                           o.forEach(entry -> entry.$listen(i -> node.$notify()));
-                           return node;
-                       });
+        return array(
+                OP_NL(PARALLEL).optional(null), OP_NL(LEFT_BRACE)
+                                                        .next(
+                                                                expression.sepBy(COMMA_TERMINATOR)
+                                                        )
+                                                        .followedBy(COMMA_TERMINATOR.optional(null))
+                                                        .followedBy(NL_OP(RIGHT_BRACE))
+        ).token().map(token -> {
+            Object[] objects = (Object[]) token.value();
+            boolean parallel = objects[0] != null;
+            List<var> o = (List<var>) objects[1];
+            final var node = node(MAP_OP, "map-" + shortHash(token), pure, this, token, o,
+                                  i -> mapFunc(parallel, o));
+            o.forEach(entry -> entry.$listen(i -> node.$notify()));
+            return node;
+        });
     }
 
     @NotNull
@@ -612,7 +617,7 @@ public class DollarParserImpl implements DollarParser {
                                  .map(token -> node(BLOCK_OP,
                                                     "block-" + shortHash(token), pure,
                                                     this, token, (List<var>) token.value(),
-                                                    i -> blockFunc(1, (List<var>) token.value())));
+                                                    i -> blockFunc(Integer.MAX_VALUE, (List<var>) token.value())));
         ref.set(or);
         return or;
     }
@@ -693,7 +698,7 @@ public class DollarParserImpl implements DollarParser {
                                            ClassScopeFactory factory = new ClassScopeFactory(currentScope(),
                                                                                              objects[0].toString(),
                                                                                              (List<var>) objects[1], false,
-                                                                                             currentScope().parallel());
+                                                                                             false);
 
                                            currentScope().registerClass(objects[0].toString(), factory);
                                            return $void();

@@ -58,7 +58,7 @@ public final class Func {
     @NotNull
     static var reduceFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         assert REDUCE.validForPure(pure);
-        return lhs.$list().$stream(currentScope().parallel()).reduce((x, y) -> {
+        return lhs.$list().$stream(false).reduce((x, y) -> {
             try {
                 return inSubScope(false, pure, REDUCE.name(), newScope -> {
                     newScope.parameter("1", x);
@@ -78,7 +78,7 @@ public final class Func {
             var result = inSubScope(false, pure, EACH.name(),
                                     newScope -> {
                                         newScope.parameter("1", i[0]);
-                                        return rhs.$fixDeep(currentScope().parallel());
+                                        return rhs.$fixDeep(false);
                                     });
             assert result != null;
             return result;
@@ -87,7 +87,7 @@ public final class Func {
 
     @NotNull
     static var elseFunc(@NotNull var lhs, @NotNull var rhs) {
-        final var fixLhs = lhs.$fixDeep(currentScope().parallel());
+        final var fixLhs = lhs.$fixDeep(false);
         if (fixLhs.isBoolean() && fixLhs.isFalse()) {
             return rhs.$fix(2, false);
         } else {
@@ -156,8 +156,8 @@ public final class Func {
 
     @NotNull
     static var assertEqualsFunc(@NotNull var lhs, @NotNull var rhs) {
-        final var lhsFix = lhs.$fixDeep(currentScope().parallel());
-        final var rhsFix = rhs.$fixDeep(currentScope().parallel());
+        final var lhsFix = lhs.$fixDeep();
+        final var rhsFix = rhs.$fixDeep();
         if (lhsFix.equals(rhsFix)) {
             return $(true);
         } else {
@@ -167,7 +167,7 @@ public final class Func {
 
     @NotNull
     static var listenFunc(@NotNull var lhs, @NotNull var rhs) {
-        lhs.$fixDeep(currentScope().parallel());
+        lhs.$fixDeep();
         return lhs.$listen(var -> lhs.isTrue() ? DollarScriptSupport.fix(rhs) : $void());
     }
 
@@ -179,14 +179,11 @@ public final class Func {
     static var inFunc(@NotNull var lhs, @NotNull var rhs) {return rhs.$contains(lhs);}
 
     @NotNull
-    static var serialFunc(@NotNull var v) {return v.$fixDeep(currentScope().parallel());}
-
-    @NotNull
     static var whileFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         assert WHILE_OP.validForPure(pure);
 
         while (lhs.isTrue()) {
-            rhs.$fixDeep(currentScope().parallel());
+            rhs.$fixDeep();
         }
         return $(false);
     }
@@ -202,10 +199,10 @@ public final class Func {
 
     @NotNull
     static var ifFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
-        final var lhsFix = lhs.$fixDeep(currentScope().parallel());
+        final var lhsFix = lhs.$fixDeep(false);
         boolean isTrue = lhsFix.isBoolean() && lhsFix.isTrue();
         assert IF_OP.validForPure(pure);
-        return isTrue ? rhs.$fix(2, currentScope().parallel()) : DollarFactory.FALSE;
+        return isTrue ? rhs.$fix(2, false) : DollarFactory.FALSE;
     }
 
     @NotNull
@@ -238,21 +235,21 @@ public final class Func {
 
     @NotNull
     static var causesFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
-        lhs.$fixDeep(currentScope().parallel());
-        return lhs.$listen(vars -> rhs.$fix(1, currentScope().parallel()));
+        lhs.$fixDeep(false);
+        return lhs.$listen(vars -> rhs.$fix(1, false));
     }
 
     @NotNull
     static var pipeFunc(@NotNull DollarParser parser, boolean pure, @NotNull Token token, @NotNull var rhs, @NotNull var lhs) {
         currentScope().parameter("1", lhs);
-        var rhsVal = rhs.$fix(currentScope().parallel());
+        var rhsVal = rhs.$fix(false);
         if (FUNCTION_NAME_OP.name().equals(rhs.metaAttribute(OPERATION_NAME))) {
             return rhsVal;
         } else {
             String rhsStr = rhsVal.toString();
             return (rhs.metaAttribute(IS_BUILTIN) != null)
                            ? Builtins.execute(rhsStr, singletonList(lhs), pure)
-                           : variableNode(pure, rhsStr, false, null, token, parser).$fix(1, currentScope().parallel());
+                           : variableNode(pure, rhsStr, false, null, token, parser).$fix(1, false);
         }
     }
 
@@ -277,7 +274,7 @@ public final class Func {
                     if ((unless != null) && unless.isTrue()) {
                         return $void();
                     } else {
-                        return block.$fixDeep(currentScope().parallel());
+                        return block.$fixDeep(false);
                     }
                 }
 
@@ -305,18 +302,17 @@ public final class Func {
                        .resolveModule(parts[0])
                        .resolve(parts[1], currentScope(), parser)
                        .pipe($(paramMap))
-                       .$fix(currentScope().parallel());
+                       .$fix(false);
 
 
     }
 
-    @NotNull
-    static var mapFunc(@NotNull List<var> entries) {
+    static var mapFunc(boolean parallel, @NotNull List<var> entries) {
         if (entries.size() == 1) {
             return DollarFactory.blockCollection(entries);
         } else {
-            Stream<var> stream = currentScope().parallel() ? entries.stream().parallel() : entries.stream();
-            return $(stream.map(v -> v.$fix(currentScope().parallel()))
+            Stream<var> stream = parallel ? entries.stream().parallel() : entries.stream();
+            return $(stream.map(v -> v.$fix(parallel))
                              .collect(Collectors.toConcurrentMap(
                                      v -> v.pair() ? v.$pairKey() : v.$S(),
                                      v -> v.pair() ? v.$pairValue() : v)));
@@ -328,8 +324,8 @@ public final class Func {
         if (l.isEmpty()) {
             return $void();
         } else {
-            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fix(depth, currentScope().parallel()));
-            return l.get(l.size() - 1).$fix(depth, currentScope().parallel());
+            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fix(depth, false));
+            return l.get(l.size() - 1).$fix(depth, false);
         }
     }
 
@@ -360,6 +356,6 @@ public final class Func {
     }
 
     public static var fixFunc(var v) {
-        return v.$fix(2, currentScope().parallel());
+        return v.$fix(2, false);
     }
 }

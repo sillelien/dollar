@@ -83,7 +83,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                 useConstraint = varScope.constraint(varName);
                 useSource = varScope.constraintSource(varName);
             }
-            final var rhsFixed = rhs.$fix(1, currentScope().parallel());
+            final var rhsFixed = rhs.$fixDeep(false);
 
             if (rhsFixed.$type() != null && type != null) {
                 if (!rhsFixed.$type().canBe(type)) {
@@ -187,13 +187,13 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                     return node(WHEN_ASSIGN, pure, parser, token, inputs,
                                 c -> {
                                     var condition = (var) objects[5];
-                                    var initial = rhs.$fixDeep(currentScope().parallel());
+                                    var initial = rhs.$fixDeep(false);
                                     scope.set(varName, condition.isTrue() ? initial : $void(), false, null, useSource,
                                               isVolatile, false, pure);
                                     return condition.$listen(
                                             args -> {
                                                 if (condition.isTrue()) {
-                                                    var value = rhs.$fixDeep(currentScope().parallel());
+                                                    var value = rhs.$fixDeep(false);
                                                     setVariable(scope, varName, value, false, useConstraint, useSource,
                                                                 isVolatile, false, pure, false, token, parser);
 

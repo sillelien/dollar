@@ -273,7 +273,7 @@ public class DollarObject extends AbstractDollar {
     }
 
     private var inThisScope(ScopeExecutable<var> exe) {
-        ScriptScope subScope = new ScriptScope(currentScope(), "this-" + name, false, currentScope().parallel(), true);
+        ScriptScope subScope = new ScriptScope(currentScope(), "this-" + name, false, true);
         DollarObject thisObject = new DollarObject(name, constructor, fields, true);
         subScope.set("this", thisObject, true, null, null, true, false, false);
         return inScope(true, subScope, exe);

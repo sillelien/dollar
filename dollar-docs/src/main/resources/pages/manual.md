@@ -539,7 +539,7 @@ Of course since the use of `(it is XXXX)` is very common Dollar provides a speci
 
 
 ```dollar
-var <string> (#it > 5) s="String value"
+var <String> (#it > 5) s="String value"
 ```
 
 It is intended that the predictive type system, will be in time combined with runtime types to help spot bugs at compile time.
@@ -549,46 +549,46 @@ Dollar also supports type coercion, this is done using the `as` operator followe
 
 
 ```dollar
-var <string> s= 1 as string
+var <String> s= 1 as String
 s <=> "1"
 ```
 
 A few more examples follow.
 
 ```dollar
-1 as string <=> "1"
-1 as boolean <=> true
-1 as list <=> [1]
-1 as map <=> {"value":1}
-1 as VOID <=> void
-1 as integer <=> 1
+1 as String <=> "1"
+1 as Boolean <=> true
+1 as List <=> [1]
+1 as Map <=> {"value":1}
+1 as Void <=> void
+1 as Integer <=> 1
 
-"1" as integer <=> 1
-"http://google.com" as uri
-"1" as VOID <=> void
-"true" as boolean <=> true
-"1" as boolean <=> false
-"1" as list <=> ["1"]
-"1" as map <=> {"value":"1"}
-"1" as string <=> "1"
+"1" as Integer <=> 1
+"http://google.com" as URI
+"1" as Void <=> void
+"true" as Boolean <=> true
+"1" as Boolean <=> false
+"1" as List <=> ["1"]
+"1" as Map <=> {"value":"1"}
+"1" as String <=> "1"
 
-true as string <=> "true"
-true as integer <=> 1
-true as list <=> [true]
-true as map <=> {"value":true}
-true as boolean <=> true
-true as VOID <=> void
+true as String <=> "true"
+true as Integer <=> 1
+true as List <=> [true]
+true as Map <=> {"value":true}
+true as Boolean <=> true
+true as Void <=> void
 
 
-[1,2,3] as string <=> "[ 1, 2, 3 ]"
-[1,2,3] as list <=> [1,2,3]
-[1,2,3] as boolean <=> true
-[1,2,3] as map <=> {"value":[1,2,3]}
+[1,2,3] as String <=> "[ 1, 2, 3 ]"
+[1,2,3] as List <=> [1,2,3]
+[1,2,3] as Boolean <=> true
+[1,2,3] as Map <=> {"value":[1,2,3]}
 
-{"a":1,"b":2} as string <=> '{"a":1,"b":2}'
-{"a":1,"b":2} as list <=> ["a":1,"b":2]
-{"a":1,"b":2} as boolean <=> true
-{"a":1,"b":2} as VOID <=> void
+{"a":1,"b":2} as String <=> '{"a":1,"b":2}'
+{"a":1,"b":2} as List <=> ["a":1,"b":2]
+{"a":1,"b":2} as Boolean <=> true
+{"a":1,"b":2} as Void <=> void
 ```
 
 
@@ -710,7 +710,7 @@ The `collect` operator listens for changes in the supplied expression adding all
 var e=void
 
 //Length is greater than or equal to 4 unless void
-var (#it >= 4 || it is VOID) collectedValues=void
+var (#it >= 4 || it is Void) collectedValues=void
 
 //count starts at 0 so this means five to collect (except if it contains the value 10)
 collect e until count == 4 unless it == 10{
@@ -830,33 +830,33 @@ Dollar support the basic numerical operators +,-,/,*,%,++,-- as well as #
 And similar to Java Dollar coerces types as required:
 
 ```dollar
-.: (1 - 1.0) is DECIMAL
-.: (1.0 - 1.0) is DECIMAL
-.: (1.0 - 1) is DECIMAL
-.: (1 - 1) is INTEGER
+.: (1 - 1.0) is Decimal
+.: (1.0 - 1.0) is Decimal
+.: (1.0 - 1) is Decimal
+.: (1 - 1) is Integer
 
-.: (1 + 1.0) is DECIMAL
-.: (1.0 + 1.0) is DECIMAL
-.: (1.0 + 1) is DECIMAL
-.: (1 + 1) is INTEGER
+.: (1 + 1.0) is Decimal
+.: (1.0 + 1.0) is Decimal
+.: (1.0 + 1) is Decimal
+.: (1 + 1) is Integer
 
-.: 1 / 1 is INTEGER
-.: 1 / 1.0 is DECIMAL
-.: 2.0 / 1 is DECIMAL
-.: 2.0 / 1.0 is DECIMAL
+.: 1 / 1 is Integer
+.: 1 / 1.0 is Decimal
+.: 2.0 / 1 is Decimal
+.: 2.0 / 1.0 is Decimal
 
-.: 1 * 1 is INTEGER
-.: 1 * 1.0 is DECIMAL
-.: 2.0 * 1 is DECIMAL
-.: 2.0 * 1.0 is DECIMAL
+.: 1 * 1 is Integer
+.: 1 * 1.0 is Decimal
+.: 2.0 * 1 is Decimal
+.: 2.0 * 1.0 is Decimal
 
 
-.: 1 % 1 is INTEGER
-.: 1 % 1.0 is DECIMAL
-.: 2.0 % 1 is DECIMAL
-.: 2.0 % 1.0 is DECIMAL
-.: ABS(1) is INTEGER
-.: ABS(1.0) is DECIMAL
+.: 1 % 1 is Integer
+.: 1 % 1.0 is Decimal
+.: 2.0 % 1 is Decimal
+.: 2.0 % 1.0 is Decimal
+.: ABS(1) is Integer
+.: ABS(1.0) is Decimal
 ```
 
 ### Logical Operators

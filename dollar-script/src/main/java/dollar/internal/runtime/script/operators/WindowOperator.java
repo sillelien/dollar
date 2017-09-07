@@ -92,7 +92,7 @@ public class WindowOperator implements Function<Token, var> {
                         NotifyListener notifyListener = new NotifyListener(unless, until, block, (long) (over.toDouble() * Func
                                                                                                                                    .ONE_DAY));
                         log.info("Before expression listen");
-                        expression.$fixDeep(currentScope().parallel());
+                        expression.$fixDeep(false);
                         var listenerId = expression.$listen(notifyListener, "window-expression-listener-" + expression.meta(
                                 MetaConstants.OPERATION_NAME) + "-" + id);
                         expression.$notify();
@@ -108,7 +108,7 @@ public class WindowOperator implements Function<Token, var> {
                                                                                                    Map.Entry::getKey))
                                                                                            .map(Map.Entry::getValue)
                                                                                            .collect(Collectors.toList())));
-                            block.$fixDeep(currentScope().parallel());
+                            block.$fixDeep(false);
                             log.info("Clearing collected");
                             if (notifyListener.finished) {
                                 log.debug("Cancelling");

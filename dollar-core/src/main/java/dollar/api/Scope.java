@@ -108,7 +108,6 @@ public interface Scope {
 
     @NotNull List<var> parametersAsVars();
 
-    boolean parallel();
 
     void registerClass(@NotNull String name, @NotNull DollarClass dollarClass);
 

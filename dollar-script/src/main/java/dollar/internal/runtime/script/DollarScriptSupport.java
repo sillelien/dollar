@@ -59,7 +59,7 @@ public final class DollarScriptSupport {
     @NotNull
     static final ThreadLocal<List<Scope>> scopes = ThreadLocal.withInitial(() -> {
         ArrayList<Scope> list = new ArrayList<>();
-        list.add(new ScriptScope("thread-" + Thread.currentThread().getId(), false, false, false));
+        list.add(new ScriptScope("thread-" + Thread.currentThread().getId(), false, false));
         return list;
     });
     @NotNull
@@ -262,13 +262,13 @@ public final class DollarScriptSupport {
 
     public static <T> T inSubScope(boolean runtime, boolean pure, @NotNull String scopeName,
                                    @NotNull ScopeExecutable<T> r) {
-        return inScope(runtime, new ScriptScope(currentScope(), scopeName, false, currentScope().parallel(), false), r);
+        return inScope(runtime, new ScriptScope(currentScope(), scopeName, false, false), r);
     }
 
 
     public static <T> T inSubScope(boolean runtime, boolean pure, boolean parallel, @NotNull String scopeName,
                                    @NotNull ScopeExecutable<T> r) {
-        return inScope(runtime, new ScriptScope(currentScope(), scopeName, false, parallel, false), r);
+        return inScope(runtime, new ScriptScope(currentScope(), scopeName, false, false), r);
     }
 
 
@@ -279,14 +279,14 @@ public final class DollarScriptSupport {
                                 @NotNull ScopeExecutable<T> r) {
         Scope newScope;
         if (pure) {
-            newScope = new PureScope(parent, parent.source(), scopeName, parent.file(), parallel);
+            newScope = new PureScope(parent, parent.source(), scopeName, parent.file());
         } else {
             if ((parent instanceof PureScope)) {
                 throw new IllegalStateException(
                                                        "trying to switch to an impure scope in a pure scope.");
             }
             newScope = new ScriptScope(parent, parent.file(), parent.source(), scopeName,
-                                       false, parallel, false);
+                                       false, false);
         }
         addScope(runtime, parent);
         addScope(runtime, newScope);
@@ -313,8 +313,6 @@ public final class DollarScriptSupport {
     public static <T> T inScope(boolean runtime,
                                 @NotNull Scope scope,
                                 @NotNull ScopeExecutable<T> r) {
-
-        boolean addedDynamicScope = !scopes.get().isEmpty();
 
         addScope(runtime, scope);
         try {
@@ -641,7 +639,7 @@ public final class DollarScriptSupport {
      */
     @NotNull
     public static var fix(@Nullable var v) {
-        return (v != null) ? DollarFactory.wrap(v.$fix(currentScope().parallel())) : $void();
+        return (v != null) ? DollarFactory.wrap(v.$fix(false)) : $void();
     }
 
     public static void checkLearntType(@NotNull Token token, @Nullable Type type, var rhs, Double threshold) {

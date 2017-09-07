@@ -47,7 +47,7 @@ public class ClassScopeFactory implements DollarClass {
     @NotNull
     @Override
     public var instance(List<var> params) {
-        ScriptScope subScope = new ScriptScope(currentScope(), "class-" + name, false, currentScope().parallel(), true);
+        ScriptScope subScope = new ScriptScope(currentScope(), "class-" + name, false, true);
         return inScope(true, subScope, scope -> {
             addParameterstoCurrentScope(scope, params);
             var constructor = DollarFactory.fromList(expression.stream().map(VarInternal::$fixDeep).collect(Collectors.toList()));
