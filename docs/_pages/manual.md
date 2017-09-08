@@ -1107,11 +1107,11 @@ The assertion opeartor is used to assert that an expression holds true. It is a 
 
 ___
 
-### `assert-equals` or `<->` {#op-assert-equals}
+### `<->` (assert-equals) {#op-assert-equals}
 
 ![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`<expression> ('<->'|'assert-equals') <expression>`**{: style="font-size: 60%"}
+**`<expression> '<->' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -1399,11 +1399,11 @@ variableA = 2
 
 ___
 
-### `dec` or `--` {#op-decrement}
+### `--` (decrement) {#op-decrement}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`('--'|'dec') <expression>`**{: style="font-size: 60%"}
+**`'--' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -1450,11 +1450,11 @@ destroy
 
 ___
 
-### `divide` or `/` {#op-divide}
+### `/` (divide) {#op-divide}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`<expression> ('/'|'divide') <expression>`**{: style="font-size: 60%"}
+**`<expression> '/' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -1507,11 +1507,11 @@ var titles = posts each { $1.title }
 
 ___
 
-### `else` or `-:` {#op-else}
+### `else` {#op-else}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`<expression> ('-:'|'else') <expression>`**{: style="font-size: 60%"}
+**`<expression> 'else' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -1527,11 +1527,11 @@ var b= if (a == 1) "one" else if (a == 2) "two" else "more than two"
 
 ___
 
-### `equal` or `==` {#op-equal}
+### `==` (equal) {#op-equal}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`<expression> ('=='|'equal') <expression>`**{: style="font-size: 60%"}
+**`<expression> '==' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -1678,11 +1678,11 @@ The standard `>=` operator, it uses Comparable#compareTo and will work with any 
 
 ___
 
-### `if` or `???` {#op-if}
+### `if` {#op-if}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`<expression> ('???'|'if') <expression>`**{: style="font-size: 60%"}
+**`<expression> 'if' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -1731,11 +1731,11 @@ Returns true if the left-hand-side expression is contained in the right-hand-sid
 
 ___
 
-### `inc` or `++` {#op-increment}
+### `++` (increment) {#op-increment}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`('++'|'inc') <expression>`**{: style="font-size: 60%"}
+**`'++' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -1905,11 +1905,11 @@ ___
 
 ___
 
-### `minus` or `-` {#op-minus}
+### `-` (minus) {#op-minus}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`<expression> ('-'|'minus') <expression>`**{: style="font-size: 60%"}
+**`<expression> '-' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -1936,11 +1936,11 @@ ___
 
 ___
 
-### `mod` or `%` {#op-modulus}
+### `%` (modulus) {#op-modulus}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`<expression> ('%'|'mod') <expression>`**{: style="font-size: 60%"}
+**`<expression> '%' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -1956,11 +1956,11 @@ Returns the remainder (modulus) of the division of the left-hand-side by the rig
 
 ___
 
-### `multiply` or `*` {#op-multiply}
+### `*` (multiply) {#op-multiply}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`<expression> ('*'|'multiply') <expression>`**{: style="font-size: 60%"}
+**`<expression> '*' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -1979,11 +1979,11 @@ Returns the product of two values. If the left-hand-side is scalar (non collecti
 
 ___
 
-### `negate` or `-` {#op-negate}
+### `-` (negate) {#op-negate}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`('-'|'negate') <expression>`**{: style="font-size: 60%"}
+**`'-' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -2013,11 +2013,11 @@ not( true ) <=> false
 
 ___
 
-### `not-equal` or `!=` {#op-not-equal}
+### `!=` (not-equal) {#op-not-equal}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`<expression> ('!='|'not-equal') <expression>`**{: style="font-size: 60%"}
+**`<expression> '!=' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -2048,11 +2048,11 @@ false || false <=> false
 
 ___
 
-### `pair` or `:` {#op-pair}
+### `:` (pair) {#op-pair}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`<expression> (':'|'pair') <expression>`**{: style="font-size: 60%"}
+**`<expression> ':' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -2158,11 +2158,11 @@ Pauses a service described typically by a URI.
 
 ___
 
-### `pipe` or `|` {#op-pipe}
+### `|` (pipe) {#op-pipe}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`<expression> ('|'|'pipe') <expression>`**{: style="font-size: 60%"}
+**`<expression> '|' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -2184,11 +2184,11 @@ def funcB {
 
 ___
 
-### `plus` or `+` {#op-plus}
+### `+` (plus) {#op-plus}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`<expression> ('+'|'plus') <expression>`**{: style="font-size: 60%"}
+**`<expression> '+' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -2287,11 +2287,11 @@ var a= pure {
 
 ___
 
-### `range` or `..` {#op-range}
+### `..` (range) {#op-range}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`<expression> ('..'|'range') <expression>`**{: style="font-size: 60%"}
+**`<expression> '..' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -2480,11 +2480,11 @@ Causes the right-hand-side expression to be evaluated in serial, most useful in 
 
 ___
 
-### `size` or `#` {#op-size}
+### `#` (size) {#op-size}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`('#'|'size') <expression>`**{: style="font-size: 60%"}
+**`'#' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -2631,11 +2631,11 @@ ___
 
 ___
 
-### `truthy` or `~` {#op-truthy}
+### `~` (truthy) {#op-truthy}
 
 ![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
 
-**`('~'|'truthy') <expression>`**{: style="font-size: 60%"}
+**`'~' <expression>`**{: style="font-size: 60%"}
 
 
 
@@ -2975,43 +2975,43 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |-------                       |-------        |-------   |-------   |
 |[fix](#op-fix)                |`fix`          | `&`      |prefix    |
 |[sorted](#op-sorted)          |`sorted`       | `->`     |prefix    |
-|[range](#op-range)            |`range`        | `..`     |binary    |
+|[range](#op-range)            |               | `..`     |binary    |
 |[default](#op-default)        |`default`      | `:-`     |binary    |
 |[member](#op-member)          |               | `.`      |binary    |
 |[parameter](#op-parameter)    |               |          |postfix   |
 |[subscript](#op-subscript)    |               |          |postfix   |
 |[cast](#op-cast)              |               |          |postfix   |
-|[decrement](#op-decrement)    |`dec`          | `--`     |prefix    |
+|[decrement](#op-decrement)    |               | `--`     |prefix    |
 |[for](#op-for)                |`for`          |          |control   |
 |[in](#op-in)                  |`in`           | `€`      |binary    |
-|[increment](#op-increment)    |`inc`          | `++`     |prefix    |
+|[increment](#op-increment)    |               | `++`     |prefix    |
 |[not](#op-not)                |`not`          | `!`      |prefix    |
 |[reversed](#op-reversed)      |`reversed`     | `<-`     |postfix   |
-|[size](#op-size)              |`size`         | `#`      |prefix    |
-|[truthy](#op-truthy)          |`truthy`       | `~`      |prefix    |
+|[size](#op-size)              |               | `#`      |prefix    |
+|[truthy](#op-truthy)          |               | `~`      |prefix    |
 |[while](#op-while)            |`while`        |          |control   |
-|[divide](#op-divide)          |`divide`       | `/`      |binary    |
+|[divide](#op-divide)          |               | `/`      |binary    |
 |[each](#op-each)              |`each`         | `=>>`    |binary    |
-|[modulus](#op-modulus)        |`mod`          | `%`      |binary    |
-|[multiply](#op-multiply)      |`multiply`     | `*`      |binary    |
+|[modulus](#op-modulus)        |               | `%`      |binary    |
+|[multiply](#op-multiply)      |               | `*`      |binary    |
 |[reduce](#op-reduce)          |`reduce`       | `>>=`    |binary    |
 |[avg](#op-avg)                |`avg`          | `[%]`    |postfix   |
 |[max](#op-max)                |`max`          | `[>]`    |postfix   |
 |[min](#op-min)                |`min`          | `[<]`    |postfix   |
-|[minus](#op-minus)            |`minus`        | `-`      |binary    |
-|[negate](#op-negate)          |`negate`       | `-`      |prefix    |
-|[plus](#op-plus)              |`plus`         | `+`      |binary    |
+|[minus](#op-minus)            |               | `-`      |binary    |
+|[negate](#op-negate)          |               | `-`      |prefix    |
+|[plus](#op-plus)              |               | `+`      |binary    |
 |[product](#op-product)        |`product`      | `[*]`    |postfix   |
 |[split](#op-split)            |`split`        | `[/]`    |postfix   |
 |[sum](#op-sum)                |`sum`          | `[+]`    |postfix   |
 |[unique](#op-unique)          |`unique`       | `[!]`    |postfix   |
 |[greater-than](#op-greater-than)|               | `>`      |binary    |
 |[less-than](#op-less-than)    |               | `<`      |binary    |
-|[pipe](#op-pipe)              |`pipe`         | `|`      |binary    |
-|[equal](#op-equal)            |`equal`        | `==`     |binary    |
+|[pipe](#op-pipe)              |               | `|`      |binary    |
+|[equal](#op-equal)            |               | `==`     |binary    |
 |[greater-than-equal](#op-greater-than-equal)|               | `>=`     |binary    |
 |[less-than-equal](#op-less-than-equal)|               | `<=`     |binary    |
-|[not-equal](#op-not-equal)    |`not-equal`    | `!=`     |binary    |
+|[not-equal](#op-not-equal)    |               | `!=`     |binary    |
 |[and](#op-and)                |`and`          | `&&`     |binary    |
 |[or](#op-or)                  |`or`           | `||`     |binary    |
 |[all](#op-all)                |`all`          | `<@`     |prefix    |
@@ -3025,12 +3025,12 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[when](#op-when)              |`when`         | `?`      |binary    |
 |[write](#op-write)            |`write`        |          |control   |
 |[write-simple](#op-write-simple)|               | `>>`     |binary    |
-|[pair](#op-pair)              |`pair`         | `:`      |binary    |
+|[pair](#op-pair)              |               | `:`      |binary    |
 |[create](#op-create)          |`create`       | `|||>`   |prefix    |
 |[destroy](#op-destroy)        |`destroy`      | `<|||`   |prefix    |
-|[else](#op-else)              |`else`         | `-:`     |binary    |
+|[else](#op-else)              |`else`         |          |binary    |
 |[fork](#op-fork)              |`fork`         | `-<`     |prefix    |
-|[if](#op-if)                  |`if`           | `???`    |binary    |
+|[if](#op-if)                  |`if`           |          |binary    |
 |[is](#op-is)                  |`is`           |          |binary    |
 |[parallel](#op-parallel)      |`parallel`     | `|:|`    |prefix    |
 |[pause](#op-pause)            |`pause`        | `||>`    |prefix    |
@@ -3044,7 +3044,7 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[subscribe-assign](#op-subscribe-assign)|               | `*=`     |assignment|
 |[when-assign](#op-when-assign)|               |          |assignment|
 |[assert](#op-assert)          |`assert`       | `.:`     |prefix    |
-|[assert-equals](#op-assert-equals)|`assert-equals`| `<->`    |binary    |
+|[assert-equals](#op-assert-equals)|               | `<->`    |binary    |
 |[assert-equals-reactive](#op-assert-equals-reactive)|               | `<=>`    |binary    |
 |[debug](#op-debug)            |`debug`        | `!!`     |prefix    |
 |[err](#op-err)                |`err`          | `!?`     |prefix    |
