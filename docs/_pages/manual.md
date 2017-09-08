@@ -544,7 +544,7 @@ Of course since the use of `(it is XXXX)` is very common Dollar provides a speci
 
 
 ```
-var <string> (#it > 5) s="String value"
+var <String> (#it > 5) s="String value"
 ```
 
 It is intended that the predictive type system, will be in time combined with runtime types to help spot bugs at compile time.
@@ -554,46 +554,46 @@ Dollar also supports type coercion, this is done using the `as` operator followe
 
 
 ```
-var <string> s= 1 as string
+var <String> s= 1 as String
 s <=> "1"
 ```
 
 A few more examples follow.
 
 ```
-1 as string <=> "1"
-1 as boolean <=> true
-1 as list <=> [1]
-1 as map <=> {"value":1}
-1 as VOID <=> void
-1 as integer <=> 1
+1 as String <=> "1"
+1 as Boolean <=> true
+1 as List <=> [1]
+1 as Map <=> {"value":1}
+1 as Void <=> void
+1 as Integer <=> 1
 
-"1" as integer <=> 1
-"http://google.com" as uri
-"1" as VOID <=> void
-"true" as boolean <=> true
-"1" as boolean <=> false
-"1" as list <=> ["1"]
-"1" as map <=> {"value":"1"}
-"1" as string <=> "1"
+"1" as Integer <=> 1
+"http://google.com" as URI
+"1" as Void <=> void
+"true" as Boolean <=> true
+"1" as Boolean <=> false
+"1" as List <=> ["1"]
+"1" as Map <=> {"value":"1"}
+"1" as String <=> "1"
 
-true as string <=> "true"
-true as integer <=> 1
-true as list <=> [true]
-true as map <=> {"value":true}
-true as boolean <=> true
-true as VOID <=> void
+true as String <=> "true"
+true as Integer <=> 1
+true as List <=> [true]
+true as Map <=> {"value":true}
+true as Boolean <=> true
+true as Void <=> void
 
 
-[1,2,3] as string <=> "[ 1, 2, 3 ]"
-[1,2,3] as list <=> [1,2,3]
-[1,2,3] as boolean <=> true
-[1,2,3] as map <=> {"value":[1,2,3]}
+[1,2,3] as String <=> "[ 1, 2, 3 ]"
+[1,2,3] as List <=> [1,2,3]
+[1,2,3] as Boolean <=> true
+[1,2,3] as Map <=> {"value":[1,2,3]}
 
-{"a":1,"b":2} as string <=> '{"a":1,"b":2}'
-{"a":1,"b":2} as list <=> ["a":1,"b":2]
-{"a":1,"b":2} as boolean <=> true
-{"a":1,"b":2} as VOID <=> void
+{"a":1,"b":2} as String <=> '{"a":1,"b":2}'
+{"a":1,"b":2} as List <=> ["a":1,"b":2]
+{"a":1,"b":2} as Boolean <=> true
+{"a":1,"b":2} as Void <=> void
 ```
 
 
@@ -715,7 +715,7 @@ The `collect` operator listens for changes in the supplied expression adding all
 var e=void
 
 //Length is greater than or equal to 4 unless void
-var (#it >= 4 || it is VOID) collectedValues=void
+var (#it >= 4 || it is Void) collectedValues=void
 
 //count starts at 0 so this means five to collect (except if it contains the value 10)
 collect e until count == 4 unless it == 10{
@@ -835,33 +835,33 @@ Dollar support the basic numerical operators +,-,/,*,%,++,-- as well as #
 And similar to Java Dollar coerces types as required:
 
 ```
-.: (1 - 1.0) is DECIMAL
-.: (1.0 - 1.0) is DECIMAL
-.: (1.0 - 1) is DECIMAL
-.: (1 - 1) is INTEGER
+.: (1 - 1.0) is Decimal
+.: (1.0 - 1.0) is Decimal
+.: (1.0 - 1) is Decimal
+.: (1 - 1) is Integer
 
-.: (1 + 1.0) is DECIMAL
-.: (1.0 + 1.0) is DECIMAL
-.: (1.0 + 1) is DECIMAL
-.: (1 + 1) is INTEGER
+.: (1 + 1.0) is Decimal
+.: (1.0 + 1.0) is Decimal
+.: (1.0 + 1) is Decimal
+.: (1 + 1) is Integer
 
-.: 1 / 1 is INTEGER
-.: 1 / 1.0 is DECIMAL
-.: 2.0 / 1 is DECIMAL
-.: 2.0 / 1.0 is DECIMAL
+.: 1 / 1 is Integer
+.: 1 / 1.0 is Decimal
+.: 2.0 / 1 is Decimal
+.: 2.0 / 1.0 is Decimal
 
-.: 1 * 1 is INTEGER
-.: 1 * 1.0 is DECIMAL
-.: 2.0 * 1 is DECIMAL
-.: 2.0 * 1.0 is DECIMAL
+.: 1 * 1 is Integer
+.: 1 * 1.0 is Decimal
+.: 2.0 * 1 is Decimal
+.: 2.0 * 1.0 is Decimal
 
 
-.: 1 % 1 is INTEGER
-.: 1 % 1.0 is DECIMAL
-.: 2.0 % 1 is DECIMAL
-.: 2.0 % 1.0 is DECIMAL
-.: ABS(1) is INTEGER
-.: ABS(1.0) is DECIMAL
+.: 1 % 1 is Integer
+.: 1 % 1.0 is Decimal
+.: 2.0 % 1 is Decimal
+.: 2.0 % 1.0 is Decimal
+.: ABS(1) is Integer
+.: ABS(1.0) is Decimal
 ```
 
 ### Logical Operators
@@ -1167,7 +1167,7 @@ var (previous is Void || it > previous ) b = 5
 b=6
 b=7
 var ( it is String) s1="String value"
-var <string> (#it > 5) s2="String value"
+var <String> (#it > 5) s2="String value"
 const immutableValue= "Hello World"
 ```
 
@@ -1234,39 +1234,39 @@ Dollar  supports type coercion using the `as` operator followed by the type to c
 
 
 ```
-1 as string <=> "1"
-1 as boolean <=> true
-1 as list <=> [1]
-1 as map <=> {"value":1}
-1 as VOID <=> void
-1 as integer <=> 1
+1 as String <=> "1"
+1 as Boolean <=> true
+1 as List <=> [1]
+1 as Map <=> {"value":1}
+1 as Void <=> void
+1 as Integer <=> 1
 
-"1" as integer <=> 1
-"http://google.com" as uri
-"1" as VOID <=> void
-"true" as boolean <=> true
-"1" as boolean <=> false
-"1" as list <=> ["1"]
-"1" as map <=> {"value":"1"}
-"1" as string <=> "1"
+"1" as Integer <=> 1
+"http://google.com" as URI
+"1" as Void <=> void
+"true" as Boolean <=> true
+"1" as Boolean <=> false
+"1" as List <=> ["1"]
+"1" as Map <=> {"value":"1"}
+"1" as String <=> "1"
 
-true as string <=> "true"
-true as integer <=> 1
-true as list <=> [true]
-true as map <=> {"value":true}
-true as boolean <=> true
-true as VOID <=> void
+true as String <=> "true"
+true as Integer <=> 1
+true as List <=> [true]
+true as Map <=> {"value":true}
+true as Boolean <=> true
+true as Void <=> void
 
 
-[1,2,3] as string <=> "[ 1, 2, 3 ]"
-[1,2,3] as list <=> [1,2,3]
-[1,2,3] as boolean <=> true
-[1,2,3] as map <=> {"value":[1,2,3]}
+[1,2,3] as String <=> "[ 1, 2, 3 ]"
+[1,2,3] as List <=> [1,2,3]
+[1,2,3] as Boolean <=> true
+[1,2,3] as Map <=> {"value":[1,2,3]}
 
-{"a":1,"b":2} as string <=> '{"a":1,"b":2}'
-{"a":1,"b":2} as list <=> ["a":1,"b":2]
-{"a":1,"b":2} as boolean <=> true
-{"a":1,"b":2} as VOID <=> void
+{"a":1,"b":2} as String <=> '{"a":1,"b":2}'
+{"a":1,"b":2} as List <=> ["a":1,"b":2]
+{"a":1,"b":2} as Boolean <=> true
+{"a":1,"b":2} as Void <=> void
 ```
 
 ___
@@ -1311,6 +1311,15 @@ value choose {"red": "roses", "green": "tomatoes"} <-> "roses"
 
 ___
 
+### `class` {#op-class}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![No Scope](https://img.shields.io/badge/scope-inherited-lightgrey.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`'class' <identifier> <expression>`**{: style="font-size: 60%"}
+
+
+___
+
 ### `collect` {#op-collect}
 
 ![non-reactive](https://img.shields.io/badge/reactivity-fixed-blue.svg?style=flat-square) ![pure](https://img.shields.io/badge/function-pure-green.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
@@ -1326,7 +1335,7 @@ The `collect` operator listens for changes in the supplied expression adding all
 var e=void
 
 //Length is greater than or equal to 4 unless void
-var (#it >= 4 || it is VOID) collectedValues=void
+var (#it >= 4 || it is Void) collectedValues=void
 
 //count starts at 0 so this means five to collect (except if it contains the value 10)
 collect e until count == 4 unless it == 10{
@@ -1464,10 +1473,10 @@ Divides one value by another.
  .: DATE() / "1.0" is Decimal
  5 / 4 <=> 1
  5.0 /4 <=> 1.25
- .: 1 / 1 is INTEGER
- .: 1 / 1.0 is DECIMAL
- .: 2.0 / 1 is DECIMAL
- .: 2.0 / 1.0 is DECIMAL
+ .: 1 / 1 is Integer
+ .: 1 / 1.0 is Decimal
+ .: 2.0 / 1 is Decimal
+ .: 2.0 / 1.0 is Decimal
 ```
 
 ___
@@ -1574,7 +1583,7 @@ The right-hand-side is executed if an error occurs in the current scope.
 ```
 var errorHappened= false
 error { !? msg; errorHappened= true }
-def redis "redis://localhost:999999/test" as uri
+def redis "redis://localhost:999999/test" as URI
 write ("Hello World " + DATE()) to redis
 .: &errorHappened
 ```
@@ -1631,15 +1640,18 @@ ___
 Executes the right-hand-side in a seperate thread returning a 'future'. Any attempt to make use of the returned value from this operator will block until that thread finishes.
 
 ```
-const sleepTime := {@@ "Background Sleeping";SLEEP(4 S); @@ "Background Finished Sleeping";TIME()}
+def sleepTime {@@ "Background Sleeping "+TIME();SLEEP(4 S); @@ "Background Finished Sleeping "+TIME();fix (TIME())}
 //Any future reference to c will block until c has completed evaluation
-var c= fork sleepTime
-SLEEP(1 S)
+var forkId= fork sleepTime
 @@ "Main thread sleeping ..."
 SLEEP(2 S)
 @@ "Main thread finished sleeping ..."
 var d= TIME()
-.: c > d
+var forkResult= $(forkId);
+@@ forkResult
+@@ d
+.: forkResult is Integer
+.: forkResult > d
 ```
 
 ___
@@ -1948,10 +1960,10 @@ Returns the remainder (modulus) of the division of the left-hand-side by the rig
 
 ```
 5 % 4 <=> 1
-.: 1 % 1 is INTEGER
-.: 1 % 1.0 is DECIMAL
-.: 2.0 % 1 is DECIMAL
-.: 2.0 % 1.0 is DECIMAL
+.: 1 % 1 is Integer
+.: 1 % 1.0 is Decimal
+.: 2.0 % 1 is Decimal
+.: 2.0 % 1.0 is Decimal
 ```
 
 ___
@@ -1969,10 +1981,10 @@ Returns the product of two values. If the left-hand-side is scalar (non collecti
 ```
 2 * 5 <=> 10
 
-.: 1 * 1 is INTEGER
-.: 1 * 1.0 is DECIMAL
-.: 2.0 * 1 is DECIMAL
-.: 2.0 * 1.0 is DECIMAL
+.: 1 * 1 is Integer
+.: 1 * 1.0 is Decimal
+.: 2.0 * 1 is Decimal
+.: 2.0 * 1.0 is Decimal
 .: DATE() * 10 is Decimal
 
 ```
@@ -1992,6 +2004,15 @@ Negates a value.
 ```
  .: -1 < 0
 ```
+
+___
+
+### `new` {#op-new}
+
+![reactive](https://img.shields.io/badge/reactivity-reactive-green.svg?style=flat-square) ![impure](https://img.shields.io/badge/function-impure-blue.svg?style=flat-square) ![New Scope](https://img.shields.io/badge/scope-new-blue.svg?style=flat-square) ![Inherited Execution](https://img.shields.io/badge/order-inherited-lightgrey.svg?style=flat-square)
+
+**`'new' <identifier> (<parameters>)`**{: style="font-size: 60%"}
+
 
 ___
 
@@ -2079,13 +2100,18 @@ ___
 Causes the right-hand-side expression to be evaluated in parallel, most useful in conjunction with list blocks.
 
 ```
-const testList := [ TIME(), {SLEEP(1 S); TIME();}, TIME() ];
-var a= |..| testList ;
-var b= |:| testList ;
+const testListS := fix [ TIME(), {SLEEP(4 S); TIME();},  TIME() ];
+const testListP := fix |:|  [ TIME(), {SLEEP(4 S); TIME();},  TIME() ];
+var a= testListS("serial: ") ;
+var b= testListP("parallel: ") ;
 
+@@"a="+a
+@@"b="+b
 //Test different execution orders
+.: a[0] is Integer
+.: a[1] >= a[0]
 .: a[2] >= a[1]
-.: b[2] < b[1]
+.: b[2] <= b[1]
 ```
 
 ___
@@ -2130,7 +2156,9 @@ Named parameters are also supported.
 var outer=10;
 const scopedArray := [$1,outer,{var inner=20;inner}]
 
+@@ scopedArray(5)[0]
 scopedArray(5)[0] <=> 5;
+@@ scopedArray(5)[1]
 scopedArray(5)[1] <=> 10;
 scopedArray(5)[2]() <=> 20;
 
@@ -2205,10 +2233,10 @@ var pair2 = "second" : "World";
 .: [1] + [1] == [1,1];
 .: [1] + 1 == [1,1];
 
-.: (1 + 1.0) is DECIMAL
-.: (1.0 + 1.0) is DECIMAL
-.: (1.0 + 1) is DECIMAL
-.: (1 + 1) is INTEGER
+.: (1 + 1.0) is Decimal
+.: (1.0 + 1.0) is Decimal
+.: (1.0 + 1) is Decimal
+.: (1 + 1) is Integer
 ```
 
 ___
@@ -2315,13 +2343,13 @@ Please see https://github.com/google/guava/wiki/RangesExplained for more informa
 
 ```
 //Types
-.: (1..5) is RANGE
-.: [1..5) is RANGE
-.: [1..5] is RANGE
-.: (1..5] is RANGE
-.: (..5] is RANGE //  less than or equal to 5
-.: (5..] is RANGE //  greater than 5
-.: (..) is RANGE //   all numbers
+.: (1..5) is Range
+.: [1..5) is Range
+.: [1..5] is Range
+.: (1..5] is Range
+.: (..5] is Range //  less than or equal to 5
+.: (5..] is Range //  greater than 5
+.: (..) is Range //   all numbers
 
 
 
@@ -2949,7 +2977,7 @@ Boolean true.
 
 The following keywords are reserved:
 
-> abstract, await, break, case, catch, class, closure, continue, dispatch, do, dump, emit, enum, extends, fail, filter, final, finally, float, goto, implements, import, impure, include, instanceof, interface, join, lambda, load, measure, native, new, package, pluripotent, private, protected, public, readonly, return, save, scope, send, short, static, super, switch, synchronized, this, throw, throws, trace, transient, try, unit, variant, varies, vary, wait
+> abstract, await, break, case, catch, closure, continue, dispatch, do, dump, emit, enum, extends, fail, filter, final, finally, float, goto, implements, import, impure, include, instanceof, interface, join, lambda, load, measure, native, package, pluripotent, private, protected, public, readonly, return, save, scope, send, short, static, super, switch, synchronized, this, throw, throws, trace, transient, try, unit, variant, varies, vary, wait
 
 ### Operators
 
@@ -3052,10 +3080,12 @@ All operators by precedence, highest precedence ([associativity](https://en.wiki
 |[print](#op-print)            |`print`        | `@@`     |prefix    |
 |[block](#op-block)            |               |          |collection|
 |[builtin](#op-builtin)        |               |          |other     |
+|[class](#op-class)            |`class`        |          |other     |
 |[collect](#op-collect)        |`collect`      |          |control   |
 |[list](#op-list)              |               |          |collection|
 |[map](#op-map)                |               |          |collection|
 |[module](#op-module)          |`module`       |          |other     |
+|[new](#op-new)                |`new`          |          |prefix    |
 |[pure](#op-pure)              |`pure`         |          |prefix    |
 |[script](#op-script)          |               |          |other     |
 |[unit](#op-unit)              |               |          |postfix   |
