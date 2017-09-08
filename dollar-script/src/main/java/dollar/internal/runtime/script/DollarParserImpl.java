@@ -859,7 +859,7 @@ public class DollarParserImpl implements DollarParser {
         return array(or(NL_OP(PRINT).map(i -> PRINT), NL_OP(ERR).map(i -> ERR), NL_OP(DEBUG).map(i -> DEBUG)),
 
                      ref.lazy().many1()
-        ).followedBy(SEMICOLON_TERMINATOR.peek())
+        ).followedBy(or(SEMICOLON_TERMINATOR, COMMA_OR_NEWLINE_TERMINATOR).peek())
                        .token()
                        .map(token -> printFunc(this, new SourceCode(token), (OpDef) ((Object[]) token.value())[0],
                                                (List<var>) ((Object[]) token.value())[1]));

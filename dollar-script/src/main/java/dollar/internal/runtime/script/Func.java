@@ -308,7 +308,7 @@ public final class Func {
 
     static var printFunc(DollarParser parser, SourceSegment segment, OpDef command, List<var> vars) {
         return node(command, false, parser, segment, vars, args -> {
-            String outStr = vars.stream().map(i -> i.toString()).collect(Collectors.joining(""));
+            String outStr = vars.stream().map(var::toString).collect(Collectors.joining(""));
             if (command.equals(PRINT)) {
                 System.out.println(outStr);
             } else if (command.equals(ERR)) {
