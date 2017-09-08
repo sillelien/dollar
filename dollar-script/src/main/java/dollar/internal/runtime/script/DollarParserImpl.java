@@ -22,7 +22,7 @@ import dollar.api.ControlFlowAware;
 import dollar.api.DollarStatic;
 import dollar.api.NumericAware;
 import dollar.api.Scope;
-import dollar.api.URIAware;
+import dollar.api.script.SourceSegment;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.DollarRange;
 import dollar.api.var;
@@ -433,6 +433,7 @@ public class DollarParserImpl implements DollarParser {
                                           classExpression(ref),
                                           newExpression(ref, false),
                                           thisRef(false),
+                                          printExpression(ref, false),
                                           moduleExpression(ref),
                                           assertExpression(ref, false),
                                           collectExpression(ref, false),
@@ -488,27 +489,27 @@ public class DollarParserImpl implements DollarParser {
         table = infixlUnReactive(pure, table, ASSERT_EQ_UNREACT, Func::assertEqualsFunc);
 
 
-        table = postfix(pure, table, DEC, var::$dec);
-        table = postfix(pure, table, INC, var::$inc);
+        table = postfix(pure, table, DEC, (v, u) -> v.$dec());
+        table = postfix(pure, table, INC, (v, u) -> v.$inc());
 
-        table = prefix(pure, table, NEGATE, var::$negate);
-        table = prefix(pure, table, SIZE, var::$size);
+        table = prefix(pure, table, NEGATE, (v, u) -> v.$negate());
+        table = prefix(pure, table, SIZE, (v, u) -> v.$size());
 
-        table = prefix(pure, table, NOT, DollarStatic::$not);
-        table = prefix(pure, table, ERROR, Func::errorFunc);
-        table = prefix(pure, table, TRUTHY, DollarStatic::$truthy);
+        table = prefix(pure, table, NOT, (v, u) -> DollarStatic.$not(v));
+        table = prefix(pure, table, ERROR, (v, u) -> Func.errorFunc(v));
+        table = prefix(pure, table, TRUTHY, (v, u) -> DollarStatic.$truthy(v));
 
-        table = postfix(pure, table, MIN, v -> v.$min(false));
-        table = postfix(pure, table, MAX, v -> v.$max(false));
-        table = postfix(pure, table, SUM, v -> v.$sum(false));
-        table = postfix(pure, table, PRODUCT, v -> v.$product(false));
-        table = postfix(pure, table, SPLIT, var::$list);
-        table = prefix(pure, table, SORT, v -> v.$sort(false));
-        table = postfix(pure, table, REVERSE, var -> var.$reverse(false));
-        table = postfix(pure, table, UNIQUE, v -> v.$unique(false));
-        table = postfix(pure, table, AVG, v -> v.$avg(false));
+        table = postfix(pure, table, MIN, (v, u) -> v.$min(false));
+        table = postfix(pure, table, MAX, (v, u) -> v.$max(false));
+        table = postfix(pure, table, SUM, (v, u) -> v.$sum(false));
+        table = postfix(pure, table, PRODUCT, (v, u) -> v.$product(false));
+        table = postfix(pure, table, SPLIT, (v, u) -> v.$list());
+        table = prefix(pure, table, SORT, (v, u) -> v.$sort(false));
+        table = postfix(pure, table, REVERSE, (v, u) -> v.$reverse(false));
+        table = postfix(pure, table, UNIQUE, (v, u) -> v.$unique(false));
+        table = postfix(pure, table, AVG, (v, u) -> v.$avg(false));
 
-        table = prefixUnReactive(pure, table, FIX, Func::fixFunc);
+        table = prefixUnReactive(pure, table, FIX, (v1, v12) -> Func.fixFunc(v1));
 
         table = table.prefix(parallelOperator(ref, pure), PARALLEL.priority());
         table = table.prefix(serialOperator(ref, pure), SERIAL.priority());
@@ -533,21 +534,21 @@ public class DollarParserImpl implements DollarParser {
             table = infixl(false, table, PUBLISH, Func::publishFunc);
             table = infixl(false, table, SUBSCRIBE, Func::subscribeFunc);
             table = infixl(false, table, WRITE_SIMPLE, Func::writeFunc);
-            table = prefix(false, table, READ_SIMPLE, Func::readFunc);
+            table = prefix(false, table, READ_SIMPLE, (v, u) -> Func.readFunc(v));
 
-            table = prefix(false, table, DRAIN, URIAware::$drain);
-            table = prefix(false, table, ALL, URIAware::$all);
-            table = prefix(false, table, STOP, var::$stop);
-            table = prefix(false, table, START, var::$start);
-            table = prefix(false, table, PAUSE, var::$pause);
-            table = prefix(false, table, UNPAUSE, var::$unpause);
-            table = prefix(false, table, DESTROY, var::$destroy);
-            table = prefix(false, table, CREATE, var::$create);
-            table = prefix(false, table, STATE, var::$state);
+            table = prefix(false, table, DRAIN, (v, u) -> v.$drain());
+            table = prefix(false, table, ALL, (v, u) -> v.$all());
+            table = prefix(false, table, STOP, (v, u) -> v.$stop());
+            table = prefix(false, table, START, (v, u) -> v.$start());
+            table = prefix(false, table, PAUSE, (v, u) -> v.$pause());
+            table = prefix(false, table, UNPAUSE, (v, u) -> v.$unpause());
+            table = prefix(false, table, DESTROY, (v, u) -> v.$destroy());
+            table = prefix(false, table, CREATE, (v, u) -> v.$create());
+            table = prefix(false, table, STATE, (v, u) -> v.$state());
 
-            table = prefix(false, table, PRINT, DollarStatic::$out);
-            table = prefix(false, table, DEBUG, DollarStatic::$debug);
-            table = prefix(false, table, ERR, DollarStatic::$err);
+            table = prefix(false, table, PRINT, (v, u) -> printFunc(this, u, PRINT, Arrays.asList(v)));
+            table = prefix(false, table, DEBUG, (v, u) -> printFunc(this, u, DEBUG, Arrays.asList(v)));
+            table = prefix(false, table, ERR, (v, u) -> printFunc(this, u, ERR, Arrays.asList(v)));
 
             table = table.prefix(writeOperator(ref), WRITE_OP.priority());
             table = table.prefix(readOperator(), READ_OP.priority());
@@ -823,7 +824,7 @@ public class DollarParserImpl implements DollarParser {
     private OperatorTable<var> postfix(boolean pure,
                                        @NotNull OperatorTable<var> table,
                                        @NotNull OpDef operator,
-                                       @NotNull Function<var, var> f2) {
+                                       @NotNull BiFunction<var, SourceSegment, var> f2) {
 
         OperatorTable<var> result = table;
         if (operator.symbol() != null) {
@@ -842,7 +843,7 @@ public class DollarParserImpl implements DollarParser {
     private OperatorTable<var> prefix(boolean pure,
                                       @NotNull OperatorTable<var> table,
                                       @NotNull OpDef operator,
-                                      @NotNull Function<var, var> f) {
+                                      @NotNull BiFunction<var, SourceSegment, var> f) {
         return table.prefix(op(operator, new DollarUnaryOperator(this, operator, f, pure)), operator.priority());
     }
 
@@ -850,8 +851,18 @@ public class DollarParserImpl implements DollarParser {
     private OperatorTable<var> prefixUnReactive(boolean pure,
                                                 @NotNull OperatorTable<var> table,
                                                 @NotNull OpDef operator,
-                                                @NotNull Function<var, var> f) {
+                                                @NotNull BiFunction<var, SourceSegment, var> f) {
         return table.prefix(op(operator, new DollarUnaryOperator(true, f, operator, this, pure)), operator.priority());
+    }
+
+    private Parser<var> printExpression(@NotNull Parser.Reference<var> ref, boolean pure) {
+        return array(or(NL_OP(PRINT).map(i -> PRINT), NL_OP(ERR).map(i -> ERR), NL_OP(DEBUG).map(i -> DEBUG)),
+
+                     ref.lazy().many1()
+        ).followedBy(SEMICOLON_TERMINATOR.peek())
+                       .token()
+                       .map(token -> printFunc(this, new SourceCode(token), (OpDef) ((Object[]) token.value())[0],
+                                               (List<var>) ((Object[]) token.value())[1]));
     }
 
     private Parser<var> pureDefinitionOperator(@NotNull Parser.Reference<var> ref) {

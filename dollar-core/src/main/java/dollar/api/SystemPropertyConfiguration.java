@@ -18,18 +18,24 @@ package dollar.api;
 
 public class SystemPropertyConfiguration implements Configuration {
 
+    private final boolean colorHighlighting = Boolean.parseBoolean(System.getProperty("dollar.color.log", "false"));
     private final boolean debugEvents = Boolean.parseBoolean(System.getProperty("dollar.debug.events", "false"));
     private final boolean debugExecution = Boolean.parseBoolean(System.getProperty("dollar.debug.execution", "false"));
-    private final boolean safe = Boolean.parseBoolean(System.getProperty("dollar.safe", "true"));
+    private final boolean debugParallel = Boolean.parseBoolean(System.getProperty("dollar.debug.parallel", "false"));
+    private final boolean debugScope = Boolean.parseBoolean(System.getProperty("dollar.debug.scope", "false"));
     private final boolean monitor = Boolean.parseBoolean(System.getProperty("dollar.monitor", "false"));
     private final boolean production = Boolean.parseBoolean(System.getProperty("dollar.production", "false"));
-    private final boolean debugScope = Boolean.parseBoolean(System.getProperty("dollar.debug.scope", "false"));
-    private final boolean debugParallel = Boolean.parseBoolean(System.getProperty("dollar.debug.parallel", "false"));
-    private final boolean colorHighlighting = Boolean.parseBoolean(System.getProperty("dollar.color.log", "false"));
+    private final boolean safe = Boolean.parseBoolean(System.getProperty("dollar.safe", "true"));
+    private final boolean userDebug = Boolean.parseBoolean(System.getProperty("dollar.debug", "false"));
     private boolean failFast = Boolean.parseBoolean(System.getProperty("dollar.fail.fast", "false"));
 
 
     public SystemPropertyConfiguration() {
+    }
+
+    @Override
+    public boolean debug() {
+        return userDebug;
     }
 
     @Override

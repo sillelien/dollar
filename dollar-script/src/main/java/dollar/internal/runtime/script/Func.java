@@ -23,6 +23,7 @@ import dollar.api.VarType;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.plugin.Plugins;
 import dollar.api.script.ModuleResolver;
+import dollar.api.script.SourceSegment;
 import dollar.api.time.Scheduler;
 import dollar.api.types.DollarFactory;
 import dollar.api.var;
@@ -303,6 +304,22 @@ public final class Func {
                            ? Builtins.execute(rhsStr, singletonList(lhs), pure)
                            : variableNode(pure, rhsStr, false, null, token, parser).$fix(1, false);
         }
+    }
+
+    static var printFunc(DollarParser parser, SourceSegment segment, OpDef command, List<var> vars) {
+        return node(command, false, parser, segment, vars, args -> {
+            String outStr = vars.stream().map(i -> i.toString()).collect(Collectors.joining(""));
+            if (command.equals(PRINT)) {
+                System.out.println(outStr);
+            } else if (command.equals(ERR)) {
+                System.err.println(outStr);
+            } else if (command.equals(DEBUG)) {
+                if (getConfig().debug()) {
+                    System.out.println(segment.getShortSourceMessage() + ": " + outStr);
+                }
+            }
+            return DollarFactory.fromStringValue(outStr);
+        });
     }
 
     @NotNull

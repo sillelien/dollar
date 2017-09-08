@@ -23,7 +23,7 @@ import dollar.internal.runtime.script.parser.OpDef;
 import dollar.internal.runtime.script.parser.OpDefType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 
 import static dollar.internal.runtime.script.DollarScriptSupport.node;
@@ -33,18 +33,18 @@ import static java.util.Collections.singletonList;
 public class DollarUnaryOperator implements UnaryOperator<var>, Operator {
     @NotNull
     protected final OpDef operation;
-    private final boolean immediate;
     @NotNull
-    private final Function<var, var> function;
+    private final BiFunction<var, SourceSegment, var> function;
+    private final boolean immediate;
     private final boolean pure;
     @NotNull
-    protected SourceSegment source;
-    @NotNull
     protected DollarParser parser;
+    @NotNull
+    protected SourceSegment source;
 
     public DollarUnaryOperator(@NotNull DollarParser parser,
                                @NotNull OpDef operation,
-                               @NotNull Function<var, var> function,
+                               @NotNull BiFunction<var, SourceSegment, var> function,
                                boolean pure) {
         this.operation = operation;
         this.function = function;
@@ -55,7 +55,7 @@ public class DollarUnaryOperator implements UnaryOperator<var>, Operator {
     }
 
     public DollarUnaryOperator(boolean immediate,
-                               @NotNull Function<var, var> function,
+                               @NotNull BiFunction<var, SourceSegment, var> function,
                                @NotNull OpDef operation,
                                @NotNull DollarParser parser, boolean pure) {
         this.operation = operation;
@@ -64,6 +64,25 @@ public class DollarUnaryOperator implements UnaryOperator<var>, Operator {
         this.parser = parser;
         this.pure = pure;
         validate(operation);
+    }
+
+    @NotNull
+    @Override
+    public var apply(@NotNull var from) {
+
+        if (immediate) {
+            return node(operation, pure, parser, source, singletonList(from), vars -> function.apply(from, source));
+
+        }
+
+        //Lazy evaluation
+        return reactiveNode(operation, pure, source, parser, from, args -> function.apply(from, source));
+
+    }
+
+    @Override
+    public void setSource(@NotNull SourceSegment source) {
+        this.source = source;
     }
 
     public void validate(@NotNull OpDef operation) {
@@ -80,25 +99,5 @@ public class DollarUnaryOperator implements UnaryOperator<var>, Operator {
         if (pure && (operation.pure() != null) && !operation.pure()) {
             throw new AssertionError("The operation " + operation.name() + " is marked as " + (operation.pure() ? "pure" : "impure") + " yet this operator is set to be " + (pure ? "pure" : "impure"));
         }
-    }
-
-    @NotNull
-    @Override
-    public var apply(@NotNull var from) {
-
-        if (immediate) {
-            return node(operation, pure, parser, source, singletonList(from), vars -> function.apply(from));
-
-        }
-
-        //Lazy evaluation
-        return reactiveNode(operation, pure, source, parser, from, args -> function.apply(from));
-
-    }
-
-
-    @Override
-    public void setSource(@NotNull SourceSegment source) {
-        this.source = source;
     }
 }

@@ -69,6 +69,11 @@ public final class ParserMain {
         public ParserConfiguration(@NotNull ParserOptions options) {this.options = options;}
 
         @Override
+        public boolean debug() {
+            return options.isUserDebug();
+        }
+
+        @Override
         public boolean debugScope() {
             return options.isDebugScope();
         }

@@ -17,12 +17,9 @@
 package dollar.api;
 
 public interface Configuration {
-    /**
-     * Returns true if debug messages will be produced for scope activity (i.e. variables in DollarScript)
-     *
-     * @return true if the scope is debugged
-     */
-    boolean debugScope();
+    boolean colorHighlighting();
+
+    boolean debug();
 
     /**
      * Returns true if debug messages will be produced for event activity (i.e. notify/listen)
@@ -38,6 +35,14 @@ public interface Configuration {
      */
     boolean debugExecution();
 
+    boolean debugParallel();
+
+    /**
+     * Returns true if debug messages will be produced for scope activity (i.e. variables in DollarScript)
+     *
+     * @return true if the scope is debugged
+     */
+    boolean debugScope();
 
     /**
      * Returns true if Dollar should stop on error (much like BASH's set -e)
@@ -71,8 +76,4 @@ public interface Configuration {
      * objects are being wrapped.
      */
     boolean wrapForMonitoring();
-
-    boolean debugParallel();
-
-    boolean colorHighlighting();
 }
