@@ -18,6 +18,7 @@ package dollar.internal.runtime.script;
 
 import dollar.api.DollarStatic;
 import dollar.api.Scope;
+import dollar.api.VarType;
 import dollar.api.Variable;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
@@ -37,12 +38,6 @@ public class PureScope extends ScriptScope {
 
     PureScope(@NotNull Scope parent, @NotNull String source, @NotNull String name, @Nullable String file) {
         super(parent, source, name, false, false);
-    }
-
-    @NotNull
-    @Override
-    public String toString() {
-        return id + "(P)" + "->" + parent;
     }
 
     @Override
@@ -90,15 +85,18 @@ public class PureScope extends ScriptScope {
     }
 
     @Override
-    public var set(@NotNull String key, @NotNull var value, boolean readonly, @Nullable var constraint,
-                   @Nullable String constraintSource,
-                   boolean isVolatile, boolean fixed,
-                   boolean pure) {
-        if (!pure) {
+    public boolean pure() {
+        return true;
+    }
+
+    @Override
+    public Variable set(@NotNull String key, @NotNull var value,
+                        @Nullable var constraint, @Nullable String constraintSource, @NotNull VarType varType) {
+        if (!varType.isPure()) {
             throw new DollarScriptException("Cannot have impure variables in a pure expression, variable was " + key + ", (" + this + ")",
                                             value);
         }
-        if (isVolatile) {
+        if (varType.isVolatile()) {
             throw new DollarScriptException("Cannot have volatile variables in a pure expression");
         }
         if (key.matches("[0-9]+")) {
@@ -115,7 +113,7 @@ public class PureScope extends ScriptScope {
         if (scope.variables().containsKey(key) && ((Variable) scope.variables().get(key)).isReadonly()) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
-        final var fixedValue = fixed ? value.$fixDeep() : value;
+        final var fixedValue = varType.isFixed() ? value.$fixDeep() : value;
         if (scope.variables().containsKey(key)) {
             final Variable variable = ((Variable) scope.variables().get(key));
             if (!variable.isVolatile() && (variable.getThread() != Thread.currentThread().getId())) {
@@ -128,18 +126,20 @@ public class PureScope extends ScriptScope {
                         new DollarScriptException("Cannot change the constraint on a variable, attempted to redeclare for " + key));
             }
             variable.setValue(fixedValue);
+            scope.notifyScope(key, fixedValue);
+            return variable;
         } else {
-            scope.variables()
-                    .put(key, new Variable(fixedValue, readonly, constraint, constraintSource, false, fixed, pure, false,
-                                           false));
+            Variable variable = new Variable(fixedValue, varType, constraint, constraintSource);
+            scope.variables().put(key, variable);
+            scope.notifyScope(key, fixedValue);
+            return variable;
         }
-        scope.notifyScope(key, fixedValue);
-        return value;
     }
 
+    @NotNull
     @Override
-    public boolean pure() {
-        return true;
+    public String toString() {
+        return id + "(P)" + "->" + parent;
     }
 
 

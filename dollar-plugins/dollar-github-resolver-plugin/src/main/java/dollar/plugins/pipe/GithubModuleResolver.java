@@ -24,6 +24,7 @@ import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
+import dollar.api.VarType;
 import dollar.api.script.ModuleResolver;
 import dollar.api.var;
 import dollar.deps.DependencyRetriever;
@@ -55,11 +56,11 @@ import static dollar.internal.runtime.script.util.FileUtil.delete;
 public class GithubModuleResolver implements ModuleResolver {
     public static final int GRACEPERIOD = 10 * 1000;
     @NotNull
+    private static final ExecutorService executor;
+    @NotNull
     private static final Logger log = LoggerFactory.getLogger(GithubModuleResolver.class);
     @NotNull
     private static final LoadingCache<String, File> repos;
-    @NotNull
-    private static final ExecutorService executor;
 
     static {
         executor = Executors.newSingleThreadExecutor();
@@ -190,7 +191,8 @@ public class GithubModuleResolver implements ModuleResolver {
 
             final ImmutableMap<var, var> paramMap = params[0].$map().toVarMap();
             for (Map.Entry<var, var> entry : paramMap.entrySet()) {
-                newScope.set(entry.getKey().$S(), entry.getValue(), true, null, null, false, false, false);
+                newScope.set(entry.getKey().$S(), entry.getValue(), null, null,
+                             new VarType(true, false, false, false, false, false));
             }
             return new DollarParserImpl(((DollarParser) parser).options(), classLoader).parse(
                     new FileScope((Scope) scope, mainFile.getAbsolutePath(), content, "github-module-scope", false,

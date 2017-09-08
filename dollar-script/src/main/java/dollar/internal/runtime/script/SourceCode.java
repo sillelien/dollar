@@ -27,25 +27,32 @@ import org.jparsec.Token;
 
 import java.util.Objects;
 
-public class SourceSegmentValue implements SourceSegment {
-    @NotNull
-    private final Scope scope;
-    @Nullable
-    private final String sourceFile;
+import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
+
+public class SourceCode implements SourceSegment {
     private final int length;
     @NotNull
-    private final String source;
-    private final int start;
+    private final Scope scope;
     @NotNull
     private final String shortHash;
+    @NotNull
+    private final String source;
+    @Nullable
+    private final String sourceFile;
+    private final int start;
 
-    public SourceSegmentValue(@NotNull Scope scope, @NotNull Token t) {
+
+    public SourceCode(@NotNull Token t) {
+        this(currentScope(), t);
+    }
+
+    public SourceCode(@NotNull Scope scope, @NotNull Token t) {
         this.scope = scope;
         sourceFile = scope.file();
         length = t.length();
         start = t.index();
         if (scope.source() == null) {
-            throw new DollarParserError("Cannot create a SourceSegmentValue from a scope with no source: " + scope);
+            throw new DollarParserError("Cannot create a SourceCode from a scope with no source: " + scope);
         }
         source = scope.source();
         if (source != null) {
@@ -148,7 +155,7 @@ public class SourceSegmentValue implements SourceSegment {
     public boolean equals(Object o) {
         if (this == o) return true;
         if ((o == null) || (getClass() != o.getClass())) return false;
-        SourceSegmentValue that = (SourceSegmentValue) o;
+        SourceCode that = (SourceCode) o;
         return (length == that.length) &&
                        (start == that.start) &&
                        Objects.equals(scope, that.scope) &&

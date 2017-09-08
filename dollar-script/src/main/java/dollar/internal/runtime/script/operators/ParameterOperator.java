@@ -18,7 +18,7 @@ package dollar.internal.runtime.script.operators;
 
 import dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
-import dollar.internal.runtime.script.SourceSegmentValue;
+import dollar.internal.runtime.script.SourceCode;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import org.jetbrains.annotations.NotNull;
@@ -56,13 +56,13 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
         return lhs -> {
             boolean functionName;
             boolean builtin;
-            SourceSegmentValue sourceSegmentValue = new SourceSegmentValue(currentScope(), token);
+            SourceCode sourceCode = new SourceCode(currentScope(), token);
             boolean isPure = pure;
             String name;
             if (FUNCTION_NAME_OP.name().equals(lhs.metaAttribute(OPERATION_NAME))) {
                 String lhsString = lhs.toString();
                 builtin = Builtins.exists(lhsString);
-                name = "function-" + lhsString + "-" + sourceSegmentValue.getShortHash();
+                name = "function-" + lhsString + "-" + sourceCode.getShortHash();
                 if (pure && builtin && !Builtins.isPure(lhsString)) {
                     throw new DollarScriptException("Cannot call the impure function '" + lhsString + "' in a pure expression.");
                 }
@@ -70,7 +70,7 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
             } else {
                 functionName = false;
                 builtin = false;
-                name = "parameterized-" + lhs.metaAttribute(OPERATION_NAME) + "-" + sourceSegmentValue.getShortHash();
+                name = "parameterized-" + lhs.metaAttribute(OPERATION_NAME) + "-" + sourceCode.getShortHash();
             }
 
             var node = node(PARAM_OP, name, pure, parser, token, parameters, i -> {

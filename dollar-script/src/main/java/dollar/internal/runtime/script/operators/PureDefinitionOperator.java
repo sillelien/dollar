@@ -20,7 +20,7 @@ import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.var;
 import dollar.internal.runtime.script.Func;
-import dollar.internal.runtime.script.SourceSegmentValue;
+import dollar.internal.runtime.script.SourceCode;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,9 +40,9 @@ import static java.util.Collections.singletonList;
 public class PureDefinitionOperator implements Function<Token, var> {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("DefinitionOperator");
+    private final boolean def;
     @NotNull
     private final DollarParser parser;
-    private final boolean def;
 
     public PureDefinitionOperator(@NotNull DollarParser parser, boolean def) {
         this.parser = parser;
@@ -81,8 +81,8 @@ public class PureDefinitionOperator implements Function<Token, var> {
         if (typeConstraintObj != null) {
             Type type = Type.of(typeConstraintObj);
             constraint = node(DEFINITION, "definition-constraint", true, NEW_SCOPE, parser,
-                              new SourceSegmentValue(currentScope(), token), new ArrayList<>(),
-                              i -> $(scope.parameter("it").is(type)), null);
+                              new SourceCode(currentScope(), token), new ArrayList<>(),
+                              i -> $(scope.parameter("it").getValue().is(type)), null);
             constraintSource = typeConstraintObj.$S().toUpperCase();
             checkLearntType(token, type, value, MIN_PROBABILITY);
 

@@ -19,6 +19,7 @@ package dollar.internal.runtime.script;
 import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.VarInternal;
+import dollar.api.VarType;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.plugin.Plugins;
 import dollar.api.script.ModuleResolver;
@@ -57,19 +58,70 @@ public final class Func {
     static final DollarExecutor executor = Objects.requireNonNull(Plugins.sharedInstance(DollarExecutor.class));
 
     @NotNull
-    static var reduceFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
-        assert REDUCE.validForPure(pure);
-        return lhs.$list().$stream(false).reduce((x, y) -> {
-            try {
-                return inSubScope(false, pure, REDUCE.name(), newScope -> {
-                    newScope.parameter("1", x);
-                    newScope.parameter("2", y);
-                    return rhs.$fixDeep(false);
-                });
-            } catch (RuntimeException e) {
-                return currentScope().handleError(e);
-            }
-        }).orElse($null(Type._ANY));
+    static var assertEqualsFunc(@NotNull var lhs, @NotNull var rhs) {
+        final var lhsFix = lhs.$fixDeep();
+        final var rhsFix = rhs.$fixDeep();
+        if (lhsFix.equals(rhsFix)) {
+            return $(true);
+        } else {
+            throw new DollarAssertionException(lhsFix.toDollarScript() + " != " + rhsFix.toDollarScript(), lhs);
+        }
+    }
+
+    @NotNull
+    static var assertFunc(@Nullable var message, @NotNull var condition) {
+        if (!condition.isTrue()) {
+            throw new DollarAssertionException("Assertion failed: " + (message != null ? message : ""), condition);
+
+        }
+        return $void();
+    }
+
+    @NotNull
+    static var blockFunc(int depth, @NotNull List<var> l) {
+        if (l.isEmpty()) {
+            return $void();
+        } else {
+            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fix(depth, false));
+            return l.get(l.size() - 1).$fix(1, false);
+        }
+    }
+
+    @NotNull
+    static var castFunc(@NotNull var lhs, @NotNull String typeName) {
+        return lhs.$as(Type.of(typeName));
+    }
+
+    @NotNull
+    static var causesFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
+        lhs.$fixDeep(false);
+        return lhs.$listen(vars -> rhs.$fix(1, false));
+    }
+
+    @NotNull
+    public static var definitionFunc(@NotNull Token token,
+                                     boolean export,
+                                     @NotNull var value,
+                                     @NotNull var variableName,
+                                     @Nullable var constraint,
+                                     @Nullable String constraintSource,
+                                     @NotNull DollarParser parser,
+                                     boolean pure,
+                                     boolean readonly) {
+        String key = variableName.$S();
+
+        setVariable(currentScope(), key, value,
+                    parser, token, constraint, constraintSource,
+                    new VarType(readonly, false, false, pure, false, true));
+
+        if (export) {
+            parser.export(key, node(DEFINITION, "export-" + DEFINITION.name(),
+                                    pure, SCOPE_WITH_CLOSURE, parser,
+                                    new SourceCode(currentScope(), token),
+                                    singletonList(value), exportArgs -> value.$fix(2, false),
+                                    null));
+        }
+        return $void();
     }
 
     @NotNull
@@ -97,161 +149,8 @@ public final class Func {
     }
 
     @NotNull
-    static var multiplyFunc(@NotNull var lhs, @NotNull var rhs) {
-        OpDef operation = lhs.meta(OPERATION);
-        if ((operation != null) && (operation.equals(BLOCK_OP) || operation.equals(LIST_OP) || operation.equals(MAP_OP))) {
-            var newValue = lhs.$fixDeep();
-            Long max = rhs.toLong();
-            if (max > Constants.MAX_MULTIPLY) {
-                throw new DollarScriptException("Cannot multiply a block, map  or list by a factor larger than " +
-                                                        Constants
-                                                                .MAX_MULTIPLY, lhs.source());
-            }
-            for (int i = 1; i < max; i++) {
-                newValue = newValue.$plus(lhs.$fixDeep());
-            }
-            return newValue;
-        } else {
-            final var lhsFix = lhs.$fix(1, false);
-            return lhsFix.$multiply(rhs);
-        }
-    }
-
-    @NotNull
     static var errorFunc(@NotNull var v) {
         return currentScope().addErrorHandler(v);
-    }
-
-    @NotNull
-    static var pairFunc(@NotNull var lhs, @NotNull var rhs) {
-        return $(lhs.$S(), rhs);
-    }
-
-
-    @NotNull
-    static Future<var> forkFunc(@NotNull var v) {
-        return executor.executeInBackground(() -> DollarScriptSupport.fix(v));
-    }
-
-    @NotNull
-    static var subscribeFunc(@NotNull var lhs, @NotNull var rhs) {
-        return lhs.$subscribe(
-                i -> inSubScope(true, false,
-                                "subscribe-param", newScope -> {
-                            final var it = DollarScriptSupport.fix(i[0]);
-                            currentScope().parameter("1", it);
-                            currentScope().parameter("it", it);
-                            return DollarScriptSupport.fix(rhs);
-                        }));
-    }
-
-    @NotNull
-    static var writeFunc(@NotNull var lhs, @NotNull var rhs) {
-        return rhs.$write(lhs);
-    }
-
-    @NotNull
-    static var publishFunc(@NotNull var lhs, @NotNull var rhs) {
-        return rhs.$publish(lhs);
-    }
-
-    @NotNull
-    static var assertEqualsFunc(@NotNull var lhs, @NotNull var rhs) {
-        final var lhsFix = lhs.$fixDeep();
-        final var rhsFix = rhs.$fixDeep();
-        if (lhsFix.equals(rhsFix)) {
-            return $(true);
-        } else {
-            throw new DollarAssertionException(lhsFix.toDollarScript() + " != " + rhsFix.toDollarScript(), lhs);
-        }
-    }
-
-    @NotNull
-    static var listenFunc(@NotNull var lhs, @NotNull var rhs) {
-        lhs.$fixDeep();
-        return lhs.$listen(var -> lhs.isTrue() ? DollarScriptSupport.fix(rhs) : $void());
-    }
-
-    @NotNull
-    static var readFunc(@NotNull var from) {
-        return DollarFactory.fromURI(from).$read();
-    }
-
-    static var inFunc(@NotNull var lhs, @NotNull var rhs) {return rhs.$contains(lhs);}
-
-    @NotNull
-    static var whileFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
-        assert WHILE_OP.validForPure(pure);
-
-        while (lhs.isTrue()) {
-            rhs.$fixDeep();
-        }
-        return $(false);
-    }
-
-    @NotNull
-    static var assertFunc(@Nullable var message, @NotNull var condition) {
-        if (!condition.isTrue()) {
-            throw new DollarAssertionException("Assertion failed: " + (message != null ? message : ""), condition);
-
-        }
-        return $void();
-    }
-
-    @NotNull
-    static var ifFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
-        final var lhsFix = lhs.$fixDeep(false);
-        boolean isTrue = lhsFix.isBoolean() && lhsFix.isTrue();
-        assert IF_OP.validForPure(pure);
-        return isTrue ? rhs.$fix(2, false) : DollarFactory.FALSE;
-    }
-
-    @NotNull
-    static var isFunc(@NotNull var lhs, @NotNull List<var> value) {
-        return $(value.stream()
-                         .map(var::$S)
-                         .map(Type::of)
-                         .filter(lhs::is).count() > 0);
-    }
-
-    @NotNull
-    static var forFunc(boolean pure, @NotNull String varName, @NotNull var iterable, @NotNull var block) {
-        assert FOR_OP.validForPure(pure);
-        return iterable.$each(i -> {
-            currentScope()
-                    .set(varName,
-                         DollarScriptSupport.fix(i[0]),
-                         false, null,
-                         null, false,
-                         false,
-                         pure);
-            return block.$fixDeep(false);
-        });
-    }
-
-    @NotNull
-    static var castFunc(@NotNull var lhs, @NotNull String typeName) {
-        return lhs.$as(Type.of(typeName));
-    }
-
-    @NotNull
-    static var causesFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
-        lhs.$fixDeep(false);
-        return lhs.$listen(vars -> rhs.$fix(1, false));
-    }
-
-    @NotNull
-    static var pipeFunc(@NotNull DollarParser parser, boolean pure, @NotNull Token token, @NotNull var rhs, @NotNull var lhs) {
-        currentScope().parameter("1", lhs);
-        var rhsVal = rhs.$fix(false);
-        if (FUNCTION_NAME_OP.name().equals(rhs.metaAttribute(OPERATION_NAME))) {
-            return rhsVal;
-        } else {
-            String rhsStr = rhsVal.toString();
-            return (rhs.metaAttribute(IS_BUILTIN) != null)
-                           ? Builtins.execute(rhsStr, singletonList(lhs), pure)
-                           : variableNode(pure, rhsStr, false, null, token, parser).$fix(1, false);
-        }
     }
 
     @NotNull
@@ -284,6 +183,64 @@ public final class Func {
         return $void();
     }
 
+    public static var fixFunc(var v) {
+        return v.$fix(Integer.MAX_VALUE, false);
+    }
+
+    @NotNull
+    static var forFunc(boolean pure, @NotNull String varName, @NotNull var iterable, @NotNull var block) {
+        assert FOR_OP.validForPure(pure);
+        return iterable.$each(i -> {
+            currentScope()
+                    .set(varName,
+                         DollarScriptSupport.fix(i[0]),
+                         null, null,
+                         new VarType(false, false, false, pure, false, false));
+            return block.$fixDeep(false);
+        });
+    }
+
+    @NotNull
+    static Future<var> forkFunc(@NotNull var v) {
+        return executor.executeInBackground(() -> DollarScriptSupport.fix(v));
+    }
+
+    @NotNull
+    static var ifFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
+        final var lhsFix = lhs.$fixDeep(false);
+        boolean isTrue = lhsFix.isBoolean() && lhsFix.isTrue();
+        assert IF_OP.validForPure(pure);
+        return isTrue ? rhs.$fix(2, false) : DollarFactory.FALSE;
+    }
+
+    static var inFunc(@NotNull var lhs, @NotNull var rhs) {return rhs.$contains(lhs);}
+
+    @NotNull
+    static var isFunc(@NotNull var lhs, @NotNull List<var> value) {
+        return $(value.stream()
+                         .map(var::$S)
+                         .map(Type::of)
+                         .filter(lhs::is).count() > 0);
+    }
+
+    @NotNull
+    static var listenFunc(@NotNull var lhs, @NotNull var rhs) {
+        lhs.$fixDeep();
+        return lhs.$listen(var -> lhs.isTrue() ? DollarScriptSupport.fix(rhs) : $void());
+    }
+
+    static var mapFunc(boolean parallel, @NotNull List<var> entries) {
+        if (entries.size() == 1) {
+            return blockFunc(2, entries);
+        } else {
+            Stream<var> stream = parallel ? entries.stream().parallel() : entries.stream();
+            return $(stream.map(v -> v.$fix(2, parallel))
+                             .collect(Collectors.toConcurrentMap(
+                                     v -> v.pair() ? v.$pairKey() : v.$S(),
+                                     v -> v.pair() ? v.$pairValue() : v)));
+        }
+    }
+
     @NotNull
     static var moduleFunc(@NotNull DollarParserImpl parser,
                           @NotNull String moduleName,
@@ -308,56 +265,96 @@ public final class Func {
 
     }
 
-    static var mapFunc(boolean parallel, @NotNull List<var> entries) {
-        if (entries.size() == 1) {
-            return blockFunc(2, entries);
+    @NotNull
+    static var multiplyFunc(@NotNull var lhs, @NotNull var rhs) {
+        OpDef operation = lhs.meta(OPERATION);
+        if ((operation != null) && (operation.equals(BLOCK_OP) || operation.equals(LIST_OP) || operation.equals(MAP_OP))) {
+            var newValue = lhs.$fixDeep();
+            Long max = rhs.toLong();
+            if (max > Constants.MAX_MULTIPLY) {
+                throw new DollarScriptException("Cannot multiply a block, map  or list by a factor larger than " +
+                                                        Constants
+                                                                .MAX_MULTIPLY, lhs.source());
+            }
+            for (int i = 1; i < max; i++) {
+                newValue = newValue.$plus(lhs.$fixDeep());
+            }
+            return newValue;
         } else {
-            Stream<var> stream = parallel ? entries.stream().parallel() : entries.stream();
-            return $(stream.map(v -> v.$fix(2, parallel))
-                             .collect(Collectors.toConcurrentMap(
-                                     v -> v.pair() ? v.$pairKey() : v.$S(),
-                                     v -> v.pair() ? v.$pairValue() : v)));
+            final var lhsFix = lhs.$fix(1, false);
+            return lhsFix.$multiply(rhs);
         }
     }
 
     @NotNull
-    static var blockFunc(int depth, @NotNull List<var> l) {
-        if (l.isEmpty()) {
-            return $void();
+    static var pairFunc(@NotNull var lhs, @NotNull var rhs) {
+        return $(lhs.$S(), rhs);
+    }
+
+    @NotNull
+    static var pipeFunc(@NotNull DollarParser parser, boolean pure, @NotNull Token token, @NotNull var rhs, @NotNull var lhs) {
+        currentScope().parameter("1", lhs);
+        var rhsVal = rhs.$fix(false);
+        if (FUNCTION_NAME_OP.name().equals(rhs.metaAttribute(OPERATION_NAME))) {
+            return rhsVal;
         } else {
-            IntStream.range(0, l.size() - 1).forEach(i -> l.get(i).$fix(depth, false));
-            return l.get(l.size() - 1).$fix(1, false);
+            String rhsStr = rhsVal.toString();
+            return (rhs.metaAttribute(IS_BUILTIN) != null)
+                           ? Builtins.execute(rhsStr, singletonList(lhs), pure)
+                           : variableNode(pure, rhsStr, false, null, token, parser).$fix(1, false);
         }
     }
 
     @NotNull
-    public static var definitionFunc(@NotNull Token token,
-                                     boolean export,
-                                     @NotNull var value,
-                                     @NotNull var variableName,
-                                     @Nullable var constraint,
-                                     @Nullable String constraintSource,
-                                     @NotNull DollarParser parser,
-                                     boolean pure,
-                                     boolean readonly) {
-        String key = variableName.$S();
-
-        setVariable(currentScope(), key, value,
-                    readonly, constraint, constraintSource,
-                    false, false, pure,
-                    true, token, parser);
-
-        if (export) {
-            parser.export(key, node(DEFINITION, "export-" + DEFINITION.name(),
-                                    pure, SCOPE_WITH_CLOSURE, parser,
-                                    new SourceSegmentValue(currentScope(), token),
-                                    singletonList(value), exportArgs -> value.$fix(2, false),
-                                    null));
-        }
-        return $void();
+    static var publishFunc(@NotNull var lhs, @NotNull var rhs) {
+        return rhs.$publish(lhs);
     }
 
-    public static var fixFunc(var v) {
-        return v.$fix(Integer.MAX_VALUE, false);
+    @NotNull
+    static var readFunc(@NotNull var from) {
+        return DollarFactory.fromURI(from).$read();
+    }
+
+    @NotNull
+    static var reduceFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
+        assert REDUCE.validForPure(pure);
+        return lhs.$list().$stream(false).reduce((x, y) -> {
+            try {
+                return inSubScope(false, pure, REDUCE.name(), newScope -> {
+                    newScope.parameter("1", x);
+                    newScope.parameter("2", y);
+                    return rhs.$fixDeep(false);
+                });
+            } catch (RuntimeException e) {
+                return currentScope().handleError(e);
+            }
+        }).orElse($null(Type._ANY));
+    }
+
+    @NotNull
+    static var subscribeFunc(@NotNull var lhs, @NotNull var rhs) {
+        return lhs.$subscribe(
+                i -> inSubScope(true, false,
+                                "subscribe-param", newScope -> {
+                            final var it = DollarScriptSupport.fix(i[0]);
+                            currentScope().parameter("1", it);
+                            currentScope().parameter("it", it);
+                            return DollarScriptSupport.fix(rhs);
+                        }));
+    }
+
+    @NotNull
+    static var whileFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
+        assert WHILE_OP.validForPure(pure);
+
+        while (lhs.isTrue()) {
+            rhs.$fixDeep();
+        }
+        return $(false);
+    }
+
+    @NotNull
+    static var writeFunc(@NotNull var lhs, @NotNull var rhs) {
+        return rhs.$write(lhs);
     }
 }

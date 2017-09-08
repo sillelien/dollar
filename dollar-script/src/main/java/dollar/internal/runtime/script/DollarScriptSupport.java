@@ -21,6 +21,7 @@ import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.TypePrediction;
+import dollar.api.VarType;
 import dollar.api.Variable;
 import dollar.api.script.SourceSegment;
 import dollar.api.types.DollarFactory;
@@ -65,17 +66,22 @@ public final class DollarScriptSupport {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(DollarScriptSupport.class);
 
-    @NotNull
-    static List<Scope> scopes() {
-        return scopes.get();
-    }
+    public static void addParameterstoCurrentScope(@NotNull Scope scope, @NotNull List<var> parameters) {
+        //Add the special $* value for all the parameters
+        int count = 0;
+        List<var> fixedParams = new ArrayList<>();
+        for (var parameter : parameters) {
+            var fixedParam = parameter.$fix(1, false);
+            fixedParams.add(fixedParam);
+            scope.parameter(String.valueOf(++count), fixedParam);
 
-    private static String indent(int i) {
-        StringBuilder b = new StringBuilder();
-        for (int j = 0; j < i; j++) {
-            b.append(" ");
+            //If the parameter is a named parameter then use the name (set as metadata on the value).
+            String paramMetaAttribute = fixedParam.metaAttribute(NAMED_PARAMETER_META_ATTR);
+            if (paramMetaAttribute != null) {
+                scope.parameter(paramMetaAttribute, fixedParam);
+            }
         }
-        return b.toString();
+        scope.parameter("*", $(fixedParams));
     }
 
     private static void addScope(boolean runtime, @NotNull Scope scope) {
@@ -85,6 +91,52 @@ public final class DollarScriptSupport {
             log.info("{}{}BEGIN {}", indent(scopes.get().size() - 1), runtime ? "**** " : "", scope);
         }
 
+    }
+
+    public static void checkLearntType(@NotNull Token token, @Nullable Type type, @NotNull var rhs, @NotNull Double threshold) {
+        final TypePrediction prediction = rhs.predictType();
+        if ((type != null) && (prediction != null)) {
+            final Double probability = prediction.probability(type);
+            log.info("Predicted " + prediction.probableType() + " at " + (new SourceCode(currentScope(),
+                                                                                         token)).getShortSourceMessage());
+            if ((probability < threshold) && !prediction.empty()) {
+                log.warn("Type assertion may fail, expected {} most likely type is {} ({}%) at {}", type,
+                         prediction.probableType(),
+                         (int) (prediction.probability(prediction.probableType()) * 100),
+                         new SourceCode(currentScope(), token).getSourceMessage()
+                );
+                if (getConfig().failFast()) {
+                    throw new DollarScriptException("Type prediction failed, was expecting " + type + " but most likely type is " + prediction.probableType() + " if this prediction is wrong please add an explicit cast (using 'as " + type.name() + "')");
+                }
+            }
+        }
+    }
+
+    @NotNull
+    public static var constrain(@NotNull Scope scope, @NotNull var value, @Nullable var constraint, @Nullable String source) {
+//        System.err.println("(" + source + ") " + rhs.$type().constraint());
+        if (!Objects.equals(value.constraintLabel(), source)) {
+            if ((source != null) && (value.constraintLabel() != null) && !value.constraintLabel().isEmpty()) {
+                scope.handleError(
+                        new DollarScriptException("Trying to assign an invalid constrained variable " + value.constraintLabel() + " vs " + source,
+                                                  value));
+            }
+        } else {
+            if ((value.constraintLabel() != null) && !value.constraintLabel().isEmpty()) {
+//                System.err.println("Fingerprint: " + rhs.$type().constraint());
+            }
+        }
+        return value.$constrain(constraint, source);
+    }
+
+    @NotNull
+    private static String createId(@NotNull String operation) {
+        return operation + "-" + UUID.randomUUID();
+    }
+
+    @NotNull
+    public static Scope currentScope() {
+        return scopes.get().get(scopes.get().size() - 1);
     }
 
     @NotNull
@@ -100,327 +152,42 @@ public final class DollarScriptSupport {
         return remove;
     }
 
-    public static var node(@NotNull OpDef operation,
-                           @NotNull String name,
-                           boolean pure,
-                           @NotNull SourceNodeOptions sourceNodeOptions,
-                           @NotNull DollarParser parser,
-                           @NotNull SourceSegment source,
-                           @NotNull List<var> inputs,
-                           @NotNull Pipeable pipeable,
-                           @Nullable Type suggestedType) {
-        var result = DollarFactory.wrap((var) Proxy.newProxyInstance(
-                DollarStatic.class.getClassLoader(),
-                new Class<?>[]{var.class},
-                new SourceNode(pipeable, source, inputs, name, parser,
-                               sourceNodeOptions, createId(name), pure, operation)));
-        try {
-            if (suggestedType != null) {
-                result.meta(MetaConstants.TYPE_HINT, suggestedType);
-            } else {
-                Type type = operation.typeFor(inputs.toArray(new var[inputs.size()]));
-                if (type != null) {
-                    result.meta(MetaConstants.TYPE_HINT, type);
-                }
-            }
-            return result;
-        } catch (Exception e) {
-            throw new DollarScriptException(e, source);
-        }
+    /**
+     * Fix var.
+     *
+     * @param v        the v
+     * @param parallel Should execution be in parallel?
+     * @return the var
+     */
+    @NotNull
+    public static var fix(@Nullable var v, boolean parallel) {
+        return (v != null) ? DollarFactory.wrap(v.$fix(parallel)) : $void();
     }
 
-    public static var node(@NotNull OpDef operation,
-                           boolean pure,
-                           @NotNull DollarParser parser,
-                           @NotNull SourceSegment source,
-                           @NotNull List<var> inputs,
-                           @NotNull Pipeable pipeable) {
-        return node(operation, operation.name(), pure, operation.nodeOptions(), parser, source, inputs, pipeable, null);
-    }
-
-
-    public static var node(@NotNull OpDef operation,
-                           boolean pure,
-                           @NotNull DollarParser parser,
-                           @NotNull Token token,
-                           @NotNull List<var> inputs,
-                           @NotNull Pipeable callable) {
-        return node(operation, operation.name(), pure, operation.nodeOptions(), parser,
-                    new SourceSegmentValue(currentScope(), token), inputs, callable, null);
-    }
-
-    public static var node(@NotNull OpDef operation,
-                           String name,
-                           boolean pure,
-                           @NotNull DollarParser parser,
-                           @NotNull Token token,
-                           @NotNull List<var> inputs,
-                           @NotNull Pipeable callable) {
-        return node(operation, name, pure, operation.nodeOptions(), parser,
-                    new SourceSegmentValue(currentScope(), token), inputs, callable, null);
-    }
-
-
-    static var reactiveNode(@NotNull OpDef operation, @NotNull String name,
-                            boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
-                            @NotNull DollarParser parser,
-                            @NotNull SourceSegment source,
-                            @NotNull var lhs,
-                            @NotNull var rhs,
-                            @NotNull Pipeable callable) {
-        final var node = node(operation, name, pure, sourceNodeOptions, parser, source, Arrays.asList(lhs, rhs),
-                              callable, null
-        );
-
-
-        rhs.$listen(i -> node.$notify());
-        lhs.$listen(i -> node.$notify());
-        return node;
+    /**
+     * Fix var.
+     *
+     * @param v the v
+     * @return the var
+     */
+    @NotNull
+    public static var fix(@Nullable var v) {
+        return (v != null) ? DollarFactory.wrap(v.$fix(false)) : $void();
     }
 
     @NotNull
-    static var reactiveNode(@NotNull OpDef operation,
-                            boolean pure,
-                            @NotNull Token token,
-                            @NotNull var lhs,
-                            @NotNull var rhs,
-                            @NotNull DollarParser parser,
-                            @NotNull Pipeable callable) {
-        return reactiveNode(operation, operation.name(), pure, operation.nodeOptions(), parser,
-                            new SourceSegmentValue(currentScope(),
-                                                   token), lhs,
-                            rhs, callable);
-
+    public static DollarParser getParser() {
+        return DollarParser.parser.get();
     }
 
     @NotNull
-    static var reactiveNode(@NotNull OpDef operation,
-                            String name,
-                            boolean pure,
-                            @NotNull Token token,
-                            @NotNull var lhs,
-                            @NotNull var rhs,
-                            @NotNull DollarParser parser,
-                            @NotNull Pipeable callable) {
-        return reactiveNode(operation, name, pure, operation.nodeOptions(), parser,
-                            new SourceSegmentValue(currentScope(),
-                                                   token), lhs,
-                            rhs, callable);
-
+    public static Scope getRootScope() {
+        return scopes.get().get(0);
     }
 
-
-    static var reactiveNode(@NotNull OpDef operation,
-                            boolean pure,
-                            @NotNull DollarParser parser, @NotNull SourceSegment source,
-                            @NotNull var lhs,
-                            @NotNull var rhs,
-                            @NotNull Pipeable callable) {
-        return reactiveNode(operation, operation.name(), pure, operation.nodeOptions(), parser, source, lhs,
-                            rhs, callable);
-
+    public static void setRootScope(@NotNull ScriptScope rootScope) {
+        scopes.get().add(0, rootScope);
     }
-
-    @NotNull
-    static var reactiveNode(@NotNull OpDef operation,
-                            boolean pure,
-                            @NotNull var lhs,
-                            @NotNull Token token,
-                            @NotNull DollarParser parser,
-                            @NotNull Pipeable callable) {
-
-        return reactiveNode(operation, pure, new SourceSegmentValue(currentScope(), token), parser, lhs, callable
-        );
-    }
-
-    @NotNull
-    static var reactiveNode(@NotNull OpDef operation,
-                            boolean pure,
-                            @NotNull SourceSegment source,
-                            @NotNull DollarParser parser,
-                            @NotNull var lhs,
-                            @NotNull Pipeable callable) {
-
-        final var node = node(operation, operation.name(),
-                              pure, operation.nodeOptions(), parser, source,
-                              Collections.singletonList(lhs),
-                              callable, null);
-        lhs.$listen(i -> node.$notify());
-        return node;
-    }
-
-    @NotNull
-    private static String createId(@NotNull String operation) {
-        return operation + "-" + UUID.randomUUID();
-    }
-
-
-    @NotNull
-    public static Scope currentScope() {
-        return scopes.get().get(scopes.get().size() - 1);
-    }
-
-    public static <T> T inSubScope(boolean runtime, boolean pure, @NotNull String scopeName,
-                                   @NotNull ScopeExecutable<T> r) {
-        return inScope(runtime, new ScriptScope(currentScope(), scopeName, false, false), r);
-    }
-
-
-    public static <T> T inSubScope(boolean runtime, boolean pure, boolean parallel, @NotNull String scopeName,
-                                   @NotNull ScopeExecutable<T> r) {
-        return inScope(runtime, new ScriptScope(currentScope(), scopeName, false, false), r);
-    }
-
-
-    public static <T> T inScope(boolean runtime,
-                                @NotNull Scope parent,
-                                boolean pure,
-                                boolean parallel, @NotNull String scopeName,
-                                @NotNull ScopeExecutable<T> r) {
-        Scope newScope;
-        if (pure) {
-            newScope = new PureScope(parent, parent.source(), scopeName, parent.file());
-        } else {
-            if ((parent instanceof PureScope)) {
-                throw new IllegalStateException(
-                                                       "trying to switch to an impure scope in a pure scope.");
-            }
-            newScope = new ScriptScope(parent, parent.source(), scopeName,
-                                       false, false);
-        }
-        addScope(runtime, parent);
-        addScope(runtime, newScope);
-        try {
-            return r.execute(newScope);
-        } catch (Exception e) {
-            newScope.handleError(e);
-            return null;
-        } finally {
-            Scope poppedScope = endScope(runtime);
-//            poppedScope.destroy();
-            if (!Objects.equals(poppedScope, newScope)) {
-                throw new IllegalStateException("Popped wrong scope");
-            }
-            final Scope poppedScope2 = endScope(runtime);
-            if (!Objects.equals(poppedScope2, parent)) {
-                throw new IllegalStateException("Popped wrong scope");
-            }
-        }
-    }
-
-
-    @Nullable
-    public static <T> T inScope(boolean runtime,
-                                @NotNull Scope scope,
-                                @NotNull ScopeExecutable<T> r) {
-
-        final boolean scopeAdded;
-        if (scopes.get().get(scopes.get().size() - 1).equals(scope)) {
-            scopeAdded = false;
-        } else {
-            addScope(runtime, scope);
-            scopeAdded = true;
-        }
-        try {
-            return r.execute(scope);
-        } catch (Exception e) {
-            scope.handleError(e);
-            return null;
-        } finally {
-            if (scopeAdded) {
-                Scope poppedScope = endScope(runtime);
-                if (!Objects.equals(poppedScope, scope)) {
-                    throw new IllegalStateException("Popped wrong scope");
-                }
-            }
-
-        }
-    }
-
-    @NotNull
-    public static var variableNode(boolean pure, @NotNull String key, @NotNull Token token, @NotNull DollarParser parser) {
-        return variableNode(pure, key, false, null, token, parser);
-    }
-
-    @NotNull
-    public static var variableNode(boolean pure, @NotNull String key,
-                                   boolean numeric, @Nullable var defaultValue,
-                                   @NotNull Token token, @NotNull DollarParser parser) {
-        var node[] = new var[1];
-        UUID id = UUID.randomUUID();
-        SourceSegmentValue sourceSegmentValue = new SourceSegmentValue(currentScope(), token);
-        node[0] = node(VAR_USAGE_OP, "var-usage-" + key + "-" + sourceSegmentValue.getShortHash(), pure, parser, token,
-                       $(key).$list().toVarList(),
-                       (i) -> {
-                           Scope scope = currentScope();
-
-                           if (getConfig().debugScope()) {
-                               log.info("{} {} in {} scopes ", highlight("LOOKUP " + key, ANSI_CYAN), scope,
-                                        scopes.get().size());
-
-                           }
-
-                           if (scope.has(key)) {
-                               Scope scopeForKey = scope.scopeForKey(key);
-                               assert scopeForKey != null;
-                               log.debug("Listening to scope {} for key {}", scopeForKey, key);
-                               scopeForKey.listen(key, id.toString(), node[0]);
-                               Variable v = scopeForKey.variable(key);
-                               if (!v.isPure() && (pure || scope.pure())) {
-                                   currentScope().handleError(
-                                           new PureFunctionException("Attempted to use an impure variable " + key + " in a " +
-                                                                             "pure context " + scopeForKey, sourceSegmentValue));
-                               }
-                               return v.getValue();
-                           }
-
-                           try {
-                               List<Scope> scopes = new ArrayList<>(DollarScriptSupport.scopes.get());
-                               Collections.reverse(scopes);
-                               for (Scope scriptScope : scopes) {
-                                   if (!(scriptScope instanceof PureScope) && pure) {
-                                       log.debug("Skipping {}", scriptScope);
-                                   }
-
-                                   if (scriptScope.has(key)) {
-                                       Scope scopeForKey = scriptScope.scopeForKey(key);
-                                       assert scopeForKey != null;
-                                       log.debug("Listening to scope {} for key {}", scopeForKey, key);
-                                       scopeForKey.listen(key, id.toString(), node[0]);
-                                       Variable v = scopeForKey.variable(key);
-                                       if (!v.isPure() && (pure || scope.pure())) {
-                                           scope.handleError(
-                                                   new PureFunctionException("Attempted to use an impure " +
-                                                                                     "variable in a pure " +
-                                                                                     "context"));
-                                       }
-                                       return v.getValue();
-
-                                   }
-                               }
-                           } catch (DollarAssertionException e) {
-                               throw e;
-                           } catch (DollarScriptException e) {
-                               return ErrorHandlerFactory.instance().handle(scope, null, e);
-                           } catch (RuntimeException e) {
-                               return ErrorHandlerFactory.instance().handle(scope, null, e);
-                           }
-                           if (numeric) {
-                               throw new VariableNotFoundException(key, scope, sourceSegmentValue);
-                           }
-
-                           if (defaultValue != null) {
-                               return defaultValue;
-                           } else {
-                               throw new VariableNotFoundException(key, scope);
-                           }
-                       }
-        );
-        node[0].metaAttribute(VARIABLE, key);
-        return node[0];
-
-    }
-
 
     @Nullable
     public static Scope getScopeForVar(boolean pure,
@@ -467,134 +234,22 @@ public final class DollarScriptSupport {
 
     }
 
-    @NotNull
-    public static Scope getRootScope() {
-        return scopes.get().get(0);
-    }
-
-    public static void setRootScope(@NotNull ScriptScope rootScope) {
-        scopes.get().add(0, rootScope);
-    }
-
-    @NotNull
-    public static var setVariableDefinition(@NotNull Scope scope,
-                                            @NotNull DollarParser parser,
-                                            @NotNull Token token,
-                                            boolean pure, boolean decleration, @NotNull String key,
-                                            @NotNull var value,
-                                            @Nullable var useConstraint,
-                                            @Nullable String useSource) {
-
-        return setVariable(scope, key, value,
-                           true, useConstraint, useSource,
-                           false, false, pure,
-                           decleration, token, parser);
-    }
-
-    @NotNull
-    public static var setVariable(@NotNull Scope scope,
-                                  @NotNull String key,
-                                  @NotNull var value,
-                                  boolean readonly,
-                                  @Nullable var useConstraint,
-                                  @Nullable String useSource,
-                                  boolean isVolatile,
-                                  boolean fixed,
-                                  boolean pure,
-                                  boolean decleration,
-                                  @NotNull Token token,
-                                  @Nullable DollarParser parser) {
-
-        SourceSegment source = new SourceSegmentValue(scope, token);
-        boolean numeric = key.matches("^\\d+$");
-
-
-        if (scope.has(key)) {
-            return updateVariable(scope, key, value, readonly, useConstraint, useSource,
-                                  isVolatile, fixed, pure, decleration);
+    private static var getVar(@NotNull String key,
+                              @NotNull UUID id,
+                              @NotNull Scope scopeForKey,
+                              @NotNull SourceSegment sourceCode,
+                              boolean pure,
+                              @NotNull var node) {
+        assert scopeForKey != null;
+        log.debug("Listening to scope {} for key {}", scopeForKey, key);
+        scopeForKey.listen(key, id.toString(), node);
+        Variable v = scopeForKey.variable(key);
+        if (!v.isPure() && (pure || scopeForKey.pure())) {
+            scopeForKey.handleError(
+                    new PureFunctionException("Attempted to use an impure variable " + key + " in a " +
+                                                      "pure context " + scopeForKey, sourceCode));
         }
-        try {
-            List<Scope> scopes = new ArrayList<>(DollarScriptSupport.scopes.get());
-            Collections.reverse(scopes);
-            for (Scope scriptScope : scopes) {
-                if (!(scriptScope instanceof PureScope) && pure) {
-                    log.debug("Skipping {}", scriptScope);
-                }
-
-                if (scriptScope.has(key)) {
-                    return updateVariable(scriptScope, key, value, readonly, useConstraint, useSource,
-                                          isVolatile, fixed, pure, decleration);
-                }
-
-            }
-        } catch (DollarAssertionException e) {
-            return ErrorHandlerFactory.instance().handle(scope, null, e);
-        } catch (DollarScriptException e) {
-            return ErrorHandlerFactory.instance().handle(scope, null, e);
-        } catch (RuntimeException e) {
-            return ErrorHandlerFactory.instance().handle(scope, null, e);
-        }
-        if (numeric) {
-            return scope.parameter(key);
-        }
-
-        if (decleration) {
-            if (getConfig().debugScope()) {
-                log.info("{} {} {}", highlight("SETTING  " + key, ANSI_CYAN), scope, scope);
-            }
-            return scope.set(key, value, readonly, useConstraint, useSource, isVolatile,
-                             fixed,
-                             pure);
-        } else {
-            throw new VariableNotFoundException(key, scope);
-        }
-
-
-    }
-
-    public static String removePrefix(@NotNull String key) {
-        if (key.startsWith("_")) {
-            return key.substring(1);
-        } else {
-            return key;
-        }
-    }
-
-    private static var updateVariable(@NotNull Scope scope,
-                                      @NotNull String key,
-                                      @NotNull var value,
-                                      boolean readonly,
-                                      @Nullable var useConstraint,
-                                      @Nullable String useSource,
-                                      boolean isVolatile,
-                                      boolean fixed,
-                                      boolean pure, boolean decleration) {
-        if (getConfig().debugScope()) {
-            log.info("{}{} {}", highlight("UPDATING ", ANSI_CYAN), key, scope);
-        }
-        if (decleration) {
-            throw new DollarScriptException("Variable " + key + " already defined in " + scope);
-        } else {
-
-            return scope.set(key, value, readonly, useConstraint, useSource, isVolatile, fixed, pure);
-        }
-    }
-
-    @NotNull
-    public static var constrain(@NotNull Scope scope, @NotNull var value, @Nullable var constraint, @Nullable String source) {
-//        System.err.println("(" + source + ") " + rhs.$type().constraint());
-        if (!Objects.equals(value.constraintLabel(), source)) {
-            if ((source != null) && (value.constraintLabel() != null) && !value.constraintLabel().isEmpty()) {
-                scope.handleError(
-                        new DollarScriptException("Trying to assign an invalid constrained variable " + value.constraintLabel() + " vs " + source,
-                                                  value));
-            }
-        } else {
-            if ((value.constraintLabel() != null) && !value.constraintLabel().isEmpty()) {
-//                System.err.println("Fingerprint: " + rhs.$type().constraint());
-            }
-        }
-        return value.$constrain(constraint, source);
+        return v.getValue();
     }
 
     public static String highlight(@NotNull String text, @NotNull String color) {
@@ -611,8 +266,145 @@ public final class DollarScriptSupport {
         }
     }
 
-    public static void pushScope(@NotNull Scope scope) {
-        addScope(true, scope);
+    public static <T> T inScope(boolean runtime,
+                                @NotNull Scope parent,
+                                boolean pure,
+                                @NotNull String scopeName,
+                                @NotNull ScopeExecutable<T> r) {
+        Scope newScope;
+        if (pure) {
+            newScope = new PureScope(parent, parent.source(), scopeName, parent.file());
+        } else {
+            if ((parent instanceof PureScope)) {
+                throw new IllegalStateException(
+                                                       "trying to switch to an impure scope in a pure scope.");
+            }
+            newScope = new ScriptScope(parent, parent.source(), scopeName,
+                                       false, false);
+        }
+        addScope(runtime, parent);
+        addScope(runtime, newScope);
+        try {
+            return r.execute(newScope);
+        } catch (Exception e) {
+            newScope.handleError(e);
+            return null;
+        } finally {
+            Scope poppedScope = endScope(runtime);
+//            poppedScope.destroy();
+            if (!Objects.equals(poppedScope, newScope)) {
+                throw new IllegalStateException("Popped wrong scope");
+            }
+            final Scope poppedScope2 = endScope(runtime);
+            if (!Objects.equals(poppedScope2, parent)) {
+                throw new IllegalStateException("Popped wrong scope");
+            }
+        }
+    }
+
+    @Nullable
+    public static <T> T inScope(boolean runtime,
+                                @NotNull Scope scope,
+                                @NotNull ScopeExecutable<T> r) {
+
+        final boolean scopeAdded;
+        if (scopes.get().get(scopes.get().size() - 1).equals(scope)) {
+            scopeAdded = false;
+        } else {
+            addScope(runtime, scope);
+            scopeAdded = true;
+        }
+        try {
+            return r.execute(scope);
+        } catch (Exception e) {
+            scope.handleError(e);
+            return null;
+        } finally {
+            if (scopeAdded) {
+                Scope poppedScope = endScope(runtime);
+                if (!Objects.equals(poppedScope, scope)) {
+                    throw new IllegalStateException("Popped wrong scope");
+                }
+            }
+
+        }
+    }
+
+    @Nullable
+    public static <T> T inSubScope(boolean runtime, boolean pure, @NotNull String scopeName,
+                                   @NotNull ScopeExecutable<T> r) {
+        return inScope(runtime, currentScope(), pure, scopeName, r);
+    }
+
+    private static String indent(int i) {
+        StringBuilder b = new StringBuilder();
+        for (int j = 0; j < i; j++) {
+            b.append(" ");
+        }
+        return b.toString();
+    }
+
+    @NotNull
+    public static var node(@NotNull OpDef operation,
+                           @NotNull String name,
+                           boolean pure,
+                           @NotNull SourceNodeOptions sourceNodeOptions,
+                           @NotNull DollarParser parser,
+                           @NotNull SourceSegment source,
+                           @NotNull List<var> inputs,
+                           @NotNull Pipeable pipeable,
+                           @Nullable Type suggestedType) {
+        var result = DollarFactory.wrap((var) Proxy.newProxyInstance(
+                DollarStatic.class.getClassLoader(),
+                new Class<?>[]{var.class},
+                new SourceNode(pipeable, source, inputs, name, parser,
+                               sourceNodeOptions, createId(name), pure, operation)));
+        try {
+            if (suggestedType != null) {
+                result.meta(MetaConstants.TYPE_HINT, suggestedType);
+            } else {
+                Type type = operation.typeFor(inputs.toArray(new var[inputs.size()]));
+                if (type != null) {
+                    result.meta(MetaConstants.TYPE_HINT, type);
+                }
+            }
+            return result;
+        } catch (Exception e) {
+            throw new DollarScriptException(e, source);
+        }
+    }
+
+    @NotNull
+    public static var node(@NotNull OpDef operation,
+                           boolean pure,
+                           @NotNull DollarParser parser,
+                           @NotNull SourceSegment source,
+                           @NotNull List<var> inputs,
+                           @NotNull Pipeable pipeable) {
+        return node(operation, operation.name(), pure, operation.nodeOptions(), parser, source, inputs, pipeable, null);
+    }
+
+    @NotNull
+    public static var node(@NotNull OpDef operation,
+                           boolean pure,
+                           @NotNull DollarParser parser,
+                           @NotNull Token token,
+                           @NotNull List<var> inputs,
+                           @NotNull Pipeable callable) {
+        return node(operation, operation.name(), pure, operation.nodeOptions(), parser,
+                    new SourceCode(currentScope(), token), inputs, callable, null);
+    }
+
+    @NotNull
+    public static var node(@NotNull OpDef operation,
+                           @NotNull String name,
+                           boolean pure,
+                           @NotNull DollarParser parser,
+                           @NotNull Token token,
+                           @NotNull List<var> inputs,
+                           @NotNull Pipeable callable) {
+        return node(operation, name, pure, operation.nodeOptions(), parser,
+                    new SourceCode(currentScope(), token), inputs, callable, null);
     }
 
     public static void popScope(@NotNull Scope scope) {
@@ -622,77 +414,255 @@ public final class DollarScriptSupport {
         }
     }
 
+    public static void pushScope(@NotNull Scope scope) {
+        addScope(true, scope);
+    }
 
     public static String randomId() {
         return UUID.randomUUID().toString();
     }
 
-    /**
-     * Fix var.
-     *
-     * @param v        the v
-     * @param parallel Should execution be in parallel?
-     * @return the var
-     */
     @NotNull
-    public static var fix(@Nullable var v, boolean parallel) {
-        return (v != null) ? DollarFactory.wrap(v.$fix(parallel)) : $void();
+    static var reactiveNode(@NotNull OpDef operation, @NotNull String name,
+                            boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
+                            @NotNull DollarParser parser,
+                            @NotNull SourceSegment source,
+                            @NotNull var lhs,
+                            @NotNull var rhs,
+                            @NotNull Pipeable callable) {
+        final var node = node(operation, name, pure, sourceNodeOptions, parser, source, Arrays.asList(lhs, rhs),
+                              callable, null
+        );
+
+
+        rhs.$listen(i -> node.$notify());
+        lhs.$listen(i -> node.$notify());
+        return node;
     }
 
-    /**
-     * Fix var.
-     *
-     * @param v the v
-     * @return the var
-     */
     @NotNull
-    public static var fix(@Nullable var v) {
-        return (v != null) ? DollarFactory.wrap(v.$fix(false)) : $void();
+    static var reactiveNode(@NotNull OpDef operation,
+                            boolean pure,
+                            @NotNull Token token,
+                            @NotNull var lhs,
+                            @NotNull var rhs,
+                            @NotNull DollarParser parser,
+                            @NotNull Pipeable callable) {
+        return reactiveNode(operation, operation.name(), pure, operation.nodeOptions(), parser,
+                            new SourceCode(currentScope(),
+                                           token), lhs,
+                            rhs, callable);
+
     }
 
-    public static void checkLearntType(@NotNull Token token, @Nullable Type type, var rhs, Double threshold) {
-        final TypePrediction prediction = rhs.predictType();
-        if ((type != null) && (prediction != null)) {
-            final Double probability = prediction.probability(type);
-            log.info("Predicted " + prediction.probableType() + " at " + (new SourceSegmentValue(currentScope(),
-                                                                                                 token)).getShortSourceMessage());
-            if ((probability < threshold) && !prediction.empty()) {
-                log.warn("Type assertion may fail, expected {} most likely type is {} ({}%) at {}", type,
-                         prediction.probableType(),
-                         (int) (prediction.probability(prediction.probableType()) * 100),
-                         new SourceSegmentValue(currentScope(), token).getSourceMessage()
-                );
-                if (getConfig().failFast()) {
-                    throw new DollarScriptException("Type prediction failed, was expecting " + type + " but most likely type is " + prediction.probableType() + " if this prediction is wrong please add an explicit cast (using 'as " + type.name() + "')");
+    @NotNull
+    static var reactiveNode(@NotNull OpDef operation,
+                            @NotNull String name,
+                            boolean pure,
+                            @NotNull Token token,
+                            @NotNull var lhs,
+                            @NotNull var rhs,
+                            @NotNull DollarParser parser,
+                            @NotNull Pipeable callable) {
+        return reactiveNode(operation, name, pure, operation.nodeOptions(), parser,
+                            new SourceCode(currentScope(),
+                                           token), lhs,
+                            rhs, callable);
+
+    }
+
+    @NotNull
+    static var reactiveNode(@NotNull OpDef operation,
+                            boolean pure,
+                            @NotNull DollarParser parser, @NotNull SourceSegment source,
+                            @NotNull var lhs,
+                            @NotNull var rhs,
+                            @NotNull Pipeable callable) {
+        return reactiveNode(operation, operation.name(), pure, operation.nodeOptions(), parser, source, lhs,
+                            rhs, callable);
+
+    }
+
+    @NotNull
+    static var reactiveNode(@NotNull OpDef operation,
+                            boolean pure,
+                            @NotNull var lhs,
+                            @NotNull Token token,
+                            @NotNull DollarParser parser,
+                            @NotNull Pipeable callable) {
+
+        return reactiveNode(operation, pure, new SourceCode(currentScope(), token), parser, lhs, callable
+        );
+    }
+
+    @NotNull
+    static var reactiveNode(@NotNull OpDef operation,
+                            boolean pure,
+                            @NotNull SourceSegment source,
+                            @NotNull DollarParser parser,
+                            @NotNull var lhs,
+                            @NotNull Pipeable callable) {
+
+        final var node = node(operation, operation.name(),
+                              pure, operation.nodeOptions(), parser, source,
+                              Collections.singletonList(lhs),
+                              callable, null);
+        lhs.$listen(i -> node.$notify());
+        return node;
+    }
+
+    @NotNull
+    public static String removePrefix(@NotNull String key) {
+        if (key.startsWith("_")) {
+            return key.substring(1);
+        } else {
+            return key;
+        }
+    }
+
+    @NotNull
+    static List<Scope> scopes() {
+        return scopes.get();
+    }
+
+    @NotNull
+    public static Variable setVariable(@NotNull Scope scope,
+                                       @NotNull String key,
+                                       @NotNull var value,
+                                       @Nullable DollarParser parser,
+                                       @NotNull Token token,
+                                       @Nullable var useConstraint,
+                                       @Nullable String useSource,
+                                       @NotNull VarType varType) {
+
+        SourceSegment source = new SourceCode(scope, token);
+        boolean numeric = key.matches("^\\d+$");
+
+
+        if (scope.has(key)) {
+            return updateVariable(scope, key, value, varType, useConstraint, useSource);
+        }
+        try {
+            List<Scope> scopes = new ArrayList<>(DollarScriptSupport.scopes.get());
+            Collections.reverse(scopes);
+            for (Scope scriptScope : scopes) {
+                if (!(scriptScope instanceof PureScope) && varType.isPure()) {
+                    log.debug("Skipping {}", scriptScope);
                 }
+
+                if (scriptScope.has(key)) {
+                    return updateVariable(scriptScope, key, value, varType, useConstraint, useSource
+                    );
+                }
+
             }
+        } catch (DollarAssertionException e) {
+            ErrorHandlerFactory.instance().handle(scope, source, e);
+            throw e;
+        } catch (DollarScriptException e) {
+            ErrorHandlerFactory.instance().handle(scope, source, e);
+            throw e;
+        } catch (RuntimeException e) {
+            ErrorHandlerFactory.instance().handle(scope, source, e);
+            throw e;
+        }
+        if (numeric) {
+            return scope.parameter(key);
+        }
+
+        if (varType.isDeclaration()) {
+            if (getConfig().debugScope()) {
+                log.info("{} {} {}", highlight("SETTING  " + key, ANSI_CYAN), scope, scope);
+            }
+            return scope.set(key, value, useConstraint, useSource, varType);
+        } else {
+            throw new VariableNotFoundException(key, scope);
+        }
+
+
+    }
+
+    @NotNull
+    static String shortHash(@NotNull Token token) {
+        return new SourceCode(currentScope(), token).getShortHash();
+    }
+
+    private static @NotNull Variable updateVariable(@NotNull Scope scope,
+                                                    @NotNull String key,
+                                                    @NotNull var value,
+                                                    @NotNull VarType varType, @Nullable var useConstraint,
+                                                    @Nullable String useSource) {
+        if (getConfig().debugScope()) {
+            log.info("{}{} {}", highlight("UPDATING ", ANSI_CYAN), key, scope);
+        }
+        if (varType.isDeclaration()) {
+            throw new DollarScriptException("Variable " + key + " already defined in " + scope);
+        } else {
+
+            return scope.set(key, value, useConstraint, useSource, varType);
         }
     }
 
     @NotNull
-    static String shortHash(Token token) {
-        return new SourceSegmentValue(currentScope(), token).getShortHash();
+    public static var variableNode(boolean pure, @NotNull String key, @NotNull Token token, @NotNull DollarParser parser) {
+        return variableNode(pure, key, false, null, token, parser);
     }
 
-    public static void addParameterstoCurrentScope(Scope scope, List<var> parameters) {
-        //Add the special $* value for all the parameters
-        int count = 0;
-        List<var> fixedParams = new ArrayList<>();
-        for (var parameter : parameters) {
-            var fixedParam = parameter.$fix(1, false);
-            fixedParams.add(fixedParam);
-            scope.parameter(String.valueOf(++count), fixedParam);
+    @NotNull
+    public static var variableNode(boolean pure, @NotNull String key,
+                                   boolean numeric, @Nullable var defaultValue,
+                                   @NotNull Token token, @NotNull DollarParser parser) {
+        var node[] = new var[1];
+        UUID id = UUID.randomUUID();
+        SourceCode sourceCode = new SourceCode(currentScope(), token);
+        node[0] = node(VAR_USAGE_OP, "var-usage-" + key + "-" + sourceCode.getShortHash(), pure, parser, token,
+                       $(key).$list().toVarList(),
+                       (i) -> {
+                           Scope scope = currentScope();
 
-            //If the parameter is a named parameter then use the name (set as metadata on the value).
-            String paramMetaAttribute = fixedParam.metaAttribute(NAMED_PARAMETER_META_ATTR);
-            if (paramMetaAttribute != null) {
-                scope.parameter(paramMetaAttribute, fixedParam);
-            }
-        }
-        scope.parameter("*", $(fixedParams));
-    }
+                           if (getConfig().debugScope()) {
+                               log.info("{} {} in {} scopes ", highlight("LOOKUP " + key, ANSI_CYAN), scope,
+                                        scopes.get().size());
 
-    public static DollarParser getParser() {
-        return DollarParser.parser.get();
+                           }
+
+                           if (scope.has(key)) {
+                               return getVar(key, id, scope.scopeForKey(key), sourceCode, pure, node[0]);
+                           }
+
+                           try {
+                               List<Scope> scopes = new ArrayList<>(DollarScriptSupport.scopes.get());
+                               Collections.reverse(scopes);
+                               for (Scope scriptScope : scopes) {
+                                   if (!(scriptScope instanceof PureScope) && pure) {
+                                       log.debug("Skipping {}", scriptScope);
+                                   }
+
+                                   if (scriptScope.has(key)) {
+                                       return getVar(key, id, scriptScope.scopeForKey(key), sourceCode, pure, node[0]);
+
+                                   }
+                               }
+                           } catch (DollarAssertionException e) {
+                               throw e;
+                           } catch (DollarScriptException e) {
+                               return ErrorHandlerFactory.instance().handle(scope, null, e);
+                           } catch (RuntimeException e) {
+                               return ErrorHandlerFactory.instance().handle(scope, null, e);
+                           }
+                           if (numeric) {
+                               throw new VariableNotFoundException(key, scope, sourceCode);
+                           }
+
+                           if (defaultValue != null) {
+                               return defaultValue;
+                           } else {
+                               throw new VariableNotFoundException(key, scope);
+                           }
+                       }
+        );
+        node[0].metaAttribute(VARIABLE, key);
+        return node[0];
+
     }
 }

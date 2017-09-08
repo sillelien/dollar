@@ -17,6 +17,7 @@
 package dollar.execution.simple;
 
 import dollar.api.Scope;
+import dollar.api.VarType;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.script.SourceSegment;
 import dollar.api.types.DollarFactory;
@@ -49,11 +50,10 @@ import static java.util.concurrent.Executors.newFixedThreadPool;
 public class ScopeAwareDollarExecutor implements DollarExecutor {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(ScopeAwareDollarExecutor.class);
-
-    @Nullable
-    private ForkJoinPool forkJoinPool;
     @Nullable
     private ExecutorService backgroundExecutor;
+    @Nullable
+    private ForkJoinPool forkJoinPool;
     @Nullable
     private ScheduledExecutorService scheduledExecutor;
 
@@ -61,29 +61,6 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
     public ScopeAwareDollarExecutor() {
         getRuntime().addShutdownHook(new Thread(this::forceStop));
         start();
-    }
-
-    @Override
-    public void start() {
-        forkJoinPool = new ForkJoinPool(getRuntime().availableProcessors() * 8);
-        backgroundExecutor = newFixedThreadPool(getRuntime().availableProcessors());
-        scheduledExecutor = Executors.newScheduledThreadPool(getRuntime().availableProcessors());
-    }
-
-    @Override
-    public void stop() {
-        if (backgroundExecutor != null) {
-            backgroundExecutor.shutdown();
-            backgroundExecutor = null;
-        }
-        if (forkJoinPool != null) {
-            forkJoinPool.shutdown();
-            forkJoinPool = null;
-        }
-        if (scheduledExecutor != null) {
-            scheduledExecutor.shutdown();
-            scheduledExecutor = null;
-        }
     }
 
     @NotNull
@@ -164,7 +141,7 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
                                         log.debug("Waiting for future ...");
                                         return varFuture.get();
                                     }
-        ), true, null, null, true, false, false);
+        ), null, null, new VarType(true, true, false, false, false, true));
         return DollarFactory.fromStringValue(id);
     }
 
@@ -178,6 +155,29 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
                         return varFuture.get();
                     }
         );
+    }
+
+    @Override
+    public void start() {
+        forkJoinPool = new ForkJoinPool(getRuntime().availableProcessors() * 8);
+        backgroundExecutor = newFixedThreadPool(getRuntime().availableProcessors());
+        scheduledExecutor = Executors.newScheduledThreadPool(getRuntime().availableProcessors());
+    }
+
+    @Override
+    public void stop() {
+        if (backgroundExecutor != null) {
+            backgroundExecutor.shutdown();
+            backgroundExecutor = null;
+        }
+        if (forkJoinPool != null) {
+            forkJoinPool.shutdown();
+            forkJoinPool = null;
+        }
+        if (scheduledExecutor != null) {
+            scheduledExecutor.shutdown();
+            scheduledExecutor = null;
+        }
     }
 
     private Runnable wrap(@NotNull Runnable runnable) {

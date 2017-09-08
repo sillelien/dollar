@@ -20,7 +20,7 @@ import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.var;
 import dollar.internal.runtime.script.Func;
-import dollar.internal.runtime.script.SourceSegmentValue;
+import dollar.internal.runtime.script.SourceCode;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,10 +41,10 @@ import static dollar.internal.runtime.script.parser.Symbols.DEFINITION;
 public class DefinitionOperator implements Function<Token, Function<? super var, ? extends var>> {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("DefinitionOperator");
-    private final boolean pure;
+    private final boolean def;
     @NotNull
     private final DollarParser parser;
-    private final boolean def;
+    private final boolean pure;
 
     public DefinitionOperator(boolean pure, @NotNull DollarParser parser, boolean def) {
         this.pure = pure;
@@ -91,10 +91,10 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
             if (typeConstraintObj != null) {
                 Type type = Type.of(typeConstraintObj);
                 constraint = node(DEFINITION, "definition-constraint", pure, NEW_SCOPE, parser,
-                                  new SourceSegmentValue(currentScope(), token), new ArrayList<>(),
-                                  i -> $(scope.parameter("it").is(type)), null);
+                                  new SourceCode(currentScope(), token), new ArrayList<>(),
+                                  i -> $(scope.parameter("it").getValue().is(type)), null);
                 checkLearntType(token, type, rhs, MIN_PROBABILITY);
-                SourceSegmentValue meta = typeConstraintObj.meta(CONSTRAINT_SOURCE);
+                SourceCode meta = typeConstraintObj.meta(CONSTRAINT_SOURCE);
                 if (meta != null) {
                     constraintSource = meta.getSourceSegment();
                 } else {

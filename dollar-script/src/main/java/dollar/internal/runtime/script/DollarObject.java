@@ -22,6 +22,7 @@ import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Type;
+import dollar.api.VarType;
 import dollar.api.Variable;
 import dollar.api.types.AbstractDollar;
 import dollar.api.types.DollarFactory;
@@ -51,13 +52,12 @@ public class DollarObject extends AbstractDollar {
 
 
     @NotNull
-    private final String name;
-    @NotNull
     private final var constructor;
-    private final boolean mutable;
     @NotNull
     private final Map<String, Variable> fields = new ConcurrentHashMap<>();
-
+    private final boolean mutable;
+    @NotNull
+    private final String name;
     private final Type type;
 
     public DollarObject(@NotNull String name, @NotNull var constructor,
@@ -77,6 +77,63 @@ public class DollarObject extends AbstractDollar {
 
     }
 
+    @NotNull
+    @Override
+    public var $abs() {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull var rhs) {
+        throw new DollarScriptException("Cannot remove field (using minus) " + rhs + " in class " + name + " no fields are " +
+                                                "removeable.");
+
+
+    }
+
+    @NotNull
+    @Override
+    public var $plus(@NotNull var rhs) {
+        throw new DollarScriptException("Cannot remove add " + rhs + " to class " + name + " all fields are fixed.");
+
+    }
+
+    @NotNull
+    @Override
+    public var $negate() {
+        throw new DollarScriptException("Cannot negate instance of class " + name + " all fields are fixed.");
+    }
+
+    @NotNull
+    @Override
+    public var $divide(@NotNull var rhs) {
+        throw new DollarScriptException("Cannot divide instance of class " + name + " all fields are fixed.");
+    }
+
+    @NotNull
+    @Override
+    public var $modulus(@NotNull var rhs) {
+        throw new DollarScriptException("Cannot modulus instance of class " + name + " all fields are fixed.");
+    }
+
+    @NotNull
+    @Override
+    public var $multiply(@NotNull var v) {
+        throw new DollarScriptException("Cannot multiply instance of class " + name + " all fields are fixed.");
+    }
+
+    @NotNull
+    @Override
+    public Integer toInteger() {
+        throw new DollarScriptException("Cannot convert instance of class " + name + " to integer.");
+    }
+
+    @NotNull
+    @Override
+    public Number toNumber() {
+        throw new DollarScriptException("Cannot convert instance of class " + name + " to number.");
+    }
 
     @Override
     public @NotNull var $as(@NotNull Type type) {
@@ -272,11 +329,106 @@ public class DollarObject extends AbstractDollar {
         return fields.size();
     }
 
+    @NotNull
+    @Override
+    public var $listen(@NotNull Pipeable pipe, @NotNull String key) {
+        for (Variable v : fields.values()) {
+            //Join the children to this, so if the children change
+            //listeners to this get the latest value of this.
+            v.getValue().$listen(i -> this, key);
+        }
+        return DollarStatic.$(key);
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $stream(boolean parallel) {
+        return split().values().stream();
+    }
+
+    @NotNull
+    @Override
+    public var $notify() {
+        fields.values().forEach(v -> v.getValue().$notify());
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $copy() {
+        return DollarFactory.wrap(new DollarObject(name, constructor, fields));
+    }
+
+    @NotNull
+    @Override
+    public var $fix(int depth, boolean parallel) {
+        return this;
+    }
+
+    @Override
+    public boolean map() {
+        return true;
+    }
+
+    @Override
+    public boolean pair() {
+        return fields.size() == 1;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj == this;
+    }
+
+    @Override
+    public @NotNull String toString() {
+        return "class " + name;
+    }
+
+    @Override
+    public int compareTo(@NotNull var o) {
+        return Comparator.<var>naturalOrder().<var>compare(this, o);
+    }
+
+    @NotNull
+    private LinkedHashMap<var, var> deepClone(@NotNull LinkedHashMap<var, var> o) {
+        LinkedHashMap<var, var> result = new LinkedHashMap<>();
+        for (Map.Entry<var, var> entry : o.entrySet()) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
+    }
+
     private var inThisScope(ScopeExecutable<var> exe) {
         ScriptScope subScope = new ScriptScope(currentScope(), "this-" + name, false, true);
         DollarObject thisObject = new DollarObject(name, constructor, fields, true);
-        subScope.set("this", thisObject, true, null, null, true, false, false);
+        subScope.set("this", thisObject, null, null, new VarType(true, true, false, false, false, true));
         return inScope(true, subScope, exe);
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean neitherTrueNorFalse() {
+        return true;
+    }
+
+    @Override
+    public boolean truthy() {
+        return !fields.isEmpty();
     }
 
     @NotNull
@@ -289,70 +441,8 @@ public class DollarObject extends AbstractDollar {
     }
 
     @NotNull
-    private LinkedHashMap<var, var> deepClone(@NotNull LinkedHashMap<var, var> o) {
-        LinkedHashMap<var, var> result = new LinkedHashMap<>();
-        for (Map.Entry<var, var> entry : o.entrySet()) {
-            result.put(entry.getKey(), entry.getValue());
-        }
-        return result;
-    }
-
-    @NotNull
-    @Override
-    public var $abs() {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $minus(@NotNull var rhs) {
-        throw new DollarScriptException("Cannot remove field (using minus) " + rhs + " in class " + name + " no fields are " +
-                                                "removeable.");
-
-
-    }
-
-    @NotNull
-    @Override
-    public var $plus(@NotNull var rhs) {
-        throw new DollarScriptException("Cannot remove add " + rhs + " to class " + name + " all fields are fixed.");
-
-    }
-
-    @NotNull
-    @Override
-    public var $negate() {
-        throw new DollarScriptException("Cannot negate instance of class " + name + " all fields are fixed.");
-    }
-
-    @NotNull
-    @Override
-    public var $divide(@NotNull var rhs) {
-        throw new DollarScriptException("Cannot divide instance of class " + name + " all fields are fixed.");
-    }
-
-    @NotNull
-    @Override
-    public var $modulus(@NotNull var rhs) {
-        throw new DollarScriptException("Cannot modulus instance of class " + name + " all fields are fixed.");
-    }
-
-    @NotNull
-    @Override
-    public var $multiply(@NotNull var v) {
-        throw new DollarScriptException("Cannot multiply instance of class " + name + " all fields are fixed.");
-    }
-
-    @NotNull
-    @Override
-    public Integer toInteger() {
-        throw new DollarScriptException("Cannot convert instance of class " + name + " to integer.");
-    }
-
-    @NotNull
-    @Override
-    public Number toNumber() {
-        throw new DollarScriptException("Cannot convert instance of class " + name + " to number.");
+    Map<var, var> split() {
+        return varMapToMap();
     }
 
     @NotNull
@@ -419,96 +509,5 @@ public class DollarObject extends AbstractDollar {
             result.put(entry.getKey().toJavaObject(), entry.getValue().toJavaObject());
         }
         return result;
-    }
-
-    @NotNull
-    @Override
-    public var $listen(@NotNull Pipeable pipe, @NotNull String key) {
-        for (Variable v : fields.values()) {
-            //Join the children to this, so if the children change
-            //listeners to this get the latest value of this.
-            v.getValue().$listen(i -> this, key);
-        }
-        return DollarStatic.$(key);
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $stream(boolean parallel) {
-        return split().values().stream();
-    }
-
-    @NotNull
-    @Override
-    public var $notify() {
-        fields.values().forEach(v -> v.getValue().$notify());
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $copy() {
-        return DollarFactory.wrap(new DollarObject(name, constructor, fields));
-    }
-
-    @NotNull
-    @Override
-    public var $fix(int depth, boolean parallel) {
-        return this;
-    }
-
-    @Override
-    public boolean map() {
-        return true;
-    }
-
-    @Override
-    public boolean pair() {
-        return fields.size() == 1;
-    }
-
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        return obj == this;
-    }
-
-    @Override
-    public @NotNull String toString() {
-        return "class " + name;
-    }
-
-    @NotNull
-    Map<var, var> split() {
-        return varMapToMap();
-    }
-
-    @Override
-    public int compareTo(@NotNull var o) {
-        return Comparator.<var>naturalOrder().<var>compare(this, o);
-    }
-
-    @Override
-    public boolean isBoolean() {
-        return false;
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean neitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
-    public boolean truthy() {
-        return !fields.isEmpty();
     }
 }

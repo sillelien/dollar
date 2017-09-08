@@ -20,19 +20,41 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class Variable {
-    private final boolean readonly;
     @Nullable
     private final var constraint;
-    private final long thread;
-    private final boolean pure;
-    private final boolean fixed;
     @Nullable
     private final String constraintSource;
+    private final boolean fixed;
     private final boolean numeric;
     private final boolean parameter;
+    private final boolean pure;
+    private final boolean readonly;
+    private final long thread;
     private boolean isVolatile;
     @NotNull
     private var value;
+
+    private Variable(@Nullable var constraint,
+                     @Nullable String constraintSource,
+                     boolean fixed,
+                     boolean numeric,
+                     boolean parameter,
+                     boolean pure,
+                     boolean readonly,
+                     long thread,
+                     boolean isVolatile,
+                     @NotNull var value) {
+        this.constraint = constraint;
+        this.constraintSource = constraintSource;
+        this.fixed = fixed;
+        this.numeric = numeric;
+        this.parameter = parameter;
+        this.pure = pure;
+        this.readonly = readonly;
+        this.thread = thread;
+        this.isVolatile = isVolatile;
+        this.value = value;
+    }
 
     public Variable(@NotNull var value, boolean pure, boolean numeric, boolean parameter) {
         this.parameter = parameter;
@@ -40,7 +62,7 @@ public final class Variable {
             throw new AssertionError("Wrong constructor for non parameters");
         }
         this.numeric = numeric;
-        setValue(value);
+        this.value = value;
         constraint = null;
         constraintSource = null;
         fixed = false;
@@ -56,7 +78,7 @@ public final class Variable {
                     boolean parameter) {
         this.numeric = numeric;
         this.parameter = parameter;
-        setValue(value);
+        this.value = value;
         this.constraint = constraint;
         this.constraintSource = constraintSource;
         fixed = false;
@@ -66,21 +88,23 @@ public final class Variable {
     }
 
     public Variable(@NotNull var value,
-                    boolean readonly,
+                    @NotNull VarType varType,
                     @Nullable var constraint,
-                    @Nullable String constraintSource,
-                    boolean isVolatile,
-                    boolean fixed, boolean pure, boolean numeric, boolean parameter) {
-        this.numeric = numeric;
-        this.parameter = parameter;
-        setValue(value);
-        this.readonly = readonly;
+                    @Nullable String constraintSource) {
+        numeric = varType.isNumeric();
+        parameter = varType.isParameter();
+        this.value = value;
+        readonly = varType.isReadonly();
         this.constraint = constraint;
         this.constraintSource = constraintSource;
-        setVolatile(isVolatile);
-        this.fixed = fixed;
-        this.pure = pure;
+        setVolatile(varType.isVolatile());
+        fixed = varType.isFixed();
+        pure = varType.isPure();
         thread = Thread.currentThread().getId();
+    }
+
+    public Variable copy(@NotNull var var) {
+        return new Variable(constraint, constraintSource, fixed, numeric, parameter, pure, readonly, thread, isVolatile, var);
     }
 
     @Nullable
@@ -95,6 +119,15 @@ public final class Variable {
 
     public long getThread() {
         return thread;
+    }
+
+    @NotNull
+    public var getValue() {
+        return value;
+    }
+
+    public void setValue(@NotNull var value) {
+        this.value = value;
     }
 
     @Override
@@ -113,13 +146,12 @@ public final class Variable {
 
     }
 
-    @NotNull
-    public var getValue() {
-        return value;
+    public boolean isNumeric() {
+        return numeric;
     }
 
-    public void setValue(@NotNull var value) {
-        this.value = value;
+    public boolean isParameter() {
+        return parameter;
     }
 
     public boolean isPure() {
@@ -136,18 +168,5 @@ public final class Variable {
 
     public void setVolatile(boolean isVolatile) {
         this.isVolatile = isVolatile;
-    }
-
-    public boolean isNumeric() {
-        return numeric;
-    }
-
-
-    public Variable copy(@NotNull var var) {
-        return new Variable(var, readonly, constraint, constraintSource, isVolatile, fixed, pure, numeric, parameter);
-    }
-
-    public boolean isParameter() {
-        return parameter;
     }
 }

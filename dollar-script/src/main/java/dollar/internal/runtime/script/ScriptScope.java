@@ -23,6 +23,7 @@ import dollar.api.DollarClass;
 import dollar.api.DollarException;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
+import dollar.api.VarType;
 import dollar.api.Variable;
 import dollar.api.exceptions.LambdaRecursionException;
 import dollar.api.script.SourceSegment;
@@ -59,29 +60,28 @@ import static dollar.internal.runtime.script.DollarScriptSupport.removePrefix;
 public class ScriptScope implements Scope {
 
     @NotNull
-    private static final Logger log = LoggerFactory.getLogger(ScriptScope.class);
-
-    @NotNull
     private static final AtomicInteger counter = new AtomicInteger();
     @NotNull
-    final String id;
+    private static final Logger log = LoggerFactory.getLogger(ScriptScope.class);
     @NotNull
-    private final ConcurrentHashMap<String, Variable> variables = new ConcurrentHashMap<>();
+    final String id;
+    private final boolean classScope;
     @NotNull
     private final ConcurrentHashMap<String, DollarClass> classes = new ConcurrentHashMap<>();
     @NotNull
-    private final Multimap<String, Listener> listeners = ArrayListMultimap.create();
-    @NotNull
     private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
+    @NotNull
+    private final Multimap<String, Listener> listeners = ArrayListMultimap.create();
     private final boolean root;
-    private final boolean classScope;
     @NotNull
     private final UUID uuid = UUID.randomUUID();
+    @NotNull
+    private final ConcurrentHashMap<String, Variable> variables = new ConcurrentHashMap<>();
     @Nullable
     Scope parent;
     @Nullable String source;
-    private boolean parameterScope;
     private boolean destroyed;
+    private boolean parameterScope;
     @Nullable
     private Parser<var> parser;
 
@@ -155,36 +155,6 @@ public class ScriptScope implements Scope {
 
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(uuid);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ScriptScope that = (ScriptScope) o;
-        return Objects.equal(uuid, that.uuid);
-    }
-
-    @Nullable
-    @Override
-    public String toString() {
-        if (parent != null) {
-            return id + "->" + parent;
-        } else {
-            return id;
-        }
-    }
-
-    private void checkPure(@NotNull Scope parent) {
-        if (parent.pure() && !pure()) {
-            log.debug("Impure child {} of pure parent {}", id, parent);
-            handleError(new PureFunctionException());
-        }
-    }
-
     @NotNull
     @Override
     public var addErrorHandler(@NotNull var handler) {
@@ -196,6 +166,11 @@ public class ScriptScope implements Scope {
     }
 
     @Override
+    public void addListener(@NotNull String key, @NotNull Scope.Listener listener) {
+        listeners.put(key, listener);
+    }
+
+    @Override
     public void clear() {
         checkDestroyed();
 
@@ -204,48 +179,6 @@ public class ScriptScope implements Scope {
         }
         variables.clear();
         listeners.clear();
-    }
-
-    @NotNull
-    @Override
-    public var get(@NotNull String k, boolean mustFind) {
-        String key = removePrefix(k);
-        checkDestroyed();
-        if (key.matches("[0-9]+")) {
-            throw new DollarAssertionException("Cannot get numerical keys, use parameter");
-        }
-        if (getConfig().debugScope()) {
-            log.info("Looking up {} in {}", key, this);
-        }
-        Scope scope = scopeForKey(key);
-        if (scope == null) {
-            scope = this;
-        } else {
-            if (getConfig().debugScope()) {
-                log.info("{} in {}", DollarScriptSupport.highlight("FOUND " + key, DollarScriptSupport.ANSI_CYAN), scope);
-            }
-        }
-        Variable result = (Variable) scope.variables().get(key);
-
-        if (mustFind) {
-            if (result == null) {
-                throw new VariableNotFoundException(key, this);
-            } else {
-                return result.getValue();
-            }
-        } else {
-            return (result != null) ? result.getValue() : $void();
-        }
-    }
-
-    @Override
-    public var get(@NotNull String key) {
-        return get(key, false);
-    }
-
-    @Override
-    public Variable variable(@NotNull String k) {
-        return variables.get(removePrefix(k));
     }
 
     @Nullable
@@ -288,6 +221,35 @@ public class ScriptScope implements Scope {
         return null;
     }
 
+    @NotNull
+    @Override
+    public Scope copy() {
+        checkDestroyed();
+
+        return new ScriptScope(parent, "*" + id.split(":")[0] + ":" + counter.incrementAndGet(),
+                               parameterScope,
+                               variables, errorHandlers, listeners, source, parser, root, classScope);
+    }
+
+    @Override
+    public void destroy() {
+        clear();
+        destroyed = true;
+    }
+
+    @NotNull
+    @Override
+    public DollarClass dollarClassByName(@NotNull String name) {
+        DollarClass clazz = classes.get(name);
+        if (clazz != null) {
+            return clazz;
+        }
+        if (parent != null) {
+            return parent.dollarClassByName(name);
+        }
+        throw new VariableNotFoundException(name, this);
+    }
+
     @Override
     public String file() {
         if (parent != null) {
@@ -297,50 +259,41 @@ public class ScriptScope implements Scope {
         }
     }
 
-    @Override
-    public @NotNull
-    Multimap<String, Listener> listeners() {
-        return listeners;
-    }
-
     @NotNull
     @Override
-    public var parameter(@NotNull String key) {
+    public var get(@NotNull String k, boolean mustFind) {
+        String key = removePrefix(k);
         checkDestroyed();
+        if (key.matches("[0-9]+")) {
+            throw new DollarAssertionException("Cannot get numerical keys, use parameter");
+        }
+        if (getConfig().debugScope()) {
+            log.info("Looking up {} in {}", key, this);
+        }
         Scope scope = scopeForKey(key);
         if (scope == null) {
-            throw new VariableNotFoundException(key, this);
-        }
-        return scope.variable(key).getValue();
-    }
-
-    @Nullable
-    @Override
-    public Scope scopeForKey(@NotNull String k) {
-        checkDestroyed();
-        String key = removePrefix(k);
-
-        if (variables.containsKey(key)) {
-            return this;
-        }
-        if (parent != null) {
-            return parent.scopeForKey(key);
+            scope = this;
         } else {
-//            if (DollarStatic.getConfig().debugScope()) { log.info("Scope not found for " + key); }
-            return null;
+            if (getConfig().debugScope()) {
+                log.info("{} in {}", DollarScriptSupport.highlight("FOUND " + key, DollarScriptSupport.ANSI_CYAN), scope);
+            }
+        }
+        Variable result = (Variable) scope.variables().get(key);
+
+        if (mustFind) {
+            if (result == null) {
+                throw new VariableNotFoundException(key, this);
+            } else {
+                return result.getValue();
+            }
+        } else {
+            return (result != null) ? result.getValue() : $void();
         }
     }
 
-    @Nullable
     @Override
-    public String source() {
-        return source;
-    }
-
-    @NotNull
-    @Override
-    public Map<String, Variable> variables() {
-        return variables;
+    public var get(@NotNull String key) {
+        return get(key, false);
     }
 
     @NotNull
@@ -412,13 +365,13 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public var handleError(@NotNull Throwable t, var context) {
+    public var handleError(@NotNull Throwable t, @NotNull var context) {
         return handleError(new DollarScriptException(t, context));
     }
 
     @NotNull
     @Override
-    public var handleError(@NotNull Throwable t, SourceSegment source) {
+    public var handleError(@NotNull Throwable t, @NotNull SourceSegment source) {
         if (t instanceof LambdaRecursionException) {
             return handleError(new DollarParserError(
                                                             "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
@@ -457,6 +410,26 @@ public class ScriptScope implements Scope {
     public boolean hasParameter(@NotNull String k) {
         Variable variable = variable(k);
         return variable != null && variable.isParameter();
+    }
+
+    @Override
+    public boolean hasParent(Scope scope) {
+        checkDestroyed();
+
+        if (parent() == null) {
+            return false;
+        }
+        return parent().equals(scope) || parent().hasParent(scope);
+    }
+
+    @Override
+    public boolean isClassScope() {
+        return classScope;
+    }
+
+    @Override
+    public boolean isRoot() {
+        return root;
     }
 
     @Override
@@ -523,14 +496,11 @@ public class ScriptScope implements Scope {
 
 
         if (listeners.get(key).stream().filter(i -> i.getId().equals(id)).count() == 0) {
-            scopeForKey.listeners().put(key, listener);
+            scopeForKey.addListener(key, listener);
         } else {
             if (getConfig().debugEvents()) {
                 log.info("Listener {} for {} in {} already exists", id, key, scopeForKey);
             }
-        }
-        if (getConfig().debugEvents()) {
-            log.info("Listener size now {}", scopeForKey.listeners().get(key).size());
         }
     }
 
@@ -580,18 +550,87 @@ public class ScriptScope implements Scope {
         }
     }
 
+    @NotNull
     @Override
-    public var set(@NotNull String k,
-                   @NotNull var value,
-                   boolean readonly,
-                   @Nullable var constraint,
-                   String constraintSource,
-                   boolean isVolatile,
-                   boolean fixed,
-                   boolean pure) {
+    public Variable parameter(@NotNull String key) {
+        checkDestroyed();
+        Scope scope = scopeForKey(key);
+        if (scope == null) {
+            throw new VariableNotFoundException(key, this);
+        }
+        Variable variable = scope.variable(key);
+        if (!variable.isParameter()) {
+            throw new DollarScriptException("Attempted to access a non-parameter variable " + key + "as a parameter in scope " + this);
+        }
+        return variable;
+    }
 
-        if (parent != null && parent.isClassScope()) {
-            return parent.set(k, value, readonly, constraint, constraintSource, isVolatile, fixed, pure);
+    @NotNull
+    @Override
+    public Variable parameter(@NotNull String key, @NotNull var value) {
+        checkDestroyed();
+
+        if (getConfig().debugScope()) {
+            log.info("Setting parameter {} in {}", key, this);
+        }
+        if (key.matches("[0-9]+") && variables.containsKey(key)) {
+            throw new DollarScriptException("Cannot change the value of positional variable $" + key + " in scope " + this);
+        }
+        parameterScope = true;
+        Variable variable = new Variable(value, value.meta(IMPURE) == null, key.matches("[0-9]+"), true);
+        variables.put(key, variable);
+        notifyScope(key, value);
+        return variable;
+    }
+
+    @NotNull
+    @Override
+    public List<var> parametersAsVars() {
+        return variables.values().stream().filter(Variable::isNumeric).map(Variable::getValue).collect(Collectors.toList());
+    }
+
+    @Override
+    public Scope parent() {
+        return parent;
+    }
+
+    @Override
+    public boolean pure() {
+        return false;
+    }
+
+    @Override
+    public void registerClass(@NotNull String name, @NotNull DollarClass dollarClass) {
+
+        log.info("Registering class {} in {}", name, this);
+        classes.put(name, dollarClass);
+    }
+
+    @Nullable
+    @Override
+    public Scope scopeForKey(@NotNull String k) {
+        checkDestroyed();
+        String key = removePrefix(k);
+
+        if (variables.containsKey(key)) {
+            return this;
+        }
+        if (parent != null) {
+            return parent.scopeForKey(key);
+        } else {
+//            if (DollarStatic.getConfig().debugScope()) { log.info("Scope not found for " + key); }
+            return null;
+        }
+    }
+
+    @NotNull
+    @Override
+    public Variable set(@NotNull String k,
+                        @NotNull var value,
+                        @Nullable var constraint, String constraintSource, @NotNull VarType varType) {
+
+        if ((parent != null) && parent.isClassScope()) {
+            return parent.set(k, value, constraint, constraintSource, varType);
         }
         checkDestroyed();
         String key = removePrefix(k);
@@ -599,15 +638,16 @@ public class ScriptScope implements Scope {
         if (key.matches("[0-9]+")) {
             throw new DollarAssertionException("Cannot set numerical keys, use parameter");
         }
+
         Scope scope = scopeForKey(key);
         if (scope == null) {
             scope = this;
         }
 
-        if (scope.variables().containsKey(key) && ((Variable) scope.variables().get(
-                key)).isReadonly()) {
+        if (scope.variables().containsKey(key) && ((Variable) scope.variables().get(key)).isReadonly()) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
+
         if (scope.variables().containsKey(key)) {
             final Variable variable = ((Variable) scope.variables().get(key));
             if (!variable.isVolatile() && (variable.getThread() != Thread.currentThread().getId())) {
@@ -627,118 +667,35 @@ public class ScriptScope implements Scope {
                 log.info("Setting {} in {}", key, scope);
             }
             variable.setValue(value);
+            scope.notifyScope(key, value);
+            return variable;
         } else {
             if (getConfig().debugScope()) {
                 log.info("Adding {} in {}", key, scope);
             }
-            scope.variables().put(key, new Variable(value, readonly, constraint, constraintSource, isVolatile, fixed, pure,
-                                                    key.matches("[0-9]+"), false));
+            Variable valueVariable = new Variable(value, varType, constraint, constraintSource);
+            scope.variables().put(key, valueVariable);
+            scope.notifyScope(key, value);
+            return valueVariable;
         }
-        scope.notifyScope(key, value);
-        return value;
+    }
+
+    @Nullable
+    @Override
+    public String source() {
+        return source;
     }
 
     @NotNull
     @Override
-    public var parameter(@NotNull String key, @NotNull var value) {
-        checkDestroyed();
-
-        if (getConfig().debugScope()) {
-            log.info("Setting parameter {} in {}", key, this);
-        }
-        if (key.matches("[0-9]+") && variables.containsKey(key)) {
-            throw new DollarScriptException("Cannot change the value of positional variable $" + key + " in scope " + this);
-        }
-        parameterScope = true;
-        variables.put(key, new Variable(value, value.meta(IMPURE) == null, key.matches("[0-9]+"), true));
-        notifyScope(key, value);
-        return value;
-    }
-
-    @Override
-    public Scope parent() {
-        return parent;
-    }
-
-    @Override
-    public boolean hasParent(Scope scope) {
-        checkDestroyed();
-
-        if (parent() == null) {
-            return false;
-        }
-        return parent().equals(scope) || parent().hasParent(scope);
-    }
-
-    @Override
-    public boolean isRoot() {
-        return root;
+    public Variable variable(@NotNull String k) {
+        return variables.get(removePrefix(k));
     }
 
     @NotNull
     @Override
-    public Scope copy() {
-        checkDestroyed();
-
-        return new ScriptScope(parent, "*" + id.split(":")[0] + ":" + counter.incrementAndGet(),
-                               parameterScope,
-                               variables, errorHandlers, listeners, source, parser, root, classScope);
-    }
-
-    @Override
-    public void destroy() {
-        clear();
-        destroyed = true;
-    }
-
-    @Override
-    public boolean pure() {
-        return false;
-    }
-
-    @NotNull
-    @Override
-    public List<var> parametersAsVars() {
-        return variables.values().stream().filter(Variable::isNumeric).map(Variable::getValue).collect(Collectors.toList());
-    }
-
-    @Override
-    public void registerClass(@NotNull String name, @NotNull DollarClass dollarClass) {
-
-        log.info("Registering class {} in {}", name, this);
-        classes.put(name, dollarClass);
-    }
-
-    @Override
-    public DollarClass getDollarClass(String name) {
-        DollarClass clazz = classes.get(name);
-        if (clazz != null) {
-            return clazz;
-        }
-        if (parent != null) {
-            return parent.getDollarClass(name);
-        }
-        throw new VariableNotFoundException(name, this);
-    }
-
-    @Override
-    public boolean isClassScope() {
-        return classScope;
-    }
-
-    private void checkDestroyed() {
-        if (destroyed) {
-            throw new IllegalStateException("Attempted to use a destroyed scope " + this);
-        }
-    }
-
-    @NotNull
-    public Parser<var> parser() {
-        return parser;
-    }
-
-    public void parser(@NotNull Parser<var> parser) {
-        this.parser = parser;
+    public Map<String, Variable> variables() {
+        return variables;
     }
 
     private boolean checkConstraint(@NotNull var value,
@@ -755,6 +712,56 @@ public class ScriptScope implements Scope {
         parameter("it", $void());
         parameter("previous", $void());
         return fail;
+    }
+
+    private void checkDestroyed() {
+        if (destroyed) {
+            throw new IllegalStateException("Attempted to use a destroyed scope " + this);
+        }
+    }
+
+    private void checkPure(@NotNull Scope parent) {
+        if (parent.pure() && !pure()) {
+            log.debug("Impure child {} of pure parent {}", id, parent);
+            handleError(new PureFunctionException());
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(uuid);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ScriptScope that = (ScriptScope) o;
+        return Objects.equal(uuid, that.uuid);
+    }
+
+    @Nullable
+    @Override
+    public String toString() {
+        if (parent != null) {
+            return id + "->" + parent;
+        } else {
+            return id;
+        }
+    }
+
+    public @NotNull
+    Multimap<String, Listener> listeners() {
+        return listeners;
+    }
+
+    public void parser(@NotNull Parser<var> parser) {
+        this.parser = parser;
+    }
+
+    @NotNull
+    public Parser<var> parser() {
+        return parser;
     }
 
 

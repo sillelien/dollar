@@ -16,8 +16,10 @@
 
 package dollar.api;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public interface DollarClass {
-    var instance(List<var> object);
+    @NotNull var instance(@NotNull List<var> object);
 }
