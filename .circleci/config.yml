@@ -259,7 +259,7 @@ jobs:
               id
               bundle install
               mkdir -p /home/circleci/workspace/docs-built/
-              bundle exec jekyll build --source /srv/jekyll/workspace/docs/ --destination /srv/jekyll/workspace/docs-built/
+              bundle exec jekyll build --source /home/circleci/workspace/docs/ --destination /home/circleci/workspace/docs-built/
 
         - store_artifacts:
             path: /home/circleci/workspace/docs-built/
