@@ -21,7 +21,7 @@ import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.TypePrediction;
-import dollar.api.VarType;
+import dollar.api.VarFlags;
 import dollar.api.Variable;
 import dollar.api.script.SourceSegment;
 import dollar.api.types.DollarFactory;
@@ -533,25 +533,25 @@ public final class DollarScriptSupport {
                                        @NotNull Token token,
                                        @Nullable var useConstraint,
                                        @Nullable String useSource,
-                                       @NotNull VarType varType) {
+                                       @NotNull VarFlags varFlags) {
 
         SourceSegment source = new SourceCode(scope, token);
         boolean numeric = key.matches("^\\d+$");
 
 
         if (scope.has(key)) {
-            return updateVariable(scope, key, value, varType, useConstraint, useSource);
+            return updateVariable(scope, key, value, varFlags, useConstraint, useSource);
         }
         try {
             List<Scope> scopes = new ArrayList<>(DollarScriptSupport.scopes.get());
             Collections.reverse(scopes);
             for (Scope scriptScope : scopes) {
-                if (!(scriptScope instanceof PureScope) && varType.isPure()) {
+                if (!(scriptScope instanceof PureScope) && varFlags.isPure()) {
                     log.debug("Skipping {}", scriptScope);
                 }
 
                 if (scriptScope.has(key)) {
-                    return updateVariable(scriptScope, key, value, varType, useConstraint, useSource
+                    return updateVariable(scriptScope, key, value, varFlags, useConstraint, useSource
                     );
                 }
 
@@ -570,11 +570,11 @@ public final class DollarScriptSupport {
             return scope.parameter(key);
         }
 
-        if (varType.isDeclaration()) {
+        if (varFlags.isDeclaration()) {
             if (getConfig().debugScope()) {
                 log.info("{} {} {}", highlight("SETTING  " + key, ANSI_CYAN), scope, scope);
             }
-            return scope.set(key, value, useConstraint, useSource, varType);
+            return scope.set(key, value, useConstraint, useSource, varFlags);
         } else {
             throw new VariableNotFoundException(key, scope);
         }
@@ -590,16 +590,16 @@ public final class DollarScriptSupport {
     private static @NotNull Variable updateVariable(@NotNull Scope scope,
                                                     @NotNull String key,
                                                     @NotNull var value,
-                                                    @NotNull VarType varType, @Nullable var useConstraint,
+                                                    @NotNull VarFlags varFlags, @Nullable var useConstraint,
                                                     @Nullable String useSource) {
         if (getConfig().debugScope()) {
             log.info("{}{} {}", highlight("UPDATING ", ANSI_CYAN), key, scope);
         }
-        if (varType.isDeclaration()) {
+        if (varFlags.isDeclaration()) {
             throw new DollarScriptException("Variable " + key + " already defined in " + scope);
         } else {
 
-            return scope.set(key, value, useConstraint, useSource, varType);
+            return scope.set(key, value, useConstraint, useSource, varFlags);
         }
     }
 

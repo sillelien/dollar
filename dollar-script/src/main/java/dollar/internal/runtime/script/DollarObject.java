@@ -22,7 +22,7 @@ import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Type;
-import dollar.api.VarType;
+import dollar.api.VarFlags;
 import dollar.api.Variable;
 import dollar.api.types.AbstractDollar;
 import dollar.api.types.DollarFactory;
@@ -402,7 +402,7 @@ public class DollarObject extends AbstractDollar {
     private var inThisScope(ScopeExecutable<var> exe) {
         ScriptScope subScope = new ScriptScope(currentScope(), "this-" + name, false, true);
         DollarObject thisObject = new DollarObject(name, constructor, fields, true);
-        subScope.set("this", thisObject, null, null, new VarType(true, true, false, false, false, true));
+        subScope.set("this", thisObject, null, null, new VarFlags(true, true, false, false, false, true));
         return inScope(true, subScope, exe);
     }
 

@@ -20,7 +20,7 @@ import dollar.api.BooleanAware;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.Type;
-import dollar.api.VarType;
+import dollar.api.VarFlags;
 import dollar.api.script.SourceSegment;
 import dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
@@ -124,13 +124,13 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                     var condition = (var) objects[5];
                                     var initial = rhs.$fixDeep(false);
                                     scope.set(varName, condition.isTrue() ? initial : $void(), null, useSource,
-                                              new VarType(false, isVolatile, false, pure, false, declaration));
+                                              new VarFlags(false, isVolatile, false, pure, false, declaration));
                                     return condition.$listen(
                                             args -> {
                                                 if (condition.isTrue()) {
                                                     var value = rhs.$fixDeep(false);
                                                     setVariable(scope, varName, value, parser, token, useConstraint, useSource,
-                                                                new VarType(false, isVolatile, false, pure, false, false));
+                                                                new VarFlags(false, isVolatile, false, pure, false, false));
 
                                                     return value;
                                                 } else {
@@ -142,15 +142,15 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
                 } else if ("subscribe".equals(op)) {
                     scope.set(varName, $void(), null, useSource,
-                              new VarType(false, true, true, pure, false, declaration));
+                              new VarFlags(false, true, true, pure, false, declaration));
                     return node(SUBSCRIBE_ASSIGN, pure, parser, token, inputs,
                                 c -> $(rhs.$subscribe(i -> setVariable(scope, varName, fix(i[0]),
                                                                        parser, token, useConstraint, useSource,
-                                                                       new VarType(false, true, false, pure,
-                                                                                   false, declaration)).getValue())));
+                                                                       new VarFlags(false, true, false, pure,
+                                                                                    false, declaration)).getValue())));
                 }
             }
-            return assign(rhs, objects, finalConstraint, new VarType(constant, isVolatile, declaration, pure),
+            return assign(rhs, objects, finalConstraint, new VarFlags(constant, isVolatile, declaration, pure),
                           constraintSource, scope, token, type, new SourceCode(currentScope(), token));
         };
     }
@@ -159,7 +159,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
     private var assign(@NotNull var rhs,
                        @NotNull Object[] objects,
                        @Nullable var constraint,
-                       @NotNull VarType varType,
+                       @NotNull VarFlags varFlags,
                        @Nullable String constraintSource,
                        @NotNull Scope scope,
                        @NotNull Token token,
@@ -208,7 +208,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
             if (objects[0] != null) {
                 parser.export(varName, rhsFixed);
             }
-            setVariable(currentScope, varName, rhsFixed, parser, token, constraint, useSource, varType);
+            setVariable(currentScope, varName, rhsFixed, parser, token, constraint, useSource, varFlags);
             return $void();
 
         };

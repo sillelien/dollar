@@ -16,24 +16,23 @@
 
 package dollar.api;
 
-public class VarType {
+public class VarFlags {
     private final boolean declaration;
     private final boolean fixed;
     private final boolean isVolatile;
     private final boolean numeric;
     private final boolean pure;
     private final boolean readonly;
-    private boolean parameter;
 
     /**
      * @param readonly    true if the variable cannot be changed
      * @param isVolatile  true if the variable can be accessed by multiple threads
      * @param fixed       true if the variable is a fixed/static value
      * @param pure        true if the variable contains a pure value (i.e. a pure function/expession)
-     * @param numeric
+     * @param numeric     true if the variable should be a number (i.e. $1, $2)
      * @param declaration true if this is the first use (declaration)
      */
-    public VarType(boolean readonly, boolean isVolatile, boolean fixed, boolean pure, boolean numeric, boolean declaration) {
+    public VarFlags(boolean readonly, boolean isVolatile, boolean fixed, boolean pure, boolean numeric, boolean declaration) {
         this.readonly = readonly;
         this.isVolatile = isVolatile;
         this.fixed = fixed;
@@ -47,7 +46,7 @@ public class VarType {
      * @param isVolatile  true if the variable can be accessed by multiple threads
      * @param declaration true if this is the first use (declaration)
      */
-    public VarType(boolean readonly, boolean isVolatile, boolean declaration, boolean pure) {
+    public VarFlags(boolean readonly, boolean isVolatile, boolean declaration, boolean pure) {
 
         this.readonly = readonly;
         this.isVolatile = isVolatile;
@@ -68,14 +67,6 @@ public class VarType {
 
     public boolean isNumeric() {
         return numeric;
-    }
-
-    public boolean isParameter() {
-        return parameter;
-    }
-
-    public void setParameter(boolean parameter) {
-        this.parameter = parameter;
     }
 
     public boolean isPure() {

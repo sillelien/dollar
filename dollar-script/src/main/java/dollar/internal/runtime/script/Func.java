@@ -18,8 +18,8 @@ package dollar.internal.runtime.script;
 
 import dollar.api.Scope;
 import dollar.api.Type;
+import dollar.api.VarFlags;
 import dollar.api.VarInternal;
-import dollar.api.VarType;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.plugin.Plugins;
 import dollar.api.script.ModuleResolver;
@@ -113,7 +113,7 @@ public final class Func {
 
         setVariable(currentScope(), key, value,
                     parser, token, constraint, constraintSource,
-                    new VarType(readonly, false, false, pure, false, true));
+                    new VarFlags(readonly, false, false, pure, false, true));
 
         if (export) {
             parser.export(key, node(DEFINITION, "export-" + DEFINITION.name(),
@@ -197,7 +197,7 @@ public final class Func {
                     .set(varName,
                          DollarScriptSupport.fix(i[0]),
                          null, null,
-                         new VarType(false, false, false, pure, false, false));
+                         new VarFlags(false, false, false, pure, false, false));
             return block.$fixDeep(false);
         });
     }

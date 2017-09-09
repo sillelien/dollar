@@ -88,18 +88,19 @@ public final class Variable {
     }
 
     public Variable(@NotNull var value,
-                    @NotNull VarType varType,
+                    @NotNull VarFlags varFlags,
                     @Nullable var constraint,
-                    @Nullable String constraintSource) {
-        numeric = varType.isNumeric();
-        parameter = varType.isParameter();
+                    @Nullable String constraintSource,
+                    boolean parameter) {
+        numeric = varFlags.isNumeric();
+        this.parameter = parameter;
         this.value = value;
-        readonly = varType.isReadonly();
+        readonly = varFlags.isReadonly();
         this.constraint = constraint;
         this.constraintSource = constraintSource;
-        setVolatile(varType.isVolatile());
-        fixed = varType.isFixed();
-        pure = varType.isPure();
+        setVolatile(varFlags.isVolatile());
+        fixed = varFlags.isFixed();
+        pure = varFlags.isPure();
         thread = Thread.currentThread().getId();
     }
 

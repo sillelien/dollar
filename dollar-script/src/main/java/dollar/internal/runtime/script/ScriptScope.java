@@ -18,12 +18,13 @@ package dollar.internal.runtime.script;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import dollar.api.DollarClass;
 import dollar.api.DollarException;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
-import dollar.api.VarType;
+import dollar.api.VarFlags;
 import dollar.api.Variable;
 import dollar.api.exceptions.LambdaRecursionException;
 import dollar.api.script.SourceSegment;
@@ -43,6 +44,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -194,9 +196,9 @@ public class ScriptScope implements Scope {
         if (getConfig().debugScope()) {
             log.info("Getting constraint for {} in {}", key, scope);
         }
-        if (scope.variables().containsKey(key) && (((Variable) scope.variables().get(
-                key)).getConstraint() != null)) {
-            return ((Variable) scope.variables().get(key)).getConstraint();
+        if (scope.variables().containsKey(key) && (scope.variables().get(
+                key).getConstraint() != null)) {
+            return scope.variables().get(key).getConstraint();
         }
         return null;
     }
@@ -214,9 +216,9 @@ public class ScriptScope implements Scope {
         if (getConfig().debugScope()) {
             log.info("Getting constraint for {} in {}", key, scope);
         }
-        if (scope.variables().containsKey(key) && (((Variable) scope.variables().get(
-                key)).getConstraintSource() != null)) {
-            return ((Variable) scope.variables().get(key)).getConstraintSource();
+        if (scope.variables().containsKey(key) && (scope.variables().get(
+                key).getConstraintSource() != null)) {
+            return scope.variables().get(key).getConstraintSource();
         }
         return null;
     }
@@ -278,7 +280,7 @@ public class ScriptScope implements Scope {
                 log.info("{} in {}", DollarScriptSupport.highlight("FOUND " + key, DollarScriptSupport.ANSI_CYAN), scope);
             }
         }
-        Variable result = (Variable) scope.variables().get(key);
+        Variable result = scope.variables().get(key);
 
         if (mustFind) {
             if (result == null) {
@@ -401,7 +403,7 @@ public class ScriptScope implements Scope {
             log.info("Checking for {} in {}", key, scope);
         }
 
-        Variable val = ((Variable) scope.variables().get(key));
+        Variable val = scope.variables().get(key);
         return val != null;
 
     }
@@ -586,7 +588,13 @@ public class ScriptScope implements Scope {
     @NotNull
     @Override
     public List<var> parametersAsVars() {
-        return variables.values().stream().filter(Variable::isNumeric).map(Variable::getValue).collect(Collectors.toList());
+        return variables.entrySet().stream()
+                       .filter(i -> i.getValue().isParameter())
+                       .filter(i -> i.getKey().matches("[0-9]+"))
+                       .sorted(Comparator.comparing(i -> Integer.parseInt(i.getKey())))
+                       .map(Map.Entry::getValue)
+                       .map(Variable::getValue)
+                       .collect(Collectors.toList());
     }
 
     @Override
@@ -627,10 +635,10 @@ public class ScriptScope implements Scope {
     @Override
     public Variable set(@NotNull String k,
                         @NotNull var value,
-                        @Nullable var constraint, String constraintSource, @NotNull VarType varType) {
+                        @Nullable var constraint, String constraintSource, @NotNull VarFlags varFlags) {
 
         if ((parent != null) && parent.isClassScope()) {
-            return parent.set(k, value, constraint, constraintSource, varType);
+            return parent.set(k, value, constraint, constraintSource, varFlags);
         }
         checkDestroyed();
         String key = removePrefix(k);
@@ -640,16 +648,32 @@ public class ScriptScope implements Scope {
         }
 
         Scope scope = scopeForKey(key);
-        if (scope == null) {
-            scope = this;
+        if (pure() && (scope != null) && !java.util.Objects.equals(scope, this)) {
+            throw new DollarScriptException("Cannot modify variables outside of a pure scope");
+        }
+        if (scope != null && scope != this) {
+            return scope.set(k, value, constraint, constraintSource, varFlags);
         }
 
-        if (scope.variables().containsKey(key) && ((Variable) scope.variables().get(key)).isReadonly()) {
+        if (pure()) {
+            if (!varFlags.isPure()) {
+                throw new DollarScriptException("Cannot have impure variables in a pure expression, variable was " + key + ", (" + this + ")",
+                                                value);
+            }
+            if (varFlags.isVolatile()) {
+                throw new DollarScriptException("Cannot have volatile variables in a pure expression");
+            }
+            if (key.matches("[0-9]+")) {
+                throw new AssertionError("Cannot set numerical keys, use parameter");
+            }
+        }
+
+        if (variables.containsKey(key) && variables.get(key).isReadonly()) {
             throw new DollarScriptException("Cannot change the value of variable " + key + " it is readonly");
         }
 
-        if (scope.variables().containsKey(key)) {
-            final Variable variable = ((Variable) scope.variables().get(key));
+        if (variables.containsKey(key)) {
+            final Variable variable = variables.get(key);
             if (!variable.isVolatile() && (variable.getThread() != Thread.currentThread().getId())) {
                 handleError(
                         new DollarScriptException("Concurrency Error: Cannot change the variable " +
@@ -664,18 +688,18 @@ public class ScriptScope implements Scope {
             }
 
             if (getConfig().debugScope()) {
-                log.info("Setting {} in {}", key, scope);
+                log.info("Setting {} in {}", key, this);
             }
             variable.setValue(value);
-            scope.notifyScope(key, value);
+            notifyScope(key, value);
             return variable;
         } else {
             if (getConfig().debugScope()) {
-                log.info("Adding {} in {}", key, scope);
+                log.info("Adding {} in {}", key, this);
             }
-            Variable valueVariable = new Variable(value, varType, constraint, constraintSource);
-            scope.variables().put(key, valueVariable);
-            scope.notifyScope(key, value);
+            Variable valueVariable = new Variable(value, varFlags, constraint, constraintSource, false);
+            variables.put(key, valueVariable);
+            notifyScope(key, value);
             return valueVariable;
         }
     }
@@ -695,7 +719,7 @@ public class ScriptScope implements Scope {
     @NotNull
     @Override
     public Map<String, Variable> variables() {
-        return variables;
+        return ImmutableMap.copyOf(variables);
     }
 
     private boolean checkConstraint(@NotNull var value,

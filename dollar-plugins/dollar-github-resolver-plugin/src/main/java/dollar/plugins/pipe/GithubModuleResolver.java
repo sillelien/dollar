@@ -24,7 +24,7 @@ import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
-import dollar.api.VarType;
+import dollar.api.VarFlags;
 import dollar.api.script.ModuleResolver;
 import dollar.api.var;
 import dollar.deps.DependencyRetriever;
@@ -192,7 +192,7 @@ public class GithubModuleResolver implements ModuleResolver {
             final ImmutableMap<var, var> paramMap = params[0].$map().toVarMap();
             for (Map.Entry<var, var> entry : paramMap.entrySet()) {
                 newScope.set(entry.getKey().$S(), entry.getValue(), null, null,
-                             new VarType(true, false, false, false, false, false));
+                             new VarFlags(true, false, false, false, false, false));
             }
             return new DollarParserImpl(((DollarParser) parser).options(), classLoader).parse(
                     new FileScope((Scope) scope, mainFile.getAbsolutePath(), content, "github-module-scope", false,

@@ -17,7 +17,7 @@
 package dollar.execution.simple;
 
 import dollar.api.Scope;
-import dollar.api.VarType;
+import dollar.api.VarFlags;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.script.SourceSegment;
 import dollar.api.types.DollarFactory;
@@ -141,7 +141,7 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
                                         log.debug("Waiting for future ...");
                                         return varFuture.get();
                                     }
-        ), null, null, new VarType(true, true, false, false, false, true));
+        ), null, null, new VarFlags(true, true, false, false, false, true));
         return DollarFactory.fromStringValue(id);
     }
 

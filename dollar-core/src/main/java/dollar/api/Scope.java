@@ -172,6 +172,11 @@ public interface Scope {
     @NotNull
     Variable parameter(@NotNull String key, @NotNull var value);
 
+    /**
+     * Gets all the numeric parameters as a sorted List.
+     *
+     * @return a sorted list of numeric parameters
+     */
     @NotNull List<var> parametersAsVars();
 
     /**
@@ -212,14 +217,14 @@ public interface Scope {
      * @param value            the value to assign
      * @param constraint       a constraint on this variable that will be checked on assignment
      * @param constraintSource an arbitrary string with a near one to one mapping with the source of the constraint
-     * @param varType
+     * @param varFlags a set of flags relating to the variable
      * @return the variable definition
      */
     @NotNull Variable set(@NotNull String key,
                           @NotNull var value,
                           @Nullable var constraint,
                           @Nullable String constraintSource,
-                          @NotNull VarType varType);
+                          @NotNull VarFlags varFlags);
 
     /**
      * Returns the Dollar source code for this scope.
@@ -236,5 +241,10 @@ public interface Scope {
      */
     @NotNull Variable variable(@NotNull String key);
 
-    @NotNull <T> Map<String, T> variables();
+    /**
+     * Returns all the variables in this scope, including parameter variables
+     *
+     * @return all variables in *this* scope
+     */
+    @NotNull Map<String, Variable> variables();
 }
