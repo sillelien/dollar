@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar.execution.simple;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.Scope;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarType;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarFlags;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.execution.DollarExecutor;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.SourceSegment;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarFactory;
@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a>                                         log.debug(<span class="jxr_string">"Waiting for future ..."</span>);
 <a class="jxr_linenumber" name="L142" href="#L142">142</a>                                         <strong class="jxr_keyword">return</strong> varFuture.get();
 <a class="jxr_linenumber" name="L143" href="#L143">143</a>                                     }
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>         ), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">new</strong> <a href="../../../dollar/api/VarType.html">VarType</a>(<strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">true</strong>, false, false, false, <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>         ), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">new</strong> <a href="../../../dollar/api/VarFlags.html">VarFlags</a>(<strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">true</strong>, false, false, false, <strong class="jxr_keyword">true</strong>));
 <a class="jxr_linenumber" name="L145" href="#L145">145</a>         <strong class="jxr_keyword">return</strong> DollarFactory.fromStringValue(id);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>     }
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 
