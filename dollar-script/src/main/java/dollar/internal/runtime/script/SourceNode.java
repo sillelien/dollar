@@ -45,6 +45,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -57,42 +58,42 @@ import static dollar.api.types.meta.MetaConstants.*;
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class SourceNode implements java.lang.reflect.InvocationHandler {
-    @NotNull
-    private static final TypeLearner typeLearner;
+    private static final int MAX_STACK_DEPTH = 100;
+    @Nullable
+    private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
     //    public static final String RETURN_SCOPE = "return-scope";
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(SourceNode.class);
     @NotNull
     private static final List<String> nonScopeOperations = Arrays.asList(
             "dynamic", "$constrain");
-    @Nullable
-    private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
-    private static final int MAX_STACK_DEPTH = 100;
     @NotNull
     private static final ThreadLocal<List<SourceNode>> notifyStack = ThreadLocal.withInitial(ArrayList::new);
     @NotNull
     private static final ThreadLocal<List<SourceNode>> stack = ThreadLocal.withInitial(ArrayList::new);
     @NotNull
-    private final ConcurrentHashMap<Object, Object> meta = new ConcurrentHashMap<>();
+    private static final TypeLearner typeLearner;
+    @NotNull
+    private final String id;
+    @NotNull
+    private final List<var> inputs;
     @NotNull
 
     private final Pipeable lambda;
     @NotNull
-    private final SourceSegment source;
-    @NotNull
     private final ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
     @NotNull
-    private final List<var> inputs;
+    private final ConcurrentHashMap<Object, Object> meta = new ConcurrentHashMap<>();
     @NotNull
     private final String name;
+    private final boolean newScope;
+    private final OpDef operation;
     @NotNull
     private final DollarParser parser;
-    private final boolean newScope;
+    private final boolean pure;
     private final boolean scopeClosure;
     @NotNull
-    private final String id;
-    private final boolean pure;
-    private final OpDef operation;
+    private final SourceSegment source;
     @NotNull
     private final SourceNodeOptions sourceNodeOptions;
     @Nullable
@@ -164,6 +165,27 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
         }
     }
 
+    @NotNull
+    private var _constrain(@NotNull var source, @Nullable var constraint, @Nullable String constraintSource) {
+        if ((constraint == null) || (constraintSource == null)) {
+            return source;
+        }
+        String constraintFingerprint = (String) meta.get(CONSTRAINT_FINGERPRINT);
+        if ((constraintFingerprint == null) || constraintSource.equals(constraintFingerprint)) {
+            meta.put(CONSTRAINT_FINGERPRINT, constraintSource);
+            return source;
+        } else {
+            throw new ConstraintViolation(source, constraint, constraintFingerprint, constraintSource);
+        }
+    }
+
+    @NotNull
+    public var execute(boolean parallel) throws Exception {return executor.executeNow(() -> executePipe($(parallel))).get();}
+
+    @NotNull
+    private var executePipe(var var) throws Exception {
+        return lambda.pipe(var);
+    }
 
     @Nullable
     @Override
@@ -217,16 +239,16 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 }
             } else {
                 //This method does require a scope
-                Scope useScope;
 
-                Object attachedScopes = meta.get(SCOPES);
+                List<Scope> attachedScopes = (List<Scope>) meta.get(SCOPES);
                 if (attachedScopes != null) {
-                    List<Scope> scopes = new ArrayList<>((List<Scope>) attachedScopes);
+                    List<Scope> scopes = new ArrayList<>(attachedScopes);
                     for (Scope scope : scopes) {
                         DollarScriptSupport.pushScope(scope);
                     }
                 }
                 try {
+                    Scope useScope;
                     if (newScope) {
                         if (pure || currentScope().pure()) {
                             useScope = new PureScope(currentScope(), currentScope().source(), name, currentScope().file());
@@ -266,7 +288,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 } finally {
 
                     if (attachedScopes != null) {
-                        List<Scope> scopes = new ArrayList<>((List<Scope>) attachedScopes);
+                        List<Scope> scopes = new ArrayList<>(attachedScopes);
                         Collections.reverse(scopes);
                         for (Scope scope : scopes) {
                             DollarScriptSupport.popScope(scope);
@@ -276,6 +298,16 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
             }
 
+            boolean dynamicVarResult = (result instanceof var) && ((var) result).dynamic();
+            if (dynamicVarResult && (meta.get(SCOPES) != null)) {
+                if (((var) result).meta(SCOPES) == null) {
+                    ((var) result).meta(SCOPES, meta.get(SCOPES));
+                } else {
+                    ArrayList<Scope> newScopes = new ArrayList<>((Collection<? extends Scope>) meta.get(SCOPES));
+                    newScopes.addAll(((var) result).meta(SCOPES));
+                    ((var) result).meta(SCOPES, newScopes);
+                }
+            }
 
             if (method.getName().startsWith("$fixDeep") && (result instanceof var)) {
 
@@ -287,7 +319,6 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             return ErrorHandlerFactory.instance().handle(currentScope(), source, e);
         }
     }
-
 
     @Nullable
     private Object invokeMain(@Nullable Object proxy, @NotNull Method method, @Nullable Object[] args) throws Throwable {
@@ -396,26 +427,4 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             return currentScope().handleError(e, source);
         }
     }
-
-    @NotNull
-    private var executePipe(var var) throws Exception {
-        return lambda.pipe(var);
-    }
-
-    @NotNull
-    private var _constrain(@NotNull var source, @Nullable var constraint, @Nullable String constraintSource) {
-        if ((constraint == null) || (constraintSource == null)) {
-            return source;
-        }
-        String constraintFingerprint = (String) meta.get(CONSTRAINT_FINGERPRINT);
-        if ((constraintFingerprint == null) || constraintSource.equals(constraintFingerprint)) {
-            meta.put(CONSTRAINT_FINGERPRINT, constraintSource);
-            return source;
-        } else {
-            throw new ConstraintViolation(source, constraint, constraintFingerprint, constraintSource);
-        }
-    }
-
-    @NotNull
-    public var execute(boolean parallel) throws Exception {return executor.executeNow(() -> executePipe($(parallel))).get();}
 }

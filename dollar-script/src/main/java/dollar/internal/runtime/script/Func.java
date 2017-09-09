@@ -119,8 +119,9 @@ public final class Func {
             parser.export(key, node(DEFINITION, "export-" + DEFINITION.name(),
                                     pure, SCOPE_WITH_CLOSURE, parser,
                                     new SourceCode(currentScope(), token),
-                                    singletonList(value), exportArgs -> value.$fix(2, false),
-                                    null));
+                                    singletonList(value), exportArgs -> {
+                        return value.$fix(2, false);
+                    }, null));
         }
         return $void();
     }

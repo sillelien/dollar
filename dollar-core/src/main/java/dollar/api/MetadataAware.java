@@ -25,24 +25,18 @@ public interface MetadataAware {
      * Gets meta attribute.
      *
      * @param key the key
-     * @return the meta attribute
-     */
-    @Nullable
-    String metaAttribute(@NotNull String key);
-
-    /**
-     * Gets meta attribute.
-     *
-     * @param key the key
      * @return the meta object
      */
-    @Nullable
-    <T> T meta(@NotNull String key);
+    @Nullable <T> T meta(@NotNull String key);
 
+    /**
+     * Sets meta attribute.
+     *
+     * @param key   the key
+     * @param value the value
+     */
+    <T> void meta(@NotNull String key, @NotNull T value);
 
-    default boolean hasMeta(@NotNull String key) {
-        return meta(key) != null;
-    }
     /**
      * Sets meta attribute.
      *
@@ -52,10 +46,11 @@ public interface MetadataAware {
     void metaAttribute(@NotNull String key, @NotNull String value);
 
     /**
-     * Sets meta attribute.
+     * Gets meta attribute.
      *
-     * @param key   the key
-     * @param value the value
+     * @param key the key
+     * @return the meta attribute
      */
-    <T> void meta(@NotNull String key, @NotNull T value);
+    @Nullable
+    String metaAttribute(@NotNull String key);
 }

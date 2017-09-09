@@ -48,15 +48,8 @@ public final class GitUtil {
         }
     }
 
-    public static void clone(@NotNull File dir, @NotNull String url) throws IOException, InterruptedException {
-        ProcessBuilder pb = new ProcessBuilder("git", "clone", url, dir.getAbsolutePath());
-        pb.directory(dir);
-        Process p = pb.start();
-        p.waitFor();
-//        System.out.println(CharStreams.toString(new InputStreamReader(p.getInputStream())));
-    }
-
     public static void checkout(@NotNull File dir, @NotNull String branch) throws IOException, InterruptedException {
+        dir.mkdirs();
         ProcessBuilder pb = new ProcessBuilder("git", "checkout", branch);
         pb.directory(dir);
         Process p = pb.start();
@@ -64,7 +57,17 @@ public final class GitUtil {
 //        System.out.println(CharStreams.toString(new InputStreamReader(p.getInputStream())));
     }
 
+    public static void clone(@NotNull File dir, @NotNull String url) throws IOException, InterruptedException {
+        dir.mkdirs();
+        ProcessBuilder pb = new ProcessBuilder("git", "clone", url, dir.getAbsolutePath());
+        pb.directory(dir);
+        Process p = pb.start();
+        p.waitFor();
+//        System.out.println(CharStreams.toString(new InputStreamReader(p.getInputStream())));
+    }
+
     public static void pull(@NotNull File dir) throws IOException, InterruptedException {
+        dir.mkdirs();
         ProcessBuilder pb = new ProcessBuilder("git", "pull");
         pb.directory(dir);
         Process p = pb.start();
