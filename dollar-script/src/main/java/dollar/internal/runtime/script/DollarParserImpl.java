@@ -433,7 +433,7 @@ public class DollarParserImpl implements DollarParser {
                                           classExpression(ref),
                                           newExpression(ref, false),
                                           thisRef(false),
-                                          printExpression(ref, false),
+//                                          printExpression(ref, false),
                                           moduleExpression(ref),
                                           assertExpression(ref, false),
                                           collectExpression(ref, false),
@@ -546,7 +546,7 @@ public class DollarParserImpl implements DollarParser {
             table = prefix(false, table, CREATE, (v, u) -> v.$create());
             table = prefix(false, table, STATE, (v, u) -> v.$state());
 
-            table = prefix(false, table, PRINT, (v, u) -> printFunc(this, u, PRINT, Arrays.asList(v)));
+            table = prefix(false, table, OUT, (v, u) -> printFunc(this, u, OUT, Arrays.asList(v)));
             table = prefix(false, table, DEBUG, (v, u) -> printFunc(this, u, DEBUG, Arrays.asList(v)));
             table = prefix(false, table, ERR, (v, u) -> printFunc(this, u, ERR, Arrays.asList(v)));
 
@@ -855,15 +855,15 @@ public class DollarParserImpl implements DollarParser {
         return table.prefix(op(operator, new DollarUnaryOperator(true, f, operator, this, pure)), operator.priority());
     }
 
-    private Parser<var> printExpression(@NotNull Parser.Reference<var> ref, boolean pure) {
-        return array(or(NL_OP(PRINT).map(i -> PRINT), NL_OP(ERR).map(i -> ERR), NL_OP(DEBUG).map(i -> DEBUG)),
-
-                     ref.lazy().many1()
-        ).followedBy(or(SEMICOLON_TERMINATOR, COMMA_OR_NEWLINE_TERMINATOR).peek())
-                       .token()
-                       .map(token -> printFunc(this, new SourceCode(token), (OpDef) ((Object[]) token.value())[0],
-                                               (List<var>) ((Object[]) token.value())[1]));
-    }
+//    private Parser<var> printExpression(@NotNull Parser.Reference<var> ref, boolean pure) {
+//        return array(or(KEYWORD(PRINT).map(i -> OUT), NL_OP(ERR).map(i -> ERR), NL_OP(DEBUG).map(i -> DEBUG)),
+//
+//                     ref.lazy().many1()
+//        ).followedBy(or(SEMICOLON_TERMINATOR, COMMA_OR_NEWLINE_TERMINATOR).peek())
+//                       .token()
+//                       .map(token -> printFunc(this, new SourceCode(token), (OpDef) ((Object[]) token.value())[0],
+//                                               (List<var>) ((Object[]) token.value())[1]));
+//    }
 
     private Parser<var> pureDefinitionOperator(@NotNull Parser.Reference<var> ref) {
         assert PURE_OP.validForPure(true);

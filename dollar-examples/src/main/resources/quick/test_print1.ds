@@ -1,0 +1,9 @@
+if (true) {
+    @@ "hello "
+}
+
+if(true) {
+    @@ "hello" ; @@ "world" ;
+}
+
+@@ "hello " + "world"
