@@ -19142,7 +19142,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "EXCEPTION Test Exception [dollar.api.DollarException: Test Exception]"
+    "EXCEPTION Test Exception"
   ],
   [
     "@",
@@ -19634,7 +19634,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "@EXCEPTION Test Exception [dollar.api.DollarException: Test Exception]"
+    "@EXCEPTION Test Exception"
   ],
   [
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
@@ -20126,7 +20126,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@EXCEPTION Test Exception [dollar.api.DollarException: Test Exception]"
+    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@EXCEPTION Test Exception"
   ],
   [
     "@@ @@ @@@ @@ @@ @@",
@@ -20618,7 +20618,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "@@ @@ @@@ @@ @@ @@EXCEPTION Test Exception [dollar.api.DollarException: Test Exception]"
+    "@@ @@ @@@ @@ @@ @@EXCEPTION Test Exception"
   ],
   [
     " ",
@@ -21110,7 +21110,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    " EXCEPTION Test Exception [dollar.api.DollarException: Test Exception]"
+    " EXCEPTION Test Exception"
   ],
   [
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
@@ -21602,7 +21602,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…EXCEPTION Test Exception [dollar.api.DollarException: Test Exception]"
+    "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…EXCEPTION Test Exception"
   ],
   [
     "\n\t\r",
@@ -22094,7 +22094,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "\n\t\rEXCEPTION Test Exception [dollar.api.DollarException: Test Exception]"
+    "\n\t\rEXCEPTION Test Exception"
   ],
   [
     "1",
@@ -22586,7 +22586,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "1EXCEPTION Test Exception [dollar.api.DollarException: Test Exception]"
+    "1EXCEPTION Test Exception"
   ],
   [
     "true",
@@ -23078,7 +23078,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "trueEXCEPTION Test Exception [dollar.api.DollarException: Test Exception]"
+    "trueEXCEPTION Test Exception"
   ],
   [
     "false",
@@ -23570,7 +23570,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "falseEXCEPTION Test Exception [dollar.api.DollarException: Test Exception]"
+    "falseEXCEPTION Test Exception"
   ],
   [
     "0",
@@ -24062,7 +24062,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "0EXCEPTION Test Exception [dollar.api.DollarException: Test Exception]"
+    "0EXCEPTION Test Exception"
   ],
   [
     true,
@@ -46160,8 +46160,8 @@
     },
     {
       "$type": "Range",
-      "lower": "aEXCEPTION Test Exception [dollar.api.DollarException: Test Exception]",
-      "upper": "zEXCEPTION Test Exception [dollar.api.DollarException: Test Exception]"
+      "lower": "aEXCEPTION Test Exception",
+      "upper": "zEXCEPTION Test Exception"
     }
   ],
   [
@@ -47196,8 +47196,8 @@
     },
     {
       "$type": "Range",
-      "lower": "@EXCEPTION Test Exception [dollar.api.DollarException: Test Exception]",
-      "upper": "EXCEPTION Test Exception [dollar.api.DollarException: Test Exception]"
+      "lower": "@EXCEPTION Test Exception",
+      "upper": "EXCEPTION Test Exception"
     }
   ],
   [

@@ -717,7 +717,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "EXCEPTION Test Exception [dollar.api.DollarException: Test Exception]"
+    "EXCEPTION Test Exception"
   ],
   [
     "",
@@ -813,7 +813,7 @@
         "errorMessage": "Test Exception"
       }
     },
-    "@EXCEPTION Test Exception [dollar.api.DollarException: Test Exception]"
+    "@EXCEPTION Test Exception"
   ],
   [
     "@",
