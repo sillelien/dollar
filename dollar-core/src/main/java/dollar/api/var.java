@@ -29,8 +29,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
@@ -66,13 +64,8 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
 
     }
 
-    /**
-     * Converts this value to a human readable string.
-     *
-     * @return the string
-     */
     @NotNull
-    String toHumanString();
+    default var $cancel(@NotNull var id) {return DollarStatic.$void();}
 
     /**
      * If this is a void object return v otherwise return this.
@@ -86,6 +79,20 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
     @Guarded(NotNullParametersGuard.class)
     var $default(@NotNull var v);
 
+    @NotNull
+    @Guarded(ChainGuard.class)
+    default var $equals(@Nullable var other) {
+        return DollarFactory.fromValue(equals(other));
+    }
+
+    /**
+     * This is for reactive programming using lamdas, you probably want $subscribe(...).
+     *
+     * @param pipeable action
+     */
+    @NotNull
+    default var $listen(@NotNull Pipeable pipeable) {return DollarStatic.$void();}
+
     /**
      * Returns the mime type of this {@link var} object. By default this will be 'application/json'
      *
@@ -96,6 +103,17 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
     default var $mimeType() {
         return DollarStatic.$("application/json");
     }
+
+    @NotNull
+    @Guarded(ChainGuard.class)
+    default var $notEquals(@Nullable var other) {
+        return DollarFactory.fromValue(!equals(other));
+    }
+
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
+    var $notify();
 
     @NotNull
     default String $serialized() {
@@ -111,6 +129,10 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
     @NotNull
     Stream<var> $stream(boolean parallel);
 
+    default boolean equalsString(@NotNull String s) {
+        return toString().equals(s);
+    }
+
     /**
      * Prints the toHumanString() value of this {@link var} to standard error.
      *
@@ -122,23 +144,6 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
         System.err.println(toString());
         return this;
     }
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    default var $equals(@Nullable var other) {
-        return DollarFactory.fromValue(equals(other));
-    }
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    default var $notEquals(@Nullable var other) {
-        return DollarFactory.fromValue(!equals(other));
-    }
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    @Override
-    String toString();
 
     /**
      * Convert this object into a Dollar JsonArray.
@@ -170,12 +175,19 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
     String toDollarScript();
 
     /**
+     * Converts this value to a human readable string.
+     *
+     * @return the string
+     */
+    @NotNull
+    String toHumanString();
+
+    /**
      * Returns the underlying storage value for this type.
      *
      * @return the underlying Java object
      */
     @Nullable <R> R toJavaObject();
-
 
     /**
      * Convert this to a Dollar {@link JsonObject}
@@ -189,19 +201,6 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
             return null;
         }
         return new ImmutableJsonObject(json);
-    }
-
-
-    /**
-     * Returns a {@link JsonObject}, JsonArray or primitive type such that it can be
-     * added to
-     * either a {@link JsonObject} or JsonArray.
-     *
-     * @return the JSON compatible object
-     */
-    @Nullable
-    default Object toJsonType() {
-        return DollarFactory.toJson(this);
     }
 
     /**
@@ -219,47 +218,22 @@ public interface var extends ErrorAware, TypeAware, Serializable, StringAware,
         }
     }
 
-
-    default boolean equalsString(@NotNull String s) {
-        return toString().equals(s);
-    }
-
-
-    default boolean eq(@NotNull String s) {
-        return toString().equals(s);
-    }
-
-    default boolean eq(@NotNull Integer i) {
-        return toInteger().equals(i);
-    }
-
-    default boolean eq(@NotNull Double d) {
-        return toInteger().equals(d);
-    }
-
-    default boolean eq(@NotNull List l) {
-        return toList().equals(l);
-    }
-
-    default boolean eq(@NotNull Map m) {
-        return toJavaMap().equals(m);
-    }
-
     /**
-     * THis is for reactive programming using lamdas, you probably want $subscribe(...).
+     * Returns a {@link JsonObject}, JsonArray or primitive type such that it can be
+     * added to
+     * either a {@link JsonObject} or JsonArray.
      *
-     * @param pipeable action
+     * @return the JSON compatible object
      */
-    @NotNull
-    default var $listen(@NotNull Pipeable pipeable) {return DollarStatic.$void();}
+    @Nullable
+    default Object toJsonType() {
+        return DollarFactory.toJson(this);
+    }
 
     @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    var $notify();
-
-    @NotNull
-    default var $cancel(@NotNull var id) {return DollarStatic.$void();}
+    @Guarded(NotNullGuard.class)
+    @Override
+    String toString();
 
 
 }

@@ -16,8 +16,6 @@
 
 package dollar.api.types;
 
-import com.google.common.collect.ImmutableList;
-import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
 import dollar.api.json.JsonObject;
@@ -29,20 +27,20 @@ import java.util.Objects;
 public class DollarError extends DollarVoid {
 
     @NotNull
-    private final ErrorType errorType;
-    @NotNull
     private final String errorMessage;
+    @NotNull
+    private final ErrorType errorType;
 
-    public DollarError(@NotNull ImmutableList<Throwable> errors, @NotNull ErrorType errorType,
+    public DollarError(@NotNull ErrorType errorType,
                        @NotNull String errorMessage) {
-        super(errors);
+        super();
         this.errorType = errorType;
         this.errorMessage = errorMessage;
     }
 
     public DollarError(@NotNull ErrorType errorType, @NotNull Throwable t) {
 
-        super(ImmutableList.of(t));
+        super();
         this.errorType = errorType;
         errorMessage = t.getMessage();
     }
@@ -50,15 +48,7 @@ public class DollarError extends DollarVoid {
 
     public DollarError(@NotNull ErrorType errorType, @NotNull String errorMessage, @NotNull Throwable t) {
 
-        super(ImmutableList.of(t));
-        this.errorType = errorType;
-        this.errorMessage = errorMessage;
-    }
-
-
-    public DollarError(@NotNull ErrorType errorType, @NotNull String errorMessage) {
-
-        super(ImmutableList.of(new DollarException(errorMessage)));
+        super();
         this.errorType = errorType;
         this.errorMessage = errorMessage;
     }
@@ -82,31 +72,6 @@ public class DollarError extends DollarVoid {
         return false;
     }
 
-    @NotNull
-    @Override
-    public String toHumanString() {
-        return errorType + " " + errorMessage + " " + errors();
-    }
-
-    @NotNull
-    @Override
-    public String toDollarScript() {
-        return "ERROR('" + errorType.name() + "'," + DollarStatic.$(errorMessage).toDollarScript() + ")";
-    }
-
-    public boolean isError() {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public Object toJsonType() {
-        final JsonObject jsonObject = new JsonObject();
-        jsonObject.putString("errorType", errorType.name());
-        jsonObject.putString("errorMessage", errorMessage);
-        return jsonObject;
-    }
-
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), errorType, errorMessage);
@@ -120,5 +85,30 @@ public class DollarError extends DollarVoid {
         DollarError that = (DollarError) o;
         return (errorType == that.errorType) &&
                        Objects.equals(errorMessage, that.errorMessage);
+    }
+
+    @NotNull
+    @Override
+    public String toDollarScript() {
+        return "ERROR('" + errorType.name() + "'," + DollarStatic.$(errorMessage).toDollarScript() + ")";
+    }
+
+    @NotNull
+    @Override
+    public String toHumanString() {
+        return errorType + " " + errorMessage;
+    }
+
+    public boolean isError() {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public Object toJsonType() {
+        final JsonObject jsonObject = new JsonObject();
+        jsonObject.putString("errorType", errorType.name());
+        jsonObject.putString("errorMessage", errorMessage);
+        return jsonObject;
     }
 }

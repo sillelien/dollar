@@ -16,7 +16,6 @@
 
 package dollar.api.types;
 
-import com.google.common.collect.ImmutableList;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
 import dollar.api.exceptions.DollarFailureException;
@@ -27,8 +26,8 @@ import java.util.Collections;
 
 public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
 
-    public DollarBoolean(@NotNull ImmutableList<Throwable> errors, @NotNull Boolean value) {
-        super(errors, value);
+    public DollarBoolean(@NotNull Boolean value) {
+        super(value);
     }
 
     @NotNull
@@ -41,20 +40,20 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
     @Override
     public var $minus(@NotNull var rhs) {
         var rhsFix = rhs.$fixDeep();
-        return DollarFactory.fromValue(value ^ rhsFix.truthy(), errors(), rhsFix.errors());
+        return DollarFactory.fromValue(value ^ rhsFix.truthy());
     }
 
     @NotNull
     @Override
     public var $negate() {
-        return DollarFactory.fromValue(!value, errors());
+        return DollarFactory.fromValue(!value);
     }
 
     @NotNull
     @Override
     public var $divide(@NotNull var rhs) {
         var rhsFix = rhs.$fixDeep();
-        return DollarFactory.fromValue(value == rhsFix.truthy(), errors(), rhsFix.errors());
+        return DollarFactory.fromValue(value == rhsFix.truthy());
     }
 
     @NotNull
@@ -137,13 +136,13 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         if (rhsFix.list()) {
             rhsFix.$prepend(this);
         } else if (rhsFix.list()) {
-            return DollarFactory.fromValue(rhsFix.$prepend(this), errors(), rhsFix.errors());
+            return DollarFactory.fromValue(rhsFix.$prepend(this));
         } else if (rhsFix.range()) {
-            return DollarFactory.fromValue(rhsFix.$plus(this), errors(), rhsFix.errors());
+            return DollarFactory.fromValue(rhsFix.$plus(this));
         } else if (rhsFix.string()) {
-            return DollarFactory.fromValue(value + rhsFix.toHumanString(), errors(), rhsFix.errors());
+            return DollarFactory.fromValue(value + rhsFix.toHumanString());
         }
-        return DollarFactory.fromValue(value || rhsFix.truthy(), errors(), rhsFix.errors());
+        return DollarFactory.fromValue(value || rhsFix.truthy());
     }
 
     @Override

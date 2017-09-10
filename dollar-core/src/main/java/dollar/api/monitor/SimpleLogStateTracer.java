@@ -26,53 +26,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class SimpleLogStateTracer implements StateTracer {
     @NotNull
-    @Override
-    public <R> R trace(@NotNull Object before, @NotNull R after, @NotNull Operations operationType, @NotNull Object... values) {
-        String beforeStr = "";
-        String afterStr = "";
-        String afterNotes = "";
-        String beforeNotes = "";
-        if (after instanceof var) {
-            if (((var) after).hasErrors()) {
-                afterNotes += "*ERROR*";
-            }
-            afterStr = format(after);
-        } else {
-            if (after != null) {
-                afterStr = String.format("%s(%s)", after.toString(), after.getClass().getName());
-            }
-        }
-        if (before instanceof var) {
-            if (((var) before).hasErrors()) {
-                beforeNotes += "*ERROR*";
-            }
-            beforeStr = format(before);
-        } else {
-            if (before != null) {
-                beforeStr = String.format("%s(%s)", before.toString(), before.getClass().getName());
-            }
-        }
-        if (((before instanceof DollarVoid) || (before == null)) && ((after instanceof DollarVoid) || (after == null))) {
-            DollarStatic.log(String.format("%s%s: %s->%s",
-                                           operationType,
-                                           toDescription(values),
-                                           beforeNotes,
-                                           afterNotes));
-        } else if ((before instanceof DollarVoid) || (before == null)) {
-            DollarStatic.log(String.format("%s%s: %s%s", operationType, toDescription(values), afterStr, afterNotes));
-        } else {
-            DollarStatic.log(String.format("%s%s: %s%s -> %s%s",
-                                           operationType,
-                                           toDescription(values),
-                                           beforeStr,
-                                           beforeNotes,
-                                           afterStr,
-                                           afterNotes));
-        }
-        return after;
-    }
-
-    @NotNull
     private String format(@NotNull Object value) {
         Object unwrapped;
         String formatted;
@@ -101,5 +54,46 @@ public class SimpleLogStateTracer implements StateTracer {
         }
         result.append("]");
         return result.toString();
+    }
+
+    @NotNull
+    @Override
+    public <R> R trace(@NotNull Object before, @NotNull R after, @NotNull Operations operationType, @NotNull Object... values) {
+        String beforeStr = "";
+        String afterStr = "";
+        String afterNotes = "";
+        String beforeNotes = "";
+        if (after instanceof var) {
+            afterStr = format(after);
+        } else {
+            if (after != null) {
+                afterStr = String.format("%s(%s)", after.toString(), after.getClass().getName());
+            }
+        }
+        if (before instanceof var) {
+            beforeStr = format(before);
+        } else {
+            if (before != null) {
+                beforeStr = String.format("%s(%s)", before.toString(), before.getClass().getName());
+            }
+        }
+        if (((before instanceof DollarVoid) || (before == null)) && ((after instanceof DollarVoid) || (after == null))) {
+            DollarStatic.log(String.format("%s%s: %s->%s",
+                                           operationType,
+                                           toDescription(values),
+                                           beforeNotes,
+                                           afterNotes));
+        } else if ((before instanceof DollarVoid) || (before == null)) {
+            DollarStatic.log(String.format("%s%s: %s%s", operationType, toDescription(values), afterStr, afterNotes));
+        } else {
+            DollarStatic.log(String.format("%s%s: %s%s -> %s%s",
+                                           operationType,
+                                           toDescription(values),
+                                           beforeStr,
+                                           beforeNotes,
+                                           afterStr,
+                                           afterNotes));
+        }
+        return after;
     }
 }

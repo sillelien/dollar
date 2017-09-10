@@ -16,7 +16,6 @@
 
 package dollar.api.types;
 
-import com.google.common.collect.ImmutableList;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
 import dollar.api.exceptions.DollarFailureException;
@@ -36,16 +35,16 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
 
     private static final double ONE_DAY_SECONDS = 24.0 * 60.0 * 60.0;
 
-    public DollarDate(@NotNull ImmutableList<Throwable> errors, @NotNull Long value) {
-        super(errors, Instant.ofEpochMilli(value));
+    public DollarDate(@NotNull Long value) {
+        super(Instant.ofEpochMilli(value));
     }
 
-    public DollarDate(@NotNull ImmutableList<Throwable> errors, @NotNull Instant value) {
-        super(errors, value);
+    public DollarDate(@NotNull Instant value) {
+        super(value);
     }
 
-    public DollarDate(@NotNull ImmutableList<Throwable> errors, @NotNull LocalDateTime value) {
-        super(errors, value.toInstant(ZoneOffset.UTC));
+    public DollarDate(@NotNull LocalDateTime value) {
+        super(value.toInstant(ZoneOffset.UTC));
     }
 
     @NotNull
@@ -57,7 +56,7 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     @NotNull
     @Override
     public var $negate() {
-        return DollarFactory.fromValue(-asDecimal(), errors());
+        return DollarFactory.fromValue(-asDecimal());
     }
 
     @NotNull
@@ -65,21 +64,21 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     public var $divide(@NotNull var rhs) {
         var rhsFix = rhs.$fixDeep();
         if (rhsFix.zero() || (rhsFix.toDouble() == null) || (rhsFix.toDouble() == 0.0)) {
-            return DollarFactory.infinity(rhs.positive(), errors(), rhs.errors());
+            return DollarFactory.infinity(rhs.positive());
         }
-        return DollarFactory.fromValue(asDecimal() / rhs.toDouble(), errors(), rhs.errors());
+        return DollarFactory.fromValue(asDecimal() / rhs.toDouble());
     }
 
     @NotNull
     @Override
     public var $modulus(@NotNull var rhs) {
-        return DollarFactory.wrap(new DollarDecimal(errors(), asDecimal() % rhs.toDouble()));
+        return DollarFactory.wrap(new DollarDecimal(asDecimal() % rhs.toDouble()));
     }
 
     @NotNull
     @Override
     public var $multiply(@NotNull var rhs) {
-        return DollarFactory.wrap(new DollarDecimal(errors(), asDecimal() * rhs.toDouble()));
+        return DollarFactory.wrap(new DollarDecimal(asDecimal() * rhs.toDouble()));
     }
 
     @Override
@@ -97,18 +96,6 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     @Override
     public Number toNumber() {
         return asDecimal();
-    }
-
-    @NotNull
-    private Double asDecimal() {
-        try {
-            final long millis = value.toEpochMilli();
-            return ((double) millis) / (24 * 60 * 60 * 1000);
-        } catch (ArithmeticException e) {
-            final long seconds = value.getEpochSecond();
-            return ((double) seconds) / (24 * 60 * 60);
-
-        }
     }
 
     @NotNull
@@ -159,8 +146,7 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     @Override
     public var $get(@NotNull var key) {
         final LocalDateTime localDateTime = LocalDateTime.ofInstant(value, ZoneId.systemDefault());
-        return DollarFactory.fromValue(localDateTime.get(ChronoField.valueOf(key.toHumanString().toUpperCase())),
-                                       errors());
+        return DollarFactory.fromValue(localDateTime.get(ChronoField.valueOf(key.toHumanString().toUpperCase())));
     }
 
     @NotNull
@@ -169,9 +155,39 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
         return DollarFactory.fromValue(
                 LocalDateTime.ofInstant(value, ZoneId.systemDefault())
                         .with(ChronoField.valueOf(key.toHumanString().toUpperCase()),
-                              DollarFactory.fromValue(v).toLong()),
-                errors(),
-                key.errors());
+                              DollarFactory.fromValue(v).toLong())
+        );
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+    @NotNull
+    @Override
+    public var $plus(@NotNull var rhs) {
+        var rhsFix = rhs.$fixDeep();
+        if (rhsFix.string()) {
+            return DollarFactory.fromValue(toString() + rhsFix);
+        } else if (rhsFix.infinite()) {
+            return rhs;
+        } else if (rhsFix.list()) {
+            return DollarFactory.fromValue(rhsFix.$prepend(this));
+        } else if (rhsFix.range()) {
+            return DollarFactory.fromValue(rhsFix.$plus(this));
+        } else {
+            try {
+                return DollarFactory.fromValue(value.plusSeconds((long) (ONE_DAY_SECONDS * rhsFix.toDouble())));
+            } catch (DateTimeException dte) {
+                if ((value.getEpochSecond() + (ONE_DAY_SECONDS * rhsFix.toDouble())) > 0) {
+                    return DollarFactory.fromValue(LocalDateTime.MAX);
+                } else {
+                    return DollarFactory.fromValue(LocalDateTime.MIN);
+                }
+            }
+        }
+
     }
 
     @NotNull
@@ -181,38 +197,15 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     }
 
     @NotNull
-    @Override
-    public var $plus(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
-        if (rhsFix.string()) {
-            return DollarFactory.fromValue(toString() + rhsFix, errors(), rhsFix.errors());
-        } else if (rhsFix.infinite()) {
-            return rhs;
-        } else if (rhsFix.list()) {
-            return DollarFactory.fromValue(rhsFix.$prepend(this), errors(), rhsFix.errors());
-        } else if (rhsFix.range()) {
-            return DollarFactory.fromValue(rhsFix.$plus(this), errors(), rhsFix.errors());
-        } else {
-            try {
-                return DollarFactory.fromValue(value.plusSeconds((long) (ONE_DAY_SECONDS * rhsFix.toDouble())),
-                                               errors(),
-                                               rhsFix.errors());
-            } catch (DateTimeException dte) {
-                if ((value.getEpochSecond() + (ONE_DAY_SECONDS * rhsFix.toDouble())) > 0) {
-                    return DollarFactory.fromValue(LocalDateTime.MAX, errors(),
-                                                   rhsFix.errors());
-                } else {
-                    return DollarFactory.fromValue(LocalDateTime.MIN, errors(),
-                                                   rhsFix.errors());
-                }
-            }
+    private Double asDecimal() {
+        try {
+            final long millis = value.toEpochMilli();
+            return ((double) millis) / (24 * 60 * 60 * 1000);
+        } catch (ArithmeticException e) {
+            final long seconds = value.getEpochSecond();
+            return ((double) seconds) / (24 * 60 * 60);
+
         }
-
-    }
-
-    @Override
-    public int hashCode() {
-        return value.hashCode();
     }
 
     @Override

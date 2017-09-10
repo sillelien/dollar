@@ -16,7 +16,6 @@
 
 package dollar.api.types;
 
-import com.google.common.collect.ImmutableList;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
 import dollar.api.exceptions.DollarFailureException;
@@ -30,8 +29,8 @@ import static java.lang.Math.abs;
 
 public class DollarInteger extends AbstractDollarSingleValue<Long> {
 
-    public DollarInteger(@NotNull ImmutableList<Throwable> errors, @NotNull Long value) {
-        super(errors, value);
+    public DollarInteger(@NotNull Long value) {
+        super(value);
         if (value < -Long.MAX_VALUE) {
             throw new IllegalArgumentException(
                                                       "Cannot create a Dollar Integer with a value less than -" + Long.MAX_VALUE);
@@ -41,13 +40,13 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     @NotNull
     @Override
     public var $abs() {
-        return DollarFactory.fromValue(abs(value.longValue()), errors());
+        return DollarFactory.fromValue(abs(value));
     }
 
     @NotNull
     @Override
     public var $negate() {
-        return DollarFactory.fromValue(-value, errors());
+        return DollarFactory.fromValue(-value);
     }
 
     @NotNull
@@ -55,14 +54,13 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     public var $divide(@NotNull var rhs) {
         var rhsFix = rhs.$fixDeep();
         if (rhsFix.infinite()) {
-            return DollarFactory.fromValue(0, errors(), rhsFix.errors());
+            return DollarFactory.fromValue(0);
         } else if (rhsFix.decimal() && (rhsFix.toDouble() != 0.0)) {
-            return DollarFactory.fromValue(value.doubleValue() / rhsFix.toDouble(), errors(),
-                                           rhsFix.errors());
+            return DollarFactory.fromValue(value.doubleValue() / rhsFix.toDouble());
         } else if (rhsFix.toLong() == 0) {
-            return DollarFactory.infinity(positive(), errors(), rhsFix.errors());
+            return DollarFactory.infinity(positive());
         } else {
-            return DollarFactory.fromValue(value / rhsFix.toLong(), errors(), rhsFix.errors());
+            return DollarFactory.fromValue(value / rhsFix.toLong());
         }
     }
 
@@ -71,16 +69,15 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     public var $modulus(@NotNull var rhs) {
         var rhsFix = rhs.$fixDeep();
         if (rhsFix.infinite()) {
-            return DollarFactory.infinity(positive(), errors(), rhsFix.errors());
+            return DollarFactory.infinity(positive());
         }
         if (rhsFix.zero()) {
-            return DollarFactory.infinity(positive(), errors(), rhsFix.errors());
+            return DollarFactory.infinity(positive());
         }
         if (rhsFix.decimal()) {
-            return DollarFactory.fromValue(value.doubleValue() % rhsFix.toDouble(), errors(),
-                                           rhsFix.errors());
+            return DollarFactory.fromValue(value.doubleValue() % rhsFix.toDouble());
         } else {
-            return DollarFactory.fromValue(value % rhsFix.toLong(), errors(), rhsFix.errors());
+            return DollarFactory.fromValue(value % rhsFix.toLong());
         }
     }
 
@@ -91,14 +88,13 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
             return newValue.$multiply(this);
         }
         if (newValue.zero()) {
-            return DollarFactory.fromValue(0, errors(), newValue.errors());
+            return DollarFactory.fromValue(0);
         }
 
         if (newValue.decimal()) {
-            return DollarFactory.fromValue(value.doubleValue() * newValue.toDouble(), errors(),
-                                           newValue.errors());
+            return DollarFactory.fromValue(value.doubleValue() * newValue.toDouble());
         } else {
-            return DollarFactory.fromValue(value * newValue.toLong(), errors(), newValue.errors());
+            return DollarFactory.fromValue(value * newValue.toLong());
         }
     }
 
@@ -172,23 +168,22 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
             return rhsFix;
         }
         if (rhsFix.decimal()) {
-            return DollarFactory.fromValue(value.doubleValue() + rhsFix.toDouble(), errors(),
-                                           rhsFix.errors());
+            return DollarFactory.fromValue(value.doubleValue() + rhsFix.toDouble());
         } else if (rhsFix.list()) {
-            return DollarFactory.fromValue(rhsFix.$prepend(this), errors(), rhsFix.errors());
+            return DollarFactory.fromValue(rhsFix.$prepend(this));
         } else if (rhsFix.range()) {
-            return DollarFactory.fromValue(rhsFix.$plus(this), errors(), rhsFix.errors());
+            return DollarFactory.fromValue(rhsFix.$plus(this));
         } else if (rhsFix.string()) {
-            return DollarFactory.fromValue(toString() + rhsFix, errors(), rhsFix.errors());
+            return DollarFactory.fromValue(toString() + rhsFix);
         } else {
-            if ((abs(value.longValue()) < (Long.MAX_VALUE / 2)) && (Math.abs(rhsFix.toLong()) < (Long.MAX_VALUE / 2))) {
-                return DollarFactory.fromValue(value + rhsFix.toLong(), errors(), rhsFix.errors());
+            if ((abs(value) < (Long.MAX_VALUE / 2)) && (Math.abs(rhsFix.toLong()) < (Long.MAX_VALUE / 2))) {
+                return DollarFactory.fromValue(value + rhsFix.toLong());
             } else {
                 final BigDecimal added = new BigDecimal(value).add(new BigDecimal(rhsFix.toLong()));
                 if (added.abs().compareTo(new BigDecimal(Long.MAX_VALUE)) == 1) {
-                    return DollarFactory.fromValue(added, errors(), rhs.errors());
+                    return DollarFactory.fromValue(added);
                 } else {
-                    return DollarFactory.fromValue(value + rhsFix.toLong(), errors(), rhs.errors());
+                    return DollarFactory.fromValue(value + rhsFix.toLong());
                 }
             }
         }
@@ -204,18 +199,6 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         } else {
             return 1;
         }
-    }
-
-    @NotNull
-    @Override
-    public String toDollarScript() {
-        return toString();
-    }
-
-    @NotNull
-    @Override
-    public Number toJavaObject() {
-        return value;
     }
 
     @Override
@@ -281,6 +264,18 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     @NotNull
     @Override
     public Long toLong() {
+        return value;
+    }
+
+    @NotNull
+    @Override
+    public String toDollarScript() {
+        return toString();
+    }
+
+    @NotNull
+    @Override
+    public Number toJavaObject() {
         return value;
     }
 

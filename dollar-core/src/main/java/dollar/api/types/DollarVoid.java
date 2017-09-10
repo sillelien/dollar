@@ -34,14 +34,10 @@ public class DollarVoid extends AbstractDollar {
     @NotNull
     public static final var INSTANCE = DollarFactory.newVoid();
 
-    public DollarVoid(@NotNull ImmutableList<Throwable> errors) {
-        super(errors);
-    }
-
     public DollarVoid() {
-
-        super(ImmutableList.of());
+        super();
     }
+
 
     @NotNull
     @Override
@@ -99,6 +95,84 @@ public class DollarVoid extends AbstractDollar {
     @NotNull
     @Override
     public Number toNumber() {
+        return 0;
+    }
+
+    @NotNull
+    @Override
+    public var $append(@NotNull var value) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $containsKey(@NotNull var value) {
+        return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public var $containsValue(@NotNull var value) {
+        return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public var $get(@NotNull var key) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $has(@NotNull var key) {
+        return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public var $insert(@NotNull var value, int position) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $prepend(@NotNull var value) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $remove(@NotNull var value) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $removeByKey(@NotNull String value) {
+        return $copy();
+    }
+
+    @NotNull
+    @Override
+    public var $set(@NotNull var key, Object value) {
+        return $copy();
+    }
+
+    @NotNull
+    @Override
+    public var $size() {
+        return DollarStatic.$(0);
+    }
+
+    @NotNull
+    @Override
+    public var remove(@NotNull Object value) {
+        return $copy();
+    }
+
+    @NotNull
+    @Override
+    public int size() {
         return 0;
     }
 
@@ -189,84 +263,6 @@ public class DollarVoid extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $get(@NotNull var key) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $append(@NotNull var value) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $containsValue(@NotNull var value) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public var $containsKey(@NotNull var value) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public var $has(@NotNull var key) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public var $size() {
-        return DollarStatic.$(0);
-    }
-
-    @NotNull
-    @Override
-    public var $prepend(@NotNull var value) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $insert(@NotNull var value, int position) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $removeByKey(@NotNull String value) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var $set(@NotNull var key, Object value) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var remove(@NotNull Object value) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var $remove(@NotNull var value) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public int size() {
-        return 0;
-    }
-
-    @NotNull
-    @Override
     public Stream<var> $stream(boolean parallel) {
         return Stream.empty();
     }
@@ -319,10 +315,13 @@ public class DollarVoid extends AbstractDollar {
         return false;
     }
 
-    @NotNull
-    @Override
-    public String toHumanString() {
-        return "";
+    /**
+     * If you stare into the void, the void will stare back at you.
+     *
+     * @param you - you.
+     */
+    void stare(@NotNull var you) {
+        stare(you);
     }
 
     @NotNull
@@ -331,20 +330,15 @@ public class DollarVoid extends AbstractDollar {
         return "void";
     }
 
+    @NotNull
+    @Override
+    public String toHumanString() {
+        return "";
+    }
+
     @Nullable
     @Override
     public <R> R toJavaObject() {
         return null;
-    }
-
-
-    /**
-     * If you stare into the void, the void will stare back at you.
-     *
-     * @param you - you.
-     */
-    @SuppressWarnings("InfiniteRecursion")
-    void stare(@NotNull var you) {
-        stare(you);
     }
 }

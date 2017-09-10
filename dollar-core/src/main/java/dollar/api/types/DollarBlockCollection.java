@@ -39,7 +39,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 
@@ -68,10 +67,6 @@ public class DollarBlockCollection implements var {
     @Guarded(NotNullGuard.class)
     public String $S() {return getValue().$S();}
 
-    @NotNull
-    @Override
-    public String toHumanString() {return getValue().toHumanString();}
-
     @Override
     @NotNull
     @Guarded(ChainGuard.class)
@@ -80,10 +75,20 @@ public class DollarBlockCollection implements var {
                      .class)
     public var $default(@NotNull var v) {return getValue().$default(v);}
 
+    @NotNull
+    @Override
+    public var $listen(@NotNull Pipeable pipeable) {return getValue().$listen(pipeable);}
+
     @Override
     @NotNull
     @Guarded(ChainGuard.class)
     public var $mimeType() {return getValue().$mimeType();}
+
+    @NotNull
+    @Override
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
+    public var $notify() {return getValue().$notify();}
 
     @Override
     @NotNull
@@ -115,6 +120,10 @@ public class DollarBlockCollection implements var {
         return builder.toString();
     }
 
+    @NotNull
+    @Override
+    public String toHumanString() {return getValue().toHumanString();}
+
     @Override
     @Nullable
     public <R> R toJavaObject() {return getValue().toJavaObject();}
@@ -122,21 +131,6 @@ public class DollarBlockCollection implements var {
     @NotNull
     @Override
     public ImmutableJsonObject toJsonObject() {return getValue().toJsonObject();}
-
-    @NotNull
-    @Override
-    public var $listen(@NotNull Pipeable pipeable) {return getValue().$listen(pipeable);}
-
-    @NotNull
-    @Override
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    public var $notify() {return getValue().$notify();}
-
-    @NotNull
-    var getValue() {
-        return value;
-    }
 
     @Override
     @NotNull
@@ -349,6 +343,146 @@ public class DollarBlockCollection implements var {
 
     @NotNull
     @Override
+    public var $append(@NotNull var value) {
+        return getValue().$append(value);
+    }
+
+    @Override
+    public var $avg(boolean parallel) {
+        return getValue().$avg(parallel);
+    }
+
+    @Override
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
+    public var $contains(
+                                @NotNull var value) {
+        return getValue().$contains(value);
+    }
+
+    @NotNull
+    @Override
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
+    public var $containsKey(@NotNull var value) {
+        return getValue().$containsKey(value);
+    }
+
+    @Override
+    @Guarded(ChainGuard.class)
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    public var $containsValue(
+                                     @NotNull var value) {
+        return getValue().$containsValue(value);
+    }
+
+    @Override
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
+    public var $get(
+                           @NotNull var rhs) {
+        return getValue().$get(rhs);
+    }
+
+    @Override
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    public var $has(@NotNull var key) {
+        return getValue().$has(key);
+    }
+
+    @NotNull
+    @Override
+    public var $insert(@NotNull var value, int position) {
+        return getValue().$insert(value, position);
+    }
+
+    @Override
+    @NotNull
+    @Guarded(ChainGuard.class)
+    public var $isEmpty() {return getValue().$isEmpty();}
+
+    @Override
+    public var $max(boolean parallel) {
+        return getValue().$max(parallel);
+    }
+
+    @Override
+    public var $min(boolean parallel) {
+        return getValue().$min(parallel);
+    }
+
+    @NotNull
+    @Override
+    public var $prepend(@NotNull var value) {
+        return getValue().$prepend(value);
+    }
+
+    @Override
+    public var $product(boolean parallel) {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public var $remove(@NotNull var value) {
+        return getValue().$remove(value);
+    }
+
+    @Override
+    @NotNull
+    public var $removeByKey(@NotNull String key) {return getValue().$removeByKey(key);}
+
+    @Override
+    public var $reverse(boolean parallel) {
+        return getValue().$reverse(parallel);
+
+    }
+
+    @Override
+    @NotNull
+    public var $set(@NotNull String key, @Nullable Object value) {
+        return getValue().$set(key, value);
+    }
+
+    @Override
+    @NotNull
+    @Guarded(ChainGuard.class)
+    public var $set(@NotNull var key, @Nullable Object value) {
+        return getValue().$set(key, value);
+    }
+
+    @Override
+    @NotNull
+    @Guarded(ChainGuard.class)
+    public var $size() {return getValue().$size();}
+
+    @Override
+    public var $sort(boolean parallel) {
+        return getValue().$sort(parallel);
+    }
+
+    @Override
+    public var $sum(boolean parallel) {
+        return getValue().$sum(parallel);
+    }
+
+    @Override
+    public var $unique(boolean parallel) {
+        return getValue().$unique(parallel);
+    }
+
+    @NotNull
+    @Override
+    public int size() {
+        return getValue().size();
+    }
+
+    @NotNull
+    @Override
     public var $as(@NotNull Type type) {return getValue().$as(type);}
 
     @Override
@@ -452,18 +586,6 @@ public class DollarBlockCollection implements var {
     }
 
     @NotNull
-    @Guarded(NotNullGuard.class)
-    public var getPairKey() {
-        return getValue().$pairKey();
-    }
-
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    public var getPairValue() {
-        return getValue().$pairValue();
-    }
-
-    @NotNull
     @Override
     @Guarded(NotNullGuard.class)
     @Guarded(ChainGuard.class)
@@ -478,264 +600,6 @@ public class DollarBlockCollection implements var {
     public var $each(
                             @NotNull Pipeable pipe) {
         return getValue().$each(pipe);
-    }
-
-    @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    public var $create() {return getValue().$create();}
-
-    @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    public var $destroy() {return getValue().$destroy();}
-
-    @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    public var $pause() {return getValue().$pause();}
-
-    @Override
-    @Guarded(NotNullGuard.class)
-    public void $signal(@NotNull Signal signal) {getValue().$signal(signal);}
-
-    @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    public var $start() {return getValue().$start();}
-
-    @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    public var $state() {return getValue().$state();}
-
-    @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    public var $stop() {return getValue().$stop();}
-
-    @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    public var $unpause() {return getValue().$unpause();}
-
-    @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    public StateMachine<ResourceState, Signal> getStateMachine() {return getValue().getStateMachine();}
-
-    @Override
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    public var $error(
-                             @NotNull String errorMessage) {
-        return getValue().$error(errorMessage);
-    }
-
-    @Override
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    public var $error(
-                             @NotNull Throwable error) {
-        return getValue().$error(error);
-    }
-
-    @Override
-    @NotNull
-    @Guarded(ChainGuard.class)
-    public var $error() {return getValue().$error();}
-
-    @Override
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    public var $errors() {return getValue().$errors();}
-
-    @Override
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    public var $fail(
-                            @NotNull Consumer<ImmutableList<Throwable>> handler) {
-        return getValue().$fail(handler);
-    }
-
-    @Override
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    public var $invalid(
-                               @NotNull String errorMessage) {
-        return getValue().$invalid(errorMessage);
-    }
-
-    @Override
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    public var $error(
-                             @NotNull String errorMessage, @NotNull ErrorType type) {
-        return getValue().$error(errorMessage, type);
-    }
-
-    @Override
-    @NotNull
-    @Guarded(ChainGuard.class)
-    public var clearErrors() {return getValue().clearErrors();}
-
-    @Override
-    @NotNull
-    @Guarded(NotNullCollectionGuard.class)
-    public List<String> errorTexts() {return getValue().errorTexts();}
-
-    @Override
-    @NotNull
-    @Guarded(NotNullCollectionGuard.class)
-    public ImmutableList<Throwable> errors() {return getValue().errors();}
-
-    @Override
-    public boolean hasErrors() {return getValue().hasErrors();}
-
-    @Override
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    public var $get(
-                           @NotNull var rhs) {
-        return getValue().$get(rhs);
-    }
-
-    @NotNull
-    @Override
-    public var $append(@NotNull var value) {
-        return getValue().$append(value);
-    }
-
-    @Override
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    public var $contains(
-                                @NotNull var value) {
-        return getValue().$contains(value);
-    }
-
-    @Override
-    @Guarded(ChainGuard.class)
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    public var $containsValue(
-                                     @NotNull var value) {
-        return getValue().$containsValue(value);
-    }
-
-    @NotNull
-    @Override
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    public var $containsKey(@NotNull var value) {
-        return getValue().$containsKey(value);
-    }
-
-    @Override
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    public var $has(@NotNull var key) {
-        return getValue().$has(key);
-    }
-
-    @Override
-    @NotNull
-    @Guarded(ChainGuard.class)
-    public var $isEmpty() {return getValue().$isEmpty();}
-
-    @Override
-    @NotNull
-    @Guarded(ChainGuard.class)
-    public var $size() {return getValue().$size();}
-
-    @NotNull
-    @Override
-    public var $prepend(@NotNull var value) {
-        return getValue().$prepend(value);
-    }
-
-    @NotNull
-    @Override
-    public var $insert(@NotNull var value, int position) {
-        return getValue().$insert(value, position);
-    }
-
-    @Override
-    @NotNull
-    public var $removeByKey(@NotNull String key) {return getValue().$removeByKey(key);}
-
-    @Override
-    @NotNull
-    public var $set(@NotNull String key, @Nullable Object value) {
-        return getValue().$set(key, value);
-    }
-
-    @Override
-    @NotNull
-    @Guarded(ChainGuard.class)
-    public var $set(@NotNull var key, @Nullable Object value) {
-        return getValue().$set(key, value);
-    }
-
-    @NotNull
-    @Override
-    public var $remove(@NotNull var value) {
-        return getValue().$remove(value);
-    }
-
-    @NotNull
-    @Override
-    public int size() {
-        return getValue().size();
-    }
-
-    @Override
-    public var $min(boolean parallel) {
-        return getValue().$min(parallel);
-    }
-
-    @Override
-    public var $max(boolean parallel) {
-        return getValue().$max(parallel);
-    }
-
-    @Override
-    public var $sum(boolean parallel) {
-        return getValue().$sum(parallel);
-    }
-
-    @Override
-    public var $avg(boolean parallel) {
-        return getValue().$avg(parallel);
-    }
-
-    @Override
-    public var $reverse(boolean parallel) {
-        return getValue().$reverse(parallel);
-
-    }
-
-    @Override
-    public var $sort(boolean parallel) {
-        return getValue().$sort(parallel);
-    }
-
-    @Override
-    public var $unique(boolean parallel) {
-        return getValue().$unique(parallel);
-    }
-
-    @Override
-    public var $product(boolean parallel) {
-        return null;
     }
 
     @Override
@@ -794,6 +658,50 @@ public class DollarBlockCollection implements var {
     public String constraintLabel() {
         return getValue().constraintLabel();
     }
+
+    @Override
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    public var $create() {return getValue().$create();}
+
+    @Override
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    public var $destroy() {return getValue().$destroy();}
+
+    @Override
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    public var $pause() {return getValue().$pause();}
+
+    @Override
+    @Guarded(NotNullGuard.class)
+    public void $signal(@NotNull Signal signal) {getValue().$signal(signal);}
+
+    @Override
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    public var $start() {return getValue().$start();}
+
+    @Override
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    public var $state() {return getValue().$state();}
+
+    @Override
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    public var $stop() {return getValue().$stop();}
+
+    @Override
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    public var $unpause() {return getValue().$unpause();}
+
+    @Override
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    public StateMachine<ResourceState, Signal> getStateMachine() {return getValue().getStateMachine();}
 
     @Override
     public int compareTo(@NotNull var o) {return getValue().compareTo(o);}
@@ -877,21 +785,20 @@ public class DollarBlockCollection implements var {
     }
 
     @NotNull
-    @Override
-    public String metaAttribute(@NotNull String key) {return getValue().metaAttribute(key);}
-
-    @NotNull
-    @Override
-    public Object meta(@NotNull String key) {
-        return getValue().meta(key);
+    @Guarded(NotNullGuard.class)
+    public var getPairKey() {
+        return getValue().$pairKey();
     }
 
-    @Override
-    public void metaAttribute(@NotNull String key, @NotNull String value) {getValue().metaAttribute(key, value);}
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    public var getPairValue() {
+        return getValue().$pairValue();
+    }
 
-    @Override
-    public void meta(@NotNull String key, @NotNull Object value) {
-        getValue().meta(key, value);
+    @NotNull
+    var getValue() {
+        return value;
     }
 
     @Override
@@ -908,6 +815,24 @@ public class DollarBlockCollection implements var {
 
     @Override
     public boolean truthy() {return getValue().truthy();}
+
+    @NotNull
+    @Override
+    public Object meta(@NotNull String key) {
+        return getValue().meta(key);
+    }
+
+    @Override
+    public void meta(@NotNull String key, @NotNull Object value) {
+        getValue().meta(key, value);
+    }
+
+    @Override
+    public void metaAttribute(@NotNull String key, @NotNull String value) {getValue().metaAttribute(key, value);}
+
+    @NotNull
+    @Override
+    public String metaAttribute(@NotNull String key) {return getValue().metaAttribute(key);}
 
     @NotNull
     @Guarded(NotNullGuard.class)

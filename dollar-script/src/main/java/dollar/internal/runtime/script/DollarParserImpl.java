@@ -16,7 +16,6 @@
 
 package dollar.internal.runtime.script;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.io.ByteStreams;
 import dollar.api.ControlFlowAware;
 import dollar.api.DollarStatic;
@@ -923,7 +922,7 @@ public class DollarParserImpl implements DollarParser {
                                                                                                                   token));
                                                    } else {
                                                        return DollarFactory.wrap(
-                                                               new DollarRange(ImmutableList.of(), lowerBounds, upperBounds,
+                                                               new DollarRange(lowerBounds, upperBounds,
                                                                                closedLeft, closedRight, lowerBound, upperBound));
                                                    }
                                                });

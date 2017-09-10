@@ -16,7 +16,6 @@
 
 package dollar.api.types;
 
-import com.google.common.collect.ImmutableList;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
 import dollar.api.exceptions.DollarFailureException;
@@ -29,20 +28,20 @@ import static java.lang.Math.abs;
 
 public class DollarDecimal extends AbstractDollarSingleValue<Double> {
 
-    public DollarDecimal(@NotNull ImmutableList<Throwable> errors, @NotNull Double value) {
-        super(errors, value);
+    public DollarDecimal(@NotNull Double value) {
+        super(value);
     }
 
     @NotNull
     @Override
     public var $abs() {
-        return DollarFactory.fromValue(abs(value), errors());
+        return DollarFactory.fromValue(abs(value));
     }
 
     @NotNull
     @Override
     public var $negate() {
-        return DollarFactory.fromValue(-value, errors());
+        return DollarFactory.fromValue(-value);
     }
 
     @NotNull
@@ -50,12 +49,12 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     public var $divide(@NotNull var rhs) {
         var rhsFix = rhs.$fixDeep();
         if ((rhsFix.toDouble() == null) || rhsFix.zero()) {
-            return DollarFactory.infinity(positive(), errors(), rhsFix.errors());
+            return DollarFactory.infinity(positive());
         }
         if (rhsFix.infinite() || Double.valueOf(value / rhsFix.toDouble()).isInfinite()) {
-            return DollarFactory.fromValue(0, errors(), rhsFix.errors());
+            return DollarFactory.fromValue(0);
         }
-        return DollarFactory.fromValue(value / rhsFix.toDouble(), errors(), rhsFix.errors());
+        return DollarFactory.fromValue(value / rhsFix.toDouble());
     }
 
     @NotNull
@@ -63,13 +62,13 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     public var $modulus(@NotNull var rhs) {
         var rhsFix = rhs.$fixDeep();
         if (rhsFix.infinite()) {
-            return DollarFactory.fromValue(0.0, errors(), rhsFix.errors());
+            return DollarFactory.fromValue(0.0);
         }
         if (rhsFix.zero()) {
-            return DollarFactory.infinity(positive(), errors(), rhsFix.errors());
+            return DollarFactory.infinity(positive());
         }
 
-        return DollarFactory.fromValue(value % rhsFix.toDouble(), errors(), rhsFix.errors());
+        return DollarFactory.fromValue(value % rhsFix.toDouble());
     }
 
     @NotNull
@@ -80,14 +79,13 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
             return rhsFix.$multiply(this);
         }
         if (rhsFix.zero()) {
-            return DollarFactory.fromValue(0.0, errors(), rhsFix.errors());
+            return DollarFactory.fromValue(0.0);
         }
 
         if (Double.valueOf(value * rhsFix.toDouble()).isInfinite()) {
-            return DollarFactory.infinity((Math.signum(value) * Math.signum(rhsFix.toDouble())) > 0, errors(),
-                                          rhs.errors());
+            return DollarFactory.infinity((Math.signum(value) * Math.signum(rhsFix.toDouble())) > 0);
         }
-        return DollarFactory.fromValue(value * rhsFix.toDouble(), errors(), rhsFix.errors());
+        return DollarFactory.fromValue(value * rhsFix.toDouble());
     }
 
     @Override
@@ -146,22 +144,9 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         return false;
     }
 
-    @NotNull
     @Override
-    public var $plus(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
-        if (rhsFix.string()) {
-            return DollarFactory.fromValue(toString() + rhsFix, errors(), rhsFix.errors());
-        } else if (rhsFix.range()) {
-            return DollarFactory.fromValue(rhsFix.$plus(this), errors(), rhsFix.errors());
-        } else if (rhsFix.list()) {
-            return DollarFactory.fromValue(rhsFix.$prepend(this), errors(), rhsFix.errors());
-        } else {
-            if (Double.valueOf(value + rhsFix.toDouble()).isInfinite()) {
-                return DollarFactory.infinity(Math.signum(value + rhsFix.toDouble()) > 0, errors(), rhs.errors());
-            }
-            return DollarFactory.fromValue(value + rhsFix.toDouble(), errors(), rhsFix.errors());
-        }
+    public int compareTo(@NotNull var o) {
+        return $minus(o).toInteger();
     }
 
     @Override
@@ -169,9 +154,22 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         return value.hashCode();
     }
 
+    @NotNull
     @Override
-    public int compareTo(@NotNull var o) {
-        return $minus(o).toInteger();
+    public var $plus(@NotNull var rhs) {
+        var rhsFix = rhs.$fixDeep();
+        if (rhsFix.string()) {
+            return DollarFactory.fromValue(toString() + rhsFix);
+        } else if (rhsFix.range()) {
+            return DollarFactory.fromValue(rhsFix.$plus(this));
+        } else if (rhsFix.list()) {
+            return DollarFactory.fromValue(rhsFix.$prepend(this));
+        } else {
+            if (Double.valueOf(value + rhsFix.toDouble()).isInfinite()) {
+                return DollarFactory.infinity(Math.signum(value + rhsFix.toDouble()) > 0);
+            }
+            return DollarFactory.fromValue(value + rhsFix.toDouble());
+        }
     }
 
     @Override

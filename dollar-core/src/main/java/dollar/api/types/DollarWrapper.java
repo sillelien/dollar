@@ -32,18 +32,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
-import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class DollarWrapper implements var {
 
+    @Nullable
+    private final var value;
     @NotNull
     private DollarMonitor monitor;
     @NotNull
     private StateTracer tracer;
-    @Nullable
-    private final var value;
 
     public DollarWrapper(@Nullable var value) {
         this.value = value;
@@ -139,14 +137,6 @@ public class DollarWrapper implements var {
         return getValue().toNumber();
     }
 
-    @Nullable
-    var getValue() {
-        if (value == null) {
-            throw new IllegalStateException("Value has become null!!");
-        }
-        return value;
-    }
-
     @NotNull
     @Override
     public var $all() {
@@ -177,18 +167,6 @@ public class DollarWrapper implements var {
     public var $give(@NotNull var lhs) {
         return getValue().$give(lhs);
 
-    }
-
-    @NotNull
-    @Override
-    public var $listen(@NotNull Pipeable pipe) {
-        return getValue().$listen(pipe);
-    }
-
-    @NotNull
-    @Override
-    public var $notify() {
-        return getValue().$notify();
     }
 
     @NotNull
@@ -267,6 +245,136 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
+    public var $append(@NotNull var value) {
+        return getValue().$append(value);
+    }
+
+    @Override
+    public var $avg(boolean parallel) {
+        return getValue().$avg(parallel);
+    }
+
+    @NotNull
+    @Override
+    public var $containsKey(@NotNull var value) {
+        return getValue().$containsKey(value);
+    }
+
+    @NotNull
+    @Override
+    public var $containsValue(@NotNull var value) {
+        return getValue().$containsValue(value);
+    }
+
+    @NotNull
+    @Override
+    public var $get(@NotNull var rhs) {
+        return getValue().$get(rhs);
+    }
+
+    @NotNull
+    @Override
+    public var $has(@NotNull var key) {
+        return DollarStatic.$(getValue().$has(key));
+    }
+
+    @NotNull
+    @Override
+    public var $insert(@NotNull var value, int position) {
+        return getValue().$insert(value, position);
+    }
+
+    @NotNull
+    @Override
+    public var $isEmpty() {
+        return DollarStatic.$(getValue().$isEmpty());
+    }
+
+    @Override
+    public var $max(boolean parallel) {
+        return getValue().$max(parallel);
+    }
+
+    @Override
+    public var $min(boolean parallel) {
+        return getValue().$min(parallel);
+    }
+
+    @NotNull
+    @Override
+    public var $prepend(@NotNull var value) {
+        return getValue().$prepend(value);
+    }
+
+    @Override
+    public var $product(boolean parallel) {
+        return getValue().$product(parallel);
+    }
+
+    @NotNull
+    @Override
+    public var $remove(@NotNull var value) {
+        return getValue().$remove(value);
+    }
+
+    @NotNull
+    @Override
+    public var $removeByKey(@NotNull String key) {
+        return tracer.trace(this, getValue().$removeByKey(key), StateTracer.Operations.REMOVE_BY_KEY, key);
+    }
+
+    @Override
+    public var $reverse(boolean parallel) {
+        return getValue().$reverse(parallel);
+    }
+
+    @NotNull
+    @Override
+    public var $set(@NotNull String key, Object value) {
+        return tracer.trace(null, getValue().$set(key, value), StateTracer.Operations.SET, key, value);
+    }
+
+    @NotNull
+    @Override
+    public var $set(@NotNull var key, Object value) {
+        return tracer.trace(this, getValue().$set(key, value), StateTracer.Operations.SET, key, value);
+    }
+
+    @NotNull
+    @Override
+    public var $size() {
+        return DollarStatic.$(getValue().$size());
+    }
+
+    @Override
+    public var $sort(boolean parallel) {
+        return getValue().$sort(parallel);
+    }
+
+    @Override
+    public var $sum(boolean parallel) {
+        return getValue().$sum(parallel);
+    }
+
+    @Override
+    public var $unique(boolean parallel) {
+        return getValue().$unique(parallel);
+    }
+
+    @NotNull
+    @Override
+    public var remove(@NotNull Object value) {
+        return tracer.trace(this, getValue().remove(value), StateTracer.Operations.REMOVE_BY_VALUE, value);
+    }
+
+    @NotNull
+    @Override
+    public int size() {
+        return getValue().size();
+    }
+
+    @NotNull
+    @Override
     public var $as(@NotNull Type type) {
         return getValue().$as(type);
     }
@@ -281,12 +389,6 @@ public class DollarWrapper implements var {
     @Override
     public Type $type() {
         return getValue().$type();
-    }
-
-    @NotNull
-    @Override
-    public String constraintLabel() {
-        return getValue().constraintLabel();
     }
 
     @Override
@@ -408,6 +510,60 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
+    public var $copy() {
+        return getValue().$copy();
+    }
+
+    @NotNull
+    @Override
+    public var $copy(@NotNull ImmutableList<Throwable> errors) {
+        return getValue().$copy();
+    }
+
+    @NotNull
+    @Override
+    public var $fix(boolean parallel) {
+        return getValue().$fix(parallel);
+    }
+
+    @NotNull
+    @Override
+    public var $fix(int depth, boolean parallel) {
+        return getValue().$fix(depth, parallel);
+    }
+
+    @NotNull
+    @Override
+    public var $fixDeep(boolean parallel) {
+        return getValue().$fixDeep(parallel);
+    }
+
+    @NotNull
+    @Override
+    public TypePrediction predictType() {
+        return getValue().predictType();
+    }
+
+    @NotNull
+    @Override
+    public var $unwrap() {
+        return getValue().$unwrap();
+    }
+
+    @NotNull
+    @Override
+    public var $constrain(@NotNull var constraint, @NotNull String source) {
+        return getValue().$constrain(constraint, source);
+    }
+
+    @NotNull
+    @Override
+    public String constraintLabel() {
+        return getValue().constraintLabel();
+    }
+
+    @NotNull
+    @Override
     public var $create() {
         return getValue().$create();
     }
@@ -461,245 +617,69 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public var $error(@NotNull String errorMessage) {
-        return getValue().$error(errorMessage);
+    public var $default(@NotNull var v) {
+        return getValue().$default(v);
     }
 
     @NotNull
     @Override
-    public var $error(@NotNull Throwable error) {
-        return getValue().$error(error);
+    public var $listen(@NotNull Pipeable pipe) {
+        return getValue().$listen(pipe);
     }
 
     @NotNull
     @Override
-    public var $error() {
-        return getValue().$error();
+    public var $mimeType() {
+        return getValue().$mimeType();
     }
 
     @NotNull
     @Override
-    public var $errors() {
-        return getValue().$errors();
+    public var $notify() {
+        return getValue().$notify();
     }
 
     @NotNull
     @Override
-    public var $fail(@NotNull Consumer<ImmutableList<Throwable>> handler) {
-        return getValue().$fail(handler);
+    public Stream<var> $stream(boolean parallel) {
+        return getValue().$stream(false);
     }
 
     @NotNull
     @Override
-    public var $invalid(@NotNull String errorMessage) {
-        return getValue().$invalid(errorMessage);
+    public var err() {
+        return getValue().err();
+
     }
 
     @NotNull
     @Override
-    public var $error(@NotNull String errorMessage, @NotNull ErrorType type) {
-        return getValue().$error(errorMessage, type);
+    public var out() {
+        return getValue().out();
     }
 
     @NotNull
     @Override
-    public var clearErrors() {
-        return tracer.trace(this, getValue().clearErrors(), StateTracer.Operations.CLEAR_ERRORS);
+    public String toDollarScript() {
+        return getValue().toString();
     }
 
     @NotNull
     @Override
-    public List<String> errorTexts() {
-        return getValue().errorTexts();
+    public String toHumanString() {
+        return getValue().toHumanString();
+    }
+
+    @Nullable
+    @Override
+    public <R> R toJavaObject() {
+        return getValue().toJavaObject();
     }
 
     @NotNull
     @Override
-    public ImmutableList<Throwable> errors() {
-        return getValue().errors();
-    }
-
-    @Override
-    public boolean hasErrors() {
-        return getValue().hasErrors();
-    }
-
-    @NotNull
-    private String sanitize(@NotNull Class clazz) {
-        return clazz.getName().toLowerCase();
-    }
-
-    @NotNull
-    @Override
-    public var $get(@NotNull var rhs) {
-        return getValue().$get(rhs);
-    }
-
-    @NotNull
-    @Override
-    public var $append(@NotNull var value) {
-        return getValue().$append(value);
-    }
-
-    @NotNull
-    @Override
-    public var $containsValue(@NotNull var value) {
-        return getValue().$containsValue(value);
-    }
-
-    @NotNull
-    @Override
-    public var $containsKey(@NotNull var value) {
-        return getValue().$containsKey(value);
-    }
-
-    @NotNull
-    @Override
-    public var $has(@NotNull var key) {
-        return DollarStatic.$(getValue().$has(key));
-    }
-
-    @NotNull
-    @Override
-    public var $isEmpty() {
-        return DollarStatic.$(getValue().$isEmpty());
-    }
-
-    @NotNull
-    @Override
-    public var $size() {
-        return DollarStatic.$(getValue().$size());
-    }
-
-    @NotNull
-    @Override
-    public var $prepend(@NotNull var value) {
-        return getValue().$prepend(value);
-    }
-
-    @NotNull
-    @Override
-    public var $insert(@NotNull var value, int position) {
-        return getValue().$insert(value, position);
-    }
-
-
-    @NotNull
-    @Override
-    public var $removeByKey(@NotNull String key) {
-        return tracer.trace(this, getValue().$removeByKey(key), StateTracer.Operations.REMOVE_BY_KEY, key);
-    }
-
-    @NotNull
-    @Override
-    public var $set(@NotNull String key, Object value) {
-        return tracer.trace(null, getValue().$set(key, value), StateTracer.Operations.SET, key, value);
-    }
-
-    @NotNull
-    @Override
-    public var $set(@NotNull var key, Object value) {
-        return tracer.trace(this, getValue().$set(key, value), StateTracer.Operations.SET, key, value);
-    }
-
-    @NotNull
-    @Override
-    public var remove(@NotNull Object value) {
-        return tracer.trace(this, getValue().remove(value), StateTracer.Operations.REMOVE_BY_VALUE, value);
-    }
-
-    @NotNull
-    @Override
-    public var $remove(@NotNull var value) {
-        return getValue().$remove(value);
-    }
-
-    @NotNull
-    @Override
-    public int size() {
-        return getValue().size();
-    }
-
-    @Override
-    public var $min(boolean parallel) {
-        return getValue().$min(parallel);
-    }
-
-    @Override
-    public var $max(boolean parallel) {
-        return getValue().$max(parallel);
-    }
-
-    @Override
-    public var $sum(boolean parallel) {
-        return getValue().$sum(parallel);
-    }
-
-    @Override
-    public var $avg(boolean parallel) {
-        return getValue().$avg(parallel);
-    }
-
-    @Override
-    public var $reverse(boolean parallel) {
-        return getValue().$reverse(parallel);
-    }
-
-    @Override
-    public var $sort(boolean parallel) {
-        return getValue().$sort(parallel);
-    }
-
-    @Override
-    public var $unique(boolean parallel) {
-        return getValue().$unique(parallel);
-    }
-
-    @Override
-    public var $product(boolean parallel) {
-        return getValue().$product(parallel);
-    }
-
-    @NotNull
-    @Override
-    public var $copy() {
-        return getValue().$copy();
-    }
-
-    @NotNull
-    @Override
-    public var $copy(@NotNull ImmutableList<Throwable> errors) {
-        return getValue().$copy();
-    }
-
-    @NotNull
-    @Override
-    public var $fix(boolean parallel) {
-        return getValue().$fix(parallel);
-    }
-
-    @NotNull
-    @Override
-    public var $fix(int depth, boolean parallel) {
-        return getValue().$fix(depth, parallel);
-    }
-
-    @NotNull
-    @Override
-    public var $fixDeep(boolean parallel) {
-        return getValue().$fixDeep(parallel);
-    }
-
-    @NotNull
-    @Override
-    public TypePrediction predictType() {
-        return getValue().predictType();
-    }
-
-    @NotNull
-    @Override
-    public var $unwrap() {
-        return getValue().$unwrap();
+    public ImmutableJsonObject toJsonObject() {
+        return getValue().toJsonObject();
     }
 
     @Override
@@ -767,27 +747,12 @@ public class DollarWrapper implements var {
         return getValue().infof(message, values);
     }
 
-    @NotNull
-    @Override
-    public String metaAttribute(@NotNull String key) {
-        return getValue().metaAttribute(key);
-    }
-
-    @NotNull
-    @Override
-    public Object meta(@NotNull String key) {
-        return getValue().meta(key);
-    }
-
-    @Override
-    public void metaAttribute(@NotNull String key, @NotNull String value) {
-        getValue().metaAttribute(key, value);
-    }
-
-    @Override
-    public void meta(@NotNull String key, @NotNull Object value) {
-        getValue().meta(key, value);
-
+    @Nullable
+    var getValue() {
+        if (value == null) {
+            throw new IllegalStateException("Value has become null!!");
+        }
+        return value;
     }
 
     @Override
@@ -834,63 +799,25 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public String toHumanString() {
-        return getValue().toHumanString();
+    public Object meta(@NotNull String key) {
+        return getValue().meta(key);
+    }
+
+    @Override
+    public void meta(@NotNull String key, @NotNull Object value) {
+        getValue().meta(key, value);
+
+    }
+
+    @Override
+    public void metaAttribute(@NotNull String key, @NotNull String value) {
+        getValue().metaAttribute(key, value);
     }
 
     @NotNull
     @Override
-    public var $default(@NotNull var v) {
-        return getValue().$default(v);
-    }
-
-    @NotNull
-    @Override
-    public var $mimeType() {
-        return getValue().$mimeType();
-    }
-
-    @NotNull
-    @Override
-    public var $constrain(@NotNull var constraint, @NotNull String source) {
-        return getValue().$constrain(constraint, source);
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $stream(boolean parallel) {
-        return getValue().$stream(false);
-    }
-
-    @NotNull
-    @Override
-    public var err() {
-        return getValue().err();
-
-    }
-
-    @NotNull
-    @Override
-    public var out() {
-        return getValue().out();
-    }
-
-    @NotNull
-    @Override
-    public String toDollarScript() {
-        return getValue().toString();
-    }
-
-    @Nullable
-    @Override
-    public <R> R toJavaObject() {
-        return getValue().toJavaObject();
-    }
-
-    @NotNull
-    @Override
-    public ImmutableJsonObject toJsonObject() {
-        return getValue().toJsonObject();
+    public String metaAttribute(@NotNull String key) {
+        return getValue().metaAttribute(key);
     }
 
 

@@ -26,8 +26,6 @@ import dollar.api.Pipeable;
 import dollar.api.Signal;
 import dollar.api.TypePrediction;
 import dollar.api.exceptions.DollarFailureException;
-import dollar.api.json.JsonArray;
-import dollar.api.json.JsonObject;
 import dollar.api.types.meta.MetaConstants;
 import dollar.api.types.prediction.SingleValueTypePrediction;
 import dollar.api.var;
@@ -40,12 +38,9 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -56,14 +51,12 @@ public abstract class AbstractDollar implements var {
     @NotNull
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @NotNull
-    private final ImmutableList<Throwable> errors;
 
     @NotNull
     private final ConcurrentHashMap<String, Object> meta = new ConcurrentHashMap<>();
 
-    protected AbstractDollar(@NotNull ImmutableList<Throwable> errors) {
-        this.errors = errors;
+    protected AbstractDollar() {
+
     }
 
     @NotNull
@@ -121,6 +114,54 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
+    public var $avg(boolean parallel) {
+        return $sum(parallel).$divide($size());
+    }
+
+    @NotNull
+    @Override
+    public var $max(boolean parallel) {
+        return $stream(parallel).max(Comparable::compareTo).orElse($void());
+    }
+
+    @NotNull
+    @Override
+    public var $min(boolean parallel) {
+        return $stream(parallel).min(Comparable::compareTo).orElse($void());
+    }
+
+    @NotNull
+    @Override
+    public var $product(boolean parallel) {
+        return $stream(parallel).reduce(NumericAware::$multiply).orElse($void());
+    }
+
+    @Override
+    public var $reverse(boolean parallel) {
+        throw new UnsupportedOperationException("Cannot reverse a " + type());
+    }
+
+    @NotNull
+    @Override
+    public var $sort(boolean parallel) {
+        return DollarFactory.fromList($stream(parallel).sorted().collect(Collectors.toList()));
+    }
+
+    @NotNull
+    @Override
+    public var $sum(boolean parallel) {
+        return $stream(parallel).reduce(NumericAware::$plus).orElse($void());
+
+    }
+
+    @NotNull
+    @Override
+    public var $unique(boolean parallel) {
+        return DollarFactory.fromSet($stream(parallel).collect(Collectors.toSet()));
+    }
+
+    @NotNull
+    @Override
     public var $choose(@NotNull var map) {
         return map.$($S());
     }
@@ -140,6 +181,112 @@ public abstract class AbstractDollar implements var {
 
         }
         return DollarFactory.fromValue(result);
+    }
+
+    @NotNull
+    @Override
+    public var $copy() {
+        return DollarFactory.fromValue(toJavaObject());
+    }
+
+    @Override
+    @NotNull
+    public var $copy(@NotNull ImmutableList<Throwable> errors) {
+        return DollarFactory.fromValue(toJavaObject());
+    }
+
+    @NotNull
+    final @Override
+    public var $fix(boolean parallel) {
+        return $fix(1, parallel);
+    }
+
+    @NotNull
+    @Override
+    public var $fix(int depth, boolean parallel) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public final var $fixDeep(boolean parallel) {
+        return $fix(Integer.MAX_VALUE, parallel);
+    }
+
+    @NotNull
+    @Override
+    public TypePrediction predictType() {
+        return new SingleValueTypePrediction($type());
+    }
+
+    @NotNull
+    @Override
+    public var $unwrap() {
+        return this;
+    }
+
+
+//    @NotNull
+//    public var $pipe(@NotNull String label, @NotNull Pipeable pipe) {
+//        try {
+//            return pipe.pipe(this);
+//        } catch (Exception e) {
+//            return DollarStatic.handleError(e, this);
+//        }
+//    }
+//
+//    @NotNull
+//    public var $pipe(@NotNull String label, @NotNull String js) {
+//        SimpleScriptContext context = new SimpleScriptContext();
+//        Object value;
+//        try {
+//            nashorn.eval("var $=" + toJsonObject() + ";", context);
+//            value = nashorn.eval(js, context);
+//        } catch (Exception e) {
+//            return DollarStatic.handleError(e, this);
+//        }
+//        return DollarFactory.fromValue(value, ImmutableList.of());
+//    }
+//
+//    @NotNull
+//    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
+//        DollarStatic.threadContext.get().setPassValue($copy());
+//        Pipeable script = null;
+//        try {
+//            script = clazz.newInstance();
+//        } catch (InstantiationException e) {
+//            return DollarStatic.handleError(e.getCause(), this);
+//        } catch (Exception e) {
+//            return DollarStatic.handleError(e, this);
+//        }
+//        try {
+//            return script.pipe(this);
+//        } catch (Exception e) {
+//            return DollarStatic.handleError(e, this);
+//        }
+//    }
+
+    @NotNull
+    @Override
+    public var $constrain(@Nullable var constraint, @Nullable String constraintFingerprint) {
+        if ((constraint == null) || (constraintFingerprint == null)) {
+            return this;
+        }
+        String thisConstraintFingerprint = constraintLabel();
+        if (thisConstraintFingerprint == null) {
+            metaAttribute(MetaConstants.CONSTRAINT_FINGERPRINT, constraintFingerprint);
+            return this;
+        } else if (thisConstraintFingerprint.equals(constraintFingerprint)) {
+            return this;
+        } else {
+            throw new ConstraintViolation(this, constraint, constraintFingerprint, constraintFingerprint);
+        }
+    }
+
+    @Nullable
+    @Override
+    public String constraintLabel() {
+        return metaAttribute(MetaConstants.CONSTRAINT_FINGERPRINT);
     }
 
     @NotNull
@@ -213,12 +360,6 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public Stream<var> $stream(boolean parallel) {
-        return toVarList().stream();
-    }
-
-    @NotNull
-    @Override
     public var $notify() {
 //        do nothing, not a reactive type
         return this;
@@ -226,111 +367,8 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $copy() {
-        return DollarFactory.fromValue(toJavaObject(), ImmutableList.copyOf(errors()));
-    }
-
-    @Override
-    @NotNull
-    public var $copy(@NotNull ImmutableList<Throwable> errors) {
-        List<Throwable> errorsMerged = new ArrayList<>();
-        errorsMerged.addAll(errors);
-        errorsMerged.addAll(errors());
-        return DollarFactory.fromValue(toJavaObject(), ImmutableList.copyOf(errorsMerged));
-    }
-
-    @NotNull
-    final @Override
-    public var $fix(boolean parallel) {
-        return $fix(1, parallel);
-    }
-
-
-//    @NotNull
-//    public var $pipe(@NotNull String label, @NotNull Pipeable pipe) {
-//        try {
-//            return pipe.pipe(this);
-//        } catch (Exception e) {
-//            return DollarStatic.handleError(e, this);
-//        }
-//    }
-//
-//    @NotNull
-//    public var $pipe(@NotNull String label, @NotNull String js) {
-//        SimpleScriptContext context = new SimpleScriptContext();
-//        Object value;
-//        try {
-//            nashorn.eval("var $=" + toJsonObject() + ";", context);
-//            value = nashorn.eval(js, context);
-//        } catch (Exception e) {
-//            return DollarStatic.handleError(e, this);
-//        }
-//        return DollarFactory.fromValue(value, ImmutableList.of());
-//    }
-//
-//    @NotNull
-//    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
-//        DollarStatic.threadContext.get().setPassValue($copy());
-//        Pipeable script = null;
-//        try {
-//            script = clazz.newInstance();
-//        } catch (InstantiationException e) {
-//            return DollarStatic.handleError(e.getCause(), this);
-//        } catch (Exception e) {
-//            return DollarStatic.handleError(e, this);
-//        }
-//        try {
-//            return script.pipe(this);
-//        } catch (Exception e) {
-//            return DollarStatic.handleError(e, this);
-//        }
-//    }
-
-    @NotNull
-    @Override
-    public var $fix(int depth, boolean parallel) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public final var $fixDeep(boolean parallel) {
-        return $fix(Integer.MAX_VALUE, parallel);
-    }
-
-    @NotNull
-    @Override
-    public TypePrediction predictType() {
-        return new SingleValueTypePrediction($type());
-    }
-
-    @NotNull
-    @Override
-    public var $unwrap() {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $constrain(@Nullable var constraint, @Nullable String constraintFingerprint) {
-        if ((constraint == null) || (constraintFingerprint == null)) {
-            return this;
-        }
-        String thisConstraintFingerprint = constraintLabel();
-        if (thisConstraintFingerprint == null) {
-            metaAttribute(MetaConstants.CONSTRAINT_FINGERPRINT, constraintFingerprint);
-            return this;
-        } else if (thisConstraintFingerprint.equals(constraintFingerprint)) {
-            return this;
-        } else {
-            throw new ConstraintViolation(this, constraint, constraintFingerprint, constraintFingerprint);
-        }
-    }
-
-    @Nullable
-    @Override
-    public String constraintLabel() {
-        return metaAttribute(MetaConstants.CONSTRAINT_FINGERPRINT);
+    public Stream<var> $stream(boolean parallel) {
+        return toVarList().stream();
     }
 
     @NotNull
@@ -465,30 +503,28 @@ public abstract class AbstractDollar implements var {
         return false;
     }
 
-    @Nullable
-    @Override
-    public String metaAttribute(@NotNull String key) {
-        return (String) meta.get(key);
-    }
-
-    @Nullable
-    @Override
-    public <T> T meta(@NotNull String key) {
-        return (T) meta.get(key);
-    }
-
-    @Override
-    public void metaAttribute(@NotNull String key, @NotNull String value) {
-        if (meta.containsKey(key)) {
-            @NotNull var result;
-            throw new DollarFailureException(ErrorType.METADATA_IMMUTABLE);
+    @NotNull
+    private String hash(@NotNull byte[] bytes) {
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            throw new DollarException(e);
         }
-        meta.put(key, value);
-    }
 
-    @Override
-    public void meta(@NotNull String key, @NotNull Object value) {
-        meta.put(key, value);
+        md.update(bytes);
+        byte[] digest = md.digest();
+        StringBuilder hexString = new StringBuilder();
+
+        for (byte aDigest : digest) {
+            String hex = Integer.toHexString(0xff & aDigest);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+
+        return hexString.toString();
     }
 
     @Override
@@ -538,6 +574,32 @@ public abstract class AbstractDollar implements var {
 
     @Nullable
     @Override
+    public <T> T meta(@NotNull String key) {
+        return (T) meta.get(key);
+    }
+
+    @Override
+    public void meta(@NotNull String key, @NotNull Object value) {
+        meta.put(key, value);
+    }
+
+    @Override
+    public void metaAttribute(@NotNull String key, @NotNull String value) {
+        if (meta.containsKey(key)) {
+            @NotNull var result;
+            throw new DollarFailureException(ErrorType.METADATA_IMMUTABLE);
+        }
+        meta.put(key, value);
+    }
+
+    @Nullable
+    @Override
+    public String metaAttribute(@NotNull String key) {
+        return (String) meta.get(key);
+    }
+
+    @Nullable
+    @Override
     public Double toDouble() {
         return 0.0;
     }
@@ -546,163 +608,5 @@ public abstract class AbstractDollar implements var {
     @Override
     public Long toLong() {
         return 0L;
-    }
-
-    @NotNull
-    private String hash(@NotNull byte[] bytes) {
-        MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            throw new DollarException(e);
-        }
-
-        md.update(bytes);
-        byte[] digest = md.digest();
-        StringBuilder hexString = new StringBuilder();
-
-        for (byte aDigest : digest) {
-            String hex = Integer.toHexString(0xff & aDigest);
-            if (hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-
-        return hexString.toString();
-    }
-
-    @NotNull
-    @Override
-    public var $error(@NotNull String errorMessage) {
-        return DollarFactory.failure(ErrorType.VALIDATION, errorMessage);
-    }
-
-
-    @NotNull
-    @Override
-    public var $error(@NotNull Throwable error) {
-        return DollarFactory.failure(error);
-    }
-
-
-    @NotNull
-    @Override
-    public var $error() {
-        return $error("Unspecified Error");
-    }
-
-    @NotNull
-    @Override
-    public var $errors() {
-        JsonObject json = new JsonObject();
-        if (!errors.isEmpty()) {
-            if (errors.get(0) instanceof DollarException) {
-                json.putNumber("httpCode", ((DollarException) errors.get(0)).httpCode());
-            }
-            json.putString("message", errors.get(0).getMessage());
-            JsonArray errorArray = new JsonArray();
-            for (Throwable error : errors) {
-                JsonObject errorJson = new JsonObject();
-                errorJson.putString("message", error.getMessage());
-                if (DollarStatic.getConfig().production()) {
-                    errorJson.putString("hash",
-                                        hash(Arrays.toString(error.getStackTrace()).getBytes()));
-                } else {
-                    errorJson.putString("stack", Arrays.toString(error.getStackTrace()));
-                }
-                errorArray.addObject(errorJson);
-            }
-            json.putArray("errors", errorArray);
-        }
-        return DollarFactory.fromValue(json);
-    }
-
-    @NotNull
-    @Override
-    public var $fail(@NotNull Consumer<ImmutableList<Throwable>> handler) {
-        if (hasErrors()) {
-            handler.accept(errors());
-            return DollarFactory.fromValue(null, errors());
-        } else {
-            return this;
-        }
-    }
-
-    @NotNull
-    @Override
-    public var $error(@NotNull String errorMessage, @NotNull ErrorType type) {
-        return DollarFactory.failure(type, errorMessage, true);
-    }
-
-    @NotNull
-    @Override
-    public var clearErrors() {
-        return DollarFactory.fromValue(toJavaObject(), ImmutableList.of());
-    }
-
-    @NotNull
-    @Override
-    public List<String> errorTexts() {
-        return errors.stream().map(Throwable::getMessage).collect(Collectors.toList());
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<Throwable> errors() {
-        return errors;
-    }
-
-    @Override
-    public boolean hasErrors() {
-        return !errors.isEmpty();
-    }
-
-    @NotNull
-    @Override
-    public var $min(boolean parallel) {
-        return $stream(parallel).min(Comparable::compareTo).orElse($void());
-    }
-
-    @NotNull
-    @Override
-    public var $max(boolean parallel) {
-        return $stream(parallel).max(Comparable::compareTo).orElse($void());
-    }
-
-    @NotNull
-    @Override
-    public var $sum(boolean parallel) {
-        return $stream(parallel).reduce(NumericAware::$plus).orElse($void());
-
-    }
-
-    @NotNull
-    @Override
-    public var $avg(boolean parallel) {
-        return $sum(parallel).$divide($size());
-    }
-
-    @Override
-    public var $reverse(boolean parallel) {
-        throw new UnsupportedOperationException("Cannot reverse a " + type());
-    }
-
-    @NotNull
-    @Override
-    public var $sort(boolean parallel) {
-        return DollarFactory.fromList($stream(parallel).sorted().collect(Collectors.toList()));
-    }
-
-    @NotNull
-    @Override
-    public var $unique(boolean parallel) {
-        return DollarFactory.fromSet($stream(parallel).collect(Collectors.toSet()));
-    }
-
-    @NotNull
-    @Override
-    public var $product(boolean parallel) {
-        return $stream(parallel).reduce(NumericAware::$multiply).orElse($void());
     }
 }

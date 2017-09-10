@@ -66,69 +66,69 @@ import java.util.concurrent.LinkedBlockingDeque;
 public final class DollarFactory {
 
     /**
-     * The constant VALUE_KEY.
+     * The constant DOUBLE_ZERO.
      */
     @NotNull
-    public static final String VALUE_KEY = "value";
+    public static final var DOUBLE_ZERO = wrap(new DollarDecimal(0.0));
     /**
-     * The constant VALUE_KEY.
+     * The constant FALSE.
      */
     @NotNull
-    public static final String POSITIVE_KEY = "positive";
+    public static final var FALSE = wrap(new DollarBoolean(false));
+    @NotNull
+    public static final var INFINITY = wrap(new DollarInfinity(true));
     /**
-     * The constant TYPE_KEY.
+     * The constant INTEGER_ZERO.
      */
     @NotNull
-    public static final String TYPE_KEY = "$type";
+    public static final var INTEGER_ZERO = wrap(new DollarInteger(0L));
     /**
      * The constant LOWERBOUND_KEY.
      */
     @NotNull
     public static final String LOWERBOUND_KEY = "lower";
     /**
-     * The constant UPPERBOUND_KEY.
+     * The constant MILLISECOND_KEY.
      */
     @NotNull
-    public static final String UPPERBOUND_KEY = "upper";
+    public static final String MILLISECOND_KEY = "millis";
+    @NotNull
+    public static final var NEGATIVE_INFINITY = wrap(new DollarInfinity(false));
+    /**
+     * The constant VALUE_KEY.
+     */
+    @NotNull
+    public static final String POSITIVE_KEY = "positive";
     /**
      * The constant TEXT_KEY.
      */
     @NotNull
     public static final String TEXT_KEY = "text";
     /**
-     * The constant MILLISECOND_KEY.
-     */
-    @NotNull
-    public static final String MILLISECOND_KEY = "millis";
-    /**
      * The constant TRUE.
      */
     @NotNull
-    public static final var TRUE = wrap(new DollarBoolean(ImmutableList.of(), true));
+    public static final var TRUE = wrap(new DollarBoolean(true));
     /**
-     * The constant FALSE.
+     * The constant TYPE_KEY.
      */
     @NotNull
-    public static final var FALSE = wrap(new DollarBoolean(ImmutableList.of(), false));
+    public static final String TYPE_KEY = "$type";
+    /**
+     * The constant UPPERBOUND_KEY.
+     */
+    @NotNull
+    public static final String UPPERBOUND_KEY = "upper";
+    /**
+     * The constant VALUE_KEY.
+     */
+    @NotNull
+    public static final String VALUE_KEY = "value";
     /**
      * The constant VOID.
      */
     @NotNull
     public static final var VOID = wrap(new DollarVoid());
-    /**
-     * The constant DOUBLE_ZERO.
-     */
-    @NotNull
-    public static final var DOUBLE_ZERO = wrap(new DollarDecimal(ImmutableList.of(), 0.0));
-    /**
-     * The constant INTEGER_ZERO.
-     */
-    @NotNull
-    public static final var INTEGER_ZERO = wrap(new DollarInteger(ImmutableList.of(), 0L));
-    @NotNull
-    public static final var INFINITY = wrap(new DollarInfinity(true));
-    @NotNull
-    public static final var NEGATIVE_INFINITY = wrap(new DollarInfinity(false));
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("DollarSource");
     /**
@@ -146,58 +146,26 @@ public final class DollarFactory {
     }
 
     /**
-     * From value.
+     * Block collection.
      *
-     * @param o      the o
-     * @param errors the errors
-     * @return the var
-     */
-    @SafeVarargs
-    @NotNull
-    public static var fromValue(@Nullable Object o, @NotNull ImmutableList<Throwable>... errors) {
-        return create(ImmutableList.copyOf(mergeErrors(errors)), o);
-    }
-
-    @NotNull
-    private static List<Throwable> mergeErrors(@NotNull ImmutableList<Throwable>[] errors) {
-        List<Throwable> mergedErrors = new ArrayList<>();
-        for (ImmutableList<Throwable> errorList : errors) {
-            mergedErrors.addAll(errorList);
-        }
-        return mergedErrors;
-    }
-
-    /**
-     * From value.
-     *
+     * @param var the var
      * @return the var
      */
     @NotNull
-    public static var fromValue() {
-        return create(ImmutableList.of(), new JsonObject());
+    public static var blockCollection(@NotNull List<var> var) {
+        return wrap(new DollarBlockCollection(var));
     }
 
-
     @NotNull
-    private static var create(@NotNull ImmutableList<Throwable> errors, @Nullable Object o) {
+    private static var create(@Nullable Object o) {
         if (o == null) {
-            if (errors.isEmpty()) {
-                return VOID;
-            }
-            return wrap(new DollarVoid(errors));
+            return wrap(new DollarVoid());
         }
         if (o instanceof var) {
             return (var) o;
         }
         if (o instanceof Boolean) {
-            if (errors.isEmpty()) {
-                if ((Boolean) o) {
-                    return TRUE;
-                } else {
-                    return FALSE;
-                }
-            }
-            return wrap(new DollarBoolean(errors, (Boolean) o));
+            return wrap(new DollarBoolean((Boolean) o));
         }
 
         if (o instanceof Pipeable) {
@@ -209,121 +177,121 @@ public final class DollarFactory {
         if (o instanceof File) {
             try {
                 try (FileInputStream stream = new FileInputStream((File) o)) {
-                    return create(errors, stream);
+                    return create(stream);
                 }
             } catch (IOException e) {
                 return failure(e);
             }
         }
         if (o instanceof JsonArray) {
-            return wrap(new DollarList(errors, (JsonArray) o));
+            return wrap(new DollarList((JsonArray) o));
         }
         if (o instanceof JsonObject) {
-            return wrap(new DollarMap(errors, new ImmutableJsonObject((JsonObject) o)));
+            return wrap(new DollarMap(new ImmutableJsonObject((JsonObject) o)));
         }
         if ("JSONObject".equals(o.getClass().getSimpleName()) || (o instanceof ObjectNode)) {
-            return wrap(new DollarMap(errors, new JsonObject(o.toString())));
+            return wrap(new DollarMap(new JsonObject(o.toString())));
         }
         if ("JSONObject".equals(o.getClass().getSimpleName()) || (o instanceof ArrayNode)) {
-            return wrap(new DollarList(errors, new JsonArray(o.toString())));
+            return wrap(new DollarList(new JsonArray(o.toString())));
         }
         if (o instanceof ImmutableMap) {
-            return wrap(new DollarMap(errors, ((ImmutableMap<?, ?>) o)));
+            return wrap(new DollarMap(((ImmutableMap<?, ?>) o)));
         }
         if (o instanceof Map) {
-            return wrap(new DollarMap(errors, (Map) o));
+            return wrap(new DollarMap((Map) o));
         }
         if (o instanceof ImmutableList) {
-            return wrap(new DollarList(errors, (ImmutableList<?>) o));
+            return wrap(new DollarList((ImmutableList<?>) o));
         }
         if (o instanceof List) {
-            return wrap(new DollarList(errors, ImmutableList.copyOf((List) o)));
+            return wrap(new DollarList(ImmutableList.copyOf((List) o)));
         }
         if (o instanceof Collection) {
-            return wrap(new DollarList(errors, ImmutableList.copyOf(new ArrayList<>((Collection<?>) o))));
+            return wrap(new DollarList(ImmutableList.copyOf(new ArrayList<>((Collection<?>) o))));
         }
         if (o.getClass().isArray()) {
-            return wrap(new DollarList(errors, (Object[]) o));
+            return wrap(new DollarList((Object[]) o));
         }
         if (o instanceof URI) {
-            return wrap(new DollarURI(errors, (URI) o));
+            return wrap(new DollarURI((URI) o));
         }
         if ((o instanceof java.net.URI) || (o instanceof java.net.URL)) {
-            return wrap(new DollarURI(errors, URI.parse(o.toString())));
+            return wrap(new DollarURI(URI.parse(o.toString())));
         }
         if (o instanceof Date) {
-            return wrap(new DollarDate(errors, ((Date) o).getTime()));
+            return wrap(new DollarDate(((Date) o).getTime()));
         }
         if (o instanceof LocalDateTime) {
-            return wrap(new DollarDate(errors, (LocalDateTime) o));
+            return wrap(new DollarDate((LocalDateTime) o));
         }
         if (o instanceof Instant) {
-            return wrap(new DollarDate(errors, (Instant) o));
+            return wrap(new DollarDate((Instant) o));
         }
         if (o instanceof Double) {
-            if (errors.isEmpty() && ((Double) o == 0.0)) {
+            if (((Double) o == 0.0)) {
                 return DOUBLE_ZERO;
             }
-            return wrap(new DollarDecimal(errors, (Double) o));
+            return wrap(new DollarDecimal((Double) o));
         }
         if (o instanceof BigDecimal) {
-            if (errors.isEmpty() && (((BigDecimal) o).doubleValue() == 0.0)) {
+            if ((((BigDecimal) o).doubleValue() == 0.0)) {
                 return DOUBLE_ZERO;
             }
-            return wrap(new DollarDecimal(errors, ((BigDecimal) o).doubleValue()));
+            return wrap(new DollarDecimal(((BigDecimal) o).doubleValue()));
         }
         if (o instanceof Float) {
-            if (errors.isEmpty() && ((Float) o == 0.0)) {
+            if (((Float) o == 0.0)) {
                 return DOUBLE_ZERO;
             }
-            return wrap(new DollarDecimal(errors, ((Float) o).doubleValue()));
+            return wrap(new DollarDecimal(((Float) o).doubleValue()));
         }
         if (o instanceof Long) {
-            if (errors.isEmpty() && ((Long) o == 0)) {
+            if (((Long) o == 0)) {
                 return INTEGER_ZERO;
             }
-            return wrap(new DollarInteger(errors, (Long) o));
+            return wrap(new DollarInteger((Long) o));
         }
         if (o instanceof Integer) {
-            if (errors.isEmpty() && ((Integer) o == 0)) {
+            if (((Integer) o == 0)) {
                 return INTEGER_ZERO;
             }
-            return wrap(new DollarInteger(errors, ((Integer) o).longValue()));
+            return wrap(new DollarInteger(((Integer) o).longValue()));
         }
         if (o instanceof Short) {
-            if (errors.isEmpty() && ((Short) o == 0)) {
+            if (((Short) o == 0)) {
                 return INTEGER_ZERO;
             }
-            return wrap(new DollarInteger(errors, ((Short) o).longValue()));
+            return wrap(new DollarInteger(((Short) o).longValue()));
         }
         if (o instanceof Range) {
-            return wrap(new DollarRange(errors, (Range) o, false));
+            return wrap(new DollarRange((Range) o, false));
         }
         if (o instanceof ImmutableJsonObject) {
-            return wrap(new DollarMap(errors, (ImmutableJsonObject) o));
+            return wrap(new DollarMap((ImmutableJsonObject) o));
         }
         if (o instanceof InputStream) {
             try {
-                return create(errors, CollectionUtil.fromStream((InputStream) o));
+                return create(CollectionUtil.fromStream((InputStream) o));
             } catch (IOException e) {
                 return failure(e);
             }
         }
         if (o instanceof String) {
             if (((String) o).matches("^[a-zA-Z0-9]+$")) {
-                return wrap(new DollarString(errors, (String) o));
+                return wrap(new DollarString((String) o));
 
             } else if (((String) o).matches("^\\s*\\[.*")) {
-                return wrap(new DollarList(errors, new JsonArray(o.toString())));
+                return wrap(new DollarList(new JsonArray(o.toString())));
             } else if (((String) o).matches("^\\s*\\{.*")) {
                 try {
-                    return wrap(new DollarMap(errors, new JsonObject((String) o)));
+                    return wrap(new DollarMap(new JsonObject((String) o)));
                 } catch (DecodeException de) {
                     log.error(de.getMessage(), de);
-                    return wrap(new DollarString(errors, (String) o));
+                    return wrap(new DollarString((String) o));
                 }
             } else {
-                return wrap(new DollarString(errors, (String) o));
+                return wrap(new DollarString((String) o));
             }
         }
         JsonObject json;
@@ -332,48 +300,19 @@ public final class DollarFactory {
         } else {
             json = Json.fromJavaObject(o);
         }
-        return wrap(new DollarMap(errors, json));
+        return wrap(new DollarMap(json));
     }
 
     /**
-     * From value.
+     * Deserialize var.
      *
-     * @param o the o
+     * @param s the s
      * @return the var
      */
     @NotNull
-    public static var fromValue(@Nullable Object o) {
-        return fromValue(o, ImmutableList.of());
-    }
-
-    /**
-     * Wrap var.
-     *
-     * @param value the value
-     * @return the var
-     */
-    @NotNull
-    public static var wrap(@NotNull var value) {
-        return wrap(value, DollarStatic.monitor(), DollarStatic.tracer());
-    }
-
-    @NotNull
-    private static var wrap(@NotNull var value, @NotNull DollarMonitor monitor, @NotNull StateTracer tracer) {
-        final var val;
-        if (DollarStatic.getConfig().wrapForMonitoring()) {
-            val = new DollarWrapper(value, monitor, tracer);
-        } else {
-            val = value;
-        }
-        if (DollarStatic.getConfig().wrapForGuards()) {
-            return (var) java.lang.reflect.Proxy.newProxyInstance(
-                    DollarStatic.class.getClassLoader(),
-                    new Class<?>[]{var.class},
-                    new DollarGuard(val));
-        } else {
-            return val;
-        }
-
+    public static var deserialize(@NotNull String s) {
+        JsonObject jsonObject = new JsonObject(s);
+        return fromJson(jsonObject);
     }
 
     /**
@@ -389,7 +328,7 @@ public final class DollarFactory {
         if (DollarStatic.getConfig().failFast() && !quiet) {
             throw new DollarFailureException(t, errorType);
         } else {
-            return wrap(new DollarError(ImmutableList.of(t), errorType, t.getMessage()));
+            return wrap(new DollarError(errorType, t.getMessage()));
         }
     }
 
@@ -405,10 +344,9 @@ public final class DollarFactory {
         if (DollarStatic.getConfig().failFast()) {
             throw new DollarFailureException(t, errorType);
         } else {
-            return wrap(new DollarError(ImmutableList.of(t), errorType, t.getMessage()));
+            return wrap(new DollarError(errorType, t.getMessage()));
         }
     }
-
 
     /**
      * Failure var.
@@ -422,7 +360,7 @@ public final class DollarFactory {
         if (DollarStatic.getConfig().failFast()) {
             throw new DollarFailureException(errorType, message);
         } else {
-            return wrap(new DollarError(ImmutableList.of(new DollarException(message)), errorType, message));
+            return wrap(new DollarError(errorType, message));
         }
     }
 
@@ -439,10 +377,9 @@ public final class DollarFactory {
         if (DollarStatic.getConfig().failFast() && !quiet) {
             throw new DollarFailureException(errorType, message);
         } else {
-            return wrap(new DollarError(ImmutableList.of(new DollarException(message)), errorType, message));
+            return wrap(new DollarError(errorType, message));
         }
     }
-
 
     /**
      * Failure var.
@@ -453,119 +390,6 @@ public final class DollarFactory {
     @NotNull
     public static var failure(@NotNull Throwable throwable) {
         return failure(ErrorType.EXCEPTION, throwable, false);
-    }
-
-    /**
-     * New void.
-     *
-     * @return the var
-     */
-    @NotNull
-    public static var newVoid() {
-        return wrap(new DollarVoid());
-    }
-
-    /**
-     * From string value.
-     *
-     * @param body the body
-     * @return the var
-     */
-    @NotNull
-    public static var fromStringValue(@NotNull String body) {
-        return wrap(new DollarString(ImmutableList.of(), body));
-    }
-
-    /**
-     * From string value.
-     *
-     * @param body the body
-     * @return the var
-     */
-    @SafeVarargs
-    @NotNull
-    public static var fromStringValue(@NotNull String body, ImmutableList<Throwable>... errors) {
-        return wrap(new DollarString(ImmutableList.copyOf(mergeErrors(errors)), body));
-    }
-
-    /**
-     * From lambda.
-     *
-     * @param pipeable the pipeable
-     * @return the var
-     */
-    @NotNull
-    public static var fromLambda(@NotNull Pipeable pipeable) {
-        return fromValue(pipeable);
-    }
-
-    /**
-     * From uRI.
-     *
-     * @param from the from
-     * @return the var
-     */
-    @NotNull
-    public static var fromURI(@NotNull var from) {
-        if (from.uri()) {
-            return from;
-        } else {
-            return fromURI(from.$S());
-        }
-    }
-
-    /**
-     * From uRI.
-     *
-     * @param uri the uri
-     * @return the var
-     */
-    @NotNull
-    public static var fromURI(@NotNull String uri) {
-        try {
-            return wrap(new DollarURI(ImmutableList.of(), URI.parse(uri)));
-        } catch (Exception e) {
-            return DollarStatic.handleError(e, null);
-        }
-    }
-
-    /**
-     * From stream.
-     *
-     * @param type    the type
-     * @param rawBody the raw body
-     * @return the var
-     * @throws IOException the iO exception
-     */
-    @NotNull
-    public static var fromStream(@NotNull SerializedType type, @NotNull InputStream rawBody) throws IOException {
-        if (type == SerializedType.JSON) {
-            ObjectMapper mapper = new ObjectMapper();
-            final JsonNode jsonNode = mapper.readTree(rawBody);
-            if (jsonNode.isArray()) {
-                return create(ImmutableList.of(), jsonNode);
-            } else if (jsonNode.isObject()) {
-                return create(ImmutableList.of(), jsonNode);
-            } else {
-                throw new DollarException("Could not deserialize JSON, not array or object");
-            }
-        } else {
-            throw new DollarException("Could not deserialize " + type);
-        }
-    }
-
-    /**
-     * From future.
-     *
-     * @param future the future
-     * @return the var
-     */
-    @NotNull
-    public static var fromFuture(@NotNull Future<var> future) {
-        return wrap((var) java.lang.reflect.Proxy.newProxyInstance(
-                DollarStatic.class.getClassLoader(),
-                new Class<?>[]{var.class},
-                new DollarLambda(i -> future.get(), false)));
     }
 
     /**
@@ -587,31 +411,22 @@ public final class DollarFactory {
             dollarFailureException.addSource(source);
             throw dollarFailureException;
         } else {
-            return wrap(new DollarError(ImmutableList.of(throwable), errorType, throwable.getMessage()));
+            return wrap(new DollarError(errorType, throwable.getMessage()));
         }
     }
 
     /**
-     * Block collection.
+     * From future.
      *
-     * @param var the var
+     * @param future the future
      * @return the var
      */
     @NotNull
-    public static var blockCollection(@NotNull List<var> var) {
-        return wrap(new DollarBlockCollection(var));
-    }
-
-    /**
-     * Deserialize var.
-     *
-     * @param s the s
-     * @return the var
-     */
-    @NotNull
-    public static var deserialize(@NotNull String s) {
-        JsonObject jsonObject = new JsonObject(s);
-        return fromJson(jsonObject);
+    public static var fromFuture(@NotNull Future<var> future) {
+        return wrap((var) java.lang.reflect.Proxy.newProxyInstance(
+                DollarStatic.class.getClassLoader(),
+                new Class<?>[]{var.class},
+                new DollarLambda(i -> future.get(), false)));
     }
 
     @NotNull
@@ -630,7 +445,7 @@ public final class DollarFactory {
         } else if (type.is(Type._BOOLEAN)) {
             return fromValue(jsonObject.getBoolean(VALUE_KEY));
         } else if (type.is(Type._DATE)) {
-            return wrap(new DollarDate(ImmutableList.of(), Instant.parse(jsonObject.getString(TEXT_KEY))));
+            return wrap(new DollarDate(Instant.parse(jsonObject.getString(TEXT_KEY))));
         } else if (type.is(Type._DECIMAL)) {
             return fromValue(jsonObject.getNumber(VALUE_KEY));
         } else if (type.is(Type._LIST)) {
@@ -639,7 +454,7 @@ public final class DollarFactory {
             for (Object o : array) {
                 arrayList.add(fromJson(o));
             }
-            return wrap(new DollarList(ImmutableList.of(), ImmutableList.copyOf(arrayList)));
+            return wrap(new DollarList(ImmutableList.copyOf(arrayList)));
         } else if (type.is(Type._MAP)) {
             final JsonObject json;
             json = jsonObject;
@@ -650,24 +465,24 @@ public final class DollarFactory {
                     map.put(fieldName, fromJson(json.get(fieldName)));
                 }
             }
-            return wrap(new DollarMap(ImmutableList.of(), map));
+            return wrap(new DollarMap(map));
         } else if (type.is(Type._ERROR)) {
             final String errorType = jsonObject.getString("errorType");
             final String errorMessage = jsonObject.getString("errorMessage");
-            return wrap(new DollarError(ImmutableList.of(), ErrorType.valueOf(errorType), errorMessage));
+            return wrap(new DollarError(ErrorType.valueOf(errorType), errorMessage));
         } else if (type.is(Type._RANGE)) {
             final var lower = fromJson(jsonObject.get(LOWERBOUND_KEY));
             final var upper = fromJson(jsonObject.get(UPPERBOUND_KEY));
-            return wrap(new DollarRange(ImmutableList.of(), lower, upper));
+            return wrap(new DollarRange(lower, upper));
         } else if (type.is(Type._URI)) {
-            return wrap(new DollarURI(ImmutableList.of(), URI.parse(jsonObject.getString(VALUE_KEY))));
+            return wrap(new DollarURI(URI.parse(jsonObject.getString(VALUE_KEY))));
         } else if (type.is(Type._INFINITY)) {
-            return wrap(new DollarInfinity(ImmutableList.of(), jsonObject.getBoolean(POSITIVE_KEY)));
+            return wrap(new DollarInfinity(jsonObject.getBoolean(POSITIVE_KEY)));
         } else if (type.is(Type._STRING)) {
             if (!(jsonObject.get(VALUE_KEY) instanceof String)) {
                 log.error("_STRING type is not a a java String, {}", jsonObject.get(VALUE_KEY));
             }
-            return wrap(new DollarString(ImmutableList.of(), jsonObject.getString(VALUE_KEY)));
+            return wrap(new DollarString(jsonObject.getString(VALUE_KEY)));
         } else {
             throw new DollarException("Unrecognized type " + type);
         }
@@ -710,6 +525,205 @@ public final class DollarFactory {
     }
 
     /**
+     * From lambda.
+     *
+     * @param pipeable the pipeable
+     * @return the var
+     */
+    @NotNull
+    public static var fromLambda(@NotNull Pipeable pipeable) {
+        return fromValue(pipeable);
+    }
+
+    @NotNull
+    public static var fromList(@NotNull ImmutableList<var> vars) {
+        return wrap(new DollarList(vars));
+    }
+
+    @NotNull
+    public static var fromList(@NotNull List<var> vars) {
+        return wrap(new DollarList(ImmutableList.copyOf(vars)));
+    }
+
+    @NotNull
+    public static var fromMap(@NotNull ImmutableMap<var, var> entries) {
+        return wrap(new DollarMap(entries));
+    }
+
+    public static var fromPair(@NotNull Object k, @NotNull Object v) {
+        return wrap(new DollarMap(ImmutableMap.of(create(k), create(v))));
+    }
+
+    @NotNull
+    public static var fromQueue(@NotNull LinkedBlockingDeque<var> linkedBlockingDeque) {
+        return wrap(new DollarQueue(ImmutableList.of(), linkedBlockingDeque));
+    }
+
+    /**
+     * From range.
+     *
+     * @param from the from
+     * @param to   the to
+     * @return the var
+     */
+    @NotNull
+    public static var fromRange(@NotNull var from,
+                                @NotNull var to) {
+        return wrap(new DollarRange(from, to));
+    }
+
+    public static var fromSet(@NotNull Set<var> vars) {
+        return wrap(new DollarList(ImmutableList.of(vars)));
+    }
+
+    /**
+     * From stream.
+     *
+     * @param type    the type
+     * @param rawBody the raw body
+     * @return the var
+     * @throws IOException the iO exception
+     */
+    @NotNull
+    public static var fromStream(@NotNull SerializedType type, @NotNull InputStream rawBody) throws IOException {
+        if (type == SerializedType.JSON) {
+            ObjectMapper mapper = new ObjectMapper();
+            final JsonNode jsonNode = mapper.readTree(rawBody);
+            if (jsonNode.isArray()) {
+                return create(jsonNode);
+            } else if (jsonNode.isObject()) {
+                return create(jsonNode);
+            } else {
+                throw new DollarException("Could not deserialize JSON, not array or object");
+            }
+        } else {
+            throw new DollarException("Could not deserialize " + type);
+        }
+    }
+
+    /**
+     * From string value.
+     *
+     * @param body the body
+     * @return the var
+     */
+    @NotNull
+    public static var fromStringValue(@NotNull String body) {
+        return wrap(new DollarString(body));
+    }
+
+
+    /**
+     * From uRI.
+     *
+     * @param from the from
+     * @return the var
+     */
+    @NotNull
+    public static var fromURI(@NotNull var from) {
+        if (from.uri()) {
+            return from;
+        } else {
+            return fromURI(from.$S());
+        }
+    }
+
+    /**
+     * From uRI.
+     *
+     * @param uri the uri
+     * @return the var
+     */
+    @NotNull
+    public static var fromURI(@NotNull String uri) {
+        try {
+            return wrap(new DollarURI(URI.parse(uri)));
+        } catch (Exception e) {
+            return DollarStatic.handleError(e, null);
+        }
+    }
+
+
+    /**
+     * From value.
+     *
+     * @return the var
+     */
+    @NotNull
+    public static var fromValue() {
+        return create(new JsonObject());
+    }
+
+    /**
+     * From value.
+     *
+     * @param o the o
+     * @return the var
+     */
+    @NotNull
+    public static var fromValue(@Nullable Object o) {
+        return create(o);
+    }
+
+    @NotNull
+    public static var fromYaml(@NotNull String yamlString) {
+        Yaml yaml = new Yaml();
+        return wrap(fromValue(yaml.load(yamlString)));
+    }
+
+    @NotNull
+    public static var fromYaml(@NotNull File yamlFile) {
+        Yaml yaml = new Yaml();
+        try (FileInputStream fileInputStream = new FileInputStream(yamlFile)) {
+            return wrap(fromValue(yaml.load(fileInputStream)));
+        } catch (IOException e) {
+            return failure(e);
+        }
+    }
+
+    @NotNull
+    public static var infinity(boolean positive) {
+        return wrap(new DollarInfinity(positive));
+    }
+
+    @Nullable
+    private static Object mapToJsonInternal(@NotNull var value) {
+        final JsonObject json = new JsonObject();
+        ImmutableMap<var, var> map = value.toVarMap();
+        final Set<var> fieldNames = map.keySet();
+        for (var fieldName : fieldNames) {
+            var v = map.get(fieldName);
+            json.putValue(fieldName.toString(), toJson(v));
+        }
+        return json;
+    }
+
+    @NotNull
+    private static List<Throwable> mergeErrors(@NotNull ImmutableList<Throwable>[] errors) {
+        List<Throwable> mergedErrors = new ArrayList<>();
+        for (ImmutableList<Throwable> errorList : errors) {
+            mergedErrors.addAll(errorList);
+        }
+        return mergedErrors;
+    }
+
+    @SafeVarargs
+    @NotNull
+    public static var newNull(@NotNull Type type, ImmutableList<Throwable>... errors) {
+        return new DollarNull(ImmutableList.copyOf(mergeErrors(errors)), type);
+    }
+
+    /**
+     * New void.
+     *
+     * @return the var
+     */
+    @NotNull
+    public static var newVoid() {
+        return wrap(new DollarVoid());
+    }
+
+    /**
      * Serialize string.
      *
      * @param value the value
@@ -719,14 +733,6 @@ public final class DollarFactory {
     public static String serialize(@NotNull var value) {
         final Object jsonObject = toJson(value.$fixDeep());
         return (jsonObject == null) ? null : jsonObject.toString();
-    }
-
-    @NotNull
-    private static JsonObject valueToJson(@NotNull var value) {
-        final JsonObject jsonObject = new JsonObject();
-        jsonObject.putString(TYPE_KEY, value.$type().name());
-        jsonObject.putValue(VALUE_KEY, value.toJavaObject());
-        return jsonObject;
     }
 
     /**
@@ -791,85 +797,40 @@ public final class DollarFactory {
     }
 
     @NotNull
-    @Nullable
-    private static Object mapToJsonInternal(@NotNull var value) {
-        final JsonObject json = new JsonObject();
-        ImmutableMap<var, var> map = value.toVarMap();
-        final Set<var> fieldNames = map.keySet();
-        for (var fieldName : fieldNames) {
-            var v = map.get(fieldName);
-            json.putValue(fieldName.toString(), toJson(v));
-        }
-        return json;
+    private static JsonObject valueToJson(@NotNull var value) {
+        final JsonObject jsonObject = new JsonObject();
+        jsonObject.putString(TYPE_KEY, value.$type().name());
+        jsonObject.putValue(VALUE_KEY, value.toJavaObject());
+        return jsonObject;
     }
 
     /**
-     * From range.
+     * Wrap var.
      *
-     * @param from the from
-     * @param to   the to
+     * @param value the value
      * @return the var
      */
     @NotNull
-    public static var fromRange(@NotNull var from,
-                                @NotNull var to) {
-        return wrap(new DollarRange(ImmutableList.of(), from, to));
-    }
-
-    @SafeVarargs
-    @NotNull
-    public static var infinity(boolean positive, ImmutableList<Throwable>... errors) {
-        return wrap(new DollarInfinity(ImmutableList.copyOf(mergeErrors(errors)), positive));
-    }
-
-    @SafeVarargs
-    @NotNull
-    public static var newNull(@NotNull Type type, ImmutableList<Throwable>... errors) {
-        return new DollarNull(ImmutableList.copyOf(mergeErrors(errors)), type);
+    public static var wrap(@NotNull var value) {
+        return wrap(value, DollarStatic.monitor(), DollarStatic.tracer());
     }
 
     @NotNull
-    public static var fromYaml(@NotNull String yamlString) {
-        Yaml yaml = new Yaml();
-        return wrap(fromValue(yaml.load(yamlString)));
-    }
-
-    @NotNull
-    public static var fromYaml(@NotNull File yamlFile) {
-        Yaml yaml = new Yaml();
-        try (FileInputStream fileInputStream = new FileInputStream(yamlFile)) {
-            return wrap(fromValue(yaml.load(fileInputStream)));
-        } catch (IOException e) {
-            return failure(e);
+    private static var wrap(@NotNull var value, @NotNull DollarMonitor monitor, @NotNull StateTracer tracer) {
+        final var val;
+        if (DollarStatic.getConfig().wrapForMonitoring()) {
+            val = new DollarWrapper(value, monitor, tracer);
+        } else {
+            val = value;
         }
-    }
+        if (DollarStatic.getConfig().wrapForGuards()) {
+            return (var) java.lang.reflect.Proxy.newProxyInstance(
+                    DollarStatic.class.getClassLoader(),
+                    new Class<?>[]{var.class},
+                    new DollarGuard(val));
+        } else {
+            return val;
+        }
 
-    @NotNull
-    public static var fromMap(@NotNull ImmutableMap<var, var> entries) {
-        return wrap(new DollarMap(ImmutableList.of(), entries));
-    }
-
-    @NotNull
-    public static var fromList(@NotNull ImmutableList<var> vars) {
-        return wrap(new DollarList(ImmutableList.of(), vars));
-    }
-
-    @NotNull
-    public static var fromList(@NotNull List<var> vars) {
-        return wrap(new DollarList(ImmutableList.of(), ImmutableList.copyOf(vars)));
-    }
-
-    @NotNull
-    public static var fromQueue(@NotNull LinkedBlockingDeque<var> linkedBlockingDeque) {
-        return wrap(new DollarQueue(ImmutableList.of(), linkedBlockingDeque));
-    }
-
-    public static var fromPair(@NotNull Object k, @NotNull Object v) {
-        ImmutableList<Throwable> empty = ImmutableList.of();
-        return wrap(new DollarMap(empty, ImmutableMap.of(create(empty, k), create(empty, v))));
-    }
-
-    public static var fromSet(@NotNull Set<var> vars) {
-        return wrap(new DollarList(ImmutableList.of(), ImmutableList.of(vars)));
     }
 }

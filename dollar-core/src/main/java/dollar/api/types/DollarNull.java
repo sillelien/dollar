@@ -35,12 +35,12 @@ public class DollarNull extends AbstractDollar {
 
 
     public DollarNull(@NotNull ImmutableList<Throwable> errors, @NotNull Type type) {
-        super(errors);
+        super();
         this.type = type;
     }
 
     public DollarNull(@NotNull Type type) {
-        super(ImmutableList.of());
+        super();
         this.type = type;
     }
 

@@ -16,7 +16,6 @@
 
 package dollar.api.types;
 
-import com.google.common.collect.ImmutableList;
 import dollar.api.DollarStatic;
 import dollar.api.Type;
 import dollar.api.exceptions.DollarFailureException;
@@ -43,8 +42,8 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     private static final int MAX_STRING_LENGTH = Integer.MAX_VALUE;
 
-    public DollarString(@NotNull ImmutableList<Throwable> errors, @NotNull String value) {
-        super(errors, value);
+    public DollarString(@NotNull String value) {
+        super(value);
     }
 
     @NotNull
@@ -62,13 +61,13 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @NotNull
     @Override
     public var $minus(@NotNull var rhs) {
-        return DollarFactory.fromStringValue(value.replace(rhs.toString(), ""), errors(), rhs.errors());
+        return DollarFactory.fromStringValue(value.replace(rhs.toString(), ""));
     }
 
     @NotNull
     @Override
     public var $negate() {
-        return DollarFactory.fromValue(new StringBuilder(value).reverse().toString(), errors());
+        return DollarFactory.fromValue(new StringBuilder(value).reverse().toString());
     }
 
     @NotNull
@@ -84,23 +83,22 @@ public class DollarString extends AbstractDollarSingleValue<String> {
                     return this;
                 }
 
-                return DollarFactory.fromValue(Arrays.asList(split), errors(), rhsFix.errors());
+                return DollarFactory.fromValue(Arrays.asList(split));
             } catch (PatternSyntaxException pse) {
                 return failure(BAD_REGEX, pse, false);
             }
         } else if (rhsFix.number()) {
             if (rhsFix.toDouble() == 0.0) {
-                return DollarFactory.infinity(true, errors(), rhsFix.errors());
+                return DollarFactory.infinity(true);
             }
             if ((rhsFix.toDouble() > 0.0) && (rhsFix.toDouble() < 1.0)) {
-                return $multiply(DollarFactory.fromValue(1.0 / rhsFix.toDouble(), rhs.errors()));
+                return $multiply(DollarFactory.fromValue(1.0 / rhsFix.toDouble()));
             }
             if (rhsFix.toDouble() < 0) {
                 return this;
             }
             return DollarFactory.fromStringValue(
-                    value.substring(0, (int) ((double) value.length() / rhsFix.toDouble())), errors(),
-                    rhsFix.errors());
+                    value.substring(0, (int) ((double) value.length() / rhsFix.toDouble())));
         } else {
             return this;
         }
@@ -126,10 +124,10 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         var rhsFix = rhs.$fixDeep();
         if (rhsFix.number()) {
             if (rhsFix.toDouble() == 0.0) {
-                return DollarFactory.fromStringValue("", errors(), rhsFix.errors());
+                return DollarFactory.fromStringValue("");
             }
             if ((rhsFix.toDouble() > 0.0) && (rhsFix.toDouble() < 1.0)) {
-                return $divide(DollarFactory.fromValue(1.0 / rhsFix.toDouble(), rhs.errors()));
+                return $divide(DollarFactory.fromValue(1.0 / rhsFix.toDouble()));
             }
             if (rhsFix.toInteger() < 0) {
                 return this;
@@ -144,7 +142,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         for (int i = 0; i < max; i++) {
             newValue.append(value);
         }
-        return DollarFactory.fromValue(newValue.toString(), errors());
+        return DollarFactory.fromValue(newValue.toString());
     }
 
     @NotNull
@@ -216,7 +214,7 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     @NotNull
     @Override
     public var $plus(@NotNull var rhs) {
-        return DollarFactory.wrap(new DollarString(ImmutableList.copyOf(errors()), value + rhs.$S()));
+        return DollarFactory.wrap(new DollarString(value + rhs.$S()));
     }
 
     @NotNull

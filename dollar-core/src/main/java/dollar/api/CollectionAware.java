@@ -33,13 +33,11 @@ public interface CollectionAware {
     }
 
     @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    var $get(@NotNull var rhs);
-
-    @NotNull
     @Guarded(NotNullGuard.class)
     var $append(@NotNull var value);
+
+    @Guarded(ChainGuard.class)
+    var $avg(boolean parallel);
 
     @NotNull
     @Guarded(ChainGuard.class)
@@ -47,54 +45,6 @@ public interface CollectionAware {
     default var $contains(@NotNull var value) {
         return $containsValue(value);
     }
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    default var $contains(@NotNull Object value) {
-        return $containsValue($(value));
-    }
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    default boolean contains(@NotNull Object value) {
-        return $containsValue($(value)).isTrue();
-    }
-
-    @NotNull
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    default boolean contains(@NotNull var value) {
-        return $containsValue(value).isTrue();
-    }
-
-    @Guarded(ChainGuard.class)
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    var $containsValue(@NotNull var value);
-
-    @Guarded(ChainGuard.class)
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    default var $containsValue(@NotNull Object value) {
-        return $containsValue(DollarStatic.$(value));
-    }
-
-    @Guarded(ChainGuard.class)
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    default boolean containsValue(@NotNull Object value) {
-        return $containsValue(DollarStatic.$(value)).isTrue();
-    }
-
-    @Guarded(ChainGuard.class)
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    default boolean containsValue(@NotNull var value) {
-        return $containsValue(value).isTrue();
-    }
-
 
     @Guarded(ChainGuard.class)
     @NotNull
@@ -111,16 +61,19 @@ public interface CollectionAware {
     @Guarded(ChainGuard.class)
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    default boolean containsKey(@NotNull Object value) {
-        return $containsKey(DollarStatic.$(value)).isTrue();
-    }
+    var $containsValue(@NotNull var value);
 
     @Guarded(ChainGuard.class)
     @NotNull
     @Guarded(NotNullParametersGuard.class)
-    default boolean containsKey(@NotNull var value) {
-        return $containsKey(value).isTrue();
+    default var $containsValue(@NotNull Object value) {
+        return $containsValue(DollarStatic.$(value));
     }
+
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
+    var $get(@NotNull var rhs);
 
     /**
      * Convenience method for the Java API. Returns true if this object has the supplied key.
@@ -144,16 +97,9 @@ public interface CollectionAware {
     @Guarded(NotNullParametersGuard.class)
     var $has(@NotNull var key);
 
-    /**
-     * Returns a boolean  which is true if this is empty.
-     *
-     * @return true if it is empty.
-     */
     @NotNull
-    @Guarded(ChainGuard.class)
-    default boolean isEmpty() {
-        return size() == 0;
-    }
+    @Guarded(NotNullGuard.class)
+    var $insert(@NotNull var value, int position);
 
     /**
      * Returns a boolean var which is true if this is empty.
@@ -166,18 +112,40 @@ public interface CollectionAware {
         return DollarStatic.$($size().toInteger() == 0);
     }
 
-
-    @NotNull
     @Guarded(ChainGuard.class)
-    var $size();
+    var $max(boolean parallel);
+
+    @Guarded(ChainGuard.class)
+    var $min(boolean parallel);
 
     @NotNull
     @Guarded(NotNullGuard.class)
     var $prepend(@NotNull var value);
 
+    @Guarded(ChainGuard.class)
+    var $product(boolean parallel);
+
+    /**
+     * Convenience version of {@link #$remove(var)}
+     *
+     * @param valueToRemove the value to be removed.
+     * @return a new var with the value removed.
+     */
+    @Nullable
+    @Guarded(ChainGuard.class)
+    default var $remove(@NotNull Object valueToRemove) {
+        return $remove(DollarStatic.$(valueToRemove));
+    }
+
+    /**
+     * Return a new version of this object with the supplied value removed. THe removal is type specific.
+     *
+     * @param valueToRemove the value to remove.
+     * @return a new object with the value removed.
+     */
     @NotNull
-    @Guarded(NotNullGuard.class)
-    var $insert(@NotNull var value, int position);
+    @Guarded(ChainGuard.class)
+    var $remove(@NotNull var valueToRemove);
 
     /**
      * Remove by key. (Map like data only).
@@ -187,6 +155,9 @@ public interface CollectionAware {
      */
     @NotNull
     var $removeByKey(@NotNull String key);
+
+    @Guarded(ChainGuard.class)
+    var $reverse(boolean parallel);
 
     @NotNull
     default var $set(@NotNull String key, @Nullable Object value) {
@@ -205,18 +176,57 @@ public interface CollectionAware {
     @Guarded(ChainGuard.class)
     var $set(@NotNull var key, @Nullable Object value);
 
-    /**
-     * Convenience version of {@link #$remove(var)}
-     *
-     * @param valueToRemove the value to be removed.
-     * @return a new var with the value removed.
-     */
-    @Nullable
+    @NotNull
     @Guarded(ChainGuard.class)
-    default var $remove(@NotNull Object valueToRemove) {
-        return $remove(DollarStatic.$(valueToRemove));
+    var $size();
+
+    @Guarded(ChainGuard.class)
+    var $sort(boolean parallel);
+
+    @Guarded(ChainGuard.class)
+    var $sum(boolean parallel);
+
+    @Guarded(ChainGuard.class)
+    var $unique(boolean parallel);
+
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
+    default boolean contains(@NotNull Object value) {
+        return $containsValue($(value)).isTrue();
     }
 
+    @NotNull
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
+    default boolean contains(@NotNull var value) {
+        return $containsValue(value).isTrue();
+    }
+
+    @Guarded(ChainGuard.class)
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    default boolean containsKey(@NotNull Object value) {
+        return $containsKey(DollarStatic.$(value)).isTrue();
+    }
+
+    @Guarded(ChainGuard.class)
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    default boolean containsKey(@NotNull var value) {
+        return $containsKey(value).isTrue();
+    }
+
+    /**
+     * Returns a boolean  which is true if this is empty.
+     *
+     * @return true if it is empty.
+     */
+    @NotNull
+    @Guarded(ChainGuard.class)
+    default boolean isEmpty() {
+        return size() == 0;
+    }
 
     /**
      * Convenience version of {@link #$remove(var)} for the Java API.
@@ -230,39 +240,5 @@ public interface CollectionAware {
         return $remove(DollarStatic.$(valueToRemove)).toJavaObject();
     }
 
-    /**
-     * Return a new version of this object with the supplied value removed. THe removal is type specific.
-     *
-     * @param valueToRemove the value to remove.
-     * @return a new object with the value removed.
-     */
-    @NotNull
-    @Guarded(ChainGuard.class)
-    var $remove(@NotNull var valueToRemove);
-
     int size();
-
-    @Guarded(ChainGuard.class)
-    var $min(boolean parallel);
-
-    @Guarded(ChainGuard.class)
-    var $max(boolean parallel);
-
-    @Guarded(ChainGuard.class)
-    var $sum(boolean parallel);
-
-    @Guarded(ChainGuard.class)
-    var $avg(boolean parallel);
-
-    @Guarded(ChainGuard.class)
-    var $reverse(boolean parallel);
-
-    @Guarded(ChainGuard.class)
-    var $sort(boolean parallel);
-
-    @Guarded(ChainGuard.class)
-    var $unique(boolean parallel);
-
-    @Guarded(ChainGuard.class)
-    var $product(boolean parallel);
 }

@@ -41,13 +41,13 @@ import java.util.UUID;
 
 public class DollarURI extends AbstractDollar {
 
+    private final transient @NotNull URIHandler handler;
     private final transient @NotNull StateMachine<ResourceState, Signal> stateMachine;
     private final @NotNull URI uri;
-    private final transient @NotNull URIHandler handler;
 
 
-    public DollarURI(@NotNull ImmutableList<Throwable> errors, @NotNull URI uri) {
-        super(errors);
+    public DollarURI(@NotNull URI uri) {
+        super();
         this.uri = uri;
         String scheme = uri.scheme();
         try {
@@ -129,13 +129,160 @@ public class DollarURI extends AbstractDollar {
         return 0;
     }
 
-    private void ensureRunning() {
-        if (stateMachine.isInState(ResourceState.INITIAL)) {
-            stateMachine.fire(Signal.START);
-        }
-        if (!stateMachine.isInState(ResourceState.RUNNING)) {
-            throw new DollarException("Resource is in state " + stateMachine.getState() + " should be RUNNING");
-        }
+    @NotNull
+
+    @Override
+    public var $all() {
+        ensureRunning();
+        return handler.all();
+    }
+
+    @NotNull
+    @Override
+    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
+        ensureRunning();
+        return handler.write(value, blocking, mutating);
+    }
+
+    @NotNull
+    @Override
+    public var $drain() {
+        ensureRunning();
+        return handler.drain();
+    }
+
+    @NotNull
+    @Override
+    public var $read(boolean blocking, boolean mutating) {
+        ensureRunning();
+        return handler.read(blocking, mutating);
+    }
+
+    @NotNull
+    @Override
+    public var $publish(@NotNull var lhs) {
+        ensureRunning();
+        return handler.publish(lhs);
+    }
+
+    @NotNull
+    @Override
+    public var $each(@NotNull Pipeable pipe) {
+        return super.$each(pipe);
+    }
+
+    @NotNull
+    @Override
+    public StateMachine<ResourceState, Signal> getStateMachine() {
+        return stateMachine;
+    }
+
+    @NotNull
+    @Override
+    public var $notify() {
+        ensureRunning();
+        return handler.write(this, false, false);
+    }
+
+    @Override
+    public boolean uri() {
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), uri);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if ((o == null) || (getClass() != o.getClass())) return false;
+        if (!super.equals(o)) return false;
+        DollarURI dollarURI = (DollarURI) o;
+        return Objects.equals(uri, dollarURI.uri);
+    }
+
+    @NotNull
+    @Override
+    public var $append(@NotNull var value) {
+        return handler.append(DollarStatic.$(value));
+    }
+
+    @NotNull
+    @Override
+    public var $containsKey(@NotNull var value) {
+        return DollarStatic.$(false);
+    }
+
+    @Override
+    @NotNull
+    public var $containsValue(@NotNull var value) {
+        return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public var $get(@NotNull var key) {
+        ensureRunning();
+        return handler.get(key);
+    }
+
+    @NotNull
+    @Override
+    public var $has(@NotNull var key) {
+        ensureRunning();
+        return DollarStatic.$(!handler.get(key).isVoid());
+    }
+
+    @NotNull
+    @Override
+    public var $insert(@NotNull var value, int position) {
+        return handler.insert(DollarStatic.$(value));
+    }
+
+    @NotNull
+    @Override
+    public var $prepend(@NotNull var value) {
+        return handler.prepend(DollarStatic.$(value));
+    }
+
+    @NotNull
+    @Override
+    public var $remove(@NotNull var key) {
+        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
+
+    }
+
+    @NotNull
+    @Override
+    public var $removeByKey(@NotNull String key) {
+        ensureRunning();
+        return handler.remove(DollarStatic.$(key));
+
+    }
+
+    @NotNull
+    @Override
+    public var $set(@NotNull var key, @Nullable Object value) {
+        ensureRunning();
+
+        return handler.set(DollarStatic.$(key), DollarStatic.$(value));
+
+    }
+
+    @NotNull
+    @Override
+    public var $size() {
+        ensureRunning();
+        return DollarStatic.$(handler.size());
+    }
+
+    @NotNull
+    @Override
+    public int size() {
+        ensureRunning();
+        return handler.size();
     }
 
     @NotNull
@@ -221,180 +368,6 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public String toHumanString() {
-        return uri.toString();
-    }
-
-    @NotNull
-    @Override
-    public String toDollarScript() {
-        return String.format("(\"%s\" as Uri)", org.apache.commons.lang.StringEscapeUtils.escapeJava(uri.toString()));
-    }
-
-    @NotNull
-    @Override
-    public <R> R toJavaObject() {
-        return (R) uri;
-    }
-
-    @NotNull
-
-    @Override
-    public var $all() {
-        ensureRunning();
-        return handler.all();
-    }
-
-    @NotNull
-    @Override
-    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
-        ensureRunning();
-        return handler.write(value, blocking, mutating);
-    }
-
-    @NotNull
-    @Override
-    public var $drain() {
-        ensureRunning();
-        return handler.drain();
-    }
-
-    @NotNull
-    @Override
-    public var $read(boolean blocking, boolean mutating) {
-        ensureRunning();
-        return handler.read(blocking, mutating);
-    }
-
-    @NotNull
-    @Override
-    public var $publish(@NotNull var lhs) {
-        ensureRunning();
-        return handler.publish(lhs);
-    }
-
-    @NotNull
-    @Override
-    public var $each(@NotNull Pipeable pipe) {
-        return super.$each(pipe);
-    }
-
-    @NotNull
-    @Override
-    public StateMachine<ResourceState, Signal> getStateMachine() {
-        return stateMachine;
-    }
-
-    @NotNull
-    @Override
-    public var $notify() {
-        ensureRunning();
-        return handler.write(this, false, false);
-    }
-
-    @Override
-    public boolean uri() {
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), uri);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if ((o == null) || (getClass() != o.getClass())) return false;
-        if (!super.equals(o)) return false;
-        DollarURI dollarURI = (DollarURI) o;
-        return Objects.equals(uri, dollarURI.uri);
-    }
-
-    @NotNull
-    @Override
-    public var $get(@NotNull var key) {
-        ensureRunning();
-        return handler.get(key);
-    }
-
-    @NotNull
-    @Override
-    public var $append(@NotNull var value) {
-        return handler.append(DollarStatic.$(value));
-    }
-
-    @Override
-    @NotNull
-    public var $containsValue(@NotNull var value) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public var $containsKey(@NotNull var value) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public var $has(@NotNull var key) {
-        ensureRunning();
-        return DollarStatic.$(!handler.get(key).isVoid());
-    }
-
-    @NotNull
-    @Override
-    public var $size() {
-        ensureRunning();
-        return DollarStatic.$(handler.size());
-    }
-
-    @NotNull
-    @Override
-    public var $prepend(@NotNull var value) {
-        return handler.prepend(DollarStatic.$(value));
-    }
-
-    @NotNull
-    @Override
-    public var $insert(@NotNull var value, int position) {
-        return handler.insert(DollarStatic.$(value));
-    }
-
-    @NotNull
-    @Override
-    public var $removeByKey(@NotNull String key) {
-        ensureRunning();
-        return handler.remove(DollarStatic.$(key));
-
-    }
-
-    @NotNull
-    @Override
-    public var $set(@NotNull var key, @Nullable Object value) {
-        ensureRunning();
-
-        return handler.set(DollarStatic.$(key), DollarStatic.$(value));
-
-    }
-
-    @NotNull
-    @Override
-    public var $remove(@NotNull var key) {
-        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
-
-    }
-
-    @NotNull
-    @Override
-    public int size() {
-        ensureRunning();
-        return handler.size();
-    }
-
-    @NotNull
-    @Override
     public var $subscribe(@NotNull Pipeable pipe) {
         return $subscribe(pipe, null);
     }
@@ -427,6 +400,15 @@ public class DollarURI extends AbstractDollar {
         return Comparator.<String>naturalOrder().compare(uri.toString(), o.toString());
     }
 
+    private void ensureRunning() {
+        if (stateMachine.isInState(ResourceState.INITIAL)) {
+            stateMachine.fire(Signal.START);
+        }
+        if (!stateMachine.isInState(ResourceState.RUNNING)) {
+            throw new DollarException("Resource is in state " + stateMachine.getState() + " should be RUNNING");
+        }
+    }
+
     @Override
     public boolean isBoolean() {
         return false;
@@ -450,5 +432,23 @@ public class DollarURI extends AbstractDollar {
     @Override
     public boolean truthy() {
         return handler != null;
+    }
+
+    @NotNull
+    @Override
+    public String toDollarScript() {
+        return String.format("(\"%s\" as Uri)", org.apache.commons.lang.StringEscapeUtils.escapeJava(uri.toString()));
+    }
+
+    @NotNull
+    @Override
+    public String toHumanString() {
+        return uri.toString();
+    }
+
+    @NotNull
+    @Override
+    public <R> R toJavaObject() {
+        return (R) uri;
     }
 }
