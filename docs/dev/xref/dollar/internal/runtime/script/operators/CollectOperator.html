@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a>                            log.debug(<span class="jxr_string">"Collected {}"</span>, fromList(collected));
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>                            <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> endValue = (until != <strong class="jxr_keyword">null</strong>) &amp;&amp; until.isTrue();
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>                            <strong class="jxr_keyword">if</strong> (endValue) {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>                                returnValue = loop.$fixDeep(currentScope().parallel());
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>                                returnValue = loop.$fixDeep(false);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a>                                collected.clear();
 <a class="jxr_linenumber" name="L133" href="#L133">133</a>                                count.set(-1);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>                                log.debug(<span class="jxr_string">"Return value  {}"</span>, returnValue);
