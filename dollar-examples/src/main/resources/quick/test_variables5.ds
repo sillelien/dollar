@@ -1,0 +1,8 @@
+//Using the _ prefix to avoid clashing with keywords
+var _map= {
+    "in": 1,
+}
+
+var _in= map._in
+_in <=> 1
+

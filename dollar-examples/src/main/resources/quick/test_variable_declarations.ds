@@ -1,0 +1,19 @@
+class Dummy {
+    <String> dummy1= "";
+}
+
+<Dummy> declaredVarByType1= new Dummy();
+<String> declaredVarByType2= "Hello World";
+(it > 10) declaredVarByConstraint= 200;
+
+var declaredVarByMutability1= 10;
+const declaredVarByMutability2= 10;
+volatile declaredVarByMutability3= 10;
+
+
+@@ declaredVarByType1
+@@ declaredVarByType2
+@@ declaredVarByConstraint
+@@ declaredVarByMutability1
+@@ declaredVarByMutability2
+@@ declaredVarByMutability3

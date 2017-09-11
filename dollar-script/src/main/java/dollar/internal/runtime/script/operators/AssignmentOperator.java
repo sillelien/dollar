@@ -91,7 +91,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
         boolean constant;
         boolean isVolatile;
         final Object mutability = objects[1];
-        boolean declaration = mutability != null;
+        boolean declaration = (mutability != null) || (objects[2] instanceof var) || (objects[3] instanceof var);
         constant = (mutability != null) && "const".equals(mutability.toString());
         isVolatile = (mutability != null) && "volatile".equals(mutability.toString());
         if (((var) objects[4]).metaAttribute(IS_BUILTIN) != null) {

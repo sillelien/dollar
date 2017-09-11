@@ -150,7 +150,7 @@ public class ParserQuickTest {
     @ValueSource(
 //            "bulletin.ds",
 //            "example.ds",
-            strings = {"quick/test_print1.ds", "quick/test_classes.ds", "quick/test_variables.ds", "quick/test_date.ds", "quick/test_block_closure.ds", "quick/test_list_closure.ds", "quick/test_map_closure.ds", "quick/test_scopes.ds",
+            strings = {"quick/test_variable_declarations.ds", "quick/test_print1.ds", "quick/test_classes.ds", "quick/test_variables1.ds", "quick/test_variables2.ds", "quick/test_variables3.ds", "quick/test_variables4.ds", "quick/test_variables5.ds", "quick/test_date.ds", "quick/test_block_closure.ds", "quick/test_list_closure.ds", "quick/test_map_closure.ds", "quick/test_scopes.ds",
                               "quick/test1.ds",
                               "quick/test_arrays.ds", "quick/test_builtins.ds", "quick/test_casting.ds", "quick/test_date.ds", "quick/test_fix1.ds",
                               "quick/test_fix2.ds", "quick/test_fix3.ds", "quick/test_iteration.ds", "quick/test_java.ds", "quick/test_logic.ds",

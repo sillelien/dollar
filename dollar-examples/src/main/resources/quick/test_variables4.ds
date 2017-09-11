@@ -1,0 +1,8 @@
+
+//Dynamically named variable
+var $("a"+"b")=2
+ab <=> 2
+
+
+
+

@@ -1,0 +1,21 @@
+
+//Variable constraints
+def string (it is String)
+var (string) d="test"
+
+var <String> f="testing"
+
+
+var (previous != it || previous is Void) e = 1
+@@e
+e=2
+e=3
+
+var errorOccured= false
+
+&{
+    error { @@ "Caught "+type ; errorOccured= true}
+    @@ "*******"
+    e=3
+}
+
