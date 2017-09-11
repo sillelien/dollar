@@ -1,5 +1,14 @@
 # Change Log
 
+## [0.3.4792](https://github.com/sillelien/dollar/tree/0.3.4792) (2017-09-11)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4787...0.3.4792)
+
+## [0.3.4787](https://github.com/sillelien/dollar/tree/0.3.4787) (2017-09-11)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4778...0.3.4787)
+
+## [0.3.4778](https://github.com/sillelien/dollar/tree/0.3.4778) (2017-09-11)
+[Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4763...0.3.4778)
+
 ## [0.3.4763](https://github.com/sillelien/dollar/tree/0.3.4763) (2017-09-11)
 [Full Changelog](https://github.com/sillelien/dollar/compare/0.3.4748...0.3.4763)
 
