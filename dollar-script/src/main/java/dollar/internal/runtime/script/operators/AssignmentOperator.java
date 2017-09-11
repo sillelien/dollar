@@ -113,8 +113,8 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                     useConstraint = finalConstraint;
                     useSource = constraintSource;
                 } else {
-                    useConstraint = scope.constraint(varName);
-                    useSource = scope.constraintLabel(varName);
+                    useConstraint = scope.constraintOf(varName);
+                    useSource = scope.subTypeOf(varName);
                 }
                 List<var> inputs = Arrays.asList(rhs, constrain(scope, rhs, finalConstraint, useSource));
                 if ("when".equals(op)) {
@@ -179,8 +179,8 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                 useConstraint = constraint;
                 useSource = constraintSource;
             } else {
-                useConstraint = varScope.constraint(varName);
-                useSource = varScope.constraintLabel(varName);
+                useConstraint = varScope.constraintOf(varName);
+                useSource = varScope.subTypeOf(varName);
             }
             //Don't change this value, 2 is the 'instinctive' depth a programmer would expect
             final var rhsFixed = rhs.$fix(2, false);

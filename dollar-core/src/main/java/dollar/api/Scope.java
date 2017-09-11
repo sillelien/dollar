@@ -30,9 +30,21 @@ public interface Scope {
         String getId();
     }
 
+    /**
+     * Adds an error handler to the scope
+     *
+     * @param handler the var to be {@link var#$fixDeep()} on error occuring
+     * @return the handler
+     */
     @NotNull
     var addErrorHandler(@NotNull var handler);
 
+    /**
+     * Add a value listener for a variable.
+     *
+     * @param key      the name of the variable
+     * @param listener the listener
+     */
     void addListener(@NotNull String key, @NotNull Listener listener);
 
     /**
@@ -40,20 +52,20 @@ public interface Scope {
      */
     void clear();
 
-    @Nullable var constraint(@NotNull String key);
+    @Nullable var constraintOf(@NotNull String key);
 
     /**
-     * Returns the constraint label for a given variable
+     * Returns a deep copy of this scope
      *
-     * @param key
-     * @return an arbitrary String that is used to label the constraint on the given variable
+     * @return a deep copy of this scope
      */
-    @Nullable
-    SubType constraintLabel(@NotNull String key);
-
     @NotNull
     Scope copy();
 
+    /**
+     * Mark this scope as destroyed.
+     */
+    @Deprecated
     void destroy();
 
     /**
@@ -189,7 +201,6 @@ public interface Scope {
      */
     void notifyScope(@NotNull String key, @NotNull var value);
 
-
     /**
      * Gets the value of a parameter from this scope or it's ancestors.
      *
@@ -269,6 +280,15 @@ public interface Scope {
      * @return the source code
      */
     @Nullable String source();
+
+    /**
+     * Returns the sub type for a given variable
+     *
+     * @param key the name of the variable
+     * @return get the subtype (computed from the constraint) of a given variable
+     */
+    @Nullable
+    SubType subTypeOf(@NotNull String key);
 
     /**
      * Returns the details of a variable.

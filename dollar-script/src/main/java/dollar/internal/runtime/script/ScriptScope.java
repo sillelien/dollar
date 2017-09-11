@@ -186,7 +186,7 @@ public class ScriptScope implements Scope {
 
     @Nullable
     @Override
-    public var constraint(@NotNull String k) {
+    public var constraintOf(@NotNull String k) {
         checkDestroyed();
 
         String key = removePrefix(k);
@@ -200,26 +200,6 @@ public class ScriptScope implements Scope {
         if (scope.variables().containsKey(key) && (scope.variables().get(
                 key).getConstraint() != null)) {
             return scope.variables().get(key).getConstraint();
-        }
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public SubType constraintLabel(@NotNull String k) {
-        checkDestroyed();
-
-        String key = removePrefix(k);
-        Scope scope = scopeForKey(key);
-        if (scope == null) {
-            scope = this;
-        }
-        if (getConfig().debugScope()) {
-            log.info("Getting constraint for {} in {}", key, scope);
-        }
-        if (scope.variables().containsKey(key) && (scope.variables().get(
-                key).getConstraintLabel() != null)) {
-            return scope.variables().get(key).getConstraintLabel();
         }
         return null;
     }
@@ -710,6 +690,26 @@ public class ScriptScope implements Scope {
     @Override
     public String source() {
         return source;
+    }
+
+    @Nullable
+    @Override
+    public SubType subTypeOf(@NotNull String k) {
+        checkDestroyed();
+
+        String key = removePrefix(k);
+        Scope scope = scopeForKey(key);
+        if (scope == null) {
+            scope = this;
+        }
+        if (getConfig().debugScope()) {
+            log.info("Getting constraint for {} in {}", key, scope);
+        }
+        if (scope.variables().containsKey(key) && (scope.variables().get(
+                key).getConstraintLabel() != null)) {
+            return scope.variables().get(key).getConstraintLabel();
+        }
+        return null;
     }
 
     @NotNull
