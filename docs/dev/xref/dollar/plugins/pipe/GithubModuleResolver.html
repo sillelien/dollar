@@ -185,13 +185,13 @@
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>             <strong class="jxr_keyword">final</strong> File moduleFile = <strong class="jxr_keyword">new</strong> File(dir, <span class="jxr_string">"module.json"</span>);
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> module = DollarStatic.$(<strong class="jxr_keyword">new</strong> String(Files.readAllBytes(moduleFile.toPath())));
-<a class="jxr_linenumber" name="L180" href="#L180">180</a>             mainFile = <strong class="jxr_keyword">new</strong> File(dir, module.$(<span class="jxr_string">"main"</span>).$S());
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>             mainFile = <strong class="jxr_keyword">new</strong> File(dir, module.$get(DollarStatic.$(<span class="jxr_string">"main"</span>)).$S());
 <a class="jxr_linenumber" name="L181" href="#L181">181</a>             content = <strong class="jxr_keyword">new</strong> String(Files.readAllBytes(mainFile.toPath()));
 <a class="jxr_linenumber" name="L182" href="#L182">182</a>             classLoader =
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>                     DependencyRetriever.retrieve(module.$(<span class="jxr_string">"dependencies"</span>)
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>                     DependencyRetriever.retrieve(module.$get(DollarStatic.$(<span class="jxr_string">"dependencies"</span>))
 <a class="jxr_linenumber" name="L184" href="#L184">184</a>                                                          .$list()
 <a class="jxr_linenumber" name="L185" href="#L185">185</a>                                                          .$stream(false)
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>                                                          .map(<strong class="jxr_keyword">var</strong>::toString)
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>                                                          .map(t -&gt; module.toString())
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>                                                          .collect(Collectors.toList()));
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 
 <a class="jxr_linenumber" name="L189" href="#L189">189</a>         }

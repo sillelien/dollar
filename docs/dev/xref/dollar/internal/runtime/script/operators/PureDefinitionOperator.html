@@ -89,8 +89,8 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>          <strong class="jxr_keyword">if</strong> (typeConstraintObj != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>              <a href="../../../../../dollar/api/Type.html">Type</a> type = Type.of(typeConstraintObj);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>              constraint = node(DEFINITION, <span class="jxr_string">"definition-constraint"</span>, <strong class="jxr_keyword">true</strong>, NEW_SCOPE, parser,
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>                                <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(), token), <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(),
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>                                i -&gt; $(scope.parameter(<span class="jxr_string">"it"</span>).getValue().is(type)), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>                                <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(), token), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(),
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>                                i -&gt; $(scope.parameter(<span class="jxr_string">"it"</span>).getValue().is(type)));
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>              constraintSource = typeConstraintObj.$S().toUpperCase();
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>              checkLearntType(token, type, value, MIN_PROBABILITY);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  

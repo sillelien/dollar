@@ -352,328 +352,326 @@
 <a class="jxr_linenumber" name="L344" href="#L344">344</a>         <strong class="jxr_keyword">return</strong> b.toString();
 <a class="jxr_linenumber" name="L345" href="#L345">345</a>     }
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>     @NotNull
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> node(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>                            @NotNull String name,
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>                            <strong class="jxr_keyword">boolean</strong> pure,
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>                            @NotNull <a href="../../../../dollar/internal/runtime/script/SourceNodeOptions.html">SourceNodeOptions</a> sourceNodeOptions,
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>                            @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>                            @NotNull <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source,
-<a class="jxr_linenumber" name="L354" href="#L354">354</a>                            @NotNull List&lt;<strong class="jxr_keyword">var</strong>&gt; inputs,
-<a class="jxr_linenumber" name="L355" href="#L355">355</a>                            @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> pipeable,
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>                            @Nullable <a href="../../../../dollar/api/Type.html">Type</a> suggestedType) {
-<a class="jxr_linenumber" name="L357" href="#L357">357</a>         <strong class="jxr_keyword">var</strong> result = DollarFactory.wrap((<strong class="jxr_keyword">var</strong>) Proxy.newProxyInstance(
-<a class="jxr_linenumber" name="L358" href="#L358">358</a>                 DollarStatic.<strong class="jxr_keyword">class</strong>.getClassLoader(),
-<a class="jxr_linenumber" name="L359" href="#L359">359</a>                 <strong class="jxr_keyword">new</strong> Class&lt;?&gt;[]{<strong class="jxr_keyword">var</strong>.<strong class="jxr_keyword">class</strong>},
-<a class="jxr_linenumber" name="L360" href="#L360">360</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceNode.html">SourceNode</a>(pipeable, source, inputs, name, parser,
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>                                sourceNodeOptions, createId(name), pure, operation)));
-<a class="jxr_linenumber" name="L362" href="#L362">362</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>             <strong class="jxr_keyword">if</strong> (suggestedType != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L364" href="#L364">364</a>                 result.meta(MetaConstants.TYPE_HINT, suggestedType);
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>                 <a href="../../../../dollar/api/Type.html">Type</a> type = operation.typeFor(inputs.toArray(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">var</strong>[inputs.size()]));
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>                 <strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>                     result.meta(MetaConstants.TYPE_HINT, type);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>                 }
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>             }
-<a class="jxr_linenumber" name="L371" href="#L371">371</a>             <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L373" href="#L373">373</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarScriptException.html">DollarScriptException</a>(e, source);
-<a class="jxr_linenumber" name="L374" href="#L374">374</a>         }
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>     }
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>     @NotNull
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> node(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
-<a class="jxr_linenumber" name="L379" href="#L379">379</a>                            <strong class="jxr_keyword">boolean</strong> pure,
-<a class="jxr_linenumber" name="L380" href="#L380">380</a>                            @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
-<a class="jxr_linenumber" name="L381" href="#L381">381</a>                            @NotNull <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source,
-<a class="jxr_linenumber" name="L382" href="#L382">382</a>                            @NotNull List&lt;<strong class="jxr_keyword">var</strong>&gt; inputs,
-<a class="jxr_linenumber" name="L383" href="#L383">383</a>                            @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> pipeable) {
-<a class="jxr_linenumber" name="L384" href="#L384">384</a>         <strong class="jxr_keyword">return</strong> node(operation, operation.name(), pure, operation.nodeOptions(), parser, source, inputs, pipeable, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L385" href="#L385">385</a>     }
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>     @NotNull
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> node(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>                            <strong class="jxr_keyword">boolean</strong> pure,
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>                            @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
-<a class="jxr_linenumber" name="L391" href="#L391">391</a>                            @NotNull Token token,
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>                            @NotNull List&lt;<strong class="jxr_keyword">var</strong>&gt; inputs,
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>                            @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
-<a class="jxr_linenumber" name="L394" href="#L394">394</a>         <strong class="jxr_keyword">return</strong> node(operation, operation.name(), pure, operation.nodeOptions(), parser,
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>                     <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(), token), inputs, callable, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>     }
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 
-<a class="jxr_linenumber" name="L398" href="#L398">398</a>     @NotNull
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> node(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>                            @NotNull String name,
-<a class="jxr_linenumber" name="L401" href="#L401">401</a>                            <strong class="jxr_keyword">boolean</strong> pure,
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>                            @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>                            @NotNull Token token,
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>                            @NotNull List&lt;<strong class="jxr_keyword">var</strong>&gt; inputs,
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>                            @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>         <strong class="jxr_keyword">return</strong> node(operation, name, pure, operation.nodeOptions(), parser,
-<a class="jxr_linenumber" name="L407" href="#L407">407</a>                     <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(), token), inputs, callable, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>     }
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> popScope(@NotNull <a href="../../../../dollar/api/Scope.html">Scope</a> scope) {
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>         <a href="../../../../dollar/api/Scope.html">Scope</a> poppedScope = endScope(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>         <strong class="jxr_keyword">if</strong> (!poppedScope.equals(scope)) {
-<a class="jxr_linenumber" name="L413" href="#L413">413</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarAssertionException.html">DollarAssertionException</a>(<span class="jxr_string">"Popped scope does not equal expected scope"</span>);
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>         }
-<a class="jxr_linenumber" name="L415" href="#L415">415</a>     }
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> pushScope(@NotNull <a href="../../../../dollar/api/Scope.html">Scope</a> scope) {
-<a class="jxr_linenumber" name="L418" href="#L418">418</a>         addScope(<strong class="jxr_keyword">true</strong>, scope);
-<a class="jxr_linenumber" name="L419" href="#L419">419</a>     }
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String randomId() {
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>         <strong class="jxr_keyword">return</strong> UUID.randomUUID().toString();
-<a class="jxr_linenumber" name="L423" href="#L423">423</a>     }
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>     @NotNull
-<a class="jxr_linenumber" name="L426" href="#L426">426</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> reactiveNode(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation, @NotNull String name,
-<a class="jxr_linenumber" name="L427" href="#L427">427</a>                             <strong class="jxr_keyword">boolean</strong> pure, @NotNull <a href="../../../../dollar/internal/runtime/script/SourceNodeOptions.html">SourceNodeOptions</a> sourceNodeOptions,
-<a class="jxr_linenumber" name="L428" href="#L428">428</a>                             @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>                             @NotNull <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source,
-<a class="jxr_linenumber" name="L430" href="#L430">430</a>                             @NotNull <strong class="jxr_keyword">var</strong> lhs,
-<a class="jxr_linenumber" name="L431" href="#L431">431</a>                             @NotNull <strong class="jxr_keyword">var</strong> rhs,
-<a class="jxr_linenumber" name="L432" href="#L432">432</a>                             @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
-<a class="jxr_linenumber" name="L433" href="#L433">433</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> node = node(operation, name, pure, sourceNodeOptions, parser, source, Arrays.asList(lhs, rhs),
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>                               callable, <strong class="jxr_keyword">null</strong>
-<a class="jxr_linenumber" name="L435" href="#L435">435</a>         );
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
-<a class="jxr_linenumber" name="L438" href="#L438">438</a>         rhs.$listen(i -&gt; node.$notify());
-<a class="jxr_linenumber" name="L439" href="#L439">439</a>         lhs.$listen(i -&gt; node.$notify());
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>         <strong class="jxr_keyword">return</strong> node;
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>     }
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>     @NotNull
-<a class="jxr_linenumber" name="L444" href="#L444">444</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> reactiveNode(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
-<a class="jxr_linenumber" name="L445" href="#L445">445</a>                             <strong class="jxr_keyword">boolean</strong> pure,
-<a class="jxr_linenumber" name="L446" href="#L446">446</a>                             @NotNull Token token,
-<a class="jxr_linenumber" name="L447" href="#L447">447</a>                             @NotNull <strong class="jxr_keyword">var</strong> lhs,
-<a class="jxr_linenumber" name="L448" href="#L448">448</a>                             @NotNull <strong class="jxr_keyword">var</strong> rhs,
-<a class="jxr_linenumber" name="L449" href="#L449">449</a>                             @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
-<a class="jxr_linenumber" name="L450" href="#L450">450</a>                             @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
-<a class="jxr_linenumber" name="L451" href="#L451">451</a>         <strong class="jxr_keyword">return</strong> reactiveNode(operation, operation.name(), pure, operation.nodeOptions(), parser,
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>                             <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(),
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>                                            token), lhs,
-<a class="jxr_linenumber" name="L454" href="#L454">454</a>                             rhs, callable);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> node(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>                            @NotNull String name,
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>                            <strong class="jxr_keyword">boolean</strong> pure,
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>                            @NotNull <a href="../../../../dollar/internal/runtime/script/SourceNodeOptions.html">SourceNodeOptions</a> sourceNodeOptions,
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>                            @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>                            @NotNull <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source,
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>                            @Nullable <a href="../../../../dollar/api/Type.html">Type</a> suggestedType, @NotNull List&lt;<strong class="jxr_keyword">var</strong>&gt; inputs,
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>                            @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> pipeable) {
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>         <strong class="jxr_keyword">var</strong> result = DollarFactory.wrap((<strong class="jxr_keyword">var</strong>) Proxy.newProxyInstance(
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>                 DollarStatic.<strong class="jxr_keyword">class</strong>.getClassLoader(),
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>                 <strong class="jxr_keyword">new</strong> Class&lt;?&gt;[]{<strong class="jxr_keyword">var</strong>.<strong class="jxr_keyword">class</strong>},
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceNode.html">SourceNode</a>(pipeable, source, inputs, name, parser,
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>                                sourceNodeOptions, createId(name), pure, operation)));
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>             <strong class="jxr_keyword">if</strong> (suggestedType != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>                 result.meta(MetaConstants.TYPE_HINT, suggestedType);
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>                 <a href="../../../../dollar/api/Type.html">Type</a> type = operation.typeFor(inputs.toArray(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">var</strong>[inputs.size()]));
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>                 <strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>                     result.meta(MetaConstants.TYPE_HINT, type);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>                 }
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>             }
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>             <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarScriptException.html">DollarScriptException</a>(e, source);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>         }
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>     }
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>     @NotNull
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> node(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>                            <strong class="jxr_keyword">boolean</strong> pure,
+<a class="jxr_linenumber" name="L378" href="#L378">378</a>                            @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>                            @NotNull <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source,
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>                            @NotNull List&lt;<strong class="jxr_keyword">var</strong>&gt; inputs,
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>                            @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> pipeable) {
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>         <strong class="jxr_keyword">return</strong> node(operation, operation.name(), pure, operation.nodeOptions(), parser, source, <strong class="jxr_keyword">null</strong>, inputs, pipeable);
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>     }
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>     @NotNull
+<a class="jxr_linenumber" name="L386" href="#L386">386</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> node(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
+<a class="jxr_linenumber" name="L387" href="#L387">387</a>                            <strong class="jxr_keyword">boolean</strong> pure,
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>                            @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>                            @NotNull Token token,
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>                            @NotNull List&lt;<strong class="jxr_keyword">var</strong>&gt; inputs,
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>                            @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>         <strong class="jxr_keyword">return</strong> node(operation, operation.name(), pure, operation.nodeOptions(), parser,
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>                     <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(), token), <strong class="jxr_keyword">null</strong>, inputs, callable);
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>     }
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>     @NotNull
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> node(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>                            @NotNull String name,
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>                            <strong class="jxr_keyword">boolean</strong> pure,
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>                            @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>                            @NotNull Token token,
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>                            @NotNull List&lt;<strong class="jxr_keyword">var</strong>&gt; inputs,
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>                            @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>         <strong class="jxr_keyword">return</strong> node(operation, name, pure, operation.nodeOptions(), parser,
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>                     <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(), token), <strong class="jxr_keyword">null</strong>, inputs, callable);
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>     }
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> popScope(@NotNull <a href="../../../../dollar/api/Scope.html">Scope</a> scope) {
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>         <a href="../../../../dollar/api/Scope.html">Scope</a> poppedScope = endScope(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>         <strong class="jxr_keyword">if</strong> (!poppedScope.equals(scope)) {
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarAssertionException.html">DollarAssertionException</a>(<span class="jxr_string">"Popped scope does not equal expected scope"</span>);
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>         }
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>     }
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> pushScope(@NotNull <a href="../../../../dollar/api/Scope.html">Scope</a> scope) {
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>         addScope(<strong class="jxr_keyword">true</strong>, scope);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>     }
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String randomId() {
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>         <strong class="jxr_keyword">return</strong> UUID.randomUUID().toString();
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>     }
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>     @NotNull
+<a class="jxr_linenumber" name="L424" href="#L424">424</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> reactiveNode(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation, @NotNull String name,
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>                             <strong class="jxr_keyword">boolean</strong> pure, @NotNull <a href="../../../../dollar/internal/runtime/script/SourceNodeOptions.html">SourceNodeOptions</a> sourceNodeOptions,
+<a class="jxr_linenumber" name="L426" href="#L426">426</a>                             @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>                             @NotNull <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source,
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>                             @NotNull <strong class="jxr_keyword">var</strong> lhs,
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>                             @NotNull <strong class="jxr_keyword">var</strong> rhs,
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>                             @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> node = node(operation, name, pure, sourceNodeOptions, parser, source, <strong class="jxr_keyword">null</strong>, Arrays.asList(lhs, rhs),
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>                               callable
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>         );
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>         rhs.$listen(i -&gt; node.$notify());
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>         lhs.$listen(i -&gt; node.$notify());
+<a class="jxr_linenumber" name="L438" href="#L438">438</a>         <strong class="jxr_keyword">return</strong> node;
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>     }
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>     @NotNull
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> reactiveNode(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>                             <strong class="jxr_keyword">boolean</strong> pure,
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>                             @NotNull Token token,
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>                             @NotNull <strong class="jxr_keyword">var</strong> lhs,
+<a class="jxr_linenumber" name="L446" href="#L446">446</a>                             @NotNull <strong class="jxr_keyword">var</strong> rhs,
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>                             @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>                             @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
+<a class="jxr_linenumber" name="L449" href="#L449">449</a>         <strong class="jxr_keyword">return</strong> reactiveNode(operation, operation.name(), pure, operation.nodeOptions(), parser,
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>                             <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(),
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>                                            token), lhs,
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>                             rhs, callable);
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>     }
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 
-<a class="jxr_linenumber" name="L456" href="#L456">456</a>     }
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 
-<a class="jxr_linenumber" name="L458" href="#L458">458</a>     @NotNull
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> reactiveNode(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
-<a class="jxr_linenumber" name="L460" href="#L460">460</a>                             @NotNull String name,
-<a class="jxr_linenumber" name="L461" href="#L461">461</a>                             <strong class="jxr_keyword">boolean</strong> pure,
-<a class="jxr_linenumber" name="L462" href="#L462">462</a>                             @NotNull Token token,
-<a class="jxr_linenumber" name="L463" href="#L463">463</a>                             @NotNull <strong class="jxr_keyword">var</strong> lhs,
-<a class="jxr_linenumber" name="L464" href="#L464">464</a>                             @NotNull <strong class="jxr_keyword">var</strong> rhs,
-<a class="jxr_linenumber" name="L465" href="#L465">465</a>                             @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
-<a class="jxr_linenumber" name="L466" href="#L466">466</a>                             @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
-<a class="jxr_linenumber" name="L467" href="#L467">467</a>         <strong class="jxr_keyword">return</strong> reactiveNode(operation, name, pure, operation.nodeOptions(), parser,
-<a class="jxr_linenumber" name="L468" href="#L468">468</a>                             <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(),
-<a class="jxr_linenumber" name="L469" href="#L469">469</a>                                            token), lhs,
-<a class="jxr_linenumber" name="L470" href="#L470">470</a>                             rhs, callable);
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>     @NotNull
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> reactiveNode(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
+<a class="jxr_linenumber" name="L458" href="#L458">458</a>                             @NotNull String name,
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>                             <strong class="jxr_keyword">boolean</strong> pure,
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>                             @NotNull Token token,
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>                             @NotNull <strong class="jxr_keyword">var</strong> lhs,
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>                             @NotNull <strong class="jxr_keyword">var</strong> rhs,
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>                             @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
+<a class="jxr_linenumber" name="L464" href="#L464">464</a>                             @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
+<a class="jxr_linenumber" name="L465" href="#L465">465</a>         <strong class="jxr_keyword">return</strong> reactiveNode(operation, name, pure, operation.nodeOptions(), parser,
+<a class="jxr_linenumber" name="L466" href="#L466">466</a>                             <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(),
+<a class="jxr_linenumber" name="L467" href="#L467">467</a>                                            token), lhs,
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>                             rhs, callable);
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>     }
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 
-<a class="jxr_linenumber" name="L472" href="#L472">472</a>     }
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 
-<a class="jxr_linenumber" name="L474" href="#L474">474</a>     @NotNull
-<a class="jxr_linenumber" name="L475" href="#L475">475</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> reactiveNode(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
-<a class="jxr_linenumber" name="L476" href="#L476">476</a>                             <strong class="jxr_keyword">boolean</strong> pure,
-<a class="jxr_linenumber" name="L477" href="#L477">477</a>                             @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser, @NotNull <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source,
-<a class="jxr_linenumber" name="L478" href="#L478">478</a>                             @NotNull <strong class="jxr_keyword">var</strong> lhs,
-<a class="jxr_linenumber" name="L479" href="#L479">479</a>                             @NotNull <strong class="jxr_keyword">var</strong> rhs,
-<a class="jxr_linenumber" name="L480" href="#L480">480</a>                             @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
-<a class="jxr_linenumber" name="L481" href="#L481">481</a>         <strong class="jxr_keyword">return</strong> reactiveNode(operation, operation.name(), pure, operation.nodeOptions(), parser, source, lhs,
-<a class="jxr_linenumber" name="L482" href="#L482">482</a>                             rhs, callable);
+<a class="jxr_linenumber" name="L472" href="#L472">472</a>     @NotNull
+<a class="jxr_linenumber" name="L473" href="#L473">473</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> reactiveNode(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
+<a class="jxr_linenumber" name="L474" href="#L474">474</a>                             <strong class="jxr_keyword">boolean</strong> pure,
+<a class="jxr_linenumber" name="L475" href="#L475">475</a>                             @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser, @NotNull <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source,
+<a class="jxr_linenumber" name="L476" href="#L476">476</a>                             @NotNull <strong class="jxr_keyword">var</strong> lhs,
+<a class="jxr_linenumber" name="L477" href="#L477">477</a>                             @NotNull <strong class="jxr_keyword">var</strong> rhs,
+<a class="jxr_linenumber" name="L478" href="#L478">478</a>                             @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
+<a class="jxr_linenumber" name="L479" href="#L479">479</a>         <strong class="jxr_keyword">return</strong> reactiveNode(operation, operation.name(), pure, operation.nodeOptions(), parser, source, lhs,
+<a class="jxr_linenumber" name="L480" href="#L480">480</a>                             rhs, callable);
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 
+<a class="jxr_linenumber" name="L482" href="#L482">482</a>     }
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 
-<a class="jxr_linenumber" name="L484" href="#L484">484</a>     }
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 
-<a class="jxr_linenumber" name="L486" href="#L486">486</a>     @NotNull
-<a class="jxr_linenumber" name="L487" href="#L487">487</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> reactiveNode(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
-<a class="jxr_linenumber" name="L488" href="#L488">488</a>                             <strong class="jxr_keyword">boolean</strong> pure,
-<a class="jxr_linenumber" name="L489" href="#L489">489</a>                             @NotNull <strong class="jxr_keyword">var</strong> lhs,
-<a class="jxr_linenumber" name="L490" href="#L490">490</a>                             @NotNull Token token,
-<a class="jxr_linenumber" name="L491" href="#L491">491</a>                             @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
-<a class="jxr_linenumber" name="L492" href="#L492">492</a>                             @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 
-<a class="jxr_linenumber" name="L494" href="#L494">494</a>         <strong class="jxr_keyword">return</strong> reactiveNode(operation, pure, <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(), token), parser, lhs, callable
-<a class="jxr_linenumber" name="L495" href="#L495">495</a>         );
-<a class="jxr_linenumber" name="L496" href="#L496">496</a>     }
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 
-<a class="jxr_linenumber" name="L498" href="#L498">498</a>     @NotNull
-<a class="jxr_linenumber" name="L499" href="#L499">499</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> reactiveNode(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
-<a class="jxr_linenumber" name="L500" href="#L500">500</a>                             <strong class="jxr_keyword">boolean</strong> pure,
-<a class="jxr_linenumber" name="L501" href="#L501">501</a>                             @NotNull <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source,
-<a class="jxr_linenumber" name="L502" href="#L502">502</a>                             @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
-<a class="jxr_linenumber" name="L503" href="#L503">503</a>                             @NotNull <strong class="jxr_keyword">var</strong> lhs,
-<a class="jxr_linenumber" name="L504" href="#L504">504</a>                             @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 
-<a class="jxr_linenumber" name="L506" href="#L506">506</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> node = node(operation, operation.name(),
-<a class="jxr_linenumber" name="L507" href="#L507">507</a>                               pure, operation.nodeOptions(), parser, source,
-<a class="jxr_linenumber" name="L508" href="#L508">508</a>                               Collections.singletonList(lhs),
-<a class="jxr_linenumber" name="L509" href="#L509">509</a>                               callable, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L510" href="#L510">510</a>         lhs.$listen(i -&gt; node.$notify());
-<a class="jxr_linenumber" name="L511" href="#L511">511</a>         <strong class="jxr_keyword">return</strong> node;
-<a class="jxr_linenumber" name="L512" href="#L512">512</a>     }
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 
-<a class="jxr_linenumber" name="L514" href="#L514">514</a>     @NotNull
-<a class="jxr_linenumber" name="L515" href="#L515">515</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String removePrefix(@NotNull String key) {
-<a class="jxr_linenumber" name="L516" href="#L516">516</a>         <strong class="jxr_keyword">if</strong> (key.startsWith(<span class="jxr_string">"_"</span>)) {
-<a class="jxr_linenumber" name="L517" href="#L517">517</a>             <strong class="jxr_keyword">return</strong> key.substring(1);
-<a class="jxr_linenumber" name="L518" href="#L518">518</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L519" href="#L519">519</a>             <strong class="jxr_keyword">return</strong> key;
-<a class="jxr_linenumber" name="L520" href="#L520">520</a>         }
-<a class="jxr_linenumber" name="L521" href="#L521">521</a>     }
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 
-<a class="jxr_linenumber" name="L523" href="#L523">523</a>     @NotNull
-<a class="jxr_linenumber" name="L524" href="#L524">524</a>     <strong class="jxr_keyword">static</strong> List&lt;Scope&gt; scopes() {
-<a class="jxr_linenumber" name="L525" href="#L525">525</a>         <strong class="jxr_keyword">return</strong> scopes.get();
-<a class="jxr_linenumber" name="L526" href="#L526">526</a>     }
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 
-<a class="jxr_linenumber" name="L528" href="#L528">528</a>     @NotNull
-<a class="jxr_linenumber" name="L529" href="#L529">529</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../dollar/api/Variable.html">Variable</a> setVariable(@NotNull <a href="../../../../dollar/api/Scope.html">Scope</a> scope,
-<a class="jxr_linenumber" name="L530" href="#L530">530</a>                                        @NotNull String key,
-<a class="jxr_linenumber" name="L531" href="#L531">531</a>                                        @NotNull <strong class="jxr_keyword">var</strong> value,
-<a class="jxr_linenumber" name="L532" href="#L532">532</a>                                        @Nullable <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
-<a class="jxr_linenumber" name="L533" href="#L533">533</a>                                        @NotNull Token token,
-<a class="jxr_linenumber" name="L534" href="#L534">534</a>                                        @Nullable <strong class="jxr_keyword">var</strong> useConstraint,
-<a class="jxr_linenumber" name="L535" href="#L535">535</a>                                        @Nullable String useSource,
-<a class="jxr_linenumber" name="L536" href="#L536">536</a>                                        @NotNull <a href="../../../../dollar/api/VarFlags.html">VarFlags</a> varFlags) {
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 
-<a class="jxr_linenumber" name="L538" href="#L538">538</a>         <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source = <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(scope, token);
-<a class="jxr_linenumber" name="L539" href="#L539">539</a>         <strong class="jxr_keyword">boolean</strong> numeric = key.matches(<span class="jxr_string">"^&#92;&#92;d+$"</span>);
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 
-<a class="jxr_linenumber" name="L542" href="#L542">542</a>         <strong class="jxr_keyword">if</strong> (scope.has(key)) {
-<a class="jxr_linenumber" name="L543" href="#L543">543</a>             <strong class="jxr_keyword">return</strong> updateVariable(scope, key, value, varFlags, useConstraint, useSource);
-<a class="jxr_linenumber" name="L544" href="#L544">544</a>         }
-<a class="jxr_linenumber" name="L545" href="#L545">545</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L546" href="#L546">546</a>             List&lt;Scope&gt; scopes = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(DollarScriptSupport.scopes.get());
-<a class="jxr_linenumber" name="L547" href="#L547">547</a>             Collections.reverse(scopes);
-<a class="jxr_linenumber" name="L548" href="#L548">548</a>             <strong class="jxr_keyword">for</strong> (Scope scriptScope : scopes) {
-<a class="jxr_linenumber" name="L549" href="#L549">549</a>                 <strong class="jxr_keyword">if</strong> (!(scriptScope instanceof PureScope) &amp;&amp; varFlags.isPure()) {
-<a class="jxr_linenumber" name="L550" href="#L550">550</a>                     log.debug(<span class="jxr_string">"Skipping {}"</span>, scriptScope);
-<a class="jxr_linenumber" name="L551" href="#L551">551</a>                 }
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 
-<a class="jxr_linenumber" name="L553" href="#L553">553</a>                 <strong class="jxr_keyword">if</strong> (scriptScope.has(key)) {
-<a class="jxr_linenumber" name="L554" href="#L554">554</a>                     <strong class="jxr_keyword">return</strong> updateVariable(scriptScope, key, value, varFlags, useConstraint, useSource
-<a class="jxr_linenumber" name="L555" href="#L555">555</a>                     );
-<a class="jxr_linenumber" name="L556" href="#L556">556</a>                 }
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 
-<a class="jxr_linenumber" name="L558" href="#L558">558</a>             }
-<a class="jxr_linenumber" name="L559" href="#L559">559</a>         } <strong class="jxr_keyword">catch</strong> (DollarAssertionException e) {
-<a class="jxr_linenumber" name="L560" href="#L560">560</a>             ErrorHandlerFactory.instance().handle(scope, source, e);
-<a class="jxr_linenumber" name="L561" href="#L561">561</a>             <strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L562" href="#L562">562</a>         } <strong class="jxr_keyword">catch</strong> (DollarScriptException e) {
-<a class="jxr_linenumber" name="L563" href="#L563">563</a>             ErrorHandlerFactory.instance().handle(scope, source, e);
-<a class="jxr_linenumber" name="L564" href="#L564">564</a>             <strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L565" href="#L565">565</a>         } <strong class="jxr_keyword">catch</strong> (RuntimeException e) {
-<a class="jxr_linenumber" name="L566" href="#L566">566</a>             ErrorHandlerFactory.instance().handle(scope, source, e);
-<a class="jxr_linenumber" name="L567" href="#L567">567</a>             <strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L568" href="#L568">568</a>         }
-<a class="jxr_linenumber" name="L569" href="#L569">569</a>         <strong class="jxr_keyword">if</strong> (numeric) {
-<a class="jxr_linenumber" name="L570" href="#L570">570</a>             <strong class="jxr_keyword">return</strong> scope.parameter(key);
-<a class="jxr_linenumber" name="L571" href="#L571">571</a>         }
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 
-<a class="jxr_linenumber" name="L573" href="#L573">573</a>         <strong class="jxr_keyword">if</strong> (varFlags.isDeclaration()) {
-<a class="jxr_linenumber" name="L574" href="#L574">574</a>             <strong class="jxr_keyword">if</strong> (getConfig().debugScope()) {
-<a class="jxr_linenumber" name="L575" href="#L575">575</a>                 log.info(<span class="jxr_string">"{} {} {}"</span>, highlight(<span class="jxr_string">"SETTING  "</span> + key, ANSI_CYAN), scope, scope);
-<a class="jxr_linenumber" name="L576" href="#L576">576</a>             }
-<a class="jxr_linenumber" name="L577" href="#L577">577</a>             <strong class="jxr_keyword">return</strong> scope.set(key, value, useConstraint, useSource, varFlags);
-<a class="jxr_linenumber" name="L578" href="#L578">578</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L579" href="#L579">579</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/VariableNotFoundException.html">VariableNotFoundException</a>(key, scope);
-<a class="jxr_linenumber" name="L580" href="#L580">580</a>         }
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 
+<a class="jxr_linenumber" name="L484" href="#L484">484</a>     @NotNull
+<a class="jxr_linenumber" name="L485" href="#L485">485</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> reactiveNode(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
+<a class="jxr_linenumber" name="L486" href="#L486">486</a>                             <strong class="jxr_keyword">boolean</strong> pure,
+<a class="jxr_linenumber" name="L487" href="#L487">487</a>                             @NotNull <strong class="jxr_keyword">var</strong> lhs,
+<a class="jxr_linenumber" name="L488" href="#L488">488</a>                             @NotNull Token token,
+<a class="jxr_linenumber" name="L489" href="#L489">489</a>                             @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
+<a class="jxr_linenumber" name="L490" href="#L490">490</a>                             @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 
+<a class="jxr_linenumber" name="L492" href="#L492">492</a>         <strong class="jxr_keyword">return</strong> reactiveNode(operation, pure, <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(), token), parser, lhs, callable
+<a class="jxr_linenumber" name="L493" href="#L493">493</a>         );
+<a class="jxr_linenumber" name="L494" href="#L494">494</a>     }
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 
+<a class="jxr_linenumber" name="L496" href="#L496">496</a>     @NotNull
+<a class="jxr_linenumber" name="L497" href="#L497">497</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> reactiveNode(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation,
+<a class="jxr_linenumber" name="L498" href="#L498">498</a>                             <strong class="jxr_keyword">boolean</strong> pure,
+<a class="jxr_linenumber" name="L499" href="#L499">499</a>                             @NotNull <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source,
+<a class="jxr_linenumber" name="L500" href="#L500">500</a>                             @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
+<a class="jxr_linenumber" name="L501" href="#L501">501</a>                             @NotNull <strong class="jxr_keyword">var</strong> lhs,
+<a class="jxr_linenumber" name="L502" href="#L502">502</a>                             @NotNull <a href="../../../../dollar/api/Pipeable.html">Pipeable</a> callable) {
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 
+<a class="jxr_linenumber" name="L504" href="#L504">504</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> node = node(operation, operation.name(),
+<a class="jxr_linenumber" name="L505" href="#L505">505</a>                               pure, operation.nodeOptions(), parser, source,
+<a class="jxr_linenumber" name="L506" href="#L506">506</a>                               <strong class="jxr_keyword">null</strong>, Collections.singletonList(lhs),
+<a class="jxr_linenumber" name="L507" href="#L507">507</a>                               callable);
+<a class="jxr_linenumber" name="L508" href="#L508">508</a>         lhs.$listen(i -&gt; node.$notify());
+<a class="jxr_linenumber" name="L509" href="#L509">509</a>         <strong class="jxr_keyword">return</strong> node;
+<a class="jxr_linenumber" name="L510" href="#L510">510</a>     }
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 
+<a class="jxr_linenumber" name="L512" href="#L512">512</a>     @NotNull
+<a class="jxr_linenumber" name="L513" href="#L513">513</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String removePrefix(@NotNull String key) {
+<a class="jxr_linenumber" name="L514" href="#L514">514</a>         <strong class="jxr_keyword">if</strong> (key.startsWith(<span class="jxr_string">"_"</span>)) {
+<a class="jxr_linenumber" name="L515" href="#L515">515</a>             <strong class="jxr_keyword">return</strong> key.substring(1);
+<a class="jxr_linenumber" name="L516" href="#L516">516</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L517" href="#L517">517</a>             <strong class="jxr_keyword">return</strong> key;
+<a class="jxr_linenumber" name="L518" href="#L518">518</a>         }
+<a class="jxr_linenumber" name="L519" href="#L519">519</a>     }
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 
+<a class="jxr_linenumber" name="L521" href="#L521">521</a>     @NotNull
+<a class="jxr_linenumber" name="L522" href="#L522">522</a>     <strong class="jxr_keyword">static</strong> List&lt;Scope&gt; scopes() {
+<a class="jxr_linenumber" name="L523" href="#L523">523</a>         <strong class="jxr_keyword">return</strong> scopes.get();
+<a class="jxr_linenumber" name="L524" href="#L524">524</a>     }
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 
+<a class="jxr_linenumber" name="L526" href="#L526">526</a>     @NotNull
+<a class="jxr_linenumber" name="L527" href="#L527">527</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../dollar/api/Variable.html">Variable</a> setVariable(@NotNull <a href="../../../../dollar/api/Scope.html">Scope</a> scope,
+<a class="jxr_linenumber" name="L528" href="#L528">528</a>                                        @NotNull String key,
+<a class="jxr_linenumber" name="L529" href="#L529">529</a>                                        @NotNull <strong class="jxr_keyword">var</strong> value,
+<a class="jxr_linenumber" name="L530" href="#L530">530</a>                                        @Nullable <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
+<a class="jxr_linenumber" name="L531" href="#L531">531</a>                                        @NotNull Token token,
+<a class="jxr_linenumber" name="L532" href="#L532">532</a>                                        @Nullable <strong class="jxr_keyword">var</strong> useConstraint,
+<a class="jxr_linenumber" name="L533" href="#L533">533</a>                                        @Nullable String useSource,
+<a class="jxr_linenumber" name="L534" href="#L534">534</a>                                        @NotNull <a href="../../../../dollar/api/VarFlags.html">VarFlags</a> varFlags) {
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 
+<a class="jxr_linenumber" name="L536" href="#L536">536</a>         <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source = <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(scope, token);
+<a class="jxr_linenumber" name="L537" href="#L537">537</a>         <strong class="jxr_keyword">boolean</strong> numeric = key.matches(<span class="jxr_string">"^&#92;&#92;d+$"</span>);
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 
+<a class="jxr_linenumber" name="L540" href="#L540">540</a>         <strong class="jxr_keyword">if</strong> (scope.has(key)) {
+<a class="jxr_linenumber" name="L541" href="#L541">541</a>             <strong class="jxr_keyword">return</strong> updateVariable(scope, key, value, varFlags, useConstraint, useSource);
+<a class="jxr_linenumber" name="L542" href="#L542">542</a>         }
+<a class="jxr_linenumber" name="L543" href="#L543">543</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L544" href="#L544">544</a>             List&lt;Scope&gt; scopes = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(DollarScriptSupport.scopes.get());
+<a class="jxr_linenumber" name="L545" href="#L545">545</a>             Collections.reverse(scopes);
+<a class="jxr_linenumber" name="L546" href="#L546">546</a>             <strong class="jxr_keyword">for</strong> (Scope scriptScope : scopes) {
+<a class="jxr_linenumber" name="L547" href="#L547">547</a>                 <strong class="jxr_keyword">if</strong> (!(scriptScope instanceof PureScope) &amp;&amp; varFlags.isPure()) {
+<a class="jxr_linenumber" name="L548" href="#L548">548</a>                     log.debug(<span class="jxr_string">"Skipping {}"</span>, scriptScope);
+<a class="jxr_linenumber" name="L549" href="#L549">549</a>                 }
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 
+<a class="jxr_linenumber" name="L551" href="#L551">551</a>                 <strong class="jxr_keyword">if</strong> (scriptScope.has(key)) {
+<a class="jxr_linenumber" name="L552" href="#L552">552</a>                     <strong class="jxr_keyword">return</strong> updateVariable(scriptScope, key, value, varFlags, useConstraint, useSource
+<a class="jxr_linenumber" name="L553" href="#L553">553</a>                     );
+<a class="jxr_linenumber" name="L554" href="#L554">554</a>                 }
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 
+<a class="jxr_linenumber" name="L556" href="#L556">556</a>             }
+<a class="jxr_linenumber" name="L557" href="#L557">557</a>         } <strong class="jxr_keyword">catch</strong> (DollarAssertionException e) {
+<a class="jxr_linenumber" name="L558" href="#L558">558</a>             ErrorHandlerFactory.instance().handle(scope, source, e);
+<a class="jxr_linenumber" name="L559" href="#L559">559</a>             <strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L560" href="#L560">560</a>         } <strong class="jxr_keyword">catch</strong> (DollarScriptException e) {
+<a class="jxr_linenumber" name="L561" href="#L561">561</a>             ErrorHandlerFactory.instance().handle(scope, source, e);
+<a class="jxr_linenumber" name="L562" href="#L562">562</a>             <strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L563" href="#L563">563</a>         } <strong class="jxr_keyword">catch</strong> (RuntimeException e) {
+<a class="jxr_linenumber" name="L564" href="#L564">564</a>             ErrorHandlerFactory.instance().handle(scope, source, e);
+<a class="jxr_linenumber" name="L565" href="#L565">565</a>             <strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L566" href="#L566">566</a>         }
+<a class="jxr_linenumber" name="L567" href="#L567">567</a>         <strong class="jxr_keyword">if</strong> (numeric) {
+<a class="jxr_linenumber" name="L568" href="#L568">568</a>             <strong class="jxr_keyword">return</strong> scope.parameter(key);
+<a class="jxr_linenumber" name="L569" href="#L569">569</a>         }
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 
+<a class="jxr_linenumber" name="L571" href="#L571">571</a>         <strong class="jxr_keyword">if</strong> (varFlags.isDeclaration()) {
+<a class="jxr_linenumber" name="L572" href="#L572">572</a>             <strong class="jxr_keyword">if</strong> (getConfig().debugScope()) {
+<a class="jxr_linenumber" name="L573" href="#L573">573</a>                 log.info(<span class="jxr_string">"{} {} {}"</span>, highlight(<span class="jxr_string">"SETTING  "</span> + key, ANSI_CYAN), scope, scope);
+<a class="jxr_linenumber" name="L574" href="#L574">574</a>             }
+<a class="jxr_linenumber" name="L575" href="#L575">575</a>             <strong class="jxr_keyword">return</strong> scope.set(key, value, useConstraint, useSource, varFlags);
+<a class="jxr_linenumber" name="L576" href="#L576">576</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L577" href="#L577">577</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/VariableNotFoundException.html">VariableNotFoundException</a>(key, scope);
+<a class="jxr_linenumber" name="L578" href="#L578">578</a>         }
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 
+<a class="jxr_linenumber" name="L581" href="#L581">581</a>     }
 <a class="jxr_linenumber" name="L582" href="#L582">582</a> 
-<a class="jxr_linenumber" name="L583" href="#L583">583</a>     }
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 
-<a class="jxr_linenumber" name="L585" href="#L585">585</a>     @NotNull
-<a class="jxr_linenumber" name="L586" href="#L586">586</a>     <strong class="jxr_keyword">static</strong> String shortHash(@NotNull Token token) {
-<a class="jxr_linenumber" name="L587" href="#L587">587</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(), token).getShortHash();
-<a class="jxr_linenumber" name="L588" href="#L588">588</a>     }
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 
-<a class="jxr_linenumber" name="L590" href="#L590">590</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> @NotNull <a href="../../../../dollar/api/Variable.html">Variable</a> updateVariable(@NotNull <a href="../../../../dollar/api/Scope.html">Scope</a> scope,
-<a class="jxr_linenumber" name="L591" href="#L591">591</a>                                                     @NotNull String key,
-<a class="jxr_linenumber" name="L592" href="#L592">592</a>                                                     @NotNull <strong class="jxr_keyword">var</strong> value,
-<a class="jxr_linenumber" name="L593" href="#L593">593</a>                                                     @NotNull <a href="../../../../dollar/api/VarFlags.html">VarFlags</a> varFlags, @Nullable <strong class="jxr_keyword">var</strong> useConstraint,
-<a class="jxr_linenumber" name="L594" href="#L594">594</a>                                                     @Nullable String useSource) {
-<a class="jxr_linenumber" name="L595" href="#L595">595</a>         <strong class="jxr_keyword">if</strong> (getConfig().debugScope()) {
-<a class="jxr_linenumber" name="L596" href="#L596">596</a>             log.info(<span class="jxr_string">"{}{} {}"</span>, highlight(<span class="jxr_string">"UPDATING "</span>, ANSI_CYAN), key, scope);
-<a class="jxr_linenumber" name="L597" href="#L597">597</a>         }
-<a class="jxr_linenumber" name="L598" href="#L598">598</a>         <strong class="jxr_keyword">if</strong> (varFlags.isDeclaration()) {
-<a class="jxr_linenumber" name="L599" href="#L599">599</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarScriptException.html">DollarScriptException</a>(<span class="jxr_string">"Variable "</span> + key + <span class="jxr_string">" already defined in "</span> + scope);
-<a class="jxr_linenumber" name="L600" href="#L600">600</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 
-<a class="jxr_linenumber" name="L602" href="#L602">602</a>             <strong class="jxr_keyword">return</strong> scope.set(key, value, useConstraint, useSource, varFlags);
-<a class="jxr_linenumber" name="L603" href="#L603">603</a>         }
-<a class="jxr_linenumber" name="L604" href="#L604">604</a>     }
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 
-<a class="jxr_linenumber" name="L606" href="#L606">606</a>     @NotNull
-<a class="jxr_linenumber" name="L607" href="#L607">607</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> variableNode(<strong class="jxr_keyword">boolean</strong> pure, @NotNull String key, @NotNull Token token, @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser) {
-<a class="jxr_linenumber" name="L608" href="#L608">608</a>         <strong class="jxr_keyword">return</strong> variableNode(pure, key, false, <strong class="jxr_keyword">null</strong>, token, parser);
-<a class="jxr_linenumber" name="L609" href="#L609">609</a>     }
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 
-<a class="jxr_linenumber" name="L611" href="#L611">611</a>     @NotNull
-<a class="jxr_linenumber" name="L612" href="#L612">612</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> variableNode(<strong class="jxr_keyword">boolean</strong> pure, @NotNull String key,
-<a class="jxr_linenumber" name="L613" href="#L613">613</a>                                    <strong class="jxr_keyword">boolean</strong> numeric, @Nullable <strong class="jxr_keyword">var</strong> defaultValue,
-<a class="jxr_linenumber" name="L614" href="#L614">614</a>                                    @NotNull Token token, @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser) {
-<a class="jxr_linenumber" name="L615" href="#L615">615</a>         <strong class="jxr_keyword">var</strong> node[] = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">var</strong>[1];
-<a class="jxr_linenumber" name="L616" href="#L616">616</a>         UUID id = UUID.randomUUID();
-<a class="jxr_linenumber" name="L617" href="#L617">617</a>         <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a> sourceCode = <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(), token);
-<a class="jxr_linenumber" name="L618" href="#L618">618</a>         node[0] = node(VAR_USAGE_OP, <span class="jxr_string">"var-usage-"</span> + key + <span class="jxr_string">"-"</span> + sourceCode.getShortHash(), pure, parser, token,
-<a class="jxr_linenumber" name="L619" href="#L619">619</a>                        $(key).$list().toVarList(),
-<a class="jxr_linenumber" name="L620" href="#L620">620</a>                        (i) -&gt; {
-<a class="jxr_linenumber" name="L621" href="#L621">621</a>                            <a href="../../../../dollar/api/Scope.html">Scope</a> scope = currentScope();
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 
-<a class="jxr_linenumber" name="L623" href="#L623">623</a>                            <strong class="jxr_keyword">if</strong> (getConfig().debugScope()) {
-<a class="jxr_linenumber" name="L624" href="#L624">624</a>                                log.info(<span class="jxr_string">"{} {} in {} scopes "</span>, highlight(<span class="jxr_string">"LOOKUP "</span> + key, ANSI_CYAN), scope,
-<a class="jxr_linenumber" name="L625" href="#L625">625</a>                                         scopes.get().size());
+<a class="jxr_linenumber" name="L583" href="#L583">583</a>     @NotNull
+<a class="jxr_linenumber" name="L584" href="#L584">584</a>     <strong class="jxr_keyword">static</strong> String shortHash(@NotNull Token token) {
+<a class="jxr_linenumber" name="L585" href="#L585">585</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(), token).getShortHash();
+<a class="jxr_linenumber" name="L586" href="#L586">586</a>     }
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 
+<a class="jxr_linenumber" name="L588" href="#L588">588</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> @NotNull <a href="../../../../dollar/api/Variable.html">Variable</a> updateVariable(@NotNull <a href="../../../../dollar/api/Scope.html">Scope</a> scope,
+<a class="jxr_linenumber" name="L589" href="#L589">589</a>                                                     @NotNull String key,
+<a class="jxr_linenumber" name="L590" href="#L590">590</a>                                                     @NotNull <strong class="jxr_keyword">var</strong> value,
+<a class="jxr_linenumber" name="L591" href="#L591">591</a>                                                     @NotNull <a href="../../../../dollar/api/VarFlags.html">VarFlags</a> varFlags, @Nullable <strong class="jxr_keyword">var</strong> useConstraint,
+<a class="jxr_linenumber" name="L592" href="#L592">592</a>                                                     @Nullable String useSource) {
+<a class="jxr_linenumber" name="L593" href="#L593">593</a>         <strong class="jxr_keyword">if</strong> (getConfig().debugScope()) {
+<a class="jxr_linenumber" name="L594" href="#L594">594</a>             log.info(<span class="jxr_string">"{}{} {}"</span>, highlight(<span class="jxr_string">"UPDATING "</span>, ANSI_CYAN), key, scope);
+<a class="jxr_linenumber" name="L595" href="#L595">595</a>         }
+<a class="jxr_linenumber" name="L596" href="#L596">596</a>         <strong class="jxr_keyword">if</strong> (varFlags.isDeclaration()) {
+<a class="jxr_linenumber" name="L597" href="#L597">597</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarScriptException.html">DollarScriptException</a>(<span class="jxr_string">"Variable "</span> + key + <span class="jxr_string">" already defined in "</span> + scope);
+<a class="jxr_linenumber" name="L598" href="#L598">598</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 
+<a class="jxr_linenumber" name="L600" href="#L600">600</a>             <strong class="jxr_keyword">return</strong> scope.set(key, value, useConstraint, useSource, varFlags);
+<a class="jxr_linenumber" name="L601" href="#L601">601</a>         }
+<a class="jxr_linenumber" name="L602" href="#L602">602</a>     }
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 
+<a class="jxr_linenumber" name="L604" href="#L604">604</a>     @NotNull
+<a class="jxr_linenumber" name="L605" href="#L605">605</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> variableNode(<strong class="jxr_keyword">boolean</strong> pure, @NotNull String key, @NotNull Token token, @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser) {
+<a class="jxr_linenumber" name="L606" href="#L606">606</a>         <strong class="jxr_keyword">return</strong> variableNode(pure, key, false, <strong class="jxr_keyword">null</strong>, token, parser);
+<a class="jxr_linenumber" name="L607" href="#L607">607</a>     }
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 
+<a class="jxr_linenumber" name="L609" href="#L609">609</a>     @NotNull
+<a class="jxr_linenumber" name="L610" href="#L610">610</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> variableNode(<strong class="jxr_keyword">boolean</strong> pure, @NotNull String key,
+<a class="jxr_linenumber" name="L611" href="#L611">611</a>                                    <strong class="jxr_keyword">boolean</strong> numeric, @Nullable <strong class="jxr_keyword">var</strong> defaultValue,
+<a class="jxr_linenumber" name="L612" href="#L612">612</a>                                    @NotNull Token token, @NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser) {
+<a class="jxr_linenumber" name="L613" href="#L613">613</a>         <strong class="jxr_keyword">var</strong> node[] = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">var</strong>[1];
+<a class="jxr_linenumber" name="L614" href="#L614">614</a>         UUID id = UUID.randomUUID();
+<a class="jxr_linenumber" name="L615" href="#L615">615</a>         <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a> sourceCode = <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/SourceCode.html">SourceCode</a>(currentScope(), token);
+<a class="jxr_linenumber" name="L616" href="#L616">616</a>         node[0] = node(VAR_USAGE_OP, <span class="jxr_string">"var-usage-"</span> + key + <span class="jxr_string">"-"</span> + sourceCode.getShortHash(), pure, parser, token,
+<a class="jxr_linenumber" name="L617" href="#L617">617</a>                        $(key).$list().toVarList(),
+<a class="jxr_linenumber" name="L618" href="#L618">618</a>                        (i) -&gt; {
+<a class="jxr_linenumber" name="L619" href="#L619">619</a>                            <a href="../../../../dollar/api/Scope.html">Scope</a> scope = currentScope();
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 
+<a class="jxr_linenumber" name="L621" href="#L621">621</a>                            <strong class="jxr_keyword">if</strong> (getConfig().debugScope()) {
+<a class="jxr_linenumber" name="L622" href="#L622">622</a>                                log.info(<span class="jxr_string">"{} {} in {} scopes "</span>, highlight(<span class="jxr_string">"LOOKUP "</span> + key, ANSI_CYAN), scope,
+<a class="jxr_linenumber" name="L623" href="#L623">623</a>                                         scopes.get().size());
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 
+<a class="jxr_linenumber" name="L625" href="#L625">625</a>                            }
 <a class="jxr_linenumber" name="L626" href="#L626">626</a> 
-<a class="jxr_linenumber" name="L627" href="#L627">627</a>                            }
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 
-<a class="jxr_linenumber" name="L629" href="#L629">629</a>                            <strong class="jxr_keyword">if</strong> (scope.has(key)) {
-<a class="jxr_linenumber" name="L630" href="#L630">630</a>                                <strong class="jxr_keyword">return</strong> getVar(key, id, scope.scopeForKey(key), sourceCode, pure, node[0]);
-<a class="jxr_linenumber" name="L631" href="#L631">631</a>                            }
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 
-<a class="jxr_linenumber" name="L633" href="#L633">633</a>                            <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L634" href="#L634">634</a>                                List&lt;Scope&gt; scopes = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(DollarScriptSupport.scopes.get());
-<a class="jxr_linenumber" name="L635" href="#L635">635</a>                                Collections.reverse(scopes);
-<a class="jxr_linenumber" name="L636" href="#L636">636</a>                                <strong class="jxr_keyword">for</strong> (Scope scriptScope : scopes) {
-<a class="jxr_linenumber" name="L637" href="#L637">637</a>                                    <strong class="jxr_keyword">if</strong> (!(scriptScope instanceof PureScope) &amp;&amp; pure) {
-<a class="jxr_linenumber" name="L638" href="#L638">638</a>                                        log.debug(<span class="jxr_string">"Skipping {}"</span>, scriptScope);
-<a class="jxr_linenumber" name="L639" href="#L639">639</a>                                    }
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 
-<a class="jxr_linenumber" name="L641" href="#L641">641</a>                                    <strong class="jxr_keyword">if</strong> (scriptScope.has(key)) {
-<a class="jxr_linenumber" name="L642" href="#L642">642</a>                                        <strong class="jxr_keyword">return</strong> getVar(key, id, scriptScope.scopeForKey(key), sourceCode, pure, node[0]);
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 
-<a class="jxr_linenumber" name="L644" href="#L644">644</a>                                    }
-<a class="jxr_linenumber" name="L645" href="#L645">645</a>                                }
-<a class="jxr_linenumber" name="L646" href="#L646">646</a>                            } <strong class="jxr_keyword">catch</strong> (DollarAssertionException e) {
-<a class="jxr_linenumber" name="L647" href="#L647">647</a>                                <strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L648" href="#L648">648</a>                            } <strong class="jxr_keyword">catch</strong> (DollarScriptException e) {
+<a class="jxr_linenumber" name="L627" href="#L627">627</a>                            <strong class="jxr_keyword">if</strong> (scope.has(key)) {
+<a class="jxr_linenumber" name="L628" href="#L628">628</a>                                <strong class="jxr_keyword">return</strong> getVar(key, id, scope.scopeForKey(key), sourceCode, pure, node[0]);
+<a class="jxr_linenumber" name="L629" href="#L629">629</a>                            }
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 
+<a class="jxr_linenumber" name="L631" href="#L631">631</a>                            <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L632" href="#L632">632</a>                                List&lt;Scope&gt; scopes = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(DollarScriptSupport.scopes.get());
+<a class="jxr_linenumber" name="L633" href="#L633">633</a>                                Collections.reverse(scopes);
+<a class="jxr_linenumber" name="L634" href="#L634">634</a>                                <strong class="jxr_keyword">for</strong> (Scope scriptScope : scopes) {
+<a class="jxr_linenumber" name="L635" href="#L635">635</a>                                    <strong class="jxr_keyword">if</strong> (!(scriptScope instanceof PureScope) &amp;&amp; pure) {
+<a class="jxr_linenumber" name="L636" href="#L636">636</a>                                        log.debug(<span class="jxr_string">"Skipping {}"</span>, scriptScope);
+<a class="jxr_linenumber" name="L637" href="#L637">637</a>                                    }
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 
+<a class="jxr_linenumber" name="L639" href="#L639">639</a>                                    <strong class="jxr_keyword">if</strong> (scriptScope.has(key)) {
+<a class="jxr_linenumber" name="L640" href="#L640">640</a>                                        <strong class="jxr_keyword">return</strong> getVar(key, id, scriptScope.scopeForKey(key), sourceCode, pure, node[0]);
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 
+<a class="jxr_linenumber" name="L642" href="#L642">642</a>                                    }
+<a class="jxr_linenumber" name="L643" href="#L643">643</a>                                }
+<a class="jxr_linenumber" name="L644" href="#L644">644</a>                            } <strong class="jxr_keyword">catch</strong> (DollarAssertionException e) {
+<a class="jxr_linenumber" name="L645" href="#L645">645</a>                                <strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L646" href="#L646">646</a>                            } <strong class="jxr_keyword">catch</strong> (DollarScriptException e) {
+<a class="jxr_linenumber" name="L647" href="#L647">647</a>                                <strong class="jxr_keyword">return</strong> ErrorHandlerFactory.instance().handle(scope, <strong class="jxr_keyword">null</strong>, e);
+<a class="jxr_linenumber" name="L648" href="#L648">648</a>                            } <strong class="jxr_keyword">catch</strong> (RuntimeException e) {
 <a class="jxr_linenumber" name="L649" href="#L649">649</a>                                <strong class="jxr_keyword">return</strong> ErrorHandlerFactory.instance().handle(scope, <strong class="jxr_keyword">null</strong>, e);
-<a class="jxr_linenumber" name="L650" href="#L650">650</a>                            } <strong class="jxr_keyword">catch</strong> (RuntimeException e) {
-<a class="jxr_linenumber" name="L651" href="#L651">651</a>                                <strong class="jxr_keyword">return</strong> ErrorHandlerFactory.instance().handle(scope, <strong class="jxr_keyword">null</strong>, e);
-<a class="jxr_linenumber" name="L652" href="#L652">652</a>                            }
-<a class="jxr_linenumber" name="L653" href="#L653">653</a>                            <strong class="jxr_keyword">if</strong> (numeric) {
-<a class="jxr_linenumber" name="L654" href="#L654">654</a>                                <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/VariableNotFoundException.html">VariableNotFoundException</a>(key, scope, sourceCode);
-<a class="jxr_linenumber" name="L655" href="#L655">655</a>                            }
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 
-<a class="jxr_linenumber" name="L657" href="#L657">657</a>                            <strong class="jxr_keyword">if</strong> (defaultValue != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L658" href="#L658">658</a>                                <strong class="jxr_keyword">return</strong> defaultValue;
-<a class="jxr_linenumber" name="L659" href="#L659">659</a>                            } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L660" href="#L660">660</a>                                <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/VariableNotFoundException.html">VariableNotFoundException</a>(key, scope);
-<a class="jxr_linenumber" name="L661" href="#L661">661</a>                            }
-<a class="jxr_linenumber" name="L662" href="#L662">662</a>                        }
-<a class="jxr_linenumber" name="L663" href="#L663">663</a>         );
-<a class="jxr_linenumber" name="L664" href="#L664">664</a>         node[0].metaAttribute(VARIABLE, key);
-<a class="jxr_linenumber" name="L665" href="#L665">665</a>         <strong class="jxr_keyword">return</strong> node[0];
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 
-<a class="jxr_linenumber" name="L667" href="#L667">667</a>     }
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> }
+<a class="jxr_linenumber" name="L650" href="#L650">650</a>                            }
+<a class="jxr_linenumber" name="L651" href="#L651">651</a>                            <strong class="jxr_keyword">if</strong> (numeric) {
+<a class="jxr_linenumber" name="L652" href="#L652">652</a>                                <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/VariableNotFoundException.html">VariableNotFoundException</a>(key, scope, sourceCode);
+<a class="jxr_linenumber" name="L653" href="#L653">653</a>                            }
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 
+<a class="jxr_linenumber" name="L655" href="#L655">655</a>                            <strong class="jxr_keyword">if</strong> (defaultValue != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L656" href="#L656">656</a>                                <strong class="jxr_keyword">return</strong> defaultValue;
+<a class="jxr_linenumber" name="L657" href="#L657">657</a>                            } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L658" href="#L658">658</a>                                <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/VariableNotFoundException.html">VariableNotFoundException</a>(key, scope);
+<a class="jxr_linenumber" name="L659" href="#L659">659</a>                            }
+<a class="jxr_linenumber" name="L660" href="#L660">660</a>                        }
+<a class="jxr_linenumber" name="L661" href="#L661">661</a>         );
+<a class="jxr_linenumber" name="L662" href="#L662">662</a>         node[0].metaAttribute(VARIABLE, key);
+<a class="jxr_linenumber" name="L663" href="#L663">663</a>         <strong class="jxr_keyword">return</strong> node[0];
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 
+<a class="jxr_linenumber" name="L665" href="#L665">665</a>     }
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017. All rights reserved.</div>
