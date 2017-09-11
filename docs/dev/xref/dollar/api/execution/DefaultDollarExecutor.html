@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar.api.execution;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.DollarException;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.SourceSegment;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.Source;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>      @NotNull
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>      @Override
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> fork(@NotNull <a href="../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source, @NotNull <strong class="jxr_keyword">var</strong> in, @NotNull Function&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; call) {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> fork(@NotNull <a href="../../../dollar/api/script/Source.html">Source</a> source, @NotNull <strong class="jxr_keyword">var</strong> in, @NotNull Function&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; call) {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>              <strong class="jxr_keyword">return</strong> submit(() -&gt; call.apply(in)).get();
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>          } <strong class="jxr_keyword">catch</strong> (InterruptedException | ExecutionException e) {
@@ -103,7 +103,7 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>      @NotNull
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>      @Override
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> forkAndReturnId(@NotNull <a href="../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source, @NotNull <strong class="jxr_keyword">var</strong> in, @NotNull Function&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; call) {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> forkAndReturnId(@NotNull <a href="../../../dollar/api/script/Source.html">Source</a> source, @NotNull <strong class="jxr_keyword">var</strong> in, @NotNull Function&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; call) {
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>          <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException();
 <a class="jxr_linenumber" name="L100" href="#L100">100</a>     }
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 

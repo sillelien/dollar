@@ -32,7 +32,7 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.api.monitor.DollarMonitor;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> dollar.api.monitor.SimpleLogStateTracer;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> dollar.api.plugin.Plugins;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.SourceSegment;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.Source;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarFactory;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> dollar.api.uri.URI;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
@@ -256,7 +256,7 @@
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">     * @param call   the call  @return the var</em>
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L250" href="#L250">250</a>     @NotNull
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> $fork(@NotNull <a href="../../dollar/api/script/SourceSegment.html">SourceSegment</a> source, @NotNull <strong class="jxr_keyword">var</strong> in, @NotNull Function&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; call) {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> $fork(@NotNull <a href="../../dollar/api/script/Source.html">Source</a> source, @NotNull <strong class="jxr_keyword">var</strong> in, @NotNull Function&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; call) {
 <a class="jxr_linenumber" name="L252" href="#L252">252</a>         <strong class="jxr_keyword">return</strong> executor.fork(source, in, call);
 <a class="jxr_linenumber" name="L253" href="#L253">253</a>     }
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 
