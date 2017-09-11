@@ -18,3 +18,4 @@ pom.xml.versionsBackup
 tmp/
 dist/
 .tmp.docker_test/
+/_site/
