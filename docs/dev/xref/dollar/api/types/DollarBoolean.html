@@ -24,9 +24,9 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar.api.types;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.ImmutableList;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.DollarStatic;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.Type;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.DollarStatic;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.Type;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.exceptions.DollarFailureException;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
@@ -34,8 +34,8 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../dollar/api/types/DollarBoolean.html">DollarBoolean</a> <strong class="jxr_keyword">extends</strong> AbstractDollarSingleValue&lt;Boolean&gt; {
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/types/DollarBoolean.html">DollarBoolean</a>(@NotNull ImmutableList&lt;Throwable&gt; errors, @NotNull Boolean value) {
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>          <strong class="jxr_keyword">super</strong>(errors, value);
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/types/DollarBoolean.html">DollarBoolean</a>(@NotNull Boolean value) {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>          <strong class="jxr_keyword">super</strong>(value);
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>      }
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>      @NotNull
@@ -48,32 +48,32 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>      @Override
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> $minus(@NotNull <strong class="jxr_keyword">var</strong> rhs) {
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>          <strong class="jxr_keyword">var</strong> rhsFix = rhs.$fixDeep();
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>          <strong class="jxr_keyword">return</strong> DollarFactory.fromValue(value ^ rhsFix.truthy(), errors(), rhsFix.errors());
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>          <strong class="jxr_keyword">return</strong> DollarFactory.fromValue(value ^ rhsFix.truthy());
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>      }
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>      @NotNull
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      @Override
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> $negate() {
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>          <strong class="jxr_keyword">return</strong> DollarFactory.fromValue(!value, errors());
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>          <strong class="jxr_keyword">return</strong> DollarFactory.fromValue(!value);
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      }
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      @NotNull
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      @Override
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> $divide(@NotNull <strong class="jxr_keyword">var</strong> rhs) {
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>          <strong class="jxr_keyword">var</strong> rhsFix = rhs.$fixDeep();
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>          <strong class="jxr_keyword">return</strong> DollarFactory.fromValue(value == rhsFix.truthy(), errors(), rhsFix.errors());
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          <strong class="jxr_keyword">return</strong> DollarFactory.fromValue(value == rhsFix.truthy());
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>      }
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      @NotNull
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      @Override
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> $modulus(@NotNull <strong class="jxr_keyword">var</strong> rhs) {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">return</strong> DollarFactory.failure(ErrorType.INVALID_BOOLEAN_VALUE_OPERATION);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../dollar/api/exceptions/DollarFailureException.html">DollarFailureException</a>(ErrorType.INVALID_BOOLEAN_VALUE_OPERATION);
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      }
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      @NotNull
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      @Override
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> $multiply(@NotNull <strong class="jxr_keyword">var</strong> v) {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">return</strong> DollarFactory.failure(ErrorType.INVALID_BOOLEAN_VALUE_OPERATION);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../dollar/api/exceptions/DollarFailureException.html">DollarFailureException</a>(ErrorType.INVALID_BOOLEAN_VALUE_OPERATION);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      }
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>      @Override
@@ -111,7 +111,7 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (type.is(Type._VOID)) {
 <a class="jxr_linenumber" name="L104" href="#L104">104</a>             <strong class="jxr_keyword">return</strong> DollarStatic.$<strong class="jxr_keyword">void</strong>();
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>             <strong class="jxr_keyword">return</strong> DollarFactory.failure(ErrorType.INVALID_CAST);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../dollar/api/exceptions/DollarFailureException.html">DollarFailureException</a>(ErrorType.INVALID_CAST);
 <a class="jxr_linenumber" name="L107" href="#L107">107</a>         }
 <a class="jxr_linenumber" name="L108" href="#L108">108</a>     }
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 
@@ -144,13 +144,13 @@
 <a class="jxr_linenumber" name="L136" href="#L136">136</a>         <strong class="jxr_keyword">if</strong> (rhsFix.list()) {
 <a class="jxr_linenumber" name="L137" href="#L137">137</a>             rhsFix.$prepend(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (rhsFix.list()) {
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>             <strong class="jxr_keyword">return</strong> DollarFactory.fromValue(rhsFix.$prepend(<strong class="jxr_keyword">this</strong>), errors(), rhsFix.errors());
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>             <strong class="jxr_keyword">return</strong> DollarFactory.fromValue(rhsFix.$prepend(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (rhsFix.range()) {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>             <strong class="jxr_keyword">return</strong> DollarFactory.fromValue(rhsFix.$plus(<strong class="jxr_keyword">this</strong>), errors(), rhsFix.errors());
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>             <strong class="jxr_keyword">return</strong> DollarFactory.fromValue(rhsFix.$plus(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L142" href="#L142">142</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (rhsFix.string()) {
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>             <strong class="jxr_keyword">return</strong> DollarFactory.fromValue(value + rhsFix.toHumanString(), errors(), rhsFix.errors());
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>             <strong class="jxr_keyword">return</strong> DollarFactory.fromValue(value + rhsFix.toHumanString());
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>         }
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>         <strong class="jxr_keyword">return</strong> DollarFactory.fromValue(value || rhsFix.truthy(), errors(), rhsFix.errors());
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>         <strong class="jxr_keyword">return</strong> DollarFactory.fromValue(value || rhsFix.truthy());
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>     }
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 
 <a class="jxr_linenumber" name="L148" href="#L148">148</a>     @Override
