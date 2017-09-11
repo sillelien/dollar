@@ -177,13 +177,13 @@ public class GithubModuleResolver implements ModuleResolver {
 
             final File moduleFile = new File(dir, "module.json");
             final var module = DollarStatic.$(new String(Files.readAllBytes(moduleFile.toPath())));
-            mainFile = new File(dir, module.$("main").$S());
+            mainFile = new File(dir, module.$get(DollarStatic.$("main")).$S());
             content = new String(Files.readAllBytes(mainFile.toPath()));
             classLoader =
-                    DependencyRetriever.retrieve(module.$("dependencies")
+                    DependencyRetriever.retrieve(module.$get(DollarStatic.$("dependencies"))
                                                          .$list()
                                                          .$stream(false)
-                                                         .map(var::toString)
+                                                         .map(t -> module.toString())
                                                          .collect(Collectors.toList()));
 
         }

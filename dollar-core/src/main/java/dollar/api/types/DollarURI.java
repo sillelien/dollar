@@ -75,138 +75,26 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var rhs) {
-        ensureRunning();
-        return handler.removeValue(DollarStatic.$(rhs));
-
-    }
-
-    @NotNull
-    @Override
-    public var $plus(@NotNull var rhs) {
-        ensureRunning();
-        return handler.append(rhs);
-    }
-
-    @NotNull
-    @Override
-    public var $negate() {
-        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $divide(@NotNull var rhs) {
-        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $modulus(@NotNull var rhs) {
-        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public var $multiply(@NotNull var v) {
-        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
-    }
-
-    @Override
-    public int sign() {
-        return 1;
-    }
-
-    @NotNull
-    @Override
-    public Integer toInteger() {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public Number toNumber() {
-        return 0;
-    }
-
-    @NotNull
-
-    @Override
-    public var $all() {
-        ensureRunning();
-        return handler.all();
-    }
-
-    @NotNull
-    @Override
-    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
-        ensureRunning();
-        return handler.write(value, blocking, mutating);
-    }
-
-    @NotNull
-    @Override
-    public var $drain() {
-        ensureRunning();
-        return handler.drain();
-    }
-
-    @NotNull
-    @Override
-    public var $read(boolean blocking, boolean mutating) {
-        ensureRunning();
-        return handler.read(blocking, mutating);
-    }
-
-    @NotNull
-    @Override
-    public var $publish(@NotNull var lhs) {
-        ensureRunning();
-        return handler.publish(lhs);
-    }
-
-    @NotNull
-    @Override
-    public var $each(@NotNull Pipeable pipe) {
-        return super.$each(pipe);
-    }
-
-    @NotNull
-    @Override
-    public StateMachine<ResourceState, Signal> getStateMachine() {
-        return stateMachine;
-    }
-
-    @NotNull
-    @Override
-    public var $notify() {
-        ensureRunning();
-        return handler.write(this, false, false);
-    }
-
-    @Override
-    public boolean uri() {
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), uri);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if ((o == null) || (getClass() != o.getClass())) return false;
-        if (!super.equals(o)) return false;
-        DollarURI dollarURI = (DollarURI) o;
-        return Objects.equals(uri, dollarURI.uri);
-    }
-
-    @NotNull
-    @Override
     public var $append(@NotNull var value) {
         return handler.append(DollarStatic.$(value));
+    }
+
+    @NotNull
+    @Override
+    public var $as(@NotNull Type type) {
+        if (type.is(Type._STRING)) {
+            return DollarStatic.$(toHumanString());
+        } else if (type.is(Type._LIST)) {
+            return $all();
+        } else if (type.is(Type._MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.is(Type._VOID)) {
+            return DollarStatic.$void();
+        } else if (type.is(Type._URI)) {
+            return this;
+        } else {
+            throw new DollarFailureException(ErrorType.INVALID_CAST);
+        }
     }
 
     @NotNull
@@ -219,6 +107,12 @@ public class DollarURI extends AbstractDollar {
     @NotNull
     public var $containsValue(@NotNull var value) {
         return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public var $divide(@NotNull var rhs) {
+        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
     }
 
     @NotNull
@@ -239,6 +133,39 @@ public class DollarURI extends AbstractDollar {
     @Override
     public var $insert(@NotNull var value, int position) {
         return handler.insert(DollarStatic.$(value));
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull var rhs) {
+        ensureRunning();
+        return handler.removeValue(DollarStatic.$(rhs));
+
+    }
+
+    @NotNull
+    @Override
+    public var $modulus(@NotNull var rhs) {
+        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $multiply(@NotNull var v) {
+        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $negate() {
+        throw new DollarFailureException(ErrorType.INVALID_URI_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    public var $plus(@NotNull var rhs) {
+        ensureRunning();
+        return handler.append(rhs);
     }
 
     @NotNull
@@ -264,7 +191,7 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $set(@NotNull var key, @Nullable Object value) {
+    public var $set(@NotNull var key, @NotNull Object value) {
         ensureRunning();
 
         return handler.set(DollarStatic.$(key), DollarStatic.$(value));
@@ -276,94 +203,6 @@ public class DollarURI extends AbstractDollar {
     public var $size() {
         ensureRunning();
         return DollarStatic.$(handler.size());
-    }
-
-    @NotNull
-    @Override
-    public int size() {
-        ensureRunning();
-        return handler.size();
-    }
-
-    @NotNull
-    @Override
-    public var $as(@NotNull Type type) {
-        if (type.is(Type._STRING)) {
-            return DollarStatic.$(toHumanString());
-        } else if (type.is(Type._LIST)) {
-            return $all();
-        } else if (type.is(Type._MAP)) {
-            return DollarStatic.$("value", this);
-        } else if (type.is(Type._VOID)) {
-            return DollarStatic.$void();
-        } else if (type.is(Type._URI)) {
-            return this;
-        } else {
-            throw new DollarFailureException(ErrorType.INVALID_CAST);
-        }
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> toVarList() {
-        ensureRunning();
-        return ImmutableList.copyOf(handler.all().toVarList());
-    }
-
-    @NotNull
-    @Override
-    public Type $type() {
-        return new Type(Type._URI, constraintLabel());
-    }
-
-    @Override
-    public boolean collection() {
-        return false;
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<var, var> toVarMap() {
-        return ImmutableMap.of();
-    }
-
-    @NotNull
-    @Override
-    public String toYaml() {
-        return "uri: \"" + uri + "\"";
-    }
-
-    @Override
-    public boolean is(@NotNull Type... types) {
-        for (Type type : types) {
-            if (type.is(Type._URI)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isVoid() {
-        return false;
-    }
-
-    @Nullable
-    @Override
-    public ImmutableList<String> toStrings() {
-        return ImmutableList.of();
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<Object> toList() {
-        return ImmutableList.of(uri);
-    }
-
-    @NotNull
-    @Override
-    public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
-        return ImmutableMap.copyOf(Collections.<K, V>emptyMap());
     }
 
     @NotNull
@@ -395,18 +234,25 @@ public class DollarURI extends AbstractDollar {
                 }))));
     }
 
+    @NotNull
     @Override
-    public int compareTo(@NotNull var o) {
-        return Comparator.<String>naturalOrder().compare(uri.toString(), o.toString());
+    public Type $type() {
+        return new Type(Type._URI, constraintLabel());
     }
 
-    private void ensureRunning() {
-        if (stateMachine.isInState(ResourceState.INITIAL)) {
-            stateMachine.fire(Signal.START);
+    @Override
+    public boolean collection() {
+        return false;
+    }
+
+    @Override
+    public boolean is(@NotNull Type... types) {
+        for (Type type : types) {
+            if (type.is(Type._URI)) {
+                return true;
+            }
         }
-        if (!stateMachine.isInState(ResourceState.RUNNING)) {
-            throw new DollarException("Resource is in state " + stateMachine.getState() + " should be RUNNING");
-        }
+        return false;
     }
 
     @Override
@@ -425,13 +271,25 @@ public class DollarURI extends AbstractDollar {
     }
 
     @Override
+    public boolean isVoid() {
+        return false;
+    }
+
+    @Override
     public boolean neitherTrueNorFalse() {
         return true;
     }
 
     @Override
-    public boolean truthy() {
-        return handler != null;
+    public int sign() {
+        return 1;
+    }
+
+    @NotNull
+    @Override
+    public int size() {
+        ensureRunning();
+        return handler.size();
     }
 
     @NotNull
@@ -448,7 +306,149 @@ public class DollarURI extends AbstractDollar {
 
     @NotNull
     @Override
+    public Integer toInteger() {
+        return 0;
+    }
+
+    @NotNull
+    @Override
+    public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
+        return ImmutableMap.copyOf(Collections.<K, V>emptyMap());
+    }
+
+    @NotNull
+    @Override
     public <R> R toJavaObject() {
         return (R) uri;
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<Object> toList() {
+        return ImmutableList.of(uri);
+    }
+
+    @NotNull
+    @Override
+    public Number toNumber() {
+        return 0;
+    }
+
+    @Nullable
+    @Override
+    public ImmutableList<String> toStrings() {
+        return ImmutableList.of();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> toVarList() {
+        ensureRunning();
+        return ImmutableList.copyOf(handler.all().toVarList());
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> toVarMap() {
+        return ImmutableMap.of();
+    }
+
+    @NotNull
+    @Override
+    public String toYaml() {
+        return "uri: \"" + uri + "\"";
+    }
+
+    @Override
+    public boolean truthy() {
+        return handler != null;
+    }
+
+    @NotNull
+
+    @Override
+    public var $all() {
+        ensureRunning();
+        return handler.all();
+    }
+
+    @NotNull
+    @Override
+    public var $drain() {
+        ensureRunning();
+        return handler.drain();
+    }
+
+    @NotNull
+    @Override
+    public var $each(@NotNull Pipeable pipe) {
+        return super.$each(pipe);
+    }
+
+    @NotNull
+    @Override
+    public var $notify() {
+        ensureRunning();
+        return handler.write(this, false, false);
+    }
+
+    @NotNull
+    @Override
+    public var $publish(@NotNull var lhs) {
+        ensureRunning();
+        return handler.publish(lhs);
+    }
+
+    @NotNull
+    @Override
+    public var $read(boolean blocking, boolean mutating) {
+        ensureRunning();
+        return handler.read(blocking, mutating);
+    }
+
+    @NotNull
+    @Override
+    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
+        ensureRunning();
+        return handler.write(value, blocking, mutating);
+    }
+
+    @Override
+    public boolean uri() {
+        return true;
+    }
+
+    @NotNull
+    @Override
+    public StateMachine<ResourceState, Signal> getStateMachine() {
+        return stateMachine;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), uri);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if ((o == null) || (getClass() != o.getClass())) return false;
+        if (!super.equals(o)) return false;
+        DollarURI dollarURI = (DollarURI) o;
+        return Objects.equals(uri, dollarURI.uri);
+    }
+
+    @Override
+    public int compareTo(@NotNull var o) {
+        return Comparator.<String>naturalOrder().compare(uri.toString(), o.toString());
+    }
+
+    private void ensureRunning() {
+        if (stateMachine.isInState(ResourceState.INITIAL)) {
+            stateMachine.fire(Signal.START);
+        }
+        if (!stateMachine.isInState(ResourceState.RUNNING)) {
+            throw new DollarException("Resource is in state " + stateMachine.getState() + " should be RUNNING");
+        }
     }
 }

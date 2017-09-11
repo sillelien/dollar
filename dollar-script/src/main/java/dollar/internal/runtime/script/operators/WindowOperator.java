@@ -129,16 +129,16 @@ public class WindowOperator implements Function<Token, var> {
     private final class NotifyListener implements Pipeable {
         @NotNull
         final AtomicLong count = new AtomicLong(-1);
-
+        @NotNull
+        private final Cache<Long, var> collected;
+        @NotNull
+        private final AtomicLong collectedId = new AtomicLong();
+        @NotNull
+        private final var loop;
         @Nullable
         private final var unless;
         @Nullable
         private final var until;
-        @NotNull
-        private final var loop;
-        @NotNull
-        private final Cache<Long, var> collected;
-        private final AtomicLong collectedId = new AtomicLong();
         private boolean finished;
 
         private NotifyListener(@Nullable var unless, @Nullable var until, @NotNull var loop, long windowLength) {

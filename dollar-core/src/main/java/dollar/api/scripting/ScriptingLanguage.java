@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ScriptingLanguage extends ExtensionPoint {
 
-    var compile(@NotNull String java, Scope scope);
+    @NotNull var compile(@NotNull String java, @NotNull Scope scope);
 
     boolean provides(@NotNull String language);
 }

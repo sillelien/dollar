@@ -42,12 +42,10 @@ import static java.util.Arrays.asList;
 public final class Symbols {
 
 
+    @NotNull
     public static final Function<var[], Type> ANY_TYPE_F = i -> Type._ANY;
     @NotNull
     public static final KeywordDef AS = new KeywordDef("as", false, null, null);
-    @NotNull
-    public static final OpDef ASSIGNMENT_CONSTRAINT = new OpDef(OpDefType.ASSIGNMENT, null, null, "assignment-constraint", false,
-                                                                true, null, ASSIGNMENT_PRIORITY, true, NO_SCOPE, null, null);
     @NotNull
     public static final OpDef AVG = new OpDef(POSTFIX, "[%]", "avg", "avg",
                                               false, true,
@@ -59,6 +57,7 @@ public final class Symbols {
                                                    false, true,
                                                    "'{' ( <expression> ';' ) * [ <expression> ] '}'",
                                                    NO_PRIORITY, null, SCOPE_WITH_CLOSURE, null, i -> Type._BLOCK);
+    @NotNull
     public static final Function<var[], Type> BOOL_TYPE_F = i -> Type._BOOLEAN;
     @NotNull
     public static final OpDef AND = new OpDef(BINARY, "&&", "and", "and",
@@ -110,6 +109,7 @@ public final class Symbols {
     public static final KeywordDef EXPORT = new KeywordDef("export", false, "Export a variable at the point of definition.", null);
     @NotNull
     public static final KeywordDef FALSE = new KeywordDef("false", false, "Boolean false.", null);
+    @NotNull
     public static final Function<var[], Type> FIRST_TYPE_F = vars -> vars[0].$type();
     @NotNull
     public static final OpDef DEC = new OpDef(PREFIX, "--", null, "decrement",
@@ -135,7 +135,6 @@ public final class Symbols {
                                               false, null, FIX_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
     @NotNull
     public static final KeywordDef FOR = new KeywordDef("for", false, null, null);
-
     /*
     [1..3]<- <=> [3..1] //reverse
     [1..3][/] <=> [1,2,3] //split ($list)
@@ -180,6 +179,7 @@ public final class Symbols {
                                                               EQ_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
     @NotNull
     public static final KeywordDef INFINITY = new KeywordDef("infinity", false, null, null);
+    @NotNull
     public static final Function<var[], Type> INTEGER_TYPE_F = i -> Type._INTEGER;
     @NotNull
     public static final KeywordDef IS = new KeywordDef("is", false, null, null);
@@ -194,6 +194,7 @@ public final class Symbols {
     public static final SymbolDef LEFT_BRACKET = new SymbolDef("[", false);
     @NotNull
     public static final SymbolDef LEFT_PAREN = new SymbolDef("(", false);
+    @NotNull
     public static final Function<var[], Type> LIST_TYPE_F = i -> Type._LIST;
     @NotNull
     public static final OpDef EACH = new OpDef(BINARY, "=>>", "each", "each", false, true, null,
@@ -216,6 +217,7 @@ public final class Symbols {
     @NotNull
     public static final OpDef LT_EQUALS = new OpDef(BINARY, "<=", null, "less-than-equal",
                                                     false, true, null, EQ_PRIORITY, true, NO_SCOPE, null, BOOL_TYPE_F);
+    @NotNull
     public static final Function<var[], Type> MAP_TYPE_F = i -> Type._MAP;
     @NotNull
     public static final OpDef MAP_OP = new OpDef(COLLECTION, null, null, "map",
@@ -285,7 +287,7 @@ public final class Symbols {
     public static final OpDef PARAM_OP = new OpDef(POSTFIX, null, null, "parameter", false, true,
                                                    "( <expression> | <builtin-name> | <function-name> ) '(' " +
                                                            "( <expression> | <name> '=' <expression> )* ')'",
-                                                   MEMBER_PRIORITY, true, SCOPE_WITH_CLOSURE, null, null);
+                                                   MEMBER_PRIORITY, true, SCOPE_WITH_CLOSURE, null, ANY_TYPE_F);
     @NotNull
     public static final KeywordDef PERIOD = new KeywordDef("period", false, null, null);
     @NotNull
@@ -302,6 +304,7 @@ public final class Symbols {
                                                   false, true,
                                                   null,
                                                   NO_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
+    @NotNull
     public static final Function<var[], Type> RANGE_TYPE_F = i -> Type._RANGE;
     @NotNull
     public static final OpDef RANGE = new OpDef(BINARY, "..", null, "range",
@@ -323,6 +326,7 @@ public final class Symbols {
     public static final OpDef REVERSE = new OpDef(POSTFIX, "<-", "reversed", "reversed",
                                                   false, true,
                                                   null, REVERSE_PRIORITY, true, NO_SCOPE, null, FIRST_TYPE_F);
+    @NotNull
     public static final Function<var[], Type> RHS_TYPE_F = i -> i[1].$type();
     @NotNull
     public static final OpDef CAUSES = new OpDef(BINARY, "=>", "causes", "causes",
@@ -434,7 +438,11 @@ public final class Symbols {
                                                        FIRST_TYPE_F);
     @NotNull
     public static final KeywordDef VOID = new KeywordDef("void", false, "A VOID value.", null);
+    @NotNull
     public static final Function<var[], Type> VOID_TYPE_F = i -> Type._VOID;
+    @NotNull
+    public static final OpDef ASSIGNMENT_CONSTRAINT = new OpDef(OpDefType.ASSIGNMENT, null, null, "assignment-constraint", false,
+                                                                true, null, ASSIGNMENT_PRIORITY, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     public static final OpDef ASSERT = new OpDef(PREFIX, ".:", "assert", "assert",
                                                  false, true, null, LINE_PREFIX_PRIORITY, true, NO_SCOPE, "\u2234", VOID_TYPE_F);
@@ -615,79 +623,79 @@ public final class Symbols {
     private static final KeywordDef READONLY = new KeywordDef("readonly", true, null, null);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_1 = new OpDef(RESERVED, "...", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_10 = new OpDef(RESERVED, "|*", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_11 = new OpDef(RESERVED, "&>", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_12 = new OpDef(RESERVED, "<&", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_13 = new OpDef(RESERVED, "?>", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_14 = new OpDef(RESERVED, "<?", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_15 = new OpDef(RESERVED, ">->", null,
                                                                 "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_16 = new OpDef(RESERVED, "@>", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_17 = new OpDef(RESERVED, "?..?", null,
                                                                 "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_18 = new OpDef(RESERVED, "?$?", null,
                                                                 "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_19 = new OpDef(RESERVED, "<$", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_2 = new OpDef(RESERVED, "->", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_20 = new OpDef(RESERVED, "<=<", null,
                                                                 "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_21 = new OpDef(RESERVED, "<++", null,
                                                                 "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_22 = new OpDef(RESERVED, "-_-", null,
                                                                 "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_23 = new OpDef(RESERVED, ">&", null, "RESERVED_OPERATOR_1",
-                                                                true, true, null, 0, true, NO_SCOPE, null, null);
+                                                                true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_3 = new OpDef(RESERVED, "<-", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_4 = new OpDef(RESERVED, "?:", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_5 = new OpDef(RESERVED, "@", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_6 = new OpDef(RESERVED, "::", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_7 = new OpDef(RESERVED, "&=", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_8 = new OpDef(RESERVED, "+>", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final OpDef RESERVED_OPERATOR_9 = new OpDef(RESERVED, "<+", null, "RESERVED_OPERATOR_1",
-                                                               true, true, null, 0, true, NO_SCOPE, null, null);
+                                                               true, true, null, 0, true, NO_SCOPE, null, VOID_TYPE_F);
     @NotNull
     private static final KeywordDef RETURN = new KeywordDef("return", true, null, null);
     @NotNull

@@ -36,27 +36,20 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DollarLambda implements java.lang.reflect.InvocationHandler {
 
+    private static final int MAX_STACK_DEPTH = 100;
     @Nullable
     private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
-
-    private static final int MAX_STACK_DEPTH = 100;
     @NotNull
     private static final ThreadLocal<List<DollarLambda>> notifyStack = ThreadLocal.withInitial(ArrayList::new);
     @NotNull
-    private static final ThreadLocal<List<DollarLambda>> stack = new ThreadLocal<List<DollarLambda>>() {
-        @NotNull
-        @Override
-        protected List<DollarLambda> initialValue() {
-            return new ArrayList<>();
-        }
-    };
-    @NotNull
-    protected final ConcurrentHashMap<Object, Object> meta = new ConcurrentHashMap<>();
+    private static final ThreadLocal<List<DollarLambda>> stack = ThreadLocal.withInitial(() -> new ArrayList<>());
     @NotNull
     protected final Pipeable lambda;
     @NotNull
-    private final var in;
+    protected final ConcurrentHashMap<Object, Object> meta = new ConcurrentHashMap<>();
     private final boolean fixable;
+    @NotNull
+    private final var in;
     @NotNull
     private final ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
 
@@ -90,6 +83,9 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             throw new ConstraintViolation(source, constraint, constraintFingerprint, constraintSource);
         }
     }
+
+    @NotNull
+    public var execute() throws Exception {return executor.executeNow(() -> lambda.pipe(in)).get();}
 
     @Nullable
     @Override
@@ -188,7 +184,6 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 notifyStack.get().remove(this);
                 return proxy;
             } else if ("$remove".equals(method.getName())) {
-                //noinspection SuspiciousMethodCalls
                 listeners.remove(args[0]);
                 return args[0];
             } else if ("hasErrors".equals(method.getName())) {
@@ -213,7 +208,4 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             throw e.getCause();
         }
     }
-
-    @NotNull
-    public var execute() throws Exception {return executor.executeNow(() -> lambda.pipe(in)).get();}
 }

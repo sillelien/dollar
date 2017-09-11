@@ -17,9 +17,8 @@
 package dollar.internal.runtime.script;
 
 import com.google.common.io.ByteStreams;
-import dollar.api.ControlFlowAware;
 import dollar.api.DollarStatic;
-import dollar.api.NumericAware;
+import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.script.SourceSegment;
 import dollar.api.types.DollarFactory;
@@ -400,7 +399,7 @@ public class DollarParserImpl implements DollarParser {
     }
 
     @NotNull
-    private Parser<var> expressionInternal(boolean pure, Parser.Reference<var> ref) {
+    private Parser<var> expressionInternal(boolean pure, @NotNull Parser.Reference<var> ref) {
         Parser<var> main;
         if (pure) {
             main = ref.lazy()
@@ -414,6 +413,7 @@ public class DollarParserImpl implements DollarParser {
                                           whenExpression(ref.lazy(), true),
                                           functionCall(true),
                                           rangeExpression(ref, true),
+                                          variableUsageOperator(ref, true),
                                           DECIMAL_LITERAL,
                                           INTEGER_LITERAL,
                                           STRING_LITERAL,
@@ -444,6 +444,7 @@ public class DollarParserImpl implements DollarParser {
                                           pureDefinitionOperator(ref),
                                           rangeExpression(ref, false),
                                           forkExpression(ref, false),
+                                          variableUsageOperator(ref, false),
                                           URL,
                                           DECIMAL_LITERAL,
                                           INTEGER_LITERAL,
@@ -459,10 +460,10 @@ public class DollarParserImpl implements DollarParser {
 
         table = infixl(pure, table, PLUS, var::$plus);
         table = infixl(pure, table, MINUS, var::$minus);
-        table = infixl(pure, table, CHOOSE, ControlFlowAware::$choose);
+        table = infixl(pure, table, CHOOSE, var::$choose);
         table = infixl(pure, table, DEFAULT, var::$default);
-        table = infixl(pure, table, DIVIDE, NumericAware::$divide);
-        table = infixl(pure, table, MOD, NumericAware::$modulus);
+        table = infixl(pure, table, DIVIDE, var::$divide);
+        table = infixl(pure, table, MOD, var::$modulus);
 
 
         table = infixl(pure, table, INEQUALITY_OPERATOR, var::$notEquals);
@@ -524,7 +525,7 @@ public class DollarParserImpl implements DollarParser {
         table = table.prefix(ifOperator(ref, pure), IF_OP.priority());
         table = table.prefix(forOperator(ref, pure), FOR_OP.priority());
         table = table.prefix(whileOperator(ref, pure), WHILE_OP.priority());
-        table = table.prefix(variableUsageOperator(pure), 1000);
+
 
         table = table.prefix(assignmentOperator(ref, pure), ASSIGNMENT.priority());
         table = table.prefix(definitionOperator(ref, pure), DEFINITION.priority());
@@ -576,15 +577,13 @@ public class DollarParserImpl implements DollarParser {
         return KEYWORD_NL(FORK)
                        .next(ref.lazy())
                        .token()
-                       .map(token -> {
-                                return node(FORK, "fork-execute", pure,
-                                            this, token, Arrays.asList((var) token.value()),
-                                            i -> {
-                                                log.debug("Executing in background ...");
-                                                return executor.forkAndReturnId(new SourceCode(currentScope(), token),
-                                                                                (var) token.value(), in -> in.$fixDeep(false));
-                                            });
-                            }
+                       .map(token -> node(FORK, "fork-execute", pure,
+                                          this, token, Arrays.asList((var) token.value()),
+                                          i -> {
+                                              log.debug("Executing in background ...");
+                                              return executor.forkAndReturnId(new SourceCode(currentScope(), token),
+                                                                              (var) token.value(), in -> in.$fixDeep(false));
+                                          })
                        );
     }
 
@@ -751,10 +750,8 @@ public class DollarParserImpl implements DollarParser {
                                            String name = objects[0].toString();
                                            return node(NEW_OP, "new-" + objects[0], pure, this, token,
                                                        Arrays.asList((var) objects[0]),
-                                                       i -> {
-                                                           return currentScope().dollarClassByName(name).instance(
-                                                                   (List<var>) objects[1]);
-                                                       });
+                                                       i -> currentScope().dollarClassByName(name).instance(
+                                                               (List<var>) objects[1]));
                                        }));
     }
 
@@ -1017,8 +1014,8 @@ public class DollarParserImpl implements DollarParser {
                                                        lhs, expression, args -> lhs.$get(expression));
                                } else {
                                    return node(SUBSCRIPT_OP, SUBSCRIPT_OP.name() + "-write", pure, NO_SCOPE, this, source,
-                                               asList(lhs, expression, subscript),
-                                               i -> lhs.$set(expression, subscript), null);
+                                               null, asList(lhs, expression, subscript),
+                                               i -> lhs.$set(expression, subscript));
                                }
                            };
                        });
@@ -1060,18 +1057,22 @@ public class DollarParserImpl implements DollarParser {
                        .map(token -> variableNode(pure, token.toString(), token, this));
     }
 
-    private Parser<Function<? super var, ? extends var>> variableUsageOperator(boolean pure) {
+    @NotNull
+    private Parser<var> variableUsageOperator(final @NotNull Parser.Reference<var> ref, boolean pure) {
         assert VAR_USAGE_OP.validForPure(pure);
         return or(
                 OP(DOLLAR)
-                        .followedBy(OP(LEFT_PAREN).peek())
+                        .next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN)))
                         .token()
-                        .map(token -> rhs -> node(VAR_USAGE_OP, pure, this, token, singletonList(rhs),
-                                                  i -> variableNode(pure, rhs.$S(), token, this))),
+                        .map(token -> {
+                            @NotNull Pipeable callable = i -> variableNode(pure, token.toString(), token, this).$fix(2, false);
+                            return node(VAR_USAGE_OP, "dynamic-var-name", pure, NO_SCOPE, this,
+                                        new SourceCode(currentScope(), token), null, singletonList((var) token.value()), callable);
+                        }),
                 OP(DOLLAR)
-                        .followedBy(INTEGER_LITERAL.peek())
+                        .next(INTEGER_LITERAL)
                         .token()
-                        .map(lhs -> rhs -> variableNode(pure, rhs.toString(), true, null, lhs, this)));
+                        .map(token -> variableNode(pure, token.toString(), true, null, token, this)));
     }
 
     private Parser<var> whenExpression(@NotNull Parser<var> expression, boolean pure) {
@@ -1134,9 +1135,7 @@ public class DollarParserImpl implements DollarParser {
                            boolean mutating = objects[3] != null;
 
                            return rhs -> node(WRITE_OP, false, this, token, Arrays.asList(lhs, rhs),
-                                              i -> {
-                                                  return rhs.$write(lhs, blocking, mutating);
-                                              }
+                                              i -> rhs.$write(lhs, blocking, mutating)
                            );
                        });
     }

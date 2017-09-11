@@ -51,20 +51,6 @@ public class DefaultDollarExecutor implements DollarExecutor {
         start();
     }
 
-    @Override
-    public void start() {
-        forkJoinPool = new ForkJoinPool(getRuntime().availableProcessors() * 8);
-        backgroundExecutor = newFixedThreadPool(getRuntime().availableProcessors());
-        scheduledExecutor = Executors.newScheduledThreadPool(getRuntime().availableProcessors());
-    }
-
-    @Override
-    public void stop() {
-        backgroundExecutor.shutdown();
-        forkJoinPool.shutdown();
-        scheduledExecutor.shutdown();
-    }
-
     @NotNull
     @Override
     public DollarExecutor copy() {
@@ -97,6 +83,22 @@ public class DefaultDollarExecutor implements DollarExecutor {
         scheduledExecutor.shutdownNow();
     }
 
+    @NotNull
+    @Override
+    public var fork(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call) {
+        try {
+            return submit(() -> call.apply(in)).get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new DollarException(e);
+        }
+    }
+
+    @NotNull
+    @Override
+    public var forkAndReturnId(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call) {
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public void restart() {
         stop();
@@ -116,16 +118,16 @@ public class DefaultDollarExecutor implements DollarExecutor {
     }
 
     @Override
-    public var forkAndReturnId(SourceSegment source, var in, Function<var, var> call) {
-        throw new UnsupportedOperationException();
+    public void start() {
+        forkJoinPool = new ForkJoinPool(getRuntime().availableProcessors() * 8);
+        backgroundExecutor = newFixedThreadPool(getRuntime().availableProcessors());
+        scheduledExecutor = Executors.newScheduledThreadPool(getRuntime().availableProcessors());
     }
 
     @Override
-    public var fork(SourceSegment source, var in, Function<var, var> call) {
-        try {
-            return submit(() -> call.apply(in)).get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new DollarException(e);
-        }
+    public void stop() {
+        backgroundExecutor.shutdown();
+        forkJoinPool.shutdown();
+        scheduledExecutor.shutdown();
     }
 }

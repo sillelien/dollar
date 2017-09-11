@@ -293,6 +293,7 @@ public class ScriptScope implements Scope {
         }
     }
 
+    @NotNull
     @Override
     public var get(@NotNull String key) {
         return get(key, false);
@@ -722,21 +723,23 @@ public class ScriptScope implements Scope {
         return ImmutableMap.copyOf(variables);
     }
 
-    private boolean checkConstraint(@NotNull var value,
-                                    @Nullable Variable oldValue,
-                                    @NotNull var constraint) {
-        checkDestroyed();
-
-        parameter("it", value);
-        log.debug("SET it={}", value);
-        if (oldValue != null) {
-            parameter("previous", oldValue.getValue());
-        }
-        final boolean fail = constraint.isFalse();
-        parameter("it", $void());
-        parameter("previous", $void());
-        return fail;
-    }
+// --Commented out by Inspection START (10/09/2017, 14:29):
+//    private boolean checkConstraint(@NotNull var value,
+//                                    @Nullable Variable oldValue,
+//                                    @NotNull var constraint) {
+//        checkDestroyed();
+//
+//        parameter("it", value);
+//        log.debug("SET it={}", value);
+//        if (oldValue != null) {
+//            parameter("previous", oldValue.getValue());
+//        }
+//        final boolean fail = constraint.isFalse();
+//        parameter("it", $void());
+//        parameter("previous", $void());
+//        return fail;
+//    }
+// --Commented out by Inspection STOP (10/09/2017, 14:29)
 
     private void checkDestroyed() {
         if (destroyed) {
@@ -774,19 +777,25 @@ public class ScriptScope implements Scope {
         }
     }
 
-    public @NotNull
-    Multimap<String, Listener> listeners() {
-        return listeners;
-    }
+// --Commented out by Inspection START (10/09/2017, 14:29):
+//    public @NotNull
+//    Multimap<String, Listener> listeners() {
+//        return listeners;
+//    }
+// --Commented out by Inspection STOP (10/09/2017, 14:29)
 
-    public void parser(@NotNull Parser<var> parser) {
-        this.parser = parser;
-    }
+// --Commented out by Inspection START (10/09/2017, 14:29):
+//    public void parser(@NotNull Parser<var> parser) {
+//        this.parser = parser;
+//    }
+// --Commented out by Inspection STOP (10/09/2017, 14:29)
 
-    @NotNull
-    public Parser<var> parser() {
-        return parser;
-    }
+// --Commented out by Inspection START (10/09/2017, 14:29):
+//    @NotNull
+//    public Parser<var> parser() {
+//        return parser;
+//    }
+// --Commented out by Inspection STOP (10/09/2017, 14:29)
 
 
 }

@@ -44,7 +44,7 @@ public class PureFunctionException extends DollarScriptException {
 
     public PureFunctionException(@NotNull String s,
                                  @NotNull SourceSegment source,
-                                 OpDef operation) {
+                                 @NotNull OpDef operation) {
         super(s, source, operation);
     }
 

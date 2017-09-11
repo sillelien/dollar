@@ -17,12 +17,10 @@
 package dollar.internal.runtime.script;
 
 import dollar.api.DollarStatic;
-import dollar.api.MetadataAware;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.TypePrediction;
-import dollar.api.VarInternal;
 import dollar.api.exceptions.LambdaRecursionException;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.plugin.Plugins;
@@ -87,6 +85,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     @NotNull
     private final String name;
     private final boolean newScope;
+    @NotNull
     private final OpDef operation;
     @NotNull
     private final DollarParser parser;
@@ -126,7 +125,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 List<Scope> attachedScopes = new ArrayList<>(DollarScriptSupport.scopes());
                 return DollarScriptSupport.node(operation, name + "-closure", pure,
                                                 new SourceNodeOptions(false, false, sourceNodeOptions.isParallel()),
-                                                parser, source, inputs, vars2 -> {
+                                                parser, source, null, inputs, vars2 -> {
                             for (Scope scope : attachedScopes) {
                                 DollarScriptSupport.pushScope(scope);
                             }
@@ -140,7 +139,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
                             }
 
-                        }, null);
+                        });
             };
         } else {
             this.lambda = lambda;
@@ -183,7 +182,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     public var execute(boolean parallel) throws Exception {return executor.executeNow(() -> executePipe($(parallel))).get();}
 
     @NotNull
-    private var executePipe(var var) throws Exception {
+    private var executePipe(@NotNull var var) throws Exception {
         return lambda.pipe(var);
     }
 
@@ -229,8 +228,8 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             //Some operations do not require a valid scope
             if ((!method.getName().startsWith("$fix") && (nonScopeOperations.contains(
                     method.getName()) || method.getDeclaringClass().equals(
-                    MetadataAware.class) || method.getDeclaringClass().equals(
-                    VarInternal.class)))) {
+                    var.class) || method.getDeclaringClass().equals(
+                    var.class)))) {
                 //This method does not require a valid scope for execution
                 try {
                     result = invokeMain(proxy, method, args);

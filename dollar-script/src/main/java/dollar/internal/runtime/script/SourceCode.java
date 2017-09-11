@@ -35,7 +35,7 @@ public class SourceCode implements SourceSegment {
     private final Scope scope;
     @NotNull
     private final String shortHash;
-    @NotNull
+    @Nullable
     private final String source;
     @Nullable
     private final String sourceFile;
@@ -64,7 +64,7 @@ public class SourceCode implements SourceSegment {
         }
     }
 
-    @NotNull
+    @Nullable
     @Override
     public String getCompleteSource() {
         return source;
@@ -79,6 +79,29 @@ public class SourceCode implements SourceSegment {
     @Override
     public String getShortHash() {
         return shortHash;
+    }
+
+    @NotNull
+    @Override
+    public String getShortSourceMessage() {
+        int index = getStart();
+        int length = getLength();
+        if ((index < 0) || (length < 0)) {
+            return "<unknown location>";
+        }
+        if ((index + length) > source.length()) {
+            throw new DollarAssertionException("Index=" + index + " Length=" + length + " SourceLength=" + source.length() + " Source='" + source + "'");
+        }
+        String[] lines = source.substring(0, index).split("\n");
+        int line = lines.length;
+        int column = (index == 0) ? 0 : ((source.charAt(index - 1) == '\n') ? 0 : lines[lines.length - 1].length());
+        int end = ((index + length) >= source.length()) ? (source.length() - 1) : source.indexOf('\n', index + length);
+        int start = index - column;
+        return " " +
+                       source.substring(start, index).replaceAll("\n+", " ") +
+                       " → " + source.substring(index, index + length) + " ← " +
+                       source.substring(index + length, end).replaceAll("\n+", " ") +
+                       " " + getSourceFile() + "(" + line + ":" + column + ")";
     }
 
     @Nullable
@@ -110,29 +133,6 @@ public class SourceCode implements SourceSegment {
                        " ← " +
                        source.substring(index + length, end).replaceAll("\n", "\n    ") +
                        "\n\n" + "see " + getSourceFile() + "(" + line + ":" + column + ")\n";
-    }
-
-    @NotNull
-    @Override
-    public String getShortSourceMessage() {
-        int index = getStart();
-        int length = getLength();
-        if ((index < 0) || (length < 0)) {
-            return "<unknown location>";
-        }
-        if ((index + length) > source.length()) {
-            throw new DollarAssertionException("Index=" + index + " Length=" + length + " SourceLength=" + source.length() + " Source='" + source + "'");
-        }
-        String[] lines = source.substring(0, index).split("\n");
-        int line = lines.length;
-        int column = (index == 0) ? 0 : ((source.charAt(index - 1) == '\n') ? 0 : lines[lines.length - 1].length());
-        int end = ((index + length) >= source.length()) ? (source.length() - 1) : source.indexOf('\n', index + length);
-        int start = index - column;
-        return " " +
-                       source.substring(start, index).replaceAll("\n+", " ") +
-                       " → " + source.substring(index, index + length) + " ← " +
-                       source.substring(index + length, end).replaceAll("\n+", " ") +
-                       " " + getSourceFile() + "(" + line + ":" + column + ")";
     }
 
     @NotNull

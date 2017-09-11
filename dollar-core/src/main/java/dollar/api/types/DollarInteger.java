@@ -45,8 +45,25 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
 
     @NotNull
     @Override
-    public var $negate() {
-        return DollarFactory.fromValue(-value);
+    public var $as(@NotNull Type type) {
+
+        if (type.is(Type._BOOLEAN)) {
+            return DollarStatic.$(value != 0);
+        } else if (type.is(Type._STRING)) {
+            return DollarStatic.$(toHumanString());
+        } else if (type.is(Type._LIST)) {
+            return DollarStatic.$(Collections.singletonList(this));
+        } else if (type.is(Type._MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.is(Type._INTEGER)) {
+            return this;
+        } else if (type.is(Type._DECIMAL)) {
+            return DollarStatic.$((double) value);
+        } else if (type.is(Type._VOID)) {
+            return DollarStatic.$void();
+        } else {
+            throw new DollarFailureException(ErrorType.INVALID_CAST);
+        }
     }
 
     @NotNull
@@ -98,56 +115,16 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         }
     }
 
-    @Override
-    public int sign() {
-        return (int) Math.signum(value);
-    }
-
-    @Override
-    @NotNull
-    public Integer toInteger() {
-        return value.intValue();
-    }
-
     @NotNull
     @Override
-    public Number toNumber() {
-        return value;
-    }
-
-    @NotNull
-    @Override
-    public var $as(@NotNull Type type) {
-
-        if (type.is(Type._BOOLEAN)) {
-            return DollarStatic.$(value != 0);
-        } else if (type.is(Type._STRING)) {
-            return DollarStatic.$(toHumanString());
-        } else if (type.is(Type._LIST)) {
-            return DollarStatic.$(Collections.singletonList(this));
-        } else if (type.is(Type._MAP)) {
-            return DollarStatic.$("value", this);
-        } else if (type.is(Type._INTEGER)) {
-            return this;
-        } else if (type.is(Type._DECIMAL)) {
-            return DollarStatic.$((double) value);
-        } else if (type.is(Type._VOID)) {
-            return DollarStatic.$void();
-        } else {
-            throw new DollarFailureException(ErrorType.INVALID_CAST);
-        }
+    public var $negate() {
+        return DollarFactory.fromValue(-value);
     }
 
     @NotNull
     @Override
     public Type $type() {
         return new Type(Type._INTEGER, constraintLabel());
-    }
-
-    @NotNull
-    @Override
-    public String toYaml() {
-        return "integer: " + value;
     }
 
     @Override
@@ -158,6 +135,66 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean neitherTrueNorFalse() {
+        return true;
+    }
+
+    @Override
+    public int sign() {
+        return (int) Math.signum(value);
+    }
+
+    @NotNull
+    @Override
+    public String toDollarScript() {
+        return toString();
+    }
+
+    @Override
+    @NotNull
+    public Integer toInteger() {
+        return value.intValue();
+    }
+
+    @NotNull
+    @Override
+    public Number toJavaObject() {
+        return value;
+    }
+
+    @NotNull
+    @Override
+    public Number toNumber() {
+        return value;
+    }
+
+    @NotNull
+    @Override
+    public String toYaml() {
+        return "integer: " + value;
+    }
+
+    @Override
+    public boolean truthy() {
+        return value != 0;
     }
 
     @NotNull
@@ -202,36 +239,6 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     }
 
     @Override
-    public boolean isBoolean() {
-        return false;
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean neitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
-    public boolean truthy() {
-        return value != 0;
-    }
-
-    @Override
-    public boolean number() {
-        return true;
-    }
-
-    @Override
     public boolean decimal() {
         return false;
     }
@@ -242,17 +249,8 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof var) {
-            var unwrapped = ((var) obj).$unwrap();
-            if (unwrapped instanceof DollarInteger) {
-                return value.equals(unwrapped.toLong());
-            } else {
-                return value.toString().equals(obj.toString());
-            }
-        } else {
-            return value.toString().equals(obj.toString());
-        }
+    public boolean number() {
+        return true;
     }
 
     @NotNull
@@ -267,16 +265,23 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         return value;
     }
 
-    @NotNull
     @Override
-    public String toDollarScript() {
-        return toString();
+    public int hashCode() {
+        return value.hashCode();
     }
 
-    @NotNull
     @Override
-    public Number toJavaObject() {
-        return value;
+    public boolean equals(Object obj) {
+        if (obj instanceof var) {
+            var unwrapped = ((var) obj).$unwrap();
+            if (unwrapped instanceof DollarInteger) {
+                return value.equals(unwrapped.toLong());
+            } else {
+                return value.toString().equals(obj.toString());
+            }
+        } else {
+            return value.toString().equals(obj.toString());
+        }
     }
 
 }

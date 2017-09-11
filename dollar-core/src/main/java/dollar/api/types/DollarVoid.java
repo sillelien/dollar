@@ -47,61 +47,32 @@ public class DollarVoid extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var rhs) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $plus(@NotNull var rhs) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $negate() {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $divide(@NotNull var rhs) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $modulus(@NotNull var rhs) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $multiply(@NotNull var v) {
-        return this;
-    }
-
-    @Override
-    public int sign() {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public Integer toInteger() {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public Number toNumber() {
-        return 0;
-    }
-
-    @NotNull
-    @Override
     public var $append(@NotNull var value) {
         return this;
+    }
+
+    @NotNull
+    @Override
+    public var $as(@NotNull Type type) {
+        if (type.is(Type._BOOLEAN)) {
+            return DollarStatic.$(false);
+        } else if (type.is(Type._STRING)) {
+            return DollarStatic.$("");
+        } else if (type.is(Type._LIST)) {
+            return DollarStatic.$(Collections.emptyList());
+        } else if (type.is(Type._MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.is(Type._DECIMAL)) {
+            return DollarStatic.$(0.0d);
+        } else if (type.is(Type._INTEGER)) {
+            return DollarStatic.$(0);
+        } else if (type.is(Type._VOID)) {
+            return this;
+        } else if (type.is(Type._RANGE)) {
+            return DollarFactory.fromValue(Range.closed($get(DollarStatic.$(0)), $get(DollarStatic.$(0))));
+        } else {
+            return DollarFactory.failure(ErrorType.INVALID_CAST, type.toString(), false);
+        }
     }
 
     @NotNull
@@ -114,6 +85,12 @@ public class DollarVoid extends AbstractDollar {
     @Override
     public var $containsValue(@NotNull var value) {
         return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public var $divide(@NotNull var rhs) {
+        return this;
     }
 
     @NotNull
@@ -131,6 +108,36 @@ public class DollarVoid extends AbstractDollar {
     @NotNull
     @Override
     public var $insert(@NotNull var value, int position) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull var rhs) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $modulus(@NotNull var rhs) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $multiply(@NotNull var v) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $negate() {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $plus(@NotNull var rhs) {
         return this;
     }
 
@@ -154,7 +161,7 @@ public class DollarVoid extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $set(@NotNull var key, Object value) {
+    public var $set(@NotNull var key, @NotNull Object value) {
         return $copy();
     }
 
@@ -166,8 +173,59 @@ public class DollarVoid extends AbstractDollar {
 
     @NotNull
     @Override
+    public Type $type() {
+        return Type._VOID;
+    }
+
+    @Override
+    public boolean collection() {
+        return false;
+    }
+
+    @Override
+    public boolean is(@NotNull Type... types) {
+        for (Type type : types) {
+            if (type.is(Type._VOID)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean isVoid() {
+        return true;
+    }
+
+    @Override
+    public boolean neitherTrueNorFalse() {
+        return true;
+    }
+
+    @NotNull
+    @Override
     public var remove(@NotNull Object value) {
         return $copy();
+    }
+
+    @Override
+    public int sign() {
+        return 0;
     }
 
     @NotNull
@@ -178,43 +236,55 @@ public class DollarVoid extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $as(@NotNull Type type) {
-        if (type.is(Type._BOOLEAN)) {
-            return DollarStatic.$(false);
-        } else if (type.is(Type._STRING)) {
-            return DollarStatic.$("");
-        } else if (type.is(Type._LIST)) {
-            return DollarStatic.$(Collections.emptyList());
-        } else if (type.is(Type._MAP)) {
-            return DollarStatic.$("value", this);
-        } else if (type.is(Type._DECIMAL)) {
-            return DollarStatic.$(0.0d);
-        } else if (type.is(Type._INTEGER)) {
-            return DollarStatic.$(0);
-        } else if (type.is(Type._VOID)) {
-            return this;
-        } else if (type.is(Type._RANGE)) {
-            return DollarFactory.fromValue(Range.closed($(0), $(0)));
-        } else {
-            return DollarFactory.failure(ErrorType.INVALID_CAST, type.toString(), false);
-        }
+    public String toDollarScript() {
+        return "void";
+    }
+
+    @NotNull
+    @Override
+    public String toHumanString() {
+        return "";
+    }
+
+    @NotNull
+    @Override
+    public Integer toInteger() {
+        return 0;
+    }
+
+    @NotNull
+    @Override
+    public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
+        return ImmutableMap.of();
+    }
+
+    @Nullable
+    @Override
+    public <R> R toJavaObject() {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public <T> ImmutableList<T> toList() {
+        return ImmutableList.of();
+    }
+
+    @NotNull
+    @Override
+    public Number toNumber() {
+        return 0;
+    }
+
+    @Override
+    public ImmutableList<String> toStrings() {
+        return ImmutableList.of();
     }
 
     @NotNull
     @Override
     public ImmutableList<var> toVarList() {
         return ImmutableList.of();
-    }
-
-    @NotNull
-    @Override
-    public Type $type() {
-        return Type._VOID;
-    }
-
-    @Override
-    public boolean collection() {
-        return false;
     }
 
     @NotNull
@@ -230,35 +300,8 @@ public class DollarVoid extends AbstractDollar {
     }
 
     @Override
-    public boolean is(@NotNull Type... types) {
-        for (Type type : types) {
-            if (type.is(Type._VOID)) {
-                return true;
-            }
-        }
+    public boolean truthy() {
         return false;
-    }
-
-    @Override
-    public boolean isVoid() {
-        return true;
-    }
-
-    @Override
-    public ImmutableList<String> toStrings() {
-        return ImmutableList.of();
-    }
-
-    @NotNull
-    @Override
-    public <T> ImmutableList<T> toList() {
-        return ImmutableList.of();
-    }
-
-    @NotNull
-    @Override
-    public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
-        return ImmutableMap.of();
     }
 
     @NotNull
@@ -266,7 +309,6 @@ public class DollarVoid extends AbstractDollar {
     public Stream<var> $stream(boolean parallel) {
         return Stream.empty();
     }
-
 
     @Override
     public int hashCode() {
@@ -288,57 +330,5 @@ public class DollarVoid extends AbstractDollar {
         } else {
             return 1;
         }
-    }
-
-    @Override
-    public boolean isBoolean() {
-        return false;
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean neitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
-    public boolean truthy() {
-        return false;
-    }
-
-    /**
-     * If you stare into the void, the void will stare back at you.
-     *
-     * @param you - you.
-     */
-    void stare(@NotNull var you) {
-        stare(you);
-    }
-
-    @NotNull
-    @Override
-    public String toDollarScript() {
-        return "void";
-    }
-
-    @NotNull
-    @Override
-    public String toHumanString() {
-        return "";
-    }
-
-    @Nullable
-    @Override
-    public <R> R toJavaObject() {
-        return null;
     }
 }

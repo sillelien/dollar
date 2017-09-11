@@ -16,7 +16,6 @@
 
 package dollar.internal.runtime.script.operators;
 
-import dollar.api.BooleanAware;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.Type;
@@ -76,11 +75,11 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
             type = Type.of(objects[2].toString());
             constraint = node(ASSIGNMENT_CONSTRAINT, "assignment-constraint",
                               pure, NEW_SCOPE, parser,
-                              new SourceCode(token), emptyList(),
+                              new SourceCode(token), type, emptyList(),
                               i -> {
                                   var it = currentScope().parameter("it").getValue();
-                                  return $(it.is(type) && ((objects[3] == null) || ((BooleanAware) objects[3]).isTrue()));
-                              }, type);
+                                  return $(it.is(type) && ((objects[3] == null) || ((var) objects[3]).isTrue()));
+                              });
         } else {
             type = null;
             if (objects[3] instanceof var) constraint = (var) objects[3];

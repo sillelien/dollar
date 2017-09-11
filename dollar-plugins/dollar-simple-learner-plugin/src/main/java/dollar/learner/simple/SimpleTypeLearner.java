@@ -49,9 +49,10 @@ public class SimpleTypeLearner implements TypeLearner {
 
     @Nullable
     private static final DollarExecutor executor = Plugins.sharedInstance(DollarExecutor.class);
-    private static final XStream xstream = new XStream();
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(SimpleTypeLearner.class);
+    @NotNull
+    private static final XStream xstream = new XStream();
     @NotNull
     private ConcurrentHashMap<String, TypeScoreMap> map = new ConcurrentHashMap<>();
 
@@ -65,6 +66,13 @@ public class SimpleTypeLearner implements TypeLearner {
     @Override
     public TypeLearner copy() {
         return this;
+    }
+
+    private String key(@NotNull String name, @NotNull SourceSegment source, @NotNull List<var> inputs) {
+        return name + "(" + inputs.stream().limit(30).filter(Objects::nonNull).limit(10).map(
+                i -> (i.$type() != null) ? i.$type() : Type._ANY).map(
+                Type::toString).collect(
+                Collectors.joining(",")) + ")";
     }
 
     @Override
@@ -92,11 +100,9 @@ public class SimpleTypeLearner implements TypeLearner {
 
     }
 
-    private String key(@NotNull String name, @NotNull SourceSegment source, @NotNull List<var> inputs) {
-        return name + "(" + inputs.stream().limit(30).filter(Objects::nonNull).limit(10).map(
-                i -> (i.$type() != null) ? i.$type() : Type._ANY).map(
-                Type::toString).collect(
-                Collectors.joining(",")) + ")";
+    @NotNull
+    private File mapFile() {
+        return new File(FileUtil.getRuntimeDir("simple.type.learner"), "map.xml");
     }
 
     @Override
@@ -105,18 +111,20 @@ public class SimpleTypeLearner implements TypeLearner {
         xstream.alias("scoreMap", TypeScoreMap.class);
         xstream.registerConverter(new SingleValueConverter() {
             @Override
-            public String toString(Object obj) {
+            public boolean canConvert(@NotNull Class type) {
+                return type.equals(AtomicLong.class);
+            }
+
+            @NotNull
+            @Override
+            public String toString(@NotNull Object obj) {
                 return obj.toString();
             }
 
+            @NotNull
             @Override
-            public Object fromString(String str) {
+            public Object fromString(@NotNull String str) {
                 return new AtomicLong(Long.parseLong(str));
-            }
-
-            @Override
-            public boolean canConvert(Class type) {
-                return type.equals(AtomicLong.class);
             }
         });
         if (mapFile().exists()) {
@@ -142,11 +150,6 @@ public class SimpleTypeLearner implements TypeLearner {
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
-    }
-
-    @NotNull
-    private File mapFile() {
-        return new File(FileUtil.getRuntimeDir("simple.type.learner"), "map.xml");
     }
 
 }

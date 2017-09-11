@@ -26,15 +26,37 @@ public final class Type {
 
 
     /**
-     * The constant STRING.
+     * The constant ANY.
      */
     @NotNull
-    public static final Type _STRING = new Type("String");
+    public static final Type _ANY = new Type("Any");
+    @NotNull
+    public static final Type _BLOCK = new Type("Block");
+    /**
+     * The constant BOOLEAN.
+     */
+    @NotNull
+    public static final Type _BOOLEAN = new Type("Boolean");
+    /**
+     * The constant DATE.
+     */
+    @NotNull
+    public static final Type _DATE = new Type("Date");
     /**
      * The constant DECIMAL.
      */
     @NotNull
     public static final Type _DECIMAL = new Type("Decimal");
+    /**
+     * The constant ERROR.
+     */
+    @NotNull
+    public static final Type _ERROR = new Type("Error");
+    /**
+     * The constant INFINITY.
+     */
+    @NotNull
+    public static final Type _INFINITY = new Type("Infinity");
     /**
      * The constant INTEGER.
      */
@@ -50,6 +72,18 @@ public final class Type {
      */
     @NotNull
     public static final Type _MAP = new Type("Map");
+    @NotNull
+    public static final Type _QUEUE = new Type("Queue");
+    /**
+     * The constant RANGE.
+     */
+    @NotNull
+    public static final Type _RANGE = new Type("Range");
+    /**
+     * The constant STRING.
+     */
+    @NotNull
+    public static final Type _STRING = new Type("String");
     /**
      * The constant URI.
      */
@@ -60,48 +94,10 @@ public final class Type {
      */
     @NotNull
     public static final Type _VOID = new Type("Void");
-    /**
-     * The constant RANGE.
-     */
-    @NotNull
-    public static final Type _RANGE = new Type("Range");
-    /**
-     * The constant BOOLEAN.
-     */
-    @NotNull
-    public static final Type _BOOLEAN = new Type("Boolean");
-    /**
-     * The constant ERROR.
-     */
-    @NotNull
-    public static final Type _ERROR = new Type("Error");
-    /**
-     * The constant DATE.
-     */
-    @NotNull
-    public static final Type _DATE = new Type("Date");
-    /**
-     * The constant INFINITY.
-     */
-    @NotNull
-    public static final Type _INFINITY = new Type("Infinity");
-    /**
-     * The constant ANY.
-     */
-    @NotNull
-    public static final Type _ANY = new Type("Any");
-
-    @NotNull
-    public static final Type _QUEUE = new Type("Queue");
-
-    @NotNull
-    public static final Type _BLOCK = new Type("Block");
-
-
-    @NotNull
-    private final String name;
     @NotNull
     private final String constraint;
+    @NotNull
+    private final String name;
 
 
     /**
@@ -176,6 +172,20 @@ public final class Type {
         }
     }
 
+    public boolean canBe(@NotNull Type type) {
+        return type.name.equals(name);
+    }
+
+    /**
+     * Return the constraint portion of the Type
+     *
+     * @return the constraint
+     */
+    @Contract(pure = true)
+    @NotNull
+    public String constraint() {
+        return constraint;
+    }
 
     @Override
     public int hashCode() {
@@ -212,20 +222,5 @@ public final class Type {
     @NotNull
     public String name() {
         return name;
-    }
-
-    /**
-     * Return the constraint portion of the Type
-     *
-     * @return the constraint
-     */
-    @Contract(pure = true)
-    @NotNull
-    public String constraint() {
-        return constraint;
-    }
-
-    public boolean canBe(Type type) {
-        return type.name.equals(name);
     }
 }

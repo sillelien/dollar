@@ -52,25 +52,56 @@ public class DollarNull extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var rhs) {
+    public var $append(@NotNull var value) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $plus(@NotNull var rhs) {
-        return this;
+    public var $as(@NotNull Type type) {
+        return DollarFactory.newNull(type);
+
     }
 
     @NotNull
     @Override
-    public var $negate() {
-        return this;
+    public var $containsKey(@NotNull var value) {
+        return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public var $containsValue(@NotNull var value) {
+        return DollarStatic.$(false);
     }
 
     @NotNull
     @Override
     public var $divide(@NotNull var rhs) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $get(@NotNull var key) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $has(@NotNull var key) {
+        return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public var $insert(@NotNull var value, int position) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull var rhs) {
         return this;
     }
 
@@ -86,34 +117,46 @@ public class DollarNull extends AbstractDollar {
         return this;
     }
 
+    @NotNull
     @Override
-    public int sign() {
-        return 0;
+    public var $negate() {
+        return this;
     }
 
     @NotNull
     @Override
-    public Integer toInteger() {
-        return 0;
+    public var $plus(@NotNull var rhs) {
+        return this;
     }
 
     @NotNull
     @Override
-    public Number toNumber() {
-        return 0;
+    public var $prepend(@NotNull var value) {
+        return this;
     }
 
     @NotNull
     @Override
-    public var $as(@NotNull Type type) {
-        return DollarFactory.newNull(type);
-
+    public var $remove(@NotNull var value) {
+        return this;
     }
 
     @NotNull
     @Override
-    public ImmutableList<var> toVarList() {
-        return ImmutableList.of();
+    public var $removeByKey(@NotNull String value) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $set(@NotNull var key, @NotNull Object value) {
+        return $copy();
+    }
+
+    @NotNull
+    @Override
+    public var $size() {
+        return DollarStatic.$(1);
     }
 
     @NotNull
@@ -125,18 +168,6 @@ public class DollarNull extends AbstractDollar {
     @Override
     public boolean collection() {
         return false;
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<var, var> toVarMap() {
-        return ImmutableMap.of(DollarStatic.$("value"), this);
-    }
-
-    @NotNull
-    @Override
-    public String toYaml() {
-        return "null: " + type;
     }
 
     @Override
@@ -153,8 +184,23 @@ public class DollarNull extends AbstractDollar {
     }
 
     @Override
+    public boolean isBoolean() {
+        return type.is(Type._BOOLEAN);
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
     public boolean isNull() {
         return true;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
     }
 
     @Override
@@ -163,8 +209,61 @@ public class DollarNull extends AbstractDollar {
     }
 
     @Override
-    public ImmutableList<String> toStrings() {
-        return ImmutableList.of();
+    public boolean neitherTrueNorFalse() {
+        return true;
+    }
+
+    @NotNull
+    @Override
+    public var remove(@NotNull Object value) {
+        return this;
+    }
+
+    @Override
+    public int sign() {
+        return 0;
+    }
+
+    @NotNull
+    @Override
+    public int size() {
+        return 0;
+    }
+
+    @NotNull
+    @Override
+    public String toDollarScript() {
+        return "null";
+    }
+
+    @NotNull
+    @Override
+    public String toHumanString() {
+        return "";
+    }
+
+    @NotNull
+    @Override
+    public Integer toInteger() {
+        return 0;
+    }
+
+    @NotNull
+    @Override
+    public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
+        return ImmutableMap.copyOf(Collections.singletonMap((K) "value", (V) null));
+    }
+
+    @Nullable
+    @Override
+    public <R> R toJavaObject() {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public String toJsonString() {
+        return "null";
     }
 
     @NotNull
@@ -175,86 +274,36 @@ public class DollarNull extends AbstractDollar {
 
     @NotNull
     @Override
-    public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
-        return ImmutableMap.copyOf(Collections.singletonMap((K) "value", (V) null));
-    }
-
-    @NotNull
-    @Override
-    public var $get(@NotNull var key) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $append(@NotNull var value) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $containsValue(@NotNull var value) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public var $containsKey(@NotNull var value) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public var $has(@NotNull var key) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public var $size() {
-        return DollarStatic.$(1);
-    }
-
-    @NotNull
-    @Override
-    public var $prepend(@NotNull var value) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $insert(@NotNull var value, int position) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $removeByKey(@NotNull String value) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $set(@NotNull var key, Object value) {
-        return $copy();
-    }
-
-    @NotNull
-    @Override
-    public var remove(@NotNull Object value) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $remove(@NotNull var value) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public int size() {
+    public Number toNumber() {
         return 0;
+    }
+
+    @Override
+    public ImmutableList<String> toStrings() {
+        return ImmutableList.of();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> toVarList() {
+        return ImmutableList.of();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> toVarMap() {
+        return ImmutableMap.of(DollarStatic.$("value"), this);
+    }
+
+    @NotNull
+    @Override
+    public String toYaml() {
+        return "null: " + type;
+    }
+
+    @Override
+    public boolean truthy() {
+        return false;
     }
 
     @Override
@@ -282,54 +331,5 @@ public class DollarNull extends AbstractDollar {
         }
         return false;
 
-    }
-
-    @Override
-    public boolean isBoolean() {
-        return type.is(Type._BOOLEAN);
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean neitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
-    public boolean truthy() {
-        return false;
-    }
-
-    @NotNull
-    @Override
-    public String toHumanString() {
-        return "";
-    }
-
-    @NotNull
-    @Override
-    public String toDollarScript() {
-        return "null";
-    }
-
-    @Nullable
-    @Override
-    public <R> R toJavaObject() {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public String toJsonString() {
-        return "null";
     }
 }

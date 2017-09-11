@@ -46,13 +46,14 @@ public interface Builtin<T> {
 
     class BuiltinImpl<R> implements Builtin<var> {
 
-        private final int minargs;
-        private final int maxargs;
         @NotNull
         private final Builtin function;
-        private final boolean pure;
+        private final int maxargs;
+        private final int minargs;
         @NotNull
         private final String name;
+        private final boolean pure;
+        @NotNull
         private final Type type;
 
         public BuiltinImpl(@NotNull String name,
@@ -60,7 +61,7 @@ public interface Builtin<T> {
                            int minargs,
                            int maxargs,
                            boolean pure,
-                           Type type) {
+                           @NotNull Type type) {
             this.name = name;
             this.function = function;
             this.minargs = minargs;
@@ -73,6 +74,7 @@ public interface Builtin<T> {
             return pure;
         }
 
+        @NotNull
         public Type type() {
             return type;
         }

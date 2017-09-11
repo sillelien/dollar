@@ -18,7 +18,6 @@ package dollar.internal.runtime.script;
 
 import dollar.api.DollarClass;
 import dollar.api.Scope;
-import dollar.api.VarInternal;
 import dollar.api.types.DollarFactory;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
@@ -34,11 +33,11 @@ public class ClassScopeFactory implements DollarClass {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(ClassScopeFactory.class);
     @NotNull
-    private final String name;
-    @NotNull
     private final List<var> expression;
+    @NotNull
+    private final String name;
 
-    ClassScopeFactory(@NotNull Scope parent, @NotNull String name, List<var> expression, boolean root, boolean parallel) {
+    ClassScopeFactory(@NotNull Scope parent, @NotNull String name, @NotNull List<var> expression, boolean root, boolean parallel) {
 
         this.name = name;
         this.expression = expression;
@@ -50,7 +49,7 @@ public class ClassScopeFactory implements DollarClass {
         ScriptScope subScope = new ScriptScope(currentScope(), "class-" + name, false, true);
         return inScope(true, subScope, scope -> {
             addParameterstoCurrentScope(scope, params);
-            var constructor = DollarFactory.fromList(expression.stream().map(VarInternal::$fixDeep).collect(Collectors.toList()));
+            var constructor = DollarFactory.fromList(expression.stream().map(var::$fixDeep).collect(Collectors.toList()));
 //            System.err.println(scope.variables());
             return new DollarObject(name, constructor, scope.variables());
         });

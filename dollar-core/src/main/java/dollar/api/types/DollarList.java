@@ -16,11 +16,10 @@
 
 package dollar.api.types;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import dollar.api.CollectionAware;
 import dollar.api.DollarStatic;
-import dollar.api.NumericAware;
 import dollar.api.Pipeable;
 import dollar.api.Type;
 import dollar.api.exceptions.DollarFailureException;
@@ -100,29 +99,48 @@ public class DollarList extends AbstractDollar {
         return this;
     }
 
+    @Guarded(NotNullGuard.class)
     @NotNull
     @Override
-    public var $minus(@NotNull var rhs) {
-        ArrayList<var> newVal = new ArrayList<>(list);
-        newVal.remove(rhs);
-        return DollarFactory.fromValue(newVal);
+    public var $append(@NotNull var value) {
+
+        final ArrayList<var> newList = new ArrayList<>(toVarList());
+        if (value.list()) {
+            newList.addAll(value.toVarList());
+        } else {
+            newList.add(value);
+        }
+        return DollarFactory.fromValue(newList);
     }
 
     @NotNull
     @Override
-    @Guarded(NotNullGuard.class)
-    public var $plus(@NotNull var rhs) {
-        return $append(rhs);
-
+    public var $as(@NotNull Type type) {
+        if (type.is(Type._LIST)) {
+            return this;
+        } else if (type.is(Type._MAP)) {
+            return DollarStatic.$(toJavaMap());
+        } else if (type.is(Type._STRING)) {
+            return DollarFactory.fromStringValue(toHumanString());
+        } else if (type.is(Type._VOID)) {
+            return DollarStatic.$void();
+        } else if (type.is(Type._BOOLEAN)) {
+            return DollarStatic.$(!list.isEmpty());
+        } else {
+            throw new DollarFailureException(ErrorType.INVALID_CAST);
+        }
     }
 
     @NotNull
     @Override
-    @Guarded(NotNullGuard.class)
-    public var $negate() {
-        ArrayList<var> result = new ArrayList<>(list);
-        Collections.reverse(result);
-        return DollarFactory.fromValue(result);
+    public var $containsKey(@NotNull var value) {
+        return DollarStatic.$(list.contains(DollarStatic.fix(value, false)));
+    }
+
+    @NotNull
+    @Override
+    public var $containsValue(@NotNull var value) {
+        return DollarStatic.$(list.contains(DollarStatic.fix(value, false)));
     }
 
     @NotNull
@@ -143,73 +161,6 @@ public class DollarList extends AbstractDollar {
         } else {
             return DollarFactory.fromValue(list.subList(list.size() - size, list.size()));
         }
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
-    public var $modulus(@NotNull var rhs) {
-        final int size = (int) ((double) list.size() / rhs.toDouble());
-        return DollarFactory.fromValue(list.subList(list.size() - size, list.size()));
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
-    public var $multiply(@NotNull var rhs) {
-        var v = rhs.$fixDeep();
-        ArrayList<var> list = new ArrayList<>();
-        final int max = Math.abs(v.toInteger());
-        if (max > MAX_LIST_MULTIPLIER) {
-            return DollarFactory.failure(ErrorType.MULTIPLIER_TOO_LARGE,
-                                         "Cannot multiply a list by a value greater than " + MAX_LIST_MULTIPLIER,
-                                         false);
-        }
-        for (int i = 0; i < max; i++) {
-            list.addAll(this.list);
-        }
-        if (v.negative()) {
-            Collections.reverse(list);
-        }
-        return DollarFactory.fromValue(list);
-    }
-
-    @NotNull
-    @Override
-    public Integer toInteger() {
-        return $stream(false).mapToInt(NumericAware::toInteger).sum();
-    }
-
-    @NotNull
-    @Override
-    public Number toNumber() {
-        return 0;
-    }
-
-    @Guarded(NotNullGuard.class)
-    @NotNull
-    @Override
-    public var $append(@NotNull var value) {
-
-        final ArrayList<var> newList = new ArrayList<>(toVarList());
-        if (value.list()) {
-            newList.addAll(value.toVarList());
-        } else {
-            newList.add(value);
-        }
-        return DollarFactory.fromValue(newList);
-    }
-
-    @NotNull
-    @Override
-    public var $containsKey(@NotNull var value) {
-        return DollarStatic.$(list.contains(DollarStatic.fix(value, false)));
-    }
-
-    @NotNull
-    @Override
-    public var $containsValue(@NotNull var value) {
-        return DollarStatic.$(list.contains(DollarStatic.fix(value, false)));
     }
 
     @NotNull
@@ -249,6 +200,80 @@ public class DollarList extends AbstractDollar {
             newList.add(position, value);
         }
         return DollarFactory.fromValue(newList);
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    public var $listen(@NotNull Pipeable pipe) {
+        String key = UUID.randomUUID().toString();
+        $listen(pipe, key);
+        return DollarStatic.$(key);
+    }
+
+    @NotNull
+    @Override
+    public var $listen(@NotNull Pipeable pipe, @NotNull String key) {
+        for (var v : list) {
+            //Join the children to this, so if the children change
+            //listeners to this get the latest value of this.
+            v.$listen(i -> this, key);
+        }
+        return DollarStatic.$(key);
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull var rhs) {
+        ArrayList<var> newVal = new ArrayList<>(list);
+        newVal.remove(rhs);
+        return DollarFactory.fromValue(newVal);
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    public var $modulus(@NotNull var rhs) {
+        final int size = (int) ((double) list.size() / rhs.toDouble());
+        return DollarFactory.fromValue(list.subList(list.size() - size, list.size()));
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    public var $multiply(@NotNull var rhs) {
+        var v = rhs.$fixDeep();
+        ArrayList<var> list = new ArrayList<>();
+        final int max = Math.abs(v.toInteger());
+        if (max > MAX_LIST_MULTIPLIER) {
+            return DollarFactory.failure(ErrorType.MULTIPLIER_TOO_LARGE,
+                                         "Cannot multiply a list by a value greater than " + MAX_LIST_MULTIPLIER,
+                                         false);
+        }
+        for (int i = 0; i < max; i++) {
+            list.addAll(this.list);
+        }
+        if (v.negative()) {
+            Collections.reverse(list);
+        }
+        return DollarFactory.fromValue(list);
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    public var $negate() {
+        ArrayList<var> result = new ArrayList<>(list);
+        Collections.reverse(result);
+        return DollarFactory.fromValue(result);
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    public var $plus(@NotNull var rhs) {
+        return $append(rhs);
+
     }
 
     @Guarded(NotNullGuard.class)
@@ -299,40 +324,6 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public int size() {
-        return list.size();
-    }
-
-    @NotNull
-    @Override
-    public var $as(@NotNull Type type) {
-        if (type.is(Type._LIST)) {
-            return this;
-        } else if (type.is(Type._MAP)) {
-            return DollarStatic.$(toJavaMap());
-        } else if (type.is(Type._STRING)) {
-            return DollarFactory.fromStringValue(toHumanString());
-        } else if (type.is(Type._VOID)) {
-            return DollarStatic.$void();
-        } else if (type.is(Type._BOOLEAN)) {
-            return DollarStatic.$(!list.isEmpty());
-        } else {
-            throw new DollarFailureException(ErrorType.INVALID_CAST);
-        }
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> toVarList() {
-        List<var> result = new ArrayList<>();
-        for (var in : list) {
-            result.add(in.$fix(1, false));
-        }
-        return ImmutableList.copyOf(result);
-    }
-
-    @NotNull
-    @Override
     public Type $type() {
         return new Type(Type._LIST, constraintLabel());
     }
@@ -340,21 +331,6 @@ public class DollarList extends AbstractDollar {
     @Override
     public boolean collection() {
         return true;
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<var, var> toVarMap() {
-        AtomicInteger counter = new AtomicInteger();
-        return list.stream().map(var -> DollarStatic.$(String.valueOf(counter.getAndIncrement()), var)).reduce(
-                CollectionAware::$append).get().toVarMap();
-    }
-
-    @NotNull
-    @Override
-    public String toYaml() {
-        Yaml yaml = new Yaml();
-        return yaml.dump(list);
     }
 
     @Override
@@ -368,39 +344,23 @@ public class DollarList extends AbstractDollar {
     }
 
     @Override
-    public boolean isVoid() {
+    public boolean isBoolean() {
         return false;
     }
 
     @Override
-    public ImmutableList<String> toStrings() {
-        return ImmutableList.copyOf(list.stream().map(Object::toString).collect(Collectors.toList()));
+    public boolean isFalse() {
+        return false;
     }
 
-    @NotNull
     @Override
-    public ImmutableList<Object> toList() {
-        List<Object> newList = new ArrayList<>();
-        for (var val : list) {
-            newList.add(val.toJavaObject());
-        }
-        return ImmutableList.copyOf(newList);
-
+    public boolean isTrue() {
+        return false;
     }
 
-    @NotNull
     @Override
-    public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
-        return ImmutableMap.copyOf(Collections.singletonMap((K) "value", (V) toVarList()));
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
-    public var $listen(@NotNull Pipeable pipe) {
-        String key = UUID.randomUUID().toString();
-        $listen(pipe, key);
-        return DollarStatic.$(key);
+    public boolean isVoid() {
+        return false;
     }
 
     /**
@@ -413,6 +373,17 @@ public class DollarList extends AbstractDollar {
     @Guarded(NotNullGuard.class)
     public JsonArray jsonArray() {
         return (JsonArray) DollarFactory.toJson($fixDeep());
+    }
+
+    @Override
+    public boolean neitherTrueNorFalse() {
+        return true;
+    }
+
+    @NotNull
+    @Override
+    public int size() {
+        return list.size();
     }
 
     @NotNull
@@ -434,6 +405,18 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
+    public Integer toInteger() {
+        return $stream(false).mapToInt(var::toInteger).sum();
+    }
+
+    @NotNull
+    @Override
+    public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
+        return ImmutableMap.copyOf(Collections.singletonMap((K) "value", (V) toVarList()));
+    }
+
+    @NotNull
+    @Override
     public <R> R toJavaObject() {
         return (R) Collections.unmodifiableList(toList());
     }
@@ -449,26 +432,54 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $listen(@NotNull Pipeable pipe, @NotNull String key) {
-        for (var v : list) {
-            //Join the children to this, so if the children change
-            //listeners to this get the latest value of this.
-            v.$listen(i -> this, key);
+    public ImmutableList<Object> toList() {
+        List<Object> newList = new ArrayList<>();
+        for (var val : list) {
+            newList.add(val.toJavaObject());
         }
-        return DollarStatic.$(key);
+        return ImmutableList.copyOf(newList);
+
     }
 
     @NotNull
     @Override
-    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
-        return $plus(value);
+    public Number toNumber() {
+        return 0;
     }
 
     @Override
-    public var $reverse(boolean parallel) {
-        ArrayList<var> newList = new ArrayList<>(list);
-        Collections.reverse(newList);
-        return DollarFactory.wrap(new DollarList(ImmutableList.copyOf(newList)));
+    public ImmutableList<String> toStrings() {
+        return ImmutableList.copyOf(list.stream().map(Object::toString).collect(Collectors.toList()));
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> toVarList() {
+        List<var> result = new ArrayList<>();
+        for (var in : list) {
+            result.add(in.$fix(1, false));
+        }
+        return ImmutableList.copyOf(result);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> toVarMap() {
+        AtomicInteger counter = new AtomicInteger();
+        return list.stream().map(var -> DollarStatic.$(String.valueOf(counter.getAndIncrement()), var)).reduce(
+                var::$append).get().toVarMap();
+    }
+
+    @NotNull
+    @Override
+    public String toYaml() {
+        Yaml yaml = new Yaml();
+        return yaml.dump(list);
+    }
+
+    @Override
+    public boolean truthy() {
+        return !list.isEmpty();
     }
 
     @NotNull
@@ -520,6 +531,14 @@ public class DollarList extends AbstractDollar {
 
     @NotNull
     @Override
+    public var $reverse(boolean parallel) {
+        ArrayList<var> newList = new ArrayList<>(list);
+        Collections.reverse(newList);
+        return DollarFactory.wrap(new DollarList(ImmutableList.copyOf(newList)));
+    }
+
+    @NotNull
+    @Override
     public Stream<var> $stream(boolean parallel) {
         Stream<var> stream;
         if (parallel) {
@@ -530,9 +549,20 @@ public class DollarList extends AbstractDollar {
         return stream;
     }
 
+    @NotNull
+    @Override
+    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
+        return $plus(value);
+    }
+
     @Override
     public boolean list() {
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), list);
     }
 
     @Override
@@ -559,31 +589,6 @@ public class DollarList extends AbstractDollar {
             return 1;
         }
         return 0;
-    }
-
-    @Override
-    public boolean isBoolean() {
-        return false;
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean neitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
-    public boolean truthy() {
-        return !list.isEmpty();
     }
 
 

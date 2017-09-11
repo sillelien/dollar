@@ -19,7 +19,6 @@ package dollar.internal.runtime.script;
 import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.VarFlags;
-import dollar.api.VarInternal;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.plugin.Plugins;
 import dollar.api.script.ModuleResolver;
@@ -119,9 +118,7 @@ public final class Func {
             parser.export(key, node(DEFINITION, "export-" + DEFINITION.name(),
                                     pure, SCOPE_WITH_CLOSURE, parser,
                                     new SourceCode(currentScope(), token),
-                                    singletonList(value), exportArgs -> {
-                        return value.$fix(2, false);
-                    }, null));
+                                    null, singletonList(value), exportArgs -> value.$fix(2, false)));
         }
         return $void();
     }
@@ -160,7 +157,7 @@ public final class Func {
                          @NotNull var durationVar,
                          @Nullable var until,
                          @Nullable var unless,
-                         @NotNull VarInternal block) {
+                         var block) {
         Scope scope = currentScope();
         Double duration = durationVar.toDouble();
         assert duration != null;
@@ -185,7 +182,7 @@ public final class Func {
         return $void();
     }
 
-    public static var fixFunc(var v) {
+    public static var fixFunc(@NotNull var v) {
         return v.$fix(Integer.MAX_VALUE, false);
     }
 
@@ -193,12 +190,14 @@ public final class Func {
     static var forFunc(boolean pure, @NotNull String varName, @NotNull var iterable, @NotNull var block) {
         assert FOR_OP.validForPure(pure);
         return iterable.$each(i -> {
-            currentScope()
-                    .set(varName,
-                         DollarScriptSupport.fix(i[0]),
-                         null, null,
-                         new VarFlags(false, false, false, pure, false, false));
-            return block.$fixDeep(false);
+            return inSubScope(true, pure, "for-loop", newScope -> {
+                currentScope()
+                        .set(varName,
+                             DollarScriptSupport.fix(i[0]),
+                             null, null,
+                             new VarFlags(false, false, false, pure, false, false));
+                return block.$fixDeep(false);
+            });
         });
     }
 
@@ -231,6 +230,7 @@ public final class Func {
         return lhs.$listen(var -> lhs.isTrue() ? DollarScriptSupport.fix(rhs) : $void());
     }
 
+    @NotNull
     static var mapFunc(boolean parallel, @NotNull List<var> entries) {
         if (entries.size() == 1) {
             return blockFunc(2, entries);
@@ -307,7 +307,11 @@ public final class Func {
         }
     }
 
-    static var printFunc(DollarParser parser, SourceSegment segment, OpDef command, List<var> vars) {
+    @SuppressWarnings("UseOfSystemOutOrSystemErr")
+    static var printFunc(@NotNull DollarParser parser,
+                         @NotNull SourceSegment segment,
+                         @NotNull OpDef command,
+                         @NotNull List<var> vars) {
         return node(command, false, parser, segment, vars, args -> {
             String outStr = vars.stream().map(var::toString).collect(Collectors.joining(""));
             if (command.equals(OUT)) {

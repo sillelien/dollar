@@ -17,17 +17,18 @@
 package dollar.api.script;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface SourceSegment {
 
-    ThreadLocal<SourceSegment> source = new ThreadLocal<>();
+    @NotNull ThreadLocal<SourceSegment> source = new ThreadLocal<>();
 
     /**
      * Returns the complete source code from which this segment comes.
      *
      * @return the source
      */
-    @NotNull
+    @Nullable
     String getCompleteSource();
 
     /**
@@ -46,11 +47,19 @@ public interface SourceSegment {
     String getShortHash();
 
     /**
+     * Returns a message describing the position in the source of this segment.
+     *
+     * @return the source message
+     */
+    @NotNull
+    String getShortSourceMessage();
+
+    /**
      * Returns the name of the source file from which the source originates.
      *
      * @return the source file
      */
-    @NotNull
+    @Nullable
     String getSourceFile();
 
     /**
@@ -60,14 +69,6 @@ public interface SourceSegment {
      */
     @NotNull
     String getSourceMessage();
-
-    /**
-     * Returns a message describing the position in the source of this segment.
-     *
-     * @return the source message
-     */
-    @NotNull
-    String getShortSourceMessage();
 
     /**
      * Gets the source segment.

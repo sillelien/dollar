@@ -40,9 +40,9 @@ public class DollarYamlTest {
 
 
         var yamlMap = DollarStatic.$yaml(yamlString2);
-        assertEquals(1L, (long) yamlMap.$("map").$("red").toInteger());
-        assertEquals(2L, (long) yamlMap.$("map").$("blue").toInteger());
-        assertEquals("leaves", yamlMap.$("map").$("green").toString());
+        assertEquals(1L, (long) yamlMap.$get(DollarStatic.$("map")).$get(DollarStatic.$("red")).toInteger());
+        assertEquals(2L, (long) yamlMap.$get(DollarStatic.$("map")).$get(DollarStatic.$("blue")).toInteger());
+        assertEquals("leaves", yamlMap.$get(DollarStatic.$("map")).$get(DollarStatic.$("green")).toString());
 
     }
 

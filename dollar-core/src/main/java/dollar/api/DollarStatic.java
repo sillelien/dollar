@@ -247,7 +247,8 @@ public class DollarStatic {
      * @param in
      * @param call   the call  @return the var
      */
-    public static var $fork(SourceSegment source, var in, Function<var, var> call) {
+    @NotNull
+    public static var $fork(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call) {
         return executor.fork(source, in, call);
     }
 

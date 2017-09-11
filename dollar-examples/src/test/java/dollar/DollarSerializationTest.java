@@ -31,29 +31,29 @@ import static org.junit.Assert.assertEquals;
 
 public class DollarSerializationTest {
 
+    private static var profile;
+
     static {
         RestAssured.port = 4567;
     }
 
-    private static var profile;
-
     @BeforeClass
     public static void setUp() {
         profile = $("name", "Neil")
-                .$("progYears", $range(1981, 2014))
-                .$("blog", $uri("http://neilellis.me"))
-                .$("age", new Date().getYear() + 1900 - 1970)
-                .$("timestamp", LocalDateTime.now())
-                .$("wroteDollar", $(true))
-                .$("empty", $void())
-                .$("rating", 0.7)
-                .$("gender", "male")
-                .$("projects", $list("snapito", "dollar"))
-                .$("location",
-                   $("city", "brighton")
-                           .$("postcode", "bn1 6jj")
-                           .$("number", 343)
-                );
+                          .$("progYears", $range(1981, 2014))
+                          .$("blog", $uri("http://neilellis.me"))
+                          .$("age", new Date().getYear() + 1900 - 1970)
+                          .$("timestamp", LocalDateTime.now())
+                          .$("wroteDollar", $(true))
+                          .$("empty", $void())
+                          .$("rating", 0.7)
+                          .$("gender", "male")
+                          .$("projects", $list("snapito", "dollar"))
+                          .$("location",
+                             $("city", "brighton")
+                                     .$("postcode", "bn1 6jj")
+                                     .$("number", 343)
+                          );
     }
 
 
@@ -65,15 +65,15 @@ public class DollarSerializationTest {
         System.out.println(type);
         final var deserialized = DollarFactory.deserialize(serialized);
         System.out.println(deserialized);
-        System.out.println(profile.$("progYears"));
+        System.out.println(profile.$get($("progYears")));
         assertEquals(profile, deserialized);
-        assertEquals(profile.$("progYears"), deserialized.$("progYears"));
-        assertEquals(profile.$("blog").$type(), Type._URI);
-        assertEquals(profile.$("timestamp").$type(), Type._DATE);
-        assertEquals(profile.$("wroteDollar").$type(), Type._BOOLEAN);
-        assertEquals(profile.$("rating").$type(), Type._DECIMAL);
-        assertEquals(profile.$("projects").$type(), Type._LIST);
-        assertEquals(profile.$("empty").$type(), Type._VOID);
+        assertEquals(profile.$get($("progYears")), deserialized.$get($("progYears")));
+        assertEquals(profile.$get($("blog")).$type(), Type._URI);
+        assertEquals(profile.$get($("timestamp")).$type(), Type._DATE);
+        assertEquals(profile.$get($("wroteDollar")).$type(), Type._BOOLEAN);
+        assertEquals(profile.$get($("rating")).$type(), Type._DECIMAL);
+        assertEquals(profile.$get($("projects")).$type(), Type._LIST);
+        assertEquals(profile.$get($("empty")).$type(), Type._VOID);
 
     }
 

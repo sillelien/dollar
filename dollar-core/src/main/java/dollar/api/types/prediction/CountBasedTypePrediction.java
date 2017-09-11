@@ -35,7 +35,7 @@ public class CountBasedTypePrediction implements TypePrediction, Serializable {
     private String name;
     private long total;
 
-    public CountBasedTypePrediction(@NotNull String name, Map<String, AtomicLong> typeAtomicLongMap) {
+    public CountBasedTypePrediction(@NotNull String name, @NotNull Map<String, AtomicLong> typeAtomicLongMap) {
         values.putAll(typeAtomicLongMap);
     }
 

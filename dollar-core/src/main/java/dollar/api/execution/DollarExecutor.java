@@ -51,6 +51,10 @@ public interface DollarExecutor extends ExtensionPoint<DollarExecutor> {
      */
     void forceStop();
 
+    @NotNull var fork(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call);
+
+    @NotNull var forkAndReturnId(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call);
+
     /**
      * Stop the execution processing and restart it.
      */
@@ -74,8 +78,4 @@ public interface DollarExecutor extends ExtensionPoint<DollarExecutor> {
      * @return the fork/join task
      */
     @NotNull <T> Future<T> submit(@NotNull Callable<T> callable);
-
-    var forkAndReturnId(SourceSegment source, var in, Function<var, var> call);
-
-    var fork(SourceSegment source, var in, Function<var, var> call);
 }

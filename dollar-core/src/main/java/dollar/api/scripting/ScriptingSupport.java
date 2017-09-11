@@ -33,9 +33,10 @@ public final class ScriptingSupport {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("ScriptingSupport");
 
-    public static var compile(String language,
+    @NotNull
+    public static var compile(@NotNull String language,
                               @NotNull String script,
-                              Scope scope) {
+                              @NotNull Scope scope) {
         ScriptingLanguage scriptingLanguage = resolveScriptProvider(language);
         return scriptingLanguage.compile(script, scope);
     }

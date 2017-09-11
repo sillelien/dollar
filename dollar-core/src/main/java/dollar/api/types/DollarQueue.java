@@ -28,7 +28,6 @@ import dollar.api.guard.NotNullGuard;
 import dollar.api.guard.NotNullParametersGuard;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
 
 import java.util.ArrayList;
@@ -62,138 +61,20 @@ public class DollarQueue extends AbstractDollar {
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
-    public var $plus(@NotNull var rhs) {
-        return $push(rhs);
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
-    public var $negate() {
-        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
-    public var $divide(@NotNull var rhs) {
-        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
-    public var $modulus(@NotNull var rhs) {
-        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
-    public var $multiply(@NotNull var v) {
-        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    public Integer toInteger() {
-        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
-    }
-
-    @NotNull
-    @Override
-    @Guarded(ChainGuard.class)
-    public var $all() {
-        return $list();
-    }
-
-    @Override
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
-        if (mutating) {
-            queue.add(value);
-            listeners.forEach((s, pipeable) -> {
-                try {
-                    pipeable.pipe(value);
-                } catch (Exception e) {
-                    DollarFactory.failure(e);
-                }
-            });
-            return this;
-        } else {
-            throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
-        }
-    }
-
-    @NotNull
-    @Override
-    @Guarded(ChainGuard.class)
-    public var $drain() {
-        ArrayList<var> result = new ArrayList<>();
-        while (!queue.isEmpty()) {
-            result.add(queue.poll());
-        }
-        return DollarFactory.fromList(result);
-    }
-
-    /**
-     * Generic read
-     */
-    @Override
-    @NotNull
-    @Guarded(NotNullParametersGuard.class)
-    @Guarded(ChainGuard.class)
-    public var $read(boolean blocking, boolean mutating) {
-        if (mutating) {
-            return queue.poll();
-        } else {
-            return queue.peek();
-        }
-    }
-
-    @NotNull
-    @Override
-    @Guarded(ChainGuard.class)
-    @Guarded(NotNullParametersGuard.class)
-    public var $publish(@NotNull var value) {
-        listeners.forEach((s, pipeable) -> {
-            try {
-                pipeable.pipe(value);
-            } catch (Exception e) {
-                DollarFactory.failure(e);
-            }
-        });
-        return this;
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
-    @Guarded(ChainGuard.class)
-    public var $each(@NotNull Pipeable pipe) {
-        ArrayList<var> result = new ArrayList<>();
-        while (!queue.isEmpty()) {
-            try {
-                result.add(pipe.pipe(queue.poll()));
-            } catch (Exception e) {
-                DollarFactory.failure(e);
-            }
-        }
-        return DollarFactory.fromList(result);
-    }
-
-    @Override
-    public boolean queue() {
-        return true;
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
     public var $append(@NotNull var value) {
         throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
+    }
+
+    @Override
+    @NotNull
+    @Guarded(NotNullGuard.class)
+    public var $as(@NotNull Type type) {
+        if (type.is(Type._LIST)) {
+            return DollarStatic.$(queue.toArray());
+        } else if (type.is(Type._MAP)) {
+            return DollarStatic.$(queue.toArray()).$map();
+        }
+        throw new DollarFailureException(ErrorType.INVALID_CAST);
     }
 
     @NotNull
@@ -207,6 +88,13 @@ public class DollarQueue extends AbstractDollar {
     @Override
     @Guarded(NotNullGuard.class)
     public var $containsValue(@NotNull var value) {
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    public var $divide(@NotNull var rhs) {
         throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
@@ -234,6 +122,34 @@ public class DollarQueue extends AbstractDollar {
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
+    public var $modulus(@NotNull var rhs) {
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    public var $multiply(@NotNull var v) {
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    public var $negate() {
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    public var $plus(@NotNull var rhs) {
+        return $push(rhs);
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
     public var $prepend(@NotNull var value) {
         $push(value);
         return this;
@@ -256,7 +172,7 @@ public class DollarQueue extends AbstractDollar {
     @NotNull
     @Override
     @Guarded(NotNullGuard.class)
-    public var $set(@NotNull var key, @Nullable Object value) {
+    public var $set(@NotNull var key, @NotNull Object value) {
         throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
     }
 
@@ -265,83 +181,6 @@ public class DollarQueue extends AbstractDollar {
     @Guarded(NotNullGuard.class)
     public var $size() {
         return DollarStatic.$(queue.size());
-    }
-
-    @Override
-    public int size() {
-        return queue.size();
-    }
-
-    @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    public var $as(@NotNull Type type) {
-        if (type.is(Type._LIST)) {
-            return DollarStatic.$(queue.toArray());
-        } else if (type.is(Type._MAP)) {
-            return DollarStatic.$(queue.toArray()).$map();
-        }
-        throw new DollarFailureException(ErrorType.INVALID_CAST);
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
-    public ImmutableList<var> toVarList() {
-        return ImmutableList.copyOf(Arrays.asList((var[]) queue.toArray()));
-    }
-
-    @Override
-    @NotNull
-    public Type $type() {
-        return new Type(Type._QUEUE, constraintLabel());
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
-    public ImmutableMap<var, var> toVarMap() {
-        return DollarStatic.$(queue.toArray()).toVarMap();
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
-    public String toYaml() {
-        Yaml yaml = new Yaml();
-        return yaml.dump(queue.toArray());
-    }
-
-    @Override
-    @Guarded(NotNullGuard.class)
-    public boolean is(@NotNull Type... types) {
-        for (Type type : types) {
-            if (type.is(Type._QUEUE)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
-    public ImmutableList<String> toStrings() {
-        return ImmutableList.copyOf(queue.stream().map(var::toString).collect(Collectors.toList()));
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
-    public ImmutableList<?> toList() {
-        return ImmutableList.copyOf(Arrays.asList(queue.toArray()));
-    }
-
-    @NotNull
-    @Override
-    @Guarded(NotNullGuard.class)
-    public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
-        return $map().toJavaMap();
     }
 
     @Override
@@ -354,8 +193,20 @@ public class DollarQueue extends AbstractDollar {
     }
 
     @Override
-    public int compareTo(var o) {
-        return 0;
+    @NotNull
+    public Type $type() {
+        return new Type(Type._QUEUE, constraintLabel());
+    }
+
+    @Override
+    @Guarded(NotNullGuard.class)
+    public boolean is(@NotNull Type... types) {
+        for (Type type : types) {
+            if (type.is(Type._QUEUE)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -379,8 +230,8 @@ public class DollarQueue extends AbstractDollar {
     }
 
     @Override
-    public boolean truthy() {
-        return false;
+    public int size() {
+        return queue.size();
     }
 
     @NotNull
@@ -400,8 +251,156 @@ public class DollarQueue extends AbstractDollar {
 
     @NotNull
     @Override
+    public Integer toInteger() {
+        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
+        return $map().toJavaMap();
+    }
+
+    @NotNull
+    @Override
     @Guarded(NotNullGuard.class)
     public <R> R toJavaObject() {
         return (R) queue;
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    public ImmutableList<?> toList() {
+        return ImmutableList.copyOf(Arrays.asList(queue.toArray()));
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    public ImmutableList<String> toStrings() {
+        return ImmutableList.copyOf(queue.stream().map(var::toString).collect(Collectors.toList()));
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    public ImmutableList<var> toVarList() {
+        return ImmutableList.copyOf(Arrays.asList((var[]) queue.toArray()));
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    public ImmutableMap<var, var> toVarMap() {
+        return DollarStatic.$(queue.toArray()).toVarMap();
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    public String toYaml() {
+        Yaml yaml = new Yaml();
+        return yaml.dump(queue.toArray());
+    }
+
+    @Override
+    public boolean truthy() {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    @Guarded(ChainGuard.class)
+    public var $all() {
+        return $list();
+    }
+
+    @NotNull
+    @Override
+    @Guarded(ChainGuard.class)
+    public var $drain() {
+        ArrayList<var> result = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            result.add(queue.poll());
+        }
+        return DollarFactory.fromList(result);
+    }
+
+    @NotNull
+    @Override
+    @Guarded(NotNullGuard.class)
+    @Guarded(ChainGuard.class)
+    public var $each(@NotNull Pipeable pipe) {
+        ArrayList<var> result = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            try {
+                result.add(pipe.pipe(queue.poll()));
+            } catch (Exception e) {
+                DollarFactory.failure(e);
+            }
+        }
+        return DollarFactory.fromList(result);
+    }
+
+    @NotNull
+    @Override
+    @Guarded(ChainGuard.class)
+    @Guarded(NotNullParametersGuard.class)
+    public var $publish(@NotNull var value) {
+        listeners.forEach((s, pipeable) -> {
+            try {
+                pipeable.pipe(value);
+            } catch (Exception e) {
+                DollarFactory.failure(e);
+            }
+        });
+        return this;
+    }
+
+    /**
+     * Generic read
+     */
+    @Override
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
+    public var $read(boolean blocking, boolean mutating) {
+        if (mutating) {
+            return queue.poll();
+        } else {
+            return queue.peek();
+        }
+    }
+
+    @Override
+    @NotNull
+    @Guarded(NotNullParametersGuard.class)
+    @Guarded(ChainGuard.class)
+    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
+        if (mutating) {
+            queue.add(value);
+            listeners.forEach((s, pipeable) -> {
+                try {
+                    pipeable.pipe(value);
+                } catch (Exception e) {
+                    DollarFactory.failure(e);
+                }
+            });
+            return this;
+        } else {
+            throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
+        }
+    }
+
+    @Override
+    public boolean queue() {
+        return true;
+    }
+
+    @Override
+    public int compareTo(var o) {
+        return 0;
     }
 }

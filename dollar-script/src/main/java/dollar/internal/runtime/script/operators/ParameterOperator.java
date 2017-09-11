@@ -73,8 +73,9 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
                 name = "parameterized-" + lhs.metaAttribute(OPERATION_NAME) + "-" + sourceCode.getShortHash();
             }
 
-            var node = node(PARAM_OP, name, pure, parser, token, parameters, i -> {
-
+            @SuppressWarnings("ConstantConditions")
+            var node = node(PARAM_OP, name, pure, parser, token, parameters,
+                            i -> inSubScope(true, pure, "param-disposable-scope", newScope -> {
                                 addParameterstoCurrentScope(currentScope(), parameters);
 
                                 var result;
@@ -90,10 +91,11 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
 
                                     result = lhs.$fix(2, false);
                                 }
-
+                                assert result != null;
                                 return result;
-                            }
+                            })
             );
+
 
             //reactive links
             lhs.$listen(i -> node.$notify());

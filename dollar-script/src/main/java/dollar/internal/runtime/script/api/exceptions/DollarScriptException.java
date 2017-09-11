@@ -25,12 +25,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class DollarScriptException extends DollarFailureException {
+    @Nullable
+    private OpDef operation;
     @NotNull
     private String rawMessage;
     @Nullable
     private SourceSegment source;
-    @Nullable
-    private OpDef operation;
 
     public DollarScriptException(@NotNull Throwable e) {
         super(e);
@@ -68,7 +68,7 @@ public class DollarScriptException extends DollarFailureException {
         this.source = source;
     }
 
-    public DollarScriptException(@NotNull String s, @Nullable SourceSegment source, OpDef operation) {
+    public DollarScriptException(@NotNull String s, @Nullable SourceSegment source, @NotNull OpDef operation) {
         super((s + ":\n" + optionalSource(source) + "\n\n") + (operation != null ? operation.helpText() : ""));
         rawMessage = s;
         this.source = source;
@@ -76,12 +76,12 @@ public class DollarScriptException extends DollarFailureException {
     }
 
 
-    public DollarScriptException(Throwable cause, @Nullable SourceSegment source) {
+    public DollarScriptException(@NotNull Throwable cause, @Nullable SourceSegment source) {
         super(cause, cause.getMessage() + ":\n" + optionalSource(source));
         this.source = source;
     }
 
-    public DollarScriptException(Throwable cause, var context) {
+    public DollarScriptException(@NotNull Throwable cause, @NotNull var context) {
         super(cause, context.source().getSourceMessage());
         source = context.source();
     }
@@ -91,15 +91,18 @@ public class DollarScriptException extends DollarFailureException {
         return (source == null) ? "" : source.getSourceMessage();
     }
 
+    @NotNull
+    public OpDef operation() {
+        return operation;
+    }
+
+    @NotNull
     public String rawMessage() {
         return rawMessage;
     }
 
+    @NotNull
     public SourceSegment source() {
         return source;
-    }
-
-    public OpDef operation() {
-        return operation;
     }
 }

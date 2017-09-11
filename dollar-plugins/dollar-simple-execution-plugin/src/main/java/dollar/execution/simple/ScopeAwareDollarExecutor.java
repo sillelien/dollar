@@ -106,6 +106,35 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
         }
     }
 
+    @NotNull
+    @Override
+    public var fork(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call) {
+        Future<var> varFuture = submit(() -> call.apply(in));
+        return node(FORK, false, DollarParser.parser.get(), source,
+                    Arrays.asList(in),
+                    j -> {
+                        log.debug("Waiting for future ...");
+                        return varFuture.get();
+                    }
+        );
+    }
+
+    @NotNull
+    @Override
+    public var forkAndReturnId(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call) {
+        Future<var> varFuture = submit(() -> call.apply(in));
+        String id = DollarScriptSupport.randomId();
+        log.debug("Future obtained, returning future node");
+        currentScope().set(id, node(FORK, false, DollarParser.parser.get(), source,
+                                    Arrays.asList(in),
+                                    j -> {
+                                        log.debug("Waiting for future ...");
+                                        return varFuture.get();
+                                    }
+        ), null, null, new VarFlags(true, true, false, false, false, true));
+        return DollarFactory.fromStringValue(id);
+    }
+
     @Override
     public void restart() {
         stop();
@@ -127,34 +156,6 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
             log.info("Forking");
         }
         return forkJoinPool.submit(wrap(callable));
-    }
-
-    @NotNull
-    @Override
-    public var forkAndReturnId(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call) {
-        Future<var> varFuture = submit(() -> call.apply(in));
-        String id = DollarScriptSupport.randomId();
-        log.debug("Future obtained, returning future node");
-        currentScope().set(id, node(FORK, false, DollarParser.parser.get(), source,
-                                    Arrays.asList(in),
-                                    j -> {
-                                        log.debug("Waiting for future ...");
-                                        return varFuture.get();
-                                    }
-        ), null, null, new VarFlags(true, true, false, false, false, true));
-        return DollarFactory.fromStringValue(id);
-    }
-
-    @Override
-    public var fork(SourceSegment source, var in, Function<var, var> call) {
-        Future<var> varFuture = submit(() -> call.apply(in));
-        return node(FORK, false, DollarParser.parser.get(), source,
-                    Arrays.asList(in),
-                    j -> {
-                        log.debug("Waiting for future ...");
-                        return varFuture.get();
-                    }
-        );
     }
 
     @Override

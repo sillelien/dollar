@@ -106,24 +106,24 @@ public class DollarBasicTest {
         Map submap = new HashMap();
         submap.put("thing", 1);
         map.put("sub", submap);
-        assertEquals("bar", DollarStatic.$(map).$("foo").toJavaObject());
+        assertEquals("bar", DollarStatic.$(map).$get($("foo")).toJavaObject());
         assertEquals("bar", DollarStatic.$(map).toJavaMap().get("foo"));
-        assertEquals(1L, DollarStatic.$(map).$("sub").toJavaMap().get("thing"));
-        assertEquals("1", DollarStatic.$(map).$("sub").$("thing").toHumanString());
-        assertEquals("{\"thing\":1}", DollarStatic.$(map).$("sub").toHumanString());
-        assertEquals(1, DollarStatic.$(map).$("sub").$("thing").toInteger().longValue());
+        assertEquals(1L, DollarStatic.$(map).$get($("sub")).toJavaMap().get("thing"));
+        assertEquals("1", DollarStatic.$(map).$get($("sub")).$get($("thing")).toHumanString());
+        assertEquals("{\"thing\":1}", DollarStatic.$(map).$get($("sub")).toHumanString());
+        assertEquals(1, DollarStatic.$(map).$get($("sub")).$get($("thing")).toInteger().longValue());
     }
 
 
     @Test
     public void testNull() {
-        assertNull(DollarStatic.$((Object) null).$("foo", "bar").$("foo").toJavaObject());
+        assertNull(DollarStatic.$((Object) null).$("foo", "bar").$get($("foo")).toJavaObject());
         assertTrue(DollarStatic.$((Object) null).isVoid());
-        assertTrue(DollarStatic.$((Object) null).$("bar").isVoid());
+        assertTrue(DollarStatic.$((Object) null).$get($("bar")).isVoid());
         assertNull(DollarStatic.$((Object) null).toJavaObject());
-        assertFalse(DollarStatic.$((Object) null).$("bar").$has("foo").isTrue());
+        assertFalse(DollarStatic.$((Object) null).$get($("bar")).$has("foo").isTrue());
         assertFalse(DollarStatic.$((Object) null).$has("foo").isTrue());
-        assertTrue(DollarStatic.$((Object) null).$("foo", "bar").$("foo").isVoid());
+        assertTrue(DollarStatic.$((Object) null).$("foo", "bar").$get($("foo")).isVoid());
         assertEquals("twasnull", DollarStatic.$((Object) null).$default($(i -> DollarStatic.$("twasnull"))).toHumanString());
     }
 
@@ -132,7 +132,7 @@ public class DollarBasicTest {
     public void testStringCreation() {
         final ImmutableJsonObject jsonObject = DollarStatic.$("{\"foo\":\"bar\"}").toJsonObject();
         System.out.println(jsonObject);
-        assertEquals("bar", DollarStatic.$("{\"foo\":\"bar\"}").$("foo").toJsonType());
+        assertEquals("bar", DollarStatic.$("{\"foo\":\"bar\"}").$get($("foo")).toJsonType());
         final String foo = jsonObject.getString("foo");
         assertEquals("bar", foo);
     }

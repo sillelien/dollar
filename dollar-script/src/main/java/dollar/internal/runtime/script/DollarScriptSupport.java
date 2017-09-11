@@ -344,16 +344,14 @@ public final class DollarScriptSupport {
         return b.toString();
     }
 
-    @NotNull
     public static var node(@NotNull OpDef operation,
                            @NotNull String name,
                            boolean pure,
                            @NotNull SourceNodeOptions sourceNodeOptions,
                            @NotNull DollarParser parser,
                            @NotNull SourceSegment source,
-                           @NotNull List<var> inputs,
-                           @NotNull Pipeable pipeable,
-                           @Nullable Type suggestedType) {
+                           @Nullable Type suggestedType, @NotNull List<var> inputs,
+                           @NotNull Pipeable pipeable) {
         var result = DollarFactory.wrap((var) Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
@@ -381,7 +379,7 @@ public final class DollarScriptSupport {
                            @NotNull SourceSegment source,
                            @NotNull List<var> inputs,
                            @NotNull Pipeable pipeable) {
-        return node(operation, operation.name(), pure, operation.nodeOptions(), parser, source, inputs, pipeable, null);
+        return node(operation, operation.name(), pure, operation.nodeOptions(), parser, source, null, inputs, pipeable);
     }
 
     @NotNull
@@ -392,7 +390,7 @@ public final class DollarScriptSupport {
                            @NotNull List<var> inputs,
                            @NotNull Pipeable callable) {
         return node(operation, operation.name(), pure, operation.nodeOptions(), parser,
-                    new SourceCode(currentScope(), token), inputs, callable, null);
+                    new SourceCode(currentScope(), token), null, inputs, callable);
     }
 
     @NotNull
@@ -404,7 +402,7 @@ public final class DollarScriptSupport {
                            @NotNull List<var> inputs,
                            @NotNull Pipeable callable) {
         return node(operation, name, pure, operation.nodeOptions(), parser,
-                    new SourceCode(currentScope(), token), inputs, callable, null);
+                    new SourceCode(currentScope(), token), null, inputs, callable);
     }
 
     public static void popScope(@NotNull Scope scope) {
@@ -430,8 +428,8 @@ public final class DollarScriptSupport {
                             @NotNull var lhs,
                             @NotNull var rhs,
                             @NotNull Pipeable callable) {
-        final var node = node(operation, name, pure, sourceNodeOptions, parser, source, Arrays.asList(lhs, rhs),
-                              callable, null
+        final var node = node(operation, name, pure, sourceNodeOptions, parser, source, null, Arrays.asList(lhs, rhs),
+                              callable
         );
 
 
@@ -505,8 +503,8 @@ public final class DollarScriptSupport {
 
         final var node = node(operation, operation.name(),
                               pure, operation.nodeOptions(), parser, source,
-                              Collections.singletonList(lhs),
-                              callable, null);
+                              null, Collections.singletonList(lhs),
+                              callable);
         lhs.$listen(i -> node.$notify());
         return node;
     }

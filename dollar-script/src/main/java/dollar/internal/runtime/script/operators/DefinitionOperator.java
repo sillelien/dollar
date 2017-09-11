@@ -91,8 +91,8 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
             if (typeConstraintObj != null) {
                 Type type = Type.of(typeConstraintObj);
                 constraint = node(DEFINITION, "definition-constraint", pure, NEW_SCOPE, parser,
-                                  new SourceCode(currentScope(), token), new ArrayList<>(),
-                                  i -> $(scope.parameter("it").getValue().is(type)), null);
+                                  new SourceCode(currentScope(), token), null, new ArrayList<>(),
+                                  i -> $(scope.parameter("it").getValue().is(type)));
                 checkLearntType(token, type, rhs, MIN_PROBABILITY);
                 SourceCode meta = typeConstraintObj.meta(CONSTRAINT_SOURCE);
                 if (meta != null) {

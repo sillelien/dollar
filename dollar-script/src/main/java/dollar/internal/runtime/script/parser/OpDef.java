@@ -41,25 +41,26 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(OpDef.class);
     @Nullable
-    private final String symbol;
-    @Nullable
     private final String keyword;
     @NotNull
     private final String name;
-    private final boolean reserved;
-    private final boolean reactive;
-    private final int priority;
-    @NotNull
-    private final OpDefType type;
-    @Nullable
-    private final Boolean pure;
     @NotNull
     private final SourceNodeOptions nodeOptions;
+    private final int priority;
+    @Nullable
+    private final Boolean pure;
+    private final boolean reactive;
+    private final boolean reserved;
+    @Nullable
+    private final String symbol;
+    @NotNull
+    private final OpDefType type;
+    @NotNull
     private final Function<var[], Type> typeFunction;
     @Nullable
-    private String emoji;
-    @Nullable
     private String bnf;
+    @Nullable
+    private String emoji;
 
     public OpDef(@NotNull OpDefType type,
                  @Nullable String symbol,
@@ -72,7 +73,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                  @Nullable Boolean pure,
                  @NotNull SourceNodeOptions nodeOptions,
                  @Nullable String emoji,
-                 Function<var[], Type> typeFunction) {
+                 @NotNull Function<var[], Type> typeFunction) {
         this.type = type;
         this.typeFunction = typeFunction;
         if (emoji != null) {
@@ -91,51 +92,6 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         if (!reserved && (priority == 0)) {
             throw new AssertionError("Priority must be > 0");
         }
-    }
-
-    @Override
-    @Nullable
-    public String keyword() {
-        return keyword;
-    }
-
-    @NotNull
-    public String name() {
-        return name;
-    }
-
-    @NotNull
-    public String emoji() {
-        return emoji;
-    }
-
-    public boolean validForPure(boolean pure) {
-        return !pure || (this.pure && pure);
-    }
-
-    @Nullable
-    @Override
-    public String symbol() {
-        return symbol;
-    }
-
-    @Override
-    public int compareTo(@NotNull Object o) {
-        if (equals(o)) {
-            return 0;
-        }
-        if ((o instanceof OpDef) && (keyword != null)) {
-            return keyword.compareTo(String.valueOf(((OpDef) o).keyword()));
-        }
-        if ((o instanceof OpDef) && (name != null)) {
-            return name.compareTo(((OpDef) o).name());
-        }
-
-        return name.compareTo(String.valueOf(o));
-    }
-
-    public boolean isReserved() {
-        return reserved;
     }
 
     @NotNull
@@ -267,6 +223,26 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     }
 
     @Override
+    public int compareTo(@NotNull Object o) {
+        if (equals(o)) {
+            return 0;
+        }
+        if ((o instanceof OpDef) && (keyword != null)) {
+            return keyword.compareTo(String.valueOf(((OpDef) o).keyword()));
+        }
+        if ((o instanceof OpDef) && (name != null)) {
+            return name.compareTo(((OpDef) o).name());
+        }
+
+        return name.compareTo(String.valueOf(o));
+    }
+
+    @NotNull
+    public String emoji() {
+        return emoji;
+    }
+
+    @Override
     public int hashCode() {
         return com.google.common.base.Objects.hashCode(symbol, keyword, name, reserved, reactive, priority, type, pure, nodeOptions,
                                                        typeFunction, emoji, bnf);
@@ -291,6 +267,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                        com.google.common.base.Objects.equal(bnf, opDef.bnf);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -309,8 +286,29 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
                        .toString();
     }
 
-    public boolean reactive() {
-        return reactive;
+    @NotNull
+    public String helpText() {
+        return asMarkdown();
+    }
+
+    public boolean isReserved() {
+        return reserved;
+    }
+
+    @Override
+    @Nullable
+    public String keyword() {
+        return keyword;
+    }
+
+    @NotNull
+    public String name() {
+        return name;
+    }
+
+    @NotNull
+    public SourceNodeOptions nodeOptions() {
+        return nodeOptions;
     }
 
     public int priority() {
@@ -318,22 +316,26 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     }
 
     @NotNull
-    public OpDefType type() {
-        return type;
-    }
-
     public Boolean pure() {
         return pure;
     }
 
-    public String helpText() {
-        return asMarkdown();
+    public boolean reactive() {
+        return reactive;
     }
 
-    public SourceNodeOptions nodeOptions() {
-        return nodeOptions;
+    @Nullable
+    @Override
+    public String symbol() {
+        return symbol;
     }
 
+    @NotNull
+    public OpDefType type() {
+        return type;
+    }
+
+    @NotNull
     public Type typeFor(@NotNull var... vars) {
         if (typeFunction == null) {
             return null;
@@ -344,5 +346,9 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
             log.error(type + ":" + e.getMessage(), e);
             throw e;
         }
+    }
+
+    public boolean validForPure(boolean pure) {
+        return !pure || (this.pure && pure);
     }
 }

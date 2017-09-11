@@ -16,11 +16,13 @@
 
 package dollar.internal.runtime.script;
 
+import org.jetbrains.annotations.NotNull;
+
 public class DollarExitError extends Error {
     public DollarExitError() {
     }
 
-    public DollarExitError(Throwable throwable) {
+    public DollarExitError(@NotNull Throwable throwable) {
         super(throwable);
     }
 }

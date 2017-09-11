@@ -54,20 +54,34 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
+    public var $as(@NotNull Type type) {
+        if (type.is(Type._BOOLEAN)) {
+            return DollarStatic.$("true".equals(value) || "yes".equals(value));
+        } else if (type.is(Type._STRING)) {
+            return this;
+        } else if (type.is(Type._LIST)) {
+            return DollarStatic.$(Collections.singletonList(this));
+        } else if (type.is(Type._MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.is(Type._DECIMAL)) {
+            return DollarStatic.$(Double.parseDouble(value));
+        } else if (type.is(Type._INTEGER)) {
+            return DollarStatic.$(Long.parseLong(value));
+        } else if (type.is(Type._VOID)) {
+            return DollarStatic.$void();
+        } else if (type.is(Type._DATE)) {
+            return DollarFactory.fromValue(LocalDateTime.parse(value));
+        } else if (type.is(Type._URI)) {
+            return DollarFactory.fromURI(value);
+        } else {
+            throw new DollarFailureException(INVALID_CAST);
+        }
+    }
+
+    @NotNull
+    @Override
     public var $dec() {
         return DollarStatic.$(String.valueOf((char) (value.charAt(value.length() - 1) - 1)));
-    }
-
-    @NotNull
-    @Override
-    public var $minus(@NotNull var rhs) {
-        return DollarFactory.fromStringValue(value.replace(rhs.toString(), ""));
-    }
-
-    @NotNull
-    @Override
-    public var $negate() {
-        return DollarFactory.fromValue(new StringBuilder(value).reverse().toString());
     }
 
     @NotNull
@@ -113,6 +127,12 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
+    public var $minus(@NotNull var rhs) {
+        return DollarFactory.fromStringValue(value.replace(rhs.toString(), ""));
+    }
+
+    @NotNull
+    @Override
     public var $modulus(@NotNull var rhs) {
         throw new DollarFailureException(INVALID_STRING_OPERATION);
     }
@@ -147,52 +167,14 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
-    public Integer toInteger() {
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException nfe) {
-            DollarFactory.failure(nfe);
-            return 0;
-        }
-    }
-
-    @NotNull
-    @Override
-    public var $as(@NotNull Type type) {
-        if (type.is(Type._BOOLEAN)) {
-            return DollarStatic.$("true".equals(value) || "yes".equals(value));
-        } else if (type.is(Type._STRING)) {
-            return this;
-        } else if (type.is(Type._LIST)) {
-            return DollarStatic.$(Collections.singletonList(this));
-        } else if (type.is(Type._MAP)) {
-            return DollarStatic.$("value", this);
-        } else if (type.is(Type._DECIMAL)) {
-            return DollarStatic.$(Double.parseDouble(value));
-        } else if (type.is(Type._INTEGER)) {
-            return DollarStatic.$(Long.parseLong(value));
-        } else if (type.is(Type._VOID)) {
-            return DollarStatic.$void();
-        } else if (type.is(Type._DATE)) {
-            return DollarFactory.fromValue(LocalDateTime.parse(value));
-        } else if (type.is(Type._URI)) {
-            return DollarFactory.fromURI(value);
-        } else {
-            throw new DollarFailureException(INVALID_CAST);
-        }
+    public var $negate() {
+        return DollarFactory.fromValue(new StringBuilder(value).reverse().toString());
     }
 
     @NotNull
     @Override
     public Type $type() {
         return new Type(Type._STRING, constraintLabel());
-    }
-
-    @NotNull
-    @Override
-    public String toYaml() {
-        Yaml yaml = new Yaml();
-        return "string: " + yaml.dump(value);
     }
 
     @Override
@@ -203,29 +185,6 @@ public class DollarString extends AbstractDollarSingleValue<String> {
             }
         }
         return false;
-    }
-
-    @NotNull
-    @Override
-    public var $size() {
-        return DollarStatic.$(value.length());
-    }
-
-    @NotNull
-    @Override
-    public var $plus(@NotNull var rhs) {
-        return DollarFactory.wrap(new DollarString(value + rhs.$S()));
-    }
-
-    @NotNull
-    @Override
-    public String toJsonString() {
-        return "\"" + value + "\"";
-    }
-
-    @Override
-    public int compareTo(@NotNull var o) {
-        return Comparator.<String>naturalOrder().compare(value, o.$S());
     }
 
     @Override
@@ -244,20 +203,15 @@ public class DollarString extends AbstractDollarSingleValue<String> {
     }
 
     @Override
-    public boolean neitherTrueNorFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean truthy() {
-        return !value.isEmpty();
-    }
-
-    @Override
     @NotNull
     @Guarded(NotNullGuard.class)
     public JsonArray jsonArray() {
         return new JsonArray(value);
+    }
+
+    @Override
+    public boolean neitherTrueNorFalse() {
+        return false;
     }
 
     @NotNull
@@ -268,18 +222,59 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
+    public Integer toInteger() {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException nfe) {
+            DollarFactory.failure(nfe);
+            return 0;
+        }
+    }
+
+    @NotNull
+    @Override
     public <R> R toJavaObject() {
         return (R) value;
+    }
+
+    @NotNull
+    @Override
+    public String toYaml() {
+        Yaml yaml = new Yaml();
+        return "string: " + yaml.dump(value);
+    }
+
+    @Override
+    public boolean truthy() {
+        return !value.isEmpty();
+    }
+
+    @NotNull
+    @Override
+    public var $plus(@NotNull var rhs) {
+        return DollarFactory.wrap(new DollarString(value + rhs.$S()));
+    }
+
+    @NotNull
+    @Override
+    public var $size() {
+        return DollarStatic.$(value.length());
+    }
+
+    @NotNull
+    @Override
+    public String toJsonString() {
+        return "\"" + value + "\"";
+    }
+
+    @Override
+    public int compareTo(@NotNull var o) {
+        return Comparator.<String>naturalOrder().compare(value, o.$S());
     }
 
     @Override
     public boolean string() {
         return true;
-    }
-
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        return (obj != null) && value.equals(obj.toString());
     }
 
     @Nullable
@@ -290,5 +285,15 @@ public class DollarString extends AbstractDollarSingleValue<String> {
         } catch (NumberFormatException nfe) {
             return null;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return (obj != null) && value.equals(obj.toString());
     }
 }

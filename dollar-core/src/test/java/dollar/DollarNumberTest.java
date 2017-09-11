@@ -35,10 +35,10 @@ public class DollarNumberTest {
     public void testBasics() {
         var map = DollarStatic.$("foo", 1).$("bar", 10);
         assertEquals(2, (long) DollarStatic.$(1).$inc().toInteger());
-        assertEquals(4, (long) DollarStatic.$(1).$plus(3).toInteger());
-        assertEquals(10, (long) map.$("bar").toInteger());
-        assertEquals(1, (long) map.$("foo").toInteger());
-        assertEquals(0, (long) map.$("foobar").toInteger());
+        assertEquals(4, (long) DollarStatic.$(1).$plus(DollarStatic.$(3)).toInteger());
+        assertEquals(10, (long) map.$get(DollarStatic.$("bar")).toInteger());
+        assertEquals(1, (long) map.$get(DollarStatic.$("foo")).toInteger());
+        assertEquals(0, (long) map.$get(DollarStatic.$("foobar")).toInteger());
 
     }
 

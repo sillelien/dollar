@@ -49,25 +49,75 @@ public final class DollarInfinity extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var rhs) {
+    public var $append(@NotNull var value) {
         return this;
     }
 
     @NotNull
     @Override
-    public var $plus(@NotNull var rhs) {
-        return this;
+    public var $as(@NotNull Type type) {
+        if (type.is(Type._BOOLEAN)) {
+            return DollarStatic.$(true);
+        } else if (type.is(Type._STRING)) {
+            return DollarStatic.$(positive ? "infinity" : "-infinity");
+        } else if (type.is(Type._LIST)) {
+            return DollarStatic.$(Collections.singletonList(this));
+        } else if (type.is(Type._MAP)) {
+            return DollarStatic.$("value", this);
+        } else if (type.is(Type._DECIMAL)) {
+            return DollarStatic.$(positive ? Double.MAX_VALUE : Double.MIN_VALUE);
+        } else if (type.is(Type._INTEGER)) {
+            return DollarStatic.$(positive ? Long.MAX_VALUE : Long.MIN_VALUE);
+        } else if (type.is(Type._VOID)) {
+            return DollarStatic.$void();
+        } else if (type.is(Type._DATE)) {
+            return this;
+        } else if (type.is(Type._RANGE)) {
+            return DollarFactory.fromValue(Range.closed($get(DollarStatic.$(0)), $get(DollarStatic.$(0))));
+        } else {
+            return DollarFactory.failure(ErrorType.INVALID_CAST, type.toString(), false);
+        }
     }
 
     @NotNull
     @Override
-    public var $negate() {
-        return DollarFactory.wrap(new DollarInfinity(!positive));
+    public var $containsKey(@NotNull var value) {
+        return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public var $containsValue(@NotNull var value) {
+        return DollarStatic.$(false);
     }
 
     @NotNull
     @Override
     public var $divide(@NotNull var rhs) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $get(@NotNull var key) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $has(@NotNull var key) {
+        return DollarStatic.$(false);
+    }
+
+    @NotNull
+    @Override
+    public var $insert(@NotNull var value, int position) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull var rhs) {
         return this;
     }
 
@@ -92,56 +142,15 @@ public final class DollarInfinity extends AbstractDollar {
         return DollarFactory.wrap(new DollarInfinity(positiveResult));
     }
 
+    @NotNull
     @Override
-    public int sign() {
-        return positive ? 1 : -1;
+    public var $negate() {
+        return DollarFactory.wrap(new DollarInfinity(!positive));
     }
 
     @NotNull
     @Override
-    public Integer toInteger() {
-        return positive ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-    }
-
-    @NotNull
-    @Override
-    public Number toNumber() {
-        return positive ? Double.MAX_VALUE : Double.MIN_VALUE;
-    }
-
-    @NotNull
-    @Override
-    public var $append(@NotNull var value) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $containsKey(@NotNull var value) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public var $containsValue(@NotNull var value) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public var $get(@NotNull var key) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $has(@NotNull var key) {
-        return DollarStatic.$(false);
-    }
-
-    @NotNull
-    @Override
-    public var $insert(@NotNull var value, int position) {
+    public var $plus(@NotNull var rhs) {
         return this;
     }
 
@@ -165,7 +174,7 @@ public final class DollarInfinity extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $set(@NotNull var key, Object value) {
+    public var $set(@NotNull var key, @NotNull Object value) {
         return this;
     }
 
@@ -177,50 +186,6 @@ public final class DollarInfinity extends AbstractDollar {
 
     @NotNull
     @Override
-    public var remove(@NotNull Object value) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public int size() {
-        return toNumber().intValue();
-    }
-
-    @NotNull
-    @Override
-    public var $as(@NotNull Type type) {
-        if (type.is(Type._BOOLEAN)) {
-            return DollarStatic.$(true);
-        } else if (type.is(Type._STRING)) {
-            return DollarStatic.$(positive ? "infinity" : "-infinity");
-        } else if (type.is(Type._LIST)) {
-            return DollarStatic.$(Collections.singletonList(this));
-        } else if (type.is(Type._MAP)) {
-            return DollarStatic.$("value", this);
-        } else if (type.is(Type._DECIMAL)) {
-            return DollarStatic.$(positive ? Double.MAX_VALUE : Double.MIN_VALUE);
-        } else if (type.is(Type._INTEGER)) {
-            return DollarStatic.$(positive ? Long.MAX_VALUE : Long.MIN_VALUE);
-        } else if (type.is(Type._VOID)) {
-            return DollarStatic.$void();
-        } else if (type.is(Type._DATE)) {
-            return this;
-        } else if (type.is(Type._RANGE)) {
-            return DollarFactory.fromValue(Range.closed($(0), $(0)));
-        } else {
-            return DollarFactory.failure(ErrorType.INVALID_CAST, type.toString(), false);
-        }
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> toVarList() {
-        return ImmutableList.of(this);
-    }
-
-    @NotNull
-    @Override
     public Type $type() {
         return Type._INFINITY;
     }
@@ -228,18 +193,6 @@ public final class DollarInfinity extends AbstractDollar {
     @Override
     public boolean collection() {
         return false;
-    }
-
-    @NotNull
-    @Override
-    public ImmutableMap<var, var> toVarMap() {
-        return ImmutableMap.of(DollarStatic.$("value"), this);
-    }
-
-    @NotNull
-    @Override
-    public String toYaml() {
-        return "infinity: " + (positive ? "positive" : "negative");
     }
 
     @Override
@@ -258,8 +211,70 @@ public final class DollarInfinity extends AbstractDollar {
     }
 
     @Override
-    public ImmutableList<String> toStrings() {
-        return ImmutableList.of();
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean neitherTrueNorFalse() {
+        return true;
+    }
+
+    @NotNull
+    @Override
+    public var remove(@NotNull Object value) {
+        return this;
+    }
+
+    @Override
+    public int sign() {
+        return positive ? 1 : -1;
+    }
+
+    @NotNull
+    @Override
+    public int size() {
+        return toNumber().intValue();
+    }
+
+    @NotNull
+    @Override
+    public String toDollarScript() {
+        return positive ? "infinity" : "-infinity";
+    }
+
+    @NotNull
+    @Override
+    public String toHumanString() {
+        return positive ? "infinity" : "-infinity";
+    }
+
+    @NotNull
+    @Override
+    public Integer toInteger() {
+        return positive ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+    }
+
+    @NotNull
+    @Override
+    public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
+        return ImmutableMap.copyOf(Collections.singletonMap((K) "value", (V) toNumber()));
+    }
+
+    @Nullable
+    @Override
+    public <R> R toJavaObject() {
+        return null;
     }
 
     @NotNull
@@ -270,8 +285,36 @@ public final class DollarInfinity extends AbstractDollar {
 
     @NotNull
     @Override
-    public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
-        return ImmutableMap.copyOf(Collections.singletonMap((K) "value", (V) toNumber()));
+    public Number toNumber() {
+        return positive ? Double.MAX_VALUE : Double.MIN_VALUE;
+    }
+
+    @Override
+    public ImmutableList<String> toStrings() {
+        return ImmutableList.of();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<var> toVarList() {
+        return ImmutableList.of(this);
+    }
+
+    @NotNull
+    @Override
+    public ImmutableMap<var, var> toVarMap() {
+        return ImmutableMap.of(DollarStatic.$("value"), this);
+    }
+
+    @NotNull
+    @Override
+    public String toYaml() {
+        return "infinity: " + (positive ? "positive" : "negative");
+    }
+
+    @Override
+    public boolean truthy() {
+        return true;
     }
 
     @Override
@@ -307,49 +350,6 @@ public final class DollarInfinity extends AbstractDollar {
             return false;
         }
 
-    }
-
-    @Override
-    public boolean isBoolean() {
-        return false;
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean neitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
-    public boolean truthy() {
-        return true;
-    }
-
-    @NotNull
-    @Override
-    public String toDollarScript() {
-        return positive ? "infinity" : "-infinity";
-    }
-
-    @NotNull
-    @Override
-    public String toHumanString() {
-        return positive ? "infinity" : "-infinity";
-    }
-
-    @Nullable
-    @Override
-    public <R> R toJavaObject() {
-        return null;
     }
 
 

@@ -21,7 +21,6 @@ import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.google.common.collect.ImmutableList;
 import dollar.api.DollarException;
 import dollar.api.DollarStatic;
-import dollar.api.NumericAware;
 import dollar.api.Pipeable;
 import dollar.api.Signal;
 import dollar.api.TypePrediction;
@@ -90,80 +89,59 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $drain() {
-        return $void();
-    }
-
-    @NotNull
-    @Override
-    public var $read(boolean blocking, boolean mutating) {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var $publish(@NotNull var lhs) {
-        return this;
-    }
-
-    @NotNull
-    @Override
     public var $avg(boolean parallel) {
         return $sum(parallel).$divide($size());
     }
 
     @NotNull
     @Override
-    public var $max(boolean parallel) {
-        return $stream(parallel).max(Comparable::compareTo).orElse($void());
-    }
-
-    @NotNull
-    @Override
-    public var $min(boolean parallel) {
-        return $stream(parallel).min(Comparable::compareTo).orElse($void());
-    }
-
-    @NotNull
-    @Override
-    public var $product(boolean parallel) {
-        return $stream(parallel).reduce(NumericAware::$multiply).orElse($void());
-    }
-
-    @Override
-    public var $reverse(boolean parallel) {
-        throw new UnsupportedOperationException("Cannot reverse a " + type());
-    }
-
-    @NotNull
-    @Override
-    public var $sort(boolean parallel) {
-        return DollarFactory.fromList($stream(parallel).sorted().collect(Collectors.toList()));
-    }
-
-    @NotNull
-    @Override
-    public var $sum(boolean parallel) {
-        return $stream(parallel).reduce(NumericAware::$plus).orElse($void());
-
-    }
-
-    @NotNull
-    @Override
-    public var $unique(boolean parallel) {
-        return DollarFactory.fromSet($stream(parallel).collect(Collectors.toSet()));
-    }
-
-    @NotNull
-    @Override
     public var $choose(@NotNull var map) {
-        return map.$($S());
+        return map.$get(DollarStatic.$($S()));
+    }
+
+    @NotNull
+    @Override
+    public var $constrain(@Nullable var constraint, @Nullable String constraintFingerprint) {
+        if ((constraint == null) || (constraintFingerprint == null)) {
+            return this;
+        }
+        String thisConstraintFingerprint = constraintLabel();
+        if (thisConstraintFingerprint == null) {
+            metaAttribute(MetaConstants.CONSTRAINT_FINGERPRINT, constraintFingerprint);
+            return this;
+        } else if (thisConstraintFingerprint.equals(constraintFingerprint)) {
+            return this;
+        } else {
+            throw new ConstraintViolation(this, constraint, constraintFingerprint, constraintFingerprint);
+        }
+    }
+
+    @NotNull
+    @Override
+    public var $copy() {
+        return DollarFactory.fromValue(toJavaObject());
+    }
+
+    @Override
+    @NotNull
+    public var $copy(@NotNull ImmutableList<Throwable> errors) {
+        return DollarFactory.fromValue(toJavaObject());
+    }
+
+    @NotNull
+    @Override
+    public var $default(@NotNull var v) {
+        if (isVoid()) {
+            return v;
+        } else {
+            return this;
+        }
+    }
+
+    @NotNull
+    @Override
+    public var $drain() {
+        return $void();
     }
 
     @NotNull
@@ -181,18 +159,6 @@ public abstract class AbstractDollar implements var {
 
         }
         return DollarFactory.fromValue(result);
-    }
-
-    @NotNull
-    @Override
-    public var $copy() {
-        return DollarFactory.fromValue(toJavaObject());
-    }
-
-    @Override
-    @NotNull
-    public var $copy(@NotNull ImmutableList<Throwable> errors) {
-        return DollarFactory.fromValue(toJavaObject());
     }
 
     @NotNull
@@ -215,14 +181,64 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public TypePrediction predictType() {
-        return new SingleValueTypePrediction($type());
+    public var $max(boolean parallel) {
+        return $stream(parallel).max(Comparable::compareTo).orElse($void());
     }
 
     @NotNull
     @Override
-    public var $unwrap() {
+    public var $min(boolean parallel) {
+        return $stream(parallel).min(Comparable::compareTo).orElse($void());
+    }
+
+    @NotNull
+    @Override
+    public var $notify() {
+//        do nothing, not a reactive type
         return this;
+    }
+
+    @NotNull
+    @Override
+    public var $product(boolean parallel) {
+        return $stream(parallel).reduce(var::$multiply).orElse($void());
+    }
+
+    @NotNull
+    @Override
+    public var $publish(@NotNull var lhs) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $read(boolean blocking, boolean mutating) {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $reverse(boolean parallel) {
+        throw new UnsupportedOperationException("Cannot reverse a " + type());
+    }
+
+    @NotNull
+    @Override
+    public var $sort(boolean parallel) {
+        return DollarFactory.fromList($stream(parallel).sorted().collect(Collectors.toList()));
+    }
+
+    @NotNull
+    @Override
+    public Stream<var> $stream(boolean parallel) {
+        return toVarList().stream();
+    }
+
+    @NotNull
+    @Override
+    public var $sum(boolean parallel) {
+        return $stream(parallel).reduce(var::$plus).orElse($void());
+
     }
 
 
@@ -268,25 +284,202 @@ public abstract class AbstractDollar implements var {
 
     @NotNull
     @Override
-    public var $constrain(@Nullable var constraint, @Nullable String constraintFingerprint) {
-        if ((constraint == null) || (constraintFingerprint == null)) {
-            return this;
-        }
-        String thisConstraintFingerprint = constraintLabel();
-        if (thisConstraintFingerprint == null) {
-            metaAttribute(MetaConstants.CONSTRAINT_FINGERPRINT, constraintFingerprint);
-            return this;
-        } else if (thisConstraintFingerprint.equals(constraintFingerprint)) {
-            return this;
-        } else {
-            throw new ConstraintViolation(this, constraint, constraintFingerprint, constraintFingerprint);
-        }
+    public var $unique(boolean parallel) {
+        return DollarFactory.fromSet($stream(parallel).collect(Collectors.toSet()));
+    }
+
+    @NotNull
+    @Override
+    public var $unwrap() {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $write(@NotNull var value, boolean blocking, boolean mutating) {
+        return this;
     }
 
     @Nullable
     @Override
     public String constraintLabel() {
         return metaAttribute(MetaConstants.CONSTRAINT_FINGERPRINT);
+    }
+
+    @NotNull
+    @Override
+    public var debug(@NotNull Object message) {
+        logger.debug(message.toString());
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var debug() {
+        logger.debug(toString());
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var debugf(@NotNull String message, Object... values) {
+        logger.debug(message, values);
+        return this;
+    }
+
+    @Override
+    public boolean decimal() {
+        return false;
+    }
+
+    @Override
+    public boolean dynamic() {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public var error(@NotNull Throwable exception) {
+        logger.error(exception.getMessage(), exception);
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var error(@NotNull Object message) {
+        logger.error(message.toString());
+        return this;
+
+    }
+
+    @NotNull
+    @Override
+    public var error() {
+        logger.error(toString());
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var errorf(@NotNull String message, Object... values) {
+        logger.error(message, values);
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var info(@NotNull Object message) {
+        logger.info(message.toString());
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var info() {
+        logger.info(toString());
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var infof(@NotNull String message, Object... values) {
+        logger.info(message, values);
+        return this;
+    }
+
+    @Override
+    public boolean integer() {
+        return false;
+    }
+
+    @Override
+    public boolean list() {
+        return false;
+    }
+
+    @Override
+    public boolean map() {
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public <T> T meta(@NotNull String key) {
+        return (T) meta.get(key);
+    }
+
+    @Override
+    public void meta(@NotNull String key, @NotNull Object value) {
+        meta.put(key, value);
+    }
+
+    @Override
+    public void metaAttribute(@NotNull String key, @NotNull String value) {
+        if (meta.containsKey(key)) {
+            @NotNull var result;
+            throw new DollarFailureException(ErrorType.METADATA_IMMUTABLE);
+        }
+        meta.put(key, value);
+    }
+
+    @Nullable
+    @Override
+    public String metaAttribute(@NotNull String key) {
+        return (String) meta.get(key);
+    }
+
+    @Override
+    public boolean number() {
+        return false;
+    }
+
+    @Override
+    public boolean pair() {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public TypePrediction predictType() {
+        return new SingleValueTypePrediction($type());
+    }
+
+    @Override
+    public boolean queue() {
+        return false;
+    }
+
+    @Override
+    public boolean singleValue() {
+        return false;
+    }
+
+    @Override
+    public boolean string() {
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Double toDouble() {
+        return 0.0;
+    }
+
+    @NotNull
+    @Override
+    public Long toLong() {
+        return 0L;
+    }
+
+    @NotNull
+    @Override
+    public InputStream toStream() {
+        return new ByteArrayInputStream($serialized().getBytes());
+    }
+
+    @Override
+    public boolean uri() {
+        return false;
     }
 
     @NotNull
@@ -346,161 +539,6 @@ public abstract class AbstractDollar implements var {
     @Override
     public StateMachine<ResourceState, Signal> getStateMachine() {
         return new StateMachine<>(ResourceState.INITIAL, getDefaultStateMachineConfig());
-    }
-
-    @NotNull
-    @Override
-    public var $default(@NotNull var v) {
-        if (isVoid()) {
-            return v;
-        } else {
-            return this;
-        }
-    }
-
-    @NotNull
-    @Override
-    public var $notify() {
-//        do nothing, not a reactive type
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public Stream<var> $stream(boolean parallel) {
-        return toVarList().stream();
-    }
-
-    @NotNull
-    @Override
-    public var debug(@NotNull Object message) {
-        logger.debug(message.toString());
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var debug() {
-        logger.debug(toString());
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var debugf(@NotNull String message, Object... values) {
-        logger.debug(message, values);
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var error(@NotNull Throwable exception) {
-        logger.error(exception.getMessage(), exception);
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var error(@NotNull Object message) {
-        logger.error(message.toString());
-        return this;
-
-    }
-
-    @NotNull
-    @Override
-    public var error() {
-        logger.error(toString());
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var errorf(@NotNull String message, Object... values) {
-        logger.error(message, values);
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var info(@NotNull Object message) {
-        logger.info(message.toString());
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var info() {
-        logger.info(toString());
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public var infof(@NotNull String message, Object... values) {
-        logger.info(message, values);
-        return this;
-    }
-
-    @Override
-    public boolean dynamic() {
-        return false;
-    }
-
-    @Override
-    public boolean list() {
-        return false;
-    }
-
-    @Override
-    public boolean map() {
-        return false;
-    }
-
-    @Override
-    public boolean number() {
-        return false;
-    }
-
-    @Override
-    public boolean decimal() {
-        return false;
-    }
-
-    @Override
-    public boolean integer() {
-        return false;
-    }
-
-    @Override
-    public boolean pair() {
-        return false;
-    }
-
-    @Override
-    public boolean singleValue() {
-        return false;
-    }
-
-    @Override
-    public boolean string() {
-        return false;
-    }
-
-    @NotNull
-    @Override
-    public InputStream toStream() {
-        return new ByteArrayInputStream($serialized().getBytes());
-    }
-
-    @Override
-    public boolean uri() {
-        return false;
-    }
-
-    @Override
-    public boolean queue() {
-        return false;
     }
 
     @NotNull
@@ -570,43 +608,5 @@ public abstract class AbstractDollar implements var {
     @Override
     public String toString() {
         return toHumanString();
-    }
-
-    @Nullable
-    @Override
-    public <T> T meta(@NotNull String key) {
-        return (T) meta.get(key);
-    }
-
-    @Override
-    public void meta(@NotNull String key, @NotNull Object value) {
-        meta.put(key, value);
-    }
-
-    @Override
-    public void metaAttribute(@NotNull String key, @NotNull String value) {
-        if (meta.containsKey(key)) {
-            @NotNull var result;
-            throw new DollarFailureException(ErrorType.METADATA_IMMUTABLE);
-        }
-        meta.put(key, value);
-    }
-
-    @Nullable
-    @Override
-    public String metaAttribute(@NotNull String key) {
-        return (String) meta.get(key);
-    }
-
-    @Nullable
-    @Override
-    public Double toDouble() {
-        return 0.0;
-    }
-
-    @NotNull
-    @Override
-    public Long toLong() {
-        return 0L;
     }
 }

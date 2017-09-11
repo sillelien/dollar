@@ -81,8 +81,8 @@ public class PureDefinitionOperator implements Function<Token, var> {
         if (typeConstraintObj != null) {
             Type type = Type.of(typeConstraintObj);
             constraint = node(DEFINITION, "definition-constraint", true, NEW_SCOPE, parser,
-                              new SourceCode(currentScope(), token), new ArrayList<>(),
-                              i -> $(scope.parameter("it").getValue().is(type)), null);
+                              new SourceCode(currentScope(), token), null, new ArrayList<>(),
+                              i -> $(scope.parameter("it").getValue().is(type)));
             constraintSource = typeConstraintObj.$S().toUpperCase();
             checkLearntType(token, type, value, MIN_PROBABILITY);
 

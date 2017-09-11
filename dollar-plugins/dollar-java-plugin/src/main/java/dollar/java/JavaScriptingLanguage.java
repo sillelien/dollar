@@ -46,7 +46,9 @@ public final class JavaScriptingLanguage implements ScriptingLanguage {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("ScriptingSupport");
 
-    public var compile(@NotNull String script, Scope scope) {
+    @Override
+    @NotNull
+    public var compile(@NotNull String script, @NotNull Scope scope) {
 
         JProxyConfig jpConfig = JProxy.createJProxyConfig();
         jpConfig.setEnabled(true)
@@ -64,8 +66,8 @@ public final class JavaScriptingLanguage implements ScriptingLanguage {
                 .setJProxyDiagnosticsListener(diagnostics -> {
                     List<Diagnostic<? extends JavaFileObject>> diagnosticList = diagnostics.getDiagnostics();
                     diagnosticList.stream()
-                                  .filter(diagnostic -> diagnostic.getKind().equals(Diagnostic.Kind.ERROR))
-                                  .forEach(i->log.debug(i.toString()));
+                            .filter(diagnostic -> diagnostic.getKind().equals(Diagnostic.Kind.ERROR))
+                            .forEach(i -> log.debug(i.toString()));
                 });
 
         JProxyScriptEngineFactory factory = JProxyScriptEngineFactory.create();
@@ -87,7 +89,8 @@ public final class JavaScriptingLanguage implements ScriptingLanguage {
         code.append(
                 " /* in statement */ List<var> in = (List<var>)context.getAttribute(\"in\",javax.script.ScriptContext.ENGINE_SCOPE)" +
                         "; \n");
-        code.append(" /* scope statement */ Scope scope = (Scope)context.getAttribute(\"scope\",javax.script.ScriptContext.ENGINE_SCOPE); \n");
+        code.append(
+                " /* scope statement */ Scope scope = (Scope)context.getAttribute(\"scope\",javax.script.ScriptContext.ENGINE_SCOPE); \n");
         code.append(" /* out statement */ var out = $void();\n");
         code.append(script).append(" /* return statement */ \nreturn out;\n");
 

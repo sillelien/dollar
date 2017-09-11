@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import dollar.api.DollarException;
@@ -58,6 +59,7 @@ public class DollarObject extends AbstractDollar {
     private final boolean mutable;
     @NotNull
     private final String name;
+    @NotNull
     private final Type type;
 
     public DollarObject(@NotNull String name, @NotNull var constructor,
@@ -85,62 +87,15 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     @Override
-    public var $minus(@NotNull var rhs) {
-        throw new DollarScriptException("Cannot remove field (using minus) " + rhs + " in class " + name + " no fields are " +
-                                                "removeable.");
-
-
-    }
-
-    @NotNull
-    @Override
-    public var $plus(@NotNull var rhs) {
-        throw new DollarScriptException("Cannot remove add " + rhs + " to class " + name + " all fields are fixed.");
-
-    }
-
-    @NotNull
-    @Override
-    public var $negate() {
-        throw new DollarScriptException("Cannot negate instance of class " + name + " all fields are fixed.");
-    }
-
-    @NotNull
-    @Override
-    public var $divide(@NotNull var rhs) {
-        throw new DollarScriptException("Cannot divide instance of class " + name + " all fields are fixed.");
-    }
-
-    @NotNull
-    @Override
-    public var $modulus(@NotNull var rhs) {
-        throw new DollarScriptException("Cannot modulus instance of class " + name + " all fields are fixed.");
-    }
-
-    @NotNull
-    @Override
-    public var $multiply(@NotNull var v) {
-        throw new DollarScriptException("Cannot multiply instance of class " + name + " all fields are fixed.");
-    }
-
-    @NotNull
-    @Override
-    public Integer toInteger() {
-        throw new DollarScriptException("Cannot convert instance of class " + name + " to integer.");
-    }
-
-    @NotNull
-    @Override
-    public Number toNumber() {
-        throw new DollarScriptException("Cannot convert instance of class " + name + " to number.");
-    }
-
-    @NotNull
-    @Override
     public var $append(@NotNull var value) {
         final LinkedHashMap<var, var> newMap = new LinkedHashMap<>(toVarMap());
         newMap.put(value.$pairKey(), value.$pairValue());
         return DollarFactory.fromValue(newMap);
+    }
+
+    @Override
+    public @NotNull var $as(@NotNull Type type) {
+        throw new UnsupportedOperationException();
     }
 
     @NotNull
@@ -153,6 +108,17 @@ public class DollarObject extends AbstractDollar {
     @NotNull
     public var $containsValue(@NotNull var value) {
         return DollarStatic.$(fields.containsValue(value.toString()));
+    }
+
+    @NotNull
+    @Override
+    public var $divide(@NotNull var rhs) {
+        throw new DollarScriptException("Cannot divide instance of class " + name + " all fields are fixed.");
+    }
+
+    @Override
+    public @NotNull var $equals(@Nullable var other) {
+        return (other == this) ? TRUE : FALSE;
     }
 
     @Override
@@ -186,6 +152,71 @@ public class DollarObject extends AbstractDollar {
         }
         newMap.putAll(toVarMap());
         return DollarFactory.fromValue(newMap);
+    }
+
+    @NotNull
+    @Override
+    public var $listen(@NotNull Pipeable pipe) {
+        String key = UUID.randomUUID().toString();
+        $listen(pipe, key);
+        return DollarStatic.$(key);
+    }
+
+    @NotNull
+    @Override
+    public var $listen(@NotNull Pipeable pipe, @NotNull String key) {
+        for (Variable v : fields.values()) {
+            //Join the children to this, so if the children change
+            //listeners to this get the latest value of this.
+            v.getValue().$listen(i -> this, key);
+        }
+        return DollarStatic.$(key);
+    }
+
+    @NotNull
+    @Override
+    public var $map() {
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public var $mimeType() {
+        return DollarStatic.$("application/json");
+    }
+
+    @NotNull
+    @Override
+    public var $minus(@NotNull var rhs) {
+        throw new DollarScriptException("Cannot remove field (using minus) " + rhs + " in class " + name + " no fields are " +
+                                                "removeable.");
+
+
+    }
+
+    @NotNull
+    @Override
+    public var $modulus(@NotNull var rhs) {
+        throw new DollarScriptException("Cannot modulus instance of class " + name + " all fields are fixed.");
+    }
+
+    @NotNull
+    @Override
+    public var $multiply(@NotNull var v) {
+        throw new DollarScriptException("Cannot multiply instance of class " + name + " all fields are fixed.");
+    }
+
+    @NotNull
+    @Override
+    public var $negate() {
+        throw new DollarScriptException("Cannot negate instance of class " + name + " all fields are fixed.");
+    }
+
+    @NotNull
+    @Override
+    public var $plus(@NotNull var rhs) {
+        throw new DollarScriptException("Cannot remove add " + rhs + " to class " + name + " all fields are fixed.");
+
     }
 
     @NotNull
@@ -233,28 +264,6 @@ public class DollarObject extends AbstractDollar {
         return DollarStatic.$(toJavaMap().size());
     }
 
-    @NotNull
-    @Override
-    public int size() {
-        return fields.size();
-    }
-
-    @Override
-    public @NotNull var $as(@NotNull Type type) {
-        return $as(type);
-    }
-
-    @NotNull
-    @Override
-    public ImmutableList<var> toVarList() {
-        final List<var> entries =
-                fields.entrySet()
-                        .stream()
-                        .map(entry -> DollarStatic.$(entry.getKey(), entry.getValue()))
-                        .collect(Collectors.toList());
-        return ImmutableList.copyOf(entries);
-    }
-
     @Override
     public @NotNull Type $type() {
         return type;
@@ -265,30 +274,6 @@ public class DollarObject extends AbstractDollar {
         return true;
     }
 
-    @NotNull
-    @Override
-    public ImmutableMap<var, var> toVarMap() {
-
-        LinkedHashMap<var, var> result = new LinkedHashMap<>();
-        for (Map.Entry<String, Variable> entry : fields.entrySet()) {
-            result.put(DollarFactory.fromStringValue(entry.getKey()), entry.getValue().getValue().$fix(false));
-        }
-        return ImmutableMap.copyOf(result);
-    }
-
-    @NotNull
-    @Override
-    public var $map() {
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public String toYaml() {
-        Yaml yaml = new Yaml();
-        return yaml.dump(fields);
-    }
-
     @Override
     public boolean is(@NotNull Type... types) {
         List<@NotNull Type> typeList = Arrays.asList(types);
@@ -296,8 +281,101 @@ public class DollarObject extends AbstractDollar {
     }
 
     @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
     public boolean isVoid() {
         return false;
+    }
+
+    @Override
+    public boolean neitherTrueNorFalse() {
+        return true;
+    }
+
+    @NotNull
+    @Override
+    public int size() {
+        return fields.size();
+    }
+
+    @NotNull
+    @Override
+    public String toDollarScript() {
+        StringBuilder builder = new StringBuilder("class ");
+        builder.append(name);
+//        builder.append("{\n");
+//        for (Map.Entry<String, Variable> entry : fields.entrySet()) {
+//            if (entry.getValue().isReadonly()) {
+//                builder.append("const");
+//            } else {
+//                builder.append("var");
+//            }
+//            builder.append(" ");
+//            builder.append("<").append(entry.getValue().getValue().$type()).append("> ");
+//            if (entry.getValue().getConstraint() != null) {
+//                builder.append("(").append(entry.getValue().getConstraint().toDollarScript()).append(") ");
+//            }
+//            builder.append(entry.getKey());
+//            builder.append(" = ");
+//            builder.append(entry.getValue().getValue().toDollarScript())
+//                    .append(";\n");
+//        }
+//        builder.append("}");
+        return builder.toString();
+    }
+
+    @NotNull
+    @Override
+    public String toHumanString() {
+        return "class " + name;
+    }
+
+    @NotNull
+    @Override
+    public Integer toInteger() {
+        throw new DollarScriptException("Cannot convert instance of class " + name + " to integer.");
+    }
+
+    @NotNull
+    @Override
+    public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
+        Map<K, V> varMap = varMapToMap();
+        return ImmutableMap.copyOf(varMap);
+    }
+
+    @NotNull
+    @Override
+    public <R> R toJavaObject() {
+        return (R) varMapToMap();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableList<Object> toList() {
+        final ArrayList<Object> entries = new ArrayList<>();
+        for (Map.Entry<String, Variable> entry : fields.entrySet()) {
+            entries.add(entry.getValue().getValue().toJavaObject());
+        }
+        return ImmutableList.copyOf(entries);
+    }
+
+    @NotNull
+    @Override
+    public Number toNumber() {
+        throw new DollarScriptException("Cannot convert instance of class " + name + " to number.");
     }
 
     @Override
@@ -314,19 +392,36 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     @Override
-    public ImmutableList<Object> toList() {
-        final ArrayList<Object> entries = new ArrayList<>();
-        for (Map.Entry<String, Variable> entry : fields.entrySet()) {
-            entries.add(entry.getValue().getValue().toJavaObject());
-        }
+    public ImmutableList<var> toVarList() {
+        final List<var> entries =
+                fields.entrySet()
+                        .stream()
+                        .map(entry -> DollarStatic.$(entry.getKey(), entry.getValue()))
+                        .collect(Collectors.toList());
         return ImmutableList.copyOf(entries);
     }
 
     @NotNull
     @Override
-    public <K extends Comparable<K>, V> ImmutableMap<K, V> toJavaMap() {
-        Map<K, V> varMap = varMapToMap();
-        return ImmutableMap.copyOf(varMap);
+    public ImmutableMap<var, var> toVarMap() {
+
+        LinkedHashMap<var, var> result = new LinkedHashMap<>();
+        for (Map.Entry<String, Variable> entry : fields.entrySet()) {
+            result.put(DollarFactory.fromStringValue(entry.getKey()), entry.getValue().getValue().$fix(false));
+        }
+        return ImmutableMap.copyOf(result);
+    }
+
+    @NotNull
+    @Override
+    public String toYaml() {
+        Yaml yaml = new Yaml();
+        return yaml.dump(fields);
+    }
+
+    @Override
+    public boolean truthy() {
+        return !fields.isEmpty();
     }
 
     @NotNull
@@ -365,81 +460,24 @@ public class DollarObject extends AbstractDollar {
     }
 
     @Override
-    public boolean equals(@Nullable Object obj) {
-        return obj == this;
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), constructor, fields, mutable);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        DollarObject that = (DollarObject) o;
+        return mutable == that.mutable &&
+                       Objects.equal(constructor, that.constructor) &&
+                       Objects.equal(fields, that.fields);
     }
 
     @Override
     public @NotNull String toString() {
         return "class " + name;
-    }
-
-    @Override
-    public @NotNull var $equals(@Nullable var other) {
-        return (other == this) ? TRUE : FALSE;
-    }
-
-    @NotNull
-    @Override
-    public var $listen(@NotNull Pipeable pipe) {
-        String key = UUID.randomUUID().toString();
-        $listen(pipe, key);
-        return DollarStatic.$(key);
-    }
-
-    @NotNull
-    @Override
-    public var $mimeType() {
-        return DollarStatic.$("application/json");
-    }
-
-    @NotNull
-    @Override
-    public String toDollarScript() {
-        StringBuilder builder = new StringBuilder("class ");
-        builder.append(name);
-//        builder.append("{\n");
-//        for (Map.Entry<String, Variable> entry : fields.entrySet()) {
-//            if (entry.getValue().isReadonly()) {
-//                builder.append("const");
-//            } else {
-//                builder.append("var");
-//            }
-//            builder.append(" ");
-//            builder.append("<").append(entry.getValue().getValue().$type()).append("> ");
-//            if (entry.getValue().getConstraint() != null) {
-//                builder.append("(").append(entry.getValue().getConstraint().toDollarScript()).append(") ");
-//            }
-//            builder.append(entry.getKey());
-//            builder.append(" = ");
-//            builder.append(entry.getValue().getValue().toDollarScript())
-//                    .append(";\n");
-//        }
-//        builder.append("}");
-        return builder.toString();
-    }
-
-    @NotNull
-    @Override
-    public String toHumanString() {
-        return "class " + name;
-    }
-
-    @NotNull
-    @Override
-    public <R> R toJavaObject() {
-        return (R) varMapToMap();
-    }
-
-    @NotNull
-    @Override
-    public var $listen(@NotNull Pipeable pipe, @NotNull String key) {
-        for (Variable v : fields.values()) {
-            //Join the children to this, so if the children change
-            //listeners to this get the latest value of this.
-            v.getValue().$listen(i -> this, key);
-        }
-        return DollarStatic.$(key);
     }
 
     @Override
@@ -456,36 +494,12 @@ public class DollarObject extends AbstractDollar {
         return result;
     }
 
-    private var inThisScope(ScopeExecutable<var> exe) {
+    @NotNull
+    private var inThisScope(@NotNull ScopeExecutable<var> exe) {
         ScriptScope subScope = new ScriptScope(currentScope(), "this-" + name, false, true);
         DollarObject thisObject = new DollarObject(name, constructor, fields, true);
         subScope.set("this", thisObject, null, null, new VarFlags(true, true, false, false, false, true));
         return inScope(true, subScope, exe);
-    }
-
-    @Override
-    public boolean isBoolean() {
-        return false;
-    }
-
-    @Override
-    public boolean isFalse() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean neitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
-    public boolean truthy() {
-        return !fields.isEmpty();
     }
 
     @NotNull

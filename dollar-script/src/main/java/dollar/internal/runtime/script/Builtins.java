@@ -16,7 +16,6 @@
 
 package dollar.internal.runtime.script;
 
-import dollar.api.Scope;
 import dollar.api.StateAware;
 import dollar.api.Type;
 import dollar.api.types.DollarFactory;
@@ -100,6 +99,30 @@ public final class Builtins {
         //todo: this will be used to provide libraries
     }
 
+    private static void addDollarSingleNoScope(boolean isPure, @NotNull Function<var, var> lambda,
+                                               @NotNull Type type, @NotNull String... names) {
+        for (String name : names) {
+            map.put(name, new Builtin.BuiltinImpl(name, (Builtin<var>) (pure, args, scope) -> {
+                var v = args.get(0);
+                return lambda.apply(v);
+            }, 1, 1, isPure, type));
+        }
+    }
+
+    private static void addDollarStyle(int minargs, int maxargs, @NotNull Builtin.DollarStyle lambda, boolean pure,
+                                       @NotNull Type type, @NotNull String... names) {
+        for (String name : names) {
+            map.put(name, new Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure, type));
+        }
+    }
+
+    private static <T> void addJavaStyle(int minargs, int maxargs, @NotNull Builtin.JavaStyle<T> lambda, boolean pure,
+                                         @NotNull Type type, @NotNull String... names) {
+        for (String name : names) {
+            map.put(name, new Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure, type));
+        }
+    }
+
     @NotNull
     public static var execute(@NotNull String name, @NotNull List<var> parameters, boolean pure) {
         final Builtin<var> builtin = (Builtin<var>) map.get(name);
@@ -113,40 +136,12 @@ public final class Builtins {
         return map.containsKey(name);
     }
 
-    private static <T> void addJavaStyle(int minargs, int maxargs, @NotNull Builtin.JavaStyle<T> lambda, boolean pure,
-                                         Type type, @NotNull String... names) {
-        for (String name : names) {
-            map.put(name, new Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure, type));
-        }
-    }
-
-    private static void addDollarStyle(int minargs, int maxargs, @NotNull Builtin.DollarStyle lambda, boolean pure,
-                                       Type type, @NotNull String... names) {
-        for (String name : names) {
-            map.put(name, new Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure, type));
-        }
-    }
-
-    private static void addDollarSingleNoScope(boolean isPure, @NotNull Function<var, var> lambda,
-                                               Type type, @NotNull String... names) {
-        for (String name : names) {
-            map.put(name, new Builtin.BuiltinImpl(name, new Builtin<var>() {
-                @NotNull
-                @Override
-                public var execute(boolean pure, @NotNull List<var> args, @NotNull Scope scope) {
-                    var v = args.get(0);
-                    return lambda.apply(v);
-                }
-            }, 1, 1, isPure, type));
-        }
-    }
-
     public static boolean isPure(@NotNull String lhsString) {
         return (map.get(lhsString) != null) && ((Builtin.BuiltinImpl) map.get(lhsString)).isPure();
     }
 
     @Nullable
-    public static Type type(String s) {
+    public static Type type(@NotNull String s) {
         return (((Builtin.BuiltinImpl<?>) map.get(s)).type());
     }
 }
