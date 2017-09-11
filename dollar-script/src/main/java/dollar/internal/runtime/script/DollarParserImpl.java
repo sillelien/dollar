@@ -20,7 +20,7 @@ import com.google.common.io.ByteStreams;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.DollarRange;
 import dollar.api.var;
@@ -820,7 +820,7 @@ public class DollarParserImpl implements DollarParser {
     private OperatorTable<var> postfix(boolean pure,
                                        @NotNull OperatorTable<var> table,
                                        @NotNull OpDef operator,
-                                       @NotNull BiFunction<var, SourceSegment, var> f2) {
+                                       @NotNull BiFunction<var, Source, var> f2) {
 
         OperatorTable<var> result = table;
         if (operator.symbol() != null) {
@@ -839,7 +839,7 @@ public class DollarParserImpl implements DollarParser {
     private OperatorTable<var> prefix(boolean pure,
                                       @NotNull OperatorTable<var> table,
                                       @NotNull OpDef operator,
-                                      @NotNull BiFunction<var, SourceSegment, var> f) {
+                                      @NotNull BiFunction<var, Source, var> f) {
         return table.prefix(op(operator, new DollarUnaryOperator(this, operator, f, pure)), operator.priority());
     }
 
@@ -847,7 +847,7 @@ public class DollarParserImpl implements DollarParser {
     private OperatorTable<var> prefixUnReactive(boolean pure,
                                                 @NotNull OperatorTable<var> table,
                                                 @NotNull OpDef operator,
-                                                @NotNull BiFunction<var, SourceSegment, var> f) {
+                                                @NotNull BiFunction<var, Source, var> f) {
         return table.prefix(op(operator, new DollarUnaryOperator(true, f, operator, this, pure)), operator.priority());
     }
 

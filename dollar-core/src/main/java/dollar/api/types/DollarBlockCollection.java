@@ -19,6 +19,7 @@ package dollar.api.types;
 import com.github.oxo42.stateless4j.StateMachine;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import dollar.api.ConstraintLabel;
 import dollar.api.Pipeable;
 import dollar.api.Signal;
 import dollar.api.Type;
@@ -102,9 +103,8 @@ public class DollarBlockCollection implements var {
         return getValue().$choose(map);
     }
 
-    @NotNull
     @Override
-    public var $constrain(@NotNull var constraint, @NotNull String source) {
+    public var $constrain(@NotNull var constraint, ConstraintLabel source) {
         return getValue().$constrain(constraint, source);
     }
 
@@ -496,7 +496,7 @@ public class DollarBlockCollection implements var {
 
     @NotNull
     @Override
-    public String constraintLabel() {
+    public ConstraintLabel constraintLabel() {
         return getValue().constraintLabel();
     }
 

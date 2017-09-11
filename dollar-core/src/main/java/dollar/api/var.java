@@ -30,7 +30,7 @@ import dollar.api.guard.ReturnVarOnlyGuard;
 import dollar.api.json.ImmutableJsonObject;
 import dollar.api.json.JsonArray;
 import dollar.api.json.JsonObject;
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.ErrorType;
 import org.jetbrains.annotations.NotNull;
@@ -117,8 +117,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @Guarded(ChainGuard.class)
     var $choose(@NotNull var map);
 
-    @NotNull
-    var $constrain(@NotNull var constraint, @NotNull String constraintSource);
+    var $constrain(@NotNull var constraint, @Nullable ConstraintLabel label);
 
     @NotNull
     @Guarded(ChainGuard.class)
@@ -648,7 +647,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     }
 
     @Nullable
-    String constraintLabel();
+    ConstraintLabel constraintLabel();
 
     /**
      * Debug var.
@@ -1049,8 +1048,8 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     int size();
 
     @Nullable
-    default SourceSegment source() {
-        return SourceSegment.source.get();
+    default Source source() {
+        return Source.source.get();
     }
 
     /**

@@ -14,19 +14,24 @@
  *    limitations under the License.
  */
 
-package dollar.api.types;
+package dollar.internal.runtime.script;
 
 import dollar.api.ConstraintLabel;
-import dollar.api.exceptions.DollarFailureException;
-import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
-public class ConstraintViolation extends DollarFailureException {
-    public ConstraintViolation(@NotNull var constrainedVar,
-                               @NotNull var constraint,
-                               ConstraintLabel constrainedFingerprint,
-                               ConstraintLabel constraintFingerPrint) {
-        super(ErrorType.ASSERTION,
-              "Constrained var fingerprint " + constrainedFingerprint + " did not match constraint fingerprint for " + constraintFingerPrint);
+public class SimpleConstraintLabel implements ConstraintLabel {
+    @NotNull
+    private final String value;
+
+    public SimpleConstraintLabel(@NotNull String value) {this.value = value;}
+
+    @Override
+    public boolean isEmpty() {
+        return value.isEmpty();
+    }
+
+    @Override
+    public String value() {
+        return value;
     }
 }

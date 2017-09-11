@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script.api.exceptions;
 
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.var;
 import dollar.internal.runtime.script.parser.OpDef;
 import org.jetbrains.annotations.NotNull;
@@ -38,12 +38,12 @@ public class PureFunctionException extends DollarScriptException {
         super(s, rhs);
     }
 
-    public PureFunctionException(@NotNull String s, @NotNull SourceSegment source) {
+    public PureFunctionException(@NotNull String s, @NotNull Source source) {
         super(s, source);
     }
 
     public PureFunctionException(@NotNull String s,
-                                 @NotNull SourceSegment source,
+                                 @NotNull Source source,
                                  @NotNull OpDef operation) {
         super(s, source, operation);
     }

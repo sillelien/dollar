@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script;
 
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
@@ -32,16 +32,16 @@ import static dollar.internal.runtime.script.DollarScriptSupport.node;
 import static dollar.internal.runtime.script.DollarScriptSupport.reactiveNode;
 
 public class BinaryOp implements BinaryOperator<var>, Operator {
-    private final boolean immediate;
     @NotNull
     private final BiFunction<var, var, var> function;
+    private final boolean immediate;
     @NotNull
     private final OpDef operation;
     @NotNull
     private final DollarParser parser;
     private final boolean pure;
     @NotNull
-    private SourceSegment source;
+    private Source source;
 
 
     public BinaryOp(@NotNull DollarParser parser,
@@ -67,6 +67,22 @@ public class BinaryOp implements BinaryOperator<var>, Operator {
         validate(operation);
     }
 
+    @NotNull
+    @Override
+    public var apply(@NotNull var lhs, @NotNull var rhs) {
+        if (immediate) {
+            return node(operation, pure, parser, source, Arrays.asList(lhs, rhs), vars -> function.apply(lhs, rhs));
+
+        }
+        //Lazy evaluation
+        return reactiveNode(operation, pure, parser, source, lhs, rhs, args -> function.apply(lhs, rhs));
+    }
+
+    @Override
+    public void setSource(@NotNull Source source) {
+        this.source = source;
+    }
+
     public void validate(@NotNull OpDef operation) {
         if (operation.reactive() == immediate) {
             throw new DollarParserError("The operation " + operation.name() + " is marked as " + (operation.reactive()
@@ -81,21 +97,5 @@ public class BinaryOp implements BinaryOperator<var>, Operator {
         if (pure && (operation.pure() != null) && !operation.pure()) {
             throw new AssertionError("The operation " + operation.name() + " is marked as " + (operation.pure() ? "pure" : "impure") + " yet this operator is set to be " + (pure ? "pure" : "impure"));
         }
-    }
-
-    @NotNull
-    @Override
-    public var apply(@NotNull var lhs, @NotNull var rhs) {
-        if (immediate) {
-            return node(operation, pure, parser, source, Arrays.asList(lhs, rhs), vars -> function.apply(lhs, rhs));
-
-        }
-        //Lazy evaluation
-        return reactiveNode(operation, pure, parser, source, lhs, rhs, args -> function.apply(lhs, rhs));
-    }
-
-    @Override
-    public void setSource(@NotNull SourceSegment source) {
-        this.source = source;
     }
 }

@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script;
 
+import dollar.api.ConstraintLabel;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
@@ -24,7 +25,7 @@ import dollar.api.TypePrediction;
 import dollar.api.exceptions.LambdaRecursionException;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.plugin.Plugins;
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.script.TypeLearner;
 import dollar.api.types.ConstraintViolation;
 import dollar.api.types.DollarFactory;
@@ -92,7 +93,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     private final boolean pure;
     private final boolean scopeClosure;
     @NotNull
-    private final SourceSegment source;
+    private final Source source;
     @NotNull
     private final SourceNodeOptions sourceNodeOptions;
     @Nullable
@@ -108,7 +109,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     }
 
     SourceNode(@NotNull Pipeable lambda,
-               @NotNull SourceSegment source,
+               @NotNull Source source,
                @NotNull List<var> inputs,
                @NotNull String name,
                @NotNull DollarParser parser,
@@ -165,11 +166,11 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     }
 
     @NotNull
-    private var _constrain(@NotNull var source, @Nullable var constraint, @Nullable String constraintSource) {
+    private var _constrain(@NotNull var source, @Nullable var constraint, @Nullable ConstraintLabel constraintSource) {
         if ((constraint == null) || (constraintSource == null)) {
             return source;
         }
-        String constraintFingerprint = (String) meta.get(CONSTRAINT_FINGERPRINT);
+        ConstraintLabel constraintFingerprint = (ConstraintLabel) meta.get(CONSTRAINT_FINGERPRINT);
         if ((constraintFingerprint == null) || constraintSource.equals(constraintFingerprint)) {
             meta.put(CONSTRAINT_FINGERPRINT, constraintSource);
             return source;
@@ -189,7 +190,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     @Nullable
     @Override
     public Object invoke(@NotNull Object proxy, @NotNull Method method, @Nullable Object[] args) throws Throwable {
-        SourceSegment.source.set(source);
+        Source.source.set(source);
         try {
             if (Objects.equals(method.getName(), "source")) {
                 return source;
@@ -200,7 +201,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
             if (Objects.equals(method.getName(), "$constrain")) {
                 if (args != null) {
-                    return _constrain((var) proxy, (var) args[0], String.valueOf(args[1]));
+                    return _constrain((var) proxy, (var) args[0], (ConstraintLabel) args[1]);
                 }
             }
 

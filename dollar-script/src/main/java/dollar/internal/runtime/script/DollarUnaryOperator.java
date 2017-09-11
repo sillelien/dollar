@@ -16,7 +16,7 @@
 
 package dollar.internal.runtime.script;
 
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.parser.OpDef;
@@ -34,17 +34,17 @@ public class DollarUnaryOperator implements UnaryOperator<var>, Operator {
     @NotNull
     protected final OpDef operation;
     @NotNull
-    private final BiFunction<var, SourceSegment, var> function;
+    private final BiFunction<var, Source, var> function;
     private final boolean immediate;
     private final boolean pure;
     @NotNull
     protected DollarParser parser;
     @NotNull
-    protected SourceSegment source;
+    protected Source source;
 
     public DollarUnaryOperator(@NotNull DollarParser parser,
                                @NotNull OpDef operation,
-                               @NotNull BiFunction<var, SourceSegment, var> function,
+                               @NotNull BiFunction<var, Source, var> function,
                                boolean pure) {
         this.operation = operation;
         this.function = function;
@@ -55,7 +55,7 @@ public class DollarUnaryOperator implements UnaryOperator<var>, Operator {
     }
 
     public DollarUnaryOperator(boolean immediate,
-                               @NotNull BiFunction<var, SourceSegment, var> function,
+                               @NotNull BiFunction<var, Source, var> function,
                                @NotNull OpDef operation,
                                @NotNull DollarParser parser, boolean pure) {
         this.operation = operation;
@@ -81,7 +81,7 @@ public class DollarUnaryOperator implements UnaryOperator<var>, Operator {
     }
 
     @Override
-    public void setSource(@NotNull SourceSegment source) {
+    public void setSource(@NotNull Source source) {
         this.source = source;
     }
 

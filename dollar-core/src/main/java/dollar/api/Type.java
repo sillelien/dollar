@@ -140,6 +140,15 @@ public final class Type {
         constraint = "";
     }
 
+    public Type(@NotNull Type type, @Nullable ConstraintLabel constraintLabel) {
+        name = type.name;
+        if (constraintLabel != null) {
+            constraint = constraintLabel.value();
+        } else {
+            constraint = "";
+        }
+    }
+
     /**
      * Create a Type from a string
      *

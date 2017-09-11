@@ -16,13 +16,15 @@
 
 package dollar.internal.runtime.script.operators;
 
+import dollar.api.ConstraintLabel;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.VarFlags;
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.SimpleConstraintLabel;
 import dollar.internal.runtime.script.SourceCode;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
@@ -62,11 +64,11 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
         @Nullable Type type;
         Object[] objects = (Object[]) token.value();
         var constraint = null;
-        @Nullable final String constraintSource;
+        @Nullable final ConstraintLabel constraintSource;
 
         if (objects[3] instanceof var) {
             SourceCode meta = ((var) objects[3]).meta(CONSTRAINT_SOURCE);
-            constraintSource = (meta == null) ? null : meta.getSourceSegment();
+            constraintSource = (meta == null) ? null : new SimpleConstraintLabel(meta.getSourceSegment());
         } else {
             constraintSource = null;
         }
@@ -105,14 +107,14 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
             final String op = ((var) objects[5]).metaAttribute(ASSIGNMENT_TYPE);
             if ("when".equals(op) || "subscribe".equals(op)) {
-                final String useSource;
+                final ConstraintLabel useSource;
                 var useConstraint;
                 if (finalConstraint != null) {
                     useConstraint = finalConstraint;
                     useSource = constraintSource;
                 } else {
                     useConstraint = scope.constraint(varName);
-                    useSource = scope.constraintSource(varName);
+                    useSource = scope.constraintLabel(varName);
                 }
                 List<var> inputs = Arrays.asList(rhs, constrain(scope, rhs, finalConstraint, useSource));
                 if ("when".equals(op)) {
@@ -159,11 +161,11 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                        @NotNull Object[] objects,
                        @Nullable var constraint,
                        @NotNull VarFlags varFlags,
-                       @Nullable String constraintSource,
+                       @Nullable ConstraintLabel constraintSource,
                        @NotNull Scope scope,
                        @NotNull Token token,
                        @Nullable Type type,
-                       @NotNull SourceSegment sourceSegment) {
+                       @NotNull Source source) {
 
         final String varName = objects[4].toString();
 
@@ -171,21 +173,21 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
             Scope currentScope = currentScope();
             final var useConstraint;
-            final String useSource;
+            final ConstraintLabel useSource;
             Scope varScope = DollarScriptSupport.getScopeForVar(pure, varName, false, currentScope());
             if ((constraint != null) || (varScope == null)) {
                 useConstraint = constraint;
                 useSource = constraintSource;
             } else {
                 useConstraint = varScope.constraint(varName);
-                useSource = varScope.constraintSource(varName);
+                useSource = varScope.constraintLabel(varName);
             }
             //Don't change this value, 2 is the 'instinctive' depth a programmer would expect
             final var rhsFixed = rhs.$fix(2, false);
 
             if (rhsFixed.$type() != null && type != null) {
                 if (!rhsFixed.$type().canBe(type)) {
-                    throw new DollarScriptException("Type mismatch expected " + type + " got " + rhsFixed.$type(), sourceSegment);
+                    throw new DollarScriptException("Type mismatch expected " + type + " got " + rhsFixed.$type(), source);
                 }
 
             }
@@ -199,7 +201,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                if (useConstraint.isFalse()) {
                                    newScope.handleError(
                                            new DollarScriptException("Constraint failed for variable " + varName + "",
-                                                                     sourceSegment));
+                                                                     source));
                                }
                                return null;
                            });

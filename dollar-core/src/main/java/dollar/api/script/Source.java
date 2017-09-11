@@ -19,9 +19,9 @@ package dollar.api.script;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface SourceSegment {
+public interface Source {
 
-    @NotNull ThreadLocal<SourceSegment> source = new ThreadLocal<>();
+    @NotNull ThreadLocal<Source> source = new ThreadLocal<>();
 
     /**
      * Returns the complete source code from which this segment comes.

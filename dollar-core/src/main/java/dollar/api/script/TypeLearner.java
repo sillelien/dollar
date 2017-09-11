@@ -60,9 +60,9 @@ public interface TypeLearner extends ExtensionPoint<TypeLearner> {
         return perms;
     }
 
-    void learn(@NotNull String name, @NotNull SourceSegment source, @NotNull List<var> inputs, @NotNull Type type);
+    void learn(@NotNull String name, @NotNull Source source, @NotNull List<var> inputs, @NotNull Type type);
 
     @NotNull
-    TypePrediction predict(@NotNull String name, @NotNull SourceSegment source, @NotNull List<var> inputs);
+    TypePrediction predict(@NotNull String name, @NotNull Source source, @NotNull List<var> inputs);
 
 }

@@ -17,7 +17,7 @@
 package dollar.api.execution;
 
 import dollar.api.plugin.ExtensionPoint;
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,9 +51,9 @@ public interface DollarExecutor extends ExtensionPoint<DollarExecutor> {
      */
     void forceStop();
 
-    @NotNull var fork(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call);
+    @NotNull var fork(@NotNull Source source, @NotNull var in, @NotNull Function<var, var> call);
 
-    @NotNull var forkAndReturnId(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call);
+    @NotNull var forkAndReturnId(@NotNull Source source, @NotNull var in, @NotNull Function<var, var> call);
 
     /**
      * Stop the execution processing and restart it.

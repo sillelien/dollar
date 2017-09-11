@@ -19,7 +19,7 @@ package dollar.execution.simple;
 import dollar.api.Scope;
 import dollar.api.VarFlags;
 import dollar.api.execution.DollarExecutor;
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.types.DollarFactory;
 import dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
@@ -108,7 +108,7 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
 
     @NotNull
     @Override
-    public var fork(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call) {
+    public var fork(@NotNull Source source, @NotNull var in, @NotNull Function<var, var> call) {
         Future<var> varFuture = submit(() -> call.apply(in));
         return node(FORK, false, DollarParser.parser.get(), source,
                     Arrays.asList(in),
@@ -121,7 +121,7 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
 
     @NotNull
     @Override
-    public var forkAndReturnId(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call) {
+    public var forkAndReturnId(@NotNull Source source, @NotNull var in, @NotNull Function<var, var> call) {
         Future<var> varFuture = submit(() -> call.apply(in));
         String id = DollarScriptSupport.randomId();
         log.debug("Future obtained, returning future node");

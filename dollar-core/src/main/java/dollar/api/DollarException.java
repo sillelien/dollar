@@ -16,7 +16,7 @@
 
 package dollar.api;
 
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
@@ -31,7 +31,7 @@ public class DollarException extends RuntimeException {
             STARS =
             "*******************************************************************************\n";
     @NotNull
-    private final List<SourceSegment> sourceList = new ArrayList<>();
+    private final List<Source> sourceList = new ArrayList<>();
 
     /**
      * Instantiates a new Dollar exception.
@@ -70,18 +70,17 @@ public class DollarException extends RuntimeException {
         }
     }
 
-    @NotNull
-    @Override
-    public String getMessage() {
-        if (sourceList.isEmpty()) {
-            return super.getMessage();
-
-        } else {
-            StringBuilder builder = new StringBuilder(super.getMessage() + "\n");
-            for (SourceSegment sourceEntry : sourceList) {
-                builder.append(sourceEntry.getSourceMessage()).append("\n");
-            }
-            return builder.toString();
+    /**
+     * Add source information, this is useful if the exception is thrown while executing DollarScript.
+     *
+     * @param source the source code to which the exception relates
+     */
+    public void addSource(@NotNull Source source) {
+        if (source == null) {
+            throw new NullPointerException();
+        }
+        if (!sourceList.contains(source)) {
+            sourceList.add(source);
         }
     }
 
@@ -91,6 +90,21 @@ public class DollarException extends RuntimeException {
 //        if (message != null) { return (STARS + s + ": " + message + "\n" + STARS); } else { return s; }
 //    }
 
+    @NotNull
+    @Override
+    public String getMessage() {
+        if (sourceList.isEmpty()) {
+            return super.getMessage();
+
+        } else {
+            StringBuilder builder = new StringBuilder(super.getMessage() + "\n");
+            for (Source sourceEntry : sourceList) {
+                builder.append(sourceEntry.getSourceMessage()).append("\n");
+            }
+            return builder.toString();
+        }
+    }
+
     /**
      * A HTTP code that is appropriate for this exception.
      *
@@ -98,19 +112,5 @@ public class DollarException extends RuntimeException {
      */
     public int httpCode() {
         return 500;
-    }
-
-    /**
-     * Add source information, this is useful if the exception is thrown while executing DollarScript.
-     *
-     * @param source the source code to which the exception relates
-     */
-    public void addSource(@NotNull SourceSegment source) {
-        if (source == null) {
-            throw new NullPointerException();
-        }
-        if (!sourceList.contains(source)) {
-            sourceList.add(source);
-        }
     }
 }

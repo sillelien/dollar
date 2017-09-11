@@ -19,6 +19,7 @@ package dollar.api.types;
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.google.common.collect.ImmutableList;
+import dollar.api.ConstraintLabel;
 import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
@@ -99,15 +100,14 @@ public abstract class AbstractDollar implements var {
         return map.$get(DollarStatic.$($S()));
     }
 
-    @NotNull
     @Override
-    public var $constrain(@Nullable var constraint, @Nullable String constraintFingerprint) {
+    public var $constrain(@Nullable var constraint, ConstraintLabel constraintFingerprint) {
         if ((constraint == null) || (constraintFingerprint == null)) {
             return this;
         }
-        String thisConstraintFingerprint = constraintLabel();
+        ConstraintLabel thisConstraintFingerprint = constraintLabel();
         if (thisConstraintFingerprint == null) {
-            metaAttribute(MetaConstants.CONSTRAINT_FINGERPRINT, constraintFingerprint);
+            meta(MetaConstants.CONSTRAINT_FINGERPRINT, constraintFingerprint);
             return this;
         } else if (thisConstraintFingerprint.equals(constraintFingerprint)) {
             return this;
@@ -302,8 +302,8 @@ public abstract class AbstractDollar implements var {
 
     @Nullable
     @Override
-    public String constraintLabel() {
-        return metaAttribute(MetaConstants.CONSTRAINT_FINGERPRINT);
+    public ConstraintLabel constraintLabel() {
+        return meta(MetaConstants.CONSTRAINT_FINGERPRINT);
     }
 
     @NotNull

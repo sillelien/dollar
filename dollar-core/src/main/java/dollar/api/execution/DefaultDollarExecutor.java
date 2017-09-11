@@ -17,7 +17,7 @@
 package dollar.api.execution;
 
 import dollar.api.DollarException;
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
 
@@ -85,7 +85,7 @@ public class DefaultDollarExecutor implements DollarExecutor {
 
     @NotNull
     @Override
-    public var fork(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call) {
+    public var fork(@NotNull Source source, @NotNull var in, @NotNull Function<var, var> call) {
         try {
             return submit(() -> call.apply(in)).get();
         } catch (InterruptedException | ExecutionException e) {
@@ -95,7 +95,7 @@ public class DefaultDollarExecutor implements DollarExecutor {
 
     @NotNull
     @Override
-    public var forkAndReturnId(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call) {
+    public var forkAndReturnId(@NotNull Source source, @NotNull var in, @NotNull Function<var, var> call) {
         throw new UnsupportedOperationException();
     }
 

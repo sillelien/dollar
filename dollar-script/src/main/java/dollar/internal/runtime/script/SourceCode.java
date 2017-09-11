@@ -17,7 +17,7 @@
 package dollar.internal.runtime.script;
 
 import dollar.api.Scope;
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.util.FNV;
@@ -29,7 +29,7 @@ import java.util.Objects;
 
 import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
-public class SourceCode implements SourceSegment {
+public class SourceCode implements Source {
     private final int length;
     @NotNull
     private final Scope scope;

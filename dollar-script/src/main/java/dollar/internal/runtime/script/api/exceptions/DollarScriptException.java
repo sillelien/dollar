@@ -17,7 +17,7 @@
 package dollar.internal.runtime.script.api.exceptions;
 
 import dollar.api.exceptions.DollarFailureException;
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.types.ErrorType;
 import dollar.api.var;
 import dollar.internal.runtime.script.parser.OpDef;
@@ -30,7 +30,7 @@ public class DollarScriptException extends DollarFailureException {
     @NotNull
     private String rawMessage;
     @Nullable
-    private SourceSegment source;
+    private Source source;
 
     public DollarScriptException(@NotNull Throwable e) {
         super(e);
@@ -50,25 +50,25 @@ public class DollarScriptException extends DollarFailureException {
         source = rhs.source();
     }
 
-    public DollarScriptException(@NotNull String s, @NotNull SourceSegment source) {
+    public DollarScriptException(@NotNull String s, @NotNull Source source) {
         super(s + ":\n" + optionalSource(source));
         rawMessage = s;
         this.source = source;
     }
 
-    public DollarScriptException(@NotNull ErrorType errorType, @NotNull SourceSegment source) {
+    public DollarScriptException(@NotNull ErrorType errorType, @NotNull Source source) {
         super(errorType, optionalSource(source));
         rawMessage = errorType.name();
         this.source = source;
     }
 
-    public DollarScriptException(@NotNull ErrorType errorType, @NotNull String additional, @NotNull SourceSegment source) {
+    public DollarScriptException(@NotNull ErrorType errorType, @NotNull String additional, @NotNull Source source) {
         super(errorType, additional + ":\n" + optionalSource(source));
         rawMessage = errorType.name();
         this.source = source;
     }
 
-    public DollarScriptException(@NotNull String s, @Nullable SourceSegment source, @NotNull OpDef operation) {
+    public DollarScriptException(@NotNull String s, @Nullable Source source, @NotNull OpDef operation) {
         super((s + ":\n" + optionalSource(source) + "\n\n") + (operation != null ? operation.helpText() : ""));
         rawMessage = s;
         this.source = source;
@@ -76,7 +76,7 @@ public class DollarScriptException extends DollarFailureException {
     }
 
 
-    public DollarScriptException(@NotNull Throwable cause, @Nullable SourceSegment source) {
+    public DollarScriptException(@NotNull Throwable cause, @Nullable Source source) {
         super(cause, cause.getMessage() + ":\n" + optionalSource(source));
         this.source = source;
     }
@@ -87,7 +87,7 @@ public class DollarScriptException extends DollarFailureException {
     }
 
     @NotNull
-    private static String optionalSource(@Nullable SourceSegment source) {
+    private static String optionalSource(@Nullable Source source) {
         return (source == null) ? "" : source.getSourceMessage();
     }
 
@@ -102,7 +102,7 @@ public class DollarScriptException extends DollarFailureException {
     }
 
     @NotNull
-    public SourceSegment source() {
+    public Source source() {
         return source;
     }
 }

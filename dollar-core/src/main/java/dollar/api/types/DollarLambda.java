@@ -16,6 +16,7 @@
 
 package dollar.api.types;
 
+import dollar.api.ConstraintLabel;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.exceptions.LambdaRecursionException;
@@ -71,11 +72,11 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
 
 
     @NotNull
-    public var _constrain(@NotNull var source, @Nullable var constraint, @Nullable String constraintSource) {
+    public var _constrain(@NotNull var source, @Nullable var constraint, @Nullable ConstraintLabel constraintSource) {
         if ((constraint == null) || (constraintSource == null)) {
             return source;
         }
-        String constraintFingerprint = (String) meta.get(MetaConstants.CONSTRAINT_FINGERPRINT);
+        ConstraintLabel constraintFingerprint = (ConstraintLabel) meta.get(MetaConstants.CONSTRAINT_FINGERPRINT);
         if ((constraintFingerprint == null) || constraintSource.equals(constraintFingerprint)) {
             meta.put(MetaConstants.CONSTRAINT_FINGERPRINT, constraintSource);
             return source;
@@ -140,7 +141,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                     return proxy;
                 }
             } else if ("$constrain".equals(method.getName())) {
-                return _constrain((var) proxy, (var) args[0], String.valueOf(args[1]));
+                return _constrain((var) proxy, (var) args[0], (ConstraintLabel) args[1]);
             } else if ("constraintLabel".equals(method.getName())) {
                 return meta.get(MetaConstants.CONSTRAINT_FINGERPRINT);
             } else if ("metaAttribute".equals(method.getName()) && (args.length == 1)) {

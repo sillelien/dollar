@@ -18,7 +18,7 @@ package dollar.internal.runtime.script;
 
 import dollar.api.DollarException;
 import dollar.api.Scope;
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.ParserErrorHandler;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
@@ -52,19 +52,19 @@ public class ErrorHandlerFactory implements ParserErrorHandler {
 
     @NotNull
     @Override
-    public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull DollarAssertionException e) {
+    public var handle(@NotNull Scope scope, @Nullable Source source, @NotNull DollarAssertionException e) {
         return handleInternal(scope, source, e);
     }
 
     @NotNull
     @Override
-    public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull DollarException e) {
+    public var handle(@NotNull Scope scope, @Nullable Source source, @NotNull DollarException e) {
         return handleInternal(scope, source, e);
     }
 
     @Override
     @NotNull
-    public var handle(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull Throwable e) {
+    public var handle(@NotNull Scope scope, @Nullable Source source, @NotNull Throwable e) {
         return handleInternal(scope, source, e);
 
     }
@@ -119,7 +119,7 @@ public class ErrorHandlerFactory implements ParserErrorHandler {
     }
 
     @NotNull
-    private var handleInternal(@NotNull Scope scope, @Nullable SourceSegment source, @NotNull Throwable e) {
+    private var handleInternal(@NotNull Scope scope, @Nullable Source source, @NotNull Throwable e) {
 
         if ((e instanceof DollarException) && (source != null)) {
             return scope.handleError(e, source);

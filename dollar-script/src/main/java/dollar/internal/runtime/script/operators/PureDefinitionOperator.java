@@ -16,10 +16,12 @@
 
 package dollar.internal.runtime.script.operators;
 
+import dollar.api.ConstraintLabel;
 import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.var;
 import dollar.internal.runtime.script.Func;
+import dollar.internal.runtime.script.SimpleConstraintLabel;
 import dollar.internal.runtime.script.SourceCode;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
@@ -75,7 +77,7 @@ public class PureDefinitionOperator implements Function<Token, var> {
         }
 
         @Nullable var constraint;
-        @Nullable String constraintSource;
+        @Nullable ConstraintLabel constraintSource;
 
         log.info("Creating pure variable {}", varName);
         if (typeConstraintObj != null) {
@@ -83,7 +85,7 @@ public class PureDefinitionOperator implements Function<Token, var> {
             constraint = node(DEFINITION, "definition-constraint", true, NEW_SCOPE, parser,
                               new SourceCode(currentScope(), token), null, new ArrayList<>(),
                               i -> $(scope.parameter("it").getValue().is(type)));
-            constraintSource = typeConstraintObj.$S().toUpperCase();
+            constraintSource = new SimpleConstraintLabel(typeConstraintObj.$S());
             checkLearntType(token, type, value, MIN_PROBABILITY);
 
         } else {

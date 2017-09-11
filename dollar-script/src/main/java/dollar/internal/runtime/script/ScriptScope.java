@@ -20,6 +20,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
+import dollar.api.ConstraintLabel;
 import dollar.api.DollarClass;
 import dollar.api.DollarException;
 import dollar.api.Pipeable;
@@ -27,7 +28,7 @@ import dollar.api.Scope;
 import dollar.api.VarFlags;
 import dollar.api.Variable;
 import dollar.api.exceptions.LambdaRecursionException;
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
@@ -205,7 +206,7 @@ public class ScriptScope implements Scope {
 
     @Nullable
     @Override
-    public String constraintSource(@NotNull String k) {
+    public ConstraintLabel constraintLabel(@NotNull String k) {
         checkDestroyed();
 
         String key = removePrefix(k);
@@ -217,8 +218,8 @@ public class ScriptScope implements Scope {
             log.info("Getting constraint for {} in {}", key, scope);
         }
         if (scope.variables().containsKey(key) && (scope.variables().get(
-                key).getConstraintSource() != null)) {
-            return scope.variables().get(key).getConstraintSource();
+                key).getConstraintLabel() != null)) {
+            return scope.variables().get(key).getConstraintLabel();
         }
         return null;
     }
@@ -374,7 +375,7 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public var handleError(@NotNull Throwable t, @NotNull SourceSegment source) {
+    public var handleError(@NotNull Throwable t, @NotNull Source source) {
         if (t instanceof LambdaRecursionException) {
             return handleError(new DollarParserError(
                                                             "Excessive recursion detected, this is usually due to a recursive definition of lazily defined " +
@@ -636,7 +637,7 @@ public class ScriptScope implements Scope {
     @Override
     public Variable set(@NotNull String k,
                         @NotNull var value,
-                        @Nullable var constraint, String constraintSource, @NotNull VarFlags varFlags) {
+                        @Nullable var constraint, ConstraintLabel constraintSource, @NotNull VarFlags varFlags) {
 
         if ((parent != null) && parent.isClassScope()) {
             return parent.set(k, value, constraint, constraintSource, varFlags);

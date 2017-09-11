@@ -14,12 +14,10 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.api;
 
-import dollar.api.script.Source;
-import org.jetbrains.annotations.NotNull;
+public interface ConstraintLabel {
+    boolean isEmpty();
 
-public interface Operator {
-
-    void setSource(@NotNull Source source);
+    String value();
 }

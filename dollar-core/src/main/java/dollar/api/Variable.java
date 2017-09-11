@@ -23,7 +23,7 @@ public final class Variable {
     @Nullable
     private final var constraint;
     @Nullable
-    private final String constraintSource;
+    private final ConstraintLabel constraintSource;
     private final boolean fixed;
     private final boolean numeric;
     private final boolean parameter;
@@ -35,7 +35,7 @@ public final class Variable {
     private var value;
 
     private Variable(@Nullable var constraint,
-                     @Nullable String constraintSource,
+                     @Nullable ConstraintLabel constraintSource,
                      boolean fixed,
                      boolean numeric,
                      boolean parameter,
@@ -73,7 +73,7 @@ public final class Variable {
 
     public Variable(@NotNull var value,
                     @Nullable var constraint,
-                    @Nullable String constraintSource,
+                    @Nullable ConstraintLabel constraintSource,
                     boolean numeric,
                     boolean parameter) {
         this.numeric = numeric;
@@ -90,7 +90,7 @@ public final class Variable {
     public Variable(@NotNull var value,
                     @NotNull VarFlags varFlags,
                     @Nullable var constraint,
-                    @Nullable String constraintSource,
+                    @Nullable ConstraintLabel constraintSource,
                     boolean parameter) {
         numeric = varFlags.isNumeric();
         this.parameter = parameter;
@@ -114,7 +114,7 @@ public final class Variable {
     }
 
     @Nullable
-    public String getConstraintSource() {
+    public ConstraintLabel getConstraintLabel() {
         return constraintSource;
     }
 

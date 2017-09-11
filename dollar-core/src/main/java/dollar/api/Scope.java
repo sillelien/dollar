@@ -16,7 +16,7 @@
 
 package dollar.api;
 
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,8 +42,14 @@ public interface Scope {
 
     @Nullable var constraint(@NotNull String key);
 
+    /**
+     * Returns the constraint label for a given variable
+     *
+     * @param key
+     * @return an arbitrary String that is used to label the constraint on the given variable
+     */
     @Nullable
-    String constraintSource(@NotNull String key);
+    ConstraintLabel constraintLabel(@NotNull String key);
 
     @NotNull
     Scope copy();
@@ -81,13 +87,33 @@ public interface Scope {
      */
     @NotNull var get(@NotNull String key);
 
+    /**
+     * Handle the error using any error handlers in this or parent scopes.
+     *
+     * @param t the error
+     * @return an error var if the method returns.
+     */
     @NotNull var handleError(@NotNull Throwable t);
 
+    /**
+     * Handle the error using any error handlers in this or parent scopes.
+     *
+     * @param t       the error
+     * @param context a var which relates to the error
+     * @return an error var if the method returns.
+     */
     @NotNull
     var handleError(@NotNull Throwable t, @NotNull var context);
 
+    /**
+     * Handle the error using any error handlers in this or parent scopes.
+     *
+     * @param t       the error
+     * @param context the source code for the point at which the error occurs
+     * @return an error var if the method returns.
+     */
     @NotNull
-    var handleError(@NotNull Throwable t, @NotNull SourceSegment context);
+    var handleError(@NotNull Throwable t, @NotNull Source context);
 
     /**
      * Return's true if this scope contains a variable.
@@ -97,6 +123,12 @@ public interface Scope {
      */
     boolean has(@NotNull String key);
 
+    /**
+     * Returns true if the *parameter* is in this scope.
+     *
+     * @param key the parameter name
+     * @return true if the supplied parameter is in *this* scope.
+     */
     boolean hasParameter(@NotNull String key);
 
     /**
@@ -114,6 +146,11 @@ public interface Scope {
      */
     boolean isClassScope();
 
+    /**
+     * Returns true if this is a root scope.
+     *
+     * @return true if root scope.
+     */
     boolean isRoot();
 
     /**
@@ -217,13 +254,13 @@ public interface Scope {
      * @param value            the value to assign
      * @param constraint       a constraint on this variable that will be checked on assignment
      * @param constraintSource an arbitrary string with a near one to one mapping with the source of the constraint
-     * @param varFlags a set of flags relating to the variable
+     * @param varFlags         a set of flags relating to the variable
      * @return the variable definition
      */
     @NotNull Variable set(@NotNull String key,
                           @NotNull var value,
                           @Nullable var constraint,
-                          @Nullable String constraintSource,
+                          @Nullable ConstraintLabel constraintSource,
                           @NotNull VarFlags varFlags);
 
     /**

@@ -37,7 +37,7 @@ import dollar.api.json.JsonArray;
 import dollar.api.json.JsonObject;
 import dollar.api.json.impl.Json;
 import dollar.api.monitor.DollarMonitor;
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.uri.URI;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
@@ -402,7 +402,7 @@ public final class DollarFactory {
      */
     @NotNull
     public static var failureWithSource(@NotNull ErrorType errorType, @NotNull Throwable throwable,
-                                        @Nullable SourceSegment source) {
+                                        @Nullable Source source) {
         if (source == null) {
             throw new NullPointerException();
         }

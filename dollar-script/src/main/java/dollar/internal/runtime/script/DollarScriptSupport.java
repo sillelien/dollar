@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script;
 
+import dollar.api.ConstraintLabel;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
@@ -23,7 +24,7 @@ import dollar.api.Type;
 import dollar.api.TypePrediction;
 import dollar.api.VarFlags;
 import dollar.api.Variable;
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.meta.MetaConstants;
 import dollar.api.var;
@@ -112,21 +113,28 @@ public final class DollarScriptSupport {
         }
     }
 
-    @NotNull
-    public static var constrain(@NotNull Scope scope, @NotNull var value, @Nullable var constraint, @Nullable String source) {
-//        System.err.println("(" + source + ") " + rhs.$type().constraint());
-        if (!Objects.equals(value.constraintLabel(), source)) {
-            if ((source != null) && (value.constraintLabel() != null) && !value.constraintLabel().isEmpty()) {
-                scope.handleError(
-                        new DollarScriptException("Trying to assign an invalid constrained variable " + value.constraintLabel() + " vs " + source,
-                                                  value));
-            }
-        } else {
-            if ((value.constraintLabel() != null) && !value.constraintLabel().isEmpty()) {
+    public static var constrain(@NotNull Scope scope,
+                                @NotNull var value,
+                                @Nullable var constraint,
+                                @Nullable ConstraintLabel label) {
+//        System.err.println("(" + label + ") " + rhs.$type().constraint());
+        ConstraintLabel valueLabel = value.constraintLabel();
+        if (Objects.equals(valueLabel, label)) {
+            if ((valueLabel != null) && !valueLabel.isEmpty()) {
 //                System.err.println("Fingerprint: " + rhs.$type().constraint());
             }
+        } else {
+            if ((label != null) && (valueLabel != null) && !valueLabel.isEmpty()) {
+                scope.handleError(
+                        new DollarScriptException("Trying to assign an invalid constrained variable " + valueLabel + " vs " + label,
+                                                  value));
+            }
         }
-        return value.$constrain(constraint, source);
+        if (constraint == null) {
+            return value;
+        } else {
+            return value.$constrain(constraint, label);
+        }
     }
 
     @NotNull
@@ -237,7 +245,7 @@ public final class DollarScriptSupport {
     private static var getVar(@NotNull String key,
                               @NotNull UUID id,
                               @NotNull Scope scopeForKey,
-                              @NotNull SourceSegment sourceCode,
+                              @NotNull Source sourceCode,
                               boolean pure,
                               @NotNull var node) {
         assert scopeForKey != null;
@@ -349,7 +357,7 @@ public final class DollarScriptSupport {
                            boolean pure,
                            @NotNull SourceNodeOptions sourceNodeOptions,
                            @NotNull DollarParser parser,
-                           @NotNull SourceSegment source,
+                           @NotNull Source source,
                            @Nullable Type suggestedType, @NotNull List<var> inputs,
                            @NotNull Pipeable pipeable) {
         var result = DollarFactory.wrap((var) Proxy.newProxyInstance(
@@ -376,7 +384,7 @@ public final class DollarScriptSupport {
     public static var node(@NotNull OpDef operation,
                            boolean pure,
                            @NotNull DollarParser parser,
-                           @NotNull SourceSegment source,
+                           @NotNull Source source,
                            @NotNull List<var> inputs,
                            @NotNull Pipeable pipeable) {
         return node(operation, operation.name(), pure, operation.nodeOptions(), parser, source, null, inputs, pipeable);
@@ -424,7 +432,7 @@ public final class DollarScriptSupport {
     static var reactiveNode(@NotNull OpDef operation, @NotNull String name,
                             boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
                             @NotNull DollarParser parser,
-                            @NotNull SourceSegment source,
+                            @NotNull Source source,
                             @NotNull var lhs,
                             @NotNull var rhs,
                             @NotNull Pipeable callable) {
@@ -472,7 +480,7 @@ public final class DollarScriptSupport {
     @NotNull
     static var reactiveNode(@NotNull OpDef operation,
                             boolean pure,
-                            @NotNull DollarParser parser, @NotNull SourceSegment source,
+                            @NotNull DollarParser parser, @NotNull Source source,
                             @NotNull var lhs,
                             @NotNull var rhs,
                             @NotNull Pipeable callable) {
@@ -496,7 +504,7 @@ public final class DollarScriptSupport {
     @NotNull
     static var reactiveNode(@NotNull OpDef operation,
                             boolean pure,
-                            @NotNull SourceSegment source,
+                            @NotNull Source source,
                             @NotNull DollarParser parser,
                             @NotNull var lhs,
                             @NotNull Pipeable callable) {
@@ -530,10 +538,10 @@ public final class DollarScriptSupport {
                                        @Nullable DollarParser parser,
                                        @NotNull Token token,
                                        @Nullable var useConstraint,
-                                       @Nullable String useSource,
+                                       @Nullable ConstraintLabel useSource,
                                        @NotNull VarFlags varFlags) {
 
-        SourceSegment source = new SourceCode(scope, token);
+        Source source = new SourceCode(scope, token);
         boolean numeric = key.matches("^\\d+$");
 
 
@@ -589,7 +597,7 @@ public final class DollarScriptSupport {
                                                     @NotNull String key,
                                                     @NotNull var value,
                                                     @NotNull VarFlags varFlags, @Nullable var useConstraint,
-                                                    @Nullable String useSource) {
+                                                    @Nullable ConstraintLabel useSource) {
         if (getConfig().debugScope()) {
             log.info("{}{} {}", highlight("UPDATING ", ANSI_CYAN), key, scope);
         }

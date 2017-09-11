@@ -24,7 +24,7 @@ import dollar.api.json.JsonObject;
 import dollar.api.monitor.DollarMonitor;
 import dollar.api.monitor.SimpleLogStateTracer;
 import dollar.api.plugin.Plugins;
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.types.DollarFactory;
 import dollar.api.uri.URI;
 import org.jetbrains.annotations.NotNull;
@@ -248,7 +248,7 @@ public class DollarStatic {
      * @param call   the call  @return the var
      */
     @NotNull
-    public static var $fork(@NotNull SourceSegment source, @NotNull var in, @NotNull Function<var, var> call) {
+    public static var $fork(@NotNull Source source, @NotNull var in, @NotNull Function<var, var> call) {
         return executor.fork(source, in, call);
     }
 

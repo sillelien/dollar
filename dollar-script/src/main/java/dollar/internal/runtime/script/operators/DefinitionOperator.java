@@ -16,10 +16,12 @@
 
 package dollar.internal.runtime.script.operators;
 
+import dollar.api.ConstraintLabel;
 import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.var;
 import dollar.internal.runtime.script.Func;
+import dollar.internal.runtime.script.SimpleConstraintLabel;
 import dollar.internal.runtime.script.SourceCode;
 import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
@@ -65,7 +67,7 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
             var variableName;
             final var typeConstraintObj;
             @Nullable var constraint;
-            @Nullable String constraintSource;
+            @Nullable ConstraintLabel constraintSource;
             boolean readonly;
 
             if (def) {
@@ -96,7 +98,7 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
                 checkLearntType(token, type, rhs, MIN_PROBABILITY);
                 SourceCode meta = typeConstraintObj.meta(CONSTRAINT_SOURCE);
                 if (meta != null) {
-                    constraintSource = meta.getSourceSegment();
+                    constraintSource = new SimpleConstraintLabel(meta.getSourceSegment());
                 } else {
                     constraintSource = null;
                 }

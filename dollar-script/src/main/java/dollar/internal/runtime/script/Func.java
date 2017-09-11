@@ -16,13 +16,14 @@
 
 package dollar.internal.runtime.script;
 
+import dollar.api.ConstraintLabel;
 import dollar.api.Scope;
 import dollar.api.Type;
 import dollar.api.VarFlags;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.plugin.Plugins;
 import dollar.api.script.ModuleResolver;
-import dollar.api.script.SourceSegment;
+import dollar.api.script.Source;
 import dollar.api.time.Scheduler;
 import dollar.api.types.DollarFactory;
 import dollar.api.var;
@@ -104,7 +105,7 @@ public final class Func {
                                      @NotNull var value,
                                      @NotNull var variableName,
                                      @Nullable var constraint,
-                                     @Nullable String constraintSource,
+                                     @Nullable ConstraintLabel constraintSource,
                                      @NotNull DollarParser parser,
                                      boolean pure,
                                      boolean readonly) {
@@ -309,7 +310,7 @@ public final class Func {
 
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
     static var printFunc(@NotNull DollarParser parser,
-                         @NotNull SourceSegment segment,
+                         @NotNull Source segment,
                          @NotNull OpDef command,
                          @NotNull List<var> vars) {
         return node(command, false, parser, segment, vars, args -> {
