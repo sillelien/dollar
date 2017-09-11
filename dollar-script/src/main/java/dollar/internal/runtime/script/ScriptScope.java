@@ -20,11 +20,11 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
-import dollar.api.ConstraintLabel;
 import dollar.api.DollarClass;
 import dollar.api.DollarException;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
+import dollar.api.SubType;
 import dollar.api.VarFlags;
 import dollar.api.Variable;
 import dollar.api.exceptions.LambdaRecursionException;
@@ -206,7 +206,7 @@ public class ScriptScope implements Scope {
 
     @Nullable
     @Override
-    public ConstraintLabel constraintLabel(@NotNull String k) {
+    public SubType constraintLabel(@NotNull String k) {
         checkDestroyed();
 
         String key = removePrefix(k);
@@ -637,7 +637,7 @@ public class ScriptScope implements Scope {
     @Override
     public Variable set(@NotNull String k,
                         @NotNull var value,
-                        @Nullable var constraint, ConstraintLabel constraintSource, @NotNull VarFlags varFlags) {
+                        @Nullable var constraint, SubType constraintSource, @NotNull VarFlags varFlags) {
 
         if ((parent != null) && parent.isClassScope()) {
             return parent.set(k, value, constraint, constraintSource, varFlags);

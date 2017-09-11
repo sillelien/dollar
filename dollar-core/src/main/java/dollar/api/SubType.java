@@ -16,8 +16,10 @@
 
 package dollar.api;
 
-public interface ConstraintLabel {
-    boolean isEmpty();
+import org.jetbrains.annotations.NotNull;
 
-    String value();
+public interface SubType {
+    @NotNull String asString();
+
+    boolean isEmpty();
 }

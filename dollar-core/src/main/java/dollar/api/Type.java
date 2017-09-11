@@ -140,10 +140,10 @@ public final class Type {
         constraint = "";
     }
 
-    public Type(@NotNull Type type, @Nullable ConstraintLabel constraintLabel) {
+    public Type(@NotNull Type type, @Nullable SubType subType) {
         name = type.name;
-        if (constraintLabel != null) {
-            constraint = constraintLabel.value();
+        if (subType != null) {
+            constraint = subType.asString();
         } else {
             constraint = "";
         }

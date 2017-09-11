@@ -19,9 +19,9 @@ package dollar.api.types;
 import com.github.oxo42.stateless4j.StateMachine;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import dollar.api.ConstraintLabel;
 import dollar.api.Pipeable;
 import dollar.api.Signal;
+import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.TypePrediction;
 import dollar.api.guard.AllVarCollectionGuard;
@@ -104,7 +104,7 @@ public class DollarBlockCollection implements var {
     }
 
     @Override
-    public var $constrain(@NotNull var constraint, ConstraintLabel source) {
+    public var $constrain(@NotNull var constraint, SubType source) {
         return getValue().$constrain(constraint, source);
     }
 
@@ -496,7 +496,7 @@ public class DollarBlockCollection implements var {
 
     @NotNull
     @Override
-    public ConstraintLabel constraintLabel() {
+    public SubType constraintLabel() {
         return getValue().constraintLabel();
     }
 

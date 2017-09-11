@@ -16,8 +16,8 @@
 
 package dollar.internal.runtime.script;
 
-import dollar.api.ConstraintLabel;
 import dollar.api.Scope;
+import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.VarFlags;
 import dollar.api.execution.DollarExecutor;
@@ -105,7 +105,7 @@ public final class Func {
                                      @NotNull var value,
                                      @NotNull var variableName,
                                      @Nullable var constraint,
-                                     @Nullable ConstraintLabel constraintSource,
+                                     @Nullable SubType constraintSource,
                                      @NotNull DollarParser parser,
                                      boolean pure,
                                      boolean readonly) {

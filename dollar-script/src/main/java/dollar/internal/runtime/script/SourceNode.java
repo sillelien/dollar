@@ -16,10 +16,10 @@
 
 package dollar.internal.runtime.script;
 
-import dollar.api.ConstraintLabel;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
+import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.TypePrediction;
 import dollar.api.exceptions.LambdaRecursionException;
@@ -166,11 +166,11 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     }
 
     @NotNull
-    private var _constrain(@NotNull var source, @Nullable var constraint, @Nullable ConstraintLabel constraintSource) {
+    private var _constrain(@NotNull var source, @Nullable var constraint, @Nullable SubType constraintSource) {
         if ((constraint == null) || (constraintSource == null)) {
             return source;
         }
-        ConstraintLabel constraintFingerprint = (ConstraintLabel) meta.get(CONSTRAINT_FINGERPRINT);
+        SubType constraintFingerprint = (SubType) meta.get(CONSTRAINT_FINGERPRINT);
         if ((constraintFingerprint == null) || constraintSource.equals(constraintFingerprint)) {
             meta.put(CONSTRAINT_FINGERPRINT, constraintSource);
             return source;
@@ -201,7 +201,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
             if (Objects.equals(method.getName(), "$constrain")) {
                 if (args != null) {
-                    return _constrain((var) proxy, (var) args[0], (ConstraintLabel) args[1]);
+                    return _constrain((var) proxy, (var) args[0], (SubType) args[1]);
                 }
             }
 

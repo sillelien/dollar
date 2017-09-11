@@ -16,22 +16,24 @@
 
 package dollar.internal.runtime.script;
 
-import dollar.api.ConstraintLabel;
+import dollar.api.SubType;
+import dollar.api.script.Source;
 import org.jetbrains.annotations.NotNull;
 
-public class SimpleConstraintLabel implements ConstraintLabel {
+public class SimpleSubType implements SubType {
     @NotNull
     private final String value;
 
-    public SimpleConstraintLabel(@NotNull String value) {this.value = value;}
+    public SimpleSubType(@NotNull Source source) {value = source.getSourceSegment();}
+
+    @NotNull
+    @Override
+    public String asString() {
+        return value;
+    }
 
     @Override
     public boolean isEmpty() {
         return value.isEmpty();
-    }
-
-    @Override
-    public String value() {
-        return value;
     }
 }

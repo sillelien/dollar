@@ -16,7 +16,7 @@
 
 package dollar.api.types;
 
-import dollar.api.ConstraintLabel;
+import dollar.api.SubType;
 import dollar.api.exceptions.DollarFailureException;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
@@ -24,8 +24,8 @@ import org.jetbrains.annotations.NotNull;
 public class ConstraintViolation extends DollarFailureException {
     public ConstraintViolation(@NotNull var constrainedVar,
                                @NotNull var constraint,
-                               ConstraintLabel constrainedFingerprint,
-                               ConstraintLabel constraintFingerPrint) {
+                               SubType constrainedFingerprint,
+                               SubType constraintFingerPrint) {
         super(ErrorType.ASSERTION,
               "Constrained var fingerprint " + constrainedFingerprint + " did not match constraint fingerprint for " + constraintFingerPrint);
     }

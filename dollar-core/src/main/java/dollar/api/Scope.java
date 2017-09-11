@@ -49,7 +49,7 @@ public interface Scope {
      * @return an arbitrary String that is used to label the constraint on the given variable
      */
     @Nullable
-    ConstraintLabel constraintLabel(@NotNull String key);
+    SubType constraintLabel(@NotNull String key);
 
     @NotNull
     Scope copy();
@@ -250,17 +250,17 @@ public interface Scope {
     /**
      * Creates or updates a variable.
      *
-     * @param key              the name of the variable
-     * @param value            the value to assign
-     * @param constraint       a constraint on this variable that will be checked on assignment
-     * @param constraintSource an arbitrary string with a near one to one mapping with the source of the constraint
-     * @param varFlags         a set of flags relating to the variable
+     * @param key        the name of the variable
+     * @param value      the value to assign
+     * @param constraint an optional constraint on this variable that will be checked on assignment
+     * @param subType    an optional subtype for the variable
+     * @param varFlags   a set of flags relating to the variable
      * @return the variable definition
      */
     @NotNull Variable set(@NotNull String key,
                           @NotNull var value,
                           @Nullable var constraint,
-                          @Nullable ConstraintLabel constraintSource,
+                          @Nullable SubType subType,
                           @NotNull VarFlags varFlags);
 
     /**

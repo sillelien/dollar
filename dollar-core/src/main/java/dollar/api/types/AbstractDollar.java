@@ -19,11 +19,11 @@ package dollar.api.types;
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.google.common.collect.ImmutableList;
-import dollar.api.ConstraintLabel;
 import dollar.api.DollarException;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Signal;
+import dollar.api.SubType;
 import dollar.api.TypePrediction;
 import dollar.api.exceptions.DollarFailureException;
 import dollar.api.types.meta.MetaConstants;
@@ -101,11 +101,11 @@ public abstract class AbstractDollar implements var {
     }
 
     @Override
-    public var $constrain(@Nullable var constraint, ConstraintLabel constraintFingerprint) {
+    public var $constrain(@Nullable var constraint, SubType constraintFingerprint) {
         if ((constraint == null) || (constraintFingerprint == null)) {
             return this;
         }
-        ConstraintLabel thisConstraintFingerprint = constraintLabel();
+        SubType thisConstraintFingerprint = constraintLabel();
         if (thisConstraintFingerprint == null) {
             meta(MetaConstants.CONSTRAINT_FINGERPRINT, constraintFingerprint);
             return this;
@@ -302,7 +302,7 @@ public abstract class AbstractDollar implements var {
 
     @Nullable
     @Override
-    public ConstraintLabel constraintLabel() {
+    public SubType constraintLabel() {
         return meta(MetaConstants.CONSTRAINT_FINGERPRINT);
     }
 

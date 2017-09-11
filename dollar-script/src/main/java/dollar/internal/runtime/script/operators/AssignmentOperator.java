@@ -16,15 +16,15 @@
 
 package dollar.internal.runtime.script.operators;
 
-import dollar.api.ConstraintLabel;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
+import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.VarFlags;
 import dollar.api.script.Source;
 import dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
-import dollar.internal.runtime.script.SimpleConstraintLabel;
+import dollar.internal.runtime.script.SimpleSubType;
 import dollar.internal.runtime.script.SourceCode;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
@@ -64,11 +64,11 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
         @Nullable Type type;
         Object[] objects = (Object[]) token.value();
         var constraint = null;
-        @Nullable final ConstraintLabel constraintSource;
+        @Nullable final SubType constraintSource;
 
         if (objects[3] instanceof var) {
             SourceCode meta = ((var) objects[3]).meta(CONSTRAINT_SOURCE);
-            constraintSource = (meta == null) ? null : new SimpleConstraintLabel(meta.getSourceSegment());
+            constraintSource = (meta == null) ? null : new SimpleSubType(meta);
         } else {
             constraintSource = null;
         }
@@ -107,7 +107,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
             final String op = ((var) objects[5]).metaAttribute(ASSIGNMENT_TYPE);
             if ("when".equals(op) || "subscribe".equals(op)) {
-                final ConstraintLabel useSource;
+                final SubType useSource;
                 var useConstraint;
                 if (finalConstraint != null) {
                     useConstraint = finalConstraint;
@@ -161,7 +161,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                        @NotNull Object[] objects,
                        @Nullable var constraint,
                        @NotNull VarFlags varFlags,
-                       @Nullable ConstraintLabel constraintSource,
+                       @Nullable SubType constraintSource,
                        @NotNull Scope scope,
                        @NotNull Token token,
                        @Nullable Type type,
@@ -173,7 +173,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
             Scope currentScope = currentScope();
             final var useConstraint;
-            final ConstraintLabel useSource;
+            final SubType useSource;
             Scope varScope = DollarScriptSupport.getScopeForVar(pure, varName, false, currentScope());
             if ((constraint != null) || (varScope == null)) {
                 useConstraint = constraint;

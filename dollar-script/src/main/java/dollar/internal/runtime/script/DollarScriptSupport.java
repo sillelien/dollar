@@ -16,10 +16,10 @@
 
 package dollar.internal.runtime.script;
 
-import dollar.api.ConstraintLabel;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
+import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.TypePrediction;
 import dollar.api.VarFlags;
@@ -116,9 +116,9 @@ public final class DollarScriptSupport {
     public static var constrain(@NotNull Scope scope,
                                 @NotNull var value,
                                 @Nullable var constraint,
-                                @Nullable ConstraintLabel label) {
+                                @Nullable SubType label) {
 //        System.err.println("(" + label + ") " + rhs.$type().constraint());
-        ConstraintLabel valueLabel = value.constraintLabel();
+        SubType valueLabel = value.constraintLabel();
         if (Objects.equals(valueLabel, label)) {
             if ((valueLabel != null) && !valueLabel.isEmpty()) {
 //                System.err.println("Fingerprint: " + rhs.$type().constraint());
@@ -538,7 +538,7 @@ public final class DollarScriptSupport {
                                        @Nullable DollarParser parser,
                                        @NotNull Token token,
                                        @Nullable var useConstraint,
-                                       @Nullable ConstraintLabel useSource,
+                                       @Nullable SubType useSource,
                                        @NotNull VarFlags varFlags) {
 
         Source source = new SourceCode(scope, token);
@@ -597,7 +597,7 @@ public final class DollarScriptSupport {
                                                     @NotNull String key,
                                                     @NotNull var value,
                                                     @NotNull VarFlags varFlags, @Nullable var useConstraint,
-                                                    @Nullable ConstraintLabel useSource) {
+                                                    @Nullable SubType useSource) {
         if (getConfig().debugScope()) {
             log.info("{}{} {}", highlight("UPDATING ", ANSI_CYAN), key, scope);
         }

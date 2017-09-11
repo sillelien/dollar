@@ -117,7 +117,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     @Guarded(ChainGuard.class)
     var $choose(@NotNull var map);
 
-    var $constrain(@NotNull var constraint, @Nullable ConstraintLabel label);
+    var $constrain(@NotNull var constraint, @Nullable SubType label);
 
     @NotNull
     @Guarded(ChainGuard.class)
@@ -647,7 +647,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
     }
 
     @Nullable
-    ConstraintLabel constraintLabel();
+    SubType constraintLabel();
 
     /**
      * Debug var.
