@@ -116,7 +116,7 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a>             } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>                 System.out.println(t.getMessage());
 <a class="jxr_linenumber" name="L110" href="#L110">110</a>             }
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/DollarExitError.html">DollarExitError</a>();
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/DollarExitError.html">DollarExitError</a>(t);
 <a class="jxr_linenumber" name="L112" href="#L112">112</a>         } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>             <strong class="jxr_keyword">if</strong> (!Objects.equals(unravel(t), t)) {
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>                 handleTopLevel(unravel(t), name, file);
