@@ -586,11 +586,12 @@ public final class DollarScriptSupport {
         return new SourceCode(currentScope(), token).getShortHash();
     }
 
-    private static @NotNull Variable updateVariable(@NotNull Scope scope,
-                                                    @NotNull VarKey key,
-                                                    @NotNull var value,
-                                                    @NotNull VarFlags varFlags, @Nullable var useConstraint,
-                                                    @Nullable SubType useSource) {
+    private static @NotNull
+    Variable updateVariable(@NotNull Scope scope,
+                            @NotNull VarKey key,
+                            @NotNull var value,
+                            @NotNull VarFlags varFlags, @Nullable var useConstraint,
+                            @Nullable SubType useSource) {
         if (getConfig().debugScope()) {
             log.info("{}{} {}", highlight("UPDATING ", ANSI_CYAN), key, scope);
         }

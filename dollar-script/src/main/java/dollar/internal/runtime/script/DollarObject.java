@@ -95,7 +95,8 @@ public class DollarObject extends AbstractDollar {
     }
 
     @Override
-    public @NotNull var $as(@NotNull Type type) {
+    public @NotNull
+    var $as(@NotNull Type type) {
         throw new UnsupportedOperationException();
     }
 
@@ -118,12 +119,14 @@ public class DollarObject extends AbstractDollar {
     }
 
     @Override
-    public @NotNull var $equals(@Nullable var other) {
+    public @NotNull
+    var $equals(@Nullable var other) {
         return (other == this) ? TRUE : FALSE;
     }
 
     @Override
-    public @NotNull var $get(@NotNull var key) {
+    public @NotNull
+    var $get(@NotNull var key) {
         return inThisScope(s -> {
             Variable variable = fields.get(VarKey.of(key));
             if (variable == null) {
@@ -242,7 +245,8 @@ public class DollarObject extends AbstractDollar {
     }
 
     @Override
-    public @NotNull var $set(@NotNull var key, @NotNull Object value) {
+    public @NotNull
+    var $set(@NotNull var key, @NotNull Object value) {
         if (mutable) {
 
             Variable variable = fields.get(VarKey.of(key));
@@ -266,7 +270,8 @@ public class DollarObject extends AbstractDollar {
     }
 
     @Override
-    public @NotNull Type $type() {
+    public @NotNull
+    Type $type() {
         return type;
     }
 
@@ -477,7 +482,8 @@ public class DollarObject extends AbstractDollar {
     }
 
     @Override
-    public @NotNull String toString() {
+    public @NotNull
+    String toString() {
         return "class " + name;
     }
 

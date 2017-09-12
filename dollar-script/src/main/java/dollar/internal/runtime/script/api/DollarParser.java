@@ -28,7 +28,8 @@ import java.io.InputStream;
 public interface DollarParser {
 
 
-    @NotNull ThreadLocal<DollarParser> parser = new ThreadLocal<>();
+    @NotNull
+    ThreadLocal<DollarParser> parser = new ThreadLocal<>();
 
     void export(VarKey name, @NotNull var export);
 
@@ -40,7 +41,8 @@ public interface DollarParser {
     @NotNull
     var parse(@NotNull ScriptScope scriptScope, @NotNull String source) throws Exception;
 
-    @NotNull var parse(@NotNull File file, boolean parallel) throws Exception;
+    @NotNull
+    var parse(@NotNull File file, boolean parallel) throws Exception;
 
     @NotNull
     var parse(@NotNull InputStream in, boolean parallel, @NotNull Scope scope) throws Exception;
@@ -48,8 +50,10 @@ public interface DollarParser {
     @NotNull
     var parse(@NotNull InputStream in, @NotNull String file, boolean parallel) throws Exception;
 
-    @NotNull var parse(@NotNull String source, boolean parallel) throws Exception;
+    @NotNull
+    var parse(@NotNull String source, boolean parallel) throws Exception;
 
-    @NotNull var parseMarkdown(@NotNull String source);
+    @NotNull
+    var parseMarkdown(@NotNull String source);
 
 }

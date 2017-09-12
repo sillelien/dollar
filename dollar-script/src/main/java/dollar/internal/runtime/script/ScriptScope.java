@@ -82,7 +82,8 @@ public class ScriptScope implements Scope {
     private final ConcurrentHashMap<VarKey, Variable> variables = new ConcurrentHashMap<>();
     @Nullable
     Scope parent;
-    @Nullable String source;
+    @Nullable
+    String source;
     private boolean destroyed;
     private boolean parameterScope;
     @Nullable

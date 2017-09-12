@@ -52,7 +52,8 @@ public interface Scope {
      */
     void clear();
 
-    @Nullable var constraintOf(@NotNull VarKey key);
+    @Nullable
+    var constraintOf(@NotNull VarKey key);
 
     /**
      * Returns a deep copy of this scope
@@ -74,14 +75,16 @@ public interface Scope {
      * @param name the name of the Class
      * @return the {@link DollarClass} definition
      */
-    @NotNull DollarClass dollarClassByName(@NotNull String name);
+    @NotNull
+    DollarClass dollarClassByName(@NotNull String name);
 
     /**
      * The file associated with this scope or one of it's ancestors.
      *
      * @return a file name that is passable to new File().
      */
-    @Nullable String file();
+    @Nullable
+    String file();
 
     /**
      * Get a variable's value by name.
@@ -89,7 +92,8 @@ public interface Scope {
      * @param key the name of the variable
      * @return the value of the variable or $void() unless mustFind is true, in which case a VariableNotFoundException is thrown
      */
-    @NotNull var get(@NotNull VarKey key, boolean mustFind);
+    @NotNull
+    var get(@NotNull VarKey key, boolean mustFind);
 
     /**
      * Get a variable's value by name.
@@ -97,7 +101,8 @@ public interface Scope {
      * @param key the name of the variable
      * @return the value of the variable or $void()
      */
-    @NotNull var get(@NotNull VarKey key);
+    @NotNull
+    var get(@NotNull VarKey key);
 
     /**
      * Handle the error using any error handlers in this or parent scopes.
@@ -105,7 +110,8 @@ public interface Scope {
      * @param t the error
      * @return an error var if the method returns.
      */
-    @NotNull var handleError(@NotNull Throwable t);
+    @NotNull
+    var handleError(@NotNull Throwable t);
 
     /**
      * Handle the error using any error handlers in this or parent scopes.
@@ -191,7 +197,8 @@ public interface Scope {
      * @param key the name of the variable
      * @return its new value
      */
-    @Nullable var notify(@NotNull VarKey key);
+    @Nullable
+    var notify(@NotNull VarKey key);
 
     /**
      * Notify all listeners that the value of a variable has changed
@@ -225,7 +232,8 @@ public interface Scope {
      *
      * @return a sorted list of numeric parameters
      */
-    @NotNull List<var> parametersAsVars();
+    @NotNull
+    List<var> parametersAsVars();
 
     /**
      * Return the parent scope or null if it does not have one.
@@ -256,7 +264,8 @@ public interface Scope {
      * @param key name of the variable.
      * @return the Scope associated with the variable or null of none found
      */
-    @Nullable Scope scopeForKey(@NotNull VarKey key);
+    @Nullable
+    Scope scopeForKey(@NotNull VarKey key);
 
     /**
      * Creates or updates a variable.
@@ -268,18 +277,20 @@ public interface Scope {
      * @param varFlags   a set of flags relating to the variable
      * @return the variable definition
      */
-    @NotNull Variable set(@NotNull VarKey key,
-                          @NotNull var value,
-                          @Nullable var constraint,
-                          @Nullable SubType subType,
-                          @NotNull VarFlags varFlags);
+    @NotNull
+    Variable set(@NotNull VarKey key,
+                 @NotNull var value,
+                 @Nullable var constraint,
+                 @Nullable SubType subType,
+                 @NotNull VarFlags varFlags);
 
     /**
      * Returns the Dollar source code for this scope.
      *
      * @return the source code
      */
-    @Nullable String source();
+    @Nullable
+    String source();
 
     /**
      * Returns the sub type for a given variable
@@ -296,12 +307,14 @@ public interface Scope {
      * @param key the name of the variable
      * @return the full Variable definition
      */
-    @NotNull Variable variable(@NotNull VarKey key);
+    @NotNull
+    Variable variable(@NotNull VarKey key);
 
     /**
      * Returns all the variables in this scope, including parameter variables
      *
      * @return all variables in *this* scope
      */
-    @NotNull Map<VarKey, Variable> variables();
+    @NotNull
+    Map<VarKey, Variable> variables();
 }
