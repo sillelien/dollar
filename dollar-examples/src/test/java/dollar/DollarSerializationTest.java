@@ -20,8 +20,8 @@ import com.jayway.restassured.RestAssured;
 import dollar.api.Type;
 import dollar.api.types.DollarFactory;
 import dollar.api.var;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -37,7 +37,7 @@ public class DollarSerializationTest {
         RestAssured.port = 4567;
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         profile = $("name", "Neil")
                           .$("progYears", $range(1981, 2014))

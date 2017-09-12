@@ -18,7 +18,7 @@ package dollar;
 
 import dollar.api.DollarStatic;
 import dollar.api.var;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 
 import java.util.Date;
 
@@ -26,7 +26,7 @@ class DollarPubSubTest {
 
     private static var profile;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         profile = DollarStatic.$("name", "Neil")
                           .$("age", new Date().getYear() + 1900 - 1970)

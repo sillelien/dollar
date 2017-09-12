@@ -18,7 +18,7 @@ package dollar;
 
 import dollar.api.DollarStatic;
 import dollar.api.Type;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -30,17 +30,12 @@ public class ToStringTest {
     }
 
     @Test
-    public void testToHumanString() throws Exception {
-
-    }
-
-    @Test
-    public void testToString() throws Exception {
-
-    }
-
-    @Test
     public void testToDollarScript() throws Exception {
+
+    }
+
+    @Test
+    public void testToHumanString() throws Exception {
 
     }
 
@@ -53,5 +48,10 @@ public class ToStringTest {
         assertEquals("{\"a\":1}", DollarStatic.$("{\"a\":1}").toJsonString());
         assertEquals("{\"a\":\"1\"}", DollarStatic.$("{\"a\":\"1\"}").toJsonString());
         assertEquals("null", DollarStatic.$null(Type._ANY).toJsonString());
+    }
+
+    @Test
+    public void testToString() throws Exception {
+
     }
 }

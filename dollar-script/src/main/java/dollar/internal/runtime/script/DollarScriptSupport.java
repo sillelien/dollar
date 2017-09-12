@@ -23,6 +23,7 @@ import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.TypePrediction;
 import dollar.api.VarFlags;
+import dollar.api.VarKey;
 import dollar.api.Variable;
 import dollar.api.script.Source;
 import dollar.api.types.DollarFactory;
@@ -74,15 +75,15 @@ public final class DollarScriptSupport {
         for (var parameter : parameters) {
             var fixedParam = parameter.$fix(1, false);
             fixedParams.add(fixedParam);
-            scope.parameter(String.valueOf(++count), fixedParam);
+            scope.parameter(VarKey.of(++count), fixedParam);
 
             //If the parameter is a named parameter then use the name (set as metadata on the value).
             String paramMetaAttribute = fixedParam.metaAttribute(NAMED_PARAMETER_META_ATTR);
             if (paramMetaAttribute != null) {
-                scope.parameter(paramMetaAttribute, fixedParam);
+                scope.parameter(VarKey.of(paramMetaAttribute), fixedParam);
             }
         }
-        scope.parameter("*", $(fixedParams));
+        scope.parameter(VarKey.of("*"), $(fixedParams));
     }
 
     private static void addScope(boolean runtime, @NotNull Scope scope) {
@@ -199,7 +200,7 @@ public final class DollarScriptSupport {
 
     @Nullable
     public static Scope getScopeForVar(boolean pure,
-                                       @NotNull String key,
+                                       @NotNull VarKey key,
                                        boolean numeric,
                                        @Nullable Scope initialScope) {
 
@@ -242,7 +243,7 @@ public final class DollarScriptSupport {
 
     }
 
-    private static var getVar(@NotNull String key,
+    private static var getVar(@NotNull VarKey key,
                               @NotNull UUID id,
                               @NotNull Scope scopeForKey,
                               @NotNull Source sourceCode,
@@ -517,14 +518,6 @@ public final class DollarScriptSupport {
         return node;
     }
 
-    @NotNull
-    public static String removePrefix(@NotNull String key) {
-        if (key.startsWith("_")) {
-            return key.substring(1);
-        } else {
-            return key;
-        }
-    }
 
     @NotNull
     static List<Scope> scopes() {
@@ -533,7 +526,7 @@ public final class DollarScriptSupport {
 
     @NotNull
     public static Variable setVariable(@NotNull Scope scope,
-                                       @NotNull String key,
+                                       @NotNull VarKey key,
                                        @NotNull var value,
                                        @Nullable DollarParser parser,
                                        @NotNull Token token,
@@ -542,7 +535,7 @@ public final class DollarScriptSupport {
                                        @NotNull VarFlags varFlags) {
 
         Source source = new SourceCode(scope, token);
-        boolean numeric = key.matches("^\\d+$");
+        boolean numeric = key.isNumeric();
 
 
         if (scope.has(key)) {
@@ -594,7 +587,7 @@ public final class DollarScriptSupport {
     }
 
     private static @NotNull Variable updateVariable(@NotNull Scope scope,
-                                                    @NotNull String key,
+                                                    @NotNull VarKey key,
                                                     @NotNull var value,
                                                     @NotNull VarFlags varFlags, @Nullable var useConstraint,
                                                     @Nullable SubType useSource) {
@@ -610,12 +603,12 @@ public final class DollarScriptSupport {
     }
 
     @NotNull
-    public static var variableNode(boolean pure, @NotNull String key, @NotNull Token token, @NotNull DollarParser parser) {
+    public static var variableNode(boolean pure, @NotNull VarKey key, @NotNull Token token, @NotNull DollarParser parser) {
         return variableNode(pure, key, false, null, token, parser);
     }
 
     @NotNull
-    public static var variableNode(boolean pure, @NotNull String key,
+    public static var variableNode(boolean pure, @NotNull VarKey key,
                                    boolean numeric, @Nullable var defaultValue,
                                    @NotNull Token token, @NotNull DollarParser parser) {
         var node[] = new var[1];
@@ -667,7 +660,7 @@ public final class DollarScriptSupport {
                            }
                        }
         );
-        node[0].metaAttribute(VARIABLE, key);
+        node[0].metaAttribute(VARIABLE, key.asString());
         return node[0];
 
     }

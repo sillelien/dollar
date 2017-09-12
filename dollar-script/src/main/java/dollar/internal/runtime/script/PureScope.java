@@ -18,6 +18,7 @@ package dollar.internal.runtime.script;
 
 import dollar.api.DollarStatic;
 import dollar.api.Scope;
+import dollar.api.VarKey;
 import dollar.api.Variable;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
@@ -44,7 +45,7 @@ public class PureScope extends ScriptScope {
 
     @NotNull
     @Override
-    public var get(@NotNull String key, boolean mustFind) {
+    public var get(@NotNull VarKey key, boolean mustFind) {
 
         if (DollarStatic.getConfig().debugScope()) {
             log.info("Looking up {} in {}", key, this);
@@ -86,7 +87,7 @@ public class PureScope extends ScriptScope {
         return true;
     }
 
-    
+
     @NotNull
     @Override
     public String toString() {

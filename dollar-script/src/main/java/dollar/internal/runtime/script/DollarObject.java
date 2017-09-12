@@ -24,6 +24,7 @@ import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Type;
 import dollar.api.VarFlags;
+import dollar.api.VarKey;
 import dollar.api.Variable;
 import dollar.api.types.AbstractDollar;
 import dollar.api.types.DollarFactory;
@@ -55,7 +56,7 @@ public class DollarObject extends AbstractDollar {
     @NotNull
     private final var constructor;
     @NotNull
-    private final Map<String, Variable> fields = new ConcurrentHashMap<>();
+    private final Map<VarKey, Variable> fields = new ConcurrentHashMap<>();
     private final boolean mutable;
     @NotNull
     private final String name;
@@ -63,13 +64,13 @@ public class DollarObject extends AbstractDollar {
     private final Type type;
 
     public DollarObject(@NotNull String name, @NotNull var constructor,
-                        @NotNull Map<String, Variable> fields) {
+                        @NotNull Map<VarKey, Variable> fields) {
 
         this(name, constructor, fields, false);
     }
 
     public DollarObject(@NotNull String name, @NotNull var constructor,
-                        @NotNull Map<String, Variable> fields, boolean mutable) {
+                        @NotNull Map<VarKey, Variable> fields, boolean mutable) {
         super();
         this.name = name;
         this.constructor = constructor;
@@ -101,13 +102,13 @@ public class DollarObject extends AbstractDollar {
     @NotNull
     @Override
     public var $containsKey(@NotNull var value) {
-        return DollarStatic.$(fields.containsKey(value.toString()));
+        return DollarStatic.$(fields.containsKey(VarKey.of(value)));
     }
 
     @Override
     @NotNull
     public var $containsValue(@NotNull var value) {
-        return DollarStatic.$(fields.containsValue(value.toString()));
+        throw new UnsupportedOperationException();
     }
 
     @NotNull
@@ -124,7 +125,7 @@ public class DollarObject extends AbstractDollar {
     @Override
     public @NotNull var $get(@NotNull var key) {
         return inThisScope(s -> {
-            Variable variable = fields.get(key.toString());
+            Variable variable = fields.get(VarKey.of(key));
             if (variable == null) {
                 throw new DollarException("No such field " + key + " in class " + name);
             }
@@ -135,7 +136,7 @@ public class DollarObject extends AbstractDollar {
     @NotNull
     @Override
     public var $has(@NotNull var key) {
-        return DollarStatic.$(fields.containsKey(key.toString()));
+        return DollarStatic.$(fields.containsKey(VarKey.of(key)));
     }
 
     @NotNull
@@ -244,7 +245,7 @@ public class DollarObject extends AbstractDollar {
     public @NotNull var $set(@NotNull var key, @NotNull Object value) {
         if (mutable) {
 
-            Variable variable = fields.get(key.toString());
+            Variable variable = fields.get(VarKey.of(key));
             if (variable.isReadonly()) {
                 throw new DollarScriptException("Cannot change field " + key + " in class " + name + " it is readonly (const)");
             } else {
@@ -366,7 +367,7 @@ public class DollarObject extends AbstractDollar {
     @Override
     public ImmutableList<Object> toList() {
         final ArrayList<Object> entries = new ArrayList<>();
-        for (Map.Entry<String, Variable> entry : fields.entrySet()) {
+        for (Map.Entry<VarKey, Variable> entry : fields.entrySet()) {
             entries.add(entry.getValue().getValue().toJavaObject());
         }
         return ImmutableList.copyOf(entries);
@@ -406,8 +407,8 @@ public class DollarObject extends AbstractDollar {
     public ImmutableMap<var, var> toVarMap() {
 
         LinkedHashMap<var, var> result = new LinkedHashMap<>();
-        for (Map.Entry<String, Variable> entry : fields.entrySet()) {
-            result.put(DollarFactory.fromStringValue(entry.getKey()), entry.getValue().getValue().$fix(false));
+        for (Map.Entry<VarKey, Variable> entry : fields.entrySet()) {
+            result.put(DollarFactory.fromStringValue(entry.getKey().asString()), entry.getValue().getValue().$fix(false));
         }
         return ImmutableMap.copyOf(result);
     }
@@ -498,7 +499,7 @@ public class DollarObject extends AbstractDollar {
     private var inThisScope(@NotNull ScopeExecutable<var> exe) {
         ScriptScope subScope = new ScriptScope(currentScope(), "this-" + name, false, true);
         DollarObject thisObject = new DollarObject(name, constructor, fields, true);
-        subScope.set("this", thisObject, null, null, new VarFlags(true, true, false, false, false, true));
+        subScope.set(VarKey.THIS, thisObject, null, null, new VarFlags(true, true, false, false, false, true));
         return inScope(true, subScope, exe);
     }
 

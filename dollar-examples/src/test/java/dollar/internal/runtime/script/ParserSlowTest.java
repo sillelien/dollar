@@ -22,11 +22,11 @@ import dollar.internal.runtime.script.api.ParserOptions;
 import dollar.internal.runtime.script.parser.Symbols;
 import dollar.test.CircleCiParallelRule;
 import org.jetbrains.annotations.NotNull;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.ClassRule;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -82,30 +82,6 @@ public class ParserSlowTest {
         }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
-    @Before
-    public void setUp() throws Exception {
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
-    }
-
-    @ParameterizedTest
-    @ValueSource(
-//            "bulletin.ds",
-//            "example.ds",
-            strings = {"slow/air_quality.ds", "slow/test_redis.ds",
-                              "slow/test_uris.ds", "slow/test_concurrency.ds",
-                              "slow/test_modules.ds"})
-
-    public void testScript(@NotNull String filename) throws Exception {
-        System.out.println("Testing " + filename);
-        new DollarParserImpl(options).parse(getClass().getResourceAsStream("/" + filename), filename, parallel);
-    }
-
-
     @ParameterizedTest
     @MethodSource("operatorList")
     public void operators(@NotNull String file) {
@@ -119,6 +95,15 @@ public class ParserSlowTest {
         }
     }
 
+    @BeforeEach
+    public void setUp() throws Exception {
+
+    }
+
+    @AfterEach
+    public void tearDown() throws Exception {
+
+    }
 
     @Test
     public void testMarkdown1() throws IOException {
@@ -126,9 +111,8 @@ public class ParserSlowTest {
                 CharStreams.toString(new InputStreamReader(getClass().getResourceAsStream("/quick/test1.md"))));
     }
 
-
     @Test
-    @Ignore("Regression test")
+    @Disabled("Regression test")
     public void testOperators() throws Exception {
         DollarStatic.getConfig().failFast(false);
         final List<String>
@@ -140,5 +124,18 @@ public class ParserSlowTest {
                     getClass().getResourceAsStream("/regression/operators/" + operatorTestFile),
                     operatorTestFile, parallel);
         }
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+//            "bulletin.ds",
+//            "example.ds",
+            strings = {"slow/air_quality.ds", "slow/test_redis.ds",
+                              "slow/test_uris.ds", "slow/test_concurrency.ds",
+                              "slow/test_modules.ds"})
+
+    public void testScript(@NotNull String filename) throws Exception {
+        System.out.println("Testing " + filename);
+        new DollarParserImpl(options).parse(getClass().getResourceAsStream("/" + filename), filename, parallel);
     }
 }

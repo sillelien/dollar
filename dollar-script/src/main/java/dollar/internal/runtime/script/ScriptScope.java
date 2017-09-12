@@ -26,6 +26,7 @@ import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.SubType;
 import dollar.api.VarFlags;
+import dollar.api.VarKey;
 import dollar.api.Variable;
 import dollar.api.exceptions.LambdaRecursionException;
 import dollar.api.script.Source;
@@ -58,7 +59,6 @@ import static dollar.api.DollarException.unravel;
 import static dollar.api.DollarStatic.*;
 import static dollar.api.types.meta.MetaConstants.IMPURE;
 import static dollar.internal.runtime.script.DollarScriptSupport.inSubScope;
-import static dollar.internal.runtime.script.DollarScriptSupport.removePrefix;
 
 public class ScriptScope implements Scope {
 
@@ -74,12 +74,12 @@ public class ScriptScope implements Scope {
     @NotNull
     private final List<var> errorHandlers = new CopyOnWriteArrayList<>();
     @NotNull
-    private final Multimap<String, Listener> listeners = ArrayListMultimap.create();
+    private final Multimap<VarKey, Listener> listeners = ArrayListMultimap.create();
     private final boolean root;
     @NotNull
     private final UUID uuid = UUID.randomUUID();
     @NotNull
-    private final ConcurrentHashMap<String, Variable> variables = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<VarKey, Variable> variables = new ConcurrentHashMap<>();
     @Nullable
     Scope parent;
     @Nullable String source;
@@ -137,9 +137,9 @@ public class ScriptScope implements Scope {
     private ScriptScope(@NotNull Scope parent,
                         @NotNull String id,
                         boolean parameterScope,
-                        @NotNull ConcurrentHashMap<String, Variable> variables,
+                        @NotNull ConcurrentHashMap<VarKey, Variable> variables,
                         @NotNull List<var> errorHandlers,
-                        @NotNull Multimap<String, Listener> listeners,
+                        @NotNull Multimap<VarKey, Listener> listeners,
                         @NotNull String source,
                         @NotNull Parser<var> parser, boolean root, boolean classScope) {
         this.parent = parent;
@@ -148,7 +148,7 @@ public class ScriptScope implements Scope {
         this.classScope = classScope;
         this.variables.putAll(variables);
         this.errorHandlers.addAll(errorHandlers);
-        for (Map.Entry<String, Collection<Listener>> entry : listeners.asMap().entrySet()) {
+        for (Map.Entry<VarKey, Collection<Listener>> entry : listeners.asMap().entrySet()) {
             this.listeners.putAll(entry.getKey(), entry.getValue());
         }
         this.source = source;
@@ -169,7 +169,7 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public void addListener(@NotNull String key, @NotNull Scope.Listener listener) {
+    public void addListener(@NotNull VarKey key, @NotNull Scope.Listener listener) {
         listeners.put(key, listener);
     }
 
@@ -186,10 +186,10 @@ public class ScriptScope implements Scope {
 
     @Nullable
     @Override
-    public var constraintOf(@NotNull String k) {
+    public var constraintOf(@NotNull VarKey key) {
         checkDestroyed();
 
-        String key = removePrefix(k);
+
         Scope scope = scopeForKey(key);
         if (scope == null) {
             scope = this;
@@ -230,7 +230,7 @@ public class ScriptScope implements Scope {
         if (parent != null) {
             return parent.dollarClassByName(name);
         }
-        throw new VariableNotFoundException(name, this);
+        throw new DollarScriptException("No class found with name " + name + " in scope " + this);
     }
 
     @Override
@@ -244,10 +244,9 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public var get(@NotNull String k, boolean mustFind) {
-        String key = removePrefix(k);
+    public var get(@NotNull VarKey key, boolean mustFind) {
         checkDestroyed();
-        if (key.matches("[0-9]+")) {
+        if (key.isNumeric()) {
             throw new DollarAssertionException("Cannot get numerical keys, use parameter");
         }
         if (getConfig().debugScope()) {
@@ -276,7 +275,7 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public var get(@NotNull String key) {
+    public var get(@NotNull VarKey key) {
         return get(key, false);
     }
 
@@ -330,15 +329,15 @@ public class ScriptScope implements Scope {
         } else {
             return inSubScope(true, pure(), "error-scope", newScope -> {
                 log.info("Error handler in {}", this);
-                parameter("type", $(unravelled.getClass().getName()));
-                parameter("msg", $(unravelled.getMessage()));
+                parameter(VarKey.of("type"), $(unravelled.getClass().getName()));
+                parameter(VarKey.of("msg"), $(unravelled.getMessage()));
                 try {
                     for (var handler : errorHandlers) {
                         handler.$fixDeep(false);
                     }
                 } finally {
-                    parameter("type", $void());
-                    parameter("msg", $void());
+                    parameter(VarKey.of("type"), $void());
+                    parameter(VarKey.of("msg"), $void());
                 }
                 return $void();
             });
@@ -373,10 +372,9 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public boolean has(@NotNull String k) {
+    public boolean has(@NotNull VarKey key) {
         checkDestroyed();
 
-        String key = removePrefix(k);
         Scope scope = scopeForKey(key);
         if (scope == null) {
             scope = this;
@@ -391,8 +389,8 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public boolean hasParameter(@NotNull String k) {
-        Variable variable = variable(k);
+    public boolean hasParameter(@NotNull VarKey key) {
+        Variable variable = variable(key);
         return variable != null && variable.isParameter();
     }
 
@@ -417,9 +415,8 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public void listen(@NotNull String k, @NotNull String id, @NotNull var listener) {
+    public void listen(@NotNull VarKey key, @NotNull String id, @NotNull var listener) {
         checkDestroyed();
-        String key = removePrefix(k);
 
         listen(key, id, in -> {
                    if (getConfig().debugEvents()) {
@@ -433,13 +430,13 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public void listen(@NotNull String k, @NotNull String id, @NotNull Pipeable pipe) {
+    public void listen(@NotNull VarKey key, @NotNull String id, @NotNull Pipeable pipe) {
         if (getConfig().debugEvents()) {
             log.info("listen called on scope {} with id {}", this, id);
         }
 
         checkDestroyed();
-        String key = removePrefix(k);
+
 
         Listener listener = new Listener() {
             @NotNull
@@ -460,7 +457,7 @@ public class ScriptScope implements Scope {
             }
         };
 
-        if (key.matches("[0-9]+")) {
+        if (key.isNumeric()) {
             if (getConfig().debugEvents()) {
                 log.info("Cannot listen to positional parameter ${} in {}", key, this);
             }
@@ -490,9 +487,7 @@ public class ScriptScope implements Scope {
 
     @Nullable
     @Override
-    public var notify(@NotNull String k) {
-        String key = removePrefix(k);
-
+    public var notify(@NotNull VarKey key) {
         checkDestroyed();
         var value = get(key);
         notifyScope((key), value);
@@ -500,10 +495,9 @@ public class ScriptScope implements Scope {
     }
 
     @Override
-    public void notifyScope(@NotNull String k, @NotNull var value) {
+    public void notifyScope(@NotNull VarKey key, @NotNull var value) {
         checkDestroyed();
 
-        String key = removePrefix(k);
 
         if (value == null) {
             throw new NullPointerException();
@@ -536,7 +530,7 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public Variable parameter(@NotNull String key) {
+    public Variable parameter(@NotNull VarKey key) {
         checkDestroyed();
         Scope scope = scopeForKey(key);
         if (scope == null) {
@@ -551,17 +545,17 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public Variable parameter(@NotNull String key, @NotNull var value) {
+    public Variable parameter(@NotNull VarKey key, @NotNull var value) {
         checkDestroyed();
 
         if (getConfig().debugScope()) {
             log.info("Setting parameter {} in {}", key, this);
         }
-        if (key.matches("[0-9]+") && variables.containsKey(key)) {
+        if (key.isNumeric() && variables.containsKey(key)) {
             throw new DollarScriptException("Cannot change the value of positional variable $" + key + " in scope " + this);
         }
         parameterScope = true;
-        Variable variable = new Variable(value, value.meta(IMPURE) == null, key.matches("[0-9]+"), true);
+        Variable variable = new Variable(value, value.meta(IMPURE) == null, key.isNumeric(), true);
         variables.put(key, variable);
         notifyScope(key, value);
         return variable;
@@ -572,8 +566,8 @@ public class ScriptScope implements Scope {
     public List<var> parametersAsVars() {
         return variables.entrySet().stream()
                        .filter(i -> i.getValue().isParameter())
-                       .filter(i -> i.getKey().matches("[0-9]+"))
-                       .sorted(Comparator.comparing(i -> Integer.parseInt(i.getKey())))
+                       .filter(i -> i.getKey().isNumeric())
+                       .sorted(Comparator.comparing(i -> Integer.parseInt(i.getKey().asString())))
                        .map(Map.Entry::getValue)
                        .map(Variable::getValue)
                        .collect(Collectors.toList());
@@ -591,16 +585,15 @@ public class ScriptScope implements Scope {
 
     @Override
     public void registerClass(@NotNull String name, @NotNull DollarClass dollarClass) {
-
         log.info("Registering class {} in {}", name, this);
         classes.put(name, dollarClass);
     }
 
     @Nullable
     @Override
-    public Scope scopeForKey(@NotNull String k) {
+    public Scope scopeForKey(@NotNull VarKey key) {
         checkDestroyed();
-        String key = removePrefix(k);
+
 
         if (variables.containsKey(key)) {
             return this;
@@ -615,17 +608,17 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public Variable set(@NotNull String k,
+    public Variable set(@NotNull VarKey key,
                         @NotNull var value,
                         @Nullable var constraint, SubType constraintSource, @NotNull VarFlags varFlags) {
 
         if ((parent != null) && parent.isClassScope()) {
-            return parent.set(k, value, constraint, constraintSource, varFlags);
+            return parent.set(key, value, constraint, constraintSource, varFlags);
         }
         checkDestroyed();
-        String key = removePrefix(k);
 
-        if (key.matches("[0-9]+")) {
+
+        if (key.isNumeric()) {
             throw new DollarAssertionException("Cannot set numerical keys, use parameter");
         }
 
@@ -634,7 +627,7 @@ public class ScriptScope implements Scope {
             throw new DollarScriptException("Cannot modify variables outside of a pure scope");
         }
         if (scope != null && scope != this) {
-            return scope.set(k, value, constraint, constraintSource, varFlags);
+            return scope.set(key, value, constraint, constraintSource, varFlags);
         }
 
         if (pure()) {
@@ -645,7 +638,7 @@ public class ScriptScope implements Scope {
             if (varFlags.isVolatile()) {
                 throw new DollarScriptException("Cannot have volatile variables in a pure expression");
             }
-            if (key.matches("[0-9]+")) {
+            if (key.isNumeric()) {
                 throw new AssertionError("Cannot set numerical keys, use parameter");
             }
         }
@@ -694,10 +687,10 @@ public class ScriptScope implements Scope {
 
     @Nullable
     @Override
-    public SubType subTypeOf(@NotNull String k) {
+    public SubType subTypeOf(@NotNull VarKey key) {
         checkDestroyed();
 
-        String key = removePrefix(k);
+
         Scope scope = scopeForKey(key);
         if (scope == null) {
             scope = this;
@@ -714,13 +707,13 @@ public class ScriptScope implements Scope {
 
     @NotNull
     @Override
-    public Variable variable(@NotNull String k) {
-        return variables.get(removePrefix(k));
+    public Variable variable(@NotNull VarKey key) {
+        return variables.get(key);
     }
 
     @NotNull
     @Override
-    public Map<String, Variable> variables() {
+    public Map<VarKey, Variable> variables() {
         return ImmutableMap.copyOf(variables);
     }
 

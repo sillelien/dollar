@@ -22,10 +22,10 @@ import dollar.internal.runtime.script.api.ParserOptions;
 import dollar.internal.runtime.script.parser.Symbols;
 import dollar.test.CircleCiParallelRule;
 import org.jetbrains.annotations.NotNull;
-import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
@@ -55,12 +55,12 @@ public class ParserQuickTest {
     private final ParserOptions options = new ParserOptions();
     private boolean parallel;
 
-    @BeforeClass
+    @BeforeAll
     public static void after() {
         DollarStatic.getConfig().failFast(false);
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void before() {
         DollarStatic.getConfig().failFast(true);
     }
@@ -132,7 +132,7 @@ public class ParserQuickTest {
     }
 
     @Test
-    @Ignore("Regression test")
+    @Disabled("Regression test")
     public void testOperators() throws Exception {
         DollarStatic.getConfig().failFast(false);
         final List<String>

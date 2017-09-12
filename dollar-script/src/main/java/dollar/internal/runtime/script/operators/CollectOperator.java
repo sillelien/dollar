@@ -18,6 +18,7 @@ package dollar.internal.runtime.script.operators;
 
 import dollar.api.Pipeable;
 import dollar.api.Scope;
+import dollar.api.VarKey;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
@@ -73,13 +74,13 @@ public class CollectOperator implements Function<Token, var> {
         String id = UUID.randomUUID().toString();
         return node(COLLECT_OP, pure, parser, token, singletonList(variable),
                     parallel -> {
-                        Scope scopeForVar = getScopeForVar(pure, varName, false, null);
+                        Scope scopeForVar = getScopeForVar(pure, VarKey.of(varName), false, null);
 
                         if (scopeForVar == null) {
-                            throw new VariableNotFoundException(varName, currentScope());
+                            throw new VariableNotFoundException(VarKey.of(varName), currentScope());
                         }
 
-                        scopeForVar.listen(varName, id, new VarListener((var) unless, (var) until, (var) loop));
+                        scopeForVar.listen(VarKey.of(varName), id, new VarListener((var) unless, (var) until, (var) loop));
                         return $void();
 
                     });
@@ -90,15 +91,15 @@ public class CollectOperator implements Function<Token, var> {
 
     private final class VarListener implements Pipeable {
         @NotNull
+        final ArrayList<var> collected = new ArrayList<>();
+        @NotNull
         final AtomicLong count = new AtomicLong(-1);
         @NotNull
-        final ArrayList<var> collected = new ArrayList<>();
+        private final var loop;
         @Nullable
         private final var unless;
         @Nullable
         private final var until;
-        @NotNull
-        private final var loop;
 
         private VarListener(@Nullable var unless, @Nullable var until, @NotNull var loop) {
             this.unless = unless;
@@ -114,8 +115,8 @@ public class CollectOperator implements Function<Token, var> {
             log.debug("Count is {} value is {}", count.get(), value);
             inSubScope(true, pure, "collect-body",
                        ns -> {
-                           ns.parameter("count", $(count.get()));
-                           ns.parameter("it", value);
+                           ns.parameter(VarKey.COUNT, $(count.get()));
+                           ns.parameter(VarKey.IT, value);
 
                            if ((unless != null) && unless.isTrue()) {
                                log.debug("Skipping {}", value);
@@ -124,7 +125,7 @@ public class CollectOperator implements Function<Token, var> {
                                collected.add(value);
                            }
                            var returnValue = $void();
-                           ns.parameter("collected", fromList(collected));
+                           ns.parameter(VarKey.COLLECTED, fromList(collected));
                            log.debug("Collected {}", fromList(collected));
                            final boolean endValue = (until != null) && until.isTrue();
                            if (endValue) {

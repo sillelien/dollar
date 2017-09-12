@@ -25,8 +25,8 @@ import dollar.api.json.JsonArray;
 import dollar.api.var;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,21 +41,35 @@ import static org.junit.Assert.fail;
 
 public class DollarOperatorsRegressionTest {
 
-    @BeforeClass
-    public static void before() {
-        DollarStatic.getConfig().failFast(false);
-    }
-
-    @BeforeClass
+    @BeforeAll
     public static void after() {
         DollarStatic.getConfig().failFast(true);
     }
 
-    @Test
-    public void testDivide() throws IOException {
-        final Function<List<var>, var> operation = v -> v.get(0).$divide(v.get(1));
-        regression("/", "divide", "all", testBinary(allValues(), noSmallDecimals(), operation));
-        regression("/", "divide", "minimal", testBinary(minimal(), noSmallDecimals(), operation));
+    @BeforeAll
+    public static void before() {
+        DollarStatic.getConfig().failFast(false);
+    }
+
+    public void diff(@NotNull String desc, @NotNull String lhs, @NotNull String rhs) {
+        final String difference = StringUtils.difference(lhs, rhs);
+        if (!difference.isEmpty()) {
+            fail("Difference for " + desc + " is " + difference + "\nCompare previous: " + lhs + "\nWith current " + rhs);
+        }
+    }
+
+    private void diff(@NotNull String desc, @NotNull JsonArray lhs, @NotNull JsonArray rhs) {
+        final List lhsArray = lhs.toStringList();
+        final List rhsArray = rhs.toStringList();
+        if (lhsArray.size() != rhsArray.size()) {
+            fail("Different lengths for " + desc);
+        } else {
+            for (int i = 0; i < lhsArray.size(); i++) {
+                if (!lhsArray.get(i).toString().equals(rhsArray.get(i).toString())) {
+                    fail("Difference between: \n" + lhsArray.get(i) + "\n\nAnd:\n" + rhsArray.get(i) + "\n\n ");
+                }
+            }
+        }
     }
 
     public void regression(@NotNull String symbol,
@@ -103,25 +117,11 @@ public class DollarOperatorsRegressionTest {
         diff("result", previous, current.jsonArray());
     }
 
-    public void diff(@NotNull String desc, @NotNull String lhs, @NotNull String rhs) {
-        final String difference = StringUtils.difference(lhs, rhs);
-        if (!difference.isEmpty()) {
-            fail("Difference for " + desc + " is " + difference + "\nCompare previous: " + lhs + "\nWith current " + rhs);
-        }
-    }
-
-    private void diff(@NotNull String desc, @NotNull JsonArray lhs, @NotNull JsonArray rhs) {
-        final List lhsArray = lhs.toStringList();
-        final List rhsArray = rhs.toStringList();
-        if (lhsArray.size() != rhsArray.size()) {
-            fail("Different lengths for " + desc);
-        } else {
-            for (int i = 0; i < lhsArray.size(); i++) {
-                if (!lhsArray.get(i).toString().equals(rhsArray.get(i).toString())) {
-                    fail("Difference between: \n" + lhsArray.get(i) + "\n\nAnd:\n" + rhsArray.get(i) + "\n\n ");
-                }
-            }
-        }
+    @Test
+    public void testDivide() throws IOException {
+        final Function<List<var>, var> operation = v -> v.get(0).$divide(v.get(1));
+        regression("/", "divide", "all", testBinary(allValues(), noSmallDecimals(), operation));
+        regression("/", "divide", "minimal", testBinary(minimal(), noSmallDecimals(), operation));
     }
 
     @Test

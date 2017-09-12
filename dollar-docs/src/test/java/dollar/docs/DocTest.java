@@ -20,9 +20,9 @@ import com.google.common.io.CharStreams;
 import dollar.internal.runtime.script.DollarParserImpl;
 import dollar.internal.runtime.script.api.ParserOptions;
 import org.jetbrains.annotations.NotNull;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,12 +33,12 @@ public class DocTest {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(DocTest.class);
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
 
     }

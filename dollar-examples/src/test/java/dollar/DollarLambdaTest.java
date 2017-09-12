@@ -18,8 +18,8 @@ package dollar;
 
 import dollar.api.DollarStatic;
 import dollar.api.var;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static dollar.api.DollarStatic.$;
 import static org.junit.Assert.assertEquals;
@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 public class DollarLambdaTest {
     private static var list;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         list = DollarStatic.$list("Neil", "Dimple", "Charlie");
     }

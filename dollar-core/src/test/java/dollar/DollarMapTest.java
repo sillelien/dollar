@@ -17,8 +17,8 @@
 package dollar;
 
 import dollar.api.var;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static dollar.api.DollarStatic.$;
 import static junit.framework.TestCase.assertEquals;
@@ -28,7 +28,7 @@ public class DollarMapTest {
     private static var list;
     private static var map;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         map = $("color", "red").$("size", "large");
     }

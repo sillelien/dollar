@@ -17,6 +17,7 @@
 package dollar.internal.runtime.script.api;
 
 import dollar.api.Scope;
+import dollar.api.VarKey;
 import dollar.api.var;
 import dollar.internal.runtime.script.ScriptScope;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +30,7 @@ public interface DollarParser {
 
     @NotNull ThreadLocal<DollarParser> parser = new ThreadLocal<>();
 
-    void export(@NotNull String name, @NotNull var export);
+    void export(VarKey name, @NotNull var export);
 
 
     @NotNull

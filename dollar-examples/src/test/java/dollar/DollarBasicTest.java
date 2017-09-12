@@ -19,7 +19,7 @@ package dollar;
 import dollar.api.DollarStatic;
 import dollar.api.json.ImmutableJsonObject;
 import dollar.api.var;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -17,8 +17,8 @@
 package dollar;
 
 import dollar.api.var;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -29,7 +29,7 @@ import static org.junit.Assert.assertTrue;
 
 public class DollarQueueTest {
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
 
     }

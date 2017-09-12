@@ -16,6 +16,7 @@
 
 package dollar.internal.runtime.script.operators;
 
+import dollar.api.VarKey;
 import dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
 import dollar.internal.runtime.script.SourceCode;
@@ -80,11 +81,10 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
 
                                 var result;
                                 if (functionName) {
-                                    String lhsString = lhs.toString();
                                     if (builtin) {
-                                        result = Builtins.execute(lhsString, parameters, pure);
+                                        result = Builtins.execute(lhs.toString(), parameters, pure);
                                     } else {
-                                        result = variableNode(pure, lhsString, false, null, token, parser)
+                                        result = variableNode(pure, VarKey.of(lhs), false, null, token, parser)
                                                          .$fix(2, false);
                                     }
                                 } else {

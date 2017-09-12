@@ -21,6 +21,7 @@ import dollar.api.Scope;
 import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.VarFlags;
+import dollar.api.VarKey;
 import dollar.api.script.Source;
 import dollar.api.var;
 import dollar.internal.runtime.script.DollarScriptSupport;
@@ -79,7 +80,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                               pure, NEW_SCOPE, parser,
                               new SourceCode(token), type, emptyList(),
                               i -> {
-                                  var it = currentScope().parameter("it").getValue();
+                                  var it = currentScope().parameter(VarKey.IT).getValue();
                                   return $(it.is(type) && ((objects[3] == null) || ((var) objects[3]).isTrue()));
                               });
         } else {
@@ -98,7 +99,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
             throw new DollarScriptException(String.format(
                     "The variable '%s' cannot be assigned as this name is the name of a builtin function.", objects[4]));
         }
-        final String varName = objects[4].toString();
+        final VarKey varName = VarKey.of((var) objects[4]);
 
         var finalConstraint = constraint;
         return (Function<var, var>) rhs -> {
@@ -167,7 +168,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                        @Nullable Type type,
                        @NotNull Source source) {
 
-        final String varName = objects[4].toString();
+        final VarKey varName = VarKey.of((var) objects[4]);
 
         Pipeable pipeable = args -> {
 
@@ -194,10 +195,10 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
             if (useConstraint != null) {
                 inSubScope(true, pure, "assignment-constraint",
                            newScope -> {
-                               newScope.parameter("it", rhsFixed);
+                               newScope.parameter(VarKey.IT, rhsFixed);
                                var value = newScope.get(varName);
                                assert value != null;
-                               newScope.parameter("previous", value);
+                               newScope.parameter(VarKey.PREVIOUS, value);
                                if (useConstraint.isFalse()) {
                                    newScope.handleError(
                                            new DollarScriptException("Constraint failed for variable " + varName + "",

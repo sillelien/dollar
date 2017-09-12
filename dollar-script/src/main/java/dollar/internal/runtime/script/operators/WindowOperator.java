@@ -20,6 +20,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
+import dollar.api.VarKey;
 import dollar.api.time.Scheduler;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.meta.MetaConstants;
@@ -99,15 +100,15 @@ public class WindowOperator implements Function<Token, var> {
                         log.info("After expression listen");
                         Scheduler.schedule(i -> inSubScope(true, pure, "window-operator-period", newScope -> {
                             log.info("Schedule called on WindowOperator");
-                            newScope.parameter("count", DollarFactory.fromValue(notifyListener.count.get()));
-                            newScope.parameter("collected", DollarFactory.fromList(notifyListener.collected
-                                                                                           .asMap()
-                                                                                           .entrySet()
-                                                                                           .stream()
-                                                                                           .sorted(Comparator.comparing(
-                                                                                                   Map.Entry::getKey))
-                                                                                           .map(Map.Entry::getValue)
-                                                                                           .collect(Collectors.toList())));
+                            newScope.parameter(VarKey.COUNT, DollarFactory.fromValue(notifyListener.count.get()));
+                            newScope.parameter(VarKey.COLLECTED, DollarFactory.fromList(notifyListener.collected
+                                                                                                .asMap()
+                                                                                                .entrySet()
+                                                                                                .stream()
+                                                                                                .sorted(Comparator.comparing(
+                                                                                                        Map.Entry::getKey))
+                                                                                                .map(Map.Entry::getValue)
+                                                                                                .collect(Collectors.toList())));
                             block.$fixDeep(false);
                             log.info("Clearing collected");
                             if (notifyListener.finished) {

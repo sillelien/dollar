@@ -19,8 +19,8 @@ package dollar;
 import dollar.api.DollarStatic;
 import dollar.api.var;
 import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -28,7 +28,7 @@ import static org.junit.Assert.assertNotEquals;
 public class DollarRangeTest {
     private static var range;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         range = DollarStatic.$(DollarStatic.$(1), DollarStatic.$(4));
     }

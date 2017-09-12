@@ -18,13 +18,13 @@ package dollar;
 
 import dollar.api.DollarStatic;
 import dollar.api.var;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class DollarVoidTest {
     private static var list;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         list = DollarStatic.$list("Neil", "Dimple", "Charlie");
     }

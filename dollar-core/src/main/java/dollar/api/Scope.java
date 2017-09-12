@@ -45,14 +45,14 @@ public interface Scope {
      * @param key      the name of the variable
      * @param listener the listener
      */
-    void addListener(@NotNull String key, @NotNull Listener listener);
+    void addListener(@NotNull VarKey key, @NotNull Listener listener);
 
     /**
      * Remove all variables, listeners etc from this scope.
      */
     void clear();
 
-    @Nullable var constraintOf(@NotNull String key);
+    @Nullable var constraintOf(@NotNull VarKey key);
 
     /**
      * Returns a deep copy of this scope
@@ -89,7 +89,7 @@ public interface Scope {
      * @param key the name of the variable
      * @return the value of the variable or $void() unless mustFind is true, in which case a VariableNotFoundException is thrown
      */
-    @NotNull var get(@NotNull String key, boolean mustFind);
+    @NotNull var get(@NotNull VarKey key, boolean mustFind);
 
     /**
      * Get a variable's value by name.
@@ -97,7 +97,7 @@ public interface Scope {
      * @param key the name of the variable
      * @return the value of the variable or $void()
      */
-    @NotNull var get(@NotNull String key);
+    @NotNull var get(@NotNull VarKey key);
 
     /**
      * Handle the error using any error handlers in this or parent scopes.
@@ -133,7 +133,7 @@ public interface Scope {
      * @param key the name of the variable
      * @return true if in this scope or a parent
      */
-    boolean has(@NotNull String key);
+    boolean has(@NotNull VarKey key);
 
     /**
      * Returns true if the *parameter* is in this scope.
@@ -141,7 +141,7 @@ public interface Scope {
      * @param key the parameter name
      * @return true if the supplied parameter is in *this* scope.
      */
-    boolean hasParameter(@NotNull String key);
+    boolean hasParameter(@NotNull VarKey key);
 
     /**
      * Returns true if the supplied scope is this, or an ancestor of this, scope.
@@ -173,7 +173,7 @@ public interface Scope {
      * @param id       an id to associate with this listener
      * @param listener the var object to be notified
      */
-    void listen(@NotNull String key, @NotNull String id, @NotNull var listener);
+    void listen(@NotNull VarKey key, @NotNull String id, @NotNull var listener);
 
     /**
      * Listen to a variable ('key') if the variable changes then {@link Pipeable#pipe(var...)}
@@ -183,7 +183,7 @@ public interface Scope {
      * @param id       an id to associate with this listener
      * @param listener the var object to be notified
      */
-    void listen(@NotNull String key, @NotNull String id, @NotNull Pipeable listener);
+    void listen(@NotNull VarKey key, @NotNull String id, @NotNull Pipeable listener);
 
     /**
      * Notify all listeners that the value of a variable has changed.
@@ -191,7 +191,7 @@ public interface Scope {
      * @param key the name of the variable
      * @return its new value
      */
-    @Nullable var notify(@NotNull String key);
+    @Nullable var notify(@NotNull VarKey key);
 
     /**
      * Notify all listeners that the value of a variable has changed
@@ -199,7 +199,7 @@ public interface Scope {
      * @param key   the name of the variable
      * @param value its new value
      */
-    void notifyScope(@NotNull String key, @NotNull var value);
+    void notifyScope(@NotNull VarKey key, @NotNull var value);
 
     /**
      * Gets the value of a parameter from this scope or it's ancestors.
@@ -208,7 +208,7 @@ public interface Scope {
      * @return the value associated or throws an exception if not found.
      */
     @NotNull
-    Variable parameter(@NotNull String key);
+    Variable parameter(@NotNull VarKey key);
 
     /**
      * Add a parameter to this scope.
@@ -218,7 +218,7 @@ public interface Scope {
      * @return the value
      */
     @NotNull
-    Variable parameter(@NotNull String key, @NotNull var value);
+    Variable parameter(@NotNull VarKey key, @NotNull var value);
 
     /**
      * Gets all the numeric parameters as a sorted List.
@@ -256,7 +256,7 @@ public interface Scope {
      * @param key name of the variable.
      * @return the Scope associated with the variable or null of none found
      */
-    @Nullable Scope scopeForKey(@NotNull String key);
+    @Nullable Scope scopeForKey(@NotNull VarKey key);
 
     /**
      * Creates or updates a variable.
@@ -268,7 +268,7 @@ public interface Scope {
      * @param varFlags   a set of flags relating to the variable
      * @return the variable definition
      */
-    @NotNull Variable set(@NotNull String key,
+    @NotNull Variable set(@NotNull VarKey key,
                           @NotNull var value,
                           @Nullable var constraint,
                           @Nullable SubType subType,
@@ -288,7 +288,7 @@ public interface Scope {
      * @return get the subtype (computed from the constraint) of a given variable
      */
     @Nullable
-    SubType subTypeOf(@NotNull String key);
+    SubType subTypeOf(@NotNull VarKey key);
 
     /**
      * Returns the details of a variable.
@@ -296,12 +296,12 @@ public interface Scope {
      * @param key the name of the variable
      * @return the full Variable definition
      */
-    @NotNull Variable variable(@NotNull String key);
+    @NotNull Variable variable(@NotNull VarKey key);
 
     /**
      * Returns all the variables in this scope, including parameter variables
      *
      * @return all variables in *this* scope
      */
-    @NotNull Map<String, Variable> variables();
+    @NotNull Map<VarKey, Variable> variables();
 }

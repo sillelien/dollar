@@ -19,6 +19,7 @@ package dollar.internal.runtime.script.operators;
 import dollar.api.Scope;
 import dollar.api.SubType;
 import dollar.api.Type;
+import dollar.api.VarKey;
 import dollar.api.var;
 import dollar.internal.runtime.script.Func;
 import dollar.internal.runtime.script.SimpleSubType;
@@ -84,7 +85,7 @@ public class PureDefinitionOperator implements Function<Token, var> {
             Type type = Type.of(typeConstraintObj);
             constraint = node(DEFINITION, "definition-constraint", true, NEW_SCOPE, parser,
                               new SourceCode(currentScope(), token), null, new ArrayList<>(),
-                              i -> $(scope.parameter("it").getValue().is(type)));
+                              i -> $(scope.parameter(VarKey.IT).getValue().is(type)));
             constraintSource = new SimpleSubType(typeConstraintObj.source());
             checkLearntType(token, type, value, MIN_PROBABILITY);
 
@@ -98,7 +99,7 @@ public class PureDefinitionOperator implements Function<Token, var> {
                                                  true, true)
         );
 
-        node.$listen(i -> scope.notify(varName.$S()));
+        node.$listen(i -> scope.notify(VarKey.of(varName)));
         return node;
 
     }

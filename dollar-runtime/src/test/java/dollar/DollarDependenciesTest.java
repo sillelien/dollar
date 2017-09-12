@@ -16,13 +16,13 @@
 
 package dollar;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.sonatype.aether.resolution.DependencyResolutionException;
 
 public class DollarDependenciesTest {
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
 
     }

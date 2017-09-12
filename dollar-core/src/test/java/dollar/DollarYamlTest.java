@@ -18,8 +18,8 @@ package dollar;
 
 import dollar.api.DollarStatic;
 import dollar.api.var;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -27,7 +27,7 @@ public class DollarYamlTest {
     private static String yamlString1;
     private static String yamlString2;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         yamlString1 = "\n- Hesperiidae\n- Papilionidae\n- Apatelodidae\n- Epiplemidae";
         yamlString2 = "map: \n  red: 1\n  blue: 2\n  green: leaves";

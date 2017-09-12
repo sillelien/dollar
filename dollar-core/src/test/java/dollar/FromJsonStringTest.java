@@ -16,7 +16,7 @@
 
 package dollar;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static dollar.api.DollarStatic.$json;
 import static org.junit.Assert.assertEquals;

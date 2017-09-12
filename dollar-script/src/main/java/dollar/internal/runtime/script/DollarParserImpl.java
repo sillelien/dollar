@@ -20,6 +20,7 @@ import com.google.common.io.ByteStreams;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
+import dollar.api.VarKey;
 import dollar.api.script.Source;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.DollarRange;
@@ -87,7 +88,7 @@ public class DollarParserImpl implements DollarParser {
     @NotNull
     private final ClassLoader classLoader;
     @NotNull
-    private final Map<String, var> exports = new ConcurrentHashMap<>();
+    private final Map<VarKey, var> exports = new ConcurrentHashMap<>();
     @NotNull
     private final ParserOptions options;
     @Nullable
@@ -283,9 +284,8 @@ public class DollarParserImpl implements DollarParser {
                        .token()
                        .map(token -> {
                            Object[] objects = (Object[]) token.value();
-                           String varName = objects[0].toString();
                            var defaultVal = (var) objects[1];
-                           return variableNode(false, varName, false, defaultVal, token, this);
+                           return variableNode(false, VarKey.of(objects[0].toString()), false, defaultVal, token, this);
                        });
     }
 
@@ -311,7 +311,7 @@ public class DollarParserImpl implements DollarParser {
     }
 
     @Override
-    public void export(@NotNull String name, @NotNull var export) {
+    public void export(VarKey name, @NotNull var export) {
         export.meta(SCOPES, new ArrayList<>(DollarScriptSupport.scopes()));
         exports.put(name, export);
     }
@@ -698,7 +698,8 @@ public class DollarParserImpl implements DollarParser {
                        .map(rhs -> lhs -> {
                            assert MEMBER.validForPure(pure);
                            var result = reactiveNode(MEMBER, pure, rhs, lhs, (var) rhs.value(), this,
-                                                     i -> lhs.$get(DollarFactory.fromStringValue(removePrefix(rhs.toString()))));
+                                                     i -> lhs.$get(
+                                                             DollarFactory.fromStringValue(VarKey.removePrefix(rhs.toString()))));
                            return result;
                        });
     }
@@ -1025,7 +1026,7 @@ public class DollarParserImpl implements DollarParser {
     private Parser<var> thisRef(boolean pure) {
         return KEYWORD_NL(THIS).followedBy(OP(LEFT_PAREN).not().peek())
                        .token()
-                       .map(token -> variableNode(pure, token.toString(), token, this));
+                       .map(token -> variableNode(pure, VarKey.of(token.toString()), token, this));
     }
 
     private Parser<var> unitExpression(boolean pure) {
@@ -1042,8 +1043,8 @@ public class DollarParserImpl implements DollarParser {
                                                    if (Builtins.exists(unitName)) {
                                                        return Builtins.execute(unitName, singletonList(quantity), pure);
                                                    } else {
-                                                       final var variable = variableNode(pure, unitName, token, this);
-                                                       currentScope().parameter("1", quantity);
+                                                       final var variable = variableNode(pure, VarKey.of(unitName), token, this);
+                                                       currentScope().parameter(VarKey.ONE, quantity);
                                                        return DollarScriptSupport.fix(variable);
                                                    }
                                                });
@@ -1054,7 +1055,7 @@ public class DollarParserImpl implements DollarParser {
     private Parser<var> variableRef(boolean pure) {
         return identifier().followedBy(OP(LEFT_PAREN).not().peek())
                        .token()
-                       .map(token -> variableNode(pure, token.toString(), token, this));
+                       .map(token -> variableNode(pure, VarKey.of(token.toString()), token, this));
     }
 
     @NotNull
@@ -1065,14 +1066,15 @@ public class DollarParserImpl implements DollarParser {
                         .next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN)))
                         .token()
                         .map(token -> {
-                            @NotNull Pipeable callable = i -> variableNode(pure, token.toString(), token, this).$fix(2, false);
+                            @NotNull Pipeable callable = i -> variableNode(pure, VarKey.of(token.toString()), token, this).$fix(2,
+                                                                                                                                false);
                             return node(VAR_USAGE_OP, "dynamic-var-name", pure, NO_SCOPE, this,
                                         new SourceCode(currentScope(), token), null, singletonList((var) token.value()), callable);
                         }),
                 OP(DOLLAR)
                         .next(INTEGER_LITERAL)
                         .token()
-                        .map(token -> variableNode(pure, token.toString(), true, null, token, this)));
+                        .map(token -> variableNode(pure, VarKey.of(token.toString()), true, null, token, this)));
     }
 
     private Parser<var> whenExpression(@NotNull Parser<var> expression, boolean pure) {

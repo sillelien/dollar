@@ -19,19 +19,19 @@ package dollar;
 import com.jayway.restassured.RestAssured;
 import dollar.api.DollarStatic;
 import dollar.api.var;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 
 import java.util.Date;
 
 class DollarHttpTest {
 
+    private static var profile;
+
     static {
         RestAssured.port = 4567;
     }
 
-    private static var profile;
-
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         profile = DollarStatic.$("name", "Neil")
                           .$("age", new Date().getYear() + 1900 - 1970)

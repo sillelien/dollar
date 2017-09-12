@@ -17,15 +17,15 @@
 package dollar;
 
 import dollar.api.DollarStatic;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static dollar.api.DollarStatic.$;
 import static org.junit.Assert.*;
 
 public class DollarTypeTest {
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
 
     }

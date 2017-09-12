@@ -17,8 +17,8 @@
 package dollar;
 
 import dollar.api.var;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static dollar.api.DollarStatic.$;
 import static org.junit.Assert.assertEquals;
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 public class DollarControlFlowTest {
     private static var map;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         map = $($("Neil", 0), $("Dimple", 10), $("Charlie", 100));
     }
