@@ -202,9 +202,9 @@ public class DollarParserImpl implements DollarParser {
                        .token()
                        .map(token -> lhs -> {
                                 assert CAST.validForPure(pure);
-                           return util().reactiveNode(CAST, "cast-" + token.toString().toLowerCase(), pure, token, lhs,
-                                                      (var) token.value(), this,
-                                                      i -> castFunc(lhs, token.toString())
+                                return util().reactiveNode(CAST, "cast-" + token.toString().toLowerCase(), pure, token, lhs,
+                                                           (var) token.value(), this,
+                                                           i -> castFunc(lhs, token.toString())
                                 );
                             }
                        );
@@ -649,8 +649,8 @@ public class DollarParserImpl implements DollarParser {
                        .token()
                        .map(token -> lhs -> {
                                 assert IS_OP.validForPure(pure);
-                           return util().reactiveNode(IS_OP, pure, lhs, token, this,
-                                                      i -> isFunc(lhs, (List<var>) token.value())
+                                return util().reactiveNode(IS_OP, pure, lhs, token, this,
+                                                           i -> isFunc(lhs, (List<var>) token.value())
 
                                 );
                             }
@@ -990,10 +990,10 @@ public class DollarParserImpl implements DollarParser {
                        .token()
                        .map((Token token) -> {
                                 Object[] objects = (Object[]) token.value();
-                           return util().node(SCRIPT_OP, pure,
-                                              this, token, singletonList($void()),
-                                              i -> compile(String.valueOf(objects[0]), String.valueOf(objects[1]),
-                                                           util().scope()));
+                                return util().node(SCRIPT_OP, pure,
+                                                   this, token, singletonList($void()),
+                                                   i -> compile(String.valueOf(objects[0]), String.valueOf(objects[1]),
+                                                                util().scope()));
                             }
                        );
     }
