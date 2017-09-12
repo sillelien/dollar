@@ -26,13 +26,12 @@ import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.VarFlags;
 import dollar.api.VarKey;
+import dollar.api.script.DollarParser;
 import dollar.api.script.ModuleResolver;
 import dollar.api.var;
 import dollar.deps.DependencyRetriever;
-import dollar.internal.runtime.script.DollarParserImpl;
-import dollar.internal.runtime.script.DollarUtilFactory;
-import dollar.internal.runtime.script.FileScope;
-import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.parser.DollarParserImpl;
+import dollar.internal.runtime.script.parser.scope.FileScope;
 import dollar.internal.runtime.script.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -52,6 +51,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static dollar.internal.runtime.script.DollarUtilFactory.util;
 import static dollar.internal.runtime.script.util.FileUtil.delete;
 
 public class GithubModuleResolver implements ModuleResolver {
@@ -72,7 +72,7 @@ public class GithubModuleResolver implements ModuleResolver {
                         .build(new CacheLoader<String, File>() {
                             @Override
                             @NotNull
-                            public File load(@NotNull String key) throws IOException, ExecutionException, InterruptedException {
+                            public File load(@NotNull String key) throws ExecutionException, InterruptedException {
 
                                 return executor.submit(() -> getFile(key)).get();
 
@@ -91,9 +91,11 @@ public class GithubModuleResolver implements ModuleResolver {
         final String githubUser = githubRepo[0];
         final String branch = !githubRepo[2].isEmpty() ? githubRepo[2] : "master";
 
-        final File dir = new File((FileUtil.SHARED_RUNTIME_PATH + "/modules/github") + "/" + githubUser + "/" + githubRepo[1] + "/" + branch);
+        final File dir = new File(
+                                         (FileUtil.SHARED_RUNTIME_PATH + "/modules/github") + "/" + githubUser + "/" + githubRepo[1] + "/" + branch);
         final String url = "https://github.com/" + githubRepo[0] + "/" + githubRepo[1] + ".git";
-        final File lockFile = new File((FileUtil.SHARED_RUNTIME_PATH + "/modules/github") + "/." + githubUser + "." + githubRepo[1] + "." + branch + ".clone.lock");
+        final File lockFile = new File(
+                                              (FileUtil.SHARED_RUNTIME_PATH + "/modules/github") + "/." + githubUser + "." + githubRepo[1] + "." + branch + ".clone.lock");
         dir.mkdirs();
 
 
@@ -158,7 +160,7 @@ public class GithubModuleResolver implements ModuleResolver {
 
     @NotNull
     @Override
-    public <T, P> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope, @NotNull P parser) throws Exception {
+    public <T, P> Pipeable retrieveModule(@NotNull String uriWithoutScheme, @NotNull T scope, @NotNull P parser) throws Exception {
         log.debug(uriWithoutScheme);
         File dir = repos.get(uriWithoutScheme);
 
@@ -188,7 +190,7 @@ public class GithubModuleResolver implements ModuleResolver {
                                                          .collect(Collectors.toList()));
 
         }
-        return (params) -> DollarUtilFactory.util().inSubScope(false, false, "github-module", newScope -> {
+        return (params) -> util().inSubScope(false, false, "github-module", newScope -> {
 
             final ImmutableMap<var, var> paramMap = params[0].$map().toVarMap();
             for (Map.Entry<var, var> entry : paramMap.entrySet()) {

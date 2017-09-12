@@ -14,15 +14,11 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.api;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class DollarExitError extends Error {
-    public DollarExitError() {
-    }
-
-    public DollarExitError(@NotNull Throwable throwable) {
-        super(throwable);
-    }
+public interface HasSymbol {
+    @Nullable
+    String symbol();
 }

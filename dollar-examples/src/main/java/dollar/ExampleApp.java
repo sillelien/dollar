@@ -16,8 +16,8 @@
 
 package dollar;
 
-import dollar.internal.runtime.script.DollarParserImpl;
-import dollar.internal.runtime.script.api.ParserOptions;
+import dollar.api.script.ParserOptions;
+import dollar.internal.runtime.script.parser.DollarParserImpl;
 import org.jetbrains.annotations.NotNull;
 
 public final class ExampleApp {

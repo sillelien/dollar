@@ -266,7 +266,7 @@ public abstract class AbstractDollar implements var {
 //
 //    @NotNull
 //    public var $pipe(@NotNull Class<? extends Pipeable> clazz) {
-//        DollarStatic.threadContext.get().setPassValue($copy());
+//        DollarStatic.threadContext.get().passValue($copy());
 //        Pipeable script = null;
 //        try {
 //            script = clazz.newInstance();

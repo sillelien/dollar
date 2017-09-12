@@ -14,26 +14,29 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.operators;
 
+import dollar.api.script.DollarParser;
 import dollar.api.script.Source;
 import dollar.api.var;
-import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.api.Operator;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
-import dollar.internal.runtime.script.parser.OpDef;
-import dollar.internal.runtime.script.parser.OpDefType;
+import dollar.internal.runtime.script.parser.Op;
+import dollar.internal.runtime.script.parser.OpType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 
+import static dollar.internal.runtime.script.DollarUtilFactory.util;
+
 public class BinaryOp implements BinaryOperator<var>, Operator {
     @NotNull
     private final BiFunction<var, var, var> function;
     private final boolean immediate;
     @NotNull
-    private final OpDef operation;
+    private final Op operation;
     @NotNull
     private final DollarParser parser;
     private final boolean pure;
@@ -42,7 +45,7 @@ public class BinaryOp implements BinaryOperator<var>, Operator {
 
 
     public BinaryOp(@NotNull DollarParser parser,
-                    @NotNull OpDef operation,
+                    @NotNull Op operation,
                     @NotNull BiFunction<var, var, var> function, boolean pure) {
         this.parser = parser;
         this.operation = operation;
@@ -53,7 +56,7 @@ public class BinaryOp implements BinaryOperator<var>, Operator {
     }
 
     public BinaryOp(boolean immediate,
-                    @NotNull OpDef operation,
+                    @NotNull Op operation,
                     @NotNull DollarParser parser,
                     @NotNull BiFunction<var, var, var> function, boolean pure) {
         this.immediate = immediate;
@@ -68,12 +71,12 @@ public class BinaryOp implements BinaryOperator<var>, Operator {
     @Override
     public var apply(@NotNull var lhs, @NotNull var rhs) {
         if (immediate) {
-            return DollarUtilFactory.util().node(operation, pure, parser, source, Arrays.asList(lhs, rhs),
-                                                 vars -> function.apply(lhs, rhs));
+            return util().node(operation, pure, parser, source, Arrays.asList(lhs, rhs),
+                               vars -> function.apply(lhs, rhs));
 
         }
         //Lazy evaluation
-        return DollarUtilFactory.util().reactiveNode(operation, pure, parser, source, lhs, rhs, args -> function.apply(lhs, rhs));
+        return util().reactiveNode(operation, pure, parser, source, lhs, rhs, args -> function.apply(lhs, rhs));
     }
 
     @Override
@@ -81,19 +84,21 @@ public class BinaryOp implements BinaryOperator<var>, Operator {
         this.source = source;
     }
 
-    public void validate(@NotNull OpDef operation) {
-        if (operation.reactive() == immediate) {
-            throw new DollarParserError("The operation " + operation.name() + " is marked as " + (operation.reactive()
-                                                                                                          ? "reactive" : "unreactive") + " " +
+    public void validate(@NotNull Op op) {
+        if (op.reactive() == immediate) {
+            throw new DollarParserError("The operation " + op.name() + " is marked as " + (op.reactive()
+                                                                                                   ? "reactive" : "unreactive") + " " +
                                                 "yet this operator is set to be " + (immediate
                                                                                              ? "unreactive" : "reactive"));
         }
-        if (operation.type() != OpDefType.BINARY) {
-            throw new DollarParserError("The operator " + operation.name() + " is defined as not BINARY but used in a binary " +
+        if (op.type() != OpType.BINARY) {
+            throw new DollarParserError("The operator " + op.name() + " is defined as not BINARY but used in a binary " +
                                                 "operator.");
         }
-        if (pure && (operation.pure() != null) && !operation.pure()) {
-            throw new AssertionError("The operation " + operation.name() + " is marked as " + (operation.pure() ? "pure" : "impure") + " yet this operator is set to be " + (pure ? "pure" : "impure"));
+        Boolean opIsPure = op.pure();
+        if (pure && (opIsPure != null) && !opIsPure) {
+            throw new AssertionError(
+                                            "The operation " + op.name() + " is marked as " + (opIsPure ? "pure" : "impure") + " yet this operator is set to be " + (pure ? "pure" : "impure"));
         }
     }
 }

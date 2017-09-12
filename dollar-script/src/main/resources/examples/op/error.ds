@@ -1,5 +1,5 @@
 var errorHappened= false
-error { !? msg; errorHappened= true }
-def redis "redis://localhost:999999/test" as URI
+error { err msg; errorHappened= true }
+def redis ("redisx://localhost:999999/test" as URI)
 write ("Hello World " + DATE()) to redis
-.: &errorHappened
+.: errorHappened

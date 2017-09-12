@@ -19,8 +19,8 @@ package dollar.internal.runtime.script.operators;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.VarKey;
+import dollar.api.script.DollarParser;
 import dollar.api.var;
-import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -77,7 +77,7 @@ public class CollectOperator implements Function<Token, var> {
                                Scope scopeForVar = util().getScopeForVar(pure, VarKey.of(varName), false, null);
 
                                if (scopeForVar == null) {
-                                   throw new VariableNotFoundException(VarKey.of(varName), util().currentScope());
+                                   throw new VariableNotFoundException(VarKey.of(varName), util().scope());
                                }
 
                                scopeForVar.listen(VarKey.of(varName), id, new VarListener((var) unless, (var) until, (var) loop));
@@ -109,7 +109,7 @@ public class CollectOperator implements Function<Token, var> {
 
         @NotNull
         @Override
-        public var pipe(var... in2) throws Exception {
+        public var pipe(var... in2) {
             var value = in2[1].$fixDeep();
             count.incrementAndGet();
             log.debug("Count is {} value is {}", count.get(), value);

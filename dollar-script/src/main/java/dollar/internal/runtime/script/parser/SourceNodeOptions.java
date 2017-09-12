@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.parser;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,42 +23,26 @@ import java.util.Objects;
 
 public class SourceNodeOptions {
     @NotNull
-    public static final SourceNodeOptions NO_SCOPE = new SourceNodeOptions(false, false, null);
+    public static final SourceNodeOptions NEW_PARALLEL_SCOPE = new SourceNodeOptions(true, false, true);
     @NotNull
     public static final SourceNodeOptions NEW_SCOPE = new SourceNodeOptions(true, false, null);
     @NotNull
-    public static final SourceNodeOptions CLASS_SCOPE = new SourceNodeOptions(true, false, null);
-    @NotNull
-    public static final SourceNodeOptions NEW_PARALLEL_SCOPE = new SourceNodeOptions(true, false, true);
-    @NotNull
     public static final SourceNodeOptions NEW_SERIAL_SCOPE = new SourceNodeOptions(true, false, false);
+    @NotNull
+    public static final SourceNodeOptions NO_SCOPE = new SourceNodeOptions(false, false, null);
     @NotNull
     public static final SourceNodeOptions SCOPE_WITH_CLOSURE = new SourceNodeOptions(true, true, null);
 
 
     private final boolean newScope;
-    private final boolean scopeClosure;
-
     @Nullable
     private final Boolean parallel;
+    private final boolean scopeClosure;
 
     public SourceNodeOptions(boolean newScope, boolean scopeClosure, @Nullable Boolean parallel) {
         this.newScope = newScope;
         this.scopeClosure = scopeClosure;
         this.parallel = parallel;
-    }
-
-    public boolean isNewScope() {
-        return newScope;
-    }
-
-    public boolean isScopeClosure() {
-        return scopeClosure;
-    }
-
-    @Nullable
-    public Boolean isParallel() {
-        return parallel;
     }
 
     @Override
@@ -74,5 +58,18 @@ public class SourceNodeOptions {
         return (newScope == that.newScope) &&
                        (scopeClosure == that.scopeClosure) &&
                        (parallel == that.parallel);
+    }
+
+    public boolean isNewScope() {
+        return newScope;
+    }
+
+    @Nullable
+    public Boolean isParallel() {
+        return parallel;
+    }
+
+    public boolean isScopeClosure() {
+        return scopeClosure;
     }
 }

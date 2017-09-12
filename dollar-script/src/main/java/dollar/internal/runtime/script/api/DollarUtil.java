@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.api;
 
 import dollar.api.Pipeable;
 import dollar.api.Scope;
@@ -23,10 +23,12 @@ import dollar.api.Type;
 import dollar.api.VarFlags;
 import dollar.api.VarKey;
 import dollar.api.Variable;
+import dollar.api.script.DollarParser;
 import dollar.api.script.Source;
 import dollar.api.var;
-import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.parser.OpDef;
+import dollar.internal.runtime.script.parser.Op;
+import dollar.internal.runtime.script.parser.SourceNodeOptions;
+import dollar.internal.runtime.script.parser.scope.ScriptScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
@@ -52,8 +54,6 @@ public interface DollarUtil {
                   @Nullable SubType label);
 
     @NotNull String createId(@NotNull String operation);
-
-    @NotNull Scope currentScope();
 
     @NotNull Scope endScope(boolean runtime);
 
@@ -96,7 +96,7 @@ public interface DollarUtil {
 
     String indent(int i);
 
-    var node(@NotNull OpDef operation,
+    var node(@NotNull Op operation,
              @NotNull String name,
              boolean pure,
              @NotNull SourceNodeOptions sourceNodeOptions,
@@ -105,21 +105,21 @@ public interface DollarUtil {
              @Nullable Type suggestedType, @NotNull List<var> inputs,
              @NotNull Pipeable pipeable);
 
-    @NotNull var node(@NotNull OpDef operation,
+    @NotNull var node(@NotNull Op operation,
                       boolean pure,
                       @NotNull DollarParser parser,
                       @NotNull Source source,
                       @NotNull List<var> inputs,
                       @NotNull Pipeable pipeable);
 
-    @NotNull var node(@NotNull OpDef operation,
+    @NotNull var node(@NotNull Op operation,
                       boolean pure,
                       @NotNull DollarParser parser,
                       @NotNull Token token,
                       @NotNull List<var> inputs,
                       @NotNull Pipeable callable);
 
-    @NotNull var node(@NotNull OpDef operation,
+    @NotNull var node(@NotNull Op operation,
                       @NotNull String name,
                       boolean pure,
                       @NotNull DollarParser parser,
@@ -133,7 +133,7 @@ public interface DollarUtil {
 
     String randomId();
 
-    @NotNull var reactiveNode(@NotNull OpDef operation, @NotNull String name,
+    @NotNull var reactiveNode(@NotNull Op operation, @NotNull String name,
                               boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
                               @NotNull DollarParser parser,
                               @NotNull Source source,
@@ -141,7 +141,7 @@ public interface DollarUtil {
                               @NotNull var rhs,
                               @NotNull Pipeable callable);
 
-    @NotNull var reactiveNode(@NotNull OpDef operation,
+    @NotNull var reactiveNode(@NotNull Op operation,
                               boolean pure,
                               @NotNull Token token,
                               @NotNull var lhs,
@@ -149,7 +149,7 @@ public interface DollarUtil {
                               @NotNull DollarParser parser,
                               @NotNull Pipeable callable);
 
-    @NotNull var reactiveNode(@NotNull OpDef operation,
+    @NotNull var reactiveNode(@NotNull Op operation,
                               @NotNull String name,
                               boolean pure,
                               @NotNull Token token,
@@ -158,26 +158,28 @@ public interface DollarUtil {
                               @NotNull DollarParser parser,
                               @NotNull Pipeable callable);
 
-    @NotNull var reactiveNode(@NotNull OpDef operation,
+    @NotNull var reactiveNode(@NotNull Op operation,
                               boolean pure,
                               @NotNull DollarParser parser, @NotNull Source source,
                               @NotNull var lhs,
                               @NotNull var rhs,
                               @NotNull Pipeable callable);
 
-    @NotNull var reactiveNode(@NotNull OpDef operation,
+    @NotNull var reactiveNode(@NotNull Op operation,
                               boolean pure,
                               @NotNull var lhs,
                               @NotNull Token token,
                               @NotNull DollarParser parser,
                               @NotNull Pipeable callable);
 
-    @NotNull var reactiveNode(@NotNull OpDef operation,
+    @NotNull var reactiveNode(@NotNull Op operation,
                               boolean pure,
                               @NotNull Source source,
                               @NotNull DollarParser parser,
                               @NotNull var lhs,
                               @NotNull Pipeable callable);
+
+    @NotNull Scope scope();
 
     @NotNull List<Scope> scopes();
 

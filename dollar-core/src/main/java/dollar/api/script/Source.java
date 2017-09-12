@@ -21,7 +21,6 @@ import org.jetbrains.annotations.Nullable;
 
 public interface Source {
 
-    @NotNull ThreadLocal<Source> source = new ThreadLocal<>();
 
     /**
      * Returns the complete source code from which this segment comes.

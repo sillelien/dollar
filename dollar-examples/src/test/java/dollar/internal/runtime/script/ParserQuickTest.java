@@ -18,11 +18,11 @@ package dollar.internal.runtime.script;
 
 import com.google.common.io.CharStreams;
 import dollar.api.DollarStatic;
-import dollar.internal.runtime.script.api.ParserOptions;
+import dollar.api.script.ParserOptions;
+import dollar.internal.runtime.script.parser.DollarParserImpl;
 import dollar.internal.runtime.script.parser.Symbols;
-import dollar.test.CircleCiParallelRule;
 import org.jetbrains.annotations.NotNull;
-import org.junit.ClassRule;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -44,8 +44,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class ParserQuickTest {
 
-    @ClassRule
-    public static final CircleCiParallelRule className = new CircleCiParallelRule();
     @NotNull
     private static final String[] files = {
     };
@@ -55,7 +53,7 @@ public class ParserQuickTest {
     private final ParserOptions options = new ParserOptions();
     private boolean parallel;
 
-    @BeforeAll
+    @AfterAll
     public static void after() {
         DollarStatic.getConfig().failFast(false);
     }
@@ -98,7 +96,7 @@ public class ParserQuickTest {
                               "negative/neg_pure_3.ds",
                               "negative/neg_pure_4.ds", "negative/neg_is_1.ds", "negative/neg_types_1.ds"})
 
-    public void negativeTestScripts(@NotNull String filename) throws Exception {
+    public void negativeTestScripts(@NotNull String filename) {
         System.out.println("Testing " + filename);
         try {
             new DollarParserImpl(options).parse(getClass().getResourceAsStream("/" + filename), filename, parallel);

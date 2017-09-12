@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script.api;
+package dollar.api.script;
 
 import com.beust.jcommander.Parameter;
 import org.jetbrains.annotations.NotNull;

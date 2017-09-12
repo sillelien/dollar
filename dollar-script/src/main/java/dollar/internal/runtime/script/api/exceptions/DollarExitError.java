@@ -14,12 +14,15 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.api.exceptions;
 
-import dollar.api.script.Source;
 import org.jetbrains.annotations.NotNull;
 
-public interface Operator {
+public class DollarExitError extends Error {
+    public DollarExitError() {
+    }
 
-    void setSource(@NotNull Source source);
+    public DollarExitError(@NotNull Throwable throwable) {
+        super(throwable);
+    }
 }

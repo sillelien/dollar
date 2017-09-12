@@ -14,11 +14,12 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.api;
 
 import org.jetbrains.annotations.Nullable;
 
-public interface HasSymbol {
+public interface HasKeyword {
     @Nullable
-    String symbol();
+    String keyword();
+
 }

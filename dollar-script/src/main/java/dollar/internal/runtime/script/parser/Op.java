@@ -22,9 +22,8 @@ import com.google.common.io.CharStreams;
 import com.vdurmont.emoji.EmojiParser;
 import dollar.api.Type;
 import dollar.api.var;
-import dollar.internal.runtime.script.HasKeyword;
-import dollar.internal.runtime.script.HasSymbol;
-import dollar.internal.runtime.script.SourceNodeOptions;
+import dollar.internal.runtime.script.api.HasKeyword;
+import dollar.internal.runtime.script.api.HasSymbol;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -35,11 +34,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.function.Function;
 
-import static dollar.internal.runtime.script.SourceNodeOptions.*;
+import static dollar.internal.runtime.script.parser.SourceNodeOptions.*;
 
-public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
+public class Op implements HasSymbol, HasKeyword, Comparable<Object> {
     @NotNull
-    private static final Logger log = LoggerFactory.getLogger(OpDef.class);
+    private static final Logger log = LoggerFactory.getLogger(Op.class);
     @Nullable
     private final String keyword;
     @NotNull
@@ -54,7 +53,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     @Nullable
     private final String symbol;
     @NotNull
-    private final OpDefType type;
+    private final OpType type;
     @NotNull
     private final Function<var[], Type> typeFunction;
     @Nullable
@@ -62,18 +61,18 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     @Nullable
     private String emoji;
 
-    public OpDef(@NotNull OpDefType type,
-                 @Nullable String symbol,
-                 @Nullable String keyword,
-                 @NotNull String name,
-                 boolean reserved,
-                 boolean reactive,
-                 @Nullable String bnf,
-                 int priority,
-                 @Nullable Boolean pure,
-                 @NotNull SourceNodeOptions nodeOptions,
-                 @Nullable String emoji,
-                 @NotNull Function<var[], Type> typeFunction) {
+    public Op(@NotNull OpType type,
+              @Nullable String symbol,
+              @Nullable String keyword,
+              @NotNull String name,
+              boolean reserved,
+              boolean reactive,
+              @Nullable String bnf,
+              int priority,
+              @Nullable Boolean pure,
+              @NotNull SourceNodeOptions nodeOptions,
+              @Nullable String emoji,
+              @NotNull Function<var[], Type> typeFunction) {
         this.type = type;
         this.typeFunction = typeFunction;
         if (emoji != null) {
@@ -157,13 +156,13 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         }
         stringBuilder.append("\n\n");
         if (bnf == null) {
-            if (type == OpDefType.PREFIX) {
+            if (type == OpType.PREFIX) {
                 bnf = "" + bnfSymbol() + " <expression>";
             }
-            if (type == OpDefType.POSTFIX) {
+            if (type == OpType.POSTFIX) {
                 bnf = "<expression> " + bnfSymbol() + "";
             }
-            if (type == OpDefType.BINARY) {
+            if (type == OpType.BINARY) {
                 bnf = "<expression> " + bnfSymbol() + " <expression>";
             }
         }
@@ -227,11 +226,11 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         if (equals(o)) {
             return 0;
         }
-        if ((o instanceof OpDef) && (keyword != null)) {
-            return keyword.compareTo(String.valueOf(((OpDef) o).keyword()));
+        if ((o instanceof Op) && (keyword != null)) {
+            return keyword.compareTo(String.valueOf(((Op) o).keyword()));
         }
-        if ((o instanceof OpDef) && (name != null)) {
-            return name.compareTo(((OpDef) o).name());
+        if ((o instanceof Op) && (name != null)) {
+            return name.compareTo(((Op) o).name());
         }
 
         return name.compareTo(String.valueOf(o));
@@ -252,19 +251,19 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OpDef opDef = (OpDef) o;
-        return reserved == opDef.reserved &&
-                       reactive == opDef.reactive &&
-                       priority == opDef.priority &&
-                       com.google.common.base.Objects.equal(symbol, opDef.symbol) &&
-                       com.google.common.base.Objects.equal(keyword, opDef.keyword) &&
-                       com.google.common.base.Objects.equal(name, opDef.name) &&
-                       type == opDef.type &&
-                       com.google.common.base.Objects.equal(pure, opDef.pure) &&
-                       com.google.common.base.Objects.equal(nodeOptions, opDef.nodeOptions) &&
-                       com.google.common.base.Objects.equal(typeFunction, opDef.typeFunction) &&
-                       com.google.common.base.Objects.equal(emoji, opDef.emoji) &&
-                       com.google.common.base.Objects.equal(bnf, opDef.bnf);
+        Op op = (Op) o;
+        return reserved == op.reserved &&
+                       reactive == op.reactive &&
+                       priority == op.priority &&
+                       com.google.common.base.Objects.equal(symbol, op.symbol) &&
+                       com.google.common.base.Objects.equal(keyword, op.keyword) &&
+                       com.google.common.base.Objects.equal(name, op.name) &&
+                       type == op.type &&
+                       com.google.common.base.Objects.equal(pure, op.pure) &&
+                       com.google.common.base.Objects.equal(nodeOptions, op.nodeOptions) &&
+                       com.google.common.base.Objects.equal(typeFunction, op.typeFunction) &&
+                       com.google.common.base.Objects.equal(emoji, op.emoji) &&
+                       com.google.common.base.Objects.equal(bnf, op.bnf);
     }
 
     @NotNull
@@ -315,7 +314,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
         return priority;
     }
 
-    @NotNull
+    @Nullable
     public Boolean pure() {
         return pure;
     }
@@ -331,7 +330,7 @@ public class OpDef implements HasSymbol, HasKeyword, Comparable<Object> {
     }
 
     @NotNull
-    public OpDefType type() {
+    public OpType type() {
         return type;
     }
 

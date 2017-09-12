@@ -20,11 +20,11 @@ import dollar.api.Scope;
 import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.VarKey;
+import dollar.api.script.DollarParser;
 import dollar.api.var;
-import dollar.internal.runtime.script.Func;
 import dollar.internal.runtime.script.SimpleSubType;
-import dollar.internal.runtime.script.SourceCode;
-import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.parser.Func;
+import dollar.internal.runtime.script.parser.SourceCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
@@ -35,9 +35,9 @@ import java.util.ArrayList;
 import java.util.function.Function;
 
 import static dollar.api.DollarStatic.$;
-import static dollar.internal.runtime.script.DollarUtil.MIN_PROBABILITY;
 import static dollar.internal.runtime.script.DollarUtilFactory.util;
-import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
+import static dollar.internal.runtime.script.api.DollarUtil.MIN_PROBABILITY;
+import static dollar.internal.runtime.script.parser.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.DEFINITION;
 import static java.util.Collections.singletonList;
 
@@ -60,7 +60,7 @@ public class PureDefinitionOperator implements Function<Token, var> {
         if (objects == null) {
             return null;
         }
-        Scope scope = util().currentScope();
+        Scope scope = util().scope();
         final Object exportObj = objects[0];
 
 
@@ -85,7 +85,7 @@ public class PureDefinitionOperator implements Function<Token, var> {
         if (typeConstraintObj != null) {
             Type type = Type.of(typeConstraintObj);
             constraint = util().node(DEFINITION, "definition-constraint", true, NEW_SCOPE, parser,
-                                     new SourceCode(util().currentScope(), token), null, new ArrayList<>(),
+                                     new SourceCode(util().scope(), token), null, new ArrayList<>(),
                                      i -> $(scope.parameter(VarKey.IT).getValue().is(type)));
             constraintSource = new SimpleSubType(typeConstraintObj.source());
             util().checkLearntType(token, type, value, MIN_PROBABILITY);

@@ -16,25 +16,20 @@
 
 package dollar.internal.runtime.script.parser;
 
-import dollar.internal.runtime.script.HasKeyword;
-import dollar.internal.runtime.script.HasSymbol;
+import dollar.internal.runtime.script.api.HasKeyword;
+import dollar.internal.runtime.script.api.HasSymbol;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public class SymbolDef implements HasSymbol, Comparable<Object> {
+    private final boolean reserved;
     @NotNull
     private final String symbol;
-    private final boolean reserved;
 
     public SymbolDef(@NotNull String symbol, boolean reserved) {
         this.symbol = symbol;
         this.reserved = reserved;
-    }
-
-    @Override
-    public String symbol() {
-        return symbol;
     }
 
     @Override
@@ -66,5 +61,10 @@ public class SymbolDef implements HasSymbol, Comparable<Object> {
 
     public boolean isReserved() {
         return reserved;
+    }
+
+    @Override
+    public String symbol() {
+        return symbol;
     }
 }

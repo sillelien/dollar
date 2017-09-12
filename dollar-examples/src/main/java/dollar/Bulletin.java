@@ -16,8 +16,8 @@
 
 package dollar;
 
-import dollar.internal.runtime.script.DollarParserImpl;
-import dollar.internal.runtime.script.api.ParserOptions;
+import dollar.api.script.ParserOptions;
+import dollar.internal.runtime.script.parser.DollarParserImpl;
 import org.jetbrains.annotations.NotNull;
 
 public final class Bulletin {
@@ -26,6 +26,6 @@ public final class Bulletin {
     public static void main(@NotNull String[] args) throws Exception {
         new DollarParserImpl(new ParserOptions()).parse(Bulletin.class.getResourceAsStream("/bulletin.ds"),
                                                         "/bulletin.ds",
-                                                    false);
+                                                        false);
     }
 }

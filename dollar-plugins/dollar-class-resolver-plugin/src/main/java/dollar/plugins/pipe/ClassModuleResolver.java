@@ -22,18 +22,21 @@ import dollar.api.script.ModuleResolver;
 import org.jetbrains.annotations.NotNull;
 
 public class ClassModuleResolver implements ModuleResolver {
-    @NotNull @Override
+    @NotNull
+    @Override
     public ModuleResolver copy() {
         return this;
     }
 
-    @NotNull @Override
+    @NotNull
+    @Override
     public String getScheme() {
         return "class";
     }
 
-    @NotNull @Override
-    public <T, P> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope, @NotNull P parser) throws Exception {
-        return (Pipeable) DollarStatic.context().getClassLoader().loadClass(uriWithoutScheme).newInstance();
+    @NotNull
+    @Override
+    public <T, P> Pipeable retrieveModule(@NotNull String uriWithoutScheme, @NotNull T scope, @NotNull P parser) throws Exception {
+        return (Pipeable) DollarStatic.context().classLoader().loadClass(uriWithoutScheme).newInstance();
     }
 }

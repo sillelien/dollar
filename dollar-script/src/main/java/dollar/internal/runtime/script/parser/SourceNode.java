@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.parser;
 
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
@@ -25,6 +25,7 @@ import dollar.api.TypePrediction;
 import dollar.api.exceptions.LambdaRecursionException;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.plugin.Plugins;
+import dollar.api.script.DollarParser;
 import dollar.api.script.Source;
 import dollar.api.script.TypeLearner;
 import dollar.api.types.ConstraintViolation;
@@ -32,9 +33,11 @@ import dollar.api.types.DollarFactory;
 import dollar.api.types.meta.MetaConstants;
 import dollar.api.types.prediction.SingleValueTypePrediction;
 import dollar.api.var;
-import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.DollarUtilFactory;
+import dollar.internal.runtime.script.ErrorHandlerFactory;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
-import dollar.internal.runtime.script.parser.OpDef;
+import dollar.internal.runtime.script.parser.scope.PureScope;
+import dollar.internal.runtime.script.parser.scope.ScriptScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -86,7 +89,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     private final String name;
     private final boolean newScope;
     @NotNull
-    private final OpDef operation;
+    private final Op operation;
     @NotNull
     private final DollarParser parser;
     private final boolean pure;
@@ -107,14 +110,14 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
         }
     }
 
-    SourceNode(@NotNull Pipeable lambda,
-               @NotNull Source source,
-               @NotNull List<var> inputs,
-               @NotNull String name,
-               @NotNull DollarParser parser,
-               @NotNull SourceNodeOptions sourceNodeOptions,
-               @NotNull String id,
-               boolean pure, @NotNull OpDef operation) {
+    public SourceNode(@NotNull Pipeable lambda,
+                      @NotNull Source source,
+                      @NotNull List<var> inputs,
+                      @NotNull String name,
+                      @NotNull DollarParser parser,
+                      @NotNull SourceNodeOptions sourceNodeOptions,
+                      @NotNull String id,
+                      boolean pure, @NotNull Op operation) {
 
         this.pure = pure;
         this.operation = operation;
@@ -188,8 +191,8 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
     @Nullable
     @Override
-    public Object invoke(@NotNull Object proxy, @NotNull Method method, @Nullable Object[] args) throws Throwable {
-        Source.source.set(source);
+    public Object invoke(@NotNull Object proxy, @NotNull Method method, @Nullable Object[] args) {
+        DollarStatic.context().source(source);
         try {
             if (Objects.equals(method.getName(), "source")) {
                 return source;
@@ -234,7 +237,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 try {
                     result = invokeMain(proxy, method, args);
                 } catch (Throwable throwable) {
-                    return DollarUtilFactory.util().currentScope().handleError(throwable, source);
+                    return DollarUtilFactory.util().scope().handleError(throwable, source);
                 }
             } else {
                 //This method does require a scope
@@ -249,20 +252,20 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 try {
                     Scope useScope;
                     if (newScope) {
-                        if (pure || DollarUtilFactory.util().currentScope().pure()) {
-                            useScope = new PureScope(DollarUtilFactory.util().currentScope(),
-                                                     DollarUtilFactory.util().currentScope().source(), name,
-                                                     DollarUtilFactory.util().currentScope().file());
+                        if (pure || DollarUtilFactory.util().scope().pure()) {
+                            useScope = new PureScope(DollarUtilFactory.util().scope(),
+                                                     DollarUtilFactory.util().scope().source(), name,
+                                                     DollarUtilFactory.util().scope().file());
                         } else {
-                            if (DollarUtilFactory.util().currentScope().pure() && (operation.pure() != null) && !operation.pure()) {
+                            if (DollarUtilFactory.util().scope().pure() && (operation.pure() != null) && !operation.pure()) {
                                 throw new DollarScriptException("Attempted to create an impure scope within a pure scope " +
-                                                                        "(" + DollarUtilFactory.util().currentScope() + ") for " + name,
+                                                                        "(" + DollarUtilFactory.util().scope() + ") for " + name,
                                                                 source);
                             }
-                            useScope = new ScriptScope(DollarUtilFactory.util().currentScope(), name, false, false);
+                            useScope = new ScriptScope(DollarUtilFactory.util().scope(), name, false, false);
                         }
                     } else {
-                        useScope = DollarUtilFactory.util().currentScope();
+                        useScope = DollarUtilFactory.util().scope();
                     }
 
                     result = DollarUtilFactory.util().inScope(true, useScope, s -> {
@@ -283,7 +286,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                             }
 
                         } catch (Throwable throwable) {
-                            return DollarUtilFactory.util().currentScope().handleError(throwable, source);
+                            return DollarUtilFactory.util().scope().handleError(throwable, source);
                         }
                     });
                 } finally {
@@ -317,7 +320,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             return result;
         } catch (Exception e) {
             log.warn(e.getMessage(), e);
-            return ErrorHandlerFactory.instance().handle(DollarUtilFactory.util().currentScope(), source, e);
+            return ErrorHandlerFactory.instance().handle(DollarUtilFactory.util().scope(), source, e);
         }
     }
 
@@ -425,7 +428,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 return method.invoke(out, args);
             }
         } catch (InvocationTargetException e) {
-            return DollarUtilFactory.util().currentScope().handleError(e, source);
+            return DollarUtilFactory.util().scope().handleError(e, source);
         }
     }
 }

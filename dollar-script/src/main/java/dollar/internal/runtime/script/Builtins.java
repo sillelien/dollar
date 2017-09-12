@@ -21,6 +21,7 @@ import dollar.api.Type;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.ErrorType;
 import dollar.api.var;
+import dollar.internal.runtime.script.api.Builtin;
 import dollar.internal.runtime.script.api.exceptions.BuiltinNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -129,7 +130,7 @@ public final class Builtins {
         if (builtin == null) {
             throw new BuiltinNotFoundException(name);
         }
-        return builtin.execute(pure, parameters, DollarUtilFactory.util().currentScope());
+        return builtin.execute(pure, parameters, DollarUtilFactory.util().scope());
     }
 
     public static boolean exists(@NotNull String name) {

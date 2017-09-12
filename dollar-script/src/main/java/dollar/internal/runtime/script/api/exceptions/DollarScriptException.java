@@ -20,13 +20,13 @@ import dollar.api.exceptions.DollarFailureException;
 import dollar.api.script.Source;
 import dollar.api.types.ErrorType;
 import dollar.api.var;
-import dollar.internal.runtime.script.parser.OpDef;
+import dollar.internal.runtime.script.parser.Op;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class DollarScriptException extends DollarFailureException {
     @Nullable
-    private OpDef operation;
+    private Op operation;
     @NotNull
     private String rawMessage;
     @Nullable
@@ -68,7 +68,7 @@ public class DollarScriptException extends DollarFailureException {
         this.source = source;
     }
 
-    public DollarScriptException(@NotNull String s, @Nullable Source source, @NotNull OpDef operation) {
+    public DollarScriptException(@NotNull String s, @Nullable Source source, @NotNull Op operation) {
         super((s + ":\n" + optionalSource(source) + "\n\n") + (operation != null ? operation.helpText() : ""));
         rawMessage = s;
         this.source = source;
@@ -92,7 +92,7 @@ public class DollarScriptException extends DollarFailureException {
     }
 
     @NotNull
-    public OpDef operation() {
+    public Op operation() {
         return operation;
     }
 

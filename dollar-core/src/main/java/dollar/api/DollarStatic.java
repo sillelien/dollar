@@ -215,14 +215,14 @@ public class DollarStatic {
      * $ dump.
      */
     public static void $dump() {
-        threadContext.get().getMonitor().dump();
+        threadContext.get().monitor().dump();
     }
 
     /**
      * $ dump thread.
      */
     public static void $dumpThread() {
-        threadContext.get().getMonitor().dumpThread();
+        threadContext.get().monitor().dumpThread();
     }
 
     /**
@@ -700,7 +700,7 @@ public class DollarStatic {
      * @param message the message
      */
     public static void log(@NotNull Object message) {
-        log.info("{}:{}", threadContext.get().getLabels(), message);
+        log.info("{}:{}", threadContext.get().labels(), message);
     }
 
     /**
@@ -709,7 +709,7 @@ public class DollarStatic {
      * @param message the message
      */
     public static void log(@NotNull String message) {
-        log.info("{}:{}", threadContext.get().getLabels(), message);
+        log.info("{}:{}", threadContext.get().labels(), message);
     }
 
     /**
@@ -752,7 +752,7 @@ public class DollarStatic {
      */
     @NotNull
     public static DollarMonitor monitor() {
-        return threadContext.get().getMonitor();
+        return threadContext.get().monitor();
     }
 
     /**

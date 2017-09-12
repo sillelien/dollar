@@ -18,7 +18,7 @@ package dollar.internal.runtime.script.api.exceptions;
 
 import dollar.api.Scope;
 import dollar.api.VarKey;
-import dollar.internal.runtime.script.SourceCode;
+import dollar.internal.runtime.script.parser.SourceCode;
 import org.jetbrains.annotations.NotNull;
 
 public class VariableNotFoundException extends DollarScriptException {

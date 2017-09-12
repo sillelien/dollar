@@ -17,10 +17,13 @@
 package dollar.docs;
 
 import com.google.common.io.CharStreams;
-import dollar.internal.runtime.script.DollarParserImpl;
-import dollar.internal.runtime.script.api.ParserOptions;
+import dollar.api.DollarStatic;
+import dollar.api.script.ParserOptions;
+import dollar.internal.runtime.script.parser.DollarParserImpl;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -33,13 +36,24 @@ public class DocTest {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(DocTest.class);
 
+    @AfterAll
+    public static void after() {
+        DollarStatic.getConfig().failFast(false);
+    }
+
+    @BeforeAll
+    public static void before() {
+        DollarStatic.getConfig().failFast(true);
+    }
+
+
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
 
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
 
     }
 

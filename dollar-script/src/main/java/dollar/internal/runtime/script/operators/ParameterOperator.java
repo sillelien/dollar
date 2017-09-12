@@ -17,11 +17,11 @@
 package dollar.internal.runtime.script.operators;
 
 import dollar.api.VarKey;
+import dollar.api.script.DollarParser;
 import dollar.api.var;
 import dollar.internal.runtime.script.Builtins;
-import dollar.internal.runtime.script.SourceCode;
-import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
+import dollar.internal.runtime.script.parser.SourceCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
@@ -57,7 +57,7 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
         return lhs -> {
             boolean functionName;
             boolean builtin;
-            SourceCode sourceCode = new SourceCode(util().currentScope(), token);
+            SourceCode sourceCode = new SourceCode(util().scope(), token);
             boolean isPure = pure;
             String name;
             if (FUNCTION_NAME_OP.name().equals(lhs.metaAttribute(OPERATION_NAME))) {
@@ -79,7 +79,7 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
                                    i -> util().inSubScope(true, pure, "param-disposable-scope",
                                                           newScope -> {
                                                               util().addParameterstoCurrentScope(
-                                                                      util().currentScope(),
+                                                                      util().scope(),
                                                                       parameters);
 
                                                               var result;

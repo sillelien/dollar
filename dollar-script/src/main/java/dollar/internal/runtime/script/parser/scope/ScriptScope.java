@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.parser.scope;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ArrayListMultimap;
@@ -31,7 +31,11 @@ import dollar.api.Variable;
 import dollar.api.exceptions.LambdaRecursionException;
 import dollar.api.script.Source;
 import dollar.api.var;
+import dollar.internal.runtime.script.DollarUtilFactory;
+import dollar.internal.runtime.script.ErrorHandlerFactory;
+import dollar.internal.runtime.script.api.DollarUtil;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
+import dollar.internal.runtime.script.api.exceptions.DollarExitError;
 import dollar.internal.runtime.script.api.exceptions.DollarParserError;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.PureFunctionException;
@@ -88,7 +92,7 @@ public class ScriptScope implements Scope {
     @Nullable
     private Parser<var> parser;
 
-    ScriptScope(@NotNull String name, boolean root, boolean classScope) {
+    public ScriptScope(@NotNull String name, boolean root, boolean classScope) {
         this.root = root;
         this.classScope = classScope;
         parent = null;
@@ -96,7 +100,7 @@ public class ScriptScope implements Scope {
         id = name + ":" + counter.incrementAndGet();
     }
 
-    ScriptScope(@NotNull String source, @NotNull String name, boolean root, boolean classScope) {
+    public ScriptScope(@NotNull String source, @NotNull String name, boolean root, boolean classScope) {
         this.root = root;
         this.classScope = classScope;
         parent = null;
@@ -105,7 +109,7 @@ public class ScriptScope implements Scope {
     }
 
 
-    ScriptScope(@NotNull Scope parent, @NotNull String name, boolean root, boolean classScope) {
+    public ScriptScope(@NotNull Scope parent, @NotNull String name, boolean root, boolean classScope) {
         this.parent = parent;
         this.root = root;
         source = parent.source();
@@ -538,7 +542,8 @@ public class ScriptScope implements Scope {
         }
         Variable variable = scope.variable(key);
         if (!variable.isParameter()) {
-            throw new DollarScriptException("Attempted to access a non-parameter variable " + key + "as a parameter in scope " + this);
+            throw new DollarScriptException(
+                                                   "Attempted to access a non-parameter variable " + key + "as a parameter in scope " + this);
         }
         return variable;
     }
@@ -632,8 +637,9 @@ public class ScriptScope implements Scope {
 
         if (pure()) {
             if (!varFlags.isPure()) {
-                throw new DollarScriptException("Cannot have impure variables in a pure expression, variable was " + key + ", (" + this + ")",
-                                                value);
+                throw new DollarScriptException(
+                                                       "Cannot have impure variables in a pure expression, variable was " + key + ", (" + this + ")",
+                                                       value);
             }
             if (varFlags.isVolatile()) {
                 throw new DollarScriptException("Cannot have volatile variables in a pure expression");
@@ -658,7 +664,8 @@ public class ScriptScope implements Scope {
             if (variable.getConstraint() != null) {
                 if (constraint != null) {
                     handleError(
-                            new DollarScriptException("Cannot change the constraint on a variable, attempted to redeclare for " + key));
+                            new DollarScriptException(
+                                                             "Cannot change the constraint on a variable, attempted to redeclare for " + key));
                 }
             }
 

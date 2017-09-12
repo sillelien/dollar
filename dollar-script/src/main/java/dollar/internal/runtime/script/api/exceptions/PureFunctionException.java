@@ -18,7 +18,7 @@ package dollar.internal.runtime.script.api.exceptions;
 
 import dollar.api.script.Source;
 import dollar.api.var;
-import dollar.internal.runtime.script.parser.OpDef;
+import dollar.internal.runtime.script.parser.Op;
 import org.jetbrains.annotations.NotNull;
 
 public class PureFunctionException extends DollarScriptException {
@@ -44,7 +44,7 @@ public class PureFunctionException extends DollarScriptException {
 
     public PureFunctionException(@NotNull String s,
                                  @NotNull Source source,
-                                 @NotNull OpDef operation) {
+                                 @NotNull Op operation) {
         super(s, source, operation);
     }
 

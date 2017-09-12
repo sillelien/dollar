@@ -23,18 +23,21 @@ import dollar.deps.DependencyRetriever;
 import org.jetbrains.annotations.NotNull;
 
 public class MavenModuleResolver implements ModuleResolver {
-    @NotNull @Override
+    @NotNull
+    @Override
     public ModuleResolver copy() {
         return this;
     }
 
-    @NotNull @Override
+    @NotNull
+    @Override
     public String getScheme() {
         return "mvn";
     }
 
-    @NotNull @Override
-    public <T, P> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope, @NotNull P parser) {
+    @NotNull
+    @Override
+    public <T, P> Pipeable retrieveModule(@NotNull String uriWithoutScheme, @NotNull T scope, @NotNull P parser) {
         String[] strings = uriWithoutScheme.split(":", 2);
         try {
             return (Pipeable) DependencyRetriever.retrieve(strings[1]).loadClass(strings[0]).newInstance();

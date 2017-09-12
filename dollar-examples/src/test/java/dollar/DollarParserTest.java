@@ -16,8 +16,8 @@
 
 package dollar;
 
-import dollar.internal.runtime.script.DollarParserImpl;
-import dollar.internal.runtime.script.api.ParserOptions;
+import dollar.api.script.ParserOptions;
+import dollar.internal.runtime.script.parser.DollarParserImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,17 +27,17 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class DollarParserTest {
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
 
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
 
     }
 
     @Test
-    public void test() throws Exception {
+    public void test() {
         try {
             new DollarParserImpl(new ParserOptions()).parse(getClass().getResourceAsStream("/quick/test1.ds"), "/quick/test1.ds",
                                                             false);

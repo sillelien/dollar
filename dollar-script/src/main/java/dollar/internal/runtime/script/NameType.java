@@ -16,8 +16,5 @@
 
 package dollar.internal.runtime.script;
 
-/**
- * @author <a href="http://uk.linkedin.com/in/neilellis">Neil Ellis</a>
- */
-class DollarParserPosition {
+public class NameType {
 }

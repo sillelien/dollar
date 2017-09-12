@@ -100,4 +100,6 @@ public class VarKey {
     public boolean isNumeric() {
         return key.matches("[0-9]+");
     }
+
+
 }

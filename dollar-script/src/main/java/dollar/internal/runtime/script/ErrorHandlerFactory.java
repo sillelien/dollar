@@ -22,6 +22,7 @@ import dollar.api.script.Source;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.ParserErrorHandler;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
+import dollar.internal.runtime.script.api.exceptions.DollarExitError;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.ErrorReporter;
 import org.jetbrains.annotations.NotNull;

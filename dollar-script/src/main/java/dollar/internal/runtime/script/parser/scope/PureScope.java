@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.parser.scope;
 
 import dollar.api.DollarStatic;
 import dollar.api.Scope;
@@ -34,7 +34,7 @@ public class PureScope extends ScriptScope {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(PureScope.class);
 
-    PureScope(@NotNull Scope parent, @NotNull String source, @NotNull String name, @Nullable String file) {
+    public PureScope(@NotNull Scope parent, @NotNull String source, @NotNull String name, @Nullable String file) {
         super(parent, source, name, false, false);
     }
 

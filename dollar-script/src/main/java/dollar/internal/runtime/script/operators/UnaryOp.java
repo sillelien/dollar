@@ -14,13 +14,15 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.operators;
 
+import dollar.api.script.DollarParser;
 import dollar.api.script.Source;
 import dollar.api.var;
-import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.parser.OpDef;
-import dollar.internal.runtime.script.parser.OpDefType;
+import dollar.internal.runtime.script.DollarUtilFactory;
+import dollar.internal.runtime.script.api.Operator;
+import dollar.internal.runtime.script.parser.Op;
+import dollar.internal.runtime.script.parser.OpType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiFunction;
@@ -28,9 +30,9 @@ import java.util.function.UnaryOperator;
 
 import static java.util.Collections.singletonList;
 
-public class DollarUnaryOperator implements UnaryOperator<var>, Operator {
+public class UnaryOp implements UnaryOperator<var>, Operator {
     @NotNull
-    protected final OpDef operation;
+    protected final Op operation;
     @NotNull
     private final BiFunction<var, Source, var> function;
     private final boolean immediate;
@@ -40,10 +42,10 @@ public class DollarUnaryOperator implements UnaryOperator<var>, Operator {
     @NotNull
     protected Source source;
 
-    public DollarUnaryOperator(@NotNull DollarParser parser,
-                               @NotNull OpDef operation,
-                               @NotNull BiFunction<var, Source, var> function,
-                               boolean pure) {
+    public UnaryOp(@NotNull DollarParser parser,
+                   @NotNull Op operation,
+                   @NotNull BiFunction<var, Source, var> function,
+                   boolean pure) {
         this.operation = operation;
         this.function = function;
         this.parser = parser;
@@ -52,10 +54,10 @@ public class DollarUnaryOperator implements UnaryOperator<var>, Operator {
         validate(operation);
     }
 
-    public DollarUnaryOperator(boolean immediate,
-                               @NotNull BiFunction<var, Source, var> function,
-                               @NotNull OpDef operation,
-                               @NotNull DollarParser parser, boolean pure) {
+    public UnaryOp(boolean immediate,
+                   @NotNull BiFunction<var, Source, var> function,
+                   @NotNull Op operation,
+                   @NotNull DollarParser parser, boolean pure) {
         this.operation = operation;
         this.immediate = immediate;
         this.function = function;
@@ -84,19 +86,21 @@ public class DollarUnaryOperator implements UnaryOperator<var>, Operator {
         this.source = source;
     }
 
-    public void validate(@NotNull OpDef operation) {
+    public void validate(@NotNull Op operation) {
         if (operation.reactive() == immediate) {
             throw new AssertionError("The operation " + operation.name() + " is marked as " + (operation.reactive()
                                                                                                        ? "reactive" : "unreactive") + " " +
                                              "yet this operator is set to be " + (immediate
                                                                                           ? "unreactive" : "reactive"));
         }
-        if ((operation.type() != OpDefType.PREFIX) && (operation.type() != OpDefType.POSTFIX)) {
+        if ((operation.type() != OpType.PREFIX) && (operation.type() != OpType.POSTFIX)) {
             throw new AssertionError("The operator " + operation.name() + " is not defined as a unary type but used in a unary " +
                                              "operator.");
         }
-        if (pure && (operation.pure() != null) && !operation.pure()) {
-            throw new AssertionError("The operation " + operation.name() + " is marked as " + (operation.pure() ? "pure" : "impure") + " yet this operator is set to be " + (pure ? "pure" : "impure"));
+        Boolean opIsPure = operation.pure();
+        if (pure && (opIsPure != null) && !opIsPure) {
+            throw new AssertionError(
+                                            "The operation " + operation.name() + " is marked as " + (opIsPure ? "pure" : "impure") + " yet this operator is set to be " + (pure ? "pure" : "impure"));
         }
     }
 }

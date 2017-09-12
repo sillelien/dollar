@@ -22,13 +22,13 @@ import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.VarFlags;
 import dollar.api.VarKey;
+import dollar.api.script.DollarParser;
 import dollar.api.script.Source;
 import dollar.api.var;
 import dollar.internal.runtime.script.DollarUtilFactory;
 import dollar.internal.runtime.script.SimpleSubType;
-import dollar.internal.runtime.script.SourceCode;
-import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
+import dollar.internal.runtime.script.parser.SourceCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
@@ -42,8 +42,8 @@ import java.util.function.Function;
 import static dollar.api.DollarStatic.$;
 import static dollar.api.DollarStatic.$void;
 import static dollar.api.types.meta.MetaConstants.*;
-import static dollar.internal.runtime.script.DollarUtil.MIN_PROBABILITY;
-import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
+import static dollar.internal.runtime.script.api.DollarUtil.MIN_PROBABILITY;
+import static dollar.internal.runtime.script.parser.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.emptyList;
 
@@ -80,7 +80,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                                        pure, NEW_SCOPE, parser,
                                                        new SourceCode(token), type, emptyList(),
                                                        i -> {
-                                                           var it = DollarUtilFactory.util().currentScope().parameter(
+                                                           var it = DollarUtilFactory.util().scope().parameter(
                                                                    VarKey.IT).getValue();
                                                            return $(
                                                                    it.is(type) && ((objects[3] == null) || ((var) objects[3]).isTrue()));
@@ -105,7 +105,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
         var finalConstraint = constraint;
         return (Function<var, var>) rhs -> {
-            Scope scope = DollarUtilFactory.util().currentScope();
+            Scope scope = DollarUtilFactory.util().scope();
             DollarUtilFactory.util().checkLearntType(token, type, rhs, MIN_PROBABILITY);
 
             final String op = ((var) objects[5]).metaAttribute(ASSIGNMENT_TYPE);
@@ -140,12 +140,13 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                                                                                                   token,
                                                                                                                   useConstraint,
                                                                                                                   useSource,
-                                                                                                                  new VarFlags(false,
-                                                                                                                               isVolatile,
-                                                                                                                               false,
-                                                                                                                               pure,
-                                                                                                                               false,
-                                                                                                                               false));
+                                                                                                                  new VarFlags(
+                                                                                                                                      false,
+                                                                                                                                      isVolatile,
+                                                                                                                                      false,
+                                                                                                                                      pure,
+                                                                                                                                      false,
+                                                                                                                                      false));
 
                                                                              return value;
                                                                          } else {
@@ -172,7 +173,7 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                 }
             }
             return assign(rhs, objects, finalConstraint, new VarFlags(constant, isVolatile, declaration, pure),
-                          constraintSource, scope, token, type, new SourceCode(DollarUtilFactory.util().currentScope(), token));
+                          constraintSource, scope, token, type, new SourceCode(DollarUtilFactory.util().scope(), token));
         };
     }
 
@@ -191,10 +192,10 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
         Pipeable pipeable = args -> {
 
-            Scope currentScope = DollarUtilFactory.util().currentScope();
+            Scope currentScope = DollarUtilFactory.util().scope();
             final var useConstraint;
             final SubType useSource;
-            Scope varScope = DollarUtilFactory.util().getScopeForVar(pure, varName, false, DollarUtilFactory.util().currentScope());
+            Scope varScope = DollarUtilFactory.util().getScopeForVar(pure, varName, false, DollarUtilFactory.util().scope());
             if ((constraint != null) || (varScope == null)) {
                 useConstraint = constraint;
                 useSource = constraintSource;
@@ -220,8 +221,9 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                                                         newScope.parameter(VarKey.PREVIOUS, value);
                                                         if (useConstraint.isFalse()) {
                                                             newScope.handleError(
-                                                                    new DollarScriptException("Constraint failed for variable " + varName + "",
-                                                                                              source));
+                                                                    new DollarScriptException(
+                                                                                                     "Constraint failed for variable " + varName + "",
+                                                                                                     source));
                                                         }
                                                         return null;
                                                     });

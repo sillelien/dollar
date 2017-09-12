@@ -14,12 +14,14 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.parser.scope;
 
 import dollar.api.DollarClass;
 import dollar.api.Scope;
 import dollar.api.types.DollarFactory;
 import dollar.api.var;
+import dollar.internal.runtime.script.DollarUtilFactory;
+import dollar.internal.runtime.script.obj.DollarObject;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +37,11 @@ public class ClassScopeFactory implements DollarClass {
     @NotNull
     private final String name;
 
-    ClassScopeFactory(@NotNull Scope parent, @NotNull String name, @NotNull List<var> expression, boolean root, boolean parallel) {
+    public ClassScopeFactory(@NotNull Scope parent,
+                             @NotNull String name,
+                             @NotNull List<var> expression,
+                             boolean root,
+                             boolean parallel) {
 
         this.name = name;
         this.expression = expression;
@@ -44,7 +50,7 @@ public class ClassScopeFactory implements DollarClass {
     @NotNull
     @Override
     public var instance(List<var> params) {
-        ScriptScope subScope = new ScriptScope(DollarUtilFactory.util().currentScope(), "class-" + name, false, true);
+        ScriptScope subScope = new ScriptScope(DollarUtilFactory.util().scope(), "class-" + name, false, true);
         return DollarUtilFactory.util().inScope(true, subScope, scope -> {
             DollarUtilFactory.util().addParameterstoCurrentScope(scope, params);
             var constructor = DollarFactory.fromList(expression.stream().map(var::$fixDeep).collect(Collectors.toList()));

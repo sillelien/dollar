@@ -16,8 +16,8 @@
 
 package dollar.internal.runtime.script.parser;
 
-import dollar.internal.runtime.script.HasKeyword;
-import dollar.internal.runtime.script.HasSymbol;
+import dollar.internal.runtime.script.api.HasKeyword;
+import dollar.internal.runtime.script.api.HasSymbol;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,13 +25,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 public class KeywordDef implements HasKeyword, Comparable<Object> {
+    @Nullable
+    private final String bnf;
+    @Nullable
+    private final String description;
     @NotNull
     private final String keyword;
     private final boolean reserved;
-    @Nullable
-    private final String description;
-    @Nullable
-    private final String bnf;
 
     public KeywordDef(@NotNull String keyword,
                       boolean reserved,
@@ -43,10 +43,14 @@ public class KeywordDef implements HasKeyword, Comparable<Object> {
         this.bnf = bnf;
     }
 
-    @Override
     @NotNull
-    public String keyword() {
-        return keyword;
+    public String asMarkdown() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("### ").append(keyword).append("\n\n");
+        if (description != null) {
+            stringBuilder.append(description).append("\n\n\n");
+        }
+        return stringBuilder.toString();
     }
 
     @Override
@@ -63,21 +67,6 @@ public class KeywordDef implements HasKeyword, Comparable<Object> {
         return keyword.compareTo(String.valueOf(o));
     }
 
-
-    public boolean isReserved() {
-        return reserved;
-    }
-
-    @NotNull
-    public String asMarkdown() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("### ").append(keyword).append("\n\n");
-        if (description != null) {
-            stringBuilder.append(description).append("\n\n\n");
-        }
-        return stringBuilder.toString();
-    }
-
     @Override
     public int hashCode() {
         return Objects.hash(keyword);
@@ -89,5 +78,15 @@ public class KeywordDef implements HasKeyword, Comparable<Object> {
         if ((o == null) || (getClass() != o.getClass())) return false;
         KeywordDef that = (KeywordDef) o;
         return Objects.equals(keyword, that.keyword);
+    }
+
+    public boolean isReserved() {
+        return reserved;
+    }
+
+    @Override
+    @NotNull
+    public String keyword() {
+        return keyword;
     }
 }

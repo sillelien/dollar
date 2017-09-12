@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.parser;
 
 import dollar.api.Scope;
 import dollar.api.SubType;
@@ -23,15 +23,16 @@ import dollar.api.VarFlags;
 import dollar.api.VarKey;
 import dollar.api.execution.DollarExecutor;
 import dollar.api.plugin.Plugins;
+import dollar.api.script.DollarParser;
 import dollar.api.script.ModuleResolver;
 import dollar.api.script.Source;
 import dollar.api.time.Scheduler;
 import dollar.api.types.DollarFactory;
 import dollar.api.var;
-import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.Builtins;
+import dollar.internal.runtime.script.Constants;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
-import dollar.internal.runtime.script.parser.OpDef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
@@ -49,7 +50,7 @@ import java.util.stream.Stream;
 import static dollar.api.DollarStatic.*;
 import static dollar.api.types.meta.MetaConstants.*;
 import static dollar.internal.runtime.script.DollarUtilFactory.util;
-import static dollar.internal.runtime.script.SourceNodeOptions.SCOPE_WITH_CLOSURE;
+import static dollar.internal.runtime.script.parser.SourceNodeOptions.SCOPE_WITH_CLOSURE;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.singletonList;
 
@@ -115,14 +116,14 @@ public final class Func {
                                      boolean readonly) {
         VarKey key = VarKey.of(variableName);
 
-        util().setVariable(util().currentScope(), key, value,
+        util().setVariable(util().scope(), key, value,
                            parser, token, constraint, constraintSource,
                            new VarFlags(readonly, false, false, pure, false, true));
 
         if (export) {
             parser.export(key, util().node(DEFINITION, "export-" + DEFINITION.name(),
                                            pure, SCOPE_WITH_CLOSURE, parser,
-                                           new SourceCode(util().currentScope(), token),
+                                           new SourceCode(util().scope(), token),
                                            null, singletonList(value), exportArgs -> value.$fix(2, false)));
         }
         return $void();
@@ -154,7 +155,7 @@ public final class Func {
 
     @NotNull
     static var errorFunc(@NotNull var v) {
-        return util().currentScope().addErrorHandler(v);
+        return util().scope().addErrorHandler(v);
     }
 
     @NotNull
@@ -163,7 +164,7 @@ public final class Func {
                          @Nullable var until,
                          @Nullable var unless,
                          var block) {
-        Scope scope = util().currentScope();
+        Scope scope = util().scope();
         Double duration = durationVar.toDouble();
         assert duration != null;
         Scheduler.schedule(i -> {
@@ -196,7 +197,7 @@ public final class Func {
         assert FOR_OP.validForPure(pure);
         return iterable.$each(i -> {
             return util().inSubScope(true, pure, "for-loop", newScope -> {
-                util().currentScope()
+                util().scope()
                         .set(VarKey.of(varName),
                              util().fix(i[0]),
                              null, null,
@@ -264,8 +265,8 @@ public final class Func {
         }
 
         return ModuleResolver
-                       .resolveModule(parts[0])
-                       .resolve(parts[1], util().currentScope(), parser)
+                       .resolveModuleScheme(parts[0])
+                       .retrieveModule(parts[1], util().scope(), parser)
                        .pipe($(paramMap))
                        .$fix(false);
 
@@ -274,7 +275,7 @@ public final class Func {
 
     @NotNull
     static var multiplyFunc(@NotNull var lhs, @NotNull var rhs) {
-        OpDef operation = lhs.meta(OPERATION);
+        Op operation = lhs.meta(OPERATION);
         if ((operation != null) && (operation.equals(BLOCK_OP) || operation.equals(LIST_OP) || operation.equals(MAP_OP))) {
             var newValue = lhs.$fixDeep();
             Long max = rhs.toLong();
@@ -300,7 +301,7 @@ public final class Func {
 
     @NotNull
     static var pipeFunc(@NotNull DollarParser parser, boolean pure, @NotNull Token token, @NotNull var rhs, @NotNull var lhs) {
-        util().currentScope().parameter(VarKey.ONE, lhs);
+        util().scope().parameter(VarKey.ONE, lhs);
         var rhsVal = rhs.$fix(false);
         if (FUNCTION_NAME_OP.name().equals(rhs.metaAttribute(OPERATION_NAME))) {
             return rhsVal;
@@ -314,7 +315,7 @@ public final class Func {
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
     static var printFunc(@NotNull DollarParser parser,
                          @NotNull Source segment,
-                         @NotNull OpDef command,
+                         @NotNull Op command,
                          @NotNull List<var> vars) {
         return util().node(command, false, parser, segment, vars, args -> {
             String outStr = vars.stream().map(var::toString).collect(Collectors.joining(""));
@@ -352,7 +353,7 @@ public final class Func {
                     return rhs.$fixDeep(false);
                 });
             } catch (RuntimeException e) {
-                return util().currentScope().handleError(e);
+                return util().scope().handleError(e);
             }
         }).orElse($null(Type._ANY));
     }
@@ -363,8 +364,8 @@ public final class Func {
                 i -> util().inSubScope(true, false,
                                        "subscribe-param", newScope -> {
                             final var it = util().fix(i[0]);
-                            util().currentScope().parameter(VarKey.ONE, it);
-                            util().currentScope().parameter(VarKey.IT, it);
+                            util().scope().parameter(VarKey.ONE, it);
+                            util().scope().parameter(VarKey.IT, it);
                             return util().fix(rhs);
                         }));
     }

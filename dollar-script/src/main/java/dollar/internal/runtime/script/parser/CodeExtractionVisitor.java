@@ -14,10 +14,11 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.parser;
 
 import dollar.api.DollarException;
-import dollar.internal.runtime.script.api.ParserOptions;
+import dollar.api.script.ParserOptions;
+import dollar.internal.runtime.script.parser.scope.ScriptScope;
 import org.jetbrains.annotations.NotNull;
 import org.pegdown.ast.AbbreviationNode;
 import org.pegdown.ast.AnchorLinkNode;

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.obj;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
@@ -29,7 +29,10 @@ import dollar.api.Variable;
 import dollar.api.types.AbstractDollar;
 import dollar.api.types.DollarFactory;
 import dollar.api.var;
+import dollar.internal.runtime.script.DollarUtilFactory;
+import dollar.internal.runtime.script.api.ScopeExecutable;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
+import dollar.internal.runtime.script.parser.scope.ScriptScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
@@ -254,9 +257,10 @@ public class DollarObject extends AbstractDollar {
                 variable.setValue(DollarStatic.$(value));
             }
         } else {
-            throw new DollarScriptException("Cannot update field " + key + " in class " + name + " all fields are immutable outside " +
-                                                    "of the " +
-                                                    "instance, use a member function to update the field.");
+            throw new DollarScriptException(
+                                                   "Cannot update field " + key + " in class " + name + " all fields are immutable outside " +
+                                                           "of the " +
+                                                           "instance, use a member function to update the field.");
         }
         return this;
     }
@@ -501,7 +505,7 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     private var inThisScope(@NotNull ScopeExecutable<var> exe) {
-        ScriptScope subScope = new ScriptScope(DollarUtilFactory.util().currentScope(), "this-" + name, false, true);
+        ScriptScope subScope = new ScriptScope(DollarUtilFactory.util().scope(), "this-" + name, false, true);
         DollarObject thisObject = new DollarObject(name, constructor, fields, true);
         subScope.set(VarKey.THIS, thisObject, null, null, new VarFlags(true, true, false, false, false, true));
         return DollarUtilFactory.util().inScope(true, subScope, exe);

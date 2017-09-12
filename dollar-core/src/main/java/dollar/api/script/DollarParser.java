@@ -14,12 +14,11 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script.api;
+package dollar.api.script;
 
 import dollar.api.Scope;
 import dollar.api.VarKey;
 import dollar.api.var;
-import dollar.internal.runtime.script.ScriptScope;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -28,16 +27,13 @@ import java.io.InputStream;
 public interface DollarParser {
 
 
-    @NotNull
-    ThreadLocal<DollarParser> parser = new ThreadLocal<>();
-
     void export(@NotNull VarKey name, @NotNull var export);
 
     @NotNull
     ParserOptions options();
 
     @NotNull
-    var parse(@NotNull ScriptScope scriptScope, @NotNull String source) throws Exception;
+    var parse(@NotNull Scope scope, @NotNull String source) throws Exception;
 
     @NotNull
     var parse(@NotNull File file, boolean parallel) throws Exception;

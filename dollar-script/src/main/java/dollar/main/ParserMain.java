@@ -19,11 +19,11 @@ package dollar.main;
 import com.beust.jcommander.JCommander;
 import dollar.api.Configuration;
 import dollar.api.DollarStatic;
-import dollar.internal.runtime.script.DollarExitError;
-import dollar.internal.runtime.script.DollarParserImpl;
+import dollar.api.script.DollarParser;
+import dollar.api.script.ParserOptions;
 import dollar.internal.runtime.script.ErrorHandlerFactory;
-import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.ParserOptions;
+import dollar.internal.runtime.script.api.exceptions.DollarExitError;
+import dollar.internal.runtime.script.parser.DollarParserImpl;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public final class ParserMain {
     private static final Logger log = LoggerFactory.getLogger("ParserMain");
 
 
-    public static void main(@NotNull String[] args) throws Throwable {
+    public static void main(@NotNull String[] args) {
 
         final ParserOptions options = new ParserOptions();
         JCommander jCommander = new JCommander(options);
@@ -69,13 +69,13 @@ public final class ParserMain {
         public ParserConfiguration(@NotNull ParserOptions options) {this.options = options;}
 
         @Override
-        public boolean debug() {
-            return options.isUserDebug();
+        public boolean colorHighlighting() {
+            return options.isColorHighlighting();
         }
 
         @Override
-        public boolean debugScope() {
-            return options.isDebugScope();
+        public boolean debug() {
+            return options.isUserDebug();
         }
 
         @Override
@@ -86,6 +86,16 @@ public final class ParserMain {
         @Override
         public boolean debugExecution() {
             return options.isDebugExecution();
+        }
+
+        @Override
+        public boolean debugParallel() {
+            return options.isDebugParallel();
+        }
+
+        @Override
+        public boolean debugScope() {
+            return options.isDebugScope();
         }
 
         @Override
@@ -111,16 +121,6 @@ public final class ParserMain {
         @Override
         public boolean wrapForMonitoring() {
             return options.isMonitor();
-        }
-
-        @Override
-        public boolean debugParallel() {
-            return options.isDebugParallel();
-        }
-
-        @Override
-        public boolean colorHighlighting() {
-            return options.isColorHighlighting();
         }
     }
 }

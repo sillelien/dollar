@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.parser.scope;
 
 import dollar.api.Scope;
 import org.jetbrains.annotations.NotNull;

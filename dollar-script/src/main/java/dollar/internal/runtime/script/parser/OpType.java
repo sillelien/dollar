@@ -14,12 +14,22 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.parser;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
-public interface HasKeyword {
-    @Nullable
-    String keyword();
+public enum OpType {
 
+    PREFIX("prefix"), POSTFIX("postfix"), BINARY("binary"), ASSIGNMENT("assignment"), CONTROL_FLOW("control"), OTHER(
+                                                                                                                            "other"), COLLECTION("collection"), RESERVED("reserved");
+
+    @NotNull
+    private final String humanName;
+
+    OpType(@NotNull String humanName) {this.humanName = humanName;}
+
+    @NotNull
+    public String humanName() {
+        return humanName;
+    }
 }

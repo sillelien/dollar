@@ -14,27 +14,34 @@
  *    limitations under the License.
  */
 
-package dollar.internal.runtime.script;
+package dollar.internal.runtime.script.parser;
 
 import com.google.common.io.ByteStreams;
 import dollar.api.DollarStatic;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.VarKey;
+import dollar.api.script.DollarParser;
+import dollar.api.script.ParserOptions;
 import dollar.api.script.Source;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.DollarRange;
 import dollar.api.var;
-import dollar.internal.runtime.script.api.DollarParser;
-import dollar.internal.runtime.script.api.ParserOptions;
+import dollar.internal.runtime.script.Builtins;
+import dollar.internal.runtime.script.ErrorHandlerFactory;
+import dollar.internal.runtime.script.api.Operator;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.operators.AssignmentOperator;
+import dollar.internal.runtime.script.operators.BinaryOp;
 import dollar.internal.runtime.script.operators.CollectOperator;
 import dollar.internal.runtime.script.operators.DefinitionOperator;
 import dollar.internal.runtime.script.operators.ParameterOperator;
 import dollar.internal.runtime.script.operators.PureDefinitionOperator;
+import dollar.internal.runtime.script.operators.UnaryOp;
 import dollar.internal.runtime.script.operators.WindowOperator;
-import dollar.internal.runtime.script.parser.OpDef;
+import dollar.internal.runtime.script.parser.scope.ClassScopeFactory;
+import dollar.internal.runtime.script.parser.scope.FileScope;
+import dollar.internal.runtime.script.parser.scope.ScriptScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.OperatorTable;
@@ -57,6 +64,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -69,11 +77,11 @@ import static dollar.api.DollarStatic.$;
 import static dollar.api.DollarStatic.$void;
 import static dollar.api.scripting.ScriptingSupport.compile;
 import static dollar.api.types.meta.MetaConstants.*;
-import static dollar.internal.runtime.script.DollarLexer.*;
 import static dollar.internal.runtime.script.DollarUtilFactory.util;
-import static dollar.internal.runtime.script.Func.*;
-import static dollar.internal.runtime.script.OperatorPriority.EQ_PRIORITY;
-import static dollar.internal.runtime.script.SourceNodeOptions.NO_SCOPE;
+import static dollar.internal.runtime.script.api.OperatorPriority.EQ_PRIORITY;
+import static dollar.internal.runtime.script.parser.DollarLexer.*;
+import static dollar.internal.runtime.script.parser.Func.*;
+import static dollar.internal.runtime.script.parser.SourceNodeOptions.NO_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -136,7 +144,7 @@ public class DollarParserImpl implements DollarParser {
                      IDENTIFIER.between(OP(LT), OP(GT)).optional(null),//2
                      ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN)).optional(null).token().map((Token token) -> {
                          if (token.value() != null) {
-                             ((var) token.value()).meta(CONSTRAINT_SOURCE, new SourceCode(util().currentScope(), token));
+                             ((var) token.value()).meta(CONSTRAINT_SOURCE, new SourceCode(util().scope(), token));
                              return token.value();
                          } else {
                              return null;
@@ -224,12 +232,12 @@ public class DollarParserImpl implements DollarParser {
                            return util().node(CLASS_OP, "class-" + objects[0],
                                               false, this, token, in,
                                               i -> {
-                                                  ClassScopeFactory factory = new ClassScopeFactory(util().currentScope(),
+                                                  ClassScopeFactory factory = new ClassScopeFactory(util().scope(),
                                                                                                     objects[0].toString(),
                                                                                                     (List<var>) objects[1], false,
                                                                                                     false);
 
-                                                  util().currentScope().registerClass(objects[0].toString(), factory);
+                                                  util().scope().registerClass(objects[0].toString(), factory);
                                                   return $void();
                                               });
                        });
@@ -257,7 +265,7 @@ public class DollarParserImpl implements DollarParser {
                         IDENTIFIER.between(OP(LT), OP(GT)).optional(null),//2
                         (OP(DOLLAR).next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))).or(IDENTIFIER))
                                 .token().map((Token token) -> {
-                            ((var) token.value()).meta(CONSTRAINT_SOURCE, new SourceCode(util().currentScope(), token));
+                            ((var) token.value()).meta(CONSTRAINT_SOURCE, new SourceCode(util().scope(), token));
                             return token.value();
                         }), //3
                         OP(DEFINITION) //4
@@ -324,19 +332,20 @@ public class DollarParserImpl implements DollarParser {
 
     @Override
     @NotNull
-    public var parse(@NotNull ScriptScope scope, @NotNull String source) throws Exception {
-        DollarParser.parser.set(this);
+    public var parse(@NotNull Scope scope, @NotNull String source) {
+        DollarStatic.context().parser(this);
         var v = util().inScope(false, scope, newScope -> {
-            DollarStatic.context().setClassLoader(classLoader);
+            DollarStatic.context().classLoader(classLoader);
             Parser<?> parser = script();
             try {
                 parser.from(TOKENIZER, IGNORED).parse(source);
             } catch (RuntimeException e) {
-                ErrorHandlerFactory.instance().handleTopLevel(e, null,
-                                                              (file != null) ? new File(file) : null);
+                ErrorHandlerFactory.instance().handleTopLevel(e, null, (file != null) ? new File(file) : null);
 
             }
-            return $(exports);
+            HashMap<var, var> exportMap = new HashMap<>();
+            exports.forEach((varKey, var) -> exportMap.put(DollarFactory.fromStringValue(varKey.asString()), var));
+            return $(exportMap);
         });
         if (v != null) {
             return v;
@@ -581,7 +590,7 @@ public class DollarParserImpl implements DollarParser {
                                                  this, token, Arrays.asList((var) token.value()),
                                                  i -> {
                                                      log.debug("Executing in background ...");
-                                                     return executor.forkAndReturnId(new SourceCode(util().currentScope(), token),
+                                                     return executor.forkAndReturnId(new SourceCode(util().scope(), token),
                                                                                      (var) token.value(), in -> in.$fixDeep(false));
                                                  })
                        );
@@ -611,7 +620,7 @@ public class DollarParserImpl implements DollarParser {
     @NotNull
     private OperatorTable<var> infixl(boolean pure,
                                       @NotNull OperatorTable<var> table,
-                                      @NotNull OpDef operator,
+                                      @NotNull Op operator,
                                       @NotNull BiFunction<var, var, var> func) {
         return table.infixl(op(operator, new BinaryOp(this, operator, func, pure)), operator.priority());
     }
@@ -619,7 +628,7 @@ public class DollarParserImpl implements DollarParser {
     @NotNull
     private OperatorTable<var> infixlReactive(boolean pure,
                                               @NotNull OperatorTable<var> table,
-                                              @NotNull OpDef operator,
+                                              @NotNull Op operator,
                                               @NotNull BiFunction<var, var, var> f) {
         return table.infixl(op(operator, new BinaryOp(false, operator, this, f, pure)),
                             operator.priority());
@@ -628,7 +637,7 @@ public class DollarParserImpl implements DollarParser {
     @NotNull
     private OperatorTable<var> infixlUnReactive(boolean pure,
                                                 @NotNull OperatorTable<var> table,
-                                                @NotNull OpDef operator,
+                                                @NotNull Op operator,
                                                 @NotNull BiFunction<var, var, var> f) {
         return table.infixl(op(operator, new BinaryOp(true, operator, this, f, pure)),
                             operator.priority());
@@ -719,8 +728,9 @@ public class DollarParserImpl implements DollarParser {
                      parameters.optional(null)).token()
                        .map(token -> {
                            Object[] objects = (Object[]) token.value();
-                           return util().node(MODULE_OP, false, this, token, emptyList(),
-                                              i -> moduleFunc(this, ((var) objects[1]).$S(), (Iterable<var>) objects[2]));
+                           return util().node(MODULE_OP, false, this,
+                                              token, emptyList(),
+                                              i -> moduleFunc(this, objects[1].toString(), (Iterable<var>) objects[2]));
 
                        });
 
@@ -752,12 +762,12 @@ public class DollarParserImpl implements DollarParser {
                                            String name = objects[0].toString();
                                            return util().node(NEW_OP, "new-" + objects[0], pure, this, token,
                                                               Arrays.asList((var) objects[0]),
-                                                              i -> util().currentScope().dollarClassByName(name).instance(
+                                                              i -> util().scope().dollarClassByName(name).instance(
                                                                       (List<var>) objects[1]));
                                        }));
     }
 
-    private <T> Parser<T> op(@NotNull OpDef def, @NotNull T value) {
+    private <T> Parser<T> op(@NotNull Op def, @NotNull T value) {
         return OP(def).token().map(new SourceMapper<>(value));
 
     }
@@ -822,18 +832,18 @@ public class DollarParserImpl implements DollarParser {
     @NotNull
     private OperatorTable<var> postfix(boolean pure,
                                        @NotNull OperatorTable<var> table,
-                                       @NotNull OpDef operator,
+                                       @NotNull Op operator,
                                        @NotNull BiFunction<var, Source, var> f2) {
 
         OperatorTable<var> result = table;
         if (operator.symbol() != null) {
             result = result.postfix(DollarLexer.OPERATORS.token(operator.symbol()).token().map(
-                    new SourceMapper<>(new DollarUnaryOperator(this, operator, f2, pure))),
+                    new SourceMapper<>(new UnaryOp(this, operator, f2, pure))),
                                     operator.priority());
         }
         if (operator.keyword() != null) {
             result = result.prefix(KEYWORDS.token(operator.keyword()).token().map(
-                    new SourceMapper<>(new DollarUnaryOperator(this, operator, f2, pure))), operator.priority());
+                    new SourceMapper<>(new UnaryOp(this, operator, f2, pure))), operator.priority());
         }
         return result;
     }
@@ -841,17 +851,17 @@ public class DollarParserImpl implements DollarParser {
     @NotNull
     private OperatorTable<var> prefix(boolean pure,
                                       @NotNull OperatorTable<var> table,
-                                      @NotNull OpDef operator,
+                                      @NotNull Op operator,
                                       @NotNull BiFunction<var, Source, var> f) {
-        return table.prefix(op(operator, new DollarUnaryOperator(this, operator, f, pure)), operator.priority());
+        return table.prefix(op(operator, new UnaryOp(this, operator, f, pure)), operator.priority());
     }
 
     @NotNull
     private OperatorTable<var> prefixUnReactive(boolean pure,
                                                 @NotNull OperatorTable<var> table,
-                                                @NotNull OpDef operator,
+                                                @NotNull Op operator,
                                                 @NotNull BiFunction<var, Source, var> f) {
-        return table.prefix(op(operator, new DollarUnaryOperator(true, f, operator, this, pure)), operator.priority());
+        return table.prefix(op(operator, new UnaryOp(true, f, operator, this, pure)), operator.priority());
     }
 
 //    private Parser<var> printExpression(@NotNull Parser.Reference<var> ref, boolean pure) {
@@ -860,7 +870,7 @@ public class DollarParserImpl implements DollarParser {
 //                     ref.lazy().many1()
 //        ).followedBy(or(SEMICOLON_TERMINATOR, COMMA_OR_NEWLINE_TERMINATOR).peek())
 //                       .token()
-//                       .map(token -> printFunc(this, new SourceCode(token), (OpDef) ((Object[]) token.value())[0],
+//                       .map(token -> printFunc(this, new SourceCode(token), (Op) ((Object[]) token.value())[0],
 //                                               (List<var>) ((Object[]) token.value())[1]));
 //    }
 
@@ -874,7 +884,7 @@ public class DollarParserImpl implements DollarParser {
                         OP(DOLLAR).next(ref.lazy().between(OP(LEFT_PAREN), OP(RIGHT_PAREN))).or(IDENTIFIER).token().map(
                                 (Token token) -> {
                                     ((var) token.value()).meta(CONSTRAINT_SOURCE,
-                                                               new SourceCode(util().currentScope(), token));
+                                                               new SourceCode(util().scope(), token));
                                     return token.value();
                                 }), //2
                         OP(DEFINITION),//3
@@ -919,7 +929,7 @@ public class DollarParserImpl implements DollarParser {
                                                               throw new DollarScriptException("Cannot create an open range with " +
                                                                                                       "identical upper and lower " +
                                                                                                       "bounds", new SourceCode
-                                                                                                                        (util().currentScope(),
+                                                                                                                        (util().scope(),
                                                                                                                          token));
                                                           } else {
                                                               return DollarFactory.wrap(
@@ -952,22 +962,23 @@ public class DollarParserImpl implements DollarParser {
     }
 
     @NotNull
-    private Parser<var> script() throws Exception {
+    private Parser<var> script() {
         log.debug("Starting Parse Phase");
 
 
         Parser.Reference<var> ref = Parser.newReference();
 //        Parser<var> block = block(ref.lazy(), false).between(OP_NL(LEFT_BRACE), NL_OP(RIGHT_BRACE));
         Parser<var> expression = expression(false);
-        Parser<var> parser = (TERMINATOR_SYMBOL.optional(null)).next(expression.followedBy(
-                TERMINATOR_SYMBOL).many1()).map(expressions -> {
-            log.debug("Ended Parse Phase");
-            log.debug("Starting Runtime Phase");
-            var resultVar = Func.blockFunc(Integer.MAX_VALUE, expressions);
-            var fixedResult = resultVar.$fixDeep(false);
-            log.debug("Ended Runtime Phase");
-            return fixedResult;
-        });
+        Parser<var> parser = (TERMINATOR_SYMBOL.optional(null))
+                                     .next(expression.followedBy(TERMINATOR_SYMBOL).many1())
+                                     .map(expressions -> {
+                                         log.debug("Ended Parse Phase");
+                                         log.debug("Starting Runtime Phase");
+                                         var resultVar = Func.blockFunc(Integer.MAX_VALUE, expressions);
+                                         var fixedResult = resultVar.$fixDeep(false);
+                                         log.debug("Ended Runtime Phase");
+                                         return fixedResult;
+                                     });
         ref.set(parser);
         return parser;
 
@@ -982,7 +993,7 @@ public class DollarParserImpl implements DollarParser {
                            return util().node(SCRIPT_OP, pure,
                                               this, token, singletonList($void()),
                                               i -> compile(String.valueOf(objects[0]), String.valueOf(objects[1]),
-                                                           util().currentScope()));
+                                                           util().scope()));
                             }
                        );
     }
@@ -1012,7 +1023,7 @@ public class DollarParserImpl implements DollarParser {
                            var subscript = (var) objects[1];
 
                            return lhs -> {
-                               SourceCode source = new SourceCode(util().currentScope(), token);
+                               SourceCode source = new SourceCode(util().scope(), token);
                                if (subscript == null) {
                                    return util().reactiveNode(SUBSCRIPT_OP, SUBSCRIPT_OP.name() + "-read", pure, NO_SCOPE, this,
                                                               source,
@@ -1049,7 +1060,7 @@ public class DollarParserImpl implements DollarParser {
                                                           } else {
                                                               final var variable = util().variableNode(pure, VarKey.of(unitName),
                                                                                                        token, this);
-                                                              util().currentScope().parameter(VarKey.ONE, quantity);
+                                                              util().scope().parameter(VarKey.ONE, quantity);
                                                               return util().fix(variable);
                                                           }
                                                       });
@@ -1075,7 +1086,7 @@ public class DollarParserImpl implements DollarParser {
                                                                                   this).$fix(2,
                                                                                              false);
                             return util().node(VAR_USAGE_OP, "dynamic-var-name", pure, NO_SCOPE, this,
-                                               new SourceCode(util().currentScope(), token), null,
+                                               new SourceCode(util().scope(), token), null,
                                                singletonList((var) token.value()), callable);
                         }),
                 OP(DOLLAR)
@@ -1185,7 +1196,7 @@ public class DollarParserImpl implements DollarParser {
         @Override
         public T apply(@NotNull Token token) {
             if (value instanceof Operator) {
-                ((Operator) value).setSource(new SourceCode(util().currentScope(), token));
+                ((Operator) value).setSource(new SourceCode(util().scope(), token));
             }
             return value;
         }

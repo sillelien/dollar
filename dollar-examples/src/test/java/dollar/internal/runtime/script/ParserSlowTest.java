@@ -18,12 +18,13 @@ package dollar.internal.runtime.script;
 
 import com.google.common.io.CharStreams;
 import dollar.api.DollarStatic;
-import dollar.internal.runtime.script.api.ParserOptions;
+import dollar.api.script.ParserOptions;
+import dollar.internal.runtime.script.parser.DollarParserImpl;
 import dollar.internal.runtime.script.parser.Symbols;
-import dollar.test.CircleCiParallelRule;
 import org.jetbrains.annotations.NotNull;
-import org.junit.ClassRule;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -44,8 +45,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class ParserSlowTest {
 
-    @ClassRule
-    public static final CircleCiParallelRule className = new CircleCiParallelRule();
 
     @NotNull
     private static final String[] files = {
@@ -54,6 +53,16 @@ public class ParserSlowTest {
     @NotNull
     private final ParserOptions options = new ParserOptions();
     private boolean parallel;
+
+    @AfterAll
+    public static void after() {
+        DollarStatic.getConfig().failFast(false);
+    }
+
+    @BeforeAll
+    public static void before() {
+        DollarStatic.getConfig().failFast(true);
+    }
 
     public static Stream<String> fileNames() {
         return Stream.of(files);
@@ -96,12 +105,12 @@ public class ParserSlowTest {
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
 
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
 
     }
 

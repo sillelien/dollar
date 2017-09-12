@@ -20,12 +20,12 @@ import dollar.api.Scope;
 import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.VarKey;
+import dollar.api.script.DollarParser;
 import dollar.api.var;
 import dollar.internal.runtime.script.DollarUtilFactory;
-import dollar.internal.runtime.script.Func;
 import dollar.internal.runtime.script.SimpleSubType;
-import dollar.internal.runtime.script.SourceCode;
-import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.parser.Func;
+import dollar.internal.runtime.script.parser.SourceCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
@@ -38,8 +38,8 @@ import java.util.function.Function;
 
 import static dollar.api.DollarStatic.$;
 import static dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
-import static dollar.internal.runtime.script.DollarUtil.MIN_PROBABILITY;
-import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
+import static dollar.internal.runtime.script.api.DollarUtil.MIN_PROBABILITY;
+import static dollar.internal.runtime.script.parser.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.DEFINITION;
 
 public class DefinitionOperator implements Function<Token, Function<? super var, ? extends var>> {
@@ -60,7 +60,7 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
     @Nullable
     public Function<? super var, ? extends var> apply(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
-        Scope scope = DollarUtilFactory.util().currentScope();
+        Scope scope = DollarUtilFactory.util().scope();
 
         final Object exportObj = objects[1];
 
@@ -95,7 +95,7 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
             if (typeConstraintObj != null) {
                 Type type = Type.of(typeConstraintObj);
                 constraint = DollarUtilFactory.util().node(DEFINITION, "definition-constraint", pure, NEW_SCOPE, parser,
-                                                           new SourceCode(DollarUtilFactory.util().currentScope(), token), null,
+                                                           new SourceCode(DollarUtilFactory.util().scope(), token), null,
                                                            new ArrayList<>(),
                                                            i -> $(scope.parameter(VarKey.IT).getValue().is(type)));
                 DollarUtilFactory.util().checkLearntType(token, type, rhs, MIN_PROBABILITY);

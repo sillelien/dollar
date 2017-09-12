@@ -21,12 +21,12 @@ import com.google.common.cache.CacheBuilder;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.VarKey;
+import dollar.api.script.DollarParser;
 import dollar.api.time.Scheduler;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.meta.MetaConstants;
 import dollar.api.var;
-import dollar.internal.runtime.script.Func;
-import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.parser.Func;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
@@ -84,12 +84,12 @@ public class WindowOperator implements Function<Token, var> {
 //                        Scope scopeForVar = getScopeForVar(pure, varName, false, null);
 //
 //                        if (scopeForVar == null) {
-//                            throw new VariableNotFoundException(varName, currentScope());
+//                            throw new VariableNotFoundException(varName, scope());
 //                        }
 //
                                Double duration = period.toDouble();
                                assert duration != null;
-                               Scope scope = util().currentScope();
+                               Scope scope = util().scope();
                                NotifyListener notifyListener = new NotifyListener(unless, until, block,
                                                                                   (long) (over.toDouble() * Func
                                                                                                                     .ONE_DAY));
@@ -170,7 +170,7 @@ public class WindowOperator implements Function<Token, var> {
 
         @NotNull
         @Override
-        public var pipe(var... in2) throws Exception {
+        public var pipe(var... in2) {
             var value = in2[0].$fixDeep();
             count.incrementAndGet();
             log.debug("Count is {} value is {} size is {}", count.get(), value, collected.size());

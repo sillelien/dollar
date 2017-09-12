@@ -1049,7 +1049,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
 
     @Nullable
     default Source source() {
-        return Source.source.get();
+        return DollarStatic.context().source();
     }
 
     /**

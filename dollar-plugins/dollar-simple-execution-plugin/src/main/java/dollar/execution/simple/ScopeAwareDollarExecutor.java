@@ -16,15 +16,15 @@
 
 package dollar.execution.simple;
 
+import dollar.api.DollarStatic;
 import dollar.api.Scope;
 import dollar.api.VarFlags;
 import dollar.api.VarKey;
 import dollar.api.execution.DollarExecutor;
+import dollar.api.script.DollarParser;
 import dollar.api.script.Source;
 import dollar.api.types.DollarFactory;
 import dollar.api.var;
-import dollar.internal.runtime.script.DollarUtilFactory;
-import dollar.internal.runtime.script.api.DollarParser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -42,6 +42,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import static dollar.api.DollarStatic.getConfig;
+import static dollar.internal.runtime.script.DollarUtilFactory.util;
 import static dollar.internal.runtime.script.parser.Symbols.FORK;
 import static java.lang.Runtime.getRuntime;
 import static java.util.concurrent.Executors.newFixedThreadPool;
@@ -109,12 +110,12 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
     @Override
     public var fork(@NotNull Source source, @NotNull var in, @NotNull Function<var, var> call) {
         Future<var> varFuture = submit(() -> call.apply(in));
-        return DollarUtilFactory.util().node(FORK, false, DollarParser.parser.get(), source,
-                                             Arrays.asList(in),
-                                             j -> {
-                                                 log.debug("Waiting for future ...");
-                                                 return varFuture.get();
-                                             }
+        return util().node(FORK, false, DollarStatic.context().parser(), source,
+                           Arrays.asList(in),
+                           j -> {
+                               log.debug("Waiting for future ...");
+                               return varFuture.get();
+                           }
         );
     }
 
@@ -124,14 +125,14 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
         Future<var> varFuture = submit(() -> call.apply(in));
         VarKey id = VarKey.random();
         log.debug("Future obtained, returning future node");
-        DollarUtilFactory.util().currentScope().set(id,
-                                                    DollarUtilFactory.util().node(FORK, false, DollarParser.parser.get(), source,
-                                                                                  Arrays.asList(in),
-                                                                                  j -> {
-                                                                                      log.debug("Waiting for future ...");
-                                                                                      return varFuture.get();
-                                                                                  }
-                                                    ), null, null, new VarFlags(true, true, false, false, false, true));
+        util().scope().set(id,
+                           util().node(FORK, false, DollarStatic.context().parser(), source,
+                                       Arrays.asList(in),
+                                       j -> {
+                                           log.debug("Waiting for future ...");
+                                           return varFuture.get();
+                                       }
+                           ), null, null, new VarFlags(true, true, false, false, false, true));
         return DollarFactory.fromStringValue(id.asString());
     }
 
@@ -182,20 +183,20 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
     }
 
     private Runnable wrap(@NotNull Runnable runnable) {
-        Scope scope = DollarUtilFactory.util().currentScope();
-        DollarParser parser = DollarParser.parser.get();
-        return () -> DollarUtilFactory.util().inScope(true, scope, newScope -> {
-            DollarParser.parser.set(parser);
+        Scope scope = util().scope();
+        DollarParser parser = DollarStatic.context().parser();
+        return () -> util().inScope(true, scope, newScope -> {
+            DollarStatic.context().parser(parser);
             runnable.run();
             return null;
         });
     }
 
     private <T> Callable<T> wrap(@NotNull Callable<T> callable) {
-        Scope scope = DollarUtilFactory.util().currentScope();
-        DollarParser parser = DollarParser.parser.get();
-        return () -> DollarUtilFactory.util().inScope(true, scope, newScope -> {
-            DollarParser.parser.set(parser);
+        Scope scope = util().scope();
+        DollarParser parser = DollarStatic.context().parser();
+        return () -> util().inScope(true, scope, newScope -> {
+            DollarStatic.context().parser(parser);
             return callable.call();
         });
     }

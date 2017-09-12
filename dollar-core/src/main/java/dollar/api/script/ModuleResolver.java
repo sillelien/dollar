@@ -26,7 +26,7 @@ import java.util.ServiceLoader;
 public interface ModuleResolver extends ExtensionPoint<ModuleResolver> {
 
     @NotNull
-    static ModuleResolver resolveModule(@NotNull String scheme) {
+    static ModuleResolver resolveModuleScheme(@NotNull String scheme) {
         final ServiceLoader<ModuleResolver> loader = ServiceLoader.load(ModuleResolver.class);
         for (ModuleResolver piper : loader) {
             if (piper.getScheme().equals(scheme)) {
@@ -40,6 +40,5 @@ public interface ModuleResolver extends ExtensionPoint<ModuleResolver> {
     @NotNull
     String getScheme();
 
-    @NotNull
-    <T, P> Pipeable resolve(@NotNull String uriWithoutScheme, @NotNull T scope, @NotNull P parser) throws Exception;
+    @NotNull <T, P> Pipeable retrieveModule(@NotNull String uriWithoutScheme, @NotNull T scope, @NotNull P parser) throws Exception;
 }

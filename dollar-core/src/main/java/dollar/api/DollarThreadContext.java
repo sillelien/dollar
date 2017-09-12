@@ -18,10 +18,13 @@ package dollar.api;
 
 import dollar.api.monitor.DollarMonitor;
 import dollar.api.plugin.Plugins;
+import dollar.api.script.DollarParser;
+import dollar.api.script.Source;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,15 +32,19 @@ public class DollarThreadContext {
 
 
     @NotNull
+    private ClassLoader classLoader = DollarThreadContext.class.getClassLoader();
+    @NotNull
     private List<String> labels = new ArrayList<>();
     @NotNull
     private DollarMonitor monitor = Plugins.newInstance(DollarMonitor.class);
     @Nullable
+    private DollarParser parser;
+    @Nullable
     private var passValue;
+    @Nullable
+    private Source source;
     @NotNull
     private String threadKey = UUID.randomUUID().toString();
-    @NotNull
-    private ClassLoader classLoader = DollarThreadContext.class.getClassLoader();
 
     private DollarThreadContext(@NotNull List<String> labels, @NotNull DollarMonitor monitor, @Nullable var passValue,
                                 @NotNull String threadKey) {
@@ -61,50 +68,55 @@ public class DollarThreadContext {
         return new DollarThreadContext(new ArrayList<>(labels), monitor, passValue, threadKey + ":" + s);
     }
 
+
     @NotNull
-    public ClassLoader getClassLoader() {
+    public ClassLoader classLoader() {
         return classLoader;
     }
 
-    public void setClassLoader(@NotNull ClassLoader classLoader) {
+    public void classLoader(@NotNull ClassLoader classLoader) {
         this.classLoader = classLoader;
     }
 
+
     @NotNull
-    public List<String> getLabels() {
-        return labels;
+    public List<String> labels() {
+        return Collections.unmodifiableList(labels);
     }
 
-    public void setLabels(@NotNull List<String> labels) {
+    public void labels(@NotNull List<String> labels) {
         this.labels = labels;
     }
 
+
     @NotNull
-    public DollarMonitor getMonitor() {
+    public DollarMonitor monitor() {
         return monitor;
     }
 
-    public void setMonitor(@NotNull DollarMonitor monitor) {
+    public void monitor(@NotNull DollarMonitor monitor) {
         this.monitor = monitor;
     }
 
+
+    public @Nullable DollarParser parser() {
+        return parser;
+    }
+
+    public void parser(@NotNull DollarParser parser) {
+        this.parser = parser;
+    }
+
+
     @Nullable
-    public var getPassValue() {
+    public var passValue() {
         return passValue;
     }
 
-    public void setPassValue(@NotNull var passValue) {
+    public void passValue(@NotNull var passValue) {
         this.passValue = passValue;
     }
 
-    @NotNull
-    public String getThreadKey() {
-        return threadKey;
-    }
-
-    public void setThreadKey(@NotNull String threadKey) {
-        this.threadKey = threadKey;
-    }
 
     public void popLabel(@NotNull String label) {
         String removedLabel = labels.remove(0);
@@ -115,5 +127,23 @@ public class DollarThreadContext {
 
     public void pushLabel(@NotNull String label) {
         labels.add(label);
+    }
+
+
+    public @Nullable Source source() {
+        return source;
+    }
+
+    public void source(@NotNull Source source) {
+        this.source = source;
+    }
+
+    @NotNull
+    public String threadKey() {
+        return threadKey;
+    }
+
+    public void threadKey(@NotNull String threadKey) {
+        this.threadKey = threadKey;
     }
 }

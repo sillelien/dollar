@@ -25,16 +25,23 @@ import dollar.api.TypePrediction;
 import dollar.api.VarFlags;
 import dollar.api.VarKey;
 import dollar.api.Variable;
+import dollar.api.script.DollarParser;
 import dollar.api.script.Source;
 import dollar.api.types.DollarFactory;
 import dollar.api.types.meta.MetaConstants;
 import dollar.api.var;
-import dollar.internal.runtime.script.api.DollarParser;
+import dollar.internal.runtime.script.api.DollarUtil;
+import dollar.internal.runtime.script.api.ScopeExecutable;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.api.exceptions.PureFunctionException;
 import dollar.internal.runtime.script.api.exceptions.VariableNotFoundException;
-import dollar.internal.runtime.script.parser.OpDef;
+import dollar.internal.runtime.script.parser.Op;
+import dollar.internal.runtime.script.parser.SourceCode;
+import dollar.internal.runtime.script.parser.SourceNode;
+import dollar.internal.runtime.script.parser.SourceNodeOptions;
+import dollar.internal.runtime.script.parser.scope.PureScope;
+import dollar.internal.runtime.script.parser.scope.ScriptScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
@@ -51,7 +58,7 @@ import java.util.UUID;
 
 import static dollar.api.DollarStatic.*;
 import static dollar.api.types.meta.MetaConstants.VARIABLE;
-import static dollar.internal.runtime.script.DollarParserImpl.NAMED_PARAMETER_META_ATTR;
+import static dollar.internal.runtime.script.parser.DollarParserImpl.NAMED_PARAMETER_META_ATTR;
 import static dollar.internal.runtime.script.parser.Symbols.VAR_USAGE_OP;
 
 public final class DollarUtilFactory implements DollarUtil {
@@ -92,7 +99,7 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     public void addScope(boolean runtime, @NotNull Scope scope) {
-        boolean newScope = scopes.get().isEmpty() || !scope.equals(currentScope());
+        boolean newScope = scopes.get().isEmpty() || !scope.equals(scope());
         scopes.get().add(scope);
         if (DollarStatic.getConfig().debugScope()) {
             log.info("{}{}BEGIN {}", indent(scopes.get().size() - 1), runtime ? "**** " : "", scope);
@@ -105,16 +112,17 @@ public final class DollarUtilFactory implements DollarUtil {
         final TypePrediction prediction = rhs.predictType();
         if ((type != null) && (prediction != null)) {
             final Double probability = prediction.probability(type);
-            log.info("Predicted " + prediction.probableType() + " at " + (new SourceCode(currentScope(),
+            log.info("Predicted " + prediction.probableType() + " at " + (new SourceCode(scope(),
                                                                                          token)).getShortSourceMessage());
             if ((probability < threshold) && !prediction.empty()) {
                 log.warn("Type assertion may fail, expected {} most likely type is {} ({}%) at {}", type,
                          prediction.probableType(),
                          (int) (prediction.probability(prediction.probableType()) * 100),
-                         new SourceCode(currentScope(), token).getSourceMessage()
+                         new SourceCode(scope(), token).getSourceMessage()
                 );
                 if (getConfig().failFast()) {
-                    throw new DollarScriptException("Type prediction failed, was expecting " + type + " but most likely type is " + prediction.probableType() + " if this prediction is wrong please add an explicit cast (using 'as " + type.name() + "')");
+                    throw new DollarScriptException(
+                                                           "Type prediction failed, was expecting " + type + " but most likely type is " + prediction.probableType() + " if this prediction is wrong please add an explicit cast (using 'as " + type.name() + "')");
                 }
             }
         }
@@ -149,12 +157,6 @@ public final class DollarUtilFactory implements DollarUtil {
     @NotNull
     public String createId(@NotNull String operation) {
         return operation + "-" + UUID.randomUUID();
-    }
-
-    @Override
-    @NotNull
-    public Scope currentScope() {
-        return scopes.get().get(scopes.get().size() - 1);
     }
 
     @Override
@@ -199,7 +201,7 @@ public final class DollarUtilFactory implements DollarUtil {
     @Override
     @NotNull
     public DollarParser getParser() {
-        return DollarParser.parser.get();
+        return DollarStatic.context().parser();
     }
 
     @Override
@@ -221,7 +223,7 @@ public final class DollarUtilFactory implements DollarUtil {
                                 @Nullable Scope initialScope) {
 
         if (initialScope == null) {
-            initialScope = currentScope();
+            initialScope = scope();
         }
         if (getConfig().debugScope()) {
             log.info("{} {} in {} scopes ", highlight("LOOKUP " + key, ANSI_CYAN), initialScope, scopes.get().size());
@@ -363,7 +365,7 @@ public final class DollarUtilFactory implements DollarUtil {
     @Nullable
     public <T> T inSubScope(boolean runtime, boolean pure, @NotNull String scopeName,
                             @NotNull ScopeExecutable<T> r) {
-        return inScope(runtime, currentScope(), pure, scopeName, r);
+        return inScope(runtime, scope(), pure, scopeName, r);
     }
 
     @Override
@@ -376,7 +378,7 @@ public final class DollarUtilFactory implements DollarUtil {
     }
 
     @Override
-    public var node(@NotNull OpDef operation,
+    public var node(@NotNull Op operation,
                     @NotNull String name,
                     boolean pure,
                     @NotNull SourceNodeOptions sourceNodeOptions,
@@ -406,7 +408,7 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public var node(@NotNull OpDef operation,
+    public var node(@NotNull Op operation,
                     boolean pure,
                     @NotNull DollarParser parser,
                     @NotNull Source source,
@@ -417,19 +419,19 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public var node(@NotNull OpDef operation,
+    public var node(@NotNull Op operation,
                     boolean pure,
                     @NotNull DollarParser parser,
                     @NotNull Token token,
                     @NotNull List<var> inputs,
                     @NotNull Pipeable callable) {
         return node(operation, operation.name(), pure, operation.nodeOptions(), parser,
-                    new SourceCode(currentScope(), token), null, inputs, callable);
+                    new SourceCode(scope(), token), null, inputs, callable);
     }
 
     @Override
     @NotNull
-    public var node(@NotNull OpDef operation,
+    public var node(@NotNull Op operation,
                     @NotNull String name,
                     boolean pure,
                     @NotNull DollarParser parser,
@@ -437,7 +439,7 @@ public final class DollarUtilFactory implements DollarUtil {
                     @NotNull List<var> inputs,
                     @NotNull Pipeable callable) {
         return node(operation, name, pure, operation.nodeOptions(), parser,
-                    new SourceCode(currentScope(), token), null, inputs, callable);
+                    new SourceCode(scope(), token), null, inputs, callable);
     }
 
     @Override
@@ -460,7 +462,7 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public var reactiveNode(@NotNull OpDef operation, @NotNull String name,
+    public var reactiveNode(@NotNull Op operation, @NotNull String name,
                             boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
                             @NotNull DollarParser parser,
                             @NotNull Source source,
@@ -479,7 +481,7 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public var reactiveNode(@NotNull OpDef operation,
+    public var reactiveNode(@NotNull Op operation,
                             boolean pure,
                             @NotNull Token token,
                             @NotNull var lhs,
@@ -487,7 +489,7 @@ public final class DollarUtilFactory implements DollarUtil {
                             @NotNull DollarParser parser,
                             @NotNull Pipeable callable) {
         return reactiveNode(operation, operation.name(), pure, operation.nodeOptions(), parser,
-                            new SourceCode(currentScope(),
+                            new SourceCode(scope(),
                                            token), lhs,
                             rhs, callable);
 
@@ -495,7 +497,7 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public var reactiveNode(@NotNull OpDef operation,
+    public var reactiveNode(@NotNull Op operation,
                             @NotNull String name,
                             boolean pure,
                             @NotNull Token token,
@@ -504,7 +506,7 @@ public final class DollarUtilFactory implements DollarUtil {
                             @NotNull DollarParser parser,
                             @NotNull Pipeable callable) {
         return reactiveNode(operation, name, pure, operation.nodeOptions(), parser,
-                            new SourceCode(currentScope(),
+                            new SourceCode(scope(),
                                            token), lhs,
                             rhs, callable);
 
@@ -512,7 +514,7 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public var reactiveNode(@NotNull OpDef operation,
+    public var reactiveNode(@NotNull Op operation,
                             boolean pure,
                             @NotNull DollarParser parser, @NotNull Source source,
                             @NotNull var lhs,
@@ -525,20 +527,20 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public var reactiveNode(@NotNull OpDef operation,
+    public var reactiveNode(@NotNull Op operation,
                             boolean pure,
                             @NotNull var lhs,
                             @NotNull Token token,
                             @NotNull DollarParser parser,
                             @NotNull Pipeable callable) {
 
-        return reactiveNode(operation, pure, new SourceCode(currentScope(), token), parser, lhs, callable
+        return reactiveNode(operation, pure, new SourceCode(scope(), token), parser, lhs, callable
         );
     }
 
     @Override
     @NotNull
-    public var reactiveNode(@NotNull OpDef operation,
+    public var reactiveNode(@NotNull Op operation,
                             boolean pure,
                             @NotNull Source source,
                             @NotNull DollarParser parser,
@@ -551,6 +553,12 @@ public final class DollarUtilFactory implements DollarUtil {
                               callable);
         lhs.$listen(i -> node.$notify());
         return node;
+    }
+
+    @Override
+    @NotNull
+    public Scope scope() {
+        return scopes.get().get(scopes.get().size() - 1);
     }
 
     @Override
@@ -620,7 +628,7 @@ public final class DollarUtilFactory implements DollarUtil {
     @Override
     @NotNull
     public String shortHash(@NotNull Token token) {
-        return new SourceCode(currentScope(), token).getShortHash();
+        return new SourceCode(scope(), token).getShortHash();
     }
 
     @Override
@@ -654,11 +662,11 @@ public final class DollarUtilFactory implements DollarUtil {
                             @NotNull Token token, @NotNull DollarParser parser) {
         var node[] = new var[1];
         UUID id = UUID.randomUUID();
-        SourceCode sourceCode = new SourceCode(currentScope(), token);
+        SourceCode sourceCode = new SourceCode(scope(), token);
         node[0] = node(VAR_USAGE_OP, "var-usage-" + key + "-" + sourceCode.getShortHash(), pure, parser, token,
                        $(key).$list().toVarList(),
                        (i) -> {
-                           Scope scope = currentScope();
+                           Scope scope = scope();
 
                            if (getConfig().debugScope()) {
                                log.info("{} {} in {} scopes ", highlight("LOOKUP " + key, ANSI_CYAN), scope,

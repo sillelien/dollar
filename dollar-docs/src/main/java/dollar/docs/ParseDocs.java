@@ -17,8 +17,8 @@
 package dollar.docs;
 
 import com.google.common.io.CharStreams;
-import dollar.internal.runtime.script.DollarParserImpl;
-import dollar.internal.runtime.script.api.ParserOptions;
+import dollar.api.script.ParserOptions;
+import dollar.internal.runtime.script.parser.DollarParserImpl;
 import org.jetbrains.annotations.NotNull;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;

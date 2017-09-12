@@ -6,7 +6,7 @@ const variableA="Hello World"
 //are available.
 
 const javaTest = java`
-out=scope.get("variableA");
+out=scope.get(VarKey.of("variableA"));
 `
 
 javaTest <=> "Hello World"
