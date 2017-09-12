@@ -28,9 +28,6 @@ import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 
-import static dollar.internal.runtime.script.DollarScriptSupport.node;
-import static dollar.internal.runtime.script.DollarScriptSupport.reactiveNode;
-
 public class BinaryOp implements BinaryOperator<var>, Operator {
     @NotNull
     private final BiFunction<var, var, var> function;
@@ -71,11 +68,12 @@ public class BinaryOp implements BinaryOperator<var>, Operator {
     @Override
     public var apply(@NotNull var lhs, @NotNull var rhs) {
         if (immediate) {
-            return node(operation, pure, parser, source, Arrays.asList(lhs, rhs), vars -> function.apply(lhs, rhs));
+            return DollarUtilFactory.util().node(operation, pure, parser, source, Arrays.asList(lhs, rhs),
+                                                 vars -> function.apply(lhs, rhs));
 
         }
         //Lazy evaluation
-        return reactiveNode(operation, pure, parser, source, lhs, rhs, args -> function.apply(lhs, rhs));
+        return DollarUtilFactory.util().reactiveNode(operation, pure, parser, source, lhs, rhs, args -> function.apply(lhs, rhs));
     }
 
     @Override

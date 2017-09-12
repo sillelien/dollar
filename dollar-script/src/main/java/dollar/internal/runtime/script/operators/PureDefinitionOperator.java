@@ -35,7 +35,8 @@ import java.util.ArrayList;
 import java.util.function.Function;
 
 import static dollar.api.DollarStatic.$;
-import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.DollarUtil.MIN_PROBABILITY;
+import static dollar.internal.runtime.script.DollarUtilFactory.util;
 import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.DEFINITION;
 import static java.util.Collections.singletonList;
@@ -59,7 +60,7 @@ public class PureDefinitionOperator implements Function<Token, var> {
         if (objects == null) {
             return null;
         }
-        Scope scope = currentScope();
+        Scope scope = util().currentScope();
         final Object exportObj = objects[0];
 
 
@@ -83,20 +84,22 @@ public class PureDefinitionOperator implements Function<Token, var> {
         log.info("Creating pure variable {}", varName);
         if (typeConstraintObj != null) {
             Type type = Type.of(typeConstraintObj);
-            constraint = node(DEFINITION, "definition-constraint", true, NEW_SCOPE, parser,
-                              new SourceCode(currentScope(), token), null, new ArrayList<>(),
-                              i -> $(scope.parameter(VarKey.IT).getValue().is(type)));
+            constraint = util().node(DEFINITION, "definition-constraint", true, NEW_SCOPE, parser,
+                                     new SourceCode(util().currentScope(), token), null, new ArrayList<>(),
+                                     i -> $(scope.parameter(VarKey.IT).getValue().is(type)));
             constraintSource = new SimpleSubType(typeConstraintObj.source());
-            checkLearntType(token, type, value, MIN_PROBABILITY);
+            util().checkLearntType(token, type, value, MIN_PROBABILITY);
 
         } else {
             constraint = null;
             constraintSource = null;
         }
 
-        var node = node(DEFINITION, true, parser, token, singletonList(constrain(scope, value, constraint, constraintSource)),
-                        i -> Func.definitionFunc(token, (exportObj != null), value, varName, constraint, constraintSource, parser,
-                                                 true, true)
+        var node = util().node(DEFINITION, true, parser, token, singletonList(
+                util().constrain(scope, value, constraint, constraintSource)),
+                               i -> Func.definitionFunc(token, (exportObj != null), value, varName, constraint,
+                                                        constraintSource, parser,
+                                                        true, true)
         );
 
         node.$listen(i -> scope.notify(VarKey.of(varName)));

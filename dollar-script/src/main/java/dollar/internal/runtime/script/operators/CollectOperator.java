@@ -38,7 +38,7 @@ import static dollar.api.DollarStatic.$void;
 import static dollar.api.types.DollarFactory.fromList;
 import static dollar.api.types.meta.MetaConstants.OPERATION_NAME;
 import static dollar.api.types.meta.MetaConstants.VARIABLE;
-import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.DollarUtilFactory.util;
 import static dollar.internal.runtime.script.parser.Symbols.COLLECT_OP;
 import static java.util.Collections.singletonList;
 
@@ -72,18 +72,18 @@ public class CollectOperator implements Function<Token, var> {
 
 
         String id = UUID.randomUUID().toString();
-        return node(COLLECT_OP, pure, parser, token, singletonList(variable),
-                    parallel -> {
-                        Scope scopeForVar = getScopeForVar(pure, VarKey.of(varName), false, null);
+        return util().node(COLLECT_OP, pure, parser, token, singletonList(variable),
+                           parallel -> {
+                               Scope scopeForVar = util().getScopeForVar(pure, VarKey.of(varName), false, null);
 
-                        if (scopeForVar == null) {
-                            throw new VariableNotFoundException(VarKey.of(varName), currentScope());
-                        }
+                               if (scopeForVar == null) {
+                                   throw new VariableNotFoundException(VarKey.of(varName), util().currentScope());
+                               }
 
-                        scopeForVar.listen(VarKey.of(varName), id, new VarListener((var) unless, (var) until, (var) loop));
-                        return $void();
+                               scopeForVar.listen(VarKey.of(varName), id, new VarListener((var) unless, (var) until, (var) loop));
+                               return $void();
 
-                    });
+                           });
 
 
     }
@@ -113,29 +113,29 @@ public class CollectOperator implements Function<Token, var> {
             var value = in2[1].$fixDeep();
             count.incrementAndGet();
             log.debug("Count is {} value is {}", count.get(), value);
-            inSubScope(true, pure, "collect-body",
-                       ns -> {
-                           ns.parameter(VarKey.COUNT, $(count.get()));
-                           ns.parameter(VarKey.IT, value);
+            util().inSubScope(true, pure, "collect-body",
+                              ns -> {
+                                  ns.parameter(VarKey.COUNT, $(count.get()));
+                                  ns.parameter(VarKey.IT, value);
 
-                           if ((unless != null) && unless.isTrue()) {
-                               log.debug("Skipping {}", value);
-                           } else {
-                               log.debug("Adding {}", value);
-                               collected.add(value);
-                           }
-                           var returnValue = $void();
-                           ns.parameter(VarKey.COLLECTED, fromList(collected));
-                           log.debug("Collected {}", fromList(collected));
-                           final boolean endValue = (until != null) && until.isTrue();
-                           if (endValue) {
-                               returnValue = loop.$fixDeep(false);
-                               collected.clear();
-                               count.set(-1);
-                               log.debug("Return value  {}", returnValue);
-                           }
-                           return returnValue;
-                       });
+                                  if ((unless != null) && unless.isTrue()) {
+                                      log.debug("Skipping {}", value);
+                                  } else {
+                                      log.debug("Adding {}", value);
+                                      collected.add(value);
+                                  }
+                                  var returnValue = $void();
+                                  ns.parameter(VarKey.COLLECTED, fromList(collected));
+                                  log.debug("Collected {}", fromList(collected));
+                                  final boolean endValue = (until != null) && until.isTrue();
+                                  if (endValue) {
+                                      returnValue = loop.$fixDeep(false);
+                                      collected.clear();
+                                      count.set(-1);
+                                      log.debug("Return value  {}", returnValue);
+                                  }
+                                  return returnValue;
+                              });
             return $void();
 
         }

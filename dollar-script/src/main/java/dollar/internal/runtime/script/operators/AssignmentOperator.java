@@ -24,7 +24,7 @@ import dollar.api.VarFlags;
 import dollar.api.VarKey;
 import dollar.api.script.Source;
 import dollar.api.var;
-import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.DollarUtilFactory;
 import dollar.internal.runtime.script.SimpleSubType;
 import dollar.internal.runtime.script.SourceCode;
 import dollar.internal.runtime.script.api.DollarParser;
@@ -42,7 +42,7 @@ import java.util.function.Function;
 import static dollar.api.DollarStatic.$;
 import static dollar.api.DollarStatic.$void;
 import static dollar.api.types.meta.MetaConstants.*;
-import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.DollarUtil.MIN_PROBABILITY;
 import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.emptyList;
@@ -76,13 +76,15 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
         if (objects[2] != null) {
             type = Type.of(objects[2].toString());
-            constraint = node(ASSIGNMENT_CONSTRAINT, "assignment-constraint",
-                              pure, NEW_SCOPE, parser,
-                              new SourceCode(token), type, emptyList(),
-                              i -> {
-                                  var it = currentScope().parameter(VarKey.IT).getValue();
-                                  return $(it.is(type) && ((objects[3] == null) || ((var) objects[3]).isTrue()));
-                              });
+            constraint = DollarUtilFactory.util().node(ASSIGNMENT_CONSTRAINT, "assignment-constraint",
+                                                       pure, NEW_SCOPE, parser,
+                                                       new SourceCode(token), type, emptyList(),
+                                                       i -> {
+                                                           var it = DollarUtilFactory.util().currentScope().parameter(
+                                                                   VarKey.IT).getValue();
+                                                           return $(
+                                                                   it.is(type) && ((objects[3] == null) || ((var) objects[3]).isTrue()));
+                                                       });
         } else {
             type = null;
             if (objects[3] instanceof var) constraint = (var) objects[3];
@@ -103,8 +105,8 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
         var finalConstraint = constraint;
         return (Function<var, var>) rhs -> {
-            Scope scope = currentScope();
-            checkLearntType(token, type, rhs, MIN_PROBABILITY);
+            Scope scope = DollarUtilFactory.util().currentScope();
+            DollarUtilFactory.util().checkLearntType(token, type, rhs, MIN_PROBABILITY);
 
             final String op = ((var) objects[5]).metaAttribute(ASSIGNMENT_TYPE);
             if ("when".equals(op) || "subscribe".equals(op)) {
@@ -117,43 +119,60 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
                     useConstraint = scope.constraintOf(varName);
                     useSource = scope.subTypeOf(varName);
                 }
-                List<var> inputs = Arrays.asList(rhs, constrain(scope, rhs, finalConstraint, useSource));
+                List<var> inputs = Arrays.asList(rhs, DollarUtilFactory.util().constrain(scope, rhs, finalConstraint, useSource));
                 if ("when".equals(op)) {
                     log.debug("DYNAMIC: {}", rhs.dynamic());
 
-                    return node(WHEN_ASSIGN, pure, parser, token, inputs,
-                                c -> {
-                                    var condition = (var) objects[5];
-                                    var initial = rhs.$fixDeep(false);
-                                    scope.set(varName, condition.isTrue() ? initial : $void(), null, useSource,
-                                              new VarFlags(false, isVolatile, false, pure, false, declaration));
-                                    return condition.$listen(
-                                            args -> {
-                                                if (condition.isTrue()) {
-                                                    var value = rhs.$fixDeep(false);
-                                                    setVariable(scope, varName, value, parser, token, useConstraint, useSource,
-                                                                new VarFlags(false, isVolatile, false, pure, false, false));
+                    return DollarUtilFactory.util().node(WHEN_ASSIGN, pure, parser, token, inputs,
+                                                         c -> {
+                                                             var condition = (var) objects[5];
+                                                             var initial = rhs.$fixDeep(false);
+                                                             scope.set(varName, condition.isTrue() ? initial : $void(), null,
+                                                                       useSource,
+                                                                       new VarFlags(false, isVolatile, false, pure, false,
+                                                                                    declaration));
+                                                             return condition.$listen(
+                                                                     args -> {
+                                                                         if (condition.isTrue()) {
+                                                                             var value = rhs.$fixDeep(false);
+                                                                             DollarUtilFactory.util().setVariable(scope, varName,
+                                                                                                                  value, parser,
+                                                                                                                  token,
+                                                                                                                  useConstraint,
+                                                                                                                  useSource,
+                                                                                                                  new VarFlags(false,
+                                                                                                                               isVolatile,
+                                                                                                                               false,
+                                                                                                                               pure,
+                                                                                                                               false,
+                                                                                                                               false));
 
-                                                    return value;
-                                                } else {
-                                                    return $void();
-                                                }
-                                            });
-                                }
+                                                                             return value;
+                                                                         } else {
+                                                                             return $void();
+                                                                         }
+                                                                     });
+                                                         }
                     );
 
                 } else if ("subscribe".equals(op)) {
                     scope.set(varName, $void(), null, useSource,
                               new VarFlags(false, true, true, pure, false, declaration));
-                    return node(SUBSCRIBE_ASSIGN, pure, parser, token, inputs,
-                                c -> $(rhs.$subscribe(i -> setVariable(scope, varName, fix(i[0]),
-                                                                       parser, token, useConstraint, useSource,
-                                                                       new VarFlags(false, true, false, pure,
-                                                                                    false, declaration)).getValue())));
+                    return DollarUtilFactory.util().node(SUBSCRIBE_ASSIGN, pure, parser, token, inputs,
+                                                         c -> $(rhs.$subscribe(
+                                                                 i -> DollarUtilFactory.util().setVariable(scope, varName,
+                                                                                                           DollarUtilFactory.util().fix(
+                                                                                                                   i[0]),
+                                                                                                           parser, token,
+                                                                                                           useConstraint, useSource,
+                                                                                                           new VarFlags(false, true,
+                                                                                                                        false, pure,
+                                                                                                                        false,
+                                                                                                                        declaration)).getValue())));
                 }
             }
             return assign(rhs, objects, finalConstraint, new VarFlags(constant, isVolatile, declaration, pure),
-                          constraintSource, scope, token, type, new SourceCode(currentScope(), token));
+                          constraintSource, scope, token, type, new SourceCode(DollarUtilFactory.util().currentScope(), token));
         };
     }
 
@@ -172,10 +191,10 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
         Pipeable pipeable = args -> {
 
-            Scope currentScope = currentScope();
+            Scope currentScope = DollarUtilFactory.util().currentScope();
             final var useConstraint;
             final SubType useSource;
-            Scope varScope = DollarScriptSupport.getScopeForVar(pure, varName, false, currentScope());
+            Scope varScope = DollarUtilFactory.util().getScopeForVar(pure, varName, false, DollarUtilFactory.util().currentScope());
             if ((constraint != null) || (varScope == null)) {
                 useConstraint = constraint;
                 useSource = constraintSource;
@@ -193,30 +212,31 @@ public class AssignmentOperator implements Function<Token, Function<? super var,
 
             }
             if (useConstraint != null) {
-                inSubScope(true, pure, "assignment-constraint",
-                           newScope -> {
-                               newScope.parameter(VarKey.IT, rhsFixed);
-                               var value = newScope.get(varName);
-                               assert value != null;
-                               newScope.parameter(VarKey.PREVIOUS, value);
-                               if (useConstraint.isFalse()) {
-                                   newScope.handleError(
-                                           new DollarScriptException("Constraint failed for variable " + varName + "",
-                                                                     source));
-                               }
-                               return null;
-                           });
+                DollarUtilFactory.util().inSubScope(true, pure, "assignment-constraint",
+                                                    newScope -> {
+                                                        newScope.parameter(VarKey.IT, rhsFixed);
+                                                        var value = newScope.get(varName);
+                                                        assert value != null;
+                                                        newScope.parameter(VarKey.PREVIOUS, value);
+                                                        if (useConstraint.isFalse()) {
+                                                            newScope.handleError(
+                                                                    new DollarScriptException("Constraint failed for variable " + varName + "",
+                                                                                              source));
+                                                        }
+                                                        return null;
+                                                    });
             }
             if (objects[0] != null) {
                 parser.export(varName, rhsFixed);
             }
-            setVariable(currentScope, varName, rhsFixed, parser, token, constraint, useSource, varFlags);
+            DollarUtilFactory.util().setVariable(currentScope, varName, rhsFixed, parser, token, constraint, useSource, varFlags);
             return $void();
 
         };
         //        node.$listen(i -> scope.notify(varName));
-        return node(ASSIGNMENT, pure, parser, token, Arrays.asList(rhs, constrain(scope, rhs, constraint, constraintSource)),
-                    pipeable);
+        return DollarUtilFactory.util().node(ASSIGNMENT, pure, parser, token, Arrays.asList(rhs, DollarUtilFactory.util().constrain(
+                scope, rhs, constraint, constraintSource)),
+                                             pipeable);
     }
 
 

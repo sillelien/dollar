@@ -47,8 +47,6 @@ import java.util.stream.Stream;
 
 import static dollar.api.types.DollarFactory.FALSE;
 import static dollar.api.types.DollarFactory.TRUE;
-import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
-import static dollar.internal.runtime.script.DollarScriptSupport.inScope;
 
 public class DollarObject extends AbstractDollar {
 
@@ -503,10 +501,10 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     private var inThisScope(@NotNull ScopeExecutable<var> exe) {
-        ScriptScope subScope = new ScriptScope(currentScope(), "this-" + name, false, true);
+        ScriptScope subScope = new ScriptScope(DollarUtilFactory.util().currentScope(), "this-" + name, false, true);
         DollarObject thisObject = new DollarObject(name, constructor, fields, true);
         subScope.set(VarKey.THIS, thisObject, null, null, new VarFlags(true, true, false, false, false, true));
-        return inScope(true, subScope, exe);
+        return DollarUtilFactory.util().inScope(true, subScope, exe);
     }
 
     @NotNull

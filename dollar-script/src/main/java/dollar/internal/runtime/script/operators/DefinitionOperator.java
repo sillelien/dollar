@@ -21,6 +21,7 @@ import dollar.api.SubType;
 import dollar.api.Type;
 import dollar.api.VarKey;
 import dollar.api.var;
+import dollar.internal.runtime.script.DollarUtilFactory;
 import dollar.internal.runtime.script.Func;
 import dollar.internal.runtime.script.SimpleSubType;
 import dollar.internal.runtime.script.SourceCode;
@@ -37,7 +38,7 @@ import java.util.function.Function;
 
 import static dollar.api.DollarStatic.$;
 import static dollar.api.types.meta.MetaConstants.CONSTRAINT_SOURCE;
-import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.DollarUtil.MIN_PROBABILITY;
 import static dollar.internal.runtime.script.SourceNodeOptions.NEW_SCOPE;
 import static dollar.internal.runtime.script.parser.Symbols.DEFINITION;
 
@@ -59,7 +60,7 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
     @Nullable
     public Function<? super var, ? extends var> apply(@NotNull Token token) {
         Object[] objects = (Object[]) token.value();
-        Scope scope = currentScope();
+        Scope scope = DollarUtilFactory.util().currentScope();
 
         final Object exportObj = objects[1];
 
@@ -93,10 +94,11 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
 
             if (typeConstraintObj != null) {
                 Type type = Type.of(typeConstraintObj);
-                constraint = node(DEFINITION, "definition-constraint", pure, NEW_SCOPE, parser,
-                                  new SourceCode(currentScope(), token), null, new ArrayList<>(),
-                                  i -> $(scope.parameter(VarKey.IT).getValue().is(type)));
-                checkLearntType(token, type, rhs, MIN_PROBABILITY);
+                constraint = DollarUtilFactory.util().node(DEFINITION, "definition-constraint", pure, NEW_SCOPE, parser,
+                                                           new SourceCode(DollarUtilFactory.util().currentScope(), token), null,
+                                                           new ArrayList<>(),
+                                                           i -> $(scope.parameter(VarKey.IT).getValue().is(type)));
+                DollarUtilFactory.util().checkLearntType(token, type, rhs, MIN_PROBABILITY);
                 SourceCode meta = typeConstraintObj.meta(CONSTRAINT_SOURCE);
                 if (meta != null) {
                     constraintSource = new SimpleSubType(meta);
@@ -110,10 +112,12 @@ public class DefinitionOperator implements Function<Token, Function<? super var,
 
             boolean finalReadonly = readonly;
 
-            var node = node(DEFINITION, pure, parser, token, Arrays.asList(rhs, constrain(scope, value, constraint,
-                                                                                          constraintSource)),
-                            i -> Func.definitionFunc(token, (exportObj != null), value, variableName, constraint, constraintSource,
-                                                     parser, pure, finalReadonly)
+            var node = DollarUtilFactory.util().node(DEFINITION, pure, parser, token,
+                                                     Arrays.asList(rhs, DollarUtilFactory.util().constrain(scope, value, constraint,
+                                                                                                           constraintSource)),
+                                                     i -> Func.definitionFunc(token, (exportObj != null), value, variableName,
+                                                                              constraint, constraintSource,
+                                                                              parser, pure, finalReadonly)
             );
 
             node.$listen(i -> scope.notify(VarKey.of(variableName)));

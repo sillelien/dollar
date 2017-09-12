@@ -54,11 +54,8 @@ import static dollar.api.types.meta.MetaConstants.VARIABLE;
 import static dollar.internal.runtime.script.DollarParserImpl.NAMED_PARAMETER_META_ATTR;
 import static dollar.internal.runtime.script.parser.Symbols.VAR_USAGE_OP;
 
-public final class DollarScriptSupport {
+public final class DollarUtilFactory implements DollarUtil {
 
-    public static final double MIN_PROBABILITY = 0.5;
-    @NotNull
-    static final String ANSI_CYAN = "36";
     @NotNull
     static final ThreadLocal<List<Scope>> scopes = ThreadLocal.withInitial(() -> {
         ArrayList<Scope> list = new ArrayList<>();
@@ -66,9 +63,16 @@ public final class DollarScriptSupport {
         return list;
     });
     @NotNull
-    private static final Logger log = LoggerFactory.getLogger(DollarScriptSupport.class);
+    private static final DollarUtilFactory instance = new DollarUtilFactory();
+    @NotNull
+    private static final Logger log = LoggerFactory.getLogger(DollarUtilFactory.class);
 
-    public static void addParameterstoCurrentScope(@NotNull Scope scope, @NotNull List<var> parameters) {
+    public static DollarUtil util() {
+        return instance;
+    }
+
+    @Override
+    public void addParameterstoCurrentScope(@NotNull Scope scope, @NotNull List<var> parameters) {
         //Add the special $* value for all the parameters
         int count = 0;
         List<var> fixedParams = new ArrayList<>();
@@ -86,7 +90,8 @@ public final class DollarScriptSupport {
         scope.parameter(VarKey.of("*"), $(fixedParams));
     }
 
-    private static void addScope(boolean runtime, @NotNull Scope scope) {
+    @Override
+    public void addScope(boolean runtime, @NotNull Scope scope) {
         boolean newScope = scopes.get().isEmpty() || !scope.equals(currentScope());
         scopes.get().add(scope);
         if (DollarStatic.getConfig().debugScope()) {
@@ -95,7 +100,8 @@ public final class DollarScriptSupport {
 
     }
 
-    public static void checkLearntType(@NotNull Token token, @Nullable Type type, @NotNull var rhs, @NotNull Double threshold) {
+    @Override
+    public void checkLearntType(@NotNull Token token, @Nullable Type type, @NotNull var rhs, @NotNull Double threshold) {
         final TypePrediction prediction = rhs.predictType();
         if ((type != null) && (prediction != null)) {
             final Double probability = prediction.probability(type);
@@ -114,10 +120,11 @@ public final class DollarScriptSupport {
         }
     }
 
-    public static var constrain(@NotNull Scope scope,
-                                @NotNull var value,
-                                @Nullable var constraint,
-                                @Nullable SubType label) {
+    @Override
+    public var constrain(@NotNull Scope scope,
+                         @NotNull var value,
+                         @Nullable var constraint,
+                         @Nullable SubType label) {
 //        System.err.println("(" + label + ") " + rhs.$type().constraint());
         SubType valueLabel = value.constraintLabel();
         if (Objects.equals(valueLabel, label)) {
@@ -138,18 +145,21 @@ public final class DollarScriptSupport {
         }
     }
 
+    @Override
     @NotNull
-    private static String createId(@NotNull String operation) {
+    public String createId(@NotNull String operation) {
         return operation + "-" + UUID.randomUUID();
     }
 
+    @Override
     @NotNull
-    public static Scope currentScope() {
+    public Scope currentScope() {
         return scopes.get().get(scopes.get().size() - 1);
     }
 
+    @Override
     @NotNull
-    private static Scope endScope(boolean runtime) {
+    public Scope endScope(boolean runtime) {
 
         Scope remove = scopes.get().remove(scopes.get().size() - 1);
         if (DollarStatic.getConfig().debugScope()) {
@@ -168,8 +178,9 @@ public final class DollarScriptSupport {
      * @param parallel Should execution be in parallel?
      * @return the var
      */
+    @Override
     @NotNull
-    public static var fix(@Nullable var v, boolean parallel) {
+    public var fix(@Nullable var v, boolean parallel) {
         return (v != null) ? DollarFactory.wrap(v.$fix(parallel)) : $void();
     }
 
@@ -179,30 +190,35 @@ public final class DollarScriptSupport {
      * @param v the v
      * @return the var
      */
+    @Override
     @NotNull
-    public static var fix(@Nullable var v) {
+    public var fix(@Nullable var v) {
         return (v != null) ? DollarFactory.wrap(v.$fix(false)) : $void();
     }
 
+    @Override
     @NotNull
-    public static DollarParser getParser() {
+    public DollarParser getParser() {
         return DollarParser.parser.get();
     }
 
+    @Override
     @NotNull
-    public static Scope getRootScope() {
+    public Scope getRootScope() {
         return scopes.get().get(0);
     }
 
-    public static void setRootScope(@NotNull ScriptScope rootScope) {
+    @Override
+    public void setRootScope(@NotNull ScriptScope rootScope) {
         scopes.get().add(0, rootScope);
     }
 
+    @Override
     @Nullable
-    public static Scope getScopeForVar(boolean pure,
-                                       @NotNull VarKey key,
-                                       boolean numeric,
-                                       @Nullable Scope initialScope) {
+    public Scope getScopeForVar(boolean pure,
+                                @NotNull VarKey key,
+                                boolean numeric,
+                                @Nullable Scope initialScope) {
 
         if (initialScope == null) {
             initialScope = currentScope();
@@ -220,7 +236,7 @@ public final class DollarScriptSupport {
             }
         }
 
-        List<Scope> scopes = new ArrayList<>(DollarScriptSupport.scopes.get());
+        List<Scope> scopes = new ArrayList<>(DollarUtilFactory.scopes.get());
         Collections.reverse(scopes);
         for (Scope scriptScope : scopes) {
             if (!(scriptScope instanceof PureScope) && pure) {
@@ -243,12 +259,13 @@ public final class DollarScriptSupport {
 
     }
 
-    private static var getVar(@NotNull VarKey key,
-                              @NotNull UUID id,
-                              @NotNull Scope scopeForKey,
-                              @NotNull Source sourceCode,
-                              boolean pure,
-                              @NotNull var node) {
+    @Override
+    public var getVar(@NotNull VarKey key,
+                      @NotNull UUID id,
+                      @NotNull Scope scopeForKey,
+                      @NotNull Source sourceCode,
+                      boolean pure,
+                      @NotNull var node) {
         assert scopeForKey != null;
         log.debug("Listening to scope {} for key {}", scopeForKey, key);
         scopeForKey.listen(key, id.toString(), node);
@@ -261,7 +278,8 @@ public final class DollarScriptSupport {
         return v.getValue();
     }
 
-    public static String highlight(@NotNull String text, @NotNull String color) {
+    @Override
+    public String highlight(@NotNull String text, @NotNull String color) {
         if (getConfig().colorHighlighting()) {
             return "\u001b["  // Prefix
                            + "0"        // Brightness
@@ -275,11 +293,12 @@ public final class DollarScriptSupport {
         }
     }
 
-    public static <T> T inScope(boolean runtime,
-                                @NotNull Scope parent,
-                                boolean pure,
-                                @NotNull String scopeName,
-                                @NotNull ScopeExecutable<T> r) {
+    @Override
+    public <T> T inScope(boolean runtime,
+                         @NotNull Scope parent,
+                         boolean pure,
+                         @NotNull String scopeName,
+                         @NotNull ScopeExecutable<T> r) {
         Scope newScope;
         if (pure) {
             newScope = new PureScope(parent, parent.source(), scopeName, parent.file());
@@ -311,10 +330,11 @@ public final class DollarScriptSupport {
         }
     }
 
+    @Override
     @Nullable
-    public static <T> T inScope(boolean runtime,
-                                @NotNull Scope scope,
-                                @NotNull ScopeExecutable<T> r) {
+    public <T> T inScope(boolean runtime,
+                         @NotNull Scope scope,
+                         @NotNull ScopeExecutable<T> r) {
 
         final boolean scopeAdded;
         if (scopes.get().get(scopes.get().size() - 1).equals(scope)) {
@@ -339,13 +359,15 @@ public final class DollarScriptSupport {
         }
     }
 
+    @Override
     @Nullable
-    public static <T> T inSubScope(boolean runtime, boolean pure, @NotNull String scopeName,
-                                   @NotNull ScopeExecutable<T> r) {
+    public <T> T inSubScope(boolean runtime, boolean pure, @NotNull String scopeName,
+                            @NotNull ScopeExecutable<T> r) {
         return inScope(runtime, currentScope(), pure, scopeName, r);
     }
 
-    private static String indent(int i) {
+    @Override
+    public String indent(int i) {
         StringBuilder b = new StringBuilder();
         for (int j = 0; j < i; j++) {
             b.append(" ");
@@ -353,14 +375,15 @@ public final class DollarScriptSupport {
         return b.toString();
     }
 
-    public static var node(@NotNull OpDef operation,
-                           @NotNull String name,
-                           boolean pure,
-                           @NotNull SourceNodeOptions sourceNodeOptions,
-                           @NotNull DollarParser parser,
-                           @NotNull Source source,
-                           @Nullable Type suggestedType, @NotNull List<var> inputs,
-                           @NotNull Pipeable pipeable) {
+    @Override
+    public var node(@NotNull OpDef operation,
+                    @NotNull String name,
+                    boolean pure,
+                    @NotNull SourceNodeOptions sourceNodeOptions,
+                    @NotNull DollarParser parser,
+                    @NotNull Source source,
+                    @Nullable Type suggestedType, @NotNull List<var> inputs,
+                    @NotNull Pipeable pipeable) {
         var result = DollarFactory.wrap((var) Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
@@ -381,56 +404,63 @@ public final class DollarScriptSupport {
         }
     }
 
+    @Override
     @NotNull
-    public static var node(@NotNull OpDef operation,
-                           boolean pure,
-                           @NotNull DollarParser parser,
-                           @NotNull Source source,
-                           @NotNull List<var> inputs,
-                           @NotNull Pipeable pipeable) {
+    public var node(@NotNull OpDef operation,
+                    boolean pure,
+                    @NotNull DollarParser parser,
+                    @NotNull Source source,
+                    @NotNull List<var> inputs,
+                    @NotNull Pipeable pipeable) {
         return node(operation, operation.name(), pure, operation.nodeOptions(), parser, source, null, inputs, pipeable);
     }
 
+    @Override
     @NotNull
-    public static var node(@NotNull OpDef operation,
-                           boolean pure,
-                           @NotNull DollarParser parser,
-                           @NotNull Token token,
-                           @NotNull List<var> inputs,
-                           @NotNull Pipeable callable) {
+    public var node(@NotNull OpDef operation,
+                    boolean pure,
+                    @NotNull DollarParser parser,
+                    @NotNull Token token,
+                    @NotNull List<var> inputs,
+                    @NotNull Pipeable callable) {
         return node(operation, operation.name(), pure, operation.nodeOptions(), parser,
                     new SourceCode(currentScope(), token), null, inputs, callable);
     }
 
+    @Override
     @NotNull
-    public static var node(@NotNull OpDef operation,
-                           @NotNull String name,
-                           boolean pure,
-                           @NotNull DollarParser parser,
-                           @NotNull Token token,
-                           @NotNull List<var> inputs,
-                           @NotNull Pipeable callable) {
+    public var node(@NotNull OpDef operation,
+                    @NotNull String name,
+                    boolean pure,
+                    @NotNull DollarParser parser,
+                    @NotNull Token token,
+                    @NotNull List<var> inputs,
+                    @NotNull Pipeable callable) {
         return node(operation, name, pure, operation.nodeOptions(), parser,
                     new SourceCode(currentScope(), token), null, inputs, callable);
     }
 
-    public static void popScope(@NotNull Scope scope) {
+    @Override
+    public void popScope(@NotNull Scope scope) {
         Scope poppedScope = endScope(true);
         if (!poppedScope.equals(scope)) {
             throw new DollarAssertionException("Popped scope does not equal expected scope");
         }
     }
 
-    public static void pushScope(@NotNull Scope scope) {
+    @Override
+    public void pushScope(@NotNull Scope scope) {
         addScope(true, scope);
     }
 
-    public static String randomId() {
+    @Override
+    public String randomId() {
         return UUID.randomUUID().toString();
     }
 
+    @Override
     @NotNull
-    static var reactiveNode(@NotNull OpDef operation, @NotNull String name,
+    public var reactiveNode(@NotNull OpDef operation, @NotNull String name,
                             boolean pure, @NotNull SourceNodeOptions sourceNodeOptions,
                             @NotNull DollarParser parser,
                             @NotNull Source source,
@@ -447,8 +477,9 @@ public final class DollarScriptSupport {
         return node;
     }
 
+    @Override
     @NotNull
-    static var reactiveNode(@NotNull OpDef operation,
+    public var reactiveNode(@NotNull OpDef operation,
                             boolean pure,
                             @NotNull Token token,
                             @NotNull var lhs,
@@ -462,8 +493,9 @@ public final class DollarScriptSupport {
 
     }
 
+    @Override
     @NotNull
-    static var reactiveNode(@NotNull OpDef operation,
+    public var reactiveNode(@NotNull OpDef operation,
                             @NotNull String name,
                             boolean pure,
                             @NotNull Token token,
@@ -478,8 +510,9 @@ public final class DollarScriptSupport {
 
     }
 
+    @Override
     @NotNull
-    static var reactiveNode(@NotNull OpDef operation,
+    public var reactiveNode(@NotNull OpDef operation,
                             boolean pure,
                             @NotNull DollarParser parser, @NotNull Source source,
                             @NotNull var lhs,
@@ -490,8 +523,9 @@ public final class DollarScriptSupport {
 
     }
 
+    @Override
     @NotNull
-    static var reactiveNode(@NotNull OpDef operation,
+    public var reactiveNode(@NotNull OpDef operation,
                             boolean pure,
                             @NotNull var lhs,
                             @NotNull Token token,
@@ -502,8 +536,9 @@ public final class DollarScriptSupport {
         );
     }
 
+    @Override
     @NotNull
-    static var reactiveNode(@NotNull OpDef operation,
+    public var reactiveNode(@NotNull OpDef operation,
                             boolean pure,
                             @NotNull Source source,
                             @NotNull DollarParser parser,
@@ -518,21 +553,22 @@ public final class DollarScriptSupport {
         return node;
     }
 
-
+    @Override
     @NotNull
-    static List<Scope> scopes() {
+    public List<Scope> scopes() {
         return scopes.get();
     }
 
+    @Override
     @NotNull
-    public static Variable setVariable(@NotNull Scope scope,
-                                       @NotNull VarKey key,
-                                       @NotNull var value,
-                                       @Nullable DollarParser parser,
-                                       @NotNull Token token,
-                                       @Nullable var useConstraint,
-                                       @Nullable SubType useSource,
-                                       @NotNull VarFlags varFlags) {
+    public Variable setVariable(@NotNull Scope scope,
+                                @NotNull VarKey key,
+                                @NotNull var value,
+                                @Nullable DollarParser parser,
+                                @NotNull Token token,
+                                @Nullable var useConstraint,
+                                @Nullable SubType useSource,
+                                @NotNull VarFlags varFlags) {
 
         Source source = new SourceCode(scope, token);
         boolean numeric = key.isNumeric();
@@ -542,7 +578,7 @@ public final class DollarScriptSupport {
             return updateVariable(scope, key, value, varFlags, useConstraint, useSource);
         }
         try {
-            List<Scope> scopes = new ArrayList<>(DollarScriptSupport.scopes.get());
+            List<Scope> scopes = new ArrayList<>(DollarUtilFactory.scopes.get());
             Collections.reverse(scopes);
             for (Scope scriptScope : scopes) {
                 if (!(scriptScope instanceof PureScope) && varFlags.isPure()) {
@@ -581,17 +617,19 @@ public final class DollarScriptSupport {
 
     }
 
+    @Override
     @NotNull
-    static String shortHash(@NotNull Token token) {
+    public String shortHash(@NotNull Token token) {
         return new SourceCode(currentScope(), token).getShortHash();
     }
 
-    private static @NotNull
-    Variable updateVariable(@NotNull Scope scope,
-                            @NotNull VarKey key,
-                            @NotNull var value,
-                            @NotNull VarFlags varFlags, @Nullable var useConstraint,
-                            @Nullable SubType useSource) {
+    @Override
+    @NotNull
+    public Variable updateVariable(@NotNull Scope scope,
+                                   @NotNull VarKey key,
+                                   @NotNull var value,
+                                   @NotNull VarFlags varFlags, @Nullable var useConstraint,
+                                   @Nullable SubType useSource) {
         if (getConfig().debugScope()) {
             log.info("{}{} {}", highlight("UPDATING ", ANSI_CYAN), key, scope);
         }
@@ -603,15 +641,17 @@ public final class DollarScriptSupport {
         }
     }
 
+    @Override
     @NotNull
-    public static var variableNode(boolean pure, @NotNull VarKey key, @NotNull Token token, @NotNull DollarParser parser) {
+    public var variableNode(boolean pure, @NotNull VarKey key, @NotNull Token token, @NotNull DollarParser parser) {
         return variableNode(pure, key, false, null, token, parser);
     }
 
+    @Override
     @NotNull
-    public static var variableNode(boolean pure, @NotNull VarKey key,
-                                   boolean numeric, @Nullable var defaultValue,
-                                   @NotNull Token token, @NotNull DollarParser parser) {
+    public var variableNode(boolean pure, @NotNull VarKey key,
+                            boolean numeric, @Nullable var defaultValue,
+                            @NotNull Token token, @NotNull DollarParser parser) {
         var node[] = new var[1];
         UUID id = UUID.randomUUID();
         SourceCode sourceCode = new SourceCode(currentScope(), token);
@@ -631,7 +671,7 @@ public final class DollarScriptSupport {
                            }
 
                            try {
-                               List<Scope> scopes = new ArrayList<>(DollarScriptSupport.scopes.get());
+                               List<Scope> scopes = new ArrayList<>(DollarUtilFactory.scopes.get());
                                Collections.reverse(scopes);
                                for (Scope scriptScope : scopes) {
                                    if (!(scriptScope instanceof PureScope) && pure) {

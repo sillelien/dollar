@@ -54,7 +54,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import static dollar.api.DollarStatic.$;
 import static dollar.api.DollarStatic.getConfig;
 import static dollar.api.types.meta.MetaConstants.*;
-import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
 
 public class SourceNode implements java.lang.reflect.InvocationHandler {
     private static final int MAX_STACK_DEPTH = 100;
@@ -123,19 +122,19 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
 
         if (sourceNodeOptions.isScopeClosure()) {
             this.lambda = vars -> {
-                List<Scope> attachedScopes = new ArrayList<>(DollarScriptSupport.scopes());
-                return DollarScriptSupport.node(operation, name + "-closure", pure,
-                                                new SourceNodeOptions(false, false, sourceNodeOptions.isParallel()),
-                                                parser, source, null, inputs, vars2 -> {
+                List<Scope> attachedScopes = new ArrayList<>(DollarUtilFactory.util().scopes());
+                return DollarUtilFactory.util().node(operation, name + "-closure", pure,
+                                                     new SourceNodeOptions(false, false, sourceNodeOptions.isParallel()),
+                                                     parser, source, null, inputs, vars2 -> {
                             for (Scope scope : attachedScopes) {
-                                DollarScriptSupport.pushScope(scope);
+                                DollarUtilFactory.util().pushScope(scope);
                             }
                             try {
                                 return lambda.pipe(vars);
                             } finally {
                                 Collections.reverse(attachedScopes);
                                 for (Scope scope : attachedScopes) {
-                                    DollarScriptSupport.popScope(scope);
+                                    DollarUtilFactory.util().popScope(scope);
                                 }
 
                             }
@@ -235,7 +234,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 try {
                     result = invokeMain(proxy, method, args);
                 } catch (Throwable throwable) {
-                    return currentScope().handleError(throwable, source);
+                    return DollarUtilFactory.util().currentScope().handleError(throwable, source);
                 }
             } else {
                 //This method does require a scope
@@ -244,27 +243,29 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 if (attachedScopes != null) {
                     List<Scope> scopes = new ArrayList<>(attachedScopes);
                     for (Scope scope : scopes) {
-                        DollarScriptSupport.pushScope(scope);
+                        DollarUtilFactory.util().pushScope(scope);
                     }
                 }
                 try {
                     Scope useScope;
                     if (newScope) {
-                        if (pure || currentScope().pure()) {
-                            useScope = new PureScope(currentScope(), currentScope().source(), name, currentScope().file());
+                        if (pure || DollarUtilFactory.util().currentScope().pure()) {
+                            useScope = new PureScope(DollarUtilFactory.util().currentScope(),
+                                                     DollarUtilFactory.util().currentScope().source(), name,
+                                                     DollarUtilFactory.util().currentScope().file());
                         } else {
-                            if (currentScope().pure() && (operation.pure() != null) && !operation.pure()) {
+                            if (DollarUtilFactory.util().currentScope().pure() && (operation.pure() != null) && !operation.pure()) {
                                 throw new DollarScriptException("Attempted to create an impure scope within a pure scope " +
-                                                                        "(" + currentScope() + ") for " + name,
+                                                                        "(" + DollarUtilFactory.util().currentScope() + ") for " + name,
                                                                 source);
                             }
-                            useScope = new ScriptScope(currentScope(), name, false, false);
+                            useScope = new ScriptScope(DollarUtilFactory.util().currentScope(), name, false, false);
                         }
                     } else {
-                        useScope = currentScope();
+                        useScope = DollarUtilFactory.util().currentScope();
                     }
 
-                    result = DollarScriptSupport.inScope(true, useScope, s -> {
+                    result = DollarUtilFactory.util().inScope(true, useScope, s -> {
                         if (DollarStatic.getConfig().debugScope()) {
                             log.info("EXE: {} {} for {}", name, method.getName(), source.getShortSourceMessage());
                         }
@@ -282,7 +283,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                             }
 
                         } catch (Throwable throwable) {
-                            return currentScope().handleError(throwable, source);
+                            return DollarUtilFactory.util().currentScope().handleError(throwable, source);
                         }
                     });
                 } finally {
@@ -291,7 +292,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                         List<Scope> scopes = new ArrayList<>(attachedScopes);
                         Collections.reverse(scopes);
                         for (Scope scope : scopes) {
-                            DollarScriptSupport.popScope(scope);
+                            DollarUtilFactory.util().popScope(scope);
                         }
                     }
                 }
@@ -316,7 +317,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             return result;
         } catch (Exception e) {
             log.warn(e.getMessage(), e);
-            return ErrorHandlerFactory.instance().handle(currentScope(), source, e);
+            return ErrorHandlerFactory.instance().handle(DollarUtilFactory.util().currentScope(), source, e);
         }
     }
 
@@ -424,7 +425,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 return method.invoke(out, args);
             }
         } catch (InvocationTargetException e) {
-            return currentScope().handleError(e, source);
+            return DollarUtilFactory.util().currentScope().handleError(e, source);
         }
     }
 }

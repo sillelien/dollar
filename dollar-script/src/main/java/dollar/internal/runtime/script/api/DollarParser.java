@@ -31,12 +31,10 @@ public interface DollarParser {
     @NotNull
     ThreadLocal<DollarParser> parser = new ThreadLocal<>();
 
-    void export(VarKey name, @NotNull var export);
-
+    void export(@NotNull VarKey name, @NotNull var export);
 
     @NotNull
     ParserOptions options();
-
 
     @NotNull
     var parse(@NotNull ScriptScope scriptScope, @NotNull String source) throws Exception;

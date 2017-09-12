@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import static dollar.api.types.meta.MetaConstants.OPERATION_NAME;
-import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.DollarUtilFactory.util;
 import static dollar.internal.runtime.script.parser.Symbols.FUNCTION_NAME_OP;
 import static dollar.internal.runtime.script.parser.Symbols.PARAM_OP;
 
@@ -57,7 +57,7 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
         return lhs -> {
             boolean functionName;
             boolean builtin;
-            SourceCode sourceCode = new SourceCode(currentScope(), token);
+            SourceCode sourceCode = new SourceCode(util().currentScope(), token);
             boolean isPure = pure;
             String name;
             if (FUNCTION_NAME_OP.name().equals(lhs.metaAttribute(OPERATION_NAME))) {
@@ -75,25 +75,35 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
             }
 
             @SuppressWarnings("ConstantConditions")
-            var node = node(PARAM_OP, name, pure, parser, token, parameters,
-                            i -> inSubScope(true, pure, "param-disposable-scope", newScope -> {
-                                addParameterstoCurrentScope(currentScope(), parameters);
+            var node = util().node(PARAM_OP, name, pure, parser, token, parameters,
+                                   i -> util().inSubScope(true, pure, "param-disposable-scope",
+                                                          newScope -> {
+                                                              util().addParameterstoCurrentScope(
+                                                                      util().currentScope(),
+                                                                      parameters);
 
-                                var result;
-                                if (functionName) {
-                                    if (builtin) {
-                                        result = Builtins.execute(lhs.toString(), parameters, pure);
-                                    } else {
-                                        result = variableNode(pure, VarKey.of(lhs), false, null, token, parser)
-                                                         .$fix(2, false);
-                                    }
-                                } else {
+                                                              var result;
+                                                              if (functionName) {
+                                                                  if (builtin) {
+                                                                      result = Builtins.execute(
+                                                                              lhs.toString(),
+                                                                              parameters, pure);
+                                                                  } else {
+                                                                      result = util().variableNode(
+                                                                              pure,
+                                                                              VarKey.of(lhs),
+                                                                              false, null,
+                                                                              token, parser)
+                                                                                       .$fix(2,
+                                                                                             false);
+                                                                  }
+                                                              } else {
 
-                                    result = lhs.$fix(2, false);
-                                }
-                                assert result != null;
-                                return result;
-                            })
+                                                                  result = lhs.$fix(2, false);
+                                                              }
+                                                              assert result != null;
+                                                              return result;
+                                                          })
             );
 
 

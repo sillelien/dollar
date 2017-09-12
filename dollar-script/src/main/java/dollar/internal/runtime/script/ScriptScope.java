@@ -58,7 +58,6 @@ import java.util.stream.Collectors;
 import static dollar.api.DollarException.unravel;
 import static dollar.api.DollarStatic.*;
 import static dollar.api.types.meta.MetaConstants.IMPURE;
-import static dollar.internal.runtime.script.DollarScriptSupport.inSubScope;
 
 public class ScriptScope implements Scope {
 
@@ -258,7 +257,7 @@ public class ScriptScope implements Scope {
             scope = this;
         } else {
             if (getConfig().debugScope()) {
-                log.info("{} in {}", DollarScriptSupport.highlight("FOUND " + key, DollarScriptSupport.ANSI_CYAN), scope);
+                log.info("{} in {}", DollarUtilFactory.util().highlight("FOUND " + key, DollarUtil.ANSI_CYAN), scope);
             }
         }
         Variable result = scope.variables().get(key);
@@ -328,7 +327,7 @@ public class ScriptScope implements Scope {
                 return parent.handleError(unravelled);
             }
         } else {
-            return inSubScope(true, pure(), "error-scope", newScope -> {
+            return DollarUtilFactory.util().inSubScope(true, pure(), "error-scope", newScope -> {
                 log.info("Error handler in {}", this);
                 parameter(VarKey.of("type"), $(unravelled.getClass().getName()));
                 parameter(VarKey.of("msg"), $(unravelled.getMessage()));

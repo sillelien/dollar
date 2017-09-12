@@ -27,8 +27,6 @@ import org.jparsec.Token;
 
 import java.util.Objects;
 
-import static dollar.internal.runtime.script.DollarScriptSupport.currentScope;
-
 public class SourceCode implements Source {
     private final int length;
     @NotNull
@@ -43,7 +41,7 @@ public class SourceCode implements Source {
 
 
     public SourceCode(@NotNull Token t) {
-        this(currentScope(), t);
+        this(DollarUtilFactory.util().currentScope(), t);
     }
 
     public SourceCode(@NotNull Scope scope, @NotNull Token t) {

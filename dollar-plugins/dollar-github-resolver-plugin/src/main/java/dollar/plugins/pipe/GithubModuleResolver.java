@@ -30,7 +30,7 @@ import dollar.api.script.ModuleResolver;
 import dollar.api.var;
 import dollar.deps.DependencyRetriever;
 import dollar.internal.runtime.script.DollarParserImpl;
-import dollar.internal.runtime.script.DollarScriptSupport;
+import dollar.internal.runtime.script.DollarUtilFactory;
 import dollar.internal.runtime.script.FileScope;
 import dollar.internal.runtime.script.api.DollarParser;
 import dollar.internal.runtime.script.util.FileUtil;
@@ -188,7 +188,7 @@ public class GithubModuleResolver implements ModuleResolver {
                                                          .collect(Collectors.toList()));
 
         }
-        return (params) -> DollarScriptSupport.inSubScope(false, false, "github-module", newScope -> {
+        return (params) -> DollarUtilFactory.util().inSubScope(false, false, "github-module", newScope -> {
 
             final ImmutableMap<var, var> paramMap = params[0].$map().toVarMap();
             for (Map.Entry<var, var> entry : paramMap.entrySet()) {

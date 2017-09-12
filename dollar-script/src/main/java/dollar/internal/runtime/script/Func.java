@@ -48,11 +48,14 @@ import java.util.stream.Stream;
 
 import static dollar.api.DollarStatic.*;
 import static dollar.api.types.meta.MetaConstants.*;
-import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.DollarUtilFactory.util;
 import static dollar.internal.runtime.script.SourceNodeOptions.SCOPE_WITH_CLOSURE;
 import static dollar.internal.runtime.script.parser.Symbols.*;
 import static java.util.Collections.singletonList;
 
+/**
+ * A collection of functions largely used by the {{@link DollarParserImpl} class to support the execution of Dollar expressions
+ */
 public final class Func {
 
     public static final double ONE_DAY = 24.0 * 60.0 * 60.0 * 1000.0;
@@ -112,15 +115,15 @@ public final class Func {
                                      boolean readonly) {
         VarKey key = VarKey.of(variableName);
 
-        setVariable(currentScope(), key, value,
-                    parser, token, constraint, constraintSource,
-                    new VarFlags(readonly, false, false, pure, false, true));
+        util().setVariable(util().currentScope(), key, value,
+                           parser, token, constraint, constraintSource,
+                           new VarFlags(readonly, false, false, pure, false, true));
 
         if (export) {
-            parser.export(key, node(DEFINITION, "export-" + DEFINITION.name(),
-                                    pure, SCOPE_WITH_CLOSURE, parser,
-                                    new SourceCode(currentScope(), token),
-                                    null, singletonList(value), exportArgs -> value.$fix(2, false)));
+            parser.export(key, util().node(DEFINITION, "export-" + DEFINITION.name(),
+                                           pure, SCOPE_WITH_CLOSURE, parser,
+                                           new SourceCode(util().currentScope(), token),
+                                           null, singletonList(value), exportArgs -> value.$fix(2, false)));
         }
         return $void();
     }
@@ -129,11 +132,11 @@ public final class Func {
     static var eachFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         assert EACH.validForPure(pure);
         return lhs.$each(i -> {
-            var result = inSubScope(false, pure, EACH.name(),
-                                    newScope -> {
-                                        newScope.parameter(VarKey.ONE, i[0]);
-                                        return rhs.$fixDeep(false);
-                                    });
+            var result = util().inSubScope(false, pure, EACH.name(),
+                                           newScope -> {
+                                               newScope.parameter(VarKey.ONE, i[0]);
+                                               return rhs.$fixDeep(false);
+                                           });
             assert result != null;
             return result;
         });
@@ -151,7 +154,7 @@ public final class Func {
 
     @NotNull
     static var errorFunc(@NotNull var v) {
-        return currentScope().addErrorHandler(v);
+        return util().currentScope().addErrorHandler(v);
     }
 
     @NotNull
@@ -160,12 +163,12 @@ public final class Func {
                          @Nullable var until,
                          @Nullable var unless,
                          var block) {
-        Scope scope = currentScope();
+        Scope scope = util().currentScope();
         Double duration = durationVar.toDouble();
         assert duration != null;
         Scheduler.schedule(i -> {
             count.incrementAndGet();
-            return inScope(true, scope, newScope -> {
+            return util().inScope(true, scope, newScope -> {
 
                 newScope.parameter(VarKey.ONE, $(count.get()));
                 if ((until != null) && until.isTrue()) {
@@ -192,10 +195,10 @@ public final class Func {
     static var forFunc(boolean pure, @NotNull String varName, @NotNull var iterable, @NotNull var block) {
         assert FOR_OP.validForPure(pure);
         return iterable.$each(i -> {
-            return inSubScope(true, pure, "for-loop", newScope -> {
-                currentScope()
+            return util().inSubScope(true, pure, "for-loop", newScope -> {
+                util().currentScope()
                         .set(VarKey.of(varName),
-                             DollarScriptSupport.fix(i[0]),
+                             util().fix(i[0]),
                              null, null,
                              new VarFlags(false, false, false, pure, false, false));
                 return block.$fixDeep(false);
@@ -205,7 +208,7 @@ public final class Func {
 
     @NotNull
     static Future<var> forkFunc(@NotNull var v) {
-        return executor.executeInBackground(() -> DollarScriptSupport.fix(v));
+        return executor.executeInBackground(() -> util().fix(v));
     }
 
     @NotNull
@@ -229,7 +232,7 @@ public final class Func {
     @NotNull
     static var listenFunc(@NotNull var lhs, @NotNull var rhs) {
         lhs.$fixDeep();
-        return lhs.$listen(var -> lhs.isTrue() ? DollarScriptSupport.fix(rhs) : $void());
+        return lhs.$listen(var -> lhs.isTrue() ? util().fix(rhs) : $void());
     }
 
     @NotNull
@@ -262,7 +265,7 @@ public final class Func {
 
         return ModuleResolver
                        .resolveModule(parts[0])
-                       .resolve(parts[1], currentScope(), parser)
+                       .resolve(parts[1], util().currentScope(), parser)
                        .pipe($(paramMap))
                        .$fix(false);
 
@@ -297,14 +300,14 @@ public final class Func {
 
     @NotNull
     static var pipeFunc(@NotNull DollarParser parser, boolean pure, @NotNull Token token, @NotNull var rhs, @NotNull var lhs) {
-        currentScope().parameter(VarKey.ONE, lhs);
+        util().currentScope().parameter(VarKey.ONE, lhs);
         var rhsVal = rhs.$fix(false);
         if (FUNCTION_NAME_OP.name().equals(rhs.metaAttribute(OPERATION_NAME))) {
             return rhsVal;
         } else {
             return (rhs.metaAttribute(IS_BUILTIN) != null)
                            ? Builtins.execute(rhsVal.toString(), singletonList(lhs), pure)
-                           : variableNode(pure, VarKey.of(rhsVal), false, null, token, parser).$fix(1, false);
+                           : util().variableNode(pure, VarKey.of(rhsVal), false, null, token, parser).$fix(1, false);
         }
     }
 
@@ -313,7 +316,7 @@ public final class Func {
                          @NotNull Source segment,
                          @NotNull OpDef command,
                          @NotNull List<var> vars) {
-        return node(command, false, parser, segment, vars, args -> {
+        return util().node(command, false, parser, segment, vars, args -> {
             String outStr = vars.stream().map(var::toString).collect(Collectors.joining(""));
             if (command.equals(OUT)) {
                 System.out.println(outStr);
@@ -343,13 +346,13 @@ public final class Func {
         assert REDUCE.validForPure(pure);
         return lhs.$list().$stream(false).reduce((x, y) -> {
             try {
-                return inSubScope(false, pure, REDUCE.name(), newScope -> {
+                return util().inSubScope(false, pure, REDUCE.name(), newScope -> {
                     newScope.parameter(VarKey.ONE, x);
                     newScope.parameter(VarKey.TWO, y);
                     return rhs.$fixDeep(false);
                 });
             } catch (RuntimeException e) {
-                return currentScope().handleError(e);
+                return util().currentScope().handleError(e);
             }
         }).orElse($null(Type._ANY));
     }
@@ -357,12 +360,12 @@ public final class Func {
     @NotNull
     static var subscribeFunc(@NotNull var lhs, @NotNull var rhs) {
         return lhs.$subscribe(
-                i -> inSubScope(true, false,
-                                "subscribe-param", newScope -> {
-                            final var it = DollarScriptSupport.fix(i[0]);
-                            currentScope().parameter(VarKey.ONE, it);
-                            currentScope().parameter(VarKey.IT, it);
-                            return DollarScriptSupport.fix(rhs);
+                i -> util().inSubScope(true, false,
+                                       "subscribe-param", newScope -> {
+                            final var it = util().fix(i[0]);
+                            util().currentScope().parameter(VarKey.ONE, it);
+                            util().currentScope().parameter(VarKey.IT, it);
+                            return util().fix(rhs);
                         }));
     }
 

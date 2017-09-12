@@ -42,7 +42,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static dollar.api.DollarStatic.$void;
-import static dollar.internal.runtime.script.DollarScriptSupport.*;
+import static dollar.internal.runtime.script.DollarUtilFactory.util;
 import static dollar.internal.runtime.script.parser.Symbols.WINDOW_OP;
 import static java.util.Collections.singletonList;
 
@@ -78,8 +78,8 @@ public class WindowOperator implements Function<Token, var> {
 
 
         String id = UUID.randomUUID().toString();
-        return node(WINDOW_OP, pure, parser, token, singletonList(expression),
-                    parallel -> {
+        return util().node(WINDOW_OP, pure, parser, token, singletonList(expression),
+                           parallel -> {
 //                        assert varName != null;
 //                        Scope scopeForVar = getScopeForVar(pure, varName, false, null);
 //
@@ -87,41 +87,59 @@ public class WindowOperator implements Function<Token, var> {
 //                            throw new VariableNotFoundException(varName, currentScope());
 //                        }
 //
-                        Double duration = period.toDouble();
-                        assert duration != null;
-                        Scope scope = currentScope();
-                        NotifyListener notifyListener = new NotifyListener(unless, until, block, (long) (over.toDouble() * Func
-                                                                                                                                   .ONE_DAY));
-                        log.info("Before expression listen");
-                        expression.$fixDeep(false);
-                        var listenerId = expression.$listen(notifyListener, "window-expression-listener-" + expression.meta(
-                                MetaConstants.OPERATION_NAME) + "-" + id);
-                        expression.$notify();
-                        log.info("After expression listen");
-                        Scheduler.schedule(i -> inSubScope(true, pure, "window-operator-period", newScope -> {
-                            log.info("Schedule called on WindowOperator");
-                            newScope.parameter(VarKey.COUNT, DollarFactory.fromValue(notifyListener.count.get()));
-                            newScope.parameter(VarKey.COLLECTED, DollarFactory.fromList(notifyListener.collected
-                                                                                                .asMap()
-                                                                                                .entrySet()
-                                                                                                .stream()
-                                                                                                .sorted(Comparator.comparing(
-                                                                                                        Map.Entry::getKey))
-                                                                                                .map(Map.Entry::getValue)
-                                                                                                .collect(Collectors.toList())));
-                            block.$fixDeep(false);
-                            log.info("Clearing collected");
-                            if (notifyListener.finished) {
-                                log.debug("Cancelling");
-                                Scheduler.cancel(i[0].$S());
-                                expression.$cancel(listenerId);
-                            }
-                            return $void();
+                               Double duration = period.toDouble();
+                               assert duration != null;
+                               Scope scope = util().currentScope();
+                               NotifyListener notifyListener = new NotifyListener(unless, until, block,
+                                                                                  (long) (over.toDouble() * Func
+                                                                                                                    .ONE_DAY));
+                               log.info("Before expression listen");
+                               expression.$fixDeep(false);
+                               var listenerId = expression.$listen(notifyListener,
+                                                                   "window-expression-listener-" + expression.meta(
+                                                                           MetaConstants.OPERATION_NAME) + "-" + id);
+                               expression.$notify();
+                               log.info("After expression listen");
+                               Scheduler.schedule(i -> util().inSubScope(true, pure,
+                                                                         "window-operator-period",
+                                                                         newScope -> {
+                                                                             log.info(
+                                                                                     "Schedule called on WindowOperator");
+                                                                             newScope.parameter(
+                                                                                     VarKey.COUNT,
+                                                                                     DollarFactory.fromValue(
+                                                                                             notifyListener.count.get()));
+                                                                             newScope.parameter(
+                                                                                     VarKey.COLLECTED,
+                                                                                     DollarFactory.fromList(
+                                                                                             notifyListener.collected
+                                                                                                     .asMap()
+                                                                                                     .entrySet()
+                                                                                                     .stream()
+                                                                                                     .sorted(Comparator.comparing(
+                                                                                                             Map.Entry::getKey))
+                                                                                                     .map(Map.Entry::getValue)
+                                                                                                     .collect(
+                                                                                                             Collectors.toList())));
+                                                                             block.$fixDeep(
+                                                                                     false);
+                                                                             log.info(
+                                                                                     "Clearing collected");
+                                                                             if (notifyListener.finished) {
+                                                                                 log.debug(
+                                                                                         "Cancelling");
+                                                                                 Scheduler.cancel(
+                                                                                         i[0].$S());
+                                                                                 expression.$cancel(
+                                                                                         listenerId);
+                                                                             }
+                                                                             return $void();
 
-                        }), ((long) (duration * Func.ONE_DAY)));
-                        return $void();
+                                                                         }),
+                                                  ((long) (duration * Func.ONE_DAY)));
+                               return $void();
 
-                    });
+                           });
 
 
     }

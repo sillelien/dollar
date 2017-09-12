@@ -27,8 +27,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static dollar.internal.runtime.script.DollarScriptSupport.*;
-
 public class ClassScopeFactory implements DollarClass {
     @NotNull
     private static final Logger log = LoggerFactory.getLogger(ClassScopeFactory.class);
@@ -46,9 +44,9 @@ public class ClassScopeFactory implements DollarClass {
     @NotNull
     @Override
     public var instance(List<var> params) {
-        ScriptScope subScope = new ScriptScope(currentScope(), "class-" + name, false, true);
-        return inScope(true, subScope, scope -> {
-            addParameterstoCurrentScope(scope, params);
+        ScriptScope subScope = new ScriptScope(DollarUtilFactory.util().currentScope(), "class-" + name, false, true);
+        return DollarUtilFactory.util().inScope(true, subScope, scope -> {
+            DollarUtilFactory.util().addParameterstoCurrentScope(scope, params);
             var constructor = DollarFactory.fromList(expression.stream().map(var::$fixDeep).collect(Collectors.toList()));
 //            System.err.println(scope.variables());
             return new DollarObject(name, constructor, scope.variables());

@@ -129,7 +129,7 @@ public final class Builtins {
         if (builtin == null) {
             throw new BuiltinNotFoundException(name);
         }
-        return builtin.execute(pure, parameters, DollarScriptSupport.currentScope());
+        return builtin.execute(pure, parameters, DollarUtilFactory.util().currentScope());
     }
 
     public static boolean exists(@NotNull String name) {

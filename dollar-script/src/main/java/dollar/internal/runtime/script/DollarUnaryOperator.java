@@ -26,8 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 
-import static dollar.internal.runtime.script.DollarScriptSupport.node;
-import static dollar.internal.runtime.script.DollarScriptSupport.reactiveNode;
 import static java.util.Collections.singletonList;
 
 public class DollarUnaryOperator implements UnaryOperator<var>, Operator {
@@ -71,12 +69,13 @@ public class DollarUnaryOperator implements UnaryOperator<var>, Operator {
     public var apply(@NotNull var from) {
 
         if (immediate) {
-            return node(operation, pure, parser, source, singletonList(from), vars -> function.apply(from, source));
+            return DollarUtilFactory.util().node(operation, pure, parser, source, singletonList(from),
+                                                 vars -> function.apply(from, source));
 
         }
 
         //Lazy evaluation
-        return reactiveNode(operation, pure, source, parser, from, args -> function.apply(from, source));
+        return DollarUtilFactory.util().reactiveNode(operation, pure, source, parser, from, args -> function.apply(from, source));
 
     }
 
