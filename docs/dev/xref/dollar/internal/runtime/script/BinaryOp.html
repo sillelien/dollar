@@ -24,7 +24,7 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar.internal.runtime.script;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.SourceSegment;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.Source;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.DollarParser;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.exceptions.DollarParserError;
@@ -40,16 +40,16 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.DollarScriptSupport.reactiveNode;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../dollar/internal/runtime/script/BinaryOp.html">BinaryOp</a> <strong class="jxr_keyword">implements</strong> BinaryOperator&lt;<strong class="jxr_keyword">var</strong>&gt;, <a href="../../../../dollar/internal/runtime/script/Operator.html">Operator</a> {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> immediate;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>      @NotNull
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BiFunction&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; function;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      @NotNull
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BiFunction&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; function;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> immediate;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>      @NotNull
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>      @NotNull
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser;
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> pure;
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>      @NotNull
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../dollar/api/script/Source.html">Source</a> source;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../dollar/internal/runtime/script/BinaryOp.html">BinaryOp</a>(@NotNull <a href="../../../../dollar/internal/runtime/script/api/DollarParser.html">DollarParser</a> parser,
@@ -75,36 +75,36 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>          validate(operation);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      }
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation) {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">if</strong> (operation.reactive() == immediate) {
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarParserError.html">DollarParserError</a>(<span class="jxr_string">"The operation "</span> + operation.name() + <span class="jxr_string">" is marked as "</span> + (operation.reactive()
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>                                                                                                            ? <span class="jxr_string">"reactive"</span> : <span class="jxr_string">"unreactive"</span>) + <span class="jxr_string">" "</span> +
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>                                                  <span class="jxr_string">"yet this operator is set to be "</span> + (immediate
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>                                                                                               ? <span class="jxr_string">"unreactive"</span> : <span class="jxr_string">"reactive"</span>));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      @NotNull
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      @Override
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> apply(@NotNull <strong class="jxr_keyword">var</strong> lhs, @NotNull <strong class="jxr_keyword">var</strong> rhs) {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          <strong class="jxr_keyword">if</strong> (immediate) {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>              <strong class="jxr_keyword">return</strong> node(operation, pure, parser, source, Arrays.asList(lhs, rhs), vars -&gt; function.apply(lhs, rhs));
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>          }
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">if</strong> (operation.type() != OpDefType.BINARY) {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarParserError.html">DollarParserError</a>(<span class="jxr_string">"The operator "</span> + operation.name() + <span class="jxr_string">" is defined as not BINARY but used in a binary "</span> +
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>                                                  <span class="jxr_string">"operator."</span>);
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>          }
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>          <strong class="jxr_keyword">if</strong> (pure &amp;&amp; (operation.pure() != <strong class="jxr_keyword">null</strong>) &amp;&amp; !operation.pure()) {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> AssertionError(<span class="jxr_string">"The operation "</span> + operation.name() + <span class="jxr_string">" is marked as "</span> + (operation.pure() ? <span class="jxr_string">"pure"</span> : <span class="jxr_string">"impure"</span>) + <span class="jxr_string">" yet this operator is set to be "</span> + (pure ? <span class="jxr_string">"pure"</span> : <span class="jxr_string">"impure"</span>));
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>          }
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <em class="jxr_comment">//Lazy evaluation</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>          <strong class="jxr_keyword">return</strong> reactiveNode(operation, pure, parser, source, lhs, rhs, args -&gt; function.apply(lhs, rhs));
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      }
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      @Override
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSource(@NotNull <a href="../../../../dollar/api/script/Source.html">Source</a> source) {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          <strong class="jxr_keyword">this</strong>.source = source;
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>      }
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>      @NotNull
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>      @Override
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> apply(@NotNull <strong class="jxr_keyword">var</strong> lhs, @NotNull <strong class="jxr_keyword">var</strong> rhs) {
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">if</strong> (immediate) {
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>              <strong class="jxr_keyword">return</strong> node(operation, pure, parser, source, Arrays.asList(lhs, rhs), vars -&gt; function.apply(lhs, rhs));
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate(@NotNull <a href="../../../../dollar/internal/runtime/script/parser/OpDef.html">OpDef</a> operation) {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          <strong class="jxr_keyword">if</strong> (operation.reactive() == immediate) {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarParserError.html">DollarParserError</a>(<span class="jxr_string">"The operation "</span> + operation.name() + <span class="jxr_string">" is marked as "</span> + (operation.reactive()
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>                                                                                                            ? <span class="jxr_string">"reactive"</span> : <span class="jxr_string">"unreactive"</span>) + <span class="jxr_string">" "</span> +
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>                                                  <span class="jxr_string">"yet this operator is set to be "</span> + (immediate
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>                                                                                               ? <span class="jxr_string">"unreactive"</span> : <span class="jxr_string">"reactive"</span>));
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>          }
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>          <em class="jxr_comment">//Lazy evaluation</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>          <strong class="jxr_keyword">return</strong> reactiveNode(operation, pure, parser, source, lhs, rhs, args -&gt; function.apply(lhs, rhs));
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>      }
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>      @Override
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSource(@NotNull <a href="../../../../dollar/api/script/SourceSegment.html">SourceSegment</a> source) {
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>          <strong class="jxr_keyword">this</strong>.source = source;
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>          <strong class="jxr_keyword">if</strong> (operation.type() != OpDefType.BINARY) {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/DollarParserError.html">DollarParserError</a>(<span class="jxr_string">"The operator "</span> + operation.name() + <span class="jxr_string">" is defined as not BINARY but used in a binary "</span> +
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>                                                  <span class="jxr_string">"operator."</span>);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>          }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>          <strong class="jxr_keyword">if</strong> (pure &amp;&amp; (operation.pure() != <strong class="jxr_keyword">null</strong>) &amp;&amp; !operation.pure()) {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> AssertionError(<span class="jxr_string">"The operation "</span> + operation.name() + <span class="jxr_string">" is marked as "</span> + (operation.pure() ? <span class="jxr_string">"pure"</span> : <span class="jxr_string">"impure"</span>) + <span class="jxr_string">" yet this operator is set to be "</span> + (pure ? <span class="jxr_string">"pure"</span> : <span class="jxr_string">"impure"</span>));
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>          }
 <a class="jxr_linenumber" name="L100" href="#L100">100</a>     }
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> }
 </pre>
