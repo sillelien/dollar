@@ -100,7 +100,7 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>                          <a href="../../../../../dollar/internal/runtime/script/operators/WindowOperator.html">NotifyListener</a> notifyListener = <strong class="jxr_keyword">new</strong> <a href="../../../../../dollar/internal/runtime/script/operators/WindowOperator.html">NotifyListener</a>(unless, until, block, (<strong class="jxr_keyword">long</strong>) (over.toDouble() * Func
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>                                                                                                                                     .ONE_DAY));
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>                          log.info(<span class="jxr_string">"Before expression listen"</span>);
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>                          expression.$fixDeep(currentScope().parallel());
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>                          expression.$fixDeep(false);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>                          <strong class="jxr_keyword">var</strong> listenerId = expression.$listen(notifyListener, <span class="jxr_string">"window-expression-listener-"</span> + expression.meta(
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>                                  MetaConstants.OPERATION_NAME) + <span class="jxr_string">"-"</span> + id);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>                          expression.$notify();
@@ -116,7 +116,7 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a>                                                                                                    Map.Entry::getKey))
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>                                                                                            .map(Map.Entry::getValue)
 <a class="jxr_linenumber" name="L110" href="#L110">110</a>                                                                                            .collect(Collectors.toList())));
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>                             block.$fixDeep(currentScope().parallel());
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>                             block.$fixDeep(false);
 <a class="jxr_linenumber" name="L112" href="#L112">112</a>                             log.info(<span class="jxr_string">"Clearing collected"</span>);
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>                             <strong class="jxr_keyword">if</strong> (notifyListener.finished) {
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>                                 log.debug(<span class="jxr_string">"Cancelling"</span>);
@@ -137,16 +137,16 @@
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../dollar/internal/runtime/script/operators/WindowOperator.html">NotifyListener</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../dollar/api/Pipeable.html">Pipeable</a> {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>         @NotNull
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>         <strong class="jxr_keyword">final</strong> AtomicLong count = <strong class="jxr_keyword">new</strong> AtomicLong(-1);
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>         @Nullable
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> unless;
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>         @Nullable
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> until;
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>         @NotNull
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> loop;
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>         @NotNull
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Cache&lt;Long, <strong class="jxr_keyword">var</strong>&gt; collected;
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicLong collectedId = <strong class="jxr_keyword">new</strong> AtomicLong();
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>         @NotNull
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Cache&lt;Long, <strong class="jxr_keyword">var</strong>&gt; collected;
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>         @NotNull
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicLong collectedId = <strong class="jxr_keyword">new</strong> AtomicLong();
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>         @NotNull
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> loop;
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>         @Nullable
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> unless;
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>         @Nullable
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> until;
 <a class="jxr_linenumber" name="L142" href="#L142">142</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> finished;
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>         <strong class="jxr_keyword">private</strong> <a href="../../../../../dollar/internal/runtime/script/operators/WindowOperator.html">NotifyListener</a>(@Nullable <strong class="jxr_keyword">var</strong> unless, @Nullable <strong class="jxr_keyword">var</strong> until, @NotNull <strong class="jxr_keyword">var</strong> loop, <strong class="jxr_keyword">long</strong> windowLength) {
