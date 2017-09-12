@@ -1,1 +1,1493 @@
-l: command not found
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] Dollar
+[INFO] Dollar Core - API for writing dynamic Java
+[INFO] dollar-resolver
+[INFO] dollar-plugins
+[INFO] dollar-std-resources-plugins
+[INFO] dollar-redis-plugin
+[INFO] dollar-http-plugin
+[INFO] dollar-metrics-plugin
+[INFO] dollar-script
+[INFO] dollar-simple-execution-plugin
+[INFO] dollar-class-resolver-plugin
+[INFO] dollar-github-resolver-plugin
+[INFO] dollar-maven-resolver-plugin
+[INFO] dollar-socketio-plugin
+[INFO] dollar-mapdb-plugin
+[INFO] dollar-simple-learner-plugin
+[INFO] dollar-runtime
+[INFO] dollar-scripting-java-plugin
+[INFO] Dollar Examples
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Dollar 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar ---
+[INFO] Attaching 'src/site/site.xml' site descriptor with classifier 'site'.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar ---
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar ---
+[INFO] Installing /Users/neil/dev/dollar/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar/0-SNAPSHOT/dollar-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/target/dollar-0-SNAPSHOT-site.xml to /Users/neil/.m2/repository/com/sillelien/dollar/0-SNAPSHOT/dollar-0-SNAPSHOT-site.xml
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Dollar Core - API for writing dynamic Java 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-core ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-core ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-core ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-core ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 27 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-core ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-core ---
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running dollar.DollarControlFlowTest
+[INFO] Running dollar.DollarErrorTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s - in dollar.DollarErrorTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 s - in dollar.DollarControlFlowTest
+[INFO] Running dollar.DollarNumberTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.041 s - in dollar.DollarNumberTest
+[INFO] Running dollar.DollarQueueTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.013 s - in dollar.DollarQueueTest
+[INFO] Running dollar.DollarArrayTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.856 s - in dollar.DollarArrayTest
+[INFO] Running dollar.DollarVoidTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.003 s - in dollar.DollarVoidTest
+[INFO] Running dollar.DollarMapTest
+{"color":"red"}[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.801 s - in dollar.DollarMapTest
+[INFO] Running dollar.FromJsonStringTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.094 s - in dollar.FromJsonStringTest
+[INFO] Running dollar.ToStringTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.076 s - in dollar.ToStringTest
+[INFO] Running dollar.DollarYamlTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.253 s - in dollar.DollarYamlTest
+[INFO] Running dollar.DollarRangeTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.999 s - in dollar.DollarRangeTest
+[INFO] Running dollar.DollarOperatorsRegressionTest
+/Users/neil/dev/dollar/dollar-core/target/minus.small.json
+/Users/neil/dev/dollar/dollar-core/target/minus.minimal.json
+/Users/neil/dev/dollar/dollar-core/target/divide.all.json
+/Users/neil/dev/dollar/dollar-core/target/divide.minimal.json
+/Users/neil/dev/dollar/dollar-core/target/plus.all.json
+/Users/neil/dev/dollar/dollar-core/target/plus.minimal.json
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 16.151 s - in dollar.DollarOperatorsRegressionTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 22, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-core ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-core ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-core ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-core >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-core ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-core <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-core ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-core/target/dollar-core-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- apache-rat-plugin:0.11:check (default) @ dollar-core ---
+[INFO] RAT will not execute since it is configured to be skipped via system property 'rat.skip'.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-core ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-core/target/dollar-core-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-core/0-SNAPSHOT/dollar-core-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-core/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-core/0-SNAPSHOT/dollar-core-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-core/target/dollar-core-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-core/0-SNAPSHOT/dollar-core-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-resolver 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-resolver ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-resolver ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-resolver/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-resolver ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-resolver ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-resolver/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-resolver ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-resolver ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-resolver ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-resolver ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-resolver ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-resolver >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-resolver ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-resolver <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-resolver ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-resolver/target/dollar-resolver-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-resolver ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-resolver/target/dollar-resolver-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-resolver/0-SNAPSHOT/dollar-resolver-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-resolver/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-resolver/0-SNAPSHOT/dollar-resolver-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-resolver/target/dollar-resolver-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-resolver/0-SNAPSHOT/dollar-resolver-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-plugins 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-plugins ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-plugins ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-plugins ---
+[INFO] No site descriptor found: nothing to attach.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-plugins >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-plugins ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-plugins <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-plugins ---
+[INFO] 
+[INFO] --- maven-shade-plugin:3.0.0:shade (default) @ dollar-plugins ---
+[INFO] Excluding com.google.guava:guava:jar:22.0 from the shaded jar.
+[INFO] Including com.google.code.findbugs:jsr305:jar:1.3.9 in the shaded jar.
+[INFO] Including com.google.errorprone:error_prone_annotations:jar:2.0.18 in the shaded jar.
+[INFO] Including com.google.j2objc:j2objc-annotations:jar:1.1 in the shaded jar.
+[INFO] Including org.codehaus.mojo:animal-sniffer-annotations:jar:1.14 in the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-log4j12:jar:1.7.12 from the shaded jar.
+[INFO] Excluding log4j:log4j:jar:1.2.17 from the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-api:jar:1.7.12 from the shaded jar.
+[INFO] Attaching shaded artifact.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-plugins ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-plugins/0-SNAPSHOT/dollar-plugins-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/target/dollar-plugins-0-SNAPSHOT-plugin.pom to /Users/neil/.m2/repository/com/sillelien/dollar-plugins/0-SNAPSHOT/dollar-plugins-0-SNAPSHOT-plugin.pom
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-std-resources-plugins 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-std-resources-plugins ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-std-resources-plugins ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-std-resources-plugins ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-std-resources-plugins ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-plugins/dollar-std-resources-plugin/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-std-resources-plugins ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-std-resources-plugins ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-std-resources-plugins ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-std-resources-plugins ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-std-resources-plugins ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-std-resources-plugins >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-std-resources-plugins ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-std-resources-plugins <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-std-resources-plugins ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-plugins/dollar-std-resources-plugin/target/dollar-std-resources-plugins-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-shade-plugin:3.0.0:shade (default) @ dollar-std-resources-plugins ---
+[INFO] Including org.jetbrains:annotations:jar:15.0 in the shaded jar.
+[INFO] Excluding com.google.guava:guava:jar:22.0 from the shaded jar.
+[INFO] Including com.google.code.findbugs:jsr305:jar:1.3.9 in the shaded jar.
+[INFO] Including com.google.errorprone:error_prone_annotations:jar:2.0.18 in the shaded jar.
+[INFO] Including com.google.j2objc:j2objc-annotations:jar:1.1 in the shaded jar.
+[INFO] Including org.codehaus.mojo:animal-sniffer-annotations:jar:1.14 in the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-log4j12:jar:1.7.12 from the shaded jar.
+[INFO] Excluding log4j:log4j:jar:1.2.17 from the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-api:jar:1.7.12 from the shaded jar.
+[INFO] Attaching shaded artifact.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-std-resources-plugins ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-std-resources-plugin/target/dollar-std-resources-plugins-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-std-resources-plugins/0-SNAPSHOT/dollar-std-resources-plugins-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-std-resources-plugin/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-std-resources-plugins/0-SNAPSHOT/dollar-std-resources-plugins-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-std-resources-plugin/target/dollar-std-resources-plugins-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-std-resources-plugins/0-SNAPSHOT/dollar-std-resources-plugins-0-SNAPSHOT-sources.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-std-resources-plugin/target/dollar-std-resources-plugins-0-SNAPSHOT-plugin.jar to /Users/neil/.m2/repository/com/sillelien/dollar-std-resources-plugins/0-SNAPSHOT/dollar-std-resources-plugins-0-SNAPSHOT-plugin.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-redis-plugin 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-redis-plugin ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-redis-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-redis-plugin ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-redis-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-plugins/dollar-redis-plugin/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-redis-plugin ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-redis-plugin ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-redis-plugin ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-redis-plugin ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-redis-plugin ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-redis-plugin >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-redis-plugin ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-redis-plugin <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-redis-plugin ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-plugins/dollar-redis-plugin/target/dollar-redis-plugin-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-shade-plugin:3.0.0:shade (default) @ dollar-redis-plugin ---
+[INFO] Including redis.clients:jedis:jar:2.9.0 in the shaded jar.
+[INFO] Including org.apache.commons:commons-pool2:jar:2.4.2 in the shaded jar.
+[INFO] Including org.jetbrains:annotations:jar:15.0 in the shaded jar.
+[INFO] Excluding com.google.guava:guava:jar:22.0 from the shaded jar.
+[INFO] Including com.google.code.findbugs:jsr305:jar:1.3.9 in the shaded jar.
+[INFO] Including com.google.errorprone:error_prone_annotations:jar:2.0.18 in the shaded jar.
+[INFO] Including com.google.j2objc:j2objc-annotations:jar:1.1 in the shaded jar.
+[INFO] Including org.codehaus.mojo:animal-sniffer-annotations:jar:1.14 in the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-log4j12:jar:1.7.12 from the shaded jar.
+[INFO] Excluding log4j:log4j:jar:1.2.17 from the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-api:jar:1.7.12 from the shaded jar.
+[INFO] Attaching shaded artifact.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-redis-plugin ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-redis-plugin/target/dollar-redis-plugin-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-redis-plugin/0-SNAPSHOT/dollar-redis-plugin-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-redis-plugin/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-redis-plugin/0-SNAPSHOT/dollar-redis-plugin-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-redis-plugin/target/dollar-redis-plugin-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-redis-plugin/0-SNAPSHOT/dollar-redis-plugin-0-SNAPSHOT-sources.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-redis-plugin/target/dollar-redis-plugin-0-SNAPSHOT-plugin.jar to /Users/neil/.m2/repository/com/sillelien/dollar-redis-plugin/0-SNAPSHOT/dollar-redis-plugin-0-SNAPSHOT-plugin.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-http-plugin 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-http-plugin ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-http-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-http-plugin ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-http-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-plugins/dollar-http-plugin/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-http-plugin ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-http-plugin ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-http-plugin ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-http-plugin ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-http-plugin ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-http-plugin >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-http-plugin ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-http-plugin <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-http-plugin ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-plugins/dollar-http-plugin/target/dollar-http-plugin-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-shade-plugin:3.0.0:shade (default) @ dollar-http-plugin ---
+[INFO] Including com.mashape.unirest:unirest-java:jar:1.4.9 in the shaded jar.
+[INFO] Including org.apache.httpcomponents:httpclient:jar:4.5.3 in the shaded jar.
+[INFO] Including org.apache.httpcomponents:httpcore:jar:4.4.6 in the shaded jar.
+[INFO] Including org.apache.httpcomponents:httpasyncclient:jar:4.1.3 in the shaded jar.
+[INFO] Including org.apache.httpcomponents:httpcore-nio:jar:4.4.6 in the shaded jar.
+[INFO] Including org.apache.httpcomponents:httpmime:jar:4.5.3 in the shaded jar.
+[INFO] Including org.json:json:jar:20160212 in the shaded jar.
+[INFO] Including commons-logging:commons-logging:jar:1.2 in the shaded jar.
+[INFO] Including org.jetbrains:annotations:jar:15.0 in the shaded jar.
+[INFO] Excluding com.google.guava:guava:jar:22.0 from the shaded jar.
+[INFO] Including com.google.code.findbugs:jsr305:jar:1.3.9 in the shaded jar.
+[INFO] Including com.google.errorprone:error_prone_annotations:jar:2.0.18 in the shaded jar.
+[INFO] Including com.google.j2objc:j2objc-annotations:jar:1.1 in the shaded jar.
+[INFO] Including org.codehaus.mojo:animal-sniffer-annotations:jar:1.14 in the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-log4j12:jar:1.7.12 from the shaded jar.
+[INFO] Excluding log4j:log4j:jar:1.2.17 from the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-api:jar:1.7.12 from the shaded jar.
+[INFO] Attaching shaded artifact.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-http-plugin ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-http-plugin/target/dollar-http-plugin-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-http-plugin/0-SNAPSHOT/dollar-http-plugin-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-http-plugin/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-http-plugin/0-SNAPSHOT/dollar-http-plugin-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-http-plugin/target/dollar-http-plugin-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-http-plugin/0-SNAPSHOT/dollar-http-plugin-0-SNAPSHOT-sources.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-http-plugin/target/dollar-http-plugin-0-SNAPSHOT-plugin.jar to /Users/neil/.m2/repository/com/sillelien/dollar-http-plugin/0-SNAPSHOT/dollar-http-plugin-0-SNAPSHOT-plugin.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-metrics-plugin 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-metrics-plugin ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-metrics-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-metrics-plugin ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-metrics-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-plugins/dollar-metrics-plugin/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-metrics-plugin ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-metrics-plugin ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-metrics-plugin ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-metrics-plugin ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-metrics-plugin ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-metrics-plugin >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-metrics-plugin ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-metrics-plugin <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-metrics-plugin ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-plugins/dollar-metrics-plugin/target/dollar-metrics-plugin-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-shade-plugin:3.0.0:shade (default) @ dollar-metrics-plugin ---
+[INFO] Including io.dropwizard.metrics:metrics-core:jar:3.2.3 in the shaded jar.
+[INFO] Including org.jetbrains:annotations:jar:15.0 in the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-api:jar:1.7.12 from the shaded jar.
+[INFO] Excluding com.google.guava:guava:jar:22.0 from the shaded jar.
+[INFO] Including com.google.code.findbugs:jsr305:jar:1.3.9 in the shaded jar.
+[INFO] Including com.google.errorprone:error_prone_annotations:jar:2.0.18 in the shaded jar.
+[INFO] Including com.google.j2objc:j2objc-annotations:jar:1.1 in the shaded jar.
+[INFO] Including org.codehaus.mojo:animal-sniffer-annotations:jar:1.14 in the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-log4j12:jar:1.7.12 from the shaded jar.
+[INFO] Excluding log4j:log4j:jar:1.2.17 from the shaded jar.
+[INFO] Attaching shaded artifact.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-metrics-plugin ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-metrics-plugin/target/dollar-metrics-plugin-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-metrics-plugin/0-SNAPSHOT/dollar-metrics-plugin-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-metrics-plugin/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-metrics-plugin/0-SNAPSHOT/dollar-metrics-plugin-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-metrics-plugin/target/dollar-metrics-plugin-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-metrics-plugin/0-SNAPSHOT/dollar-metrics-plugin-0-SNAPSHOT-sources.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-metrics-plugin/target/dollar-metrics-plugin-0-SNAPSHOT-plugin.jar to /Users/neil/.m2/repository/com/sillelien/dollar-metrics-plugin/0-SNAPSHOT/dollar-metrics-plugin-0-SNAPSHOT-plugin.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-script 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-script ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-script ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 177 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-script ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-script ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-script/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-script ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-script ---
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running dollar.internal.runtime.script.ParserMainTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 s - in dollar.internal.runtime.script.ParserMainTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-script ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-script ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-script ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-script >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-script ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-script <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-script ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-script/target/dollar-script-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-script ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-script/target/dollar-script-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-script/0-SNAPSHOT/dollar-script-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-script/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-script/0-SNAPSHOT/dollar-script-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-script/target/dollar-script-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-script/0-SNAPSHOT/dollar-script-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-simple-execution-plugin 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-simple-execution-plugin ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-simple-execution-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-simple-execution-plugin ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-simple-execution-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-plugins/dollar-simple-execution-plugin/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-simple-execution-plugin ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-simple-execution-plugin ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-simple-execution-plugin ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-simple-execution-plugin ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-simple-execution-plugin ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-simple-execution-plugin >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-simple-execution-plugin ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-simple-execution-plugin <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-simple-execution-plugin ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-plugins/dollar-simple-execution-plugin/target/dollar-simple-execution-plugin-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-shade-plugin:3.0.0:shade (default) @ dollar-simple-execution-plugin ---
+[INFO] Including org.jetbrains:annotations:jar:15.0 in the shaded jar.
+[INFO] Excluding com.google.guava:guava:jar:22.0 from the shaded jar.
+[INFO] Including com.google.code.findbugs:jsr305:jar:1.3.9 in the shaded jar.
+[INFO] Including com.google.errorprone:error_prone_annotations:jar:2.0.18 in the shaded jar.
+[INFO] Including com.google.j2objc:j2objc-annotations:jar:1.1 in the shaded jar.
+[INFO] Including org.codehaus.mojo:animal-sniffer-annotations:jar:1.14 in the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-log4j12:jar:1.7.12 from the shaded jar.
+[INFO] Excluding log4j:log4j:jar:1.2.17 from the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-api:jar:1.7.12 from the shaded jar.
+[INFO] Attaching shaded artifact.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-simple-execution-plugin ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-simple-execution-plugin/target/dollar-simple-execution-plugin-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-simple-execution-plugin/0-SNAPSHOT/dollar-simple-execution-plugin-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-simple-execution-plugin/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-simple-execution-plugin/0-SNAPSHOT/dollar-simple-execution-plugin-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-simple-execution-plugin/target/dollar-simple-execution-plugin-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-simple-execution-plugin/0-SNAPSHOT/dollar-simple-execution-plugin-0-SNAPSHOT-sources.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-simple-execution-plugin/target/dollar-simple-execution-plugin-0-SNAPSHOT-plugin.jar to /Users/neil/.m2/repository/com/sillelien/dollar-simple-execution-plugin/0-SNAPSHOT/dollar-simple-execution-plugin-0-SNAPSHOT-plugin.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-class-resolver-plugin 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-class-resolver-plugin ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-class-resolver-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-class-resolver-plugin ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-class-resolver-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-plugins/dollar-class-resolver-plugin/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-class-resolver-plugin ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-class-resolver-plugin ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-class-resolver-plugin ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-class-resolver-plugin ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-class-resolver-plugin ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-class-resolver-plugin >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-class-resolver-plugin ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-class-resolver-plugin <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-class-resolver-plugin ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-plugins/dollar-class-resolver-plugin/target/dollar-class-resolver-plugin-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-shade-plugin:3.0.0:shade (default) @ dollar-class-resolver-plugin ---
+[INFO] Including org.jetbrains:annotations:jar:15.0 in the shaded jar.
+[INFO] Including com.sillelien:dollar-resolver:jar:0-SNAPSHOT in the shaded jar.
+[INFO] Including org.sonatype.aether:aether-util:jar:1.13.1 in the shaded jar.
+[INFO] Including org.sonatype.aether:aether-api:jar:1.13.1 in the shaded jar.
+[INFO] Excluding com.google.guava:guava:jar:22.0 from the shaded jar.
+[INFO] Including com.google.code.findbugs:jsr305:jar:1.3.9 in the shaded jar.
+[INFO] Including com.google.errorprone:error_prone_annotations:jar:2.0.18 in the shaded jar.
+[INFO] Including com.google.j2objc:j2objc-annotations:jar:1.1 in the shaded jar.
+[INFO] Including org.codehaus.mojo:animal-sniffer-annotations:jar:1.14 in the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-log4j12:jar:1.7.12 from the shaded jar.
+[INFO] Excluding log4j:log4j:jar:1.2.17 from the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-api:jar:1.7.12 from the shaded jar.
+[INFO] Attaching shaded artifact.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-class-resolver-plugin ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-class-resolver-plugin/target/dollar-class-resolver-plugin-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-class-resolver-plugin/0-SNAPSHOT/dollar-class-resolver-plugin-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-class-resolver-plugin/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-class-resolver-plugin/0-SNAPSHOT/dollar-class-resolver-plugin-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-class-resolver-plugin/target/dollar-class-resolver-plugin-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-class-resolver-plugin/0-SNAPSHOT/dollar-class-resolver-plugin-0-SNAPSHOT-sources.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-class-resolver-plugin/target/dollar-class-resolver-plugin-0-SNAPSHOT-plugin.jar to /Users/neil/.m2/repository/com/sillelien/dollar-class-resolver-plugin/0-SNAPSHOT/dollar-class-resolver-plugin-0-SNAPSHOT-plugin.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-github-resolver-plugin 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-github-resolver-plugin ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-github-resolver-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-github-resolver-plugin ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-github-resolver-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-plugins/dollar-github-resolver-plugin/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-github-resolver-plugin ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-github-resolver-plugin ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-github-resolver-plugin ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-github-resolver-plugin ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-github-resolver-plugin ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-github-resolver-plugin >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-github-resolver-plugin ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-github-resolver-plugin <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-github-resolver-plugin ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-plugins/dollar-github-resolver-plugin/target/dollar-github-resolver-plugin-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-shade-plugin:3.0.0:shade (default) @ dollar-github-resolver-plugin ---
+[INFO] Including org.jetbrains:annotations:jar:15.0 in the shaded jar.
+[INFO] Including com.sillelien:dollar-resolver:jar:0-SNAPSHOT in the shaded jar.
+[INFO] Including org.sonatype.aether:aether-util:jar:1.13.1 in the shaded jar.
+[INFO] Including org.sonatype.aether:aether-api:jar:1.13.1 in the shaded jar.
+[INFO] Excluding com.google.guava:guava:jar:22.0 from the shaded jar.
+[INFO] Including com.google.code.findbugs:jsr305:jar:1.3.9 in the shaded jar.
+[INFO] Including com.google.errorprone:error_prone_annotations:jar:2.0.18 in the shaded jar.
+[INFO] Including com.google.j2objc:j2objc-annotations:jar:1.1 in the shaded jar.
+[INFO] Including org.codehaus.mojo:animal-sniffer-annotations:jar:1.14 in the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-log4j12:jar:1.7.12 from the shaded jar.
+[INFO] Excluding log4j:log4j:jar:1.2.17 from the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-api:jar:1.7.12 from the shaded jar.
+[INFO] Attaching shaded artifact.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-github-resolver-plugin ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-github-resolver-plugin/target/dollar-github-resolver-plugin-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-github-resolver-plugin/0-SNAPSHOT/dollar-github-resolver-plugin-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-github-resolver-plugin/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-github-resolver-plugin/0-SNAPSHOT/dollar-github-resolver-plugin-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-github-resolver-plugin/target/dollar-github-resolver-plugin-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-github-resolver-plugin/0-SNAPSHOT/dollar-github-resolver-plugin-0-SNAPSHOT-sources.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-github-resolver-plugin/target/dollar-github-resolver-plugin-0-SNAPSHOT-plugin.jar to /Users/neil/.m2/repository/com/sillelien/dollar-github-resolver-plugin/0-SNAPSHOT/dollar-github-resolver-plugin-0-SNAPSHOT-plugin.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-maven-resolver-plugin 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-maven-resolver-plugin ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-maven-resolver-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-maven-resolver-plugin ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-maven-resolver-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-plugins/dollar-maven-resolver-plugin/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-maven-resolver-plugin ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-maven-resolver-plugin ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-maven-resolver-plugin ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-maven-resolver-plugin ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-maven-resolver-plugin ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-maven-resolver-plugin >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-maven-resolver-plugin ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-maven-resolver-plugin <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-maven-resolver-plugin ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-plugins/dollar-maven-resolver-plugin/target/dollar-maven-resolver-plugin-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-shade-plugin:3.0.0:shade (default) @ dollar-maven-resolver-plugin ---
+[INFO] Including org.jetbrains:annotations:jar:15.0 in the shaded jar.
+[INFO] Including com.sillelien:dollar-resolver:jar:0-SNAPSHOT in the shaded jar.
+[INFO] Including org.sonatype.aether:aether-util:jar:1.13.1 in the shaded jar.
+[INFO] Including org.sonatype.aether:aether-api:jar:1.13.1 in the shaded jar.
+[INFO] Excluding com.google.guava:guava:jar:22.0 from the shaded jar.
+[INFO] Including com.google.code.findbugs:jsr305:jar:1.3.9 in the shaded jar.
+[INFO] Including com.google.errorprone:error_prone_annotations:jar:2.0.18 in the shaded jar.
+[INFO] Including com.google.j2objc:j2objc-annotations:jar:1.1 in the shaded jar.
+[INFO] Including org.codehaus.mojo:animal-sniffer-annotations:jar:1.14 in the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-log4j12:jar:1.7.12 from the shaded jar.
+[INFO] Excluding log4j:log4j:jar:1.2.17 from the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-api:jar:1.7.12 from the shaded jar.
+[INFO] Attaching shaded artifact.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-maven-resolver-plugin ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-maven-resolver-plugin/target/dollar-maven-resolver-plugin-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-maven-resolver-plugin/0-SNAPSHOT/dollar-maven-resolver-plugin-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-maven-resolver-plugin/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-maven-resolver-plugin/0-SNAPSHOT/dollar-maven-resolver-plugin-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-maven-resolver-plugin/target/dollar-maven-resolver-plugin-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-maven-resolver-plugin/0-SNAPSHOT/dollar-maven-resolver-plugin-0-SNAPSHOT-sources.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-maven-resolver-plugin/target/dollar-maven-resolver-plugin-0-SNAPSHOT-plugin.jar to /Users/neil/.m2/repository/com/sillelien/dollar-maven-resolver-plugin/0-SNAPSHOT/dollar-maven-resolver-plugin-0-SNAPSHOT-plugin.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-socketio-plugin 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-socketio-plugin ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-socketio-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-socketio-plugin ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-socketio-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-plugins/dollar-socketio-plugin/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-socketio-plugin ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-socketio-plugin ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-socketio-plugin ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-socketio-plugin ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-socketio-plugin ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-socketio-plugin >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-socketio-plugin ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-socketio-plugin <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-socketio-plugin ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-plugins/dollar-socketio-plugin/target/dollar-socketio-plugin-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-shade-plugin:3.0.0:shade (default) @ dollar-socketio-plugin ---
+[INFO] Including com.fasterxml.jackson.core:jackson-core:jar:2.6.1 in the shaded jar.
+[INFO] Including com.fasterxml.jackson.core:jackson-databind:jar:2.6.1 in the shaded jar.
+[INFO] Including com.fasterxml.jackson.core:jackson-annotations:jar:2.6.0 in the shaded jar.
+[INFO] Including org.jetbrains:annotations:jar:15.0 in the shaded jar.
+[INFO] Including com.corundumstudio.socketio:netty-socketio:jar:1.7.12 in the shaded jar.
+[INFO] Including io.netty:netty-buffer:jar:4.1.5.Final in the shaded jar.
+[INFO] Including io.netty:netty-common:jar:4.1.5.Final in the shaded jar.
+[INFO] Including io.netty:netty-transport:jar:4.1.5.Final in the shaded jar.
+[INFO] Including io.netty:netty-resolver:jar:4.1.5.Final in the shaded jar.
+[INFO] Including io.netty:netty-handler:jar:4.1.5.Final in the shaded jar.
+[INFO] Including io.netty:netty-codec-http:jar:4.1.5.Final in the shaded jar.
+[INFO] Including io.netty:netty-codec:jar:4.1.5.Final in the shaded jar.
+[INFO] Including io.netty:netty-transport-native-epoll:jar:4.1.5.Final in the shaded jar.
+[INFO] Excluding com.google.guava:guava:jar:22.0 from the shaded jar.
+[INFO] Including com.google.code.findbugs:jsr305:jar:1.3.9 in the shaded jar.
+[INFO] Including com.google.errorprone:error_prone_annotations:jar:2.0.18 in the shaded jar.
+[INFO] Including com.google.j2objc:j2objc-annotations:jar:1.1 in the shaded jar.
+[INFO] Including org.codehaus.mojo:animal-sniffer-annotations:jar:1.14 in the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-log4j12:jar:1.7.12 from the shaded jar.
+[INFO] Excluding log4j:log4j:jar:1.2.17 from the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-api:jar:1.7.12 from the shaded jar.
+[INFO] Attaching shaded artifact.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-socketio-plugin ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-socketio-plugin/target/dollar-socketio-plugin-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-socketio-plugin/0-SNAPSHOT/dollar-socketio-plugin-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-socketio-plugin/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-socketio-plugin/0-SNAPSHOT/dollar-socketio-plugin-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-socketio-plugin/target/dollar-socketio-plugin-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-socketio-plugin/0-SNAPSHOT/dollar-socketio-plugin-0-SNAPSHOT-sources.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-socketio-plugin/target/dollar-socketio-plugin-0-SNAPSHOT-plugin.jar to /Users/neil/.m2/repository/com/sillelien/dollar-socketio-plugin/0-SNAPSHOT/dollar-socketio-plugin-0-SNAPSHOT-plugin.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-mapdb-plugin 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-mapdb-plugin ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-mapdb-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-mapdb-plugin ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-mapdb-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-plugins/dollar-mapdb-plugin/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-mapdb-plugin ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-mapdb-plugin ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-mapdb-plugin ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-mapdb-plugin ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-mapdb-plugin ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-mapdb-plugin >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-mapdb-plugin ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-mapdb-plugin <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-mapdb-plugin ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-plugins/dollar-mapdb-plugin/target/dollar-mapdb-plugin-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-shade-plugin:3.0.0:shade (default) @ dollar-mapdb-plugin ---
+[INFO] Including org.jetbrains:annotations:jar:15.0 in the shaded jar.
+[INFO] Excluding com.sillelien:dollar-mapdb:jar:0.1.24 from the shaded jar.
+[INFO] Excluding com.google.guava:guava:jar:22.0 from the shaded jar.
+[INFO] Including com.google.code.findbugs:jsr305:jar:1.3.9 in the shaded jar.
+[INFO] Including com.google.errorprone:error_prone_annotations:jar:2.0.18 in the shaded jar.
+[INFO] Including com.google.j2objc:j2objc-annotations:jar:1.1 in the shaded jar.
+[INFO] Including org.codehaus.mojo:animal-sniffer-annotations:jar:1.14 in the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-log4j12:jar:1.7.12 from the shaded jar.
+[INFO] Excluding log4j:log4j:jar:1.2.17 from the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-api:jar:1.7.12 from the shaded jar.
+[INFO] Attaching shaded artifact.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-mapdb-plugin ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-mapdb-plugin/target/dollar-mapdb-plugin-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-mapdb-plugin/0-SNAPSHOT/dollar-mapdb-plugin-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-mapdb-plugin/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-mapdb-plugin/0-SNAPSHOT/dollar-mapdb-plugin-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-mapdb-plugin/target/dollar-mapdb-plugin-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-mapdb-plugin/0-SNAPSHOT/dollar-mapdb-plugin-0-SNAPSHOT-sources.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-mapdb-plugin/target/dollar-mapdb-plugin-0-SNAPSHOT-plugin.jar to /Users/neil/.m2/repository/com/sillelien/dollar-mapdb-plugin/0-SNAPSHOT/dollar-mapdb-plugin-0-SNAPSHOT-plugin.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-simple-learner-plugin 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-simple-learner-plugin ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-simple-learner-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-simple-learner-plugin ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-simple-learner-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-plugins/dollar-simple-learner-plugin/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-simple-learner-plugin ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-simple-learner-plugin ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-simple-learner-plugin ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-simple-learner-plugin ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-simple-learner-plugin ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-simple-learner-plugin >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-simple-learner-plugin ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-simple-learner-plugin <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-simple-learner-plugin ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-plugins/dollar-simple-learner-plugin/target/dollar-simple-learner-plugin-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-shade-plugin:3.0.0:shade (default) @ dollar-simple-learner-plugin ---
+[INFO] Including com.thoughtworks.xstream:xstream:jar:1.4.10 in the shaded jar.
+[INFO] Including xmlpull:xmlpull:jar:1.1.3.1 in the shaded jar.
+[INFO] Including xpp3:xpp3_min:jar:1.1.4c in the shaded jar.
+[INFO] Excluding com.google.guava:guava:jar:22.0 from the shaded jar.
+[INFO] Including com.google.code.findbugs:jsr305:jar:1.3.9 in the shaded jar.
+[INFO] Including com.google.errorprone:error_prone_annotations:jar:2.0.18 in the shaded jar.
+[INFO] Including com.google.j2objc:j2objc-annotations:jar:1.1 in the shaded jar.
+[INFO] Including org.codehaus.mojo:animal-sniffer-annotations:jar:1.14 in the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-log4j12:jar:1.7.12 from the shaded jar.
+[INFO] Excluding log4j:log4j:jar:1.2.17 from the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-api:jar:1.7.12 from the shaded jar.
+[WARNING] xpp3_min-1.1.4c.jar, xmlpull-1.1.3.1.jar define 2 overlapping classes: 
+[WARNING]   - org.xmlpull.v1.XmlPullParserException
+[WARNING]   - org.xmlpull.v1.XmlPullParser
+[WARNING] maven-shade-plugin has detected that some class files are
+[WARNING] present in two or more JARs. When this happens, only one
+[WARNING] single version of the class is copied to the uber jar.
+[WARNING] Usually this is not harmful and you can skip these warnings,
+[WARNING] otherwise try to manually exclude artifacts based on
+[WARNING] mvn dependency:tree -Ddetail=true and the above output.
+[WARNING] See http://maven.apache.org/plugins/maven-shade-plugin/
+[INFO] Attaching shaded artifact.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-simple-learner-plugin ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-simple-learner-plugin/target/dollar-simple-learner-plugin-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-simple-learner-plugin/0-SNAPSHOT/dollar-simple-learner-plugin-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-simple-learner-plugin/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-simple-learner-plugin/0-SNAPSHOT/dollar-simple-learner-plugin-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-simple-learner-plugin/target/dollar-simple-learner-plugin-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-simple-learner-plugin/0-SNAPSHOT/dollar-simple-learner-plugin-0-SNAPSHOT-sources.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-simple-learner-plugin/target/dollar-simple-learner-plugin-0-SNAPSHOT-plugin.jar to /Users/neil/.m2/repository/com/sillelien/dollar-simple-learner-plugin/0-SNAPSHOT/dollar-simple-learner-plugin-0-SNAPSHOT-plugin.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-runtime 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-runtime ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-runtime ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-runtime/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-runtime ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-runtime ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-runtime/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-runtime ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-runtime ---
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running dollar.DollarDependenciesTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s - in dollar.DollarDependenciesTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-runtime ---
+[WARNING] JAR will be empty - no content was marked for inclusion!
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-runtime ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-runtime ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-runtime >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-runtime ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-runtime <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-runtime ---
+[INFO] No sources in project. Archive not created.
+[INFO] 
+[INFO] --- maven-shade-plugin:3.0.0:shade (default) @ dollar-runtime ---
+[INFO] Including com.sillelien:dollar-core:jar:0-SNAPSHOT in the shaded jar.
+[INFO] Including commons-logging:commons-logging:jar:1.2 in the shaded jar.
+[INFO] Including org.jetbrains:annotations:jar:15.0 in the shaded jar.
+[INFO] Including commons-lang:commons-lang:jar:2.6 in the shaded jar.
+[INFO] Including com.fasterxml.jackson.core:jackson-core:jar:2.6.1 in the shaded jar.
+[INFO] Including com.fasterxml.jackson.core:jackson-databind:jar:2.6.1 in the shaded jar.
+[INFO] Including com.fasterxml.jackson.core:jackson-annotations:jar:2.6.0 in the shaded jar.
+[INFO] Including org.yaml:snakeyaml:jar:1.16 in the shaded jar.
+[INFO] Including com.github.oxo42:stateless4j:jar:2.5.0 in the shaded jar.
+[INFO] Including commons-io:commons-io:jar:2.5 in the shaded jar.
+[INFO] Including com.sillelien:dollar-script:jar:0-SNAPSHOT in the shaded jar.
+[INFO] Including org.jparsec:jparsec:jar:3.0 in the shaded jar.
+[INFO] Including org.apache.servicemix.bundles:org.apache.servicemix.bundles.cglib:jar:3.2.4_1 in the shaded jar.
+[INFO] Including com.vdurmont:emoji-java:jar:3.3.0 in the shaded jar.
+[INFO] Including org.json:json:jar:20160212 in the shaded jar.
+[INFO] Including com.sillelien:java-as-script:jar:0.9.142 in the shaded jar.
+[INFO] Including org.pegdown:pegdown:jar:1.6.0 in the shaded jar.
+[INFO] Including org.parboiled:parboiled-java:jar:1.1.7 in the shaded jar.
+[INFO] Including org.parboiled:parboiled-core:jar:1.1.7 in the shaded jar.
+[INFO] Including org.ow2.asm:asm:jar:5.0.3 in the shaded jar.
+[INFO] Including org.ow2.asm:asm-tree:jar:5.0.3 in the shaded jar.
+[INFO] Including org.ow2.asm:asm-analysis:jar:5.0.3 in the shaded jar.
+[INFO] Including org.ow2.asm:asm-util:jar:5.0.3 in the shaded jar.
+[INFO] Including com.beust:jcommander:jar:1.72 in the shaded jar.
+[INFO] Excluding com.google.guava:guava:jar:22.0 from the shaded jar.
+[INFO] Including com.google.code.findbugs:jsr305:jar:1.3.9 in the shaded jar.
+[INFO] Including com.google.errorprone:error_prone_annotations:jar:2.0.18 in the shaded jar.
+[INFO] Including com.google.j2objc:j2objc-annotations:jar:1.1 in the shaded jar.
+[INFO] Including org.codehaus.mojo:animal-sniffer-annotations:jar:1.14 in the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-log4j12:jar:1.7.12 from the shaded jar.
+[INFO] Excluding log4j:log4j:jar:1.2.17 from the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-api:jar:1.7.12 from the shaded jar.
+[WARNING] org.apache.servicemix.bundles.cglib-3.2.4_1.jar, jparsec-3.0.jar define 265 overlapping classes: 
+[WARNING]   - net.sf.cglib.transform.impl.UndeclaredThrowableTransformer$1
+[WARNING]   - net.sf.cglib.core.EmitUtils$1
+[WARNING]   - net.sf.cglib.core.AbstractClassGenerator
+[WARNING]   - net.sf.cglib.transform.TransformingClassGenerator
+[WARNING]   - net.sf.cglib.core.EmitUtils$ArrayDelimiters
+[WARNING]   - net.sf.cglib.core.EmitUtils
+[WARNING]   - net.sf.cglib.util.ParallelSorterEmitter
+[WARNING]   - net.sf.cglib.core.AbstractClassGenerator$Source
+[WARNING]   - net.sf.cglib.transform.impl.AddPropertyTransformer
+[WARNING]   - net.sf.cglib.core.ClassInfo
+[WARNING]   - 255 more...
+[WARNING] maven-shade-plugin has detected that some class files are
+[WARNING] present in two or more JARs. When this happens, only one
+[WARNING] single version of the class is copied to the uber jar.
+[WARNING] Usually this is not harmful and you can skip these warnings,
+[WARNING] otherwise try to manually exclude artifacts based on
+[WARNING] mvn dependency:tree -Ddetail=true and the above output.
+[WARNING] See http://maven.apache.org/plugins/maven-shade-plugin/
+[INFO] Attaching shaded artifact.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-runtime ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-runtime/target/dollar-runtime-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-runtime/0-SNAPSHOT/dollar-runtime-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-runtime/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-runtime/0-SNAPSHOT/dollar-runtime-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-runtime/target/dollar-runtime-0-SNAPSHOT-mod.jar to /Users/neil/.m2/repository/com/sillelien/dollar-runtime/0-SNAPSHOT/dollar-runtime-0-SNAPSHOT-mod.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building dollar-scripting-java-plugin 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-scripting-java-plugin ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-scripting-java-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-scripting-java-plugin ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-scripting-java-plugin ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/neil/dev/dollar/dollar-plugins/dollar-java-plugin/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-scripting-java-plugin ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-scripting-java-plugin ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-scripting-java-plugin ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-scripting-java-plugin ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-scripting-java-plugin ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-scripting-java-plugin >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-scripting-java-plugin ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-scripting-java-plugin <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-scripting-java-plugin ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-plugins/dollar-java-plugin/target/dollar-scripting-java-plugin-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-shade-plugin:3.0.0:shade (default) @ dollar-scripting-java-plugin ---
+[INFO] Including com.sillelien:java-as-script:jar:0.9.142 in the shaded jar.
+[INFO] Including org.jetbrains:annotations:jar:15.0 in the shaded jar.
+[INFO] Excluding com.google.guava:guava:jar:22.0 from the shaded jar.
+[INFO] Including com.google.code.findbugs:jsr305:jar:1.3.9 in the shaded jar.
+[INFO] Including com.google.errorprone:error_prone_annotations:jar:2.0.18 in the shaded jar.
+[INFO] Including com.google.j2objc:j2objc-annotations:jar:1.1 in the shaded jar.
+[INFO] Including org.codehaus.mojo:animal-sniffer-annotations:jar:1.14 in the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-log4j12:jar:1.7.12 from the shaded jar.
+[INFO] Excluding log4j:log4j:jar:1.2.17 from the shaded jar.
+[INFO] Excluding org.slf4j:slf4j-api:jar:1.7.12 from the shaded jar.
+[INFO] Attaching shaded artifact.
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-scripting-java-plugin ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-java-plugin/target/dollar-scripting-java-plugin-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-scripting-java-plugin/0-SNAPSHOT/dollar-scripting-java-plugin-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-java-plugin/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-scripting-java-plugin/0-SNAPSHOT/dollar-scripting-java-plugin-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-java-plugin/target/dollar-scripting-java-plugin-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-scripting-java-plugin/0-SNAPSHOT/dollar-scripting-java-plugin-0-SNAPSHOT-sources.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-plugins/dollar-java-plugin/target/dollar-scripting-java-plugin-0-SNAPSHOT-plugin.jar to /Users/neil/.m2/repository/com/sillelien/dollar-scripting-java-plugin/0-SNAPSHOT/dollar-scripting-java-plugin-0-SNAPSHOT-plugin.jar
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Dollar Examples 0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-examples ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ dollar-examples ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 68 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ dollar-examples ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ dollar-examples ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ dollar-examples ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ dollar-examples ---
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running dollar.DollarBasicTest
+{"foo":"bar"}[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.981 s - in dollar.DollarBasicTest
+[INFO] Running dollar.DollarTypeTest
+[INFO] Running dollar.DollarLambdaTest
+15051755633671505175563425[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 s - in dollar.DollarTypeTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.067 s - in dollar.DollarLambdaTest
+Running locally, so skipping
+Running locally, so skipping
+[INFO] Running dollar.internal.runtime.script.ParserSlowTest
+[WARNING] Tests run: 2, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.869 s - in dollar.internal.runtime.script.ParserSlowTest
+[INFO] Running dollar.json.JsonUtilTest
+{"remove":"filename","add":["file1","file2"],"send":["fileA","fileB","fileC"],"count":1,"rate":2.343434,"quiet":false,"fast":true}{"test":[1,2,3]}[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.447 s - in dollar.json.JsonUtilTest
+[INFO] Running dollar.DollarSerializationTest
+{"name":"Neil","progYears":{"$type":"Range","lower":1981,"upper":2014},"blog":{"$type":"URI","value":"http://neilellis.me"},"age":47,"timestamp":{"$type":"Date","text":"2017-09-12T01:19:25.190Z","millis":1505179165190},"wroteDollar":true,"empty":null,"rating":0.7,"gender":"male","projects":["snapito","dollar"],"location":{"city":"brighton","postcode":"bn1 6jj","number":343}}
+Map{"name":"Neil","progYears":{"$type":"Range","lower":1981,"upper":2014},"blog":{"$type":"URI","value":"http://neilellis.me"},"age":47,"timestamp":{"$type":"Date","text":"2017-09-12T01:19:25.190Z","millis":1505179165190},"wroteDollar":true,"empty":null,"rating":0.7,"gender":"male","projects":["snapito","dollar"],"location":{"city":"brighton","postcode":"bn1 6jj","number":343}}1981..2014[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.611 s - in dollar.DollarSerializationTest
+[INFO] Running dollar.internal.runtime.script.ParserQuickTest
+01:19:23 DollarParser: Starting Parse Phase
+01:19:24 ParameterOperator: Created pure param op
+01:19:24 ParameterOperator: Created pure param op
+01:19:24 ParameterOperator: Created pure param op
+01:19:24 ParameterOperator: Created pure param op
+01:19:24 ParameterOperator: Created pure param op
+01:19:24 ParameterOperator: Created pure param op
+01:19:24 ParameterOperator: Created impure param op
+01:19:24 ParameterOperator: Created impure param op
+01:19:25 SimpleTypeLearner: Loading learnt types from /Users/neil/.dollar/runtime/simple.type.learner/map.xml
+01:19:25 SimpleTypeLearner: Loaded 585 entries
+01:19:25 SourceNode: var-usage-1-22fqeiugt2702:String
+01:19:25 SourceNode: plus:String
+01:19:25 SourceNode: assign:String
+01:19:25 SourceNode: assign:Integer
+01:19:25 SourceNode: var-usage-this-2isl88vfj8f8e:String
+01:19:25 SourceNode: var-usage-1-16p3bnepukbde:String
+01:19:25 SourceNode: subscript-write:Any
+01:19:25 SourceNode: var-usage-this-2isl88vfj8f8e:String
+01:19:25 SourceNode: var-usage-1-16p3bnepukbde:String
+01:19:25 SourceNode: subscript-write:Any
+01:19:25 SourceNode: block-1wvjgqbs3myn:Block
+01:19:25 DefinitionOperator: Creating impure variable updateMutableVal
+01:19:25 SourceNode: declaration:Block
+01:19:25 SourceNode: var-usage-1-1pj4e6v26tzs6:String
+01:19:25 SourceNode: plus:String
+01:19:25 SourceNode: map-1n5v7lvub0693:Map
+01:19:25 DefinitionOperator: Creating impure variable myFunction
+01:19:25 SourceNode: declaration:Map
+01:19:25 SourceNode: class-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: assignment-constraint:Void
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 DollarScriptSupport: Predicted MyFirstClass at   → var <MyFirstClass> instance=  ← new MyFirstClass(20) /quick/test_classes.ds(13:0)
+01:19:25 SourceNode: assign:MyFirstClass
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: member:Any
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: member:Any
+01:19:25 SourceNode: parameterized-member-lvv13i1163xc:Any
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: member:Any
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: member:Any
+01:19:25 SourceNode: parameterized-member-lvv13i1163xc:Any
+01:19:25 SourceNode: print:Void
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: member:Any
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: member:Any
+01:19:25 SourceNode: parameterized-member-27ffmil23dws7:Any
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: member:Any
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: member:Any
+01:19:25 SourceNode: parameterized-member-27ffmil23dws7:Any
+01:19:25 SourceNode: assert-equals-reactive:Boolean
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: member:Any
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: member:Any
+01:19:25 SourceNode: parameterized-member-1wtadskqlemtr:Any
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: member:Any
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: member:Any
+01:19:25 SourceNode: parameterized-member-1wtadskqlemtr:Any
+01:19:25 SourceNode: assert-equals-reactive:Boolean
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: new-MyFirstClass:MyFirstClass
+01:19:25 SourceNode: member:Any
+01:19:25 SourceNode: assert-equals-reactive:Boolean
+01:19:25 SourceNode: var-usage-instance-3n2mltfvj0e6r:String
+01:19:25 SourceNode: member:Any
+01:19:25 SourceNode: assert-equals-reactive:Boolean
+01:19:25 DollarParser: Ended Parse Phase
+01:19:25 DollarParser: Starting Runtime Phase
+01:19:25 ScriptScope: Registering class MyFirstClass in file-test-classes-ds:4
+01:19:25 DollarScriptSupport: Listening to scope class-MyFirstClass:7->new-MyFirstClass:6->file-test-classes-ds:4 for key 1
+01:19:25 SourceNode: print:Void
+01:19:25 SourceNode: parameterized-member-lvv13i1163xc-closure:Any
+01:19:25 DollarScriptSupport: Listening to scope class-MyFirstClass:11->param-disposable-scope:10->parameterized-member-lvv13i1163xc:9->file-test-classes-ds:4 for key 1
+01:19:25 SourceNode: map-1n5v7lvub0693-closure:Map
+01:19:25 DollarScriptSupport: Listening to scope param-disposable-scope:10->parameterized-member-lvv13i1163xc:9->file-test-classes-ds:4 for key 1
+Hello World
+01:19:25 SourceNode: parameterized-member-27ffmil23dws7-closure:Any
+01:19:25 DollarScriptSupport: Listening to scope class-MyFirstClass:16->param-disposable-scope:15->parameterized-member-27ffmil23dws7:14->file-test-classes-ds:4 for key 1
+01:19:25 SourceNode: map-1n5v7lvub0693-closure:Map
+01:19:25 DollarScriptSupport: Listening to scope param-disposable-scope:15->parameterized-member-27ffmil23dws7:14->file-test-classes-ds:4 for key 1
+01:19:25 SourceNode: parameterized-member-1wtadskqlemtr-closure:Any
+01:19:25 DollarScriptSupport: Listening to scope class-MyFirstClass:21->param-disposable-scope:20->parameterized-member-1wtadskqlemtr:19->file-test-classes-ds:4 for key 1
+01:19:25 SourceNode: map-1n5v7lvub0693-closure:Map
+01:19:25 DollarScriptSupport: Listening to scope param-disposable-scope:20->parameterized-member-1wtadskqlemtr:19->file-test-classes-ds:4 for key 1
+01:19:25 DollarScriptSupport: Listening to scope class-MyFirstClass:24->file-test-classes-ds:4 for key 1
+01:19:25 DollarScriptSupport: Listening to scope file-test-classes-ds:4 for key instance
+01:19:26 DollarParser: Ended Runtime Phase
+[WARNING] Tests run: 3, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 2.486 s - in dollar.internal.runtime.script.ParserQuickTest
+[INFO] Running dollar.DollarParserTest
+01:19:23 DollarParser: Starting Parse Phase
+01:19:24 ParameterOperator: Created pure param op
+01:19:24 ParameterOperator: Created pure param op
+01:19:24 ParameterOperator: Created pure param op
+01:19:24 ParameterOperator: Created pure param op
+01:19:24 ParameterOperator: Created pure param op
+01:19:24 ParameterOperator: Created pure param op
+01:19:24 ParameterOperator: Created impure param op
+01:19:24 ParameterOperator: Created impure param op
+01:19:25 SimpleTypeLearner: Loading learnt types from /Users/neil/.dollar/runtime/simple.type.learner/map.xml
+01:19:25 SimpleTypeLearner: Loaded 585 entries
+01:19:25 SourceNode: block-w39hduitunks:Block
+01:19:25 SourceNode: assign:Block
+01:19:25 SourceNode: var-usage-f-1db7xtfzrxh53:String
+01:19:25 SourceNode: print:Void
+01:19:25 SourceNode: block-1zk47r2elzjt:Block
+01:19:25 SourceNode: assign:Block
+01:19:25 SourceNode: pair:Map
+01:19:25 SourceNode: map-qtkretuqfkuz:Map
+01:19:25 SourceNode: assign:Map
+01:19:25 SourceNode: var-usage-multiline-pwavcnczzy4c:String
+01:19:25 SourceNode: print:Void
+01:19:25 SourceNode: var-usage-c-2f8qd78h6ha7g:String
+01:19:25 SourceNode: print:Void
+01:19:25 SourceNode: var-usage-c-1ed108cclxoy1:String
+01:19:25 SourceNode: member:Any
+01:19:25 SourceNode: print:Void
+01:19:25 SourceNode: assign:String
+01:19:25 SourceNode: assign:String
+01:19:25 SourceNode: var-usage-a-2wvtdz8pzng4d:String
+01:19:25 SourceNode: print:Void
+01:19:25 SourceNode: assign:String
+01:19:25 SourceNode: default:Void
+01:19:25 SourceNode: assign:Void
+01:19:25 SourceNode: var-usage-d-fbnt1n3nbm51:String
+01:19:25 SourceNode: equal:Boolean
+01:19:25 SourceNode: assert:Void
+01:19:25 SourceNode: var-usage-d-8kp65zzugx5n:String
+01:19:25 SourceNode: equal:Boolean
+01:19:25 SourceNode: when:String
+01:19:25 SourceNode: print:Void
+01:19:25 SourceNode: var-usage-d-2pnn2yim2jzcx:String
+01:19:25 SourceNode: print:Void
+01:19:25 SourceNode: var-usage-a-14g0e3ge03muo:String
+01:19:25 SourceNode: print:Void
+01:19:25 SourceNode: var-usage-c-vjas1rs1y94w:String
+01:19:25 SourceNode: print:Void
+01:19:25 SourceNode: var-usage-a-375nu6vi96v0t:String
+01:19:25 SourceNode: var-usage-b-29qpo4gx6gm3:String
+01:19:25 SourceNode: var-usage-c-q20m03llw0cl:String
+01:19:25 SourceNode: list-otkrk02mgfl1:List
+01:19:25 SourceNode: print:Void
+01:19:25 SourceNode: var-usage-it-1it4hn7sq9551:String
+01:19:25 SourceNode: list-1lwp86vba12fs:List
+01:19:25 SourceNode: in:Boolean
+01:19:25 SourceNode: map-w439g5aowsyy:Map
+01:19:25 DefinitionOperator: Creating impure variable colorEnum
+01:19:25 SourceNode: declaration:Map
+01:19:25 SourceNode: var-usage-colorEnum-117earj42sohs:String
+01:19:25 SourceNode: assign:String:(colorEnum) 
+01:19:25 SourceNode: var-usage-it-29qv7eylx7nv9:String
+01:19:25 SourceNode: greater-than:Boolean
+01:19:25 SourceNode: map-pgaxhsul8l74:Map
+01:19:25 DefinitionOperator: Creating impure variable greaterThan3
+01:19:25 SourceNode: declaration:Map
+01:19:25 SourceNode: var-usage-it-278l9ry5mq8xj:String
+01:19:25 SourceNode: greater-than:Boolean
+01:19:25 SourceNode: map-39miu0jnq093r:Map
+01:19:25 DefinitionOperator: Creating impure variable greaterThan2
+01:19:25 SourceNode: declaration:Map
+01:19:25 SourceNode: var-usage-greaterThan3-jp8kb8gb7iee:String
+01:19:25 SourceNode: assign:Integer:(greaterThan3) 
+01:19:25 SourceNode: var-usage-greaterThan3-3kenc079uw09w:String
+01:19:25 SourceNode: assign:Integer:(greaterThan3) 
+01:19:25 SourceNode: var-usage-greaterThan2-dc5ub16h3wai:String
+01:19:25 SourceNode: assign:Integer:(greaterThan2) 
+01:19:25 SourceNode: print:Void
+01:19:25 SourceNode: map-1vz1t9ilc7fsl:Map
+01:19:25 SourceNode: error:Void
+01:19:25 SourceNode: print:Void
+01:19:25 SourceNode: map-1vz1t9ilc7fsl:Map
+01:19:25 SourceNode: error:Void
+01:19:25 SourceNode: var-usage-y-1p5xtzmq4chwo:String
+01:19:25 SourceNode: assign:String
+01:19:25 SourceNode: var-usage-z-2oy8tdmgev86d:String
+01:19:25 SourceNode: assign:String
+01:19:25 SourceNode: assign:Integer
+01:19:25 SourceNode: block-3pybsf6u63o6w:Block
+01:19:25 SourceNode: if:Boolean
+01:19:25 DollarParser: Ended Parse Phase
+01:19:25 DollarParser: Starting Runtime Phase
+01:19:25 SourceNode: block-w39hduitunks-closure:Block
+01:19:25 SourceNode: print:Void
+01:19:25 DollarScriptSupport: Listening to scope file-test1-ds:1 for key f
+4
+01:19:25 SourceNode: block-1zk47r2elzjt-closure:Block
+01:19:25 SourceNode: map-qtkretuqfkuz-closure:Map
+01:19:25 SourceNode: print:Void
+01:19:25 DollarScriptSupport: Listening to scope file-test1-ds:1 for key multiline
+World
+01:19:25 SourceNode: print:Void
+01:19:25 DollarScriptSupport: Listening to scope file-test1-ds:1 for key c
+{"test2":1}
+01:19:26 SourceNode: print:Void
+01:19:26 DollarScriptSupport: Listening to scope file-test1-ds:1 for key c
+1
+01:19:26 SourceNode: print:Void
+01:19:26 DollarScriptSupport: Listening to scope file-test1-ds:1 for key a
+Hello
+01:19:26 DollarScriptSupport: Listening to scope file-test1-ds:1 for key d
+01:19:26 SourceNode: print:Void
+01:19:26 DollarScriptSupport: Listening to scope file-test1-ds:1 for key d
+cac652e9-2fed-4bcc-ae53-ee6665843f9e
+01:19:26 SourceNode: print:Void
+01:19:26 DollarScriptSupport: Listening to scope file-test1-ds:1 for key d
+2
+01:19:26 SourceNode: print:Void
+01:19:26 DollarScriptSupport: Listening to scope file-test1-ds:1 for key a
+Goodbye
+01:19:26 SourceNode: print:Void
+01:19:26 DollarScriptSupport: Listening to scope file-test1-ds:1 for key c
+{"test2":1}
+01:19:26 SourceNode: print:Void
+01:19:26 SourceNode: list-otkrk02mgfl1-closure:List
+01:19:26 DollarParser: Fixing list serial
+01:19:26 DollarScriptSupport: Listening to scope file-test1-ds:1 for key a
+01:19:26 DollarScriptSupport: Listening to scope file-test1-ds:1 for key b
+01:19:26 DollarScriptSupport: Listening to scope file-test1-ds:1 for key c
+[ "Goodbye", "World", {
+  "test2" : 1
+} ]
+01:19:26 DollarScriptSupport: Listening to scope file-test1-ds:1 for key colorEnum
+01:19:26 SourceNode: map-w439g5aowsyy-closure:Map
+01:19:26 SourceNode: list-1lwp86vba12fs-closure:List
+01:19:26 DollarParser: Fixing list serial
+01:19:26 DollarScriptSupport: Listening to scope assignment-constraint:8->file-test1-ds:1 for key it
+01:19:26 DollarScriptSupport: Listening to scope file-test1-ds:1 for key greaterThan3
+01:19:26 SourceNode: map-pgaxhsul8l74-closure:Map
+01:19:26 DollarScriptSupport: Listening to scope assignment-constraint:9->file-test1-ds:1 for key it
+01:19:26 DollarScriptSupport: Listening to scope file-test1-ds:1 for key greaterThan3
+01:19:26 SourceNode: map-pgaxhsul8l74-closure:Map
+01:19:26 DollarScriptSupport: Listening to scope assignment-constraint:10->file-test1-ds:1 for key it
+01:19:26 DollarScriptSupport: Listening to scope file-test1-ds:1 for key greaterThan2
+01:19:26 SourceNode: map-39miu0jnq093r-closure:Map
+01:19:26 DollarScriptSupport: Listening to scope assignment-constraint:11->file-test1-ds:1 for key it
+01:19:26 DollarParser: Ended Runtime Phase
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.845 s - in dollar.DollarParserTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[WARNING] Tests run: 20, Failures: 0, Errors: 0, Skipped: 2
+[INFO] 
+[INFO] 
+[INFO] --- maven-jar-plugin:3.0.2:jar (default-jar) @ dollar-examples ---
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.10.4:jar (attach-javadocs) @ dollar-examples ---
+[INFO] Skipping javadoc generation
+[INFO] 
+[INFO] --- maven-site-plugin:3.6:attach-descriptor (attach-descriptor) @ dollar-examples ---
+[INFO] Skipping because packaging 'jar' is not pom.
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ dollar-examples >>>
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-versions) @ dollar-examples ---
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ dollar-examples <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ dollar-examples ---
+[INFO] Building jar: /Users/neil/dev/dollar/dollar-examples/target/dollar-examples-0-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ dollar-examples ---
+[INFO] Installing /Users/neil/dev/dollar/dollar-examples/target/dollar-examples-0-SNAPSHOT.jar to /Users/neil/.m2/repository/com/sillelien/dollar-examples/0-SNAPSHOT/dollar-examples-0-SNAPSHOT.jar
+[INFO] Installing /Users/neil/dev/dollar/dollar-examples/pom.xml to /Users/neil/.m2/repository/com/sillelien/dollar-examples/0-SNAPSHOT/dollar-examples-0-SNAPSHOT.pom
+[INFO] Installing /Users/neil/dev/dollar/dollar-examples/target/dollar-examples-0-SNAPSHOT-sources.jar to /Users/neil/.m2/repository/com/sillelien/dollar-examples/0-SNAPSHOT/dollar-examples-0-SNAPSHOT-sources.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] 
+[INFO] Dollar ............................................. SUCCESS [  1.805 s]
+[INFO] Dollar Core - API for writing dynamic Java ......... SUCCESS [ 19.882 s]
+[INFO] dollar-resolver .................................... SUCCESS [  0.287 s]
+[INFO] dollar-plugins ..................................... SUCCESS [  0.377 s]
+[INFO] dollar-std-resources-plugins ....................... SUCCESS [  0.247 s]
+[INFO] dollar-redis-plugin ................................ SUCCESS [  3.508 s]
+[INFO] dollar-http-plugin ................................. SUCCESS [  7.965 s]
+[INFO] dollar-metrics-plugin .............................. SUCCESS [  0.697 s]
+[INFO] dollar-script ...................................... SUCCESS [  2.666 s]
+[INFO] dollar-simple-execution-plugin ..................... SUCCESS [  0.245 s]
+[INFO] dollar-class-resolver-plugin ....................... SUCCESS [  0.827 s]
+[INFO] dollar-github-resolver-plugin ...................... SUCCESS [  0.832 s]
+[INFO] dollar-maven-resolver-plugin ....................... SUCCESS [  0.795 s]
+[INFO] dollar-socketio-plugin ............................. SUCCESS [ 18.533 s]
+[INFO] dollar-mapdb-plugin ................................ SUCCESS [  0.173 s]
+[INFO] dollar-simple-learner-plugin ....................... SUCCESS [  1.570 s]
+[INFO] dollar-runtime ..................................... SUCCESS [  2.543 s]
+[INFO] dollar-scripting-java-plugin ....................... SUCCESS [  0.507 s]
+[INFO] Dollar Examples .................................... SUCCESS [  5.886 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 01:09 min
+[INFO] Finished at: 2017-09-12T01:19:27+01:00
+[INFO] Final Memory: 39M/471M
+[INFO] ------------------------------------------------------------------------

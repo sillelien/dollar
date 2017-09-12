@@ -19,5 +19,5 @@ tmp/
 dist/
 .tmp.docker_test/
 /_site/
-pre-commit.log
+#pre-commit.log
 .sass-cache/

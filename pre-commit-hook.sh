@@ -4,4 +4,4 @@ then
     source ~/.bash_profile &> /dev/null
 fi
 export MAVEN_OPTS="$MAVEN_OPTS -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
-mvn -Drat.skip=true -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true -pl dollar-examples -am install &> pre-commit.log
+mvn -Drat.skip=true -Dmaven.source.skip=true -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true -pl dollar-examples -am install &> /tmp/pre-commit.log
