@@ -4,4 +4,4 @@ then
     source ~/.bash_profile
 fi
 export MAVEN_OPTS="$MAVEN_OPTS -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
-mvn -Drat.skip=true -Dmaven.source.skip=true -Dsource.skip=true -DgenerateReports=false -Dmaven.javadoc.skip=true -pl dollar-examples -am --offline install
+mvn -DfailIfNoTests=false  -Dtest=DocTest,ParserQuickTest,ParserSlowTest -pl dollar-examples -am --offline test

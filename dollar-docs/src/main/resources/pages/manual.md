@@ -782,7 +782,7 @@ Hopefully you'll find Dollar a useful and productive language, but there will be
 
 var variableA="Hello World"
 
-var java = java `out=scope.get("variableA");`
+var java = java `out=scope.get(VarKey.of("variableA"));`
 
 java <=> "Hello World"
 
