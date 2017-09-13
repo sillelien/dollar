@@ -23,8 +23,10 @@ dollar.http
 dollar.internal.runtime.script
 dollar.internal.runtime.script.api
 dollar.internal.runtime.script.api.exceptions
+dollar.internal.runtime.script.obj
 dollar.internal.runtime.script.operators
 dollar.internal.runtime.script.parser
+dollar.internal.runtime.script.parser.scope
 dollar.internal.runtime.script.util
 dollar.java
 dollar.lang
