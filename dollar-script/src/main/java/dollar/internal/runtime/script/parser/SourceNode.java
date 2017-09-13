@@ -17,6 +17,7 @@
 package dollar.internal.runtime.script.parser;
 
 import dollar.api.DollarStatic;
+import dollar.api.MetaKey;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.SubType;
@@ -84,7 +85,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
     @NotNull
     private final ConcurrentHashMap<String, Pipeable> listeners = new ConcurrentHashMap<>();
     @NotNull
-    private final ConcurrentHashMap<Object, Object> meta = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<MetaKey, Object> meta = new ConcurrentHashMap<>();
     @NotNull
     private final String name;
     private final boolean newScope;
@@ -372,14 +373,14 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
             } else if ("constraintLabel".equals(method.getName())) {
                 return meta.get(CONSTRAINT_FINGERPRINT);
             } else if ("metaAttribute".equals(method.getName()) && (((args != null) ? args.length : 0) == 1)) {
-                return meta.get(args[0].toString());
+                return meta.get(MetaKey.of(args[0]));
             } else if ("metaAttribute".equals(method.getName()) && (((args != null) ? args.length : 0) == 2)) {
-                meta.put(String.valueOf(args[0]), String.valueOf(args[1]));
+                meta.put(MetaKey.of(args[0]), String.valueOf(args[1]));
                 return null;
             } else if ("meta".equals(method.getName()) && (((args != null) ? args.length : 0) == 1)) {
-                return meta.get(args[0]);
+                return meta.get(MetaKey.of(args[0]));
             } else if ("meta".equals(method.getName()) && (((args != null) ? args.length : 0) == 2)) {
-                meta.put(args[0], args[1]);
+                meta.put(MetaKey.of(args[0]), args[1]);
                 return null;
             } else if ("$listen".equals(method.getName())) {
                 String listenerId = UUID.randomUUID().toString();

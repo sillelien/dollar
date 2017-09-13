@@ -20,6 +20,7 @@ import com.github.oxo42.stateless4j.StateMachine;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import dollar.api.DollarStatic;
+import dollar.api.MetaKey;
 import dollar.api.Pipeable;
 import dollar.api.Signal;
 import dollar.api.StateTracer;
@@ -560,24 +561,24 @@ public class DollarWrapper implements var {
 
     @NotNull
     @Override
-    public Object meta(@NotNull String key) {
+    public Object meta(@NotNull MetaKey key) {
         return getValue().meta(key);
     }
 
     @Override
-    public void meta(@NotNull String key, @NotNull Object value) {
+    public void meta(@NotNull MetaKey key, @NotNull Object value) {
         getValue().meta(key, value);
 
     }
 
     @Override
-    public void metaAttribute(@NotNull String key, @NotNull String value) {
+    public void metaAttribute(@NotNull MetaKey key, @NotNull String value) {
         getValue().metaAttribute(key, value);
     }
 
     @NotNull
     @Override
-    public String metaAttribute(@NotNull String key) {
+    public String metaAttribute(@NotNull MetaKey key) {
         return getValue().metaAttribute(key);
     }
 

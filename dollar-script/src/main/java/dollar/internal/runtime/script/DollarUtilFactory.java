@@ -61,6 +61,7 @@ import static dollar.api.DollarStatic.*;
 import static dollar.api.types.meta.MetaConstants.VARIABLE;
 import static dollar.internal.runtime.script.parser.DollarParserImpl.NAMED_PARAMETER_META_ATTR;
 import static dollar.internal.runtime.script.parser.Symbols.VAR_USAGE_OP;
+import static java.lang.String.format;
 
 public final class DollarUtilFactory implements DollarUtil {
 
@@ -122,7 +123,7 @@ public final class DollarUtilFactory implements DollarUtil {
                          new SourceCode(scope(), token).getSourceMessage()
                 );
                 if (getConfig().failFast()) {
-                    throw new DollarScriptException(String.format(
+                    throw new DollarScriptException(format(
                             "Type prediction failed, was expecting %s but most likely type is %s if this prediction is wrong please add an explicit cast (using 'as %s')",
                             type, prediction.probableType(), type.name()));
                 }
@@ -136,12 +137,12 @@ public final class DollarUtilFactory implements DollarUtil {
                          @NotNull var value,
                          @Nullable var constraint,
                          @Nullable SubType label) {
-//        System.err.println("(" + label + ") " + rhs.$type().constraint());
         SubType valueLabel = value.constraintLabel();
         if (!Objects.equals(valueLabel, label)) {
             if ((label != null) && (valueLabel != null) && !valueLabel.isEmpty()) {
                 scope.handleError(
-                        new DollarScriptException("Trying to assign an invalid constrained variable " + valueLabel + " vs " + label,
+                        new DollarScriptException(format("Trying to assign an invalid constrained variable %s vs %s",
+                                                         valueLabel, label),
                                                   value));
             }
         }

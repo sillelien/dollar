@@ -21,6 +21,7 @@ import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.google.common.collect.ImmutableList;
 import dollar.api.DollarException;
 import dollar.api.DollarStatic;
+import dollar.api.MetaKey;
 import dollar.api.Pipeable;
 import dollar.api.Signal;
 import dollar.api.SubType;
@@ -53,7 +54,7 @@ public abstract class AbstractDollar implements var {
 
 
     @NotNull
-    private final ConcurrentHashMap<String, Object> meta = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<MetaKey, Object> meta = new ConcurrentHashMap<>();
 
     protected AbstractDollar() {
 
@@ -404,17 +405,17 @@ public abstract class AbstractDollar implements var {
 
     @Nullable
     @Override
-    public <T> T meta(@NotNull String key) {
+    public <T> T meta(@NotNull MetaKey key) {
         return (T) meta.get(key);
     }
 
     @Override
-    public void meta(@NotNull String key, @NotNull Object value) {
+    public void meta(@NotNull MetaKey key, @NotNull Object value) {
         meta.put(key, value);
     }
 
     @Override
-    public void metaAttribute(@NotNull String key, @NotNull String value) {
+    public void metaAttribute(@NotNull MetaKey key, @NotNull String value) {
         if (meta.containsKey(key)) {
             @NotNull var result;
             throw new DollarFailureException(ErrorType.METADATA_IMMUTABLE);
@@ -424,7 +425,7 @@ public abstract class AbstractDollar implements var {
 
     @Nullable
     @Override
-    public String metaAttribute(@NotNull String key) {
+    public String metaAttribute(@NotNull MetaKey key) {
         return (String) meta.get(key);
     }
 

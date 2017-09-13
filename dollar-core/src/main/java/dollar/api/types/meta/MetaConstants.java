@@ -16,38 +16,30 @@
 
 package dollar.api.types.meta;
 
+import dollar.api.MetaKey;
 import org.jetbrains.annotations.NotNull;
 
 public class MetaConstants {
     @NotNull
-    public static final String CONSTRAINT_FINGERPRINT = "dollar.internal.constraint.fingerprint";
+    public static final MetaKey ASSIGNMENT_TYPE = MetaKey.of("dollar.internal.assignment.type");
     @NotNull
-    public static final String IS_BUILTIN = "dollar.internal.builtin";
-
+    public static final MetaKey CONSTRAINT_FINGERPRINT = MetaKey.of("dollar.internal.constraint.fingerprint");
     @NotNull
-    public static final String VARIABLE = "dollar.internal.variable";
-
+    public static final MetaKey CONSTRAINT_SOURCE = MetaKey.of("dollar.internal.constraint.source");
     @NotNull
-    public static final String OPERATION_NAME = "dollar.internal.operation.name";
-
+    public static final MetaKey ID = MetaKey.of("dollar.internal.id");
     @NotNull
-    public static final String OPERATION = "dollar.internal.operation";
-
-
+    public static final MetaKey IMPURE = MetaKey.of("dollar.internal.pure");
     @NotNull
-    public static final String IMPURE = "dollar.internal.pure";
+    public static final MetaKey IS_BUILTIN = MetaKey.of("dollar.internal.builtin");
     @NotNull
-    public static final String CONSTRAINT_SOURCE = "dollar.internal.constraint.source";
-
+    public static final MetaKey OPERATION = MetaKey.of("dollar.internal.operation");
     @NotNull
-    public static final String SCOPES = "dollar.internal.scopes";
-
+    public static final MetaKey OPERATION_NAME = MetaKey.of("dollar.internal.operation.name");
     @NotNull
-    public static final String ID = "dollar.internal.id";
-
+    public static final MetaKey SCOPES = MetaKey.of("dollar.internal.scopes");
     @NotNull
-    public static final String ASSIGNMENT_TYPE = "dollar.internal.assignment.type";
-
+    public static final MetaKey TYPE_HINT = MetaKey.of("dollar.internal.type.hint");
     @NotNull
-    public static final String TYPE_HINT = "dollar.internal.type.hint";
+    public static final MetaKey VARIABLE = MetaKey.of("dollar.internal.variable");
 }

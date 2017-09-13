@@ -18,6 +18,7 @@ package dollar.internal.runtime.script.parser;
 
 import com.google.common.io.ByteStreams;
 import dollar.api.DollarStatic;
+import dollar.api.MetaKey;
 import dollar.api.Pipeable;
 import dollar.api.Scope;
 import dollar.api.VarKey;
@@ -90,7 +91,7 @@ import static org.jparsec.Parsers.*;
 
 public class DollarParserImpl implements DollarParser {
     @NotNull
-    public static final String NAMED_PARAMETER_META_ATTR = "__named_parameter";
+    public static final MetaKey NAMED_PARAMETER_META_ATTR = MetaKey.of("__named_parameter");
     @NotNull
     private static final Logger log = LoggerFactory.getLogger("DollarParser");
     @NotNull

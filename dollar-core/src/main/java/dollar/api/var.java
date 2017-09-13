@@ -909,7 +909,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      * @param key the key
      * @return the meta object
      */
-    @Nullable <T> T meta(@NotNull String key);
+    @Nullable <T> T meta(@NotNull MetaKey key);
 
     /**
      * Sets meta attribute.
@@ -917,7 +917,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      * @param key   the key
      * @param value the value
      */
-    <T> void meta(@NotNull String key, @NotNull T value);
+    <T> void meta(@NotNull MetaKey key, @NotNull T value);
 
     /**
      * Sets meta attribute.
@@ -925,7 +925,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      * @param key   the key
      * @param value the value
      */
-    void metaAttribute(@NotNull String key, @NotNull String value);
+    void metaAttribute(@NotNull MetaKey key, @NotNull String value);
 
     /**
      * Gets meta attribute.
@@ -934,7 +934,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      * @return the meta attribute
      */
     @Nullable
-    String metaAttribute(@NotNull String key);
+    String metaAttribute(@NotNull MetaKey key);
 
     /**
      * Is negative.

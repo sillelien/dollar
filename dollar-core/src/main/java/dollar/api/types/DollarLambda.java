@@ -17,6 +17,7 @@
 package dollar.api.types;
 
 import dollar.api.DollarStatic;
+import dollar.api.MetaKey;
 import dollar.api.Pipeable;
 import dollar.api.SubType;
 import dollar.api.exceptions.LambdaRecursionException;
@@ -47,7 +48,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
     @NotNull
     protected final Pipeable lambda;
     @NotNull
-    protected final ConcurrentHashMap<Object, Object> meta = new ConcurrentHashMap<>();
+    protected final ConcurrentHashMap<MetaKey, Object> meta = new ConcurrentHashMap<>();
     private final boolean fixable;
     @NotNull
     private final var in;
@@ -145,9 +146,9 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
             } else if ("constraintLabel".equals(method.getName())) {
                 return meta.get(MetaConstants.CONSTRAINT_FINGERPRINT);
             } else if ("metaAttribute".equals(method.getName()) && (args.length == 1)) {
-                return meta.get(args[0].toString());
+                return meta.get(MetaKey.of(args[0]));
             } else if ("metaAttribute".equals(method.getName()) && (args.length == 2)) {
-                meta.put(String.valueOf(args[0]), String.valueOf(args[1]));
+                meta.put(MetaKey.of(args[0]), String.valueOf(args[1]));
                 return null;
             } else if ("_scope".equals(method.getName())) {
                 throw new Exception("Deprectated (_scope)");
@@ -161,9 +162,9 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
 //                meta.put(String.of(args[0]), String.of(args[1]));
 //                return null;
             } else if ("meta".equals(method.getName()) && (args.length == 1)) {
-                return meta.get(args[0]);
+                return meta.get(MetaKey.of(args[0]));
             } else if ("meta".equals(method.getName()) && (args.length == 2)) {
-                meta.put(args[0], args[1]);
+                meta.put(MetaKey.of(args[0]), args[1]);
                 return null;
             } else if ("$listen".equals(method.getName())) {
                 String listenerId = UUID.randomUUID().toString();
@@ -185,7 +186,7 @@ public class DollarLambda implements java.lang.reflect.InvocationHandler {
                 notifyStack.get().remove(this);
                 return proxy;
             } else if ("$remove".equals(method.getName())) {
-                listeners.remove(args[0]);
+                listeners.remove(args[0].toString());
                 return args[0];
             } else if ("hasErrors".equals(method.getName())) {
                 return false;
