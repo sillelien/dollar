@@ -242,9 +242,8 @@ public class DollarNull extends AbstractDollar {
         return "";
     }
 
-    @NotNull
     @Override
-    public Integer toInteger() {
+    public int toInteger() {
         return 0;
     }
 

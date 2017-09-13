@@ -169,8 +169,7 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
     }
 
     @Override
-    @NotNull
-    public Integer toInteger() {
+    public int toInteger() {
         return value.intValue();
     }
 
@@ -253,15 +252,13 @@ public class DollarInteger extends AbstractDollarSingleValue<Long> {
         return true;
     }
 
-    @NotNull
     @Override
-    public Double toDouble() {
+    public double toDouble() {
         return value.doubleValue();
     }
 
-    @NotNull
     @Override
-    public Long toLong() {
+    public long toLong() {
         return value;
     }
 

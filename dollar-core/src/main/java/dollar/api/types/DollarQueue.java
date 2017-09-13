@@ -249,10 +249,10 @@ public class DollarQueue extends AbstractDollar {
         return toJsonString();
     }
 
-    @NotNull
     @Override
-    public Integer toInteger() {
-        throw new DollarFailureException(ErrorType.INVALID_QUEUE_OPERATION);
+    public int toInteger() {
+        DollarFactory.failure(ErrorType.INVALID_QUEUE_OPERATION, "Cannot convert a queue to an integer");
+        return 0;
     }
 
     @NotNull

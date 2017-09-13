@@ -27,7 +27,6 @@ import dollar.api.Signal;
 import dollar.api.SubType;
 import dollar.api.TypePrediction;
 import dollar.api.exceptions.DollarFailureException;
-import dollar.api.types.meta.MetaConstants;
 import dollar.api.types.prediction.SingleValueTypePrediction;
 import dollar.api.var;
 import org.jetbrains.annotations.NotNull;
@@ -46,6 +45,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static dollar.api.DollarStatic.$void;
+import static dollar.api.types.meta.MetaConstants.CONSTRAINT_FINGERPRINT;
 
 public abstract class AbstractDollar implements var {
 
@@ -108,7 +108,7 @@ public abstract class AbstractDollar implements var {
         }
         SubType thisConstraintFingerprint = constraintLabel();
         if (thisConstraintFingerprint == null) {
-            meta(MetaConstants.CONSTRAINT_FINGERPRINT, constraintFingerprint);
+            meta(CONSTRAINT_FINGERPRINT, constraintFingerprint);
             return this;
         } else if (thisConstraintFingerprint.equals(constraintFingerprint)) {
             return this;
@@ -304,7 +304,7 @@ public abstract class AbstractDollar implements var {
     @Nullable
     @Override
     public SubType constraintLabel() {
-        return meta(MetaConstants.CONSTRAINT_FINGERPRINT);
+        return meta(CONSTRAINT_FINGERPRINT);
     }
 
     @NotNull
@@ -462,13 +462,13 @@ public abstract class AbstractDollar implements var {
 
     @Nullable
     @Override
-    public Double toDouble() {
+    public double toDouble() {
         return 0.0;
     }
 
     @NotNull
     @Override
-    public Long toLong() {
+    public long toLong() {
         return 0L;
     }
 

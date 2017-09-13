@@ -149,7 +149,7 @@ public class DollarList extends AbstractDollar {
     public var $divide(@NotNull var rhs) {
 
         var rhsFix = rhs.$fixDeep();
-        if ((rhsFix.toDouble() == null) || (rhsFix.toDouble() == 0.0)) {
+        if ((rhsFix.toDouble() == 0.0)) {
             return DollarFactory.infinity(true);
         }
         final int size = (int) ((double) list.size() / Math.abs(rhsFix.toDouble()));
@@ -403,9 +403,8 @@ public class DollarList extends AbstractDollar {
         return jsonArray().toString();
     }
 
-    @NotNull
     @Override
-    public Integer toInteger() {
+    public int toInteger() {
         return $stream(false).mapToInt(var::toInteger).sum();
     }
 

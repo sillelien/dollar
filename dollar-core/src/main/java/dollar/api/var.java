@@ -1029,9 +1029,6 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      * @return the int
      */
     default int sign() {
-        if (toDouble() == null) {
-            return 0;
-        }
         return (int) Math.signum(toDouble());
     }
 
@@ -1074,8 +1071,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      *
      * @return the double
      */
-    @Nullable
-    Double toDouble();
+    double toDouble();
 
     /**
      * Converts this value to a human readable string.
@@ -1090,8 +1086,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      *
      * @return the integer
      */
-    @NotNull
-    Integer toInteger();
+    int toInteger();
 
     /**
      * Returns this object as a set of nested maps the values are completely unwrapped and don't contain 'var' objects.
@@ -1167,7 +1162,7 @@ public interface var extends Serializable, Comparable<var>, StateAware<var> {
      * @return the long
      */
     @NotNull
-    Long toLong();
+    long toLong();
 
     /**
      * toNumber number.

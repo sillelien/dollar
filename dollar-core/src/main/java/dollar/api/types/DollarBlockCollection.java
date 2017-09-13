@@ -692,18 +692,14 @@ public class DollarBlockCollection implements var {
     }
 
     @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    public Double toDouble() {return getValue().toDouble();}
+    public double toDouble() {return getValue().toDouble();}
 
     @NotNull
     @Override
     public String toHumanString() {return getValue().toHumanString();}
 
     @Override
-    @NotNull
-    @Guarded(NotNullGuard.class)
-    public Integer toInteger() {return getValue().toInteger();}
+    public int toInteger() {return getValue().toInteger();}
 
     @NotNull
     @Override
@@ -729,7 +725,7 @@ public class DollarBlockCollection implements var {
     @Override
     @Guarded(NotNullGuard.class)
     @NotNull
-    public Long toLong() {return getValue().toLong();}
+    public long toLong() {return getValue().toLong();}
 
     @Override
     @Guarded(NotNullGuard.class)

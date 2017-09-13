@@ -24,7 +24,6 @@ import dollar.api.var;
 import dollar.internal.runtime.script.api.Builtin;
 import dollar.internal.runtime.script.api.exceptions.BuiltinNotFoundException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,18 +58,19 @@ public final class Builtins {
         addDollarSingleNoScope(false, StateAware::$unpause, Type._VOID, "UNPAUSE");
         addDollarSingleNoScope(false, StateAware::$state, Type._VOID, "STATE");
 
-        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(
                 0).toDouble() / DAY_IN_MILLIS), true, Type._DECIMAL, "MS", "MILLIS", "MILLISECONDS", "MILLISECOND");
-        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(
                 0).toDouble() / DAY_IN_SECONDS), true, Type._DECIMAL, "S", "SEC", "SECS", "SECONDS");
-        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(
                 0).toDouble() / DAY_IN_MINUTES), true, Type._DECIMAL, "M", "MINUTES",
                      "MINUTE");
-        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(
                 0).toDouble() / DAY_IN_HOURS), true, Type._DECIMAL, "H", "HOUR", "HOURS");
         addJavaStyle(1, 1, (pure, args, scope) -> {
             try {
-                Thread.sleep((long) (args.get(0).toDouble() * DAY_IN_MILLIS));
+                long millis = (long) (args.get(0).toDouble() * DAY_IN_MILLIS);
+                Thread.sleep(millis);
                 return args.get(0);
             } catch (InterruptedException e) {
                 return scope.handleError(e);
@@ -83,13 +83,13 @@ public final class Builtins {
                 return DollarFactory.failure(ErrorType.valueOf(args.get(0).toString()), args.get(1).toString(), true);
             }
         }, true, Type._ANY, "ERROR");
-        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(0).toDouble()), true,
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble()), true,
                      Type._DECIMAL, "DAYS", "DAY", "D");
-        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(
                 0).toDouble() * WEEK_IN_DAYS), true, Type._DECIMAL, "WEEKS", "WEEK", "W");
-        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(
                 0).toDouble() * MONTH_IN_DAYS), true, Type._DECIMAL, "MONTHS", "MONTH", "MTH", "MTHS");
-        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(0).toDouble() == null) ? args.get(0) : (args.get(
+        addJavaStyle(1, 1, (pure, args, scope) -> (args.get(
                 0).toDouble() * YEAR_IN_DAYS), true, Type._DECIMAL, "YEARS", "YEAR", "YRS", "YR", "Y");
         addJavaStyle(1, 1, (pure, args, scope) -> args.get(0).toString().length(), true, Type._INTEGER, "LEN");
         addJavaStyle(0, 0, (pure, args, scope) -> $(new Date()), false, Type._DATE, "DATE");
@@ -141,7 +141,7 @@ public final class Builtins {
         return (map.get(lhsString) != null) && ((Builtin.BuiltinImpl) map.get(lhsString)).isPure();
     }
 
-    @Nullable
+    @NotNull
     public static Type type(@NotNull String s) {
         return (((Builtin.BuiltinImpl<?>) map.get(s)).type());
     }

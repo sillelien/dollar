@@ -630,7 +630,6 @@ public class DollarWrapper implements var {
         return getValue().singleValue();
     }
 
-    @NotNull
     @Override
     public int size() {
         return getValue().size();
@@ -647,9 +646,8 @@ public class DollarWrapper implements var {
         return getValue().toString();
     }
 
-    @NotNull
     @Override
-    public Double toDouble() {
+    public double toDouble() {
         return getValue().toDouble();
     }
 
@@ -659,9 +657,8 @@ public class DollarWrapper implements var {
         return getValue().toHumanString();
     }
 
-    @NotNull
     @Override
-    public Integer toInteger() {
+    public int toInteger() {
         return getValue().toInteger();
     }
 
@@ -689,9 +686,8 @@ public class DollarWrapper implements var {
         return getValue().toList();
     }
 
-    @NotNull
     @Override
-    public Long toLong() {
+    public long toLong() {
         return getValue().toLong();
     }
 

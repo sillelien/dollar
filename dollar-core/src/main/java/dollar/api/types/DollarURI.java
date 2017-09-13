@@ -304,9 +304,9 @@ public class DollarURI extends AbstractDollar {
         return uri.toString();
     }
 
-    @NotNull
     @Override
-    public Integer toInteger() {
+    public int toInteger() {
+        DollarFactory.failure(ErrorType.INVALID_URI_OPERATION, "Cannot convert a URI to an integer");
         return 0;
     }
 

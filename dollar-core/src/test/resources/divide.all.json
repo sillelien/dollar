@@ -4853,56 +4853,77 @@
     1.401298464324817E-45,
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     1.401298464324817E-45,
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
     1.401298464324817E-45,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
     1.401298464324817E-45,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
     1.401298464324817E-45,
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     1.401298464324817E-45,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
     1.401298464324817E-45,
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -4914,16 +4935,22 @@
     1.401298464324817E-45,
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
     1.401298464324817E-45,
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -5373,56 +5400,77 @@
     3.4028234663852886E38,
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     3.4028234663852886E38,
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
     3.4028234663852886E38,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
     3.4028234663852886E38,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
     3.4028234663852886E38,
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     3.4028234663852886E38,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
     3.4028234663852886E38,
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -5434,16 +5482,22 @@
     3.4028234663852886E38,
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
     3.4028234663852886E38,
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -5893,56 +5947,77 @@
     4.9E-324,
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     4.9E-324,
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
     4.9E-324,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
     4.9E-324,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
     4.9E-324,
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     4.9E-324,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
     4.9E-324,
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -5954,16 +6029,22 @@
     4.9E-324,
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
     4.9E-324,
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -6413,56 +6494,77 @@
     1.7976931348623157E308,
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     1.7976931348623157E308,
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
     1.7976931348623157E308,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
     1.7976931348623157E308,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
     1.7976931348623157E308,
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     1.7976931348623157E308,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
     1.7976931348623157E308,
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -6474,16 +6576,22 @@
     1.7976931348623157E308,
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
     1.7976931348623157E308,
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -6933,56 +7041,77 @@
     0.0,
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     0.0,
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
     0.0,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
     0.0,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
     0.0,
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     0.0,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
     0.0,
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -6994,16 +7123,22 @@
     0.0,
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
     0.0,
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -7453,56 +7588,77 @@
     1.0,
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     1.0,
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
     1.0,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
     1.0,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
     1.0,
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     1.0,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
     1.0,
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -7514,16 +7670,22 @@
     1.0,
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
     1.0,
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -7973,56 +8135,77 @@
     -1.0,
     "",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     -1.0,
     "@",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
     -1.0,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
     -1.0,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
     -1.0,
     " ",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     -1.0,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
     -1.0,
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -8034,16 +8217,22 @@
     -1.0,
     "true",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
     -1.0,
     "false",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -8493,56 +8682,77 @@
     100.0,
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     100.0,
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
     100.0,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
     100.0,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
     100.0,
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     100.0,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
     100.0,
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -8554,16 +8764,22 @@
     100.0,
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
     100.0,
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -9013,56 +9229,77 @@
     -100.0,
     "",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     -100.0,
     "@",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
     -100.0,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
     -100.0,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
     -100.0,
     " ",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     -100.0,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
     -100.0,
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -9074,16 +9311,22 @@
     -100.0,
     "true",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
     -100.0,
     "false",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -9533,56 +9776,77 @@
     0.5,
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     0.5,
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
     0.5,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
     0.5,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
     0.5,
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     0.5,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
     0.5,
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -9594,16 +9858,22 @@
     0.5,
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
     0.5,
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -10053,56 +10323,77 @@
     -0.5,
     "",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     -0.5,
     "@",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
     -0.5,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
     -0.5,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
     -0.5,
     " ",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     -0.5,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
     -0.5,
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -10114,16 +10405,22 @@
     -0.5,
     "true",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
     -0.5,
     "false",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -10573,56 +10870,77 @@
     -0.1,
     "",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     -0.1,
     "@",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
     -0.1,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
     -0.1,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
     -0.1,
     " ",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     -0.1,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
     -0.1,
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -10634,16 +10952,22 @@
     -0.1,
     "true",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
     -0.1,
     "false",
     {
-      "$type": "Infinity",
-      "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -11093,56 +11417,77 @@
     0.1,
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     0.1,
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
     0.1,
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
     0.1,
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
     0.1,
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     0.1,
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
     0.1,
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -11154,16 +11499,22 @@
     0.1,
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
     0.1,
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -11717,8 +12068,11 @@
     },
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -11729,8 +12083,11 @@
     },
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
@@ -11741,8 +12098,11 @@
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
@@ -11753,8 +12113,11 @@
     },
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
@@ -11765,8 +12128,11 @@
     },
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -11777,8 +12143,11 @@
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
@@ -11789,8 +12158,11 @@
     },
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -11810,8 +12182,11 @@
     },
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
@@ -11822,8 +12197,11 @@
     },
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -12481,8 +12859,11 @@
     },
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -12493,8 +12874,11 @@
     },
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
@@ -12505,8 +12889,11 @@
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
@@ -12517,8 +12904,11 @@
     },
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
@@ -12529,8 +12919,11 @@
     },
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -12541,8 +12934,11 @@
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
@@ -12553,8 +12949,11 @@
     },
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -12574,8 +12973,11 @@
     },
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
@@ -12586,8 +12988,11 @@
     },
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -13245,8 +13650,11 @@
     },
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -13257,8 +13665,11 @@
     },
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
@@ -13269,8 +13680,11 @@
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
@@ -13281,8 +13695,11 @@
     },
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
@@ -13293,8 +13710,11 @@
     },
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -13305,8 +13725,11 @@
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
@@ -13317,8 +13740,11 @@
     },
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -13338,8 +13764,11 @@
     },
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
@@ -13350,8 +13779,11 @@
     },
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -14009,8 +14441,11 @@
     },
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -14021,8 +14456,11 @@
     },
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
@@ -14033,8 +14471,11 @@
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
@@ -14045,8 +14486,11 @@
     },
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
@@ -14057,8 +14501,11 @@
     },
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -14069,8 +14516,11 @@
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
@@ -14081,8 +14531,11 @@
     },
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -14102,8 +14555,11 @@
     },
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
@@ -14114,8 +14570,11 @@
     },
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -14773,8 +15232,11 @@
     },
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -14785,8 +15247,11 @@
     },
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
@@ -14797,8 +15262,11 @@
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
@@ -14809,8 +15277,11 @@
     },
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
@@ -14821,8 +15292,11 @@
     },
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -14833,8 +15307,11 @@
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
@@ -14845,8 +15322,11 @@
     },
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -14866,8 +15346,11 @@
     },
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
@@ -14878,8 +15361,11 @@
     },
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -21707,8 +22193,11 @@
     ],
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -21725,8 +22214,11 @@
     ],
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
@@ -21743,8 +22235,11 @@
     ],
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
@@ -21761,8 +22256,11 @@
     ],
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
@@ -21779,8 +22277,11 @@
     ],
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -21797,8 +22298,11 @@
     ],
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
@@ -21815,8 +22319,11 @@
     ],
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -21858,8 +22365,11 @@
     ],
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
@@ -21876,8 +22386,11 @@
     ],
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -23376,8 +23889,11 @@
     ],
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -23398,8 +23914,11 @@
     ],
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
@@ -23420,8 +23939,11 @@
     ],
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
@@ -23442,8 +23964,11 @@
     ],
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
@@ -23464,8 +23989,11 @@
     ],
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -23486,8 +24014,11 @@
     ],
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
@@ -23508,8 +24039,11 @@
     ],
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -23563,8 +24097,11 @@
     ],
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
@@ -23585,8 +24122,11 @@
     ],
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -25854,8 +26394,11 @@
     ],
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -25888,8 +26431,11 @@
     ],
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
@@ -25922,8 +26468,11 @@
     ],
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
@@ -25956,8 +26505,11 @@
     ],
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
@@ -25990,8 +26542,11 @@
     ],
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -26024,8 +26579,11 @@
     ],
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
@@ -26058,8 +26616,11 @@
     ],
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -26149,8 +26710,11 @@
     ],
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
@@ -26183,8 +26747,11 @@
     ],
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -28051,8 +28618,11 @@
     ],
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -28071,8 +28641,11 @@
     ],
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
@@ -28091,8 +28664,11 @@
     ],
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
@@ -28111,8 +28687,11 @@
     ],
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
@@ -28131,8 +28710,11 @@
     ],
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -28151,8 +28733,11 @@
     ],
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
@@ -28171,8 +28756,11 @@
     ],
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -28220,8 +28808,11 @@
     ],
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
@@ -28240,8 +28831,11 @@
     ],
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -29204,8 +29798,11 @@
     ],
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -29215,8 +29812,11 @@
     ],
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
@@ -29226,8 +29826,11 @@
     ],
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
@@ -29237,8 +29840,11 @@
     ],
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
@@ -29248,8 +29854,11 @@
     ],
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -29259,8 +29868,11 @@
     ],
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
@@ -29270,8 +29882,11 @@
     ],
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -29292,8 +29907,11 @@
     ],
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
@@ -29303,8 +29921,11 @@
     ],
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -29844,56 +30465,77 @@
     [],
     "",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     [],
     "@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
+      }
     }
   ],
   [
     [],
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
+      }
     }
   ],
   [
     [],
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
+      }
     }
   ],
   [
     [],
     " ",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
     [],
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
+      }
     }
   ],
   [
     [],
     "\n\t\r",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
+      }
     }
   ],
   [
@@ -29905,16 +30547,22 @@
     [],
     "true",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
+      }
     }
   ],
   [
     [],
     "false",
     {
-      "$type": "Infinity",
-      "positive": true
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
+      }
     }
   ],
   [
@@ -30785,7 +31433,7 @@
       "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid range: [infinity..infinity]"
+        "errorMessage": "empty String"
       }
     }
   ],
@@ -30808,7 +31456,7 @@
       "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid range: [infinity..infinity]"
+        "errorMessage": "For input string: \"@\""
       }
     }
   ],
@@ -30831,7 +31479,7 @@
       "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid range: [infinity..infinity]"
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
       }
     }
   ],
@@ -30854,7 +31502,7 @@
       "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid range: [infinity..infinity]"
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
       }
     }
   ],
@@ -30877,7 +31525,7 @@
       "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid range: [infinity..infinity]"
+        "errorMessage": "empty String"
       }
     }
   ],
@@ -30900,7 +31548,7 @@
       "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid range: [infinity..infinity]"
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
       }
     }
   ],
@@ -30923,7 +31571,7 @@
       "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid range: [infinity..infinity]"
+        "errorMessage": "empty String"
       }
     }
   ],
@@ -30967,7 +31615,7 @@
       "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid range: [infinity..infinity]"
+        "errorMessage": "For input string: \"true\""
       }
     }
   ],
@@ -30990,7 +31638,7 @@
       "$type": "Error",
       "value": {
         "errorType": "EXCEPTION",
-        "errorMessage": "Invalid range: [infinity..infinity]"
+        "errorMessage": "For input string: \"false\""
       }
     }
   ],
@@ -38086,14 +38734,10 @@
     },
     "",
     {
-      "$type": "Range",
-      "lower": {
-        "$type": "Infinity",
-        "positive": false
-      },
-      "upper": {
-        "$type": "Infinity",
-        "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
       }
     }
   ],
@@ -38105,14 +38749,10 @@
     },
     "@",
     {
-      "$type": "Range",
-      "lower": {
-        "$type": "Infinity",
-        "positive": false
-      },
-      "upper": {
-        "$type": "Infinity",
-        "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@\""
       }
     }
   ],
@@ -38124,14 +38764,10 @@
     },
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     {
-      "$type": "Range",
-      "lower": {
-        "$type": "Infinity",
-        "positive": false
-      },
-      "upper": {
-        "$type": "Infinity",
-        "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\""
       }
     }
   ],
@@ -38143,14 +38779,10 @@
     },
     "@@ @@ @@@ @@ @@ @@",
     {
-      "$type": "Range",
-      "lower": {
-        "$type": "Infinity",
-        "positive": false
-      },
-      "upper": {
-        "$type": "Infinity",
-        "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"@@ @@ @@@ @@ @@ @@\""
       }
     }
   ],
@@ -38162,14 +38794,10 @@
     },
     " ",
     {
-      "$type": "Range",
-      "lower": {
-        "$type": "Infinity",
-        "positive": false
-      },
-      "upper": {
-        "$type": "Infinity",
-        "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
       }
     }
   ],
@@ -38181,14 +38809,10 @@
     },
     "ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…",
     {
-      "$type": "Range",
-      "lower": {
-        "$type": "Infinity",
-        "positive": false
-      },
-      "upper": {
-        "$type": "Infinity",
-        "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"ﬂ‡°·‚ÏÌÓÔ^øπåß∂ƒ©˙∆˚¬…æ…;…\""
       }
     }
   ],
@@ -38200,14 +38824,10 @@
     },
     "\n\t\r",
     {
-      "$type": "Range",
-      "lower": {
-        "$type": "Infinity",
-        "positive": false
-      },
-      "upper": {
-        "$type": "Infinity",
-        "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "empty String"
       }
     }
   ],
@@ -38232,14 +38852,10 @@
     },
     "true",
     {
-      "$type": "Range",
-      "lower": {
-        "$type": "Infinity",
-        "positive": false
-      },
-      "upper": {
-        "$type": "Infinity",
-        "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"true\""
       }
     }
   ],
@@ -38251,14 +38867,10 @@
     },
     "false",
     {
-      "$type": "Range",
-      "lower": {
-        "$type": "Infinity",
-        "positive": false
-      },
-      "upper": {
-        "$type": "Infinity",
-        "positive": false
+      "$type": "Error",
+      "value": {
+        "errorType": "EXCEPTION",
+        "errorMessage": "For input string: \"false\""
       }
     }
   ],

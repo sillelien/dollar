@@ -222,13 +222,8 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @NotNull
     @Override
-    public Integer toInteger() {
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException nfe) {
-            DollarFactory.failure(nfe);
-            return 0;
-        }
+    public int toInteger() {
+        return Integer.parseInt(value);
     }
 
     @NotNull
@@ -279,12 +274,8 @@ public class DollarString extends AbstractDollarSingleValue<String> {
 
     @Nullable
     @Override
-    public Double toDouble() {
-        try {
-            return Double.parseDouble(value);
-        } catch (NumberFormatException nfe) {
-            return null;
-        }
+    public double toDouble() {
+        return Double.parseDouble(value);
     }
 
     @Override

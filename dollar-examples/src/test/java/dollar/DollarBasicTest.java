@@ -111,7 +111,7 @@ public class DollarBasicTest {
         assertEquals(1L, DollarStatic.$(map).$get($("sub")).toJavaMap().get("thing"));
         assertEquals("1", DollarStatic.$(map).$get($("sub")).$get($("thing")).toHumanString());
         assertEquals("{\"thing\":1}", DollarStatic.$(map).$get($("sub")).toHumanString());
-        assertEquals(1, DollarStatic.$(map).$get($("sub")).$get($("thing")).toInteger().longValue());
+        assertEquals(1, DollarStatic.$(map).$get($("sub")).$get($("thing")).toInteger());
     }
 
 

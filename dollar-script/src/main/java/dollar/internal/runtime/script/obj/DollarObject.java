@@ -28,6 +28,7 @@ import dollar.api.VarKey;
 import dollar.api.Variable;
 import dollar.api.types.AbstractDollar;
 import dollar.api.types.DollarFactory;
+import dollar.api.types.ErrorType;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.ScopeExecutable;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
@@ -353,8 +354,9 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     @Override
-    public Integer toInteger() {
-        throw new DollarScriptException("Cannot convert instance of class " + name + " to integer.");
+    public int toInteger() {
+        DollarFactory.failure(ErrorType.INVALID_OBJECT_OPERATION, "Cannot convert instance of class " + name + " to integer.");
+        return 0;
     }
 
     @NotNull

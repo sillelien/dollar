@@ -19,27 +19,40 @@ package dollar.api.types.meta;
 import dollar.api.MetaKey;
 import org.jetbrains.annotations.NotNull;
 
-public class MetaConstants {
+@SuppressWarnings({"UtilityClassCanBeSingleton", "UtilityClassCanBeEnum"})
+public final class MetaConstants {
+
     @NotNull
     public static final MetaKey ASSIGNMENT_TYPE = MetaKey.of("dollar.internal.assignment.type");
+
     @NotNull
     public static final MetaKey CONSTRAINT_FINGERPRINT = MetaKey.of("dollar.internal.constraint.fingerprint");
+
     @NotNull
     public static final MetaKey CONSTRAINT_SOURCE = MetaKey.of("dollar.internal.constraint.source");
+
     @NotNull
     public static final MetaKey ID = MetaKey.of("dollar.internal.id");
+
     @NotNull
     public static final MetaKey IMPURE = MetaKey.of("dollar.internal.pure");
+
     @NotNull
     public static final MetaKey IS_BUILTIN = MetaKey.of("dollar.internal.builtin");
+
     @NotNull
     public static final MetaKey OPERATION = MetaKey.of("dollar.internal.operation");
+
     @NotNull
     public static final MetaKey OPERATION_NAME = MetaKey.of("dollar.internal.operation.name");
+
     @NotNull
     public static final MetaKey SCOPES = MetaKey.of("dollar.internal.scopes");
+
     @NotNull
     public static final MetaKey TYPE_HINT = MetaKey.of("dollar.internal.type.hint");
+
     @NotNull
     public static final MetaKey VARIABLE = MetaKey.of("dollar.internal.variable");
+
 }

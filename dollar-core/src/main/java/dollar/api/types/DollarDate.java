@@ -55,51 +55,6 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
 
     @NotNull
     @Override
-    public var $negate() {
-        return DollarFactory.fromValue(-asDecimal());
-    }
-
-    @NotNull
-    @Override
-    public var $divide(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
-        if (rhsFix.zero() || (rhsFix.toDouble() == null) || (rhsFix.toDouble() == 0.0)) {
-            return DollarFactory.infinity(rhs.positive());
-        }
-        return DollarFactory.fromValue(asDecimal() / rhs.toDouble());
-    }
-
-    @NotNull
-    @Override
-    public var $modulus(@NotNull var rhs) {
-        return DollarFactory.wrap(new DollarDecimal(asDecimal() % rhs.toDouble()));
-    }
-
-    @NotNull
-    @Override
-    public var $multiply(@NotNull var rhs) {
-        return DollarFactory.wrap(new DollarDecimal(asDecimal() * rhs.toDouble()));
-    }
-
-    @Override
-    public int sign() {
-        return (int) Math.signum(asDecimal());
-    }
-
-    @Override
-    @NotNull
-    public Integer toInteger() {
-        return asDecimal().intValue();
-    }
-
-    @NotNull
-    @Override
-    public Number toNumber() {
-        return asDecimal();
-    }
-
-    @NotNull
-    @Override
     public var $as(@NotNull Type type) {
         if (type.is(Type._BOOLEAN)) {
             return DollarStatic.$(true);
@@ -122,14 +77,36 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
 
     @NotNull
     @Override
-    public Type $type() {
-        return new Type(Type._DATE, constraintLabel());
+    public var $divide(@NotNull var rhs) {
+        var rhsFix = rhs.$fixDeep();
+        if (rhsFix.zero() || (rhsFix.toDouble() == 0.0)) {
+            return DollarFactory.infinity(rhs.positive());
+        }
+        return DollarFactory.fromValue(asDecimal() / rhs.toDouble());
     }
 
     @NotNull
     @Override
-    public String toYaml() {
-        return "date: " + value;
+    public var $modulus(@NotNull var rhs) {
+        return DollarFactory.wrap(new DollarDecimal(asDecimal() % rhs.toDouble()));
+    }
+
+    @NotNull
+    @Override
+    public var $multiply(@NotNull var rhs) {
+        return DollarFactory.wrap(new DollarDecimal(asDecimal() * rhs.toDouble()));
+    }
+
+    @NotNull
+    @Override
+    public var $negate() {
+        return DollarFactory.fromValue(-asDecimal());
+    }
+
+    @NotNull
+    @Override
+    public Type $type() {
+        return new Type(Type._DATE, constraintLabel());
     }
 
     @Override
@@ -142,26 +119,71 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
         return false;
     }
 
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isFalse() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrue() {
+        return false;
+    }
+
+    @Override
+    public boolean neitherTrueNorFalse() {
+        return true;
+    }
+
+    @Override
+    public int sign() {
+        return (int) Math.signum(asDecimal());
+    }
+
+    @NotNull
+    @Override
+    public String toDollarScript() {
+        return String.format("(\"%s\" as Date)", toString());
+    }
+
+    @Override
+    @NotNull
+    public int toInteger() {
+        return asDecimal().intValue();
+    }
+
+    @NotNull
+    @Override
+    public String toJavaObject() {
+        return value.toString();
+    }
+
+    @NotNull
+    @Override
+    public Number toNumber() {
+        return asDecimal();
+    }
+
+    @NotNull
+    @Override
+    public String toYaml() {
+        return "date: " + value;
+    }
+
+    @Override
+    public boolean truthy() {
+        return true;
+    }
+
     @NotNull
     @Override
     public var $get(@NotNull var key) {
         final LocalDateTime localDateTime = LocalDateTime.ofInstant(value, ZoneId.systemDefault());
         return DollarFactory.fromValue(localDateTime.get(ChronoField.valueOf(key.toHumanString().toUpperCase())));
-    }
-
-    @NotNull
-    @Override
-    public var $set(@NotNull var key, @NotNull Object v) {
-        return DollarFactory.fromValue(
-                LocalDateTime.ofInstant(value, ZoneId.systemDefault())
-                        .with(ChronoField.valueOf(key.toHumanString().toUpperCase()),
-                              DollarFactory.fromValue(v).toLong())
-        );
-    }
-
-    @Override
-    public int hashCode() {
-        return value.hashCode();
     }
 
     @NotNull
@@ -192,6 +214,16 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
 
     @NotNull
     @Override
+    public var $set(@NotNull var key, @NotNull Object v) {
+        return DollarFactory.fromValue(
+                LocalDateTime.ofInstant(value, ZoneId.systemDefault())
+                        .with(ChronoField.valueOf(key.toHumanString().toUpperCase()),
+                              DollarFactory.fromValue(v).toLong())
+        );
+    }
+
+    @NotNull
+    @Override
     public String toHumanString() {
         return value.toString();
     }
@@ -214,28 +246,13 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     }
 
     @Override
-    public boolean isBoolean() {
+    public boolean decimal() {
         return false;
     }
 
     @Override
-    public boolean isFalse() {
+    public boolean integer() {
         return false;
-    }
-
-    @Override
-    public boolean isTrue() {
-        return false;
-    }
-
-    @Override
-    public boolean neitherTrueNorFalse() {
-        return true;
-    }
-
-    @Override
-    public boolean truthy() {
-        return true;
     }
 
     @Override
@@ -244,13 +261,19 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
     }
 
     @Override
-    public boolean decimal() {
-        return false;
+    public double toDouble() {
+        return asDecimal();
+    }
+
+    @NotNull
+    @Override
+    public long toLong() {
+        return asDecimal().longValue();
     }
 
     @Override
-    public boolean integer() {
-        return false;
+    public int hashCode() {
+        return value.hashCode();
     }
 
     @Override
@@ -267,30 +290,6 @@ public class DollarDate extends AbstractDollarSingleValue<Instant> {
         } else {
             return toString().equals(obj.toString());
         }
-    }
-
-    @NotNull
-    @Override
-    public Double toDouble() {
-        return asDecimal();
-    }
-
-    @NotNull
-    @Override
-    public Long toLong() {
-        return asDecimal().longValue();
-    }
-
-    @NotNull
-    @Override
-    public String toDollarScript() {
-        return String.format("(\"%s\" as Date)", toString());
-    }
-
-    @NotNull
-    @Override
-    public String toJavaObject() {
-        return value.toString();
     }
 
 }

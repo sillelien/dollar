@@ -216,14 +216,14 @@ public class DollarRange extends AbstractDollar {
                 throw new DollarException("Elements not available in an empty range");
             }
             if (upper.integer()) {
-                if (upper.toLong().equals(lower.toLong()) && (keyL == 0)) {
+                if ((upper.toLong() == lower.toLong()) && (keyL == 0)) {
                     return DollarFactory.fromValue(lower);
                 }
                 final long result = reversed ? (upper.toLong() - keyL) : (lower.toLong() + keyL);
                 return DollarFactory.fromValue(result);
             }
             if (upper.decimal()) {
-                if (upper.toDouble().equals(lower.toDouble()) && (keyL == 0)) {
+                if ((upper.toDouble() == lower.toDouble()) && (keyL == 0)) {
                     return DollarFactory.fromValue(lower);
                 }
                 final double diff = reversed ? (upper.toDouble() - keyL) : (lower.toDouble() + keyL);
@@ -426,9 +426,8 @@ public class DollarRange extends AbstractDollar {
         return String.format("%s..%s", lower(), upper());
     }
 
-    @NotNull
     @Override
-    public Integer toInteger() {
+    public int toInteger() {
         return diff().toInteger();
     }
 
@@ -536,13 +535,13 @@ public class DollarRange extends AbstractDollar {
     }
 
     @Override
-    public Double toDouble() {
+    public double toDouble() {
         return diff().toDouble();
     }
 
     @NotNull
     @Override
-    public Long toLong() {
+    public long toLong() {
         return diff().toLong();
     }
 
@@ -605,14 +604,14 @@ public class DollarRange extends AbstractDollar {
             return $void();
         }
         if (upper.integer()) {
-            if (upper.toLong().equals(lower.toLong())) {
+            if (upper.toLong() == lower.toLong()) {
                 return DollarFactory.fromValue(1);
             }
             final long diff = reversed ? (lower.toLong() - upper.toLong()) : (upper.toLong() - lower.toLong());
             return DollarFactory.fromValue(diff + (long) Math.signum(diff));
         }
         if (upper.decimal()) {
-            if (upper.toDouble().equals(lower.toDouble())) {
+            if (upper.toDouble() == lower.toDouble()) {
                 return DollarFactory.fromValue(1.0);
             }
             final double diff = reversed ? (lower.toDouble() - upper.toDouble()) : (upper.toDouble() - lower.toDouble());

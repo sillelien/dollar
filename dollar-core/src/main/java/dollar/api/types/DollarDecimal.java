@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 
+import static dollar.api.types.DollarFactory.fromValue;
 import static java.lang.Math.abs;
 
 public class DollarDecimal extends AbstractDollarSingleValue<Double> {
@@ -35,69 +36,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     @NotNull
     @Override
     public var $abs() {
-        return DollarFactory.fromValue(abs(value));
-    }
-
-    @NotNull
-    @Override
-    public var $negate() {
-        return DollarFactory.fromValue(-value);
-    }
-
-    @NotNull
-    @Override
-    public var $divide(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
-        if ((rhsFix.toDouble() == null) || rhsFix.zero()) {
-            return DollarFactory.infinity(positive());
-        }
-        if (rhsFix.infinite() || Double.valueOf(value / rhsFix.toDouble()).isInfinite()) {
-            return DollarFactory.fromValue(0);
-        }
-        return DollarFactory.fromValue(value / rhsFix.toDouble());
-    }
-
-    @NotNull
-    @Override
-    public var $modulus(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
-        if (rhsFix.infinite()) {
-            return DollarFactory.fromValue(0.0);
-        }
-        if (rhsFix.zero()) {
-            return DollarFactory.infinity(positive());
-        }
-
-        return DollarFactory.fromValue(value % rhsFix.toDouble());
-    }
-
-    @NotNull
-    @Override
-    public var $multiply(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
-        if (rhsFix.infinite()) {
-            return rhsFix.$multiply(this);
-        }
-        if (rhsFix.zero()) {
-            return DollarFactory.fromValue(0.0);
-        }
-
-        if (Double.valueOf(value * rhsFix.toDouble()).isInfinite()) {
-            return DollarFactory.infinity((Math.signum(value) * Math.signum(rhsFix.toDouble())) > 0);
-        }
-        return DollarFactory.fromValue(value * rhsFix.toDouble());
-    }
-
-    @Override
-    @NotNull
-    public Integer toInteger() {
-        return value.intValue();
-    }
-
-    @NotNull
-    @Override
-    public Number toNumber() {
-        return value;
+        return fromValue(abs(value));
     }
 
     @NotNull
@@ -124,14 +63,58 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
 
     @NotNull
     @Override
-    public Type $type() {
-        return new Type(Type._DECIMAL, constraintLabel());
+    public var $divide(@NotNull var rhs) {
+        var rhsFix = rhs.$fixDeep();
+        if (rhsFix.zero()) {
+            return DollarFactory.infinity(positive());
+        }
+        if (rhsFix.infinite() || Double.valueOf(value / rhsFix.toDouble()).isInfinite()) {
+            return fromValue(0);
+        }
+        return fromValue(value / rhsFix.toDouble());
     }
 
     @NotNull
     @Override
-    public String toYaml() {
-        return "decimal: " + value;
+    public var $modulus(@NotNull var rhs) {
+        var rhsFix = rhs.$fixDeep();
+        if (rhsFix.infinite()) {
+            return fromValue(0.0);
+        }
+        if (rhsFix.zero()) {
+            return DollarFactory.infinity(positive());
+        }
+
+        return fromValue(value % rhsFix.toDouble());
+    }
+
+    @NotNull
+    @Override
+    public var $multiply(@NotNull var rhs) {
+        var rhsFix = rhs.$fixDeep();
+        if (rhsFix.infinite()) {
+            return rhsFix.$multiply(this);
+        }
+        if (rhsFix.zero()) {
+            return fromValue(0.0);
+        }
+
+        if (Double.valueOf(value * rhsFix.toDouble()).isInfinite()) {
+            return DollarFactory.infinity((Math.signum(value) * Math.signum(rhsFix.toDouble())) > 0);
+        }
+        return fromValue(value * rhsFix.toDouble());
+    }
+
+    @NotNull
+    @Override
+    public var $negate() {
+        return fromValue(-value);
+    }
+
+    @NotNull
+    @Override
+    public Type $type() {
+        return new Type(Type._DECIMAL, constraintLabel());
     }
 
     @Override
@@ -142,34 +125,6 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
             }
         }
         return false;
-    }
-
-    @Override
-    public int compareTo(@NotNull var o) {
-        return $minus(o).toInteger();
-    }
-
-    @Override
-    public int hashCode() {
-        return value.hashCode();
-    }
-
-    @NotNull
-    @Override
-    public var $plus(@NotNull var rhs) {
-        var rhsFix = rhs.$fixDeep();
-        if (rhsFix.string()) {
-            return DollarFactory.fromValue(toString() + rhsFix);
-        } else if (rhsFix.range()) {
-            return DollarFactory.fromValue(rhsFix.$plus(this));
-        } else if (rhsFix.list()) {
-            return DollarFactory.fromValue(rhsFix.$prepend(this));
-        } else {
-            if (Double.valueOf(value + rhsFix.toDouble()).isInfinite()) {
-                return DollarFactory.infinity(Math.signum(value + rhsFix.toDouble()) > 0);
-            }
-            return DollarFactory.fromValue(value + rhsFix.toDouble());
-        }
     }
 
     @Override
@@ -192,14 +147,62 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         return true;
     }
 
+    @NotNull
+    @Override
+    public String toDollarScript() {
+        return toString();
+    }
+
+    @Override
+    @NotNull
+    public int toInteger() {
+        return value.intValue();
+    }
+
+    @NotNull
+    @Override
+    public Double toJavaObject() {
+        return value;
+    }
+
+    @NotNull
+    @Override
+    public Number toNumber() {
+        return value;
+    }
+
+    @NotNull
+    @Override
+    public String toYaml() {
+        return "decimal: " + value;
+    }
+
     @Override
     public boolean truthy() {
         return value.intValue() != 0;
     }
 
+    @NotNull
     @Override
-    public boolean number() {
-        return true;
+    public var $plus(@NotNull var rhs) {
+        var rhsFix = rhs.$fixDeep();
+        if (rhsFix.string()) {
+            return fromValue(toString() + rhsFix);
+        } else if (rhsFix.range()) {
+            return fromValue(rhsFix.$plus(this));
+        } else if (rhsFix.list()) {
+            return fromValue(rhsFix.$prepend(this));
+        } else {
+            if (Double.valueOf(value + rhsFix.toDouble()).isInfinite()) {
+                return DollarFactory.infinity(Math.signum(value + rhsFix.toDouble()) > 0);
+            }
+            return fromValue(value + rhsFix.toDouble());
+        }
+    }
+
+    @Override
+    public int compareTo(@NotNull var o) {
+        return $minus(o).toInteger();
     }
 
     @Override
@@ -213,6 +216,26 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
     }
 
     @Override
+    public boolean number() {
+        return true;
+    }
+
+    @Override
+    public double toDouble() {
+        return value;
+    }
+
+    @Override
+    public long toLong() {
+        return value.longValue();
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof var) {
             var unwrapped = ((var) obj).$unwrap();
@@ -220,7 +243,7 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
                 if (integer()) {
                     return value.longValue() == unwrapped.toLong();
                 } else {
-                    return value.doubleValue() == unwrapped.toDouble();
+                    return value == unwrapped.toDouble();
                 }
             } else {
                 return value.toString().equals(obj.toString());
@@ -230,31 +253,6 @@ public class DollarDecimal extends AbstractDollarSingleValue<Double> {
         } else {
             return value.toString().equals(obj.toString());
         }
-    }
-
-    @NotNull
-    @Override
-    public Double toDouble() {
-        return value;
-    }
-
-    @NotNull
-    @Override
-    public Long toLong() {
-        return value.longValue();
-    }
-
-    @NotNull
-    @Override
-    public String toDollarScript() {
-        return toString();
-    }
-
-
-    @NotNull
-    @Override
-    public Double toJavaObject() {
-        return value;
     }
 
 }

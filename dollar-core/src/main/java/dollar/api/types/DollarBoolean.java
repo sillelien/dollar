@@ -139,7 +139,7 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
 
     @Override
     @NotNull
-    public Integer toInteger() {
+    public int toInteger() {
         return value ? 1 : 0;
     }
 
@@ -202,15 +202,13 @@ public class DollarBoolean extends AbstractDollarSingleValue<Boolean> {
         return false;
     }
 
-    @NotNull
     @Override
-    public Double toDouble() {
+    public double toDouble() {
         return value ? 1.0 : 0.0;
     }
 
-    @NotNull
     @Override
-    public Long toLong() {
+    public long toLong() {
         return value ? 1L : 0L;
     }
 

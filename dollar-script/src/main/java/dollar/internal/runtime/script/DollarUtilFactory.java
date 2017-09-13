@@ -27,8 +27,6 @@ import dollar.api.VarKey;
 import dollar.api.Variable;
 import dollar.api.script.DollarParser;
 import dollar.api.script.Source;
-import dollar.api.types.DollarFactory;
-import dollar.api.types.meta.MetaConstants;
 import dollar.api.var;
 import dollar.internal.runtime.script.api.DollarUtil;
 import dollar.internal.runtime.script.api.ScopeExecutable;
@@ -58,6 +56,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static dollar.api.DollarStatic.*;
+import static dollar.api.types.DollarFactory.wrap;
+import static dollar.api.types.meta.MetaConstants.TYPE_HINT;
 import static dollar.api.types.meta.MetaConstants.VARIABLE;
 import static dollar.internal.runtime.script.parser.DollarParserImpl.NAMED_PARAMETER_META_ATTR;
 import static dollar.internal.runtime.script.parser.Symbols.VAR_USAGE_OP;
@@ -103,7 +103,7 @@ public final class DollarUtilFactory implements DollarUtil {
     public void addScope(boolean runtime, @NotNull Scope scope) {
         boolean newScope = scopes.get().isEmpty() || !scope.equals(scope());
         scopes.get().add(scope);
-        if (DollarStatic.getConfig().debugScope()) {
+        if (getConfig().debugScope()) {
             log.info("{}{}BEGIN {}", indent(scopes.get().size() - 1), runtime ? "**** " : "", scope);
         }
 
@@ -164,10 +164,8 @@ public final class DollarUtilFactory implements DollarUtil {
     public Scope endScope(boolean runtime) {
 
         Scope remove = scopes.get().remove(scopes.get().size() - 1);
-        if (DollarStatic.getConfig().debugScope()) {
-
+        if (getConfig().debugScope()) {
             log.info("{}{}END:  {}", indent(scopes.get().size()), runtime ? "**** " : "", remove);
-
         }
 
         return remove;
@@ -183,7 +181,7 @@ public final class DollarUtilFactory implements DollarUtil {
     @Override
     @NotNull
     public var fix(@Nullable var v, boolean parallel) {
-        return (v != null) ? DollarFactory.wrap(v.$fix(parallel)) : $void();
+        return (v != null) ? wrap(v.$fix(parallel)) : $void();
     }
 
     /**
@@ -195,7 +193,7 @@ public final class DollarUtilFactory implements DollarUtil {
     @Override
     @NotNull
     public var fix(@Nullable var v) {
-        return (v != null) ? DollarFactory.wrap(v.$fix(false)) : $void();
+        return (v != null) ? wrap(v.$fix(false)) : $void();
     }
 
     @Override
@@ -385,16 +383,18 @@ public final class DollarUtilFactory implements DollarUtil {
                     @NotNull Source source,
                     @Nullable Type suggestedType, @NotNull List<var> inputs,
                     @NotNull Pipeable pipeable) {
-        var result = DollarFactory.wrap((var) Proxy.newProxyInstance(
+
+        var result = wrap((var) Proxy.newProxyInstance(
                 DollarStatic.class.getClassLoader(),
                 new Class<?>[]{var.class},
                 new SourceNode(pipeable, source, inputs, name, parser,
                                sourceNodeOptions, createId(name), pure, operation)));
+
         try {
             if (suggestedType != null) {
-                result.meta(MetaConstants.TYPE_HINT, suggestedType);
+                result.meta(TYPE_HINT, suggestedType);
             } else {
-                result.meta(MetaConstants.TYPE_HINT, operation.typeFor(inputs.toArray(new var[inputs.size()])));
+                result.meta(TYPE_HINT, operation.typeFor(inputs.toArray(new var[inputs.size()])));
             }
             return result;
         } catch (RuntimeException e) {
@@ -632,7 +632,8 @@ public final class DollarUtilFactory implements DollarUtil {
     public Variable updateVariable(@NotNull Scope scope,
                                    @NotNull VarKey key,
                                    @NotNull var value,
-                                   @NotNull VarFlags varFlags, @Nullable var useConstraint,
+                                   @NotNull VarFlags varFlags,
+                                   @Nullable var useConstraint,
                                    @Nullable SubType useSource) {
         if (getConfig().debugScope()) {
             log.info("{}{} {}", highlight("UPDATING ", ANSI_CYAN), key, scope);
@@ -640,7 +641,6 @@ public final class DollarUtilFactory implements DollarUtil {
         if (varFlags.isDeclaration()) {
             throw new DollarScriptException("Variable " + key + " already defined in " + scope);
         } else {
-
             return scope.set(key, value, useConstraint, useSource, varFlags);
         }
     }

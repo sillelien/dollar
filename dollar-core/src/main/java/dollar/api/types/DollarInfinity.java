@@ -241,7 +241,6 @@ public final class DollarInfinity extends AbstractDollar {
         return positive ? 1 : -1;
     }
 
-    @NotNull
     @Override
     public int size() {
         return toNumber().intValue();
@@ -259,9 +258,8 @@ public final class DollarInfinity extends AbstractDollar {
         return positive ? "infinity" : "-infinity";
     }
 
-    @NotNull
     @Override
-    public Integer toInteger() {
+    public int toInteger() {
         return positive ? Integer.MAX_VALUE : Integer.MIN_VALUE;
     }
 
