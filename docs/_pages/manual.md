@@ -787,7 +787,7 @@ Hopefully you'll find Dollar a useful and productive language, but there will be
 
 var variableA="Hello World"
 
-var java = java `out=scope.get("variableA");`
+var java = java `out=scope.get(VarKey.of("variableA"));`
 
 java <=> "Hello World"
 
@@ -1050,6 +1050,17 @@ In the example the value of c is greater than d because the value of c is evalua
 ## Advanced Topics
 
 TODO
+
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running dollar.internal.runtime.script.ParserMainTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.174 sec - in dollar.internal.runtime.script.ParserMainTest
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
 
 ## Appendix A - Operators
 ### `all` or `<@` {#op-all}
@@ -1582,10 +1593,10 @@ The right-hand-side is executed if an error occurs in the current scope.
 
 ```
 var errorHappened= false
-error { !? msg; errorHappened= true }
-def redis "redis://localhost:999999/test" as URI
+error { err msg; errorHappened= true }
+def redis ("redisx://localhost:999999/test" as URI)
 write ("Hello World " + DATE()) to redis
-.: &errorHappened
+.: errorHappened
 ```
 
 ___
@@ -2477,7 +2488,7 @@ const variableA="Hello World"
 //are available.
 
 const javaTest = java`
-out=scope.get("variableA");
+out=scope.get(VarKey.of("variableA"));
 `
 
 javaTest <=> "Hello World"

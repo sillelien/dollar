@@ -223,14 +223,14 @@
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">     * $ dump.</em>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L217" href="#L217">217</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> $dump() {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>         threadContext.get().getMonitor().dump();
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>         threadContext.get().monitor().dump();
 <a class="jxr_linenumber" name="L219" href="#L219">219</a>     }
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 
 <a class="jxr_linenumber" name="L221" href="#L221">221</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">     * $ dump thread.</em>
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L224" href="#L224">224</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> $dumpThread() {
-<a class="jxr_linenumber" name="L225" href="#L225">225</a>         threadContext.get().getMonitor().dumpThread();
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>         threadContext.get().monitor().dumpThread();
 <a class="jxr_linenumber" name="L226" href="#L226">226</a>     }
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 
 <a class="jxr_linenumber" name="L228" href="#L228">228</a>     <em class="jxr_javadoccomment">/**</em>
@@ -708,7 +708,7 @@
 <a class="jxr_linenumber" name="L700" href="#L700">700</a> <em class="jxr_javadoccomment">     * @param message the message</em>
 <a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L702" href="#L702">702</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> log(@NotNull Object message) {
-<a class="jxr_linenumber" name="L703" href="#L703">703</a>         log.info(<span class="jxr_string">"{}:{}"</span>, threadContext.get().getLabels(), message);
+<a class="jxr_linenumber" name="L703" href="#L703">703</a>         log.info(<span class="jxr_string">"{}:{}"</span>, threadContext.get().labels(), message);
 <a class="jxr_linenumber" name="L704" href="#L704">704</a>     }
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 
 <a class="jxr_linenumber" name="L706" href="#L706">706</a>     <em class="jxr_javadoccomment">/**</em>
@@ -717,7 +717,7 @@
 <a class="jxr_linenumber" name="L709" href="#L709">709</a> <em class="jxr_javadoccomment">     * @param message the message</em>
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L711" href="#L711">711</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> log(@NotNull String message) {
-<a class="jxr_linenumber" name="L712" href="#L712">712</a>         log.info(<span class="jxr_string">"{}:{}"</span>, threadContext.get().getLabels(), message);
+<a class="jxr_linenumber" name="L712" href="#L712">712</a>         log.info(<span class="jxr_string">"{}:{}"</span>, threadContext.get().labels(), message);
 <a class="jxr_linenumber" name="L713" href="#L713">713</a>     }
 <a class="jxr_linenumber" name="L714" href="#L714">714</a> 
 <a class="jxr_linenumber" name="L715" href="#L715">715</a>     <em class="jxr_javadoccomment">/**</em>
@@ -760,7 +760,7 @@
 <a class="jxr_linenumber" name="L752" href="#L752">752</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L753" href="#L753">753</a>     @NotNull
 <a class="jxr_linenumber" name="L754" href="#L754">754</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../dollar/api/monitor/DollarMonitor.html">DollarMonitor</a> monitor() {
-<a class="jxr_linenumber" name="L755" href="#L755">755</a>         <strong class="jxr_keyword">return</strong> threadContext.get().getMonitor();
+<a class="jxr_linenumber" name="L755" href="#L755">755</a>         <strong class="jxr_keyword">return</strong> threadContext.get().monitor();
 <a class="jxr_linenumber" name="L756" href="#L756">756</a>     }
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> 
 <a class="jxr_linenumber" name="L758" href="#L758">758</a>     <em class="jxr_javadoccomment">/**</em>

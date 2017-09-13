@@ -34,7 +34,7 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../dollar/api/script/ModuleResolver.html">ModuleResolver</a> <strong class="jxr_keyword">extends</strong> ExtensionPoint&lt;ModuleResolver&gt; {
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>      @NotNull
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">static</strong> <a href="../../../dollar/api/script/ModuleResolver.html">ModuleResolver</a> resolveModule(@NotNull String scheme) {
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">static</strong> <a href="../../../dollar/api/script/ModuleResolver.html">ModuleResolver</a> resolveModuleScheme(@NotNull String scheme) {
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>          <strong class="jxr_keyword">final</strong> ServiceLoader&lt;ModuleResolver&gt; loader = ServiceLoader.load(ModuleResolver.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>          <strong class="jxr_keyword">for</strong> (ModuleResolver piper : loader) {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>              <strong class="jxr_keyword">if</strong> (piper.getScheme().equals(scheme)) {
@@ -48,9 +48,8 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>      @NotNull
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>      String getScheme();
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      @NotNull
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>      &lt;T, P&gt; <a href="../../../dollar/api/Pipeable.html">Pipeable</a> resolve(@NotNull String uriWithoutScheme, @NotNull T scope, @NotNull P parser) <strong class="jxr_keyword">throws</strong> Exception;
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  }
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      @NotNull &lt;T, P&gt; <a href="../../../dollar/api/Pipeable.html">Pipeable</a> retrieveModule(@NotNull String uriWithoutScheme, @NotNull T scope, @NotNull P parser) <strong class="jxr_keyword">throws</strong> Exception;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017. All rights reserved.</div>
