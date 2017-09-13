@@ -95,7 +95,7 @@ public final class DollarUtilFactory implements DollarUtil {
                 scope.parameter(VarKey.of(paramMetaAttribute), fixedParam);
             }
         }
-        scope.parameter(VarKey.of("*"), $(fixedParams));
+        scope.parameter(VarKey.STAR, $(fixedParams));
     }
 
     @Override
@@ -113,8 +113,8 @@ public final class DollarUtilFactory implements DollarUtil {
         final TypePrediction prediction = rhs.predictType();
         if ((type != null) && (prediction != null)) {
             final Double probability = prediction.probability(type);
-            log.info("Predicted " + prediction.probableType() + " at " + (new SourceCode(scope(),
-                                                                                         token)).getShortSourceMessage());
+            log.info("Predicted {} at {}", prediction.probableType(), (new SourceCode(scope(),
+                                                                                      token)).getShortSourceMessage());
             if ((probability < threshold) && !prediction.empty()) {
                 log.warn("Type assertion may fail, expected {} most likely type is {} ({}%) at {}", type,
                          prediction.probableType(),
@@ -122,13 +122,15 @@ public final class DollarUtilFactory implements DollarUtil {
                          new SourceCode(scope(), token).getSourceMessage()
                 );
                 if (getConfig().failFast()) {
-                    throw new DollarScriptException(
-                                                           "Type prediction failed, was expecting " + type + " but most likely type is " + prediction.probableType() + " if this prediction is wrong please add an explicit cast (using 'as " + type.name() + "')");
+                    throw new DollarScriptException(String.format(
+                            "Type prediction failed, was expecting %s but most likely type is %s if this prediction is wrong please add an explicit cast (using 'as %s')",
+                            type, prediction.probableType(), type.name()));
                 }
             }
         }
     }
 
+    @NotNull
     @Override
     public var constrain(@NotNull Scope scope,
                          @NotNull var value,
@@ -136,11 +138,7 @@ public final class DollarUtilFactory implements DollarUtil {
                          @Nullable SubType label) {
 //        System.err.println("(" + label + ") " + rhs.$type().constraint());
         SubType valueLabel = value.constraintLabel();
-        if (Objects.equals(valueLabel, label)) {
-            if ((valueLabel != null) && !valueLabel.isEmpty()) {
-//                System.err.println("Fingerprint: " + rhs.$type().constraint());
-            }
-        } else {
+        if (!Objects.equals(valueLabel, label)) {
             if ((label != null) && (valueLabel != null) && !valueLabel.isEmpty()) {
                 scope.handleError(
                         new DollarScriptException("Trying to assign an invalid constrained variable " + valueLabel + " vs " + label,
@@ -201,12 +199,6 @@ public final class DollarUtilFactory implements DollarUtil {
 
     @Override
     @NotNull
-    public DollarParser getParser() {
-        return DollarStatic.context().parser();
-    }
-
-    @Override
-    @NotNull
     public Scope getRootScope() {
         return scopes.get().get(0);
     }
@@ -222,20 +214,21 @@ public final class DollarUtilFactory implements DollarUtil {
                                 @NotNull VarKey key,
                                 boolean numeric,
                                 @Nullable Scope initialScope) {
+        Scope startingScope = initialScope;
 
-        if (initialScope == null) {
-            initialScope = scope();
+        if (startingScope == null) {
+            startingScope = scope();
         }
         if (getConfig().debugScope()) {
-            log.info("{} {} in {} scopes ", highlight("LOOKUP " + key, ANSI_CYAN), initialScope, scopes.get().size());
+            log.info("{} {} in {} scopes ", highlight("LOOKUP " + key, ANSI_CYAN), startingScope, scopes.get().size());
         }
         if (numeric) {
-            if (initialScope.hasParameter(key)) {
-                return initialScope;
+            if (startingScope.hasParameter(key)) {
+                return startingScope;
             }
         } else {
-            if (initialScope.has(key)) {
-                return initialScope;
+            if (startingScope.has(key)) {
+                return startingScope;
             }
         }
 
@@ -263,13 +256,13 @@ public final class DollarUtilFactory implements DollarUtil {
     }
 
     @Override
+    @NotNull
     public var getVar(@NotNull VarKey key,
                       @NotNull UUID id,
                       @NotNull Scope scopeForKey,
                       @NotNull Source sourceCode,
                       boolean pure,
                       @NotNull var node) {
-        assert scopeForKey != null;
         log.debug("Listening to scope {} for key {}", scopeForKey, key);
         scopeForKey.listen(key, id.toString(), node);
         Variable v = scopeForKey.variable(key);
@@ -282,6 +275,7 @@ public final class DollarUtilFactory implements DollarUtil {
     }
 
     @Override
+    @NotNull
     public String highlight(@NotNull String text, @NotNull String color) {
         if (getConfig().colorHighlighting()) {
             return "\u001b["  // Prefix
@@ -380,6 +374,7 @@ public final class DollarUtilFactory implements DollarUtil {
         return b.toString();
     }
 
+    @NotNull
     @Override
     public var node(@NotNull Op operation,
                     @NotNull String name,
@@ -398,13 +393,10 @@ public final class DollarUtilFactory implements DollarUtil {
             if (suggestedType != null) {
                 result.meta(MetaConstants.TYPE_HINT, suggestedType);
             } else {
-                Type type = operation.typeFor(inputs.toArray(new var[inputs.size()]));
-                if (type != null) {
-                    result.meta(MetaConstants.TYPE_HINT, type);
-                }
+                result.meta(MetaConstants.TYPE_HINT, operation.typeFor(inputs.toArray(new var[inputs.size()])));
             }
             return result;
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             throw new DollarScriptException(e, source);
         }
     }
@@ -678,7 +670,9 @@ public final class DollarUtilFactory implements DollarUtil {
                            }
 
                            if (scope.has(key)) {
-                               return getVar(key, id, scope.scopeForKey(key), sourceCode, pure, node[0]);
+                               Scope scopeForKey = scope.scopeForKey(key);
+                               assert scopeForKey != null;
+                               return getVar(key, id, scopeForKey, sourceCode, pure, node[0]);
                            }
 
                            try {
@@ -690,7 +684,9 @@ public final class DollarUtilFactory implements DollarUtil {
                                    }
 
                                    if (scriptScope.has(key)) {
-                                       return getVar(key, id, scriptScope.scopeForKey(key), sourceCode, pure, node[0]);
+                                       Scope scopeForKey = scriptScope.scopeForKey(key);
+                                       assert scopeForKey != null;
+                                       return getVar(key, id, scopeForKey, sourceCode, pure, node[0]);
 
                                    }
                                }

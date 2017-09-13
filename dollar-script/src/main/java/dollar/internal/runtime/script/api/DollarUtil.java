@@ -49,10 +49,10 @@ public interface DollarUtil {
 
     void checkLearntType(@NotNull Token token, @Nullable Type type, @NotNull var rhs, @NotNull Double threshold);
 
-    var constrain(@NotNull Scope scope,
-                  @NotNull var value,
-                  @Nullable var constraint,
-                  @Nullable SubType label);
+    @NotNull var constrain(@NotNull Scope scope,
+                           @NotNull var value,
+                           @Nullable var constraint,
+                           @Nullable SubType label);
 
     @NotNull String createId(@NotNull String operation);
 
@@ -61,8 +61,6 @@ public interface DollarUtil {
     @NotNull var fix(@Nullable var v, boolean parallel);
 
     @NotNull var fix(@Nullable var v);
-
-    @NotNull DollarParser getParser();
 
     @NotNull Scope getRootScope();
 
@@ -73,14 +71,14 @@ public interface DollarUtil {
                                    boolean numeric,
                                    @Nullable Scope initialScope);
 
-    var getVar(@NotNull VarKey key,
-               @NotNull UUID id,
-               @NotNull Scope scopeForKey,
-               @NotNull Source sourceCode,
-               boolean pure,
-               @NotNull var node);
+    @NotNull var getVar(@NotNull VarKey key,
+                        @NotNull UUID id,
+                        @NotNull Scope scopeForKey,
+                        @NotNull Source sourceCode,
+                        boolean pure,
+                        @NotNull var node);
 
-    String highlight(@NotNull String text, @NotNull String color);
+    @NotNull String highlight(@NotNull String text, @NotNull String color);
 
     @NotNull <T> Optional<T> inScope(boolean runtime,
                                      @NotNull Scope parent,
