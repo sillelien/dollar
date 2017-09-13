@@ -57,6 +57,7 @@ import static java.util.Collections.singletonList;
 /**
  * A collection of functions largely used by the {{@link DollarParserImpl} class to support the execution of Dollar expressions
  */
+@SuppressWarnings({"UtilityClassCanBeSingleton", "UtilityClassCanBeEnum"})
 public final class Func {
 
     public static final double ONE_DAY = 24.0 * 60.0 * 60.0 * 1000.0;
@@ -132,15 +133,11 @@ public final class Func {
     @NotNull
     static var eachFunc(boolean pure, @NotNull var lhs, @NotNull var rhs) {
         assert EACH.validForPure(pure);
-        return lhs.$each(i -> {
-            var result = util().inSubScope(false, pure, EACH.name(),
-                                           newScope -> {
-                                               newScope.parameter(VarKey.ONE, i[0]);
-                                               return rhs.$fixDeep(false);
-                                           });
-            assert result != null;
-            return result;
-        });
+        return lhs.$each(i -> util().inSubScope(false, pure, EACH.name(),
+                                                newScope -> {
+                                                    newScope.parameter(VarKey.ONE, i[0]);
+                                                    return rhs.$fixDeep(false);
+                                                }).orElseThrow(() -> new AssertionError("Optional should not be null here")));
     }
 
     @NotNull
@@ -183,7 +180,7 @@ public final class Func {
                     }
                 }
 
-            });
+            }).orElseThrow(() -> new AssertionError("Optional should not be null here"));
         }, ((long) (duration * ONE_DAY)));
         return $void();
     }
@@ -195,16 +192,14 @@ public final class Func {
     @NotNull
     static var forFunc(boolean pure, @NotNull String varName, @NotNull var iterable, @NotNull var block) {
         assert FOR_OP.validForPure(pure);
-        return iterable.$each(i -> {
-            return util().inSubScope(true, pure, "for-loop", newScope -> {
-                util().scope()
-                        .set(VarKey.of(varName),
-                             util().fix(i[0]),
-                             null, null,
-                             new VarFlags(false, false, false, pure, false, false));
-                return block.$fixDeep(false);
-            });
-        });
+        return iterable.$each(i -> util().inSubScope(true, pure, "for-loop", newScope -> {
+            util().scope()
+                    .set(VarKey.of(varName),
+                         util().fix(i[0]),
+                         null, null,
+                         new VarFlags(false, false, false, pure, false, false));
+            return block.$fixDeep(false);
+        }).orElseThrow(() -> new AssertionError("Optional should not be null here")));
     }
 
     @NotNull
@@ -351,7 +346,7 @@ public final class Func {
                     newScope.parameter(VarKey.ONE, x);
                     newScope.parameter(VarKey.TWO, y);
                     return rhs.$fixDeep(false);
-                });
+                }).orElseThrow(() -> new AssertionError("Optional should not be null here"));
             } catch (RuntimeException e) {
                 return util().scope().handleError(e);
             }
@@ -367,7 +362,7 @@ public final class Func {
                             util().scope().parameter(VarKey.ONE, it);
                             util().scope().parameter(VarKey.IT, it);
                             return util().fix(rhs);
-                        }));
+                        }).orElseThrow(() -> new AssertionError("Optional should not be null here")));
     }
 
     @NotNull

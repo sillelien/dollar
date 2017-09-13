@@ -288,7 +288,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                         } catch (Throwable throwable) {
                             return DollarUtilFactory.util().scope().handleError(throwable, source);
                         }
-                    });
+                    }).get();
                 } finally {
 
                     if (attachedScopes != null) {
@@ -412,7 +412,7 @@ public class SourceNode implements java.lang.reflect.InvocationHandler {
                 }
                 return proxy;
             } else if ("$cancel".equals(method.getName())) {
-                listeners.remove(args[0]);
+                listeners.remove(String.valueOf(args[0]));
                 return args[0];
             } else if ("hasErrors".equals(method.getName())) {
                 return false;

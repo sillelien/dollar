@@ -135,7 +135,7 @@ public class CollectOperator implements Function<Token, var> {
                                       log.debug("Return value  {}", returnValue);
                                   }
                                   return returnValue;
-                              });
+                              }).orElseThrow(() -> new AssertionError("Optional should not be null here"));
             return $void();
 
         }

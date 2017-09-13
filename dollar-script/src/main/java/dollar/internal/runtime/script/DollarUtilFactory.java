@@ -54,6 +54,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import static dollar.api.DollarStatic.*;
@@ -295,12 +296,13 @@ public final class DollarUtilFactory implements DollarUtil {
         }
     }
 
+    @NotNull
     @Override
-    public <T> T inScope(boolean runtime,
-                         @NotNull Scope parent,
-                         boolean pure,
-                         @NotNull String scopeName,
-                         @NotNull ScopeExecutable<T> r) {
+    public <T> Optional<T> inScope(boolean runtime,
+                                   @NotNull Scope parent,
+                                   boolean pure,
+                                   @NotNull String scopeName,
+                                   @NotNull ScopeExecutable<T> r) {
         Scope newScope;
         if (pure) {
             newScope = new PureScope(parent, parent.source(), scopeName, parent.file());
@@ -315,10 +317,10 @@ public final class DollarUtilFactory implements DollarUtil {
         addScope(runtime, parent);
         addScope(runtime, newScope);
         try {
-            return r.execute(newScope);
+            return Optional.ofNullable(r.execute(newScope));
         } catch (Exception e) {
             newScope.handleError(e);
-            return null;
+            return Optional.ofNullable(null);
         } finally {
             Scope poppedScope = endScope(runtime);
 //            poppedScope.destroy();
@@ -332,11 +334,11 @@ public final class DollarUtilFactory implements DollarUtil {
         }
     }
 
+    @NotNull
     @Override
-    @Nullable
-    public <T> T inScope(boolean runtime,
-                         @NotNull Scope scope,
-                         @NotNull ScopeExecutable<T> r) {
+    public <T> Optional<T> inScope(boolean runtime,
+                                   @NotNull Scope scope,
+                                   @NotNull ScopeExecutable<T> r) {
 
         final boolean scopeAdded;
         if (scopes.get().get(scopes.get().size() - 1).equals(scope)) {
@@ -346,10 +348,10 @@ public final class DollarUtilFactory implements DollarUtil {
             scopeAdded = true;
         }
         try {
-            return r.execute(scope);
+            return Optional.ofNullable(r.execute(scope));
         } catch (Exception e) {
             scope.handleError(e);
-            return null;
+            return Optional.ofNullable(null);
         } finally {
             if (scopeAdded) {
                 Scope poppedScope = endScope(runtime);
@@ -362,9 +364,10 @@ public final class DollarUtilFactory implements DollarUtil {
     }
 
     @Override
-    @Nullable
-    public <T> T inSubScope(boolean runtime, boolean pure, @NotNull String scopeName,
-                            @NotNull ScopeExecutable<T> r) {
+    @NotNull
+    public <T> Optional<T> inSubScope(boolean runtime, boolean pure,
+                                      @NotNull String scopeName,
+                                      @NotNull ScopeExecutable<T> r) {
         return inScope(runtime, scope(), pure, scopeName, r);
     }
 

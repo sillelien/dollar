@@ -346,7 +346,7 @@ public class DollarParserImpl implements DollarParser {
             HashMap<var, var> exportMap = new HashMap<>();
             exports.forEach((varKey, var) -> exportMap.put(DollarFactory.fromStringValue(varKey.asString()), var));
             return $(exportMap);
-        });
+        }).orElseThrow(() -> new AssertionError("Optional should not be null here"));
         if (v != null) {
             return v;
         } else {

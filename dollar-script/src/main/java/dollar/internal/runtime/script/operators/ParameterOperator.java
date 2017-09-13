@@ -103,7 +103,8 @@ public class ParameterOperator implements Function<Token, Function<? super var, 
                                                               }
                                                               assert result != null;
                                                               return result;
-                                                          })
+                                                          }).orElseThrow(() -> new AssertionError("Optional should not be null " +
+                                                                                                          "here"))
             );
 
 

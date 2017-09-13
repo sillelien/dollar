@@ -29,7 +29,6 @@ import dollar.api.Variable;
 import dollar.api.types.AbstractDollar;
 import dollar.api.types.DollarFactory;
 import dollar.api.var;
-import dollar.internal.runtime.script.DollarUtilFactory;
 import dollar.internal.runtime.script.api.ScopeExecutable;
 import dollar.internal.runtime.script.api.exceptions.DollarScriptException;
 import dollar.internal.runtime.script.parser.scope.ScriptScope;
@@ -50,6 +49,7 @@ import java.util.stream.Stream;
 
 import static dollar.api.types.DollarFactory.FALSE;
 import static dollar.api.types.DollarFactory.TRUE;
+import static dollar.internal.runtime.script.DollarUtilFactory.util;
 
 public class DollarObject extends AbstractDollar {
 
@@ -505,10 +505,11 @@ public class DollarObject extends AbstractDollar {
 
     @NotNull
     private var inThisScope(@NotNull ScopeExecutable<var> exe) {
-        ScriptScope subScope = new ScriptScope(DollarUtilFactory.util().scope(), "this-" + name, false, true);
+        ScriptScope subScope = new ScriptScope(util().scope(), "this-" + name, false, true);
         DollarObject thisObject = new DollarObject(name, constructor, fields, true);
         subScope.set(VarKey.THIS, thisObject, null, null, new VarFlags(true, true, false, false, false, true));
-        return DollarUtilFactory.util().inScope(true, subScope, exe);
+        return util().inScope(true, subScope, exe).orElseThrow(() -> new AssertionError("Optional should not be null " +
+                                                                                                "here"));
     }
 
     @NotNull

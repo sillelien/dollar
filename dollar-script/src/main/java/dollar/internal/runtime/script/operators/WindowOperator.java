@@ -78,15 +78,10 @@ public class WindowOperator implements Function<Token, var> {
 
 
         String id = UUID.randomUUID().toString();
-        return util().node(WINDOW_OP, pure, parser, token, singletonList(expression),
+        return util().node(WINDOW_OP, pure, parser,
+                           token, singletonList(expression),
                            parallel -> {
-//                        assert varName != null;
-//                        Scope scopeForVar = getScopeForVar(pure, varName, false, null);
-//
-//                        if (scopeForVar == null) {
-//                            throw new VariableNotFoundException(varName, scope());
-//                        }
-//
+
                                Double duration = period.toDouble();
                                assert duration != null;
                                Scope scope = util().scope();
@@ -100,43 +95,30 @@ public class WindowOperator implements Function<Token, var> {
                                                                            MetaConstants.OPERATION_NAME) + "-" + id);
                                expression.$notify();
                                log.info("After expression listen");
-                               Scheduler.schedule(i -> util().inSubScope(true, pure,
-                                                                         "window-operator-period",
-                                                                         newScope -> {
-                                                                             log.info(
-                                                                                     "Schedule called on WindowOperator");
-                                                                             newScope.parameter(
-                                                                                     VarKey.COUNT,
-                                                                                     DollarFactory.fromValue(
-                                                                                             notifyListener.count.get()));
-                                                                             newScope.parameter(
-                                                                                     VarKey.COLLECTED,
-                                                                                     DollarFactory.fromList(
-                                                                                             notifyListener.collected
-                                                                                                     .asMap()
-                                                                                                     .entrySet()
-                                                                                                     .stream()
-                                                                                                     .sorted(Comparator.comparing(
-                                                                                                             Map.Entry::getKey))
-                                                                                                     .map(Map.Entry::getValue)
-                                                                                                     .collect(
-                                                                                                             Collectors.toList())));
-                                                                             block.$fixDeep(
-                                                                                     false);
-                                                                             log.info(
-                                                                                     "Clearing collected");
-                                                                             if (notifyListener.finished) {
-                                                                                 log.debug(
-                                                                                         "Cancelling");
-                                                                                 Scheduler.cancel(
-                                                                                         i[0].$S());
-                                                                                 expression.$cancel(
-                                                                                         listenerId);
-                                                                             }
-                                                                             return $void();
+                               Scheduler.schedule(
+                                       i -> util().inSubScope(true, pure,
+                                                              "window-operator-period",
+                                                              newScope -> {
+                                                                  log.info("Schedule called on WindowOperator");
+                                                                  newScope.parameter(VarKey.COUNT, DollarFactory.fromValue(
+                                                                          notifyListener.count.get()));
+                                                                  newScope.parameter(VarKey.COLLECTED, DollarFactory.fromList(
+                                                                          notifyListener.collected.asMap().entrySet().stream().sorted(
+                                                                                  Comparator.comparing(Map.Entry::getKey)).map(
+                                                                                  Map.Entry::getValue).collect(
+                                                                                  Collectors.toList())));
+                                                                  block.$fixDeep(false);
+                                                                  log.info("Clearing collected");
+                                                                  if (notifyListener.finished) {
+                                                                      log.debug("Cancelling");
+                                                                      Scheduler.cancel(i[0].$S());
+                                                                      expression.$cancel(listenerId);
+                                                                  }
+                                                                  return $void();
 
-                                                                         }),
-                                                  ((long) (duration * Func.ONE_DAY)));
+                                                              }).orElseThrow(
+                                               () -> new AssertionError("Optional should not be null here")),
+                                       ((long) (duration * Func.ONE_DAY)));
                                return $void();
 
                            });

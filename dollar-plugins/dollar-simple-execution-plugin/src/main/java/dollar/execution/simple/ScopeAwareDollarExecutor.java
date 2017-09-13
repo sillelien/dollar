@@ -198,6 +198,6 @@ public class ScopeAwareDollarExecutor implements DollarExecutor {
         return () -> util().inScope(true, scope, newScope -> {
             DollarStatic.context().parser(parser);
             return callable.call();
-        });
+        }).orElseThrow(() -> new AssertionError("callable.call() should not be null"));
     }
 }

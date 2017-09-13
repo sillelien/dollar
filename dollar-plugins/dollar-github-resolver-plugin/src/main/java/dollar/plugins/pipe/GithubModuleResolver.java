@@ -200,6 +200,6 @@ public class GithubModuleResolver implements ModuleResolver {
             return new DollarParserImpl(((DollarParser) parser).options(), classLoader).parse(
                     new FileScope((Scope) scope, mainFile.getAbsolutePath(), content, "github-module-scope", false,
                                   false), content);
-        });
+        }).orElseThrow(() -> new AssertionError("Optional should not be null here"));
     }
 }

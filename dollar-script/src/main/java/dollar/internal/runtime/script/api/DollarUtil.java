@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jparsec.Token;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface DollarUtil {
@@ -81,18 +82,18 @@ public interface DollarUtil {
 
     String highlight(@NotNull String text, @NotNull String color);
 
-    <T> T inScope(boolean runtime,
-                  @NotNull Scope parent,
-                  boolean pure,
-                  @NotNull String scopeName,
-                  @NotNull ScopeExecutable<T> r);
+    @NotNull <T> Optional<T> inScope(boolean runtime,
+                                     @NotNull Scope parent,
+                                     boolean pure,
+                                     @NotNull String scopeName,
+                                     @NotNull ScopeExecutable<T> r);
 
-    @Nullable <T> T inScope(boolean runtime,
-                            @NotNull Scope scope,
-                            @NotNull ScopeExecutable<T> r);
+    @NotNull <T> Optional<T> inScope(boolean runtime,
+                                     @NotNull Scope scope,
+                                     @NotNull ScopeExecutable<T> r);
 
-    @Nullable <T> T inSubScope(boolean runtime, boolean pure, @NotNull String scopeName,
-                               @NotNull ScopeExecutable<T> r);
+    @NotNull <T> Optional<T> inSubScope(boolean runtime, boolean pure, @NotNull String scopeName,
+                                        @NotNull ScopeExecutable<T> r);
 
     String indent(int i);
 

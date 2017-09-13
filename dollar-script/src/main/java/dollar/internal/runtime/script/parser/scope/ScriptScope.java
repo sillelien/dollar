@@ -31,7 +31,6 @@ import dollar.api.Variable;
 import dollar.api.exceptions.LambdaRecursionException;
 import dollar.api.script.Source;
 import dollar.api.var;
-import dollar.internal.runtime.script.DollarUtilFactory;
 import dollar.internal.runtime.script.ErrorHandlerFactory;
 import dollar.internal.runtime.script.api.DollarUtil;
 import dollar.internal.runtime.script.api.exceptions.DollarAssertionException;
@@ -62,6 +61,7 @@ import java.util.stream.Collectors;
 import static dollar.api.DollarException.unravel;
 import static dollar.api.DollarStatic.*;
 import static dollar.api.types.meta.MetaConstants.IMPURE;
+import static dollar.internal.runtime.script.DollarUtilFactory.util;
 
 public class ScriptScope implements Scope {
 
@@ -261,7 +261,7 @@ public class ScriptScope implements Scope {
             scope = this;
         } else {
             if (getConfig().debugScope()) {
-                log.info("{} in {}", DollarUtilFactory.util().highlight("FOUND " + key, DollarUtil.ANSI_CYAN), scope);
+                log.info("{} in {}", util().highlight("FOUND " + key, DollarUtil.ANSI_CYAN), scope);
             }
         }
         Variable result = scope.variables().get(key);
@@ -331,7 +331,7 @@ public class ScriptScope implements Scope {
                 return parent.handleError(unravelled);
             }
         } else {
-            return DollarUtilFactory.util().inSubScope(true, pure(), "error-scope", newScope -> {
+            return util().inSubScope(true, pure(), "error-scope", newScope -> {
                 log.info("Error handler in {}", this);
                 parameter(VarKey.of("type"), $(unravelled.getClass().getName()));
                 parameter(VarKey.of("msg"), $(unravelled.getMessage()));
@@ -344,7 +344,7 @@ public class ScriptScope implements Scope {
                     parameter(VarKey.of("msg"), $void());
                 }
                 return $void();
-            });
+            }).orElseThrow(() -> new AssertionError("Optional should not be null here"));
 
         }
 
