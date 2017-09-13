@@ -143,7 +143,7 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a>                                       log.debug(<span class="jxr_string">"Return value  {}"</span>, returnValue);
 <a class="jxr_linenumber" name="L136" href="#L136">136</a>                                   }
 <a class="jxr_linenumber" name="L137" href="#L137">137</a>                                   <strong class="jxr_keyword">return</strong> returnValue;
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>                               });
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>                               }).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> AssertionError(<span class="jxr_string">"Optional should not be null here"</span>));
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>             <strong class="jxr_keyword">return</strong> $<strong class="jxr_keyword">void</strong>();
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
 <a class="jxr_linenumber" name="L141" href="#L141">141</a>         }

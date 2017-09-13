@@ -1056,7 +1056,7 @@ TODO
  T E S T S
 -------------------------------------------------------
 Running dollar.internal.runtime.script.ParserMainTest
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.174 sec - in dollar.internal.runtime.script.ParserMainTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.157 sec - in dollar.internal.runtime.script.ParserMainTest
 
 Results :
 

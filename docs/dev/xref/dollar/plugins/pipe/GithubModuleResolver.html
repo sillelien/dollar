@@ -208,7 +208,7 @@
 <a class="jxr_linenumber" name="L200" href="#L200">200</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../dollar/internal/runtime/script/parser/DollarParserImpl.html">DollarParserImpl</a>(((DollarParser) parser).options(), classLoader).parse(
 <a class="jxr_linenumber" name="L201" href="#L201">201</a>                     <strong class="jxr_keyword">new</strong> <a href="../../../dollar/internal/runtime/script/parser/scope/FileScope.html">FileScope</a>((Scope) scope, mainFile.getAbsolutePath(), content, <span class="jxr_string">"github-module-scope"</span>, false,
 <a class="jxr_linenumber" name="L202" href="#L202">202</a>                                   false), content);
-<a class="jxr_linenumber" name="L203" href="#L203">203</a>         });
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>         }).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> AssertionError(<span class="jxr_string">"Optional should not be null here"</span>));
 <a class="jxr_linenumber" name="L204" href="#L204">204</a>     }
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> }
 </pre>

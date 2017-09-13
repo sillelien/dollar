@@ -354,7 +354,7 @@
 <a class="jxr_linenumber" name="L346" href="#L346">346</a>             HashMap&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; exportMap = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L347" href="#L347">347</a>             exports.forEach((varKey, <strong class="jxr_keyword">var</strong>) -&gt; exportMap.put(DollarFactory.fromStringValue(varKey.asString()), <strong class="jxr_keyword">var</strong>));
 <a class="jxr_linenumber" name="L348" href="#L348">348</a>             <strong class="jxr_keyword">return</strong> $(exportMap);
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>         });
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>         }).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> AssertionError(<span class="jxr_string">"Optional should not be null here"</span>));
 <a class="jxr_linenumber" name="L350" href="#L350">350</a>         <strong class="jxr_keyword">if</strong> (v != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L351" href="#L351">351</a>             <strong class="jxr_keyword">return</strong> v;
 <a class="jxr_linenumber" name="L352" href="#L352">352</a>         } <strong class="jxr_keyword">else</strong> {

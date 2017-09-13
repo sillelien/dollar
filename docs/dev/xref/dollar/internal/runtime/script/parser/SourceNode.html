@@ -296,7 +296,7 @@
 <a class="jxr_linenumber" name="L288" href="#L288">288</a>                         } <strong class="jxr_keyword">catch</strong> (Throwable throwable) {
 <a class="jxr_linenumber" name="L289" href="#L289">289</a>                             <strong class="jxr_keyword">return</strong> DollarUtilFactory.util().scope().handleError(throwable, source);
 <a class="jxr_linenumber" name="L290" href="#L290">290</a>                         }
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>                     });
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>                     }).get();
 <a class="jxr_linenumber" name="L292" href="#L292">292</a>                 } <strong class="jxr_keyword">finally</strong> {
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 
 <a class="jxr_linenumber" name="L294" href="#L294">294</a>                     <strong class="jxr_keyword">if</strong> (attachedScopes != <strong class="jxr_keyword">null</strong>) {
@@ -420,7 +420,7 @@
 <a class="jxr_linenumber" name="L412" href="#L412">412</a>                 }
 <a class="jxr_linenumber" name="L413" href="#L413">413</a>                 <strong class="jxr_keyword">return</strong> proxy;
 <a class="jxr_linenumber" name="L414" href="#L414">414</a>             } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"$cancel"</span>.equals(method.getName())) {
-<a class="jxr_linenumber" name="L415" href="#L415">415</a>                 listeners.remove(args[0]);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>                 listeners.remove(String.valueOf(args[0]));
 <a class="jxr_linenumber" name="L416" href="#L416">416</a>                 <strong class="jxr_keyword">return</strong> args[0];
 <a class="jxr_linenumber" name="L417" href="#L417">417</a>             } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"hasErrors"</span>.equals(method.getName())) {
 <a class="jxr_linenumber" name="L418" href="#L418">418</a>                 <strong class="jxr_keyword">return</strong> false;
