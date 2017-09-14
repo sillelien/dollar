@@ -6,7 +6,7 @@ PROJECT=$(pwd)
 mkdir -p /home/circleci/workspace/devdocs
 mkdir -p /home/circleci/workspace/gendocs
 bin/set-version.sh
-export MAVEN_OPTS="$MAVEN_OPTS -Xmx1g"
+export MAVEN_OPTS="$MAVEN_OPTS -Xmx2g"
 mvn -q -T 2C -Dmaven.test.skip -DskipDeploy -DstagingDirectory=/home/circleci/workspace/devdocs/ install site:site site:stage
 cd dollar-script
 mvn package
