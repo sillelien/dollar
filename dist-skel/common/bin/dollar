@@ -68,4 +68,4 @@ then
     exit 1
 fi
 
-java -classpath "${DOLLAR_HOME}/lib/*:${DOLLAR_HOME}/ext:${DOLLAR_HOME}/plugins/*:${DOLLAR_HOME}/etc:${HOME}/.dollar/lib" dollar.main.ParserMain $@
+${DOLLAR_HOME}/jdk/bin/java -classpath "${DOLLAR_HOME}/lib/*:${DOLLAR_HOME}/ext:${DOLLAR_HOME}/plugins/*:${DOLLAR_HOME}/etc:${HOME}/.dollar/lib" dollar.main.ParserMain $@
