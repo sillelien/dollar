@@ -24,10 +24,10 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar.internal.runtime.script.api.exceptions;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.exceptions.DollarFailureException;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.Source;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.ErrorType;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.Value;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.exceptions.DollarFailureException;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.Source;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.ErrorType;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.parser.Op;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.Nullable;
@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>          <strong class="jxr_keyword">super</strong>(t, s);
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>      }
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../dollar/internal/runtime/script/api/exceptions/DollarScriptException.html">DollarScriptException</a>(@NotNull String s, @NotNull <strong class="jxr_keyword">var</strong> rhs) {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../dollar/internal/runtime/script/api/exceptions/DollarScriptException.html">DollarScriptException</a>(@NotNull String s, @NotNull <a href="../../../../../../dollar/api/Value.html">Value</a> rhs) {
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>          <strong class="jxr_keyword">super</strong>(s + <span class="jxr_string">":\n"</span> + optionalSource(rhs.source()));
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>          rawMessage = s;
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>          source = rhs.source();
@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>          <strong class="jxr_keyword">this</strong>.source = source;
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>      }
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../dollar/internal/runtime/script/api/exceptions/DollarScriptException.html">DollarScriptException</a>(@NotNull Throwable cause, @NotNull <strong class="jxr_keyword">var</strong> context) {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../dollar/internal/runtime/script/api/exceptions/DollarScriptException.html">DollarScriptException</a>(@NotNull Throwable cause, @NotNull <a href="../../../../../../dollar/api/Value.html">Value</a> context) {
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">super</strong>(cause, context.source().getSourceMessage());
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          source = context.source();
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>      }

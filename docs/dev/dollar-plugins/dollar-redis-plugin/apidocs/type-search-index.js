@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"dollar.redis","l":"RedisURIHandler"},{"p":"dollar.redis","l":"RedisURIHandlerFactory"}]

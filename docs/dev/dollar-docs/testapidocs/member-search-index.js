@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"dollar.docs","c":"DocTest","l":"after()"},{"p":"dollar.docs","c":"DocTest","l":"before()"},{"p":"dollar.docs","c":"DocTest","l":"DocTest()"},{"p":"dollar.docs","c":"DocTest","l":"setUp()"},{"p":"dollar.docs","c":"DocTest","l":"tearDown()"},{"p":"dollar.docs","c":"DocTest","l":"testDocs()"},{"p":"dollar.docs","c":"DocTest","l":"testReadme()"}]

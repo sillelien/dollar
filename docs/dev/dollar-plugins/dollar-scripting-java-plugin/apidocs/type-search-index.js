@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"dollar.java","l":"Java9ScriptingLanguage"},{"p":"dollar.java","l":"JavaScriptingStaticImports"}]

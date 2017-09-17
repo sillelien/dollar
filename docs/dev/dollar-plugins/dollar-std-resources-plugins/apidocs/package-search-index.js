@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"dollar.resources.std"}]

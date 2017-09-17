@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"dollar.plugins.pipe","c":"ClassModuleResolver","l":"ClassModuleResolver()"},{"p":"dollar.plugins.pipe","c":"ClassModuleResolver","l":"copy()"},{"p":"dollar.plugins.pipe","c":"ClassModuleResolver","l":"getScheme()"},{"p":"dollar.plugins.pipe","c":"ClassModuleResolver","l":"retrieveModule(String, T, P)","url":"retrieveModule-java.lang.String-T-P-"}]

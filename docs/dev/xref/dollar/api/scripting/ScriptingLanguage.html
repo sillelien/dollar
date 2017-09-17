@@ -25,13 +25,13 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar.api.scripting;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.Scope;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.plugin.ExtensionPoint;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.Value;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.plugin.ExtensionPoint;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../dollar/api/scripting/ScriptingLanguage.html">ScriptingLanguage</a> <strong class="jxr_keyword">extends</strong> <a href="../../../dollar/api/plugin/ExtensionPoint.html">ExtensionPoint</a> {
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>      @NotNull <strong class="jxr_keyword">var</strong> compile(@NotNull String java, @NotNull <a href="../../../dollar/api/Scope.html">Scope</a> scope);
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>      @NotNull <a href="../../../dollar/api/Value.html">Value</a> compile(@NotNull String java, @NotNull <a href="../../../dollar/api/Scope.html">Scope</a> scope);
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>      <strong class="jxr_keyword">boolean</strong> provides(@NotNull String language);
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  }

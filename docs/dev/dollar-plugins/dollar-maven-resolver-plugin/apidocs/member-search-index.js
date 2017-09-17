@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"dollar.plugins.pipe","c":"MavenModuleResolver","l":"copy()"},{"p":"dollar.plugins.pipe","c":"MavenModuleResolver","l":"getScheme()"},{"p":"dollar.plugins.pipe","c":"MavenModuleResolver","l":"MavenModuleResolver()"},{"p":"dollar.plugins.pipe","c":"MavenModuleResolver","l":"retrieveModule(String, T, P)","url":"retrieveModule-java.lang.String-T-P-"}]

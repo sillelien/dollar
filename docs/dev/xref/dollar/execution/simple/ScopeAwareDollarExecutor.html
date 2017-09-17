@@ -26,13 +26,13 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.DollarStatic;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.Scope;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarFlags;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarKey;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.api.execution.DollarExecutor;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.DollarParser;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.Source;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarFactory;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.Value;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarFlags;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.api.VarKey;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.api.execution.DollarExecutor;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.DollarParser;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> dollar.api.script.Source;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarFactory;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.Nullable;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
@@ -116,8 +116,8 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>     @NotNull
 <a class="jxr_linenumber" name="L110" href="#L110">110</a>     @Override
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> fork(@NotNull <a href="../../../dollar/api/script/Source.html">Source</a> source, @NotNull <strong class="jxr_keyword">var</strong> in, @NotNull Function&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; call) {
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>         Future&lt;<strong class="jxr_keyword">var</strong>&gt; varFuture = submit(() -&gt; call.apply(in));
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> fork(@NotNull <a href="../../../dollar/api/script/Source.html">Source</a> source, @NotNull <a href="../../../dollar/api/Value.html">Value</a> in, @NotNull Function&lt;Value, Value&gt; call) {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>         Future&lt;Value&gt; varFuture = submit(() -&gt; call.apply(in));
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>         <strong class="jxr_keyword">return</strong> util().node(FORK, false, DollarStatic.context().parser(), source,
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>                            Arrays.asList(in),
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>                            j -&gt; {
@@ -129,8 +129,8 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 
 <a class="jxr_linenumber" name="L122" href="#L122">122</a>     @NotNull
 <a class="jxr_linenumber" name="L123" href="#L123">123</a>     @Override
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">var</strong> forkAndReturnId(@NotNull <a href="../../../dollar/api/script/Source.html">Source</a> source, @NotNull <strong class="jxr_keyword">var</strong> in, @NotNull Function&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; call) {
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>         Future&lt;<strong class="jxr_keyword">var</strong>&gt; varFuture = submit(() -&gt; call.apply(in));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>     <strong class="jxr_keyword">public</strong> <a href="../../../dollar/api/Value.html">Value</a> forkAndReturnId(@NotNull <a href="../../../dollar/api/script/Source.html">Source</a> source, @NotNull <a href="../../../dollar/api/Value.html">Value</a> in, @NotNull Function&lt;Value, Value&gt; call) {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>         Future&lt;Value&gt; varFuture = submit(() -&gt; call.apply(in));
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>         <a href="../../../dollar/api/VarKey.html">VarKey</a> id = VarKey.random();
 <a class="jxr_linenumber" name="L127" href="#L127">127</a>         log.debug(<span class="jxr_string">"Future obtained, returning future node"</span>);
 <a class="jxr_linenumber" name="L128" href="#L128">128</a>         util().scope().set(id,
