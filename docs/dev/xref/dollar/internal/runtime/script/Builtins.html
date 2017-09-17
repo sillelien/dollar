@@ -24,129 +24,136 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> dollar.internal.runtime.script;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.Scope;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.StateAware;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> dollar.api.StateAware;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> dollar.api.Type;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.DollarFactory;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> dollar.api.types.ErrorType;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> dollar.api.<strong class="jxr_keyword">var</strong>;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.exceptions.BuiltinNotFoundException;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.Date;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.HashMap;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.List;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.util.function.Function;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.api.DollarStatic.$;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.Constants.*;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../dollar/internal/runtime/script/Builtins.html">Builtins</a> {
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>      @NotNull
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> HashMap&lt;String, Builtin&lt;?&gt;&gt; map;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">static</strong> {
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>          map = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>          addDollarStyle(1, 1, (pure, args, scope) -&gt; args.get(0).$abs(), <strong class="jxr_keyword">true</strong>, <span class="jxr_string">"ABS"</span>);
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>          addJavaStyle(1, Integer.MAX_VALUE, (pure, args, scope) -&gt; {
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>              String message = args.get(0).$S();
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>              ArrayList&lt;<strong class="jxr_keyword">var</strong>&gt; values = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(args);
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>              values.remove(0);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>              <strong class="jxr_keyword">return</strong> $(String.format(message, values.stream().map(<strong class="jxr_keyword">var</strong>::toJavaObject).toArray()));
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>          }, <strong class="jxr_keyword">true</strong>, <span class="jxr_string">"FORMAT"</span>);
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>          addDollarSingleNoScope(false, StateAware::$start, <span class="jxr_string">"START"</span>);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>          addDollarSingleNoScope(false, StateAware::$stop, <span class="jxr_string">"STOP"</span>);
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>          addDollarSingleNoScope(false, StateAware::$create, <span class="jxr_string">"CREATE"</span>);
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>          addDollarSingleNoScope(false, StateAware::$destroy, <span class="jxr_string">"DESTROY"</span>);
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>          addDollarSingleNoScope(false, StateAware::$pause, <span class="jxr_string">"PAUSE"</span>);
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>          addDollarSingleNoScope(false, StateAware::$unpause, <span class="jxr_string">"UNPAUSE"</span>);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          addDollarSingleNoScope(false, StateAware::$state, <span class="jxr_string">"STATE"</span>);
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; (args.get(0).toDouble() == <strong class="jxr_keyword">null</strong>) ? args.get(0) : (args.get(
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>                  0).toDouble() / DAY_IN_MILLIS), <strong class="jxr_keyword">true</strong>, <span class="jxr_string">"MS"</span>, <span class="jxr_string">"MILLIS"</span>, <span class="jxr_string">"MILLISECONDS"</span>, <span class="jxr_string">"MILLISECOND"</span>);
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.Builtin;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> dollar.internal.runtime.script.api.exceptions.BuiltinNotFoundException;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.Nullable;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.Date;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.util.HashMap;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.util.function.Function;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.api.DollarStatic.$;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> dollar.internal.runtime.script.Constants.*;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../dollar/internal/runtime/script/Builtins.html">Builtins</a> {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      @NotNull
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> HashMap&lt;String, Builtin&lt;?&gt;&gt; map;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">static</strong> {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>          map = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          addDollarStyle(1, 1, (pure, args, scope) -&gt; args.get(0).$abs(), <strong class="jxr_keyword">true</strong>, Type._ANY, <span class="jxr_string">"ABS"</span>);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>          addJavaStyle(1, Integer.MAX_VALUE, (pure, args, scope) -&gt; {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>              String message = args.get(0).$S();
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>              ArrayList&lt;<strong class="jxr_keyword">var</strong>&gt; values = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(args);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>              values.remove(0);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>              <strong class="jxr_keyword">return</strong> $(String.format(message, values.stream().map(<strong class="jxr_keyword">var</strong>::toJavaObject).toArray()));
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>          }, <strong class="jxr_keyword">true</strong>, Type._STRING, <span class="jxr_string">"FORMAT"</span>);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>          addDollarSingleNoScope(false, StateAware::$start, Type._VOID, <span class="jxr_string">"START"</span>);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>          addDollarSingleNoScope(false, StateAware::$stop, Type._VOID, <span class="jxr_string">"STOP"</span>);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          addDollarSingleNoScope(false, StateAware::$create, Type._VOID, <span class="jxr_string">"CREATE"</span>);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>          addDollarSingleNoScope(false, StateAware::$destroy, Type._VOID, <span class="jxr_string">"DESTROY"</span>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>          addDollarSingleNoScope(false, StateAware::$pause, Type._VOID, <span class="jxr_string">"PAUSE"</span>);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>          addDollarSingleNoScope(false, StateAware::$unpause, Type._VOID, <span class="jxr_string">"UNPAUSE"</span>);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>          addDollarSingleNoScope(false, StateAware::$state, Type._VOID, <span class="jxr_string">"STATE"</span>);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; (args.get(0).toDouble() == <strong class="jxr_keyword">null</strong>) ? args.get(0) : (args.get(
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>                  0).toDouble() / DAY_IN_SECONDS), <strong class="jxr_keyword">true</strong>, <span class="jxr_string">"S"</span>, <span class="jxr_string">"SEC"</span>, <span class="jxr_string">"SECS"</span>, <span class="jxr_string">"SECONDS"</span>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>                  0).toDouble() / DAY_IN_MILLIS), <strong class="jxr_keyword">true</strong>, Type._DECIMAL, <span class="jxr_string">"MS"</span>, <span class="jxr_string">"MILLIS"</span>, <span class="jxr_string">"MILLISECONDS"</span>, <span class="jxr_string">"MILLISECOND"</span>);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; (args.get(0).toDouble() == <strong class="jxr_keyword">null</strong>) ? args.get(0) : (args.get(
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>                  0).toDouble() / DAY_IN_MINUTES), <strong class="jxr_keyword">true</strong>, <span class="jxr_string">"M"</span>, <span class="jxr_string">"MINUTES"</span>,
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>                       <span class="jxr_string">"MINUTE"</span>);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; (args.get(0).toDouble() == <strong class="jxr_keyword">null</strong>) ? args.get(0) : (args.get(
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>                  0).toDouble() / DAY_IN_HOURS), <strong class="jxr_keyword">true</strong>, <span class="jxr_string">"H"</span>, <span class="jxr_string">"HOUR"</span>, <span class="jxr_string">"HOURS"</span>);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>              <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>                  Thread.sleep((<strong class="jxr_keyword">long</strong>) (args.get(0).toDouble() * DAY_IN_MILLIS));
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>                  <strong class="jxr_keyword">return</strong> args.get(0);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>              } <strong class="jxr_keyword">catch</strong> (InterruptedException e) {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>                  <strong class="jxr_keyword">return</strong> scope.handleError(e);
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>              }
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>          }, false, <span class="jxr_string">"SLEEP"</span>);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          addDollarStyle(1, 2, (pure, args, scope) -&gt; {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>              <strong class="jxr_keyword">if</strong> (args.size() == 1) {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>                  <strong class="jxr_keyword">return</strong> DollarFactory.failure(ErrorType.valueOf(args.get(0).toString()), <span class="jxr_string">""</span>, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>              } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>                  <strong class="jxr_keyword">return</strong> DollarFactory.failure(ErrorType.valueOf(args.get(0).toString()), args.get(1).toString(), <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>              }
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>          }, <strong class="jxr_keyword">true</strong>, <span class="jxr_string">"ERROR"</span>);
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; (args.get(0).toDouble() == <strong class="jxr_keyword">null</strong>) ? args.get(0) : (args.get(0).toDouble()), <strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>                       <span class="jxr_string">"DAYS"</span>, <span class="jxr_string">"DAY"</span>, <span class="jxr_string">"D"</span>);
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; (args.get(0).toDouble() == <strong class="jxr_keyword">null</strong>) ? args.get(0) : (args.get(
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>                  0).toDouble() * WEEK_IN_DAYS), <strong class="jxr_keyword">true</strong>, <span class="jxr_string">"WEEKS"</span>, <span class="jxr_string">"WEEK"</span>, <span class="jxr_string">"W"</span>);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>                  0).toDouble() / DAY_IN_SECONDS), <strong class="jxr_keyword">true</strong>, Type._DECIMAL, <span class="jxr_string">"S"</span>, <span class="jxr_string">"SEC"</span>, <span class="jxr_string">"SECS"</span>, <span class="jxr_string">"SECONDS"</span>);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; (args.get(0).toDouble() == <strong class="jxr_keyword">null</strong>) ? args.get(0) : (args.get(
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>                  0).toDouble() / DAY_IN_MINUTES), <strong class="jxr_keyword">true</strong>, Type._DECIMAL, <span class="jxr_string">"M"</span>, <span class="jxr_string">"MINUTES"</span>,
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>                       <span class="jxr_string">"MINUTE"</span>);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; (args.get(0).toDouble() == <strong class="jxr_keyword">null</strong>) ? args.get(0) : (args.get(
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>                  0).toDouble() / DAY_IN_HOURS), <strong class="jxr_keyword">true</strong>, Type._DECIMAL, <span class="jxr_string">"H"</span>, <span class="jxr_string">"HOUR"</span>, <span class="jxr_string">"HOURS"</span>);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>              <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>                  Thread.sleep((<strong class="jxr_keyword">long</strong>) (args.get(0).toDouble() * DAY_IN_MILLIS));
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>                  <strong class="jxr_keyword">return</strong> args.get(0);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>              } <strong class="jxr_keyword">catch</strong> (InterruptedException e) {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>                  <strong class="jxr_keyword">return</strong> scope.handleError(e);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>              }
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>          }, false, Type._VOID, <span class="jxr_string">"SLEEP"</span>);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>          addDollarStyle(1, 2, (pure, args, scope) -&gt; {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>              <strong class="jxr_keyword">if</strong> (args.size() == 1) {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                  <strong class="jxr_keyword">return</strong> DollarFactory.failure(ErrorType.valueOf(args.get(0).toString()), <span class="jxr_string">""</span>, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>              } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>                  <strong class="jxr_keyword">return</strong> DollarFactory.failure(ErrorType.valueOf(args.get(0).toString()), args.get(1).toString(), <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>              }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          }, <strong class="jxr_keyword">true</strong>, Type._ANY, <span class="jxr_string">"ERROR"</span>);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; (args.get(0).toDouble() == <strong class="jxr_keyword">null</strong>) ? args.get(0) : (args.get(0).toDouble()), <strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>                       Type._DECIMAL, <span class="jxr_string">"DAYS"</span>, <span class="jxr_string">"DAY"</span>, <span class="jxr_string">"D"</span>);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; (args.get(0).toDouble() == <strong class="jxr_keyword">null</strong>) ? args.get(0) : (args.get(
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>                  0).toDouble() * MONTH_IN_DAYS), <strong class="jxr_keyword">true</strong>, <span class="jxr_string">"MONTHS"</span>, <span class="jxr_string">"MONTH"</span>, <span class="jxr_string">"MTH"</span>, <span class="jxr_string">"MTHS"</span>);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>                  0).toDouble() * WEEK_IN_DAYS), <strong class="jxr_keyword">true</strong>, Type._DECIMAL, <span class="jxr_string">"WEEKS"</span>, <span class="jxr_string">"WEEK"</span>, <span class="jxr_string">"W"</span>);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; (args.get(0).toDouble() == <strong class="jxr_keyword">null</strong>) ? args.get(0) : (args.get(
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>                  0).toDouble() * YEAR_IN_DAYS), <strong class="jxr_keyword">true</strong>, <span class="jxr_string">"YEARS"</span>, <span class="jxr_string">"YEAR"</span>, <span class="jxr_string">"YRS"</span>, <span class="jxr_string">"YR"</span>, <span class="jxr_string">"Y"</span>);
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; args.get(0).toString().length(), <strong class="jxr_keyword">true</strong>, <span class="jxr_string">"LEN"</span>);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>          addJavaStyle(0, 0, (pure, args, scope) -&gt; $(<strong class="jxr_keyword">new</strong> Date()), false, <span class="jxr_string">"DATE"</span>);
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>          addJavaStyle(0, 0, (pure, args, scope) -&gt; System.currentTimeMillis(), false, <span class="jxr_string">"TIME"</span>);
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>          addJavaStyle(2, 2, (pure, args, scope) -&gt; args.get(0).toString().matches(args.get(1).$S()), <strong class="jxr_keyword">true</strong>, <span class="jxr_string">"MATCHES"</span>);
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>          <em class="jxr_comment">//todo: use a service loader to load additional builtins :- http://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>          <em class="jxr_comment">//todo: this will be used to provide libraries</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>      }
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>     @NotNull
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> execute(@NotNull String name, @NotNull List&lt;<strong class="jxr_keyword">var</strong>&gt; parameters, <strong class="jxr_keyword">boolean</strong> pure) {
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>         <strong class="jxr_keyword">final</strong> Builtin&lt;<strong class="jxr_keyword">var</strong>&gt; builtin = (Builtin&lt;<strong class="jxr_keyword">var</strong>&gt;) map.get(name);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>         <strong class="jxr_keyword">if</strong> (builtin == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/BuiltinNotFoundException.html">BuiltinNotFoundException</a>(name);
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>         }
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>         <strong class="jxr_keyword">return</strong> builtin.execute(pure, parameters, DollarScriptSupport.currentScope());
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>     }
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> exists(@NotNull String name) {
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>         <strong class="jxr_keyword">return</strong> map.containsKey(name);
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>     }
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; <strong class="jxr_keyword">void</strong> addJavaStyle(<strong class="jxr_keyword">int</strong> minargs, <strong class="jxr_keyword">int</strong> maxargs, @NotNull Builtin.JavaStyle&lt;T&gt; lambda, <strong class="jxr_keyword">boolean</strong> pure,
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>                                          @NotNull String... names) {
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>         <strong class="jxr_keyword">for</strong> (String name : names) {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>             map.put(name, <strong class="jxr_keyword">new</strong> Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure));
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>         }
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>     }
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> addDollarStyle(<strong class="jxr_keyword">int</strong> minargs, <strong class="jxr_keyword">int</strong> maxargs, @NotNull Builtin.DollarStyle lambda, <strong class="jxr_keyword">boolean</strong> pure,
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>                                        @NotNull String... names) {
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>         <strong class="jxr_keyword">for</strong> (String name : names) {
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>             map.put(name, <strong class="jxr_keyword">new</strong> Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure));
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>         }
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>     }
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> addDollarSingleNoScope(<strong class="jxr_keyword">boolean</strong> isPure, @NotNull Function&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; lambda,
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>                                                @NotNull String... names) {
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>         <strong class="jxr_keyword">for</strong> (String name : names) {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>             map.put(name, <strong class="jxr_keyword">new</strong> Builtin.BuiltinImpl(name, (Builtin&lt;<strong class="jxr_keyword">var</strong>&gt;) (<strong class="jxr_keyword">boolean</strong> pure, List&lt;<strong class="jxr_keyword">var</strong>&gt; args, Scope scope) -&gt; {
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>                 <strong class="jxr_keyword">var</strong> v = args.get(0);
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>                 <strong class="jxr_keyword">return</strong> lambda.apply(v);
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>             }, 1, 1, isPure));
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>         }
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>     }
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isPure(@NotNull String lhsString) {
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>         <strong class="jxr_keyword">return</strong> (map.get(lhsString) != <strong class="jxr_keyword">null</strong>) &amp;&amp; ((Builtin.BuiltinImpl) map.get(lhsString)).isPure();
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>     }
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> }
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>                  0).toDouble() * MONTH_IN_DAYS), <strong class="jxr_keyword">true</strong>, Type._DECIMAL, <span class="jxr_string">"MONTHS"</span>, <span class="jxr_string">"MONTH"</span>, <span class="jxr_string">"MTH"</span>, <span class="jxr_string">"MTHS"</span>);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; (args.get(0).toDouble() == <strong class="jxr_keyword">null</strong>) ? args.get(0) : (args.get(
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>                  0).toDouble() * YEAR_IN_DAYS), <strong class="jxr_keyword">true</strong>, Type._DECIMAL, <span class="jxr_string">"YEARS"</span>, <span class="jxr_string">"YEAR"</span>, <span class="jxr_string">"YRS"</span>, <span class="jxr_string">"YR"</span>, <span class="jxr_string">"Y"</span>);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>          addJavaStyle(1, 1, (pure, args, scope) -&gt; args.get(0).toString().length(), <strong class="jxr_keyword">true</strong>, Type._INTEGER, <span class="jxr_string">"LEN"</span>);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>          addJavaStyle(0, 0, (pure, args, scope) -&gt; $(<strong class="jxr_keyword">new</strong> Date()), false, Type._DATE, <span class="jxr_string">"DATE"</span>);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>          addJavaStyle(0, 0, (pure, args, scope) -&gt; System.currentTimeMillis(), false, Type._INTEGER, <span class="jxr_string">"TIME"</span>);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>          addJavaStyle(2, 2, (pure, args, scope) -&gt; args.get(0).toString().matches(args.get(1).$S()), <strong class="jxr_keyword">true</strong>, Type._BOOLEAN, <span class="jxr_string">"MATCHES"</span>);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>          <em class="jxr_comment">//todo: use a service loader to load additional builtins :- http://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>         <em class="jxr_comment">//todo: this will be used to provide libraries</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>     }
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> addDollarSingleNoScope(<strong class="jxr_keyword">boolean</strong> isPure, @NotNull Function&lt;<strong class="jxr_keyword">var</strong>, <strong class="jxr_keyword">var</strong>&gt; lambda,
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>                                                @NotNull <a href="../../../../dollar/api/Type.html">Type</a> type, @NotNull String... names) {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>         <strong class="jxr_keyword">for</strong> (String name : names) {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>             map.put(name, <strong class="jxr_keyword">new</strong> Builtin.BuiltinImpl(name, (Builtin&lt;<strong class="jxr_keyword">var</strong>&gt;) (pure, args, scope) -&gt; {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>                 <strong class="jxr_keyword">var</strong> v = args.get(0);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>                 <strong class="jxr_keyword">return</strong> lambda.apply(v);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>             }, 1, 1, isPure, type));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>         }
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>     }
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> addDollarStyle(<strong class="jxr_keyword">int</strong> minargs, <strong class="jxr_keyword">int</strong> maxargs, @NotNull Builtin.DollarStyle lambda, <strong class="jxr_keyword">boolean</strong> pure,
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>                                        @NotNull <a href="../../../../dollar/api/Type.html">Type</a> type, @NotNull String... names) {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>         <strong class="jxr_keyword">for</strong> (String name : names) {
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>             map.put(name, <strong class="jxr_keyword">new</strong> Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure, type));
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>         }
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>     }
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; <strong class="jxr_keyword">void</strong> addJavaStyle(<strong class="jxr_keyword">int</strong> minargs, <strong class="jxr_keyword">int</strong> maxargs, @NotNull Builtin.JavaStyle&lt;T&gt; lambda, <strong class="jxr_keyword">boolean</strong> pure,
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>                                          @NotNull <a href="../../../../dollar/api/Type.html">Type</a> type, @NotNull String... names) {
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>         <strong class="jxr_keyword">for</strong> (String name : names) {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>             map.put(name, <strong class="jxr_keyword">new</strong> Builtin.BuiltinImpl(name, lambda, minargs, maxargs, pure, type));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>         }
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>     }
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>     @NotNull
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">var</strong> execute(@NotNull String name, @NotNull List&lt;<strong class="jxr_keyword">var</strong>&gt; parameters, <strong class="jxr_keyword">boolean</strong> pure) {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>         <strong class="jxr_keyword">final</strong> Builtin&lt;<strong class="jxr_keyword">var</strong>&gt; builtin = (Builtin&lt;<strong class="jxr_keyword">var</strong>&gt;) map.get(name);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>         <strong class="jxr_keyword">if</strong> (builtin == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../dollar/internal/runtime/script/api/exceptions/BuiltinNotFoundException.html">BuiltinNotFoundException</a>(name);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>         }
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>         <strong class="jxr_keyword">return</strong> builtin.execute(pure, parameters, DollarUtilFactory.util().scope());
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>     }
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> exists(@NotNull String name) {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>         <strong class="jxr_keyword">return</strong> map.containsKey(name);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>     }
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isPure(@NotNull String lhsString) {
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>         <strong class="jxr_keyword">return</strong> (map.get(lhsString) != <strong class="jxr_keyword">null</strong>) &amp;&amp; ((Builtin.BuiltinImpl) map.get(lhsString)).isPure();
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>     }
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>     @Nullable
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../dollar/api/Type.html">Type</a> type(@NotNull String s) {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>         <strong class="jxr_keyword">return</strong> (((Builtin.BuiltinImpl&lt;?&gt;) map.get(s)).type());
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>     }
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017. All rights reserved.</div>
