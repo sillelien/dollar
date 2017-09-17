@@ -20,35 +20,42 @@ else
        echo "Unsupported operating system $OSTYPE would you consider porting this simple script?" && exit 1
 fi
 
-if ! javac -version &> /dev/null
+if [[ ! -f ~/.dollar-cache/jdk.downloaded ]]
 then
-    echo "Downloading a valid Java 1.8 JDK for OS type: ${os}"
+    echo "Dollar requires a valid Java 1.9 runtime. We'll download and install"
+    echo "one that we know works with Dollar well."
     echo
-    echo "Use of the JDK is under the terms of:"
+    echo "Downloading Java 1.9 Zulu JDK for OS type: ${os}"
     echo
-    echo "     http://www.azulsystems.com/products/zulu/terms-of-use"
+    echo "Use of this JDK is under the terms of:"
+    echo
+    echo "     https://www.azul.com/products/zulu/zulu-terms-of-use/"
     echo "     and http://openjdk.java.net/legal/"
     echo
+    echo "To learn more about the Zulu JDK please visit http://zulu.org/"
     echo
-    echo "If you do not agree, please delete the contents of"
-    echo "${DOLLAR_HOME} and ${HOME}/.dollar-cache"
+    echo "If you have any problems, please delete the ${HOME}/.dollar-cache directory"
     echo
     echo "This may take some time, but hey you only need to do it once."
-    echo ""
-        [ -d ~/.dollar-cache ] || mkdir ~/.dollar-cache
+    echo
+    echo "For further information, please re-read."
+    echo
+    echo
+    [ -d ~/.dollar-cache ] || mkdir ~/.dollar-cache
     if [[ $os == "macosx" ]]
     then
-        durl=http://cdn.azul.com/zulu/bin/zulu8.21.0.1-jdk8.0.131-macosx_x64.zip
+        durl=http://cdn.azul.com/zulu-pre/bin/zulu9.0.0.14-ea-jdk9.0.0-macosx_x64.zip
         [ -f ~/.dollar-cache/jdk.zip ] || curl -L ${durl}  > ~/.dollar-cache/jdk.zip
         unzip -q ~/.dollar-cache/jdk.zip -d .
     fi
     if [[ $os == "linux" ]]
     then
-        durl=http://cdn.azul.com/zulu/bin/zulu8.21.0.1-jdk8.0.131-linux_x64.tar.gz
+        durl=http://cdn.azul.com/zulu-pre/bin/zulu9.0.0.14-ea-jdk9.0.0-linux_x64.tar.gz
         [ -f ~/.dollar-cache/jdk.tgz ] || curl -L ${durl}  > ~/.dollar-cache/jdk.tgz
         tar -zxvf ~/.dollar-cache/jdk.tgz
     fi
     mv zulu* jdk
+    touch ~/.dollar-cache/jdk.downloaded
 fi
 
 cd -  &> /dev/null
