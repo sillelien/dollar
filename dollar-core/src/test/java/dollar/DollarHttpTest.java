@@ -16,9 +16,10 @@
 
 package dollar;
 
-import com.jayway.restassured.RestAssured;
+
 import dollar.api.DollarStatic;
 import dollar.api.Value;
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.util.Date;

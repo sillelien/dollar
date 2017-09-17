@@ -5,8 +5,8 @@ defaults: &defaults
     - image: redis:3-alpine
 
   environment:
-    MAJOR_VERSION: 0.3
-    NEXT_MAJOR_VERSION: 0.4
+    MAJOR_VERSION: 0.4
+    NEXT_MAJOR_VERSION: 0.5
     MAVEN_OPTS: "-Xmx1g -DbuildNumber=${CIRCLE_BUILD_NUM}"
     TZ: "/usr/share/zoneinfo/Europe/London"
 

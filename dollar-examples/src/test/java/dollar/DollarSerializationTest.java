@@ -16,10 +16,10 @@
 
 package dollar;
 
-import com.jayway.restassured.RestAssured;
 import dollar.api.Type;
 import dollar.api.Value;
 import dollar.api.types.DollarFactory;
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
